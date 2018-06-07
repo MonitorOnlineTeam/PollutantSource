@@ -1,89 +1,96 @@
-// import liraries
-import React, { Component } from 'react';
-import { connect } from 'dva';
-import { Map, Markers } from 'react-amap';
-
-
-const alphabet = 'ABCDEFGHIJKLMNOP'.split('');
-const randomMarker = (len) => (
-  Array(len).fill(true).map((e, idx) => ({
-    position: {
-      longitude: 100 + Math.random() * 30,
-      latitude: 30 + Math.random() * 20,
-    },
-    myLabel: alphabet[idx],
-    myIndex: idx + 1,
-  }))
-);
-
-const style = {
-  padding: '8px',
-  backgroundColor: '#000',
-  color: '#fff',
-  border: '1px solid #fff',
-};
-
-const mouseoverStyle = {
-  padding: '8px',
-  backgroundColor: '#fff',
-  color: '#000',
-  border: '1px solid #000',
-}
-
-@connect()
-class AMapTest extends Component {
-  constructor(){
+import { Map, InfoWindow } from 'react-amap';
+class App extends React.Component{
+  constructor() {
     super();
-    this.markers = randomMarker(10);
-    this.mapCenter = {longitude: 115, latitude: 40};
     this.state = {
-      useCluster: false,
-    };
-    this.markerEvents = {
-      mouseover:(e, marker) => {
-        marker.render(this.renderMouseoverLayout);
+      visible: true,
+      value: 1,
+      position: {
+        longitude: 120,
+        latitude: 30
       },
-      mouseout: (e, marker) => {
-        marker.render(this.renderMarkerLayout);
-      }
+      offset: [0, 0],
+      size: {
+        width: 200,
+        height: 140,
+      },
+    }
+    this.windowEvents = {
+      created: (iw) => {console.log(iw)},
+      open: () => {console.log('InfoWindow opened')},
+      close: () => {console.log('InfoWindow closed')},
+      change: () => {console.log('InfoWindow prop changed')},
     }
   }
   
-  toggleCluster(){
+  changeOffset(){
     this.setState({
-      useCluster: !this.state.useCluster,
+      offset: [Math.random() * 10, Math.random() * 10]
     })
   }
   
-  renderMouseoverLayout(extData){
-    if (extData.myIndex === 3){
-      return false;
-    }
-    return <div style={mouseoverStyle}>{extData.myLabel}</div>
+  resetOffset(){
+    this.setState({
+      offset: [0, 0]
+    })
   }
   
-  renderMarkerLayout(extData){
-    if (extData.myIndex === 3){
-      return false;
-    }
-    return <div style={style}>{extData.myLabel}</div>
+  changeSize(){
+    this.setState({
+      size: {
+        width: 200 + Math.random() * 20,
+        height: 140 + Math.random() * 20,
+      }
+    })
   }
   
-  render(){   
+  changeValue(){
+    this.setState({
+      value: this.state.value + 1,
+    });
+  }
+
+  toggleVisible() {
+    this.setState({
+      visible: !this.state.visible
+    })
+  }
+   
+  randomPosition() {
+    this.setState({
+      position: {
+        longitude: 120 + Math.random() * 20,
+        latitude: 30 + Math.random() * 20,
+      }
+    })
+  }
+
+  render(){
+    const html = `<div><h4>Greetings</h4><p>This is content of this info window</p><p>Click 'Change Value' Button: ${this.state.value}</p></div>`;
     return <div>
-      <div style={{width: '100%', height: 370}}>
-        <Map plugins={['ToolBar']} center={this.mapCenter} zoom={4}>
-          <Markers 
-            events={this.markerEvents}
-            markers={this.markers}
-            useCluster={this.state.useCluster}
-            render={this.renderMarkerLayout}
+      <div style={{width: '100%', height: '345px'}}>
+        <Map>
+          <InfoWindow
+            position={this.state.position}
+            visible={this.state.visible}
+            isCustom={false}
+            content={html}
+            size={this.state.size}
+            offset={this.state.offset}
+            events={this.windowEvents}
           />
         </Map>
       </div>
-      <button onClick={()=>{ this.toggleCluster() }}>Toggle Cluster</button>
+      <button onClick={() => { this.toggleVisible() }}>Toggle Visible</button>
+      <button onClick={() => { this.randomPosition() }}>Random Position</button>
+      <button onClick={() => { this.changeValue() }}>Change Value</button>
+      <button onClick={() => { this.changeOffset() }}>Change Offset</button>
+      <button onClick={() => { this.resetOffset() }}>Restore Offset</button>
+      <button onClick={() => { this.changeSize() }}>Change Size</button>
     </div>
   }
 }
-// make this component available to the app
-export default AMapTest;
+
+ReactDOM.render(
+  <App/>, mountNode
+)

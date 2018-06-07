@@ -13,7 +13,7 @@ const menuData = [
       },
       {
         name: '工作台',
-        path: 'workbench',
+        path: 'testMap',
         icon: 'desktop',
       },
       {
@@ -28,7 +28,7 @@ const menuData = [
             children:[
               {
                 name: '报警类别统计',
-                path: 'alarm1',
+                path: 'overview',
                 icon: 'appstore-o',
                },
                {
