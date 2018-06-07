@@ -75,23 +75,6 @@ class OverViewMap extends PureComponent {
               plugins={plugins}
             >
              <Input style={{width:200,position:'absolute',top:100,left:100}} />
-              <Markers
-                markers={markers}
-                events={this.markerEvents}
-                useCluster={clusterOptions}
-                render={(extData) => {
-                return (<div style={{ background: "https://webapi.amap.com/theme/v1.3/markers/n/mark_b.png",
-                  backgroundSize: 'contain',
-                  backgroundRepeat: 'no-repeat',
-                  backgroundPosition: 'center',
-                  width: '30px',
-                  height: '40px',
-                  color: '#000',
-                  textAlign: 'center',
-                  lineHeight: '40px' }}
-                />);
-              }}
-              />
             </Map>
       </div>);
   }
