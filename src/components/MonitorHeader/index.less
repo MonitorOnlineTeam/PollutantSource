@@ -6,7 +6,7 @@
   line-height: 64px; 
   transition: all .3s; 
   overflow: hidden; 
-  width: 270px; 
+  width: 400px; 
   float: left;
 
   img {
@@ -15,7 +15,7 @@
     height: 32px;
   }
   h1 {
-    color: rgba(0, 0, 0, 0.65);
+    color:#fff;
     display: inline-block;
     vertical-align: middle;
     font-size: 20px;
@@ -26,7 +26,7 @@
 }
  
 .header { 
-  background: #FFF;
+  background: #001529;
   box-shadow: 0 1px 4px rgba(0, 21, 41, .08);
   position: relative;
   width:100%;
@@ -54,7 +54,7 @@ i.trigger {
   transition: all .3s;
   padding: 0 24px;
   &:hover {
-    background: @primary-1;
+    background: #1890ff;
   }
 }
 
@@ -71,6 +71,7 @@ i.trigger {
     cursor: pointer;
     padding: 0 12px;
     display: inline-block;
+    color:#a6adb4;
     transition: all .3s;
     height: 100%;
     > i {
@@ -79,7 +80,8 @@ i.trigger {
     }
     &:global(.ant-popover-open),
     &:hover {
-      background: @primary-1;
+      color:#fff;
+      background: #1890ff;
     }
   }
   .search {
@@ -92,8 +94,8 @@ i.trigger {
   .account {
     .avatar {
       margin: 20px 8px 20px 0;
-      color: @primary-color;
-      background: rgba(255, 255, 255, .85);
+      color: #a6a490;
+      background: #001529;
       vertical-align: middle;
     }
   }

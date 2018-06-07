@@ -141,8 +141,7 @@ class MonitorLayout extends React.PureComponent {
             dispatch={dispatch}
           />
 
-          <Content style={{ margin: ' 10px 10px 0 10px ', height: '100%' }}>
-            <div style={{ minHeight: 'calc(100vh - 260px)' }}>
+          <Content style={{ margin: ' 5 5 0 0', height: '100%' }}>
               <Switch>
                 {
                   redirectData.map(item =>
@@ -165,17 +164,17 @@ class MonitorLayout extends React.PureComponent {
                 <Route rendermonitor
                 ={NotFound} />
               </Switch>
-            </div>
 
           </Content>
-          <GlobalFooter
+          {/* <GlobalFooter
+          
             links={[]}
             copyright={
               <div>
               Copyright <Icon type="copyright" />{config.footerText}
               </div>
           }
-          />
+          /> */}
         </Layout>
       );
 

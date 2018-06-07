@@ -73,6 +73,7 @@ export default class HeaderSearch extends PureComponent {
           onChange={this.onChange}
         >
           <Input
+           style={{color:'#fff'}}
             placeholder={placeholder}
             ref={(node) => { this.input = node; }}
             onKeyDown={this.onKeyDown}

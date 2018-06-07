@@ -310,7 +310,7 @@ render() {
 
   const { openKeys } = this.state;
   const menu = (
-    <Menu className={styles.menu} selectedKeys={[]} onClick={this.handleMenuClick}>
+    <Menu theme="dark" className={styles.menu} selectedKeys={[]} onClick={this.handleMenuClick}>
       <Menu.Item disabled><Icon type="user" />个人中心</Menu.Item>
       <Menu.Item key="changepwd"><Icon type="edit" />修改密码</Menu.Item>
       <Menu.Divider />
@@ -381,6 +381,7 @@ render() {
       <Menu
         mode="horizontal"
         onOpenChange={this.handleOpenChange}
+        theme="dark"
         selectedKeys={selectedKeys}
         style={{ padding: '12px 0', height: '64px' }}
         >

@@ -119,7 +119,14 @@ export default class BreadcrumbHeader extends PureComponent {
       breadcrumb = null;
     }
     return (
-      breadcrumb
+      <div style={this.props.style}> 
+      <div style={{paddingLeft:10,paddingTop:10,paddingBottom:15}}>
+        {breadcrumb}
+        </div> 
+        <div style={{width: '100%',height: 'calc(100vh - 120px)'}}>
+        {this.props.children}
+        </div>
+        </div>
     );
   }
 }
