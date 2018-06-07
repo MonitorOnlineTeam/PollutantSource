@@ -118,7 +118,7 @@ function getRenderArr(routes) {
   for (let i = 1; i < routes.length; i += 1) {
     let isAdd = false;
     // 是否包含
-    isAdd = renderArr.every(item => getRelation(item, routes[i]) === 3);
+    isAdd = renderArr.every(item => getRelation(item, routes[i]) === 3||getRelation(item, routes[i]) === 2);
     // 去重
     renderArr = renderArr.filter(item => getRelation(item, routes[i]) !== 1);
     if (isAdd) {
@@ -141,6 +141,7 @@ export function getRoutes(path, routerData) {
   routes = routes.map(item => item.replace(path, ''));
   // Get the route to be rendered to remove the deep rendering
   const renderArr = getRenderArr(routes);
+ 
   // Conversion and stitching parameters
   const renderRoutes = renderArr.map((item) => {
     const exact = !routes.some(route => route !== item && getRelation(route, item) === 1);

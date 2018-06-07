@@ -2,13 +2,12 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
 import { Map, Markers, InfoWindow } from 'react-amap';
-import { Select, Cascader, Input, Card, Spin } from 'antd';
+import { Select, Cascader, Input, Card, Spin, Button } from 'antd';
 import { routerRedux } from 'dva/router';
 import config from '../../config';
 import MarkerDetail from '../../components/MarkerDetail';
 import styles from './index.less';
 import city from '../../utils/city';
-import BreadcrumbHeader from '../../components/BreadcrumbHeader';
 
 const Option = Select.Option;
 const Search = Input.Search;
@@ -46,19 +45,19 @@ class OverViewMap extends PureComponent {
       visible: false,
     };
   }
- 
+
   render() {
     const markers = [{
-      key: "1234546",
+      key: '1234546',
       position: {
         longitude: 109.480766,
         latitude: 29.932931,
       },
-      title: `雪迪龙-研发顶楼`,
+      title: '雪迪龙-研发顶楼',
     }];
     const { location, pollutanttype, effects } = this.props;
     const { payload = {} } = location;
-  
+
     const windowheight = 220 + (this.props.lastdata.length * 15);
     const clusterOptions = {
       zoomOnClick: true,
@@ -67,20 +66,28 @@ class OverViewMap extends PureComponent {
     };
     return (
       <div
-        style={{ width: '100%',height: 'calc(100vh - 70px)' }}
+        style={{ width: '100%', height: 'calc(100vh - 67px)' }}
       >
-            <Map
-              loading={<Spin />}
-              amapkey={amapKey}
-              plugins={plugins}
-            >
-             <Input style={{width:200,position:'absolute',top:100,left:100}} />
-              <Markers
-                markers={markers}
-                events={this.markerEvents}
-                useCluster={clusterOptions}
-                render={(extData) => {
-                return (<div style={{ background: "https://webapi.amap.com/theme/v1.3/markers/n/mark_b.png",
+        <Map
+          loading={<Spin />}
+          amapkey={amapKey}
+          plugins={plugins}
+        >
+          <Input style={{ width: 200, position: 'absolute', top: 100, left: 100 }} />
+          <Button
+            type="dashed"
+            style={{ width: 200, position: 'absolute', top: 200, left: 100 }}
+            onClick={() => {
+                this.props.dispatch(routerRedux.push('/monitor/pointdetail/0'));
+             }}
+          >Dashed
+          </Button>
+          <Markers
+            markers={markers}
+            events={this.markerEvents}
+            useCluster={clusterOptions}
+            render={(extData) => {
+                return (<div style={{ background: 'https://webapi.amap.com/theme/v1.3/markers/n/mark_b.png',
                   backgroundSize: 'contain',
                   backgroundRepeat: 'no-repeat',
                   backgroundPosition: 'center',
@@ -91,8 +98,8 @@ class OverViewMap extends PureComponent {
                   lineHeight: '40px' }}
                 />);
               }}
-              />
-            </Map>
+          />
+        </Map>
       </div>);
   }
 }

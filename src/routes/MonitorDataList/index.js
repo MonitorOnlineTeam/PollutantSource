@@ -6,7 +6,6 @@ import moment from 'moment';
 import { routerRedux } from 'dva/router';
 import city from '../../utils/city';
 import styles from './index.less';
-import BreadcrumbHeader from '../../components/BreadcrumbHeader';
 import MonitorDetail from '../../components/MonitorDetail';
 import CountryDetail from '../../components/CountryDetail';
 import { getRoutes } from '../../utils/utils';
@@ -67,7 +66,6 @@ class MonitorDataList extends Component {
               padding: '0px 20px',
             }
           }
-          title={<BreadcrumbHeader />}
           extra={<div>
             <RadioGroup
               onChange={({ target }) => {
