@@ -94,6 +94,8 @@ export const getRouterData = (app) => {
     },
     '/monitor/pointdetail/:pointcode/module5': {
       component: dynamicWrapper(app, ['points'], () => import('../routes/PointDetail/Module5')),
+    '/monitor/workbench': {
+      component: dynamicWrapper(app, ['user', 'points'], () => import('../routes/Workbench')),
     },
     '/user': {
       component: dynamicWrapper(app, [], () => import('../layouts/UserLayout')),
