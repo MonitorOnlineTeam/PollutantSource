@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import { connect } from 'dva';
 import groupBy from 'lodash/groupBy';
 import moment from 'moment';
-import { Layout, Menu, Icon, Spin, Tag, Dropdown, Avatar,Modal,Form, Input,Tooltip, Cascader, Select, Row, Col, Checkbox, Button, AutoComplete  } from 'antd';
+import { Layout, Menu, Icon, Spin, Tag, Dropdown, Avatar, Modal } from 'antd';
 import pathToRegexp from 'path-to-regexp';
 import Debounce, { debounce } from 'lodash-decorators/debounce';
 import { Link } from 'dva/router';
@@ -11,9 +11,8 @@ import HeaderSearch from '../../components/HeaderSearch';
 import styles from './index.less';
 import config from '../../config';
 import logo from '../../../public/sdlicon.png';
-import MessageDetail from '../../components/MessageDetail'
+import MessageDetail from '../../components/MessageDetail';
 import ChangePwdDetail from '../ChangePwdDetail';
-
 
 
 const { Header } = Layout;
@@ -28,9 +27,9 @@ const getIcon = (icon) => {
   }
   return icon;
 };
-@connect( ({search})=>({
-   lxsearchinfo:search.lxsearchinfo,
-   fullfulltextinfo:search.fullfulltextinfo
+@connect(({ search }) => ({
+  lxsearchinfo: search.lxsearchinfo,
+  fullfulltextinfo: search.fullfulltextinfo,
 }))
 export default class MonitorHeader extends PureComponent {
   constructor(props) {
@@ -38,12 +37,12 @@ export default class MonitorHeader extends PureComponent {
     this.menus = props.menuData;
     this.state = {
       openKeys: this.getDefaultCollapsedSubMenus(props),
-      showdetail:false,
-      detailtitle:"",
-      alarmTime:0,
-      DGIMN:"",
-      datetime:null,
-      oldvalue:""
+      showdetail: false,
+      detailtitle: '',
+      alarmTime: 0,
+      DGIMN: '',
+      datetime: null,
+      oldvalue: '',
     };
   }
   componentDidMount() {
@@ -197,7 +196,7 @@ export default class MonitorHeader extends PureComponent {
   * 获得菜单子节点
   * @memberof SiderMenu
   */
-  getNavMenuItems = (menusData) => {    
+  getNavMenuItems = (menusData) => {
     if (!menusData) {
       return [];
     }
@@ -254,44 +253,42 @@ handleMenuClick = ({ key }) => {
       break;
     default:
       break;
-  }  
+  }
 }
 onRef = (ref) => {
-  this.child = ref
+  this.child = ref;
 }
 handleNoticeVisibleChange = (visible) => {
   if (visible) {
     this.props.dispatch({
       type: 'global/fetchNotices',
-      payload:{
-      }
+      payload: {
+      },
     });
   }
 }
 
-onPressEnter=(value)=>{ 
-   this.props.dispatch({
-      type: 'search/querySearchInfo',
-      payload:{
-        value:value,
-        current:1
-      }
-   })
+onPressEnter=(value) => {
+  this.props.dispatch({
+    type: 'search/querySearchInfo',
+    payload: {
+      value,
+      current: 1,
+    },
+  });
 }
-onChange=(value)=>{
-
-  let _this=this;
+onChange=(value) => {
+  const _this = this;
   this.setState({
-    oldvalue:value
-   })
-  setTimeout(function () {
-    if(_this.state.oldvalue==value)
-    {
+    oldvalue: value,
+  });
+  setTimeout(() => {
+    if (_this.state.oldvalue == value) {
       _this.props.dispatch({
         type: 'search/queryLxSearchResult',
-        payload:{
-          value:value
-        }
+        payload: {
+          value,
+        },
       });
     }
   }, 1000);
@@ -317,16 +314,16 @@ render() {
       <Menu.Item key="logout"><Icon type="logout" />退出登录</Menu.Item>
     </Menu>
   );
-  const noticeData = this.getNoticeData();  
+  const noticeData = this.getNoticeData();
   let selectedKeys = this.getSelectedMenuKeys(pathname);
   if (!selectedKeys.length) {
     selectedKeys = [openKeys[openKeys.length - 1]];
   }
- 
+
   return (
     <Header className={styles.header}>
       <div className={styles.logo}>
-        <img style={{ height: 50 }} src={logo} alt="logo"  />
+        <img style={{ height: 50 }} src={logo} alt="logo" />
         <h1>{config.name}</h1>
       </div>
       <div className={styles.right}>
@@ -334,47 +331,47 @@ render() {
           className={`${styles.action} ${styles.search}`}
           placeholder="站内搜索"
           dataSource={this.props.lxsearchinfo}
-          onChange={this.onChange }
+          onChange={this.onChange}
           onPressEnter={this.onPressEnter}
-          />
+        />
         <NoticeIcon
           className={styles.action}
           count={currentUser.notifyCount}
-          onItemClick={(item, tabProps) => {           
+          onItemClick={(item, tabProps) => {
             this.setState({
-              showdetail:true,
-              detailtitle:item.parentname+"-"+item.pointname,
-              DGIMN:item.DGIMN,
-              datetime:item.datetime,
-              datenow:item.datenow
+              showdetail: true,
+              detailtitle: `${item.parentname}-${item.pointname}`,
+              DGIMN: item.DGIMN,
+              datetime: item.datetime,
+              datenow: item.datenow,
             });
 
             // console.log(item, tabProps); // eslint-disable-line
-          }}          
+          }}
           onPopupVisibleChange={this.handleNoticeVisibleChange}
           loading={fetchingNotices}
           popupAlign={{ offset: [20, -16] }}
-          >
+        >
           <NoticeIcon.Tab
             list={noticeData['报警']}
             title="报警"
             isshowclear={false}
             emptyText="你已查看所有通知"
             emptyImage="https://gw.alipayobjects.com/zos/rmsportal/wAhyIChODzsoKIOBHcBk.svg"
-            />
-            <NoticeIcon.Tab
-              list={noticeData['消息']}
-              title="消息"
-              emptyText="您已读完所有消息"
-              emptyImage="https://gw.alipayobjects.com/zos/rmsportal/sAuJeJzSKbUmHfBQRzmZ.svg"
-            />
+          />
+          <NoticeIcon.Tab
+            list={noticeData['消息']}
+            title="消息"
+            emptyText="您已读完所有消息"
+            emptyImage="https://gw.alipayobjects.com/zos/rmsportal/sAuJeJzSKbUmHfBQRzmZ.svg"
+          />
         </NoticeIcon>
         {currentUser.User_Name ? (
           <Dropdown overlay={menu}>
             <span className={`${styles.action} ${styles.account}`}>
-                <Avatar size="small" className={styles.avatar} src="https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png" />
-                {currentUser.User_Name}
-              </span>
+              <Avatar size="small" className={styles.avatar} src="https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png" />
+              {currentUser.User_Name}
+            </span>
           </Dropdown>
             ) : <Spin size="small" style={{ marginLeft: 8 }} />}
       </div>
@@ -384,29 +381,29 @@ render() {
         theme="dark"
         selectedKeys={selectedKeys}
         style={{ padding: '12px 0', height: '64px' }}
-        >
+      >
         {this.getNavMenuItems(this.menus)}
       </Menu>
 
-      
+
       <Modal
-      title={this.state.detailtitle !== null ? `${this.state.detailtitle }` : '详细信息'}
-      visible={this.state.showdetail}
-      //wrapClassName={styles["vertical-center-modal"]}
-      width={SCREEN_WIDTH*0.45}     
-      onCancel={() => {
+        title={this.state.detailtitle !== null ? `${this.state.detailtitle}` : '详细信息'}
+        visible={this.state.showdetail}
+      // wrapClassName={styles["vertical-center-modal"]}
+        width={SCREEN_WIDTH * 0.45}
+        onCancel={() => {
         this.setState({
-          showdetail:false
+          showdetail: false,
         });
       }}
-      footer={null}
-    >
-      <MessageDetail changeModel={this.changeModelheight} {...this.props} {...this.state}/>
-    </Modal>
+        footer={null}
+      >
+        <MessageDetail changeModel={this.changeModelheight} {...this.props} {...this.state} />
+      </Modal>
 
 
-    <ChangePwdDetail {...this.props} onRef={this.onRef} />
-    
+      <ChangePwdDetail {...this.props} onRef={this.onRef} />
+
     </Header>
   );
 }

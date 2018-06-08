@@ -8,7 +8,6 @@ import config from '../../config';
 import MarkerDetail from '../../components/MarkerDetail';
 import styles from './index.less';
 import city from '../../utils/city';
-import BreadcrumbHeader from '../../components/BreadcrumbHeader';
 
 const Option = Select.Option;
 const Search = Input.Search;
@@ -132,7 +131,6 @@ class MonitorDataMap extends PureComponent {
               padding: '0px 20px',
             }
           }
-          title={<BreadcrumbHeader />}
           extra={<div >
             <Cascader options={city}placeholder="请选择行政区" style={{ width: 250, marginLeft: 10 }} />
             <Select
