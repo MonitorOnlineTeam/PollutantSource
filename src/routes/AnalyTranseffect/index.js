@@ -1,8 +1,10 @@
 import React, { Component } from 'react'
 
 /* 
-应急维护待审核列表
-待审核的应急维护任务
+页面：设备传输有效率统计
+描述：设备分开统计传输有效率
+add by cg 18.6.8
+modify by 
 */
 
 export default class AnalyTranseffect extends Component {

@@ -1,8 +1,10 @@
 import React, { Component } from 'react'
 
 /* 
-应急维护待审核列表
-待审核的应急维护任务
+页面：污染物排放量占比。
+描述：各个排口不同污染物累计排放量占总排放量比重
+add by cg 18.6.8
+modify by 
 */
 
 export default class AnalyPollDischarge extends Component {

@@ -1,8 +1,10 @@
 import React, { Component } from 'react'
 
 /* 
-应急维护待审核列表
-待审核的应急维护任务
+页面：排污量的统计、排名
+描述：各个时间段各个排口排污量统计排名 
+add by cg 18.6.8
+modify by 
 */
 
 export default class AnalyDischarge extends Component {
