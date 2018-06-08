@@ -7,7 +7,12 @@ import "./index.less";
 
 const fakeDataUrl = 'https://randomuser.me/api/?results=5&inc=name,gender,email,nat&noinfo';
 
-export default class WorkbenchComponet extends Component {
+/* 
+页面：工作台 
+add by cg 18.6.8
+modify by 
+*/
+export default class Workbench extends Component {
   constructor(props) {
     super(props)
   

@@ -23,96 +23,96 @@ const menuData = [
         children:[
           {
             name: '报警专题分析',
-            path:'alarm',
+            path:'alarmsubject',
             icon: 'exception',
             children:[
               {
                 name: '报警类别统计',
-                path: 'overview',
+                path: 'alarmtypeanaly',
                 icon: 'appstore-o',
                },
                {
                 name: '报警时长统计',
-                path: 'alarm4',
+                path: 'alarmhouranaly',
                 icon: 'appstore-o',
               },
               {
                 name: '报警因子统计',
-                path: 'alarm5',
+                path: 'alarmpollanaly',
                 icon: 'appstore-o',
               },
               {
                 name: '报警时间范围分布情况',
-                path: 'alarm6',
+                path: 'alarmhourareaanaly',
                 icon: 'appstore-o',
               },
               {
                 name: '报警原因统计',
-                path: 'alarm7',
+                path: 'alarmreasonanaly',
                 icon: 'appstore-o',
               },
             ]
           },
           {
             name: '运维专题分析',
-            path:'medicine-box',
+            path:'operationsubject',
             icon: 'appstore-o',
             children:[
               {
                 name: '传输有效率分析',
-                path: 'mlist',
+                path: 'transeffectanaly',
                 icon: 'appstore-o',
               },
               {
                 name: '设备运行时间占比',
-                path: 'alarm2',
+                path: 'devicehouranaly',
                 icon: 'appstore-o',
               },
               {
                 name: '备品备件消耗情况',
-                path: 'alarm3',
+                path: 'replacepartanaly',
                 icon: 'appstore-o',
               },
               {
                 name: '成本分析',
-                path: 'alarm18',
+                path: 'costinganaly',
                 icon: 'appstore-o',
               },
             ]
           },
           {
             name: '排污专题分析',
-            path:'sewage',
+            path:'pollsubject',
             icon: 'code',
             children:[
               {
                 name: '排污量的统计、排名',
-                path: 'alarm8',
+                path: 'dischargeanaly',
                 icon: 'appstore-o',
               },
               {
                 name: '污染物排放时段分布情况',
-                path: 'alarm9',
+                path: 'timehouranaly',
                 icon: 'appstore-o',
               },
               {
                 name: '污染物排放量占比',
-                path: 'alarm10',
+                path: 'polldischargeanaly',
                 icon: 'appstore-o',
               },
               {
                 name: '环保税分析',
-                path: 'alarm11',
+                path: 'environmenttaxanaly',
                 icon: 'appstore-o',
               },
               {
                 name: '环保税、排污量对比分析',
-                path: 'alarm12',
+                path: 'environmenttaxdischargeanaly',
                 icon: 'appstore-o',
               },
               {
                 name: '排污达标率',
-                path: 'alarm13',
+                path: 'reachstandardanaly',
                 icon: 'appstore-o',
               },
             ]
@@ -121,36 +121,79 @@ const menuData = [
       },
       {
         name: '运维信息',
-        path: 'alarm14',
+        path: 'operation',
         icon: 'medicine-box',
-        children:[{
-          name: '待办列表',
-          path: 'testmap',
-          icon: 'appstore',
-        },
-        {
-          name: '应急维护记录',
-          path: 'alarm16',
-          icon: 'appstore',
-        },
-        {
-          name: '待审核列表',
-          path: 'alarm17',
-          icon: 'appstore',
-        },
-        {
-          name: '运维计划上报',
-          path: 'alarm18',
-          icon: 'appstore',
-        },
-        {
-          name: '运维计划记录',
-          path: 'alarm19',
-          icon: 'appstore',
-        },
+        children: [{
+            name: '应急维护',
+            path: 'emergency',
+            icon: 'appstore',
+            children: [{
+                name: '待办列表',
+                path: 'emergencytodolist',
+                icon: 'appstore',
+              },
+              {
+                name: '应急维护记录',
+                path: 'emergencymaintenancelist',
+                icon: 'appstore',
+              },
+              {
+                name: '待审核列表',
+                path: 'emergencyauditlist',
+                icon: 'appstore',
+              }]
+          },
+          {
+            name: '运维计划',
+            path: 'plan',
+            icon: 'appstore',
+            children:[{
+                name: '运维计划上报',
+                path: 'operationplanup',
+                icon: 'appstore',
+              },
+              {
+                name: '运维计划记录',
+                path: 'operationplanlist',
+                icon: 'appstore',
+              }, 
+              {
+                name: '待审核列表',
+                path: 'operationplanauditlist',
+                icon: 'appstore',
+              }]
+          }, {
+            name: '例行任务',
+            path: 'inspection',
+            icon: 'appstore',
+            children: [{
+              name: '待办列表',
+              path: 'inspectiontasktodolist',
+              icon: 'appstore',
+            },
+            {
+              name: '例行任务记录',
+              path: 'inspectiontasklist',
+              icon: 'appstore',
+            },
+            {
+              name: '备品备件使用记录',
+              path: 'inspectiontaskreplacementpartlist',
+              icon: 'appstore',
+            }]
+          },
+          {
+            name: '备品备件维护',
+            path: 'replacementpartadd',
+            icon: 'appstore',
+          },
+          {
+            name: '停产管理',
+            path: 'stopmanagement',
+            icon: 'appstore',
+          },
         ]
       }
-
     ],
   }
 ];
