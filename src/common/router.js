@@ -77,6 +77,23 @@ export const getRouterData = (app) => {
     '/monitor/overview': {
       component: dynamicWrapper(app, ['points'], () => import('../routes/OverView')),
     },
+    '/monitor/pointdetail/:pointcode': {
+      component: dynamicWrapper(app, ['points'], () => import('../routes/PointDetail')),
+    },
+    '/monitor/pointdetail/:pointcode/module1': {
+      component: dynamicWrapper(app, ['points'], () => import('../routes/PointDetail/Module1')),
+    },
+    '/monitor/pointdetail/:pointcode/module2': {
+      component: dynamicWrapper(app, ['points'], () => import('../routes/PointDetail/Module2')),
+    },
+    '/monitor/pointdetail/:pointcode/module3': {
+      component: dynamicWrapper(app, ['points'], () => import('../routes/PointDetail/Module3')),
+    },
+    '/monitor/pointdetail/:pointcode/module4': {
+      component: dynamicWrapper(app, ['points'], () => import('../routes/PointDetail/Module4')),
+    },
+    '/monitor/pointdetail/:pointcode/module5': {
+      component: dynamicWrapper(app, ['points'], () => import('../routes/PointDetail/Module5')),
     '/monitor/workbench': {
       component: dynamicWrapper(app, ['user', 'points'], () => import('../routes/Workbench')),
     },

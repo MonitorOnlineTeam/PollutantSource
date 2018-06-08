@@ -6,7 +6,6 @@ import moment from 'moment';
 import { routerRedux } from 'dva/router';
 import city from '../../utils/city';
 import styles from './index.less';
-import BreadcrumbHeader from '../../components/BreadcrumbHeader';
 import MonitorDetail from '../../components/MonitorDetail';
 import { getRoutes } from '../../utils/utils';
 
@@ -153,7 +152,6 @@ class AlarmDataList extends Component {
               padding: '0px 20px',
             }
           }
-          title={<BreadcrumbHeader />}
           extra={<div>
             <Radio.Group onChange={this.handleSizeChange}>
               <Radio.Button value="3">参照参数及状态预警</Radio.Button>
