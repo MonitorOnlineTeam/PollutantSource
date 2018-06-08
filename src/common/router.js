@@ -114,27 +114,83 @@ export const getRouterData = (app) => {
         component: dynamicWrapper(app, ['points'], () =>
           import ('../routes/PointDetail/Module5')),
       },
-        '/monitor/workbench': {
-          component: dynamicWrapper(app, ['user', 'points'], () =>
-            import ('../routes/Workbench')),
-        },
-        '/user': {
-          component: dynamicWrapper(app, [], () =>
-            import ('../layouts/UserLayout')),
-        },
-        '/user/login': {
-          component: dynamicWrapper(app, ['login'], () =>
-            import ('../routes/User/UserLogin')),
-        },
-        '/user/register-result': {
-          component: dynamicWrapper(app, [], () =>
-            import ('../routes/User/RegisterResult')),
-        },
+      '/monitor/pointdetail/:pointcode/module5': {
+        component: dynamicWrapper(app, ['points'], () =>
+          import ('../routes/PointDetail/Module5')),
+      },
+      '/monitor/pointdetail/:pointcode/module5': {
+        component: dynamicWrapper(app, ['points'], () =>
+          import ('../routes/PointDetail/Module5')),
+      },
+      /* 工作台 */
+      '/monitor/workbench': {
+        component: dynamicWrapper(app, ['user', 'points'], () =>
+          import ('../routes/Workbench')),
+      },
+      /* 运维相关 */
+      '/monitor/emergencyauditlist': {
+        component: dynamicWrapper(app, ['points'], () =>
+          import ('../routes/EmergencyAuditList')),
+      },
+      '/monitor/emergencymaintenancelist': {
+        component: dynamicWrapper(app, ['points'], () =>
+          import ('../routes/EmergencyMaintenanceList')),
+      },
+      '/monitor/emergencytodolist': {
+        component: dynamicWrapper(app, ['points'], () =>
+          import ('../routes/EmergencyTodoList')),
+      },
+      '/monitor/inspectiontasklist': {
+        component: dynamicWrapper(app, ['points'], () =>
+          import ('../routes/InspectionTaskList')),
+      },
+      '/monitor/inspectiontaskreplacementpartlist': {
+        component: dynamicWrapper(app, ['points'], () =>
+          import ('../routes/InspectionTaskReplacementPartList')),
+      },
+      '/monitor/inspectiontasktodolist': {
+        component: dynamicWrapper(app, ['points'], () =>
+          import ('../routes/InspectionTaskTodoList')),
+      },
+      '/monitor/operationplanauditlist': {
+        component: dynamicWrapper(app, ['points'], () =>
+          import ('../routes/OperationPlanAuditList')),
+      },
+      '/monitor/operationplanlist': {
+        component: dynamicWrapper(app, ['points'], () =>
+          import ('../routes/OperationPlanList')),
+      },
+      '/monitor/operationplanup': {
+        component: dynamicWrapper(app, ['points'], () =>
+          import ('../routes/OperationPlanUp')),
+      },
+      '/monitor/replacementpartadd': {
+        component: dynamicWrapper(app, ['points'], () =>
+          import ('../routes/ReplacementPartAdd')),
+      },
+      '/monitor/stopmanagement': {
+        component: dynamicWrapper(app, ['points'], () =>
+          import ('../routes/StopManagement')),
+      },
+      /* 登陆 */
+      '/user': {
+        component: dynamicWrapper(app, [], () =>
+          import ('../layouts/UserLayout')),
+      },
+      '/user/login': {
+        component: dynamicWrapper(app, ['login'], () =>
+          import ('../routes/User/UserLogin')),
+      },
+      '/user/register-result': {
+        component: dynamicWrapper(app, [], () =>
+          import ('../routes/User/RegisterResult')),
+      },
 
-        // '/user/:id': {
-        //   component: dynamicWrapper(app, [], () => import('../routes/User/SomeComponent')),
-        // },
-      };
+      // '/user/:id': {
+      //   component: dynamicWrapper(app, [], () => import('../routes/User/SomeComponent')),
+      // },
+    };
+
       // Get name from ./menu.js or just set it in the router data.
       const menuData = getFlatMenuData(getMenuData());
       // Route configuration data
