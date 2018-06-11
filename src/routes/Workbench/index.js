@@ -7,11 +7,6 @@
 
 // const fakeDataUrl = 'https://randomuser.me/api/?results=5&inc=name,gender,email,nat&noinfo';
 
-<<<<<<< HEAD
-// export default class WorkbenchComponet extends Component {
-//   constructor(props) {
-//     super(props)
-=======
 /* 
 页面：工作台 
 add by cg 18.6.8
@@ -20,7 +15,6 @@ modify by
 export default class Workbench extends Component {
   constructor(props) {
     super(props)
->>>>>>> 95bbcac9f65a5541269043cda51a41da408d0f0e
   
 //     this.state = {
 //       data: [],
