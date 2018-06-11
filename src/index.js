@@ -14,13 +14,13 @@ import './index.less';
 
 // 1. Initialize
 const app = dva({
-  extraEnhancers: [autoRehydrate()],
-  ...createLoading({ effects: true }),
-  history: createHistory(),
-  onAction: createLogger(),
-  onError(error) {
-    message.error(error.message);
-  },
+    extraEnhancers: [autoRehydrate()],
+    ...createLoading({ effects: true }),
+    history: createHistory(),
+    onAction: createLogger(),
+    onError(error) {
+        message.error(error.message);
+    },
 });
 
 // 2. Plugins

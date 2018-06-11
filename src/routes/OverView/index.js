@@ -17,7 +17,7 @@ import config from '../../config';
 import MarkerDetail from '../../components/MarkerDetail';
 import styles from './index.less';
 import city from '../../utils/city';
-import img from '../../../public/timg.jpg'
+import img from '../../../public/timg.jpg';
 const Option = Select.Option;
 const Search = Input.Search;
 
@@ -57,31 +57,31 @@ class OverViewMap extends PureComponent {
             ],
             visible: false,
             markers: this.props.markers,
-            content: "",
-            region: "",
-            special: ""
+            content: '',
+            region: '',
+            special: ''
         };
 
         this.specialChange = (value) => {
-            let special = "monitor";
+            let special = 'monitor';
             debugger;
-            if (value == "a") {
-                special = "monitor";
-            } else if (value = "b") {
-                special = "operation";
-            } else if (value = "c") {
-                special = "sewage";
-            } else if (value = "d") {
-                special = "quality";
+            if (value === 'a') {
+                special = 'monitor';
+            } else if (value === 'b') {
+                special = 'operation';
+            } else if (value === 'c') {
+                special = 'sewage';
+            } else if (value === 'd') {
+                special = 'quality';
             }
             _this.setState({special: special});
-        }
+        };
 
         this.stationclick = () => {
             this
                 .props
                 .dispatch(routerRedux.push('/monitor/pointdetail/0'));
-        }
+        };
 
         this.markersEvents = {
             click: (MapsOption, marker) => {
@@ -94,61 +94,61 @@ class OverViewMap extends PureComponent {
                         latitude: itemdata.position.latitude
                     },
                     visible: true,
-                    title: itemdata.ent + "-" + itemdata.title,
+                    title: itemdata.ent + '-' + itemdata.title,
                     region: itemdata.region,
                     industry: itemdata.industry,
                     control: itemdata.control
                 });
             }
 
-        }
+        };
     }
     render() {
         const markersinfo = [
             {
-                key: "1",
+                key: '1',
                 position: {
                     longitude: 116.335854,
                     latitude: 39.985071
                 },
-                title: "研发顶楼1",
-                ent: "雪迪龙",
-                region: "北京",
-                industry: "电厂",
-                control: "国控"
+                title: '研发顶楼1',
+                ent: '雪迪龙',
+                region: '北京',
+                industry: '电厂',
+                control: '国控'
             }, {
-                key: "2",
+                key: '2',
                 position: {
                     longitude: 116.365869,
                     latitude: 39.915087
                 },
-                title: "研发顶楼2",
-                ent: "雪迪龙",
-                region: "北京",
-                industry: "电厂",
-                control: "国控"
+                title: '研发顶楼2',
+                ent: '雪迪龙',
+                region: '北京',
+                industry: '电厂',
+                control: '国控'
             }, {
-                key: "3",
+                key: '3',
                 position: {
                     longitude: 116.346202,
                     latitude: 40.070817
                 },
-                title: "研发顶楼3",
-                ent: "雪迪龙",
-                region: "北京",
-                industry: "电厂",
-                control: "国控"
+                title: '研发顶楼3',
+                ent: '雪迪龙',
+                region: '北京',
+                industry: '电厂',
+                control: '国控'
             }, {
-                key: "4",
+                key: '4',
                 position: {
                     longitude: 116.246282,
                     latitude: 40.170817
                 },
-                title: "研发顶楼4",
-                ent: "雪迪龙",
-                region: "北京",
-                industry: "电厂",
-                control: "国控"
+                title: '研发顶楼4',
+                ent: '雪迪龙',
+                region: '北京',
+                industry: '电厂',
+                control: '国控'
             }
         ];
 
@@ -252,23 +252,23 @@ class OverViewMap extends PureComponent {
         return (
             <div
                 style={{
-                width: '100%',
-                height: 'calc(100vh - 67px)'
-            }}>
-                <Map loading={< Spin />} amapkey={amapKey} plugins={plugins}>
+                    width: '100%',
+                    height: 'calc(100vh - 67px)'
+                }}>
+                <Map loading={<Spin />} amapkey={amapKey} plugins={plugins}>
                     <div
                         className={styles.treeborder}
                         style={{
-                        width: 350,
-                        position: 'absolute',
-                        top: 100,
-                        left: 100,
-                        background: '#fff'
-                    }}>
+                            width: 350,
+                            position: 'absolute',
+                            top: 100,
+                            left: 100,
+                            background: '#fff'
+                        }}>
                         <Radio.Group
                             style={{
-                            padding: '20px 2px 7px 50px'
-                        }}
+                                padding: '20px 2px 7px 50px'
+                            }}
                             onChange={this.specialChange}
                             defaultValue="a">
                             <Radio.Button value="a">监控</Radio.Button>
@@ -279,21 +279,21 @@ class OverViewMap extends PureComponent {
                         <Input
                             placeholder="请输入排口名称、企业名称、设备编号进行搜索"
                             style={{
-                            width: 327,
-                            margin: '0px 2px 10px 10px'
-                        }}/>
-                        <Table columns={columns} dataSource={data} pagination={false}/>
+                                width: 327,
+                                margin: '0px 2px 10px 10px'
+                            }} />
+                        <Table columns={columns} dataSource={data} pagination={false} />
                     </div>
                     <div
                         style={{
-                        position: 'absolute',
-                        top: 30,
-                        right: 200
-                    }}>
+                            position: 'absolute',
+                            top: 30,
+                            right: 200
+                        }}>
                         <Radio.Group
                             style={{
-                            padding: '10px 2px 2px 50px'
-                        }}
+                                padding: '10px 2px 2px 50px'
+                            }}
                             defaultValue="a">
                             <Radio.Button value="a">地图</Radio.Button>
                             <Radio.Button value="b">数据</Radio.Button>
@@ -302,38 +302,38 @@ class OverViewMap extends PureComponent {
                     </div>
                     <div
                         style={{
-                        position: 'absolute',
-                        top: 30,
-                        left: 450
-                    }}>
+                            position: 'absolute',
+                            top: 30,
+                            left: 450
+                        }}>
                         <Radio.Group
                             style={{
-                            padding: '10px 2px 2px 50px'
-                        }}
+                                padding: '10px 2px 2px 50px'
+                            }}
                             defaultValue="a">
                             <Radio.Button value="a">SO2</Radio.Button>
                             <Radio.Button value="b">NOx</Radio.Button>
                             <Radio.Button value="c">烟尘</Radio.Button>
                         </Radio.Group>
                     </div>
-                    <Markers markers={markersinfo} events={this.markersEvents}/>
+                    <Markers markers={markersinfo} events={this.markersEvents} />
                     <InfoWindow
-                        autoMove
-                        showShadow
+                        autoMove={true}
+                        showShadow={true}
                         position={this.state.position}
                         visible={this.state.visible}
                         size={{
-                        width: 290,
-                        height: 400
-                    }}
+                            width: 290,
+                            height: 400
+                        }}
                         offset={[0, -10]}>
                         <div>
                             <h3 className={styles.titleborder}>{this.state.title}</h3>
                             <div className={styles.titlebutton}>
                                 <Button
                                     style={{
-                                    marginRight: '10px'
-                                }}
+                                        marginRight: '10px'
+                                    }}
                                     onClick={this.stationclick}>进入站房</Button>
                                 <Button>紧急派单</Button>
                             </div>
@@ -344,8 +344,8 @@ class OverViewMap extends PureComponent {
                                     <div>行业：{this.state.industry}</div>
                                     <div>控制级别：{this.state.control}</div>
                                 </div>
-                                <img src={img} className={styles.img}/>
-                                <div className={styles.clearboth}></div>
+                                <img src={img} className={styles.img} />
+                                <div className={styles.clearboth} />
                             </div>
                             <div>
                                 <h3>污染物</h3>
@@ -355,7 +355,7 @@ class OverViewMap extends PureComponent {
                                     size="small"
                                     columns={wryinfo}
                                     dataSource={wrydata}
-                                    pagination={false}/>
+                                    pagination={false} />
                             </div>
                             <div>
                                 <h3>污染物24小时趋势图</h3>

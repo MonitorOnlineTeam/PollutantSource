@@ -1,0 +1,22 @@
+[
+    {
+        "listid":"1",
+        "listname":"测试点位1"
+    },
+    {
+        "listid": "2",
+        "listname": "测试点位2"
+    },
+    {
+        "listid": "3",
+        "listname": "测试点位3"
+    },
+    {
+        "listid": "4",
+        "listname": "测试点位4"
+    },
+    {
+        "listid": "5",
+        "listname": "测试点位5"
+    }
+]
