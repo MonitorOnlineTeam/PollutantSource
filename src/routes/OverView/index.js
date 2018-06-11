@@ -8,7 +8,7 @@ import config from '../../config';
 import MarkerDetail from '../../components/MarkerDetail';
 import styles from './index.less';
 import city from '../../utils/city';
-
+import img from  '../../../public/timg.jpg'
 const Option = Select.Option;
 const Search = Input.Search;
 
@@ -46,8 +46,8 @@ class OverViewMap extends PureComponent {
       position: [0, 0],
       visible: false,
       markers:this.props.markers,
-      content:""
-
+      content:"",
+      region:""
     };
 
      
@@ -63,7 +63,10 @@ class OverViewMap extends PureComponent {
         _this.setState({
           position: { longitude: itemdata.position.longitude, latitude: itemdata.position.latitude },
           visible: true,
-          title:itemdata.ent+"-"+itemdata.title
+          title:itemdata.ent+"-"+itemdata.title,
+          region:itemdata.region,
+          industry:itemdata.industry,
+          control:itemdata.control
         });
       }
       
@@ -78,7 +81,10 @@ class OverViewMap extends PureComponent {
         latitude: 39.985071,
       },
       title:"研发顶楼1",
-      ent:"雪迪龙"
+      ent:"雪迪龙",
+      region:"北京",
+      industry:"电厂",
+      control:"国控",
     },
     {
       key: "2",
@@ -87,7 +93,10 @@ class OverViewMap extends PureComponent {
         latitude: 39.915087,
       },
       title:"研发顶楼2",
-      ent:"雪迪龙"
+      ent:"雪迪龙",
+      region:"北京",
+      industry:"电厂",
+      control:"国控",
     },
     {
       key: "3",
@@ -96,7 +105,10 @@ class OverViewMap extends PureComponent {
         latitude: 40.070817,
       },
       title:"研发顶楼3",
-      ent:"雪迪龙"
+      ent:"雪迪龙",
+      region:"北京",
+      industry:"电厂",
+      control:"国控",
     },
     {
       key: "4",
@@ -105,7 +117,10 @@ class OverViewMap extends PureComponent {
         latitude: 40.170817,
       },
       title:"研发顶楼4",
-      ent:"雪迪龙"
+      ent:"雪迪龙",
+      region:"北京",
+      industry:"电厂",
+      control:"国控",
     }];
 
 
@@ -155,7 +170,39 @@ class OverViewMap extends PureComponent {
       ent: '雪迪龙',
       status: '正常',
       name: '研发顶楼4',
-    }];    
+    }];  
+
+    const wryinfo = [{
+      width:'25%',
+      dataIndex: 'wry1',
+      key: 'wry1',
+    }, {
+      width:'25%',
+      dataIndex: 'value1',
+      key: 'value1',
+    }, {
+    
+      width:'25%',
+      dataIndex: 'wry2',
+      key: 'wry2',
+    }, {
+ 
+      width:'25%',
+      dataIndex: 'value2',
+      key: 'value2',
+    }];
+    const wrydata = [{
+      key: '1',
+      wry1:'SO2',
+      value1: '78',
+      wry2: '烟尘',
+      value2: '107',
+    }, {
+      key: '2',
+      wry1:'NOx',
+      value1: '41',
+    }];  
+      
     const { location, pollutanttype, effects } = this.props;
     const { payload = {} } = location;
     const clusterOptions = {
@@ -166,7 +213,8 @@ class OverViewMap extends PureComponent {
     const html = `<div><h4>
     ${this.state.title}</h4><div style="margin:20px 0px 5px 50px"><button style="margin-right:15px;border-radius: 2px;
     background: #E0FFFF;border: 1px solid #ddd;">紧急派单</button><button style="border-radius: 2px;
-    background: #E0FFFF;border: 1px solid #ddd;">进入站房</button></div></div> `;
+    background: #E0FFFF;border: 1px solid #ddd;">进入站房</button></div>
+    <div style="border:1px solid #ddd"><div style=""></div></div></div> `;
     return (
       <div
         style={{ width: '100%', height: 'calc(100vh - 67px)' }}
@@ -207,12 +255,38 @@ class OverViewMap extends PureComponent {
                showShadow
                 position={this.state.position}
                 visible={this.state.visible}
-                content={html}
                 size={{
                   width: 290,
-                  height: 350,
+                  height: 400,
                 }}
-                offset={[0, -10]}/>
+                offset={[0, -10]}>
+                <div>
+                   <h3 className={styles.titleborder}>{this.state.title}</h3>
+                   <div className={styles.titlebutton}>
+                   <Button style={{marginRight:'10px'}}>进入站房</Button>
+                   <Button>进入站房</Button>
+                   </div>
+                   <div className={styles.titleborder}>
+                   <div className={styles.content}>
+                      <h3 className={styles.pointInfo}>站点信息</h3>
+                      <div>区域：{this.state.region}</div>
+                      <div>行业：{this.state.industry}</div>
+                      <div>控制级别：{this.state.control}</div>
+                   </div>
+                   <img src={img}  className={styles.img}   />
+                   <div className={styles.clearboth}></div>
+                   </div>
+                   <div>
+                     <h3>污染物</h3>
+                     <Table showHeader={false} bordered={true} size="small" columns={wryinfo} dataSource={wrydata} pagination={false}/>
+                   </div>
+                   <div>
+                       <h3>污染物24小时趋势图</h3>
+
+                   </div>
+
+                 </div>
+                </InfoWindow>
             </Map>
             <Button
             type="dashed"
