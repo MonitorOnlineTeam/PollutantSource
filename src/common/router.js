@@ -94,33 +94,45 @@ export const getRouterData = (app) => {
         component: dynamicWrapper(app, ['points'], () =>
           import ('../routes/PointDetail')),
       },
-      '/monitor/pointdetail/:pointcode/module1': {
+      '/monitor/pointdetail/:pointcode/processflowdiagram': {
         component: dynamicWrapper(app, ['points'], () =>
-          import ('../routes/PointDetail/Module1')),
+          import ('../routes/PointDetail/ProcessFlowDiagram')),
       },
-      '/monitor/pointdetail/:pointcode/module2': {
+      '/monitor/pointdetail/:pointcode/dataquery': {
         component: dynamicWrapper(app, ['points'], () =>
-          import ('../routes/PointDetail/Module2')),
+          import ('../routes/PointDetail/DataQuery')),
       },
-      '/monitor/pointdetail/:pointcode/module3': {
+      '/monitor/pointdetail/:pointcode/alarmrecord': {
         component: dynamicWrapper(app, ['points'], () =>
-          import ('../routes/PointDetail/Module3')),
+          import ('../routes/PointDetail/AlarmRecord')),
       },
-      '/monitor/pointdetail/:pointcode/module4': {
+      '/monitor/pointdetail/:pointcode/monitorvideo': {
         component: dynamicWrapper(app, ['points'], () =>
-          import ('../routes/PointDetail/Module4')),
+          import ('../routes/PointDetail/MonitorVideo')),
       },
-      '/monitor/pointdetail/:pointcode/module5': {
+      '/monitor/pointdetail/:pointcode/warningrecord': {
         component: dynamicWrapper(app, ['points'], () =>
-          import ('../routes/PointDetail/Module5')),
+          import ('../routes/PointDetail/WarningRecord')),
       },
-      '/monitor/pointdetail/:pointcode/module5': {
+      '/monitor/pointdetail/:pointcode/emergencymaintenancerecord': {
         component: dynamicWrapper(app, ['points'], () =>
-          import ('../routes/PointDetail/Module5')),
+          import ('../routes/PointDetail/EmergencyMaintenanceRecord')),
       },
-      '/monitor/pointdetail/:pointcode/module5': {
+      '/monitor/pointdetail/:pointcode/operationplanrecord': {
         component: dynamicWrapper(app, ['points'], () =>
-          import ('../routes/PointDetail/Module5')),
+          import ('../routes/PointDetail/OperationPlanRecord')),
+      },
+      '/monitor/pointdetail/:pointcode/inspectiontaskrecord': {
+        component: dynamicWrapper(app, ['points'], () =>
+          import ('../routes/PointDetail/InspectionTaskRecord')),
+      },
+      '/monitor/pointdetail/:pointcode/replacementpartrecord': {
+        component: dynamicWrapper(app, ['points'], () =>
+          import ('../routes/PointDetail/ReplacementPartRecord')),
+      },
+      '/monitor/pointdetail/:pointcode/stopmanagement': {
+        component: dynamicWrapper(app, ['points'], () =>
+          import ('../routes/PointDetail/StopManagement')),
       },
       /* 工作台 */
       '/monitor/workbench': {

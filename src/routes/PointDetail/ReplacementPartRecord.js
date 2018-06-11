@@ -1,8 +1,13 @@
 // import liraries
 import React, { Component } from 'react';
 
-
-class Module5 extends Component {
+/* 
+页面：9、备品备件使用记录
+描述：现场对备品备件出库使用信息记录、耗材消耗成本
+add by cg 18.6.8
+modify by 
+*/
+class ReplacementPartRecord extends Component {
   render() {
     return (
       <div
@@ -15,4 +20,4 @@ class Module5 extends Component {
   }
 }
 // make this component available to the app
-export default Module5;
+export default ReplacementPartRecord;
