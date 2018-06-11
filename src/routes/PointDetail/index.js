@@ -16,11 +16,16 @@ class PointDetail extends Component {
     this.state = {
       pointname: ['测试点位1', '测试点位2'],
       tablist: [
-        { key: 'module1', tab: '模块1' },
-        { key: 'module2', tab: '模块2' },
-        { key: 'module3', tab: '模块3' },
-        { key: 'module4', tab: '模块4' },
-        { key: 'module5', tab: '模块5' },
+        { key: 'processflowdiagram', tab: '工艺流程图' },
+        { key: 'dataquery', tab: '数据查询' },
+        { key: 'alarmrecord', tab: '报警记录' },
+        { key: 'monitorvideo', tab: '监控视频' },
+        { key: 'warningrecord', tab: '预警记录' },
+        { key: 'emergencymaintenancerecord', tab: '应急维护记录' },
+        { key: 'operationplanrecord', tab: '运维计划记录' },
+        { key: 'inspectiontaskrecord', tab: '例行任务记录' },
+        { key: 'replacementpartrecord', tab: '备品备件使用记录' },
+        { key: 'stopmanagement', tab: '停产管理' },
       ],
     };
   }
