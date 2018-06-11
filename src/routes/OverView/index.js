@@ -47,11 +47,39 @@ class OverViewMap extends PureComponent {
       visible: false,
       markers:this.props.markers,
       content:"",
-      region:""
+      region:"",
+      special:""
     };
 
-     
+    this.specialChange=(value)=>{
+      let special="monitor";
+      debugger;
+      if(value=="a")
+      {
+        special="monitor";
+      }
+      else if(value="b")
+      {
+        special="operation";
+      }
+      else if(value="c")
+      {
+        special="sewage";
+      }
   
+      else if(value="d")
+      {
+        special="quality";
+      }
+        _this.setState({
+          special:special
+        });
+      }
+  
+    this.stationclick=()=>{
+      this.props.dispatch(routerRedux.push('/monitor/pointdetail/0'));
+    }
+
     this.markersEvents = {
       click: (MapsOption, marker) => {
         const itemdata = marker.F.extData;
@@ -210,11 +238,8 @@ class OverViewMap extends PureComponent {
       gridSize: 30,
       minClusterSize: 3,
     };
-    const html = `<div><h4>
-    ${this.state.title}</h4><div style="margin:20px 0px 5px 50px"><button style="margin-right:15px;border-radius: 2px;
-    background: #E0FFFF;border: 1px solid #ddd;">紧急派单</button><button style="border-radius: 2px;
-    background: #E0FFFF;border: 1px solid #ddd;">进入站房</button></div>
-    <div style="border:1px solid #ddd"><div style=""></div></div></div> `;
+
+
     return (
       <div
         style={{ width: '100%', height: 'calc(100vh - 67px)' }}
@@ -225,7 +250,7 @@ class OverViewMap extends PureComponent {
               plugins={plugins}
             >
                 <div className={styles.treeborder} style={{width:350,position:'absolute',top:100,left:100,background:'#fff' }}>
-                    <Radio.Group style={{padding:'20px 2px 7px 50px' }} defaultValue="a">
+                    <Radio.Group style={{padding:'20px 2px 7px 50px' }} onChange={this.specialChange} defaultValue="a">
                       <Radio.Button value="a">监控</Radio.Button>
                       <Radio.Button value="b">运维</Radio.Button>
                       <Radio.Button value="c">排污</Radio.Button>
@@ -263,8 +288,8 @@ class OverViewMap extends PureComponent {
                 <div>
                    <h3 className={styles.titleborder}>{this.state.title}</h3>
                    <div className={styles.titlebutton}>
-                   <Button style={{marginRight:'10px'}}>进入站房</Button>
-                   <Button>进入站房</Button>
+                   <Button style={{marginRight:'10px'}} onClick={this.stationclick}>进入站房</Button>
+                   <Button>紧急派单</Button>
                    </div>
                    <div className={styles.titleborder}>
                    <div className={styles.content}>
@@ -282,17 +307,18 @@ class OverViewMap extends PureComponent {
                    </div>
                    <div>
                        <h3>污染物24小时趋势图</h3>
-
                    </div>
-
                  </div>
+
+
+
                 </InfoWindow>
             </Map>
             <Button
             type="dashed"
          
             onClick={() => {
-                this.props.dispatch(routerRedux.push('/monitor/pointdetail/0'));
+               
              }}
           >Dashed
           </Button>
