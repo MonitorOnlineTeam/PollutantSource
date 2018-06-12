@@ -1,27 +1,22 @@
 // import liraries
 import React, {PureComponent} from 'react';
 import {connect} from 'dva';
-import {Map, Markers, Marker, InfoWindow} from 'react-amap';
+import {Map, Markers, InfoWindow} from 'react-amap';
 import {
-    Select,
-    Cascader,
     Input,
-    Card,
     Spin,
     Radio,
     Button,
     Table
 } from 'antd';
 import {routerRedux} from 'dva/router';
+import ReactEcharts from 'echarts-for-react';
 import config from '../../config';
-import MarkerDetail from '../../components/MarkerDetail';
 import styles from './index.less';
-import city from '../../utils/city';
 import img from '../../../public/timg.jpg';
-const Option = Select.Option;
-const Search = Input.Search;
+import markerspoint from '../../mockdata/OverView/markersInfo.json';
 
-const {amapKey, zoom} = config;
+const {amapKey} = config;
 const plugins = [
     'MapType',
     'Scale', {
@@ -104,151 +99,6 @@ class OverViewMap extends PureComponent {
         };
     }
     render() {
-        const markersinfo = [
-            {
-                key: '1',
-                position: {
-                    longitude: 116.335854,
-                    latitude: 39.985071
-                },
-                title: '研发顶楼1',
-                ent: '雪迪龙',
-                region: '北京',
-                industry: '电厂',
-                control: '国控'
-            }, {
-                key: '2',
-                position: {
-                    longitude: 116.365869,
-                    latitude: 39.915087
-                },
-                title: '研发顶楼2',
-                ent: '雪迪龙',
-                region: '北京',
-                industry: '电厂',
-                control: '国控'
-            }, {
-                key: '3',
-                position: {
-                    longitude: 116.346202,
-                    latitude: 40.070817
-                },
-                title: '研发顶楼3',
-                ent: '雪迪龙',
-                region: '北京',
-                industry: '电厂',
-                control: '国控'
-            }, {
-                key: '4',
-                position: {
-                    longitude: 116.246282,
-                    latitude: 40.170817
-                },
-                title: '研发顶楼4',
-                ent: '雪迪龙',
-                region: '北京',
-                industry: '电厂',
-                control: '国控'
-            }
-        ];
-
-        const columns = [
-            {
-                title: '地区',
-                width: '20%',
-                dataIndex: 'region',
-                key: 'region'
-            }, {
-                title: '企业',
-                width: '25%',
-                dataIndex: 'ent',
-                key: 'ent'
-            }, {
-                title: '状态',
-                width: '20%',
-                dataIndex: 'status',
-                key: 'status'
-            }, {
-                title: '名称',
-                width: '35%',
-                dataIndex: 'name',
-                key: 'name'
-            }
-        ];
-
-        const data = [
-            {
-                key: '1',
-                region: '北京',
-                ent: '雪迪龙',
-                status: '正常',
-                name: '研发顶楼1'
-            }, {
-                key: '2',
-                region: '北京',
-                ent: '雪迪龙',
-                status: '正常',
-                name: '研发顶楼2'
-            }, {
-                key: '3',
-                region: '北京',
-                ent: '雪迪龙',
-                status: '正常',
-                name: '研发顶楼3'
-            }, {
-                key: '4',
-                region: '北京',
-                ent: '雪迪龙',
-                status: '正常',
-                name: '研发顶楼4'
-            }
-        ];
-
-        const wryinfo = [
-            {
-                width: '25%',
-                dataIndex: 'wry1',
-                key: 'wry1'
-            }, {
-                width: '25%',
-                dataIndex: 'value1',
-                key: 'value1'
-            }, {
-
-                width: '25%',
-                dataIndex: 'wry2',
-                key: 'wry2'
-            }, {
-
-                width: '25%',
-                dataIndex: 'value2',
-                key: 'value2'
-            }
-        ];
-        const wrydata = [
-            {
-                key: '1',
-                wry1: 'SO2',
-                value1: '78',
-                wry2: '烟尘',
-                value2: '107'
-            }, {
-                key: '2',
-                wry1: 'NOx',
-                value1: '41'
-            }
-        ];
-
-        const {location, pollutanttype, effects} = this.props;
-        const {
-            payload = {}
-        } = location;
-        const clusterOptions = {
-            zoomOnClick: true,
-            gridSize: 30,
-            minClusterSize: 3
-        };
-
         return (
             <div
                 style={{
@@ -260,14 +110,15 @@ class OverViewMap extends PureComponent {
                         className={styles.treeborder}
                         style={{
                             width: 350,
+                            height: 'calc(100vh - 90px)',
                             position: 'absolute',
-                            top: 100,
-                            left: 100,
+                            top: 10,
+                            left: 5,
                             background: '#fff'
                         }}>
                         <Radio.Group
                             style={{
-                                padding: '20px 2px 7px 50px'
+                                padding: '10px 2px 7px 50px'
                             }}
                             onChange={this.specialChange}
                             defaultValue="a">
@@ -282,17 +133,18 @@ class OverViewMap extends PureComponent {
                                 width: 327,
                                 margin: '0px 2px 10px 10px'
                             }} />
-                        <Table columns={columns} dataSource={data} pagination={false} />
+                        <Table columns={markerspoint.treeListcol} dataSource={markerspoint.treeListdata} pagination={false} />
                     </div>
                     <div
                         style={{
                             position: 'absolute',
-                            top: 30,
+                            top: 10,
                             right: 200
                         }}>
                         <Radio.Group
+
                             style={{
-                                padding: '10px 2px 2px 50px'
+                                padding: '0 2px 2px 50px'
                             }}
                             defaultValue="a">
                             <Radio.Button value="a">地图</Radio.Button>
@@ -303,7 +155,6 @@ class OverViewMap extends PureComponent {
                     <div
                         style={{
                             position: 'absolute',
-                            top: 30,
                             left: 450
                         }}>
                         <Radio.Group
@@ -316,7 +167,7 @@ class OverViewMap extends PureComponent {
                             <Radio.Button value="c">烟尘</Radio.Button>
                         </Radio.Group>
                     </div>
-                    <Markers markers={markersinfo} events={this.markersEvents} />
+                    <Markers markers={markerspoint.markersInfo} events={this.markersEvents} />
                     <InfoWindow
                         autoMove={true}
                         showShadow={true}
@@ -328,7 +179,7 @@ class OverViewMap extends PureComponent {
                         }}
                         offset={[0, -10]}>
                         <div>
-                            <h3 className={styles.titleborder}>{this.state.title}</h3>
+                            <h4 className={styles.titleborder}>{this.state.title}</h4>
                             <div className={styles.titlebutton}>
                                 <Button
                                     style={{
@@ -339,7 +190,7 @@ class OverViewMap extends PureComponent {
                             </div>
                             <div className={styles.titleborder}>
                                 <div className={styles.content}>
-                                    <h3 className={styles.pointInfo}>站点信息</h3>
+                                    <h4 className={styles.pointInfo}>站点信息</h4>
                                     <div>区域：{this.state.region}</div>
                                     <div>行业：{this.state.industry}</div>
                                     <div>控制级别：{this.state.control}</div>
@@ -348,17 +199,23 @@ class OverViewMap extends PureComponent {
                                 <div className={styles.clearboth} />
                             </div>
                             <div>
-                                <h3>污染物</h3>
+                                <h4>污染物</h4>
                                 <Table
                                     showHeader={false}
                                     bordered={true}
                                     size="small"
-                                    columns={wryinfo}
-                                    dataSource={wrydata}
+                                    columns={markerspoint.wryinfo}
+                                    dataSource={markerspoint.wrydata}
                                     pagination={false} />
                             </div>
                             <div>
-                                <h3>污染物24小时趋势图</h3>
+                                <h4>污染物24小时趋势图</h4>
+                                <ReactEcharts
+                                    className={styles.echartdiv}
+                                    style={{width: '95%', height: '150px'}}
+                                    option={markerspoint.monitorTrend}
+                                    notMerge={true}
+                                    lazyUpdate={true} />
                             </div>
                         </div>
 

@@ -1,0 +1,142 @@
+
+ 
+
+    {
+        "markersInfo": [
+        {
+            "key": 1,
+            "position": {
+                "longitude": 116.335854,
+                "latitude": 39.985071
+            },
+            "title": "研发顶楼1",
+            "ent": "雪迪龙",
+            "region": "北京",
+            "industry": "电厂",
+            "control": "国控"
+        }, {
+            "key": 2,
+            "position": {
+                "longitude": 116.365869,
+                "latitude": 39.915087
+            },
+            "title": "研发顶楼2",
+            "ent": "雪迪龙",
+            "region": "北京",
+            "industry": "电厂",
+            "control": "国控"
+        }, {
+            "key": 3,
+            "position": {
+                "longitude": 116.346202,
+                "latitude": 40.070817
+            },
+            "title": "研发顶楼3",
+            "ent": "雪迪龙",
+            "region": "北京",
+            "industry": "电厂",
+            "control": "国控"
+        }, {
+            "key": "4",
+            "position": {
+                "longitude": 116.246282,
+                "latitude": 40.170817
+            },
+            "title": "研发顶楼4",
+            "ent": "雪迪龙",
+            "region": "北京",
+            "industry": "电厂",
+            "control": "国控"
+        }
+      ],
+      "treeListcol":[ {
+        "title": "地区",
+        "width": "20%",
+        "dataIndex": "region",
+        "key": "region"
+    }, {
+        "title": "企业",
+        "width": "25%",
+        "dataIndex": "ent",
+        "key": "ent"
+    }, {
+        "title": "状态",
+        "width": "20%",
+        "dataIndex": "status",
+        "key": "status"
+    }, {
+        "title": "名称",
+        "width": "35%",
+        "dataIndex": "name",
+        "key": "name"
+    }],
+    "treeListdata":[ {
+        "key": "1",
+        "region": "北京",
+        "ent": "雪迪龙",
+        "status": "正常",
+        "name": "研发顶楼1"
+    }, {
+        "key": "2",
+        "region": "北京",
+        "ent": "雪迪龙",
+        "status": "正常",
+        "name": "研发顶楼2"
+    }, {
+        "key": "3",
+        "region": "北京",
+        "ent": "雪迪龙",
+        "status": "正常",
+        "name": "研发顶楼3"
+    }, {
+        "key": "4",
+        "region": "北京",
+        "ent": "雪迪龙",
+        "status": "正常",
+        "name": "研发顶楼4"
+    }],
+    "wrydata":[  {
+        "key": "1",
+        "wry1": "SO2",
+        "value1": "78",
+        "wry2": "烟尘",
+        "value2": "107"
+    }, {
+        "key": "2",
+        "wry1": "NOx",
+        "value1": "41"
+    }],
+    "wryinfo":[ {
+        "width": "25%",
+        "dataIndex": "wry1",
+        "key": "wry1"
+    }, {
+        "width": "25%",
+        "dataIndex": "value1",
+        "key": "value1"
+    }, {
+
+        "width": "25%",
+        "dataIndex": "wry2",
+        "key": "wry2"
+    }, {
+
+        "width": "25%",
+        "dataIndex": "value2",
+        "key": "value2"
+    }],
+    "monitorTrend": {
+        "xAxis": {
+            "type": "category",
+            "data": ["0","01", "02", "03", "04", "05", "06", "07","08","09","10","11","12","13","14","15","16","17","18","19","20","21","22","23"]
+        },
+        "yAxis": {
+            "type": "value"
+        },
+        "series": [{
+            "data": [27, 56, 48, 31, 39, 43, 61,52,64,57,62,77,27, 56, 48, 31, 39, 43, 61,52,64,57,62,77],
+            "type": "line"
+        }]
+        }
+    }
+    
