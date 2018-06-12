@@ -1,0 +1,21 @@
+[{
+    "ExceptionHandleId": "",
+    "DGIMN": "ldscwjty000001",   //成都统一食品公司-废气排口
+    "UserId": "",
+    "User_Name": "小王",
+    "BeginHandleTime": "2018-6-2 12:00:00",
+    "EndHandleTime": "2018-6-4 12:00:00",
+    "ExceptionType": "设备故障",
+    "SignFlag": "",
+    "CheckState":"审核通过"     //任务状态
+  }, {
+    "ExceptionHandleId": "1",
+    "DGIMN": "62072531stjt01",     //张掖市山丹铁骑水泥有限责任公司-窑头
+    "UserId": "",
+    "User_Name": "小王",
+    "BeginHandleTime": "2018-6-5 12:00:00",
+    "EndHandleTime": "",
+    "ExceptionType": "设备故障",
+    "SignFlag": "",
+    "CheckState":"处理中"
+  }]

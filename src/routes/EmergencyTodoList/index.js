@@ -1,5 +1,5 @@
-import React, { Component } from 'react'
-
+import React, { Component } from 'react';
+import { Table, Radio, Select, Cascader, Input, Card, Modal,Spin } from 'antd';
 
 /* 
 页面：应急维护待办列表
@@ -10,8 +10,19 @@ modify by
 export default class EmergencyAuditList extends Component {
   render() {
     return (
-      <div>
-        水电费水电费第三方的双丰收
+      <div
+      style={{ width: '100%',
+      height: 'calc(100vh - 120px)' }}
+      >
+       <Card
+          bordered={false}
+          bodyStyle={
+            {
+              height: 'calc(100vh - 200px)',
+              padding: '0px 20px',
+            }
+          }>
+          </Card >
       </div>
     )
   }
