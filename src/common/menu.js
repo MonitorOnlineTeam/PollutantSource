@@ -13,7 +13,7 @@ const menuData = [
             },
             {
                 name: '工作台',
-                path: 'testMap',
+                path: 'workbench',
                 icon: 'desktop',
             },
             {
