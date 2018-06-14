@@ -3,17 +3,21 @@ import React, {PureComponent} from 'react';
 import {connect} from 'dva';
 import {Map, Markers, InfoWindow} from 'react-amap';
 import {
-    Input,
     Spin,
     Radio,
     Button,
-    Table
+
 } from 'antd';
+
 import {routerRedux} from 'dva/router';
-import ReactEcharts from 'echarts-for-react';
+import MonitorTips from '../../components/OverView/MonitorTips';
+import NavigationTree from '../../components/OverView/NavigationTree';
+import OperationTips from '../../components/OverView/OperationTips';
+import SewageTips from '../../components/OverView/SewageTips';
+import QualityControlTips from '../../components/OverView/QualityControlTips';
 import config from '../../config';
 import styles from './index.less';
-import img from '../../../public/timg.jpg';
+
 import markerspoint from '../../mockdata/OverView/markersInfo.json';
 
 const {amapKey} = config;
@@ -51,25 +55,38 @@ class OverViewMap extends PureComponent {
                 0, 0
             ],
             visible: false,
-            markers: this.props.markers,
             content: '',
             region: '',
-            special: ''
+            special: 'monitor',
+            markerInfo: markerspoint.markersInfo
         };
 
         this.specialChange = (value) => {
             let special = 'monitor';
-            debugger;
-            if (value === 'a') {
+            if (value.target.value === 'a') {
                 special = 'monitor';
-            } else if (value === 'b') {
+            } else if (value.target.value === 'b') {
                 special = 'operation';
-            } else if (value === 'c') {
+            } else if (value.target.value === 'c') {
                 special = 'sewage';
-            } else if (value === 'd') {
+            } else if (value.target.value === 'd') {
                 special = 'quality';
             }
             _this.setState({special: special});
+        };
+        this.treeCilck = (row) => {
+            _this.setState({visible: false});
+            _this.setState({
+                position: {
+                    longitude: row.position.longitude,
+                    latitude: row.position.latitude
+                },
+                visible: true,
+                title: row.ent + '-' + row.title,
+                region: row.region,
+                industry: row.industry,
+                control: row.control
+            });
         };
 
         this.stationclick = () => {
@@ -78,11 +95,31 @@ class OverViewMap extends PureComponent {
                 .dispatch(routerRedux.push('/monitor/pointdetail/0'));
         };
 
+        this.TreeSearch = (value) => {
+            let markerInfo = [];
+            markerspoint.markersInfo.map((item, key) => {
+                debugger;
+                let isexist = false;
+                if (item.title.indexOf(value) > -1 || value.indexOf(item.title) > -1) {
+                    isexist = true;
+                }
+                if (item.ent.indexOf(value) > -1 || value.indexOf(item.ent) > -1) {
+                    isexist = true;
+                }
+                if (item.region.indexOf(value) > -1 || value.indexOf(item.region) > -1) {
+                    isexist = true;
+                }
+                if (item.key.indexOf(value) > -1 || value.indexOf(item.key) > -1) {
+                    isexist = true;
+                }
+                if (isexist) { markerInfo.push(item); }
+            });
+            _this.setState({markerInfo: markerInfo});
+        };
         this.markersEvents = {
             click: (MapsOption, marker) => {
                 const itemdata = marker.F.extData;
                 _this.setState({visible: false});
-
                 _this.setState({
                     position: {
                         longitude: itemdata.position.longitude,
@@ -99,42 +136,16 @@ class OverViewMap extends PureComponent {
         };
     }
     render() {
+        const special = this.state.special;
         return (
             <div
                 style={{
                     width: '100%',
                     height: 'calc(100vh - 67px)'
                 }}>
-                <Map loading={<Spin />} amapkey={amapKey} plugins={plugins}>
-                    <div
-                        className={styles.treeborder}
-                        style={{
-                            width: 350,
-                            height: 'calc(100vh - 90px)',
-                            position: 'absolute',
-                            top: 10,
-                            left: 5,
-                            background: '#fff'
-                        }}>
-                        <Radio.Group
-                            style={{
-                                padding: '10px 2px 7px 50px'
-                            }}
-                            onChange={this.specialChange}
-                            defaultValue="a">
-                            <Radio.Button value="a">监控</Radio.Button>
-                            <Radio.Button value="b">运维</Radio.Button>
-                            <Radio.Button value="c">排污</Radio.Button>
-                            <Radio.Button value="d">质控</Radio.Button>
-                        </Radio.Group>
-                        <Input
-                            placeholder="请输入排口名称、企业名称、设备编号进行搜索"
-                            style={{
-                                width: 327,
-                                margin: '0px 2px 10px 10px'
-                            }} />
-                        <Table columns={markerspoint.treeListcol} dataSource={markerspoint.treeListdata} pagination={false} />
-                    </div>
+                <Map loading={<Spin />} amapkey={amapKey}  plugins={plugins}>
+
+                    <NavigationTree TreeSearch={this.TreeSearch} specialChange={this.specialChange} treeCilck={this.treeCilck} markersInfo={this.state.markerInfo} />
                     <div
                         style={{
                             position: 'absolute',
@@ -142,7 +153,6 @@ class OverViewMap extends PureComponent {
                             right: 200
                         }}>
                         <Radio.Group
-
                             style={{
                                 padding: '0 2px 2px 50px'
                             }}
@@ -155,7 +165,8 @@ class OverViewMap extends PureComponent {
                     <div
                         style={{
                             position: 'absolute',
-                            left: 450
+                            left: 450,
+                            top: 0,
                         }}>
                         <Radio.Group
                             style={{
@@ -167,7 +178,7 @@ class OverViewMap extends PureComponent {
                             <Radio.Button value="c">烟尘</Radio.Button>
                         </Radio.Group>
                     </div>
-                    <Markers markers={markerspoint.markersInfo} events={this.markersEvents} />
+                    <Markers useCluster={true} markers={this.state.markerInfo} events={this.markersEvents} />
                     <InfoWindow
                         autoMove={true}
                         showShadow={true}
@@ -175,7 +186,8 @@ class OverViewMap extends PureComponent {
                         visible={this.state.visible}
                         size={{
                             width: 290,
-                            height: 400
+                            height: 450,
+                            overflow: 'hidden'
                         }}
                         offset={[0, -10]}>
                         <div>
@@ -188,41 +200,12 @@ class OverViewMap extends PureComponent {
                                     onClick={this.stationclick}>进入站房</Button>
                                 <Button>紧急派单</Button>
                             </div>
-                            <div className={styles.titleborder}>
-                                <div className={styles.content}>
-                                    <h4 className={styles.pointInfo}>站点信息</h4>
-                                    <div>区域：{this.state.region}</div>
-                                    <div>行业：{this.state.industry}</div>
-                                    <div>控制级别：{this.state.control}</div>
-                                </div>
-                                <img src={img} className={styles.img} />
-                                <div className={styles.clearboth} />
-                            </div>
-                            <div>
-                                <h4>污染物</h4>
-                                <Table
-                                    showHeader={false}
-                                    bordered={true}
-                                    size="small"
-                                    columns={markerspoint.wryinfo}
-                                    dataSource={markerspoint.wrydata}
-                                    pagination={false} />
-                            </div>
-                            <div>
-                                <h4>污染物24小时趋势图</h4>
-                                <ReactEcharts
-                                    className={styles.echartdiv}
-                                    style={{width: '95%', height: '150px'}}
-                                    option={markerspoint.monitorTrend}
-                                    notMerge={true}
-                                    lazyUpdate={true} />
-                            </div>
+                            {special === 'monitor' ? <MonitorTips region={this.state.region} stationclick={this.stationclick}
+                                industry={this.state.industry} control={this.state.control} /> : (special === 'operation' ? <OperationTips />
+                                : (special === 'sewage' ? <SewageTips /> : <QualityControlTips />))}
                         </div>
-
                     </InfoWindow>
                 </Map>
-                <Button type="dashed" onClick={() => {}}>Dashed
-                </Button>
             </div>
         );
     }
