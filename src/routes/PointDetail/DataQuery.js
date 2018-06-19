@@ -1,6 +1,7 @@
 // import liraries
 import React, { Component } from 'react';
 import ReactEcharts from 'echarts-for-react';
+import PollutantSelect from '../../components/PointDetail/PollutantSelect';
 import {
     Form,
     Table,
@@ -101,24 +102,21 @@ const option = {
     toolbox: {
         show: true,
         feature: {
-            dataZoom: {
-                yAxisIndex: 'none'
-            },
-            dataView: {readOnly: false},
-            magicType: {type: ['line', 'bar']},
             restore: {},
             saveAsImage: {}
         }
     },
     xAxis: {
         type: 'category',
+        name: '时间',
         boundaryGap: false,
         data: ['2017-05-17', '2017-05-18', '2017-05-19', '2017-05-20', '2017-05-21', '2017-05-22']
     },
     yAxis: {
         type: 'value',
+        name: '浓度(mol/L)',
         axisLabel: {
-            formatter: '{value} mol/L'
+            formatter: '{value}'
         }
     },
     series: [
@@ -182,6 +180,11 @@ class DataQuery extends Component {
                                                 <Option value="rmb">RMB</Option>
                                                 <Option value="dollar">Dollar</Option>
                                             </Select>
+                                        </FormItem>
+                                    </Col>
+                                    <Col>
+                                        <FormItem label="污染物1">
+                                            <PollutantSelect />
                                         </FormItem>
                                     </Col>
                                 </Row>
