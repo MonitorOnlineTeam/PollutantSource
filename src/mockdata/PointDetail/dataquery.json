@@ -1,7 +1,18 @@
-[
-    {
-        "ID":"1",
-        "PointID":"100001"
-        
-    }
-]
+{
+    "DataQueryList":[],
+    "Pollutant":
+    [
+        {
+            "PollutantCode":"100",
+            "PollutantName":"SO2"
+        },
+        {
+            "PollutantCode":"101",
+            "PollutantName":"NOx"
+        },
+        {
+            "PollutantCode":"103",
+            "PollutantName":"烟尘"
+        }
+    ]
+}
