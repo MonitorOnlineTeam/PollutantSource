@@ -1,7 +1,8 @@
-// import liraries
+// 监控总览-数据查询
 import React, { Component } from 'react';
 import ReactEcharts from 'echarts-for-react';
-import PollutantSelect from '../../components/PointDetail/PollutantSelect';
+import PollutantSelect_ from '../../components/PointDetail/PollutantSelect_';
+import RangePicker_ from '../../components/PointDetail/RangePicker_';
 import {
     Form,
     Table,
@@ -10,8 +11,8 @@ import {
     Card,
     Input,
     Radio,
-    Select,
-    DatePicker } from 'antd';
+    Button
+} from 'antd';
 import styles from './index.less';
 /*
 页面：2、数据查询
@@ -19,10 +20,6 @@ import styles from './index.less';
 add by cg 18.6.8
 modify by
 */
-
-function onChange(date, dateString) {
-    console.log(date, dateString);
-}
 
 const renderContent = (value, row, index) => {
     const obj = {
@@ -140,14 +137,23 @@ const option = {
 };
 const FormItem = Form.Item;
 
-const Option = Select.Option;
 class DataQuery extends Component {
     state = {
         size: 'Realtime',
     };
+    submit=() => {
+        // const it = this.pollutantSelect.state.selectitem;
+    }
     handleSizeChange = (e) => {
         this.setState({ size: e.target.value });
     }
+    // 查询按钮
+    BtnSearch=() => {
+        // this.pollutantSelect.setSelectItem(100);
+        console.log(this.PollutantSelect_.getSelectItem());
+        console.log(this.RangePicker_.getDateValues());
+    }
+
     render() {
         const size = this.state.size;
         return (
@@ -164,9 +170,9 @@ class DataQuery extends Component {
                         } style={{ width: '100%', height: 'calc(100vh - 225px)' }}>
                             <Form layout="inline">
                                 <Row>
-                                    <Col span={5} >
+                                    <Col span={7} >
                                         <FormItem label="时间">
-                                            <DatePicker onChange={onChange} />
+                                            <RangePicker_ format="YYYY-MM-DD" ref={(r) => { this.RangePicker_ = r; }} />
                                         </FormItem>
                                     </Col>
                                     <Col span={5} >
@@ -174,17 +180,14 @@ class DataQuery extends Component {
                                             <Input placeholder="placeholder" />
                                         </FormItem>
                                     </Col>
-                                    <Col span={5} >
+                                    <Col span={5}>
                                         <FormItem label="污染物">
-                                            <Select defaultValue="dollar" style={{ width: 200 }}>
-                                                <Option value="rmb">RMB</Option>
-                                                <Option value="dollar">Dollar</Option>
-                                            </Select>
+                                            <PollutantSelect_ ref={(r) => { this.PollutantSelect_ = r; }} />
                                         </FormItem>
                                     </Col>
-                                    <Col>
-                                        <FormItem label="污染物1">
-                                            <PollutantSelect />
+                                    <Col span={5}>
+                                        <FormItem>
+                                            <Button type="primary" icon="search" onClick={this.BtnSearch}>查询</Button>
                                         </FormItem>
                                     </Col>
                                 </Row>
