@@ -41,6 +41,13 @@ class RangePicker_ extends Component {
     getDateValues=() => {
         return {Form: this.state.Form, To: this.state.To};
     };
+
+    setDateValues=(dates) => {
+        this.setState({
+            searchdate: dates
+        });
+    };
+
     onDateChange=(dates, dateStrings) => {
         this.setState({
             searchdate: dates,

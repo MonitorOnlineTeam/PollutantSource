@@ -1,20 +1,17 @@
 @import "~antd/lib/style/themes/default.less";
-
-
-  /*数据查询样式*/
-  .cardTitle{
+/*数据查询样式*/
+.cardTitle{
+  width: '100%'; 
+  height:'calc(100vh - 225px)';
+  :global {
     .ant-card-extra{
       padding: 12.5px 0 !important;
-    } 
-  }  
-
-
-th.table_concentration,
-td.table_concentration{
-  text-align: center !important;
-}
-
+    }
+  }
+}  
 /*数据查询样式*/
+
+  
 
 .pageHeader {
   background: @component-background;
@@ -97,7 +94,7 @@ td.table_concentration{
     margin-left: 88px;
     min-width: 242px;
   }
-
-
 }
+
+
  

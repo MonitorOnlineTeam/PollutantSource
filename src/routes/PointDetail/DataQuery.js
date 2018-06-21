@@ -1,19 +1,20 @@
 // 监控总览-数据查询
 import React, { Component } from 'react';
 import ReactEcharts from 'echarts-for-react';
-import PollutantSelect_ from '../../components/PointDetail/PollutantSelect_';
+import PageDatas from '../../mockdata/PointDetail/dataquery.json';
 import RangePicker_ from '../../components/PointDetail/RangePicker_';
+import ButtonGroup_ from '../../components/PointDetail/ButtonGroup_';
+import Select_ from '../../components/PointDetail/Select_';
+import styles from './index.less';
 import {
     Form,
     Table,
     Row,
     Col,
     Card,
-    Input,
-    Radio,
     Button
 } from 'antd';
-import styles from './index.less';
+
 /*
 页面：2、数据查询
 描述：管控状态、参数信息，分钟、小时，日数据
@@ -94,7 +95,7 @@ const option = {
         trigger: 'axis'
     },
     legend: {
-        data: ['雪迪龙-研发顶楼']
+        data: ['SO2']
     },
     toolbox: {
         show: true,
@@ -118,7 +119,7 @@ const option = {
     },
     series: [
         {
-            name: '雪迪龙-研发顶楼',
+            name: 'SO2',
             type: 'line',
             data: [27, 40, 28, 35, 29, 42],
             markPoint: {
@@ -139,7 +140,7 @@ const FormItem = Form.Item;
 
 class DataQuery extends Component {
     state = {
-        size: 'Realtime',
+
     };
     submit=() => {
         // const it = this.pollutantSelect.state.selectitem;
@@ -150,23 +151,27 @@ class DataQuery extends Component {
     // 查询按钮
     BtnSearch=() => {
         // this.pollutantSelect.setSelectItem(100);
-        console.log(this.PollutantSelect_.getSelectItem());
-        console.log(this.RangePicker_.getDateValues());
+        var obj = {
+            FormDate: this.RangePicker_.getDateValues().Form,
+            ToDate: this.RangePicker_.getDateValues().To,
+            // CompareValues: this.select_Compare.getSelectItemValue(),
+            PollutantValue: this.select_Pollutant.getSelectItemValue()
+        };
+
+        console.log(obj);
+        // console.log(this.select_Pollutant.getSelectItemValue());// 获取选中的污染物code
+        // console.log(this.Select_.getSelectItemText());// 获取选中的污染物code
+        // console.log(this.RangePicker_.getDateValues());// 获取时间范围 {From:'',To:''}
+        // console.log(this.RangePicker_.setDateValues([moment('2018-06-20'), moment('2018-06-21')]));// 设置时间 From To
     }
 
     render() {
-        const size = this.state.size;
         return (
-            <div style={{ width: '100%', height: 'calc(100vh - 225px)' }} className={styles.cardTitle}>
+            <div className={styles.cardTitle}>
                 <Row>
                     <Col span={20} push={4} >
-                        <Card title="雪迪龙-研发顶楼3" extra={
-                            <Radio.Group value={size} onChange={this.handleSizeChange} >
-                                <Radio.Button value="Realtime">实时</Radio.Button>
-                                <Radio.Button value="Minutes">分钟</Radio.Button>
-                                <Radio.Button value="Hour">小时</Radio.Button>
-                                <Radio.Button value="Day">日</Radio.Button>
-                            </Radio.Group>
+                        <Card title="监测趋势图" extra={
+                            <ButtonGroup_ />
                         } style={{ width: '100%', height: 'calc(100vh - 225px)' }}>
                             <Form layout="inline">
                                 <Row>
@@ -177,12 +182,13 @@ class DataQuery extends Component {
                                     </Col>
                                     <Col span={5} >
                                         <FormItem label="对比">
-                                            <Input placeholder="placeholder" />
+                                            <Select_ mode="multiple" optionDatas={PageDatas.Pollutant} ref={(r) => { this.select_Compare = r; }} />
                                         </FormItem>
                                     </Col>
                                     <Col span={5}>
                                         <FormItem label="污染物">
-                                            <PollutantSelect_ ref={(r) => { this.PollutantSelect_ = r; }} />
+                                            <Select_ optionDatas={PageDatas.Pollutant} ref={(r) => { this.select_Pollutant = r; }} />
+                                            {/* <PollutantSelect_ ref={(r) => { this.PollutantSelect_ = r; }} /> */}
                                         </FormItem>
                                     </Col>
                                     <Col span={5}>

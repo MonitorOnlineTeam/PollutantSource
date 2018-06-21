@@ -3,16 +3,16 @@
     "Pollutant":
     [
         {
-            "PollutantCode":"100",
-            "PollutantName":"SO2"
+            "Value":"100",
+            "Name":"SO2"
         },
         {
-            "PollutantCode":"101",
-            "PollutantName":"NOx"
+            "Value":"101",
+            "Name":"NOx"
         },
         {
-            "PollutantCode":"103",
-            "PollutantName":"烟尘"
+            "Value":"103",
+            "Name":"烟尘"
         }
     ]
 }
