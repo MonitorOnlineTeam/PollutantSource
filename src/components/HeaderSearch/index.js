@@ -9,7 +9,7 @@ export default class HeaderSearch extends PureComponent {
     defaultActiveFirstOption: false,
     onPressEnter: () => {},
     onSearch: () => {},
-    className: '',
+    className: '',  
     placeholder: '',
     dataSource: [],
   };

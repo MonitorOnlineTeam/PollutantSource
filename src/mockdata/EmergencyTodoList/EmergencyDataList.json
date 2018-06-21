@@ -1,21 +1,55 @@
-[{
-    "ExceptionHandleId": "",
-    "DGIMN": "ldscwjty000001",   //成都统一食品公司-废气排口
+{
+  "EColumn":[
+  {
+    "title": "故障类型",
+    "width": "10%",
+    "dataIndex": "ExceptionType",
+    "align":"center"
+}, {
+    "title": "处理人",
+    "width": "20%",
+    "dataIndex": "User_Name",
+    "align":"center"
+}, {
+    "title": "开始时间",
+    "width": "20%",
+    "dataIndex": "BeginHandleTime",
+    "align":"center"
+}, {
+    "title": "结束时间",
+    "width": "20%",
+    "dataIndex": "EndHandleTime",
+    "align":"center"
+}, {
+  "title": "签到",
+  "width": "20%",
+  "dataIndex": "SignFlag",
+  "align":"center"
+}, {
+  "title": "任务状态",
+  "width": "10%",
+  "dataIndex": "CheckState",
+  "align":"center"
+}],
+  "EDataList":[{
+    "ExceptionHandleId": "1",
+    "DGIMN": "ldscwjty000001",   
     "UserId": "",
+    "ExceptionType": "设备故障",
     "User_Name": "小王",
     "BeginHandleTime": "2018-6-2 12:00:00",
     "EndHandleTime": "2018-6-4 12:00:00",
-    "ExceptionType": "设备故障",
     "SignFlag": "",
-    "CheckState":"审核通过"     //任务状态
+    "CheckState":"审核通过"     
   }, {
-    "ExceptionHandleId": "1",
-    "DGIMN": "62072531stjt01",     //张掖市山丹铁骑水泥有限责任公司-窑头
+    "ExceptionHandleId": "2",
+    "DGIMN": "62072531stjt01", 
     "UserId": "",
+    "ExceptionType": "设备故障",
     "User_Name": "小王",
     "BeginHandleTime": "2018-6-5 12:00:00",
     "EndHandleTime": "",
-    "ExceptionType": "设备故障",
     "SignFlag": "",
     "CheckState":"处理中"
-  }]
+  }]}
+  
