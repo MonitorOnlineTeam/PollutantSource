@@ -1,0 +1,20 @@
+﻿[
+    {
+        "CarryOutStandardLevelCode":"1",
+        "CarryOutStandardLevelName":"一级标准",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "CarryOutStandardLevelCode":"2",
+        "CarryOutStandardLevelName":"二级标准",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "CarryOutStandardLevelCode":"3",
+        "CarryOutStandardLevelName":"三级标准",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    }
+]

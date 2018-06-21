@@ -1,0 +1,194 @@
+﻿[
+    {
+        "RegistTypeCode":"100",
+        "RegistTypeName":"内资企业",
+        "Comment":"",
+        "UpdateDate":"01 1 1900 12:00AM"
+    },
+    {
+        "RegistTypeCode":"110",
+        "RegistTypeName":"国有企业",
+        "Comment":"",
+        "UpdateDate":"01 1 1900 12:00AM"
+    },
+    {
+        "RegistTypeCode":"120",
+        "RegistTypeName":"集体企业",
+        "Comment":"",
+        "UpdateDate":"01 1 1900 12:00AM"
+    },
+    {
+        "RegistTypeCode":"130",
+        "RegistTypeName":"股份合作企业",
+        "Comment":"",
+        "UpdateDate":"01 1 1900 12:00AM"
+    },
+    {
+        "RegistTypeCode":"140",
+        "RegistTypeName":"联营企业",
+        "Comment":"",
+        "UpdateDate":"01 1 1900 12:00AM"
+    },
+    {
+        "RegistTypeCode":"141",
+        "RegistTypeName":"国有联营企业",
+        "Comment":"",
+        "UpdateDate":"01 1 1900 12:00AM"
+    },
+    {
+        "RegistTypeCode":"142",
+        "RegistTypeName":"集体联营企业",
+        "Comment":"",
+        "UpdateDate":"01 1 1900 12:00AM"
+    },
+    {
+        "RegistTypeCode":"143",
+        "RegistTypeName":"国有与集体联营企业",
+        "Comment":"",
+        "UpdateDate":"01 1 1900 12:00AM"
+    },
+    {
+        "RegistTypeCode":"149",
+        "RegistTypeName":"其他联营企业",
+        "Comment":"",
+        "UpdateDate":"01 1 1900 12:00AM"
+    },
+    {
+        "RegistTypeCode":"150",
+        "RegistTypeName":"有限责任公司",
+        "Comment":"",
+        "UpdateDate":"01 1 1900 12:00AM"
+    },
+    {
+        "RegistTypeCode":"151",
+        "RegistTypeName":"国有独资公司",
+        "Comment":"",
+        "UpdateDate":"01 1 1900 12:00AM"
+    },
+    {
+        "RegistTypeCode":"159",
+        "RegistTypeName":"其他有限责任公司",
+        "Comment":"",
+        "UpdateDate":"01 1 1900 12:00AM"
+    },
+    {
+        "RegistTypeCode":"160",
+        "RegistTypeName":"股份有限公司",
+        "Comment":"",
+        "UpdateDate":"01 1 1900 12:00AM"
+    },
+    {
+        "RegistTypeCode":"170",
+        "RegistTypeName":"私营企业",
+        "Comment":"",
+        "UpdateDate":"01 1 1900 12:00AM"
+    },
+    {
+        "RegistTypeCode":"171",
+        "RegistTypeName":"私营独资企业（个人独资企业）",
+        "Comment":"",
+        "UpdateDate":"01 1 1900 12:00AM"
+    },
+    {
+        "RegistTypeCode":"172",
+        "RegistTypeName":"私营合伙企业",
+        "Comment":"",
+        "UpdateDate":"01 1 1900 12:00AM"
+    },
+    {
+        "RegistTypeCode":"173",
+        "RegistTypeName":"私营有限责任公司",
+        "Comment":"",
+        "UpdateDate":"01 1 1900 12:00AM"
+    },
+    {
+        "RegistTypeCode":"174",
+        "RegistTypeName":"私营股份有限公司",
+        "Comment":"",
+        "UpdateDate":"01 1 1900 12:00AM"
+    },
+    {
+        "RegistTypeCode":"190",
+        "RegistTypeName":"其他企业",
+        "Comment":"",
+        "UpdateDate":"01 1 1900 12:00AM"
+    },
+    {
+        "RegistTypeCode":"200",
+        "RegistTypeName":"港、澳、台商投资企业",
+        "Comment":"",
+        "UpdateDate":"01 1 1900 12:00AM"
+    },
+    {
+        "RegistTypeCode":"210",
+        "RegistTypeName":"合资经营企业（港或澳、台资）",
+        "Comment":"",
+        "UpdateDate":"01 1 1900 12:00AM"
+    },
+    {
+        "RegistTypeCode":"220",
+        "RegistTypeName":"合作经营企业（港或澳、台资）",
+        "Comment":"",
+        "UpdateDate":"01 1 1900 12:00AM"
+    },
+    {
+        "RegistTypeCode":"230",
+        "RegistTypeName":"港、澳、台商独资经营企业",
+        "Comment":"",
+        "UpdateDate":"01 1 1900 12:00AM"
+    },
+    {
+        "RegistTypeCode":"240",
+        "RegistTypeName":"港、澳、台商投资股份有限公司",
+        "Comment":"",
+        "UpdateDate":"01 1 1900 12:00AM"
+    },
+    {
+        "RegistTypeCode":"300",
+        "RegistTypeName":"外商投资企业",
+        "Comment":"",
+        "UpdateDate":"01 1 1900 12:00AM"
+    },
+    {
+        "RegistTypeCode":"310",
+        "RegistTypeName":"中外合资经营企业",
+        "Comment":"",
+        "UpdateDate":"01 1 1900 12:00AM"
+    },
+    {
+        "RegistTypeCode":"320",
+        "RegistTypeName":"中外合作经营企业",
+        "Comment":"",
+        "UpdateDate":"01 1 1900 12:00AM"
+    },
+    {
+        "RegistTypeCode":"330",
+        "RegistTypeName":"外资企业",
+        "Comment":"",
+        "UpdateDate":"01 1 1900 12:00AM"
+    },
+    {
+        "RegistTypeCode":"340",
+        "RegistTypeName":"外商投资股份有限公司",
+        "Comment":"",
+        "UpdateDate":"01 1 1900 12:00AM"
+    },
+    {
+        "RegistTypeCode":"400",
+        "RegistTypeName":"个体经营",
+        "Comment":"",
+        "UpdateDate":"01 1 1900 12:00AM"
+    },
+    {
+        "RegistTypeCode":"410",
+        "RegistTypeName":"个体户",
+        "Comment":"",
+        "UpdateDate":"01 1 1900 12:00AM"
+    },
+    {
+        "RegistTypeCode":"420",
+        "RegistTypeName":"个人合伙",
+        "Comment":"",
+        "UpdateDate":"01 1 1900 12:00AM"
+    }
+]

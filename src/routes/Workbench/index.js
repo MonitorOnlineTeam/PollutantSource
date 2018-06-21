@@ -8,6 +8,7 @@ import EnterpriseAutoComplete from '../../components/EnterpriseAutoComplete/inde
 import WorkbenchCard from '../../components/Workbench/WorkbenchCard';
 import AlarmTypeSelect from '../../components/AlarmTypeSelect/index';
 import EarlyWarningSelect from '../../components/EarlyWarningSelect/index';
+import {getEnterprise, getPointEnterprise} from '../../mockdata/Base/commonbase';
 
 /*
 页面：工作台
@@ -61,6 +62,8 @@ class Workbench extends Component {
       const titleCnt2 = 12;
       const titleCnt3 = 21;
       const titleCnt4 = 20;
+      const point = getPointEnterprise();
+      debugger;
       return (
           <div style={{ background: '#ECECEC', padding: '30px' }}>
               <Row gutter={16}>

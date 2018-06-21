@@ -1,0 +1,386 @@
+﻿[
+    {
+        "FuelTypeCode":"100",
+        "FuelTypeName":"固体燃料",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "FuelTypeCode":"110",
+        "FuelTypeName":"煤炭",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "FuelTypeCode":"111",
+        "FuelTypeName":"烟煤　",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "FuelTypeCode":"112",
+        "FuelTypeName":"无烟煤　",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "FuelTypeCode":"115",
+        "FuelTypeName":"褐煤",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "FuelTypeCode":"117",
+        "FuelTypeName":"煤矸石",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "FuelTypeCode":"130",
+        "FuelTypeName":"天然固体燃料",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "FuelTypeCode":"131",
+        "FuelTypeName":"油页岩",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "FuelTypeCode":"132",
+        "FuelTypeName":"炭沥青",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "FuelTypeCode":"133",
+        "FuelTypeName":"天然焦",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "FuelTypeCode":"140",
+        "FuelTypeName":"煤炭石油制品",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "FuelTypeCode":"141",
+        "FuelTypeName":"型煤",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "FuelTypeCode":"142",
+        "FuelTypeName":"水煤浆",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "FuelTypeCode":"143",
+        "FuelTypeName":"焦碳",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "FuelTypeCode":"144",
+        "FuelTypeName":"石油焦",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "FuelTypeCode":"150",
+        "FuelTypeName":"生物质燃料和制品",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "FuelTypeCode":"151",
+        "FuelTypeName":"木炭",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "FuelTypeCode":"152",
+        "FuelTypeName":"甘蔗渣",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "FuelTypeCode":"153",
+        "FuelTypeName":"木屑",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "FuelTypeCode":"154",
+        "FuelTypeName":"树皮",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "FuelTypeCode":"155",
+        "FuelTypeName":"植物",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "FuelTypeCode":"156",
+        "FuelTypeName":"其他生物质固体燃料",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "FuelTypeCode":"160",
+        "FuelTypeName":"核燃料",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "FuelTypeCode":"161",
+        "FuelTypeName":"金属核燃料",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "FuelTypeCode":"162",
+        "FuelTypeName":"陶瓷器核燃料",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "FuelTypeCode":"190",
+        "FuelTypeName":"其他固体燃料",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "FuelTypeCode":"200",
+        "FuelTypeName":"气体燃料",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "FuelTypeCode":"210",
+        "FuelTypeName":"天然气",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "FuelTypeCode":"211",
+        "FuelTypeName":"纯气田天然气",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "FuelTypeCode":"212",
+        "FuelTypeName":"油田天然气",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "FuelTypeCode":"213",
+        "FuelTypeName":"煤田天然气",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "FuelTypeCode":"214",
+        "FuelTypeName":"凝析气田天然气",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "FuelTypeCode":"220",
+        "FuelTypeName":"炼厂和化肥厂驰放气",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "FuelTypeCode":"221",
+        "FuelTypeName":"焦炉煤气",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "FuelTypeCode":"222",
+        "FuelTypeName":"高炉煤气",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "FuelTypeCode":"223",
+        "FuelTypeName":"转炉煤气",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "FuelTypeCode":"224",
+        "FuelTypeName":"炼油厂和化肥厂驰放气",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "FuelTypeCode":"230",
+        "FuelTypeName":"人工煤气",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "FuelTypeCode":"231",
+        "FuelTypeName":"油制气",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "FuelTypeCode":"232",
+        "FuelTypeName":"汽化炉煤气",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "FuelTypeCode":"240",
+        "FuelTypeName":"液化石油气",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "FuelTypeCode":"290",
+        "FuelTypeName":"其他气体燃料",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "FuelTypeCode":"291",
+        "FuelTypeName":"沼气",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "FuelTypeCode":"300",
+        "FuelTypeName":"液体燃料",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "FuelTypeCode":"310",
+        "FuelTypeName":"原油和石油制品",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "FuelTypeCode":"311",
+        "FuelTypeName":"轻柴油",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "FuelTypeCode":"312",
+        "FuelTypeName":"重油",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "FuelTypeCode":"313",
+        "FuelTypeName":"原油",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "FuelTypeCode":"314",
+        "FuelTypeName":"渣油",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "FuelTypeCode":"315",
+        "FuelTypeName":"汽油",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "FuelTypeCode":"316",
+        "FuelTypeName":"煤油",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "FuelTypeCode":"317",
+        "FuelTypeName":"柴油",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "FuelTypeCode":"320",
+        "FuelTypeName":"煤焦油",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "FuelTypeCode":"330",
+        "FuelTypeName":"页岩油",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "FuelTypeCode":"340",
+        "FuelTypeName":"液体火箭燃料",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "FuelTypeCode":"341",
+        "FuelTypeName":"火箭氧化剂",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "FuelTypeCode":"342",
+        "FuelTypeName":"火箭燃烧剂　",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "FuelTypeCode":"350",
+        "FuelTypeName":"合成油品",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "FuelTypeCode":"351",
+        "FuelTypeName":"煤液化油",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "FuelTypeCode":"352",
+        "FuelTypeName":"醇类燃料",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "FuelTypeCode":"390",
+        "FuelTypeName":"其他液体燃料",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "FuelTypeCode":"901",
+        "FuelTypeName":"原料煤",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "FuelTypeCode":"902",
+        "FuelTypeName":"燃料煤",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "FuelTypeCode":"903",
+        "FuelTypeName":"油类燃料",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    }
+]

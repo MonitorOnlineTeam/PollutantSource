@@ -1,0 +1,14 @@
+﻿[
+    {
+        "MiniStationLimitedTypeCode":"1",
+        "MiniStationLimitedType":"一级"
+    },
+    {
+        "MiniStationLimitedTypeCode":"2",
+        "MiniStationLimitedType":"二级"
+    },
+    {
+        "MiniStationLimitedTypeCode":"3",
+        "MiniStationLimitedType":"三级"
+    }
+]

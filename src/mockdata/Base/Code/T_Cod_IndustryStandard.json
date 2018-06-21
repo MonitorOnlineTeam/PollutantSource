@@ -1,0 +1,218 @@
+﻿[
+    {
+        "IndustryStandardCode":"1",
+        "IndustryName":"造纸工业",
+        "Comment":"",
+        "UpdateTime":"10 10 2009 11:21AM"
+    },
+    {
+        "IndustryStandardCode":"10",
+        "IndustryName":"叠氮化铅，三硝基间苯二酚铅，D.S共晶工业",
+        "Comment":"",
+        "UpdateTime":"10 10 2009 11:21AM"
+    },
+    {
+        "IndustryStandardCode":"11",
+        "IndustryName":"海洋石油开发工业",
+        "Comment":"",
+        "UpdateTime":"10 10 2009 11:21AM"
+    },
+    {
+        "IndustryStandardCode":"12",
+        "IndustryName":"纺织染整工业",
+        "Comment":"",
+        "UpdateTime":"10 10 2009 11:21AM"
+    },
+    {
+        "IndustryStandardCode":"13",
+        "IndustryName":"钢铁工业",
+        "Comment":"",
+        "UpdateTime":"10 10 2009 11:21AM"
+    },
+    {
+        "IndustryStandardCode":"14",
+        "IndustryName":"肉类加工工业",
+        "Comment":"",
+        "UpdateTime":"06 27 2012 4:13PM"
+    },
+    {
+        "IndustryStandardCode":"15",
+        "IndustryName":"航天推进剂",
+        "Comment":"11-19更新",
+        "UpdateTime":"10 10 2009 11:21AM"
+    },
+    {
+        "IndustryStandardCode":"16",
+        "IndustryName":"兵器工业（火炸药）",
+        "Comment":"",
+        "UpdateTime":"10 10 2009 11:21AM"
+    },
+    {
+        "IndustryStandardCode":"17",
+        "IndustryName":"兵器工业（火工品）",
+        "Comment":"",
+        "UpdateTime":"10 10 2009 11:21AM"
+    },
+    {
+        "IndustryStandardCode":"18",
+        "IndustryName":"兵器工业（弹药装药）",
+        "Comment":"",
+        "UpdateTime":"10 10 2009 11:21AM"
+    },
+    {
+        "IndustryStandardCode":"19",
+        "IndustryName":"磷肥工业",
+        "Comment":"",
+        "UpdateTime":"10 10 2009 11:21AM"
+    },
+    {
+        "IndustryStandardCode":"2",
+        "IndustryName":"合成氨工业",
+        "Comment":"",
+        "UpdateTime":"10 10 2009 11:21AM"
+    },
+    {
+        "IndustryStandardCode":"20",
+        "IndustryName":"烧碱，聚氯乙烯工业",
+        "Comment":"",
+        "UpdateTime":"10 10 2009 11:21AM"
+    },
+    {
+        "IndustryStandardCode":"20000",
+        "IndustryName":"综合标准",
+        "Comment":"",
+        "UpdateTime":"10 10 2009 11:21AM"
+    },
+    {
+        "IndustryStandardCode":"21",
+        "IndustryName":"污水海洋处置工程",
+        "Comment":"",
+        "UpdateTime":"10 10 2009 11:21AM"
+    },
+    {
+        "IndustryStandardCode":"22",
+        "IndustryName":"工业炉窑",
+        "Comment":"",
+        "UpdateTime":"10 10 2009 11:21AM"
+    },
+    {
+        "IndustryStandardCode":"23",
+        "IndustryName":"火力发电厂",
+        "Comment":"",
+        "UpdateTime":"10 10 2009 11:21AM"
+    },
+    {
+        "IndustryStandardCode":"24",
+        "IndustryName":"锅炉",
+        "Comment":"",
+        "UpdateTime":"10 10 2009 11:21AM"
+    },
+    {
+        "IndustryStandardCode":"25",
+        "IndustryName":"饮食业",
+        "Comment":"",
+        "UpdateTime":"10 10 2009 11:21AM"
+    },
+    {
+        "IndustryStandardCode":"26",
+        "IndustryName":"炼焦炉",
+        "Comment":"",
+        "UpdateTime":"10 10 2009 11:21AM"
+    },
+    {
+        "IndustryStandardCode":"27",
+        "IndustryName":"水泥厂",
+        "Comment":"",
+        "UpdateTime":"10 10 2009 11:21AM"
+    },
+    {
+        "IndustryStandardCode":"28",
+        "IndustryName":"dsa",
+        "Comment":"yt",
+        "UpdateTime":"06 27 2012 4:46PM"
+    },
+    {
+        "IndustryStandardCode":"3",
+        "IndustryName":"船舶",
+        "Comment":"",
+        "UpdateTime":"10 10 2009 11:21AM"
+    },
+    {
+        "IndustryStandardCode":"4",
+        "IndustryName":"船舶工业",
+        "Comment":"",
+        "UpdateTime":"10 10 2009 11:21AM"
+    },
+    {
+        "IndustryStandardCode":"45",
+        "IndustryName":"342",
+        "Comment":"432",
+        "UpdateTime":"06 27 2012 5:07PM"
+    },
+    {
+        "IndustryStandardCode":"5",
+        "IndustryName":"梯恩梯工业",
+        "Comment":"",
+        "UpdateTime":"10 10 2009 11:21AM"
+    },
+    {
+        "IndustryStandardCode":"51",
+        "IndustryName":"rr",
+        "Comment":"",
+        "UpdateTime":"06 28 2012 10:29AM"
+    },
+    {
+        "IndustryStandardCode":"55",
+        "IndustryName":"",
+        "Comment":"",
+        "UpdateTime":"08 6 2012 5:56PM"
+    },
+    {
+        "IndustryStandardCode":"566",
+        "IndustryName":"",
+        "Comment":"m",
+        "UpdateTime":"08 8 2012 7:01PM"
+    },
+    {
+        "IndustryStandardCode":"6",
+        "IndustryName":"黑索金工业",
+        "Comment":"",
+        "UpdateTime":"10 10 2009 11:21AM"
+    },
+    {
+        "IndustryStandardCode":"66",
+        "IndustryName":"@",
+        "Comment":"@",
+        "UpdateTime":"11 12 2012 2:17PM"
+    },
+    {
+        "IndustryStandardCode":"66666",
+        "IndustryName":"",
+        "Comment":"",
+        "UpdateTime":"08 8 2012 7:02PM"
+    },
+    {
+        "IndustryStandardCode":"7",
+        "IndustryName":"火炸药工业",
+        "Comment":"",
+        "UpdateTime":"10 10 2009 11:21AM"
+    },
+    {
+        "IndustryStandardCode":"8",
+        "IndustryName":"雷汞工业",
+        "Comment":"",
+        "UpdateTime":"10 10 2009 11:21AM"
+    },
+    {
+        "IndustryStandardCode":"89",
+        "IndustryName":"航天推进剂",
+        "Comment":"更新",
+        "UpdateTime":"06 28 2012 10:30AM"
+    },
+    {
+        "IndustryStandardCode":"9",
+        "IndustryName":"二硝基重氮酚工业",
+        "Comment":"",
+        "UpdateTime":"10 10 2009 11:21AM"
+    }
+]

@@ -1,0 +1,22 @@
+﻿[
+    {
+        "AverageTimeCode":"1",
+        "AverageTime":"年平均"
+    },
+    {
+        "AverageTimeCode":"2",
+        "AverageTime":"季平均"
+    },
+    {
+        "AverageTimeCode":"3",
+        "AverageTime":"24小时平均"
+    },
+    {
+        "AverageTimeCode":"4",
+        "AverageTime":"1小时平均"
+    },
+    {
+        "AverageTimeCode":"5",
+        "AverageTime":"日最大8小时平均"
+    }
+]

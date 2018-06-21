@@ -1,0 +1,612 @@
+﻿[
+    {
+        "BaseCode":"0",
+        "ParentCode":"12",
+        "BaseCnName":"待处理",
+        "BaseEnName":"WaitDeal",
+        "IsUsed":"1",
+        "Comment":"审批单待审批",
+        "SortBy":"0",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "BaseCode":"0",
+        "ParentCode":"13",
+        "BaseCnName":"报警核实",
+        "BaseEnName":"AlarmVerify",
+        "IsUsed":"1",
+        "Comment":"",
+        "SortBy":"0",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "BaseCode":"0",
+        "ParentCode":"14",
+        "BaseCnName":"正在审核",
+        "BaseEnName":"Checking",
+        "IsUsed":"1",
+        "Comment":"正在审核",
+        "SortBy":"0",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "BaseCode":"0",
+        "ParentCode":"15",
+        "BaseCnName":"巡检任务",
+        "BaseEnName":"PatrolTask",
+        "IsUsed":"1",
+        "Comment":"巡检任务类型",
+        "SortBy":"0",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "BaseCode":"0",
+        "ParentCode":"16",
+        "BaseCnName":"原始值",
+        "BaseEnName":"OriginalValue",
+        "IsUsed":"1",
+        "Comment":"原始值",
+        "SortBy":"0",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "BaseCode":"0",
+        "ParentCode":"19",
+        "BaseCnName":"主",
+        "BaseEnName":"Main",
+        "IsUsed":"1",
+        "Comment":"",
+        "SortBy":"0",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "BaseCode":"0",
+        "ParentCode":"2",
+        "BaseCnName":"无报警",
+        "BaseEnName":"NoAlarm",
+        "IsUsed":"1",
+        "Comment":"",
+        "SortBy":"1",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "BaseCode":"0",
+        "ParentCode":"3",
+        "BaseCnName":"数据异常报警",
+        "BaseEnName":"DataException",
+        "IsUsed":"1",
+        "Comment":"",
+        "SortBy":"1",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "BaseCode":"0",
+        "ParentCode":"5",
+        "BaseCnName":"离线",
+        "BaseEnName":"OffLine",
+        "IsUsed":"1",
+        "Comment":"",
+        "SortBy":"1",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "BaseCode":"0",
+        "ParentCode":"6",
+        "BaseCnName":"未核实",
+        "BaseEnName":"No",
+        "IsUsed":"1",
+        "Comment":"",
+        "SortBy":"1",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "BaseCode":"1",
+        "ParentCode":"1",
+        "BaseCnName":"企业",
+        "BaseEnName":"T_Bas_Enterprise",
+        "IsUsed":"1",
+        "Comment":"",
+        "SortBy":"1",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "BaseCode":"1",
+        "ParentCode":"10",
+        "BaseCnName":"0值异常",
+        "BaseEnName":"ZERO",
+        "IsUsed":"1",
+        "Comment":"",
+        "SortBy":"1",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "BaseCode":"1",
+        "ParentCode":"11",
+        "BaseCnName":"自动状态",
+        "BaseEnName":"S_AutoRun",
+        "IsUsed":"1",
+        "Comment":"设备自动运行",
+        "SortBy":"1",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "BaseCode":"1",
+        "ParentCode":"12",
+        "BaseCnName":"同意",
+        "BaseEnName":"Agree",
+        "IsUsed":"1",
+        "Comment":"审批单同意",
+        "SortBy":"1",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "BaseCode":"1",
+        "ParentCode":"13",
+        "BaseCnName":"三级审核核实",
+        "BaseEnName":"ThreeLevelAutVerify",
+        "IsUsed":"1",
+        "Comment":"",
+        "SortBy":"1",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "BaseCode":"1",
+        "ParentCode":"14",
+        "BaseCnName":"未通过",
+        "BaseEnName":"FailCheck",
+        "IsUsed":"1",
+        "Comment":"审核未通过",
+        "SortBy":"1",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "BaseCode":"1",
+        "ParentCode":"15",
+        "BaseCnName":"故障任务类型",
+        "BaseEnName":"ExceptionTask",
+        "IsUsed":"1",
+        "Comment":"故障任务类型",
+        "SortBy":"1",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "BaseCode":"1",
+        "ParentCode":"16",
+        "BaseCnName":"修正值",
+        "BaseEnName":"CorrectedValue",
+        "IsUsed":"1",
+        "Comment":"修正值",
+        "SortBy":"1",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "BaseCode":"1",
+        "ParentCode":"19",
+        "BaseCnName":"副",
+        "BaseEnName":"Vice",
+        "IsUsed":"1",
+        "Comment":"",
+        "SortBy":"0",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "BaseCode":"1",
+        "ParentCode":"2",
+        "BaseCnName":"上限报警",
+        "BaseEnName":"UpperAlarm",
+        "IsUsed":"1",
+        "Comment":"",
+        "SortBy":"2",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "BaseCode":"1",
+        "ParentCode":"3",
+        "BaseCnName":"动态管控参数异常推送",
+        "BaseEnName":"DYPARAMETER",
+        "IsUsed":"1",
+        "Comment":"",
+        "SortBy":"2",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "BaseCode":"1",
+        "ParentCode":"5",
+        "BaseCnName":"在线",
+        "BaseEnName":"OnLine",
+        "IsUsed":"1",
+        "Comment":"",
+        "SortBy":"2",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "BaseCode":"1",
+        "ParentCode":"7",
+        "BaseCnName":"无异常",
+        "BaseEnName":"No",
+        "IsUsed":"1",
+        "Comment":"",
+        "SortBy":"1",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "BaseCode":"1",
+        "ParentCode":"8",
+        "BaseCnName":" 立方米",
+        "BaseEnName":"LiFangMi",
+        "IsUsed":"1",
+        "Comment":"",
+        "SortBy":"1",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "BaseCode":"1",
+        "ParentCode":"9",
+        "BaseCnName":"微克",
+        "BaseEnName":"ug",
+        "IsUsed":"1",
+        "Comment":"",
+        "SortBy":"1",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "BaseCode":"-1",
+        "ParentCode":"17",
+        "BaseCnName":"预警",
+        "BaseEnName":"EarlyWarning",
+        "IsUsed":"1",
+        "Comment":"良",
+        "SortBy":"0",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "BaseCode":"2",
+        "ParentCode":"1",
+        "BaseCnName":"监测站",
+        "BaseEnName":"T_Bas_Station",
+        "IsUsed":"1",
+        "Comment":"",
+        "SortBy":"2",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "BaseCode":"2",
+        "ParentCode":"10",
+        "BaseCnName":"连续值异常",
+        "BaseEnName":"SERIES",
+        "IsUsed":"1",
+        "Comment":"",
+        "SortBy":"2",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "BaseCode":"2",
+        "ParentCode":"11",
+        "BaseCnName":"维护状态",
+        "BaseEnName":"S_SystemRepaired",
+        "IsUsed":"1",
+        "Comment":"设备维护",
+        "SortBy":"2",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "BaseCode":"2",
+        "ParentCode":"12",
+        "BaseCnName":"打回",
+        "BaseEnName":"back",
+        "IsUsed":"1",
+        "Comment":"审批单打回",
+        "SortBy":"2",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "BaseCode":"2",
+        "ParentCode":"13",
+        "BaseCnName":"派发核实",
+        "BaseEnName":"DistributeVerify",
+        "IsUsed":"1",
+        "Comment":"",
+        "SortBy":"2",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "BaseCode":"2",
+        "ParentCode":"14",
+        "BaseCnName":"审核通过",
+        "BaseEnName":"SuccessCheck",
+        "IsUsed":"1",
+        "Comment":"审核通过",
+        "SortBy":"2",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "BaseCode":"2",
+        "ParentCode":"17",
+        "BaseCnName":"一级报警",
+        "BaseEnName":"OneWarning",
+        "IsUsed":"1",
+        "Comment":"轻度污染",
+        "SortBy":"1",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "BaseCode":"2",
+        "ParentCode":"2",
+        "BaseCnName":"下限报警",
+        "BaseEnName":"LowerAlarm",
+        "IsUsed":"1",
+        "Comment":"",
+        "SortBy":"3",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "BaseCode":"2",
+        "ParentCode":"3",
+        "BaseCnName":"数据超标报警",
+        "BaseEnName":"DataOver",
+        "IsUsed":"1",
+        "Comment":"",
+        "SortBy":"3",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "BaseCode":"2",
+        "ParentCode":"5",
+        "BaseCnName":"超标",
+        "BaseEnName":"OverLine",
+        "IsUsed":"1",
+        "Comment":"",
+        "SortBy":"3",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "BaseCode":"2",
+        "ParentCode":"6",
+        "BaseCnName":"已核实",
+        "BaseEnName":"Yes",
+        "IsUsed":"1",
+        "Comment":"",
+        "SortBy":"2",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "BaseCode":"2",
+        "ParentCode":"7",
+        "BaseCnName":"有异常且生成运维单",
+        "BaseEnName":"Yes",
+        "IsUsed":"1",
+        "Comment":"",
+        "SortBy":"2",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "BaseCode":"2",
+        "ParentCode":"8",
+        "BaseCnName":"万立方米",
+        "BaseEnName":"WangLiFangMi",
+        "IsUsed":"1",
+        "Comment":"",
+        "SortBy":"2",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "BaseCode":"2",
+        "ParentCode":"9",
+        "BaseCnName":"毫克",
+        "BaseEnName":"mg",
+        "IsUsed":"1",
+        "Comment":"",
+        "SortBy":"2",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "BaseCode":"3",
+        "ParentCode":"1",
+        "BaseCnName":"河段",
+        "BaseEnName":"T_Bas_Reach",
+        "IsUsed":"1",
+        "Comment":"",
+        "SortBy":"3",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "BaseCode":"3",
+        "ParentCode":"10",
+        "BaseCnName":"超限异常",
+        "BaseEnName":"OUTLIMIT",
+        "IsUsed":"1",
+        "Comment":"",
+        "SortBy":"3",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "BaseCode":"3",
+        "ParentCode":"11",
+        "BaseCnName":"待机状态",
+        "BaseEnName":"S_Standby",
+        "IsUsed":"1",
+        "Comment":"设备待机",
+        "SortBy":"3",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "BaseCode":"3",
+        "ParentCode":"14",
+        "BaseCnName":"未审核",
+        "BaseEnName":"UnCheck",
+        "IsUsed":"1",
+        "Comment":"未审核",
+        "SortBy":"3",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "BaseCode":"3",
+        "ParentCode":"17",
+        "BaseCnName":"二级报警",
+        "BaseEnName":"TwoWarning",
+        "IsUsed":"1",
+        "Comment":"中度污染",
+        "SortBy":"2",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "BaseCode":"3",
+        "ParentCode":"2",
+        "BaseCnName":"区间报警",
+        "BaseEnName":"AreaAlarm",
+        "IsUsed":"1",
+        "Comment":"",
+        "SortBy":"5",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "BaseCode":"3",
+        "ParentCode":"3",
+        "BaseCnName":"动态管控状态异常推送",
+        "BaseEnName":"DYSTATEALARM",
+        "IsUsed":"1",
+        "Comment":"",
+        "SortBy":"5",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "BaseCode":"3",
+        "ParentCode":"5",
+        "BaseCnName":"异常",
+        "BaseEnName":"ExceptLine",
+        "IsUsed":"1",
+        "Comment":"",
+        "SortBy":"5",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "BaseCode":"3",
+        "ParentCode":"9",
+        "BaseCnName":"克",
+        "BaseEnName":"g",
+        "IsUsed":"1",
+        "Comment":"",
+        "SortBy":"3",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "BaseCode":"4",
+        "ParentCode":"1",
+        "BaseCnName":"工地",
+        "BaseEnName":"T_Bas_BuildingSite",
+        "IsUsed":"1",
+        "Comment":"",
+        "SortBy":"4",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "BaseCode":"4",
+        "ParentCode":"10",
+        "BaseCnName":"动态管控参数异常",
+        "BaseEnName":"DYPARAMETER",
+        "IsUsed":"1",
+        "Comment":"",
+        "SortBy":"4",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "BaseCode":"4",
+        "ParentCode":"11",
+        "BaseCnName":"采水状态",
+        "BaseEnName":"S_MiningWater",
+        "IsUsed":"1",
+        "Comment":"留水样",
+        "SortBy":"4",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "BaseCode":"4",
+        "ParentCode":"17",
+        "BaseCnName":"三级报警",
+        "BaseEnName":"ThreeWarning",
+        "IsUsed":"1",
+        "Comment":"重度污染",
+        "SortBy":"3",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "BaseCode":"4",
+        "ParentCode":"3",
+        "BaseCnName":"数据缺失",
+        "BaseEnName":"DataLoss",
+        "IsUsed":"1",
+        "Comment":"",
+        "SortBy":"6",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "BaseCode":"5",
+        "ParentCode":"11",
+        "BaseCnName":"测量状态",
+        "BaseEnName":"S_Measure",
+        "IsUsed":"1",
+        "Comment":"设备测量",
+        "SortBy":"5",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "BaseCode":"5",
+        "ParentCode":"17",
+        "BaseCnName":"四级报警",
+        "BaseEnName":"FourWarning",
+        "IsUsed":"1",
+        "Comment":"严重污染",
+        "SortBy":"4",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "BaseCode":"5",
+        "ParentCode":"9",
+        "BaseCnName":"千克",
+        "BaseEnName":"kg",
+        "IsUsed":"1",
+        "Comment":"",
+        "SortBy":"5",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "BaseCode":"6",
+        "ParentCode":"10",
+        "BaseCnName":"动态管控状态异常",
+        "BaseEnName":"DYSTATE",
+        "IsUsed":"1",
+        "Comment":"",
+        "SortBy":"6",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "BaseCode":"6",
+        "ParentCode":"11",
+        "BaseCnName":"清洗状态",
+        "BaseEnName":"S_Clean",
+        "IsUsed":"1",
+        "Comment":"设备清洗",
+        "SortBy":"6",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "BaseCode":"6",
+        "ParentCode":"9",
+        "BaseCnName":"吨",
+        "BaseEnName":"t",
+        "IsUsed":"1",
+        "Comment":"",
+        "SortBy":"6",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "BaseCode":"7",
+        "ParentCode":"11",
+        "BaseCnName":"除藻状态",
+        "BaseEnName":"S_AlgaeRemoval",
+        "IsUsed":"1",
+        "Comment":"设备除藻",
+        "SortBy":"7",
+        "UpdateTime":"01 1 1900 12:00AM"
+    }
+]

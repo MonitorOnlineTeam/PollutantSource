@@ -1,0 +1,14 @@
+﻿[
+    {
+        "GasOutputTypeCode":"1",
+        "GasOutputTypeName":"工艺废气排放口",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "GasOutputTypeCode":"2",
+        "GasOutputTypeName":"燃烧废气排放口",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    }
+]

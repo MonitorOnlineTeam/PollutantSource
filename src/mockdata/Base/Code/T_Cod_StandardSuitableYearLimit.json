@@ -1,0 +1,134 @@
+﻿[
+    {
+        "StandardSuitableYearLimitCode":"1",
+        "StandardSuitableYearLimitName":"无年限限制",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "StandardSuitableYearLimitCode":"10",
+        "StandardSuitableYearLimitName":"1993年12月1日起",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "StandardSuitableYearLimitCode":"11",
+        "StandardSuitableYearLimitName":"1994年1月1日前",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "StandardSuitableYearLimitCode":"12",
+        "StandardSuitableYearLimitName":"1994年1月1日起",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "StandardSuitableYearLimitCode":"13",
+        "StandardSuitableYearLimitName":"1998年1月1日前",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "StandardSuitableYearLimitCode":"14",
+        "StandardSuitableYearLimitName":"1989年1月1日至1996年6月30日",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "StandardSuitableYearLimitCode":"15",
+        "StandardSuitableYearLimitName":"1996年7月1日起",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "StandardSuitableYearLimitCode":"16",
+        "StandardSuitableYearLimitName":"1997年1月1日前",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "StandardSuitableYearLimitCode":"17",
+        "StandardSuitableYearLimitName":"1997年1月1日起",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "StandardSuitableYearLimitCode":"18",
+        "StandardSuitableYearLimitName":"1992年8月1日前",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "StandardSuitableYearLimitCode":"19",
+        "StandardSuitableYearLimitName":"1992年8月1日起至1996年12月31日",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "StandardSuitableYearLimitCode":"2",
+        "StandardSuitableYearLimitName":"1997年12月31日之前",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "StandardSuitableYearLimitCode":"22",
+        "StandardSuitableYearLimitName":"1997年1月1日前（通过环评审批）",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "StandardSuitableYearLimitCode":"23",
+        "StandardSuitableYearLimitName":"1997年1月1日起（通过环评审批）",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "StandardSuitableYearLimitCode":"24",
+        "StandardSuitableYearLimitName":"1985年8月1日前",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "StandardSuitableYearLimitCode":"25",
+        "StandardSuitableYearLimitName":"1985年8月1日至1996年12月31日",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "StandardSuitableYearLimitCode":"4",
+        "StandardSuitableYearLimitName":"2001年1月1日起",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "StandardSuitableYearLimitCode":"5",
+        "StandardSuitableYearLimitName":"2000年12月31日前",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "StandardSuitableYearLimitCode":"6",
+        "StandardSuitableYearLimitName":"1989年1月1日之前",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "StandardSuitableYearLimitCode":"7",
+        "StandardSuitableYearLimitName":"1989年1月1日至1992年6月30日之",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "StandardSuitableYearLimitCode":"8",
+        "StandardSuitableYearLimitName":"1992年7月1日起",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "StandardSuitableYearLimitCode":"9",
+        "StandardSuitableYearLimitName":"1993年12月1日以前",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    }
+]

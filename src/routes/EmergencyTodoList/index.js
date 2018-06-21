@@ -1,18 +1,18 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
+import { Row, Col, Spin } from 'antd';
+import EmergencyDataList from './EmergencyDataList';
+import PointList from '../../components/PointList/PointsList';
 
-
-/* 
-页面：应急维护待办列表
-描述：通过待办进入应急维护任务，也可通过代办列表找到需要应急的任务
-add by cg 18.6.8
-modify by 
-*/
-export default class EmergencyAuditList extends Component {
-  render() {
-    return (
-      <div>
-        水电费水电费第三方的双丰收
-      </div>
-    )
-  }
+export default class componentName extends Component {
+    render() {
+        return (
+            <div style={{ width: '100%',
+                height: 'calc(100vh - 120px)' }}>
+                    <Row gutter={8}>
+                        <Col span={4}><PointList /></Col>
+                        <Col span={20}> <EmergencyDataList /></Col>
+                    </Row>
+            </div>
+        );
+    }
 }

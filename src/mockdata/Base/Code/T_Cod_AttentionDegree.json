@@ -1,0 +1,26 @@
+﻿[
+    {
+        "AttentionCode":"1",
+        "AttentionName":"国控",
+        "Comment":"",
+        "UpdateDate":"01 1 1900 12:00AM"
+    },
+    {
+        "AttentionCode":"2",
+        "AttentionName":"省控",
+        "Comment":"",
+        "UpdateDate":"01 1 1900 12:00AM"
+    },
+    {
+        "AttentionCode":"3",
+        "AttentionName":"市控",
+        "Comment":"",
+        "UpdateDate":"01 1 1900 12:00AM"
+    },
+    {
+        "AttentionCode":"4",
+        "AttentionName":"非重点污染源",
+        "Comment":"",
+        "UpdateDate":"01 1 1900 12:00AM"
+    }
+]

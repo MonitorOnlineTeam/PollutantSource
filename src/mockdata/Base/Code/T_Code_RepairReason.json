@@ -1,0 +1,32 @@
+﻿[
+    {
+        "ReasonCode":"1",
+        "ReasonName":"停产",
+        "Comment":"",
+        "UpdateTime":"03 18 2016 12:00AM"
+    },
+    {
+        "ReasonCode":"2",
+        "ReasonName":"通讯故障",
+        "Comment":"",
+        "UpdateTime":"03 18 2016 12:00AM"
+    },
+    {
+        "ReasonCode":"3",
+        "ReasonName":"设备损坏",
+        "Comment":"",
+        "UpdateTime":"03 18 2016 12:00AM"
+    },
+    {
+        "ReasonCode":"4",
+        "ReasonName":"设备维护",
+        "Comment":"",
+        "UpdateTime":"03 18 2016 12:00AM"
+    },
+    {
+        "ReasonCode":"5",
+        "ReasonName":"旁路开启",
+        "Comment":"",
+        "UpdateTime":"03 18 2016 12:00AM"
+    }
+]
