@@ -5,7 +5,7 @@ import Point_ComplexJson from './Point_Complex.json';
 import Point_OperationJson from './Point_Operation.json';
 import relationJson from './Point_MonitorPointBase.json';
 import Cookie from 'js-cookie';
-import ColumnGroup from 'antd/lib/table/ColumnGroup';
+import regions from '../Regions/region.json';
 
 const enterpriseArray = Enterprise_AllJson;
 const allpointArray = Point_AllJson;
@@ -106,7 +106,8 @@ export function getPointEnterprise() {
         let relation = relationArray.find((r) => r.DGIMN === p.DGIMN);
         let enterprise = enterpriseArraySon.find((e) => e.EntCode === relation.BaseCode);
         if (enterprise) {
-            const rr = { ...enterprise, ...p};
+            const region = regions.find(t => t.RegionCode === p.RegionCode);
+            const rr = { ...enterprise, ...p, RegionName: region.RegionName };
             result.push(rr);
         }
     }
