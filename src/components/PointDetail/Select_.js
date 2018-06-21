@@ -21,11 +21,12 @@ export default class Select_ extends Component {
     }
     handleChange=(value, text) => {
         // console.log(value);
-        // debugger;
+        
         const selectText = [];
         const selectValue = [];
         // 取消选择
-        if ((!value || !text) || (!value.length || !text.length)) {
+
+        if ((!value || !text) || (!value.length || text.length === 0)) {
             this.setState({
                 selectValue: [],
                 selectText: []
@@ -50,15 +51,15 @@ export default class Select_ extends Component {
         });
     }
     // 获取选中值
-    getSelectItemValue=() => {
+    getSelectedValue=() => {
         // debugger;
         return this.state.selectValue;
     }
-    getSelectItemText=() => {
+    getSelectedText=() => {
         return this.state.selectText;
     }
     // 设置选中值
-    setSelectItem=(value, text) => {
+    setSelectedValue=(value, text) => {
         this.setState({
             selectValue: value,
             selectText: text

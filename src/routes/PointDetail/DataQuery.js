@@ -1,6 +1,8 @@
 // 监控总览-数据查询
 import React, { Component } from 'react';
 import ReactEcharts from 'echarts-for-react';
+import {getPointEnterprise} from '../../mockdata/Base/commonbase';
+import PollutantDatas from '../../mockdata/PointDetail/Pollutant.json';
 import PageDatas from '../../mockdata/PointDetail/dataquery.json';
 import RangePicker_ from '../../components/PointDetail/RangePicker_';
 import ButtonGroup_ from '../../components/PointDetail/ButtonGroup_';
@@ -12,7 +14,8 @@ import {
     Row,
     Col,
     Card,
-    Button
+    Button,
+    Popover
 } from 'antd';
 
 /*
@@ -22,12 +25,17 @@ add by cg 18.6.8
 modify by
 */
 
+const data = PageDatas;
+data.push({
+    key: '999',
+    MonitoringTime: '加载更多'
+});
 const renderContent = (value, row, index) => {
     const obj = {
         children: value,
         props: {},
     };
-    if (index === 6) {
+    if (index === data.length - 1) {
         obj.props.colSpan = 0;
     }
     return obj;
@@ -35,57 +43,67 @@ const renderContent = (value, row, index) => {
 
 const columns = [{
     title: '时间',
-    dataIndex: 'dateTime',
+    dataIndex: 'MonitoringTime',
     render: renderContent,
+    width: 200
 }, {
     title: '浓度',
-    dataIndex: 'concentration',
+    dataIndex: 'Concentration',
     className: 'table_concentration',
+    width: 150,
     render: (text, row, index) => {
-        const color = text > 40 ? 'red' : 'none';
-
-        if (index < 6) {
-            return <span style={{color: color, cursor: 'pointer'}}>{text}</span>;
+        const color = text > 25 ? 'red' : 'none';
+        const content = (
+            <div>
+                <p>标准值:<b>{row.Standard}</b></p>
+                <p>超标倍数:<b style={{color: color}}>{row.Overproof}</b></p>
+                <a className="login-form-forgot" href="##">查看管控状态及参数</a>
+            </div>
+        );
+        if (index < (data.length - 1)) {
+            return (
+                <Popover placement="bottom" content={content}>
+                    <span style={{color: color, cursor: 'pointer'}}>{text}</span>
+                </Popover>);
         }
         return {
             children: <a href="javascript:;">{text}</a>,
             props: {
-                colSpan: 7,
+                colSpan: data.length,
             },
         };
     },
 }];
+// [{
+//     key: '1',
+//     dateTime: '2018-05-17',
+//     concentration: 27,
 
-const data = [{
-    key: '1',
-    dateTime: '2018-05-17',
-    concentration: 27,
-
-}, {
-    key: '2',
-    dateTime: '2018-05-18',
-    concentration: 40,
-}, {
-    key: '3',
-    dateTime: '2018-05-19',
-    concentration: 28,
-}, {
-    key: '4',
-    dateTime: '2018-05-20',
-    concentration: 35,
-}, {
-    key: '5',
-    dateTime: '2018-05-21',
-    concentration: 29,
-}, {
-    key: '6',
-    dateTime: '2018-05-22',
-    concentration: 42,
-}, {
-    key: '7',
-    dateTime: '加载更多',
-    concentration: '加载更多',
-}];
+// }, {
+//     key: '2',
+//     dateTime: '2018-05-18',
+//     concentration: 40,
+// }, {
+//     key: '3',
+//     dateTime: '2018-05-19',
+//     concentration: 28,
+// }, {
+//     key: '4',
+//     dateTime: '2018-05-20',
+//     concentration: 35,
+// }, {
+//     key: '5',
+//     dateTime: '2018-05-21',
+//     concentration: 29,
+// }, {
+//     key: '6',
+//     dateTime: '2018-05-22',
+//     concentration: 42,
+// }, {
+//     key: '7',
+//     dateTime: '加载更多',
+//     concentration: '加载更多',
+// }];
 
 const option = {
     title: {
@@ -137,28 +155,54 @@ const option = {
     ]
 };
 const FormItem = Form.Item;
+const pointDatas = getPointEnterprise();
 
 class DataQuery extends Component {
-    state = {
+    constructor(props) {
+        super(props);
+        this.state = {
+            echartsOption: option
+        };
+    }
 
-    };
     submit=() => {
         // const it = this.pollutantSelect.state.selectitem;
     }
     handleSizeChange = (e) => {
         this.setState({ size: e.target.value });
     }
+    // 获取监测点
+    getPointDatas=() => {
+        var datas = [];
+        pointDatas.map((item) => {
+            datas.push({
+                'Name': `${item.PointName}(${item.EntName})`,
+                'Value': item.DGIMN,
+                'Unit': ''
+            });
+        });
+        return datas;
+    }
+    reloadChart=() => {
+        this.setState({
+            echartsOption: []
+        });
+        // option.legend = [];
+        // ReactEcharts.setOption(option);
+    };
     // 查询按钮
     BtnSearch=() => {
-        // this.pollutantSelect.setSelectItem(100);
         var obj = {
-            FormDate: this.RangePicker_.getDateValues().Form,
-            ToDate: this.RangePicker_.getDateValues().To,
-            // CompareValues: this.select_Compare.getSelectItemValue(),
-            PollutantValue: this.select_Pollutant.getSelectItemValue()
+            StatisticsType: this.StatisticsType_.getSelectedValue(), // 获取统计类型 string
+            FormDate: this.RangePicker_.getDateValues().Form, // 开始时间 string
+            ToDate: this.RangePicker_.getDateValues().To, // 结束时间 string
+            CompareValues: this.select_Compare.getSelectedValue(), // 对比 Array
+            PollutantValue: this.select_Pollutant.getSelectedValue() // 污染物 Array
         };
 
         console.log(obj);
+        this.reloadChart();
+        // this.pollutantSelect.setSelectItem(100);
         // console.log(this.select_Pollutant.getSelectItemValue());// 获取选中的污染物code
         // console.log(this.Select_.getSelectItemText());// 获取选中的污染物code
         // console.log(this.RangePicker_.getDateValues());// 获取时间范围 {From:'',To:''}
@@ -169,25 +213,25 @@ class DataQuery extends Component {
         return (
             <div className={styles.cardTitle}>
                 <Row>
-                    <Col span={20} push={4} >
+                    <Col span={18} push={6} >
                         <Card title="监测趋势图" extra={
-                            <ButtonGroup_ />
+                            <ButtonGroup_ ref={(r) => { this.StatisticsType_ = r; }} />
                         } style={{ width: '100%', height: 'calc(100vh - 225px)' }}>
                             <Form layout="inline">
                                 <Row>
-                                    <Col span={7} >
+                                    <Col span={6} >
                                         <FormItem label="时间">
                                             <RangePicker_ format="YYYY-MM-DD" ref={(r) => { this.RangePicker_ = r; }} />
                                         </FormItem>
                                     </Col>
                                     <Col span={5} >
                                         <FormItem label="对比">
-                                            <Select_ mode="multiple" optionDatas={PageDatas.Pollutant} ref={(r) => { this.select_Compare = r; }} />
+                                            <Select_ mode="multiple" optionDatas={this.getPointDatas()} ref={(r) => { this.select_Compare = r; }} />
                                         </FormItem>
                                     </Col>
                                     <Col span={5}>
                                         <FormItem label="污染物">
-                                            <Select_ optionDatas={PageDatas.Pollutant} ref={(r) => { this.select_Pollutant = r; }} />
+                                            <Select_ optionDatas={PollutantDatas} ref={(r) => { this.select_Pollutant = r; }} />
                                             {/* <PollutantSelect_ ref={(r) => { this.PollutantSelect_ = r; }} /> */}
                                         </FormItem>
                                     </Col>
@@ -199,12 +243,13 @@ class DataQuery extends Component {
                                 </Row>
                             </Form>
 
-                            <ReactEcharts option={option} id="rightLine" style={{ width: '100%', height: 'calc(100vh - 380px)' }} />
+                            <ReactEcharts option={this.state.echartsOption} lazyUpdate={true} notMerge={true} id="rightLine" style={{ width: '100%', height: 'calc(100vh - 380px)' }} />
                         </Card>
                     </Col>
-                    <Col span={4} pull={20}>
+                    <Col span={6} pull={18}>
                         <Card title="监测维度" extra={<a href="#" />} style={{ width: '98%', height: 'calc(100vh - 225px)' }}>
-                            <Table columns={columns} dataSource={data} bordered={true} pagination={false} />
+                            <Table size="middle" columns={columns} dataSource={data} bordered={true} pagination={false} scroll={{ x: '100%', y: 'calc(100vh - 385px)' }} />
+                            <a className="login-form-forgot" href="">加载更多……</a>
                         </Card>
                     </Col>
                 </Row>
