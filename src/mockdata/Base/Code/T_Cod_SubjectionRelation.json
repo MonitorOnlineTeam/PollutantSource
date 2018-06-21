@@ -1,0 +1,74 @@
+﻿[
+    {
+        "SubjectionRelationCode":"10",
+        "SubjectionRelationName":"中央",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "SubjectionRelationCode":"20",
+        "SubjectionRelationName":"省",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "SubjectionRelationCode":"40",
+        "SubjectionRelationName":"市、地区",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "SubjectionRelationCode":"50",
+        "SubjectionRelationName":"县",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "SubjectionRelationCode":"60",
+        "SubjectionRelationName":"街道、镇、乡",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "SubjectionRelationCode":"61",
+        "SubjectionRelationName":"街道",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "SubjectionRelationCode":"62",
+        "SubjectionRelationName":"镇",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "SubjectionRelationCode":"63",
+        "SubjectionRelationName":"乡",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "SubjectionRelationCode":"70",
+        "SubjectionRelationName":"居民、村民委员会",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "SubjectionRelationCode":"71",
+        "SubjectionRelationName":"居民委员会",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "SubjectionRelationCode":"72",
+        "SubjectionRelationName":"村民委员会",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "SubjectionRelationCode":"90",
+        "SubjectionRelationName":"其他",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    }
+]

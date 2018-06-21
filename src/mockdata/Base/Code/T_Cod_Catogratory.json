@@ -1,0 +1,164 @@
+﻿[
+    {
+        "BaseCode":"1",
+        "BaseCnName":"监控对象",
+        "BaseEnName":"MonitorObject",
+        "IsUsed":"1",
+        "Comment":"",
+        "SortBy":"1",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "BaseCode":"10",
+        "BaseCnName":"异常类别",
+        "BaseEnName":"ExceptionType",
+        "IsUsed":"1",
+        "Comment":"",
+        "SortBy":"10",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "BaseCode":"11",
+        "BaseCnName":"水质河长制网格化设备反控回馈状态",
+        "BaseEnName":"WaterSurfaceControlAnswerStatus",
+        "IsUsed":"1",
+        "Comment":"水质河长制网格化设备反控回馈状态",
+        "SortBy":"11",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "BaseCode":"12",
+        "BaseCnName":"申请单审批状态",
+        "BaseEnName":"ApplyCheckState",
+        "IsUsed":"1",
+        "Comment":"",
+        "SortBy":"12",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "BaseCode":"13",
+        "BaseCnName":"核实类型",
+        "BaseEnName":"VerifyType",
+        "IsUsed":"1",
+        "Comment":"报警核实、三级审核核实、派发核实",
+        "SortBy":"13",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "BaseCode":"14",
+        "BaseCnName":"运维任务单审核状态",
+        "BaseEnName":"PatrolCheckState",
+        "IsUsed":"1",
+        "Comment":"巡检任务单、故障任务单完成后的审核状态",
+        "SortBy":"14",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "BaseCode":"15",
+        "BaseCnName":"运维任务类型",
+        "BaseEnName":"PatrolTaskType",
+        "IsUsed":"1",
+        "Comment":"巡检、故障",
+        "SortBy":"15",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "BaseCode":"16",
+        "BaseCnName":"监测值类型",
+        "BaseEnName":"MonitoringType",
+        "IsUsed":"1",
+        "Comment":"监测值类型",
+        "SortBy":"16",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "BaseCode":"17",
+        "BaseCnName":"报警级别",
+        "BaseEnName":"AlarmLevel",
+        "IsUsed":"1",
+        "Comment":"",
+        "SortBy":"17",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "BaseCode":"19",
+        "BaseCnName":"主副传感器标识",
+        "BaseEnName":"TransducerFlag",
+        "IsUsed":"1",
+        "Comment":"设备上传的主副传感器标识",
+        "SortBy":"19",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "BaseCode":"2",
+        "BaseCnName":"报警类别",
+        "BaseEnName":"AlarmType",
+        "IsUsed":"1",
+        "Comment":"",
+        "SortBy":"2",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "BaseCode":"3",
+        "BaseCnName":"报警来源类别",
+        "BaseEnName":"PropellingAlarmSourceType",
+        "IsUsed":"1",
+        "Comment":"",
+        "SortBy":"3",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "BaseCode":"4",
+        "BaseCnName":"动态管控状态",
+        "BaseEnName":"DynamicControlState",
+        "IsUsed":"1",
+        "Comment":"",
+        "SortBy":"4",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "BaseCode":"5",
+        "BaseCnName":"点位状态",
+        "BaseEnName":"PointState",
+        "IsUsed":"1",
+        "Comment":"",
+        "SortBy":"5",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "BaseCode":"6",
+        "BaseCnName":"推送消息核实状态",
+        "BaseEnName":"PropMsgVerifyState",
+        "IsUsed":"1",
+        "Comment":"",
+        "SortBy":"6",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "BaseCode":"7",
+        "BaseCnName":"已核实推送消息是否有异常",
+        "BaseEnName":"VerifyHasException",
+        "IsUsed":"1",
+        "Comment":"",
+        "SortBy":"7",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "BaseCode":"8",
+        "BaseCnName":"流量单位",
+        "BaseEnName":"LiuliangUnit",
+        "IsUsed":"1",
+        "Comment":"",
+        "SortBy":"8",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "BaseCode":"9",
+        "BaseCnName":"排量单位",
+        "BaseEnName":"PailiangUnit",
+        "IsUsed":"1",
+        "Comment":"",
+        "SortBy":"9",
+        "UpdateTime":"01 1 1900 12:00AM"
+    }
+]

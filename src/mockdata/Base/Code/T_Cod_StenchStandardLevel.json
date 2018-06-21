@@ -1,0 +1,14 @@
+﻿[
+    {
+        "StenchStandardLevelCode":"1",
+        "StenchStandardLevel":"一级"
+    },
+    {
+        "StenchStandardLevelCode":"2",
+        "StenchStandardLevel":"二级"
+    },
+    {
+        "StenchStandardLevelCode":"3",
+        "StenchStandardLevel":"三级"
+    }
+]

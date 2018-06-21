@@ -1,0 +1,96 @@
+
+
+[
+    {
+        "layout": "MonitorLayout",
+        "name": "首页", 
+        "path": "monitor",
+        "children": [
+            {
+                "name": "工作台",
+                "path": "workbench",
+                "icon": "desktop"
+            },
+            {
+                "name": "监控总览",
+                "path": "overview",
+                "icon": "home"
+            },            
+            {
+                "name": "运维信息",
+                "path": "operation",
+                "icon": "medicine-box",
+                "children": [{
+                    "name": "应急维护",
+                    "path": "emergency",
+                    "icon": "appstore",
+                    "children": [{
+                        "name": "待办列表",
+                        "path": "emergencytodolist",
+                        "icon": "appstore"
+                    },
+                    {
+                        "name": "应急维护记录",
+                        "path": "emergencymaintenancelist",
+                        "icon": "appstore"
+                    },
+                    {
+                        "name": "待审核列表",
+                        "path": "emergencyauditlist",
+                        "icon": "appstore"
+                    }]
+                },
+                {
+                    "name": "运维计划",
+                    "path": "plan",
+                    "icon": "appstore",
+                    "children": [{
+                        "name": "运维计划上报",
+                        "path": "operationplanup",
+                        "icon": "appstore"
+                    },
+                    {
+                        "name": "运维计划记录",
+                        "path": "operationplanlist",
+                        "icon": "appstore"
+                    },
+                    {
+                        "name": "待审核列表",
+                        "path": "operationplanauditlist",
+                        "icon": "appstore"
+                    }]
+                }, {
+                    "name": "例行任务",
+                    "path": "inspection",
+                    "icon": "appstore",
+                    "children": [{
+                        "name": "待办列表",
+                        "path": "inspectiontasktodolist",
+                        "icon": "appstore"
+                    },
+                    {
+                        "name": "例行任务记录",
+                        "path": "inspectiontasklist",
+                        "icon": "appstore"
+                    },
+                    {
+                        "name": "备品备件使用记录",
+                        "path": "inspectiontaskreplacementpartlist",
+                        "icon": "appstore"
+                    }]
+                },
+                {
+                    "name": "备品备件维护",
+                    "path": "replacementpartadd",
+                    "icon": "appstore"
+                },
+                {
+                    "name": "停产管理",
+                    "path": "stopmanagement",
+                    "icon": "appstore"
+                }
+                ]
+            }
+        ]
+    }
+]

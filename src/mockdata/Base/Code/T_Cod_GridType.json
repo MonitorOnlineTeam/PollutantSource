@@ -1,0 +1,114 @@
+﻿[
+    {
+        "GridTypeCode":"1",
+        "GridTypeName":"环境质量监控网格",
+        "Comment":"",
+        "UpdateDate":"01 1 1900 12:00AM",
+        "ParentNode":"18"
+    },
+    {
+        "GridTypeCode":"2",
+        "GridTypeName":"污染源监控网格",
+        "Comment":"",
+        "UpdateDate":"01 1 1900 12:00AM",
+        "ParentNode":"18"
+    },
+    {
+        "GridTypeCode":"3",
+        "GridTypeName":"立体空间监控网格",
+        "Comment":"",
+        "UpdateDate":"01 1 1900 12:00AM",
+        "ParentNode":"18"
+    },
+    {
+        "GridTypeCode":"4",
+        "GridTypeName":"移动监测网格",
+        "Comment":"",
+        "UpdateDate":"01 1 1900 12:00AM",
+        "ParentNode":"18"
+    },
+    {
+        "GridTypeCode":"5",
+        "GridTypeName":"敏感区域",
+        "Comment":"",
+        "UpdateDate":"01 1 1900 12:00AM",
+        "ParentNode":"1"
+    },
+    {
+        "GridTypeCode":"6",
+        "GridTypeName":"交通网络",
+        "Comment":"",
+        "UpdateDate":"01 1 1900 12:00AM",
+        "ParentNode":"1"
+    },
+    {
+        "GridTypeCode":"7",
+        "GridTypeName":"扬尘监控",
+        "Comment":"",
+        "UpdateDate":"01 1 1900 12:00AM",
+        "ParentNode":"1"
+    },
+    {
+        "GridTypeCode":"8",
+        "GridTypeName":"企业监控",
+        "Comment":"",
+        "UpdateDate":"01 1 1900 12:00AM",
+        "ParentNode":"1"
+    },
+    {
+        "GridTypeCode":"9",
+        "GridTypeName":"工业园区",
+        "Comment":"",
+        "UpdateDate":"01 1 1900 12:00AM",
+        "ParentNode":"1"
+    },
+    {
+        "GridTypeCode":"10",
+        "GridTypeName":"城市网格",
+        "Comment":"",
+        "UpdateDate":"01 1 1900 12:00AM",
+        "ParentNode":"2"
+    },
+    {
+        "GridTypeCode":"11",
+        "GridTypeName":"农村乡镇",
+        "Comment":"",
+        "UpdateDate":"01 1 1900 12:00AM",
+        "ParentNode":"2"
+    },
+    {
+        "GridTypeCode":"12",
+        "GridTypeName":"传输通道",
+        "Comment":"",
+        "UpdateDate":"01 1 1900 12:00AM",
+        "ParentNode":"2"
+    },
+    {
+        "GridTypeCode":"13",
+        "GridTypeName":"边界区域",
+        "Comment":"",
+        "UpdateDate":"01 1 1900 12:00AM",
+        "ParentNode":"2"
+    },
+    {
+        "GridTypeCode":"14",
+        "GridTypeName":"生 活 源",
+        "Comment":"",
+        "UpdateDate":"01 1 1900 12:00AM",
+        "ParentNode":"2"
+    },
+    {
+        "GridTypeCode":"15",
+        "GridTypeName":"立体监控",
+        "Comment":"",
+        "UpdateDate":"01 1 1900 12:00AM",
+        "ParentNode":"3"
+    },
+    {
+        "GridTypeCode":"16",
+        "GridTypeName":"移动监测",
+        "Comment":"",
+        "UpdateDate":"01 1 1900 12:00AM",
+        "ParentNode":"4"
+    }
+]

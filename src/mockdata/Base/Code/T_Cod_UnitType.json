@@ -1,0 +1,44 @@
+﻿[
+    {
+        "UnitTypeCode":"1",
+        "UnitTypeName":"县以上工业企业",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "UnitTypeCode":"2",
+        "UnitTypeName":"县以上非工业",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "UnitTypeCode":"3",
+        "UnitTypeName":"事业单位",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "UnitTypeCode":"4",
+        "UnitTypeName":"乡镇街道工业",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "UnitTypeCode":"5",
+        "UnitTypeName":"乡镇街道非工业企业",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "UnitTypeCode":"6",
+        "UnitTypeName":"部队",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "UnitTypeCode":"7",
+        "UnitTypeName":"其他",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    }
+]

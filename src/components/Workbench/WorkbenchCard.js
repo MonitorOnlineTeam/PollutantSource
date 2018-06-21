@@ -3,6 +3,14 @@ import { Card, List} from 'antd';
 import styles from './WorkbenchCard.less';
 
 export default class WorkbenchCard extends Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+
+        };
+    }
+
     render() {
         const title = this.props.title;
         const dataSource = this.props.dataSource;
@@ -15,9 +23,9 @@ export default class WorkbenchCard extends Component {
                         renderItem={item => (
                             <List.Item key={item.id}>
                                 <List.Item.Meta
-                                    title={<span>jsdfkjdsklf</span>}
+                                    /* title={<span>{item.detail}</span>} */
+                                    title={<a href="#">sdfdsfdsfdsfsdfdsfdsfddsfdsfdsfsdfdsfdsfdsfsdfdsfdsfdsfsdfdsfdsfdsfsdfdsfdsfdsfsdfdsfdsfdsfsdfdsfdsfdsfsdfdsfdsfdsfsdfdsfdsfdsf</a>}
                                 />
-                                <div>Content</div>
                             </List.Item>
                         )}
                     />

@@ -1,0 +1,32 @@
+﻿[
+    {
+        "PSClassCode":"1",
+        "PSClassName":"一般工业企业",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "PSClassCode":"2",
+        "PSClassName":"小型三产",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "PSClassCode":"3",
+        "PSClassName":"建筑施工",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "PSClassCode":"4",
+        "PSClassName":"污水处理厂",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "PSClassCode":"5",
+        "PSClassName":"固废处理厂",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    }
+]

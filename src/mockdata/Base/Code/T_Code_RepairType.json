@@ -1,0 +1,32 @@
+﻿[
+    {
+        "RepairTypeCode":"1",
+        "RepairTypeName":"人工修正",
+        "Comment":"",
+        "UpdateTime":"03 18 2016 12:00AM"
+    },
+    {
+        "RepairTypeCode":"2",
+        "RepairTypeName":"技术修正",
+        "Comment":"",
+        "UpdateTime":"03 18 2016 12:00AM"
+    },
+    {
+        "RepairTypeCode":"3",
+        "RepairTypeName":"待核实",
+        "Comment":"",
+        "UpdateTime":"03 18 2016 12:00AM"
+    },
+    {
+        "RepairTypeCode":"4",
+        "RepairTypeName":"不修正",
+        "Comment":"",
+        "UpdateTime":"03 18 2016 12:00AM"
+    },
+    {
+        "RepairTypeCode":"5",
+        "RepairTypeName":"数据回溯",
+        "Comment":"",
+        "UpdateTime":"03 18 2016 12:00AM"
+    }
+]

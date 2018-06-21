@@ -1,0 +1,86 @@
+﻿[
+    {
+        "OutPutWhitherCode":"A",
+        "OutputWhitherName":"直接进入海域",
+        "PollutantType":"1",
+        "Comment":"1",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "OutPutWhitherCode":"B",
+        "OutputWhitherName":"直接进入江河湖、库等水环境",
+        "PollutantType":"1",
+        "Comment":"1",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "OutPutWhitherCode":"C",
+        "OutputWhitherName":"进入城市下水道（再入江河、湖、库）",
+        "PollutantType":"1",
+        "Comment":"1",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "OutPutWhitherCode":"D",
+        "OutputWhitherName":"进入城市下水道（再入沿海海域）",
+        "PollutantType":"1",
+        "Comment":"1",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "OutPutWhitherCode":"E",
+        "OutputWhitherName":"进入城市污水处理厂或工业废水集中处理厂",
+        "PollutantType":"1",
+        "Comment":"1",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "OutPutWhitherCode":"F",
+        "OutputWhitherName":"直接污灌农田",
+        "PollutantType":"1",
+        "Comment":"1",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "OutPutWhitherCode":"G",
+        "OutputWhitherName":"进入地渗或蒸发地",
+        "PollutantType":"1",
+        "Comment":"1",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "OutPutWhitherCode":"H",
+        "OutputWhitherName":"进入其他单位",
+        "PollutantType":"1",
+        "Comment":"1",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "OutPutWhitherCode":"K",
+        "OutputWhitherName":"其他",
+        "PollutantType":"1",
+        "Comment":"1",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "OutPutWhitherCode":"L",
+        "OutputWhitherName":"有组织排放",
+        "PollutantType":"2",
+        "Comment":"2",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "OutPutWhitherCode":"M",
+        "OutputWhitherName":"无组织排放",
+        "PollutantType":"2",
+        "Comment":"2",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "OutPutWhitherCode":"N",
+        "OutputWhitherName":"其他",
+        "PollutantType":"2",
+        "Comment":"2",
+        "UpdateTime":"01 1 1900 12:00AM"
+    }
+]

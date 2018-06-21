@@ -1,0 +1,44 @@
+﻿[
+    {
+        "PSScaleCode":"1",
+        "PSScaleName":"特大型",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "PSScaleCode":"2",
+        "PSScaleName":"大型一档",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "PSScaleCode":"3",
+        "PSScaleName":"大型二档",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "PSScaleCode":"4",
+        "PSScaleName":"中一型",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "PSScaleCode":"5",
+        "PSScaleName":"中二型",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "PSScaleCode":"6",
+        "PSScaleName":"小型",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "PSScaleCode":"7",
+        "PSScaleName":"其它",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    }
+]

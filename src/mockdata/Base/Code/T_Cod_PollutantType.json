@@ -1,0 +1,122 @@
+﻿[
+    {
+        "PollutantTypeCode":"1",
+        "PollutantTypeName":"废水",
+        "Comment":"WATER",
+        "UpdateTime":"01 1 1900 12:00AM",
+        "ST":"32",
+        "IsUsed":"0"
+    },
+    {
+        "PollutantTypeCode":"2",
+        "PollutantTypeName":"废气",
+        "Comment":"GAS",
+        "UpdateTime":"01 1 1900 12:00AM",
+        "ST":"31",
+        "IsUsed":"0"
+    },
+    {
+        "PollutantTypeCode":"3",
+        "PollutantTypeName":"噪声",
+        "Comment":"NOISE",
+        "UpdateTime":"01 1 1900 12:00AM",
+        "ST":"36",
+        "IsUsed":"0"
+    },
+    {
+        "PollutantTypeCode":"4",
+        "PollutantTypeName":"固体废物",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM",
+        "ST":"27",
+        "IsUsed":"0"
+    },
+    {
+        "PollutantTypeCode":"5",
+        "PollutantTypeName":"环境质量",
+        "Comment":"AIR",
+        "UpdateTime":"04 5 2016 12:00AM",
+        "ST":"22",
+        "IsUsed":"0"
+    },
+    {
+        "PollutantTypeCode":"6",
+        "PollutantTypeName":"水质",
+        "Comment":"WATERQUALITY",
+        "UpdateTime":"04 17 2016 12:00AM",
+        "ST":"21",
+        "IsUsed":"0"
+    },
+    {
+        "PollutantTypeCode":"8",
+        "PollutantTypeName":"小型站",
+        "Comment":"MINISTATION",
+        "UpdateTime":"04 5 2016 12:00AM",
+        "ST":"24",
+        "IsUsed":"0"
+    },
+    {
+        "PollutantTypeCode":"9",
+        "PollutantTypeName":"恶臭",
+        "Comment":"STENCH",
+        "UpdateTime":"04 5 2016 12:00AM",
+        "ST":"25",
+        "IsUsed":"0"
+    },
+    {
+        "PollutantTypeCode":"10",
+        "PollutantTypeName":"voc",
+        "Comment":"VOC",
+        "UpdateTime":"04 5 2016 12:00AM",
+        "ST":"26",
+        "IsUsed":"0"
+    },
+    {
+        "PollutantTypeCode":"11",
+        "PollutantTypeName":"工况",
+        "Comment":"WORKINGCONDITION",
+        "UpdateTime":"05 16 2016 12:00AM",
+        "ST":"27",
+        "IsUsed":"0"
+    },
+    {
+        "PollutantTypeCode":"12",
+        "PollutantTypeName":"扬尘",
+        "Comment":"Dust",
+        "UpdateTime":"08 10 2016 6:22AM",
+        "ST":"31",
+        "IsUsed":"0"
+    },
+    {
+        "PollutantTypeCode":"18",
+        "PollutantTypeName":"颗粒物",
+        "Comment":"ParticulateMatter",
+        "UpdateTime":"10 11 2017 3:39PM",
+        "ST":"33",
+        "IsUsed":"0"
+    },
+    {
+        "PollutantTypeCode":"23",
+        "PollutantTypeName":"国控",
+        "Comment":"CountryControl",
+        "UpdateTime":"10 8 2017 12:00AM",
+        "ST":"23",
+        "IsUsed":"0"
+    },
+    {
+        "PollutantTypeCode":"24",
+        "PollutantTypeName":"省控",
+        "Comment":"ProvinceControl",
+        "UpdateTime":"10 8 2017 12:00AM",
+        "ST":"24",
+        "IsUsed":"0"
+    },
+    {
+        "PollutantTypeCode":"25",
+        "PollutantTypeName":"市控",
+        "Comment":"CityControl",
+        "UpdateTime":"10 8 2017 12:00AM",
+        "ST":"25",
+        "IsUsed":"0"
+    }
+]

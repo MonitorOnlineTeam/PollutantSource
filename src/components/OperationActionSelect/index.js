@@ -19,9 +19,9 @@ export default class OperationActionSelect extends Component {
                 onChange={this.handleChange}
                 filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
             >
-                <Option value="例行运维">例行运维</Option>
-                <Option value="应急运维">应急运维</Option>
-                <Option value="运维审核">运维审核</Option>
+                <Option value="1">例行运维</Option>
+                <Option value="2">应急运维</Option>
+                <Option value="3">运维审核</Option>
             </Select>
         );
     }

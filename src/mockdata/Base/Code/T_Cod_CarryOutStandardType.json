@@ -1,0 +1,20 @@
+﻿[
+    {
+        "CarryOutStandardTypeCode":"1",
+        "CarryOutStandardTypeName":"国家标准",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "CarryOutStandardTypeCode":"2",
+        "CarryOutStandardTypeName":"地方标准",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "CarryOutStandardTypeCode":"3",
+        "CarryOutStandardTypeName":"行业标准",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    }
+]

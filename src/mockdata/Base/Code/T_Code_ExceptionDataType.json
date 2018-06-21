@@ -1,0 +1,38 @@
+﻿[
+    {
+        "ExceptionCode":"1",
+        "ExceptionName":"0值异常",
+        "Comment":"",
+        "UpdateTime":"03 18 2016 12:00AM"
+    },
+    {
+        "ExceptionCode":"2",
+        "ExceptionName":"连续值异常",
+        "Comment":"",
+        "UpdateTime":"03 18 2016 12:00AM"
+    },
+    {
+        "ExceptionCode":"3",
+        "ExceptionName":"超限异常",
+        "Comment":"",
+        "UpdateTime":"03 18 2016 12:00AM"
+    },
+    {
+        "ExceptionCode":"4",
+        "ExceptionName":"设备参数异常",
+        "Comment":"",
+        "UpdateTime":"11 28 2016 12:00AM"
+    },
+    {
+        "ExceptionCode":"5",
+        "ExceptionName":"人工挑选异常",
+        "Comment":"",
+        "UpdateTime":"03 18 2016 12:00AM"
+    },
+    {
+        "ExceptionCode":"6",
+        "ExceptionName":"设备状态异常",
+        "Comment":"",
+        "UpdateTime":"11 28 2016 12:00AM"
+    }
+]

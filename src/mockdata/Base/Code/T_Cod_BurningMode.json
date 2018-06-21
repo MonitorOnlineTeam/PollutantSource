@@ -1,0 +1,26 @@
+﻿[
+    {
+        "BurningModeCode":"1",
+        "BurningModeName":"层燃(手烧及机械烧)",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "BurningModeCode":"2",
+        "BurningModeName":"室燃(煤粉、油、气燃烧)",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "BurningModeCode":"3",
+        "BurningModeName":"沸腾燃烧(循环流化床、沸腾炉)",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    },
+    {
+        "BurningModeCode":"4",
+        "BurningModeName":"其他燃烧方式",
+        "Comment":"",
+        "UpdateTime":"01 1 1900 12:00AM"
+    }
+]
