@@ -61,8 +61,8 @@
     }, {
         "title": "企业",
         "width": "25%",
-        "dataIndex": "ent",
-        "key": "ent"
+        "dataIndex": "entName",
+        "key": "entName"
     }, {
         "title": "状态",
         "width": "20%",
@@ -71,8 +71,8 @@
     }, {
         "title": "名称",
         "width": "35%",
-        "dataIndex": "title",
-        "key": "title"
+        "dataIndex": "pointName",
+        "key": "pointName"
     }],
     "wrydata":[  {
         "key": "1",

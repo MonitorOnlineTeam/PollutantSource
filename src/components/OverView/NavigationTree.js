@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import markerspoint from '../../mockdata/OverView/markersInfo.json';
 import styles from './OverView.less';
+import InfiniteScroll from 'react-infinite-scroller';
 import {
     Radio,
     Input,
-    Table
+    Table,
+    List
 } from 'antd';
 
 class NavigationTree extends Component {
@@ -42,6 +44,7 @@ class NavigationTree extends Component {
                         margin: '0px 2px 10px 10px'
                     }} />
                 <Table columns={markerspoint.treeListcol} dataSource={this.props.markersInfo} pagination={false}
+                    scroll={{ y: 'calc(100vh - 260px)' }}
                     onRow={record => ({
                         onClick: () => {
                             this.props.treeCilck(record);
