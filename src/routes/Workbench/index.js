@@ -62,7 +62,6 @@ class Workbench extends Component {
       const titleCnt2 = 12;
       const titleCnt3 = 21;
       const titleCnt4 = 20;
-      const enterprise = getEnterprise();
       const point = getPointEnterprise();
       debugger;
       return (
