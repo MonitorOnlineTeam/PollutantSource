@@ -14,6 +14,7 @@ export default class Select_ extends Component {
             allowClear: true,
             placeholder: '请选择',
             mode: this.props.mode,
+            defaultValue: (this.props.defaultValue && [this.props.defaultValue]) || [],
             optionDatas: this.props.optionDatas || []
         };
 
@@ -21,7 +22,7 @@ export default class Select_ extends Component {
     }
     handleChange=(value, text) => {
         // console.log(value);
-        
+
         const selectText = [];
         const selectValue = [];
         // 取消选择
@@ -80,6 +81,7 @@ export default class Select_ extends Component {
                     allowClear={this.state.allowClear}
                     style={{width: 200, ...this.props.style}}
                     placeholder={this.state.placeholder}
+                    defaultValue={this.state.defaultValue}
                 >
                     {
                         this.state.optionDatas.map((item, key) => {
@@ -90,4 +92,8 @@ export default class Select_ extends Component {
             </div>
         );
     }
+}
+
+export function getSelectedValue() {
+    return 1;
 }
