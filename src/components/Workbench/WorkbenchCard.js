@@ -24,7 +24,7 @@ export default class WorkbenchCard extends Component {
                             <List.Item key={item.id}>
                                 <List.Item.Meta
                                     /* title={<span>{item.detail}</span>} */
-                                    title={<a href="#">sdfdsfdsfdsfsdfdsfdsfddsfdsfdsfsdfdsfdsfdsfsdfdsfdsfdsfsdfdsfdsfdsfsdfdsfdsfdsfsdfdsfdsfdsfsdfdsfdsfdsfsdfdsfdsfdsfsdfdsfdsfdsf</a>}
+                                    title={<a href="#" style={{'text-decoration': 'underline'}}>{item.operationaction === 1 ? '例行运维' : item.operationaction === 2 ? '应急运维' : '运维审核'}-<span style={{color: 'red'}}>{item.EntName}</span>企业<span style={{color: 'red'}}>{item.PointName}</span>排口,{item.date.replace((new Date()).getFullYear() + '-', '')}{item.operationaction === 1 ? '待巡检' : item.operationaction === 2 ? '待应急运维' : '待审核'}</a>}
                                 />
                             </List.Item>
                         )}

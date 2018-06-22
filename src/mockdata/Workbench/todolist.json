@@ -1,0 +1,32 @@
+[
+    {
+        "id":"1",
+        "DGIMN":"sgjt001005",
+        "operationaction":1,
+        "date":"2018-07-27"
+    },
+    {
+        "id":"2",
+        "DGIMN":"sgjt001003",
+        "operationaction":1,
+        "date":"2018-07-19"
+    },
+    {
+        "id":"3",
+        "DGIMN":"sgjt001007",
+        "operationaction":1,
+        "date":"2018-08-01"
+    },
+    {
+        "id":"4",
+        "DGIMN":"hgjt001003",
+        "operationaction":1,
+        "date":"2018-08-01"
+    },
+    {
+        "id":"5",
+        "DGIMN":"hgjt001001",
+        "operationaction":2,
+        "date":"2018-08-01"
+    }
+]
