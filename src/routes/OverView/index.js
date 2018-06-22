@@ -18,10 +18,8 @@ import QualityControlTips from '../../components/OverView/QualityControlTips';
 import config from '../../config';
 import styles from './index.less';
 
-import markerspoint from '../../mockdata/OverView/markersInfo.json';
 import point from '../../mockdata/OverView/point.json';
-
-import { getPointEnterprise } from '../../mockdata/Base/commonbase';
+import { getPointEnterprise, getEnterprise } from '../../mockdata/Base/commonbase';
 
 const {amapKey} = config;
 const plugins = [
@@ -77,41 +75,33 @@ class OverViewMap extends PureComponent {
             longitude: 91.300317,
             latitude: 42.01278,
             tipheight: 470,
-            useCluster: true,
-            icon: 'environment',
             coordinateSet: []
         };
         this.specialChange = (value) => {
             let special = 'monitor';
-            let icon = 'environment';
+
             let tipheight = 470;
             if (value.target.value === 'a') {
                 special = 'monitor';
                 tipheight = 470;
-                icon = 'environment';
             } else if (value.target.value === 'b') {
                 special = 'operation';
-                tipheight = 420;
-                icon = 'medicine-box';
+                tipheight = 430;
             } else if (value.target.value === 'c') {
                 special = 'sewage';
                 tipheight = 420;
-                icon = 'up-square';
             } else if (value.target.value === 'd') {
                 special = 'quality';
-                tipheight = 470;
-                icon = 'dashboard';
+                tipheight = 303;
             }
-            _this.setState({special: special, tipheight: tipheight, icon: icon});
+            _this.setState({special: special, tipheight: tipheight});
         };
         this.treeCilck = (row) => {
-            _this.setState({visible: false});
             _this.setState({
                 position: {
                     longitude: row.position.longitude,
                     latitude: row.position.latitude
                 },
-                useCluster: false,
                 visible: true,
                 title: row.EntName + '-' + row.PointName,
                 region: row.RegionName,
@@ -121,7 +111,6 @@ class OverViewMap extends PureComponent {
                 coordinateSet: row.CoordinateSet,
                 longitude: row.position.longitude,
                 latitude: row.position.latitude,
-
             });
         };
         this.stationclick = () => {
@@ -168,14 +157,23 @@ class OverViewMap extends PureComponent {
                     control: itemdata.AttentionName,
                     zoom: 17,
                     longitude: itemdata.position.longitude,
-                    latitude: itemdata.position.latitude
+                    latitude: itemdata.position.latitude,
+                    coordinateSet: itemdata.CoordinateSet
                 });
             }
 
         };
         this.mapEvents = {
+            created(m) {
+                _this.map = m;
+            },
             zoomchange: (value) => {
-                // const aa = getZoom();
+                const zoom = _this.map.getZoom();
+            }
+        };
+        this.infoWindowEvents = {
+            close: () => {
+                _this.setState({visible: false});
             }
         };
     }
@@ -189,7 +187,6 @@ class OverViewMap extends PureComponent {
                 cgcoordinateSet.push(item[0]);
             });
         }
-        console.log(this.state.icon);
         return (
 
             <div
@@ -197,8 +194,7 @@ class OverViewMap extends PureComponent {
                     width: '100%',
                     height: 'calc(100vh - 67px)'
                 }}>
-                <Map events={this.mapEvents} resizeEnable={true} center={[this.state.longitude, this.state.latitude]} zoom={this.state.zoom} loading={<Spin />} amapkey={amapKey} plugins={plugins}>
-
+                <Map events={this.mapEvents} resizeEnable={true} center={[this.state.longitude, this.state.latitude]} zoom={5} loading={<Spin />} amapkey={amapKey} plugins={plugins}>
                     <NavigationTree TreeSearch={this.TreeSearch} specialChange={this.specialChange} treeCilck={this.treeCilck} markersInfo={this.state.markerInfo} />
                     <div
                         style={{
@@ -217,18 +213,19 @@ class OverViewMap extends PureComponent {
                         </Radio.Group>
                     </div>
 
-                    <Markers useCluster={this.state.useCluster} markers={this.state.markerInfo} events={this.markersEvents}
+                    <Markers markers={this.state.markerInfo} events={this.markersEvents}
                         render={(extData) => {
-                            return (
-                                special === 'monitor' ? <Icon type="environment" style={{ fontSize: 25, color: '#11d549' }} />
-                                    : (special === 'operation' ? <Icon type="medicine-box" style={{ fontSize: 25, color: '#11d549' }} />
-                                        : special === 'sewage'
-                                            ? <Icon type="up-square" style={{ fontSize: 25, color: '#11d549' }} />
-                                            : <Icon type="dashboard" style={{ fontSize: 25, color: '#11d549' }} />));
+                            return (<div style={{ background: `url('../../../gisnormal.png')`,
+                                backgroundRepeat: 'no-repeat',
+                                width: '30px',
+                                height: '30px'
+                            }}
+                            />);
                         }} />
 
                     <Polygon
-                        style={{}}
+                        style={{strokeColor: '#ff0000',
+                        }}
                         path={cgcoordinateSet}
                     />
                     <InfoWindow
@@ -241,7 +238,10 @@ class OverViewMap extends PureComponent {
                             height: this.state.tipheight,
                             overflow: 'hidden'
                         }}
-                        offset={[0, -10]}>
+                        offset={[0, -10]}
+                        events={
+                            this.infoWindowEvents
+                        }>
                         <div>
                             <h4 className={styles.titleborder}>{this.state.title}</h4>
                             <div className={styles.titlebutton}>
