@@ -5,11 +5,22 @@ import { Select } from 'antd';
 const Option = Select.Option;
 
 export default class OperationActionSelect extends Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+
+        };
+    }
+
     handleChange=(value) => {
         console.log(`selected ${value}`);
     }
 
     render() {
+        let datasource = this.props.datasource;
+        let options = [];
+        datasource.forEach(t => { options.push(<Option value={t.id}>{t.text}</Option>); });
         return (
             <Select
                 showSearch={true}
@@ -19,9 +30,7 @@ export default class OperationActionSelect extends Component {
                 onChange={this.handleChange}
                 filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
             >
-                <Option value="1">例行运维</Option>
-                <Option value="2">应急运维</Option>
-                <Option value="3">运维审核</Option>
+                { options }
             </Select>
         );
     }

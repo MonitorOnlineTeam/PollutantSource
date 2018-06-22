@@ -10,8 +10,8 @@ import AlarmTypeSelect from '../../components/AlarmTypeSelect/index';
 import EarlyWarningSelect from '../../components/EarlyWarningSelect/index';
 import {getPointEnterprise} from '../../mockdata/Base/commonbase';
 import todolist from '../../mockdata/Workbench/todolist.json';
-import alarm from '../../mockdata/Workbench/alarm.json';
 import operationinfo from '../../mockdata/Workbench/operationinfo.json';
+import alarm from '../../mockdata/Workbench/alarm.json';
 import earlywarning from '../../mockdata/Workbench/earlywarning.json';
 let todoArray = [];
 let operationArray = [];
@@ -115,18 +115,20 @@ class Workbench extends Component {
       const titleCnt2 = operationArray.length;
       const titleCnt3 = alarmArray.length;
       const titleCnt4 = earlyArray.length;
+      const toduOperationActionSelect = [{'id': 1, 'text': '例行运维'}, {'id': 2, 'text': '应急运维'}, {'id': 3, 'text': '运维审核'}];
+      const operOperationActionSelect = [{'id': 1, 'text': '例行运维'}, {'id': 2, 'text': '应急运维'}, {'id': 3, 'text': '运维审核'}, {'id': 4, 'text': '备件更换'}, {'id': 5, 'text': '备件过期'}, {'id': 6, 'text': '运维催办'}];
       return (
           <div style={{ background: '#ECECEC', padding: '30px' }}>
               <Row gutter={16}>
                   <Col xs={2} sm={6} md={12} lg={12} xl={12} xxl={12}>
                       <WorkbenchCard title={<span>待办事项 | <span style={{color: 'red', fontWeight: 'bold'}}>{titleCnt1}</span></span>}
                           dataSource={todoArray}
-                          extra={<div> <OperationActionSelect width="100px" /> <EnterpriseAutoComplete width="200px" /></div>} />
+                          extra={<div> <OperationActionSelect width="100px" datasource={toduOperationActionSelect} /> <EnterpriseAutoComplete width="200px" /></div>} />
                   </Col>
                   <Col xs={2} sm={6} md={12} lg={12} xl={12} xxl={12}>
                       <WorkbenchCard title={<span>运维提醒 | <span style={{color: 'red', fontWeight: 'bold'}}>{titleCnt2}</span></span>}
                           dataSource={operationArray}
-                          extra={<div><OperationActionSelect width="100px" />
+                          extra={<div><OperationActionSelect width="100px" datasource={operOperationActionSelect} />
                               <EnterpriseAutoComplete width="200px" />
                               <Switch style={{marginLeft: 5}} checkedChildren="催办" unCheckedChildren="全部" defaultChecked={false} />
                           </div>} />
