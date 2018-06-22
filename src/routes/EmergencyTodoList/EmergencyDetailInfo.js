@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import styles from './EmergencyDetailInfo.less';
 
 export default class componentName extends Component {
     render() {
@@ -7,7 +8,9 @@ export default class componentName extends Component {
             style={{ width: '100%',
             height: 'calc(100vh - 120px)' }}
             >
-                ceshi 
+                <div style={styles.HandleProcess}>
+任务处理流程图
+                </div>
             </div>
         )
     }
