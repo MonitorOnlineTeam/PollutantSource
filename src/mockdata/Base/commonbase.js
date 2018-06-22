@@ -6,6 +6,8 @@ import Point_OperationJson from './Point_Operation.json';
 import relationJson from './Point_MonitorPointBase.json';
 import Cookie from 'js-cookie';
 import regions from '../Regions/region.json';
+import industrys from './Code/T_Cod_IndustryType.json';
+import attentions from './Code/T_Cod_AttentionDegree.json';
 
 const enterpriseArray = Enterprise_AllJson;
 const allpointArray = Point_AllJson;
@@ -106,8 +108,15 @@ export function getPointEnterprise() {
         let relation = relationArray.find((r) => r.DGIMN === p.DGIMN);
         let enterprise = enterpriseArraySon.find((e) => e.EntCode === relation.BaseCode);
         if (enterprise) {
+            debugger;
             const region = regions.find(t => t.RegionCode === p.RegionCode);
-            const rr = { ...enterprise, ...p, RegionName: region.RegionName };
+            const industry = industrys.find(t => t.IndustryTypeCode === enterprise.IndustryTypeCode);
+            const attention = attentions.find(t => t.AttentionCode === enterprise.AttentionCode);
+            const rr = { ...enterprise,
+                ...p,
+                RegionName: region.RegionName,
+                IndustryTypeName: industry.IndustryTypeName,
+                AttentionName: attention.AttentionName };
             result.push(rr);
         }
     }

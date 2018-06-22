@@ -9,8 +9,8 @@ export default class componentName extends Component {
             <div style={{ width: '100%',
                 height: 'calc(100vh - 120px)' }}>
                     <Row gutter={8}>
-                        <Col span={4}><PointList /></Col>
-                        <Col span={20}> <EmergencyDataList /></Col>
+                        <Col span={3}><PointList /></Col>
+                        <Col span={21}> <EmergencyDataList /></Col>
                     </Row>
             </div>
         );

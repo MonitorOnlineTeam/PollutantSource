@@ -1,5 +1,5 @@
 .bigDiv{
-  background-color:#fff;
+  background-color:rgb(238,241,246);
 }
 .navigation{
   height:40px;
@@ -40,99 +40,103 @@
               position: relative;
               top: 7px;
           }
-/*==============图例结束===========*/
-
-.zhuangtai_style01 {
-  width: 8px;
-  height: 8px;
-  border-radius: 15px 15px 15px 15px;
-  -moz-border-radius: 15px 15px 15px 15px;
-  -webkit-border-radius: 15px 15px 15px 15px;
-  text-shadow: 2px 2px 2px #6e6e6e;
-  -moz-text-shadow: 2px 2px 2px #6e6e6e;
-  -webkit-text-shadow: 2px 2px 2px #6e6e6e;
-  -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
-  -moz-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
-  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
-  float: left;
-  margin-right: 4px;
-  margin-top: 2px;
-}
-
-.z_green {
-  background: #61bc00;
-}
-
-.z_red {
-  background: #e80606;
-}
-
-.z_grey {
-  background: #b1b1b1;
-}
-
-.z_yellow {
-  background: #AAC600;
-}
 
 .searchInput{
-  width: 100%;
+  width: 95%;
   height:45px;
   padding-left: 5px;
+  padding-top:10px;
+  margin-left:3px;
 }
 
-/*离线*/
-.glyphicon-stop {
-  background: url(../../../public/image/bootunonline.png) no-repeat;
-  position: relative;
-  top: 6px;
-  right:6px;
-  height:16px;
-}
-/*在线*/
-.glyphicon-forward {
-  background: url(../../../public/image/bootonline.png) no-repeat;
-  position: relative;
-  top: 6px;
-  right:6px;
-  height:16px;
-}
-/*超标*/
-.glyphicon-fast-forward {
-  background: url(../../../public/image/overTreecss.png) no-repeat;
-  position: relative;
-   top: 6px;
-  right:6px;
-  height:16px;
-}
-/*设备参数异常*/
-.glyphicon-step-forward {
-  background: url(../../../public/image/bootdataabnormal.png) no-repeat;
-  position: relative;
-  top: 6px;
-  right:6px;
-  height:16px;
-}
-/*设备状态异常*/
-.glyphicon-eject {
-  background: url(../../../public/image/bootstateabnormal.png) no-repeat;
-  position: relative;
-   top: 6px;
-  right:6px;
-     height:16px;
-}
-/*数据异常*/
-.glyphicon-chevron-left {
-  background: url(../../../public/image/bootrefabnormal.png) no-repeat;
-  height:16px;
-  position: relative;
-  top: 6px;
-  right:6px;
+.listbox{
+  width:100%;
+  padding:0 10px 0 10px;
 }
 
 .shadow{  
-  -webkit-box-shadow: #666 0px 0px 10px;  
-  -moz-box-shadow: #666 0px 0px 10px;  
-  box-shadow: #666 0px 0px 10px;   
-} 
+  -webkit-box-shadow: #666 0px 0px 5px;  
+  -moz-box-shadow: #666 0px 0px 5px;  
+  box-shadow: #666 0px 0px 5px;   
+}
 
+.toggler{
+  -webkit-background-clip: padding-box;
+  background-clip: padding-box;
+  border: 1px solid #ccc;
+  border: 1px solid rgba(0, 0, 0, .15);
+  width: 20px;
+  height: 48px;
+  position: absolute;
+  top: 45%;
+  cursor: pointer;
+  z-index: 1000;
+}
+
+.bigDiv .toggler{
+  -webkit-border-top-right-radius: 4px;
+      -webkit-border-bottom-right-radius: 4px;
+      -moz-border-radius-topright: 4px;
+      -moz-border-radius-bottomright: 4px;
+      border-top-right-radius: 4px;
+      border-bottom-right-radius: 4px;
+      border-left: 1px solid #fff;
+      -webkit-box-shadow: 1px 0px 8px rgba(0, 0, 0, .175);
+      box-shadow: 1px 0px 8px rgba(0, 0, 0, .175);
+      right: -20px;
+}
+
+.bigDiv > .toggler > span{
+  margin:15px 2px;
+}
+
+.bigDiv > .toggler > .glyphiconChevronRight{
+  background-image:url(../../../public/image/arrow_left.png);
+  background-repeat: no-repeat;
+  display:none;
+}
+
+.bigDiv > .toggler > .glyphiconChevronLeft{
+  background-image:url(../../../public/image/arrow_left.png);
+  background-repeat: no-repeat;
+  display:block;
+}
+
+.cardList{
+  height:70px;
+  background-color: #fff;
+  margin-top:10px;
+  margin-bottom:10px;
+  padding:10px;
+  cursor: pointer;
+}
+
+.cardList:hover {
+  -webkit-box-shadow: #666 0px 0px 10px;  
+  -moz-box-shadow: #666 0px 0px 10px; 
+  box-shadow: #666 0px 0px 10px;
+  //background-color: rgb(232,247,255);
+}
+
+.cardList .title{
+  height:25px;
+  line-height:25px;
+}
+
+.cardList .title .chkbox{
+  margin-right:5px;
+  //display: none;
+}
+
+.cardList .title .titleSpan{
+  font-size:14px;
+  font-weight: bold;
+  margin-right:5px;
+}
+
+.cardList .content{
+  font-size:12px;
+  color:rgb(140,140,140);
+  height:25px;
+  line-height:25px;
+}

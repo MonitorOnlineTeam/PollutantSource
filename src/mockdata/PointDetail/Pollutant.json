@@ -1,0 +1,32 @@
+[
+    {
+        "Value":"a21026",
+        "Name":"SO2",
+        "Unit":"mg/m3"
+    },
+    {
+        "Value":"a34002",
+        "Name":"PM10",
+        "Unit":"mg/m3"
+    },
+    {
+        "Value":"a21005",
+        "Name":"CO",
+        "Unit":"mg/m3"
+    },
+    {
+        "Value":"a05024",
+        "Name":"O3",
+        "Unit":"mg/m3"
+    },
+    {
+        "Value":"a34004",
+        "Name":"PM25",
+        "Unit":"mg/m3"
+    },
+    {
+        "Value":"a21004",
+        "Name":"NO2",
+        "Unit":"mg/m3"
+    }
+]

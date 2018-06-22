@@ -28,7 +28,7 @@ class RangePicker_ extends Component {
                 '最近三年': [moment().add(-3, 'y').startOf('years'), moment().endOf('years')]
             },
             style: {
-                width: this.props.style && (this.props.style.width || 350),
+                width: (this.props.style && (this.props.style.width || 300)) || 250,
                 marginLeft: 5,
             },
             placeholder: ['开始时间', '结束时间'],
@@ -41,6 +41,13 @@ class RangePicker_ extends Component {
     getDateValues=() => {
         return {Form: this.state.Form, To: this.state.To};
     };
+
+    setDateValues=(dates) => {
+        this.setState({
+            searchdate: dates
+        });
+    };
+
     onDateChange=(dates, dateStrings) => {
         this.setState({
             searchdate: dates,
