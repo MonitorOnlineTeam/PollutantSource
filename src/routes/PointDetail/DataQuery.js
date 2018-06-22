@@ -26,18 +26,18 @@ modify by
 */
 
 const data = PageDatas;
-data.push({
-    key: '999',
-    MonitoringTime: '加载更多'
-});
+// data.push({
+//     key: '999',
+//     MonitoringTime: '加载更多'
+// });
 const renderContent = (value, row, index) => {
     const obj = {
         children: value,
         props: {},
     };
-    if (index === data.length - 1) {
-        obj.props.colSpan = 0;
-    }
+    // if (index === data.length - 1) {
+    //     obj.props.colSpan = 0;
+    // }
     return obj;
 };
 
@@ -57,111 +57,63 @@ const columns = [{
             <div>
                 <p>标准值:<b>{row.Standard}</b></p>
                 <p>超标倍数:<b style={{color: color}}>{row.Overproof}</b></p>
-                <a className="login-form-forgot" href="##">查看管控状态及参数</a>
+                <a href="##">查看管控状态及参数</a>
             </div>
         );
-        if (index < (data.length - 1)) {
-            return (
-                <Popover placement="bottom" content={content}>
-                    <span style={{color: color, cursor: 'pointer'}}>{text}</span>
-                </Popover>);
-        }
-        return {
-            children: <a href="javascript:;">{text}</a>,
-            props: {
-                colSpan: data.length,
-            },
-        };
+        // if (index < (data.length - 1)) {
+        return (
+            <Popover placement="bottom" content={content}>
+                <a style={{color: color, cursor: 'pointer'}}>{text}</a>
+            </Popover>);
+        // }
+        // return {
+        //     children: <a href="javascript:;">{text}</a>,
+        //     props: {
+        //         colSpan: data.length,
+        //     },
+        // };
     },
 }];
-// [{
-//     key: '1',
-//     dateTime: '2018-05-17',
-//     concentration: 27,
 
-// }, {
-//     key: '2',
-//     dateTime: '2018-05-18',
-//     concentration: 40,
-// }, {
-//     key: '3',
-//     dateTime: '2018-05-19',
-//     concentration: 28,
-// }, {
-//     key: '4',
-//     dateTime: '2018-05-20',
-//     concentration: 35,
-// }, {
-//     key: '5',
-//     dateTime: '2018-05-21',
-//     concentration: 29,
-// }, {
-//     key: '6',
-//     dateTime: '2018-05-22',
-//     concentration: 42,
-// }, {
-//     key: '7',
-//     dateTime: '加载更多',
-//     concentration: '加载更多',
-// }];
-
-const option = {
-    title: {
-        // text: '2018-05-17~2018-05-18'
-    },
-    tooltip: {
-        trigger: 'axis'
-    },
-    legend: {
-        data: ['SO2']
-    },
-    toolbox: {
-        show: true,
-        feature: {
-            restore: {},
-            saveAsImage: {}
-        }
-    },
-    xAxis: {
-        type: 'category',
-        name: '时间',
-        boundaryGap: false,
-        data: ['2017-05-17', '2017-05-18', '2017-05-19', '2017-05-20', '2017-05-21', '2017-05-22']
-    },
-    yAxis: {
-        type: 'value',
-        name: '浓度(mol/L)',
-        axisLabel: {
-            formatter: '{value}'
-        }
-    },
-    series: [
-        {
-            name: 'SO2',
-            type: 'line',
-            data: [27, 40, 28, 35, 29, 42],
-            markPoint: {
-                data: [
-                    {type: 'max', name: '最大值'},
-                    {type: 'min', name: '最小值'}
-                ]
-            },
-            markLine: {
-                data: [
-                    {type: 'average', name: '平均值'}
-                ]
-            }
-        }
-    ]
-};
 const FormItem = Form.Item;
 const pointDatas = getPointEnterprise();
-
 class DataQuery extends Component {
     constructor(props) {
         super(props);
+        // console.log(this.select_Pollutant.getSelectedValue()[0].Value);
+
+        var defaultOption = {
+            legend: [],
+            xAxisData: [],
+            series: [{
+                name: '',
+                type: 'line',
+                data: [],
+                markPoint: {
+                    data: [
+                        {type: 'max', name: '最大值'},
+                        {type: 'min', name: '最小值'}
+                    ]
+                },
+                markLine: {
+                    data: [
+                        {type: 'average', name: '平均值'}
+                    ]
+                }
+            }]
+        };
+        defaultOption.legend.push(PollutantDatas[0].Name);
+        defaultOption.series[0].name = PollutantDatas[0].Name;
+        data.map((item) => {
+            defaultOption.xAxisData.push(item.MonitoringTime);
+            defaultOption.series[0].data.push((+item.Concentration));
+        });
+        console.log(defaultOption.series);
         this.state = {
-            echartsOption: option
+            // echartsOption: option,
+            legendData: defaultOption.legend,
+            xAxisData: defaultOption.xAxisData,
+            seriesData: defaultOption.series
         };
     }
 
@@ -185,7 +137,7 @@ class DataQuery extends Component {
     }
     reloadChart=() => {
         this.setState({
-            echartsOption: []
+            legendData: [this.select_Pollutant.getSelectedText()[0]]
         });
         // option.legend = [];
         // ReactEcharts.setOption(option);
@@ -210,6 +162,42 @@ class DataQuery extends Component {
     }
 
     render() {
+        // console.log(`${this.state.legendData}`);
+        // console.log(this.state.legendData);
+
+        const option = {
+            title: {
+                // text: '2018-05-17~2018-05-18'
+            },
+            tooltip: {
+                trigger: 'axis'
+            },
+            legend: {
+                data: this.state.legendData
+            },
+            toolbox: {
+                show: true,
+                feature: {
+                    // restore: {},
+                    saveAsImage: {}
+                }
+            },
+            xAxis: {
+                type: 'category',
+                name: '时间',
+                boundaryGap: false,
+                data: this.state.xAxisData// ['2017-05-17', '2017-05-18', '2017-05-19', '2017-05-20', '2017-05-21', '2017-05-22']
+            },
+            yAxis: {
+                type: 'value',
+                name: '浓度(mol/L)',
+                axisLabel: {
+                    formatter: '{value}'
+                }
+            },
+            series: this.state.seriesData
+        };
+        console.log(option);
         return (
             <div className={styles.cardTitle}>
                 <Row>
@@ -218,7 +206,7 @@ class DataQuery extends Component {
                             <ButtonGroup_ ref={(r) => { this.StatisticsType_ = r; }} />
                         } style={{ width: '100%', height: 'calc(100vh - 225px)' }}>
                             <Form layout="inline">
-                                <Row>
+                                <Row gutter={24}>
                                     <Col span={6} >
                                         <FormItem label="时间">
                                             <RangePicker_ format="YYYY-MM-DD" ref={(r) => { this.RangePicker_ = r; }} />
@@ -229,13 +217,13 @@ class DataQuery extends Component {
                                             <Select_ mode="multiple" optionDatas={this.getPointDatas()} ref={(r) => { this.select_Compare = r; }} />
                                         </FormItem>
                                     </Col>
-                                    <Col span={5}>
+                                    <Col span={6}>
                                         <FormItem label="污染物">
-                                            <Select_ optionDatas={PollutantDatas} ref={(r) => { this.select_Pollutant = r; }} />
+                                            <Select_ optionDatas={PollutantDatas} ref={(r) => { this.select_Pollutant = r; }} defaultValue={PollutantDatas[0].Value} />
                                             {/* <PollutantSelect_ ref={(r) => { this.PollutantSelect_ = r; }} /> */}
                                         </FormItem>
                                     </Col>
-                                    <Col span={5}>
+                                    <Col span={2}>
                                         <FormItem>
                                             <Button type="primary" icon="search" onClick={this.BtnSearch}>查询</Button>
                                         </FormItem>
@@ -243,7 +231,7 @@ class DataQuery extends Component {
                                 </Row>
                             </Form>
 
-                            <ReactEcharts option={this.state.echartsOption} lazyUpdate={true} notMerge={true} id="rightLine" style={{ width: '100%', height: 'calc(100vh - 380px)' }} />
+                            <ReactEcharts option={option} lazyUpdate={true} notMerge={true} id="rightLine" style={{ width: '100%', height: 'calc(100vh - 380px)' }} />
                         </Card>
                     </Col>
                     <Col span={6} pull={18}>

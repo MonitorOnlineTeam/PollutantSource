@@ -4,28 +4,28 @@
         "MonitoringTime":"2018-05-01",
         "Concentration":"21",
         "Standard":"25",
-        "Overproof":"0.07"
+        "Overproof":"0.00"
     },
     {
         "Key":"2",
         "MonitoringTime":"2018-05-02",
         "Concentration":"22",
         "Standard":"25",
-        "Overproof":"0.08"
+        "Overproof":"0.00"
     },
     {
         "Key":"3",
         "MonitoringTime":"2018-05-03",
         "Concentration":"21",
         "Standard":"25",
-        "Overproof":"0.07"
+        "Overproof":"0.00"
     },
     {
         "Key":"4",
         "MonitoringTime":"2018-05-04",
-        "Concentration":"22",
+        "Concentration":"14",
         "Standard":"25",
-        "Overproof":"0.08"
+        "Overproof":"0.00"
     },
     {
         "Key":"5",
@@ -37,30 +37,30 @@
     {
         "Key":"6",
         "MonitoringTime":"2018-05-06",
-        "Concentration":"22",
+        "Concentration":"16",
         "Standard":"25",
-        "Overproof":"0.08"
+        "Overproof":"0.00"
     },
     {
         "Key":"7",
         "MonitoringTime":"2018-05-07",
-        "Concentration":"21",
+        "Concentration":"11",
         "Standard":"25",
-        "Overproof":"0.07"
+        "Overproof":"0.00"
     },
     {
         "Key":"8",
         "MonitoringTime":"2018-05-08",
         "Concentration":"22",
         "Standard":"25",
-        "Overproof":"0.08"
+        "Overproof":"0.00"
     },
     {
         "Key":"9",
         "MonitoringTime":"2018-05-09",
         "Concentration":"21",
         "Standard":"25",
-        "Overproof":"0.07"
+        "Overproof":"0.00"
     },
     {
         "Key":"10",
@@ -72,43 +72,43 @@
     {
         "Key":"11",
         "MonitoringTime":"2018-05-11",
-        "Concentration":"21",
+        "Concentration":"13",
         "Standard":"25",
-        "Overproof":"0.07"
+        "Overproof":"0.00"
     },
     {
         "Key":"12",
         "MonitoringTime":"2018-05-12",
-        "Concentration":"22",
+        "Concentration":"6",
         "Standard":"25",
-        "Overproof":"0.08"
+        "Overproof":"0.00"
     },
     {
         "Key":"13",
         "MonitoringTime":"2018-05-13",
-        "Concentration":"21",
+        "Concentration":"8",
         "Standard":"25",
-        "Overproof":"0.07"
+        "Overproof":"0.00"
     },
     {
         "Key":"14",
         "MonitoringTime":"2018-05-14",
-        "Concentration":"22",
+        "Concentration":"8",
         "Standard":"25",
-        "Overproof":"0.08"
+        "Overproof":"0.00"
     },
     {
         "Key":"15",
         "MonitoringTime":"2018-05-15",
-        "Concentration":"21",
-        "Standard":"19",
+        "Concentration":"15",
+        "Standard":"25",
         "Overproof":"0.00"
     },
     {
         "Key":"16",
         "MonitoringTime":"2018-05-16",
         "Concentration":"27",
-        "Standard":"28",
+        "Standard":"25",
         "Overproof":"0.07"
     }
 ]
