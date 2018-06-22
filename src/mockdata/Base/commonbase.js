@@ -108,7 +108,6 @@ export function getPointEnterprise() {
         let relation = relationArray.find((r) => r.DGIMN === p.DGIMN);
         let enterprise = enterpriseArraySon.find((e) => e.EntCode === relation.BaseCode);
         if (enterprise) {
-            debugger;
             const region = regions.find(t => t.RegionCode === p.RegionCode);
             const industry = industrys.find(t => t.IndustryTypeCode === enterprise.IndustryTypeCode);
             const attention = attentions.find(t => t.AttentionCode === enterprise.AttentionCode);
