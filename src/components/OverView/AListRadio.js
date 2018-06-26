@@ -24,7 +24,7 @@ class AListRadio extends Component {
                     padding: '0 2px 2px 50px'
                 }}
                 onChange={this.onchange}
-                defaultValue="a">
+                defaultValue={this.props.dvalue}>
                 <Radio.Button value="a">地图</Radio.Button>
                 <Radio.Button value="b">数据</Radio.Button>
                 <Radio.Button value="c">状态</Radio.Button>
