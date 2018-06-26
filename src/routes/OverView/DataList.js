@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import { Table } from 'antd';
+import AListRadio from '../../components/OverView/AListRadio';
+
 
 class DataList extends Component {
     constructor(props) {
         super(props);
-        
     }
     render() {
         const columns = [
@@ -39,6 +40,7 @@ class DataList extends Component {
             address: 'London Park',
         }];
         return (
+
             <Table columns={columns} dataSource={data} scroll={{ x: 1300 }} />
         );
     }

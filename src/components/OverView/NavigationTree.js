@@ -44,19 +44,18 @@ class NavigationTree extends Component {
                 }}>
                 <Radio.Group
                     style={{
-                        padding: '10px 2px 7px 20px'
+                        padding: '10px 2px 7px 17px'
                     }}
-                    onChange={(value) => { this.props.specialChange(value); }}
+                    onChange={this.props.specialChange}
                     defaultValue="a">
-                    <Radio.Button value="a" style={{marginRight: '2px'}}><Icon type="environment" className={styles.radiobtnimg} />监控</Radio.Button>
-                    <Radio.Button value="b" style={{marginRight: '2px'}}><Icon type="medicine-box" className={styles.radiobtnimg} />运维</Radio.Button>
-                    <Radio.Button value="c" style={{marginRight: '2px'}}><Icon type="up-square" className={styles.radiobtnimg} />排污</Radio.Button>
+                    <Radio.Button value="a" style={{marginRight: '4px', borderRadius: '2px'}}><Icon type="environment" className={styles.radiobtnimg} />监控</Radio.Button>
+                    <Radio.Button value="b" style={{marginRight: '4px', borderRadius: '2px'}}><Icon type="medicine-box" className={styles.radiobtnimg} />运维</Radio.Button>
+                    <Radio.Button value="c" style={{marginRight: '4px', borderRadius: '2px'}}><Icon type="up-square" className={styles.radiobtnimg} />排污</Radio.Button>
                     <Radio.Button value="d"><Icon type="dashboard" className={styles.radiobtnimg} />质控</Radio.Button>
                 </Radio.Group>
                 <Input.Search
                     placeholder="请输入排口名称、企业名称、设备编号进行搜索"
                     onSearch={(value) => {
-                        console.log(value);
                         this.props.TreeSearch(value);
                     }}
                     style={{
