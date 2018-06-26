@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
 import styles from './EmergencyDetailInfo.less';
 
 export default class componentName extends Component {
@@ -9,7 +9,7 @@ export default class componentName extends Component {
             height: 'calc(100vh - 120px)' }}
             >
                 <div style={styles.HandleProcess}>
-任务处理流程图
+
                 </div>
             </div>
         )

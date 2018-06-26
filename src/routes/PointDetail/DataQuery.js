@@ -1,21 +1,20 @@
 // 监控总览-数据查询
 import React, { Component } from 'react';
 import ReactEcharts from 'echarts-for-react';
-import {getPointEnterprise} from '../../mockdata/Base/commonbase';
-import PollutantDatas from '../../mockdata/PointDetail/Pollutant.json';
-import PageDatas from '../../mockdata/PointDetail/dataquery.json';
+import moment from 'moment';
+import {getPollutantDatas, getAllConcentration} from '../../mockdata/Base/commonbase';
 import RangePicker_ from '../../components/PointDetail/RangePicker_';
 import ButtonGroup_ from '../../components/PointDetail/ButtonGroup_';
 import Select_ from '../../components/PointDetail/Select_';
 import styles from './index.less';
 import {
-    Form,
     Table,
     Row,
     Col,
     Card,
-    Button,
-    Popover
+    Popover,
+    Icon,
+    Modal
 } from 'antd';
 
 /*
@@ -24,147 +23,122 @@ import {
 add by cg 18.6.8
 modify by
 */
+const pollutantDatas = getPollutantDatas();
 
-const data = PageDatas;
-// data.push({
-//     key: '999',
-//     MonitoringTime: '加载更多'
-// });
-const renderContent = (value, row, index) => {
-    const obj = {
-        children: value,
-        props: {},
-    };
-    // if (index === data.length - 1) {
-    //     obj.props.colSpan = 0;
-    // }
-    return obj;
-};
-
-const columns = [{
-    title: '时间',
-    dataIndex: 'MonitoringTime',
-    render: renderContent,
-    width: 200
-}, {
-    title: '浓度',
-    dataIndex: 'Concentration',
-    className: 'table_concentration',
-    width: 150,
-    render: (text, row, index) => {
-        const color = text > 25 ? 'red' : 'none';
-        const content = (
-            <div>
-                <p>标准值:<b>{row.Standard}</b></p>
-                <p>超标倍数:<b style={{color: color}}>{row.Overproof}</b></p>
-                <a href="##">查看管控状态及参数</a>
-            </div>
-        );
-        // if (index < (data.length - 1)) {
-        return (
-            <Popover placement="bottom" content={content}>
-                <a style={{color: color, cursor: 'pointer'}}>{text}</a>
-            </Popover>);
-        // }
-        // return {
-        //     children: <a href="javascript:;">{text}</a>,
-        //     props: {
-        //         colSpan: data.length,
-        //     },
-        // };
-    },
-}];
-
-const FormItem = Form.Item;
-const pointDatas = getPointEnterprise();
 class DataQuery extends Component {
     constructor(props) {
         super(props);
-        // console.log(this.select_Pollutant.getSelectedValue()[0].Value);
-
         var defaultOption = {
             legend: [],
             xAxisData: [],
             series: [{
                 name: '',
                 type: 'line',
-                data: [],
-                markPoint: {
-                    data: [
-                        {type: 'max', name: '最大值'},
-                        {type: 'min', name: '最小值'}
-                    ]
-                },
-                markLine: {
-                    data: [
-                        {type: 'average', name: '平均值'}
-                    ]
-                }
+                data: []
             }]
         };
-        defaultOption.legend.push(PollutantDatas[0].Name);
-        defaultOption.series[0].name = PollutantDatas[0].Name;
-        data.map((item) => {
+        const obj = {
+            startTime: '',
+            endTime: '',
+            concentration: [pollutantDatas[0].Value],
+            dataType: 'hour'
+        };
+        let concentrationDatas = getAllConcentration(obj);
+        concentrationDatas = concentrationDatas[0].PollutantData[0].Datas;
+        defaultOption.series[0].name = pollutantDatas[0].Name;
+
+        concentrationDatas.map((item) => {
             defaultOption.xAxisData.push(item.MonitoringTime);
             defaultOption.series[0].data.push((+item.Concentration));
         });
-        console.log(defaultOption.series);
+
         this.state = {
-            // echartsOption: option,
-            legendData: defaultOption.legend,
-            xAxisData: defaultOption.xAxisData,
-            seriesData: defaultOption.series
+            pollutantDatas: getPollutantDatas(),
+            searchData: {
+                pollutantValue: pollutantDatas[0].Value,
+                pollutantText: pollutantDatas[0].Name,
+                rangeDate: [],
+                dataType: 'hour'
+            },
+            optionData: {
+                legendData: [pollutantDatas[0].Name],
+                xAxisData: defaultOption.xAxisData,
+                series: defaultOption.series,
+                unit: pollutantDatas[0].Unit,
+                min: pollutantDatas[0].Min,
+                max: pollutantDatas[0].Max
+
+            },
+            tableData: concentrationDatas,
+            tempDataParam: obj,
+            lookDataParamModal: false,
         };
     }
-
-    submit=() => {
-        // const it = this.pollutantSelect.state.selectitem;
-    }
-    handleSizeChange = (e) => {
-        this.setState({ size: e.target.value });
-    }
-    // 获取监测点
-    getPointDatas=() => {
-        var datas = [];
-        pointDatas.map((item) => {
-            datas.push({
-                'Name': `${item.PointName}(${item.EntName})`,
-                'Value': item.DGIMN,
-                'Unit': ''
-            });
-        });
-        return datas;
-    }
-    reloadChart=() => {
-        this.setState({
-            legendData: [this.select_Pollutant.getSelectedText()[0]]
-        });
-        // option.legend = [];
-        // ReactEcharts.setOption(option);
+    // 污染物
+    _handlePollutantChange=(value, selectedOptions) => {
+        let setData = this.state;
+        setData.searchData.pollutantValue = selectedOptions.props.value;
+        setData.searchData.pollutantText = selectedOptions.props.children;
+        setData.optionData.unit = selectedOptions.props.Unit;
+        setData.optionData.min = selectedOptions.props.minValue;
+        setData.optionData.max = selectedOptions.props.maxValue;
+        this._reloadData(setData);
     };
-    // 查询按钮
-    BtnSearch=() => {
-        var obj = {
-            StatisticsType: this.StatisticsType_.getSelectedValue(), // 获取统计类型 string
-            FormDate: this.RangePicker_.getDateValues().Form, // 开始时间 string
-            ToDate: this.RangePicker_.getDateValues().To, // 结束时间 string
-            CompareValues: this.select_Compare.getSelectedValue(), // 对比 Array
-            PollutantValue: this.select_Pollutant.getSelectedValue() // 污染物 Array
-        };
-
-        console.log(obj);
-        this.reloadChart();
-        // this.pollutantSelect.setSelectItem(100);
-        // console.log(this.select_Pollutant.getSelectItemValue());// 获取选中的污染物code
-        // console.log(this.Select_.getSelectItemText());// 获取选中的污染物code
-        // console.log(this.RangePicker_.getDateValues());// 获取时间范围 {From:'',To:''}
-        // console.log(this.RangePicker_.setDateValues([moment('2018-06-20'), moment('2018-06-21')]));// 设置时间 From To
+    // 时间范围
+    _handleDateChange=(date, dateString) => {
+        let setData = this.state;
+        setData.searchData.rangeDate = date;
+        if (date.length === 0) {
+            this._reloadData(setData);
+        } else {
+            let filterTableDatas = [];
+            setData.tableData.map((item) => {
+                let thisMonitoringTime = `${item.MonitoringTime}`;
+                if (thisMonitoringTime >= `${date[0].format('YYYY-MM-DD 00:00:00')}` && thisMonitoringTime <= `${date[1].format('YYYY-MM-DD HH:mm:ss')}`) {
+                    filterTableDatas.push(item);
+                }
+            });
+            setData.tableData = [];
+            setData.tableData = filterTableDatas;
+            let isFilter = true;
+            this._reloadData(setData, isFilter);
+        }
+    };
+    // 时间类型
+    _handleDateTypeChange=(e) => {
+        let setData = this.state;
+        setData.searchData.dataType = e.target.value;
+        this._reloadData(setData);
     }
+    // 刷新
+    _reloadData=(stateParam, isFilter) => {
+        let setData = stateParam;
 
+        if (!isFilter) {
+            setData.tableData = [];
+            setData.tableData = getAllConcentration({
+                dataType: setData.searchData.dataType,
+                concentration: [setData.searchData.pollutantValue]
+            })[0].PollutantData[0].Datas;
+        }
+        setData.optionData.legendData = [setData.searchData.pollutantText];
+        setData.optionData.xAxisData = [];
+        setData.optionData.series[0].name = setData.searchData.pollutantText;
+        setData.optionData.series[0].data = [];
+
+        setData.tableData.map((item) => {
+            setData.optionData.xAxisData.push(item.MonitoringTime);
+            setData.optionData.series[0].data.push((+item.Concentration));
+        });
+        // console.log(setData.tableData);
+        this.setState({setData});
+    };
+    _lookDataParamModal=(modalVisible) => {
+        let setData = this.state;
+        setData.lookDataParamModal = modalVisible;
+        this.setState({ setData });
+    };
     render() {
-        // console.log(`${this.state.legendData}`);
-        // console.log(this.state.legendData);
-
         const option = {
             title: {
                 // text: '2018-05-17~2018-05-18'
@@ -173,74 +147,104 @@ class DataQuery extends Component {
                 trigger: 'axis'
             },
             legend: {
-                data: this.state.legendData
+                data: this.state.optionData.legendData
             },
             toolbox: {
                 show: true,
                 feature: {
-                    // restore: {},
                     saveAsImage: {}
                 }
             },
+            grid: [
+                {x: '5%', y: '7%', y2: '5%', x2: '5%'}
+            ],
             xAxis: {
                 type: 'category',
                 name: '时间',
                 boundaryGap: false,
-                data: this.state.xAxisData// ['2017-05-17', '2017-05-18', '2017-05-19', '2017-05-20', '2017-05-21', '2017-05-22']
+                data: this.state.optionData.xAxisData
             },
             yAxis: {
                 type: 'value',
-                name: '浓度(mol/L)',
+                name: '浓度(' + `${this.state.optionData.unit}` + ')',
                 axisLabel: {
                     formatter: '{value}'
-                }
+                },
+                min: this.state.optionData.min,
+                max: Math.floor((this.state.optionData.min + this.state.optionData.max) * 1.5)
             },
-            series: this.state.seriesData
+            series: this.state.optionData.series
         };
-        console.log(option);
+        // console.log(option);
+        const columns = [
+            {
+                title: '时间',
+                dataIndex: 'MonitoringTime',
+                width: 200,
+                key: 'MonitoringTime'
+            }, {
+                title: '浓度(' + `${this.state.optionData.unit}` + ')',
+                dataIndex: 'Concentration',
+                className: 'table_concentration',
+                width: 150,
+                render: (text, row, index) => {
+                    let color = (+row.Concentration) > (+row.Standard) ? 'red' : 'none';
+                    let content = (
+                        <div className={styles.popoverTip}>
+                            <p onClick={() => this._lookDataParamModal(true)}><Icon type="table" style={{ fontSize: 14, color: '#08c' }} /> 查看各参数数据</p>
+                            {/* <p><Icon type="table" style={{ fontSize: 14, color: '#08c' }} />标准值:<b>{row.Standard}</b></p> */}
+                            {/* <p>超标倍数:<b style={{color: color}}>{row.Overproof}</b></p> */}
+                            {/* <a href="##">查看管控状态及参数</a> */}
+                            <p><Icon type="laptop" style={{ fontSize: 14, color: '#08c' }} /> 查看仪器状态参数</p>
+                        </div>
+                    );
+                    return (
+                        <Popover placement="bottom" content={content} trigger="click">
+                            <a style={{color: color, cursor: 'pointer'}}>{row.Concentration}</a>
+                        </Popover>);
+                },
+                key: 'Concentration'
+            }];
         return (
             <div className={styles.cardTitle}>
                 <Row>
                     <Col span={18} push={6} >
                         <Card title="监测趋势图" extra={
-                            <ButtonGroup_ ref={(r) => { this.StatisticsType_ = r; }} />
-                        } style={{ width: '100%', height: 'calc(100vh - 225px)' }}>
-                            <Form layout="inline">
-                                <Row gutter={24}>
-                                    <Col span={6} >
-                                        <FormItem label="时间">
-                                            <RangePicker_ format="YYYY-MM-DD" ref={(r) => { this.RangePicker_ = r; }} />
-                                        </FormItem>
-                                    </Col>
-                                    <Col span={5} >
-                                        <FormItem label="对比">
-                                            <Select_ mode="multiple" optionDatas={this.getPointDatas()} ref={(r) => { this.select_Compare = r; }} />
-                                        </FormItem>
-                                    </Col>
-                                    <Col span={6}>
-                                        <FormItem label="污染物">
-                                            <Select_ optionDatas={PollutantDatas} ref={(r) => { this.select_Pollutant = r; }} defaultValue={PollutantDatas[0].Value} />
-                                            {/* <PollutantSelect_ ref={(r) => { this.PollutantSelect_ = r; }} /> */}
-                                        </FormItem>
-                                    </Col>
-                                    <Col span={2}>
-                                        <FormItem>
-                                            <Button type="primary" icon="search" onClick={this.BtnSearch}>查询</Button>
-                                        </FormItem>
-                                    </Col>
-                                </Row>
-                            </Form>
+                            <div>
+                                <Select_
+                                    optionDatas={this.state.pollutantDatas}
+                                    ref={(r) => { this.select_Pollutant = r; }}
+                                    defaultValue={this.state.pollutantDatas[0].Value}
+                                    style={{width: 200}}
+                                    onChange={this._handlePollutantChange}
+                                />
+                                <RangePicker_ dateValue={this.state.searchData.rangeDate} format="YYYY-MM-DD" ref={(r) => { this.RangePicker_ = r; }} onChange={this._handleDateChange} />
+                                <ButtonGroup_ checked={this.state.searchData.dataType} onChange={this._handleDateTypeChange} />
 
+                            </div>
+                        } style={{ width: '100%', height: 'calc(100vh - 225px)' }}>
                             <ReactEcharts option={option} lazyUpdate={true} notMerge={true} id="rightLine" style={{ width: '100%', height: 'calc(100vh - 380px)' }} />
                         </Card>
                     </Col>
                     <Col span={6} pull={18}>
                         <Card title="监测维度" extra={<a href="#" />} style={{ width: '98%', height: 'calc(100vh - 225px)' }}>
-                            <Table size="middle" columns={columns} dataSource={data} bordered={true} pagination={false} scroll={{ x: '100%', y: 'calc(100vh - 385px)' }} />
+                            <Table rowKey="Key" size="middle" columns={columns} dataSource={this.state.tableData} pagination={false} bordered={true} scroll={{ x: '100%', y: 'calc(100vh - 385px)' }} />
                             <a className="login-form-forgot" href="">加载更多……</a>
                         </Card>
                     </Col>
                 </Row>
+                <Modal
+                    title="Vertically centered modal dialog"
+                    wrapClassName="vertical-center-modal"
+                    style={{ top: 20 }}
+                    visible={this.state.lookDataParamModal}
+                    onOk={() => this._lookDataParamModal(false)}
+                    onCancel={() => this._lookDataParamModal(false)}
+                >
+                    <p>some contents...</p>
+                    <p>some contents...</p>
+                    <p>some contents...</p>
+                </Modal>
             </div>
         );
     }
