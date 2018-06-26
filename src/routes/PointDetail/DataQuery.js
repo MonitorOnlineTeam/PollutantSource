@@ -12,7 +12,9 @@ import {
     Row,
     Col,
     Card,
-    Popover
+    Popover,
+    Icon,
+    Modal
 } from 'antd';
 
 /*
@@ -41,10 +43,11 @@ class DataQuery extends Component {
             concentration: [pollutantDatas[0].Value],
             dataType: 'hour'
         };
-        const concentrationDatas = getAllConcentration(obj);
+        let concentrationDatas = getAllConcentration(obj);
+        concentrationDatas = concentrationDatas[0].PollutantData[0].Datas;
         defaultOption.series[0].name = pollutantDatas[0].Name;
 
-        concentrationDatas[0].Datas.map((item) => {
+        concentrationDatas.map((item) => {
             defaultOption.xAxisData.push(item.MonitoringTime);
             defaultOption.series[0].data.push((+item.Concentration));
         });
@@ -66,8 +69,9 @@ class DataQuery extends Component {
                 max: pollutantDatas[0].Max
 
             },
-            tableData: concentrationDatas[0].Datas,
-            tempDataParam: obj
+            tableData: concentrationDatas,
+            tempDataParam: obj,
+            lookDataParamModal: false,
         };
     }
     // 污染物
@@ -115,7 +119,7 @@ class DataQuery extends Component {
             setData.tableData = getAllConcentration({
                 dataType: setData.searchData.dataType,
                 concentration: [setData.searchData.pollutantValue]
-            })[0].Datas;
+            })[0].PollutantData[0].Datas;
         }
         setData.optionData.legendData = [setData.searchData.pollutantText];
         setData.optionData.xAxisData = [];
@@ -128,6 +132,11 @@ class DataQuery extends Component {
         });
         // console.log(setData.tableData);
         this.setState({setData});
+    };
+    _lookDataParamModal=(modalVisible) => {
+        let setData = this.state;
+        setData.lookDataParamModal = modalVisible;
+        this.setState({ setData });
     };
     render() {
         const option = {
@@ -181,14 +190,16 @@ class DataQuery extends Component {
                 render: (text, row, index) => {
                     let color = (+row.Concentration) > (+row.Standard) ? 'red' : 'none';
                     let content = (
-                        <div>
-                            <p>标准值:<b>{row.Standard}</b></p>
-                            <p>超标倍数:<b style={{color: color}}>{row.Overproof}</b></p>
-                            <a href="##">查看管控状态及参数</a>
+                        <div className={styles.popoverTip}>
+                            <p onClick={() => this._lookDataParamModal(true)}><Icon type="table" style={{ fontSize: 14, color: '#08c' }} /> 查看各参数数据</p>
+                            {/* <p><Icon type="table" style={{ fontSize: 14, color: '#08c' }} />标准值:<b>{row.Standard}</b></p> */}
+                            {/* <p>超标倍数:<b style={{color: color}}>{row.Overproof}</b></p> */}
+                            {/* <a href="##">查看管控状态及参数</a> */}
+                            <p><Icon type="laptop" style={{ fontSize: 14, color: '#08c' }} /> 查看仪器状态参数</p>
                         </div>
                     );
                     return (
-                        <Popover placement="bottom" content={content}>
+                        <Popover placement="bottom" content={content} trigger="click">
                             <a style={{color: color, cursor: 'pointer'}}>{row.Concentration}</a>
                         </Popover>);
                 },
@@ -222,6 +233,18 @@ class DataQuery extends Component {
                         </Card>
                     </Col>
                 </Row>
+                <Modal
+                    title="Vertically centered modal dialog"
+                    wrapClassName="vertical-center-modal"
+                    style={{ top: 20 }}
+                    visible={this.state.lookDataParamModal}
+                    onOk={() => this._lookDataParamModal(false)}
+                    onCancel={() => this._lookDataParamModal(false)}
+                >
+                    <p>some contents...</p>
+                    <p>some contents...</p>
+                    <p>some contents...</p>
+                </Modal>
             </div>
         );
     }
