@@ -22,12 +22,14 @@ export default class componentName extends Component {
     }
 
     SearchEmergencyDataList = (value) => {
+        console.log(value);
         let dataList = [];
         EmergencyDataList.EDataList.map((item, key) => {
             let isexist = false;
-            if (item.DGIMN === value) {
+            if (value.indexOf(item.DGIMN)>-1) {
                 isexist = true;
             }
+
             if (isexist) { dataList.push(item); }
         });
         this.setState({ EmergencyData: dataList });
