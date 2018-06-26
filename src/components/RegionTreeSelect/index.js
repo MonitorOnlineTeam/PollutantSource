@@ -37,25 +37,29 @@ function getRegionsTree(provices, regions, istop) {
 }
 const treeData = tree;
 export default class RegionTreeSelect extends Component {
-  state = {
-      value: ['0-0-0'],
-  }
-  onChange = (value) => {
-      console.log('onChange ', value, arguments);
-      this.setState({ value });
-  }
-  render() {
-      const tProps = {
-          treeData,
-          value: this.state.value,
-          onChange: this.onChange,
-          treeCheckable: true,
-          showCheckedStrategy: SHOW_PARENT,
-          searchPlaceholder: '区域',
-          style: {
-              width: this.props.width,
-          },
-      };
-      return <TreeSelect {...tProps} />;
-  }
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            value: []
+        };
+    }
+    getRegions=(() => {
+        return this.state.value;
+    });
+    render() {
+        const tProps = {
+            treeData,
+            onChange: e => {
+                this.setState({value: e});
+            },
+            treeCheckable: true,
+            showCheckedStrategy: SHOW_PARENT,
+            searchPlaceholder: '区域',
+            style: {
+                width: this.props.width ? this.props.width : '200px',
+            },
+        };
+        return <TreeSelect {...tProps} />;
+    }
 }
