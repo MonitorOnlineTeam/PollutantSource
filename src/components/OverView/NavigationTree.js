@@ -15,7 +15,7 @@ const treecol = [
         width: '10%',
         dataIndex: 'Status',
         align: 'center',
-        render: text => <img src="../../../image/bootonline.png" />,
+        render: text => <img src="../../../gisnormal.png" />,
     }, {
         title: '企业',
         width: '50%',

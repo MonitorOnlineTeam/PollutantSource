@@ -2,6 +2,10 @@ import React, { Component } from 'react';
 import { Table } from 'antd';
 
 class DataList extends Component {
+    constructor(props) {
+        super(props);
+        
+    }
     render() {
         const columns = [
             { title: 'Full Name', width: 100, dataIndex: 'name', key: 'name', fixed: 'left' },

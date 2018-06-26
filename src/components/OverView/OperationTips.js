@@ -30,7 +30,7 @@ class OperationTips extends Component {
                         dataSource={markerspoint.consumablesdata}
                         pagination={false} />
                 </div>
-                <div style={{marginLeft: '180px'}}>查看更多>></div>
+                <div style={{marginLeft: '180px', cursor: 'pointer'}}>查看更多>></div>
                 <Button style={{marginLeft: '100px'}}>催办</Button>
             </div>
         );
