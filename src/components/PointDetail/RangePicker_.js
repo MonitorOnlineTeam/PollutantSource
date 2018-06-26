@@ -1,13 +1,11 @@
 
-// 时间组件封装
+// 时间弹窗组件封装
 
 import React, { Component } from 'react';
 import moment from 'moment';
 import {DatePicker} from 'antd';
 
 const RangePicker = DatePicker.RangePicker;
-
-// const _moment = moment(new Date());
 
 class RangePicker_ extends Component {
     constructor(props) {
@@ -30,6 +28,7 @@ class RangePicker_ extends Component {
             style: {
                 width: (this.props.style && (this.props.style.width || 300)) || 250,
                 marginLeft: 5,
+                marginRight: 5,
             },
             placeholder: ['开始时间', '结束时间'],
             Form: '',
@@ -37,16 +36,6 @@ class RangePicker_ extends Component {
         };
         this.state = defaultOption;
     }
-
-    getDateValues=() => {
-        return {Form: this.state.Form, To: this.state.To};
-    };
-
-    setDateValues=(dates) => {
-        this.setState({
-            searchdate: dates
-        });
-    };
 
     onDateChange=(dates, dateStrings) => {
         this.setState({
@@ -57,17 +46,15 @@ class RangePicker_ extends Component {
     }
     render() {
         return (
-            <div>
-                <RangePicker
-                    showTime={this.state.showTime}
-                    value={this.state.searchdate}
-                    onChange={this.onDateChange}
-                    ranges={this.state.ranges}
-                    format={this.state.dateFormat}
-                    style={this.state.style}
-                    placeholder={this.state.placeholder}
-                />
-            </div>
+            <RangePicker
+                showTime={this.state.showTime}
+                value={this.props.dateValue}
+                onChange={this.props.onChange}
+                ranges={this.state.ranges}
+                format={this.state.dateFormat}
+                style={this.state.style}
+                placeholder={this.state.placeholder}
+            />
         );
     }
 }

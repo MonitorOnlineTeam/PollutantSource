@@ -9,38 +9,6 @@
   background-color:rgb(244,244,244);
 }
 
-/*==============图例开始===========*/
-.legend_div {
-  width: 232px;
-  height: 40px;
-  padding-top: 15px;
-  padding-bottom: 15px;
-  padding-left: 5px;
-}
-
-  .legend_div ul {
-      margin-top: -8px;
-      list-style: none;
-      margin-left: 5px;
-      padding-left: 0px;
-      margin-bottom: 10px;
-  }
-
-      .legend_div ul li {
-          float: left;
-          color: #3b494f;
-          display: block;
-          font-size: 12px;
-          margin-right: 12px;
-          height: 25px;
-          line-height: 25px;
-      }
-
-          .legend_div ul li div {
-              position: relative;
-              top: 7px;
-          }
-
 .searchInput{
   width: 95%;
   height:45px;
@@ -50,8 +18,9 @@
 }
 
 .listbox{
-  width:100%;
   padding:0 10px 0 10px;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .shadow{  
@@ -91,9 +60,9 @@
 }
 
 .bigDiv > .toggler > .glyphiconChevronRight{
-  background-image:url(../../../public/image/arrow_left.png);
+  background-image:url(../../../public/image/arrow_right.png);
   background-repeat: no-repeat;
-  display:none;
+  display:block;
 }
 
 .bigDiv > .toggler > .glyphiconChevronLeft{
@@ -103,12 +72,13 @@
 }
 
 .cardList{
-  height:70px;
+  min-height:70px;
   background-color: #fff;
   margin-top:10px;
   margin-bottom:10px;
   padding:10px;
   cursor: pointer;
+  width:330px;
 }
 
 .cardList:hover {
@@ -137,6 +107,24 @@
 .cardList .content{
   font-size:12px;
   color:rgb(140,140,140);
-  height:25px;
-  line-height:25px;
+  min-height:25px;
+}
+
+
+.trigger {
+  font-size: 18px;
+  line-height: 64px;
+  padding: 0 24px;
+  cursor: pointer;
+  transition: color .3s;
+}
+
+.trigger:hover {
+  color: #1890ff;
+}
+
+.logo {
+  height: 32px;
+  background: rgba(255,255,255,.2);
+  margin: 16px;
 }
