@@ -221,7 +221,7 @@ class OverViewMap extends PureComponent {
                             top: 10,
                             right: 200
                         }}>
-                        <AListRadio />
+                        <AListRadio dvalue="a" />
                     </div>
                     {!this.state.pointvisible ? <Markers markers={this.state.entslist}
                         offset={[-110, -50]} events={this.entslistEvents}
