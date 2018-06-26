@@ -14,7 +14,8 @@ import {
     Card,
     Popover,
     Icon,
-    Modal
+    Modal,
+    List
 } from 'antd';
 
 /*
@@ -195,7 +196,7 @@ class DataQuery extends Component {
                             {/* <p><Icon type="table" style={{ fontSize: 14, color: '#08c' }} />标准值:<b>{row.Standard}</b></p> */}
                             {/* <p>超标倍数:<b style={{color: color}}>{row.Overproof}</b></p> */}
                             {/* <a href="##">查看管控状态及参数</a> */}
-                            <p><Icon type="laptop" style={{ fontSize: 14, color: '#08c' }} /> 查看仪器状态参数</p>
+                            <p onClick={() => this._lookDataParamModal(true)}><Icon type="laptop" style={{ fontSize: 14, color: '#08c' }} /> 查看仪器状态参数</p>
                         </div>
                     );
                     return (
@@ -234,16 +235,21 @@ class DataQuery extends Component {
                     </Col>
                 </Row>
                 <Modal
-                    title="Vertically centered modal dialog"
-                    wrapClassName="vertical-center-modal"
-                    style={{ top: 20 }}
+                    title="XXX监测点"
+                    wrapClassName={styles.verticalCenterModal}
                     visible={this.state.lookDataParamModal}
                     onOk={() => this._lookDataParamModal(false)}
                     onCancel={() => this._lookDataParamModal(false)}
                 >
-                    <p>some contents...</p>
-                    <p>some contents...</p>
-                    <p>some contents...</p>
+                    <Table
+                        rowKey="Key"
+                        size="middle"
+                        columns={columns}
+                        dataSource={this.state.tableData}
+                        pagination={false}
+                        bordered={true}
+                        scroll={{ x: '100%', y: 'calc(100vh - 500px)' }}
+                    />
                 </Modal>
             </div>
         );
