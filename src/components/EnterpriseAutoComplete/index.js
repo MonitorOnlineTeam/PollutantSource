@@ -18,7 +18,8 @@ export default class EnterpriseAutoComplete extends Component {
 
         let enterprise = getEnterprise();
         this.state = {
-            dataSource: enterprise
+            dataSource: enterprise,
+            enterCode: ''
         };
     }
 
@@ -36,13 +37,21 @@ export default class EnterpriseAutoComplete extends Component {
           }
       }
 
+      getEnterprise=() => this.state.enterCode;
+
       render() {
           const { dataSource } = this.state;
           return (
               <AutoComplete
                   dataSource={dataSource.map(renderOption)}
-                  style={{ width: this.props.width }}
+                  style={{ width: this.props.width ? this.props.width : '200px' }}
                   onSearch={this.handleSearch}
+                  onSelect={(value, option) => {
+                      this.setState({enterCode: value});
+                  }}
+                  onChange={(value) => {
+                      this.setState({enterCode: value});
+                  }}
                   placeholder="输入企业"
               />
           );

@@ -2,31 +2,61 @@
     {
         "id":"1",
         "DGIMN":"sgjt001005",
-        "operationaction":1,
-        "date":"2018-07-27"
+        "alarmtype":1,
+        "date":"2018-07-27 03:30:00",
+        "PollutantCode":"",
+        "PollutantName":"截距",
+        "standard":"[20-50]",
+        "Strength":60,
+        "timespan":5,
+        "cnt":5
     },
     {
         "id":"2",
         "DGIMN":"sgjt001003",
-        "operationaction":1,
-        "date":"2018-07-19"
+        "alarmtype":2,
+        "date":"2018-07-19 03:30:00",
+        "PollutantCode":"",
+        "PollutantName":"截距",
+        "standard":"[20-50]",
+        "Strength":60,
+        "timespan":5,
+        "cnt":9
     },
     {
         "id":"3",
         "DGIMN":"sgjt001007",
-        "operationaction":1,
-        "date":"2018-08-01"
+        "alarmtype":3,
+        "date":"2018-08-01 03:30:00",
+        "PollutantCode":"",
+        "PollutantName":"截距",
+        "standard":"[20-50]",
+        "Strength":60,
+        "timespan":5,
+        "cnt":30
     },
     {
         "id":"4",
         "DGIMN":"hgjt001003",
-        "operationaction":1,
-        "date":"2018-08-01"
+        "alarmtype":4,
+        "date":"2018-08-01 03:30:00",
+        "PollutantCode":"",
+        "PollutantName":"截距",
+        "standard":"[20-50]",
+        "Strength":60,
+        "timespan":5,
+        "cnt":20
     },
     {
         "id":"5",
         "DGIMN":"hgjt001001",
-        "operationaction":2,
-        "date":"2018-08-01"
+        "alarmtype":5,
+        "date":"2018-08-01 03:30:00",
+        "PollutantCode":"",
+        "PollutantName":"截距",
+        "standard":"[20-50]",
+        "Strength":60,
+        "timespan":5,
+        "cnt":5
     }
 ]

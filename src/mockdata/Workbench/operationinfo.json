@@ -3,30 +3,49 @@
         "id":"1",
         "DGIMN":"sgjt001005",
         "operationaction":1,
-        "date":"2018-07-27"
+        "date":"2018-07-27",
+        "predate":"2018-07-20",
+        "timespan":"3",
+        "timeflag":"notto"
     },
     {
         "id":"2",
         "DGIMN":"sgjt001003",
         "operationaction":1,
-        "date":"2018-07-19"
+        "date":"2018-07-19",
+        "cuiban":true,
+        "predate":"2018-07-12",
+        "timespan":"5",
+        "timeflag":"over"
     },
     {
         "id":"3",
         "DGIMN":"sgjt001007",
         "operationaction":1,
-        "date":"2018-08-01"
+        "date":"2018-08-11",
+        "cuiban":true,
+        "predate":"2018-07-23",
+        "timespan":"6",
+        "timeflag":"over"
     },
     {
         "id":"4",
         "DGIMN":"hgjt001003",
         "operationaction":1,
-        "date":"2018-08-01"
+        "date":"2018-08-06",
+        "cuiban":false,
+        "predate":"2018-07-31",
+        "timespan":"8",
+        "timeflag":"over"
     },
     {
         "id":"5",
         "DGIMN":"hgjt001001",
         "operationaction":2,
-        "date":"2018-08-01"
+        "date":"2018-06-01",
+        "cuiban":false,
+        "predate":"",
+        "timespan":"2",
+        "timeflag":"over"
     }
 ]
