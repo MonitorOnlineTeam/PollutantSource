@@ -1,47 +1,58 @@
+// import liraries
 import React, { Component } from 'react';
-import { Table } from 'antd';
-
+import { connect } from 'dva';
+import { Table, Radio, Select, Cascader, Input, Card, Modal, Spin } from 'antd';
+import moment from 'moment';
+import { routerRedux } from 'dva/router';
+import styles from './index.less';
+import city from '../../utils/city';
+import AListRadio from '../../components/OverView/AListRadio';
+@connect()
 class DataList extends Component {
     constructor(props) {
         super(props);
-        
+        this.state = {
+        };
     }
     render() {
-        const columns = [
-            { title: 'Full Name', width: 100, dataIndex: 'name', key: 'name', fixed: 'left' },
-            { title: 'Age', width: 100, dataIndex: 'age', key: 'age', fixed: 'left' },
-            { title: 'Column 1', dataIndex: 'address', key: '1' },
-            { title: 'Column 2', dataIndex: 'address', key: '2' },
-            { title: 'Column 3', dataIndex: 'address', key: '3' },
-            { title: 'Column 4', dataIndex: 'address', key: '4' },
-            { title: 'Column 5', dataIndex: 'address', key: '5' },
-            { title: 'Column 6', dataIndex: 'address', key: '6' },
-            { title: 'Column 7', dataIndex: 'address', key: '7' },
-            { title: 'Column 8', dataIndex: 'address', key: '8' },
-            {
-                title: 'Action',
-                key: 'operation',
-                fixed: 'right',
-                width: 100,
-                render: () => <a href="javascript:;">action</a>,
-            },
-        ];
-
-        const data = [{
-            key: '1',
-            name: 'John Brown',
-            age: 32,
-            address: 'New York Park',
-        }, {
-            key: '2',
-            name: 'Jim Green',
-            age: 40,
-            address: 'London Park',
-        }];
         return (
-            <Table columns={columns} dataSource={data} scroll={{ x: 1300 }} />
+            <div
+                style={{ width: '100%',
+                    height: 'calc(100vh - 120px)' }}
+                className={styles.standardList}
+            >
+                <Card
+                    bordered={false}
+                    bodyStyle={
+                        {
+                            height: 'calc(100vh - 200px)',
+                            padding: '0px 20px',
+                        }
+                    }
+                    extra={
+                        <div style={{}}>
+                            <Radio.Group
+                                defaultValue="realtime"
+                                size="default"
+                                style={{ marginLeft: 10 }}>
+                                <Radio.Button value="realtime"> 实时 </Radio.Button>
+                                <Radio.Button value="minute"> 分钟 </Radio.Button>
+                                <Radio.Button value="hour"> 小时 </Radio.Button>
+                                <Radio.Button value="day"> 日均 </Radio.Button>
+                            </Radio.Group>
+                            <Cascader options={city} placeholder="请选择行政区"
+                                style={{ width: 250, marginLeft: 10 }} />
+                            <AListRadio dvalue="b" />
+                        </div>}>
+
+                    <Table
+                        bodyStyle={{ height: 'calc(100vh - 300px)' }}
+                        onRow={record => ({
+                        })}
+                    />
+                </Card >
+            </div>
         );
     }
 }
-
 export default DataList;

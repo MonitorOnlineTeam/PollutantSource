@@ -177,9 +177,10 @@ export function getPollutantDatas() {
  obj={
      startTime:开始时间
      endTime:结束时间
-     dataType:数据类型
-     concentration:污染物 array
-     interval:时间间隔
+     dataType:数据类型 eg:'realtime','minutes', 'hour', 'day'
+     concentration:污染物 eg:['s1','01']
+     interval:时间间隔 (realtime:30m minutes:10)
+     point:监测点 eg:['123','456']
  }
 */
 export function getAllConcentration(obj) {
@@ -188,6 +189,8 @@ export function getAllConcentration(obj) {
     let dataType = obj.dataType || 'day';
     let returnDatas = [];
     let concentration = [];
+    let point = [];
+    let defaultPoint = getPointEnterprise();
     let i = 1;
     let dateForms = {
         format: 'YYYY-MM-DD',
@@ -196,6 +199,18 @@ export function getAllConcentration(obj) {
         startTime: startTime,
         endTime: endTime
     };
+    console.log(defaultPoint);
+    if (obj.point && obj.point.length > 0) {
+        obj.point.map((k) => {
+            defaultPoint.map((m) => {
+                if (k.DGIMN === m.DGIMN) {
+                    point.push(m);
+                }
+            });
+        });
+    } else {
+        point = defaultPoint;
+    }
 
     if (obj.concentration && obj.concentration.length > 0) {
         obj.concentration.map((k) => {
@@ -239,27 +254,36 @@ export function getAllConcentration(obj) {
 
             break;
     };
-    concentration.map((item) => {
-        var data = {
-            'PollutantCode': item.Value,
-            'PollutantName': item.Name,
-            'Unit': item.Unit,
-            'Datas': []
-        };
-        while (dateForms.startTime < dateForms.endTime) {
-            data.Datas.push({
-                'Key': i++,
-                'MonitoringTime': moment(dateForms.startTime).format(dateForms.format),
-                'Concentration': (Math.random() * (item.Max - item.Min + 1) + item.Min).toFixed(3),
-                'Standard': item.Standard,
-                'Overproof': '0.00',
-                'Unit': item.Unit
-            });
+    point.map((p) => {
+        let pointData = p;
+        pointData.PollutantData = [];
 
-            dateForms.startTime = moment(dateForms.startTime).add(dateForms.value, dateForms.type).format(dateForms.format);
-        }
-        returnDatas.push(data);
+        concentration.map((item) => {
+            var data = {
+                'PollutantCode': item.Value,
+                'PollutantName': item.Name,
+                'Unit': item.Unit,
+                'Datas': []
+            };
+            let sTime = dateForms.startTime;
+            let eTime = dateForms.endTime;
+            while (sTime < eTime) {
+                data.Datas.push({
+                    'Key': i++,
+                    'MonitoringTime': moment(eTime).format(dateForms.format),
+                    'Concentration': (Math.random() * (item.Max - item.Min + 1) + item.Min).toFixed(3),
+                    'Standard': item.Standard,
+                    'Overproof': '0.00',
+                    'Unit': item.Unit
+                });
+
+                eTime = moment(eTime).subtract(dateForms.value, dateForms.type).format(dateForms.format);
+            }
+            pointData.PollutantData.push(data);
+        });
+        returnDatas.push(pointData);
     });
+    console.log(returnDatas);
     return returnDatas;
 }
 // *********************************获取浓度数据*********************************
