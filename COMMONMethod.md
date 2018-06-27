@@ -31,9 +31,37 @@ modify by
 >     let enterprise = getPointEnterprise();
 
 
+## 获取企业监测点数据（包含组份数据）-模拟数据
+
+### 调用：
+#### 引用：
+>     import { getAllConcentration } from '../../mockdata/Base/commonbase';
+#### 使用：
+>     
+>     参数实例：
+>     let paramObj={
+>                 startTime:'2018-06-23 12:30:00',  
+>                 endTime:'2018-06-24 8:30:00',
+>                 dataType:'hour',
+>                 interval:1,// 一小时一条数据
+>                 concentration:['01','02'], // 只生成传递Code组份的数据，不传则生成所有组份
+>                 point:['sdl01','sdl02']// mn号
+>                 };
+>     
+>     let allConcentrationDatas = getAllConcentration(paramObj); //默认获取所有企业下所有监测点的数据
+>
+>     【注】：1.方法可以不用传递参数，不传递则生成默认的数据
+>            2.可以传递部分参数 eg：{dataType:'hour'} 则只生成系统默认的小时数据
 
 
-
+| 参数      | 说明                                      | 类型         | 默认值 |
+|----------|------------------------------------------|-------------|-------|
+| startTime    | 开始时间           | string  | 当前时间减24小时 |
+| endTime    | 结束时间   | string  | 当前时间 |
+| dataType   | 数据类型   | 'realtime','minutes','hour','day'  | 'realtime' |
+|interval     |数据生成时间间隔| int    |数据类型不同，默认时间间隔不同|
+|concentration|污染物       |  Array   |        所有组份        |
+|point        |监测点       |  Array   |        所有监测点        |
 
 
 
