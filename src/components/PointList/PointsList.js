@@ -7,7 +7,7 @@ const Search = Input.Search;
 const { Content, Sider } = Layout;
 const dataList = getPointEnterprise();
 
-export default class componentName extends Component {
+export default class PointsList extends Component {
     state = {
         collapsed: false,
         pointslist: dataList,
