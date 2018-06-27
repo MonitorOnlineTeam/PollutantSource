@@ -6,15 +6,15 @@ import { Link, routerRedux, Switch, Redirect } from 'dva/router';
 import { getRoutes } from '../../utils/utils';
 import styles from './index.less';
 import AuthorizedRoute from '../../components/AuthorizedRoute';
-
+import { getPointEnterprise } from '../../mockdata/Base/commonbase';
 const { TabPane } = Tabs;
 @connect()
 class PointDetail extends Component {
     constructor(props) {
         super(props);
         this.menus = props.menuData;
+
         this.state = {
-            pointname: ['测试点位1', '测试点位2'],
             tablist: [
                 { key: 'processflowdiagram', tab: '工艺流程图' },
                 { key: 'dataquery', tab: '数据查询' },
@@ -34,6 +34,10 @@ class PointDetail extends Component {
         const routes = getRoutes(match.path, routerData);
         const defaultroute = routes[0].path;
 
+        const pointName = getPointEnterprise().find((item) => {
+            return item.DGIMN = match.params.pointcode;
+        });
+        console.log(pointName);
         return (
             <div
                 style={{ width: '100%',
@@ -46,7 +50,7 @@ class PointDetail extends Component {
                         </Breadcrumb.Item>
                         <Breadcrumb.Item key="home">
                             {
-                                this.state.pointname[match.params.pointcode]
+                                pointName.Abbreviation + '-' + pointName.PointName
                             }
                         </Breadcrumb.Item>
                     </Breadcrumb>

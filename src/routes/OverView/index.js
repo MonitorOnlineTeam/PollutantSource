@@ -87,7 +87,8 @@ class OverViewMap extends PureComponent {
             pointslist: pointInfo,
             entslist: entInfo,
             pointvisible: false,
-            entvisible: true
+            entvisible: true,
+            selectpoint: {}
         };
         this.specialChange = (value) => {
             let special = 'monitor';
@@ -121,6 +122,7 @@ class OverViewMap extends PureComponent {
                 coordinateSet: row.CoordinateSet,
                 longitude: row.position.longitude,
                 latitude: row.position.latitude,
+                selectpoint: row
             });
             _thismap.setZoomAndCenter(17, [row.position.longitude, row.position.latitude]);
             this.firsttreeClick(row);
@@ -133,7 +135,7 @@ class OverViewMap extends PureComponent {
         };
 
         this.stationclick = () => {
-            this.props.dispatch(routerRedux.push('/monitor/pointdetail/0'));
+            this.props.dispatch(routerRedux.push('/monitor/pointdetail/' + this.state.selectpoint.DGIMN));
         };
         this.TreeSearch = (value) => {
             let markerInfo = [];
@@ -165,7 +167,8 @@ class OverViewMap extends PureComponent {
                     control: itemdata.AttentionName,
                     longitude: itemdata.position.longitude,
                     latitude: itemdata.position.latitude,
-                    coordinateSet: itemdata.CoordinateSet
+                    coordinateSet: itemdata.CoordinateSet,
+                    selectpoint: itemdata
                 });
             }
         };
@@ -204,6 +207,7 @@ class OverViewMap extends PureComponent {
         };
     }
     render() {
+        console.log(this.state.selectpoint);
         const special = this.state.special;
         return (
             <div

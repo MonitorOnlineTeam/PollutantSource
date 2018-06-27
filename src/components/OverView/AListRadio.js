@@ -8,7 +8,6 @@ class AListRadio extends Component {
     constructor(props) {
         super(props);
         const _this = this;
-        console.log(this.props.dispatch);
         this.onchange = (value) => {
             if (value.target.value === 'a') {
                 _this.props.dispatch(routerRedux.push('/monitor/overview'));

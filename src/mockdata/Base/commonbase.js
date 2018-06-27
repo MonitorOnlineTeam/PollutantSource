@@ -126,7 +126,7 @@ export function getPointEnterprise() {
 
 // *********************************获取浓度数据*********************************
 // 默认污染物
-const defaultConcentration = [
+export const defaultConcentration = [
     {Value: '01', Name: '实测烟尘', Unit: 'mg/m3', Min: 1, Max: 35, Standard: 25},
     {Value: '02', Name: '实测二氧化硫', Unit: 'mg/m3', Min: 20, Max: 300, Standard: 25},
     {Value: '03', Name: '实测氮氧化物', Unit: 'mg/m3', Min: 10, Max: 150, Standard: 25},
