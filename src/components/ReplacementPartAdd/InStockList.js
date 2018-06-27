@@ -1,23 +1,32 @@
 import React, { Component } from 'react';
 import {Table, Row, Col, Form, DatePicker, Input, Button} from 'antd';
 import inDatas from '../../mockdata/OperationStock/InStockListData.json';
-
+import styles from '../../routes/ReplacementPartAdd/index.less';
 const { RangePicker } = DatePicker;
 const FormItem = Form.Item;
 
 @Form.create()
 export default class InStockList extends Component {
+
+    handleFormReset = () => {
+        const { form } = this.props;
+        form.resetFields();
+        this.setState({
+          formValues: {},
+        });
+      };
+
     render() {
         const { getFieldDecorator } = this.props.form;
 
         const columns = [{
             title: '入库时间',
             dataIndex: 'AddDate',
-            width: 120,
+            width: 110,
         }, {
             title: '生产日期',
             dataIndex: 'ManufactoryDate',
-            width: 100
+            width: 110
 
         }, {
             title: '入库人',
@@ -34,48 +43,59 @@ export default class InStockList extends Component {
         }, {
             title: '规格型号',
             dataIndex: 'Specifications',
-            width: 150,
+            width: 130,
         }, {
             title: '品牌',
             dataIndex: 'Brand',
         }, {
             title: '数量',
             dataIndex: 'Num',
+            width:54
         }, {
             title: '单位',
             dataIndex: 'Unit',
+            width:54
         }];
+        
+       
 
         return (
-            <div>
-                <div>
-                    <Row gutter={24}>
-                        <Col span={8} >
-                            <FormItem style={{display: 'flex'}} label={`入库人`}>
+            <div className={styles.inlist}>
+                <div className={styles.tableListForm}>
+                <Form layout="inline">   
+                <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
+                  <Col md={8} sm={24}>               
+                            <FormItem  label={`入库人`}>
                                 {getFieldDecorator(`AddUser`)(
                                     <Input placeholder="请输入入库人" />
                                 )}
-                            </FormItem>
-                        </Col>
-                        <Col span={10} >
-                            <FormItem style={{display: 'flex'}} label={`入库时间`}>
+                            </FormItem>    
+                            </Col>
+                            <Col md={8} sm={24}>                          
+                            <FormItem label={`入库时间`}>
                                 {getFieldDecorator(`AddDate`)(
-                                    <RangePicker style={{width: 220}} />
+                                    <RangePicker />
                                 )}
                             </FormItem>
-                        </Col>
-
-                        <Col span={6} style={{ textAlign: 'left' }}>
+                            </Col>
+                            <Col md={8} sm={24}>     
+                               <FormItem>
                             <Button type="primary" htmlType="submit">查询</Button>
-                            <Button style={{ marginLeft: 8 }} >清空</Button>
-                        </Col>
-                    </Row>
-                </div>
+                            <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset} >重置</Button>                      
+                               </FormItem> 
+                     </Col>
+                     </Row>
+                 </Form>
+              </div>                
                 <Table
                     columns={columns}
                     dataSource={inDatas}
                     pagination={{
-                        pageSize: 50
+                        showSizeChanger: true,
+                        showQuickJumper: true,
+                        "total":45,
+                        "pageSize":20,
+                        "current":1
                     }}
                     scroll={
                         {
@@ -84,7 +104,6 @@ export default class InStockList extends Component {
                     }
                 />
             </div>
-
         );
     }
 }
