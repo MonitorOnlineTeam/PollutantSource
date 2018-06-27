@@ -280,3 +280,44 @@
 | showButton    | 显示的按钮           | array   | ['realtime', 'minutes', 'hour', 'day'] |
 | checked    | 默认选中   | string  | 'realtime' |
 | onChange    | 时间发生变化的回调   | function(e)  | - |
+
+
+-------------------------------
+  
+污染物下拉框组件
+  
+## API
+  
+  
+### PollutantSelect_
+  
+  
+污染物下拉框。
+  
+### 调用：
+  
+#### 引用：
+  
+>     import PollutantSelect_ from '../../components/PointDetail/PollutantSelect_';
+#### 使用：
+>     //render中增加控件显示
+>     eg1: 显示时间
+>         <PollutantSelect_  onChange={this._handlePollutantChange} />
+>     
+>     【注】:要想不显示时间功能，则去掉 showTime 属性即可
+>   
+>     示例：onChange
+>     _handlePollutantChange=(value,option) => {
+>        console.log(value);// 01
+>        console.log(option);// object
+>        this.state.pollutantValue = value;
+>     };
+>
+>  
+  
+| 参数      | 说明                                      | 类型         | 默认值 |
+|----------|------------------------------------------|-------------|-------|
+| optionDatas    | 数据源(暂不支持传递)           | []   | getPollutantDatas() |
+| defaultValue    | 默认选中   | string  | getPollutantDatas()[0] |
+| onChange    | 下拉框发生变化的回调   | function(value,option)  | - |
+| style    | 样式   | object  | {width:200} |
