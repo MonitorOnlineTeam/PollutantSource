@@ -7,14 +7,13 @@ const FormItem = Form.Item;
 
 @Form.create()
 export default class InStockList extends Component {
-
     handleFormReset = () => {
         const { form } = this.props;
         form.resetFields();
         this.setState({
-          formValues: {},
+            formValues: {},
         });
-      };
+    };
 
     render() {
         const { getFieldDecorator } = this.props.form;
@@ -50,52 +49,50 @@ export default class InStockList extends Component {
         }, {
             title: '数量',
             dataIndex: 'Num',
-            width:54
+            width: 54
         }, {
             title: '单位',
             dataIndex: 'Unit',
-            width:54
+            width: 54
         }];
-        
-       
 
         return (
             <div className={styles.inlist}>
                 <div className={styles.tableListForm}>
-                <Form layout="inline">   
-                <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
-                  <Col md={8} sm={24}>               
-                            <FormItem  label={`入库人`}>
-                                {getFieldDecorator(`AddUser`)(
-                                    <Input placeholder="请输入入库人" />
-                                )}
-                            </FormItem>    
+                    <Form layout="inline">
+                        <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
+                            <Col md={8} sm={24}>
+                                <FormItem label={`入库人`}>
+                                    {getFieldDecorator(`AddUser`)(
+                                        <Input placeholder="请输入入库人" />
+                                    )}
+                                </FormItem>
                             </Col>
-                            <Col md={8} sm={24}>                          
-                            <FormItem label={`入库时间`}>
-                                {getFieldDecorator(`AddDate`)(
-                                    <RangePicker />
-                                )}
-                            </FormItem>
+                            <Col md={8} sm={24}>
+                                <FormItem label={`入库时间`}>
+                                    {getFieldDecorator(`AddDate`)(
+                                        <RangePicker />
+                                    )}
+                                </FormItem>
                             </Col>
-                            <Col md={8} sm={24}>     
-                               <FormItem>
-                            <Button type="primary" htmlType="submit">查询</Button>
-                            <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset} >重置</Button>                      
-                               </FormItem> 
-                     </Col>
-                     </Row>
-                 </Form>
-              </div>                
+                            <Col md={8} sm={24}>
+                                <FormItem>
+                                    <Button type="primary" htmlType="submit">查询</Button>
+                                    <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset} >重置</Button>
+                                </FormItem>
+                            </Col>
+                        </Row>
+                    </Form>
+                </div>
                 <Table
                     columns={columns}
                     dataSource={inDatas}
                     pagination={{
                         showSizeChanger: true,
                         showQuickJumper: true,
-                        "total":45,
-                        "pageSize":20,
-                        "current":1
+                        'total': 45,
+                        'pageSize': 20,
+                        'current': 1
                     }}
                     scroll={
                         {
