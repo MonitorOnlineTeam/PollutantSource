@@ -173,35 +173,43 @@ export function getPollutantDatas() {
 // moment().subtract(7,'seconds');// 减7秒钟
 
 /**
+ * 获取监测点数据
  *@param
- obj={
-     startTime:开始时间
-     endTime:结束时间
-     dataType:数据类型 eg:'realtime','minutes', 'hour', 'day'
-     concentration:污染物 eg:['s1','01']
-     interval:时间间隔 (realtime:30m minutes:10)
-     point:监测点 eg:['123','456']
+ ={
+     startTime?:开始时间 eg: '2018-06-23 15:30'
+     endTime?:结束时间 eg: '2018-06-24 15:30'
+     dataType?:数据类型 eg:dataType:'realtime' //'minutes', 'hour', 'day'
+     concentration?:污染物 eg:['s1','01']
+     interval?:时间间隔  eg: interval:30 //实时：秒/条  分钟：分钟/条
+     point?:监测点 eg:['123','456']
  }
 */
 export function getAllConcentration(obj) {
-    let startTime = obj.startTime || moment().subtract(23, 'hours').format('YYYY-MM-DD HH:mm:ss');
-    let endTime = obj.endTime || moment().format('YYYY-MM-DD HH:mm:ss');
-    let dataType = obj.dataType || 'day';
+    let $this = obj || {};
+    let startTime = $this.startTime || moment().subtract(24, 'hours').format('YYYY-MM-DD HH:mm:ss');
+    let endTime = $this.endTime || moment().format('YYYY-MM-DD HH:mm:ss');
+    let dataType = $this.dataType || 'day';
     let returnDatas = [];
     let concentration = [];
     let point = [];
     let defaultPoint = getPointEnterprise();
     let i = 1;
     let dateForms = {
-        format: 'YYYY-MM-DD',
+        format: '',
         value: 1,
         type: '',
         startTime: startTime,
         endTime: endTime
     };
-    console.log(defaultPoint);
-    if (obj.point && obj.point.length > 0) {
-        obj.point.map((k) => {
+    const dateTypeFormat = {
+        realtime: 'YYYY-MM-DD HH:mm:ss',
+        minutes: 'YYYY-MM-DD HH:mm:00',
+        hour: 'YYYY-MM-DD HH:00:00',
+        day: 'YYYY-MM-DD 00:00:00'
+    };
+    // console.log(defaultPoint);
+    if ($this.point && $this.point.length > 0) {
+        $this.point.map((k) => {
             defaultPoint.map((m) => {
                 if (k.DGIMN === m.DGIMN) {
                     point.push(m);
@@ -212,8 +220,8 @@ export function getAllConcentration(obj) {
         point = defaultPoint;
     }
 
-    if (obj.concentration && obj.concentration.length > 0) {
-        obj.concentration.map((k) => {
+    if ($this.concentration && $this.concentration.length > 0) {
+        $this.concentration.map((k) => {
             defaultConcentration.map((m) => {
                 if (k === m.Value) {
                     concentration.push(m);
@@ -225,33 +233,54 @@ export function getAllConcentration(obj) {
     }
     switch (dataType) {
         case 'realtime':
-            dateForms.format += ' HH:mm:ss';
+            dateForms.format = dateTypeFormat.realtime;
             dateForms.type = 'seconds';
-            dateForms.value = obj.interval || 30;
-            if (!obj.startTime || !obj.endTime) {
-                dateForms.endTime = moment().subtract(1, 'minutes').format('YYYY-MM-DD HH:mm:ss');
-                dateForms.startTime = moment().subtract(16, 'minutes').format('YYYY-MM-DD HH:mm:ss');
+            dateForms.value = $this.interval || 30;
+            if (!$this.startTime || !$this.endTime) {
+                dateForms.endTime = moment().subtract(1, 'minutes').format(dateTypeFormat.realtime);
+                dateForms.startTime = moment().subtract(16, 'minutes').format(dateTypeFormat.realtime);
+            } else {
+                dateForms.endTime = moment(dateForms.endTime).format(dateTypeFormat.realtime);
+                dateForms.startTime = moment(dateForms.startTime).format(dateTypeFormat.realtime);
             }
             break;
         case 'minutes':
-            dateForms.format += ' HH:mm:00';
+            dateForms.format = dateTypeFormat.minutes;
             dateForms.type = 'minutes';
-            dateForms.value = obj.interval || 10;
-            if (!obj.startTime || !obj.endTime) {
-                dateForms.endTime = moment().subtract(1, 'hours').format('YYYY-MM-DD HH:mm:00');
-                dateForms.startTime = moment().subtract(5, 'hours').format('YYYY-MM-DD HH:mm:00');
+            dateForms.value = $this.interval || 10;
+            if (!$this.startTime || !$this.endTime) {
+                dateForms.endTime = moment().format(dateTypeFormat.minutes);
+                dateForms.startTime = moment().subtract(5, 'hours').format(dateTypeFormat.minutes);
+            } else {
+                dateForms.endTime = moment(dateForms.endTime).format(dateTypeFormat.minutes);
+                dateForms.startTime = moment(dateForms.startTime).format(dateTypeFormat.minutes);
             }
+
             break;
         case 'hour':
-            dateForms.format += ' HH:00:00';
+            dateForms.format = dateTypeFormat.hour;
             dateForms.type = 'hours';
-            dateForms.value = obj.interval || 1;
+            dateForms.value = $this.interval || 1;
+            if (!$this.startTime || !$this.endTime) {
+                dateForms.endTime = moment().subtract(1, 'hours').format(dateTypeFormat.hour);
+                dateForms.startTime = moment().subtract(25, 'hours').format(dateTypeFormat.hour);
+            } else {
+                dateForms.endTime = moment(dateForms.endTime).format(dateTypeFormat.hour);
+                dateForms.startTime = moment(dateForms.startTime).format(dateTypeFormat.hour);
+            }
             break;
         case 'day':
-            dateForms.format += ' 00:00:00';
+            dateForms.format = dateTypeFormat.day;
             dateForms.type = 'days';
-            dateForms.value = obj.interval || 1;
+            dateForms.value = $this.interval || 1;
 
+            if (!$this.startTime || !$this.endTime) {
+                dateForms.endTime = moment().subtract(1, 'day').format(dateTypeFormat.day);
+                dateForms.startTime = moment().subtract(25, 'day').format(dateTypeFormat.day);
+            } else {
+                dateForms.endTime = moment(dateForms.endTime).format(dateTypeFormat.day);
+                dateForms.startTime = moment(dateForms.startTime).format(dateTypeFormat.day);
+            }
             break;
     };
     point.map((p) => {
@@ -267,7 +296,7 @@ export function getAllConcentration(obj) {
             };
             let sTime = dateForms.startTime;
             let eTime = dateForms.endTime;
-            while (sTime < eTime) {
+            while (sTime <= eTime) {
                 data.Datas.push({
                     'Key': i++,
                     'MonitoringTime': moment(eTime).format(dateForms.format),
@@ -278,12 +307,14 @@ export function getAllConcentration(obj) {
                 });
 
                 eTime = moment(eTime).subtract(dateForms.value, dateForms.type).format(dateForms.format);
+                // console.log('sTime:', sTime);
+                // console.log('eTime:', eTime);
             }
             pointData.PollutantData.push(data);
         });
         returnDatas.push(pointData);
     });
-    console.log(returnDatas);
+    // console.log(returnDatas);
     return returnDatas;
 }
 // *********************************获取浓度数据*********************************

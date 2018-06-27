@@ -10,7 +10,7 @@ import EmergencyDetailInfo from './EmergencyDetailInfo';
 const { RangePicker } = DatePicker;
 const Option = Select.Option;
 
-export default class componentName extends Component {
+export default class EmergencyTodoList extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -22,12 +22,15 @@ export default class componentName extends Component {
     }
 
     SearchEmergencyDataList = (value) => {
+        debugger;
+        this.setState({ EmergencyData: [] });
         let dataList = [];
         EmergencyDataList.EDataList.map((item, key) => {
             let isexist = false;
-            if (item.DGIMN === value) {
+            if (value.indexOf(item.DGIMN)>-1) {
                 isexist = true;
             }
+
             if (isexist) { dataList.push(item); }
         });
         this.setState({ EmergencyData: dataList });
@@ -93,8 +96,7 @@ export default class componentName extends Component {
                               return {
                                   onClick: () => {} // 点击行
                               };
-                          }}
-                          
+                          }} 
                       />
                       <Modal
                           visible={this.state.showdetailinfo}

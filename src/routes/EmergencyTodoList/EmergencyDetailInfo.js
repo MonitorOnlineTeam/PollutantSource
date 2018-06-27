@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import styles from './EmergencyDetailInfo.less';
 
-export default class componentName extends Component {
+export default class EmergencyDetailInfo extends Component {
     render() {
         return (
             <div

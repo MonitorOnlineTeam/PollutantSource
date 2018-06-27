@@ -7,10 +7,12 @@ const Search = Input.Search;
 const { Content, Sider } = Layout;
 const dataList = getPointEnterprise();
 
-export default class componentName extends Component {
+export default class PointsList extends Component {
     state = {
         collapsed: false,
-        pointslist: dataList
+        pointslist: dataList,
+        selDGIMN: '',
+        selDGMINS:[]
     };
 
       toggle = () => {
@@ -53,14 +55,47 @@ export default class componentName extends Component {
                               <List
                                   dataSource={this.state.pointslist}
                                   renderItem={item => (
-                                      <div id={item.DGIMN} className={styles.cardList}
+                                      <div id={item.DGIMN} className={styles.cardList} style={this.state.selDGIMN === item.DGIMN ? {
+                                          borderWidth:'1px',borderColor:'rgb(97,166,238)',borderStyle:'solid',
+                                          WebkitBoxShadow: 'rgb(118,178,240) 0px 0px 5px',MozBoxShadow:'rgb(118,178,240) 0px 0px 5px'
+                                          ,boxShadow:'rgb(118,178,240) 0px 0px 5px'
+                                        } : {}}
                                           onClick={
-                                              () => {
-                                                this.props.handleChange(item.DGIMN);
-                                              }
+                                             ()=>{
+                                                if(this.props.IsShowChk=="none"){
+                                                this.props.handleChange([item.DGIMN]);
+                                                this.setState({
+                                                    selDGIMN: item.DGIMN
+                                                });
+                                               }
+                                             }
                                           } >
                                           <div className={styles.title}>
-                                              <span className={styles.chkbox} style={{display: IsShowChk}}><Checkbox /></span>
+                                              <span className={styles.chkbox} style={{display: IsShowChk}}>
+                                              <Checkbox  
+                                              onChange={
+                                                  (e)=>{
+                                                    let dgimns=this.state.selDGMINS;
+                                                    if(e.target.checked==true){
+                                                        if(dgimns.indexOf(item.DGIMN)==-1){
+                                                            dgimns.push(item.DGIMN);
+                                                        }
+                                                    }
+                                                    else{
+                                                        if(dgimns.indexOf(item.DGIMN)>-1){
+                                                            dgimns.splice(dgimns.indexOf(item.DGIMN),1);
+                                                        }
+                                                    }
+                                        
+                                                    this.setState({
+                                                        selDGIMNS: dgimns
+                                                    });
+                                                    
+                                                    this.props.handleChange(dgimns);
+                                                  }
+                                              }
+                                              />
+                                              </span>
                                               <span className={styles.titleSpan}>{item.PointName}</span>
                                           </div>
                                           <div className={styles.content}>
