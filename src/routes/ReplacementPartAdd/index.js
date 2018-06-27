@@ -155,7 +155,7 @@ export default class ReplacementPartAdd extends Component {
                     }}
                     scroll={
                         {
-                            y: 'calc(100vh - 455px)'
+                            y: 'calc(100vh - 445px)'
                         }
                     }
                 />
