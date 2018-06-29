@@ -5,6 +5,7 @@ import {getPollutantDatas, getAllConcentration} from '../../mockdata/Base/common
 import RangePicker_ from '../../components/PointDetail/RangePicker_';
 import ButtonGroup_ from '../../components/PointDetail/ButtonGroup_';
 import PollutantSelect_ from '../../components/PointDetail/PollutantSelect_';
+import PopoverViewData_ from '../../components/PointDetail/PopoverViewData_';
 import styles from './index.less';
 import {
     Table,
@@ -71,6 +72,10 @@ class DataQuery extends Component {
             tableData: concentrationDatas,
             tempDataParam: obj,
             lookDataParamModal: false,
+            modalData: {
+                allParamData: [],
+                statusData: []
+            }
         };
     }
     // 污染物
@@ -197,10 +202,15 @@ class DataQuery extends Component {
                             <p onClick={() => this._lookDataParamModal(true)}><Icon type="laptop" style={{ fontSize: 14, color: '#08c' }} /> 查看仪器状态参数</p>
                         </div>
                     );
+                    // return (
+                    //     <Popover placement="bottom" content={content}>
+                    //         <a style={{color: color, cursor: 'pointer'}}>{row.Concentration}</a>
+                    //     </Popover>);
                     return (
-                        <Popover placement="bottom" content={content} trigger="click">
-                            <a style={{color: color, cursor: 'pointer'}}>{row.Concentration}</a>
-                        </Popover>);
+                        <PopoverViewData_>
+                            <a style={{color: color, cursor: 'pointer'}} datatype={this.state.searchData.dataType}>{row.Concentration}</a>
+                        </PopoverViewData_>
+                    );
                 },
                 key: 'Concentration'
             }];
@@ -227,28 +237,19 @@ class DataQuery extends Component {
                     </Col>
                     <Col span={6} pull={18}>
                         <Card title="监测维度" extra={<a href="#" />} style={{ width: '98%', height: 'calc(100vh - 225px)' }}>
-                            <Table rowKey="Key" size="middle" columns={columns} dataSource={this.state.tableData} pagination={false} bordered={true} scroll={{ x: '100%', y: 'calc(100vh - 385px)' }} />
+                            <Table
+                                rowKey="Key"
+                                size="middle"
+                                columns={columns}
+                                dataSource={this.state.tableData}
+                                pagination={false}
+                                bordered={false}
+                                scroll={{ x: '100%', y: 'calc(100vh - 385px)' }} />
                             <a className="login-form-forgot" href="">加载更多……</a>
                         </Card>
                     </Col>
                 </Row>
-                <Modal
-                    title="XXX监测点"
-                    wrapClassName={styles.verticalCenterModal}
-                    visible={this.state.lookDataParamModal}
-                    onOk={() => this._lookDataParamModal(false)}
-                    onCancel={() => this._lookDataParamModal(false)}
-                >
-                    <Table
-                        rowKey="Key"
-                        size="middle"
-                        columns={columns}
-                        dataSource={this.state.tableData}
-                        pagination={false}
-                        bordered={true}
-                        scroll={{ x: '100%', y: 'calc(100vh - 500px)' }}
-                    />
-                </Modal>
+
             </div>
         );
     }
