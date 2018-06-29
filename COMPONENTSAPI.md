@@ -195,3 +195,129 @@
 | width    | 宽度           | -  | 100px |
 | ref    | 组件真正实例的引用   | -  | - |
 | mode    | 设置 Select 的模式，可设置为可编辑的下拉选项框   | string('combobox')  | '' |
+
+
+-------------------------------
+  
+时间范围下拉框选择
+  
+## API
+  
+  
+### RangePicker_
+  
+  
+时间范围选择。
+  
+### 调用：
+  
+#### 引用：
+  
+>     import RangePicker_ from '../../components/PointDetail/RangePicker_';
+#### 使用：
+>     //render中增加控件显示
+>     eg1: 显示时间
+>         <RangePicker_ dateFormat='YYYY-MM-DD' dateValue={this.state.rangeDate} showTime={format:'HH:mm:ss'} onChange={this._handleDateChange} />
+>     
+>     【注】:要想不显示时间功能，则去掉 showTime 属性即可
+>   
+>     示例：onChange
+>     _handleDateChange=(date, dateString) => {
+>        console.log(date);// [moment,moment]
+>        console.log(dateString);// ['2018-06-23','2018-06-25']
+>        this.state.rangeDate = date;
+>     };
+>
+>  
+
+  
+  
+| 参数      | 说明                                      | 类型         | 默认值 |
+|----------|------------------------------------------|-------------|-------|
+| showTime    | 增加时间选择功能(默认不显示时间)           | object   | {format:'HH:mm:ss'} |
+| dateFormat    | 展示的日期格式，配置参考 moment.js   | string  | 'YYYY-MM-DD HH:mm:ss' |
+| onChange    | 时间发生变化的回调   | function(date: moment, dateString: string)  | - |
+| dateValue    | 日期   | moment  | [] |
+| style    | 样式   | object  | {width:250} |
+
+
+-------------------------------
+  
+时间类型维度按钮组件
+  
+## API
+  
+  
+### ButtonGroup_
+  
+  
+时间类型维度按钮。
+  
+### 调用：
+  
+#### 引用：
+  
+>     import ButtonGroup_ from '../../components/PointDetail/ButtonGroup_';
+#### 使用：
+>     //render中增加控件显示
+>     eg1: 显示时间
+>         <ButtonGroup_ checked={this.state.dataType} onChange={this._handleDateTypeChange} />
+>     
+>     【注】:要想不显示时间功能，则去掉 showTime 属性即可
+>   
+>     示例：onChange
+>     _handleDateTypeChange=(e) => {
+>        console.log(e.target.value);// realtime
+>        this.state.dataType = e.target.value;
+>     };
+>
+>  
+
+  
+  
+| 参数      | 说明                                      | 类型         | 默认值 |
+|----------|------------------------------------------|-------------|-------|
+| showButton    | 显示的按钮           | array   | ['realtime', 'minutes', 'hour', 'day'] |
+| checked    | 默认选中   | string  | 'realtime' |
+| onChange    | 时间发生变化的回调   | function(e)  | - |
+
+
+-------------------------------
+  
+污染物下拉框组件
+  
+## API
+  
+  
+### PollutantSelect_
+  
+  
+污染物下拉框。
+  
+### 调用：
+  
+#### 引用：
+  
+>     import PollutantSelect_ from '../../components/PointDetail/PollutantSelect_';
+#### 使用：
+>     //render中增加控件显示
+>     eg1: 显示时间
+>         <PollutantSelect_  onChange={this._handlePollutantChange} />
+>     
+>     【注】:要想不显示时间功能，则去掉 showTime 属性即可
+>   
+>     示例：onChange
+>     _handlePollutantChange=(value,option) => {
+>        console.log(value);// 01
+>        console.log(option);// object
+>        this.state.pollutantValue = value;
+>     };
+>
+>  
+  
+| 参数      | 说明                                      | 类型         | 默认值 |
+|----------|------------------------------------------|-------------|-------|
+| optionDatas    | 数据源(暂不支持传递)           | []   | getPollutantDatas() |
+| defaultValue    | 默认选中   | string  | getPollutantDatas()[0] |
+| onChange    | 下拉框发生变化的回调   | function(value,option)  | - |
+| style    | 样式   | object  | {width:200} |
