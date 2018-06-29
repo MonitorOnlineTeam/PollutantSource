@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import markerspoint from '../../mockdata/OverView/markersInfo.json';
 import styles from './OverView.less';
 import {
     Radio,
@@ -7,30 +6,81 @@ import {
     Table,
     Icon
 } from 'antd';
-import { SIMD_AVAILABLE } from 'gl-matrix/src/gl-matrix/common';
-
-const treecol = [
-    {
-        title: '',
-        width: '10%',
-        dataIndex: 'Status',
-        align: 'center',
-        render: text => <img src="../../../gisnormal.png" />,
-    }, {
-        title: '企业',
-        width: '50%',
-        dataIndex: 'EntName',
-        align: 'center'
-    },
-    {
-        title: '排口',
-        width: '30%',
-        dataIndex: 'PointName',
-        align: 'center'
-    }];
 
 class NavigationTree extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+        };
+    }
     render() {
+        const treecol = [
+            {
+                title: '',
+                width: '10%',
+                dataIndex: 'Status',
+                align: 'center',
+                render: (value, record) => {
+                    if (this.props.special === 'monitor') {
+                        if (record.DGIMN === 'bjldgn01' || record.DGIMN === 'dtgjhh11102' || record.DGIMN === 'dtgrjx110') {
+                            return (
+                                <img src="../../../gisoverdue.png" />
+                            );
+                        } else if (record.DGIMN === 'dtgrjx103' || record.DGIMN === 'lywjfd03') {
+                            return (
+                                <img src="../../../gisexception.png" />
+                            );
+                        } else {
+                            return (
+                                <img src="../../../gisnormal.png" />
+                            );
+                        }
+                    } else if (this.props.special === 'operation') {
+                        if (record.DGIMN === 'bjldgn01' || record.DGIMN === 'dtgjhh11102' || record.DGIMN === 'dtgrjx110') {
+                            return (
+                                <img src="../../../gisexception.png" />
+                            );
+                        } else if (record.DGIMN === 'dtgrjx103' || record.DGIMN === 'lywjfd03') {
+                            return (
+                                <img src="../../../gisoperation.png" />
+                            );
+                        } else {
+                            return (
+                                <img src="../../../gisnormal.png" />
+                            );
+                        }
+                    } else if (this.props.special === 'sewage') {
+
+                    } else {
+                        if (record.DGIMN === 'bjldgn01' || record.DGIMN === 'dtgjhh11102' || record.DGIMN === 'dtgrjx110'
+                        || record.DGIMN === 'dtgrjx103' || record.DGIMN === 'lywjfd03') {
+                            return (
+                                <img src="../../../gisquality.png" />
+                            );
+                        } else if (record.DGIMN === 'dtgjhh11102') {
+                            return (
+                                <img src="../../../gisquality.png" />
+                            );
+                        } else {
+                            return (
+                                <img src="../../../gisnormal.png" />
+                            );
+                        }
+                    }
+                }
+            },
+            {
+                title: '企业',
+                width: '50%',
+                dataIndex: 'EntName',
+                align: 'center'
+            },
+            {
+                title: '排口',
+                width: '30%',
+                dataIndex: 'PointName',
+                align: 'center'
+            }];
         return (
             <div
                 className={styles.treeborder}

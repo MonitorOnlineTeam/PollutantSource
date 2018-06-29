@@ -101,7 +101,7 @@ class OverViewMap extends PureComponent {
                 tipheight = 430;
             } else if (value.target.value === 'c') {
                 special = 'sewage';
-                tipheight = 420;
+                tipheight = 460;
             } else if (value.target.value === 'd') {
                 special = 'quality';
                 tipheight = 303;
@@ -207,7 +207,6 @@ class OverViewMap extends PureComponent {
         };
     }
     render() {
-        console.log(this.state.selectpoint);
         const special = this.state.special;
         return (
             <div
@@ -217,8 +216,8 @@ class OverViewMap extends PureComponent {
                 }}>
                 <Map events={this.mapEvents} resizeEnable={true}
                     center={[this.state.longitude, this.state.latitude]}
-                    zoom={5} loading={<Spin />} amapkey={amapKey} plugins={plugins}>
-                    <NavigationTree TreeSearch={this.TreeSearch} specialChange={this.specialChange} treeCilck={this.treeCilck} markersInfo={this.state.pointslist} />
+                    zoom={15} loading={<Spin />} amapkey={amapKey} plugins={plugins}>
+                    <NavigationTree special={this.state.special} TreeSearch={this.TreeSearch} specialChange={this.specialChange} treeCilck={this.treeCilck} markersInfo={this.state.pointslist} />
                     <div
                         style={{
                             position: 'absolute',
@@ -251,20 +250,20 @@ class OverViewMap extends PureComponent {
                             }} />)}
 
                     {this.state.entslist.map(item => {
-                        let coordinateSet;
-                        let cgcoordinateSet = [];
-                        if (item.CoordinateSet.length > 0) {
-                            coordinateSet = eval(item.CoordinateSet);
-                            coordinateSet.map(coo => {
-                                cgcoordinateSet.push(coo[0]);
-                            });
+                        const allcoo = eval(item.CoordinateSet);
+                        for (let i = 0; i < allcoo.length; i++) {
+                            return (
+                                <Polygon
+                                    style={{
+                                        strokeColor: '#FF33FF',
+                                        strokeOpacity: 0.2,
+                                        strokeWeight: 3,
+                                        fillColor: '#1791fc',
+                                        fillOpacity: 0.35,
+                                    }}
+                                    path={allcoo[i][0]}
+                                />);
                         }
-                        return (
-                            <Polygon
-                                style={{strokeColor: 'red',
-                                }}
-                                path={cgcoordinateSet}
-                            />);
                     })}
                     <InfoWindow
                         autoMove={true}
@@ -295,19 +294,33 @@ class OverViewMap extends PureComponent {
                                 : (special === 'sewage' ? <SewageTips /> : <QualityControlTips />))}
                         </div>
                     </InfoWindow>
-
-                    {/* <div style={{ position: 'absolute',
+                    <div style={{ position: 'absolute',
                         bottom: 10,
                         left: 380,
                         background: '#fff'}} className={styles.legend_div}>
-                        <ul>
-                            <li> 正常</li>
-                            <li> 超标</li>
-                            <li> 离线</li>
-                            <li> 异常</li>
+                        {special === 'monitor' ? <ul>
+                            <li><img src="../../../gisnormal.png" /> 正常</li>
+                            <li><img src="../../../gisover.png" /> 超标</li>
+                            <li><img src="../../../gisunline.png" /> 离线</li>
+                            <li><img src="../../../gisexception.png" /> 异常</li>
+                        </ul> : special === 'operation' ? <ul>
+                            <li><img src="../../../gisnormal.png" /> 正常</li>
+                            <li><img src="../../../gisoperation.png" /> 运维</li>
+                            <li><img src="../../../gisoverdue.png" /> 逾期</li>
+                            <li><img src="../../../gisfault.png" /> 故障</li>
+                            <li><img src="../../../gisexception.png" /> 停产</li>
+                        </ul> : special === 'sewage' ? <ul>
+                            <li><img src="../../../gisnormal.png" /> 正常</li>
+                            <li><img src="../../../gisoperation.png" /> 运维</li>
+                            <li><img src="../../../gisoverdue.png" /> 逾期</li>
+                            <li><img src="../../../gisfault.png" /> 故障</li>
+                            <li><img src="../../../gisexception.png" /> 停产</li>
+                        </ul> : <ul>
+                            <li><img src="../../../gisnormal.png" /> 正常</li>
+                            <li><img src="../../../gisquality.png" /> 质控</li>
                         </ul>
-
-                    </div> */}
+                        }
+                    </div>
                 </Map>
             </div>
         );
