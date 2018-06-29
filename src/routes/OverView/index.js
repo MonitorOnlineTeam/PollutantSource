@@ -229,6 +229,9 @@ class OverViewMap extends PureComponent {
                     {!this.state.pointvisible ? <Markers markers={this.state.entslist}
                         offset={[-110, -50]} events={this.entslistEvents}
                         render={(extData) => {
+                            if (extData.EntCode === 'bjldgn') {
+                                  
+                            }
                             return (<div className={styles.tag}>
                                 <div className={styles.arrow}>
                                     <em /><span />
