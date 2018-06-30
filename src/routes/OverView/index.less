@@ -35,34 +35,17 @@
  }
 
  .legend_div ul {
-  margin-top: -8px;
   list-style: none;
-  margin-left: 5px;
-  padding-left: 0px;
-  margin-bottom: 10px;
+  width: 88px;
+  padding: 0;
+ // height: 105px;
 }
- .legend_div{
-  position: 'absolute';
-  bottom: 10;
-  left: 380;
-  background: '#fff';
- }
-
  .legend_div ul li {
-  width: 8px;
-  height: 8px;
-  border-radius: 15px 15px 15px 15px;
-  -moz-border-radius: 15px 15px 15px 15px;
-  -webkit-border-radius: 15px 15px 15px 15px;
-  text-shadow: 2px 2px 2px #6e6e6e;
-  -moz-text-shadow: 2px 2px 2px #6e6e6e;
-  -webkit-text-shadow: 2px 2px 2px #6e6e6e;
-  -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
-  -moz-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+  width: 88px;
+  height: 28px;
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
-  float: left;
-  margin-right: 4px;
-  margin-top: 2px;
+  padding: 5px 0 3px 12px;
 }
 
 .z_green {
@@ -95,5 +78,39 @@
   float: right;
   border-left: 1px solid gray;
   padding:0 7px 0 7px;
+}
+:global{
+  .ant-card-head-wrapper{
+    display: -webkit-box;
+    padding-left: 30px; 
+  }
+  .ant-card-extra{
+       text-align: left; 
+  }
+}
+
+.legendtext{
+   border: 1px solid #000;
+   border-radius: 150px;
+}
+
+
+img{cursor:pointer;-webkit-animation: scaleout 1.3s infinite ease-in-out;animation: scaleout 1.3s infinite ease-in-out;}
+@-webkit-keyframes scaleout {
+    0% { -webkit-transform: scale(1.0) }
+    100% {
+        -webkit-transform: scale(1.1);
+        opacity: 0;
+    }
+}
+@keyframes scaleout {
+    0% {
+        transform: scale(1.0);
+        -webkit-transform: scale(1.0);
+    } 100% {
+          transform: scale(1.1);
+          -webkit-transform: scale(1.1);
+          opacity: 0;
+      }
 }
 
