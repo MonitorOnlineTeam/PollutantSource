@@ -13,15 +13,15 @@ class AListRadio extends Component {
                 _this.props.dispatch(routerRedux.push('/monitor/overview'));
             } else if (value.target.value === 'b') {
                 _this.props.dispatch(routerRedux.push('/monitor/datalist'));
+            } else {
+                _this.props.dispatch(routerRedux.push('/monitor/statuslist'));
             }
         };
     }
     render() {
         return (
             <Radio.Group
-                style={{
-                    padding: '0 2px 2px 50px'
-                }}
+                style={{padding: '0 2px 2px 50px', ...this.props.style}}
                 onChange={this.onchange}
                 defaultValue={this.props.dvalue}>
                 <Radio.Button value="a">地图</Radio.Button>

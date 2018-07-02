@@ -1,15 +1,6 @@
 
 import React, { Component } from 'react';
-import { Col, Row, Switch, Button} from 'antd';
-import OperationActionSelect from '../../components/OperationActionSelect/index';
-import EnterpriseAutoComplete from '../../components/EnterpriseAutoComplete/index';
-import WorkbenchCard from '../../components/Workbench/WorkbenchCard';
-import AlarmTypeSelect from '../../components/AlarmTypeSelect/index';
-import EarlyWarningTypeSelect from '../../components/EarlyWarningTypeSelect/index';
-import {getPointEnterprise} from '../../mockdata/Base/commonbase';
-import operationinfo from '../../mockdata/Workbench/operationinfo.json';
-import alarm from '../../mockdata/Workbench/alarm.json';
-import earlywarning from '../../mockdata/Workbench/earlywarning.json';
+import { Col, Row} from 'antd';
 import TodolistWorkbenchCard from '../../components/Workbench/TodolistWorkbenchCard';
 import OperationWorkbenchCard from '../../components/Workbench/OperationWorkbenchCard';
 import AlarmInfoWorkbenchCard from '../../components/Workbench/AlarmInfoWorkbenchCard';
@@ -33,7 +24,7 @@ class Workbench extends Component {
     componentDidMount() {
 
     }
-    render() {        
+    render() {
         return (
             <div style={{ background: '#ECECEC', padding: '30px' }}>
                 <Row gutter={16}>

@@ -34,10 +34,9 @@ class PointDetail extends Component {
         const routes = getRoutes(match.path, routerData);
         const defaultroute = routes[0].path;
 
-        const pointName = getPointEnterprise().find((item) => {
+        const pointInfo = getPointEnterprise().find((item) => {
             return item.DGIMN = match.params.pointcode;
         });
-        console.log(pointName);
         return (
             <div
                 style={{ width: '100%',
@@ -50,7 +49,7 @@ class PointDetail extends Component {
                         </Breadcrumb.Item>
                         <Breadcrumb.Item key="home">
                             {
-                                pointName.Abbreviation + '-' + pointName.PointName
+                                pointInfo.Abbreviation + '-' + pointInfo.PointName
                             }
                         </Breadcrumb.Item>
                     </Breadcrumb>
@@ -64,7 +63,7 @@ class PointDetail extends Component {
                             dispatch(routerRedux.push(`${match.url}/${key}`));
                         }}
                     >
-                        {this.state.tablist.map(item => <TabPane tab={item.tab} key={item.key} />)}
+                        {this.state.tablist.map(item => <TabPane pointInfo={pointInfo} tab={item.tab} key={item.key} />)}
                     </Tabs>
                     <Switch>
                         {

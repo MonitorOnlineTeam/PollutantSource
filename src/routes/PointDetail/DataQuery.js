@@ -1,11 +1,11 @@
 // 监控总览-数据查询
 import React, { Component } from 'react';
 import ReactEcharts from 'echarts-for-react';
-import moment from 'moment';
 import {getPollutantDatas, getAllConcentration} from '../../mockdata/Base/commonbase';
 import RangePicker_ from '../../components/PointDetail/RangePicker_';
 import ButtonGroup_ from '../../components/PointDetail/ButtonGroup_';
-import Select_ from '../../components/PointDetail/Select_';
+import PollutantSelect_ from '../../components/PointDetail/PollutantSelect_';
+import PopoverViewData_ from '../../components/PointDetail/PopoverViewData_';
 import styles from './index.less';
 import {
     Table,
@@ -14,8 +14,7 @@ import {
     Card,
     Popover,
     Icon,
-    Modal,
-    List
+    Modal
 } from 'antd';
 
 /*
@@ -42,7 +41,7 @@ class DataQuery extends Component {
             startTime: '',
             endTime: '',
             concentration: [pollutantDatas[0].Value],
-            dataType: 'hour'
+            dataType: 'realtime'
         };
         let concentrationDatas = getAllConcentration(obj);
         concentrationDatas = concentrationDatas[0].PollutantData[0].Datas;
@@ -59,7 +58,7 @@ class DataQuery extends Component {
                 pollutantValue: pollutantDatas[0].Value,
                 pollutantText: pollutantDatas[0].Name,
                 rangeDate: [],
-                dataType: 'hour'
+                dataType: 'realtime'
             },
             optionData: {
                 legendData: [pollutantDatas[0].Name],
@@ -73,6 +72,10 @@ class DataQuery extends Component {
             tableData: concentrationDatas,
             tempDataParam: obj,
             lookDataParamModal: false,
+            modalData: {
+                allParamData: [],
+                statusData: []
+            }
         };
     }
     // 污染物
@@ -199,10 +202,15 @@ class DataQuery extends Component {
                             <p onClick={() => this._lookDataParamModal(true)}><Icon type="laptop" style={{ fontSize: 14, color: '#08c' }} /> 查看仪器状态参数</p>
                         </div>
                     );
+                    // return (
+                    //     <Popover placement="bottom" content={content}>
+                    //         <a style={{color: color, cursor: 'pointer'}}>{row.Concentration}</a>
+                    //     </Popover>);
                     return (
-                        <Popover placement="bottom" content={content} trigger="click">
-                            <a style={{color: color, cursor: 'pointer'}}>{row.Concentration}</a>
-                        </Popover>);
+                        <PopoverViewData_>
+                            <a style={{color: color, cursor: 'pointer'}} datatype={this.state.searchData.dataType}>{row.Concentration}</a>
+                        </PopoverViewData_>
+                    );
                 },
                 key: 'Concentration'
             }];
@@ -212,14 +220,14 @@ class DataQuery extends Component {
                     <Col span={18} push={6} >
                         <Card title="监测趋势图" extra={
                             <div>
-                                <Select_
+                                <PollutantSelect_
                                     optionDatas={this.state.pollutantDatas}
                                     ref={(r) => { this.select_Pollutant = r; }}
                                     defaultValue={this.state.pollutantDatas[0].Value}
                                     style={{width: 200}}
                                     onChange={this._handlePollutantChange}
                                 />
-                                <RangePicker_ dateValue={this.state.searchData.rangeDate} format="YYYY-MM-DD" ref={(r) => { this.RangePicker_ = r; }} onChange={this._handleDateChange} />
+                                <RangePicker_ style={{width: 250}} dateValue={this.state.searchData.rangeDate} format="YYYY-MM-DD" onChange={this._handleDateChange} />
                                 <ButtonGroup_ checked={this.state.searchData.dataType} onChange={this._handleDateTypeChange} />
 
                             </div>
@@ -229,28 +237,19 @@ class DataQuery extends Component {
                     </Col>
                     <Col span={6} pull={18}>
                         <Card title="监测维度" extra={<a href="#" />} style={{ width: '98%', height: 'calc(100vh - 225px)' }}>
-                            <Table rowKey="Key" size="middle" columns={columns} dataSource={this.state.tableData} pagination={false} bordered={true} scroll={{ x: '100%', y: 'calc(100vh - 385px)' }} />
+                            <Table
+                                rowKey="Key"
+                                size="middle"
+                                columns={columns}
+                                dataSource={this.state.tableData}
+                                pagination={false}
+                                bordered={false}
+                                scroll={{ x: '100%', y: 'calc(100vh - 385px)' }} />
                             <a className="login-form-forgot" href="">加载更多……</a>
                         </Card>
                     </Col>
                 </Row>
-                <Modal
-                    title="XXX监测点"
-                    wrapClassName={styles.verticalCenterModal}
-                    visible={this.state.lookDataParamModal}
-                    onOk={() => this._lookDataParamModal(false)}
-                    onCancel={() => this._lookDataParamModal(false)}
-                >
-                    <Table
-                        rowKey="Key"
-                        size="middle"
-                        columns={columns}
-                        dataSource={this.state.tableData}
-                        pagination={false}
-                        bordered={true}
-                        scroll={{ x: '100%', y: 'calc(100vh - 500px)' }}
-                    />
-                </Modal>
+
             </div>
         );
     }

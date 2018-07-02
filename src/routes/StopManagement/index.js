@@ -1,18 +1,18 @@
-import React, { Component } from 'react'
-
-
-/* 
+import React, { Component} from 'react';
+import PageHeaderLayout from '../../layouts/PageHeaderLayout';
+import Content from './content';
+/*
 页面：停产管理
 描述：停产情况维护，需要上传附件。描述清楚是勒令停产还是企业减少产能。（自动打标）依据恢复生产动作
 add by cg 18.6.8
-modify by 
+modify by
 */
 export default class StopManagement extends Component {
-  render() {
-    return (
-      <div>
-        
-      </div>
-    )
-  }
+    render() {
+        return (
+            <PageHeaderLayout title="停产管理" >
+                <Content />
+            </PageHeaderLayout>
+        );
+    }
 }

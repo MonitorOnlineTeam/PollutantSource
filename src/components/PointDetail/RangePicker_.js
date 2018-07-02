@@ -25,11 +25,11 @@ class RangePicker_ extends Component {
                 '最近一年': [moment().startOf('years'), moment().endOf('years')],
                 '最近三年': [moment().add(-3, 'y').startOf('years'), moment().endOf('years')]
             },
-            style: {
-                width: (this.props.style && (this.props.style.width || 300)) || 250,
-                marginLeft: 5,
-                marginRight: 5,
-            },
+            // style: {
+            //     width: (this.props.style && (this.props.style.width || 300)) || 250,
+            //     marginLeft: 5,
+            //     marginRight: 5,
+            // },
             placeholder: ['开始时间', '结束时间'],
             Form: '',
             To: ''
@@ -52,7 +52,8 @@ class RangePicker_ extends Component {
                 onChange={this.props.onChange}
                 ranges={this.state.ranges}
                 format={this.state.dateFormat}
-                style={this.state.style}
+                disabled={this.props.disabled}
+                style={{width: 250, marginLeft: 5, marginRight: 5, ...this.props.style}}
                 placeholder={this.state.placeholder}
             />
         );
