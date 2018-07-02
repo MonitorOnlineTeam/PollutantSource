@@ -26,7 +26,6 @@ let columns = [{
         if (record.dgimn === 'bjldgn01') {
             return (
                 <div>
-
                     <div style={{fontSize: 8, marginBottom: '4px'}}>
                         <img src="../../../gisexception.png" /><span className={styles.legendtext}>运</span></div>
                 </div>

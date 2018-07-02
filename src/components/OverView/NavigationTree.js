@@ -24,11 +24,12 @@ class NavigationTree extends Component {
                     if (this.props.special === 'monitor') {
                         if (record.DGIMN === 'bjldgn01' || record.DGIMN === 'dtgjhh11102' || record.DGIMN === 'dtgrjx110') {
                             return (
-                                <img src="../../../gisoverdue.png" />
+                                <img className={styles.shine_red} src="../../../gisover.png" />
+
                             );
                         } else if (record.DGIMN === 'dtgrjx103' || record.DGIMN === 'lywjfd03') {
                             return (
-                                <img src="../../../gisexception.png" />
+                                <img className={styles.shine_red} src="../../../gisexception.png" />
                             );
                         } else {
                             return (
@@ -38,11 +39,11 @@ class NavigationTree extends Component {
                     } else if (this.props.special === 'operation') {
                         if (record.DGIMN === 'bjldgn01' || record.DGIMN === 'dtgjhh11102' || record.DGIMN === 'dtgrjx110') {
                             return (
-                                <img src="../../../gisexception.png" />
+                                <img className={styles.shine_red} src="../../../gisexception.png" />
                             );
                         } else if (record.DGIMN === 'dtgrjx103' || record.DGIMN === 'lywjfd03') {
                             return (
-                                <img src="../../../gisoperation.png" />
+                                <img className={styles.shine_red} src="../../../gisoperation.png" />
                             );
                         } else {
                             return (
@@ -55,11 +56,7 @@ class NavigationTree extends Component {
                         if (record.DGIMN === 'bjldgn01' || record.DGIMN === 'dtgjhh11102' || record.DGIMN === 'dtgrjx110'
                         || record.DGIMN === 'dtgrjx103' || record.DGIMN === 'lywjfd03') {
                             return (
-                                <img src="../../../gisquality.png" />
-                            );
-                        } else if (record.DGIMN === 'dtgjhh11102') {
-                            return (
-                                <img src="../../../gisquality.png" />
+                                <img className={styles.shine_red} src="../../../gisquality.png" />
                             );
                         } else {
                             return (
