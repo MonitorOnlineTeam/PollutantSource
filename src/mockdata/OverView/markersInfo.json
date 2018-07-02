@@ -177,13 +177,6 @@
             }]
         },
         "sewagepieoption":{
-            "legend": {
-                "orient": "vertical",
-                "left": "left",
-                "data": ["SO2","烟尘","NOx"],
-                "padding":"0 100 0 0"
-            },
-         
             "series" : [
                 {
                     "name": "排放占比",

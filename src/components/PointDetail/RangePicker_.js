@@ -52,6 +52,7 @@ class RangePicker_ extends Component {
                 onChange={this.props.onChange}
                 ranges={this.state.ranges}
                 format={this.state.dateFormat}
+                disabled={this.props.disabled}
                 style={{width: 250, marginLeft: 5, marginRight: 5, ...this.props.style}}
                 placeholder={this.state.placeholder}
             />

@@ -82,7 +82,7 @@ class OverViewMap extends PureComponent {
             special: 'monitor',
             longitude: 100.300317,
             latitude: 39.01278,
-            tipheight: 480,
+            tipheight: 490,
             coordinateSet: [],
             pointslist: pointInfo,
             entslist: entInfo,
@@ -92,7 +92,7 @@ class OverViewMap extends PureComponent {
         };
         this.specialChange = (value) => {
             let special = 'monitor';
-            let tipheight = 480;
+            let tipheight = 490;
             if (value.target.value === 'a') {
                 special = 'monitor';
                 tipheight = 470;
@@ -101,7 +101,7 @@ class OverViewMap extends PureComponent {
                 tipheight = 430;
             } else if (value.target.value === 'c') {
                 special = 'sewage';
-                tipheight = 420;
+                tipheight = 460;
             } else if (value.target.value === 'd') {
                 special = 'quality';
                 tipheight = 303;
@@ -207,7 +207,6 @@ class OverViewMap extends PureComponent {
         };
     }
     render() {
-        console.log(this.state.selectpoint);
         const special = this.state.special;
         return (
             <div
@@ -217,8 +216,8 @@ class OverViewMap extends PureComponent {
                 }}>
                 <Map events={this.mapEvents} resizeEnable={true}
                     center={[this.state.longitude, this.state.latitude]}
-                    zoom={5} loading={<Spin />} amapkey={amapKey} plugins={plugins}>
-                    <NavigationTree TreeSearch={this.TreeSearch} specialChange={this.specialChange} treeCilck={this.treeCilck} markersInfo={this.state.pointslist} />
+                    zoom={15} loading={<Spin />} amapkey={amapKey} plugins={plugins}>
+                    <NavigationTree special={this.state.special} TreeSearch={this.TreeSearch} specialChange={this.specialChange} treeCilck={this.treeCilck} markersInfo={this.state.pointslist} />
                     <div
                         style={{
                             position: 'absolute',
@@ -230,46 +229,101 @@ class OverViewMap extends PureComponent {
                     {!this.state.pointvisible ? <Markers markers={this.state.entslist}
                         offset={[-110, -50]} events={this.entslistEvents}
                         render={(extData) => {
-                            return (<div className={styles.tag}>
-                                <div className={styles.arrow}>
-                                    <em /><span />
-                                </div>
-                                <Icon type="home" style={{ fontSize: 16, color: '#08c', paddingTop: '4px', color: 'gray' }} />
-                                {extData.Abbreviation}
-                                <span className={styles.arrowspan}>({extData.count})</span>
-                            </div>
-                            );
+                            if (extData.EntCode === 'bjldgn' || extData.EntCode === 'dtgrjx001' || extData.EntCode === 'dtgjhh11'
+                            || extData.EntCode === 'lywjfd') {
+                                return (
+                                    <div className={`${styles.tag} ${styles.shine_red}`}
+                                    >
+                                        <div className={styles.arrow}>
+                                            <em /><span />
+                                        </div>
+                                        <Icon type="home" style={{ fontSize: 16, color: '#08c', paddingTop: '4px', color: 'gray' }} />
+                                        {extData.Abbreviation}
+                                        <span className={styles.arrowspan}>({extData.count})</span>
+                                    </div>
+                                );
+                            } else {
+                                return (
+                                    <div className={`${styles.tag}`}
+                                    >
+                                        <div className={styles.arrow}>
+                                            <em /><span />
+                                        </div>
+                                        <Icon type="home" style={{ fontSize: 16, color: '#08c', paddingTop: '4px', color: 'gray' }} />
+                                        {extData.Abbreviation}
+                                        <span className={styles.arrowspan}>({extData.count})</span>
+                                    </div>
+                                );
+                            }
                         }} />
                         : (<Markers markers={this.state.pointslist} events={this.markersEvents}
                             render={(extData) => {
-                                return (<div style={{ background: `url('../../../gisnormal.png')`,
-                                    backgroundRepeat: 'no-repeat',
-                                    width: '30px',
-                                    height: '30px'
-                                }}
-                                />);
+                                if (this.state.special === 'monitor') {
+                                    if (extData.DGIMN === 'bjldgn01' || extData.DGIMN === 'dtgjhh11102' || extData.DGIMN === 'dtgrjx110') {
+                                        return (
+                                            <img className={styles.shine_red} src="../../../gisover.png" />
+                                        );
+                                    } else if (extData.DGIMN === 'dtgrjx103' || extData.DGIMN === 'lywjfd03') {
+                                        return (
+                                            <img className={styles.shine_red} src="../../../gisexception.png" />
+                                        );
+                                    } else {
+                                        return (
+                                            <img src="../../../gisnormal.png" />
+                                        );
+                                    }
+                                } else if (this.state.special === 'operation') {
+                                    if (extData.DGIMN === 'bjldgn01' || extData.DGIMN === 'dtgjhh11102' || extData.DGIMN === 'dtgrjx110') {
+                                        return (
+                                            <img className={styles.shine_red} src="../../../gisexception.png" />
+                                        );
+                                    } else if (extData.DGIMN === 'dtgrjx103' || extData.DGIMN === 'lywjfd03') {
+                                        return (
+                                            <img className={styles.shine_red} src="../../../gisoperation.png" />
+                                        );
+                                    } else {
+                                        return (
+                                            <img src="../../../gisnormal.png" />
+                                        );
+                                    }
+                                } else if (this.state.special === 'sewage') {
+
+                                } else {
+                                    if (extData.DGIMN === 'bjldgn01' || extData.DGIMN === 'dtgjhh11102' || extData.DGIMN === 'dtgrjx110'
+                                    || extData.DGIMN === 'dtgrjx103' || extData.DGIMN === 'lywjfd03') {
+                                        return (
+                                            <img className={styles.shine_red} src="../../../gisquality.png" />
+                                        );
+                                    } else {
+                                        return (
+                                            <img src="../../../gisnormal.png" />
+                                        );
+                                    }
+                                }
                             }} />)}
 
                     {this.state.entslist.map(item => {
-                        let coordinateSet;
-                        let cgcoordinateSet = [];
-                        if (item.CoordinateSet.length > 0) {
-                            coordinateSet = eval(item.CoordinateSet);
-                            coordinateSet.map(coo => {
-                                cgcoordinateSet.push(coo[0]);
-                            });
+                        const allcoo = eval(item.CoordinateSet);
+                        for (let i = 0; i < allcoo.length; i++) {
+                            return (
+                                <Polygon
+                                    style={{
+                                        strokeColor: '#FF33FF',
+                                        strokeOpacity: 0.2,
+                                        strokeWeight: 3,
+                                        fillColor: '#1791fc',
+                                        fillOpacity: 0.35,
+                                    }}
+                                    path={allcoo[i][0]}
+                                />);
                         }
-                        return (
-                            <Polygon
-                                style={{strokeColor: 'red',
-                                }}
-                                path={cgcoordinateSet}
-                            />);
                     })}
                     <InfoWindow
                         autoMove={true}
                         showShadow={true}
+                        className={`${styles.shine_red}`}
                         position={this.state.position}
+                        isCustom={true}
                         visible={this.state.visible}
                         size={{
                             width: 320,
@@ -290,24 +344,38 @@ class OverViewMap extends PureComponent {
                                     onClick={this.stationclick}>进入站房</Button>
                                 <Button>紧急派单</Button>
                             </div>
-                            {special === 'monitor' ? <MonitorTips region={this.state.region} stationclick={this.stationclick}
+                            {special === 'monitor' ? <MonitorTips selectpoint={this.state.selectpoint} region={this.state.region} stationclick={this.stationclick}
                                 industry={this.state.industry} control={this.state.control} /> : (special === 'operation' ? <OperationTips />
                                 : (special === 'sewage' ? <SewageTips /> : <QualityControlTips />))}
                         </div>
                     </InfoWindow>
-
-                    {/* <div style={{ position: 'absolute',
+                    <div style={{ position: 'absolute',
                         bottom: 10,
                         left: 380,
                         background: '#fff'}} className={styles.legend_div}>
-                        <ul>
-                            <li> 正常</li>
-                            <li> 超标</li>
-                            <li> 离线</li>
-                            <li> 异常</li>
+                        {special === 'monitor' ? <ul>
+                            <li><img src="../../../gisnormal.png" /> 正常</li>
+                            <li><img src="../../../gisover.png" /> 超标</li>
+                            <li><img src="../../../gisunline.png" /> 离线</li>
+                            <li><img src="../../../gisexception.png" /> 异常</li>
+                        </ul> : special === 'operation' ? <ul>
+                            <li><img src="../../../gisnormal.png" /> 正常</li>
+                            <li><img src="../../../gisoperation.png" /> 运维</li>
+                            <li><img src="../../../gisoverdue.png" /> 逾期</li>
+                            <li><img src="../../../gisfault.png" /> 故障</li>
+                            <li><img src="../../../gisexception.png" /> 停产</li>
+                        </ul> : special === 'sewage' ? <ul>
+                            <li><img src="../../../gisnormal.png" /> 正常</li>
+                            <li><img src="../../../gisoperation.png" /> 运维</li>
+                            <li><img src="../../../gisoverdue.png" /> 逾期</li>
+                            <li><img src="../../../gisfault.png" /> 故障</li>
+                            <li><img src="../../../gisexception.png" /> 停产</li>
+                        </ul> : <ul>
+                            <li><img src="../../../gisnormal.png" /> 正常</li>
+                            <li><img src="../../../gisquality.png" /> 质控</li>
                         </ul>
-
-                    </div> */}
+                        }
+                    </div>
                 </Map>
             </div>
         );

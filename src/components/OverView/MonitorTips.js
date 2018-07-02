@@ -39,8 +39,7 @@ class MonitorTips extends Component {
                         notMerge={true}
                         lazyUpdate={true} />
                 </div>
-                <div style={{marginTop: '10px', marginLeft: '10px'}}><span style={{cursor: 'pointer'}}>查看工作情况</span><span onClick={this.props.stationclick} style={{ marginLeft: '80px', cursor: 'pointer'}}>查看更多>></span></div>
-
+                <div style={{marginTop: '10px', marginLeft: '10px'}}><span style={{cursor: 'pointer'}}>查看工作情况</span><span onClick={this.props.stationclick} style={{ marginLeft: '80px', cursor: 'pointer' }}>查看更多>></span></div>
             </div>
         );
     }

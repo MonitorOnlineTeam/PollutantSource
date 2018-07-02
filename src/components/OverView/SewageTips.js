@@ -24,6 +24,7 @@ class SewageTips extends Component {
                     <div className={styles.clearboth} />
                 </div>
                 <div className={styles.titleborder}>
+                    <h4 className={styles.pointInfo}>排量占比</h4>
                     <ReactEcharts
                         style={{width: '95%', height: '100px'}}
                         option={markerspoint.sewagepieoption}

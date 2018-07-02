@@ -314,7 +314,7 @@ export function getAllConcentration(obj) {
         });
         returnDatas.push(pointData);
     });
-    // console.log(returnDatas);
+    console.log(returnDatas);
     return returnDatas;
 }
 // *********************************获取浓度数据*********************************
