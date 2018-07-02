@@ -93,6 +93,10 @@ export const getRouterData = (app) => {
             component: dynamicWrapper(app, ['points'], () =>
           import('../routes/PointDetail')),
         },
+        '/monitor/emergency/emergencydetailinfo/:exceptionhandleid': {
+            component: dynamicWrapper(app, ['points'], () =>
+          import('../routes/EmergencyTodoList/EmergencyDetailInfo')),
+        },
         '/monitor/pointdetail/:pointcode/processflowdiagram': {
             component: dynamicWrapper(app, ['points'], () =>
           import('../routes/PointDetail/ProcessFlowDiagram')),
