@@ -93,6 +93,10 @@ export const getRouterData = (app) => {
             component: dynamicWrapper(app, ['points'], () =>
           import('../routes/OverView/statusList')),
         },
+        '/monitor/stationbuilding/:pointcode': {
+            component: dynamicWrapper(app, ['points'], () =>
+          import('../components/OverView/StationBuilding')),
+        },
         '/monitor/pointdetail/:pointcode': {
             component: dynamicWrapper(app, ['points'], () =>
           import('../routes/PointDetail')),
