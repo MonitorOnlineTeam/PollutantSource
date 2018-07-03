@@ -87,6 +87,7 @@
   .ant-card-extra{
        text-align: left; 
   }
+
 }
 
 .legendtext{
@@ -95,22 +96,21 @@
 }
 
 
-img{cursor:pointer;-webkit-animation: scaleout 1.3s infinite ease-in-out;animation: scaleout 1.3s infinite ease-in-out;}
-@-webkit-keyframes scaleout {
-    0% { -webkit-transform: scale(1.0) }
-    100% {
-        -webkit-transform: scale(1.1);
-        opacity: 0;
-    }
-}
-@keyframes scaleout {
-    0% {
-        transform: scale(1.0);
-        -webkit-transform: scale(1.0);
-    } 100% {
-          transform: scale(1.1);
-          -webkit-transform: scale(1.1);
-          opacity: 0;
-      }
-}
-
+@-webkit-keyframes  shineRed {  
+  from { -webkit-box-shadow: 0 0 5px #bbb; }  
+  50% { -webkit-box-shadow: 0 0 50px red; }  
+  to { -webkit-box-shadow: 0 0 10px #bbb; }  
+  }  
+  .shine_red{  
+  -webkit-animation-name: shineRed;   
+  -webkit-animation-duration: 2s;  
+  -webkit-animation-iteration-count: infinite;   
+  }  
+  .inforWindows
+  {
+    background: #fff;
+    border: 1px solid #ccc;
+    padding: 10px 18px 10px 10px;
+    line-height: 1.4;
+    overflow: auto;
+  }
