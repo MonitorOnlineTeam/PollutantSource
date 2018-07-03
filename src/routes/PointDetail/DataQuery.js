@@ -208,7 +208,10 @@ class DataQuery extends Component {
                     //     </Popover>);
                     return (
                         <PopoverViewData_>
-                            <a style={{color: color, cursor: 'pointer'}} datatype={this.state.searchData.dataType}>{row.Concentration}</a>
+                            <a style={{color: color, cursor: 'pointer'}}
+                                datatype={this.state.searchData.dataType}
+                                
+                            >{row.Concentration}</a>
                         </PopoverViewData_>
                     );
                 },

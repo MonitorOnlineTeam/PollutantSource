@@ -82,7 +82,7 @@ class OverViewMap extends PureComponent {
             special: 'monitor',
             longitude: 100.300317,
             latitude: 39.01278,
-            tipheight: 480,
+            tipheight: 490,
             coordinateSet: [],
             pointslist: pointInfo,
             entslist: entInfo,
@@ -92,7 +92,7 @@ class OverViewMap extends PureComponent {
         };
         this.specialChange = (value) => {
             let special = 'monitor';
-            let tipheight = 480;
+            let tipheight = 490;
             if (value.target.value === 'a') {
                 special = 'monitor';
                 tipheight = 470;
@@ -229,27 +229,77 @@ class OverViewMap extends PureComponent {
                     {!this.state.pointvisible ? <Markers markers={this.state.entslist}
                         offset={[-110, -50]} events={this.entslistEvents}
                         render={(extData) => {
-                            if (extData.EntCode === 'bjldgn') {
-                                  
+                            if (extData.EntCode === 'bjldgn' || extData.EntCode === 'dtgrjx001' || extData.EntCode === 'dtgjhh11'
+                            || extData.EntCode === 'lywjfd') {
+                                return (
+                                    <div className={`${styles.tag} ${styles.shine_red}`}
+                                    >
+                                        <div className={styles.arrow}>
+                                            <em /><span />
+                                        </div>
+                                        <Icon type="home" style={{ fontSize: 16, color: '#08c', paddingTop: '4px', color: 'gray' }} />
+                                        {extData.Abbreviation}
+                                        <span className={styles.arrowspan}>({extData.count})</span>
+                                    </div>
+                                );
+                            } else {
+                                return (
+                                    <div className={`${styles.tag}`}
+                                    >
+                                        <div className={styles.arrow}>
+                                            <em /><span />
+                                        </div>
+                                        <Icon type="home" style={{ fontSize: 16, color: '#08c', paddingTop: '4px', color: 'gray' }} />
+                                        {extData.Abbreviation}
+                                        <span className={styles.arrowspan}>({extData.count})</span>
+                                    </div>
+                                );
                             }
-                            return (<div className={styles.tag}>
-                                <div className={styles.arrow}>
-                                    <em /><span />
-                                </div>
-                                <Icon type="home" style={{ fontSize: 16, color: '#08c', paddingTop: '4px', color: 'gray' }} />
-                                {extData.Abbreviation}
-                                <span className={styles.arrowspan}>({extData.count})</span>
-                            </div>
-                            );
                         }} />
                         : (<Markers markers={this.state.pointslist} events={this.markersEvents}
                             render={(extData) => {
-                                return (<div style={{ background: `url('../../../gisnormal.png')`,
-                                    backgroundRepeat: 'no-repeat',
-                                    width: '30px',
-                                    height: '30px'
-                                }}
-                                />);
+                                if (this.state.special === 'monitor') {
+                                    if (extData.DGIMN === 'bjldgn01' || extData.DGIMN === 'dtgjhh11102' || extData.DGIMN === 'dtgrjx110') {
+                                        return (
+                                            <img className={styles.shine_red} src="../../../gisover.png" />
+                                        );
+                                    } else if (extData.DGIMN === 'dtgrjx103' || extData.DGIMN === 'lywjfd03') {
+                                        return (
+                                            <img className={styles.shine_red} src="../../../gisexception.png" />
+                                        );
+                                    } else {
+                                        return (
+                                            <img src="../../../gisnormal.png" />
+                                        );
+                                    }
+                                } else if (this.state.special === 'operation') {
+                                    if (extData.DGIMN === 'bjldgn01' || extData.DGIMN === 'dtgjhh11102' || extData.DGIMN === 'dtgrjx110') {
+                                        return (
+                                            <img className={styles.shine_red} src="../../../gisexception.png" />
+                                        );
+                                    } else if (extData.DGIMN === 'dtgrjx103' || extData.DGIMN === 'lywjfd03') {
+                                        return (
+                                            <img className={styles.shine_red} src="../../../gisoperation.png" />
+                                        );
+                                    } else {
+                                        return (
+                                            <img src="../../../gisnormal.png" />
+                                        );
+                                    }
+                                } else if (this.state.special === 'sewage') {
+
+                                } else {
+                                    if (extData.DGIMN === 'bjldgn01' || extData.DGIMN === 'dtgjhh11102' || extData.DGIMN === 'dtgrjx110'
+                                    || extData.DGIMN === 'dtgrjx103' || extData.DGIMN === 'lywjfd03') {
+                                        return (
+                                            <img className={styles.shine_red} src="../../../gisquality.png" />
+                                        );
+                                    } else {
+                                        return (
+                                            <img src="../../../gisnormal.png" />
+                                        );
+                                    }
+                                }
                             }} />)}
 
                     {this.state.entslist.map(item => {
@@ -271,7 +321,9 @@ class OverViewMap extends PureComponent {
                     <InfoWindow
                         autoMove={true}
                         showShadow={true}
+                        className={`${styles.shine_red}`}
                         position={this.state.position}
+                        isCustom={true}
                         visible={this.state.visible}
                         size={{
                             width: 320,
@@ -292,7 +344,7 @@ class OverViewMap extends PureComponent {
                                     onClick={this.stationclick}>进入站房</Button>
                                 <Button>紧急派单</Button>
                             </div>
-                            {special === 'monitor' ? <MonitorTips region={this.state.region} stationclick={this.stationclick}
+                            {special === 'monitor' ? <MonitorTips selectpoint={this.state.selectpoint} region={this.state.region} stationclick={this.stationclick}
                                 industry={this.state.industry} control={this.state.control} /> : (special === 'operation' ? <OperationTips />
                                 : (special === 'sewage' ? <SewageTips /> : <QualityControlTips />))}
                         </div>
