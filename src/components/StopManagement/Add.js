@@ -155,7 +155,7 @@ export default class Add extends Component {
                             <FormItem
                                 labelCol={{ span: 4 }}
                                 wrapperCol={{ span: 16 }}
-                                label="资料">
+                                label="档案">
                                 {getFieldDecorator('attention')(
                                     <Upload {...props}>
                                         <Button>
