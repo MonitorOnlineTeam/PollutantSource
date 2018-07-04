@@ -5,9 +5,11 @@ import {Map, Markers, Polygon, InfoWindow} from 'react-amap';
 import {
     Spin,
     Button,
-    Icon
+    Icon,
+    Tag,
+    Modal
 } from 'antd';
-
+import markerspoint from '../../mockdata/OverView/markersInfo.json';
 import AListRadio from '../../components/OverView/AListRadio';
 import {routerRedux} from 'dva/router';
 import MonitorTips from '../../components/OverView/MonitorTips';
@@ -18,6 +20,7 @@ import QualityControlTips from '../../components/OverView/QualityControlTips';
 import config from '../../config';
 import styles from './index.less';
 import { getPointEnterprise, getEnterprise } from '../../mockdata/Base/commonbase';
+import MapLegend from '../../components/OverView/MapLegend';
 
 const {amapKey} = config;
 const plugins = [
@@ -56,6 +59,8 @@ pointInfo.map(item => {
 
     item.key = item.DGIMN;
 });
+const defaultlegend = markerspoint.maplegend[0].monitor;
+
 @connect(({loading, points, global}) => ({
     ...loading,
     pointlist: points.pointlist,
@@ -65,6 +70,7 @@ pointInfo.map(item => {
     selectpoint: points.selectpoint,
     pollutant: points.pollutant,
     markers: []
+
 }))
 
 class OverViewMap extends PureComponent {
@@ -88,25 +94,43 @@ class OverViewMap extends PureComponent {
             entslist: entInfo,
             pointvisible: false,
             entvisible: true,
-            selectpoint: {}
+            selectpoint: {},
+            legend: defaultlegend,
+            modalvisible: false
         };
         this.specialChange = (value) => {
             let special = 'monitor';
+            let legend = [];
             let tipheight = 490;
             if (value.target.value === 'a') {
                 special = 'monitor';
                 tipheight = 470;
+                legend = markerspoint.maplegend[0].monitor;
             } else if (value.target.value === 'b') {
                 special = 'operation';
                 tipheight = 430;
+                legend = markerspoint.maplegend[0].operation;
             } else if (value.target.value === 'c') {
                 special = 'sewage';
                 tipheight = 460;
+                legend = markerspoint.maplegend[0].sewage;
             } else if (value.target.value === 'd') {
                 special = 'quality';
                 tipheight = 303;
+                legend = markerspoint.maplegend[0].quality;
             }
-            _this.setState({special: special, tipheight: tipheight});
+            let list = [];
+            let pointlist = [];
+            entInfo.map(item => {
+                item.special = special;
+                list.push(item);
+            });
+            pointInfo.map(item => {
+                item.special = special;
+                pointlist.push(item);
+            });
+
+            _this.setState({legend: legend, special: special, tipheight: tipheight, entslist: list, pointslist: pointlist});
         };
         this.treeCilck = (row) => {
             _this.setState({
@@ -124,6 +148,7 @@ class OverViewMap extends PureComponent {
                 latitude: row.position.latitude,
                 selectpoint: row
             });
+            _this.statusChange(row.DGIMN);
             _thismap.setZoomAndCenter(17, [row.position.longitude, row.position.latitude]);
             this.firsttreeClick(row);
         };
@@ -134,8 +159,15 @@ class OverViewMap extends PureComponent {
             _thismap.setZoomAndCenter(17, [row.position.longitude, row.position.latitude]);
         };
 
-        this.stationclick = () => {
+        this.stationClick = () => {
             this.props.dispatch(routerRedux.push('/monitor/pointdetail/' + this.state.selectpoint.DGIMN));
+        };
+        this.StationBuildingClick = () => {
+            _this.setState({modalvisible: true});
+            // this.props.dispatch(routerRedux.push('/monitor/stationbuilding/' + this.state.selectpoint.DGIMN));
+        };
+        this.closeModal = () => {
+            _this.setState({modalvisible: false});
         };
         this.TreeSearch = (value) => {
             let markerInfo = [];
@@ -170,6 +202,7 @@ class OverViewMap extends PureComponent {
                     coordinateSet: itemdata.CoordinateSet,
                     selectpoint: itemdata
                 });
+                _this.statusChange(itemdata.DGIMN);
             }
         };
         this.entslistEvents = {
@@ -179,6 +212,19 @@ class OverViewMap extends PureComponent {
             click: (MapsOption, marker) => {
                 const itemdata = marker.F.extData;
                 _thismap.setZoomAndCenter(17, [itemdata.Longitude, itemdata.Latitude]);
+            }
+        };
+
+        this.statusChange = (mn) => {
+            if (mn === 'bjldgn01' || mn === 'dtgjhh11102' || mn === 'dtgrjx110'
+            || mn === 'dtgrjx103' || mn === 'lywjfd03') {
+                _this.setState({
+                    alarmstatus: styles.shine_red
+                });
+            } else {
+                _this.setState({
+                    alarmstatus: ''
+                });
             }
         };
         let _thismap;
@@ -205,9 +251,12 @@ class OverViewMap extends PureComponent {
                 _this.setState({visible: false});
             }
         };
+        this.infoWinClose = () => {
+            _this.setState({visible: false});
+        };
     }
     render() {
-        const special = this.state.special;
+        let special = this.state.special;
         return (
             <div
                 style={{
@@ -229,43 +278,84 @@ class OverViewMap extends PureComponent {
                     {!this.state.pointvisible ? <Markers markers={this.state.entslist}
                         offset={[-110, -50]} events={this.entslistEvents}
                         render={(extData) => {
+                            let normalstatus = 10;
+                            let overstatus = 0;
+                            let exceptionstatus = 0;
+                            let gzstatus = 0;
+                            let tcstatus = 0;
+                            let zkstatus = 0;
+                            if (extData.EntCode === 'dtgrjx001') {
+                                normalstatus = 8;
+                                overstatus = 1;
+                                exceptionstatus = 1;
+                                tcstatus = 1;
+                                gzstatus = 1;
+                                zkstatus = 2;
+                            }
+                            if (extData.EntCode === 'bjldgn') {
+                                normalstatus = 9;
+                                overstatus = 1;
+                                tcstatus = 1;
+                                zkstatus = 1;
+                            }
+                            if (extData.EntCode === 'dtgjhh11') {
+                                normalstatus = 9;
+                                overstatus = 1;
+                                tcstatus = 1;
+                                zkstatus = 1;
+                            }
+                            if (extData.EntCode === 'lywjfd') {
+                                normalstatus = 9;
+                                exceptionstatus = 1;
+                                gzstatus = 1;
+                                zkstatus = 1;
+                            }
+                            let shine = '';
                             if (extData.EntCode === 'bjldgn' || extData.EntCode === 'dtgrjx001' || extData.EntCode === 'dtgjhh11'
                             || extData.EntCode === 'lywjfd') {
-                                return (
-                                    <div className={`${styles.tag} ${styles.shine_red}`}
-                                    >
-                                        <div className={styles.arrow}>
-                                            <em /><span />
-                                        </div>
-                                        <Icon type="home" style={{ fontSize: 16, color: '#08c', paddingTop: '4px', color: 'gray' }} />
-                                        {extData.Abbreviation}
-                                        <span className={styles.arrowspan}>({extData.count})</span>
-                                    </div>
-                                );
-                            } else {
-                                return (
-                                    <div className={`${styles.tag}`}
-                                    >
-                                        <div className={styles.arrow}>
-                                            <em /><span />
-                                        </div>
-                                        <Icon type="home" style={{ fontSize: 16, color: '#08c', paddingTop: '4px', color: 'gray' }} />
-                                        {extData.Abbreviation}
-                                        <span className={styles.arrowspan}>({extData.count})</span>
-                                    </div>
-                                );
+                                shine = styles.shine_red;
                             }
+                            return (<div className={`${styles.tag} ${shine}`}
+                            >
+                                <div className={styles.arrow}>
+                                    <em /><span />
+                                </div>
+                                <div style={{height: '30px', borderBottom: '1px solid #CDC9C9', paddingRight: '25px'}}>
+                                    <Icon type="home" style={{ fontSize: 16, color: '#08c', paddingTop: '4px', paddingRight: '4px', color: 'gray' }} />
+                                    <span style={{fontSize: '14px', lineHeight: '30px'}}>{extData.Abbreviation}({extData.count})</span>
+                                </div>
+                                {special === 'monitor' ? <div style={{paddingTop: '5px', paddingLeft: '5px'}}>
+                                    <Tag className={styles.enttag} color="#79C403">{normalstatus}</Tag>
+                                    <Tag className={styles.enttag} color="#F40000">{overstatus}</Tag>
+                                    <Tag className={styles.enttag} color="#A8A6A5">0</Tag>
+                                    <Tag className={styles.enttag} color="#FADE00">{exceptionstatus}</Tag>
+                                </div> : special === 'operation' ? <div style={{paddingTop: '5px', paddingLeft: '5px'}}>
+                                    <Tag className={styles.enttag} color="#79C403">{normalstatus}</Tag>
+                                    <Tag className={styles.enttag} color="#F29C26">0</Tag>
+                                    <Tag className={styles.enttag} color="#970258">0</Tag>
+                                    <Tag className={styles.enttag} color="#F8AD00">{gzstatus}</Tag>
+                                    <Tag className={styles.enttag} color="#FADE00">{tcstatus}</Tag>
+                                </div> : special === 'sewage' ? <div style={{paddingTop: '5px', paddingLeft: '5px'}}>
+                                    <Tag className={styles.enttag} color="#79C403">{normalstatus}</Tag>
+                                    <Tag className={styles.enttag} color="#F40000">{overstatus}</Tag>
+                                    <Tag className={styles.enttag} color="#A8A6A5">0</Tag>
+                                    <Tag className={styles.enttag} color="#FADE00">{exceptionstatus}</Tag>
+                                </div> : <div style={{paddingTop: '5px', paddingLeft: '5px'}}>
+                                    <Tag className={styles.enttag} color="#79C403">{normalstatus}</Tag>
+                                    <Tag className={styles.enttag} color="#2E8A9F">{zkstatus}</Tag>
+                                </div>}
+                            </div>);
                         }} />
-                        : (<Markers markers={this.state.pointslist} events={this.markersEvents}
+                        : (<Markers markers={this.state.pointslist} className={this.state.special} events={this.markersEvents}
                             render={(extData) => {
                                 if (this.state.special === 'monitor') {
                                     if (extData.DGIMN === 'bjldgn01' || extData.DGIMN === 'dtgjhh11102' || extData.DGIMN === 'dtgrjx110') {
                                         return (
-                                            <img className={styles.shine_red} src="../../../gisover.png" />
+                                            <img className={styles.imgradius_shinered} src="../../../gisover.png" />
                                         );
                                     } else if (extData.DGIMN === 'dtgrjx103' || extData.DGIMN === 'lywjfd03') {
                                         return (
-                                            <img className={styles.shine_red} src="../../../gisexception.png" />
+                                            <img className={styles.imgradius_shinered} src="../../../gisexception.png" />
                                         );
                                     } else {
                                         return (
@@ -275,11 +365,11 @@ class OverViewMap extends PureComponent {
                                 } else if (this.state.special === 'operation') {
                                     if (extData.DGIMN === 'bjldgn01' || extData.DGIMN === 'dtgjhh11102' || extData.DGIMN === 'dtgrjx110') {
                                         return (
-                                            <img className={styles.shine_red} src="../../../gisexception.png" />
+                                            <img className={styles.imgradius_shinered} src="../../../gisexception.png" />
                                         );
                                     } else if (extData.DGIMN === 'dtgrjx103' || extData.DGIMN === 'lywjfd03') {
                                         return (
-                                            <img className={styles.shine_red} src="../../../gisoperation.png" />
+                                            <img className={styles.imgradius_shinered} src="../../../gisoperation.png" />
                                         );
                                     } else {
                                         return (
@@ -287,12 +377,24 @@ class OverViewMap extends PureComponent {
                                         );
                                     }
                                 } else if (this.state.special === 'sewage') {
-
+                                    if (extData.DGIMN === 'bjldgn01' || extData.DGIMN === 'dtgjhh11102' || extData.DGIMN === 'dtgrjx110') {
+                                        return (
+                                            <img className={styles.imgradius_shinered} src="../../../gisover.png" />
+                                        );
+                                    } else if (extData.DGIMN === 'dtgrjx103' || extData.DGIMN === 'lywjfd03') {
+                                        return (
+                                            <img className={styles.imgradius_shinered} src="../../../gisexception.png" />
+                                        );
+                                    } else {
+                                        return (
+                                            <img src="../../../gisnormal.png" />
+                                        );
+                                    }
                                 } else {
                                     if (extData.DGIMN === 'bjldgn01' || extData.DGIMN === 'dtgjhh11102' || extData.DGIMN === 'dtgrjx110'
                                     || extData.DGIMN === 'dtgrjx103' || extData.DGIMN === 'lywjfd03') {
                                         return (
-                                            <img className={styles.shine_red} src="../../../gisquality.png" />
+                                            <img className={styles.imgradius_shinered} src="../../../gisquality.png" />
                                         );
                                     } else {
                                         return (
@@ -321,7 +423,7 @@ class OverViewMap extends PureComponent {
                     <InfoWindow
                         autoMove={true}
                         showShadow={true}
-                        className={`${styles.shine_red}`}
+                        className={`${styles.inforWindows} ${this.state.alarmstatus}`}
                         position={this.state.position}
                         isCustom={true}
                         visible={this.state.visible}
@@ -335,44 +437,35 @@ class OverViewMap extends PureComponent {
                             this.infoWindowEvents
                         }>
                         <div>
-                            <h4 className={styles.titleborder}>{this.state.title}</h4>
+                            <h4 className={styles.titleborder}> <Icon onClick={this.infoWinClose} className={styles.closeIcon} type="close" style={{ fontSize: 16, color: '#08c' }} />{this.state.title} </h4>
                             <div className={styles.titlebutton}>
                                 <Button
                                     style={{
                                         marginRight: '10px'
                                     }}
-                                    onClick={this.stationclick}>进入站房</Button>
+                                    onClick={this.StationBuildingClick}>进入站房</Button>
                                 <Button>紧急派单</Button>
                             </div>
-                            {special === 'monitor' ? <MonitorTips selectpoint={this.state.selectpoint} region={this.state.region} stationclick={this.stationclick}
+                            {special === 'monitor' ? <MonitorTips selectpoint={this.state.selectpoint} region={this.state.region} stationclick={this.stationClick}
                                 industry={this.state.industry} control={this.state.control} /> : (special === 'operation' ? <OperationTips />
                                 : (special === 'sewage' ? <SewageTips /> : <QualityControlTips />))}
                         </div>
                     </InfoWindow>
-                    <div style={{position: 'absolute', bottom: 10, left: 380, background: '#fff'}} className={styles.legend_div}>
-                        {special === 'monitor' ? <ul>
-                            <li><img src="../../../gisnormal.png" /> 正常</li>
-                            <li><img src="../../../gisover.png" /> 超标</li>
-                            <li><img src="../../../gisunline.png" /> 离线</li>
-                            <li><img src="../../../gisexception.png" /> 异常</li>
-                        </ul> : special === 'operation' ? <ul>
-                            <li><img src="../../../gisnormal.png" /> 正常</li>
-                            <li><img src="../../../gisoperation.png" /> 运维</li>
-                            <li><img src="../../../gisoverdue.png" /> 逾期</li>
-                            <li><img src="../../../gisfault.png" /> 故障</li>
-                            <li><img src="../../../gisexception.png" /> 停产</li>
-                        </ul> : special === 'sewage' ? <ul>
-                            <li><img src="../../../gisnormal.png" /> 正常</li>
-                            <li><img src="../../../gisoperation.png" /> 运维</li>
-                            <li><img src="../../../gisoverdue.png" /> 逾期</li>
-                            <li><img src="../../../gisfault.png" /> 故障</li>
-                            <li><img src="../../../gisexception.png" /> 停产</li>
-                        </ul> : <ul>
-                            <li><img src="../../../gisnormal.png" /> 正常</li>
-                            <li><img src="../../../gisquality.png" /> 质控</li>
-                        </ul>
-                        }
-                    </div>
+                    <Modal
+                        title={`${this.state.selectpoint.EntName}-${this.state.selectpoint.PointName}`}
+                        visible={this.state.modalvisible}
+                        footer={null}
+                        onCancel={this.closeModal}
+                    >
+                        <p>Some contents...</p>
+                        <p>Some contents...</p>
+                        <p>Some contents...</p>
+                    </Modal>
+                    {/* 图例 */}
+                    <MapLegend style={{ position: 'absolute',
+                        bottom: 30,
+                        left: 380,
+                        background: '#fff'}} legend={this.state.legend} />
                 </Map>
             </div>
         );

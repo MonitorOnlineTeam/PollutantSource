@@ -182,6 +182,7 @@ export function getPollutantDatas() {
      concentration?:污染物 eg:['s1','01']
      interval?:时间间隔  eg: interval:30 //实时：秒/条  分钟：分钟/条
      point?:监测点 eg:['123','456']
+     sort:'desc'  // 默认降序  asc 按时间升序    desc  降序
  }
 */
 export function getAllConcentration(obj) {
@@ -189,6 +190,7 @@ export function getAllConcentration(obj) {
     let startTime = $this.startTime || moment().subtract(24, 'hours').format('YYYY-MM-DD HH:mm:ss');
     let endTime = $this.endTime || moment().format('YYYY-MM-DD HH:mm:ss');
     let dataType = $this.dataType || 'day';
+    let sort = $this.sort || 'desc';
     let returnDatas = [];
     let concentration = [];
     let point = [];
@@ -207,11 +209,11 @@ export function getAllConcentration(obj) {
         hour: 'YYYY-MM-DD HH:00:00',
         day: 'YYYY-MM-DD 00:00:00'
     };
-    // console.log(defaultPoint);
+    // console.log($this.point);
     if ($this.point && $this.point.length > 0) {
         $this.point.map((k) => {
             defaultPoint.map((m) => {
-                if (k.DGIMN === m.DGIMN) {
+                if (k === m.DGIMN) {
                     point.push(m);
                 }
             });
@@ -283,38 +285,70 @@ export function getAllConcentration(obj) {
             }
             break;
     };
+
+    let sTime = dateForms.startTime;
+    let eTime = dateForms.endTime;
+    // console.log(dateForms);
+    // console.log(point);
     point.map((p) => {
         let pointData = p;
-        pointData.PollutantData = [];
-
-        concentration.map((item) => {
-            var data = {
-                'PollutantCode': item.Value,
-                'PollutantName': item.Name,
-                'Unit': item.Unit,
-                'Datas': []
-            };
-            let sTime = dateForms.startTime;
-            let eTime = dateForms.endTime;
-            while (sTime <= eTime) {
-                data.Datas.push({
-                    'Key': i++,
-                    'MonitoringTime': moment(eTime).format(dateForms.format),
-                    'Concentration': (Math.random() * (item.Max - item.Min + 1) + item.Min).toFixed(3),
-                    'Standard': item.Standard,
-                    'Overproof': '0.00',
-                    'Unit': item.Unit
-                });
-
-                eTime = moment(eTime).subtract(dateForms.value, dateForms.type).format(dateForms.format);
-                // console.log('sTime:', sTime);
-                // console.log('eTime:', eTime);
-            }
-            pointData.PollutantData.push(data);
-        });
+        pointData.MonitoringDatas = [];
+        let m = 1;
+        while (sTime <= eTime) {
+            let monitoringTime = {};
+            monitoringTime.id = m++;
+            monitoringTime.MonitoringTime = moment(eTime).format(dateForms.format);
+            monitoringTime.PollutantDatas = [];
+            concentration.map((item) => {
+                let PollutantData = {};
+                PollutantData.PollutantCode = item.Value;
+                PollutantData.PollutantName = item.Name;
+                PollutantData.Unit = item.Unit;
+                PollutantData.Concentration = (Math.random() * (item.Max - item.Min + 1) + item.Min).toFixed(3);
+                PollutantData.Standard = item.Standard;
+                monitoringTime.PollutantDatas.push(PollutantData);
+            });
+            eTime = moment(eTime).subtract(dateForms.value, dateForms.type).format(dateForms.format);
+            pointData.MonitoringDatas.push(monitoringTime);
+        };
+        if (sort === 'asc') {
+            pointData.MonitoringDatas = pointData.MonitoringDatas.reverse();
+        }
         returnDatas.push(pointData);
     });
-    console.log(returnDatas);
+
+    // point.map((p) => {
+    //     let pointData = p;
+    //     pointData.PollutantData = [];
+
+    //     concentration.map((item) => {
+    //         var data = {
+    //             'PollutantCode': item.Value,
+    //             'PollutantName': item.Name,
+    //             'Unit': item.Unit,
+    //             'Datas': []
+    //         };
+    //         let sTime = dateForms.startTime;
+    //         let eTime = dateForms.endTime;
+    //         while (sTime <= eTime) {
+    //             data.Datas.push({
+    //                 'Key': i++,
+    //                 'MonitoringTime': moment(eTime).format(dateForms.format),
+    //                 'Concentration': (Math.random() * (item.Max - item.Min + 1) + item.Min).toFixed(3),
+    //                 'Standard': item.Standard,
+    //                 'Overproof': '0.00',
+    //                 'Unit': item.Unit
+    //             });
+
+    //             eTime = moment(eTime).subtract(dateForms.value, dateForms.type).format(dateForms.format);
+    //             // console.log('sTime:', sTime);
+    //             // console.log('eTime:', eTime);
+    //         }
+    //         pointData.PollutantData.push(data);
+    //     });
+    //     returnDatas.push(pointData);
+    // });
+    // console.log(returnDatas);
     return returnDatas;
 }
 // *********************************获取浓度数据*********************************

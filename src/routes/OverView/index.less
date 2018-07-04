@@ -16,7 +16,7 @@
     padding-bottom: 5px;
  }
  .titlebutton{
-    padding-left: 55px;
+    padding-left: 30px;
     border-bottom: 1px solid #ddd;
     padding-bottom: 5px;
  }
@@ -43,51 +43,17 @@
     right:-20px;
  }
 
- .legend_div ul {
-  list-style: none;
-  width: 88px;
-  padding: 0;
- // height: 105px;
-}
- .legend_div ul li {
-  cursor: pointer;
-  width: 88px;
-  height: 28px;
-  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
-  padding: 5px 0 3px 12px;
-}
-
-.z_green {
-  background: #61bc00;
-}
-
-.z_red {
-  background: #e80606;
-}
-
-.z_grey {
-  background: #b1b1b1;
-}
-
-.z_yellow {
-  background: #AAC600;
-}
  
 
-.tag{ width:200px; height:30px; border:1px solid #ddd;
+.tag{ width:200px; height:64px; border:1px solid #ddd;
    position:relative; background-color:#FFF;border-radius:4px;
-  padding: 3px 0 0 10px; box-shadow: 10px 10px 5px #888888;
+  padding: 0 0 0 10px; box-shadow: 10px 10px 5px #888888;
    }
 .arrow{ position:absolute; width:40px; height:40px; bottom:-40px; left:100px; }
 .arrow *{ display:block; border-width:12px; position:absolute; 
   border-style:solid dashed dashed dashed; font-size:0; line-height:0; }
 .arrow em{border-color:#ddd transparent transparent;}
 .arrow span{border-color:#FFF transparent transparent; top:-7px;}
-.arrowspan{
-  float: right;
-  border-left: 1px solid gray;
-  padding:0 7px 0 7px;
-}
 :global{
   .ant-card-head-wrapper{
     display: -webkit-box;
@@ -114,11 +80,36 @@
   -webkit-animation-duration: 2s;  
   -webkit-animation-iteration-count: infinite;   
   }  
+
+  .imgradius_shinered{
+    border-radius: 150px;
+    -webkit-animation-name: shineRed;   
+    -webkit-animation-duration: 1s;  
+    -webkit-animation-iteration-count: infinite;   
+  }
   .inforWindows
   {
     background: #fff;
     border: 1px solid #ccc;
     padding: 10px 18px 10px 10px;
-    line-height: 1.4;
-    overflow: auto;
   }
+  .closeIcon{
+    position: absolute;
+    right: 5px;
+    top: 12px;
+    cursor: pointer;
+  }
+  .enttag{
+    height: 20px;
+    line-height: 20px;
+    width: 28px;
+    text-align: center;
+  }
+  .currentlegendBox {
+    border: 0;
+    width: 65px;
+    margin: 0;
+    height: 25px;
+    text-align: center;
+    color: white;
+}
