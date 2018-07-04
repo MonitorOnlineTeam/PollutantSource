@@ -188,7 +188,7 @@ class PopoverViewData_ extends Component {
             if (this.props.dataType === 'hour' || this.props.dataType === 'day') {
                 setData.divContent = (
                     <div>
-
+                        <Divider />
                         <p style={{fontSize: 12, cursor: 'pointer', color: '#575757'}} onClick={() => this._openModal(true, 1)}><Icon type="table" style={{ fontSize: 14, color: '#08c' }} /> 查看各参数数据</p>
                         <p style={{fontSize: 12, cursor: 'pointer', color: '#575757'}} onClick={() => this._openModal(true, 2)}><Icon type="laptop" style={{ fontSize: 14, color: '#08c' }} /> 查看仪器状态参数</p>
                     </div>
@@ -196,8 +196,20 @@ class PopoverViewData_ extends Component {
             } else {
                 setData.divContent = (
                     <div>
-                        <Divider style={{color: '#1890ff', fontWeight: 500, width: 200}}>状态</Divider>
-                        <p style={{fontSize: 12, cursor: 'pointer', color: '#575757'}} onClick={() => this._openModal(true, 2)}><Icon type="laptop" style={{ fontSize: 14, color: '#08c' }} /> 查看仪器状态参数</p>
+                        <ul style={{paddingLeft: 0}}>
+
+                            <li style={{borderBottom: '1px solid #e8e8e8', listStyle: 'none'}} />
+                            <li style={{listStyle: 'none'}}>
+                                <Icon type="laptop" style={{ fontSize: 14, color: '#08c' }} />
+                                <Divider type="vertical" />
+                                <a style={{fontSize: 12, cursor: 'pointer', color: '#575757'}} onClick={() => this._openModal(true, 2)}>查看仪器状态参数</a>
+                            </li>
+                            <li style={{listStyle: 'none'}}>
+                                <Icon type="table" style={{ fontSize: 14, color: '#08c' }} />
+                                <Divider type="vertical" />
+                                <a style={{fontSize: 12, cursor: 'pointer', color: '#575757'}} onClick={() => this._openModal(true, 1)}>查看各参数数据</a>
+                            </li>
+                        </ul>
                     </div>
                 );
             }
