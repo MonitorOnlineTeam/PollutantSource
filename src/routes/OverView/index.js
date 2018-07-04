@@ -349,10 +349,7 @@ class OverViewMap extends PureComponent {
                                 : (special === 'sewage' ? <SewageTips /> : <QualityControlTips />))}
                         </div>
                     </InfoWindow>
-                    <div style={{ position: 'absolute',
-                        bottom: 10,
-                        left: 380,
-                        background: '#fff'}} className={styles.legend_div}>
+                    <div style={{position: 'absolute', bottom: 10, left: 380, background: '#fff'}} className={styles.legend_div}>
                         {special === 'monitor' ? <ul>
                             <li><img src="../../../gisnormal.png" /> 正常</li>
                             <li><img src="../../../gisover.png" /> 超标</li>
