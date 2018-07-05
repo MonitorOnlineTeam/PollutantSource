@@ -1,10 +1,12 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
-import { Table, Radio, Icon, Card, Popover, Button, Input, Select } from 'antd';
+import { Table, Radio, Icon, Card, Popover, Row, Col, Input, Select, Affix, Avatar, Tag } from 'antd';
 import styles from './index.less';
-
+import moment from 'moment';
 import AListRadio from '../../components/OverView/AListRadio';
-import { getAllConcentration, defaultConcentration } from '../../mockdata/Base/commonbase';
+import { getAllConcentration, defaultPollutantCodes } from '../../mockdata/Base/commonbase';
+import EnterprisePointCascadeMultiSelect from '../../components/EnterprisePointCascadeMultiSelect/index';
+import PopoverViewData_ from '../../components/PointDetail/PopoverViewData_';
 import industryInfo from '../../mockdata/Base/Code/T_Cod_IndustryStandard.json';
 import controlInfo from '../../mockdata/Base/Code/T_Cod_AttentionDegree.json';
 
@@ -16,99 +18,32 @@ let content = (
         <p style={{cursor: 'pointer'}}><Icon type="laptop" style={{ fontSize: 14, color: '#08c' }} /> 查看更多</p>
     </div>
 );
-
-let columns = [{
-    title: '状态',
-    dataIndex: 'monitorTime',
-    key: 'monitorTime',
-    width: 130,
-    render: (value, record) => {
-        if (record.dgimn === 'bjldgn01') {
-            return (
-                <div>
-                    <div style={{fontSize: 8, marginBottom: '4px'}}>
-                        <img src="../../../gisexception.png" /><span className={styles.legendtext}>运</span></div>
-                </div>
-            );
-        } else if (record.dgimn === 'dtgjhh11102') {
-            return (
-                <div>
-                    <img src="../../../gisexception.png" />
-                    <img style={{width: '25px', height: '25px'}} src="../../../fault.png" />
-                    <img style={{width: '25px', height: '25px'}} src="../../../operation.png" />
-                </div>
-            );
-        } else {
-            return (
-                <img src="../../../gisnormal.png" />
-            );
-        }
-    }
-}, {
-    title: '名称',
-    dataIndex: 'entpointName',
-    key: 'entpointName',
-    width: 280,
-    render: (value) => {
-        return (<Popover placement="bottom" content={content}
-            trigger="click"><span style={{cursor: 'pointer'}}>{value}
-            </span></Popover>);
-    }
-}, {
-    title: '时间',
-    dataIndex: 'monitorTime',
-    key: 'monitorTime',
-    width: 200,
-}];
-defaultConcentration.map(item => {
-    let datacol = {
-        title: item.Name,
-        dataIndex: item.Name,
-        key: item.Name,
-        render: (value) => {
-            if (item.Standard > value) {
-                return (value);
-            } else {
-                const content = (
-                    <div>
-                        <p>标准值 : {item.Standard}</p>
-                        <p>超标倍数 : {((value - item.Standard) / item.Standard).toFixed(2)}</p>
-                        <p>状态参数 : 正常</p>
-                    </div>
-                );
-                return (<Popover content={content} trigger="hover">
-                    <span style={{color: 'red', cursor: 'pointer'}}>{value}</span>
-                </Popover>);
-            }
-        }
-    };
-    columns.push(datacol);
-});
-// columns.push({
-//     title: '操作',
-//     dataIndex: 'operation',
-//     key: 'operation',
-//     width: 200,
-//     fixed: 'left',
-//     render: (value) => {
-//         return (<Button>111</Button>);
-//     }
-// });
 const getAllData = (dataType) => {
     let datalist = [];
-    getAllConcentration(dataType).map(item => {
+    getAllConcentration({dataType: dataType}).map(item => {
         let data = {
-            entpointName: item.Abbreviation + '-' + item.PointName,
-            monitorTime: item.PollutantData[0].Datas[0].MonitoringTime,
+            key: item.DGIMN,
+            entpointName: item.EntName + '-' + item.PointName,
+            monitorTime: item.MonitoringDatas.length === 0 ? moment().format('YYYY-MM-DD HH:mm:ss') : item.MonitoringDatas[0].MonitoringTime,
             entName: item.EntName,
             pointName: item.PointName,
             industry: item.IndustryTypeCode,
             dgimn: item.DGIMN,
-            control: item.AttentionCode
+            control: item.AttentionCode,
+            dataType: dataType
         };
-        item.PollutantData.map(wry => {
-            data[wry.PollutantName] = wry.Datas[0].Concentration;
-        });
+        if (item.MonitoringDatas.length > 0) {
+            item.MonitoringDatas[0].PollutantDatas.map(wry => {
+                data[wry.PollutantCode] = wry.Concentration;
+                data['PollutantName'] = wry.PollutantName;
+                data['PollutantCode'] = wry.PollutantCode;
+                data['IsExceed'] = wry.IsExceed; // 是否超标
+                data['ExceedValue'] = wry.ExceedValue; // 超标倍数
+                data['IsException'] = wry.IsException; // 是否异常
+                data['ExceptionText'] = wry.ExceptionText; // 异常类型
+                data['Standard'] = wry.Standard; // 标准值
+            });
+        }
         datalist.push(data);
     });
     return datalist;
@@ -117,6 +52,110 @@ const getAllData = (dataType) => {
 class dataList extends PureComponent {
     constructor(props) {
         super(props);
+
+        let columns = [{
+            title: '状态',
+            dataIndex: 'status',
+            key: 'status',
+            width: 70,
+            fixed: 'left',
+            render: (value, record) => {
+                if (record.dgimn === 'bjldgn01') {
+                    return (
+                        <div>
+                            <img src="../../../gisover.png" />
+                        </div>
+                    );
+                } else if (record.dgimn === 'dtgjhh11102') {
+                    return (
+                        <div>
+                            <img src="../../../gisover.png" />
+                        </div>
+                    );
+                } else if (record.dgimn === 'dtgrjx110') {
+                    return (
+                        <div>
+                            <img src="../../../gisover.png" />
+                        </div>
+                    );
+                } else if (record.dgimn === 'dtgrjx103') {
+                    return (
+                        <div>
+                            <img src="../../../gisexception.png" />
+                        </div>
+                    );
+                } else if (record.dgimn === 'lywjfd03') {
+                    return (
+                        <div>
+                            <img src="../../../gisexception.png" />
+                        </div>
+                    );
+                } else {
+                    return (
+                        <img src="../../../gisnormal.png" />
+                    );
+                }
+            }
+        }, {
+            title: '名称',
+            dataIndex: 'entpointName',
+            key: 'entpointName',
+            width: 300,
+            fixed: 'left',
+            sorter: (a, b) => a.entpointName.length - b.entpointName.length,
+            render: (value, record) => {
+                let AvatarObj;
+                if (record.dgimn === 'bjldgn01') {
+                } else if (record.dgimn === 'dtgjhh11102') {
+                } else if (record.dgimn === 'dtgrjx110') {
+                    // AvatarObj = (<Avatar style={{ color: '#f56a00', backgroundColor: '#D1D1D1' }}>运</Avatar>);
+                    AvatarObj = (<Tag color="red">运维</Tag>);
+                } else if (record.dgimn === 'dtgrjx103') {
+                    // AvatarObj = (<Avatar style={{ color: '#1C1C1C', backgroundColor: '#D1D1D1' }}>故</Avatar>);
+                    AvatarObj = (<Tag color="red">故障</Tag>);
+                } else if (record.dgimn === 'lywjfd03') {
+                    // AvatarObj = (<Avatar style={{ color: '#1C1C1C', backgroundColor: '#D1D1D1' }}>停</Avatar>);
+                    AvatarObj = (<Tag color="red">停运</Tag>);
+                }
+                return (<div><div><Popover placement="bottom" content={content} trigger="click"><span style={{cursor: 'pointer'}}>{value}</span></Popover></div><div>{AvatarObj}</div></div>);
+            }
+        }, {
+            title: '时间',
+            dataIndex: 'monitorTime',
+            key: 'monitorTime',
+            width: 200,
+            fixed: 'left',
+            sorter: (a, b) => moment(a.monitorTime) - moment(b.monitorTime)
+        }];
+        defaultPollutantCodes.map(item => {
+            let datacol = {
+                title: item.Name,
+                dataIndex: item.Value,
+                key: item.Value,
+                width: 120,
+                render: (value, record) => {
+                    return (<div>
+                        <PopoverViewData_
+                            dataParam={{
+                                dataType: record.dataType,
+                                pollutantCode: record.PollutantCode,
+                                point: record.dgimn || [],
+                                rowTime: record.monitorTime,
+                                isExceed: record.IsExceed, // 是否超标
+                                exceedValue: record.ExceedValue, // 超标倍数
+                                isException: record.IsException, // 是否异常
+                                exceptionText: record.ExceptionText, // 异常类型
+                                standard: record.Standard, // 标准值
+                            }}
+                        >
+                            <span style={{cursor: 'pointer'}}>{value}</span><Avatar src="../../../red.png" />
+                        </PopoverViewData_>
+                    </div>);
+                }
+            };
+            columns.push(datacol);
+        });
+
         const _this = this;
         this.state = {
             columns: columns,
@@ -129,7 +168,7 @@ class dataList extends PureComponent {
             mn: '',
             industry: '',
             control: '',
-            loading: false
+            loading: true
         };
         this.Onchange = (value) => {
             _this.setState({ loading: true });
@@ -199,11 +238,18 @@ class dataList extends PureComponent {
             _this.setState({datalist: result});
         };
     }
+    componentDidMount() {
+        const that = this;
+        setTimeout(function() {
+            that.setState({
+                loading: false
+            });
+        }, 1000);
+    }
     render() {
         return (
             <div
-                style={{ width: '100%',
-                    height: 'calc(100vh - 120px)' }}
+                style={{ width: '100%', height: 'calc(100vh - 65px)' }}
                 className={styles.standardList}>
                 <Card
                     bordered={false}
@@ -215,33 +261,60 @@ class dataList extends PureComponent {
                     extra={
                         <div>
                             <div style={{ width: 'calc(100vw - 220px)' }}>
-                                <Radio.Group
-                                    defaultValue="realtime"
-                                    size="default"
-                                    onChange={this.Onchange}
-                                    style={{ marginLeft: 10 }}>
-                                    <Radio.Button value="realtime"> 实时 </Radio.Button>
-                                    <Radio.Button value="minute"> 分钟 </Radio.Button>
-                                    <Radio.Button value="hour"> 小时 </Radio.Button>
-                                    <Radio.Button value="day"> 日均 </Radio.Button>
-                                </Radio.Group>
-                                <AListRadio style={{float: 'right'}} dvalue="b" />
+                                <Row gutter={{ md: 8, lg: 8, xl: 8 }}>
+                                    <Col span={8} md={8} sm={8}>
+                                        <Affix offsetTop={10}>
+                                            <Radio.Group>
+                                                <Radio.Button value="normal"><img src="../../../gisnormal.png" /> 正常</Radio.Button>
+                                                <Radio.Button value="over"><img src="../../../gisover.png" /> 超标</Radio.Button>
+                                                <Radio.Button value="underline"><img src="../../../gisunline.png" /> 离线</Radio.Button>
+                                                <Radio.Button value="exception"><img src="../../../gisexception.png" /> 异常</Radio.Button>
+                                            </Radio.Group>
+                                        </Affix>
+                                    </Col>
+                                    <Col span={8} md={8} sm={8}>
+                                        <Radio.Group
+                                            defaultValue="realtime"
+                                            size="default"
+                                            onChange={this.Onchange}
+                                            style={{ marginLeft: 10, visibility: 'hidden', float: 'left' }}>
+                                            <Radio.Button value="realtime"> 实时 </Radio.Button>
+                                            <Radio.Button value="minute"> 分钟 </Radio.Button>
+                                            <Radio.Button value="hour"> 小时 </Radio.Button>
+                                            <Radio.Button value="day"> 日均 </Radio.Button>
+                                        </Radio.Group>
+                                    </Col>
+                                    <Col span={8} md={8} sm={8}>
+                                        <AListRadio style={{float: 'right'}} dvalue="b" />
+                                    </Col>
+                                </Row>
                             </div>
                             <div style={{paddingTop: '10px'}}>
-                                <Input onPressEnter={this.entSearch} placeholder="企业" style={{ width: 250, marginLeft: 10, marginRight: 10 }} />
-                                <Input onPressEnter={this.pointSearch} placeholder="站点" style={{ width: 250, marginLeft: 10, marginRight: 10 }} />
-                                <Input onPressEnter={this.MNSearch} placeholder="设备编号" style={{ width: 250, marginLeft: 10, marginRight: 10 }} />
-                                <Input onPressEnter={this.entSearch} placeholder="状态" style={{ width: 250, marginLeft: 10, marginRight: 10 }} />
-                                <Select placeholder="行业" style={{ width: 250, marginLeft: 10, marginRight: 10 }} onChange={this.industrySearch}>
-                                    { this.state.industryInfo.map(item => {
-                                        return (<Select.Option value={item.IndustryStandardCode}>{item.IndustryName}</Select.Option>);
-                                    })}
-                                </Select>
-                                <Select placeholder="控制级别" style={{ width: 250, marginLeft: 10, marginRight: 10 }} onChange={this.controlSearch}>
-                                    { this.state.controlInfo.map(item => {
-                                        return (<Select.Option value={item.AttentionCode}>{item.AttentionName}</Select.Option>);
-                                    })}
-                                </Select>
+                                <Row gutter={{ md: 8, lg: 8, xl: 8 }}>
+                                    <Col span={4} md={4} sm={4}>
+                                        <EnterprisePointCascadeMultiSelect width="250px" cascadeSize={2} />
+                                    </Col>
+                                    <Col span={4} md={4} sm={4}>
+                                        <Input onPressEnter={this.MNSearch} placeholder="设备编号" style={{ width: 250, marginLeft: 10, marginRight: 10 }} />
+                                    </Col>
+                                    <Col span={4} md={4} sm={4}>
+                                        <Input onPressEnter={this.entSearch} placeholder="状态" style={{ width: 250, marginLeft: 10, marginRight: 10 }} />
+                                    </Col>
+                                    <Col span={4} md={4} sm={4}>
+                                        <Select placeholder="行业" style={{ width: 250, marginLeft: 10, marginRight: 10 }} onChange={this.industrySearch}>
+                                            { this.state.industryInfo.map(item => {
+                                                return (<Select.Option key={item.IndustryStandardCode} value={item.IndustryStandardCode}>{item.IndustryName}</Select.Option>);
+                                            })}
+                                        </Select>
+                                    </Col>
+                                    <Col span={4} md={4} sm={4}>
+                                        <Select placeholder="控制级别" style={{ width: 250, marginLeft: 10, marginRight: 10 }} onChange={this.controlSearch}>
+                                            { this.state.controlInfo.map(item => {
+                                                return (<Select.Option key={item.AttentionCode} value={item.AttentionCode}>{item.AttentionName}</Select.Option>);
+                                            })}
+                                        </Select>
+                                    </Col>
+                                </Row>
                             </div>
                         </div>
                     }>
@@ -249,10 +322,16 @@ class dataList extends PureComponent {
                     <Table
                         loading={this.state.loading}
                         columns={this.state.columns}
-                        dataSource={this.state.datalist}
+                        dataSource={this.state.loading ? [] : this.state.datalist}
                         pagination={false}
                         onRow={record => ({
                         })}
+                        scroll={
+                            {
+                                x: 1950,
+                                y: 'calc(100vh - 260px)'
+                            }
+                        }
                     />
                 </Card >
             </div>

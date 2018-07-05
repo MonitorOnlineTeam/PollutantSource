@@ -24,12 +24,11 @@ class NavigationTree extends Component {
                     if (this.props.special === 'monitor') {
                         if (record.DGIMN === 'bjldgn01' || record.DGIMN === 'dtgjhh11102' || record.DGIMN === 'dtgrjx110') {
                             return (
-                                <img className={styles.shine_red} src="../../../gisover.png" />
-
+                                <img className={styles.imgradius_shinered} src="../../../gisover.png" />
                             );
                         } else if (record.DGIMN === 'dtgrjx103' || record.DGIMN === 'lywjfd03') {
                             return (
-                                <img className={styles.shine_red} src="../../../gisexception.png" />
+                                <img className={styles.imgradius_shinered} src="../../../gisexception.png" />
                             );
                         } else {
                             return (
@@ -39,11 +38,11 @@ class NavigationTree extends Component {
                     } else if (this.props.special === 'operation') {
                         if (record.DGIMN === 'bjldgn01' || record.DGIMN === 'dtgjhh11102' || record.DGIMN === 'dtgrjx110') {
                             return (
-                                <img className={styles.shine_red} src="../../../gisexception.png" />
+                                <img className={styles.imgradius_shinered} src="../../../gisexception.png" />
                             );
                         } else if (record.DGIMN === 'dtgrjx103' || record.DGIMN === 'lywjfd03') {
                             return (
-                                <img className={styles.shine_red} src="../../../gisoperation.png" />
+                                <img className={styles.imgradius_shinered} src="../../../gisoperation.png" />
                             );
                         } else {
                             return (
@@ -51,12 +50,24 @@ class NavigationTree extends Component {
                             );
                         }
                     } else if (this.props.special === 'sewage') {
-
+                        if (record.DGIMN === 'bjldgn01' || record.DGIMN === 'dtgjhh11102' || record.DGIMN === 'dtgrjx110') {
+                            return (
+                                <img className={styles.imgradius_shinered} src="../../../gisover.png" />
+                            );
+                        } else if (record.DGIMN === 'dtgrjx103' || record.DGIMN === 'lywjfd03') {
+                            return (
+                                <img className={styles.imgradius_shinered} src="../../../gisexception.png" />
+                            );
+                        } else {
+                            return (
+                                <img src="../../../gisnormal.png" />
+                            );
+                        }
                     } else {
                         if (record.DGIMN === 'bjldgn01' || record.DGIMN === 'dtgjhh11102' || record.DGIMN === 'dtgrjx110'
                         || record.DGIMN === 'dtgrjx103' || record.DGIMN === 'lywjfd03') {
                             return (
-                                <img className={styles.shine_red} src="../../../gisquality.png" />
+                                <img className={styles.imgradius_shinered} src="../../../gisquality.png" />
                             );
                         } else {
                             return (
@@ -116,10 +127,14 @@ class NavigationTree extends Component {
                         onClick: () => {
                             this.props.treeCilck(record);
                         }
-                    })} />
+                    })}
+                />
             </div>
         );
     }
 }
-
+// rowClassName={record => {
+//     return (record.DGIMN === 'bjldgn01' || record.DGIMN === 'dtgjhh11102' || record.DGIMN === 'dtgrjx110'
+//     || record.DGIMN === 'dtgrjx103' || record.DGIMN === 'lywjfd03') ? styles.shine_red : '';
+// }}
 export default NavigationTree;

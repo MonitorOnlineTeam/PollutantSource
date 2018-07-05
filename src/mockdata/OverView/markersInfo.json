@@ -197,6 +197,85 @@
                     }
                 }
             ]
+        },
+       "maplegend":[
+        {
+            "monitor":[
+                {
+                    "defaultValue":"正常",
+                    "bgcolor":"#79C403"
+                },
+                {
+                    "defaultValue":"超标",
+                    "bgcolor":"#F40000"
+                },
+                {
+                    "defaultValue":"离线",
+                    "bgcolor":"#A8A6A5"
+                },
+                {
+                    "defaultValue":"异常",
+                    "bgcolor":"#FADE00"
+                }
+            ],
+            "operation":[
+                {
+                    "defaultValue":"正常",
+                    "bgcolor":"#79C403"
+                },
+                {
+                    "defaultValue":"运维",
+                    "bgcolor":"#F29C26"
+                },
+                {
+                    "defaultValue":"逾期",
+                    "bgcolor":"#970258"
+                },
+                {
+                    "defaultValue":"故障",
+                    "bgcolor":"#F8AD00"
+                },
+                {
+                    "defaultValue":"停产",
+                    "bgcolor":"#FADE00"
+                }
+            ],
+            "sewage":[
+                {
+                    "defaultValue":"一级",
+                    "bgcolor":"#79C403"
+                },
+                {
+                    "defaultValue":"二级",
+                    "bgcolor":"#F40000"
+                },
+                {
+                    "defaultValue":"三级",
+                    "bgcolor":"#A8A6A5"
+                },
+                {
+                    "defaultValue":"四级",
+                    "bgcolor":"#FADE00"
+                }
+            ],
+            "quality":[
+                {
+                    "defaultValue":"正常",
+                    "bgcolor":"#79C403"
+                },
+                {
+                    "defaultValue":"质控",
+                    "bgcolor":"#F40000"
+                }
+            ]
         }
+    ]
     }
     
+  
+
+ 
+ 
+   
+ 
+ 

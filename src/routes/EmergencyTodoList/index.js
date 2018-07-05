@@ -1,59 +1,54 @@
 import React, { Component } from 'react';
 import PointList from '../../components/PointList/PointsList';
-import {Button, Table, DatePicker, Select, Modal} from 'antd';
+import {Button, Table, Select, Card, Form, Row, Col, Icon, message} from 'antd';
 import EmergencyDataList from '../../mockdata/EmergencyTodoList/EmergencyDataList.json';
-import styles from './index.less';
 import moment from 'moment';
-import { getTimeDistance } from '../../utils/utils';
-import EmergencyDetailInfo from './EmergencyDetailInfo';
+import { connect } from 'dva';
 import RangePicker_ from '../../components/PointDetail/RangePicker_';
+import PageHeaderLayout from '../../layouts/PageHeaderLayout';
+import styless from '../ReplacementPartAdd/index.less';
+import {routerRedux} from 'dva/router';
+const FormItem = Form.Item;
 
-const { RangePicker } = DatePicker;
-const Option = Select.Option;
-const currentDate=moment(getTimeDistance('today')).format('yyyy-MM-dd');
-
+  @Form.create()
+  @connect()
 export default class EmergencyTodoList extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            showdetailinfo: false,
-            showcheck: false,
-            selectedRowKeys: [],
-            EmergencyData: EmergencyDataList.EDataList,
-            RangeDate: [],
-            TargetStatus: '',
-            OpeartionPerson: ''
-        };
-    }
+      constructor(props) {
+          super(props);
+          this.state = {
+              EmergencyData: EmergencyDataList.EDataList.filter((item) => {
+                  return item.CheckState !== '审核通过';
+              }),
+              RangeDate: [moment().subtract(7, 'days'), moment()],
+              TargetStatus: '',
+              OpeartionPerson: '',
+              DGIMNS: [],
+              selectid: ''
+          };
+      }
 
     SearchEmergencyDataList = (value) => {
-        this.setState({ EmergencyData: [] });
+        this.setState({
+            EmergencyData: [],
+            DGIMNS: value
+        });
+
         let dataList = [];
-        EmergencyDataList.EDataList.map((item, key) => {
+        EmergencyDataList.EDataList.map((item, _key) => {
             let isexist = false;
-            if (value.indexOf(item.DGIMN) > -1) {
+            if (item.CheckState !== '审核通过' && value.indexOf(item.DGIMN) > -1) {
                 isexist = true;
             }
 
             if (isexist) { dataList.push(item); }
         });
-        this.setState({ EmergencyData: dataList });
+        this.setState({
+            EmergencyData: dataList,
+        });
     };
 
-    SeeDetailInfo = () => {
-        this.setState({
-            showdetailinfo: true
-        });
-    }
-
-      SeeCheckInfo = () => {
-          this.setState({
-              showcheck: true
-          });
-      }
-
       // 时间范围
-    _handleDateChange=(date, dateString) => {
+    _handleDateChange=(_date, dateString) => {
         this.state.RangeDate = dateString;
     };
 
@@ -71,84 +66,180 @@ export default class EmergencyTodoList extends Component {
         });
     };
 
+    toggleForm = () => {
+        this.setState({
+            expandForm: !this.state.expandForm,
+        });
+    };
+
     SearchInfo=() => {
-let rangeDate=this.state.RangeDate;
-let targetStatus=this.state.TargetStatus;
-let opeartionPerson=this.state.OpeartionPerson;
+
+    }
+
+    handleFormReset = () => {
+        const { form } = this.props;
+        form.resetFields();
+        this.setState({
+            formValues: {},
+        });
+    };
+
+    renderSimpleForm() {
+        const { getFieldDecorator } = this.props.form;
+        return (
+            <Form layout="inline">
+                <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
+                    <Col md={9} sm={24}>
+                        <FormItem label="开始时间">
+                            {getFieldDecorator(`MaterialName`)(
+                                <RangePicker_ dateValue={this.state.RangeDate} format="YYYY-MM-DD" onChange={this._handleDateChange} style={{ width: '100%' }} />
+                            )}
+                        </FormItem>
+                    </Col>
+                    <Col md={5} sm={24}>
+                        <FormItem label="任务状态">
+                            {getFieldDecorator('Brand')(
+                                <Select placeholder="请选择"
+                                    onChange={this._handleTargetChange} style={{ width: '100%' }}>
+                                    <Option value="">全部</Option>
+                                    <Option value="处理中">处理中</Option>
+                                    <Option value="未审核">未审核</Option>
+                                    <Option value="正在审核">正在审核</Option>
+                                    <Option value="未通过">未通过</Option>
+                                    <Option value="审核通过">审核通过</Option>
+                                </Select>
+                            )}
+                        </FormItem>
+                    </Col>
+                    <Col md={5} sm={24}>
+                        <FormItem label="处理人">
+                            {getFieldDecorator(`Specifications`)(
+                                <Select placeholder="请选择"
+                                    onChange={this._handleOperationChange}
+                                    style={{ width: '100%' }}>
+                                    <Option value="">全部</Option>
+                                    <Option value="小李">小李</Option>
+                                    <Option value="小王">小王</Option>
+                                </Select>
+                            ) }
+                        </FormItem>
+                    </Col>
+                    <Col md={5} sm={24}>
+                        <Button type="primary" htmlType="submit" onClick={this.SearchInfo}>
+                查询 </Button>
+                        <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>
+                重置
+                        </Button>
+                    </Col>
+                </Row>
+            </Form>
+        );
+    }
+
+    renderForm() {
+        return this.renderSimpleForm();
     }
 
     render() {
-        const { selectedRowKeys } = this.state;
         const SCREEN_HEIGHT = document.querySelector('body').offsetHeight;
         const SCREEN_WIDTH = document.querySelector('body').offsetWidth;
+        const thata = this;
+        const EColumn = [
+            {
+                title: '故障类型',
+                width: '15%',
+                dataIndex: 'ExceptionType',
+                align: 'center'
+            }, {
+                title: '处理人',
+                width: '15%',
+                dataIndex: 'User_Name',
+                align: 'center'
+            }, {
+                title: '开始时间',
+                width: '20%',
+                dataIndex: 'BeginHandleTime',
+                align: 'center'
+            }, {
+                title: '结束时间',
+                width: '20%',
+                dataIndex: 'EndHandleTime',
+                align: 'center'
+            }, {
+                title: '签到',
+                width: '20%',
+                dataIndex: 'SignFlag',
+                align: 'center'
+            }, {
+                title: '任务状态',
+                width: '10%',
+                dataIndex: 'CheckState',
+                align: 'center'
+            }
+        ];
+
+        const rowSelection = {
+            onChange: (selectedRowKeys, selectedRows) => {
+                let keys = [];
+                selectedRowKeys.map(t => {
+                    if (Array.isArray(t)) {
+                        t.map(a => {
+                            if (a !== '') { keys.push(a); }
+                        });
+                    } else {
+                        if (t !== '') { keys.push(t); }
+                    }
+                });
+            },
+            getCheckboxProps: record => ({
+                disabled: record.name === 'Disabled User', // Column configuration not to be checked
+                name: record.name,
+            }),
+            selectedRowKeys: [this.state.selectid]
+        };
+
         return (
             <PointList handleChange={this.SearchEmergencyDataList} IsShowChk={'none'}>
-                <div className={styles.codebox} style={{ width: '100%', height: 'calc(100vh - 80px)', backgroundColor: '#fff' }}>
-                    <div className={styles.operations} >
-                        <Button onClick={this.SeeDetailInfo}>查看详细</Button>
-                        <Button onClick={this.SeeCheckInfo}>审核记录</Button>
-                    </div>
-                    <div className={styles.searchCondition} >
-                       
-                        <RangePicker_ dateValue={this.state.RangeDate} format="YYYY-MM-DD" onChange={this._handleDateChange} />
-                        <Select style={{ width: 200, marginLeft: 10 }} placeholder="任务状态"
-                            onChange={this._handleTargetChange}>
-                            <Option value="0">全部</Option>
-                            <Option value="1">处理中</Option>
-                            <Option value="2">未审核</Option>
-                            <Option value="3">正在审核</Option>
-                            <Option value="4">未通过</Option>
-                            <Option value="5">审核通过</Option>
-                        </Select>
-                        <Select style={{ width: 200, marginLeft: 10 }} placeholder="处理人"
-                            onChange={this._handleOperationChange}>
-                            <Option value="0">全部</Option>
-                            <Option value="1">小李</Option>
-                            <Option value="2">小王</Option>
-                        </Select>
-                        <Button type="primary" icon="search" onClick={this.SearchInfo}>查询</Button>
-                    </div>
-                    <Table bodyStyle={{ height: 'calc(100vh - 260px)' }}
-                        columns={EmergencyDataList.EColumn}
-                        dataSource={this.state.EmergencyData}
-                        rowKey="ExceptionHandleId"
-                        bordered={true}
-                        onRow={(record) => {
-                            return {
-                                onClick: () => {} // 点击行
-                            };
-                        }}
-                    />
-                    <Modal
-                        visible={this.state.showdetailinfo}
-                        width={SCREEN_WIDTH - 40}
-                        style={{ top: 20 }}
-                        bodyStyle={{ padding: 5 }}
-                        onCancel={() => {
-                            this.setState({
-                                showdetailinfo: false
-                            });
-                        }}
-                        footer={null}
-                    >
-                        <EmergencyDetailInfo {...this.props} />}
-                    </Modal>
-                    <Modal
-                        visible={this.state.showcheck}
-                        width={SCREEN_WIDTH - 200}
-                        style={{ top: 20 }}
-                        bodyStyle={{ padding: 5 }}
-                        onCancel={() => {
-                            this.setState({
-                                showcheck: false
-                            });
-                        }}
-                        footer={null}
-                    >
-                        <EmergencyDetailInfo {...this.props} />}
-                    </Modal>
-                </div>
+                <PageHeaderLayout title="待办列表">
+                    <Card bordered={false} >
+                        <div>
+                            <div className={styless.tableListForm}>{this.renderForm()}</div>
+                            <Button style={{marginLeft: 10, marginBottom: 10}} onClick={() => {
+                                if (this.state.selectid === '') {
+                                    message.info('请选择应急任务！');
+                                } else {
+                                    this.props.dispatch(routerRedux.push(`/monitor/emergency/emergencydetailinfo/${this.state.selectid}`));
+                                }
+                            }}> 查看 </Button>
+                            <Table
+                                columns={EColumn}
+                                dataSource={this.state.EmergencyData}
+                                rowKey="ExceptionHandleId"
+                                pagination={{
+                                    showSizeChanger: true,
+                                    showQuickJumper: true,
+                                    'total': this.state.EmergencyData.length,
+                                    'pageSize': 20,
+                                    'current': 1
+                                }}
+                                rowSelection={rowSelection}
+                                scroll={
+                                    {
+                                        y: 'calc(100vh - 458px)'
+                                    }
+                                }
+                                onRow={(record, index) => {
+                                    return {
+                                        onClick: (a, b, c) => {
+                                            this.setState({selectid: record.ExceptionHandleId});
+                                        }, // 点击行
+                                        onMouseEnter: () => {}, // 鼠标移入行
+                                    };
+                                }}
+                            />
+                        </div></Card>
+                </PageHeaderLayout>
             </PointList>
         );
     }
-}
+  }
