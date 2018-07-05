@@ -255,11 +255,6 @@ class DataQuery extends Component {
                                 rowTime: row.MonitoringTime,
                                 sort: 'asc'
                             }}
-                            dataType={this.state.searchData.dataType}
-                            pollutantCode={this.state.searchData.pollutantCode}
-                            point={this.state.dgmin || []}
-                            rowTime={row.MonitoringTime}
-                            sort={'asc'}
                         >
                             <a style={{color: color, cursor: 'pointer'}}>{row.Concentration}</a>
                         </PopoverViewData_>
