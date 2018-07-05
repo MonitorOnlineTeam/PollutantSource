@@ -4,8 +4,9 @@ import { Table, Radio, Icon, Card, Popover, Row, Col, Input, Select, Affix, Avat
 import styles from './index.less';
 import moment from 'moment';
 import AListRadio from '../../components/OverView/AListRadio';
-import { getAllConcentration, defaultConcentration } from '../../mockdata/Base/commonbase';
+import { getAllConcentration, defaultPollutantCodes } from '../../mockdata/Base/commonbase';
 import EnterprisePointCascadeMultiSelect from '../../components/EnterprisePointCascadeMultiSelect/index';
+import PopoverViewData_ from '../../components/PointDetail/PopoverViewData_';
 import industryInfo from '../../mockdata/Base/Code/T_Cod_IndustryStandard.json';
 import controlInfo from '../../mockdata/Base/Code/T_Cod_AttentionDegree.json';
 
@@ -19,20 +20,30 @@ let content = (
 );
 const getAllData = (dataType) => {
     let datalist = [];
-    getAllConcentration(dataType).map(item => {
+    getAllConcentration({dataType: dataType}).map(item => {
         let data = {
             key: item.DGIMN,
-            entpointName: item.Abbreviation + '-' + item.PointName,
-            monitorTime: item.PollutantData[0].Datas[0].MonitoringTime,
+            entpointName: item.EntName + '-' + item.PointName,
+            monitorTime: item.MonitoringDatas.length === 0 ? moment().format('YYYY-MM-DD HH:mm:ss') : item.MonitoringDatas[0].MonitoringTime,
             entName: item.EntName,
             pointName: item.PointName,
             industry: item.IndustryTypeCode,
             dgimn: item.DGIMN,
-            control: item.AttentionCode
+            control: item.AttentionCode,
+            dataType: dataType
         };
-        item.PollutantData.map(wry => {
-            data[wry.PollutantName] = wry.Datas[0].Concentration;
-        });
+        if (item.MonitoringDatas.length > 0) {
+            item.MonitoringDatas[0].PollutantDatas.map(wry => {
+                data[wry.PollutantCode] = wry.Concentration;
+                data['PollutantName'] = wry.PollutantName;
+                data['PollutantCode'] = wry.PollutantCode;
+                data['IsExceed'] = wry.IsExceed; // 是否超标
+                data['ExceedValue'] = wry.ExceedValue; // 超标倍数
+                data['IsException'] = wry.IsException; // 是否异常
+                data['ExceptionText'] = wry.ExceptionText; // 异常类型
+                data['Standard'] = wry.Standard; // 标准值
+            });
+        }
         datalist.push(data);
     });
     return datalist;
@@ -89,7 +100,7 @@ class dataList extends PureComponent {
             title: '名称',
             dataIndex: 'entpointName',
             key: 'entpointName',
-            width: 280,
+            width: 300,
             fixed: 'left',
             sorter: (a, b) => a.entpointName.length - b.entpointName.length,
             render: (value, record) => {
@@ -116,32 +127,30 @@ class dataList extends PureComponent {
             fixed: 'left',
             sorter: (a, b) => moment(a.monitorTime) - moment(b.monitorTime)
         }];
-        defaultConcentration.map(item => {
+        defaultPollutantCodes.map(item => {
             let datacol = {
                 title: item.Name,
-                dataIndex: item.Name,
-                key: item.Name,
+                dataIndex: item.Value,
+                key: item.Value,
                 width: 120,
                 render: (value, record) => {
-                    if (item.Standard > value) {
-                        return (value);
-                    } else {
-                        if (record.dgimn === 'bjldgn01' || record.dgimn === 'dtgjhh11102' || record.dgimn === 'dtgrjx110' || record.dgimn === 'dtgrjx103' || record.dgimn === 'lywjfd03') {
-                            const content = (
-                                <div>
-                                    <p>标准值 : {item.Standard}</p>
-                                    <p>超标倍数 : {((value - item.Standard) / item.Standard).toFixed(2)}</p>
-                                    <p>状态参数 : 正常</p>
-                                </div>
-                            );
-                            return (<Popover content={content} trigger="hover">
-                                <Avatar src="../../../red.png" />
-                                <span style={{cursor: 'pointer'}}>{value}</span>
-                            </Popover>);
-                        } else {
-                            return (value);
-                        }
-                    }
+                    return (<div>
+                        <PopoverViewData_
+                            dataParam={{
+                                dataType: record.dataType,
+                                pollutantCode: record.PollutantCode,
+                                point: record.dgimn || [],
+                                rowTime: record.monitorTime,
+                                isExceed: record.IsExceed, // 是否超标
+                                exceedValue: record.ExceedValue, // 超标倍数
+                                isException: record.IsException, // 是否异常
+                                exceptionText: record.ExceptionText, // 异常类型
+                                standard: record.Standard, // 标准值
+                            }}
+                        >
+                            <span style={{cursor: 'pointer'}}>{value}</span><Avatar src="../../../red.png" />
+                        </PopoverViewData_>
+                    </div>);
                 }
             };
             columns.push(datacol);
@@ -256,10 +265,10 @@ class dataList extends PureComponent {
                                     <Col span={8} md={8} sm={8}>
                                         <Affix offsetTop={10}>
                                             <Radio.Group>
-                                                <Radio.Button value="large"><img src="../../../gisnormal.png" /> 正常</Radio.Button>
-                                                <Radio.Button value="default"><img src="../../../gisover.png" /> 超标</Radio.Button>
-                                                <Radio.Button value="small"><img src="../../../gisunline.png" /> 离线</Radio.Button>
-                                                <Radio.Button value="small"><img src="../../../gisexception.png" /> 异常</Radio.Button>
+                                                <Radio.Button value="normal"><img src="../../../gisnormal.png" /> 正常</Radio.Button>
+                                                <Radio.Button value="over"><img src="../../../gisover.png" /> 超标</Radio.Button>
+                                                <Radio.Button value="underline"><img src="../../../gisunline.png" /> 离线</Radio.Button>
+                                                <Radio.Button value="exception"><img src="../../../gisexception.png" /> 异常</Radio.Button>
                                             </Radio.Group>
                                         </Affix>
                                     </Col>
