@@ -86,7 +86,7 @@ export default class EnterprisePointCascadeMultiSelect extends Component {
         return this.state.initValue;
     }
     render() {
-        const {config, cascadeSize, disabled, readOnly, width, initValue} = this.props;
+        const {config, cascadeSize, disabled, readOnly, width} = this.props;
         const onItemClick = this.props.onItemClick ? this.props.onItemClick : this.state.onItemClick;
         return (
             <div style={{ margin: 0, width: width }}>
