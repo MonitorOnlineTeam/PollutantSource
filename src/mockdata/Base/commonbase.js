@@ -210,6 +210,7 @@ export function getAllConcentration(obj) {
         day: 'YYYY-MM-DD 00:00:00'
     };
     // console.log($this.point);
+    // point = defaultPoint;
     if ($this.point && $this.point.length > 0) {
         $this.point.map((k) => {
             defaultPoint.map((m) => {
@@ -286,14 +287,14 @@ export function getAllConcentration(obj) {
             break;
     };
 
-    let sTime = dateForms.startTime;
-    let eTime = dateForms.endTime;
     // console.log(dateForms);
     // console.log(point);
     point.map((p) => {
         let pointData = p;
         pointData.MonitoringDatas = [];
         let m = 1;
+        let sTime = dateForms.startTime;
+        let eTime = dateForms.endTime;
         while (sTime <= eTime) {
             let monitoringTime = {};
             monitoringTime.id = m++;
@@ -353,7 +354,7 @@ export function getAllConcentration(obj) {
     //     });
     //     returnDatas.push(pointData);
     // });
-    console.log(returnDatas);
+    // console.log(returnDatas);
     return returnDatas;
 }
 // *********************************获取浓度数据*********************************
