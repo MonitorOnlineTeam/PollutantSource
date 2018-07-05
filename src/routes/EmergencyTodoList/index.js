@@ -16,7 +16,9 @@ export default class EmergencyTodoList extends Component {
       constructor(props) {
           super(props);
           this.state = {
-              EmergencyData: EmergencyDataList.EDataList,
+              EmergencyData: EmergencyDataList.EDataList.filter((item) => {
+                  return item.CheckState !== '审核通过';
+              }),
               RangeDate: [moment().subtract(7, 'days'), moment()],
               TargetStatus: '',
               OpeartionPerson: '',
@@ -34,14 +36,14 @@ export default class EmergencyTodoList extends Component {
         let dataList = [];
         EmergencyDataList.EDataList.map((item, _key) => {
             let isexist = false;
-            if (value.indexOf(item.DGIMN) > -1) {
+            if (item.CheckState !== '审核通过' && value.indexOf(item.DGIMN) > -1) {
                 isexist = true;
             }
 
             if (isexist) { dataList.push(item); }
         });
         this.setState({
-            EmergencyData: dataList
+            EmergencyData: dataList,
         });
     };
 
@@ -216,6 +218,7 @@ export default class EmergencyTodoList extends Component {
                                 pagination={{
                                     showSizeChanger: true,
                                     showQuickJumper: true,
+                                    'total': this.state.EmergencyData.length,
                                     'pageSize': 20,
                                     'current': 1
                                 }}

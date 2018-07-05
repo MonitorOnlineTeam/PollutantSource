@@ -2,63 +2,63 @@
     "TaskProcess":[
 {
     "ProcessID":"1",
-    "ExceptionHandleId":"1",
+    "ExceptionHandleId":"28",
     "ProcessName":"创建任务单",
     "UserName":"",
     "CreateTime":""
 },
 {
     "ProcessID":"2",
-    "ExceptionHandleId":"1",
+    "ExceptionHandleId":"28",
     "ProcessName":"应急处理",
     "UserName":"小王",
     "CreateTime":"2018-6-12 12:32"
 },
 {
     "ProcessID":"3",
-    "ExceptionHandleId":"1",
+    "ExceptionHandleId":"28",
     "ProcessName":"校准",
-    "UserName":"小王",
-    "CreateTime":"2018-6-12 16:32"
+    "UserName":"",
+    "CreateTime":""
 },
 {
     "ProcessID":"4",
-    "ExceptionHandleId":"1",
+    "ExceptionHandleId":"28",
     "ProcessName":"审核",
-    "UserName":"王科长",
-    "CreateTime":"2018-6-13 11:32"
+    "UserName":"",
+    "CreateTime":""
 },
 {
     "ProcessID":"5",
-    "ExceptionHandleId":"2",
+    "ExceptionHandleId":"14",
     "ProcessName":"创建任务单",
     "UserName":"",
     "CreateTime":""
 },
 {
     "ProcessID":"6",
-    "ExceptionHandleId":"2",
+    "ExceptionHandleId":"14",
     "ProcessName":"应急处理",
     "UserName":"小王",
     "CreateTime":"2018-6-17 12:32"
 },
 {
     "ProcessID":"7",
-    "ExceptionHandleId":"2",
+    "ExceptionHandleId":"14",
     "ProcessName":"校准",
     "UserName":"小王",
     "CreateTime":"2018-6-17 16:32"
 },
 {
     "ProcessID":"8",
-    "ExceptionHandleId":"2",
+    "ExceptionHandleId":"14",
     "ProcessName":"审核",
     "UserName":"王科长",
     "CreateTime":"2018-6-18 11:32"
 }],
 "TaskBasicInfo":[
     {
-        "ExceptionHandleId":"1",
+        "ExceptionHandleId":"28",
         "TaskNo":"234231029431",
         "PointName":"厂北场口",
         "EnterName":"北京雪迪龙科技股份有限公司",
@@ -66,7 +66,7 @@
         "City":"北京市",
         "TaskSource":"数据审核",
         "Emergence":"紧急",
-        "TaskStatus":"已完成",
+        "TaskStatus":"处理中",
         "TaskContent":"设备数据异常",
         "CreatePerson":"小王",
         "CreateTime":"2018-6-12 12:32",
@@ -76,7 +76,7 @@
         "DeviceType":"SDL_CEMS334"
     },
     {
-        "ExceptionHandleId":"2",
+        "ExceptionHandleId":"14",
         "TaskNo":"234231029254",
         "PointName":"厂南场口",
         "EnterName":"北京雪迪龙科技股份有限公司",
@@ -96,13 +96,13 @@
 ],
 "EmergencyHandle":[
     {
-        "ExceptionHandleId":"1",
+        "ExceptionHandleId":"28",
         "HandleContent":"",
         "HandlePerson":"小王",
         "HandleTime":"2018-6-12 12:32"
     },
     {
-        "ExceptionHandleId":"2",
+        "ExceptionHandleId":"14",
         "HandleContent":"",
         "HandlePerson":"小王",
         "HandleTime":"2018-6-17 12:32"
@@ -110,68 +110,69 @@
 ],
 "CorrectInfo":[
     {
-        "ExceptionHandleId":"1",
+        "ExceptionHandleId":"28",
         "HandlePerson":"小王",
         "HandleTime":"2018-6-12 12:32"
     },
     {
-        "ExceptionHandleId":"2",
+        "ExceptionHandleId":"14",
         "HandlePerson":"小王",
         "HandleTime":"2018-6-17 12:32"
     }
 ],
 "ApprovalProcess":[
     {
-        "ExceptionHandleId":"1",
+        "ExceptionHandleId":"28",
         "CheckId":"1",
-        "NodeName":"科长",
-        "CheckName":"王科长",
-        "CheckTime":"2018-6-13 11:32",
-        "CheckContent":"同意"
+        "NodeName":"运维部经理",
+        "CheckName":"",
+        "CheckTime":"",
+        "CheckContent":""
     },
     {
-        "ExceptionHandleId":"1",
+        "ExceptionHandleId":"28",
         "CheckId":"2",
         "NodeName":"科员",
-        "CheckName":"李科员",
-        "CheckTime":"2018-6-13 11:32",
-        "CheckContent":"同意"
-    },{
-        "ExceptionHandleId":"1",
+        "CheckName":"",
+        "CheckTime":"",
+        "CheckContent":""
+    },
+    {
+        "ExceptionHandleId":"28",
         "CheckId":"3",
+        "NodeName":"科长",
+        "CheckName":"",
+        "CheckTime":"",
+        "CheckContent":""
+    },{
+        "ExceptionHandleId":"14",
+        "CheckId":"4",
         "NodeName":"运维部经理",
         "CheckName":"李经理",
         "CheckTime":"2018-6-13 11:32",
         "CheckContent":"同意"
     },
     {
-        "ExceptionHandleId":"2",
-        "CheckId":"4",
-        "NodeName":"科长",
-        "CheckName":"王科长",
-        "CheckTime":"2018-6-13 11:32",
-        "CheckContent":"同意"
-    },
-    {
-        "ExceptionHandleId":"2",
+        "ExceptionHandleId":"14",
         "CheckId":"5",
         "NodeName":"科员",
         "CheckName":"李科员",
         "CheckTime":"2018-6-13 11:32",
         "CheckContent":"同意"
-    },{
-        "ExceptionHandleId":"2",
+    },
+    {
+        "ExceptionHandleId":"14",
         "CheckId":"6",
-        "NodeName":"运维部经理",
-        "CheckName":"李经理",
+        "NodeName":"科长",
+        "CheckName":"王科长",
         "CheckTime":"2018-6-13 11:32",
-        "CheckContent":"同意"
+        "CheckContent":""
     }
 ],
 "LogDataList":[
         {
         "StepID":"1",
-        "ExceptionHandleId":"1",
+        "ExceptionHandleId":"28",
         "StepName":"创建任务单",
         "User_Name":"小王",
         "BeginTime":"2018-6-18 11:12",
@@ -181,7 +182,7 @@
         },
         {
             "StepID":"2",
-            "ExceptionHandleId":"1",
+            "ExceptionHandleId":"28",
             "StepName":"应急处理",
             "User_Name":"小王",
             "BeginTime":"2018-6-18 11:12",
@@ -190,48 +191,8 @@
             "HandlingState":"完成"
             },
             {
-                "StepID":"3",
-                "ExceptionHandleId":"1",
-                "StepName":"校准",
-                "User_Name":"小王",
-                "BeginTime":"2018-6-18 11:12",
-                "EndTime":"2018-6-18 11:12",
-                "Remark":"",
-                "HandlingState":"完成"
-            },
-            {
-                    "StepID":"4",
-                    "ExceptionHandleId":"1",
-                    "StepName":"审核",
-                    "User_Name":"李经理",
-                    "BeginTime":"2018-6-18 11:12",
-                    "EndTime":"2018-6-18 11:12",
-                    "Remark":"",
-                    "HandlingState":"完成"
-            },
-            {
-                        "StepID":"5",
-                        "ExceptionHandleId":"1",
-                        "StepName":"审核",
-                        "User_Name":"李科员",
-                        "BeginTime":"2018-6-18 11:12",
-                        "EndTime":"2018-6-18 11:12",
-                        "Remark":"",
-                        "HandlingState":"完成"
-            },
-            {
-                            "StepID":"6",
-                            "ExceptionHandleId":"1",
-                            "StepName":"审核",
-                            "User_Name":"王科长",
-                            "BeginTime":"2018-6-18 11:12",
-                            "EndTime":"2018-6-18 11:12",
-                            "Remark":"",
-                            "HandlingState":"完成"
-            },
-            {
                 "StepID":"7",
-                "ExceptionHandleId":"2",
+                "ExceptionHandleId":"14",
                 "StepName":"创建任务单",
                 "User_Name":"小王",
                 "BeginTime":"2018-6-18 11:12",
@@ -241,7 +202,7 @@
                 },
                 {
                     "StepID":"8",
-                    "ExceptionHandleId":"2",
+                    "ExceptionHandleId":"14",
                     "StepName":"应急处理",
                     "User_Name":"小王",
                     "BeginTime":"2018-6-18 11:12",
@@ -251,7 +212,7 @@
                     },
                     {
                         "StepID":"9",
-                        "ExceptionHandleId":"2",
+                        "ExceptionHandleId":"14",
                         "StepName":"校准",
                         "User_Name":"小王",
                         "BeginTime":"2018-6-18 11:12",
@@ -261,7 +222,7 @@
                     },
                     {
                             "StepID":"10",
-                            "ExceptionHandleId":"2",
+                            "ExceptionHandleId":"14",
                             "StepName":"审核",
                             "User_Name":"李经理",
                             "BeginTime":"2018-6-18 11:12",
@@ -271,7 +232,7 @@
                     },
                     {
                                 "StepID":"11",
-                                "ExceptionHandleId":"2",
+                                "ExceptionHandleId":"14",
                                 "StepName":"审核",
                                 "User_Name":"李科员",
                                 "BeginTime":"2018-6-18 11:12",
@@ -281,7 +242,7 @@
                     },
                     {
                                     "StepID":"12",
-                                    "ExceptionHandleId":"2",
+                                    "ExceptionHandleId":"14",
                                     "StepName":"审核",
                                     "User_Name":"王科长",
                                     "BeginTime":"2018-6-18 11:12",
@@ -292,7 +253,7 @@
     ],
 "InspectionRecord":[
     {
-    "ExceptionHandleId":"1",
+    "ExceptionHandleId":"28",
     "DeviceName":"便携式红外线烟气分析仪",
     "DeviceType":"MODEL 3080",
     "DeviceProvider":"北京雪迪龙科技股份有限公司",
@@ -348,7 +309,7 @@
     "Result2":"采取的措施是"                             
     },
     {
-        "ExceptionHandleId":"2",
+        "ExceptionHandleId":"14",
         "DeviceName":"便携式红外线烟气分析仪",
         "DeviceType":"MODEL 3080",
         "DeviceProvider":"北京雪迪龙科技股份有限公司",
