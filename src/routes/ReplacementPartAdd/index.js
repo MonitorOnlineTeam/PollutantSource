@@ -140,8 +140,7 @@ export default class ReplacementPartAdd extends Component {
             <PageHeaderLayout title="备件备件维护" >
                 <Card bordered={false} >
                     <div>
-                        <div className={styles.tableListForm}>{this.renderForm()}</div>
-                        
+                        <div className={styles.tableListForm}>{this.renderForm()}</div>                        
                         <Button style={{marginBottom: 10}} type="primary" onClick={() => {
                             this.setState({
                                 visible: true,
