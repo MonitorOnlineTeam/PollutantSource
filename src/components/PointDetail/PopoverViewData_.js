@@ -86,7 +86,7 @@ class PopoverViewData_ extends Component {
         _childrenProps.dataType = dataParam.dataType;
         _childrenProps.startTime = '';
         _childrenProps.endTime = '';
-        _childrenProps.point = [dataParam.point];
+        _childrenProps.point = dataParam.point;
         _childrenProps.sort = dataParam.sort;
 
         switch (_childrenProps.dataType) {
@@ -128,7 +128,7 @@ class PopoverViewData_ extends Component {
     // 弹出模态窗口
     _openModal=(modalVisible, modalType) => {
         let setData = this.state;
-        // debugger;
+        debugger;
         setData.lookDataParamModal = modalVisible;
         if (modalVisible) {
             setData.modalType = modalType;

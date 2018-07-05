@@ -248,11 +248,19 @@ class DataQuery extends Component {
                     let color = (+row.Concentration) > (+row.Standard) ? 'red' : 'none';
                     // console.log(row);
                     // console.log(row.Concentration + ' ' + row.Standard);
-                    let dot = true;
-                    if (row.isExceed > 0) {
-                        dot = true;
-                    } else if (row.isException > 0) {
-                        dot = true;
+                    let dot;
+                    if (row.IsExceed > 0 || row.IsException > 0) {
+                        dot = (
+                            <Badge dot={true}>
+                                <a style={{cursor: 'pointer'}}>{row.Concentration}</a>
+                            </Badge>
+                        );
+                    } else {
+                        dot = (
+                            <Badge>
+                                <a style={{cursor: 'pointer'}}>{row.Concentration}</a>
+                            </Badge>
+                        );
                     }
                     return (
                         <PopoverViewData_
@@ -269,9 +277,7 @@ class DataQuery extends Component {
                                 sort: 'asc'
                             }}
                         >
-                            <Badge dot={dot}>
-                                <a style={{cursor: 'pointer'}}>{row.Concentration}</a>
-                            </Badge>
+                            {dot}
                             {/* <a style={{color: color, cursor: 'pointer'}}>{row.Concentration}</a> */}
                         </PopoverViewData_>
                     );
