@@ -9,7 +9,8 @@ import {
     Popover,
     Modal,
     Row, Col, Tabs, Input, Form,
-    Divider
+    Divider,
+    Badge
 } from 'antd';
 const TabPane = Tabs.TabPane;
 const FormItem = Form.Item;
@@ -26,25 +27,28 @@ class PopoverViewData_ extends Component {
             columns: [],
             tableData: [],
             pointInfo: {},
-            dataParam: this.props.children.props.dataparam,
+            dataParam: this.props.dataparam,
             divContent: divContent,
             visible: false,
             selectedRowKeys: [],
             dataType: this.props.dataType,
-            concentration: [this.props.concentration],
             scrollStyle: {y: 'calc(100vh - 385px)'}
         };
     }
-
+    // 获取属性
+    _getDataParam=() => {
+        return this.props.dataParam;
+    };
     // 获取列
     _getColumns=(modalType) => {
+        let dataParam = this._getDataParam();
         const columns = [{
             title: '时间',
             dataIndex: 'MonitoringTime',
             width: 200,
             key: 'MonitoringTime'
         }];
-        debugger;
+        // debugger;
 
         if (modalType === 1) {
             pollutantDatas.map((item) => {
@@ -56,8 +60,10 @@ class PopoverViewData_ extends Component {
                 });
             });
         } else {
+            // console.log(this.props.pollutantCode);
+            // console.log(this.props.dataParam);
             pollutantDatas.map((item) => {
-                if (this.props.concentration === item.Value) {
+                if (dataParam.pollutantCode === item.Value) {
                     columns.push({
                         title: item.Name,
                         dataIndex: item.Value,
@@ -72,16 +78,16 @@ class PopoverViewData_ extends Component {
     };
     // 获取列表数据
     _getTableDatas=() => {
-        let setData = this.state;
-
+        // let setData = this.state;
+        let dataParam = this._getDataParam();
         let _childrenProps = {};
 
-        _childrenProps.concentration = [];
-        _childrenProps.dataType = setData.dataType;
-        _childrenProps.startTime = setData.dataParam.startTime;
-        _childrenProps.endTime = setData.dataParam.endTime;
-        _childrenProps.point = setData.dataParam.point;
-        _childrenProps.sort = setData.dataParam.sort;
+        _childrenProps.pollutantCodes = [];
+        _childrenProps.dataType = dataParam.dataType;
+        _childrenProps.startTime = '';
+        _childrenProps.endTime = '';
+        _childrenProps.point = dataParam.point;
+        _childrenProps.sort = dataParam.sort;
 
         switch (_childrenProps.dataType) {
             case 'realtime':
@@ -149,6 +155,7 @@ class PopoverViewData_ extends Component {
     };
     // 查看数据
     _lookDataParamModal=(data) => {
+        let dataParam = this._getDataParam();
         let t = 1;
         let tableDatas = [];
         data.map((item) => {
@@ -161,7 +168,7 @@ class PopoverViewData_ extends Component {
                     _timeInfo[pollutants.PollutantCode] = pollutants.Concentration;
                 });
                 // tableDatas.push(_timeInfo);
-                if (this.state.dataType === 'realtime') {
+                if (dataParam.dataType === 'realtime') {
                     tableDatas.push(_timeInfo);
                 } else {
                     if (i > 0) {
@@ -183,9 +190,10 @@ class PopoverViewData_ extends Component {
     _handleonVisibleChang=(visible) => {
         // console.log(this.props.dataType);
         // console.log(visible);
+        let dataParam = this._getDataParam();
         let setData = this.state;
         if (visible) {
-            if (this.props.dataType === 'hour' || this.props.dataType === 'day') {
+            if (dataParam.dataType === 'hour' || dataParam.dataType === 'day') {
                 setData.divContent = (
                     <div>
                         <Divider />
@@ -197,8 +205,13 @@ class PopoverViewData_ extends Component {
                 setData.divContent = (
                     <div>
                         <ul style={{paddingLeft: 0}}>
-
-                            <li style={{borderBottom: '1px solid #e8e8e8', listStyle: 'none'}} />
+                            <li style={{listStyle: 'none', marginBottom: 10}}>
+                                <Badge status="success" text="标准值：25" />
+                            </li>
+                            <li style={{listStyle: 'none', marginBottom: 10}}>
+                                <Badge status="success" text="超标倍数：25" />
+                            </li>
+                            <li style={{borderBottom: '1px solid #e8e8e8', listStyle: 'none', marginBottom: 10}} />
                             <li style={{listStyle: 'none'}}>
                                 <Icon type="laptop" style={{ fontSize: 14, color: '#08c' }} />
                                 <Divider type="vertical" />

@@ -70,9 +70,10 @@ class DataQuery extends Component {
                 defaultOption.series[0].data.push((+_thisPollutantInfo.Concentration));
                 defaultOption.series[0].name = _thisPollutantInfo.PollutantName;
                 let _rowData = {};
+                _rowData = _thisPollutantInfo;
                 _rowData.Key = t++;
-                _rowData.MonitoringTime = _thisPollutantInfo.MonitoringTime;
-                _rowData.Concentration = _thisPollutantInfo.Concentration;
+                // _rowData.MonitoringTime = _thisPollutantInfo.MonitoringTime;
+                // _rowData.Concentration = _thisPollutantInfo.Concentration;
                 defaultTableDatas.push(_rowData);
             });
         });
@@ -80,7 +81,7 @@ class DataQuery extends Component {
         this.state = {
             pollutantDatas: getPollutantDatas(),
             searchData: {
-                pollutantValue: defaultPollutant.Value,
+                pollutantCode: defaultPollutant.Value,
                 pollutantText: defaultPollutant.Name,
                 rangeDate: [],
                 dataType: 'realtime'
@@ -107,7 +108,7 @@ class DataQuery extends Component {
     // 污染物
     _handlePollutantChange=(value, selectedOptions) => {
         let setData = this.state;
-        setData.searchData.pollutantValue = selectedOptions.props.value;
+        setData.searchData.pollutantCode = selectedOptions.props.value;
         setData.searchData.pollutantText = selectedOptions.props.children;
         setData.optionData.unit = selectedOptions.props.Unit;
         setData.optionData.min = selectedOptions.props.minValue;
@@ -150,7 +151,7 @@ class DataQuery extends Component {
 
             let _thisTableDatas = getAllConcentration({
                 dataType: setData.searchData.dataType,
-                concentration: [setData.searchData.pollutantValue],
+                pollutantCodes: [setData.searchData.pollutantCode],
                 point: setData.dgmin || []
             });
             // console.log(_thisTableDatas);
@@ -160,16 +161,17 @@ class DataQuery extends Component {
                     // console.log(time);
                     let _thisPollutantInfo = {};
                     let _thisPollutant = time.PollutantDatas.find((pollutants) => {
-                        return pollutants.PollutantCode === setData.searchData.pollutantValue;
+                        return pollutants.PollutantCode === setData.searchData.pollutantCode;
                     });
 
                     _thisPollutantInfo = _thisPollutant;
                     _thisPollutantInfo.MonitoringTime = time.MonitoringTime;
 
                     let _rowData = {};
+                    _rowData = _thisPollutantInfo;
                     _rowData.Key = t++;
-                    _rowData.MonitoringTime = _thisPollutantInfo.MonitoringTime;
-                    _rowData.Concentration = _thisPollutantInfo.Concentration;
+                    // _rowData.MonitoringTime = _thisPollutantInfo.MonitoringTime;
+                    // _rowData.Concentration = _thisPollutantInfo.Concentration;
                     setData.tableData.push(_rowData);
                 });
             });
@@ -243,21 +245,23 @@ class DataQuery extends Component {
                 width: 150,
                 render: (text, row, index) => {
                     let color = (+row.Concentration) > (+row.Standard) ? 'red' : 'none';
-                    let _dataparam = {
-                        startTime: '',
-                        endTime: '',
-                        concentration: [this.state.searchData.pollutantValue],
-                        dataType: this.state.searchData.dataType,
-                        point: this.state.dgmin || [],
-                        rowTime: row.MonitoringTime,
-                        sort: 'asc'
-                    };
+                    // console.log(row.Concentration + ' ' + row.Standard);
                     return (
-                        <PopoverViewData_ dataType={this.state.searchData.dataType} concentration={this.state.searchData.pollutantValue}>
-                            <a style={{color: color, cursor: 'pointer'}}
-                                dataparam={_dataparam}
-
-                            >{row.Concentration}</a>
+                        <PopoverViewData_
+                            dataParam={{
+                                dataType: this.state.searchData.dataType,
+                                pollutantCode: this.state.searchData.pollutantCode,
+                                point: this.state.dgmin || [],
+                                rowTime: row.MonitoringTime,
+                                sort: 'asc'
+                            }}
+                            dataType={this.state.searchData.dataType}
+                            pollutantCode={this.state.searchData.pollutantCode}
+                            point={this.state.dgmin || []}
+                            rowTime={row.MonitoringTime}
+                            sort={'asc'}
+                        >
+                            <a style={{color: color, cursor: 'pointer'}}>{row.Concentration}</a>
                         </PopoverViewData_>
                     );
                 },
@@ -272,7 +276,7 @@ class DataQuery extends Component {
                                 <PollutantSelect_
                                     optionDatas={this.state.pollutantDatas}
                                     ref={(r) => { this.select_Pollutant = r; }}
-                                    defaultValue={this.state.searchData.pollutantValue}
+                                    defaultValue={this.state.searchData.pollutantCode}
                                     style={{width: 200}}
                                     onChange={this._handlePollutantChange}
                                 />

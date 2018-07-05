@@ -126,19 +126,19 @@ export function getPointEnterprise() {
 
 // *********************************获取浓度数据*********************************
 // 默认污染物
-export const defaultConcentration = [
-    {Value: '01', Name: '实测烟尘', Unit: 'mg/m3', Min: 1, Max: 35, Standard: 25},
-    {Value: '02', Name: '实测二氧化硫', Unit: 'mg/m3', Min: 20, Max: 300, Standard: 25},
-    {Value: '03', Name: '实测氮氧化物', Unit: 'mg/m3', Min: 10, Max: 150, Standard: 25},
-    {Value: 'b02', Name: '流量', Unit: 'm3/h', Min: 30, Max: 70, Standard: 25},
-    {Value: 's01', Name: '氧含量', Unit: '%', Min: 3, Max: 10, Standard: 25},
-    {Value: 's02', Name: '流速', Unit: 'm/s', Min: 3, Max: 10, Standard: 25},
-    {Value: 's03', Name: '烟气温度', Unit: '℃', Min: 3, Max: 20, Standard: 25}, // 22
-    {Value: 's05', Name: '烟气湿度', Unit: '%', Min: 3, Max: 20, Standard: 25},
-    {Value: 's08', Name: '烟气静压', Unit: 'MPa', Min: -100, Max: -500, Standard: 25}, // -0.120  - 0.200
-    {Value: 'zs01', Name: '烟尘', Unit: 'mg/m3', Min: 1, Max: 50, Standard: 25},
-    {Value: 'zs02', Name: '二氧化硫', Unit: 'mg/m3', Min: 10, Max: 300, Standard: 25},
-    {Value: 'zs03', Name: '氮氧化物', Unit: 'mg/m3', Min: 15, Max: 150, Standard: 25}
+export const defaultPollutantCodes = [
+    {Value: '01', Name: '实测烟尘', Unit: 'mg/m3', Min: 1, Max: 35, Standard: 25, IsExceed: 0, ExceedValue: 0, IsException: 0, ExceptionValue: 0, ExceptionText: ''},
+    {Value: '02', Name: '实测二氧化硫', Unit: 'mg/m3', Min: 20, Max: 300, Standard: 25, IsExceed: 0, ExceedValue: 0, IsException: 0, ExceptionValue: 0},
+    {Value: '03', Name: '实测氮氧化物', Unit: 'mg/m3', Min: 10, Max: 150, Standard: 25, IsExceed: 0, ExceedValue: 0, IsException: 0, ExceptionValue: 0},
+    {Value: 'b02', Name: '流量', Unit: 'm3/h', Min: 30, Max: 70, Standard: 25, IsExceed: 0, ExceedValue: 0, IsException: 0, ExceptionValue: 0},
+    {Value: 's01', Name: '氧含量', Unit: '%', Min: 3, Max: 10, Standard: 25, IsExceed: 0, ExceedValue: 0, IsException: 0, ExceptionValue: 0},
+    {Value: 's02', Name: '流速', Unit: 'm/s', Min: 3, Max: 10, Standard: 25, IsExceed: 0, ExceedValue: 0, IsException: 0, ExceptionValue: 0},
+    {Value: 's03', Name: '烟气温度', Unit: '℃', Min: 3, Max: 20, Standard: 25, IsExceed: 0, ExceedValue: 0, IsException: 0, ExceptionValue: 0},
+    {Value: 's05', Name: '烟气湿度', Unit: '%', Min: 3, Max: 20, Standard: 25, IsExceed: 0, ExceedValue: 0, IsException: 0, ExceptionValue: 0},
+    {Value: 's08', Name: '烟气静压', Unit: 'MPa', Min: -100, Max: -500, Standard: 25, IsExceed: 0, ExceedValue: 0, IsException: 0, ExceptionValue: 0},
+    {Value: 'zs01', Name: '烟尘', Unit: 'mg/m3', Min: 1, Max: 50, Standard: 25, IsExceed: 0, ExceedValue: 0, IsException: 0, ExceptionValue: 0},
+    {Value: 'zs02', Name: '二氧化硫', Unit: 'mg/m3', Min: 10, Max: 300, Standard: 25, IsExceed: 0, ExceedValue: 0, IsException: 0, ExceptionValue: 0},
+    {Value: 'zs03', Name: '氮氧化物', Unit: 'mg/m3', Min: 15, Max: 150, Standard: 25, IsExceed: 0, ExceedValue: 0, IsException: 0, ExceptionValue: 0}
 ];
 
 // 获取污染物
@@ -155,7 +155,7 @@ export function getPollutantDatas() {
     // });
     // // console.log(data);
     // return data;
-    return defaultConcentration;
+    return defaultPollutantCodes;
 };
 // (Math.random()*(10-1+1)+1).toFixed(3);
 // moment().add(7,'years'); // 加7年
@@ -179,7 +179,7 @@ export function getPollutantDatas() {
      startTime?:开始时间 eg: '2018-06-23 15:30'
      endTime?:结束时间 eg: '2018-06-24 15:30'
      dataType?:数据类型 eg:dataType:'realtime' //'minutes', 'hour', 'day'
-     concentration?:污染物 eg:['s1','01']
+     pollutantCodes?:污染物 eg:['s1','01']
      interval?:时间间隔  eg: interval:30 //实时：秒/条  分钟：分钟/条
      point?:监测点 eg:['123','456']
      sort:'desc'  // 默认降序  asc 按时间升序    desc  降序
@@ -192,10 +192,10 @@ export function getAllConcentration(obj) {
     let dataType = $this.dataType || 'day';
     let sort = $this.sort || 'desc';
     let returnDatas = [];
-    let concentration = [];
+    let pollutantCodes = [];
     let point = [];
     let defaultPoint = getPointEnterprise();
-    let i = 1;
+    // let i = 1;
     let dateForms = {
         format: '',
         value: 1,
@@ -222,16 +222,16 @@ export function getAllConcentration(obj) {
         point = defaultPoint;
     }
 
-    if ($this.concentration && $this.concentration.length > 0) {
-        $this.concentration.map((k) => {
-            defaultConcentration.map((m) => {
+    if ($this.pollutantCodes && $this.pollutantCodes.length > 0) {
+        $this.pollutantCodes.map((k) => {
+            defaultPollutantCodes.map((m) => {
                 if (k === m.Value) {
-                    concentration.push(m);
+                    pollutantCodes.push(m);
                 }
             });
         });
     } else {
-        concentration = defaultConcentration;
+        pollutantCodes = defaultPollutantCodes;
     }
     switch (dataType) {
         case 'realtime':
@@ -299,13 +299,18 @@ export function getAllConcentration(obj) {
             monitoringTime.id = m++;
             monitoringTime.MonitoringTime = moment(eTime).format(dateForms.format);
             monitoringTime.PollutantDatas = [];
-            concentration.map((item) => {
+            pollutantCodes.map((item) => {
                 let PollutantData = {};
                 PollutantData.PollutantCode = item.Value;
                 PollutantData.PollutantName = item.Name;
+                PollutantData.Max = item.Max;
+                PollutantData.Min = item.Min;
                 PollutantData.Unit = item.Unit;
                 PollutantData.Concentration = (Math.random() * (item.Max - item.Min + 1) + item.Min).toFixed(3);
                 PollutantData.Standard = item.Standard;
+                PollutantData.IsExceed = 0;
+
+                // PollutantData.
                 monitoringTime.PollutantDatas.push(PollutantData);
             });
             eTime = moment(eTime).subtract(dateForms.value, dateForms.type).format(dateForms.format);
@@ -348,7 +353,7 @@ export function getAllConcentration(obj) {
     //     });
     //     returnDatas.push(pointData);
     // });
-    // console.log(returnDatas);
+    console.log(returnDatas);
     return returnDatas;
 }
 // *********************************获取浓度数据*********************************
