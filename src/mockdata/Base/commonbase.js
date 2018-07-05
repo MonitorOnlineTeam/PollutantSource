@@ -301,8 +301,8 @@ export function getAllConcentration(obj) {
             monitoringTime.id = m;
             monitoringTime.MonitoringTime = moment(eTime).format(dateForms.format);
             monitoringTime.PollutantDatas = [];
-            let tempIsExceedFlag = false;
-            let tempIsExceptionFlag = false;
+            // let tempIsExceedFlag = false;
+            // let tempIsExceptionFlag = false;
             let dotRandom = parseInt(Math.random() * 10);
             pollutantCodes.map((item, Key) => {
                 let PollutantData = {};
@@ -325,17 +325,19 @@ export function getAllConcentration(obj) {
                     || pointData.DGIMN === 'dtgrjx103'
                     || pointData.DGIMN === 'lywjfd03') {
                     if (m === 1) { // 第一条数据超标
-                        PollutantData.IsExceed = 1;
-                        PollutantData.Concentration = ((PollutantData.Standard / 2) + (+PollutantData.Concentration)).toFixed(3);
-                        console.log(PollutantData.Concentration);
-                        PollutantData.ExceedValue = ((PollutantData.Concentration - PollutantData.Standard) / PollutantData.Standard).toFixed(2);
+                        if (dotRandom === Key) {
+                            PollutantData.IsExceed = 1;
+                            PollutantData.Concentration = ((PollutantData.Standard / 2) + (+PollutantData.Concentration)).toFixed(3);
+                            console.log(Key + ':' + PollutantData.Concentration);
+                            PollutantData.ExceedValue = ((PollutantData.Concentration - PollutantData.Standard) / PollutantData.Standard).toFixed(2);
+                        }
                     } else if (m === 2) { // 第二条数据异常
                         PollutantData.Concentration = 0;
                         PollutantData.IsException = 1;
                         PollutantData.ExceptionText = '0值异常';
                     } else {
-                        console.log(dotRandom + '-' + Key);
-                        console.log(dotRandom === Key);
+                        // console.log(dotRandom + '-' + Key);
+                        // console.log(dotRandom === Key);
                         if (dotRandom === Key) {
                             PollutantData.IsExceed = 1;
                             PollutantData.Concentration = ((PollutantData.Standard / 2) + (+PollutantData.Concentration)).toFixed(3);
@@ -393,7 +395,7 @@ export function getAllConcentration(obj) {
     //     });
     //     returnDatas.push(pointData);
     // });
-    console.log(returnDatas);
+    // console.log(returnDatas);
     return returnDatas;
 }
 // *********************************获取浓度数据*********************************

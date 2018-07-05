@@ -56,7 +56,11 @@ class PopoverViewData_ extends Component {
                     title: item.Name,
                     dataIndex: item.Value, // 'Concentration',
                     width: 100,
-                    key: item.Value
+                    key: item.Value,
+                    // render: (value, record, index) => {
+                    //     debugger;
+                    //     return value;
+                    // }
                 });
             });
         } else {
@@ -194,7 +198,7 @@ class PopoverViewData_ extends Component {
         let setData = this.state;
 
         let dataStatusContent;
-        console.log(dataParam);
+        // console.log(dataParam);
         if (dataParam.isExceed > 0) {
             dataStatusContent = (
                 <div>

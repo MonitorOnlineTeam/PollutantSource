@@ -34,18 +34,19 @@ const getAllData = (dataType) => {
         };
         if (item.MonitoringDatas.length > 0) {
             item.MonitoringDatas[0].PollutantDatas.map(wry => {
-                data[wry.PollutantCode] = wry.Concentration;
-                data['PollutantName'] = wry.PollutantName;
-                data['PollutantCode'] = wry.PollutantCode;
-                data['IsExceed'] = wry.IsExceed; // 是否超标
-                data['ExceedValue'] = wry.ExceedValue; // 超标倍数
-                data['IsException'] = wry.IsException; // 是否异常
-                data['ExceptionText'] = wry.ExceptionText; // 异常类型
-                data['Standard'] = wry.Standard; // 标准值
+                data[wry.PollutantCode] = wry.Concentration + ',' + wry.PollutantCode;
+                data[wry.PollutantCode + '-' + 'PollutantName'] = wry.PollutantName;
+                data[wry.PollutantCode + '-' + 'PollutantCode'] = wry.PollutantCode;
+                data[wry.PollutantCode + '-' + 'IsExceed'] = wry.IsExceed; // 是否超标
+                data[wry.PollutantCode + '-' + 'ExceedValue'] = wry.ExceedValue; // 超标倍数
+                data[wry.PollutantCode + '-' + 'IsException'] = wry.IsException; // 是否异常
+                data[wry.PollutantCode + '-' + 'ExceptionText'] = wry.ExceptionText; // 异常类型
+                data[wry.PollutantCode + '-' + 'Standard'] = wry.Standard; // 标准值
             });
         }
         datalist.push(data);
     });
+    console.log(datalist);
     return datalist;
 };
 @connect()
@@ -133,24 +134,63 @@ class dataList extends PureComponent {
                 dataIndex: item.Value,
                 key: item.Value,
                 width: 120,
-                render: (value, record) => {
-                    return (<div>
-                        <PopoverViewData_
-                            dataParam={{
-                                dataType: record.dataType,
-                                pollutantCode: record.PollutantCode,
-                                point: record.dgimn || [],
-                                rowTime: record.monitorTime,
-                                isExceed: record.IsExceed, // 是否超标
-                                exceedValue: record.ExceedValue, // 超标倍数
-                                isException: record.IsException, // 是否异常
-                                exceptionText: record.ExceptionText, // 异常类型
-                                standard: record.Standard, // 标准值
-                            }}
-                        >
-                            <span style={{cursor: 'pointer'}}>{value}</span><Avatar src="../../../red.png" />
-                        </PopoverViewData_>
-                    </div>);
+                render: (value, record, index) => {
+                    // debugger;
+                    let dot;
+                    // 01-IsExceed +
+                    // debugger;
+                    record.PollutantCode = value.split(',')[1];
+                    value = value.split(',')[0];
+                    record.IsExceed = record[record.PollutantCode + '-IsExceed'];
+                    record.ExceedValue = record[record.PollutantCode + '-ExceedValue'];
+                    record.IsException = record[record.PollutantCode + '-IsException'];
+                    record.ExceptionText = record[record.PollutantCode + '-ExceptionText'];
+                    record.Standard = record[record.PollutantCode + '-Standard'];
+
+                    if (record.IsExceed > 0 || record.IsException > 0) {
+                        dot = (
+                            <Avatar src="../../../red.png" />
+                        );
+                    }
+
+                    // console.log(record);
+                    if (record.dgimn === 'bjldgn01' || record.dgimn === 'dtgjhh11102' || record.dgimn === 'dtgrjx110' || record.dgimn === 'dtgrjx103' || record.dgimn === 'lywjfd03') {
+                        return (<div>
+                            <PopoverViewData_
+                                dataParam={{
+                                    dataType: record.dataType,
+                                    pollutantCode: record.PollutantCode,
+                                    point: [record.dgimn] || [],
+                                    rowTime: record.monitorTime,
+                                    isExceed: record.IsExceed, // 是否超标
+                                    exceedValue: record.ExceedValue, // 超标倍数
+                                    isException: record.IsException, // 是否异常
+                                    exceptionText: record.ExceptionText, // 异常类型
+                                    standard: record.Standard, // 标准值
+                                }}
+                            >
+                                <span style={{cursor: 'pointer'}}>{value}</span>{dot}
+                            </PopoverViewData_>
+                        </div>);
+                    } else {
+                        return (<div>
+                            <PopoverViewData_
+                                dataParam={{
+                                    dataType: record.dataType,
+                                    pollutantCode: record.PollutantCode,
+                                    point: [record.dgimn] || [],
+                                    rowTime: record.monitorTime,
+                                    isExceed: record.IsExceed, // 是否超标
+                                    exceedValue: record.ExceedValue, // 超标倍数
+                                    isException: record.IsException, // 是否异常
+                                    exceptionText: record.ExceptionText, // 异常类型
+                                    standard: record.Standard, // 标准值
+                                }}
+                            >
+                                <span style={{cursor: 'pointer'}}>{value}</span>
+                            </PopoverViewData_>
+                        </div>);
+                    }
                 }
             };
             columns.push(datacol);

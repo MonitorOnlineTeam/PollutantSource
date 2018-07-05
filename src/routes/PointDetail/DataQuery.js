@@ -245,7 +245,8 @@ class DataQuery extends Component {
                 className: 'table_concentration',
                 width: 150,
                 render: (text, row, index) => {
-                    let color = (+row.Concentration) > (+row.Standard) ? 'red' : 'none';
+                    // debugger
+                    // let color = (+row.Concentration) > (+row.Standard) ? 'red' : 'none';
                     // console.log(row);
                     // console.log(row.Concentration + ' ' + row.Standard);
                     let dot;
