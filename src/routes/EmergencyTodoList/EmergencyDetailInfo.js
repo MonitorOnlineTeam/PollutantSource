@@ -35,6 +35,8 @@ export default class EmergencyDetailInfo extends Component {
     render() {
         const SCREEN_WIDTH = document.querySelector('body').offsetWidth;
         const { match} = this.props;
+        debugger;
+
         const emergencyId = match.params.exceptionhandleid; // 任务ID
         const LogColumn = [
             {
@@ -87,7 +89,6 @@ export default class EmergencyDetailInfo extends Component {
             return item.ExceptionHandleId === emergencyId;
         });
 
-        debugger;
         const currentProcess = taskProcess.filter(function(item) {
             return item.UserName !== '';
         });
@@ -119,7 +120,7 @@ export default class EmergencyDetailInfo extends Component {
         const logDataList = EmergencyInfo.LogDataList.filter((item) => {
             return item.ExceptionHandleId === emergencyId;
         });
-console.log(emergencyId)
+        console.log(emergencyId);
         return (
             <PageHeaderLayout title="应急任务详情">
                 <div style={{height: 'calc(100vh - 190px)'}} className={styles.ExceptionDetailDiv}>
@@ -141,34 +142,34 @@ console.log(emergencyId)
                     </Card>
                     <Card title="任务信息" style={{marginTop: 20 }} bordered={false}>
                         <DescriptionList className={styles.headerList} size="large" col="3">
-                            <Description term="任务单号">{taskBasicInfo === [] ? '' : taskBasicInfo[0].TaskNo}</Description>
-                            <Description term="排口" style={{fontWeight: '1000'}}>{taskBasicInfo === [] ? '' : taskBasicInfo[0].PointName}</Description>
-                            <Description term="企业">{taskBasicInfo === [] ? '' : taskBasicInfo[0].EnterName}</Description>
-                            <Description term="省份">{taskBasicInfo === [] ? '' : taskBasicInfo[0].Province}</Description>
-                            <Description term="城市">{taskBasicInfo === [] ? '' : taskBasicInfo[0].City}</Description>
+                            <Description term="任务单号">{taskBasicInfo.length === 0 ? '' : taskBasicInfo[0].TaskNo}</Description>
+                            <Description term="排口" style={{fontWeight: '1000'}}>{taskBasicInfo.length === 0 ? '' : taskBasicInfo[0].PointName}</Description>
+                            <Description term="企业">{taskBasicInfo.length === 0 ? '' : taskBasicInfo[0].EnterName}</Description>
+                            <Description term="省份">{taskBasicInfo.length === 0 ? '' : taskBasicInfo[0].Province}</Description>
+                            <Description term="城市">{taskBasicInfo.length === 0 ? '' : taskBasicInfo[0].City}</Description>
                         </DescriptionList>
                         <DescriptionList style={{marginTop: 20}} className={styles.headerList} size="large" col="3">
-                            <Description term="任务来源">{taskBasicInfo === [] ? '' : taskBasicInfo[0].TaskSource}</Description>
-                            <Description term="紧急程度" style={{fontWeight: '1000'}}>{taskBasicInfo === [] ? '' : taskBasicInfo[0].Emergence}</Description>
-                            <Description term="任务状态">{taskBasicInfo === [] ? '' : taskBasicInfo[0].TaskStatus}</Description>
-                            <Description term="任务内容" style={{fontWeight: '1000'}}>{taskBasicInfo === [] ? '' : taskBasicInfo[0].TaskContent}</Description>
+                            <Description term="任务来源">{taskBasicInfo.length === 0 ? '' : taskBasicInfo[0].TaskSource}</Description>
+                            <Description term="紧急程度" style={{fontWeight: '1000'}}>{taskBasicInfo.length === 0 ? '' : taskBasicInfo[0].Emergence}</Description>
+                            <Description term="任务状态">{taskBasicInfo.length === 0 ? '' : taskBasicInfo[0].TaskStatus}</Description>
+                            <Description term="任务内容" style={{fontWeight: '1000'}}>{taskBasicInfo.length === 0 ? '' : taskBasicInfo[0].TaskContent}</Description>
                         </DescriptionList>
                         <DescriptionList style={{marginTop: 20}} className={styles.headerList} size="large" col="3">
-                            <Description term="创建人">{taskBasicInfo === [] ? '' : taskBasicInfo[0].CreatePerson}</Description>
-                            <Description term="创建时间">{taskBasicInfo === [] ? '' : taskBasicInfo[0].CreateTime}</Description>
+                            <Description term="创建人">{taskBasicInfo.length === 0 ? '' : taskBasicInfo[0].CreatePerson}</Description>
+                            <Description term="创建时间">{taskBasicInfo.length === 0 ? '' : taskBasicInfo[0].CreateTime}</Description>
                         </DescriptionList>
                         <Divider style={{ marginBottom: 20 }} />
                         <DescriptionList className={styles.headerList} size="large" col="3">
-                            <Description term="设备类型">{taskBasicInfo === [] ? '' : taskBasicInfo[0].DeviceType}</Description>
-                            <Description term="设备品牌">{taskBasicInfo === [] ? '' : taskBasicInfo[0].DeviceBrand}</Description>
-                            <Description term="设备编号">{taskBasicInfo === [] ? '' : taskBasicInfo[0].DeviceNo}</Description>
-                            <Description term="设备型号">{taskBasicInfo === [] ? '' : taskBasicInfo[0].DeviceType}</Description>
+                            <Description term="设备类型">{taskBasicInfo.length === 0 ? '' : taskBasicInfo[0].DeviceType}</Description>
+                            <Description term="设备品牌">{taskBasicInfo.length === 0 ? '' : taskBasicInfo[0].DeviceBrand}</Description>
+                            <Description term="设备编号">{taskBasicInfo.length === 0 ? '' : taskBasicInfo[0].DeviceNo}</Description>
+                            <Description term="设备型号">{taskBasicInfo.length === 0 ? '' : taskBasicInfo[0].DeviceType}</Description>
                         </DescriptionList>
                     </Card>
                     <Card title="应急处理" style={{ marginTop: 20}} bordered={false}>
                         <DescriptionList className={styles.headerList} size="large" col="1">
                             <Description term="处理说明">
-                                <TextArea style={{width: '400px'}} autosize={{ minRows: 2, maxRows: 6 }} value={emergencyHandle === [] ? '' : emergencyHandle[0].HandleContent} />
+                                <TextArea style={{width: '400px'}} autosize={{ minRows: 2, maxRows: 6 }} value={emergencyHandle.length === 0 ? '' : emergencyHandle[0].HandleContent} />
                             </Description>
                             <Description term="处理记录">
                                 <Button style={{marginBottom: '5px'}} icon="check-circle-o" onClick={this.SeeDetailInfo}>气态分析仪运行状况检查记录表</Button><br />
@@ -177,10 +178,10 @@ console.log(emergencyId)
                         </DescriptionList>
                         <DescriptionList style={{marginTop: 20}} className={styles.headerList} size="large" col="2">
                             <Description term="处理人">
-                                {emergencyHandle === [] ? '' : emergencyHandle[0].HandlePerson}
+                                {emergencyHandle.length === 0 ? '' : emergencyHandle[0].HandlePerson}
                             </Description>
                             <Description term="处理时间">
-                                {emergencyHandle === [] ? '' : emergencyHandle[0].HandleTime}
+                                {emergencyHandle.length === 0 ? '' : emergencyHandle[0].HandleTime}
                             </Description>
                         </DescriptionList>
                     </Card>
@@ -192,10 +193,10 @@ console.log(emergencyId)
                         </DescriptionList>
                         <DescriptionList style={{marginTop: 20}} className={styles.headerList} size="large" col="2">
                             <Description term="校准人">
-                                {correctInfo === [] ? '' : correctInfo[0].HandlePerson}
+                                {correctInfo.length === 0 ? '' : correctInfo[0].HandlePerson}
                             </Description>
                             <Description term="校准时间">
-                                {correctInfo === [] ? '' : correctInfo[0].HandleTime}
+                                {correctInfo.length === 0 ? '' : correctInfo[0].HandleTime}
                             </Description>
                         </DescriptionList>
                     </Card>
@@ -228,7 +229,8 @@ console.log(emergencyId)
                     </Card>
                     <div className={styles.returnLastPage}>
                         <Button type="solid" icon="left" onClick={() => {
-                            this.props.dispatch(routerRedux.push(`/monitor/operation/emergency/emergencytodolist/`));
+                            this.props.history.goBack(-1);
+                            // this.props.dispatch(routerRedux.push(`/monitor/operation/emergency/emergencytodolist/`));
                         }}>返回</Button>
                     </div>
                     <Modal
