@@ -86,7 +86,7 @@ class PopoverViewData_ extends Component {
         _childrenProps.dataType = dataParam.dataType;
         _childrenProps.startTime = '';
         _childrenProps.endTime = '';
-        _childrenProps.point = dataParam.point;
+        _childrenProps.point = [dataParam.point];
         _childrenProps.sort = dataParam.sort;
 
         switch (_childrenProps.dataType) {
@@ -192,26 +192,46 @@ class PopoverViewData_ extends Component {
         // console.log(visible);
         let dataParam = this._getDataParam();
         let setData = this.state;
+
+        let dataStatusContent;
+        console.log(dataParam);
+        if (dataParam.isExceed > 0) {
+            dataStatusContent = (
+                <div>
+                    <li style={{listStyle: 'none', marginBottom: 10}}>
+                        <Badge status="success" text={`标准值：${dataParam.standard}`} />
+                    </li>
+                    <li style={{listStyle: 'none', marginBottom: 10}}>
+                        <Badge status="error" text={`超标倍数：${dataParam.exceedValue}`} />
+                    </li>
+                    <li style={{borderBottom: '1px solid #e8e8e8', listStyle: 'none', marginBottom: 10}} />
+                </div>
+            );
+        } else if (dataParam.isException > 0) {
+            dataStatusContent = (
+                <div>
+                    <li style={{listStyle: 'none', marginBottom: 10}}>
+                        <Badge status="success" text={`标准值：${dataParam.standard}`} />
+                    </li>
+                    <li style={{listStyle: 'none', marginBottom: 10, color: 'red'}}>
+                        <Badge status="error" text={`状态：${dataParam.exceptionText}`} />
+                    </li>
+                    <li style={{borderBottom: '1px solid #e8e8e8', listStyle: 'none', marginBottom: 10}} />
+                </div>
+            );
+        }
+
         if (visible) {
             if (dataParam.dataType === 'hour' || dataParam.dataType === 'day') {
                 setData.divContent = (
-                    <div>
-                        <Divider />
-                        <p style={{fontSize: 12, cursor: 'pointer', color: '#575757'}} onClick={() => this._openModal(true, 1)}><Icon type="table" style={{ fontSize: 14, color: '#08c' }} /> 查看各参数数据</p>
-                        <p style={{fontSize: 12, cursor: 'pointer', color: '#575757'}} onClick={() => this._openModal(true, 2)}><Icon type="laptop" style={{ fontSize: 14, color: '#08c' }} /> 查看仪器状态参数</p>
-                    </div>
-                );
-            } else {
-                setData.divContent = (
+                    // <div>
+                    //     <Divider />
+                    //     <p style={{fontSize: 12, cursor: 'pointer', color: '#575757'}} onClick={() => this._openModal(true, 1)}><Icon type="table" style={{ fontSize: 14, color: '#08c' }} /> 查看各参数数据</p>
+                    //     <p style={{fontSize: 12, cursor: 'pointer', color: '#575757'}} onClick={() => this._openModal(true, 2)}><Icon type="laptop" style={{ fontSize: 14, color: '#08c' }} /> 查看仪器状态参数</p>
+                    // </div>
                     <div>
                         <ul style={{paddingLeft: 0}}>
-                            <li style={{listStyle: 'none', marginBottom: 10}}>
-                                <Badge status="success" text="标准值：25" />
-                            </li>
-                            <li style={{listStyle: 'none', marginBottom: 10}}>
-                                <Badge status="success" text="超标倍数：25" />
-                            </li>
-                            <li style={{borderBottom: '1px solid #e8e8e8', listStyle: 'none', marginBottom: 10}} />
+                            {dataStatusContent}
                             <li style={{listStyle: 'none'}}>
                                 <Icon type="laptop" style={{ fontSize: 14, color: '#08c' }} />
                                 <Divider type="vertical" />
@@ -221,6 +241,19 @@ class PopoverViewData_ extends Component {
                                 <Icon type="table" style={{ fontSize: 14, color: '#08c' }} />
                                 <Divider type="vertical" />
                                 <a style={{fontSize: 12, cursor: 'pointer', color: '#575757'}} onClick={() => this._openModal(true, 1)}>查看各参数数据</a>
+                            </li>
+                        </ul>
+                    </div>
+                );
+            } else {
+                setData.divContent = (
+                    <div>
+                        <ul style={{paddingLeft: 0}}>
+                            {dataStatusContent}
+                            <li style={{listStyle: 'none'}}>
+                                <Icon type="laptop" style={{ fontSize: 14, color: '#08c' }} />
+                                <Divider type="vertical" />
+                                <a style={{fontSize: 12, cursor: 'pointer', color: '#575757'}} onClick={() => this._openModal(true, 2)}>查看仪器状态参数</a>
                             </li>
                         </ul>
                     </div>

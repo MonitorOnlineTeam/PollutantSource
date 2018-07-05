@@ -12,6 +12,7 @@ import {
     Row,
     Col,
     Card,
+    Badge
 } from 'antd';
 
 /*
@@ -245,7 +246,14 @@ class DataQuery extends Component {
                 width: 150,
                 render: (text, row, index) => {
                     let color = (+row.Concentration) > (+row.Standard) ? 'red' : 'none';
+                    // console.log(row);
                     // console.log(row.Concentration + ' ' + row.Standard);
+                    let dot = true;
+                    if (row.isExceed > 0) {
+                        dot = true;
+                    } else if (row.isException > 0) {
+                        dot = true;
+                    }
                     return (
                         <PopoverViewData_
                             dataParam={{
@@ -253,10 +261,18 @@ class DataQuery extends Component {
                                 pollutantCode: this.state.searchData.pollutantCode,
                                 point: this.state.dgmin || [],
                                 rowTime: row.MonitoringTime,
+                                isExceed: row.IsExceed, // 是否超标
+                                exceedValue: row.ExceedValue, // 超标倍数
+                                isException: row.IsException, // 是否异常
+                                exceptionText: row.ExceptionText, // 异常类型
+                                standard: row.Standard, // 标准值
                                 sort: 'asc'
                             }}
                         >
-                            <a style={{color: color, cursor: 'pointer'}}>{row.Concentration}</a>
+                            <Badge dot={dot}>
+                                <a style={{cursor: 'pointer'}}>{row.Concentration}</a>
+                            </Badge>
+                            {/* <a style={{color: color, cursor: 'pointer'}}>{row.Concentration}</a> */}
                         </PopoverViewData_>
                     );
                 },

@@ -127,18 +127,18 @@ export function getPointEnterprise() {
 // *********************************获取浓度数据*********************************
 // 默认污染物
 export const defaultPollutantCodes = [
-    {Value: '01', Name: '实测烟尘', Unit: 'mg/m3', Min: 1, Max: 35, Standard: 25, IsExceed: 0, ExceedValue: 0, IsException: 0, ExceptionValue: 0, ExceptionText: ''},
-    {Value: '02', Name: '实测二氧化硫', Unit: 'mg/m3', Min: 20, Max: 300, Standard: 25, IsExceed: 0, ExceedValue: 0, IsException: 0, ExceptionValue: 0},
-    {Value: '03', Name: '实测氮氧化物', Unit: 'mg/m3', Min: 10, Max: 150, Standard: 25, IsExceed: 0, ExceedValue: 0, IsException: 0, ExceptionValue: 0},
-    {Value: 'b02', Name: '流量', Unit: 'm3/h', Min: 30, Max: 70, Standard: 25, IsExceed: 0, ExceedValue: 0, IsException: 0, ExceptionValue: 0},
-    {Value: 's01', Name: '氧含量', Unit: '%', Min: 3, Max: 10, Standard: 25, IsExceed: 0, ExceedValue: 0, IsException: 0, ExceptionValue: 0},
-    {Value: 's02', Name: '流速', Unit: 'm/s', Min: 3, Max: 10, Standard: 25, IsExceed: 0, ExceedValue: 0, IsException: 0, ExceptionValue: 0},
-    {Value: 's03', Name: '烟气温度', Unit: '℃', Min: 3, Max: 20, Standard: 25, IsExceed: 0, ExceedValue: 0, IsException: 0, ExceptionValue: 0},
-    {Value: 's05', Name: '烟气湿度', Unit: '%', Min: 3, Max: 20, Standard: 25, IsExceed: 0, ExceedValue: 0, IsException: 0, ExceptionValue: 0},
-    {Value: 's08', Name: '烟气静压', Unit: 'MPa', Min: -100, Max: -500, Standard: 25, IsExceed: 0, ExceedValue: 0, IsException: 0, ExceptionValue: 0},
-    {Value: 'zs01', Name: '烟尘', Unit: 'mg/m3', Min: 1, Max: 50, Standard: 25, IsExceed: 0, ExceedValue: 0, IsException: 0, ExceptionValue: 0},
-    {Value: 'zs02', Name: '二氧化硫', Unit: 'mg/m3', Min: 10, Max: 300, Standard: 25, IsExceed: 0, ExceedValue: 0, IsException: 0, ExceptionValue: 0},
-    {Value: 'zs03', Name: '氮氧化物', Unit: 'mg/m3', Min: 15, Max: 150, Standard: 25, IsExceed: 0, ExceedValue: 0, IsException: 0, ExceptionValue: 0}
+    {Value: '01', Name: '实测烟尘', Unit: 'mg/m3', Min: 1, Max: 35, Standard: 25, IsExceed: 0, ExceedValue: 0, IsException: 0, ExceptionText: ''},
+    {Value: '02', Name: '实测二氧化硫', Unit: 'mg/m3', Min: 20, Max: 300, Standard: 25, IsExceed: 0, ExceedValue: 0, IsException: 0, ExceptionText: ''},
+    {Value: '03', Name: '实测氮氧化物', Unit: 'mg/m3', Min: 10, Max: 150, Standard: 25, IsExceed: 0, ExceedValue: 0, IsException: 0, ExceptionText: ''},
+    {Value: 'b02', Name: '流量', Unit: 'm3/h', Min: 30, Max: 70, Standard: 25, IsExceed: 0, ExceedValue: 0, IsException: 0, ExceptionText: ''},
+    {Value: 's01', Name: '氧含量', Unit: '%', Min: 3, Max: 10, Standard: 25, IsExceed: 0, ExceedValue: 0, IsException: 0, ExceptionText: ''},
+    {Value: 's02', Name: '流速', Unit: 'm/s', Min: 3, Max: 10, Standard: 25, IsExceed: 0, ExceedValue: 0, IsException: 0, ExceptionText: ''},
+    {Value: 's03', Name: '烟气温度', Unit: '℃', Min: 3, Max: 20, Standard: 25, IsExceed: 0, ExceedValue: 0, IsException: 0, ExceptionText: ''},
+    {Value: 's05', Name: '烟气湿度', Unit: '%', Min: 3, Max: 20, Standard: 25, IsExceed: 0, ExceedValue: 0, IsException: 0, ExceptionText: ''},
+    {Value: 's08', Name: '烟气静压', Unit: 'MPa', Min: -100, Max: -500, Standard: 25, IsExceed: 0, ExceedValue: 0, IsException: 0, ExceptionText: ''},
+    {Value: 'zs01', Name: '烟尘', Unit: 'mg/m3', Min: 1, Max: 50, Standard: 25, IsExceed: 0, ExceedValue: 0, IsException: 0, ExceptionText: ''},
+    {Value: 'zs02', Name: '二氧化硫', Unit: 'mg/m3', Min: 10, Max: 300, Standard: 25, IsExceed: 0, ExceedValue: 0, IsException: 0, ExceptionText: ''},
+    {Value: 'zs03', Name: '氮氧化物', Unit: 'mg/m3', Min: 15, Max: 150, Standard: 25, IsExceed: 0, ExceedValue: 0, IsException: 0, ExceptionText: ''}
 ];
 
 // 获取污染物
@@ -300,17 +300,22 @@ export function getAllConcentration(obj) {
             monitoringTime.id = m++;
             monitoringTime.MonitoringTime = moment(eTime).format(dateForms.format);
             monitoringTime.PollutantDatas = [];
-            pollutantCodes.map((item) => {
+            let tempIsExceedFlag = false;
+            let tempIsExceptionFlag = false;
+            pollutantCodes.map((item, Key) => {
                 let PollutantData = {};
                 PollutantData.PollutantCode = item.Value;
                 PollutantData.PollutantName = item.Name;
                 PollutantData.Max = item.Max;
                 PollutantData.Min = item.Min;
                 PollutantData.Unit = item.Unit;
-                PollutantData.Concentration = (Math.random() * (item.Max - item.Min + 1) + item.Min).toFixed(3);
+                PollutantData.Concentration = m === 6 ? 0 : (Math.random() * (item.Max - item.Min + 1) + item.Min).toFixed(3);
                 PollutantData.Standard = item.Standard;
-                PollutantData.IsExceed = 0;
 
+                PollutantData.IsExceed = m === 3 ? 1 : 0;
+                PollutantData.ExceedValue = m === 3 ? ((PollutantData.Concentration - PollutantData.Standard) / PollutantData.Standard).toFixed(2) : 0;
+                PollutantData.IsException = m === 6 ? 1 : 0;
+                PollutantData.ExceptionText = '0值异常';
                 // PollutantData.
                 monitoringTime.PollutantDatas.push(PollutantData);
             });
@@ -354,7 +359,7 @@ export function getAllConcentration(obj) {
     //     });
     //     returnDatas.push(pointData);
     // });
-    // console.log(returnDatas);
+     console.log(returnDatas);
     return returnDatas;
 }
 // *********************************获取浓度数据*********************************
