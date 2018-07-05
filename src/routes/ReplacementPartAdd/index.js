@@ -120,22 +120,28 @@ export default class ReplacementPartAdd extends Component {
             title: '总价（元）',
             dataIndex: 'TotalMoney',
             width: 80
+        }, {
+            title: '操作',
+            dataIndex: 'action',
+            width: 80,
+            render: (text, record) => {
+                return (<a onClick={() => {
+                    this.setState({
+                        visible: true,
+                        type: 'list',
+                        title: '入库详细信息查看',
+                        width: 1030
+                    });
+                }}>入库详细</a>);
+            }
         }];
 
         return (
             <PageHeaderLayout title="备件备件维护" >
                 <Card bordered={false} >
                     <div>
-                        <div className={styles.tableListForm}>{this.renderForm()}</div>
+                        <div className={styles.tableListForm}>{this.renderForm()}</div>                        
                         <Button style={{marginBottom: 10}} type="primary" onClick={() => {
-                            this.setState({
-                                visible: true,
-                                type: 'list',
-                                title: '入库详细信息查看',
-                                width: 1030
-                            });
-                        }}> 查看入库详细 </Button>
-                        <Button style={{marginLeft: 10, marginBottom: 10}} onClick={() => {
                             this.setState({
                                 visible: true,
                                 type: 'form',

@@ -1,0 +1,81 @@
+[{
+    "key": 1,
+    "Company": "雪迪龙运维公司",
+    "MadeTime": "2017-03-31",
+    "Made": 50,
+    "UnMade": 0,
+    "Total": 50,
+    "MadeRate": 100,
+    "WeekInfo":"2018-04-02至2018-04-08",
+    "State":"2"
+  },{
+    "key": 2,
+    "Company": "雪迪龙运维公司",
+    "MadeTime": "2017-04-08",
+    "Made": 50,
+    "UnMade": 0,
+    "Total": 50,
+    "MadeRate": 100,
+    "WeekInfo":"2018-04-09至2018-04-15",
+    "State":"2"
+  },{
+    "key": 3,
+    "Company": "雪迪龙运维公司",
+    "MadeTime": "2017-04-15",
+    "Made": 50,
+    "UnMade": 0,
+    "Total": 50,
+    "MadeRate": 100,
+    "WeekInfo":"2018-04-16至2018-04-22",
+    "State":"2"
+  },{
+    "key": 4,
+    "Company": "雪迪龙运维公司",
+    "MadeTime": "2017-04-22",
+    "Made": 50,
+    "UnMade": 0,
+    "Total": 50,
+    "MadeRate": 100,
+    "WeekInfo":"2018-04-23至2018-04-29",
+    "State":"2"
+  },{
+    "key": 5,
+    "Company": "雪迪龙运维公司",
+    "MadeTime": "2017-04-29",
+    "Made": 50,
+    "UnMade": 0,
+    "Total": 50,
+    "MadeRate": 100,
+    "WeekInfo":"2018-04-29至2018-05-06",
+    "State":"2"
+  },{
+    "key": 6,
+    "Company": "雪迪龙运维公司",
+    "MadeTime": "2017-05-06",
+    "Made": 50,
+    "UnMade": 0,
+    "Total": 50,
+    "MadeRate": 100,
+    "WeekInfo":"2018-05-07至2018-05-13",
+    "State":"2"
+  },{
+    "key": 7,
+    "Company": "雪迪龙运维公司",
+    "MadeTime": "2017-05-13",
+    "Made": 50,
+    "UnMade": 0,
+    "Total": 50,
+    "MadeRate": 100,
+    "WeekInfo":"2018-05-14至2018-05-20",
+    "State":"2"
+  },{
+    "key": 8,
+    "Company": "雪迪龙运维公司",
+    "MadeTime": "2017-06-28",
+    "Made": 50,
+    "UnMade": 0,
+    "Total": 50,
+    "MadeRate": 100,
+    "WeekInfo":"2018-07-02至2018-07-08",
+    "State":"1"
+  }]

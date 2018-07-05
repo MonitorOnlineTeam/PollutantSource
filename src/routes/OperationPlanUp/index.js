@@ -252,24 +252,28 @@ export default class OperationPlanUp extends Component {
             title: '操作',
             key: 'action',
             render: (text, record) => {
-                if (!!record.editable && this.state.loading) {
-                    return null;
-                }
-                if (record.editable) {
+                if (record.State === '1') {
+                    return '-';
+                } else {
+                    if (!!record.editable && this.state.loading) {
+                        return null;
+                    }
+                    if (record.editable) {
+                        return (
+                            <span>
+                                <a onClick={e => this.saveRow(e, record.key)}>保存</a>
+                                <Divider type="vertical" />
+                                <a onClick={e => this.cancel(e, record.key)}>取消</a>
+                            </span>
+                        );
+                    }
+
                     return (
                         <span>
-                            <a onClick={e => this.saveRow(e, record.key)}>保存</a>
-                            <Divider type="vertical" />
-                            <a onClick={e => this.cancel(e, record.key)}>取消</a>
+                            <a onClick={e => this.toggleEditable(e, record.key)}>制定计划</a>
                         </span>
                     );
                 }
-
-                return (
-                    <span>
-                        <a onClick={e => this.toggleEditable(e, record.key)}>制定计划</a>
-                    </span>
-                );
             }
         }];
 
@@ -279,9 +283,9 @@ export default class OperationPlanUp extends Component {
                     <div style={{marginBottom: 10}}>
                         <span>2018-07-02至2018-07-08</span>
                         <RadioGroup defaultValue="1" style={{marginLeft: 20}}>
-                            <RadioButton value="2" onClick={e => this.SearchData(e)}>全部(85)</RadioButton>
-                            <RadioButton value="1" onClick={e => this.SearchData(e)} className={styles.green}><span style={{color: 'white'}}>已制定(40)</span></RadioButton>
-                            <RadioButton value="0" onClick={e => this.SearchData(e)} className={styles.red}><span style={{color: 'white'}}>未制定(45)</span></RadioButton>
+                            <RadioButton value="2" onClick={e => this.SearchData(e)}>全部({newPlanData.filter(item => item.State !== '2').length})</RadioButton>
+                            <RadioButton value="1" onClick={e => this.SearchData(e)} className={styles.green}><span style={{color: 'white'}}>已制定({newPlanData.filter(item => item.State === '1').length})</span></RadioButton>
+                            <RadioButton value="0" onClick={e => this.SearchData(e)} className={styles.red}><span style={{color: 'white'}}>未制定({newPlanData.filter(item => item.State === '0').length})</span></RadioButton>
                         </RadioGroup>
                         <Select placeholder="请选择企业" style={{ width: 300, marginLeft: 30 }}>
                             <Option value="大唐集团">大唐集团</Option>
