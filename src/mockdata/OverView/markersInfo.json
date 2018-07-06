@@ -163,7 +163,7 @@
                 "data":["0","01", "02", "03", "04", "05", "06", "07","08","09","10","11","12","13","14","15","16","17","18","19","20","21","22","23"]
             },
             "grid" : {
-                "top" : 10,    
+                "top" : -10,    
                 "bottom": 20,
                 "left":35 ,
                 "right":0
@@ -179,15 +179,20 @@
         "sewagepieoption":{
             "series" : [
                 {
+                    "hoverAnimation":false,
                     "name": "排放占比",
                     "type": "pie",
-                    "radius" : "55%",
+                    "radius" : "80%",
                     "center": ["50%", "60%"],
                     "data":[
                         {"value":238, "name":"SO2"},
-                        {"value":31, "name":"烟尘"},
+                        {"value":172, "name":"烟尘"},
                         {"value":119, "name":"NOx"}
                     ],
+                    "label":{
+                        "show":true,
+                        "position":"inside"
+                    },
                     "itemStyle": {
                         "emphasis": {
                             "shadowBlur": 10,
@@ -197,6 +202,85 @@
                     }
                 }
             ]
+        },
+       "maplegend":[
+        {
+            "monitor":[
+                {
+                    "defaultValue":"正常",
+                    "bgcolor":"#79C403"
+                },
+                {
+                    "defaultValue":"超标",
+                    "bgcolor":"#F40000"
+                },
+                {
+                    "defaultValue":"离线",
+                    "bgcolor":"#A8A6A5"
+                },
+                {
+                    "defaultValue":"异常",
+                    "bgcolor":"#FADE00"
+                }
+            ],
+            "operation":[
+                {
+                    "defaultValue":"正常",
+                    "bgcolor":"#79C403"
+                },
+                {
+                    "defaultValue":"运维",
+                    "bgcolor":"#F29C26"
+                },
+                {
+                    "defaultValue":"逾期",
+                    "bgcolor":"#970258"
+                },
+                {
+                    "defaultValue":"故障",
+                    "bgcolor":"#F8AD00"
+                },
+                {
+                    "defaultValue":"停产",
+                    "bgcolor":"#FADE00"
+                }
+            ],
+            "sewage":[
+                {
+                    "defaultValue":"一级",
+                    "bgcolor":"#79C403"
+                },
+                {
+                    "defaultValue":"二级",
+                    "bgcolor":"#F40000"
+                },
+                {
+                    "defaultValue":"三级",
+                    "bgcolor":"#A8A6A5"
+                },
+                {
+                    "defaultValue":"四级",
+                    "bgcolor":"#FADE00"
+                }
+            ],
+            "quality":[
+                {
+                    "defaultValue":"正常",
+                    "bgcolor":"#79C403"
+                },
+                {
+                    "defaultValue":"质控",
+                    "bgcolor":"#3F8AA0"
+                }
+            ]
         }
+    ]
     }
     
+  
+
+ 
+ 
+   
+ 
+ 

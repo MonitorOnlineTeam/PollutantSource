@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import PointList from '../../components/PointList/PointsList';
-import {Button, Table, Select, Modal, Card, Form, Row, Col} from 'antd';
+import {Button, Table, Select, Card, Form, Row, Col, Icon, message} from 'antd';
 import EmergencyDataList from '../../mockdata/EmergencyTodoList/EmergencyDataList.json';
 import moment from 'moment';
-import EmergencyDetailInfo from './EmergencyDetailInfo';
+import { connect } from 'dva';
 import RangePicker_ from '../../components/PointDetail/RangePicker_';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styless from '../ReplacementPartAdd/index.less';
@@ -11,15 +11,19 @@ import {routerRedux} from 'dva/router';
 const FormItem = Form.Item;
 
   @Form.create()
+  @connect()
 export default class EmergencyTodoList extends Component {
       constructor(props) {
           super(props);
           this.state = {
-              EmergencyData: EmergencyDataList.EDataList,
+              EmergencyData: EmergencyDataList.EDataList.filter((item) => {
+                  return item.CheckState !== '审核通过';
+              }),
               RangeDate: [moment().subtract(7, 'days'), moment()],
               TargetStatus: '',
               OpeartionPerson: '',
               DGIMNS: [],
+              selectid: ''
           };
       }
 
@@ -32,14 +36,14 @@ export default class EmergencyTodoList extends Component {
         let dataList = [];
         EmergencyDataList.EDataList.map((item, _key) => {
             let isexist = false;
-            if (value.indexOf(item.DGIMN) > -1) {
+            if (item.CheckState !== '审核通过' && value.indexOf(item.DGIMN) > -1) {
                 isexist = true;
             }
 
             if (isexist) { dataList.push(item); }
         });
         this.setState({
-            EmergencyData: dataList
+            EmergencyData: dataList,
         });
     };
 
@@ -62,6 +66,12 @@ export default class EmergencyTodoList extends Component {
         });
     };
 
+    toggleForm = () => {
+        this.setState({
+            expandForm: !this.state.expandForm,
+        });
+    };
+
     SearchInfo=() => {
 
     }
@@ -76,22 +86,21 @@ export default class EmergencyTodoList extends Component {
 
     renderSimpleForm() {
         const { getFieldDecorator } = this.props.form;
-        const { Option } = Select;
         return (
             <Form layout="inline">
-                <Row gutter={{ md: 6, lg: 24, xl: 48 }}>
-                    <Col span={6} md={6} sm={24}>
+                <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
+                    <Col md={9} sm={24}>
                         <FormItem label="开始时间">
                             {getFieldDecorator(`MaterialName`)(
-                                <RangePicker_ dateValue={this.state.RangeDate} format="YYYY-MM-DD" onChange={this._handleDateChange} />
+                                <RangePicker_ dateValue={this.state.RangeDate} format="YYYY-MM-DD" onChange={this._handleDateChange} style={{ width: '100%' }} />
                             )}
                         </FormItem>
                     </Col>
-                    <Col span={6} md={6} sm={24}>
+                    <Col md={5} sm={24}>
                         <FormItem label="任务状态">
                             {getFieldDecorator('Brand')(
-                                <Select style={{ width: 200, marginLeft: 10 }} placeholder="请输入"
-                                    onChange={this._handleTargetChange}>
+                                <Select placeholder="请选择"
+                                    onChange={this._handleTargetChange} style={{ width: '100%' }}>
                                     <Option value="">全部</Option>
                                     <Option value="处理中">处理中</Option>
                                     <Option value="未审核">未审核</Option>
@@ -102,26 +111,25 @@ export default class EmergencyTodoList extends Component {
                             )}
                         </FormItem>
                     </Col>
-                    <Col span={6} md={6} sm={24}>
+                    <Col md={5} sm={24}>
                         <FormItem label="处理人">
                             {getFieldDecorator(`Specifications`)(
-                                <Select style={{ width: 200, marginLeft: 10 }} placeholder="请输入"
-                                    onChange={this._handleOperationChange}>
+                                <Select placeholder="请选择"
+                                    onChange={this._handleOperationChange}
+                                    style={{ width: '100%' }}>
                                     <Option value="">全部</Option>
                                     <Option value="小李">小李</Option>
                                     <Option value="小王">小王</Option>
                                 </Select>
-                            )}
+                            ) }
                         </FormItem>
                     </Col>
-                    <Col span={6} md={6} sm={24}>
-                        <span className={styless.submitButtons}>
-                            <Button type="primary" htmlType="submit" onClick={this.SearchInfo}>
+                    <Col md={5} sm={24}>
+                        <Button type="primary" htmlType="submit" onClick={this.SearchInfo}>
                 查询 </Button>
-                            <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>
+                        <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>
                 重置
-                            </Button>
-                        </span>
+                        </Button>
                     </Col>
                 </Row>
             </Form>
@@ -131,6 +139,7 @@ export default class EmergencyTodoList extends Component {
     renderForm() {
         return this.renderSimpleForm();
     }
+
     render() {
         const SCREEN_HEIGHT = document.querySelector('body').offsetHeight;
         const SCREEN_WIDTH = document.querySelector('body').offsetWidth;
@@ -138,7 +147,7 @@ export default class EmergencyTodoList extends Component {
         const EColumn = [
             {
                 title: '故障类型',
-                width: '10%',
+                width: '15%',
                 dataIndex: 'ExceptionType',
                 align: 'center'
             }, {
@@ -158,7 +167,7 @@ export default class EmergencyTodoList extends Component {
                 align: 'center'
             }, {
                 title: '签到',
-                width: '15%',
+                width: '20%',
                 dataIndex: 'SignFlag',
                 align: 'center'
             }, {
@@ -166,28 +175,28 @@ export default class EmergencyTodoList extends Component {
                 width: '10%',
                 dataIndex: 'CheckState',
                 align: 'center'
-            }, {
-                title: '操作',
-                width: '10%',
-                dataIndex: 'action',
-                align: 'center',
-                render: (text, record) => {
-                    const that = thata;
-                    debugger;
-                    return (
-                        <span>
-                            <Button type="dashed" icon="search" size="small"
-                                onClick={(record) => {
-                                    debugger;
-                                    that.props.dispatch(routerRedux.push(`/monitor/emergency/emergencydetailinfo/${record.ExceptionHandleId}`));
-                                }}
-                            >详细
-                            </Button>
-                        </span>
-                    );
-                }
             }
         ];
+
+        const rowSelection = {
+            onChange: (selectedRowKeys, selectedRows) => {
+                let keys = [];
+                selectedRowKeys.map(t => {
+                    if (Array.isArray(t)) {
+                        t.map(a => {
+                            if (a !== '') { keys.push(a); }
+                        });
+                    } else {
+                        if (t !== '') { keys.push(t); }
+                    }
+                });
+            },
+            getCheckboxProps: record => ({
+                disabled: record.name === 'Disabled User', // Column configuration not to be checked
+                name: record.name,
+            }),
+            selectedRowKeys: [this.state.selectid]
+        };
 
         return (
             <PointList handleChange={this.SearchEmergencyDataList} IsShowChk={'none'}>
@@ -195,6 +204,13 @@ export default class EmergencyTodoList extends Component {
                     <Card bordered={false} >
                         <div>
                             <div className={styless.tableListForm}>{this.renderForm()}</div>
+                            <Button style={{marginLeft: 10, marginBottom: 10}} onClick={() => {
+                                if (this.state.selectid === '') {
+                                    message.info('请选择应急任务！');
+                                } else {
+                                    this.props.dispatch(routerRedux.push(`/monitor/emergency/emergencydetailinfo/${this.state.selectid}`));
+                                }
+                            }}> 查看 </Button>
                             <Table
                                 columns={EColumn}
                                 dataSource={this.state.EmergencyData}
@@ -202,15 +218,24 @@ export default class EmergencyTodoList extends Component {
                                 pagination={{
                                     showSizeChanger: true,
                                     showQuickJumper: true,
+                                    'total': this.state.EmergencyData.length,
                                     'pageSize': 20,
                                     'current': 1
                                 }}
+                                rowSelection={rowSelection}
                                 scroll={
                                     {
-                                        y: 'calc(100vh - 460px)'
+                                        y: 'calc(100vh - 458px)'
                                     }
                                 }
-                                bordered={true}
+                                onRow={(record, index) => {
+                                    return {
+                                        onClick: (a, b, c) => {
+                                            this.setState({selectid: record.ExceptionHandleId});
+                                        }, // 点击行
+                                        onMouseEnter: () => {}, // 鼠标移入行
+                                    };
+                                }}
                             />
                         </div></Card>
                 </PageHeaderLayout>

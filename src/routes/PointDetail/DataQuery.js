@@ -11,11 +11,9 @@ import {
     Table,
     Row,
     Col,
-    Card,
-    Popover,
-    Icon,
-    Modal
+    Card
 } from 'antd';
+import moment from 'moment';
 
 /*
 页面：2、数据查询
@@ -28,64 +26,110 @@ const pollutantDatas = getPollutantDatas();
 class DataQuery extends Component {
     constructor(props) {
         super(props);
+        // console.log(this.props.match.params.pointcode);
+        const defaultPollutant = pollutantDatas[0];
         var defaultOption = {
             legend: [],
             xAxisData: [],
             series: [{
                 name: '',
                 type: 'line',
-                data: []
+                data: [],
+                markPoint: {
+                    data: [
+                        {type: 'max', name: '最大值'},
+                        {type: 'min', name: '最小值'}
+                    ]
+                },
+                markLine: {
+                    data: [
+                        // {type: 'average', name: '平均值'}
+                        {name: '标准值', yAxis: defaultPollutant.Standard}
+                    ]
+                }
             }]
         };
+
         const obj = {
             startTime: '',
             endTime: '',
             concentration: [pollutantDatas[0].Value],
-            dataType: 'realtime'
+            dataType: 'realtime',
+            point: [this.props.match.params.pointcode] || []
         };
         let concentrationDatas = getAllConcentration(obj);
-        concentrationDatas = concentrationDatas[0].PollutantData[0].Datas;
-        defaultOption.series[0].name = pollutantDatas[0].Name;
-
+        let defaultTableDatas = [];
+        // console.log(defaultPollutant.Value);
+        let t = 1;
         concentrationDatas.map((item) => {
-            defaultOption.xAxisData.push(item.MonitoringTime);
-            defaultOption.series[0].data.push((+item.Concentration));
+            let _thisPollutantInfo = {};
+            item.MonitoringDatas.map((time) => {
+                let _thisPollutant = time.PollutantDatas.find((pollutants) => {
+                    return pollutants.PollutantCode === defaultPollutant.Value;
+                });
+                _thisPollutantInfo = _thisPollutant;
+                _thisPollutantInfo.MonitoringTime = time.MonitoringTime;
+                defaultOption.xAxisData.push(_thisPollutantInfo.MonitoringTime);
+                defaultOption.series[0].data.push((+_thisPollutantInfo.Concentration));
+                defaultOption.series[0].name = _thisPollutantInfo.PollutantName;
+                let _rowData = {};
+                _rowData = _thisPollutantInfo;
+                _rowData.Key = t++;
+                // _rowData.MonitoringTime = _thisPollutantInfo.MonitoringTime;
+                // _rowData.Concentration = _thisPollutantInfo.Concentration;
+                defaultTableDatas.push(_rowData);
+            });
         });
 
         this.state = {
             pollutantDatas: getPollutantDatas(),
             searchData: {
-                pollutantValue: pollutantDatas[0].Value,
-                pollutantText: pollutantDatas[0].Name,
+                pollutantCode: defaultPollutant.Value,
+                pollutantText: defaultPollutant.Name,
                 rangeDate: [],
                 dataType: 'realtime'
             },
             optionData: {
-                legendData: [pollutantDatas[0].Name],
+                legendData: [defaultPollutant.Name],
                 xAxisData: defaultOption.xAxisData,
                 series: defaultOption.series,
-                unit: pollutantDatas[0].Unit,
-                min: pollutantDatas[0].Min,
-                max: pollutantDatas[0].Max
+                unit: defaultPollutant.Unit,
+                min: defaultPollutant.Min,
+                max: defaultPollutant.Max,
+                standard: defaultPollutant.Standard
 
             },
-            tableData: concentrationDatas,
+            tableData: defaultTableDatas,
             tempDataParam: obj,
             lookDataParamModal: false,
             modalData: {
                 allParamData: [],
                 statusData: []
-            }
+            },
+            dgmin: obj.point
         };
+    }
+
+    _formatDate=(time) => {
+        debugger;
+        let formats;
+        switch (this.state.searchData.dataType) {
+            case 'realtime':
+            case 'minutes': formats = 'YYYY-MM-DD HH:mm:ss'; break;
+            case 'hour': formats = 'YYYY-MM-DD HH:mm'; break;
+            case 'day': formats = 'YYYY-MM-DD HH'; break;
+        };
+        return moment(time).format(formats);
     }
     // 污染物
     _handlePollutantChange=(value, selectedOptions) => {
         let setData = this.state;
-        setData.searchData.pollutantValue = selectedOptions.props.value;
+        setData.searchData.pollutantCode = selectedOptions.props.value;
         setData.searchData.pollutantText = selectedOptions.props.children;
         setData.optionData.unit = selectedOptions.props.Unit;
         setData.optionData.min = selectedOptions.props.minValue;
         setData.optionData.max = selectedOptions.props.maxValue;
+        setData.optionData.standard = selectedOptions.props.Standard;
         this._reloadData(setData);
     };
     // 时间范围
@@ -102,6 +146,7 @@ class DataQuery extends Component {
                     filterTableDatas.push(item);
                 }
             });
+
             setData.tableData = [];
             setData.tableData = filterTableDatas;
             let isFilter = true;
@@ -120,10 +165,31 @@ class DataQuery extends Component {
 
         if (!isFilter) {
             setData.tableData = [];
-            setData.tableData = getAllConcentration({
+
+            let _thisTableDatas = getAllConcentration({
                 dataType: setData.searchData.dataType,
-                concentration: [setData.searchData.pollutantValue]
-            })[0].PollutantData[0].Datas;
+                pollutantCodes: [setData.searchData.pollutantCode],
+                point: setData.dgmin || []
+            });
+            // console.log(_thisTableDatas);
+            let t = 1;
+            _thisTableDatas.map((item) => {
+                item.MonitoringDatas.map((time) => {
+                    // console.log(time);
+                    let _thisPollutantInfo = {};
+                    let _thisPollutant = time.PollutantDatas.find((pollutants) => {
+                        return pollutants.PollutantCode === setData.searchData.pollutantCode;
+                    });
+
+                    _thisPollutantInfo = _thisPollutant;
+                    _thisPollutantInfo.MonitoringTime = this._formatDate(time.MonitoringTime);
+
+                    let _rowData = {};
+                    _rowData = _thisPollutantInfo;
+                    _rowData.Key = t++;
+                    setData.tableData.push(_rowData);
+                });
+            });
         }
         setData.optionData.legendData = [setData.searchData.pollutantText];
         setData.optionData.xAxisData = [];
@@ -131,12 +197,12 @@ class DataQuery extends Component {
         setData.optionData.series[0].data = [];
 
         setData.tableData.map((item) => {
-            setData.optionData.xAxisData.push(item.MonitoringTime);
+            setData.optionData.xAxisData.push(this._formatDate(item.MonitoringTime));
             setData.optionData.series[0].data.push((+item.Concentration));
         });
-        // console.log(setData.tableData);
         this.setState({setData});
     };
+    // 查看数据参数弹窗
     _lookDataParamModal=(modalVisible) => {
         let setData = this.state;
         setData.lookDataParamModal = modalVisible;
@@ -174,12 +240,11 @@ class DataQuery extends Component {
                 axisLabel: {
                     formatter: '{value}'
                 },
-                min: this.state.optionData.min,
+                min: 0, // this.state.optionData.min,
                 max: Math.floor((this.state.optionData.min + this.state.optionData.max) * 1.5)
             },
             series: this.state.optionData.series
         };
-        // console.log(option);
         const columns = [
             {
                 title: '时间',
@@ -192,26 +257,41 @@ class DataQuery extends Component {
                 className: 'table_concentration',
                 width: 150,
                 render: (text, row, index) => {
-                    let color = (+row.Concentration) > (+row.Standard) ? 'red' : 'none';
-                    let content = (
-                        <div className={styles.popoverTip}>
-                            <p onClick={() => this._lookDataParamModal(true)}><Icon type="table" style={{ fontSize: 14, color: '#08c' }} /> 查看各参数数据</p>
-                            {/* <p><Icon type="table" style={{ fontSize: 14, color: '#08c' }} />标准值:<b>{row.Standard}</b></p> */}
-                            {/* <p>超标倍数:<b style={{color: color}}>{row.Overproof}</b></p> */}
-                            {/* <a href="##">查看管控状态及参数</a> */}
-                            <p onClick={() => this._lookDataParamModal(true)}><Icon type="laptop" style={{ fontSize: 14, color: '#08c' }} /> 查看仪器状态参数</p>
-                        </div>
-                    );
-                    // return (
-                    //     <Popover placement="bottom" content={content}>
-                    //         <a style={{color: color, cursor: 'pointer'}}>{row.Concentration}</a>
-                    //     </Popover>);
+                    // debugger
+                    // let color = (+row.Concentration) > (+row.Standard) ? 'red' : 'none';
+                    // console.log(row);
+                    // console.log(row.Concentration + ' ' + row.Standard);
+                    let dot;
+                    if (row.IsExceed > 0 || row.IsException > 0) {
+                        dot = (
+
+                            <a style={{color: 'red', cursor: 'pointer'}}>{row.Concentration}</a>
+
+                        );
+                    } else {
+                        dot = (
+
+                            <a style={{cursor: 'pointer'}}>{row.Concentration}</a>
+
+                        );
+                    }
                     return (
-                        <PopoverViewData_>
-                            <a style={{color: color, cursor: 'pointer'}}
-                                datatype={this.state.searchData.dataType}
-                                
-                            >{row.Concentration}</a>
+                        <PopoverViewData_
+                            dataParam={{
+                                dataType: this.state.searchData.dataType,
+                                pollutantCode: this.state.searchData.pollutantCode,
+                                point: this.state.dgmin || [],
+                                rowTime: row.MonitoringTime,
+                                isExceed: row.IsExceed, // 是否超标
+                                exceedValue: row.ExceedValue, // 超标倍数
+                                isException: row.IsException, // 是否异常
+                                exceptionText: row.ExceptionText, // 异常类型
+                                standard: row.Standard, // 标准值
+                                sort: 'asc'
+                            }}
+                        >
+                            {dot}
+                            {/* <a style={{color: color, cursor: 'pointer'}}>{row.Concentration}</a> */}
                         </PopoverViewData_>
                     );
                 },
@@ -226,7 +306,7 @@ class DataQuery extends Component {
                                 <PollutantSelect_
                                     optionDatas={this.state.pollutantDatas}
                                     ref={(r) => { this.select_Pollutant = r; }}
-                                    defaultValue={this.state.pollutantDatas[0].Value}
+                                    defaultValue={this.state.searchData.pollutantCode}
                                     style={{width: 200}}
                                     onChange={this._handlePollutantChange}
                                 />

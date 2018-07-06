@@ -20,7 +20,6 @@ export default class PointsList extends Component {
               collapsed: !this.state.collapsed,
           });
       }
-
       // 根据关键字（企业、监测点名称）搜索监测点列表
       SearchList = (value) => {
           let markerInfo = [];
