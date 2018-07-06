@@ -297,6 +297,7 @@ export default class OperationPlanUp extends Component {
                         loading={this.state.loading}
                         columns={columns}
                         dataSource={this.state.data}
+                        borderd={true}
                         pagination={{
                             showSizeChanger: true,
                             showQuickJumper: true,
