@@ -1,7 +1,7 @@
 [
     {
         "id":"1",
-        "DGIMN":"sgjt001005",
+        "DGIMN":"bjldgn01",
         "operationaction":1,
         "date":"2018-07-27",
         "predate":"2018-07-20",
@@ -10,7 +10,7 @@
     },
     {
         "id":"2",
-        "DGIMN":"sgjt001003",
+        "DGIMN":"dtgjhh11102",
         "operationaction":1,
         "date":"2018-07-19",
         "cuiban":true,
@@ -20,7 +20,7 @@
     },
     {
         "id":"3",
-        "DGIMN":"sgjt001007",
+        "DGIMN":"dtgrjx110",
         "operationaction":1,
         "date":"2018-08-11",
         "cuiban":true,
@@ -30,7 +30,7 @@
     },
     {
         "id":"4",
-        "DGIMN":"hgjt001003",
+        "DGIMN":"dtgrjx103",
         "operationaction":1,
         "date":"2018-08-06",
         "cuiban":false,
@@ -40,7 +40,7 @@
     },
     {
         "id":"5",
-        "DGIMN":"hgjt001001",
+        "DGIMN":"lywjfd03",
         "operationaction":2,
         "date":"2018-06-01",
         "cuiban":false,

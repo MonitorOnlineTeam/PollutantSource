@@ -114,10 +114,10 @@ class DataQuery extends Component {
         debugger;
         let formats;
         switch (this.state.searchData.dataType) {
-            case 'realtime':
-            case 'minutes': formats = 'YYYY-MM-DD HH:mm:ss'; break;
-            case 'hour': formats = 'YYYY-MM-DD HH:mm'; break;
-            case 'day': formats = 'YYYY-MM-DD HH'; break;
+            case 'realtime':formats = 'YYYY-MM-DD HH:mm:ss'; break;
+            case 'minutes': formats = 'YYYY-MM-DD HH:mm'; break;
+            case 'hour': formats = 'YYYY-MM-DD HH'; break;
+            case 'day': formats = 'YYYY-MM-DD'; break;
         };
         return moment(time).format(formats);
     }
@@ -143,6 +143,7 @@ class DataQuery extends Component {
             setData.tableData.map((item) => {
                 let thisMonitoringTime = `${item.MonitoringTime}`;
                 if (thisMonitoringTime >= `${date[0].format('YYYY-MM-DD 00:00:00')}` && thisMonitoringTime <= `${date[1].format('YYYY-MM-DD HH:mm:ss')}`) {
+                    item.MonitoringTime = this._formatDate(item.MonitoringTime);
                     filterTableDatas.push(item);
                 }
             });

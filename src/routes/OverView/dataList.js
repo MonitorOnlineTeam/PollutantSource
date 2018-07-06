@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
-import { Table, Radio, Icon, Card, Popover, Row, Col, Input, Select, Affix, Avatar, Tag } from 'antd';
+import { Table, Radio, Icon, Card, Popover, Row, Col, Input, Select, Affix, Avatar, Tag, Button } from 'antd';
+import {routerRedux} from 'dva/router';
 import styles from './index.less';
 import moment from 'moment';
 import AListRadio from '../../components/OverView/AListRadio';
@@ -10,14 +11,6 @@ import PopoverViewData_ from '../../components/PointDetail/PopoverViewData_';
 import industryInfo from '../../mockdata/Base/Code/T_Cod_IndustryStandard.json';
 import controlInfo from '../../mockdata/Base/Code/T_Cod_AttentionDegree.json';
 
-let content = (
-    <div className={styles.popoverTip}>
-        <p style={{cursor: 'pointer'}}><Icon type="table" style={{ fontSize: 14, color: '#08c' }} /> 进入站房</p>
-        <p style={{cursor: 'pointer'}}><Icon type="laptop" style={{ fontSize: 14, color: '#08c' }} /> 紧急派单</p>
-        <p style={{cursor: 'pointer'}}><Icon type="laptop" style={{ fontSize: 14, color: '#08c' }} /> 查看工作情况</p>
-        <p style={{cursor: 'pointer'}}><Icon type="laptop" style={{ fontSize: 14, color: '#08c' }} /> 查看更多</p>
-    </div>
-);
 const getAllData = (dataType) => {
     let datalist = [];
     getAllConcentration({dataType: dataType}).map(item => {
@@ -46,7 +39,6 @@ const getAllData = (dataType) => {
         }
         datalist.push(data);
     });
-    console.log(datalist);
     return datalist;
 };
 @connect()
@@ -118,6 +110,25 @@ class dataList extends PureComponent {
                     // AvatarObj = (<Avatar style={{ color: '#1C1C1C', backgroundColor: '#D1D1D1' }}>停</Avatar>);
                     AvatarObj = (<Tag color="red">停运</Tag>);
                 }
+                const that = this;
+                let content = (
+                    <div className={styles.popoverTip}>
+                        <div style={{padding: '3px'}}><Button icon="table" onClick={() => {
+                        }}>进入站房</Button>
+                        </div>
+                        <div style={{padding: '3px'}}><Button icon="laptop" onClick={() => {
+                        }}>紧急派单</Button>
+                        </div>
+                        <div style={{padding: '3px'}}><Button icon="laptop" onClick={() => {
+                        }}>查看工作情况</Button>
+                        </div>
+                        <div style={{padding: '3px'}}><Button icon="laptop" onClick={() => {
+                            that.props.dispatch(routerRedux.push('/monitor/pointdetail/' + record.dgimn));
+                        }}>查看更多</Button>
+                        </div>
+                    </div>
+                );
+
                 return (<div><div><Popover placement="bottom" content={content} trigger="click"><span style={{cursor: 'pointer'}}>{value}</span></Popover></div><div>{AvatarObj}</div></div>);
             }
         }, {
@@ -133,7 +144,7 @@ class dataList extends PureComponent {
                 title: item.Name,
                 dataIndex: item.Value,
                 key: item.Value,
-                width: 120,
+                width: 150,
                 render: (value, record, index) => {
                     // debugger;
                     let dot;
