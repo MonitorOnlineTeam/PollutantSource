@@ -37,6 +37,28 @@ export default class AnalyAlarmReason extends Component {
       this.setState({rangeDate: date});
   };
   render() {
+      const rowSelection = {
+          onChange: (selectedRowKeys, selectedRows) => {
+              let keys = [];
+              selectedRowKeys.map(t => {
+                  if (Array.isArray(t)) {
+                      t.map(a => {
+                          if (a !== '') { keys.push(a); }
+                      });
+                  } else {
+                      debugger;
+                      if (t !== '') { keys.push(t); }
+                  }
+              });
+              this.setState({selectid: keys});
+              console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+          },
+          getCheckboxProps: record => ({
+              disabled: record.name === 'Disabled User', // Column configuration not to be checked
+              name: record.name,
+          }),
+          selectedRowKeys: this.state.selectid
+      };
       const option = {
           tooltip: {
               trigger: 'item',
@@ -52,11 +74,11 @@ export default class AnalyAlarmReason extends Component {
                   name: '访问来源',
                   type: 'pie',
                   radius: '55%',
-                  center: ['50%', '60%'],
+                  center: ['50%', '45%'],
                   data: [
-                      {value: 335, name: '设备原因'},
-                      {value: 310, name: '数据原因'},
-                      {value: 234, name: '其他原因'},
+                      {value: 250, name: '设备原因'},
+                      {value: 250, name: '数据原因'},
+                      {value: 250, name: '其他原因'},
 
                   ],
                   itemStyle: {
@@ -199,6 +221,22 @@ export default class AnalyAlarmReason extends Component {
                                       dataSource={dataSource}
                                       columns={columns}
                                       scroll={{ x: 550, y: 'calc(100vh - 860px)' }}
+                                      rowSelection={rowSelection}
+                                      onRow={(record, index) => {
+                                          return {
+                                              onClick: (a, b, c) => {
+                                                  let {selectid} = this.state;
+                                                  let index = selectid.findIndex(t => t === record.key);
+                                                  if (index !== -1) {
+                                                      selectid.splice(index, 1);
+                                                  } else {
+                                                      selectid.push(record.key);
+                                                  }
+                                                  this.setState({selectid: selectid});
+                                              }, // 点击行
+                                              onMouseEnter: () => {}, // 鼠标移入行
+                                          };
+                                      }}
                                   />
                                   <Card style={{marginTop: 50, marginLeft: -20}} title={'总结'}>
                                       <p>
