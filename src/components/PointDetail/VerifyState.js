@@ -4,7 +4,7 @@ import { Select } from 'antd';
 
 const Option = Select.Option;
 
-export default class EarlyWarningTypeSelect extends Component {
+export default class VerifyState extends Component {
     constructor(props) {
         super(props);
 
@@ -22,16 +22,14 @@ export default class EarlyWarningTypeSelect extends Component {
         return (
             <Select
                 mode={this.props.mode ? this.props.mode : ''}
-                style={{ width: this.props.width ? this.props.width : '100px' }}
-                placeholder="预警类型"
+                style={{ width: this.props.width ? this.props.width : '150px' }}
+                placeholder="核实状态"
                 optionFilterProp="children"
                 onChange={this.handleChange}
                 filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
             >
-                <Option key="1" value="参数预警">参数预警</Option>
-                <Option key="2" value="对比预警">对比预警</Option>
-                <Option key="3" value="机器学习预警">机器学习预警</Option>
-                <Option key="4" value="状态预警">状态预警</Option>
+                <Option key="1" value="已核实">已核实</Option>
+                <Option key="2" value="未核实">未核实</Option>
 
             </Select>
         );
