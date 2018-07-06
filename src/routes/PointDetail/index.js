@@ -35,7 +35,7 @@ class PointDetail extends Component {
         const defaultroute = routes[0].path;
 
         const pointInfo = getPointEnterprise().find((item) => {
-            return item.DGIMN = match.params.pointcode;
+            return item.DGIMN === match.params.pointcode;
         });
         return (
             <div

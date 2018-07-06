@@ -49,8 +49,9 @@ export default class Content extends Component {
             title: '填写入库单',
             width: 400,
             expandForm: false,
-            selectid: '',
+            selectid: [],
             data: getData(),
+            loading: true,
             rangeDate: [moment('2018-06-23 00:00:00'), moment('2018-06-25 00:00:00')]
         };
     }
@@ -189,6 +190,15 @@ export default class Content extends Component {
     attentionClick=(e) => {
         this.setState({attentionvisible: true});
     }
+
+    componentDidMount() {
+        const that = this;
+        setTimeout(function() {
+            that.setState({
+                loading: false
+            });
+        }, 1000);
+    }
     render() {
         const { getFieldDecorator } = this.props.form;
 
@@ -242,8 +252,8 @@ export default class Content extends Component {
         }, {
             title: '描述',
             dataIndex: 'Descripe',
-            key: 'Descripe'
-        }];
+            key: 'Descripe',
+        } ];
 
         const rowSelection = {
             onChange: (selectedRowKeys, selectedRows) => {
@@ -254,22 +264,22 @@ export default class Content extends Component {
                             if (a !== '') { keys.push(a); }
                         });
                     } else {
+                        debugger;
                         if (t !== '') { keys.push(t); }
                     }
                 });
-                const aa = keys.join();
-                // this.setState({selectid: "\'1\',\'2\'"});
+                this.setState({selectid: keys});
                 console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
             },
             getCheckboxProps: record => ({
                 disabled: record.name === 'Disabled User', // Column configuration not to be checked
                 name: record.name,
             }),
-            selectedRowKeys: [this.state.selectid]
+            selectedRowKeys: this.state.selectid
         };
 
         return (
-            <Card bordered={false} >
+            <Card bordered={false}>
                 <div>
                     <div className={styles.tableListForm}>{this.renderForm()}
                     </div>
@@ -305,14 +315,21 @@ export default class Content extends Component {
                         scroll={
                             {
                                 x: 1950,
-                                y: 'calc(100vh - 445px)'
+                                y: 'calc(100vh -  110px)'
                             }
                         }
                         rowSelection={rowSelection}
                         onRow={(record, index) => {
                             return {
                                 onClick: (a, b, c) => {
-                                    this.setState({selectid: record.key});
+                                    let {selectid} = this.state;
+                                    let index = selectid.findIndex(t => t === record.key);
+                                    if (index !== -1) {
+                                        selectid.splice(index, 1);
+                                    } else {
+                                        selectid.push(record.key);
+                                    }
+                                    this.setState({selectid: selectid});
                                 }, // 点击行
                                 onMouseEnter: () => {}, // 鼠标移入行
                             };

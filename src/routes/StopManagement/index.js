@@ -10,7 +10,7 @@ modify by
 export default class StopManagement extends Component {
     render() {
         return (
-            <PageHeaderLayout title="停产管理" >
+            <PageHeaderLayout title="停产管理">
                 <Content />
             </PageHeaderLayout>
         );

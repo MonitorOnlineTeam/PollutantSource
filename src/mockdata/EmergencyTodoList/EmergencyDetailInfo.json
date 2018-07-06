@@ -1,0 +1,369 @@
+{
+    "TaskProcess":[
+{
+    "ProcessID":"1",
+    "ExceptionHandleId":"28",
+    "ProcessName":"创建任务单",
+    "UserName":"",
+    "CreateTime":""
+},
+{
+    "ProcessID":"2",
+    "ExceptionHandleId":"28",
+    "ProcessName":"应急处理",
+    "UserName":"小王",
+    "CreateTime":"2018-6-12 12:32"
+},
+{
+    "ProcessID":"3",
+    "ExceptionHandleId":"28",
+    "ProcessName":"校准",
+    "UserName":"",
+    "CreateTime":""
+},
+{
+    "ProcessID":"4",
+    "ExceptionHandleId":"28",
+    "ProcessName":"审核",
+    "UserName":"",
+    "CreateTime":""
+},
+{
+    "ProcessID":"5",
+    "ExceptionHandleId":"14",
+    "ProcessName":"创建任务单",
+    "UserName":"",
+    "CreateTime":""
+},
+{
+    "ProcessID":"6",
+    "ExceptionHandleId":"14",
+    "ProcessName":"应急处理",
+    "UserName":"小王",
+    "CreateTime":"2018-6-17 12:32"
+},
+{
+    "ProcessID":"7",
+    "ExceptionHandleId":"14",
+    "ProcessName":"校准",
+    "UserName":"小王",
+    "CreateTime":"2018-6-17 16:32"
+},
+{
+    "ProcessID":"8",
+    "ExceptionHandleId":"14",
+    "ProcessName":"审核",
+    "UserName":"王科长",
+    "CreateTime":"2018-6-18 11:32"
+}],
+"TaskBasicInfo":[
+    {
+        "ExceptionHandleId":"28",
+        "TaskNo":"234231029431",
+        "PointName":"厂北场口",
+        "EnterName":"北京雪迪龙科技股份有限公司",
+        "Province":"北京市",
+        "City":"北京市",
+        "TaskSource":"数据审核",
+        "Emergence":"紧急",
+        "TaskStatus":"处理中",
+        "TaskContent":"设备数据异常",
+        "CreatePerson":"小王",
+        "CreateTime":"2018-6-12 12:32",
+        "DeviceType":"CEMS",
+        "DeviceBrand":"SDL",
+        "DeviceNo":"SDL23001",
+        "DeviceType":"SDL_CEMS334"
+    },
+    {
+        "ExceptionHandleId":"14",
+        "TaskNo":"234231029254",
+        "PointName":"厂南场口",
+        "EnterName":"北京雪迪龙科技股份有限公司",
+        "Province":"北京市",
+        "City":"北京市",
+        "TaskSource":"数据审核",
+        "Emergence":"紧急",
+        "TaskStatus":"已完成",
+        "TaskContent":"设备数据异常",
+        "CreatePerson":"小王",
+        "CreateTime":"2018-6-17 12:32",
+        "DeviceType":"CEMS",
+        "DeviceBrand":"SDL",
+        "DeviceNo":"SDL23001",
+        "DeviceType":"SDL_CEMS334"
+    }
+],
+"EmergencyHandle":[
+    {
+        "ExceptionHandleId":"28",
+        "HandleContent":"",
+        "HandlePerson":"小王",
+        "HandleTime":"2018-6-12 12:32"
+    },
+    {
+        "ExceptionHandleId":"14",
+        "HandleContent":"",
+        "HandlePerson":"小王",
+        "HandleTime":"2018-6-17 12:32"
+    }
+],
+"CorrectInfo":[
+    {
+        "ExceptionHandleId":"28",
+        "HandlePerson":"小王",
+        "HandleTime":"2018-6-12 12:32"
+    },
+    {
+        "ExceptionHandleId":"14",
+        "HandlePerson":"小王",
+        "HandleTime":"2018-6-17 12:32"
+    }
+],
+"ApprovalProcess":[
+    {
+        "ExceptionHandleId":"28",
+        "CheckId":"1",
+        "NodeName":"运维部经理",
+        "CheckName":"",
+        "CheckTime":"",
+        "CheckContent":""
+    },
+    {
+        "ExceptionHandleId":"28",
+        "CheckId":"2",
+        "NodeName":"科员",
+        "CheckName":"",
+        "CheckTime":"",
+        "CheckContent":""
+    },
+    {
+        "ExceptionHandleId":"28",
+        "CheckId":"3",
+        "NodeName":"科长",
+        "CheckName":"",
+        "CheckTime":"",
+        "CheckContent":""
+    },{
+        "ExceptionHandleId":"14",
+        "CheckId":"4",
+        "NodeName":"运维部经理",
+        "CheckName":"李经理",
+        "CheckTime":"2018-6-13 11:32",
+        "CheckContent":"同意"
+    },
+    {
+        "ExceptionHandleId":"14",
+        "CheckId":"5",
+        "NodeName":"科员",
+        "CheckName":"李科员",
+        "CheckTime":"2018-6-13 11:32",
+        "CheckContent":"同意"
+    },
+    {
+        "ExceptionHandleId":"14",
+        "CheckId":"6",
+        "NodeName":"科长",
+        "CheckName":"王科长",
+        "CheckTime":"2018-6-13 11:32",
+        "CheckContent":""
+    }
+],
+"LogDataList":[
+        {
+        "StepID":"1",
+        "ExceptionHandleId":"28",
+        "StepName":"创建任务单",
+        "User_Name":"小王",
+        "BeginTime":"2018-6-18 11:12",
+        "EndTime":"2018-6-18 11:12",
+        "Remark":"",
+        "HandlingState":"完成"
+        },
+        {
+            "StepID":"2",
+            "ExceptionHandleId":"28",
+            "StepName":"应急处理",
+            "User_Name":"小王",
+            "BeginTime":"2018-6-18 11:12",
+            "EndTime":"2018-6-18 11:12",
+            "Remark":"",
+            "HandlingState":"完成"
+            },
+            {
+                "StepID":"7",
+                "ExceptionHandleId":"14",
+                "StepName":"创建任务单",
+                "User_Name":"小王",
+                "BeginTime":"2018-6-18 11:12",
+                "EndTime":"2018-6-18 11:12",
+                "Remark":"",
+                "HandlingState":"完成"
+                },
+                {
+                    "StepID":"8",
+                    "ExceptionHandleId":"14",
+                    "StepName":"应急处理",
+                    "User_Name":"小王",
+                    "BeginTime":"2018-6-18 11:12",
+                    "EndTime":"2018-6-18 11:12",
+                    "Remark":"",
+                    "HandlingState":"完成"
+                    },
+                    {
+                        "StepID":"9",
+                        "ExceptionHandleId":"14",
+                        "StepName":"校准",
+                        "User_Name":"小王",
+                        "BeginTime":"2018-6-18 11:12",
+                        "EndTime":"2018-6-18 11:12",
+                        "Remark":"",
+                        "HandlingState":"完成"
+                    },
+                    {
+                            "StepID":"10",
+                            "ExceptionHandleId":"14",
+                            "StepName":"审核",
+                            "User_Name":"李经理",
+                            "BeginTime":"2018-6-18 11:12",
+                            "EndTime":"2018-6-18 11:12",
+                            "Remark":"",
+                            "HandlingState":"完成"
+                    },
+                    {
+                                "StepID":"11",
+                                "ExceptionHandleId":"14",
+                                "StepName":"审核",
+                                "User_Name":"李科员",
+                                "BeginTime":"2018-6-18 11:12",
+                                "EndTime":"2018-6-18 11:12",
+                                "Remark":"",
+                                "HandlingState":"完成"
+                    },
+                    {
+                                    "StepID":"12",
+                                    "ExceptionHandleId":"14",
+                                    "StepName":"审核",
+                                    "User_Name":"王科长",
+                                    "BeginTime":"2018-6-18 11:12",
+                                    "EndTime":"2018-6-18 11:12",
+                                    "Remark":"",
+                                    "HandlingState":"完成"
+                    }
+    ],
+"InspectionRecord":[
+    {
+    "ExceptionHandleId":"28",
+    "DeviceName":"便携式红外线烟气分析仪",
+    "DeviceType":"MODEL 3080",
+    "DeviceProvider":"北京雪迪龙科技股份有限公司",
+    "Yc_PrincipleOfContrastTester":"红外传感器工作原理",       
+    "Yc_PrincipleOfCEMSAnalyzer":"",                         
+    "Yc_CbThreeJz":"12",                                       
+    "Yc_CbCdJz":"10",                                         
+    "Yc_formula":"相对误差",                                         
+    "Yc_EvaluationResults":"",                               
+    "SO2_Jz_PrincipleOfContrastTester":"红外传感器工作原理",       
+    "SO2_Jz_PrincipleOfCEMSAnalyzer":"",                         
+    "SO2_Jz_CbThreeJz":"12",                                       
+    "SO2_Jz_CbCdJz":"10",                                         
+    "SO2_Jz_formula":"相对误差",                                         
+    "SO2_Jz_EvaluationResults":"",                               
+    "SO2_Bd_PrincipleOfContrastTester":"红外传感器工作原理",       
+    "SO2_Bd_PrincipleOfCEMSAnalyzer":"",                         
+    "SO2_Bd_CbThreeJz":"12",                                       
+    "SO2_Bd_CbCdJz":"10",                                         
+    "SO2_Bd_formula":"相对误差",                                         
+    "SO2_Bd_EvaluationResults":"",                               
+    "NOX_Jz_PrincipleOfContrastTester":"红外传感器工作原理",       
+    "NOX_Jz_PrincipleOfCEMSAnalyzer":"",                         
+    "NOX_Jz_CbThreeJz":"12",                                       
+    "NOX_Jz_CbCdJz":"10",                                         
+    "NOX_Jz_formula":"相对误差",                                   
+    "NOX_Jz_EvaluationResults":"",                              
+    "NOX_Db_PrincipleOfContrastTester":"红外传感器工作原理",       
+    "NOX_Db_PrincipleOfCEMSAnalyzer":"",                         
+    "NOX_Db_CbThreeJz":"12",                                       
+    "NOX_Db_CbCdJz":"10",                                         
+    "NOX_Db_formula":"相对误差",                                   
+    "NOX_Db_EvaluationResults":"",                              
+    "O2_Bd_PrincipleOfContrastTester":"红外传感器工作原理",      
+    "O2_Bd_PrincipleOfCEMSAnalyzer":"",                         
+    "O2_Bd_CbThreeJz":"12",                                       
+    "O2_Bd_CbCdJz":"10",                                         
+    "O2_Bd_formula":"相对误差",                                   
+    "O2_Bd_EvaluationResults":"",                                                          
+    "Ls_Bd_PrincipleOfContrastTester":"红外传感器工作原理",       
+    "Ls_Bd_PrincipleOfCEMSAnalyzer":"",                         
+    "Ls_Bd_CbThreeJz":"12",                                       
+    "Ls_Bd_CbCdJz":"10",                                         
+    "Ls_Bd_formula":"相对误差",                                  
+    "Ls_Bd_EvaluationResults":"",                              
+    "Temperature_Bd_PrincipleOfContrastTester":"红外传感器工作原理",       
+    "Temperature_Bd_PrincipleOfCEMSAnalyzer":"",                         
+    "Temperature_Bd_CbThreeJz":"12",                                       
+    "Temperature_Bd_CbCdJz":"10",                                         
+    "Temperature_Bd_formula":"相对误差",                                   
+    "Temperature_Bd_EvaluationResults":"",                              
+    "Result1":"是",                                   
+    "Result2":"采取的措施是"                             
+    },
+    {
+        "ExceptionHandleId":"14",
+        "DeviceName":"便携式红外线烟气分析仪",
+        "DeviceType":"MODEL 3080",
+        "DeviceProvider":"北京雪迪龙科技股份有限公司",
+        "Yc_PrincipleOfContrastTester":"红外传感器工作原理",       
+        "Yc_PrincipleOfCEMSAnalyzer":"",                         
+        "Yc_CbThreeJz":"12",                                       
+        "Yc_CbCdJz":"10",                                         
+        "Yc_formula":"相对误差",                                         
+        "Yc_EvaluationResults":"",                               
+        "SO2_Jz_PrincipleOfContrastTester":"红外传感器工作原理",       
+        "SO2_Jz_PrincipleOfCEMSAnalyzer":"",                         
+        "SO2_Jz_CbThreeJz":"12",                                       
+        "SO2_Jz_CbCdJz":"10",                                         
+        "SO2_Jz_formula":"相对误差",                                         
+        "SO2_Jz_EvaluationResults":"",                               
+        "SO2_Bd_PrincipleOfContrastTester":"红外传感器工作原理",       
+        "SO2_Bd_PrincipleOfCEMSAnalyzer":"",                         
+        "SO2_Bd_CbThreeJz":"12",                                       
+        "SO2_Bd_CbCdJz":"10",                                         
+        "SO2_Bd_formula":"相对误差",                                         
+        "SO2_Bd_EvaluationResults":"",                               
+        "NOX_Jz_PrincipleOfContrastTester":"红外传感器工作原理",       
+        "NOX_Jz_PrincipleOfCEMSAnalyzer":"",                         
+        "NOX_Jz_CbThreeJz":"12",                                      
+        "NOX_Jz_CbCdJz":"10",                                         
+        "NOX_Jz_formula":"相对误差",                                   
+        "NOX_Jz_EvaluationResults":"",                              
+        "NOX_Db_PrincipleOfContrastTester":"红外传感器工作原理",       
+        "NOX_Db_PrincipleOfCEMSAnalyzer":"",                         
+        "NOX_Db_CbThreeJz":"12",                                       
+        "NOX_Db_CbCdJz":"10",                                         
+        "NOX_Db_formula":"相对误差",                                   
+        "NOX_Db_EvaluationResults":"",                              
+        "O2_Bd_PrincipleOfContrastTester":"红外传感器工作原理",       
+        "O2_Bd_PrincipleOfCEMSAnalyzer":"",                         
+        "O2_Bd_CbThreeJz":"12",                                       
+        "O2_Bd_CbCdJz":"10",                                         
+        "O2_Bd_formula":"相对误差",                                                              
+        "O2_Bd_EvaluationResults":"",                              
+        "Ls_Bd_PrincipleOfContrastTester":"红外传感器工作原理",       
+        "Ls_Bd_PrincipleOfCEMSAnalyzer":"",                         
+        "Ls_Bd_CbThreeJz":"12",                                       
+        "Ls_Bd_CbCdJz":"10",                                         
+        "Ls_Bd_formula":"相对误差",                                  
+        "Ls_Bd_EvaluationResults":"",                              
+        "Temperature_Bd_PrincipleOfContrastTester":"红外传感器工作原理",       
+        "Temperature_Bd_PrincipleOfCEMSAnalyzer":"",                         
+        "Temperature_Bd_CbThreeJz":"12",                                       
+        "Temperature_Bd_CbCdJz":"10",                                        
+        "Temperature_Bd_formula":"相对误差",                                   
+        "Temperature_Bd_EvaluationResults":"",                              
+        "Result1":"是",                                   
+        "Result2":"采取的措施是"                              
+        }
+    ]
+}
+    
