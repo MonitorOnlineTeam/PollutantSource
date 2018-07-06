@@ -10,12 +10,7 @@
                 "name": "工作台",
                 "path": "workbench",
                 "icon": "desktop"
-            },
-            {
-                "name": "监控总览",
-                "path": "overview",
-                "icon": "home"
-            },            
+            },     
             {
                 "name": "运维信息",
                 "path": "operation",

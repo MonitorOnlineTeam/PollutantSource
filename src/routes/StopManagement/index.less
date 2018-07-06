@@ -2,6 +2,12 @@
 @import "../../utils/utils.less";
 
 /*查询样式*/
+:global{
+  /* 这个造成 ant-table-fixed-right、ant-table-fixed-left 区域始终有横向滚动条 */
+.ant-table-fixed-header .ant-table-body-inner { 
+  overflow: scroll 
+}
+}
 
 .tableList {
   .tableListOperator {
