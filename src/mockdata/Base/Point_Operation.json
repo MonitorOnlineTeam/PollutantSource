@@ -1,5 +1,60 @@
 ﻿[
     {
+        "PointCode":"019a1c86-5f38-4846-8042-2a4809f64fe8",
+        "PointName":"锅炉小号烟囱",
+        "DGIMN":"bjldgn01",
+        "Longitude":"117.109833",
+        "Latitude":"40.133689",
+        "RegionCode":"110117000",
+        "PollutantType":"2",
+        "DevicePassword":"123456",
+        "OutputType":"0"
+    },    
+    {
+        "PointCode":"04d5cc42-93a0-4636-baf5-e2a05e6b74d7",
+        "PointName":"脱硫出口",
+        "DGIMN":"dtgjhh11102",
+        "Longitude":"103.222515",
+        "Latitude":"23.738153",
+        "RegionCode":"532502000",
+        "PollutantType":"2",
+        "DevicePassword":"123456",
+        "OutputType":"0"
+    },
+    {
+        "PointCode":"06c6b98f-2a47-473c-9e75-0b010e0d5692",
+        "PointName":"脱硫入口",
+        "DGIMN":"dtgrjx110",
+        "Longitude":"130.965877",
+        "Latitude":"45.300879",
+        "RegionCode":"230301000",
+        "PollutantType":"2",
+        "DevicePassword":"123456",
+        "OutputType":"1"
+    },
+    {
+        "PointCode":"08148e40-0de0-4a2d-9a83-c67288929b87",
+        "PointName":"脱硫入口",
+        "DGIMN":"dtgrjx103",
+        "Longitude":"130.965716",
+        "Latitude":"45.300992",
+        "RegionCode":"230301000",
+        "PollutantType":"2",
+        "DevicePassword":"123456",
+        "OutputType":"1"
+    },
+    {
+        "PointCode":"09b3cff7-e6bb-44c2-a6df-8417ac304fef",
+        "PointName":"脱硫入口",
+        "DGIMN":"lywjfd03",
+        "Longitude":"112.065595",
+        "Latitude":"34.743508",
+        "RegionCode":"410323000",
+        "PollutantType":"2",
+        "DevicePassword":"123456",
+        "OutputType":"1"
+    },
+    {
         "PointCode":"1897c762-55a3-43d9-989a-58a79a24cb83",
         "PointName":"脱硫入口",
         "DGIMN":"sgjt001005",

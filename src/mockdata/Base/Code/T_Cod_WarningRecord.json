@@ -1,0 +1,170 @@
+[
+{
+"EarlyWorningType":"参数预警",
+"EarlyWorningTime":"2018-06-01 09:25:00",
+"CheckTime":"2018-06-05 09:25:00",
+"State":"未核实",
+"CheckPerson":"彭万里",
+"Comment":"二氧化硫超过预警标准10%"
+},
+{
+"EarlyWorningType":"参数预警",
+"EarlyWorningTime":"2018-06-14 15:56:00",
+"CheckTime":"2018-06-16 15:56:00",
+"State":"未核实",
+"CheckPerson":"彭万里",
+"Comment":"二氧化硫超过预警标准10%"
+},
+{
+"EarlyWorningType":"参数预警",
+"EarlyWorningTime":"2018-06-26 18:15:00",
+"CheckTime":"2018-06-29 18:15:00",
+"State":"未核实",
+"CheckPerson":"彭万里",
+"Comment":"二氧化硫超过预警标准10%"
+},
+{
+"EarlyWorningType":"参数预警",
+"EarlyWorningTime":"2018-05-26 03:09:11",
+"CheckTime":"2018-05-28 15:09:11",
+"State":"未核实",
+"CheckPerson":"彭万里",
+"Comment":"二氧化硫超过预警标准10%"
+},
+{
+"EarlyWorningType":"参数预警",
+"EarlyWorningTime":"2018-06-01 14:03:00",
+"CheckTime":"2018-06-05 14:03:00",
+"State":"未核实",
+"CheckPerson":"彭万里",
+"Comment":"二氧化硫超过预警标准10%"
+},
+{
+"EarlyWorningType":"参数预警",
+"EarlyWorningTime":"2018-06-01 13:47:00",
+"CheckTime":"2018-06-06 11:47:00",
+"State":"未核实",
+"CheckPerson":"彭万里",
+"Comment":"二氧化硫超过预警标准10%"
+},
+{
+"EarlyWorningType":"参数预警",
+"EarlyWorningTime":"2018-06-10 11:41:00",
+"CheckTime":"2018-06-12 11:41:00",
+"State":"未核实",
+"CheckPerson":"彭万里",
+"Comment":"二氧化硫超过预警标准10%"
+},
+{
+"EarlyWorningType":"参数预警",
+"EarlyWorningTime":"2018-06-06 04:35:00",
+"CheckTime":"2018-06-07 04:35:00",
+"State":"未核实",
+"CheckPerson":"彭万里",
+"Comment":"二氧化硫超过预警标准10%"
+},
+{
+"EarlyWorningType":"参数预警",
+"EarlyWorningTime":"2018-05-31 21:15:00",
+"CheckTime":"2018-06-2 21:20:00",
+"State":"未核实",
+"CheckPerson":"彭万里",
+"Comment":"二氧化硫超过预警标准10%"
+},
+{
+"EarlyWorningType":"参数预警",
+"EarlyWorningTime":"2018-06-14 15:14:00",
+"CheckTime":"2018-06-16 17:14:00",
+"State":"未核实",
+"CheckPerson":"彭万里",
+"Comment":"二氧化硫超过预警标准10%"
+},
+{
+"EarlyWorningType":"对比预警",
+"EarlyWorningTime":"2018-03-29 21:37:00",
+"CheckTime":"2018-03-31 10:37:00",
+"State":"未核实",
+"CheckPerson":"高大山",
+"Comment":"烟尘超过预警标准50%"
+},
+{
+"EarlyWorningType":"对比预警",
+"EarlyWorningTime":"2018-06-26 17:39:00",
+"CheckTime":"2018-06-28 17:39:00",
+"State":"未核实",
+"CheckPerson":"高大山",
+"Comment":"烟尘超过预警标准50%"
+},
+{
+"EarlyWorningType":"对比预警",
+"EarlyWorningTime":"2018-03-29 16:32:00",
+"CheckTime":"2018-03-30 16:32:00",
+"State":"未核实",
+"CheckPerson":"高大山",
+"Comment":"烟尘超过预警标准50%"
+},
+{
+"EarlyWorningType":"对比预警",
+"EarlyWorningTime":"2018-03-28 20:13:00",
+"CheckTime":"2018-03-30 12:13:00",
+"State":"未核实",
+"CheckPerson":"高大山",
+"Comment":"烟尘超过预警标准50%"
+},
+{
+"EarlyWorningType":"对比预警",
+"EarlyWorningTime":"2018-03-28 22:36:0",
+"CheckTime":"2018-03-29 12:36:0",
+"State":"未核实",
+"CheckPerson":"高大山",
+"Comment":"烟尘超过预警标准50%"
+},
+{
+"EarlyWorningType":"对比预警",
+"EarlyWorningTime":"2018-03-29 21:38:00",
+"CheckTime":"2018-03-31 21:38:00",
+"State":"未核实",
+"CheckPerson":"高大山",
+"Comment":"烟尘超过预警标准50%"
+},
+{
+"EarlyWorningType":"对比预警",
+"EarlyWorningTime":"2018-03-29 02:45:00",
+"CheckTime":"2018-03-31 12:45:00",
+"State":"未核实",
+"CheckPerson":"高大山",
+"Comment":"烟尘超过预警标准50%"
+},
+{
+"EarlyWorningType":"对比预警",
+"EarlyWorningTime":"2018-03-30 03:14:00",
+"CheckTime":"2018-03-31 03:14:00",
+"State":"未核实",
+"CheckPerson":"高大山",
+"Comment":"烟尘超过预警标准50%"
+},
+{
+"EarlyWorningType":"对比预警",
+"EarlyWorningTime":"2018-03-29 23:58:00",
+"CheckTime":"2018-03-31 12:58:00",
+"State":"未核实",
+"CheckPerson":"高大山",
+"Comment":"烟尘超过预警标准50%"
+},
+{
+"EarlyWorningType":"对比预警",
+"EarlyWorningTime":"2018-03-29 13:01:00",
+"CheckTime":"2018-03-31 13:01:00",
+"State":"未核实",
+"CheckPerson":"高大山",
+"Comment":"烟尘超过预警标准50%"
+},
+{
+"EarlyWorningType":"对比预警",
+"EarlyWorningTime":"2018-06-27 02:03:00",
+"CheckTime":"2018-06-30 02:03:00",
+"State":"未核实",
+"CheckPerson":"高大山",
+"Comment":"烟尘超过预警标准50%"
+}
+]

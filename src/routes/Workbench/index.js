@@ -21,9 +21,6 @@ class Workbench extends Component {
             hasMore: true,
         };
     }
-    componentDidMount() {
-
-    }
     render() {
         return (
             <div style={{ background: '#ECECEC', padding: '30px' }}>
