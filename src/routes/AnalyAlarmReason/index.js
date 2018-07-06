@@ -217,7 +217,7 @@ export default class AnalyAlarmReason extends Component {
                                   />
                                   <Card style={{marginTop: 50, marginLeft: -20}} title={'总结'}>
                                       <p>
-                                          <span> 数据原因报警166，设备原因报警105，总计271，其中数据原因最多排口为废气排口，最少为废气排口。</span>
+                                          <span> 数据原因报警150，设备原因报警15，总计165，其中数据原因最多排口为废气排口，最少为废气排口。</span>
                                       </p>
                                   </Card>
                               </Col>
