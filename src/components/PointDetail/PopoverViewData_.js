@@ -27,17 +27,13 @@ class PopoverViewData_ extends Component {
             columns: [],
             tableData: [],
             pointInfo: {},
-            dataParam: this.props.dataparam,
             divContent: divContent,
             visible: false,
             selectedRowKeys: [],
             dataType: this.props.dataType,
             scrollStyle: {y: 'calc(100vh - 385px)'},
-            statusHtml: [],
             statusDatas: [],
             paramDatas: [],
-            selectRowTime: '',
-            selectRowPollutantCode: ''
         };
     }
     // 获取属性
@@ -157,9 +153,12 @@ class PopoverViewData_ extends Component {
                     break;
             };
             this._resizeTableHeight(tableDatas);
+            if (tableDatas.length > 0) {
+                setData.selectedRowKeys = [tableDatas[0].Key];
+                this._getDynamicControlData(tableDatas[0].MonitoringTime, this._getDataParam().pollutantCode);
+            }
             setData.tableData = tableDatas;
         }
-
         this.setState({ setData });
     };
     // 查看数据
@@ -292,7 +291,7 @@ class PopoverViewData_ extends Component {
     // 选中行改变事件
     _onSelectChange = (keys, selectedRows) => {
         // debugger;
-        if (keys.length > 2) { return false; }
+        if (keys.length > 2 || keys.length === 0) { return false; }
         let { selectedRowKeys } = this.state;
         let _thisKeys = keys;
         if (selectedRowKeys.length > 0) {
@@ -310,7 +309,7 @@ class PopoverViewData_ extends Component {
 
     render() {
         const rowSelection = {
-            selectedRowKeys: this.state.selectedRowKeys,
+            selectedRowKeys: this.state.selectedRowKeys, // this.state.selectedRowKeys
             onChange: this._onSelectChange
         };
         return (
@@ -331,7 +330,7 @@ class PopoverViewData_ extends Component {
                 >
                     {this.state.modalType === 1 ? <Table
                         rowKey="Key"
-                        size="middle"
+                        size="small"// middle
                         columns={this.state.columns}
                         dataSource={this.state.tableData}
                         pagination={false}
@@ -344,19 +343,13 @@ class PopoverViewData_ extends Component {
                                 <Col xs={2} sm={4} md={6} lg={6} xl={8}>
                                     <Table
                                         rowKey="Key"
-                                        size="small"
+                                        size="middle"
                                         onRow={(record) => {
                                             return {
                                                 onClick: () => {
-                                                    // debugger;
-                                                    console.log(record.MonitoringTime);
-                                                    console.log(this._getDataParam().pollutantCode);
                                                     this.setState({
-                                                        selectedRowKeys: [record.Key],
-                                                        selectRowTime: record.MonitoringTime,
-                                                        selectRowPollutantCode: record[this._getDataParam().pollutantCode]
+                                                        selectedRowKeys: [record.Key]
                                                     });
-                                                    // console.log(this.state.selectRowTime);
                                                     this._getDynamicControlData(record.MonitoringTime, this._getDataParam().pollutantCode);
                                                 }
                                             };
@@ -375,12 +368,10 @@ class PopoverViewData_ extends Component {
                                             <Divider style={{color: '#1890ff', fontWeight: 500}}>状态</Divider>
                                             <Row>
                                                 <Form layout="inline">
-
                                                     {
-                                                        this.state.statusDatas.map((item) => {
+                                                        this.state.statusDatas.map((item, key) => {
                                                             return (
-
-                                                                <FormItem hasFeedback={true} validateStatus="warning" wrapperCol={{color: '#ccc'}}>
+                                                                <FormItem key={key} hasFeedback={true} validateStatus="warning" wrapperCol={{color: '#ccc'}}>
                                                                     <Input title={`${item.Status}`} placeholder={`${item.Name}：${item.Status}`} readOnly={true} />
                                                                 </FormItem>
                                                             );
@@ -392,9 +383,9 @@ class PopoverViewData_ extends Component {
                                             <Row>
                                                 <Form layout="inline">
                                                     {
-                                                        this.state.paramDatas.map((item) => {
+                                                        this.state.paramDatas.map((item, key) => {
                                                             return (
-                                                                <FormItem hasFeedback={true} validateStatus="success" wrapperCol={{color: '#ccc'}}>
+                                                                <FormItem key={key} hasFeedback={true} validateStatus="success" wrapperCol={{color: '#ccc'}}>
                                                                     <Input title={`${item.Status}`} placeholder={`${item.Name}：${item.Value}`} readOnly={true} />
                                                                 </FormItem>
                                                             );
