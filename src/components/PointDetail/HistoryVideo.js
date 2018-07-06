@@ -40,7 +40,7 @@ export default class HistoryVideo extends Component {
         }, {
             title: 'NOX(mg/m³)',
             dataIndex: 'Col3',
-            width: 50, 
+            width: 50,
             render: (text, record) => {
                 if (text > 14) {
                     return (<span style={{color: 'red'}}>{text}</span>);
@@ -77,12 +77,10 @@ export default class HistoryVideo extends Component {
         return (
             <div>
                 <Row gutter={24}>
-                    <Col xl={16} lg={24} md={24} sm={24} xs={24} style={{ marginBottom: 24, height: 400 }}>
-                        <Card style={{background:'black',height:500,width:800}}>
-                           
-                        </Card>
+                    <Col xl={19} lg={24} md={24} sm={24} xs={24} style={{ marginBottom: 24, height: 400 }}>
+                        <Card style={{background: 'black', height: 500, width: 800}} />
                     </Col>
-                    <Col xl={8} lg={24} md={24} sm={24} xs={24}>
+                    <Col xl={5} lg={24} md={24} sm={24} xs={24}>
 
                         <Card style={{ marginBottom: 24 }} >
                             <Row>
