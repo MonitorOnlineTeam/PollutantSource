@@ -219,7 +219,7 @@ export default class AnalyAlarmReason extends Component {
                                       <p>
                                           <span> 数据原因报警166，设备原因报警105，总计271，其中数据原因最多排口为废气排口，最少为废气排口。</span>
                                       </p>
-                                  </Card>,
+                                  </Card>
                               </Col>
                           </Row>
                       </Col>
