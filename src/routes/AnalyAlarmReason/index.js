@@ -37,28 +37,6 @@ export default class AnalyAlarmReason extends Component {
       this.setState({rangeDate: date});
   };
   render() {
-      const rowSelection = {
-          onChange: (selectedRowKeys, selectedRows) => {
-              let keys = [];
-              selectedRowKeys.map(t => {
-                  if (Array.isArray(t)) {
-                      t.map(a => {
-                          if (a !== '') { keys.push(a); }
-                      });
-                  } else {
-                      debugger;
-                      if (t !== '') { keys.push(t); }
-                  }
-              });
-              this.setState({selectid: keys});
-              console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
-          },
-          getCheckboxProps: record => ({
-              disabled: record.name === 'Disabled User', // Column configuration not to be checked
-              name: record.name,
-          }),
-          selectedRowKeys: this.state.selectid
-      };
       const option = {
           tooltip: {
               trigger: 'item',
@@ -221,7 +199,6 @@ export default class AnalyAlarmReason extends Component {
                                       dataSource={dataSource}
                                       columns={columns}
                                       scroll={{ x: 550, y: 'calc(100vh - 860px)' }}
-                                      rowSelection={rowSelection}
                                       onRow={(record, index) => {
                                           return {
                                               onClick: (a, b, c) => {
