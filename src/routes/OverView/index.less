@@ -63,9 +63,9 @@
 
 
 @-webkit-keyframes  shineRed {  
-  from { -webkit-box-shadow: 0 0 5px #bbb; }  
+  from { -webkit-box-shadow: 0 0 5px red; }  
   50% { -webkit-box-shadow: 0 0 50px red; }  
-  to { -webkit-box-shadow: 0 0 10px #bbb; }  
+  to { -webkit-box-shadow: 0 0 10px red; }  
   }  
   .shine_red{  
   -webkit-animation-name: shineRed;   
@@ -81,9 +81,13 @@
   }
   .inforWindows
   {
+    width: 320px;
     background: #fff;
     border: 1px solid #ccc;
     padding: 10px 18px 10px 10px;
+  }
+  .inforWindows first-child div{
+    width: 300px;
   }
   .closeIcon{
     position: absolute;
