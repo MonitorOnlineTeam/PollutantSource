@@ -1,5 +1,27 @@
 ﻿[
     {
+        "PointCode":"019a1c86-5f38-4846-8042-2a4809f64fe8",
+        "PointName":"锅炉小号烟囱",
+        "DGIMN":"bjldgn01",
+        "Longitude":"117.109833",
+        "Latitude":"40.133689",
+        "RegionCode":"110117000",
+        "PollutantType":"2",
+        "DevicePassword":"123456",
+        "OutputType":"0"
+    },
+    {
+        "PointCode":"09b3cff7-e6bb-44c2-a6df-8417ac304fef",
+        "PointName":"脱硫入口",
+        "DGIMN":"lywjfd03",
+        "Longitude":"112.065595",
+        "Latitude":"34.743508",
+        "RegionCode":"410323000",
+        "PollutantType":"2",
+        "DevicePassword":"123456",
+        "OutputType":"1"
+    },
+    {
         "PointCode":"1ec14916-bfe8-4ae8-8b17-61600523a5d4",
         "PointName":"脱硫入口",
         "DGIMN":"dtrlsmx001005",
