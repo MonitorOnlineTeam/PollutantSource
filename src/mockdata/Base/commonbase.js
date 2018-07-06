@@ -123,6 +123,63 @@ export function getPointEnterprise() {
     return result;
 }
 
+// ********************************获取管控状态、参数****************************
+
+// 根据时间、污染物获取管控参数以及状态
+export function getDynamicControlData(obj) {
+    // debugger
+    let thisObj = obj || {};
+    let returnDatas = {
+        statusDatas: [],
+        paramDatas: []
+    };
+    let statusDatas = [];
+    let paramDatas = [];
+    let i = 1;
+    let statusEnum = ['运行', '故障', '校准', '维护'];
+    let paramEnum = ['正常', '零点校准', '量程校准'];
+
+    defaultPollutantCodes.map((item) => {
+        if (item.Value === thisObj.PollutantCode) {
+            let statusRandom = parseInt(Math.random() * 3);
+            let paramRandom = parseInt(Math.random() * 2);
+
+            let statusData = {};
+            statusData.id = i;
+            statusData.MonitoringTime = thisObj.MonitoringTime;
+            statusData.PollutantCode = thisObj.PollutantCode;
+            statusData.Params = [];
+            statusData.Params.push({Code: 'RunStatus', Name: '设备运行状态', Value: statusRandom, StatusText: statusEnum[statusRandom], Status: statusRandom});// 设备运行状态
+            statusData.Params.push({Code: 'InstrumentStatus', Name: '分析仪状态', Value: paramRandom, StatusText: paramEnum[paramRandom], Status: paramRandom});// 设备运行状态
+
+            statusDatas.push(statusData);
+
+            let paramData = {};
+            paramData.id = i;
+            paramData.MonitoringTime = thisObj.MonitoringTime;
+            paramData.PollutantCode = thisObj.PollutantCode;
+            paramData.Params = [];
+
+            paramData.Params.push({Code: 'Flow', Name: '流量', Value: (Math.random() * 1024).toFixed(3), Status: '正常', Unit: 'KB'});// 流量
+            paramData.Params.push({Code: 'Oxygen', Name: '含氧量', Value: (Math.random() * 100).toFixed(2), Status: '正常', Unit: '%'});// 含氧量 Code: 'Speed', Name: '流速', Value: 0
+            paramData.Params.push({Code: 'Speed', Name: '流速', Value: (Math.random() * 20).toFixed(2), Status: '正常', Unit: 'm/s'});// 流速
+            paramData.Params.push({Code: 'Temperature', Name: '温度', Value: (Math.random() * 90).toFixed(2), Status: '正常', Unit: '℃'});// 温度
+            paramData.Params.push({Code: 'Humidity', Name: '湿度', Value: (Math.random() * 90).toFixed(2), Status: '正常', Unit: 'hPa'});// 湿度
+            paramData.Params.push({Code: 'SectionalArea', Name: '截面积', Value: (Math.random() * 1).toFixed(4), Status: '正常'});// 截面积
+            paramData.Params.push({Code: 'Intercept', Name: '截距', Value: (Math.random() * 1).toFixed(4), Status: '正常'});// 截距
+            paramData.Params.push({Code: 'Pressure', Name: '压力', Value: (Math.random() * 300).toFixed(3), Status: '正常'});// 压力
+
+            paramDatas.push(paramData);
+            returnDatas.statusDatas = statusDatas;
+            returnDatas.paramDatas = paramDatas;
+        }
+        i++;
+    });
+    return returnDatas;
+};
+
+// ********************************获取管控状态、参数****************************
+
 // *********************************获取浓度数据*********************************
 // 默认污染物
 export const defaultPollutantCodes = [
@@ -361,39 +418,6 @@ export function getAllConcentration(obj) {
         }
         returnDatas.push(pointData);
     });
-
-    // point.map((p) => {
-    //     let pointData = p;
-    //     pointData.PollutantData = [];
-
-    //     concentration.map((item) => {
-    //         var data = {
-    //             'PollutantCode': item.Value,
-    //             'PollutantName': item.Name,
-    //             'Unit': item.Unit,
-    //             'Datas': []
-    //         };
-    //         let sTime = dateForms.startTime;
-    //         let eTime = dateForms.endTime;
-    //         while (sTime <= eTime) {
-    //             data.Datas.push({
-    //                 'Key': i++,
-    //                 'MonitoringTime': moment(eTime).format(dateForms.format),
-    //                 'Concentration': (Math.random() * (item.Max - item.Min + 1) + item.Min).toFixed(3),
-    //                 'Standard': item.Standard,
-    //                 'Overproof': '0.00',
-    //                 'Unit': item.Unit
-    //             });
-
-    //             eTime = moment(eTime).subtract(dateForms.value, dateForms.type).format(dateForms.format);
-    //             // console.log('sTime:', sTime);
-    //             // console.log('eTime:', eTime);
-    //         }
-    //         pointData.PollutantData.push(data);
-    //     });
-    //     returnDatas.push(pointData);
-    // });
-    // console.log(returnDatas);
     return returnDatas;
 }
 // *********************************获取浓度数据*********************************

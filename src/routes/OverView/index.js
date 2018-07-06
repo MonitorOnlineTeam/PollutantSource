@@ -17,6 +17,8 @@ import NavigationTree from '../../components/OverView/NavigationTree';
 import OperationTips from '../../components/OverView/OperationTips';
 import SewageTips from '../../components/OverView/SewageTips';
 import QualityControlTips from '../../components/OverView/QualityControlTips';
+import StationBuilding from '../../components/OverView/StationBuilding';
+
 import config from '../../config';
 import styles from './index.less';
 import { getPointEnterprise, getEnterprise } from '../../mockdata/Base/commonbase';
@@ -36,29 +38,6 @@ const plugins = [
     }
 ];
 
-const pointInfo = getPointEnterprise();
-const entInfo = getEnterprise();
-entInfo.map(item => {
-    let count = 0;
-    pointInfo.map(point => {
-        if (point.EntCode === item.EntCode) { count++; }
-    });
-    item.position = {
-        'longitude': item.Longitude,
-        'latitude': item.Latitude
-    };
-    item.count = count;
-    //  item.PointName = item.EntName;
-    item.key = item.EntCode;
-});
-pointInfo.map(item => {
-    item.position = {
-        'longitude': item.Longitude,
-        'latitude': item.Latitude
-    };
-
-    item.key = item.DGIMN;
-});
 const defaultlegend = markerspoint.maplegend[0].monitor;
 
 @connect(({loading, points, global}) => ({
@@ -76,6 +55,29 @@ const defaultlegend = markerspoint.maplegend[0].monitor;
 class OverViewMap extends PureComponent {
     constructor(props) {
         super(props);
+        const pointInfo = getPointEnterprise();
+        const entInfo = getEnterprise();
+        entInfo.map(item => {
+            let count = 0;
+            pointInfo.map(point => {
+                if (point.EntCode === item.EntCode) { count++; }
+            });
+            item.position = {
+                'longitude': item.Longitude,
+                'latitude': item.Latitude
+            };
+            item.count = count;
+            //  item.PointName = item.EntName;
+            item.key = item.EntCode;
+        });
+        pointInfo.map(item => {
+            item.position = {
+                'longitude': item.Longitude,
+                'latitude': item.Latitude
+            };
+
+            item.key = item.DGIMN;
+        });
         const _this = this;
         this.map = null;
         this.state = {
@@ -96,8 +98,74 @@ class OverViewMap extends PureComponent {
             entvisible: true,
             selectpoint: {},
             legend: defaultlegend,
-            modalvisible: false
+            modalvisible: false,
+            alarmType: true,
+            Isbutton: true,
+            status: '',
+            isShowPointTime: false,
+            urgent: '紧急派单'
         };
+
+        this.legendReductionClick = () => {
+            this.setState({
+                status: '',
+                pointslist: pointInfo,
+                isShowPointTime: false
+            });
+        };
+        this.legendSearchClick = (legend) => {
+            if (_this.state.status === legend.defaultValue) {
+                this.setState({
+                    status: '',
+                    pointslist: pointInfo,
+                    isShowPointTime: false
+                });
+            } else {
+                let alllist = [];
+                if (legend.defaultValue === '正常' || legend.defaultValue === '一级') {
+                    pointInfo.map(item => {
+                        if (item.DGIMN !== 'bjldgn01' && item.DGIMN !== 'dtgjhh11102' && item.DGIMN !== 'dtgrjx110'
+                    && item.DGIMN !== 'dtgrjx103' && item.DGIMN !== 'lywjfd03') {
+                            alllist.push(item);
+                        }
+                    });
+                } else if (legend.defaultValue === '超标' || legend.defaultValue === '故障' || legend.defaultValue === '二级') {
+                    pointInfo.map(item => {
+                        if (item.DGIMN === 'bjldgn01' || item.DGIMN === 'dtgjhh11102' || item.DGIMN === 'dtgrjx110') {
+                            alllist.push(item);
+                        }
+                    });
+                } else if (legend.defaultValue === '离线' || legend.defaultValue === '运维' || legend.defaultValue === '逾期'
+             || legend.defaultValue === '逾期' || legend.defaultValue === '三级') {
+                    alllist = [];
+                } else if (legend.defaultValue === '异常' || legend.defaultValue === '停产') {
+                    pointInfo.map(item => {
+                        if (item.DGIMN === 'dtgrjx103' || item.DGIMN === 'lywjfd03') {
+                            alllist.push(item);
+                        }
+                    });
+                } else if (legend.defaultValue === '四級') {
+                    pointInfo.map(item => {
+                        if (item.DGIMN === 'dtgrjx103' || item.DGIMN === 'lywjfd03') {
+                            alllist.push(item);
+                        }
+                    });
+                } else if (legend.defaultValue === '质控') {
+                    pointInfo.map(item => {
+                        if (item.DGIMN === 'bjldgn01' || item.DGIMN === 'dtgjhh11102' || item.DGIMN === 'dtgrjx110'
+                    || item.DGIMN === 'dtgrjx103' || item.DGIMN === 'lywjfd03') {
+                            alllist.push(item);
+                        }
+                    });
+                }
+                this.setState({
+                    status: legend.defaultValue,
+                    pointslist: alllist,
+                    isShowPointTime: true
+                });
+            }
+        };
+
         this.specialChange = (value) => {
             let special = 'monitor';
             let legend = [];
@@ -130,7 +198,15 @@ class OverViewMap extends PureComponent {
                 pointlist.push(item);
             });
 
-            _this.setState({legend: legend, special: special, tipheight: tipheight, entslist: list, pointslist: pointlist});
+            _this.setState({ status: '',
+                legend: legend,
+                special: special,
+                tipheight: tipheight,
+                entslist: list,
+                pointslist: pointlist,
+                isShowPointTime: false,
+                urgent: '紧急派单'
+            });
         };
         this.treeCilck = (row) => {
             _this.setState({
@@ -149,6 +225,7 @@ class OverViewMap extends PureComponent {
                 selectpoint: row
             });
             _this.statusChange(row.DGIMN);
+
             _thismap.setZoomAndCenter(17, [row.position.longitude, row.position.latitude]);
             this.firsttreeClick(row);
         };
@@ -164,7 +241,6 @@ class OverViewMap extends PureComponent {
         };
         this.StationBuildingClick = () => {
             _this.setState({modalvisible: true});
-            // this.props.dispatch(routerRedux.push('/monitor/stationbuilding/' + this.state.selectpoint.DGIMN));
         };
         this.closeModal = () => {
             _this.setState({modalvisible: false});
@@ -219,11 +295,15 @@ class OverViewMap extends PureComponent {
             if (mn === 'bjldgn01' || mn === 'dtgjhh11102' || mn === 'dtgrjx110'
             || mn === 'dtgrjx103' || mn === 'lywjfd03') {
                 _this.setState({
-                    alarmstatus: styles.shine_red
+                    alarmstatus: styles.shine_red,
+                    Isbutton: true,
+                    urgent: '紧急派单'
                 });
             } else {
                 _this.setState({
-                    alarmstatus: ''
+                    alarmstatus: '',
+                    Isbutton: false,
+                    urgent: '紧急派单'
                 });
             }
         };
@@ -254,6 +334,18 @@ class OverViewMap extends PureComponent {
         this.infoWinClose = () => {
             _this.setState({visible: false});
         };
+        this.AlarmClick = () => {
+            this.setState({alarmType: false});
+        };
+        this.NormalClick = () => {
+            this.setState({alarmType: true});
+        };
+
+        this.urgentClick = () => {
+            this.setState({
+                urgent: '催办'
+            });
+        };
     }
     render() {
         let special = this.state.special;
@@ -265,6 +357,7 @@ class OverViewMap extends PureComponent {
                 }}>
                 <Map events={this.mapEvents} resizeEnable={true}
                     center={[this.state.longitude, this.state.latitude]}
+
                     zoom={15} loading={<Spin />} amapkey={amapKey} plugins={plugins}>
                     <NavigationTree special={this.state.special} TreeSearch={this.TreeSearch} specialChange={this.specialChange} treeCilck={this.treeCilck} markersInfo={this.state.pointslist} />
                     <div
@@ -275,7 +368,7 @@ class OverViewMap extends PureComponent {
                         }}>
                         <AListRadio dvalue="a" />
                     </div>
-                    {!this.state.pointvisible ? <Markers markers={this.state.entslist}
+                    {(!this.state.pointvisible && !this.state.isShowPointTime) ? <Markers markers={this.state.entslist}
                         offset={[-110, -50]} events={this.entslistEvents}
                         render={(extData) => {
                             let normalstatus = 10;
@@ -409,6 +502,7 @@ class OverViewMap extends PureComponent {
                         for (let i = 0; i < allcoo.length; i++) {
                             return (
                                 <Polygon
+                                    key={item.EntCode}
                                     style={{
                                         strokeColor: '#FF33FF',
                                         strokeOpacity: 0.2,
@@ -429,26 +523,30 @@ class OverViewMap extends PureComponent {
                         visible={this.state.visible}
                         size={{
                             width: 320,
-                            height: this.state.tipheight,
+                            height: 1000,
                             overflow: 'hidden'
                         }}
                         offset={[0, -10]}
                         events={
                             this.infoWindowEvents
                         }>
-                        <div>
-                            <h4 className={styles.titleborder}> <Icon onClick={this.infoWinClose} className={styles.closeIcon} type="close" style={{ fontSize: 16, color: '#08c' }} />{this.state.title} </h4>
+                        <div style={{width: '292px'}}>
+                            <h4 className={styles.titleborder}> <Icon onClick={this.infoWinClose} className={styles.closeIcon} type="close" style={{ fontSize: 16, color: '#000' }} />{this.state.title} </h4>
                             <div className={styles.titlebutton}>
                                 <Button
                                     style={{
-                                        marginRight: '10px'
+                                        marginRight: '15px'
                                     }}
-                                    onClick={this.StationBuildingClick}>进入站房</Button>
-                                <Button>紧急派单</Button>
+                                    onClick={this.StationBuildingClick}> <Icon type="home" style={{ fontSize: 14, color: '#A8A6A5', marginLeft: '1px' }} />进入站房</Button>
+                                <Button onClick={this.urgentClick}> <Icon type="medicine-box" style={{ fontSize: 14, color: '#A8A6A5', marginLeft: '1px' }} /> {this.state.urgent}</Button>
                             </div>
-                            {special === 'monitor' ? <MonitorTips selectpoint={this.state.selectpoint} region={this.state.region} stationclick={this.stationClick}
-                                industry={this.state.industry} control={this.state.control} /> : (special === 'operation' ? <OperationTips />
-                                : (special === 'sewage' ? <SewageTips /> : <QualityControlTips />))}
+
+                            {
+                                (special === 'monitor' ? <MonitorTips Isbutton={this.state.Isbutton} alarmType={this.state.alarmType} AlarmClick={this.AlarmClick} NormalClick={this.NormalClick}
+                                    selectpoint={this.state.selectpoint} region={this.state.region} stationclick={this.stationClick}
+                                    industry={this.state.industry} control={this.state.control} /> : (special === 'operation' ? <OperationTips Isbutton={this.state.Isbutton} selectpoint={this.state.selectpoint} alarmType={this.state.alarmType} AlarmClick={this.AlarmClick} NormalClick={this.NormalClick} />
+                                    : (special === 'sewage' ? <SewageTips Isbutton={this.state.Isbutton} selectpoint={this.state.selectpoint} alarmType={this.state.alarmType} AlarmClick={this.AlarmClick} NormalClick={this.NormalClick} /> : <QualityControlTips Isbutton={this.state.Isbutton} selectpoint={this.state.selectpoint} alarmType={this.state.alarmType} AlarmClick={this.AlarmClick} NormalClick={this.NormalClick} />)))
+                            }
                         </div>
                     </InfoWindow>
                     <Modal
@@ -457,15 +555,13 @@ class OverViewMap extends PureComponent {
                         footer={null}
                         onCancel={this.closeModal}
                     >
-                        <p>Some contents...</p>
-                        <p>Some contents...</p>
-                        <p>Some contents...</p>
+                        <StationBuilding />
                     </Modal>
                     {/* 图例 */}
                     <MapLegend style={{ position: 'absolute',
                         bottom: 30,
                         left: 380,
-                        background: '#fff'}} legend={this.state.legend} />
+                        background: '#fff'}} legend={this.state.legend} status={this.state.status} legendClick={this.legendSearchClick} />
                 </Map>
             </div>
         );
