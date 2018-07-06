@@ -78,17 +78,13 @@ export default class HistoryVideo extends Component {
             <div>
                 <Row gutter={24}>
                     <Col xl={16} lg={24} md={24} sm={24} xs={24} style={{ marginBottom: 24, height: 400 }}>
-                        <Card title="历史视频">
-                            <Row>
-                                <Col span={24} >
-                                    <img src={img} className={styles.videoImage} />
-                                </Col>
-                            </Row>
+                        <Card style={{background:'black',height:500,width:800}}>
+                           
                         </Card>
                     </Col>
                     <Col xl={8} lg={24} md={24} sm={24} xs={24}>
 
-                        <Card title="云台" style={{ marginBottom: 24 }} >
+                        <Card style={{ marginBottom: 24 }} >
                             <Row>
                                 <Col span={24} >历史视频时间：<RangePicker /></Col>
                             </Row>

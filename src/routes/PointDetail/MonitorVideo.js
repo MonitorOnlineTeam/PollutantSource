@@ -15,17 +15,15 @@ const { TabPane } = Tabs;
 class MonitorVideo extends Component {
     render() {
         return (
-
-            <div style={{width: '100%', padding: 10 }} >
+            <div style={{width: '100%', padding: 10}} >
                 <Tabs size="large" tabBarStyle={{ marginBottom: 24 }}>
-                    <TabPane tab="实时视频" key="real">
+                    <TabPane tab="实时视频" key="real" style={{height: 1000}}>
                         <Row>
                             <Col xl={24} lg={12} md={12} sm={24} xs={24}>
                                 <div className={styles.salesBar}>
                                     <RealTimeVideo />
                                 </div>
                             </Col>
-
                         </Row>
                     </TabPane>
                     <TabPane tab="历史视频" key="history">
@@ -39,7 +37,6 @@ class MonitorVideo extends Component {
                         </Row>
                     </TabPane>
                 </Tabs>
-
             </div>
         );
     }
