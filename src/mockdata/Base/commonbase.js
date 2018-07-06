@@ -150,8 +150,8 @@ export function getDynamicControlData(obj) {
             statusData.MonitoringTime = thisObj.MonitoringTime;
             statusData.PollutantCode = thisObj.PollutantCode;
             statusData.Params = [];
-            statusData.Params.push({Code: 'RunStatus', Name: '设备运行状态', Value: statusRandom, Status: statusEnum[statusRandom]});// 设备运行状态
-            statusData.Params.push({Code: 'InstrumentStatus', Name: '分析仪状态', Value: paramRandom, Status: paramEnum[paramRandom]});// 设备运行状态
+            statusData.Params.push({Code: 'RunStatus', Name: '设备运行状态', Value: statusRandom, StatusText: statusEnum[statusRandom], Status: statusRandom});// 设备运行状态
+            statusData.Params.push({Code: 'InstrumentStatus', Name: '分析仪状态', Value: paramRandom, StatusText: paramEnum[paramRandom], Status: paramRandom});// 设备运行状态
 
             statusDatas.push(statusData);
 
@@ -161,14 +161,14 @@ export function getDynamicControlData(obj) {
             paramData.PollutantCode = thisObj.PollutantCode;
             paramData.Params = [];
 
-            paramData.Params.push({Code: 'Flow', Name: '流量', Value: 0, Status: '正常'});// 流量
-            paramData.Params.push({Code: 'Oxygen', Name: '含氧量', Value: 0, Status: '正常'});// 含氧量 Code: 'Speed', Name: '流速', Value: 0
-            paramData.Params.push({Code: 'Speed', Name: '流速', Value: 0, Status: '正常'});// 流速
-            paramData.Params.push({Code: 'Temperature', Name: '温度', Value: 0, Status: '正常'});// 温度
-            paramData.Params.push({Code: 'Humidity', Name: '湿度', Value: 0, Status: '正常'});// 湿度
-            paramData.Params.push({Code: 'SectionalArea', Name: '截面积', Value: 0, Status: '正常'});// 截面积
-            paramData.Params.push({Code: 'Intercept', Name: '截距', Value: 0, Status: '正常'});// 截距
-            paramData.Params.push({Code: 'Pressure', Name: '压力', Value: 0, Status: '正常'});// 压力
+            paramData.Params.push({Code: 'Flow', Name: '流量', Value: (Math.random() * 1024).toFixed(3), Status: '正常', Unit: 'KB'});// 流量
+            paramData.Params.push({Code: 'Oxygen', Name: '含氧量', Value: (Math.random() * 100).toFixed(2), Status: '正常', Unit: '%'});// 含氧量 Code: 'Speed', Name: '流速', Value: 0
+            paramData.Params.push({Code: 'Speed', Name: '流速', Value: (Math.random() * 20).toFixed(2), Status: '正常', Unit: 'm/s'});// 流速
+            paramData.Params.push({Code: 'Temperature', Name: '温度', Value: (Math.random() * 90).toFixed(2), Status: '正常', Unit: '℃'});// 温度
+            paramData.Params.push({Code: 'Humidity', Name: '湿度', Value: (Math.random() * 90).toFixed(2), Status: '正常', Unit: 'hPa'});// 湿度
+            paramData.Params.push({Code: 'SectionalArea', Name: '截面积', Value: (Math.random() * 1).toFixed(4), Status: '正常'});// 截面积
+            paramData.Params.push({Code: 'Intercept', Name: '截距', Value: (Math.random() * 1).toFixed(4), Status: '正常'});// 截距
+            paramData.Params.push({Code: 'Pressure', Name: '压力', Value: (Math.random() * 300).toFixed(3), Status: '正常'});// 压力
 
             paramDatas.push(paramData);
             returnDatas.statusDatas = statusDatas;

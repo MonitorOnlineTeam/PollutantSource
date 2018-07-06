@@ -3,6 +3,7 @@
 import React, { Component } from 'react';
 import moment from 'moment';
 import { getPollutantDatas, getAllConcentration, getDynamicControlData } from '../../mockdata/Base/commonbase';
+import GyProcessPic_ from '../../components/PointDetail/GyProcessPic';
 import {
     Table,
     Icon,
@@ -10,8 +11,10 @@ import {
     Modal,
     Row, Col, Tabs, Input, Form,
     Divider,
-    Badge
+    Badge,
+    Tooltip
 } from 'antd';
+import { height } from 'window-size';
 const TabPane = Tabs.TabPane;
 const FormItem = Form.Item;
 // 污染物列
@@ -49,8 +52,6 @@ class PopoverViewData_ extends Component {
             width: 200,
             key: 'MonitoringTime'
         }];
-        // debugger;
-
         if (modalType === 1) {
             pollutantDatas.map((item) => {
                 columns.push({
@@ -58,15 +59,9 @@ class PopoverViewData_ extends Component {
                     dataIndex: item.Value, // 'Concentration',
                     width: 100,
                     key: item.Value,
-                    // render: (value, record, index) => {
-                    //     debugger;
-                    //     return value;
-                    // }
                 });
             });
         } else {
-            // console.log(this.props.pollutantCode);
-            // console.log(this.props.dataParam);
             pollutantDatas.map((item) => {
                 if (dataParam.pollutantCode === item.Value) {
                     columns.push({
@@ -78,7 +73,6 @@ class PopoverViewData_ extends Component {
                 }
             });
         }
-
         return columns;
     };
     // 获取列表数据
@@ -212,7 +206,7 @@ class PopoverViewData_ extends Component {
                     <li style={{listStyle: 'none', marginBottom: 10}}>
                         <Badge status="error" text={`超标倍数：${dataParam.exceedValue}`} />
                     </li>
-                    <li style={{borderBottom: '1px solid #e8e8e8', listStyle: 'none', marginBottom: 10}} />
+                    <li style={{borderBottom: '1px solid #e8e8e8', listStyle: 'none', marginBottom: 5}} />
                 </div>
             );
         } else if (dataParam.isException > 0) {
@@ -304,12 +298,13 @@ class PopoverViewData_ extends Component {
                 });
             });
         }
+        this._getDynamicControlData(selectedRows.MonitoringTime, this._getDataParam().pollutantCode);
         this.setState({ selectedRowKeys: _thisKeys });
     }
 
     render() {
         const rowSelection = {
-            selectedRowKeys: this.state.selectedRowKeys, // this.state.selectedRowKeys
+            selectedRowKeys: this.state.selectedRowKeys,
             onChange: this._onSelectChange
         };
         return (
@@ -362,7 +357,7 @@ class PopoverViewData_ extends Component {
                                         rowSelection={rowSelection}
 
                                     /></Col>
-                                <Col xs={22} sm={20} md={18} lg={18} xl={16} style={{minHeight: 500, border: '1px solid #ccc'}}>
+                                <Col xs={22} sm={20} md={18} lg={18} xl={16} style={{minHeight: 500, scrollStyle: {y: 'calc(100vh - 385px)'}, border: '1px solid #ccc'}}>
                                     <Tabs>
                                         <TabPane tab="仪器状态与参数" key="1">
                                             <Divider style={{color: '#1890ff', fontWeight: 500}}>状态</Divider>
@@ -370,9 +365,12 @@ class PopoverViewData_ extends Component {
                                                 <Form layout="inline">
                                                     {
                                                         this.state.statusDatas.map((item, key) => {
+                                                            let text = (<span>{`${item.StatusText}`}</span>);
                                                             return (
-                                                                <FormItem key={key} hasFeedback={true} validateStatus="warning" wrapperCol={{color: '#ccc'}}>
-                                                                    <Input title={`${item.Status}`} placeholder={`${item.Name}：${item.Status}`} readOnly={true} />
+                                                                <FormItem key={key} hasFeedback={true} validateStatus={item.Status === 0 ? 'success' : 'warning'} wrapperCol={{color: '#ccc'}}>
+                                                                    <Tooltip placement="top" title={text}>
+                                                                        <Input title={`${item.StatusText}`} placeholder={`${item.Name}：${item.StatusText}`} readOnly={true} style={{cursor: 'pointer'}} />
+                                                                    </Tooltip>
                                                                 </FormItem>
                                                             );
                                                         })
@@ -384,17 +382,26 @@ class PopoverViewData_ extends Component {
                                                 <Form layout="inline">
                                                     {
                                                         this.state.paramDatas.map((item, key) => {
+                                                            let text = (<span>{`${key === 3 ? '超标' : item.Status}`}</span>);
                                                             return (
-                                                                <FormItem key={key} hasFeedback={true} validateStatus="success" wrapperCol={{color: '#ccc'}}>
-                                                                    <Input title={`${item.Status}`} placeholder={`${item.Name}：${item.Value}`} readOnly={true} />
+
+                                                                <FormItem key={key} hasFeedback={true} validateStatus={key === 3 ? 'error' : 'success'} wrapperCol={{color: '#ccc'}}>
+                                                                    <Tooltip placement="top" title={text}>
+                                                                        <Input title={`${item.Status}`} placeholder={`${item.Name}：${item.Value}`} readOnly={true} style={{cursor: 'pointer'}} />
+                                                                    </Tooltip>
                                                                 </FormItem>
+
                                                             );
                                                         })
                                                     }
                                                 </Form>
                                             </Row>
                                         </TabPane>
-                                        <TabPane tab="工艺流程图" key="2">工艺流程图</TabPane>
+                                        <TabPane tab="工艺流程图" key="2">
+                                            <div style={{overflow: 'scroll', maxHeight: 'calc(100vh - 385px)'}}>
+                                                <GyProcessPic_ DGIMN={this.state.pointInfo.DGIMN} status={'1'} />
+                                            </div>
+                                        </TabPane>
                                         <TabPane tab="站房信息" key="3">站房信息</TabPane>
                                     </Tabs>
                                 </Col>
