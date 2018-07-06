@@ -13,7 +13,6 @@ import {
     Col,
     Card
 } from 'antd';
-import { isMoment } from '../../../node_modules/moment';
 import moment from 'moment';
 
 /*
@@ -115,10 +114,10 @@ class DataQuery extends Component {
         debugger;
         let formats;
         switch (this.state.searchData.dataType) {
-            case 'realtime': formats = 'YYYY-MM-DD HH:mm:ss'; break;
-            case 'minutes': formats = 'YYYY-MM-DD HH:mm'; break;
-            case 'hour': formats = 'YYYY-MM-DD HH'; break;
-            case 'day': formats = 'YYYY-MM-DD'; break;
+            case 'realtime':
+            case 'minutes': formats = 'YYYY-MM-DD HH:mm:ss'; break;
+            case 'hour': formats = 'YYYY-MM-DD HH:mm'; break;
+            case 'day': formats = 'YYYY-MM-DD HH'; break;
         };
         return moment(time).format(formats);
     }
@@ -198,7 +197,7 @@ class DataQuery extends Component {
         setData.optionData.series[0].data = [];
 
         setData.tableData.map((item) => {
-            setData.optionData.xAxisData.push(item.MonitoringTime);
+            setData.optionData.xAxisData.push(this._formatDate(item.MonitoringTime));
             setData.optionData.series[0].data.push((+item.Concentration));
         });
         this.setState({setData});
