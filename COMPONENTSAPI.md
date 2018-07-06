@@ -225,7 +225,7 @@
 >     _handleDateChange=(date, dateString) => {
 >        console.log(date);// [moment,moment]
 >        console.log(dateString);// ['2018-06-23','2018-06-25']
->        this.state.rangeDate = date;
+>        this.setState({rangeDate:date});
 >     };
 >
 >  
@@ -268,7 +268,7 @@
 >     示例：onChange
 >     _handleDateTypeChange=(e) => {
 >        console.log(e.target.value);// realtime
->        this.state.dataType = e.target.value;
+>        this.setState({dataType:e.target.value});
 >     };
 >
 >  
@@ -310,7 +310,7 @@
 >     _handlePollutantChange=(value,option) => {
 >        console.log(value);// 01
 >        console.log(option);// object
->        this.state.pollutantValue = value;
+>        this.setState({pollutantValue:value});
 >     };
 >
 >  
