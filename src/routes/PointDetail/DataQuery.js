@@ -11,9 +11,9 @@ import {
     Table,
     Row,
     Col,
-    Card,
-    Badge
+    Card
 } from 'antd';
+import moment from 'moment';
 
 /*
 页面：2、数据查询
@@ -27,6 +27,7 @@ class DataQuery extends Component {
     constructor(props) {
         super(props);
         // console.log(this.props.match.params.pointcode);
+        const defaultPollutant = pollutantDatas[0];
         var defaultOption = {
             legend: [],
             xAxisData: [],
@@ -42,12 +43,13 @@ class DataQuery extends Component {
                 },
                 markLine: {
                     data: [
-                        {type: 'average', name: '平均值'}
+                        // {type: 'average', name: '平均值'}
+                        {name: '标准值', yAxis: defaultPollutant.Standard}
                     ]
                 }
             }]
         };
-        const defaultPollutant = pollutantDatas[0];
+
         const obj = {
             startTime: '',
             endTime: '',
@@ -93,7 +95,8 @@ class DataQuery extends Component {
                 series: defaultOption.series,
                 unit: defaultPollutant.Unit,
                 min: defaultPollutant.Min,
-                max: defaultPollutant.Max
+                max: defaultPollutant.Max,
+                standard: defaultPollutant.Standard
 
             },
             tableData: defaultTableDatas,
@@ -106,6 +109,18 @@ class DataQuery extends Component {
             dgmin: obj.point
         };
     }
+
+    _formatDate=(time) => {
+        debugger;
+        let formats;
+        switch (this.state.searchData.dataType) {
+            case 'realtime':formats = 'YYYY-MM-DD HH:mm:ss'; break;
+            case 'minutes': formats = 'YYYY-MM-DD HH:mm'; break;
+            case 'hour': formats = 'YYYY-MM-DD HH'; break;
+            case 'day': formats = 'YYYY-MM-DD'; break;
+        };
+        return moment(time).format(formats);
+    }
     // 污染物
     _handlePollutantChange=(value, selectedOptions) => {
         let setData = this.state;
@@ -114,6 +129,7 @@ class DataQuery extends Component {
         setData.optionData.unit = selectedOptions.props.Unit;
         setData.optionData.min = selectedOptions.props.minValue;
         setData.optionData.max = selectedOptions.props.maxValue;
+        setData.optionData.standard = selectedOptions.props.Standard;
         this._reloadData(setData);
     };
     // 时间范围
@@ -127,6 +143,7 @@ class DataQuery extends Component {
             setData.tableData.map((item) => {
                 let thisMonitoringTime = `${item.MonitoringTime}`;
                 if (thisMonitoringTime >= `${date[0].format('YYYY-MM-DD 00:00:00')}` && thisMonitoringTime <= `${date[1].format('YYYY-MM-DD HH:mm:ss')}`) {
+                    item.MonitoringTime = this._formatDate(item.MonitoringTime);
                     filterTableDatas.push(item);
                 }
             });
@@ -166,13 +183,11 @@ class DataQuery extends Component {
                     });
 
                     _thisPollutantInfo = _thisPollutant;
-                    _thisPollutantInfo.MonitoringTime = time.MonitoringTime;
+                    _thisPollutantInfo.MonitoringTime = this._formatDate(time.MonitoringTime);
 
                     let _rowData = {};
                     _rowData = _thisPollutantInfo;
                     _rowData.Key = t++;
-                    // _rowData.MonitoringTime = _thisPollutantInfo.MonitoringTime;
-                    // _rowData.Concentration = _thisPollutantInfo.Concentration;
                     setData.tableData.push(_rowData);
                 });
             });
@@ -183,10 +198,9 @@ class DataQuery extends Component {
         setData.optionData.series[0].data = [];
 
         setData.tableData.map((item) => {
-            setData.optionData.xAxisData.push(item.MonitoringTime);
+            setData.optionData.xAxisData.push(this._formatDate(item.MonitoringTime));
             setData.optionData.series[0].data.push((+item.Concentration));
         });
-        // console.log(setData.tableData);
         this.setState({setData});
     };
     // 查看数据参数弹窗
@@ -227,12 +241,11 @@ class DataQuery extends Component {
                 axisLabel: {
                     formatter: '{value}'
                 },
-                min: this.state.optionData.min,
+                min: 0, // this.state.optionData.min,
                 max: Math.floor((this.state.optionData.min + this.state.optionData.max) * 1.5)
             },
             series: this.state.optionData.series
         };
-        // console.log(option);
         const columns = [
             {
                 title: '时间',
@@ -252,15 +265,15 @@ class DataQuery extends Component {
                     let dot;
                     if (row.IsExceed > 0 || row.IsException > 0) {
                         dot = (
-                            <Badge dot={true}>
-                                <a style={{cursor: 'pointer'}}>{row.Concentration}</a>
-                            </Badge>
+
+                            <a style={{color: 'red', cursor: 'pointer'}}>{row.Concentration}</a>
+
                         );
                     } else {
                         dot = (
-                            <Badge>
-                                <a style={{cursor: 'pointer'}}>{row.Concentration}</a>
-                            </Badge>
+
+                            <a style={{cursor: 'pointer'}}>{row.Concentration}</a>
+
                         );
                     }
                     return (

@@ -33,7 +33,13 @@ export default class PollutantSelect_ extends Component {
             >
                 {
                     this.state.optionDatas.map((item, key) => {
-                        return <Option key={key} value={item.Value} Unit={item.Unit} minValue={item.Min} maxValue={item.Max}>{item.Name}</Option>;
+                        return <Option
+                            key={key}
+                            value={item.Value}
+                            Unit={item.Unit}
+                            Standard={item.Standard}
+                            minValue={item.Min}
+                            maxValue={item.Max}>{item.Name}</Option>;
                     })
                 }
             </Select>
