@@ -1,0 +1,28 @@
+[{
+    "MonitorItem":"监测时间",
+    "MonitorValue":"2018-05-17 10:50"
+},{
+    "MonitorItem":"SO2(mg/m³)",
+    "MonitorValue":"4.798"
+},{
+    "MonitorItem":"实测烟尘(mg/m³)",
+    "MonitorValue":"3.75"
+},{
+    "MonitorItem":"氮氧化物(mg/m³)",
+    "MonitorValue":"25.12"
+},{
+    "MonitorItem":"烟气湿度（％）",
+    "MonitorValue":"15.2"
+},{
+    "MonitorItem":"烟气温度(℃)",
+    "MonitorValue":"185"
+},{
+    "MonitorItem":"烟气静压(Pa)",
+    "MonitorValue":"23"
+},{
+    "MonitorItem":"流速(m/s)",
+    "MonitorValue":"6.2"
+},{
+    "MonitorItem":"流量(m³/H)",
+    "MonitorValue":"92"
+}]

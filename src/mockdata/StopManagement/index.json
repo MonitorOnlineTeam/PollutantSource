@@ -1,7 +1,7 @@
 [
     {
         "id":"1",
-        "DGIMN":"sgjt001005",
+        "DGIMN":"bjldgn01",
         "attachment":[],
         "ExpectStopStartTime":"2018-07-01 03:30:00",
         "RealStopStartTime":"2018-07-01 03:30:00",
@@ -14,7 +14,7 @@
     },
     {
         "id":"2",
-        "DGIMN":"sgjt001003",
+        "DGIMN":"bjldgn01",
         "attachment":[],
         "ExpectStopStartTime":"2018-07-01 03:30:00",
         "RealStopStartTime":"2018-07-01 03:30:00",
@@ -27,7 +27,7 @@
     },
     {
         "id":"3",
-        "DGIMN":"sgjt001007",
+        "DGIMN":"bjldgn01",
         "attachment":[],
         "ExpectStopStartTime":"2018-07-01 03:30:00",
         "RealStopStartTime":"2018-07-01 03:30:00",
@@ -40,7 +40,7 @@
     },
     {
         "id":"4",
-        "DGIMN":"hgjt001003",
+        "DGIMN":"bjldgn01",
         "attachment":[],
         "ExpectStopStartTime":"2018-07-01 03:30:00",
         "RealStopStartTime":"2018-07-01 03:30:00",
@@ -53,7 +53,7 @@
     },
     {
         "id":"5",
-        "DGIMN":"hgjt001001",
+        "DGIMN":"bjldgn01",
         "attachment":[],
         "ExpectStopStartTime":"2018-07-01 03:30:00",
         "RealStopStartTime":"2018-07-01 03:30:00",
@@ -66,7 +66,7 @@
     },
     {
         "id":"11",
-        "DGIMN":"sgjt001005",
+        "DGIMN":"bjldgn01",
         "attachment":[],
         "ExpectStopStartTime":"2018-07-01 03:30:00",
         "RealStopStartTime":"2018-07-01 03:30:00",
@@ -79,7 +79,7 @@
     },
     {
         "id":"12",
-        "DGIMN":"sgjt001003",
+        "DGIMN":"bjldgn01",
         "attachment":[],
         "ExpectStopStartTime":"2018-07-01 03:30:00",
         "RealStopStartTime":"2018-07-01 03:30:00",
@@ -92,7 +92,7 @@
     },
     {
         "id":"13",
-        "DGIMN":"sgjt001007",
+        "DGIMN":"bjldgn01",
         "attachment":[],
         "ExpectStopStartTime":"2018-07-01 03:30:00",
         "RealStopStartTime":"2018-07-01 03:30:00",
@@ -105,7 +105,7 @@
     },
     {
         "id":"14",
-        "DGIMN":"hgjt001003",
+        "DGIMN":"bjldgn01",
         "attachment":[],
         "ExpectStopStartTime":"2018-07-01 03:30:00",
         "RealStopStartTime":"2018-07-01 03:30:00",
@@ -118,7 +118,7 @@
     },
     {
         "id":"15",
-        "DGIMN":"hgjt001001",
+        "DGIMN":"bjldgn01",
         "attachment":[],
         "ExpectStopStartTime":"2018-07-01 03:30:00",
         "RealStopStartTime":"2018-07-01 03:30:00",
@@ -131,7 +131,7 @@
     },
     {
         "id":"31",
-        "DGIMN":"sgjt001005",
+        "DGIMN":"bjldgn01",
         "attachment":[],
         "ExpectStopStartTime":"2018-07-01 03:30:00",
         "RealStopStartTime":"2018-07-01 03:30:00",
@@ -144,7 +144,7 @@
     },
     {
         "id":"32",
-        "DGIMN":"sgjt001003",
+        "DGIMN":"bjldgn01",
         "attachment":[],
         "ExpectStopStartTime":"2018-07-01 03:30:00",
         "RealStopStartTime":"2018-07-01 03:30:00",
@@ -157,7 +157,7 @@
     },
     {
         "id":"33",
-        "DGIMN":"sgjt001007",
+        "DGIMN":"bjldgn01",
         "attachment":[],
         "ExpectStopStartTime":"2018-07-01 03:30:00",
         "RealStopStartTime":"2018-07-01 03:30:00",
@@ -170,7 +170,7 @@
     },
     {
         "id":"34",
-        "DGIMN":"hgjt001003",
+        "DGIMN":"bjldgn01",
         "attachment":[],
         "ExpectStopStartTime":"2018-07-01 03:30:00",
         "RealStopStartTime":"2018-07-01 03:30:00",
@@ -183,7 +183,7 @@
     },
     {
         "id":"35",
-        "DGIMN":"hgjt001001",
+        "DGIMN":"bjldgn01",
         "attachment":[],
         "ExpectStopStartTime":"2018-07-01 03:30:00",
         "RealStopStartTime":"2018-07-01 03:30:00",

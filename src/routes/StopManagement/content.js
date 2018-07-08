@@ -215,13 +215,6 @@ export default class Content extends Component {
             width: 200,
             fixed: 'left'
         }, {
-            title: '档案',
-            dataIndex: 'attachment',
-            key: 'attachment',
-            width: 80,
-            fixed: 'left',
-            render: (text, record, index) => { return <Button type="primary" shape="circle" icon="download" size={'small'} id={record.key} onClick={this.attentionClick} />; }
-        }, {
             title: '预计停产开始至结束时间',
             dataIndex: 'ExpectStopStartTime',
             key: 'ExpectStopStartTime',
@@ -253,6 +246,13 @@ export default class Content extends Component {
             title: '描述',
             dataIndex: 'Descripe',
             key: 'Descripe',
+        }, {
+            title: '档案',
+            dataIndex: 'attachment',
+            key: 'attachment',
+            width: 80,
+            fixed: 'right',
+            render: (text, record, index) => { return <Button type="primary" shape="circle" icon="download" size={'small'} id={record.key} onClick={this.attentionClick} />; }
         } ];
 
         const rowSelection = {
@@ -264,7 +264,6 @@ export default class Content extends Component {
                             if (a !== '') { keys.push(a); }
                         });
                     } else {
-                        debugger;
                         if (t !== '') { keys.push(t); }
                     }
                 });

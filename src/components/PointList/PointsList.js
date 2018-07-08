@@ -5,15 +5,19 @@ import { getPointEnterprise } from '../../mockdata/Base/commonbase';
 
 const Search = Input.Search;
 const { Content, Sider } = Layout;
-const dataList = getPointEnterprise();
 
 export default class PointsList extends Component {
-    state = {
-        collapsed: false,
-        pointslist: dataList,
-        selDGIMN: '',
-        selDGMINS:[]
-    };
+        constructor(props) {
+            super(props);
+
+            const dataList = getPointEnterprise();
+            this.state = {
+                collapsed: false,
+                pointslist: dataList,
+                selDGIMN: '',
+                selDGMINS: []
+            };
+        }
 
       toggle = () => {
           this.setState({
@@ -55,45 +59,47 @@ export default class PointsList extends Component {
                                   dataSource={this.state.pointslist}
                                   renderItem={item => (
                                       <div id={item.DGIMN} className={styles.cardList} style={this.state.selDGIMN === item.DGIMN ? {
-                                          borderWidth:'1px',borderColor:'rgb(97,166,238)',borderStyle:'solid',
-                                          WebkitBoxShadow: 'rgb(118,178,240) 0px 0px 5px',MozBoxShadow:'rgb(118,178,240) 0px 0px 5px'
-                                          ,boxShadow:'rgb(118,178,240) 0px 0px 5px'
-                                        } : {}}
-                                          onClick={
-                                             ()=>{
-                                                if(this.props.IsShowChk=="none"){
-                                                this.props.handleChange([item.DGIMN]);
-                                                this.setState({
-                                                    selDGIMN: item.DGIMN
-                                                });
-                                               }
-                                             }
-                                          } >
+                                          borderWidth: '1px',
+                                          borderColor: 'rgb(97,166,238)',
+                                          borderStyle: 'solid',
+                                          WebkitBoxShadow: 'rgb(118,178,240) 0px 0px 5px',
+                                          MozBoxShadow: 'rgb(118,178,240) 0px 0px 5px',
+                                          boxShadow: 'rgb(118,178,240) 0px 0px 5px'
+                                      } : {}}
+                                      onClick={
+                                          () => {
+                                              if (this.props.IsShowChk == 'none') {
+                                                  this.props.handleChange([item.DGIMN]);
+                                                  this.setState({
+                                                      selDGIMN: item.DGIMN
+                                                  });
+                                              }
+                                          }
+                                      } >
                                           <div className={styles.title}>
                                               <span className={styles.chkbox} style={{display: IsShowChk}}>
-                                              <Checkbox  
-                                              onChange={
-                                                  (e)=>{
-                                                    let dgimns=this.state.selDGMINS;
-                                                    if(e.target.checked==true){
-                                                        if(dgimns.indexOf(item.DGIMN)==-1){
-                                                            dgimns.push(item.DGIMN);
-                                                        }
-                                                    }
-                                                    else{
-                                                        if(dgimns.indexOf(item.DGIMN)>-1){
-                                                            dgimns.splice(dgimns.indexOf(item.DGIMN),1);
-                                                        }
-                                                    }
-                                        
-                                                    this.setState({
-                                                        selDGIMNS: dgimns
-                                                    });
-                                                    
-                                                    this.props.handleChange(dgimns);
-                                                  }
-                                              }
-                                              />
+                                                  <Checkbox
+                                                      onChange={
+                                                          (e) => {
+                                                              let dgimns = this.state.selDGMINS;
+                                                              if (e.target.checked == true) {
+                                                                  if (dgimns.indexOf(item.DGIMN) == -1) {
+                                                                      dgimns.push(item.DGIMN);
+                                                                  }
+                                                              } else {
+                                                                  if (dgimns.indexOf(item.DGIMN) > -1) {
+                                                                      dgimns.splice(dgimns.indexOf(item.DGIMN), 1);
+                                                                  }
+                                                              }
+
+                                                              this.setState({
+                                                                  selDGIMNS: dgimns
+                                                              });
+
+                                                              this.props.handleChange(dgimns);
+                                                          }
+                                                      }
+                                                  />
                                               </span>
                                               <span className={styles.titleSpan}>{item.PointName}</span>
                                           </div>

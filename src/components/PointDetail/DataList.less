@@ -26,4 +26,56 @@
   height: 1034px;
 }
 
+.FormTable {
+  width:90%;
+  border-collapse: collapse;/* 边框合并属性  */
+  font-size: 10px;
+  margin:auto;
+  background-color: #fff;
+  margin-top:15px;
+}
+.FormTable>thead>th {
+      text-align: right;
+      border: 1px solid #ccc;
+      font-weight: normal;
+      display: table-cell;
+      vertical-align: inherit;
+      line-height: 25px;
+      height: 25px;
+      white-space: nowrap;
+      padding-left: 9px;
+      background-color: rgb(114,135,178);
+      color: #fff;
+  }
+
+  .FormTable>tbody>tr>td {
+      border: 1px solid #ccc;
+      display: table-cell;
+      vertical-align: inherit;
+      text-align: left;
+      padding-left: 9px;
+      padding-top:9px;
+      padding-bottom:9px;
+  }
+
+  .AlarmRed{
+  color: red;  
+  }
+
+  .AlarmCommon{
+    color: #000; 
+  }
+
+  @-webkit-keyframes  shineRed {  
+    from { -webkit-box-shadow: 0 0 5px red; }  
+    50% { -webkit-box-shadow: 0 0 20px red; }  
+    to { -webkit-box-shadow: 0 0 10px red; }  
+    }  
+    .shine_red{  
+      color: red; 
+    -webkit-animation-name: shineRed;   
+    -webkit-animation-duration: 2s;  
+    -webkit-animation-iteration-count: infinite;   
+    }  
+
 /*工艺流程图*/

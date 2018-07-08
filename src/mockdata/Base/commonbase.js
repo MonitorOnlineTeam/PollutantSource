@@ -109,7 +109,6 @@ export function getPointEnterprise() {
         let relation = relationArray.find((r) => r.DGIMN === p.DGIMN);
         let enterprise = enterpriseArraySon.find((e) => e.EntCode === relation.BaseCode);
         if (enterprise) {
-            // debugger;
             const region = regions.find(t => t.RegionCode === p.RegionCode);
             const industry = industrys.find(t => t.IndustryTypeCode === enterprise.IndustryTypeCode);
             const attention = attentions.find(t => t.AttentionCode === enterprise.AttentionCode);
@@ -347,7 +346,6 @@ export function getAllConcentration(obj) {
     // console.log(dateForms);
     // console.log(point);
     point.map((p) => {
-        // debugger;
         let pointData = p;
         pointData.MonitoringDatas = [];
         let m = 1;
@@ -385,7 +383,7 @@ export function getAllConcentration(obj) {
                         if (dotRandom === Key) {
                             PollutantData.IsExceed = 1;
                             PollutantData.Concentration = ((PollutantData.Standard / 2) + (+PollutantData.Concentration)).toFixed(3);
-                            console.log(Key + ':' + PollutantData.Concentration);
+                            // console.log(Key + ':' + PollutantData.Concentration);
                             PollutantData.ExceedValue = ((PollutantData.Concentration - PollutantData.Standard) / PollutantData.Standard).toFixed(2);
                         }
                     } else if (m === 2) { // 第二条数据异常
