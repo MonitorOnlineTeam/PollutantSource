@@ -549,13 +549,15 @@ class OverViewMap extends PureComponent {
                             }
                         </div>
                     </InfoWindow>
+                  
                     <Modal
                         title={`${this.state.selectpoint.EntName}-${this.state.selectpoint.PointName}`}
+                        width={1700}
                         visible={this.state.modalvisible}
                         footer={null}
                         onCancel={this.closeModal}
                     >
-                        <StationBuilding />
+                        {/* <StationBuilding /> */}
                     </Modal>
                     {/* 图例 */}
                     <MapLegend style={{ position: 'absolute',
