@@ -1,7 +1,7 @@
 [
     {
         "id":"1",
-        "DGIMN":"sgjt001005",
+        "DGIMN":"bjldgn01",
         "alarmtype":1,
         "date":"2018-07-27 03:30:00",
         "PollutantCode":"",
@@ -13,7 +13,7 @@
     },
     {
         "id":"2",
-        "DGIMN":"sgjt001003",
+        "DGIMN":"dtgjhh11102",
         "alarmtype":2,
         "date":"2018-07-19 03:30:00",
         "PollutantCode":"",
@@ -25,7 +25,7 @@
     },
     {
         "id":"3",
-        "DGIMN":"sgjt001007",
+        "DGIMN":"dtgrjx110",
         "alarmtype":3,
         "date":"2018-08-01 03:30:00",
         "PollutantCode":"",
@@ -37,7 +37,7 @@
     },
     {
         "id":"4",
-        "DGIMN":"hgjt001003",
+        "DGIMN":"dtgrjx103",
         "alarmtype":4,
         "date":"2018-08-01 03:30:00",
         "PollutantCode":"",
@@ -49,7 +49,7 @@
     },
     {
         "id":"5",
-        "DGIMN":"hgjt001001",
+        "DGIMN":"lywjfd03",
         "alarmtype":5,
         "date":"2018-08-01 03:30:00",
         "PollutantCode":"",
