@@ -11,7 +11,7 @@ modify by
 class StopManagement extends Component {
     render() {
         return (
-            <StopManagementModel />
+                <StopManagementModel dgimn={'bjldgn01'} />
         );
     }
 }

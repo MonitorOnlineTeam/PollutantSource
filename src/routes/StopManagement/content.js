@@ -42,6 +42,7 @@ modify by
 export default class Content extends Component {
     constructor(props) {
         super(props);
+
         this.state = {
             visible: false,
             attentionvisible: false,
@@ -50,7 +51,7 @@ export default class Content extends Component {
             width: 400,
             expandForm: false,
             selectid: [],
-            data: getData(),
+            data: this.props.dgimn ? getData().filter(t => t.DGIMN === this.props.dgimn) : getData(),
             loading: true,
             rangeDate: [moment('2018-06-23 00:00:00'), moment('2018-06-25 00:00:00')]
         };
