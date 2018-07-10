@@ -35,8 +35,6 @@ export default class EmergencyDetailInfo extends Component {
     render() {
         const SCREEN_WIDTH = document.querySelector('body').offsetWidth;
         const { match} = this.props;
-        debugger;
-
         const emergencyId = match.params.exceptionhandleid; // 任务ID
         const LogColumn = [
             {

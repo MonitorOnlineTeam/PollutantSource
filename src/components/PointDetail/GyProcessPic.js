@@ -6,7 +6,7 @@ export default class GyProcessPic extends Component {
     render() {
         const { DGIMN, status } = this.props;
         const flows = FlowInfo.DataList.filter((item) => {
-            return item.DGMIN === DGIMN && item.Status === status;
+            return item.Status === status;
         });
         return (
             <div className={styles.GyProcessPic} style={{height: 'calc(100vh - 225px)'}}>
