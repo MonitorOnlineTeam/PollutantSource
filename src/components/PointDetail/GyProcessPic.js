@@ -1,15 +1,35 @@
 import React, { Component } from 'react';
 import styles from '../PointDetail/DataList.less';
 import FlowInfo from '../../mockdata/PointDetail/ProcessFlowDiagram.json';
+import { MapInteractionCSS } from 'react-map-interaction';
 
 export default class GyProcessPic extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+          scale: 1,
+          translation: { x: 0, y: 0 }
+        };
+      }
+
     render() {
         const { DGIMN, status } = this.props;
         const flows = FlowInfo.DataList.filter((item) => {
             return item.Status === status;
         });
+        const { scale, translation } = this.state;
         return (
             <div className={styles.GyProcessPic} style={{height: 'calc(100vh - 225px)'}}>
+            <MapInteractionCSS
+          scale={scale}
+          translation={translation}
+          onChange={({ scale, translation }) => this.setState({ scale, translation })}
+          defaultScale={1}
+          defaultTranslation={{ x: 0, y: 0 }}
+          minScale={0.05}
+          maxScale={5}
+          showControls
+        >
                 <div className={styles.imgBg} >
                     <div style={{width: '200px', height: '20px', position: 'relative', left: '1250px', top: '20px', fontWeight: '1000', fontSize: '13px'}}>CEMS运行状态：<span className={flows.length === 0 ? styles.AlarmCommon : (flows[0].Status !== '0' ? styles.shine_red : styles.AlarmCommon)}>{flows.length === 0 ? '' : flows[0].CEMSStatus}</span></div>
                     <div style={{width: '100px', height: '20px', position: 'relative', left: '400px', top: '186px', fontWeight: '700', fontSize: '10px'}}>管线：{flows.length === 0 ? '' : flows[0].GxTemperature}</div>
@@ -37,12 +57,14 @@ export default class GyProcessPic extends Component {
                     <div style={{width: '450px', height: '220px', position: 'relative', left: '25px', top: '329px', fontWeight: '700', fontSize: '10px'}}>
                         <table className={styles.FormTable}>
                             <thead>
+                            <tr>
                                 <th style={{width: '30%', textAlign: 'left'}}>
     因子
                                 </th>
                                 <th style={{width: '68%', textAlign: 'left'}}>
     值
                                 </th>
+                                </tr>
                             </thead>
                             <tbody>
                                 <tr>
@@ -67,6 +89,7 @@ export default class GyProcessPic extends Component {
                     <div style={{width: '450px', height: '220px', position: 'relative', left: '525px', top: '95px', fontWeight: '0', fontSize: '10px'}}>
                         <table className={styles.FormTable}>
                             <thead>
+                            <tr>
                                 <th style={{width: '25%', textAlign: 'left'}}>
     参数
                                 </th>
@@ -79,6 +102,7 @@ export default class GyProcessPic extends Component {
                                 <th style={{width: '25%', textAlign: 'left'}}>
     值
                                 </th>
+                                </tr>
                             </thead>
                             <tbody>
                                 <tr>
@@ -111,12 +135,14 @@ export default class GyProcessPic extends Component {
                     <div style={{width: '450px', height: '220px', position: 'relative', left: '1025px', top: '-139px', fontWeight: '700', fontSize: '10px'}}>
                         <table className={styles.FormTable}>
                             <thead>
+                            <tr>
                                 <th style={{width: '30%', textAlign: 'left'}}>
     因子
                                 </th>
                                 <th style={{width: '68%', textAlign: 'left'}}>
     值
                                 </th>
+                                </tr>
                             </thead>
                             <tbody>
                                 <tr>
@@ -128,6 +154,7 @@ export default class GyProcessPic extends Component {
                         </table>
                     </div>
                 </div>
+                </MapInteractionCSS>
             </div>
         );
     }
