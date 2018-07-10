@@ -1,0 +1,128 @@
+[{
+    "key":1,
+    "InStockDate":"2018-05-18",
+    "MaterialNum":"B981502127",
+     "MaterialName":"温度控制器",
+    "Specifications":"TC4SP-14R",
+    "Brand":"虹润",
+    "Num":6,  
+    "Price":20,
+    "ManufactureDate":"2018-05-15",
+    "ValidateNum":365,
+    "State":"待使用"
+},{
+    "key":2,
+    "InStockDate":"2018-05-18",
+    "MaterialNum":"B120403003",
+    "MaterialName":"氟化钡晶体",
+    "Specifications":"直径25±0/-0.05mm 厚度1.5±0/-0.1mm 双面抛光",
+    "Brand":"SDL",
+    "Num":5, 
+    "Price":20,
+    "ManufactureDate":"2018-05-15",
+    "ValidateNum":365,
+    "State":"待使用"
+},{
+    "key":3,
+    "InStockDate":"2018-05-18",
+    "MaterialNum":"B110206011",
+
+    "MaterialName":"继电器",
+    "Specifications":"RJ2S-CL-D24+SJ2S-05B",
+    "Brand":"SDL",
+    "Num":10, 
+    "Price":20,
+    "ManufactureDate":"2018-05-15",
+    "ValidateNum":365,
+    "State":"待使用"
+},{
+    "key":4,
+    "InStockDate":"2018-05-18",
+    "MaterialNum":"B090803002",
+
+    "MaterialName":"四氟卡套",
+    "Specifications":"φ6",
+    "Brand":"SDL",
+    "Num":6, 
+    "Price":20,
+    "ManufactureDate":"2018-05-15",
+    "ValidateNum":365,
+    "State":"待使用"
+},{
+    "key":5,
+    "InStockDate":"2018-05-18",
+    "MaterialNum":"B090109053",
+    "Num":7, 
+    "MaterialName":"喷氟取样管",
+    "Specifications":"喷氟，黑色，材质;hastelloyC-276,1.5米",
+    "Brand":"SDL",
+    "Price":20,
+    "ManufactureDate":"2018-05-15",
+    "ValidateNum":365,
+    "State":"待使用"
+},{
+    "key":6,
+    "InStockDate":"2018-05-18",
+    "MaterialNum":"B090109009",
+    "Num":10, 
+    "MaterialName":"密封垫",
+    "Specifications":"SD200普通探头,φ49（外径）Xφ37（内径）,δ3,材料：4F",
+    "Brand":"SDL",
+
+    "Price":20,
+    "ManufactureDate":"2018-05-15",
+    "ValidateNum":365,
+    "State":"待使用"
+},{
+    "key":7,
+    "InStockDate":"2018-05-18",
+    "MaterialNum":"B080302009",
+    "Num":11, 
+    "MaterialName":"盐酸标准溶液",
+    "Specifications":"0.1mol/L,500ml/瓶",
+    "Brand":"SDL",
+
+    "Price":20,
+    "ManufactureDate":"2018-05-15",
+    "ValidateNum":365,
+    "State":"待使用"
+},{
+    "key":8,
+    "InStockDate":"2018-05-18",
+    "MaterialNum":"B080301045",
+    "Num":22, 
+    "MaterialName":"总铅试剂",
+    "Specifications":"适用于泰肯 （0-10mg/L）总铅分析仪，湖北运营专用",
+    "Brand":"SDL",
+
+    "Price":20,
+    "ManufactureDate":"2018-05-15",
+    "ValidateNum":365,
+    "State":"待使用"
+},{
+    "key":9,
+    "InStockDate":"2018-05-18",
+    "MaterialNum":"B080301040",
+    "Num":14, 
+    "MaterialName":"氨氮试剂",
+    "Specifications":"适用于泰肯 TKN-1 （0.1-30mg/L）氨氮分析仪",
+    "Brand":"SDL",
+
+    "Price":20,
+    "ManufactureDate":"2018-05-15",
+    "ValidateNum":365,
+    "State":"待使用"
+},{
+    "key":10,
+    "InStockDate":"2018-05-18",
+    "MaterialNum":"B080301039",
+    "Num":9, 
+    "MaterialName":"六价铬试剂",
+    "Specifications":"适用于SYSTEA（0-1mg/L）六价铬分析仪",
+    "Brand":"SDL",
+
+    "Price":20,
+    "ManufactureDate":"2018-05-15",
+    "ValidateNum":365,
+    "State":"待使用"
+}]
