@@ -26,6 +26,7 @@ class PointDetail extends Component {
                 { key: 'inspectiontaskrecord', tab: '例行任务记录' },
                 { key: 'replacementpartrecord', tab: '备品备件使用记录' },
                 { key: 'stopmanagement', tab: '停产管理' },
+                { key: 'stationthree', tab: '站房全景' },
             ],
         };
     }

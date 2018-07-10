@@ -149,6 +149,10 @@ export const getRouterData = (app) => {
             component: dynamicWrapper(app, ['points'], () =>
           import('../routes/PointDetail/StopManagement')),
         },
+        '/monitor/pointdetail/:pointcode/stationthree': {
+            component: dynamicWrapper(app, ['points'], () =>
+        import('../routes/PointDetail/StationThree')),
+        },
         /* 工作台 */
         '/monitor/workbench': {
             component: dynamicWrapper(app, ['user', 'points'], () =>
