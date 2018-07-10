@@ -77,12 +77,12 @@ export default class HistoryVideo extends Component {
         return (
             <div>
                 <Row gutter={24}>
-                    <Col xl={19} lg={24} md={24} sm={24} xs={24} style={{ marginBottom: 24, height: 400 }}>
-                        <Card style={{background: 'black', height: 500, width: 800}} />
+                    <Col xl={19} lg={24} md={24} sm={24} xs={24} style={{ marginBottom: 24, height: 490 }}>
+                        <div className={styles.videoComponent} />
                     </Col>
                     <Col xl={5} lg={24} md={24} sm={24} xs={24}>
 
-                        <Card style={{ marginBottom: 24 }} >
+                        <Card className={styles.hisYunStyle}>
                             <Row>
                                 <Col span={24} >历史视频时间：<RangePicker /></Col>
                             </Row>

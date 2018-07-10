@@ -20,11 +20,11 @@ export default class RealTimeVideo extends Component {
         return (
             <div >
                 <Row gutter={24}>
-                    <Col xl={19} lg={24} md={24} sm={24} xs={24} style={{ marginBottom: 10, height: 400 }}>
-                        <Card style={{background: 'black', height: 500, width: 800}} />
+                    <Col xl={19} lg={24} md={24} sm={24} xs={24} style={{ marginBottom: 10, height: 480 }}>
+                        <div className={styles.videoComponent} />
                     </Col>
                     <Col xl={5} lg={24} md={24} sm={24} xs={24}>
-                        <Card style={{ marginBottom: 24 }} >
+                        <Card className={styles.realYunStyle} >
                             <Row>
                                 <Col span={24} ><Button icon="picture">抓图</Button></Col>
                             </Row>
