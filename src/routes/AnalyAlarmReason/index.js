@@ -156,7 +156,7 @@ export default class AnalyAlarmReason extends Component {
       return (
           <div>
               <Card title="报警原因统计">
-                  <Row>
+                  <Row >
                       <Col span={10} >
                           <Layout >
                               <Content><ReactEcharts
@@ -166,16 +166,17 @@ export default class AnalyAlarmReason extends Component {
                                   lazyUpdate={true} /></Content>
                           </Layout></Col>
                       <Col span={13} style={{marginLeft: 30}}>
-                          <Row>
+                          <Row style={{marginBottom: 30}}>
                               <Col >
                                   <table style={{height: 100}}>
                                       <tr>
-                                          <td> <span ><EnterpriseAutoComplete width={200} placeholder="请选择企业" /></span></td>
+                                          <td> <span >企业：<EnterpriseAutoComplete width={200} placeholder="请选择企业" /></span></td>
                                           <td>
                                               <span>
+                                                  <span>行业：</span>
                                                   <TreeSelect
                                                       showSearch={true}
-                                                      style={{ width: 200, marginLeft: 14 }}
+                                                      style={{ width: 200 }}
                                                       value={this.state.value}
                                                       dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
                                                       placeholder="请选择行业"
@@ -186,8 +187,10 @@ export default class AnalyAlarmReason extends Component {
                                                   />
                                               </span>
                                           </td>
-                                          <td><span style={{marginLeft: 14}}><Attention placeholder="请选择控制级别" width={200} /></span></td>
-                                          <td> <span style={{marginLeft: 14}} className="gutter-box"><RangePicker_ style={{width: 350}} placeholder="请选择时间" format="YYYY-MM-DD HH:mm:ss" onChange={this._handleDateChange} dateValue={this.state.rangeDate} /></span></td>
+                                      </tr>
+                                      <tr>
+                                          <td><span > 级别：<Attention placeholder="请选择控制级别" width={200} /></span></td>
+                                          <td> <span className="gutter-box">时间：<RangePicker_ style={{width: 250}} placeholder="请选择时间" format="YYYY-MM-DD" onChange={this._handleDateChange} dateValue={this.state.rangeDate} /></span></td>
                                       </tr>
                                   </table>
                               </Col>
@@ -198,7 +201,7 @@ export default class AnalyAlarmReason extends Component {
                                       style={{marginTop: 10}}
                                       dataSource={dataSource}
                                       columns={columns}
-                                      scroll={{ x: 550, y: 'calc(100vh - 860px)' }}
+                                      scroll={{ x: 550, y: 'calc(100vh - 660px)' }}
                                       onRow={(record, index) => {
                                           return {
                                               onClick: (a, b, c) => {
@@ -215,7 +218,7 @@ export default class AnalyAlarmReason extends Component {
                                           };
                                       }}
                                   />
-                                  <Card style={{marginTop: 50, marginLeft: -20}} title={'总结'}>
+                                  <Card style={{marginTop: 20, marginLeft: -20}} title={'总结'}>
                                       <p>
                                           <span> 数据原因报警150，设备原因报警15，总计165，其中数据原因最多排口为废气排口，最少为废气排口。</span>
                                       </p>
