@@ -120,7 +120,7 @@ export default class AnalyDischarge extends Component {
         return (
             <div style={{ width: '100%',
                 height: 'calc(100vh - 67px)' }}>
-                <EnterpriseList handleChange={this.SearchDataList}>
+                <EnterpriseList IsShowChk={'none'} handleChange={this.SearchDataList}>
                     <div className={styles.pageHeader}>
                         <Breadcrumb className={styles.breadcrumb} >
                             <Breadcrumb.Item key="1">

@@ -9,7 +9,6 @@ const { Content, Sider } = Layout;
 export default class PointsList extends Component {
     constructor(props) {
         super(props);
-        debugger;
         const dataList = getPointEnterprise();
         this.state = {
             collapsed: false,
@@ -68,7 +67,7 @@ export default class PointsList extends Component {
                                       } : {}}
                                           onClick={
                                           () => {
-                                              if (this.props.IsShowChk == 'none') {
+                                              if (this.props.IsShowChk === 'none') {
                                                   this.props.handleChange([item.DGIMN]);
                                                   this.setState({
                                                       selDGIMN: item.DGIMN
