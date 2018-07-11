@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 import { Link } from 'dva/router';
-import PointList from '../../components/PointList/PointsList';
+import EnterpriseList from '../../components/EnterpriseList/EnterpriseList';
 import RangePicker_ from '../../components/PointDetail/RangePicker_';
 import ReactEcharts from 'echarts-for-react';
 import styles from '../../routes/PointDetail/index.less';
@@ -20,6 +20,11 @@ export default class AnalyDischarge extends Component {
             rangeDate: []
         };
     }
+
+    SearchDataList = (value) => {
+
+    };
+
     render() {
         let option = {
             tooltip: {
@@ -115,7 +120,7 @@ export default class AnalyDischarge extends Component {
         return (
             <div style={{ width: '100%',
                 height: 'calc(100vh - 67px)' }}>
-                <PointList handleChange={this.SearchEmergencyDataList} IsShowChk={'none'}>
+                <EnterpriseList handleChange={this.SearchDataList}>
                     <div className={styles.pageHeader}>
                         <Breadcrumb className={styles.breadcrumb} >
                             <Breadcrumb.Item key="1">
@@ -145,7 +150,7 @@ export default class AnalyDischarge extends Component {
                             </Tabs>
                         </Card>
                     </div>
-                </PointList>
+                </EnterpriseList>
             </div>
         );
     }

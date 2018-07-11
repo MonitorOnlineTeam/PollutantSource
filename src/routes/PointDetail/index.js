@@ -19,13 +19,15 @@ class PointDetail extends Component {
                 { key: 'processflowdiagram', tab: '工艺流程图' },
                 { key: 'dataquery', tab: '数据查询' },
                 { key: 'alarmrecord', tab: '报警记录' },
-                { key: 'monitorvideo', tab: '监控视频' },
+                { key: 'realvideo', tab: '实时视频' },
+                { key: 'hisvideo', tab: '历史视频' },
                 { key: 'warningrecord', tab: '预警记录' },
                 { key: 'emergencymaintenancerecord', tab: '应急维护记录' },
                 { key: 'operationplanrecord', tab: '运维计划记录' },
                 { key: 'inspectiontaskrecord', tab: '例行任务记录' },
                 { key: 'replacementpartrecord', tab: '备品备件使用记录' },
                 { key: 'stopmanagement', tab: '停产管理' },
+                { key: 'stationthree', tab: '站房全景' },
             ],
         };
     }

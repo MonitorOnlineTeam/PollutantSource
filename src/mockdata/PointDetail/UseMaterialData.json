@@ -1,0 +1,71 @@
+[{
+    "key":1,
+    "MaterialName":"冷凝管",
+    "Specifications":"双通道N15",
+    "Num":1,
+    "UseDate":"2018-05-06",
+    "TotalMoney":200.00,
+    "ManufactureDate":"2018-03-05",
+    "ValidateDate":"2019-05-03",
+    "NextChangeDate":"2019-04-05"
+},{
+    "key":2,
+    "MaterialName":"探头",
+    "Specifications":"3080探头",
+    "Num":1,
+    "UseDate":"2018-05-06",
+    "TotalMoney":200.00,
+    "ManufactureDate":"2018-03-05",
+    "ValidateDate":"2019-05-03",
+    "NextChangeDate":"2019-04-05"
+},{
+    "key":3,
+    "MaterialName":"冷凝器",
+    "Specifications":"3080分体式",
+    "Num":1,
+    "UseDate":"2018-05-06",
+    "TotalMoney":200.00,
+    "ManufactureDate":"2018-03-05",
+    "ValidateDate":"2019-05-03",
+    "NextChangeDate":"2019-04-05"
+},{
+    "key":4,
+    "MaterialName":"1080氧分析模块",
+    "Specifications":"Oxy-11（1080用）",
+    "Num":1,
+    "UseDate":"2018-05-06",
+    "TotalMoney":200.00,
+    "ManufactureDate":"2018-03-05",
+    "ValidateDate":"2019-05-03",
+    "NextChangeDate":"2019-04-05"
+},{
+    "key":5,
+    "MaterialName":"MCA04 红外光源",
+    "Specifications":"IR-source",
+    "Num":1,
+    "UseDate":"2018-05-06",
+    "TotalMoney":200.00,
+    "ManufactureDate":"2018-03-05",
+    "ValidateDate":"2019-05-03",
+    "NextChangeDate":"2019-04-05"
+},{
+    "key":6,
+    "MaterialName":"滤芯",
+    "Specifications":"HQQ210-100",
+    "Num":1,
+    "UseDate":"2018-05-06",
+    "TotalMoney":200.00,
+    "ManufactureDate":"2018-03-05",
+    "ValidateDate":"2019-05-03",
+    "NextChangeDate":"2019-04-05"
+},{
+    "key":7,
+    "MaterialName":"皮托管",
+    "Specifications":"SUS304+喷氟",
+    "Num":1,
+    "UseDate":"2018-05-06",
+    "TotalMoney":200.00,
+    "ManufactureDate":"2018-03-05",
+    "ValidateDate":"2019-05-03",
+    "NextChangeDate":"2019-04-05"
+}]

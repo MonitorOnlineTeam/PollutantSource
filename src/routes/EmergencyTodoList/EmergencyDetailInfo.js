@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import styles from '../EmergencyTodoList/EmergencyDetailInfo.less';
-import {Steps, Card, Popover, Divider, Button, Input, Table, Modal } from 'antd';
+import {Steps, Card, Popover, Divider, Button, Input, Table, Modal, Row, Col,Icon } from 'antd';
 import DescriptionList from '../../components/DescriptionList';
 import EmergencyInfo from '../../mockdata/EmergencyTodoList/EmergencyDetailInfo.json';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
@@ -35,8 +35,6 @@ export default class EmergencyDetailInfo extends Component {
     render() {
         const SCREEN_WIDTH = document.querySelector('body').offsetWidth;
         const { match} = this.props;
-        debugger;
-
         const emergencyId = match.params.exceptionhandleid; // 任务ID
         const LogColumn = [
             {
@@ -218,7 +216,40 @@ export default class EmergencyDetailInfo extends Component {
                             }
                         </Steps>
                     </Card>
-
+                    <Card title="附件" style={{marginTop: 20 }} bordered={false}>
+                        <Row gutter={16} justify="center" align="middle">
+                        <Col span={4} align="center">
+                                <Button type="primary" size="large" style={{width: 100, height: 100}}>
+                                    <Icon type="picture" style={{fontSize: 60}} />
+                                </Button>
+                            </Col>
+                        <Col span={4} align="center">
+                                <Button type="primary" size="large" style={{width: 100, height: 100}}>
+                                    <Icon type="picture" style={{fontSize: 60}} />
+                                </Button>
+                            </Col>
+                            <Col span={4} align="center">
+                                <Button type="primary" size="large" style={{width: 100, height: 100}}>
+                                    <Icon type="picture" style={{fontSize: 60}} />
+                                </Button>
+                            </Col>
+                        <Col span={4} align="center">
+                                <Button type="primary" size="large" style={{width: 100, height: 100}}>
+                                    <Icon type="picture" style={{fontSize: 60}} />
+                                </Button>
+                            </Col>
+                            <Col span={4} align="center">
+                                <Button type="primary" size="large" style={{width: 100, height: 100}}>
+                                    <Icon type="picture" style={{fontSize: 60}} />
+                                </Button>
+                            </Col>
+                            <Col span={4} align="center">
+                                <Button type="primary" size="large" style={{width: 100, height: 100}}>
+                                    <Icon type="picture" style={{fontSize: 60}} />
+                                </Button>
+                            </Col>
+                        </Row>
+                    </Card>
                     <Card title="日志表" style={{marginTop: 20 }} bordered={false}>
                         <Table columns={LogColumn}
                             dataSource={logDataList}
