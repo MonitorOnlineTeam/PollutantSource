@@ -1,7 +1,7 @@
 ﻿[
     {
         "PointCode":"019a1c86-5f38-4846-8042-2a4809f64fe8",
-        "PointName":"锅炉小号烟囱",
+        "PointName":"锅炉小号烟囱1",
         "DGIMN":"bjldgn01",
         "Longitude":"117.109633",
         "Latitude":"40.133689",
@@ -12,7 +12,7 @@
     },
     {
         "PointCode":"04d5cc42-93a0-4636-baf5-e2a05e6b74d7",
-        "PointName":"脱硫出口",
+        "PointName":"脱硫出口1",
         "DGIMN":"dtgjhh11102",
         "Longitude":"103.222715",
         "Latitude":"23.738053",
@@ -23,7 +23,7 @@
     },
     {
         "PointCode":"06c6b98f-2a47-473c-9e75-0b010e0d5692",
-        "PointName":"脱硫入口",
+        "PointName":"脱硫入口1",
         "DGIMN":"dtgrjx110",
         "Longitude":"130.965877",
         "Latitude":"45.300679",
@@ -34,7 +34,7 @@
     },
     {
         "PointCode":"08148e40-0de0-4a2d-9a83-c67288929b87",
-        "PointName":"脱硫入口",
+        "PointName":"脱硫入口2",
         "DGIMN":"dtgrjx103",
         "Longitude":"130.966116",
         "Latitude":"45.300892",
@@ -45,7 +45,7 @@
     },
     {
         "PointCode":"09b3cff7-e6bb-44c2-a6df-8417ac304fef",
-        "PointName":"脱硫入口",
+        "PointName":"脱硫入口1",
         "DGIMN":"lywjfd03",
         "Longitude":"112.065595",
         "Latitude":"34.743508",
@@ -56,7 +56,7 @@
     },
     {
         "PointCode":"0adf7e70-5111-4043-abe0-677ab730c5b4",
-        "PointName":"脱硫入口",
+        "PointName":"脱硫入口9",
         "DGIMN":"dtgrjx104",
         "Longitude":"130.965888",
         "Latitude":"45.300730",
@@ -67,7 +67,7 @@
     },
     {
         "PointCode":"0b5fae0d-619a-48ff-89fb-133af911aa89",
-        "PointName":"脱硫入口",
+        "PointName":"脱硫入口1",
         "DGIMN":"jtrj005",
         "Longitude":"104.404173",
         "Latitude":"30.863992",
@@ -78,7 +78,7 @@
     },
     {
         "PointCode":"0d13a7c8-606c-48a4-8a52-3f4fa8e8f23b",
-        "PointName":"脱硫出口",
+        "PointName":"脱硫出口2",
         "DGIMN":"bjldgn10",
         "Longitude":"117.109418",
         "Latitude":"40.133612",
@@ -89,7 +89,7 @@
     },
     {
         "PointCode":"0d318e9d-d4e4-42b6-91eb-41d3d3c12c43",
-        "PointName":"脱硫入口",
+        "PointName":"脱硫入口3",
         "DGIMN":"dtgrjx108",
         "Longitude":"130.965989",
         "Latitude":"45.300807",
@@ -100,7 +100,7 @@
     },
     {
         "PointCode":"0d69e0b4-8ef1-43f2-9295-d5b9c920a4e2",
-        "PointName":"脱硫出口",
+        "PointName":"脱硫出口1",
         "DGIMN":"dtbzfd007",
         "Longitude":"118.052249",
         "Latitude":"37.465319",
@@ -111,7 +111,7 @@
     },
     {
         "PointCode":"0f126ebb-6826-404c-9809-db0342977cfb",
-        "PointName":"脱硫出口",
+        "PointName":"脱硫出口1",
         "DGIMN":"bzfxdc10",
         "Longitude":"102.257660",
         "Latitude":"36.103689",
@@ -122,7 +122,7 @@
     },
     {
         "PointCode":"10489fff-b3e7-43b2-96e4-4ae3eb24beed",
-        "PointName":"焦炉小号烟囱",
+        "PointName":"焦炉小号烟囱1",
         "DGIMN":"dtgs001",
         "Longitude":"103.783200",
         "Latitude":"36.072838",
@@ -133,7 +133,7 @@
     },
     {
         "PointCode":"10f3bbc8-db7a-4689-9c5d-93241ad52392",
-        "PointName":"脱硫入口",
+        "PointName":"脱硫入口2",
         "DGIMN":"bzfxdc06",
         "Longitude":"102.257349",
         "Latitude":"36.104027",
@@ -144,7 +144,7 @@
     },
     {
         "PointCode":"12b7205a-f8ab-45a3-9db6-1c9c54774c60",
-        "PointName":"脱硫出口",
+        "PointName":"脱硫出口1",
         "DGIMN":"whgc06",
         "Longitude":"114.437445",
         "Latitude":"30.631367",
@@ -155,7 +155,7 @@
     },
     {
         "PointCode":"150f9e0f-2ec2-44af-b0e2-7c3d9047ee5a",
-        "PointName":"脱硫入口",
+        "PointName":"脱硫入口2",
         "DGIMN":"jtrj003",
         "Longitude":"104.404759",
         "Latitude":"30.863659",
@@ -166,7 +166,7 @@
     },
     {
         "PointCode":"15a647cd-8c19-4003-8e4e-ff7344304f3a",
-        "PointName":"武汉钢铁2号焦炉烟囱",
+        "PointName":"脱硫出口2",
         "DGIMN":"whgc02",
         "Longitude":"114.439129",
         "Latitude":"30.630190",
@@ -177,7 +177,7 @@
     },
     {
         "PointCode":"16249cfb-cc77-46a2-8fcc-0b306197b566",
-        "PointName":"脱硫入口",
+        "PointName":"脱硫入口4",
         "DGIMN":"dtgrjx107",
         "Longitude":"130.965721",
         "Latitude":"45.300777",
@@ -188,7 +188,7 @@
     },
     {
         "PointCode":"1897c762-55a3-43d9-989a-58a79a24cb83",
-        "PointName":"脱硫入口",
+        "PointName":"脱硫入口1",
         "DGIMN":"sgjt001005",
         "Longitude":"118.496199",
         "Latitude":"38.969068",
@@ -199,7 +199,7 @@
     },
     {
         "PointCode":"19480acc-92fc-4155-8c1a-86c93e8ad3ee",
-        "PointName":"脱硫出口",
+        "PointName":"脱硫出口1",
         "DGIMN":"jxwaslfd09",
         "Longitude":"114.792323",
         "Latitude":"26.453592",
@@ -210,7 +210,7 @@
     },
     {
         "PointCode":"1ad8a043-fc51-4b03-b31a-c4bc003b671c",
-        "PointName":"脱硫出口",
+        "PointName":"脱硫出口3",
         "DGIMN":"bzfxdc09",
         "Longitude":"102.258019",
         "Latitude":"36.104005",
@@ -221,7 +221,7 @@
     },
     {
         "PointCode":"1b56fd93-d720-4a31-9514-088b8df33095",
-        "PointName":"脱硫出口",
+        "PointName":"脱硫出口2",
         "DGIMN":"jxwaslfd08",
         "Longitude":"114.792607",
         "Latitude":"26.453693",
@@ -232,7 +232,7 @@
     },
     {
         "PointCode":"1caee7e3-7ee9-4620-b1da-442a18f1f9c1",
-        "PointName":"脱硫入口",
+        "PointName":"脱硫入口2",
         "DGIMN":"lywjfd04",
         "Longitude":"112.065166",
         "Latitude":"34.743261",
@@ -243,7 +243,7 @@
     },
     {
         "PointCode":"1dcc5489-d241-434f-a2cd-3d50d5846a4b",
-        "PointName":"脱硫出口",
+        "PointName":"脱硫出口3",
         "DGIMN":"bjldgn09",
         "Longitude":"117.109420",
         "Latitude":"40.133879",
@@ -254,7 +254,7 @@
     },
     {
         "PointCode":"1ec14916-bfe8-4ae8-8b17-61600523a5d4",
-        "PointName":"脱硫入口",
+        "PointName":"脱硫入口1",
         "DGIMN":"dtrlsmx001005",
         "Longitude":"111.176852",
         "Latitude":"34.768181",
@@ -265,7 +265,7 @@
     },
     {
         "PointCode":"20c94e1b-dcf3-4188-90c8-56b48e6d6733",
-        "PointName":"脱硫入口",
+        "PointName":"脱硫入口2",
         "DGIMN":"dtrlsmx001006",
         "Longitude":"111.176732",
         "Latitude":"34.768507",
@@ -276,7 +276,7 @@
     },
     {
         "PointCode":"212bf425-2daf-4af6-8c92-efc8c73804ad",
-        "PointName":"武汉钢铁4号焦炉烟囱",
+        "PointName":"脱硫入口3",
         "DGIMN":"whgc04",
         "Longitude":"114.436171",
         "Latitude":"30.631561",
@@ -287,7 +287,7 @@
     },
     {
         "PointCode":"21816f35-b2de-444d-8f01-8b084b729860",
-        "PointName":"脱硫入口",
+        "PointName":"脱硫入口2",
         "DGIMN":"sgjt001003",
         "Longitude":"118.492058",
         "Latitude":"38.971604",
@@ -298,7 +298,7 @@
     },
     {
         "PointCode":"246526f2-75d8-4e74-8998-6403ead233df",
-        "PointName":"脱硫入口",
+        "PointName":"脱硫入口1",
         "DGIMN":"hgjt001005",
         "Longitude":"114.443413",
         "Latitude":"36.607795",
@@ -309,7 +309,7 @@
     },
     {
         "PointCode":"259c9dfb-87bb-42eb-8819-0ae5678f3827",
-        "PointName":"脱硫出口",
+        "PointName":"脱硫出口3",
         "DGIMN":"lywjfd09",
         "Longitude":"112.065236",
         "Latitude":"34.743287",
@@ -320,7 +320,7 @@
     },
     {
         "PointCode":"25e80bcc-cfec-4e3e-ad2a-82d58abb4dab",
-        "PointName":"垃圾焚烧炉中型烟囱",
+        "PointName":"垃圾焚烧炉中型烟囱4",
         "DGIMN":"bzfxdc02",
         "Longitude":"102.257940",
         "Latitude":"36.103926",
@@ -331,7 +331,7 @@
     },
     {
         "PointCode":"2b6bea2e-1588-4671-96b4-bfacb7466491",
-        "PointName":"脱硫出口",
+        "PointName":"脱硫出口4",
         "DGIMN":"lywjfd08",
         "Longitude":"112.065177",
         "Latitude":"34.743384",
@@ -342,7 +342,7 @@
     },
     {
         "PointCode":"2d8e3b45-7686-48bc-80f7-5a3b8a822079",
-        "PointName":"脱硫出口",
+        "PointName":"脱硫出口3",
         "DGIMN":"jxwaslfd010",
         "Longitude":"114.792432",
         "Latitude":"26.453049",
@@ -353,7 +353,7 @@
     },
     {
         "PointCode":"2eae5e7c-3e62-4207-baee-5071e6758210",
-        "PointName":"脱硫出口",
+        "PointName":"脱硫出口1",
         "DGIMN":"dthld009",
         "Longitude":"120.842086",
         "Latitude":"40.713720",
@@ -364,7 +364,7 @@
     },
     {
         "PointCode":"2fadc71c-61ef-491e-85cd-f114eaba0eb4",
-        "PointName":"脱硫入口",
+        "PointName":"脱硫入口4",
         "DGIMN":"whgc08",
         "Longitude":"114.436502",
         "Latitude":"30.631284",
@@ -375,7 +375,7 @@
     },
     {
         "PointCode":"308c0deb-a49f-4ba0-94e3-d6232e143363",
-        "PointName":"武汉钢铁1号焦炉烟囱",
+        "PointName":"脱硫入口5",
         "DGIMN":"whgc01",
         "Longitude":"114.435674",
         "Latitude":"30.632203",
@@ -386,7 +386,7 @@
     },
     {
         "PointCode":"30ffa37b-8521-49e1-8080-aa98f648d62e",
-        "PointName":"脱硫出口",
+        "PointName":"脱硫出口2",
         "DGIMN":"dthld006",
         "Longitude":"120.842553",
         "Latitude":"40.713826",
@@ -397,7 +397,7 @@
     },
     {
         "PointCode":"36592c65-6b0e-4f3b-ba74-ab9bc4052501",
-        "PointName":"脱硫入口",
+        "PointName":"脱硫入口3",
         "DGIMN":"jtrj004",
         "Longitude":"104.404769",
         "Latitude":"30.863669",
@@ -408,7 +408,7 @@
     },
     {
         "PointCode":"3703dffc-17ea-454f-827f-a76de258641e",
-        "PointName":"脱硫入口",
+        "PointName":"脱硫入口4",
         "DGIMN":"jxwaslfd01",
         "Longitude":"114.792332",
         "Latitude":"26.453049",
@@ -419,7 +419,7 @@
     },
     {
         "PointCode":"3734160b-7d79-4acc-b71d-e9c90158396c",
-        "PointName":"脱硫入口",
+        "PointName":"脱硫入口2",
         "DGIMN":"dtgjhh11106",
         "Longitude":"103.222364",
         "Latitude":"23.737895",
@@ -430,7 +430,7 @@
     },
     {
         "PointCode":"3c561e96-766d-472a-a0b0-80954f80bd73",
-        "PointName":"脱硫出口",
+        "PointName":"脱硫出口2",
         "DGIMN":"hgjt001009",
         "Longitude":"114.446235",
         "Latitude":"36.606761",
@@ -441,7 +441,7 @@
     },
     {
         "PointCode":"3c68c84b-9cc6-495c-a481-7f3a624bdfd1",
-        "PointName":"脱硫入口",
+        "PointName":"脱硫入口3",
         "DGIMN":"dtrlsmx001008",
         "Longitude":"111.176288",
         "Latitude":"34.768613",
@@ -452,7 +452,7 @@
     },
     {
         "PointCode":"3d4e354a-6d46-46a4-a178-df268c2fd4d1",
-        "PointName":"脱硫入口",
+        "PointName":"脱硫入口1",
         "DGIMN":"dtbz00102",
         "Longitude":"118.037764",
         "Latitude":"37.480648",
@@ -463,7 +463,7 @@
     },
     {
         "PointCode":"3e766935-822c-417d-9f49-53cc328276a0",
-        "PointName":"脱硫出口",
+        "PointName":"脱硫出口4",
         "DGIMN":"dtrlsmx001009",
         "Longitude":"111.176208",
         "Latitude":"34.768710",
@@ -474,7 +474,7 @@
     },
     {
         "PointCode":"43ba89db-a7cb-4180-9781-32709e1faa1e",
-        "PointName":"脱硫入口",
+        "PointName":"脱硫入口2",
         "DGIMN":"dtbz00101",
         "Longitude":"118.038150",
         "Latitude":"37.479967",
@@ -485,7 +485,7 @@
     },
     {
         "PointCode":"4474c520-942e-4fe6-bc92-2515a5ce8b5d",
-        "PointName":"脱硫出口",
+        "PointName":"脱硫出口4",
         "DGIMN":"jtrj006",
         "Longitude":"104.404844",
         "Latitude":"30.864190",
@@ -496,7 +496,7 @@
     },
     {
         "PointCode":"447fe04f-62d2-42df-9474-5efdd8aa95b0",
-        "PointName":"脱硫出口",
+        "PointName":"脱硫出口5",
         "DGIMN":"jtrj009",
         "Longitude":"104.404693",
         "Latitude":"30.863494",
@@ -507,7 +507,7 @@
     },
     {
         "PointCode":"44c328f9-e9cb-476e-a738-36e9e108b483",
-        "PointName":"脱硫出口",
+        "PointName":"脱硫出口3",
         "DGIMN":"dtbz00109",
         "Longitude":"118.047226",
         "Latitude":"37.478673",
@@ -518,7 +518,7 @@
     },
     {
         "PointCode":"454c6789-e817-491f-b2a1-4047f36e5e38",
-        "PointName":"脱硫入口",
+        "PointName":"脱硫入口5",
         "DGIMN":"jxwaslfd02",
         "Longitude":"114.792532",
         "Latitude":"26.453049",
@@ -529,7 +529,7 @@
     },
     {
         "PointCode":"46167b33-0ab5-4fdc-a452-bcaaf7138800",
-        "PointName":"脱硫出口",
+        "PointName":"脱硫出口2",
         "DGIMN":"dtbzfd005",
         "Longitude":"118.050881",
         "Latitude":"37.464610",
@@ -540,7 +540,7 @@
     },
     {
         "PointCode":"485aa4a6-d92f-4e52-8e12-63106ddcfbbe",
-        "PointName":"脱硫入口",
+        "PointName":"脱硫入口4",
         "DGIMN":"bjldgn04",
         "Longitude":"117.109522",
         "Latitude":"40.133627",
@@ -551,7 +551,7 @@
     },
     {
         "PointCode":"4a31f58f-9ab2-4c15-b502-0a2c906c6586",
-        "PointName":"脱硫入口",
+        "PointName":"脱硫入口3",
         "DGIMN":"sgjt001002",
         "Longitude":"118.549028",
         "Latitude":"38.962295",
@@ -562,7 +562,7 @@
     },
     {
         "PointCode":"4a7fe4fe-51bf-4d4d-a266-71b3487d4676",
-        "PointName":"脱硫出口",
+        "PointName":"脱硫出口3",
         "DGIMN":"dtgjhh11104",
         "Longitude":"103.222713",
         "Latitude":"23.737876",
@@ -573,7 +573,7 @@
     },
     {
         "PointCode":"4ad84598-26a8-49c1-9bd8-f5f2ce4cb4ad",
-        "PointName":"脱硫入口",
+        "PointName":"脱硫入口4",
         "DGIMN":"sgjt001001",
         "Longitude":"118.541132",
         "Latitude":"38.968969",
@@ -584,7 +584,7 @@
     },
     {
         "PointCode":"4b220dd9-47f9-4502-b01a-ca7c0418dfef",
-        "PointName":"脱硫入口",
+        "PointName":"脱硫入口4",
         "DGIMN":"dtbz00103",
         "Longitude":"118.037871",
         "Latitude":"37.476187",
@@ -595,7 +595,7 @@
     },
     {
         "PointCode":"4cab5c28-9138-4017-9d03-4fd95b4891ae",
-        "PointName":"脱硫入口",
+        "PointName":"脱硫入口5",
         "DGIMN":"dtbz00104",
         "Longitude":"118.041883",
         "Latitude":"37.477651",
@@ -606,7 +606,7 @@
     },
     {
         "PointCode":"4f071a2d-fbc2-4967-a4f7-bb44a550dc0c",
-        "PointName":"脱硫出口",
+        "PointName":"脱硫出口5",
         "DGIMN":"dtrlsmx0010010",
         "Longitude":"111.176406",
         "Latitude":"34.768529",
@@ -617,7 +617,7 @@
     },
     {
         "PointCode":"518b12be-9b18-422e-8ee8-3ea4422abf39",
-        "PointName":"脱硫出口",
+        "PointName":"脱硫出口6",
         "DGIMN":"jtrj007",
         "Longitude":"104.404479",
         "Latitude":"30.863264",
@@ -628,7 +628,7 @@
     },
     {
         "PointCode":"52423d60-92c6-40e4-b526-1a526f4101f1",
-        "PointName":"脱硫入口",
+        "PointName":"脱硫入口5",
         "DGIMN":"bjldgn06",
         "Longitude":"117.109627",
         "Latitude":"40.133854",
@@ -639,7 +639,7 @@
     },
     {
         "PointCode":"53aca65e-5f74-46fb-8627-014792e9af07",
-        "PointName":"脱硫入口",
+        "PointName":"脱硫入口3",
         "DGIMN":"dthld002",
         "Longitude":"120.842148",
         "Latitude":"40.713800",
@@ -650,7 +650,7 @@
     },
     {
         "PointCode":"55193653-0b96-4825-9cc3-6760cdf4337d",
-        "PointName":"脱硫入口",
+        "PointName":"脱硫入口6",
         "DGIMN":"jxwaslfd05",
         "Longitude":"114.792421",
         "Latitude":"26.453654",
@@ -661,7 +661,7 @@
     },
     {
         "PointCode":"5c2f245f-2334-47cd-8f28-25fd443aee11",
-        "PointName":"脱硫出口",
+        "PointName":"脱硫出口5",
         "DGIMN":"bzfxdc08",
         "Longitude":"102.257097",
         "Latitude":"36.103904",
@@ -672,7 +672,7 @@
     },
     {
         "PointCode":"5c6cd430-cb1d-4d31-8553-c861d25edc84",
-        "PointName":"脱硫出口",
+        "PointName":"脱硫出口5",
         "DGIMN":"sgjt001008",
         "Longitude":"118.507400",
         "Latitude":"38.968017",
@@ -683,7 +683,7 @@
     },
     {
         "PointCode":"5cf5cae3-b821-4748-846d-3422bf22da14",
-        "PointName":"脱硫入口",
+        "PointName":"脱硫入口6",
         "DGIMN":"sgjt001004",
         "Longitude":"118.509224",
         "Latitude":"38.972405",
@@ -694,7 +694,7 @@
     },
     {
         "PointCode":"5dfa63d9-a1ba-441d-b717-e9df34cde9ab",
-        "PointName":"脱硫出口",
+        "PointName":"脱硫出口3",
         "DGIMN":"dtbzfd010",
         "Longitude":"118.052244",
         "Latitude":"37.464710",
@@ -705,7 +705,7 @@
     },
     {
         "PointCode":"5f19c161-da32-4e6b-a32c-d021c0220b1b",
-        "PointName":"脱硫入口",
+        "PointName":"脱硫入口4",
         "DGIMN":"dtgjhh11107",
         "Longitude":"103.222370",
         "Latitude":"23.737959",
@@ -716,7 +716,7 @@
     },
     {
         "PointCode":"6029a186-b50f-45f2-8772-62da9ce2e487",
-        "PointName":"脱硫入口",
+        "PointName":"脱硫入口7",
         "DGIMN":"jxwaslfd03",
         "Longitude":"114.792132",
         "Latitude":"26.453049",
@@ -727,7 +727,7 @@
     },
     {
         "PointCode":"60c338ea-7819-4123-98e5-d6fe0e5275a3",
-        "PointName":"脱硫入口",
+        "PointName":"脱硫入口3",
         "DGIMN":"hgjt001007",
         "Longitude":"114.444153",
         "Latitude":"36.607089",
@@ -738,7 +738,7 @@
     },
     {
         "PointCode":"6446c65d-ba79-4556-bbca-a3b7370a82b9",
-        "PointName":"脱硫入口",
+        "PointName":"脱硫入口5",
         "DGIMN":"dtgrjx109",
         "Longitude":"130.965893",
         "Latitude":"45.300792",
@@ -749,7 +749,7 @@
     },
     {
         "PointCode":"64fe2d80-4a99-4882-a684-af63acf7c560",
-        "PointName":"供热烟囱小号",
+        "PointName":"脱硫入口6",
         "DGIMN":"dtgrjx102",
         "Longitude":"130.965726",
         "Latitude":"45.300787",
@@ -760,7 +760,7 @@
     },
     {
         "PointCode":"69a50328-eb6e-4f18-b58f-14be2f1c5b34",
-        "PointName":"脱硫出口",
+        "PointName":"脱硫出口1",
         "DGIMN":"dtgs0010",
         "Longitude":"103.783577",
         "Latitude":"36.072828",
@@ -771,7 +771,7 @@
     },
     {
         "PointCode":"6b4cbc08-2d1c-413a-ac8f-95f12fbe4925",
-        "PointName":"脱硫出口",
+        "PointName":"脱硫出口4",
         "DGIMN":"dtbzfd004",
         "Longitude":"118.050179",
         "Latitude":"37.464316",
@@ -782,7 +782,7 @@
     },
     {
         "PointCode":"6bcde792-9a8b-4af3-88b7-f478e8334ad3",
-        "PointName":"脱硫出口",
+        "PointName":"脱硫出口2",
         "DGIMN":"dtgs009",
         "Longitude":"103.783469",
         "Latitude":"36.072755",
@@ -793,7 +793,7 @@
     },
     {
         "PointCode":"6e50a257-1ead-42ba-8007-fd4922ffdae9",
-        "PointName":"脱硫入口",
+        "PointName":"脱硫入口7",
         "DGIMN":"dtgrjx105",
         "Longitude":"130.966016",
         "Latitude":"45.300722",
@@ -804,7 +804,7 @@
     },
     {
         "PointCode":"6e82e9bf-2b4b-4da0-9a75-5671b93fa6d0",
-        "PointName":"脱硫出口",
+        "PointName":"脱硫出口7",
         "DGIMN":"jtrj010",
         "Longitude":"104.404414",
         "Latitude":"30.863789",
@@ -815,7 +815,7 @@
     },
     {
         "PointCode":"6e8ed8e4-8562-4351-8526-32e7a8047f05",
-        "PointName":"脱硫出口",
+        "PointName":"脱硫出口6",
         "DGIMN":"bjldgn08",
         "Longitude":"117.109391",
         "Latitude":"40.133649",
@@ -826,7 +826,7 @@
     },
     {
         "PointCode":"6f34b5a6-f7b7-4dbc-bc9e-71a8a0dd7a7a",
-        "PointName":"脱硫入口",
+        "PointName":"脱硫入口7",
         "DGIMN":"bjldgn05",
         "Longitude":"117.109395",
         "Latitude":"40.133794",
@@ -837,7 +837,7 @@
     },
     {
         "PointCode":"714a4186-eaa8-437b-bde4-5bdf465a7135",
-        "PointName":"脱硫入口",
+        "PointName":"脱硫入口4",
         "DGIMN":"dthld003",
         "Longitude":"120.842268",
         "Latitude":"40.713574",
@@ -848,7 +848,7 @@
     },
     {
         "PointCode":"76d3bf60-d3cf-4cae-a6c2-1f378386fa05",
-        "PointName":"3号烟囱",
+        "PointName":"脱硫出口5",
         "DGIMN":"dtbzfd003",
         "Longitude":"118.052822",
         "Latitude":"37.464923",
@@ -859,7 +859,7 @@
     },
     {
         "PointCode":"7a4ba350-a53a-4018-a794-e78bf33e45b6",
-        "PointName":"脱硫出口",
+        "PointName":"脱硫出口3",
         "DGIMN":"dtgs008",
         "Longitude":"103.783303",
         "Latitude":"36.072985",
@@ -870,7 +870,7 @@
     },
     {
         "PointCode":"7b2d2e30-49c4-40d4-ba91-71128c1ee9b0",
-        "PointName":"脱硫出口",
+        "PointName":"脱硫出口8",
         "DGIMN":"jxwaslfd06",
         "Longitude":"114.792762",
         "Latitude":"26.453568",
@@ -881,7 +881,7 @@
     },
     {
         "PointCode":"7faa3f6b-f67d-4a4c-a758-a0b0fad97eb6",
-        "PointName":"脱硫出口",
+        "PointName":"脱硫出口6",
         "DGIMN":"dtbz00110",
         "Longitude":"118.038600",
         "Latitude":"37.479576",
@@ -892,7 +892,7 @@
     },
     {
         "PointCode":"8200b362-66ce-4340-9527-03af44cba323",
-        "PointName":"脱硫入口",
+        "PointName":"脱硫入口5",
         "DGIMN":"dtgjhh11109",
         "Longitude":"103.222472",
         "Latitude":"23.738053",
@@ -903,7 +903,7 @@
     },
     {
         "PointCode":"8304f0e5-e422-4def-8109-4eef48dccb11",
-        "PointName":"垃圾焚烧炉小型烟囱",
+        "PointName":"垃圾焚烧炉小型烟囱6",
         "DGIMN":"bzfxdc03",
         "Longitude":"102.257773",
         "Latitude":"36.104147",
@@ -914,7 +914,7 @@
     },
     {
         "PointCode":"84b056e4-8fbe-4081-9db4-9d8ddf26388a",
-        "PointName":"脱硫出口",
+        "PointName":"脱硫出口5",
         "DGIMN":"lywjfd010",
         "Longitude":"112.065510",
         "Latitude":"34.743336",
@@ -925,7 +925,7 @@
     },
     {
         "PointCode":"87ca90d6-3852-480a-ae71-6a340bf98c70",
-        "PointName":"脱硫出口",
+        "PointName":"脱硫出口4",
         "DGIMN":"dtgs007",
         "Longitude":"103.783142",
         "Latitude":"36.073037",
@@ -936,7 +936,7 @@
     },
     {
         "PointCode":"8951fbbe-e51f-4796-b8e9-225dea541c47",
-        "PointName":"脱硫入口",
+        "PointName":"脱硫入口6",
         "DGIMN":"dtgjhh111010",
         "Longitude":"103.222633",
         "Latitude":"23.738121",
@@ -947,7 +947,7 @@
     },
     {
         "PointCode":"8d4c75d9-147d-42e6-ac5d-da7893949181",
-        "PointName":"脱硫出口",
+        "PointName":"脱硫出口8",
         "DGIMN":"bjldgn03",
         "Longitude":"117.109799",
         "Latitude":"40.133907",
@@ -958,7 +958,7 @@
     },
     {
         "PointCode":"8df7ca7e-bd83-4e58-aeff-77615387fa72",
-        "PointName":"脱硫入口",
+        "PointName":"脱硫入口7",
         "DGIMN":"bzfxdc05",
         "Longitude":"102.256866",
         "Latitude":"36.103545",
@@ -969,7 +969,7 @@
     },
     {
         "PointCode":"8f6a72e7-a3e6-46aa-b5e8-75281044ef4e",
-        "PointName":"脱硫入口",
+        "PointName":"脱硫入口6",
         "DGIMN":"lywjfd05",
         "Longitude":"112.065005",
         "Latitude":"34.742961",
@@ -980,7 +980,7 @@
     },
     {
         "PointCode":"924e6964-6d34-4f3e-89db-a1fbef66992b",
-        "PointName":"脱硫入口",
+        "PointName":"脱硫入口7",
         "DGIMN":"lywjfd01",
         "Longitude":"112.065241",
         "Latitude":"34.743459",
@@ -991,7 +991,7 @@
     },
     {
         "PointCode":"927f11c4-011d-4f1b-b003-407335707129",
-        "PointName":"脱硫出口",
+        "PointName":"脱硫出口7",
         "DGIMN":"sgjt001009",
         "Longitude":"118.499847",
         "Latitude":"38.964280",
@@ -1002,7 +1002,7 @@
     },
     {
         "PointCode":"93da35eb-fc63-4f4e-ae84-290bc716bf84",
-        "PointName":"锅炉小号烟囱",
+        "PointName":"锅炉小号烟囱2",
         "DGIMN":"bjldgn02",
         "Longitude":"117.109699",
         "Latitude":"40.133907",
@@ -1013,7 +1013,7 @@
     },
     {
         "PointCode":"9485f4c2-f71c-407a-a64a-f4621181a2da",
-        "PointName":"大型烟囱",
+        "PointName":"大型烟囱7",
         "DGIMN":"dtgjhh11101",
         "Longitude":"103.222300",
         "Latitude":"23.738011",
@@ -1024,7 +1024,7 @@
     },
     {
         "PointCode":"94ec8577-dfac-4f0e-a1f0-866172804942",
-        "PointName":"脱硫入口",
+        "PointName":"脱硫入口8",
         "DGIMN":"lywjfd02",
         "Longitude":"112.065519",
         "Latitude":"34.743615",
@@ -1035,7 +1035,7 @@
     },
     {
         "PointCode":"96d5e1bb-7694-41da-bf6a-38303bf412c0",
-        "PointName":"脱硫入口",
+        "PointName":"脱硫入口5",
         "DGIMN":"dtgs003",
         "Longitude":"103.783529",
         "Latitude":"36.072926",
@@ -1046,7 +1046,7 @@
     },
     {
         "PointCode":"9bb8fa7a-8398-4f0e-b40f-ed2d3bed0f77",
-        "PointName":"供热烟囱小号",
+        "PointName":"供热烟囱小号1",
         "DGIMN":"dtrlsmx001004",
         "Longitude":"111.176439",
         "Latitude":"34.768430",
@@ -1057,7 +1057,7 @@
     },
     {
         "PointCode":"9cdc399f-509c-4b5d-8381-5f7e7b2b962b",
-        "PointName":"脱硫出口",
+        "PointName":"脱硫出口6",
         "DGIMN":"dtbzfd009",
         "Longitude":"118.052276",
         "Latitude":"37.464897",
@@ -1068,7 +1068,7 @@
     },
     {
         "PointCode":"a50ffe95-1c28-4d79-826a-3f14f23c2b1d",
-        "PointName":"脱硫出口",
+        "PointName":"脱硫出口9",
         "DGIMN":"jxwaslfd07",
         "Longitude":"114.793025",
         "Latitude":"26.453122",
@@ -1079,7 +1079,7 @@
     },
     {
         "PointCode":"aab3bdb7-7d46-40e3-9b85-aff9305ff5cf",
-        "PointName":"脱硫入口",
+        "PointName":"脱硫入口5",
         "DGIMN":"dthld001",
         "Longitude":"120.842336",
         "Latitude":"40.713623",
@@ -1090,7 +1090,7 @@
     },
     {
         "PointCode":"adac1366-7b1b-49b7-8681-8170c614f62a",
-        "PointName":"脱硫出口",
+        "PointName":"脱硫出口7",
         "DGIMN":"dtbz00107",
         "Longitude":"118.041969",
         "Latitude":"37.479218",
@@ -1101,7 +1101,7 @@
     },
     {
         "PointCode":"ae9007f3-d9a7-46a6-932e-837484627e9e",
-        "PointName":"1号烟囱",
+        "PointName":"脱硫出口7",
         "DGIMN":"dtbzfd001",
         "Longitude":"118.051094",
         "Latitude":"37.464744",
@@ -1112,7 +1112,7 @@
     },
     {
         "PointCode":"b35bc90e-407f-4a7b-a37a-d830a342e3b4",
-        "PointName":"脱硫出口",
+        "PointName":"脱硫出口1",
         "DGIMN":"bjldgn07",
         "Longitude":"117.109264",
         "Latitude":"40.133723",
@@ -1123,7 +1123,7 @@
     },
     {
         "PointCode":"b36c1cb2-5b80-447c-b74a-351a70f3b98e",
-        "PointName":"脱硫入口",
+        "PointName":"脱硫入口8",
         "DGIMN":"dtbz00105",
         "Longitude":"118.045639",
         "Latitude":"37.478418",
@@ -1134,7 +1134,7 @@
     },
     {
         "PointCode":"b678b58a-e490-4eab-add8-1409e489c180",
-        "PointName":"供热烟囱小号",
+        "PointName":"供热烟囱小号2",
         "DGIMN":"dtrlsmx001003",
         "Longitude":"111.176616",
         "Latitude":"34.768302",
@@ -1145,7 +1145,7 @@
     },
     {
         "PointCode":"b71f5097-7d15-438e-98d3-ebd773c386eb",
-        "PointName":"脱硫入口",
+        "PointName":"脱硫入口8",
         "DGIMN":"jtrj01",
         "Longitude":"104.404393",
         "Latitude":"30.863264",
@@ -1156,7 +1156,7 @@
     },
     {
         "PointCode":"b77384f7-044b-495f-b914-0f490fdffe26",
-        "PointName":"脱硫入口",
+        "PointName":"脱硫入口6",
         "DGIMN":"whgc10",
         "Longitude":"114.437456",
         "Latitude":"30.631521",
@@ -1167,7 +1167,7 @@
     },
     {
         "PointCode":"baa4df5b-dccd-46a0-a7fd-0f4b8d7ec201",
-        "PointName":"脱硫出口",
+        "PointName":"脱硫出口7",
         "DGIMN":"whgc07",
         "Longitude":"114.437102",
         "Latitude":"30.631494",
@@ -1178,7 +1178,7 @@
     },
     {
         "PointCode":"bb8550e3-f0ae-453b-8387-11c284b0939e",
-        "PointName":"邯钢焦炉2号烟囱",
+        "PointName":"邯钢焦炉2号烟囱1",
         "DGIMN":"hgjt001002",
         "Longitude":"114.444512",
         "Latitude":"36.607626",
@@ -1189,7 +1189,7 @@
     },
     {
         "PointCode":"bc700418-cf2b-4028-895e-76ccf930848b",
-        "PointName":"脱硫出口",
+        "PointName":"脱硫出口8",
         "DGIMN":"dtgjhh11103",
         "Longitude":"103.222763",
         "Latitude":"23.737674",
@@ -1200,7 +1200,7 @@
     },
     {
         "PointCode":"becf8955-e441-46d5-8e27-dbe769cb7694",
-        "PointName":"脱硫入口",
+        "PointName":"脱硫入口6",
         "DGIMN":"dtgs006",
         "Longitude":"103.783260",
         "Latitude":"36.073063",
@@ -1211,7 +1211,7 @@
     },
     {
         "PointCode":"c106f734-f2f7-4415-884b-85b1faa87137",
-        "PointName":"脱硫出口",
+        "PointName":"脱硫出口8",
         "DGIMN":"sgjt001007",
         "Longitude":"118.503709",
         "Latitude":"38.969219",
@@ -1222,7 +1222,7 @@
     },
     {
         "PointCode":"c34dedfd-bd37-4cd1-81bf-327bc464f68a",
-        "PointName":"脱硫出口",
+        "PointName":"脱硫出口9",
         "DGIMN":"lywjfd07",
         "Longitude":"112.065166",
         "Latitude":"34.743522",
@@ -1233,7 +1233,7 @@
     },
     {
         "PointCode":"c36fc0fc-3af4-4d01-a72e-9a7700982801",
-        "PointName":"脱硫出口",
+        "PointName":"脱硫出口9",
         "DGIMN":"jtrj008",
         "Longitude":"104.404629",
         "Latitude":"30.863361",
@@ -1244,7 +1244,7 @@
     },
     {
         "PointCode":"c66ef059-449d-465b-9fc1-c5318fae16f7",
-        "PointName":"邯钢焦炉1号烟囱",
+        "PointName":"邯钢焦炉1号烟囱2",
         "DGIMN":"hgjt001001",
         "Longitude":"114.441293",
         "Latitude":"36.607643",
@@ -1255,7 +1255,7 @@
     },
     {
         "PointCode":"c8fa0655-525b-4eab-9d27-4c5dac1925ea",
-        "PointName":"供热烟囱小号",
+        "PointName":"供热烟囱小号1",
         "DGIMN":"dtgrjx101",
         "Longitude":"130.966085",
         "Latitude":"45.300634",
@@ -1266,7 +1266,7 @@
     },
     {
         "PointCode":"cbe3300d-df94-48be-bfd8-d2a9936e28be",
-        "PointName":"脱硫入口",
+        "PointName":"脱硫入口8",
         "DGIMN":"bzfxdc04",
         "Longitude":"102.257097",
         "Latitude":"36.103904",
@@ -1277,7 +1277,7 @@
     },
     {
         "PointCode":"d4024de3-0592-465b-ab92-6a50ecec347d",
-        "PointName":"脱硫出口",
+        "PointName":"脱硫出口8",
         "DGIMN":"whgc05",
         "Longitude":"114.437327",
         "Latitude":"30.631609",
@@ -1288,7 +1288,7 @@
     },
     {
         "PointCode":"d4faf067-fc77-4515-b432-52d2e6feffef",
-        "PointName":"脱硫出口",
+        "PointName":"脱硫出口9",
         "DGIMN":"sgjt0010010",
         "Longitude":"118.498001",
         "Latitude":"38.961728",
@@ -1299,7 +1299,7 @@
     },
     {
         "PointCode":"d7228831-c0b1-48ca-883a-206a48f6c70d",
-        "PointName":"脱硫出口",
+        "PointName":"脱硫出口6",
         "DGIMN":"dthld008",
         "Longitude":"120.842236",
         "Latitude":"40.713676",
@@ -1310,7 +1310,7 @@
     },
     {
         "PointCode":"d7d8ff96-08e8-4960-9fcc-97ecc1e3e2dc",
-        "PointName":"脱硫入口",
+        "PointName":"脱硫入口7",
         "DGIMN":"dtgs002",
         "Longitude":"103.783225",
         "Latitude":"36.072792",
@@ -1321,7 +1321,7 @@
     },
     {
         "PointCode":"d812cc22-4919-4204-8370-262cad0328f0",
-        "PointName":"脱硫出口",
+        "PointName":"脱硫出口9",
         "DGIMN":"dtgjhh11105",
         "Longitude":"103.222552",
         "Latitude":"23.737876",
@@ -1332,7 +1332,7 @@
     },
     {
         "PointCode":"d82f3be3-db87-4853-990e-661554e6972a",
-        "PointName":"脱硫入口",
+        "PointName":"脱硫入口4",
         "DGIMN":"hgjt001008",
         "Longitude":"114.444422",
         "Latitude":"36.607183",
@@ -1343,7 +1343,7 @@
     },
     {
         "PointCode":"db4743df-b908-458a-b603-0eb4c6a7fd07",
-        "PointName":"供热烟囱小号",
+        "PointName":"供热烟囱小号3",
         "DGIMN":"dtrlsmx001002",
         "Longitude":"111.176895",
         "Latitude":"34.768368",
@@ -1354,7 +1354,7 @@
     },
     {
         "PointCode":"dbf15341-27df-4d0a-8783-cc25ea6d5a45",
-        "PointName":"脱硫出口",
+        "PointName":"脱硫出口5",
         "DGIMN":"hgjt001010",
         "Longitude":"114.441761",
         "Latitude":"36.607838",
@@ -1365,7 +1365,7 @@
     },
     {
         "PointCode":"dcb4a46a-d250-4221-8770-14f1919a81ef",
-        "PointName":"脱硫出口",
+        "PointName":"脱硫出口7",
         "DGIMN":"dthld0010",
         "Longitude":"120.842134",
         "Latitude":"40.713606",
@@ -1376,7 +1376,7 @@
     },
     {
         "PointCode":"dde789ef-1527-45fc-9de6-4b8f38c9a10a",
-        "PointName":"2号烟囱",
+        "PointName":"脱硫出口8",
         "DGIMN":"dtbzfd002",
         "Longitude":"118.051556",
         "Latitude":"37.464271",
@@ -1387,7 +1387,7 @@
     },
     {
         "PointCode":"e028bfeb-6820-4b9e-a9d7-287d5b4d0b73",
-        "PointName":"脱硫出口",
+        "PointName":"脱硫出口9",
         "DGIMN":"dtbz00106",
         "Longitude":"118.042506",
         "Latitude":"37.479678",
@@ -1398,7 +1398,7 @@
     },
     {
         "PointCode":"e2134853-3a15-45b4-80fd-b6fbee84b16d",
-        "PointName":"脱硫入口",
+        "PointName":"脱硫入口6",
         "DGIMN":"hgjt001006",
         "Longitude":"114.442169",
         "Latitude":"36.607140",
@@ -1409,7 +1409,7 @@
     },
     {
         "PointCode":"e215a0b9-ee45-461c-811f-3d7f27a87403",
-        "PointName":"武汉钢铁3号焦炉烟囱",
+        "PointName":"脱硫出口9",
         "DGIMN":"whgc03",
         "Longitude":"114.435202",
         "Latitude":"30.630593",
@@ -1420,7 +1420,7 @@
     },
     {
         "PointCode":"e36b72ab-6c14-4a4a-968e-913dcff9a322",
-        "PointName":"脱硫入口",
+        "PointName":"脱硫入口8",
         "DGIMN":"dtgs004",
         "Longitude":"103.783121",
         "Latitude":"36.072845",
@@ -1431,7 +1431,7 @@
     },
     {
         "PointCode":"e4d2422e-b714-41e1-a4ac-c6b6204945d5",
-        "PointName":"脱硫入口",
+        "PointName":"脱硫入口10",
         "DGIMN":"jtrj002",
         "Longitude":"104.404511",
         "Latitude":"30.863411",
@@ -1442,7 +1442,7 @@
     },
     {
         "PointCode":"e6818a0a-295b-4cb9-a8bc-5eeb19522d69",
-        "PointName":"脱硫出口",
+        "PointName":"脱硫出口8",
         "DGIMN":"dthld007",
         "Longitude":"120.842375",
         "Latitude":"40.713863",
@@ -1453,7 +1453,7 @@
     },
     {
         "PointCode":"e876500a-e8c8-4803-b606-c4e24971b87f",
-        "PointName":"脱硫出口",
+        "PointName":"脱硫出口9",
         "DGIMN":"dtbzfd008",
         "Longitude":"118.052003",
         "Latitude":"37.464590",
@@ -1464,7 +1464,7 @@
     },
     {
         "PointCode":"e87e002f-2dbe-4293-8d30-657ac82a060f",
-        "PointName":"脱硫入口",
+        "PointName":"脱硫入口9",
         "DGIMN":"dthld005",
         "Longitude":"120.842161",
         "Latitude":"40.713810",
@@ -1475,7 +1475,7 @@
     },
     {
         "PointCode":"e9a205c5-8af9-4ad6-b10a-32f2d4259569",
-        "PointName":"脱硫入口",
+        "PointName":"脱硫入口10",
         "DGIMN":"dtgjhh11108",
         "Longitude":"103.222515",
         "Latitude":"23.738053",
@@ -1486,7 +1486,7 @@
     },
     {
         "PointCode":"ec53e13f-3717-497e-9bbd-8105be7918b3",
-        "PointName":"脱硫入口",
+        "PointName":"脱硫入口6",
         "DGIMN":"dtrlsmx001007",
         "Longitude":"111.175897",
         "Latitude":"34.768587",
@@ -1497,7 +1497,7 @@
     },
     {
         "PointCode":"ee561135-62c7-4dd8-9c10-dabde149dd58",
-        "PointName":"脱硫入口",
+        "PointName":"脱硫入口9",
         "DGIMN":"bzfxdc07",
         "Longitude":"102.258019",
         "Latitude":"36.104005",
@@ -1508,7 +1508,7 @@
     },
     {
         "PointCode":"ee8d2cea-e108-4c95-9990-e48d05264406",
-        "PointName":"脱硫入口",
+        "PointName":"脱硫入口9",
         "DGIMN":"dtgs005",
         "Longitude":"103.783201",
         "Latitude":"36.073093",
@@ -1519,7 +1519,7 @@
     },
     {
         "PointCode":"f009302b-b34d-4def-b3e5-3ca765cf5aab",
-        "PointName":"脱硫出口",
+        "PointName":"脱硫出口10",
         "DGIMN":"dtbz00108",
         "Longitude":"118.040188",
         "Latitude":"37.479729",
@@ -1530,7 +1530,7 @@
     },
     {
         "PointCode":"f807e024-f4fd-435c-87f9-32929989427f",
-        "PointName":"脱硫入口",
+        "PointName":"脱硫出口10",
         "DGIMN":"whgc09",
         "Longitude":"114.436682",
         "Latitude":"30.631683",
@@ -1541,7 +1541,7 @@
     },
     {
         "PointCode":"f9c5de90-cb7f-49ef-97c6-d67a2a8c38da",
-        "PointName":"脱硫入口",
+        "PointName":"脱硫入口8",
         "DGIMN":"dtgrjx106",
         "Longitude":"130.965953",
         "Latitude":"45.300820",
@@ -1552,7 +1552,7 @@
     },
     {
         "PointCode":"fa670095-af41-44c3-94d8-7fc7e0c1b475",
-        "PointName":"垃圾焚烧炉大型烟囱",
+        "PointName":"垃圾焚烧炉大型烟囱10",
         "DGIMN":"bzfxdc01",
         "Longitude":"102.258192",
         "Latitude":"36.104103",
@@ -1563,7 +1563,7 @@
     },
     {
         "PointCode":"fb9df3de-4db4-44c7-99fc-d9f228741634",
-        "PointName":"脱硫入口",
+        "PointName":"脱硫入口10",
         "DGIMN":"sgjt001006",
         "Longitude":"118.500641",
         "Latitude":"38.968935",
@@ -1574,7 +1574,7 @@
     },
     {
         "PointCode":"fbb5a893-54e0-4487-9324-e26b779ea25c",
-        "PointName":"脱硫入口",
+        "PointName":"脱硫入口10",
         "DGIMN":"jxwaslfd04",
         "Longitude":"114.792521",
         "Latitude":"26.453654",
@@ -1585,7 +1585,7 @@
     },
     {
         "PointCode":"fd7fd49b-06fd-43ca-a830-e40580c500a9",
-        "PointName":"脱硫入口",
+        "PointName":"脱硫入口10",
         "DGIMN":"dthld004",
         "Longitude":"120.842233",
         "Latitude":"40.713476",
@@ -1596,7 +1596,7 @@
     },
     {
         "PointCode":"fe0c043b-5a70-442c-ae68-70032f216d64",
-        "PointName":"邯钢焦炉3号烟囱",
+        "PointName":"邯钢焦炉3号烟囱3",
         "DGIMN":"hgjt001003",
         "Longitude":"114.446958",
         "Latitude":"36.606558",
@@ -1607,7 +1607,7 @@
     },
     {
         "PointCode":"febc1e4a-6535-4534-9c51-8cb4ee124c5c",
-        "PointName":"脱硫出口",
+        "PointName":"脱硫出口10",
         "DGIMN":"dtbzfd006",
         "Longitude":"118.051412",
         "Latitude":"37.464876",
@@ -1618,7 +1618,7 @@
     },
     {
         "PointCode":"ff615d6d-95a3-4ef9-9e3a-8a26127a14ca",
-        "PointName":"脱硫出口",
+        "PointName":"脱硫出口10",
         "DGIMN":"lywjfd06",
         "Longitude":"112.065359",
         "Latitude":"34.743424",
