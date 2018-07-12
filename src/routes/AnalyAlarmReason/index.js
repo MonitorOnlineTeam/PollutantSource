@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
-import { Row, Col, Layout, TreeSelect, Table, Card, number} from 'antd';
+import { Row, Col, Layout, TreeSelect, Table, Card, Button, Icon} from 'antd';
 import ReactEcharts from 'echarts-for-react';
-
+import styles from './index.less';
 import RangePicker_ from '../../components/PointDetail/RangePicker_';
 import Attention from '../../components/AnalyAlarmReason/AttentionDegree';
 import EnterpriseAutoComplete from '../../components/EnterpriseAutoComplete/index';
 import AlarmCause from '../../mockdata/Base/Code/T_Cod_AlarmCause';
 import moment from 'moment';
 const { Content} = Layout;
+import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 /*
 页面：报警原因
 描述：设备原因或数据原因占比
@@ -19,12 +20,16 @@ export default class AnalyAlarmReason extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            rangeDate: [moment('2018-06-23 00:00:00'), moment('2018-06-25 00:00:00')]
+            rangeDate: [moment('2018-06-23 00:00:00'), moment('2018-06-25 00:00:00')],
+            expandForm: true,
         };
     }
 
   state = {
       value: undefined,
+  }
+  renderForm() {
+      return this.state.expandForm ? this.renderSimpleForm() : this.renderAllForm();
   }
   onChange = (value) => {
       console.log(value);
@@ -36,39 +41,7 @@ export default class AnalyAlarmReason extends Component {
       // this.state.rangeDate = date;
       this.setState({rangeDate: date});
   };
-  render() {
-      const option = {
-          tooltip: {
-              trigger: 'item',
-              formatter: '{a} <br/>{b} : {c} ({d}%)'
-          },
-          legend: {
-              orient: 'vertical',
-              left: 'left',
-              data: ['设备原因', '数据原因', '其他原因']
-          },
-          series: [
-              {
-                  name: '访问来源',
-                  type: 'pie',
-                  radius: '55%',
-                  center: ['50%', '45%'],
-                  data: [
-                      {value: 250, name: '设备原因'},
-                      {value: 250, name: '数据原因'},
-                      {value: 250, name: '其他原因'},
-
-                  ],
-                  itemStyle: {
-                      emphasis: {
-                          shadowBlur: 10,
-                          shadowOffsetX: 0,
-                          shadowColor: 'rgba(0, 0, 0, 0.5)'
-                      }
-                  }
-              }
-          ]
-      };
+  renderSimpleForm() {
       const treeData = [{
           label: '农、林、牧、渔业',
           value: '农、林、牧、渔业',
@@ -96,6 +69,140 @@ export default class AnalyAlarmReason extends Component {
               key: '客运火车站',
           }],
       }];
+      return (
+
+          <Row style={{marginBottom: 30}}>
+              <Col span="8">
+                  <span >企业：<EnterpriseAutoComplete width={200} placeholder="请选择企业" /></span>
+              </Col>
+              <Col span="8">
+                  <span>
+                      <span>行业：</span>
+                      <TreeSelect
+                          showSearch={true}
+                          style={{ width: 200 }}
+                          value={this.state.value}
+                          dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+                          placeholder="请选择行业"
+                          allowClear={true}
+                          treeDefaultExpandAll={true}
+                          onChange={this.onChange}
+                          treeData={treeData}
+                      />
+                  </span>
+              </Col>
+              <Col span="8">
+                  <span ><Button style={{width: 90}} type="primary" onClick={this._Processes}>查询</Button><a style={{ marginLeft: 8 }} onClick={this.toggleForm}>
+                            展开 <Icon type="down" /> </a></span>
+              </Col>
+          </Row>
+      );
+  }
+
+  toggleForm = () => {
+      this.setState({
+          expandForm: !this.state.expandForm,
+      });
+  };
+  renderAllForm() {
+      const treeData = [{
+          label: '农、林、牧、渔业',
+          value: '农、林、牧、渔业',
+          key: '农、林、牧、渔业',
+          children: [{
+              label: '农业',
+              value: '农业',
+              key: '农业',
+          }, {
+              label: '制造业',
+              value: '制造业',
+              key: '制造业',
+          }],
+      }, {
+          label: '交通运输、仓储和邮政业',
+          value: '交通运输、仓储和邮政业',
+          key: '交通运输、仓储和邮政业',
+          children: [{
+              label: '铁路运输业',
+              value: '铁路运输业',
+              key: '铁路运输业',
+          }, {
+              label: '客运火车站',
+              value: '客运火车站',
+              key: '客运火车站',
+          }],
+      }];
+      return (
+          <div>
+              <Row style={{marginBottom: 30}}>
+                  <Col span="8">
+                      <span >企业：<EnterpriseAutoComplete width={200} placeholder="请选择企业" /></span>
+                  </Col>
+                  <Col span="8">
+                      <span>
+                          <span>行业：</span>
+                          <TreeSelect
+                              showSearch={true}
+                              style={{ width: 200 }}
+                              value={this.state.value}
+                              dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+                              placeholder="请选择行业"
+                              allowClear={true}
+                              treeDefaultExpandAll={true}
+                              onChange={this.onChange}
+                              treeData={treeData}
+                          />
+                      </span>
+                  </Col>
+                  <Col span="8">
+                      <span ><Button style={{width: 90}} type="primary" onClick={this._Processes}>查询</Button><a style={{ marginLeft: 8 }} onClick={this.toggleForm}>
+                            收起 <Icon type="up" />
+                      </a></span>
+                  </Col>
+              </Row>
+              <Row>
+                  <Col span="8">
+                      <span > 级别：<Attention placeholder="请选择控制级别" width={200} /></span>
+                  </Col>
+                  <Col span="8">
+                      <span className="gutter-box">时间：<RangePicker_ style={{width: 250}} placeholder="请选择时间" format="YYYY-MM-DD" onChange={this._handleDateChange} dateValue={this.state.rangeDate} /></span>
+                  </Col>
+              </Row>
+          </div>
+      );
+  }
+  render() {
+      const option = {
+          tooltip: {
+              trigger: 'item',
+              formatter: '{a} <br/>{b} : {c} ({d}%)'
+          },
+          legend: {
+              orient: 'vertical',
+              left: 'left',
+              data: ['设备原因', '数据原因']
+          },
+          series: [
+              {
+                  name: '访问来源',
+                  type: 'pie',
+                  radius: '55%',
+                  center: ['50%', '45%'],
+                  data: [
+                      {value: 250, name: '设备原因'},
+                      {value: 350, name: '数据原因'}
+                  ],
+                  itemStyle: {
+                      emphasis: {
+                          shadowBlur: 10,
+                          shadowOffsetX: 0,
+                          shadowColor: 'rgba(0, 0, 0, 0.5)'
+                      }
+                  }
+              }
+          ]
+      };
+
       const columns = [{
           title: '排口名称',
           dataIndex: 'PointName',
@@ -111,8 +218,7 @@ export default class AnalyAlarmReason extends Component {
           dataIndex: 'EquipmentCause',
           key: 'EquipmentCause',
           width: 110,
-      },
-      {
+      }, {
           title: '总计',
           dataIndex: 'Count',
           key: 'Count',
@@ -131,15 +237,13 @@ export default class AnalyAlarmReason extends Component {
               EquipmentCause: item.EquipmentCause,
           });
       }
-      // 最下面的总计
+      // 最下面一栏的总计
       let ColDataCause = [];
       let ColEquipmentCause = [];
       for (let items of dataSource) {
           ColDataCause.push(items.DataCause);
           ColEquipmentCause.push(items.EquipmentCause);
       }
-      console.log(ColDataCause);
-      console.log(ColEquipmentCause);
       var ColDataCauses = ColDataCause.reduce(function(first, second) {
           return Number.parseInt(first) + Number.parseInt(second);
       }, 0);
@@ -151,85 +255,59 @@ export default class AnalyAlarmReason extends Component {
           PointName: '总计',
           DataCause: ColDataCauses,
           EquipmentCause: ColEquipmentCauses,
-
       });
-      return (
-          <div>
-              <Card title="报警原因统计">
-                  <Row >
-                      <Col span={10} >
-                          <Layout >
-                              <Content><ReactEcharts
-                                  style={{width: '100%', height: 'calc(100vh - 260px)'}}
-                                  option={option}
-                                  notMerge={true}
-                                  lazyUpdate={true} /></Content>
-                          </Layout></Col>
-                      <Col span={13} style={{marginLeft: 30}}>
-                          <Row style={{marginBottom: 30}}>
-                              <Col >
-                                  <table style={{height: 100}}>
-                                      <tr>
-                                          <td> <span >企业：<EnterpriseAutoComplete width={200} placeholder="请选择企业" /></span></td>
-                                          <td>
-                                              <span>
-                                                  <span>行业：</span>
-                                                  <TreeSelect
-                                                      showSearch={true}
-                                                      style={{ width: 200 }}
-                                                      value={this.state.value}
-                                                      dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
-                                                      placeholder="请选择行业"
-                                                      allowClear={true}
-                                                      treeDefaultExpandAll={true}
-                                                      onChange={this.onChange}
-                                                      treeData={treeData}
-                                                  />
-                                              </span>
-                                          </td>
-                                      </tr>
-                                      <tr>
-                                          <td><span > 级别：<Attention placeholder="请选择控制级别" width={200} /></span></td>
-                                          <td> <span className="gutter-box">时间：<RangePicker_ style={{width: 250}} placeholder="请选择时间" format="YYYY-MM-DD" onChange={this._handleDateChange} dateValue={this.state.rangeDate} /></span></td>
-                                      </tr>
-                                  </table>
-                              </Col>
-                          </Row>
-                          <Row>
-                              <Col >
-                                  <Table
-                                      style={{marginTop: 10}}
-                                      dataSource={dataSource}
-                                      columns={columns}
-                                      scroll={{ x: 550, y: 'calc(100vh - 660px)' }}
-                                      onRow={(record, index) => {
-                                          return {
-                                              onClick: (a, b, c) => {
-                                                  let {selectid} = this.state;
-                                                  let index = selectid.findIndex(t => t === record.key);
-                                                  if (index !== -1) {
-                                                      selectid.splice(index, 1);
-                                                  } else {
-                                                      selectid.push(record.key);
-                                                  }
-                                                  this.setState({selectid: selectid});
-                                              }, // 点击行
-                                              onMouseEnter: () => {}, // 鼠标移入行
-                                          };
-                                      }}
-                                  />
-                                  <Card style={{marginTop: 20, marginLeft: -20}} title={'总结'}>
-                                      <p>
-                                          <span> 数据原因报警150，设备原因报警15，总计165，其中数据原因最多排口为废气排口，最少为废气排口。</span>
-                                      </p>
-                                  </Card>
-                              </Col>
-                          </Row>
-                      </Col>
-                  </Row>
-              </Card>,
 
-          </div>
+      return (
+          <PageHeaderLayout title="报警原因统计">
+              <div>
+                  <Card title="报警原因统计">
+                      <Row >
+                          <Col span={10} >
+                              <Layout >
+                                  <Content><ReactEcharts
+                                      style={{width: '100%', height: 'calc(100vh - 290px)'}}
+                                      option={option}
+                                      notMerge={true}
+                                      lazyUpdate={true} /></Content>
+                              </Layout></Col>
+                          <Col span={13} style={{marginLeft: 30}}>
+                              <div className={styles.tableListForm}>{this.renderForm()}</div>
+
+                              <Row>
+                                  <Col >
+                                      <Table
+                                          style={{marginTop: 10}}
+                                          dataSource={dataSource}
+                                          columns={columns}
+                                          scroll={{ x: 550, y: 'calc(100vh - 660px)' }}
+                                          onRow={(record, index) => {
+                                              return {
+                                                  onClick: (a, b, c) => {
+                                                      let {selectid} = this.state;
+                                                      let index = selectid.findIndex(t => t === record.key);
+                                                      if (index !== -1) {
+                                                          selectid.splice(index, 1);
+                                                      } else {
+                                                          selectid.push(record.key);
+                                                      }
+                                                      this.setState({selectid: selectid});
+                                                  }, // 点击行
+                                                  onMouseEnter: () => {}, // 鼠标移入行
+                                              };
+                                          }}
+                                      />
+                                      <Card style={{marginTop: 20, marginLeft: -20}} title={'总结'}>
+                                          <p>
+                                              <span> 数据原因报警150，设备原因报警15，总计165，其中数据原因最多排口为废气排口，最少为废气排口。</span>
+                                          </p>
+                                      </Card>
+                                  </Col>
+                              </Row>
+                          </Col>
+                      </Row>
+                  </Card>
+              </div>
+          </PageHeaderLayout>
       );
   }
 }

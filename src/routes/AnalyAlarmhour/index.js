@@ -14,22 +14,67 @@ import PointList from '../../components/PointList/PointsList';
 import styles from '../../routes/PointDetail/index.less';
 import { Link } from 'dva/router';
 import ReactEcharts from 'echarts-for-react';
+import AlarmContinue from '../../mockdata/Base/Code/T_Cod_AlarmContinue.json';
 /*
 页面：报警时长统计
 描述：分别统计各个设备的累计报警时长和连续报警时长
 add by cg 18.6.8
 modify by
 */
-
 export default class AnalyAlarmhour extends Component {
     constructor(props) {
         super(props);
+        var name = [];
+        var ContinueTime = [];
+        var CountTime = [];
+        AlarmContinue.map((item) => {
+            debugger;
+            name.push(item.PointName);
+            ContinueTime.push(item.ContinueTimeLength);
+            CountTime.push(item.CountTimeLength);
+        });
         this.state = {
+            AlarmContinueList: AlarmContinue,
             expandForm: true,
+            DGIMNS: [],
+            PointName: name,
+            ContinueTimeLength: ContinueTime,
+            CountTimeLength: CountTime,
         };
     }
     state = {
         value: undefined,
+    };
+    SearchEmergencyDataList = (value) => {
+        debugger;
+        this.setState({
+            AlarmContinueList: [],
+            DGIMNS: value,
+            PointName: [],
+            ContinueTimeLength: [],
+            CountTimeLength: [],
+        });
+        console.log(this.state.DGIMNS);
+        let dataList = [];
+        AlarmContinue.map((item, _key) => {
+            if (value.indexOf(item.DGIMN) > -1) {
+                dataList.push(item);
+            }
+        });
+        var name = [];
+        var ContinueTime = [];
+        var CountTime = [];
+        dataList.map((item) => {
+            name.push(item.PointName);
+            ContinueTime.push(item.ContinueTimeLength);
+            CountTime.push(item.CountTimeLength);
+        });
+        this.setState({
+            AlarmContinueList: dataList,
+            PointName: name,
+            ContinueTimeLength: ContinueTime,
+            CountTimeLength: CountTime,
+        });
     };
     renderForm() {
         return this.state.expandForm ? this.renderSimpleForm() : this.renderAllForm();
@@ -172,7 +217,7 @@ export default class AnalyAlarmhour extends Component {
             xAxis: [
                 {
                     type: 'category',
-                    data: ['排口1', '排口2', '排口3', '排口4', '排口5']
+                    data: this.state.PointName
                 }
             ],
             yAxis: [
@@ -184,7 +229,7 @@ export default class AnalyAlarmhour extends Component {
                 {
                     name: '连续报警时长',
                     type: 'bar',
-                    data: [2.0, 4.9, 7.0, 23.2, 25.6],
+                    data: this.state.ContinueTimeLength,
                     markPoint: {
                         data: [
                             {type: 'max', name: '最大值'},
@@ -200,7 +245,7 @@ export default class AnalyAlarmhour extends Component {
                 {
                     name: '累计时长',
                     type: 'bar',
-                    data: [2.6, 5.9, 9.0, 26.4, 28.7],
+                    data: this.state.CountTimeLength,
                     markPoint: {
                         data: [
                             {type: 'max', name: '最大值'},
@@ -216,7 +261,7 @@ export default class AnalyAlarmhour extends Component {
             ]
         };
         return (
-            <PointList handleChange={this.SearchEmergencyDataList} IsShowChk={'none'}>
+            <PointList handleChange={this.SearchEmergencyDataList} IsMoreSlect="true">
                 <div className={styles.pageHeader}>
                     <Breadcrumb className={styles.breadcrumb} >
                         <Breadcrumb.Item key="1">

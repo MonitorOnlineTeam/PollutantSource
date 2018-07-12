@@ -6,6 +6,7 @@ import RangePicker_ from '../../components/PointDetail/RangePicker_';
 import ReactEcharts from 'echarts-for-react';
 import { Link } from 'dva/router';
 import moment from 'moment';
+import AlarmTimeRange from '../../mockdata/Base/Code/T_Cod_AlarmTimeRange.json';
 /*
 页面：报警时间范围分布情况
 描述：统计一段时间24个小时分布情况
@@ -18,11 +19,79 @@ export default class AnalyAlarmhourarea extends Component {
     };
     constructor(props) {
         super(props);
+        var dataList = [];
+        var PointNames = [];
+        AlarmTimeRange.map((item) => {
+            var timedata = [];
+            var times = item.time.split(',');
+            times.map((item) => {
+                timedata.push(item);
+            });
+            PointNames.push(item.PointName);
+            dataList.push({
+                name: item.PointName,
+                type: 'bar',
+                stack: '总量',
+                label: {
+                    normal: {
+                        show: true,
+                        position: 'insideRight'
+                    }
+                },
+                data: timedata
+            });
+        });
+
         this.state = {
             rangeDate: [moment('2018-06-23 00:00:00'), moment('2018-06-25 00:00:00')],
+            AlarmTimeRangeList: AlarmTimeRange,
+            DGIMNS: [],
+            DataLists: dataList,
+            PointName: PointNames,
         };
     }
-
+    SearchEmergencyDataList = (value) => {
+        debugger;
+        this.setState({
+            AlarmTimeRangeList: [],
+            DataLists: [],
+            DGIMNS: value,
+            PointName: [],
+        });
+        let AlarmTimeRangeLists = [];
+        let Data = [];
+        let Name = [];
+        AlarmTimeRange.map((item, _key) => {
+            if (value.indexOf(item.DGIMN) > -1) {
+                AlarmTimeRangeLists.push(item);
+            }
+        });
+        AlarmTimeRangeLists.map((item) => {
+            var timedata = [];
+            var times = item.time.split(',');
+            times.map((item) => {
+                timedata.push(item);
+            });
+            Name.push(item.PointName);
+            Data.push({
+                name: item.PointName,
+                type: 'bar',
+                stack: '总量',
+                label: {
+                    normal: {
+                        show: true,
+                        position: 'insideRight'
+                    }
+                },
+                data: timedata
+            });
+        });
+        this.setState({
+            AlarmTimeRangeList: AlarmTimeRangeLists,
+            DataLists: Data,
+            PointName: Name,
+        });
+    };
     render() {
         let option = {
             tooltip: {
@@ -32,7 +101,7 @@ export default class AnalyAlarmhourarea extends Component {
                 }
             },
             legend: {
-                data: ['大唐供热集团-脱硫入口1', '大唐供热集团-脱硫入口2', '北京绿都供暖-脱硫入口', '巴中垃圾焚烧电厂-脱硫入口1']
+                data: this.state.PointName
             },
             grid: {
                 left: '3%',
@@ -48,61 +117,62 @@ export default class AnalyAlarmhourarea extends Component {
             yAxis: {
                 type: 'value'
             },
-            series: [
-                {
-                    name: '大唐供热集团-脱硫入口1',
-                    type: 'bar',
-                    stack: '总量',
-                    label: {
-                        normal: {
-                            show: true,
-                            position: 'insideRight'
-                        }
-                    },
-                    data: [320, 302, 301, 334, 390, 330, 320, 302, 301, 334, 390, 330, 320, 302, 301, 334, 390, 330, 320, 302, 301, 334, 390, 330],
-                },
-                {
-                    name: '大唐供热集团-脱硫入口2',
-                    type: 'bar',
-                    stack: '总量',
-                    label: {
-                        normal: {
-                            show: true,
-                            position: 'insideRight'
-                        }
-                    },
-                    data: [120, 132, 101, 134, 90, 230, 210, 302, 301, 334, 390, 330, 320, 302, 301, 334, 390, 330, 320, 302, 301, 334, 390, 330]
-                },
-                {
-                    name: '北京绿都供暖-脱硫入口',
-                    type: 'bar',
-                    stack: '总量',
-                    label: {
-                        normal: {
-                            show: true,
-                            position: 'insideRight'
-                        }
-                    },
-                    data: [220, 182, 191, 234, 290, 330, 310, 302, 301, 334, 390, 330, 320, 302, 301, 334, 390, 330, 320, 302, 301, 334, 390, 330]
-                },
-                {
-                    name: '巴中垃圾焚烧电厂-脱硫入口1',
-                    type: 'bar',
-                    stack: '总量',
-                    label: {
-                        normal: {
-                            show: true,
-                            position: 'insideRight'
-                        }
-                    },
-                    data: [150, 212, 201, 154, 190, 330, 410, 302, 301, 334, 390, 330, 320, 302, 101, 334, 390, 330, 320, 302, 301, 334, 590, 330]
-                },
-            ]
+            series: this.state.DataLists
+            //  [
+            //     {
+            //         name: '大唐供热集团-脱硫入口1',
+            //         type: 'bar',
+            //         stack: '总量',
+            //         label: {
+            //             normal: {
+            //                 show: true,
+            //                 position: 'insideRight'
+            //             }
+            //         },
+            //         data: [320, 302, 301, 334, 390, 330, 320, 302, 301, 334, 390, 330, 320, 302, 301, 334, 390, 330, 320, 302, 301, 334, 390, 330],
+            //     },
+            //     {
+            //         name: '大唐供热集团-脱硫入口2',
+            //         type: 'bar',
+            //         stack: '总量',
+            //         label: {
+            //             normal: {
+            //                 show: true,
+            //                 position: 'insideRight'
+            //             }
+            //         },
+            //         data: [120, 132, 101, 134, 90, 230, 210, 302, 301, 334, 390, 330, 320, 302, 301, 334, 390, 330, 320, 302, 301, 334, 390, 330]
+            //     },
+            //     {
+            //         name: '北京绿都供暖-脱硫入口',
+            //         type: 'bar',
+            //         stack: '总量',
+            //         label: {
+            //             normal: {
+            //                 show: true,
+            //                 position: 'insideRight'
+            //             }
+            //         },
+            //         data: [220, 182, 191, 234, 290, 330, 310, 302, 301, 334, 390, 330, 320, 302, 301, 334, 390, 330, 320, 302, 301, 334, 390, 330]
+            //     },
+            //     {
+            //         name: '巴中垃圾焚烧电厂-脱硫入口1',
+            //         type: 'bar',
+            //         stack: '总量',
+            //         label: {
+            //             normal: {
+            //                 show: true,
+            //                 position: 'insideRight'
+            //             }
+            //         },
+            //         data: [150, 212, 201, 154, 190, 330, 410, 302, 301, 334, 390, 330, 320, 302, 101, 334, 390, 330, 320, 302, 301, 334, 590, 330]
+            //     },
+            // ]
         };
         return (
             <div style={{ width: '100%',
                 height: 'calc(100vh - 67px)' }}>
-                <PointList handleChange={this.SearchEmergencyDataList} IsShowChk={'none'}>
+                <PointList handleChange={this.SearchEmergencyDataList} IsMoreSlect="true">
                     <div className={styles.pageHeader}>
                         <Breadcrumb className={styles.breadcrumb} >
                             <Breadcrumb.Item key="1">
