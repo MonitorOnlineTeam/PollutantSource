@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import styles from './PointsList.less';
-import { List, Input, Checkbox, Layout } from 'antd';
+import { List, Input, Checkbox, Layout, Icon } from 'antd';
 import { getPointEnterprise } from '../../mockdata/Base/commonbase';
 
 const Search = Input.Search;
@@ -13,8 +13,8 @@ export default class PointsList extends Component {
         this.state = {
             collapsed: false,
             pointslist: dataList,
-            selDGIMN: '',
-            selDGMINS: []
+            AllPointslist: dataList,
+            selDGIMNS: []
         };
     }
 
@@ -25,8 +25,11 @@ export default class PointsList extends Component {
       }
       // 根据关键字（企业、监测点名称）搜索监测点列表
       SearchList = (value) => {
+          this.setState({
+              selDGIMNS: []
+          });
           let markerInfo = [];
-          dataList.map((item, key) => {
+          this.state.AllPointslist.map((item, key) => {
               let isexist = false;
               if (item.PointName.indexOf(value) > -1 || value.indexOf(item.PointName) > -1) {
                   isexist = true;
@@ -40,7 +43,7 @@ export default class PointsList extends Component {
       };
 
       render() {
-          const IsShowChk = this.props.IsShowChk == null ? '' : this.props.IsShowChk; // 监控点列表是否显示复选框
+          const isMore = this.props.IsMoreSlect; // 监控点列表是否允许多选
           return (
               <Layout>
                   <Sider width={350}
@@ -57,49 +60,42 @@ export default class PointsList extends Component {
                               <List
                                   dataSource={this.state.pointslist}
                                   renderItem={item => (
-                                      <div id={item.DGIMN} className={styles.cardList} style={this.state.selDGIMN === item.DGIMN ? {
+                                      <div id={item.DGIMN} className={styles.cardList} style={this.state.selDGIMNS.indexOf(item.DGIMN) > -1 ? {
                                           borderWidth: '1px',
                                           borderColor: 'rgb(97,166,238)',
                                           borderStyle: 'solid',
                                           WebkitBoxShadow: 'rgb(118,178,240) 0px 0px 5px',
                                           MozBoxShadow: 'rgb(118,178,240) 0px 0px 5px',
-                                          boxShadow: 'rgb(118,178,240) 0px 0px 5px'
+                                          boxShadow: 'rgb(118,178,240) 0px 0px 5px',
+                                          backgroundImage: 'url(/dui.png)',
+                                          backgroundRepeat: 'no-repeat'
                                       } : {}}
                                           onClick={
                                           () => {
-                                              if (this.props.IsShowChk === 'none') {
-                                                  this.props.handleChange([item.DGIMN]);
+                                            let dgimns = this.state.selDGIMNS;
+                                              if (isMore === 'true') {
+                                                  if (dgimns.indexOf(item.DGIMN) === -1) {
+                                                      dgimns.push(item.DGIMN);
+                                                  } else {
+                                                      dgimns.splice(dgimns.indexOf(item.DGIMN), 1);
+                                                  }
                                                   this.setState({
-                                                      selDGIMN: item.DGIMN
+                                                      selDGIMNS: dgimns
                                                   });
+                                                  this.props.handleChange(dgimns);
+                                              } else {
+                                                  dgimns = [];
+                                                  dgimns.push(item.DGIMN);
+                                                  this.setState({
+                                                      selDGIMNS: dgimns
+                                                  });
+                                                  this.props.handleChange([item.DGIMN]);
                                               }
                                           }
                                       } >
+                                          <div />
                                           <div className={styles.title}>
-                                              <span className={styles.chkbox} style={{display: IsShowChk}}>
-                                                  <Checkbox
-                                                      onChange={
-                                                          (e) => {
-                                                              let dgimns = this.state.selDGMINS;
-                                                              if (e.target.checked == true) {
-                                                                  if (dgimns.indexOf(item.DGIMN) == -1) {
-                                                                      dgimns.push(item.DGIMN);
-                                                                  }
-                                                              } else {
-                                                                  if (dgimns.indexOf(item.DGIMN) > -1) {
-                                                                      dgimns.splice(dgimns.indexOf(item.DGIMN), 1);
-                                                                  }
-                                                              }
-
-                                                              this.setState({
-                                                                  selDGIMNS: dgimns
-                                                              });
-
-                                                              this.props.handleChange(dgimns);
-                                                          }
-                                                      }
-                                                  />
-                                              </span>
+                                              <Icon type="environment-o" style={{ fontSize: 21, color: this.state.selDGIMNS.indexOf(item.DGIMN) > -1 ? 'rgb(118,178,240)' : '' }} />
                                               <span className={styles.titleSpan}>{item.PointName}</span>
                                           </div>
                                           <div className={styles.content}>

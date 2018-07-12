@@ -118,7 +118,7 @@ export default class EmergencyDetailInfo extends Component {
         const logDataList = EmergencyInfo.LogDataList.filter((item) => {
             return item.ExceptionHandleId === emergencyId;
         });
-        console.log(emergencyId);
+
         return (
             <PageHeaderLayout title="应急任务详情">
                 <div style={{height: 'calc(100vh - 190px)'}} className={styles.ExceptionDetailDiv}>

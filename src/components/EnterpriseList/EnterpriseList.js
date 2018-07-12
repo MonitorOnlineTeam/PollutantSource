@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import styles from './EnterpriseList.less';
-import { List, Input, Layout,Checkbox } from 'antd';
+import { List, Input, Layout,Icon } from 'antd';
 import { getEnterprise } from '../../mockdata/Base/commonbase';
 
 const Search = Input.Search;
@@ -15,7 +15,6 @@ export default class PointsList extends Component {
             collapsed: false,
             enterpriseslist: dataList,
             AllEnterpriseslist: dataList,
-            selEntCode: '',
             selEntCodes: []
         };
     }
@@ -27,6 +26,9 @@ export default class PointsList extends Component {
       }
       // 根据关键字（企业）搜索监测点列表
       SearchList = (value) => {
+        this.setState({
+            selEntCodes: []
+        });
           let markerInfo = [];
           this.state.AllEnterpriseslist.map((item, key) => {
               let isexist = false;
@@ -40,7 +42,7 @@ export default class PointsList extends Component {
       };
 
       render() {
-          const IsShowChk = this.props.IsShowChk == null ? '' : this.props.IsShowChk; // 监控点列表是否显示复选框
+          const isMore = this.props.IsMoreSlect; // 监控点列表是否允许多选
           return (
               <Layout>
                   <Sider width={350}
@@ -57,49 +59,41 @@ export default class PointsList extends Component {
                               <List
                                   dataSource={this.state.enterpriseslist}
                                   renderItem={item => (
-                                      <div id={item.EntCode} className={styles.cardList} style={this.state.selEntCode === item.EntCode ? {
+                                      <div id={item.EntCode} className={styles.cardList} style={this.state.selEntCodes.indexOf(item.EntCode) > -1 ? {
                                           borderWidth: '1px',
                                           borderColor: 'rgb(97,166,238)',
                                           borderStyle: 'solid',
                                           WebkitBoxShadow: 'rgb(118,178,240) 0px 0px 5px',
                                           MozBoxShadow: 'rgb(118,178,240) 0px 0px 5px',
-                                          boxShadow: 'rgb(118,178,240) 0px 0px 5px'
+                                          boxShadow: 'rgb(118,178,240) 0px 0px 5px',
+                                          backgroundImage: 'url(/dui1.png)',
+                                          backgroundRepeat: 'no-repeat'
                                       } : {}}
                                       onClick={
                                           () => {
-                                              if (this.props.IsShowChk === 'none') {
-                                                  this.props.handleChange([item.EntCode]);
+                                              let entcodes = this.state.selEntCodes;
+                                              if (isMore === 'true') {
+                                                  if (entcodes.indexOf(item.EntCode) === -1) {
+                                                    entcodes.push(item.EntCode);
+                                                  } else {
+                                                    entcodes.splice(entcodes.indexOf(item.EntCode), 1);
+                                                  }
                                                   this.setState({
-                                                      selEntCode: item.EntCode
+                                                    selEntCodes: entcodes
                                                   });
+                                                  this.props.handleChange(entcodes);
+                                              } else {
+                                                entcodes = [];
+                                                entcodes.push(item.EntCode);
+                                                  this.setState({
+                                                    selEntCodes: entcodes
+                                                  });
+                                                  this.props.handleChange([item.EntCode]);
                                               }
                                           }
                                       } >
                                           <div className={styles.title}>
-                                              <span className={styles.chkbox} style={{display: IsShowChk}}>
-                                              <Checkbox
-                                                      onChange={
-                                                          (e) => {
-                                                              let entcodes = this.state.selEntCodes;
-                                                              if (e.target.checked == true) {
-                                                                  if (entcodes.indexOf(item.EntCode) == -1) {
-                                                                      entcodes.push(item.EntCode);
-                                                                  }
-                                                              } else {
-                                                                  if (entcodes.indexOf(item.EntCode) > -1) {
-                                                                      entcodes.splice(entcodes.indexOf(item.EntCode), 1);
-                                                                  }
-                                                              }
-
-                                                              this.setState({
-                                                                  selEntCodes: entcodes
-                                                              });
-
-                                                              this.props.handleChange(entcodes);
-                                                          }
-                                                      }
-                                                  />
-                                          </span>
+                                          <Icon type="environment-o" style={{ fontSize: 21, color: this.state.selEntCodes.indexOf(item.EntCode) > -1 ? 'rgb(118,178,240)' : '' }} />
                                               <span className={styles.titleSpan}>{item.EntName}</span>
                                           </div>
                                       </div>
