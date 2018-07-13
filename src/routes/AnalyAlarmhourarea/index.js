@@ -118,56 +118,6 @@ export default class AnalyAlarmhourarea extends Component {
                 type: 'value'
             },
             series: this.state.DataLists
-            //  [
-            //     {
-            //         name: '大唐供热集团-脱硫入口1',
-            //         type: 'bar',
-            //         stack: '总量',
-            //         label: {
-            //             normal: {
-            //                 show: true,
-            //                 position: 'insideRight'
-            //             }
-            //         },
-            //         data: [320, 302, 301, 334, 390, 330, 320, 302, 301, 334, 390, 330, 320, 302, 301, 334, 390, 330, 320, 302, 301, 334, 390, 330],
-            //     },
-            //     {
-            //         name: '大唐供热集团-脱硫入口2',
-            //         type: 'bar',
-            //         stack: '总量',
-            //         label: {
-            //             normal: {
-            //                 show: true,
-            //                 position: 'insideRight'
-            //             }
-            //         },
-            //         data: [120, 132, 101, 134, 90, 230, 210, 302, 301, 334, 390, 330, 320, 302, 301, 334, 390, 330, 320, 302, 301, 334, 390, 330]
-            //     },
-            //     {
-            //         name: '北京绿都供暖-脱硫入口',
-            //         type: 'bar',
-            //         stack: '总量',
-            //         label: {
-            //             normal: {
-            //                 show: true,
-            //                 position: 'insideRight'
-            //             }
-            //         },
-            //         data: [220, 182, 191, 234, 290, 330, 310, 302, 301, 334, 390, 330, 320, 302, 301, 334, 390, 330, 320, 302, 301, 334, 390, 330]
-            //     },
-            //     {
-            //         name: '巴中垃圾焚烧电厂-脱硫入口1',
-            //         type: 'bar',
-            //         stack: '总量',
-            //         label: {
-            //             normal: {
-            //                 show: true,
-            //                 position: 'insideRight'
-            //             }
-            //         },
-            //         data: [150, 212, 201, 154, 190, 330, 410, 302, 301, 334, 390, 330, 320, 302, 101, 334, 390, 330, 320, 302, 301, 334, 590, 330]
-            //     },
-            // ]
         };
         return (
             <div style={{ width: '100%',
@@ -199,7 +149,7 @@ export default class AnalyAlarmhourarea extends Component {
                     </div>
                     <div style={{marginTop: -160, marginLeft: 70}}>
                         <Card title="总结：">
-                            <p>报警在22时次数最多，报警在2时次数最少</p>
+                            <p>报警在11时次数最多，报警在14时次数最少</p>
                         </Card>
                     </div>
                 </PointList>

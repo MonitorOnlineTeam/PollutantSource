@@ -15,6 +15,7 @@ import styles from '../../routes/PointDetail/index.less';
 import { Link } from 'dva/router';
 import ReactEcharts from 'echarts-for-react';
 import AlarmContinue from '../../mockdata/Base/Code/T_Cod_AlarmContinue.json';
+import IndustryType from '../../mockdata/Base/Code/T_Cod_IndustryType';
 /*
 页面：报警时长统计
 描述：分别统计各个设备的累计报警时长和连续报警时长
@@ -33,6 +34,32 @@ export default class AnalyAlarmhour extends Component {
             ContinueTime.push(item.ContinueTimeLength);
             CountTime.push(item.CountTimeLength);
         });
+        var industryList = [];
+        IndustryType.map((item) => {
+            if (item.ParentNode === 'root') {
+                industryList.push({
+                    label: item.IndustryTypeName,
+                    value: item.IndustryTypeName,
+                    key: item.IndustryTypeName,
+                    children: getSecond(item.IndustryTypeCode)
+                });
+            }
+        });
+        function getSecond(Code) {
+            var children = [];
+            IndustryType.map((item) => {
+                if (item.ParentNode === Code) {
+                    children.push({
+                        label: item.IndustryTypeName,
+                        value: item.IndustryTypeName,
+                        key: item.IndustryTypeName,
+                        children: getSecond(item.IndustryTypeCode)
+                    }
+                    );
+                }
+            });
+            return children;
+        }
         this.state = {
             AlarmContinueList: AlarmContinue,
             expandForm: true,
@@ -40,6 +67,7 @@ export default class AnalyAlarmhour extends Component {
             PointName: name,
             ContinueTimeLength: ContinueTime,
             CountTimeLength: CountTime,
+            IndustryTypes: industryList,
         };
     }
     state = {
@@ -76,133 +104,12 @@ export default class AnalyAlarmhour extends Component {
             CountTimeLength: CountTime,
         });
     };
-    renderForm() {
-        return this.state.expandForm ? this.renderSimpleForm() : this.renderAllForm();
-    }
-    renderSimpleForm() {
-        const treeData = [{
-            label: '农、林、牧、渔业',
-            value: '农、林、牧、渔业',
-            key: '农、林、牧、渔业',
-            children: [{
-                label: '农业',
-                value: '农业',
-                key: '农业',
-            }, {
-                label: '制造业',
-                value: '制造业',
-                key: '制造业',
-            }],
-        }, {
-            label: '交通运输、仓储和邮政业',
-            value: '交通运输、仓储和邮政业',
-            key: '交通运输、仓储和邮政业',
-            children: [{
-                label: '铁路运输业',
-                value: '铁路运输业',
-                key: '铁路运输业',
-            }, {
-                label: '客运火车站',
-                value: '客运火车站',
-                key: '客运火车站',
-            }],
-        }];
-
-        return (
-            <p>
-                <Row>
-                    <Col span={7}>
-                        <span>行业：</span>
-                        <TreeSelect
-                            showSearch={true}
-                            style={{ width: 200 }}
-                            value={this.state.value}
-                            dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
-                            placeholder="请选择行业"
-                            allowClear={true}
-                            treeDefaultExpandAll={true}
-                            onChange={this.onChange}
-                            treeData={treeData}
-                        /></Col>
-                    <Col span={7}>
-                        <span > 级别：<Attention placeholder="请选择控制级别" width={200} /></span>
-                    </Col>
-                    <Col span={5}>
-                        <span ><Button type="primary" onClick={this._Processes}>查询</Button><a style={{ marginLeft: 8 }} onClick={this.toggleForm}>
-        展开 <Icon type="down" /> </a></span>
-                    </Col>
-                </Row>
-            </p>
-        );
-    }
-    toggleForm = () => {
-        this.setState({
-            expandForm: !this.state.expandForm,
-        });
-    };
-    renderAllForm() {
-        const treeData = [{
-            label: '农、林、牧、渔业',
-            value: '农、林、牧、渔业',
-            key: '农、林、牧、渔业',
-            children: [{
-                label: '农业',
-                value: '农业',
-                key: '农业',
-            }, {
-                label: '制造业',
-                value: '制造业',
-                key: '制造业',
-            }],
-        }, {
-            label: '交通运输、仓储和邮政业',
-            value: '交通运输、仓储和邮政业',
-            key: '交通运输、仓储和邮政业',
-            children: [{
-                label: '铁路运输业',
-                value: '铁路运输业',
-                key: '铁路运输业',
-            }, {
-                label: '客运火车站',
-                value: '客运火车站',
-                key: '客运火车站',
-            }],
-        }];
-        return (
-            <p>
-                <Row>
-                    <Col span={7}>
-                        <span>行业：</span>
-                        <TreeSelect
-                            showSearch={true}
-                            style={{ width: 200 }}
-                            value={this.state.value}
-                            dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
-                            placeholder="请选择行业"
-                            allowClear={true}
-                            treeDefaultExpandAll={true}
-                            onChange={this.onChange}
-                            treeData={treeData}
-                        /></Col>
-                    <Col span={7}>
-                        <span > 级别：<Attention placeholder="请选择控制级别" width={200} /></span>
-                    </Col>
-
-                    <Col span={5}>
-                        <span ><Button type="primary" onClick={this._Processes}>查询</Button><a style={{ marginLeft: 8 }} onClick={this.toggleForm}>
-                            收起 <Icon type="up" />
-                        </a></span>
-                    </Col>
-                </Row>
-                <Row style={{marginTop: 15}}>
-                    <Col span={10}>
-                        <span >时间：<RangePicker_ style={{width: 250, marginLeft: 5}} placeholder="请选择时间" format="YYYY-MM-DD" onChange={this._handleDateChange} dateValue={this.state.rangeDate} /></span>
-                    </Col>
-                </Row>
-            </p>
-        );
+    onChange = (value) => {
+        console.log(value);
+        this.setState({ value });
     }
     render() {
+        const treeData = this.state.IndustryTypes;
         let option = {
             tooltip: {
                 trigger: 'axis'
@@ -230,6 +137,7 @@ export default class AnalyAlarmhour extends Component {
                     name: '连续报警时长',
                     type: 'bar',
                     data: this.state.ContinueTimeLength,
+                    barMaxWidth: 50, // 最大宽度
                     markPoint: {
                         data: [
                             {type: 'max', name: '最大值'},
@@ -246,6 +154,7 @@ export default class AnalyAlarmhour extends Component {
                     name: '累计时长',
                     type: 'bar',
                     data: this.state.CountTimeLength,
+                    barMaxWidth: 50, // 最大宽度
                     markPoint: {
                         data: [
                             {type: 'max', name: '最大值'},
@@ -257,8 +166,14 @@ export default class AnalyAlarmhour extends Component {
                             {type: 'average', name: '平均值'}
                         ]
                     }
+                },
+
+            ],
+            dataZoom: [
+                {
+                    type: 'inside'
                 }
-            ]
+            ],
         };
         return (
             <PointList handleChange={this.SearchEmergencyDataList} IsMoreSlect="true">
@@ -280,12 +195,38 @@ export default class AnalyAlarmhour extends Component {
                 </div>
                 <div>
                     <Card title="报警时长统计" bordered={false}>
-                        <div className={styles.tableListForm}>{this.renderForm()}</div>
+                        <p>
+                            <Row style={{marginLeft: 50}}>
+                                <Col span={6}>
+                                    <span >时间：<RangePicker_ style={{width: 250, marginLeft: 5}} placeholder="请选择时间" format="YYYY-MM-DD" onChange={this._handleDateChange} dateValue={this.state.rangeDate} /></span>
+                                </Col>
+                                <Col span={5}>
+                                    <span>行业：</span>
+                                    <TreeSelect
+                                        showSearch={true}
+                                        style={{ width: 200 }}
+                                        value={this.state.value}
+                                        dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+                                        placeholder="请选择行业"
+                                        allowClear={true}
+                                        treeDefaultExpandAll={true}
+                                        onChange={this.onChange}
+                                        treeData={treeData}
+                                    /></Col>
+                                <Col span={5}>
+                                    <span > 级别：<Attention placeholder="请选择控制级别" width={200} /></span>
+                                </Col>
+
+                                <Col span={5}>
+                                    <span ><Button type="primary" onClick={this._Processes}>查询</Button></span>
+                                </Col>
+                            </Row>
+                        </p>
                         <p style={{marginTop: 30}}>
                             <Card style={{ height: 'calc(100vh - 305px)' }}>
                                 <ReactEcharts option={option} lazyUpdate={true} notMerge={true} style={{ width: '100%', height: 'calc(100vh - 500px)', marginLeft: -100 }} />
                                 <Card title="总结：" >
-                                    <p>连续报警时长最大是排口5排口，时长为25.6；累计报警时长最大是排口5排口，时长为28.7。</p>
+                                    <p>连续报警时长最大是锅炉小号烟囱1排口，时长为33；累计报警时长最大是脱硫出口1排口，时长为99。</p>
                                 </Card>
                             </Card>
                         </p>

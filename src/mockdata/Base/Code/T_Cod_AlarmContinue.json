@@ -1,19 +1,19 @@
 [
     {
     "DGIMN":"bjldgn01",
-    "PointName":"废气排口1",
+    "PointName":"锅炉小号烟囱1",
     "ContinueTimeLength":"33",
     "CountTimeLength":"50"
     },
     {
         "DGIMN":"dtgjhh11102",
-        "PointName":"废气排口2",
+        "PointName":"脱硫出口1",
         "ContinueTimeLength":"13",
         "CountTimeLength":"99"
     },
     {
         "DGIMN":"dtgrjx110",
-        "PointName":"废气排口3",
+        "PointName":"脱硫入口1",
         "ContinueTimeLength":"23",
         "CountTimeLength":"86"
     }
