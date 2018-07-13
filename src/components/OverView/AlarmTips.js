@@ -18,7 +18,7 @@ class AlarmTips extends Component {
                     </div>
                     <div className={styles.clearboth} />
                 </div>
-                <div style={{marginLeft: '80px', marginTop: '10px'}}>
+                <div style={{marginLeft: '100px', marginTop: '10px'}}>
                     <Button style={{marginRight: '20px'}} onClick={this.props.AlarmClick}>查看点位信息</Button>
                 </div>
 

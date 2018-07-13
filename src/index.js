@@ -4,7 +4,7 @@ import createLoading from 'dva-loading';
 import { persistStore, autoRehydrate } from 'redux-persist';
 import createHistory from 'history/createBrowserHistory';
 import { createLogger } from 'redux-logger';
-
+import Cookie from 'js-cookie';
 import 'babel-polyfill';
 import 'moment/locale/zh-cn';
 import './g2';
@@ -23,6 +23,7 @@ const app = dva({
     },
 });
 
+Cookie.set('seldgimn', '');
 // 2. Plugins
 // app.use({});
 
