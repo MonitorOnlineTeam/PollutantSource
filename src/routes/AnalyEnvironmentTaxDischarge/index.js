@@ -49,10 +49,6 @@ export default class AnalyEnvironmentTaxDischarge extends Component {
 
           tooltip: {
               trigger: 'axis',
-              formatter(paras) {
-                  debugger;
-                  return paras[0];
-              },
               axisPointer: {
                   type: 'cross'
               }
