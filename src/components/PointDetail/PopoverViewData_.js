@@ -369,7 +369,7 @@ class PopoverViewData_ extends Component {
                                                             return (
                                                                 <FormItem key={key} hasFeedback={true} validateStatus={item.Status === 0 ? 'success' : 'warning'} wrapperCol={{color: '#ccc'}}>
                                                                     <Tooltip placement="top" title={text}>
-                                                                        <Input title={`${item.StatusText}`} placeholder={`${item.Name}：${item.StatusText}`} readOnly={true} style={{cursor: 'pointer'}} />
+                                                                        <Input title={`${item.StatusText}`} value={`${item.Name}：${item.StatusText}`} placeholder={`${item.Name}：${item.StatusText}`} readOnly={true} style={{cursor: 'pointer'}} />
                                                                     </Tooltip>
                                                                 </FormItem>
                                                             );
@@ -387,7 +387,7 @@ class PopoverViewData_ extends Component {
 
                                                                 <FormItem key={key} hasFeedback={true} validateStatus={key === 3 ? 'error' : 'success'} wrapperCol={{color: '#ccc'}}>
                                                                     <Tooltip placement="top" title={text}>
-                                                                        <Input title={`${item.Status}`} placeholder={`${item.Name}：${item.Value}`} readOnly={true} style={{cursor: 'pointer'}} />
+                                                                        <Input title={`${item.Status}`} value={`${item.Name}：${item.Value}`} placeholder={`${item.Name}：${item.Value}`} readOnly={true} style={{cursor: 'pointer'}} />
                                                                     </Tooltip>
                                                                 </FormItem>
 

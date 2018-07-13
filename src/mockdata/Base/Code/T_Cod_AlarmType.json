@@ -1,0 +1,22 @@
+[
+    {
+    "PointName":"废气排口1",
+    "AlarmEnterprise":"33",
+    "AlarmState":"50",
+    "AlarmFault":"40"
+    },
+    {
+        "PointName":"废气排口2",
+        "AlarmEnterprise":"40",
+        "AlarmState":"4",
+        "AlarmFault":"41"
+    },
+    {
+        "PointName":"废气排口3",
+        "AlarmEnterprise":"49",
+        "AlarmState":"65",
+        "AlarmFault":"63"
+    }
+]
+    
+    
