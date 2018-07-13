@@ -24,9 +24,9 @@ class MapLegend extends Component {
                                             this.props.legendClick(item);
                                         }}
                                         key={item.defaultValue}
-                                        style={{ backgroundColor: `${item.bgcolor}` }} >
+                                        style={{ backgroundColor: `${item.bgcolor}`, color: `${item.fontcolor}` }} >
                                         <Icon type="check" style={{ fontSize: 14,
-                                            color: '#fff',
+                                            color: `${item.fontcolor}`,
                                             marginTop: '4px'}} />
                                         {item.defaultValue}</Tag>
                                 );
@@ -37,7 +37,7 @@ class MapLegend extends Component {
                                             this.props.legendClick(item);
                                         }}
                                         key={item.defaultValue}
-                                        style={{ backgroundColor: `${item.bgcolor}` }} >{item.defaultValue}</Tag>
+                                        style={{ backgroundColor: `${item.bgcolor}`, color: `${item.fontcolor}` }} >{item.defaultValue}</Tag>
                                 );
                             }
                         })

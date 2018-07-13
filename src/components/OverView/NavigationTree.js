@@ -38,11 +38,11 @@ class NavigationTree extends Component {
                     } else if (this.props.special === 'operation') {
                         if (record.DGIMN === 'bjldgn01' || record.DGIMN === 'dtgjhh11102' || record.DGIMN === 'dtgrjx110') {
                             return (
-                                <img className={styles.imgradius_shinered} src="../../../gisexception.png" />
+                                <img className={styles.imgradius_shinered} src="../../../gisfault.png" />
                             );
                         } else if (record.DGIMN === 'dtgrjx103' || record.DGIMN === 'lywjfd03') {
                             return (
-                                <img className={styles.imgradius_shinered} src="../../../gisoperation.png" />
+                                <img className={styles.imgradius_shinered} src="../../../gisstop.png" />
                             );
                         } else {
                             return (
