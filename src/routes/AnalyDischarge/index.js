@@ -74,7 +74,7 @@ export default class AnalyDischarge extends Component {
                     barCategoryGap: '50%'
                 });
 
-                switch (value) {
+                switch (code) {
                     case 'SO2':
                         selectRank.push(Math.floor(Math.random() * (so2Range[1] - so2Range[0] + 1) + so2Range[0]) * 24);
                         break;
