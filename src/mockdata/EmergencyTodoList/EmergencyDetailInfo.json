@@ -11,7 +11,7 @@
     "ProcessID":"2",
     "ExceptionHandleId":"28",
     "ProcessName":"应急处理",
-    "UserName":"小王",
+    "UserName":"成云",
     "CreateTime":"2018-6-12 12:32"
 },
 {
@@ -39,14 +39,14 @@
     "ProcessID":"6",
     "ExceptionHandleId":"14",
     "ProcessName":"应急处理",
-    "UserName":"小王",
+    "UserName":"成云",
     "CreateTime":"2018-6-17 12:32"
 },
 {
     "ProcessID":"7",
     "ExceptionHandleId":"14",
     "ProcessName":"校准",
-    "UserName":"小王",
+    "UserName":"成云",
     "CreateTime":"2018-6-17 16:32"
 },
 {
@@ -68,7 +68,7 @@
         "Emergence":"紧急",
         "TaskStatus":"处理中",
         "TaskContent":"设备数据异常",
-        "CreatePerson":"小王",
+        "CreatePerson":"成云",
         "CreateTime":"2018-6-12 12:32",
         "DeviceType":"CEMS",
         "DeviceBrand":"SDL",
@@ -86,7 +86,7 @@
         "Emergence":"紧急",
         "TaskStatus":"已完成",
         "TaskContent":"设备数据异常",
-        "CreatePerson":"小王",
+        "CreatePerson":"成云",
         "CreateTime":"2018-6-17 12:32",
         "DeviceType":"CEMS",
         "DeviceBrand":"SDL",
@@ -98,25 +98,25 @@
     {
         "ExceptionHandleId":"28",
         "HandleContent":"",
-        "HandlePerson":"小王",
+        "HandlePerson":"成云",
         "HandleTime":"2018-6-12 12:32"
     },
     {
         "ExceptionHandleId":"14",
         "HandleContent":"",
-        "HandlePerson":"小王",
+        "HandlePerson":"成云",
         "HandleTime":"2018-6-17 12:32"
     }
 ],
 "CorrectInfo":[
     {
         "ExceptionHandleId":"28",
-        "HandlePerson":"小王",
+        "HandlePerson":"成云",
         "HandleTime":"2018-6-12 12:32"
     },
     {
         "ExceptionHandleId":"14",
-        "HandlePerson":"小王",
+        "HandlePerson":"成云",
         "HandleTime":"2018-6-17 12:32"
     }
 ],
@@ -124,7 +124,7 @@
     {
         "ExceptionHandleId":"28",
         "CheckId":"1",
-        "NodeName":"运维部经理",
+        "NodeName":"运维人",
         "CheckName":"",
         "CheckTime":"",
         "CheckContent":""
@@ -132,40 +132,9 @@
     {
         "ExceptionHandleId":"28",
         "CheckId":"2",
-        "NodeName":"科员",
-        "CheckName":"",
-        "CheckTime":"",
-        "CheckContent":""
-    },
-    {
-        "ExceptionHandleId":"28",
-        "CheckId":"3",
-        "NodeName":"科长",
-        "CheckName":"",
-        "CheckTime":"",
-        "CheckContent":""
-    },{
-        "ExceptionHandleId":"14",
-        "CheckId":"4",
         "NodeName":"运维部经理",
-        "CheckName":"李经理",
-        "CheckTime":"2018-6-13 11:32",
-        "CheckContent":"同意"
-    },
-    {
-        "ExceptionHandleId":"14",
-        "CheckId":"5",
-        "NodeName":"科员",
-        "CheckName":"李科员",
-        "CheckTime":"2018-6-13 11:32",
-        "CheckContent":"同意"
-    },
-    {
-        "ExceptionHandleId":"14",
-        "CheckId":"6",
-        "NodeName":"科长",
-        "CheckName":"王科长",
-        "CheckTime":"2018-6-13 11:32",
+        "CheckName":"",
+        "CheckTime":"",
         "CheckContent":""
     }
 ],
@@ -174,7 +143,7 @@
         "StepID":"1",
         "ExceptionHandleId":"28",
         "StepName":"创建任务单",
-        "User_Name":"小王",
+        "User_Name":"成云",
         "BeginTime":"2018-6-18 11:12",
         "EndTime":"2018-6-18 11:12",
         "Remark":"",
@@ -184,7 +153,7 @@
             "StepID":"2",
             "ExceptionHandleId":"28",
             "StepName":"应急处理",
-            "User_Name":"小王",
+            "User_Name":"成云",
             "BeginTime":"2018-6-18 11:12",
             "EndTime":"2018-6-18 11:12",
             "Remark":"",
@@ -194,7 +163,7 @@
                 "StepID":"7",
                 "ExceptionHandleId":"14",
                 "StepName":"创建任务单",
-                "User_Name":"小王",
+                "User_Name":"成云",
                 "BeginTime":"2018-6-18 11:12",
                 "EndTime":"2018-6-18 11:12",
                 "Remark":"",
@@ -204,7 +173,7 @@
                     "StepID":"8",
                     "ExceptionHandleId":"14",
                     "StepName":"应急处理",
-                    "User_Name":"小王",
+                    "User_Name":"成云",
                     "BeginTime":"2018-6-18 11:12",
                     "EndTime":"2018-6-18 11:12",
                     "Remark":"",
@@ -214,7 +183,7 @@
                         "StepID":"9",
                         "ExceptionHandleId":"14",
                         "StepName":"校准",
-                        "User_Name":"小王",
+                        "User_Name":"成云",
                         "BeginTime":"2018-6-18 11:12",
                         "EndTime":"2018-6-18 11:12",
                         "Remark":"",
