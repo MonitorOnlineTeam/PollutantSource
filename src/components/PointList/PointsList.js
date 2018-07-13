@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import styles from './PointsList.less';
-import { List, Input, Checkbox, Layout, Icon } from 'antd';
+import { List, Input, Layout, Icon } from 'antd';
 import { getPointEnterprise } from '../../mockdata/Base/commonbase';
 
 const Search = Input.Search;
@@ -43,7 +43,7 @@ export default class PointsList extends Component {
       };
 
       render() {
-          const isMore = this.props.IsMoreSlect; // 监控点列表是否允许多选
+          const isMore = this.props.IsMoreSelect; // 监控点列表是否允许多选
           return (
               <Layout>
                   <Sider width={350}

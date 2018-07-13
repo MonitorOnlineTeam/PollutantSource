@@ -42,7 +42,7 @@ export default class PointsList extends Component {
       };
 
       render() {
-          const isMore = this.props.IsMoreSlect; // 监控点列表是否允许多选
+          const isMore = this.props.IsMoreSelect; // 监控点列表是否允许多选
           return (
               <Layout>
                   <Sider width={350}
