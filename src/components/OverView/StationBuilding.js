@@ -14,17 +14,17 @@ import {
     Dropdown,
 } from 'antd';
 import numeral from 'numeral';
-// import {
-//     ChartCard,
-//     yuan,
-//     MiniArea,
-//     MiniBar,
-//     MiniProgress,
-//     Field,
-//     Bar,
-//     Pie,
-//     TimelineChart,
-// } from 'components/Charts';
+import {
+    ChartCard,
+    // yuan,
+    // MiniArea,
+    // MiniBar,
+    // MiniProgress,
+    // Field,
+    // Bar,
+    // Pie,
+    // TimelineChart,
+} from '../Charts';
 // import Trend from 'components/Trend';
 // import NumberInfo from 'components/NumberInfo';
 import { getTimeDistance } from '../../utils/utils';
@@ -56,19 +56,71 @@ export default class StationBuilding extends Component {
       };
 
       return (
-          <Fragment>
-              <Row gutter={24}>
+          <div style={{background: '#e8e8e8'}}>
+              <Row style={{padding: '20px 20px 20px 20px'}} gutter={24}>
                   <Col {...topColResponsiveProps}>
-                     总销售额
+                      <Card style={{background: '#fff'}}>
+                          <div >
+                              <div style={{borderBottom: '1px solid #E8E8E8', fontSize: '16px'}}>
+                          质控记录
+                              </div>
+                              <div style={{borderBottom: '1px solid #E8E8E8', marginTop: '10px'
+                              }}>
+                                  <p style={{ fontSize: '30px', color: '#6FC425', marginBottom: '15px' }}><Icon style={{ marginRight: '2px' }} type="smile-o" />上期质控已完成</p>
+                                  <p style={{paddingBottom: '5px'}}><span style={{marginRight: '10px'}}><Icon style={{ marginRight: '2px' }} type="user" />质控人：小王</span><span><Icon style={{ marginRight: '2px' }} type="calendar" />质控时间：2018-06-26</span></p>
+                                  <p><Icon style={{ marginRight: '2px' }} type="dashboard" />质控内容：零点检查、量程检查</p>
+                              </div>
+                              <div style={{color: '#4B8AA1', fontSize: '14px', paddingTop: '10px'}}>距离下次质控还有6天!</div>
+                          </div>
+                      </Card>
                   </Col>
                   <Col {...topColResponsiveProps}>
-                  访问量
+                      <Card style={{background: '#fff'}}>
+                          <div >
+                              <div style={{borderBottom: '1px solid #E8E8E8', fontSize: '16px'}}>
+                            例行任务
+                              </div>
+                              <div style={{borderBottom: '1px solid #E8E8E8', marginTop: '10px'
+                              }}>
+                                  <p style={{ fontSize: '30px', color: '#6FC425', marginBottom: '15px' }}><Icon style={{ marginRight: '2px' }} type="smile-o" />上期任务已完成</p>
+                                  <p style={{paddingBottom: '5px'}}><span style={{marginRight: '10px'}}><Icon style={{ marginRight: '2px' }} type="user" />执行人：小王</span><span><Icon style={{ marginRight: '2px' }} type="calendar" />完成时间：2018-06-26</span></p>
+                                  <p><Icon style={{ marginRight: '2px' }} type="dashboard" />发现问题：无</p>
+                              </div>
+                              <div style={{color: '#4B8AA1', fontSize: '14px', paddingTop: '10px'}}>距离下次例行任务还有6天!</div>
+                          </div>
+                      </Card>
                   </Col>
                   <Col {...topColResponsiveProps}>
-                     支付笔数
+                      <Card style={{background: '#fff'}}>
+                          <div >
+                              <div style={{borderBottom: '1px solid #E8E8E8', fontSize: '16px'}}>
+                            报警记录
+                              </div>
+                              <div style={{borderBottom: '1px solid #E8E8E8', marginTop: '10px'
+                              }}>
+                                  <p style={{ fontSize: '30px', color: '#6FC425', marginBottom: '15px' }}><Icon style={{ marginRight: '2px' }} type="smile-o" />上期任务已完成</p>
+                                  <p style={{paddingBottom: '5px'}}><span style={{marginRight: '10px'}}><Icon style={{ marginRight: '2px' }} type="user" />执行人：小王</span><span><Icon style={{ marginRight: '2px' }} type="calendar" />完成时间：2018-06-26</span></p>
+                                  <p><Icon style={{ marginRight: '2px' }} type="dashboard" />发现问题：无</p>
+                              </div>
+                              <div style={{color: '#4B8AA1', fontSize: '14px', paddingTop: '10px'}}>距离下次例行任务还有6天!</div>
+                          </div>
+                      </Card>
                   </Col>
                   <Col {...topColResponsiveProps}>
-                  运营活动效果
+                      <Card style={{background: '#fff'}}>
+                          <div >
+                              <div style={{borderBottom: '1px solid #E8E8E8', fontSize: '16px'}}>
+                              预警记录
+                              </div>
+                              <div style={{borderBottom: '1px solid #E8E8E8', marginTop: '10px'
+                              }}>
+                                  <p style={{ fontSize: '30px', color: '#6FC425', marginBottom: '15px' }}><Icon style={{ marginRight: '2px' }} type="smile-o" />上期任务已完成</p>
+                                  <p style={{paddingBottom: '5px'}}><span style={{marginRight: '10px'}}><Icon style={{ marginRight: '2px' }} type="user" />执行人：小王</span><span><Icon style={{ marginRight: '2px' }} type="calendar" />完成时间：2018-06-26</span></p>
+                                  <p><Icon style={{ marginRight: '2px' }} type="dashboard" />发现问题：无</p>
+                              </div>
+                              <div style={{color: '#4B8AA1', fontSize: '14px', paddingTop: '10px'}}>距离下次例行任务还有6天!</div>
+                          </div>
+                      </Card>
                   </Col>
               </Row>
 
@@ -134,7 +186,7 @@ export default class StationBuilding extends Component {
                   </Col>
               </Row>
 
-          </Fragment>
+          </div>
       );
   }
 }

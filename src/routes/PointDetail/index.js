@@ -7,7 +7,9 @@ import { getRoutes } from '../../utils/utils';
 import styles from './index.less';
 import AuthorizedRoute from '../../components/AuthorizedRoute';
 import { getPointEnterprise } from '../../mockdata/Base/commonbase';
+import Cookie from 'js-cookie';
 const { TabPane } = Tabs;
+
 @connect()
 class PointDetail extends Component {
     constructor(props) {
@@ -35,7 +37,7 @@ class PointDetail extends Component {
         const { match, routerData, location } = this.props;
         const routes = getRoutes(match.path, routerData);
         const defaultroute = routes[0].path;
-
+        Cookie.set('seldgimn', match.params.pointcode);
         const pointInfo = getPointEnterprise().find((item) => {
             return item.DGIMN === match.params.pointcode;
         });

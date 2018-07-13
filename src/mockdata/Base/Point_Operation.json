@@ -1,7 +1,7 @@
 ﻿[
     {
         "PointCode":"019a1c86-5f38-4846-8042-2a4809f64fe8",
-        "PointName":"锅炉小号烟囱",
+        "PointName":"锅炉小号烟囱1",
         "DGIMN":"bjldgn01",
         "Longitude":"117.109833",
         "Latitude":"40.133689",
@@ -12,7 +12,7 @@
     },    
     {
         "PointCode":"04d5cc42-93a0-4636-baf5-e2a05e6b74d7",
-        "PointName":"脱硫出口",
+        "PointName":"脱硫出口1",
         "DGIMN":"dtgjhh11102",
         "Longitude":"103.222515",
         "Latitude":"23.738153",
@@ -23,7 +23,7 @@
     },
     {
         "PointCode":"06c6b98f-2a47-473c-9e75-0b010e0d5692",
-        "PointName":"脱硫入口",
+        "PointName":"脱硫入口2",
         "DGIMN":"dtgrjx110",
         "Longitude":"130.965877",
         "Latitude":"45.300879",
@@ -34,7 +34,7 @@
     },
     {
         "PointCode":"08148e40-0de0-4a2d-9a83-c67288929b87",
-        "PointName":"脱硫入口",
+        "PointName":"脱硫入口3",
         "DGIMN":"dtgrjx103",
         "Longitude":"130.965716",
         "Latitude":"45.300992",

@@ -9,6 +9,8 @@ import ReactEcharts from 'echarts-for-react';
 import img from '../../../public/timg.jpg';
 import markerspoint from '../../mockdata/OverView/markersInfo.json';
 import AlarmTips from '../../components/OverView/AlarmTips';
+import AlarmButtom from '../../components/OverView/AlarmButtom';
+
 class MonitorTips extends Component {
     render() {
         let isAlarm = false;
@@ -40,7 +42,7 @@ class MonitorTips extends Component {
                             dataSource={markerspoint.wrydata}
                             pagination={false} />
                     </div>
-                    <div className={styles.titleborder}>
+                    <div style={{paddingTop: '5px'}}>
                         <h4>污染物24小时趋势图</h4>
                         <ReactEcharts
                             className={styles.echartdiv}
@@ -49,11 +51,9 @@ class MonitorTips extends Component {
                             notMerge={true}
                             lazyUpdate={true} />
                     </div>
-                    <div style={{margin: '8px 0 0 10px', paddingBottom: '5px', borderBottom: '1px solid #ddd'}}><span style={{cursor: 'pointer'}}>查看工作情况</span>
-                        <span onClick={this.props.stationclick} style={{ marginLeft: '90px', cursor: 'pointer' }}>查看更多>></span></div>
-                    {Isbutton ? <div>
-                        <Button style={{marginTop: '3px', marginLeft: '80px'}} onClick={this.props.NormalClick}>查看报警情况</Button>
-                    </div> : ''}
+                    <div style={{ margin: '8px 0 0 10px', paddingBottom: '5px' }}>
+                        <span onClick={this.props.stationclick} style={{ marginLeft: '225px', cursor: 'pointer' }}>查看更多>></span></div>
+                    {Isbutton ? <AlarmButtom /> : ''}
                 </div>)
         );
     }
