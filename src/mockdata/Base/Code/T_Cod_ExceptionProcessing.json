@@ -1,191 +1,222 @@
 [
     {
-        "AlarmType":"连续值报警",
-        "AlarmTime":"2018-06-01 09:25:00",
-        "ExceptRecoverTime":"2018-06-05 09:25:00",
-        "State":"未解除",
-        "AlarmMsg":"[北京绿都供暖有限责任公司-废气排口]于2018-06-01 09:25:00 pH值数据超标[13]次(2级13次)，首次超标时间2018-06-01 09:12:00，报警[2]级，超标值5.994[9-6为正常值]",
-        "AlarmContinuedTime":"13",
-        "PollutantName":"二氧化硫"
-    },
-    {
+        "AlarmCode":"3",
         "AlarmType":"连续值报警",
         "AlarmTime":"2018-06-14 15:56:00",
         "ExceptRecoverTime":"2018-06-16 15:56:00",
         "State":"未解除",
         "AlarmMsg":"[北京绿都供暖有限责任公司-废气排口]于2018-06-14 15:56:00 氮氧化物数据超标[7]次(2级7次)，首次超标时间2018-06-14 15:26:00，报警[2]级，超标值214.736[<200为正常值]",
         "AlarmContinuedTime":"7",
-        "PollutantName":"氮氧化物"
+        "PollutantCode":"zs02",
+        "PollutantName":"二氧化硫"
     },
     {
+        "AlarmCode":"3",
         "AlarmType":"连续值报警",
         "AlarmTime":"2018-06-26 18:15:00",
         "ExceptRecoverTime":"2018-06-29 18:15:00",
         "State":"未解除",
         "AlarmMsg":"[北京绿都供暖有限责任公司-废气排口]于2018-06-26 18:15:00 二氧化硫数据超标[5]次(2级5次)，首次超标时间2018-06-26 18:11:00，报警[2]级，超标值273.250[<200为正常值]",
         "AlarmContinuedTime":"5",
+        "PollutantCode":"zs02",
         "PollutantName":"二氧化硫"
     },
     {
+        "AlarmCode":"3",
         "AlarmType":"连续值报警",
         "AlarmTime":"2018-05-26 03:09:11",
         "ExceptRecoverTime":"2018-05-28 15:09:11",
         "State":"未解除",
         "AlarmMsg":"[北京绿都供暖有限责任公司-废气排口]于2018-05-26 03:09:11 烟尘数据超标[5]次(2级5次)，首次超标时间2018-05-26 01:59:55，报警[2]级，超标值38.790[<30为正常值]",
         "AlarmContinuedTime":"5",
+        "PollutantCode":"zs01",
         "PollutantName":"烟尘"
     },
     {
+        "AlarmCode":"3",
         "AlarmType":"连续值报警",
         "AlarmTime":"2018-06-01 14:03:00",
         "ExceptRecoverTime":"2018-06-05 14:03:00",
         "State":"未解除",
         "AlarmMsg":"[北京绿都供暖有限责任公司-废气排口]于2018-06-01 14:03:00 pH值数据超标[5]次(2级5次)，首次超标时间2018-06-01 13:50:00，报警[2]级，超标值5.951[9-6为正常值]",
         "AlarmContinuedTime":"5",
+        "PollutantCode":"zs02",
         "PollutantName":"二氧化硫"
     },
     {
+        "AlarmCode":"3",
         "AlarmType":"连续值报警",
         "AlarmTime":"2018-06-01 13:47:00",
         "ExceptRecoverTime":"2018-06-06 11:47:00",
         "State":"未解除",
         "AlarmMsg":"[北京绿都供暖有限责任公司-废气排口]于2018-06-01 13:47:00 pH值数据超标[7]次(2级7次)，首次超标时间2018-06-01 13:35:00，报警[2]级，超标值5.977[9-6为正常值]",
         "AlarmContinuedTime":"7",
-        "PollutantName":"pH值"
+        "PollutantCode":"zs02",
+        "PollutantName":"二氧化硫"
     },
     {
+        "AlarmCode":"3",
         "AlarmType":"连续值报警",
         "AlarmTime":"2018-06-10 11:41:00",
         "ExceptRecoverTime":"2018-06-12 11:41:00",
         "State":"未解除",
         "AlarmMsg":"[北京绿都供暖有限责任公司-废气排口]于2018-06-10 11:41:00 氮氧化物数据超标[5]次(2级5次)，首次超标时间2018-06-10 11:35:00，报警[2]级，超标值223.190[<200为正常值]",
         "AlarmContinuedTime":"5",
-        "PollutantName":"氮氧化物"
+        "PollutantCode":"zs01",
+        "PollutantName":"烟尘"
     },
     {
+        "AlarmCode":"3",
         "AlarmType":"连续值报警",
         "AlarmTime":"2018-06-06 04:35:00",
         "ExceptRecoverTime":"2018-06-07 04:35:00",
         "State":"未解除",
         "AlarmMsg":"[北京绿都供暖有限责任公司-废气排口]于2018-06-06 04:35:00 烟尘数据超标[11]次(2级11次)，首次超标时间2018-06-06 04:25:00，报警[2]级，超标值114.820[<30为正常值]",
         "AlarmContinuedTime":"11",
+        "PollutantCode":"zs01",
         "PollutantName":"烟尘"
     },
     {
+        "AlarmCode":"3",
         "AlarmType":"连续值报警",
         "AlarmTime":"2018-05-31 21:15:00",
         "ExceptRecoverTime":"2018-06-2 21:20:00",
         "State":"未解除",
         "AlarmMsg":"[北京绿都供暖有限责任公司-废气排口]于2018-05-31 21:15:00 pH值数据超标[5]次(2级5次)，首次超标时间2018-05-31 02:20:45，报警[2]级，超标值5.998[9.5-6为正常值]",
         "AlarmContinuedTime":"5",
-        "PollutantName":"氮氧化物"
+        "PollutantCode":"zs01",
+        "PollutantName":"烟尘"
     },
     {
-        "AlarmType":"连续值报警",
+        "AlarmCode":"2",
+        "AlarmType":"零值报警",
         "AlarmTime":"2018-06-14 15:14:00",
         "ExceptRecoverTime":"2018-06-16 17:14:00",
         "State":"未解除",
         "AlarmMsg":"[北京绿都供暖有限责任公司-废气排口]于2018-06-14 15:14:00 氮氧化物数据超标[5]次(2级5次)，首次超标时间2018-06-14 02:20:00，报警[2]级，超标值299.243[<200为正常值]",
         "AlarmContinuedTime":"5",
-        "PollutantName":"氮氧化物"
+        "PollutantCode":"zs01",
+        "PollutantName":"烟尘"
     },
     {
-        "AlarmType":"连续值报警",
+        "AlarmCode":"2",
+        "AlarmType":"零值报警",
         "AlarmTime":"2018-03-29 21:37:00",
         "ExceptRecoverTime":"2018-03-31 10:37:00",
         "State":"未解除",
         "AlarmMsg":"[北京绿都供暖有限责任公司-废气排口]于2018-03-29 21:37:00 二氧化硫数据超标[26]次(2级26次)，首次超标时间2018-03-29 21:12:00，报警[2]级，超标值2416.255[<35为正常值]",
         "AlarmContinuedTime":"26",
+        "PollutantCode":"zs02",
         "PollutantName":"二氧化硫"
     },
     {
-        "AlarmType":"连续值报警",
+        "AlarmCode":"2",
+        "AlarmType":"零值报警",
         "AlarmTime":"2018-06-26 17:39:00",
         "ExceptRecoverTime":"2018-06-28 17:39:00",
         "State":"未解除",
         "AlarmMsg":"[北京绿都供暖有限责任公司-废气排口]于2018-06-26 17:39:00 二氧化硫数据超标[4]次(2级4次)，首次超标时间2018-06-26 17:36:00，报警[2]级，超标值315.060[<200为正常值]",
         "AlarmContinuedTime":"4",
+        "PollutantCode":"zs02",
         "PollutantName":"二氧化硫"
     },
     {
-        "AlarmType":"连续值报警",
+        "AlarmCode":"2",
+        "AlarmType":"零值报警",
         "AlarmTime":"2018-03-29 16:32:00",
         "ExceptRecoverTime":"2018-03-30 16:32:00",
         "State":"未解除",
         "AlarmMsg":"[北京绿都供暖有限责任公司-废气排口]于2018-03-29 16:32:00 烟尘数据超标[60]次(2级60次)，首次超标时间2018-03-29 15:33:00，报警[2]级，超标值54.704[<5为正常值]",
         "AlarmContinuedTime":"60",
+        "PollutantCode":"zs01",
         "PollutantName":"烟尘"
     },
     {
-        "AlarmType":"连续值报警",
+        "AlarmCode":"2",
+        "AlarmType":"零值报警",
         "AlarmTime":"2018-03-28 20:13:00",
         "ExceptRecoverTime":"2018-03-30 12:13:00",
         "State":"未解除",
         "AlarmMsg":"[北京绿都供暖有限责任公司-废气排口]于2018-03-28 20:13:00 烟尘数据超标[8]次(2级8次)，首次超标时间2018-03-28 20:05:00，报警[2]级，超标值6.669[<5为正常值]",
         "AlarmContinuedTime":"8",
+        "PollutantCode":"zs01",
         "PollutantName":"烟尘"
     },
     {
+        "AlarmCode":"3",
         "AlarmType":"连续值报警",
         "AlarmTime":"2018-03-28 22:36:0",
         "ExceptRecoverTime":"2018-03-29 12:36:0",
         "State":"未解除",
         "AlarmMsg":"[北京绿都供暖有限责任公司-废气排口]于2018-03-28 22:36:00 烟尘数据超标[29]次(2级29次)，首次超标时间2018-03-28 22:08:00，报警[2]级，超标值12.380[<5为正常值]",
         "AlarmContinuedTime":"29",
+        "PollutantCode":"zs01",
         "PollutantName":"烟尘"
     },
     {
+        "AlarmCode":"3",
         "AlarmType":"连续值报警",
         "AlarmTime":"2018-03-29 21:38:00",
         "ExceptRecoverTime":"2018-03-31 21:38:00",
         "State":"未解除",
         "AlarmMsg":"[大唐国际红河发电公司-废气排口]于2018-03-29 21:38:00 烟尘数据超标[28]次(2级28次)，首次超标时间2018-03-29 21:09:00，报警[2]级，超标值5.259[<5为正常值]",
         "AlarmContinuedTime":"28",
+        "PollutantCode":"zs01",
         "PollutantName":"烟尘"
     },
     {
+        "AlarmCode":"3",
         "AlarmType":"连续值报警",
         "AlarmTime":"2018-03-29 02:45:00",
         "ExceptRecoverTime":"2018-03-31 12:45:00",
         "State":"未解除",
         "AlarmMsg":"[大唐国际红河发电公司-废气排口]于2018-03-29 02:45:00 烟尘数据超标[23]次(2级23次)，首次超标时间2018-03-29 02:23:00，报警[2]级，超标值14.282[<5为正常值]",
         "AlarmContinuedTime":"23",
+        "PollutantCode":"zs01",
         "PollutantName":"烟尘"
     },
     {
+        "AlarmCode":"3",
         "AlarmType":"连续值报警",
         "AlarmTime":"2018-03-30 03:14:00",
         "ExceptRecoverTime":"2018-03-31 03:14:00",
         "State":"未解除",
         "AlarmMsg":"[大唐国际红河发电公司-废气排口]于2018-03-30 03:14:00 二氧化硫数据超标[22]次(2级22次)，首次超标时间2018-03-30 02:53:00，报警[2]级，超标值49.428[<35为正常值]",
         "AlarmContinuedTime":"22",
+        "PollutantCode":"zs02",
         "PollutantName":"二氧化硫"
     },
     {
+        "AlarmCode":"3",
         "AlarmType":"连续值报警",
         "AlarmTime":"2018-03-29 23:58:00",
         "ExceptRecoverTime":"2018-03-31 12:58:00",
         "State":"未解除",
         "AlarmMsg":"[大唐国际红河发电公司-废气排口]于2018-03-29 23:58:00 二氧化硫数据超标[93]次(2级93次)，首次超标时间2018-03-29 22:26:00，报警[2]级，超标值152.647[<35为正常值]",
         "AlarmContinuedTime":"93",
+        "PollutantCode":"zs02",
         "PollutantName":"二氧化硫"
     },
     {
+        "AlarmCode":"3",
         "AlarmType":"连续值报警",
         "AlarmTime":"2018-03-29 13:01:00",
         "ExceptRecoverTime":"2018-03-31 13:01:00",
         "State":"未解除",
         "AlarmMsg":"[大唐国际红河发电公司-废气排口]于2018-03-29 13:01:00 二氧化硫数据超标[5]次(2级5次)，首次超标时间2018-03-29 12:55:00，报警[2]级，超标值49.008[<35为正常值]",
         "AlarmContinuedTime":"5",
+        "PollutantCode":"zs02",
         "PollutantName":"二氧化硫"
     },
     {
+        "AlarmCode":"3",
         "AlarmType":"连续值报警",
         "AlarmTime":"2018-06-27 02:03:00",
         "ExceptRecoverTime":"2018-06-30 02:03:00",
         "State":"未解除",
         "AlarmMsg":"[大唐国际红河发电公司-废气排口]于2018-06-27 02:03:00 二氧化硫数据超标[4]次(2级4次)，首次超标时间2018-06-27 02:00:00，报警[2]级，超标值251.710[<200为正常值]",
         "AlarmContinuedTime":"4",
+        "PollutantCode":"zs02",
         "PollutantName":"二氧化硫"
     }
 ]

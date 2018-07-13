@@ -1,0 +1,301 @@
+{
+  "EDataList":[
+    {
+      "InspectionTaskId": "28",
+      "DGIMN": "dtgjhh11102", 
+      "UserId": "",
+      "User_Name": "小王",
+      "BeginTime": "2018-7-3 11:21:00",
+      "EndTime": "2018-7-4 11:36:00",
+      "SignFlag": "",
+      "LimitTime": "1"
+    },
+ {
+     "InspectionTaskId": "27",
+     "DGIMN": "dtgjhh11102", 
+     "UserId": "",
+     "ExceptionType": "设备故障",
+     "User_Name": "小王",
+     "BeginTime": "2018-6-25 11:23:00",
+     "EndTime": "2018-6-26 11:24:00",
+     "SignFlag": "",
+     "LimitTime": ""
+   },
+ {
+     "InspectionTaskId": "26",
+     "DGIMN": "dtgjhh11102", 
+     "UserId": "",
+     "ExceptionType": "设备故障",
+     "User_Name": "小王",
+     "BeginTime": "2018-6-18 13:12:00",
+     "EndTime": "2018-6-18 14:50:00",
+     "SignFlag": "",
+     "LimitTime": "1"
+     
+   }, {
+     "InspectionTaskId": "25",
+     "DGIMN": "dtgjhh11102", 
+     "UserId": "",
+     "ExceptionType": "设备故障",
+     "User_Name": "小王",
+     "BeginTime": "2018-6-11 12:45:00",
+     "EndTime": "2018-6-11 15:16:00",
+     "SignFlag": "",
+     "LimitTime": "2"
+     
+   }, {
+     "InspectionTaskId": "24",
+     "DGIMN": "dtgjhh11102", 
+     "UserId": "",
+     "ExceptionType": "设备故障",
+     "User_Name": "小王",
+     "BeginTime": "2018-6-4 10:45:00",
+     "EndTime": "2018-6-4 15:13:00",
+     "SignFlag": "",
+     "LimitTime": ""
+     
+   }, {
+     "InspectionTaskId": "23",
+     "DGIMN": "dtgjhh11102", 
+     "UserId": "",
+     "ExceptionType": "设备故障",
+     "User_Name": "小王",
+     "BeginTime": "2018-5-27 13:05:00",
+     "EndTime": "2018-5-27 17:50:00",
+     "SignFlag": "",
+     "LimitTime": ""
+     
+   }, {
+     "InspectionTaskId": "22",
+     "DGIMN": "dtgjhh11102", 
+     "UserId": "",
+     "ExceptionType": "设备故障",
+     "User_Name": "小王",
+     "BeginTime": "2018-5-20 10:45:00",
+     "EndTime": "2018-5-20 17:15:00",
+     "SignFlag": "",
+     "LimitTime": ""
+     
+   }, {
+     "InspectionTaskId": "21",
+     "DGIMN": "dtgjhh11102", 
+     "UserId": "",
+     "ExceptionType": "设备故障",
+     "User_Name": "小王",
+     "BeginTime": "2018-5-13 11:05:00",
+     "EndTime": "2018-5-13 17:10:00",
+     "SignFlag": "",
+     "LimitTime": "3"
+     
+   }, {
+     "InspectionTaskId": "20",
+     "DGIMN": "dtgjhh11102", 
+     "UserId": "",
+     "ExceptionType": "设备故障",
+     "User_Name": "小王",
+     "BeginTime": "2018-5-6 11:14:00",
+     "EndTime": "2018-5-6 17:23:00",
+     "SignFlag": "",
+     "LimitTime": "2"
+     
+   }, {
+     "InspectionTaskId": "19",
+     "DGIMN": "dtgjhh11102", 
+     "UserId": "",
+     "ExceptionType": "设备故障",
+     "User_Name": "小王",
+     "BeginTime": "2018-4-26 13:45:00",
+     "EndTime": "2018-4-26 17:50:00",
+     "SignFlag": "",
+     "LimitTime": "1"
+     
+   }, {
+     "InspectionTaskId": "18",
+     "DGIMN": "dtgjhh11102", 
+     "UserId": "",
+     "ExceptionType": "设备故障",
+     "User_Name": "小王",
+     "BeginTime": "2018-5-3 15:45:00",
+     "EndTime": "2018-5-4 11:16:00",
+     "SignFlag": "",
+     "LimitTime": "2"
+     
+   }, {
+     "InspectionTaskId": "17",
+     "DGIMN": "dtgjhh11102", 
+     "UserId": "",
+     "ExceptionType": "设备故障",
+     "User_Name": "小王",
+     "BeginTime": "2018-4-28 11:45:00",
+     "EndTime": "2018-4-28 15:19:00",
+     "SignFlag": "",
+     "LimitTime": "1"
+     
+   }, {
+     "InspectionTaskId": "16",
+     "DGIMN": "dtgjhh11102", 
+     "UserId": "",
+     "ExceptionType": "设备故障",
+     "User_Name": "小王",
+     "BeginTime": "2018-4-21 9:45:00",
+     "EndTime": "2018-4-21 16:50:00",
+     "SignFlag": "",
+     "LimitTime": "1"
+     
+   }, {
+     "InspectionTaskId": "15",
+     "DGIMN": "dtgjhh11102", 
+     "UserId": "",
+     "ExceptionType": "设备故障",
+     "User_Name": "小王",
+     "BeginTime": "2018-4-15 10:15:00",
+     "EndTime": "2018-4-15 17:12:00",
+     "SignFlag": "",
+     "LimitTime": "2"
+     
+   }, 
+   {
+     "InspectionTaskId": "14",
+     "DGIMN": "bjldgn01", 
+     "UserId": "",
+     "ExceptionType": "设备故障",
+     "User_Name": "小王",
+     "BeginTime": "2018-7-3 9:45:00",
+     "EndTime": "2018-7-3 16:15:00",
+     "SignFlag": "",
+     "LimitTime": "2"
+     
+   }, {
+     "InspectionTaskId": "13",
+     "DGIMN": "bjldgn01", 
+     "UserId": "",
+     "ExceptionType": "设备故障",
+     "User_Name": "小王",
+     "BeginTime": "2018-6-26 11:01:00",
+     "EndTime": "2018-6-26 17:12:00",
+     "SignFlag": "",
+     "LimitTime": "2"
+     
+   }, {
+     "InspectionTaskId": "12",
+     "DGIMN": "bjldgn01", 
+     "UserId": "",
+     "ExceptionType": "设备故障",
+     "User_Name": "小王",
+     "BeginTime": "2018-6-19 9:45:00",
+     "EndTime": "2018-6-19 14:36:00",
+     "SignFlag": "",
+     "LimitTime": "2"
+     
+   }, {
+     "InspectionTaskId": "11",
+     "DGIMN": "bjldgn01", 
+     "UserId": "",
+     "ExceptionType": "设备故障",
+     "User_Name": "小王",
+     "BeginTime": "2018-6-12 10:23:00",
+     "EndTime": "2018-6-12 17:54:00",
+     "SignFlag": "",
+     "LimitTime": "2"
+     
+   }, {
+     "InspectionTaskId": "10",
+     "DGIMN": "bjldgn01", 
+     "UserId": "",
+     "ExceptionType": "设备故障",
+     "User_Name": "小王",
+     "BeginTime": "2018-6-5 10:45:00",
+     "EndTime": "2018-6-5 17:52:00",
+     "SignFlag": "",
+     "LimitTime": "2"
+     
+   }, {
+     "InspectionTaskId": "9",
+     "DGIMN": "bjldgn01", 
+     "UserId": "",
+     "ExceptionType": "设备故障",
+     "User_Name": "小王",
+     "BeginTime": "2018-5-28 11:45:00",
+     "EndTime": "2018-5-28 17:59:00",
+     "SignFlag": "",
+     "LimitTime": "1"
+     
+   }, {
+     "InspectionTaskId": "8",
+     "DGIMN": "bjldgn01", 
+     "UserId": "",
+     "ExceptionType": "设备故障",
+     "User_Name": "小王",
+     "BeginTime": "2018-5-21 10:45:00",
+     "EndTime": "2018-5-21 15:59:00",
+     "SignFlag": "",
+     "LimitTime": "2"
+     
+   }, {
+     "InspectionTaskId": "7",
+     "DGIMN": "bjldgn01", 
+     "UserId": "",
+     "ExceptionType": "设备故障",
+     "User_Name": "小王",
+     "BeginTime": "2018-5-14 10:45:00",
+     "EndTime": "2018-5-14 10:34:00",
+     "SignFlag": "",
+     "LimitTime": "1"
+     
+   }, {
+     "InspectionTaskId": "6",
+     "DGIMN": "bjldgn01", 
+     "UserId": "",
+     "ExceptionType": "设备故障",
+     "User_Name": "小王",
+     "BeginTime": "2018-5-7 10:00:00",
+     "EndTime": "2018-5-7 11:00:00",
+     "SignFlag": "",
+     "LimitTime": "2"
+     
+   }, {
+     "InspectionTaskId": "5",
+     "DGIMN": "bjldgn01", 
+     "UserId": "",
+     "ExceptionType": "设备故障",
+     "User_Name": "小王",
+     "BeginTime": "2018-4-27 10:00:00",
+     "EndTime": "2018-4-27 18:00:00",
+     "SignFlag": "",
+     "LimitTime": "1"
+     
+   }, {
+     "InspectionTaskId": "4",
+     "DGIMN": "bjldgn01", 
+     "UserId": "",
+     "ExceptionType": "设备故障",
+     "User_Name": "小王",
+     "BeginTime": "2018-4-20 10:00:00",
+     "EndTime": "2018-4-20 15:00:00",
+     "SignFlag": "",
+     "LimitTime": ""
+     
+   }, {
+     "InspectionTaskId": "3",
+     "DGIMN": "bjldgn01", 
+     "UserId": "",
+     "ExceptionType": "设备故障",
+     "User_Name": "小王",
+     "BeginTime": "2018-4-13 9:00:00",
+     "EndTime": "2018-4-13 16:00:00",
+     "SignFlag": "",
+     "LimitTime": ""
+     
+   },{
+     "InspectionTaskId": "1",
+     "DGIMN": "bjldgn01",   
+     "UserId": "",
+     "ExceptionType": "设备故障",
+     "User_Name": "小王",
+     "BeginTime": "2018-4-6 9:00:00",
+     "EndTime": "2018-4-6 17:00:00",
+     "SignFlag": "",
+     "LimitTime": "1"
+          
+   } 
+ ]} 

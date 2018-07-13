@@ -199,7 +199,7 @@ export default class EmergencyTodoList extends Component {
         };
 
         return (
-            <PointList handleChange={this.SearchEmergencyDataList} IsShowChk={'none'}>
+            <PointList handleChange={this.SearchEmergencyDataList}>
                 <PageHeaderLayout title="待办列表">
                     <Card bordered={false} >
                         <div>
