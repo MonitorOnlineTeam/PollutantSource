@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button} from 'antd';
+import { Button, Spin} from 'antd';
 import {routerRedux} from 'dva/router';
 import { connect } from 'dva';
 import OperationActionSelect from '../../components/OperationActionSelect/index';
@@ -39,6 +39,7 @@ export default class TodolistWorkbenchCard extends Component {
 
         this.state = {
             todoArray: getTodolist(),
+            loading: true
         };
         that = this;
     }
@@ -50,14 +51,23 @@ export default class TodolistWorkbenchCard extends Component {
     aclick = () => {
         that.props.dispatch(routerRedux.push('/monitor/operation/emergency/emergencytodolist'));
     };
+    componentDidMount() {
+        const _this = this;
+        setTimeout(function() {
+            _this.setState({
+                loading: false
+            });
+        }, 1000);
+    }
     render() {
-        debugger;
         const titleCnt1 = this.state.todoArray.length;
         const toduOperationActionSelect = [{'id': '1', 'text': '例行运维'}, {'id': '2', 'text': '应急运维'}, {'id': '3', 'text': '运维审核'}];
         return (
-            <WorkbenchCard title={<span>待办事项 | <a href="javascript:void(0)" onClick={this.aclick} target="_blank" style={{color: 'red', fontWeight: 'bold'}}>{titleCnt1}</a></span>}
-                dataSource={this.state.todoArray}
-                extra={<div> <OperationActionSelect mode="combobox" ref={(r) => { this.OperationActionSelect_ = r; }} width="100px" datasource={toduOperationActionSelect} /> <EnterpriseAutoComplete ref={(r) => { this.EnterpriseAutoComplete_ = r; }} width="200px" /> <Button shape="circle" icon="search" id="btn" onClick={this.search} /></div>} />
+            <Spin spinning={this.state.loading}>
+                <WorkbenchCard title={<span>待办事项 | <a href="javascript:void(0)" onClick={this.aclick} target="_blank" style={{color: 'red', fontWeight: 'bold'}}>{titleCnt1}</a></span>}
+                    dataSource={this.state.todoArray}
+                    extra={<div> <OperationActionSelect mode="combobox" ref={(r) => { this.OperationActionSelect_ = r; }} width="100px" datasource={toduOperationActionSelect} /> <EnterpriseAutoComplete ref={(r) => { this.EnterpriseAutoComplete_ = r; }} width="200px" /> <Button shape="circle" icon="search" id="btn" onClick={this.search} /></div>} />
+            </Spin>
         );
     }
 }

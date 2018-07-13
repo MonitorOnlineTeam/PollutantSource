@@ -11,6 +11,7 @@ export default class WorkbenchCard extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            loading: true,
         };
         that = this;
     }
@@ -108,6 +109,14 @@ export default class WorkbenchCard extends Component {
     aclick = () => {
         that.props.dispatch(routerRedux.push(`/monitor/emergency/emergencydetailinfo/28`));
     };
+    componentDidMount() {
+        const _this = this;
+        setTimeout(function() {
+            _this.setState({
+                loading: false
+            });
+        }, 1000);
+    }
     render() {
         const {title, extra} = this.props;
         return (
