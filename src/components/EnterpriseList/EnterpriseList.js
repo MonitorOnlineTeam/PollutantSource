@@ -53,7 +53,7 @@ export default class PointsList extends Component {
 
       render() {
           const isMore = this.props.IsMoreSelect; // 监控点列表是否允许多选
-          const defaultNode = this.state.AllEnterpriseslist.length > 0 ? this.state.AllEnterpriseslist[0].EntCode : '';
+          const defaultNode = this.state.enterpriseslist.length > 0 ? this.state.AllEnterpriseslist[0].EntCode : '';
           const selEntCodes = this.state.selEntCodes;
           if (this.state.selEntCodes.length === 0) {
               selEntCodes.push(defaultNode);
