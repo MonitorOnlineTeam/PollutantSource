@@ -42,7 +42,7 @@ class MonitorTips extends Component {
                             dataSource={markerspoint.wrydata}
                             pagination={false} />
                     </div>
-                    <div style={{paddingTop: '5px'}}>
+                    <div style={{paddingTop: '5px', paddingBottom: '10px'}}>
                         <h4>污染物24小时趋势图</h4>
                         <ReactEcharts
                             className={styles.echartdiv}
@@ -51,9 +51,9 @@ class MonitorTips extends Component {
                             notMerge={true}
                             lazyUpdate={true} />
                     </div>
-                    <div style={{ margin: '8px 0 0 10px', paddingBottom: '5px' }}>
-                        <span onClick={this.props.stationclick} style={{ marginLeft: '225px', cursor: 'pointer' }}>查看更多>></span></div>
-                    {Isbutton ? <AlarmButtom /> : ''}
+                    {/* <div style={{ margin: '8px 0 0 10px', paddingBottom: '5px' }}>
+                        <span onClick={this.props.stationclick} style={{ marginLeft: '225px', cursor: 'pointer' }}>查看更多>></span></div> */}
+                    {Isbutton ? <AlarmButtom NormalClick={this.props.NormalClick} /> : ''}
                 </div>)
         );
     }

@@ -17,7 +17,7 @@ class QualityControlTips extends Component {
             isAlarm
                 ? <AlarmTips selectpoint={this.props.selectpoint} AlarmClick={this.props.AlarmClick} />
                 : (<div>
-                    <div style={{paddingTop: '5px'}}>
+                    <div style={{paddingTop: '5px', paddingBottom: '10px'}}>
                         <div className={styles.content}>
                             <h4 className={styles.pointInfo}>近期质控情况（月）</h4>
                             <div style={{fontSize: '18px', color: '#6FC425'}}>零点偏差：-0.5</div>
@@ -29,8 +29,8 @@ class QualityControlTips extends Component {
                         </div>
                         <div className={styles.clearboth} />
                     </div>
-                    <div onClick={this.props.stationclick} style={{paddingLeft: '225px', marginTop: '8px', cursor: 'pointer', paddingBottom: '5px'}}>查看更多>></div>
-                    {Isbutton ? <AlarmButtom /> : ''}
+                    {/* <div onClick={this.props.stationclick} style={{paddingLeft: '225px', marginTop: '8px', cursor: 'pointer', paddingBottom: '5px'}}>查看更多>></div> */}
+                    {Isbutton ? <AlarmButtom NormalClick={this.props.NormalClick} /> : ''}
                 </div>)
         );
     }

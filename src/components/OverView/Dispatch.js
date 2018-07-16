@@ -36,10 +36,11 @@ class Dispatch extends Component {
                 </FormItem>
                 <FormItem
                     label="任务内容"
+
                     labelCol={{ span: 5 }}
                     wrapperCol={{ span: 12 }}
                 >
-                    <TextArea rows={3} className={styles.dispatchinput} />
+                    <TextArea defaultValue="温度状态参数过高" rows={3} className={styles.dispatchinput} />
                 </FormItem>
 
                 <FormItem

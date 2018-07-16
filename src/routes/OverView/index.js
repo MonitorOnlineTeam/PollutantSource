@@ -228,7 +228,7 @@ class OverViewMap extends PureComponent {
                     latitude: row.position.latitude
                 },
                 visible: true,
-                title: row.EntName + '-' + row.PointName,
+                title: row.Abbreviation + '-' + row.PointName,
                 region: row.RegionName,
                 industry: row.IndustryTypeName,
                 control: row.AttentionName,
@@ -272,7 +272,7 @@ class OverViewMap extends PureComponent {
                         latitude: itemdata.position.latitude
                     },
                     visible: true,
-                    title: itemdata.EntName + '-' + itemdata.PointName,
+                    title: itemdata.Abbreviation + '-' + itemdata.PointName,
                     region: itemdata.RegionName,
                     industry: itemdata.IndustryTypeName,
                     control: itemdata.AttentionName,
@@ -562,7 +562,7 @@ class OverViewMap extends PureComponent {
                                     style={{
                                         marginRight: '15px'
                                     }}
-                                    onClick={this.StationBuildingClick}> <Icon type="home" style={{ fontSize: 14, color: '#A8A6A5', marginLeft: '1px' }} />进入站房</Button>
+                                    onClick={this.stationClick}> <Icon type="home" style={{ fontSize: 14, color: '#A8A6A5', marginLeft: '1px' }} />进入站房</Button>
                                 <Button onClick={this.urgentClick}> <Icon type="medicine-box" style={{ fontSize: 14, color: '#A8A6A5', marginLeft: '1px' }} /> {this.state.urgent}</Button>
                             </div>
                             {
@@ -578,8 +578,8 @@ class OverViewMap extends PureComponent {
                     </InfoWindow>
 
                     <Modal
-                        title={`${this.state.selectpoint.EntName}-${this.state.selectpoint.PointName}`}
-                        width={1700}
+                        title={`${this.state.selectpoint.Abbreviation}-${this.state.selectpoint.PointName}`}
+                        width={1660}
                         visible={this.state.modalvisible}
                         footer={null}
                         onCancel={this.closeModal}
@@ -587,7 +587,7 @@ class OverViewMap extends PureComponent {
                         <StationBuilding />
                     </Modal>
                     <Modal
-                        title={`${this.state.selectpoint.EntName}-${this.state.selectpoint.PointName}`}
+                        title={`${this.state.selectpoint.Abbreviation}-${this.state.selectpoint.PointName}`}
                         width={400}
                         visible={this.state.dispatchvisible}
                         footer={null}
