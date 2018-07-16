@@ -47,46 +47,48 @@ export default class AnalyDischarge extends Component {
         const pointsList = this.state.pointslist;
         let selectRank = [];
         pointsList.map((item, key) => {
-            if (value.indexOf(item.EntCode) > -1) {
-                pList.push(item.PointName);
-                let dataItem = [];
-                for (var i = 0; i < 24; i++) {
+            if(pList.length<4){
+                if (value.indexOf(item.EntCode) > -1) {
+                    pList.push(item.PointName);
+                    let dataItem = [];
+                    for (var i = 0; i < 24; i++) {
+                        switch (code) {
+                            case 'SO2':
+                                dataItem.push(Math.floor(Math.random() * (so2Range[1] - so2Range[0] + 1) + so2Range[0]));
+                                break;
+                            case 'NOX':
+                                dataItem.push(Math.floor(Math.random() * (noxRange[1] - noxRange[0] + 1) + noxRange[0]));
+                                break;
+                            case 'PM':
+                                dataItem.push(Math.floor(Math.random() * (ycRange[1] - ycRange[0] + 1) + ycRange[0]));
+                                break;
+                            default:
+                                dataItem.push(Math.floor(Math.random() * (all[1] - all[0] + 1) + all[0]));
+                                break;
+                        }
+                    }
+                    dataInfo.push({
+                        name: item.PointName,
+                        type: 'bar',
+                        stack: '排口',
+                        data: dataItem,
+                        barCategoryGap: '50%'
+                    });
+    
                     switch (code) {
                         case 'SO2':
-                            dataItem.push(Math.floor(Math.random() * (so2Range[1] - so2Range[0] + 1) + so2Range[0]));
+                            selectRank.push(Math.floor(Math.random() * (so2Range[1] - so2Range[0] + 1) + so2Range[0]) * 24);
                             break;
                         case 'NOX':
-                            dataItem.push(Math.floor(Math.random() * (noxRange[1] - noxRange[0] + 1) + noxRange[0]));
+                            selectRank.push(Math.floor(Math.random() * (noxRange[1] - noxRange[0] + 1) + noxRange[0]) * 24);
                             break;
                         case 'PM':
-                            dataItem.push(Math.floor(Math.random() * (ycRange[1] - ycRange[0] + 1) + ycRange[0]));
+                            selectRank.push(Math.floor(Math.random() * (ycRange[1] - ycRange[0] + 1) + ycRange[0]) * 24);
                             break;
                         default:
-                            dataItem.push(Math.floor(Math.random() * (all[1] - all[0] + 1) + all[0]));
+                            selectRank.push(Math.floor(Math.random() * (all[1] - all[0] + 1) + all[0]) * 24);
                             break;
                     }
-                }
-                dataInfo.push({
-                    name: item.PointName,
-                    type: 'bar',
-                    stack: '排口',
-                    data: dataItem,
-                    barCategoryGap: '50%'
-                });
-
-                switch (code) {
-                    case 'SO2':
-                        selectRank.push(Math.floor(Math.random() * (so2Range[1] - so2Range[0] + 1) + so2Range[0]) * 24);
-                        break;
-                    case 'NOX':
-                        selectRank.push(Math.floor(Math.random() * (noxRange[1] - noxRange[0] + 1) + noxRange[0]) * 24);
-                        break;
-                    case 'PM':
-                        selectRank.push(Math.floor(Math.random() * (ycRange[1] - ycRange[0] + 1) + ycRange[0]) * 24);
-                        break;
-                    default:
-                        selectRank.push(Math.floor(Math.random() * (all[1] - all[0] + 1) + all[0]) * 24);
-                        break;
                 }
             }
         });

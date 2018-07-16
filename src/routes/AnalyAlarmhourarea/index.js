@@ -7,6 +7,7 @@ import ReactEcharts from 'echarts-for-react';
 import { Link } from 'dva/router';
 import moment from 'moment';
 import AlarmTimeRange from '../../mockdata/Base/Code/T_Cod_AlarmTimeRange.json';
+import EnterpriseList from '../../components/EnterpriseList/EnterpriseList';
 /*
 页面：报警时间范围分布情况
 描述：统计一段时间24个小时分布情况
@@ -19,17 +20,20 @@ export default class AnalyAlarmhourarea extends Component {
     };
     constructor(props) {
         super(props);
+        debugger;
         var dataList = [];
         var PointNames = [];
         AlarmTimeRange.map((item) => {
             var timedata = [];
-            var times = item.time.split(',');
-            times.map((item) => {
-                timedata.push(item);
+            item.Child.map((items) => {
+                var times = items.time.split(',');
+                times.map((item) => {
+                    timedata.push(item);
+                });
+                PointNames.push(items.PointName);
             });
-            PointNames.push(item.PointName);
             dataList.push({
-                name: item.PointName,
+                name: item.EntName,
                 type: 'bar',
                 stack: '总量',
                 label: {
@@ -45,26 +49,27 @@ export default class AnalyAlarmhourarea extends Component {
         this.state = {
             rangeDate: [moment('2018-06-23 00:00:00'), moment('2018-06-25 00:00:00')],
             AlarmTimeRangeList: AlarmTimeRange,
-            DGIMNS: [],
             DataLists: dataList,
             PointName: PointNames,
         };
     }
-    SearchEmergencyDataList = (value) => {
+    SearchDataList = (value) => {
         debugger;
         this.setState({
             AlarmTimeRangeList: [],
             DataLists: [],
-            DGIMNS: value,
+            Enterprise: value,
             PointName: [],
         });
         let AlarmTimeRangeLists = [];
         let Data = [];
         let Name = [];
         AlarmTimeRange.map((item, _key) => {
-            if (value.indexOf(item.DGIMN) > -1) {
-                AlarmTimeRangeLists.push(item);
-            }
+            item.Child.map((items) => {
+                if (value.indexOf(item.EntCode) > -1) {
+                    AlarmTimeRangeLists.push(items);
+                }
+            });
         });
         AlarmTimeRangeLists.map((item) => {
             var timedata = [];
@@ -122,7 +127,7 @@ export default class AnalyAlarmhourarea extends Component {
         return (
             <div style={{ width: '100%',
                 height: 'calc(100vh - 67px)' }}>
-                <PointList handleChange={this.SearchEmergencyDataList} IsMoreSlect="true">
+                <EnterpriseList IsShowChk={'none'} handleChange={this.SearchDataList}>
                     <div className={styles.pageHeader}>
                         <Breadcrumb className={styles.breadcrumb} >
                             <Breadcrumb.Item key="1">
@@ -152,7 +157,7 @@ export default class AnalyAlarmhourarea extends Component {
                             <p>报警在11时次数最多，报警在14时次数最少</p>
                         </Card>
                     </div>
-                </PointList>
+                </EnterpriseList>
             </div>
         );
     }
