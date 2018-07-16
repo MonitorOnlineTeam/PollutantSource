@@ -92,12 +92,12 @@ export default class AnalyAlarmReason extends Component {
       return (
           <Row style={{marginBottom: 30}}>
               <Col span="8">
-                  <span >企业：<EnterpriseAutoComplete width={200} placeholder="请选择企业" /></span>
+                  <span >企业：<EnterpriseAutoComplete width={160} placeholder="请选择企业" /></span>
               </Col>
-              <Col span="9">
-                  <span className="gutter-box">时间：<RangePicker_ style={{width: 250}} placeholder="请选择时间" format="YYYY-MM-DD" onChange={this._handleDateChange} dateValue={this.state.rangeDate} /></span>
+              <Col span="10">
+                  <span className="gutter-box">时间：<RangePicker_ style={{width: 200}} placeholder="请选择时间" format="YYYY-MM-DD" onChange={this._handleDateChange} dateValue={this.state.rangeDate} /></span>
               </Col>
-              <Col span="7">
+              <Col span="6">
                   <span ><Button style={{width: 90}} type="primary" onClick={this._Processes}>查询</Button><a style={{ marginLeft: 8 }} onClick={this.toggleForm}>
                             展开 <Icon type="down" /> </a></span>
               </Col>
@@ -116,12 +116,12 @@ export default class AnalyAlarmReason extends Component {
           <div>
               <Row style={{marginBottom: 30}}>
                   <Col span="8">
-                      <span >企业：<EnterpriseAutoComplete width={200} placeholder="请选择企业" /></span>
+                      <span >企业：<EnterpriseAutoComplete width={160} placeholder="请选择企业" /></span>
                   </Col>
-                  <Col span="9">
-                      <span className="gutter-box">时间：<RangePicker_ style={{width: 250}} placeholder="请选择时间" format="YYYY-MM-DD" onChange={this._handleDateChange} dateValue={this.state.rangeDate} /></span>
+                  <Col span="10">
+                      <span className="gutter-box">时间：<RangePicker_ style={{width: 200}} placeholder="请选择时间" format="YYYY-MM-DD" onChange={this._handleDateChange} dateValue={this.state.rangeDate} /></span>
                   </Col>
-                  <Col span="7">
+                  <Col span="6">
                       <span ><Button style={{width: 90}} type="primary" onClick={this._Processes}>查询</Button><a style={{ marginLeft: 8 }} onClick={this.toggleForm}>
                             收起 <Icon type="up" />
                       </a></span>
@@ -129,9 +129,9 @@ export default class AnalyAlarmReason extends Component {
               </Row>
               <Row>
                   <Col span="8">
-                      <span > 级别：<Attention placeholder="请选择控制级别" width={200} /></span>
+                      <span > 级别：<Attention placeholder="请选择控制级别" width={160} /></span>
                   </Col>
-                  <Col span="8">
+                  <Col span="10">
                       <span>
                           <span>行业：</span>
                           <TreeSelect
@@ -153,6 +153,12 @@ export default class AnalyAlarmReason extends Component {
   }
   render() {
       const option = {
+          grid: {
+              right: '4%',
+              top: '10%',
+              bottom: '10%',
+              containLabel: true
+          },
           tooltip: {
               trigger: 'item',
               formatter: '{a} <br/>{b} : {c} ({d}%)'
@@ -164,18 +170,16 @@ export default class AnalyAlarmReason extends Component {
           },
           series: [
               {
+                  label: {
+                      normal: {
+                          position: 'inner'
+                      }
+                  },
                   name: '访问来源',
                   type: 'pie',
-                  radius: '55%',
-                  center: ['50%', '45%'],
+                  radius: '80%',
+                  center: ['50%', '40%'],
                   data: this.state.sumbings,
-                  itemStyle: {
-                      emphasis: {
-                          shadowBlur: 10,
-                          shadowOffsetX: 0,
-                          shadowColor: 'rgba(0, 0, 0, 0.5)'
-                      }
-                  }
               }
           ]
       };
@@ -242,7 +246,7 @@ export default class AnalyAlarmReason extends Component {
                           <Col span={10} >
                               <Layout >
                                   <Content><ReactEcharts
-                                      style={{width: '100%', height: 'calc(100vh - 350px)'}}
+                                      style={{height: 'calc(100vh - 0px)'}}
                                       option={option}
                                       notMerge={true}
                                       lazyUpdate={true} /></Content>
@@ -255,7 +259,7 @@ export default class AnalyAlarmReason extends Component {
                                           style={{marginTop: 10}}
                                           dataSource={dataSource}
                                           columns={columns}
-                                          scroll={{ x: 550, y: 'calc(100vh - 660px)' }}
+                                          scroll={{ x: 550, y: 350 }}
                                           onRow={(record, index) => {
                                               return {
                                                   onClick: (a, b, c) => {
