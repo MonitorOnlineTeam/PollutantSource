@@ -120,7 +120,7 @@ class NavigationTree extends Component {
                         width: 327,
                         margin: '0px 2px 10px 10px'
                     }} />
-                <Table size="small" columns={treecol} dataSource={this.props.markersInfo} pagination={false}
+                <Table className={styles.reTable} size="small" columns={treecol} dataSource={this.props.markersInfo} pagination={false}
                     scroll={{ y: 'calc(100vh - 240px)' }}
                     style={{fontSize: '12px'}}
                     onRow={record => ({
