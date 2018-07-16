@@ -278,7 +278,7 @@ export default class EmergencyDetailInfo extends Component {
                         onCancel={() => {
                             this.setState({
                                 showaudio: false
-                            });
+                            }); 
                         }}>
                         <div>
                             <Form>
