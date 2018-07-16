@@ -176,7 +176,7 @@ export default class AnalyAlarmhour extends Component {
             ],
         };
         return (
-            <PointList handleChange={this.SearchEmergencyDataList} IsMoreSlect="true">
+            <PointList handleChange={this.SearchEmergencyDataList} IsMoreSelect="true">
                 <div className={styles.pageHeader}>
                     <Breadcrumb className={styles.breadcrumb} >
                         <Breadcrumb.Item key="1">
