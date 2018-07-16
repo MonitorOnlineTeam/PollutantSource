@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import styles from './EnterpriseList.less';
-import { List, Input, Layout,Icon } from 'antd';
+import { List, Input, Layout, Icon } from 'antd';
 import { getEnterprise } from '../../mockdata/Base/commonbase';
-
 const Search = Input.Search;
 const { Content, Sider } = Layout;
 
@@ -26,9 +25,9 @@ export default class PointsList extends Component {
       }
       // 根据关键字（企业）搜索监测点列表
       SearchList = (value) => {
-        this.setState({
-            selEntCodes: []
-        });
+          this.setState({
+              selEntCodes: []
+          });
           let markerInfo = [];
           this.state.AllEnterpriseslist.map((item, key) => {
               let isexist = false;
@@ -38,11 +37,30 @@ export default class PointsList extends Component {
 
               if (isexist) { markerInfo.push(item); }
           });
+          debugger;
+          if (markerInfo.length > 0) {
+              this.setState({
+                  selEntCodes: [markerInfo[0].EntCode]
+              });
+
+              this.props.handleChange([markerInfo[0].EntCode]);
+          } else {
+              this.props.handleChange([]);
+          }
+
           this.setState({ enterpriseslist: markerInfo });
       };
 
       render() {
-          const isMore = this.props.IsMoreSlect; // 监控点列表是否允许多选
+          const isMore = this.props.IsMoreSelect; // 监控点列表是否允许多选
+          const defaultNode = this.state.enterpriseslist.length > 0 ? this.state.AllEnterpriseslist[0].EntCode : '';
+          const selEntCodes = this.state.selEntCodes;
+          if (this.state.selEntCodes.length === 0) {
+              selEntCodes.push(defaultNode);
+              this.setState({ selEntCodes: selEntCodes });
+              this.props.handleChange([defaultNode]);
+          }
+
           return (
               <Layout>
                   <Sider width={350}
@@ -69,31 +87,31 @@ export default class PointsList extends Component {
                                           backgroundImage: 'url(/dui1.png)',
                                           backgroundRepeat: 'no-repeat'
                                       } : {}}
-                                      onClick={
+                                          onClick={
                                           () => {
                                               let entcodes = this.state.selEntCodes;
                                               if (isMore === 'true') {
                                                   if (entcodes.indexOf(item.EntCode) === -1) {
-                                                    entcodes.push(item.EntCode);
+                                                      entcodes.push(item.EntCode);
                                                   } else {
-                                                    entcodes.splice(entcodes.indexOf(item.EntCode), 1);
+                                                      entcodes.splice(entcodes.indexOf(item.EntCode), 1);
                                                   }
                                                   this.setState({
-                                                    selEntCodes: entcodes
+                                                      selEntCodes: entcodes
                                                   });
                                                   this.props.handleChange(entcodes);
                                               } else {
-                                                entcodes = [];
-                                                entcodes.push(item.EntCode);
+                                                  entcodes = [];
+                                                  entcodes.push(item.EntCode);
                                                   this.setState({
-                                                    selEntCodes: entcodes
+                                                      selEntCodes: entcodes
                                                   });
                                                   this.props.handleChange([item.EntCode]);
                                               }
                                           }
                                       } >
                                           <div className={styles.title}>
-                                          <Icon type="environment-o" style={{ fontSize: 21, color: this.state.selEntCodes.indexOf(item.EntCode) > -1 ? 'rgb(118,178,240)' : '' }} />
+                                              <Icon type="environment-o" style={{ fontSize: 21, color: this.state.selEntCodes.indexOf(item.EntCode) > -1 ? 'rgb(118,178,240)' : '' }} />
                                               <span className={styles.titleSpan}>{item.EntName}</span>
                                           </div>
                                       </div>

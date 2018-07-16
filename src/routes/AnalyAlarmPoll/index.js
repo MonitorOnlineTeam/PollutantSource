@@ -8,6 +8,7 @@ import Attention from '../../components/AnalyAlarmReason/AttentionDegree';
 import EnterpriseAutoComplete from '../../components/EnterpriseAutoComplete/index';
 import moment from 'moment';
 import AlarmFactor from '../../mockdata/Base/Code/T_Cod_AlarmFactor';
+import IndustryType from '../../mockdata/Base/Code/T_Cod_IndustryType';
 /*
 页面：报警因子统计
 描述：分别统计各个设备污染因子报警分布情况
@@ -18,65 +19,239 @@ modify by
 export default class AnalyAlarmPoll extends Component {
     constructor(props) {
         super(props);
+        debugger;
+        var a01 = [];
+        var a02 = [];
+        var a03 = [];
+        var b02 = [];
+        var s01 = [];
+        var s02 = [];
+        var s03 = [];
+        var s05 = [];
+        var s08 = [];
+        var zs01 = [];
+        var zs02 = [];
+        var zs03 = [];
+        AlarmFactor.map((item) => {
+            a01.push(item.a01);
+            a02.push(item.a02);
+            a03.push(item.a03);
+            b02.push(item.b02);
+            s01.push(item.s01);
+            s02.push(item.s02);
+            s03.push(item.s03);
+            s05.push(item.s05);
+            s08.push(item.s08);
+            zs01.push(item.zs01);
+            zs02.push(item.zs02);
+            zs03.push(item.zs03);
+        });
+        var sum = [];
+        var sumbing = [];
+        var cola01 = a01.reduce(function(first, second) {
+            return Number.parseInt(first) + Number.parseInt(second);
+        }, 0);
+        var cola02 = a02.reduce(function(first, second) {
+            return Number.parseInt(first) + Number.parseInt(second);
+        }, 0);
+        var cola03 = a03.reduce(function(first, second) {
+            return Number.parseInt(first) + Number.parseInt(second);
+        }, 0);
+        var colb02 = b02.reduce(function(first, second) {
+            return Number.parseInt(first) + Number.parseInt(second);
+        }, 0);
+        var cols01 = s01.reduce(function(first, second) {
+            return Number.parseInt(first) + Number.parseInt(second);
+        }, 0);
+        var cols02 = s02.reduce(function(first, second) {
+            return Number.parseInt(first) + Number.parseInt(second);
+        }, 0);
+        var cols03 = s03.reduce(function(first, second) {
+            return Number.parseInt(first) + Number.parseInt(second);
+        }, 0);
+        var cols05 = s05.reduce(function(first, second) {
+            return Number.parseInt(first) + Number.parseInt(second);
+        }, 0);
+        var cols08 = s08.reduce(function(first, second) {
+            return Number.parseInt(first) + Number.parseInt(second);
+        }, 0);
+        var colzs01 = zs01.reduce(function(first, second) {
+            return Number.parseInt(first) + Number.parseInt(second);
+        }, 0);
+        var colzs02 = zs02.reduce(function(first, second) {
+            return Number.parseInt(first) + Number.parseInt(second);
+        }, 0);
+        var colzs03 = zs03.reduce(function(first, second) {
+            return Number.parseInt(first) + Number.parseInt(second);
+        }, 0);
         this.state = {
             rangeDate: [moment('2018-06-23 00:00:00'), moment('2018-06-25 00:00:00')],
             expandForm: true,
+        };
+        sum.push(cola01);
+        sum.push(cola02);
+        sum.push(cola03);
+        sum.push(colb02);
+        sum.push(cols01);
+        sum.push(cols02);
+        sum.push(cols03);
+        sum.push(cols05);
+        sum.push(cols08);
+        sum.push(colzs01);
+        sum.push(colzs02);
+        sum.push(colzs03);
+        sumbing.push({
+            value: cola01,
+            name: '实测烟尘'
+        });
+        sumbing.push({
+            value: cola02,
+            name: '实测二氧化硫'
+        });
+        sumbing.push({
+            value: cola03,
+            name: '实测氮氧化物'
+        });
+        sumbing.push({
+            value: colb02,
+            name: '流量'
+        });
+        sumbing.push({
+            value: cols01,
+            name: '氧含量'
+        });
+        sumbing.push({
+            value: cols02,
+            name: '流速'
+        });
+        sumbing.push({
+            value: cols03,
+            name: '烟气温度'
+        });
+        sumbing.push({
+            value: cols05,
+            name: '烟气湿度'
+        });
+        sumbing.push({
+            value: cols08,
+            name: '烟气静压'
+        });
+        sumbing.push({
+            value: colzs01,
+            name: '烟尘'
+        });
+        sumbing.push({
+            value: colzs02,
+            name: '二氧化硫'
+        });
+        sumbing.push({
+            value: colzs03,
+            name: '氮氧化物'
+        });
+        let i = sum.length;
+        let j = sum.length;
+        let len = sum.length;
+        debugger;
+        for (i = 0; i < len; i++) {
+            for (j = i; j < len; j++) {
+                if (sum[i] > sum[j]) {
+                    [sum[i], sum[j]] = [sum[j], sum[i]];
+                }
+            }
+        }
+        var PointName = [];
+        sum.map((item) => {
+            if (item === cola01) {
+                PointName.push('实测烟尘');
+            }
+            if (item === cola02) {
+                PointName.push('实测二氧化硫');
+            }
+            if (item === cola03) {
+                PointName.push('实测氮氧化物');
+            }
+            if (item === colb02) {
+                PointName.push('流量');
+            }
+            if (item === cols01) {
+                PointName.push('氧含量');
+            }
+            if (item === cols02) {
+                PointName.push('流速');
+            }
+            if (item === cols03) {
+                PointName.push('烟气温度');
+            }
+            if (item === cols05) {
+                PointName.push('烟气湿度');
+            }
+            if (item === cols08) {
+                PointName.push('烟气静压');
+            }
+            if (item === colzs01) {
+                PointName.push('烟尘');
+            }
+            if (item === colzs02) {
+                PointName.push('二氧化硫');
+            }
+            if (item === colzs03) {
+                PointName.push('氮氧化物');
+            }
+        });
+        // 递归获取行业下拉框
+        var industryList = [];
+        IndustryType.map((item) => {
+            if (item.ParentNode === 'root') {
+                industryList.push({
+                    label: item.IndustryTypeName,
+                    value: item.IndustryTypeName,
+                    key: item.IndustryTypeName,
+                    children: getSecond(item.IndustryTypeCode)
+                });
+            }
+        });
+        function getSecond(Code) {
+            var children = [];
+            IndustryType.map((item) => {
+                if (item.ParentNode === Code) {
+                    children.push({
+                        label: item.IndustryTypeName,
+                        value: item.IndustryTypeName,
+                        key: item.IndustryTypeName,
+                        children: getSecond(item.IndustryTypeCode)
+                    }
+                    );
+                }
+            });
+            return children;
+        }
+        this.state = {
+            rangeDate: [moment('2018-06-23 00:00:00'), moment('2018-06-25 00:00:00')],
+            expandForm: true,
+            pollutantSum: sum,
+            sumbings: sumbing,
+            IndustryTypes: industryList,
+            histogram: PointName,
         };
     }
     renderForm() {
         return this.state.expandForm ? this.renderSimpleForm() : this.renderAllForm();
     }
+    onChange = (value) => {
+        console.log(value);
+        this.setState({ value });
+    }
     renderSimpleForm() {
-        const treeData = [{
-            label: '农、林、牧、渔业',
-            value: '农、林、牧、渔业',
-            key: '农、林、牧、渔业',
-            children: [{
-                label: '农业',
-                value: '农业',
-                key: '农业',
-            }, {
-                label: '制造业',
-                value: '制造业',
-                key: '制造业',
-            }],
-        }, {
-            label: '交通运输、仓储和邮政业',
-            value: '交通运输、仓储和邮政业',
-            key: '交通运输、仓储和邮政业',
-            children: [{
-                label: '铁路运输业',
-                value: '铁路运输业',
-                key: '铁路运输业',
-            }, {
-                label: '客运火车站',
-                value: '客运火车站',
-                key: '客运火车站',
-            }],
-        }];
         return (
 
             <Row style={{marginBottom: 30}}>
                 <Col span="8">
                     <span >企业：<EnterpriseAutoComplete width={200} placeholder="请选择企业" /></span>
                 </Col>
-                <Col span="8">
-                    <span>
-                        <span>行业：</span>
-                        <TreeSelect
-                            showSearch={true}
-                            style={{ width: 200 }}
-                            value={this.state.value}
-                            dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
-                            placeholder="请选择行业"
-                            allowClear={true}
-                            treeDefaultExpandAll={true}
-                            onChange={this.onChange}
-                            treeData={treeData}
-                        />
-                    </span>
+                <Col span="9">
+                    <span className="gutter-box">时间：<RangePicker_ style={{width: 250}} placeholder="请选择时间" format="YYYY-MM-DD" onChange={this._handleDateChange} dateValue={this.state.rangeDate} /></span>
                 </Col>
-                <Col span="8">
+                <Col span="7">
                     <span ><Button style={{width: 90}} type="primary" onClick={this._Processes}>查询</Button><a style={{ marginLeft: 8 }} onClick={this.toggleForm}>
                               展开 <Icon type="down" /> </a></span>
                 </Col>
@@ -90,38 +265,26 @@ export default class AnalyAlarmPoll extends Component {
         });
     };
     renderAllForm() {
-        const treeData = [{
-            label: '农、林、牧、渔业',
-            value: '农、林、牧、渔业',
-            key: '农、林、牧、渔业',
-            children: [{
-                label: '农业',
-                value: '农业',
-                key: '农业',
-            }, {
-                label: '制造业',
-                value: '制造业',
-                key: '制造业',
-            }],
-        }, {
-            label: '交通运输、仓储和邮政业',
-            value: '交通运输、仓储和邮政业',
-            key: '交通运输、仓储和邮政业',
-            children: [{
-                label: '铁路运输业',
-                value: '铁路运输业',
-                key: '铁路运输业',
-            }, {
-                label: '客运火车站',
-                value: '客运火车站',
-                key: '客运火车站',
-            }],
-        }];
+        const treeData = this.state.IndustryTypes;
         return (
             <div>
                 <Row style={{marginBottom: 30}}>
                     <Col span="8">
                         <span >企业：<EnterpriseAutoComplete width={200} placeholder="请选择企业" /></span>
+                    </Col>
+                    <Col span="9">
+                        <span className="gutter-box">时间：<RangePicker_ style={{width: 250}} placeholder="请选择时间" format="YYYY-MM-DD" onChange={this._handleDateChange} dateValue={this.state.rangeDate} /></span>
+                    </Col>
+
+                    <Col span="7">
+                        <span ><Button style={{width: 90}} type="primary" onClick={this._Processes}>查询</Button><a style={{ marginLeft: 8 }} onClick={this.toggleForm}>
+                              收起 <Icon type="up" />
+                        </a></span>
+                    </Col>
+                </Row>
+                <Row style={{marginBottom: 30}}>
+                    <Col span="8">
+                        <span > 级别：<Attention placeholder="请选择控制级别" width={200} /></span>
                     </Col>
                     <Col span="8">
                         <span>
@@ -138,19 +301,6 @@ export default class AnalyAlarmPoll extends Component {
                                 treeData={treeData}
                             />
                         </span>
-                    </Col>
-                    <Col span="8">
-                        <span ><Button style={{width: 90}} type="primary" onClick={this._Processes}>查询</Button><a style={{ marginLeft: 8 }} onClick={this.toggleForm}>
-                              收起 <Icon type="up" />
-                        </a></span>
-                    </Col>
-                </Row>
-                <Row style={{marginBottom: 30}}>
-                    <Col span="8">
-                        <span > 级别：<Attention placeholder="请选择控制级别" width={200} /></span>
-                    </Col>
-                    <Col span="8">
-                        <span className="gutter-box">时间：<RangePicker_ style={{width: 250}} placeholder="请选择时间" format="YYYY-MM-DD" onChange={this._handleDateChange} dateValue={this.state.rangeDate} /></span>
                     </Col>
                 </Row>
             </div>
@@ -334,6 +484,16 @@ export default class AnalyAlarmPoll extends Component {
 
         });
         let Circleoption = {
+            grid: { // 控制图的大小，调整下面这些值就可以，
+                x: 80,
+                // x2: 50,
+                //  y2: 50, // y2可以控制 X轴跟Zoom控件之间的间隔，避免以为倾斜后造成 label重叠到zoom上
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                top: '10%',
+                containLabel: true
+            },
             tooltip: {
                 trigger: 'item',
                 formatter: '{a} <br/>{b} : {c} ({d}%)'
@@ -344,34 +504,36 @@ export default class AnalyAlarmPoll extends Component {
                     type: 'pie',
                     radius: '90%',
                     center: ['45%', '50%'],
-                    data: [
-                        {value: 335, name: '设备报警'},
-                        {value: 310, name: '状态报警'},
-                        {value: 234, name: '故障报警'},
-                    ],
+                    data: this.state.sumbings,
                 }
             ]
         };
         let histogramoption = {
             grid: { // 控制图的大小，调整下面这些值就可以，
-                x: 60,
+                x: 80,
                 // x2: 50,
                 //  y2: 50, // y2可以控制 X轴跟Zoom控件之间的间隔，避免以为倾斜后造成 label重叠到zoom上
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                top: '10%',
+                containLabel: true
             },
             xAxis: {
-                type: 'value'
+                type: 'value',
             },
             yAxis: {
                 type: 'category',
-                data: ['设备报警', '状态报警', '故障报警'],
+                data: this.state.histogram,
                 axisLabel: {
                     interval: 0,
                     rotate: -30
-                }
+                },
             },
             series: [{
-                data: [120, 200, 250],
-                type: 'bar'
+                data: this.state.pollutantSum,
+                type: 'bar',
+                barWidth: 15,
             }],
         };
 
@@ -383,14 +545,14 @@ export default class AnalyAlarmPoll extends Component {
                             <Card style={{width: '100%', height: 'calc(100vh - 180px)'}}>
                                 <Card>
                                     <ReactEcharts
-                                        style={{marginLeft: 30}}
+                                        style={{height: 400}}
                                         option={Circleoption}
                                         notMerge={true}
                                         lazyUpdate={true} />
                                 </Card>
-                                <Card title="排名">
+                                <Card title="因子排名">
                                     <ReactEcharts
-                                        style={{marginTop: 30, marginLeft: 30}}
+                                        style={{height: 300}}
                                         option={histogramoption}
                                         notMerge={true}
                                         lazyUpdate={true} />
@@ -424,16 +586,16 @@ export default class AnalyAlarmPoll extends Component {
                                     />
                                     <Card style={{marginTop: 20}} title={'总结'}>
                                         <p>
-                                            设备报警122次；状态报警119次；故障报警143次；总共384次。
+                                            实测烟尘报警84次；实测二氧化硫报警154次；实测氮氧化物报警173次；流量报警319次；氧含量报警65次；流速报警111次；延期温度报警50次；烟气湿度报警122次；烟气静压报警158次；烟尘报警329次，二氧化硫报警278次；氮氧化物报警157次。
                                         </p>
                                         <p>
-                                            设备报警最多的是废气排口3,最少的是废气排口1
+                                            实测烟尘最大为脱硫出口1排口；最小为锅炉小号烟囱1排口、脱硫入口1排口、脱硫入口2排口
                                         </p>
                                         <p>
-                                            状态报警最多的是废气排口3,最少的是废气排口2
+                                            实测二氧化硫最大为脱硫出口1排口；最小为锅炉小号烟囱1排口、脱硫入口1排口、脱硫入口2排口
                                         </p>
                                         <p>
-                                            故障报警1最多的是废气排口3,最少的是废气排口1
+                                            实测氮氧化物最大为锅炉小号烟囱1排口、脱硫入口1排口、脱硫入口2排口；最小为脱硫出口1排口
                                         </p>
                                     </Card>
                                 </Col>
