@@ -4,6 +4,7 @@ import styles from './WorkbenchCard.less';
 import moment from 'moment';
 import {routerRedux} from 'dva/router';
 import { connect } from 'dva';
+import Cookie from 'js-cookie';
 
 let that;
 @connect()
@@ -11,6 +12,7 @@ export default class WorkbenchCard extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            loading: true,
         };
         that = this;
     }
@@ -61,7 +63,7 @@ export default class WorkbenchCard extends Component {
                         {item.EntName} </span>企业<span> {item.PointName} </span>排口{item.date ? item.date.replace((new Date()).getFullYear() + '-', '') : ''}{earlytext1}</span></a></span>;
                     break;
                 default:
-                    title = <span><a href="javascript:void(0)" onClick={this.aclick}>{item.operationaction === 1 ? '例行运维' : item.operationaction === 2 ? '应急运维' : '运维审核'}-<span>
+                    title = <span><a href="javascript:void(0)" id={item.operationaction} onClick={this.aclick}>{item.operationaction === 1 ? '例行运维' : item.operationaction === 2 ? '应急运维' : '运维审核'}-<span>
                         {item.EntName} </span>企业<span> {item.PointName} </span>排口，{item.date.replace((new Date()).getFullYear() + '-', '')}{item.operationaction === 1 ? '待巡检' : item.operationaction === 2 ? '待应急运维' : '待审核'}</a></span>;
                     break;
             }
@@ -105,9 +107,22 @@ export default class WorkbenchCard extends Component {
             );
         });
     }
-    aclick = () => {
-        that.props.dispatch(routerRedux.push(`/monitor/emergency/emergencydetailinfo/28`));
+    aclick=(e) => {
+        const user = JSON.parse(Cookie.get('token'));
+        if (user.User_Account === 'lisonggui') {
+            that.props.dispatch(routerRedux.push(`/monitor/emergency/emergencyauditdetailinfo/28`));
+        } else {
+            that.props.dispatch(routerRedux.push(`/monitor/emergency/emergencydetailinfo/28`));
+        }
     };
+    componentDidMount() {
+        const _this = this;
+        setTimeout(function() {
+            _this.setState({
+                loading: false
+            });
+        }, 1000);
+    }
     render() {
         const {title, extra} = this.props;
         return (

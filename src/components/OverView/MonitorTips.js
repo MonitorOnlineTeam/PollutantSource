@@ -46,7 +46,7 @@ class MonitorTips extends Component {
                         <h4>污染物24小时趋势图</h4>
                         <ReactEcharts
                             className={styles.echartdiv}
-                            style={{width: '95%', height: '100px'}}
+                            style={{width: '95%', height: '110px'}}
                             option={markerspoint.monitorTrend}
                             notMerge={true}
                             lazyUpdate={true} />
