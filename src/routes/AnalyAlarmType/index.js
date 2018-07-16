@@ -118,13 +118,13 @@ export default class AnalyAlarmType extends Component {
     renderSimpleForm() {
         return (
             <Row style={{marginBottom: 30}}>
-                <Col span="8">
+                <Col span="9">
                     <span >企业：<EnterpriseAutoComplete width={200} placeholder="请选择企业" /></span>
                 </Col>
-                <Col span="9">
-                    <span className="gutter-box">时间：<RangePicker_ style={{width: 250}} placeholder="请选择时间" format="YYYY-MM-DD" onChange={this._handleDateChange} dateValue={this.state.rangeDate} /></span>
+                <Col span="10">
+                    <span className="gutter-box">时间：<RangePicker_ style={{width: 200}} placeholder="请选择时间" format="YYYY-MM-DD" onChange={this._handleDateChange} dateValue={this.state.rangeDate} /></span>
                 </Col>
-                <Col span="7">
+                <Col span="5">
                     <span ><Button style={{width: 90}} type="primary" onClick={this._Processes}>查询</Button><a style={{ marginLeft: 8 }} onClick={this.toggleForm}>
                               展开 <Icon type="down" /> </a></span>
                 </Col>
@@ -144,24 +144,24 @@ export default class AnalyAlarmType extends Component {
         return (
             <div>
                 <Row style={{marginBottom: 30}}>
-                    <Col span="8">
+                    <Col span="9">
                         <span >企业：<EnterpriseAutoComplete width={200} placeholder="请选择企业" /></span>
                     </Col>
-                    <Col span="9">
-                        <span className="gutter-box">时间：<RangePicker_ style={{width: 250}} placeholder="请选择时间" format="YYYY-MM-DD" onChange={this._handleDateChange} dateValue={this.state.rangeDate} /></span>
+                    <Col span="10">
+                        <span className="gutter-box">时间：<RangePicker_ style={{width: 200}} placeholder="请选择时间" format="YYYY-MM-DD" onChange={this._handleDateChange} dateValue={this.state.rangeDate} /></span>
                     </Col>
 
-                    <Col span="7">
+                    <Col span="5">
                         <span ><Button style={{width: 90}} type="primary" onClick={this._Processes}>查询</Button><a style={{ marginLeft: 8 }} onClick={this.toggleForm}>
                               收起 <Icon type="up" />
                         </a></span>
                     </Col>
                 </Row>
                 <Row style={{marginBottom: 30}}>
-                    <Col span="8">
+                    <Col span="9">
                         <span > 级别：<Attention placeholder="请选择控制级别" width={200} /></span>
                     </Col>
-                    <Col span="8">
+                    <Col span="11">
                         <span>
                             <span>行业：</span>
                             <TreeSelect
@@ -293,9 +293,9 @@ export default class AnalyAlarmType extends Component {
         return (
             <div>
                 <PageHeaderLayout title="报警类别统计">
-                    <Row style={{width: '100%', height: 'calc(100vh - 180px)'}}>
-                        <Col span={8}>
-                            <Card style={{width: '100%', height: 'calc(100vh - 200px)'}}>
+                    <Row style={{width: '100%'}}>
+                        <Col span={8} style={{height: 'calc(100vh - 250px)'}}>
+                            <Card style={{width: '100%'}}>
                                 <Card>
                                     <ReactEcharts
                                         style={{marginLeft: 30}}

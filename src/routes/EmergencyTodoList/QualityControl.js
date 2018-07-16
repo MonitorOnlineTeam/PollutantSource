@@ -67,7 +67,7 @@ export default class QualityControl extends Component {
     CEMS分析仪原理
                             </td>
                             <td colSpan="1" rowSpan="1" style={{width: '25%', textAlign: 'left'}}>
-                                <Input style={{ width: 250 }} value={inspectionRecord.length === 0 ? '' : inspectionRecord[0].Yc_PrincipleOfCEMSAnalyze} />
+                                <Input style={{ width: 250 }} value={inspectionRecord.length === 0 ? '' : inspectionRecord[0].Yc_PrincipleOfCEMSAnalyzer} />
                             </td>
                         </tr>
                         <tr>
@@ -106,7 +106,7 @@ export default class QualityControl extends Component {
     评价结果
                             </td>
                             <td colSpan="3" rowSpan="1">
-                                <Input style={{ width: 250 }} value={inspectionRecord.length === 0 ? '' : inspectionRecord[0].DeviceType} />
+                                <Input style={{ width: 250 }}  />
                             </td>
                         </tr>
                         <tr>
@@ -162,7 +162,7 @@ export default class QualityControl extends Component {
     评价结果
                             </td>
                             <td colSpan="3" rowSpan="1">
-                                <Input style={{ width: 250 }} value={inspectionRecord.length === 0 ? '' : inspectionRecord[0].DeviceType} />
+                                <Input style={{ width: 250 }}  />
                             </td>
                         </tr><tr>
                             <td rowSpan="4" style={{width: '12%', textAlign: 'left'}}>
@@ -215,7 +215,7 @@ export default class QualityControl extends Component {
     评价结果
                             </td>
                                 <td colSpan="3" rowSpan="1">
-                                <Input style={{ width: 250 }} value={inspectionRecord.length === 0 ? '' : inspectionRecord[0].DeviceType} />
+                                <Input style={{ width: 250 }}  />
                             </td>
                             </tr><tr>
                             <td rowSpan="4" style={{width: '12%', textAlign: 'left'}}>
@@ -266,7 +266,7 @@ export default class QualityControl extends Component {
     评价结果
                             </td>
                             <td colSpan="3" rowSpan="1">
-                                        <Input style={{ width: 250 }} value={inspectionRecord.length === 0 ? '' : inspectionRecord[0].DeviceType} />
+                                        <Input style={{ width: 250 }}  />
                             </td>
                             </tr><tr>
                                     <td rowSpan="4" style={{width: '12%', textAlign: 'left'}}>
@@ -317,7 +317,7 @@ export default class QualityControl extends Component {
     评价结果
                                 </td>
                             <td colSpan="3" rowSpan="1">
-                                    <Input style={{ width: 250 }} value={inspectionRecord.length === 0 ? '' : inspectionRecord[0].DeviceType} />
+                                    <Input style={{ width: 250 }}  />
                                 </td>
                                 </tr><tr>
                             <td rowSpan="4" style={{width: '12%', textAlign: 'left'}}>
@@ -368,7 +368,7 @@ export default class QualityControl extends Component {
     评价结果
                             </td>
                             <td colSpan="3" rowSpan="1">
-                                    <Input style={{ width: 250 }} value={inspectionRecord.length === 0 ? '' : inspectionRecord[0].DeviceType} />
+                                    <Input style={{ width: 250 }}  />
                                 </td>
                             </tr><tr>
                             <td rowSpan="4" style={{width: '12%', textAlign: 'left'}}>
@@ -419,7 +419,7 @@ export default class QualityControl extends Component {
     评价结果
                                 </td>
                                     <td colSpan="3" rowSpan="1">
-                                <Input style={{ width: 250 }} value={inspectionRecord.length === 0 ? '' : inspectionRecord[0].DeviceType} />
+                                <Input style={{ width: 250 }}  />
                             </td>
                         </tr><tr>
                                 <td rowSpan="4" style={{width: '12%', textAlign: 'left'}}>
@@ -472,7 +472,7 @@ export default class QualityControl extends Component {
     评价结果
                             </td>
                                 <td colSpan="3" rowSpan="1">
-                                <Input style={{ width: 250 }} value={inspectionRecord.length === 0 ? '' : inspectionRecord[0].DeviceType} />
+                                <Input style={{ width: 250 }}  />
                             </td>
                             </tr><tr>
                             <td rowSpan="2">
