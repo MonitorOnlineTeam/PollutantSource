@@ -290,7 +290,7 @@ export default class EmergencyDetailInfo extends Component {
                                             label="审核结果">
                                             {getFieldDecorator('result')(
                                                 <RadioGroup onChange={this.onRadioChange} value={this.state.data.result}>
-                                                    <Radio key={1} value={1}>同意</Radio>
+                                                    <Radio key={1} value={1}>通过</Radio>
                                                     <Radio key={2} value={2}>打回</Radio>
                                                 </RadioGroup>
                                             )}
