@@ -37,7 +37,7 @@ export default class PointsList extends Component {
 
               if (isexist) { markerInfo.push(item); }
           });
-          debugger;
+          
           if (markerInfo.length > 0) {
               this.setState({
                   selEntCodes: [markerInfo[0].EntCode]
