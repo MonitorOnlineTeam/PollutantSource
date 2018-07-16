@@ -15,10 +15,14 @@ class OperationTips extends Component {
                 let bgcolor;
                 let fontcolor;
                 let cell;
+                let istoday;
                 if (value.date() <= 9) {
                     cell = styles.calendarcell;
                 } else {
                     cell = styles.calendarcellbig;
+                }
+                if (value.date() === moment().date()) {
+                    istoday = styles.istoday;
                 }
 
                 switch (value.date()) {
@@ -52,7 +56,7 @@ class OperationTips extends Component {
                     default:
                       //  fontcolor = '#000';
                 }
-                const res = <span className={cell} style={{background: `${bgcolor}`, color: `${fontcolor}`}}>
+                const res = <span className={`${istoday} ${cell}`} style={{background: `${bgcolor}`, color: `${fontcolor}`}}>
                     {value.date()}
                 </span>;
                 return res;

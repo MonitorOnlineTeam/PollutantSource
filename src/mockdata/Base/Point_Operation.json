@@ -1,15 +1,4 @@
-﻿[
-    {
-        "PointCode":"019a1c86-5f38-4846-8042-2a4809f64fe8",
-        "PointName":"锅炉小号烟囱1",
-        "DGIMN":"bjldgn01",
-        "Longitude":"117.109833",
-        "Latitude":"40.133689",
-        "RegionCode":"110117000",
-        "PollutantType":"2",
-        "DevicePassword":"123456",
-        "OutputType":"0"
-    },    
+﻿[   
     {
         "PointCode":"04d5cc42-93a0-4636-baf5-e2a05e6b74d7",
         "PointName":"脱硫出口1",

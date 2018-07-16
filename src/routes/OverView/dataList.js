@@ -159,9 +159,10 @@ class dataList extends PureComponent {
                     record.Standard = record[record.PollutantCode + '-Standard'];
 
                     if (record.IsExceed > 0 || record.IsException > 0) {
-                        dot = (
+                        /*  dot = (
                             <Avatar src="../../../red.png" />
-                        );
+                        ); */
+                        dot = true;
                     }
 
                     // console.log(record);
@@ -180,7 +181,7 @@ class dataList extends PureComponent {
                                     standard: record.Standard, // 标准值
                                 }}
                             >
-                                <span style={{cursor: 'pointer'}}>{value}</span>{dot}
+                                <span style={{cursor: 'pointer', color: dot ? 'red' : ''}}>{value}</span>
                             </PopoverViewData_>
                         </div>);
                     } else {
@@ -210,8 +211,8 @@ class dataList extends PureComponent {
         const _this = this;
         this.state = {
             columns: columns,
-            datalist: getAllData('realtime'),
-            dataType: 'realtime',
+            datalist: getAllData('hour'),
+            dataType: 'hour',
             industryInfo: industryInfo,
             controlInfo: controlInfo,
             ent: '',
@@ -325,7 +326,7 @@ class dataList extends PureComponent {
                                     </Col>
                                     <Col span={8} md={8} sm={8}>
                                         <Radio.Group
-                                            defaultValue="realtime"
+                                            defaultValue="hour"
                                             size="default"
                                             onChange={this.Onchange}
                                             style={{ marginLeft: 10, visibility: 'hidden', float: 'left' }}>
@@ -342,29 +343,29 @@ class dataList extends PureComponent {
                             </div>
                             <div style={{paddingTop: '10px'}}>
                                 <Row gutter={{ md: 8, lg: 8, xl: 8 }}>
-                                    <Col span={4} md={4} sm={4}>
+                                    <Col span={8} md={8} sm={8}>
                                         <EnterprisePointCascadeMultiSelect width="250px" cascadeSize={2} />
                                     </Col>
-                                    <Col span={4} md={4} sm={4}>
+                                    <Col span={8} md={8} sm={8}>
                                         <Input onPressEnter={this.MNSearch} placeholder="设备编号" style={{ width: 250, marginLeft: 10, marginRight: 10 }} />
                                     </Col>
-                                    <Col span={4} md={4} sm={4}>
+                                    {/* <Col span={8} md={8} sm={8}>
                                         <Input onPressEnter={this.entSearch} placeholder="状态" style={{ width: 250, marginLeft: 10, marginRight: 10 }} />
-                                    </Col>
-                                    <Col span={4} md={4} sm={4}>
+                                    </Col> */}
+                                    <Col span={8} md={8} sm={8}>
                                         <Select placeholder="行业" style={{ width: 250, marginLeft: 10, marginRight: 10 }} onChange={this.industrySearch}>
                                             { this.state.industryInfo.map(item => {
                                                 return (<Select.Option key={item.IndustryStandardCode} value={item.IndustryStandardCode}>{item.IndustryName}</Select.Option>);
                                             })}
                                         </Select>
                                     </Col>
-                                    <Col span={4} md={4} sm={4}>
-                                        <Select placeholder="控制级别" style={{ width: 250, marginLeft: 10, marginRight: 10 }} onChange={this.controlSearch}>
+                                    {/*  <Col span={8} md={8} sm={8}>
+                                       <Select placeholder="控制级别" style={{ width: 250, marginLeft: 10, marginRight: 10 }} onChange={this.controlSearch}>
                                             { this.state.controlInfo.map(item => {
                                                 return (<Select.Option key={item.AttentionCode} value={item.AttentionCode}>{item.AttentionName}</Select.Option>);
                                             })}
                                         </Select>
-                                    </Col>
+                                        </Col> */}
                                 </Row>
                             </div>
                         </div>

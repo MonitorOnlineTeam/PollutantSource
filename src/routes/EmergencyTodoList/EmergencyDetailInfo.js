@@ -218,35 +218,17 @@ export default class EmergencyDetailInfo extends Component {
                     </Card>
                     <Card title="附件" style={{marginTop: 20 }} bordered={false}>
                         <Row gutter={16} justify="center" align="middle">
-                        <Col span={4} align="center">
-                                <Button type="primary" size="large" style={{width: 100, height: 100}}>
-                                    <Icon type="picture" style={{fontSize: 60}} />
-                                </Button>
+                        <Col span={6} align="center">
+                            <img src='../../../pic1.jpg' />
                             </Col>
-                        <Col span={4} align="center">
-                                <Button type="primary" size="large" style={{width: 100, height: 100}}>
-                                    <Icon type="picture" style={{fontSize: 60}} />
-                                </Button>
+                        <Col span={6} align="center">
+                        <img src='../../../pic2.jpg' />
                             </Col>
-                            <Col span={4} align="center">
-                                <Button type="primary" size="large" style={{width: 100, height: 100}}>
-                                    <Icon type="picture" style={{fontSize: 60}} />
-                                </Button>
+                            <Col span={6} align="center">
+                            <img src='../../../pic3.jpg' />
                             </Col>
-                        <Col span={4} align="center">
-                                <Button type="primary" size="large" style={{width: 100, height: 100}}>
-                                    <Icon type="picture" style={{fontSize: 60}} />
-                                </Button>
-                            </Col>
-                            <Col span={4} align="center">
-                                <Button type="primary" size="large" style={{width: 100, height: 100}}>
-                                    <Icon type="picture" style={{fontSize: 60}} />
-                                </Button>
-                            </Col>
-                            <Col span={4} align="center">
-                                <Button type="primary" size="large" style={{width: 100, height: 100}}>
-                                    <Icon type="picture" style={{fontSize: 60}} />
-                                </Button>
+                        <Col span={6} align="center">
+                                    
                             </Col>
                         </Row>
                     </Card>
