@@ -37,7 +37,7 @@ class SewageTips extends Component {
                         </div>
                         <div className={styles.clearboth} />
                     </div>
-                    <div style={{paddingTop: '5px'}}>
+                    <div style={{paddingTop: '5px', paddingBottom: '10px'}}>
                         <h4 className={styles.pointInfo}>排量占比</h4>
                         <ReactEcharts
                             style={{width: '95%', height: '150px'}}
@@ -46,9 +46,9 @@ class SewageTips extends Component {
                             lazyUpdate={true} />
 
                     </div>
-                    <div style={{ margin: '8px 0 0 10px', paddingBottom: '5px' }}>
-                        <span onClick={this.props.stationclick} style={{ marginLeft: '225px', cursor: 'pointer' }}>查看更多>></span></div>
-                    {Isbutton ? <AlarmButtom /> : ''}
+                    {/* <div style={{ margin: '8px 0 0 10px', paddingBottom: '5px' }}>
+                        <span onClick={this.props.stationclick} style={{ marginLeft: '225px', cursor: 'pointer' }}>查看更多>></span></div> */}
+                    {Isbutton ? <AlarmButtom NormalClick={this.props.NormalClick} /> : ''}
                 </div>)
         );
     }

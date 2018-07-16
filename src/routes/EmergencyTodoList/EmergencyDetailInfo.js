@@ -161,7 +161,7 @@ export default class EmergencyDetailInfo extends Component {
                             <Description term="设备类型">{taskBasicInfo.length === 0 ? '' : taskBasicInfo[0].DeviceType}</Description>
                             <Description term="设备品牌">{taskBasicInfo.length === 0 ? '' : taskBasicInfo[0].DeviceBrand}</Description>
                             <Description term="设备编号">{taskBasicInfo.length === 0 ? '' : taskBasicInfo[0].DeviceNo}</Description>
-                            <Description term="设备型号">{taskBasicInfo.length === 0 ? '' : taskBasicInfo[0].DeviceType}</Description>
+                            <Description term="设备型号">{taskBasicInfo.length === 0 ? '' : taskBasicInfo[0].DeviceXh}</Description>
                         </DescriptionList>
                     </Card>
                     <Card title="应急处理" style={{ marginTop: 20}} bordered={false}>

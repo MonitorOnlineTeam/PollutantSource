@@ -84,7 +84,7 @@ class OperationTips extends Component {
                     <div >
                         <div className={styles.content} >
                             <h4 className={styles.pointInfo}>运维信息</h4>
-                            <div><Icon type="user" style={{ fontSize: 14, color: '#A8A6A5', marginRight: '2px' }} />运维人：小王</div>
+                            <div><Icon type="user" style={{ fontSize: 14, color: '#A8A6A5', marginRight: '2px' }} />运维人：成云</div>
                             <div><Icon type="phone" style={{ fontSize: 14, color: '#A8A6A5', marginRight: '2px' }} />联系电话：18911524678</div>
                             {/* <div><Icon type="calendar" style={{ fontSize: 14, color: '#A8A6A5', marginRight: '2px' }} />上次运维时间：2018-06-01</div>
                             <div><Icon type="code-o" style={{ fontSize: 14, color: '#A8A6A5', marginRight: '2px' }} />距下次运维时间：9（天）</div>
@@ -97,7 +97,7 @@ class OperationTips extends Component {
                     <div style={{ width: 300, border: '1px solid #d9d9d9', borderRadius: 4, marginLeft: '10px' }}>
                         <Calendar disabledDate={this.CalendarClick} dateFullCellRender={this.dateCellRender} fullscreen={false} />
                     </div>
-                    <div>
+                    <div style={{paddingBottom: '10px'}}>
                         <h4>近期耗材情况（本月）</h4>
                         <Table
                             showHeader={false}
@@ -107,9 +107,9 @@ class OperationTips extends Component {
                             dataSource={markerspoint.consumablesdata}
                             pagination={false} />
                     </div>
-                    <div style={{ margin: '8px 0 0 10px', paddingBottom: '5px' }}>
-                        <span onClick={this.props.stationclick} style={{ marginLeft: '225px', cursor: 'pointer' }}>查看更多>></span></div>
-                    {Isbutton ? <AlarmButtom /> : ''}
+                    {/* <div style={{ margin: '8px 0 0 10px', paddingBottom: '5px' }}>
+                        <span onClick={this.props.stationclick} style={{ marginLeft: '225px', cursor: 'pointer' }}>查看更多>></span></div> */}
+                    {Isbutton ? <AlarmButtom NormalClick={this.props.NormalClick} /> : ''}
                 </div>)
         );
     }
