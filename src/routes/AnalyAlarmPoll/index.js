@@ -241,71 +241,7 @@ export default class AnalyAlarmPoll extends Component {
         console.log(value);
         this.setState({ value });
     }
-    renderSimpleForm() {
-        return (
 
-            <Row style={{marginBottom: 30}}>
-                <Col span="9">
-                   企业 <span ><EnterpriseAutoComplete width={160} placeholder="请选择企业" /></span>
-                </Col>
-                <Col span="10">
-                  时间  <span className="gutter-box"><RangePicker_ style={{width: 200}} placeholder="请选择时间" format="YYYY-MM-DD" onChange={this._handleDateChange} dateValue={this.state.rangeDate} /></span>
-                </Col>
-                <Col span="5">
-                    <span ><Button style={{width: 90}} type="primary" onClick={this._Processes}>查询</Button><a style={{ marginLeft: 8 }} onClick={this.toggleForm}>
-                              展开 <Icon type="down" /> </a></span>
-                </Col>
-            </Row>
-        );
-    }
-
-    toggleForm = () => {
-        this.setState({
-            expandForm: !this.state.expandForm,
-        });
-    };
-    renderAllForm() {
-        const treeData = this.state.IndustryTypes;
-        return (
-            <div>
-                <Row style={{marginBottom: 30}}>
-                    <Col span="9">
-                      企业  <span ><EnterpriseAutoComplete width={160} placeholder="请选择企业" /></span>
-                    </Col>
-                    <Col span="10">
-                      时间  <span className="gutter-box"><RangePicker_ style={{width: 200}} placeholder="请选择时间" format="YYYY-MM-DD" onChange={this._handleDateChange} dateValue={this.state.rangeDate} /></span>
-                    </Col>
-
-                    <Col span="5">
-                        <span ><Button style={{width: 90}} type="primary" onClick={this._Processes}>查询</Button><a style={{ marginLeft: 8 }} onClick={this.toggleForm}>
-                              收起 <Icon type="up" />
-                        </a></span>
-                    </Col>
-                </Row>
-                <Row style={{marginBottom: 30}}>
-                    <Col span="9">
-                      级别  <span > <Attention placeholder="请选择控制级别" width={200} /></span>
-                    </Col>
-                    <Col span="10">
-                        <span>
-                             行业
-                            <TreeSelect
-                                showSearch={true}
-                                style={{ width: 200 }}
-                                value={this.state.value}
-                                dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
-                                placeholder="请选择行业"
-                                allowClear={true}
-                                treeDefaultExpandAll={true}
-                                onChange={this.onChange}
-                                treeData={treeData}
-                            />
-                        </span>
-                    </Col>
-                </Row>
-            </div>
-        );
-    }
     render() {
         const columns = [{
             title: '排口名称',
@@ -546,7 +482,7 @@ export default class AnalyAlarmPoll extends Component {
                 //  y2: 50, // y2可以控制 X轴跟Zoom控件之间的间隔，避免以为倾斜后造成 label重叠到zoom上
                 left: '3%',
                 right: '4%',
-                bottom: '3%',
+                bottom: '0',
                 top: '10%',
                 containLabel: true
             },
@@ -567,7 +503,7 @@ export default class AnalyAlarmPoll extends Component {
                 barWidth: 15,
             }],
         };
-
+        const treeData = this.state.IndustryTypes;
         return (
             <div>
                 <PageHeaderLayout title="报警因子统计">
@@ -589,7 +525,45 @@ export default class AnalyAlarmPoll extends Component {
                             </Card>
                         </Col>
                         <Col span={14} style={{marginLeft: 30}}>
-                            <div className={styles.tableListForm}>{this.renderForm()}</div>
+                            <div>
+                                <Row style={{marginBottom: 30}}>
+                                    <Col span="9">
+                         企业:
+                                        <span ><EnterpriseAutoComplete width={160} placeholder="请选择企业" /></span>
+                                    </Col>
+                                    <Col span="10">
+                          时间:
+                                        <span className="gutter-box"><RangePicker_ style={{width: 200}} placeholder="请选择时间" format="YYYY-MM-DD" onChange={this._handleDateChange} dateValue={this.state.rangeDate} /></span>
+                                    </Col>
+
+                                </Row>
+                                <Row style={{marginBottom: 30}}>
+                                    <Col span="9">
+                            级别:
+                                        <span > <Attention placeholder="请选择控制级别" width={200} /></span>
+                                    </Col>
+                                    <Col span="10">
+                                        <span>
+                                            行业:
+                                            <TreeSelect
+                                                showSearch={true}
+                                                style={{ width: 200 }}
+                                                value={this.state.value}
+                                                dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+                                                placeholder="请选择行业"
+                                                allowClear={true}
+                                                treeDefaultExpandAll={true}
+                                                onChange={this.onChange}
+                                                treeData={treeData}
+                                            />
+                                        </span>
+                                    </Col>
+
+                                    <Col span="5">
+                                        <span ><Button style={{width: 90}} type="primary" onClick={this._Processes}>查询</Button>  </span>
+                                    </Col>
+                                </Row>
+                            </div>
                             <Row>
                                 <Col >
                                     <Table
