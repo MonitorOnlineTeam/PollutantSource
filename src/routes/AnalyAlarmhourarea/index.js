@@ -6,8 +6,10 @@ import RangePicker_ from '../../components/PointDetail/RangePicker_';
 import ReactEcharts from 'echarts-for-react';
 import { Link } from 'dva/router';
 import moment from 'moment';
-import AlarmTimeRange from '../../mockdata/Base/Code/T_Cod_AlarmTimeRange.json';
+import AlarmTimeRange from '../../mockdata/AnalyAlarmhourarea/AlarmTimeRange';
 import EnterpriseList from '../../components/EnterpriseList/EnterpriseList';
+import ConclusionInfo from '../../components/EnterpriseList/Conclusion';
+import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 /*
 页面：报警时间范围分布情况
 描述：统计一段时间24个小时分布情况
@@ -20,7 +22,6 @@ export default class AnalyAlarmhourarea extends Component {
     };
     constructor(props) {
         super(props);
-        debugger;
         var dataList = [];
         var PointNames = [];
         AlarmTimeRange.map((item) => {
@@ -44,17 +45,17 @@ export default class AnalyAlarmhourarea extends Component {
                 },
                 data: timedata
             });
+            // var summarize = timedata;
         });
-
         this.state = {
             rangeDate: [moment('2018-06-23 00:00:00'), moment('2018-06-25 00:00:00')],
             AlarmTimeRangeList: AlarmTimeRange,
             DataLists: dataList,
             PointName: PointNames,
+            comments: [],
         };
     }
     SearchDataList = (value) => {
-        debugger;
         this.setState({
             AlarmTimeRangeList: [],
             DataLists: [],
@@ -64,13 +65,16 @@ export default class AnalyAlarmhourarea extends Component {
         let AlarmTimeRangeLists = [];
         let Data = [];
         let Name = [];
+        let table = [];
         AlarmTimeRange.map((item, _key) => {
             item.Child.map((items) => {
                 if (value.indexOf(item.EntCode) > -1) {
+                    table.push(item.comment);
                     AlarmTimeRangeLists.push(items);
                 }
             });
         });
+        var commentinfo = table[0];
         AlarmTimeRangeLists.map((item) => {
             var timedata = [];
             var times = item.time.split(',');
@@ -95,6 +99,7 @@ export default class AnalyAlarmhourarea extends Component {
             AlarmTimeRangeList: AlarmTimeRangeLists,
             DataLists: Data,
             PointName: Name,
+            comments: commentinfo,
         });
     };
     render() {
@@ -111,7 +116,7 @@ export default class AnalyAlarmhourarea extends Component {
             grid: {
                 left: '3%',
                 right: '4%',
-                bottom: 0,
+                bottom: '1%',
                 containLabel: true
             },
             xAxis: {
@@ -128,31 +133,19 @@ export default class AnalyAlarmhourarea extends Component {
             <div style={{ width: '100%',
                 height: 'calc(100vh - 67px)' }}>
                 <EnterpriseList IsShowChk={'none'} handleChange={this.SearchDataList}>
-                    <div className={styles.pageHeader}>
-                        <Breadcrumb className={styles.breadcrumb} >
-                            <Breadcrumb.Item key="1">
-                                <Link to="/monitor/overview"> 首页 </Link>
-                            </Breadcrumb.Item>
-                            <Breadcrumb.Item key="1">
-                            综合分析
-                            </Breadcrumb.Item>
-                            <Breadcrumb.Item key="1-3-1">
-                            报警专题分析
-                            </Breadcrumb.Item>
-                            <Breadcrumb.Item key="1-3-1">
-                            报警时间范围分布情况
-                            </Breadcrumb.Item>
-                        </Breadcrumb>
-                    </div>
-                    <div>
-                        <Card style={{ height: 'calc(100vh - 145px)' }}>
-                            <RangePicker_ style={{width: 250}} dateValue={this.state.rangeDate} format="YYYY-MM-DD" onChange={this._handleDateChange} />
-                            <ReactEcharts option={option} lazyUpdate={true} notMerge={true} style={{ width: '100%', height: 'calc(100vh - 380px)' }} />
-                            <Card title="总结：" style={{marginTop: 25, marginLeft: '3%'}}>
-                                <p>报警在11时次数最多，报警在14时次数最少</p>
-                            </Card>
-                        </Card>
-                    </div>
+                    <PageHeaderLayout>
+                        <div>
+                            <ConclusionInfo content={this.state.comments}>
+                                <Card style={{ height: 'calc(100vh - 245px)' }}>
+                                    <div style={{textAlign: 'right'}}>
+                                        <RangePicker_ style={{width: 250}} dateValue={this.state.rangeDate} format="YYYY-MM-DD" onChange={this._handleDateChange} />
+                                    </div>
+
+                                    <ReactEcharts option={option} lazyUpdate={true} notMerge={true} style={{ width: '100%', height: 'calc(100vh - 330px)' }} />
+                                </Card>
+                            </ConclusionInfo>
+                        </div>
+                    </PageHeaderLayout>
 
                 </EnterpriseList>
             </div>
