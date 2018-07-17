@@ -4,8 +4,10 @@ import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import ReactEcharts from 'echarts-for-react';
 import moment from 'moment';
 import Cookie from 'js-cookie';
-
+import ConclusionInfo from '../../components/EnterpriseList/Conclusion';
 import StandardJson from '../../mockdata/DischargeTax/GroupStandard.json';
+
+import AnalyBase from '../../mockdata/Base/AnalyEntPoint.json';
 
 /*
 页面：排污达标率 一段时间内的达标率
@@ -19,12 +21,14 @@ const Option = Select.Option;
 const {RangePicker} = DatePicker;
 const dateFormat = 'YYYY-MM-DD';
 let standard = StandardJson[0];
+let category = AnalyBase.Ent;
 
 export default class AnalyReachStandard extends Component {
     render() {
         const user = JSON.parse(Cookie.get('token'));
         if (user.User_Account === 'lisonggui') {
             standard = StandardJson[1];
+            category = AnalyBase.Point;
         }
 
         const option = {
@@ -51,7 +55,7 @@ export default class AnalyReachStandard extends Component {
             },
             yAxis: {
                 type: 'category',
-                data: standard.Company
+                data: category
             },
             series: [
                 {
@@ -72,11 +76,9 @@ export default class AnalyReachStandard extends Component {
                         <RangePicker style={{width: 300, marginLeft: 10}} defaultValue={[moment('2018/07/01', dateFormat), moment('2018/08/01', dateFormat)]} format={dateFormat} />
                     </div>
                 }>
-                    <ReactEcharts option={option} lazyUpdate={true} notMerge={true} id="rightLine" style={{ width: '100%', height: 'calc(100vh - 510px)' }} />
-                    <Card title="说明" style={{width: '100%'}} >
-                        <p>达标率计算方法：达标率=[1+(执行标准-达标量）÷执行标准]×100%</p>
-                        <p>{standard.Summer}</p>
-                    </Card>
+                    <ConclusionInfo content={standard.Summer}>
+                        <ReactEcharts option={option} lazyUpdate={true} notMerge={true} id="rightLine" style={{ width: '100%', height: 'calc(100vh - 390px)' }} />
+                    </ConclusionInfo>
                 </Card>
             </PageHeaderLayout>
         );

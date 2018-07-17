@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
-import { Select, Card} from 'antd';
+import {Select, Card} from 'antd';
 import ReactEcharts from 'echarts-for-react';
 import TaxData from '../../mockdata/DischargeTax/DischargeAndTax.json';
 import EntList from '../../components/EnterpriseList/EnterpriseList';
