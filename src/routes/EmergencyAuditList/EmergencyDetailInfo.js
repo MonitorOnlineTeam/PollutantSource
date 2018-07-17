@@ -14,7 +14,7 @@ const { Description } = DescriptionList;
 const { TextArea } = Input;
 const Step = Steps.Step;
 const customDot = (dot, { status, index }) => (
-    <Popover content={<span>step {index} status: {status}</span>}>
+    <Popover content={<span>步骤 {(index + 1)} 状态: {status === 'finish' ? '完成' : '进行中'}</span>}>
         {dot}
     </Popover>
 );
@@ -138,7 +138,7 @@ export default class EmergencyDetailInfo extends Component {
             <PageHeaderLayout title="应急任务详情">
                 <div style={{height: 'calc(100vh - 190px)'}} className={styles.ExceptionDetailDiv}>
                     <Card title="" style={{ }} bordered={false}>
-                        <Steps progressDot={customDot} current={currentProcess.length}>
+                        <Steps progressDot={customDot} current={3}>
                             {
                                 taskProcess.map((item) => {
                                     return (<Step title={item.ProcessName} description={
@@ -278,7 +278,7 @@ export default class EmergencyDetailInfo extends Component {
                         onCancel={() => {
                             this.setState({
                                 showaudio: false
-                            }); 
+                            });
                         }}>
                         <div>
                             <Form>
