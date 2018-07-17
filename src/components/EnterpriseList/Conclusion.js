@@ -7,6 +7,8 @@ const { Content, Footer } = Layout;
 export default class Conclusion extends Component {
     render() {
         const conclusion = this.props.content;
+        const height = conclusion.length * 23;
+
         return (
             <div>
                 <Layout className="layout" style={{backgroundColor: '#fff'}}>
@@ -20,14 +22,15 @@ export default class Conclusion extends Component {
                         paddingRight: '3px',
                         paddingTop: '5px',
                         paddingBottom: '3px',
-                        backgroundColor: '#fff' }}>
+                        backgroundColor: '#fff',
+                    }}>
                         <div className={styles.zjTop}>
                             <Icon type="pushpin-o" /><span>结论：</span>
                         </div>
-                        <div className={styles.zjBottom}>
+                        <div className={styles.zjBottom} style={{height: `${height}px`}}>
                             {
                                 conclusion.map((item, key) => {
-                                    return (<p>{key + 1} 、{item}</p>);
+                                    return (<p style={{marginBottom: '0px'}}>{key + 1} 、{item}</p>);
                                 })
                             }
                         </div>

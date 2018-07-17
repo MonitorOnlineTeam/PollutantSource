@@ -95,7 +95,6 @@ export default class AnalyDischarge extends Component {
             }
         });
 
-        debugger;
         let pointRank = [];
         selectRank.map((item, key) => {
             pointRank.push({
@@ -134,8 +133,8 @@ export default class AnalyDischarge extends Component {
         const noxRange = this.state.NoxRange;
         const ycRange = this.state.YcRange;
         const all = this.state.AllRange;
-        const pList = this.state.points;
-        const selectRank = [];
+        let pList = this.state.points;
+        let selectRank = [];
         pList.map((item, key) => {
             let dataItem = [];
             for (var i = 0; i < 24; i++) {
@@ -178,11 +177,37 @@ export default class AnalyDischarge extends Component {
             }
         });
 
+        let pointRank = [];
+        selectRank.map((item, key) => {
+            pointRank.push({
+                name: pList[key],
+                value: item
+            });
+        });
+
+        pointRank = pointRank.sort((a, b) => {
+            if (a.value > b.value) {
+                return 1;
+            } else if (a.value < b.value) {
+                return -1;
+            } else {
+                return 0;
+            }
+        });
+
+        pList = [];
+        selectRank = [];
+        pointRank.map((item) => {
+            pList.push(item.name);
+            selectRank.push(item.value);
+        });
+
         this.setState({
             DataInfo: dataInfo,
             selectCode: value,
             selectName: option.props.children,
-            selectRank: selectRank
+            selectRank: selectRank,
+            points: pList
         });
     }
 
@@ -195,6 +220,7 @@ export default class AnalyDischarge extends Component {
               const plist = this.state.points;
               const data = this.state.DataInfo;
               const selectName = this.state.selectName;
+              const selectRank = this.state.selectRank;
 
               let option = {
                   title: {
@@ -259,7 +285,7 @@ export default class AnalyDischarge extends Component {
                       {
                           name: '排放量',
                           type: 'bar',
-                          data: this.state.selectRank,
+                          data: selectRank,
                           barCategoryGap: '50%',
                           markPoint: {
                               data: [
@@ -270,10 +296,9 @@ export default class AnalyDischarge extends Component {
                       }
                   ]
               };
-
-              const conclusion1 = ['2018/7/10-2018/7/17，24个小时排口累计排放量情况：3:00排放量最大，即500mg/m3，14:00排放量最少，即200mg/m3。'];
-
-              const conclusion2 = ['2018/6/17-2018/6/27，排口排放量排名：'];
+            
+              const conclusion1 = ['2018/7/10~2018/7/17，24个小时排口累计排放量情况：3:00排放量最大，即500(mg/m³)，14:00排放量最少，即200(mg/m³)。'];
+              const conclusion2 = ['2018/6/17~2018/6/，' + (plist.length > 0 ? plist[plist.length-1] : '') + '排放最多，即' + (selectRank.length > 0 ? selectRank[selectRank.length-1]+"(mg/m³)" : '') + '，' + (plist.length > 0 ? plist[0] : '') + '排放最少，即' + (selectRank.length > 0 ? selectRank[0]+"(mg/m³)" : '')];
 
               return (
                   <div style={{ width: '100%',
@@ -308,10 +333,10 @@ export default class AnalyDischarge extends Component {
                                       <RangePicker_ style={{width: 350}} dateValue={this.state.RangeDate} format="YYYY-MM-DD" onChange={this._handleDateChange} />
                                   </div>
                               }>
-                                  <Tabs defaultActiveKey="1" tabPosition={'left'} style={{marginTop: '10px', height: 'calc(100vh - 300px)'}}>
+                                  <Tabs defaultActiveKey="1" tabPosition={'left'} style={{marginTop: '10px', height: 'calc(100vh - 280px)'}}>
                                       <TabPane tab={<span><Icon type="bar-chart" />统计</span>} key="1">
                                           <ConclusionInfo content={conclusion1}>
-                                              <ReactEcharts option={option} lazyUpdate={true} notMerge={true} style={{ width: '100%', height: 'calc(100vh - 380px)' }} />
+                                              <ReactEcharts option={option} lazyUpdate={true} notMerge={true} style={{ width: '100%', height: 'calc(100vh - 350px)' }} />
                                           </ConclusionInfo>
                                       </TabPane>
                                       <TabPane tab={<span><Icon type="line-chart" />排名</span>} key="2">
