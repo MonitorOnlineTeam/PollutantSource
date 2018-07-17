@@ -218,7 +218,7 @@ export const getRouterData = (app) => {
         },
         '/monitor/analysis/pollsubject/environmenttaxdischargeanaly': {
             component: dynamicWrapper(app, ['points'], () =>
-          import('../routes/AnalyEnvironmentTaxDischarge')),
+          import('../routes/AnalyEnvironmentTaxDischarge/GroupTax')),
         },
         '/monitor/analysis/pollsubject/reachstandardanaly': {
             component: dynamicWrapper(app, ['points'], () =>
