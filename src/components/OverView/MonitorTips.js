@@ -24,7 +24,7 @@ class MonitorTips extends Component {
                 : (<div>
                     <div className={styles.titleborder}>
                         <div className={styles.content}>
-                            <h4 className={styles.pointInfo}>站点信息</h4>
+                            <h4 style={{marginBottom: '5px'}} className={styles.pointInfo}>站点信息</h4>
                             <div><Icon type="environment-o" style={{ fontSize: 14, color: '#A8A6A5', marginRight: '2px' }} />区域：{this.props.region}</div>
                             <div><Icon type="team" style={{ fontSize: 14, color: '#A8A6A5', marginRight: '2px' }} />行业：{this.props.industry}</div>
                             <div><Icon type="api" style={{ fontSize: 14, color: '#A8A6A5', marginRight: '2px' }} />控制级别：{this.props.control}</div>
@@ -33,7 +33,7 @@ class MonitorTips extends Component {
                         <div className={styles.clearboth} />
                     </div>
                     <div>
-                        <h4>污染物</h4>
+                        <h4 style={{marginBottom: '5px'}}>污染物</h4>
                         <Table
                             showHeader={false}
                             bordered={true}
@@ -43,7 +43,7 @@ class MonitorTips extends Component {
                             pagination={false} />
                     </div>
                     <div style={{paddingTop: '5px', paddingBottom: '10px'}}>
-                        <h4>污染物24小时趋势图</h4>
+                        <h4 style={{marginBottom: '5px'}}>污染物24小时趋势图</h4>
                         <ReactEcharts
                             className={styles.echartdiv}
                             style={{width: '95%', height: '110px'}}

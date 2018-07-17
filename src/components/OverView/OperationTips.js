@@ -83,7 +83,7 @@ class OperationTips extends Component {
                 : (<div>
                     <div >
                         <div className={styles.content} >
-                            <h4 className={styles.pointInfo}>运维信息</h4>
+                            <h4 style={{marginBottom: '5px'}} className={styles.pointInfo}>运维信息</h4>
                             <div><Icon type="user" style={{ fontSize: 14, color: '#A8A6A5', marginRight: '2px' }} />运维人：成云</div>
                             <div><Icon type="phone" style={{ fontSize: 14, color: '#A8A6A5', marginRight: '2px' }} />联系电话：18911524678</div>
                             {/* <div><Icon type="calendar" style={{ fontSize: 14, color: '#A8A6A5', marginRight: '2px' }} />上次运维时间：2018-06-01</div>
@@ -98,7 +98,7 @@ class OperationTips extends Component {
                         <Calendar disabledDate={this.CalendarClick} dateFullCellRender={this.dateCellRender} fullscreen={false} />
                     </div>
                     <div style={{paddingBottom: '10px'}}>
-                        <h4>近期耗材情况（本月）</h4>
+                        <h4 style={{marginBottom: '5px'}}>近期耗材情况（本月）</h4>
                         <Table
                             showHeader={false}
                             bordered={true}

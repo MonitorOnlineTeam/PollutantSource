@@ -112,76 +112,12 @@ export default class AnalyAlarmType extends Component {
             histogram: PointName,
         };
     }
-    renderForm() {
-        return this.state.expandForm ? this.renderSimpleForm() : this.renderAllForm();
-    }
-    renderSimpleForm() {
-        return (
-            <Row style={{marginBottom: 30}}>
-                <Col span="9">
-                    <span >企业：<EnterpriseAutoComplete width={200} placeholder="请选择企业" /></span>
-                </Col>
-                <Col span="10">
-                    <span className="gutter-box">时间：<RangePicker_ style={{width: 200}} placeholder="请选择时间" format="YYYY-MM-DD" onChange={this._handleDateChange} dateValue={this.state.rangeDate} /></span>
-                </Col>
-                <Col span="5">
-                    <span ><Button style={{width: 90}} type="primary" onClick={this._Processes}>查询</Button><a style={{ marginLeft: 8 }} onClick={this.toggleForm}>
-                              展开 <Icon type="down" /> </a></span>
-                </Col>
-            </Row>
-        );
-    }
+
     onChange = (value) => {
         this.setState({ value });
     }
-    toggleForm = () => {
-        this.setState({
-            expandForm: !this.state.expandForm,
-        });
-    };
-    renderAllForm() {
-        const treeData = this.state.IndustryTypes;
-        return (
-            <div>
-                <Row style={{marginBottom: 30}}>
-                    <Col span="9">
-                        <span >企业：<EnterpriseAutoComplete width={200} placeholder="请选择企业" /></span>
-                    </Col>
-                    <Col span="10">
-                        <span className="gutter-box">时间：<RangePicker_ style={{width: 200}} placeholder="请选择时间" format="YYYY-MM-DD" onChange={this._handleDateChange} dateValue={this.state.rangeDate} /></span>
-                    </Col>
-
-                    <Col span="5">
-                        <span ><Button style={{width: 90}} type="primary" onClick={this._Processes}>查询</Button><a style={{ marginLeft: 8 }} onClick={this.toggleForm}>
-                              收起 <Icon type="up" />
-                        </a></span>
-                    </Col>
-                </Row>
-                <Row style={{marginBottom: 30}}>
-                    <Col span="9">
-                        <span > 级别：<Attention placeholder="请选择控制级别" width={200} /></span>
-                    </Col>
-                    <Col span="11">
-                        <span>
-                            <span>行业：</span>
-                            <TreeSelect
-                                showSearch={true}
-                                style={{ width: 200 }}
-                                value={this.state.value}
-                                dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
-                                placeholder="请选择行业"
-                                allowClear={true}
-                                treeDefaultExpandAll={true}
-                                onChange={this.onChange}
-                                treeData={treeData}
-                            />
-                        </span>
-                    </Col>
-                </Row>
-            </div>
-        );
-    }
     render() {
+        const treeData = this.state.IndustryTypes;
         const columns = [{
             title: '排口名称',
             dataIndex: 'PointName',
@@ -256,8 +192,13 @@ export default class AnalyAlarmType extends Component {
                 {
                     name: '报警类型',
                     type: 'pie',
+                    label: {
+                        normal: {
+                            position: 'inner'
+                        }
+                    },
                     radius: '90%',
-                    center: ['45%', '50%'],
+                    center: ['50%', '50%'],
                     data: this.state.sumbings,
                 }
             ]
@@ -266,9 +207,9 @@ export default class AnalyAlarmType extends Component {
             grid: { // 控制图的大小，调整下面这些值就可以，
                 x: 60,
                 left: '3%',
-                right: '4%',
+                right: '3%',
                 bottom: '3%',
-                top: '20%',
+                top: '10%',
                 containLabel: true
                 // x2: 50,
                 //  y2: 50, // y2可以控制 X轴跟Zoom控件之间的间隔，避免以为倾斜后造成 label重叠到zoom上
@@ -292,13 +233,12 @@ export default class AnalyAlarmType extends Component {
 
         return (
             <div>
-                <PageHeaderLayout title="报警类别统计">
-                    <Row style={{width: '100%'}}>
-                        <Col span={8} style={{height: 'calc(100vh - 250px)'}}>
+                <PageHeaderLayout>
+                    <Row>
+                        <Col span={8} >
                             <Card style={{width: '100%'}}>
                                 <Card>
                                     <ReactEcharts
-                                        style={{marginLeft: 30}}
                                         option={Circleoption}
                                         notMerge={true}
                                         lazyUpdate={true} />
@@ -312,44 +252,80 @@ export default class AnalyAlarmType extends Component {
                             </Card>
                         </Col>
                         <Col span={14} style={{marginLeft: 30}}>
-                            <div className={styles.tableListForm}>{this.renderForm()}</div>
+                            <div>
+                                <Row style={{marginBottom: 30}}>
+                                    <Col span="9">
+                                        <span >企业：<EnterpriseAutoComplete width={200} placeholder="请选择企业" /></span>
+                                    </Col>
+                                    <Col span="10">
+                                        <span className="gutter-box">时间：<RangePicker_ style={{width: 200}} placeholder="请选择时间" format="YYYY-MM-DD" onChange={this._handleDateChange} dateValue={this.state.rangeDate} /></span>
+                                    </Col>
+                                </Row>
+                                <Row style={{marginBottom: 30}}>
+                                    <Col span="9">
+                                        <span > 级别：<Attention placeholder="请选择控制级别" width={200} /></span>
+                                    </Col>
+                                    <Col span="10">
+                                        <span>
+                                            <span>行业：</span>
+                                            <TreeSelect
+                                                showSearch={true}
+                                                style={{ width: 200 }}
+                                                value={this.state.value}
+                                                dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+                                                placeholder="请选择行业"
+                                                allowClear={true}
+                                                treeDefaultExpandAll={true}
+                                                onChange={this.onChange}
+                                                treeData={treeData}
+                                            />
+                                        </span>
+                                    </Col>
+                                    <Col span="5">
+                                        <span ><Button style={{width: 90}} type="primary" onClick={this._Processes}>查询</Button></span>
+                                    </Col>
+                                </Row>
+                            </div>
                             <Row>
                                 <Col >
-                                    <Table
-                                        style={{marginTop: 10}}
-                                        dataSource={dataSource}
-                                        columns={columns}
-                                        scroll={{ x: 550, y: 'calc(100vh - 660px)' }}
-                                        onRow={(record, index) => {
-                                            return {
-                                                onClick: (a, b, c) => {
-                                                    let {selectid} = this.state;
-                                                    let index = selectid.findIndex(t => t === record.key);
-                                                    if (index !== -1) {
-                                                        selectid.splice(index, 1);
-                                                    } else {
-                                                        selectid.push(record.key);
-                                                    }
-                                                    this.setState({selectid: selectid});
-                                                }, // 点击行
-                                                onMouseEnter: () => {}, // 鼠标移入行
-                                            };
-                                        }}
-                                    />
-                                    <Card style={{marginTop: 20}} title={'总结'}>
-                                        <p>
+                                    <Card >
+                                        <Table
+                                            style={{marginTop: 10}}
+                                            dataSource={dataSource}
+                                            columns={columns}
+                                            scroll={{ x: 640, y: 350 }}
+                                            onRow={(record, index) => {
+                                                return {
+                                                    onClick: (a, b, c) => {
+                                                        let {selectid} = this.state;
+                                                        let index = selectid.findIndex(t => t === record.key);
+                                                        if (index !== -1) {
+                                                            selectid.splice(index, 1);
+                                                        } else {
+                                                            selectid.push(record.key);
+                                                        }
+                                                        this.setState({selectid: selectid});
+                                                    }, // 点击行
+                                                    onMouseEnter: () => {}, // 鼠标移入行
+                                                };
+                                            }}
+                                        />
+                                        <Card title={'总结'} style={{marginTop: '2%'}}>
+                                            <p>
                                             设备报警122次；状态报警119次；故障报警144次；总共385次。
-                                        </p>
-                                        <p>
+                                            </p>
+                                            <p>
                                             设备报警最多的是废气排口3,最少的是废气排口1
-                                        </p>
-                                        <p>
+                                            </p>
+                                            <p>
                                             状态报警最多的是废气排口3,最少的是废气排口2
-                                        </p>
-                                        <p>
+                                            </p>
+                                            <p>
                                             故障报警最多的是废气排口3,最少的是废气排口1
-                                        </p>
+                                            </p>
+                                        </Card>
                                     </Card>
+
                                 </Col>
                             </Row>
                         </Col>

@@ -111,7 +111,7 @@ export default class AnalyAlarmhourarea extends Component {
             grid: {
                 left: '3%',
                 right: '4%',
-                bottom: '3%',
+                bottom: 0,
                 containLabel: true
             },
             xAxis: {
@@ -147,16 +147,13 @@ export default class AnalyAlarmhourarea extends Component {
                     <div>
                         <Card style={{ height: 'calc(100vh - 145px)' }}>
                             <RangePicker_ style={{width: 250}} dateValue={this.state.rangeDate} format="YYYY-MM-DD" onChange={this._handleDateChange} />
-
                             <ReactEcharts option={option} lazyUpdate={true} notMerge={true} style={{ width: '100%', height: 'calc(100vh - 380px)' }} />
+                            <Card title="总结：" style={{marginTop: 25, marginLeft: '3%'}}>
+                                <p>报警在11时次数最多，报警在14时次数最少</p>
+                            </Card>
+                        </Card>
+                    </div>
 
-                        </Card>
-                    </div>
-                    <div style={{marginTop: -160, marginLeft: 70}}>
-                        <Card title="总结：">
-                            <p>报警在11时次数最多，报警在14时次数最少</p>
-                        </Card>
-                    </div>
                 </EnterpriseList>
             </div>
         );

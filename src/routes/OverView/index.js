@@ -556,7 +556,7 @@ class OverViewMap extends PureComponent {
                             this.infoWindowEvents
                         }>
                         <div style={{width: '322px'}}>
-                            <h4 className={styles.titleborder}> <Icon onClick={this.infoWinClose} className={styles.closeIcon} type="close" style={{ fontSize: 16, color: '#000' }} />{this.state.title} </h4>
+                            <h4 style={{marginBottom: '5px'}} className={styles.titleborder}> <Icon onClick={this.infoWinClose} className={styles.closeIcon} type="close" style={{ fontSize: 16, color: '#000' }} />{this.state.title} </h4>
                             <div className={styles.titlebutton}>
                                 <Button
                                     style={{

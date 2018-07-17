@@ -53,7 +53,7 @@
     "ProcessID":"8",
     "ExceptionHandleId":"14",
     "ProcessName":"审核",
-    "UserName":"王科长",
+    "UserName":"李松桂",
     "CreateTime":"2018-6-18 11:32"
 }],
 "TaskBasicInfo":[
@@ -61,9 +61,9 @@
         "ExceptionHandleId":"28",
         "TaskNo":"234231029431",
         "PointName":"锅炉小号烟囱1",
-        "EnterName":"北京雪迪龙科技股份有限公司",
-        "Province":"北京市",
-        "City":"北京市",
+        "EnterName":"法电大唐(三门峡)城市供热有限公司",
+        "Province":"河南",
+        "City":"三门峡",
         "TaskSource":"数据审核",
         "Emergence":"紧急",
         "TaskStatus":"处理中",
@@ -79,9 +79,9 @@
         "ExceptionHandleId":"14",
         "TaskNo":"234231029254",
         "PointName":"锅炉小号烟囱1",
-        "EnterName":"北京雪迪龙科技股份有限公司",
-        "Province":"北京市",
-        "City":"北京市",
+        "EnterName":"法电大唐(三门峡)城市供热有限公司",
+        "Province":"河南",
+        "City":"三门峡",
         "TaskSource":"数据审核",
         "Emergence":"紧急",
         "TaskStatus":"已完成",
@@ -193,31 +193,11 @@
                             "StepID":"10",
                             "ExceptionHandleId":"14",
                             "StepName":"审核",
-                            "User_Name":"李经理",
+                            "User_Name":"李松桂",
                             "BeginTime":"2018-6-18 11:12",
                             "EndTime":"2018-6-18 11:12",
                             "Remark":"",
                             "HandlingState":"完成"
-                    },
-                    {
-                                "StepID":"11",
-                                "ExceptionHandleId":"14",
-                                "StepName":"审核",
-                                "User_Name":"李科员",
-                                "BeginTime":"2018-6-18 11:12",
-                                "EndTime":"2018-6-18 11:12",
-                                "Remark":"",
-                                "HandlingState":"完成"
-                    },
-                    {
-                                    "StepID":"12",
-                                    "ExceptionHandleId":"14",
-                                    "StepName":"审核",
-                                    "User_Name":"王科长",
-                                    "BeginTime":"2018-6-18 11:12",
-                                    "EndTime":"2018-6-18 11:12",
-                                    "Remark":"",
-                                    "HandlingState":"完成"
                     }
     ],
 "InspectionRecord":[
