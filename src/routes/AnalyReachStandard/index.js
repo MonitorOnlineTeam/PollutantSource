@@ -7,6 +7,8 @@ import Cookie from 'js-cookie';
 import ConclusionInfo from '../../components/EnterpriseList/Conclusion';
 import StandardJson from '../../mockdata/DischargeTax/GroupStandard.json';
 
+import AnalyBase from '../../mockdata/Base/AnalyEntPoint.json';
+
 /*
 页面：排污达标率 一段时间内的达标率
 描述：工业废水排放达标量    指报告期内废水中各项污染物指标都达到国家或地方排放标准的外排工业废水量，包括未经处理外排达标的，经废水处理设施处理后达标排放的，以及经污水处理厂处理后达标排放的。
@@ -19,12 +21,14 @@ const Option = Select.Option;
 const {RangePicker} = DatePicker;
 const dateFormat = 'YYYY-MM-DD';
 let standard = StandardJson[0];
+let category = AnalyBase.Ent;
 
 export default class AnalyReachStandard extends Component {
     render() {
         const user = JSON.parse(Cookie.get('token'));
         if (user.User_Account === 'lisonggui') {
             standard = StandardJson[1];
+            category = AnalyBase.Point;
         }
 
         const option = {
@@ -51,7 +55,7 @@ export default class AnalyReachStandard extends Component {
             },
             yAxis: {
                 type: 'category',
-                data: standard.Company
+                data: category
             },
             series: [
                 {

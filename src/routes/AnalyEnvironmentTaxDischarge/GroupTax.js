@@ -7,6 +7,8 @@ import TaxJson from '../../mockdata/DischargeTax/GroupTax.json';
 import Cookie from 'js-cookie';
 import ConclusionInfo from '../../components/EnterpriseList/Conclusion';
 
+import AnalyBase from '../../mockdata/Base/AnalyEntPoint.json';
+
 const {RangePicker} = DatePicker;
 const Option = Select.Option;
 const TabPane = Tabs.TabPane;
@@ -43,7 +45,7 @@ export default class GroupTax extends Component {
             },
             yAxis: {
                 type: 'category',
-                data: Tax.Company
+                data: AnalyBase.Point
             },
             series: [
                 {
@@ -84,7 +86,7 @@ export default class GroupTax extends Component {
             },
             yAxis: {
                 type: 'category',
-                data: Tax.Company
+                data: AnalyBase.Ent
             },
             series: [
                 {
