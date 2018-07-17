@@ -176,13 +176,13 @@ export default class EmergencyDetailInfo extends Component {
                             <Description term="设备类型">{taskBasicInfo.length === 0 ? '' : taskBasicInfo[0].DeviceType}</Description>
                             <Description term="设备品牌">{taskBasicInfo.length === 0 ? '' : taskBasicInfo[0].DeviceBrand}</Description>
                             <Description term="设备编号">{taskBasicInfo.length === 0 ? '' : taskBasicInfo[0].DeviceNo}</Description>
-                            <Description term="设备型号">{taskBasicInfo.length === 0 ? '' : taskBasicInfo[0].DeviceType}</Description>
+                            <Description term="设备型号">{taskBasicInfo.length === 0 ? '' : taskBasicInfo[0].DeviceXh}</Description>
                         </DescriptionList>
                     </Card>
                     <Card title="应急处理" style={{ marginTop: 20}} bordered={false}>
                         <DescriptionList className={styles.headerList} size="large" col="1">
                             <Description term="处理说明">
-                                <TextArea style={{width: '400px'}} autosize={{ minRows: 2, maxRows: 6 }} value={emergencyHandle.length === 0 ? '' : emergencyHandle[0].HandleContent} />
+                                <TextArea style={{width: '400px'}} autosize={{ minRows: 2, maxRows: 6 }} disabled={true} value={emergencyHandle.length === 0 ? '' : emergencyHandle[0].HandleContent} />
                             </Description>
                             <Description term="处理记录">
                                 <Button style={{marginBottom: '5px'}} icon="check-circle-o" onClick={this.SeeDetailInfo}>气态分析仪运行状况检查记录表</Button><br />
