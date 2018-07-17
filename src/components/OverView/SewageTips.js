@@ -21,7 +21,7 @@ class SewageTips extends Component {
                 ? <AlarmTips selectpoint={this.props.selectpoint} AlarmClick={this.props.AlarmClick} />
                 : (<div>
                     <div className={styles.titleborder}>
-                        <h4 className={styles.pointInfo}>24小时排污量</h4>
+                        <h4 style={{marginBottom: '5px'}} className={styles.pointInfo}>24小时排污量</h4>
                         <ReactEcharts
 
                             style={{width: '95%', height: '100px'}}
@@ -31,14 +31,14 @@ class SewageTips extends Component {
                     </div>
                     <div className={styles.titleborder}>
                         <div className={styles.content}>
-                            <h4 className={styles.pointInfo}>排量统计</h4>
+                            <h4 style={{marginBottom: '5px'}} className={styles.pointInfo}>排量统计</h4>
                             <div><Icon type="tag" style={{ fontSize: 14, color: '#A8A6A5', marginRight: '2px' }} />总排污量:200（吨）</div>
                             <div><Icon type="pie-chart" style={{ fontSize: 14, color: '#A8A6A5', marginRight: '2px' }} />排污占比：12.8%</div>
                         </div>
                         <div className={styles.clearboth} />
                     </div>
                     <div style={{paddingTop: '5px', paddingBottom: '10px'}}>
-                        <h4 className={styles.pointInfo}>排量占比</h4>
+                        <h4 style={{marginBottom: '5px'}} className={styles.pointInfo}>排量占比</h4>
                         <ReactEcharts
                             style={{width: '95%', height: '150px'}}
                             option={markerspoint.sewagepieoption}

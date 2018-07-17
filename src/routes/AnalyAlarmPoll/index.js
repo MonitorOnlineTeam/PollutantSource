@@ -245,13 +245,13 @@ export default class AnalyAlarmPoll extends Component {
         return (
 
             <Row style={{marginBottom: 30}}>
-                <Col span="8">
-                    <span >企业：<EnterpriseAutoComplete width={200} placeholder="请选择企业" /></span>
-                </Col>
                 <Col span="9">
-                    <span className="gutter-box">时间：<RangePicker_ style={{width: 250}} placeholder="请选择时间" format="YYYY-MM-DD" onChange={this._handleDateChange} dateValue={this.state.rangeDate} /></span>
+                   企业 <span ><EnterpriseAutoComplete width={160} placeholder="请选择企业" /></span>
                 </Col>
-                <Col span="7">
+                <Col span="10">
+                  时间  <span className="gutter-box"><RangePicker_ style={{width: 200}} placeholder="请选择时间" format="YYYY-MM-DD" onChange={this._handleDateChange} dateValue={this.state.rangeDate} /></span>
+                </Col>
+                <Col span="5">
                     <span ><Button style={{width: 90}} type="primary" onClick={this._Processes}>查询</Button><a style={{ marginLeft: 8 }} onClick={this.toggleForm}>
                               展开 <Icon type="down" /> </a></span>
                 </Col>
@@ -269,26 +269,26 @@ export default class AnalyAlarmPoll extends Component {
         return (
             <div>
                 <Row style={{marginBottom: 30}}>
-                    <Col span="8">
-                        <span >企业：<EnterpriseAutoComplete width={200} placeholder="请选择企业" /></span>
-                    </Col>
                     <Col span="9">
-                        <span className="gutter-box">时间：<RangePicker_ style={{width: 250}} placeholder="请选择时间" format="YYYY-MM-DD" onChange={this._handleDateChange} dateValue={this.state.rangeDate} /></span>
+                      企业  <span ><EnterpriseAutoComplete width={160} placeholder="请选择企业" /></span>
+                    </Col>
+                    <Col span="10">
+                      时间  <span className="gutter-box"><RangePicker_ style={{width: 200}} placeholder="请选择时间" format="YYYY-MM-DD" onChange={this._handleDateChange} dateValue={this.state.rangeDate} /></span>
                     </Col>
 
-                    <Col span="7">
+                    <Col span="5">
                         <span ><Button style={{width: 90}} type="primary" onClick={this._Processes}>查询</Button><a style={{ marginLeft: 8 }} onClick={this.toggleForm}>
                               收起 <Icon type="up" />
                         </a></span>
                     </Col>
                 </Row>
                 <Row style={{marginBottom: 30}}>
-                    <Col span="8">
-                        <span > 级别：<Attention placeholder="请选择控制级别" width={200} /></span>
+                    <Col span="9">
+                      级别  <span > <Attention placeholder="请选择控制级别" width={200} /></span>
                     </Col>
-                    <Col span="8">
+                    <Col span="10">
                         <span>
-                            <span>行业：</span>
+                             行业
                             <TreeSelect
                                 showSearch={true}
                                 style={{ width: 200 }}
@@ -484,29 +484,60 @@ export default class AnalyAlarmPoll extends Component {
 
         });
         let Circleoption = {
-            grid: { // 控制图的大小，调整下面这些值就可以，
-                x: 80,
-                // x2: 50,
-                //  y2: 50, // y2可以控制 X轴跟Zoom控件之间的间隔，避免以为倾斜后造成 label重叠到zoom上
-                left: '3%',
-                right: '4%',
-                bottom: '3%',
-                top: '10%',
-                containLabel: true
-            },
             tooltip: {
                 trigger: 'item',
-                formatter: '{a} <br/>{b} : {c} ({d}%)'
+                formatter: '{a} <br/>{b}: {c} ({d}%)'
             },
             series: [
                 {
-                    name: '报警类型',
+                    name: '污染物',
                     type: 'pie',
-                    radius: '90%',
-                    center: ['45%', '50%'],
+                    radius: ['50%', '90%'],
+                    avoidLabelOverlap: false,
+                    label: {
+                        normal: {
+                            show: false,
+                            position: 'center'
+                        },
+                        emphasis: {
+                            show: true,
+                            textStyle: {
+                                fontSize: '30',
+                                fontWeight: 'bold'
+                            }
+                        }
+                    },
+                    labelLine: {
+                        normal: {
+                            show: false
+                        }
+                    },
                     data: this.state.sumbings,
                 }
             ]
+            // grid: { // 控制图的大小，调整下面这些值就可以，
+            //     x: 80,
+            //     // x2: 50,
+            //     //  y2: 50, // y2可以控制 X轴跟Zoom控件之间的间隔，避免以为倾斜后造成 label重叠到zoom上
+            //     left: '3%',
+            //     right: '4%',
+            //     bottom: '3%',
+            //     top: '10%',
+            //     containLabel: true
+            // },
+            // tooltip: {
+            //     trigger: 'item',
+            //     formatter: '{a} <br/>{b} : {c} ({d}%)'
+            // },
+            // series: [
+            //     {
+            //         name: '报警类型',
+            //         type: 'pie',
+            //         radius: '90%',
+            //         center: ['45%', '50%'],
+            //         data: this.state.sumbings,
+            //     }
+            // ]
         };
         let histogramoption = {
             grid: { // 控制图的大小，调整下面这些值就可以，
@@ -542,17 +573,15 @@ export default class AnalyAlarmPoll extends Component {
                 <PageHeaderLayout title="报警因子统计">
                     <Row style={{width: '100%'}}>
                         <Col span={8}>
-                            <Card style={{width: '100%', height: 'calc(100vh - 180px)'}}>
+                            <Card >
                                 <Card>
                                     <ReactEcharts
-                                        style={{height: 400}}
                                         option={Circleoption}
                                         notMerge={true}
                                         lazyUpdate={true} />
                                 </Card>
                                 <Card title="因子排名">
                                     <ReactEcharts
-                                        style={{height: 300}}
                                         option={histogramoption}
                                         notMerge={true}
                                         lazyUpdate={true} />
@@ -564,7 +593,7 @@ export default class AnalyAlarmPoll extends Component {
                             <Row>
                                 <Col >
                                     <Table
-                                        style={{marginTop: 10}}
+                                        style={{marginTop: -10}}
                                         dataSource={dataSource}
                                         columns={columns}
                                         scroll={{ x: 1400, y: 350 }}
@@ -584,7 +613,7 @@ export default class AnalyAlarmPoll extends Component {
                                             };
                                         }}
                                     />
-                                    <Card style={{marginTop: 20}} title={'总结'}>
+                                    <Card title={'总结'}>
                                         <p>
                                             实测烟尘报警84次；实测二氧化硫报警154次；实测氮氧化物报警173次；流量报警319次；氧含量报警65次；流速报警111次；延期温度报警50次；烟气湿度报警122次；烟气静压报警158次；烟尘报警329次，二氧化硫报警278次；氮氧化物报警157次。
                                         </p>

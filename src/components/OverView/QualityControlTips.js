@@ -19,7 +19,7 @@ class QualityControlTips extends Component {
                 : (<div>
                     <div style={{paddingTop: '5px', paddingBottom: '10px'}}>
                         <div className={styles.content}>
-                            <h4 className={styles.pointInfo}>近期质控情况（月）</h4>
+                            <h4 style={{marginBottom: '5px'}} className={styles.pointInfo}>近期质控情况（月）</h4>
                             <div style={{fontSize: '18px', color: '#6FC425'}}>零点偏差：-0.5</div>
                             <div style={{fontSize: '18px', color: '#6FC425'}}>量程偏差：0.5</div>
                             <div><Icon type="copy" style={{ fontSize: 14, color: '#A8A6A5', marginRight: '2px' }} />应质控：9次</div>

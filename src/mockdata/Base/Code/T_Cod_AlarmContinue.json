@@ -16,6 +16,12 @@
         "PointName":"脱硫入口1",
         "ContinueTimeLength":"23",
         "CountTimeLength":"86"
+    },
+    {
+        "DGIMN":"dtgrjx103",
+        "PointName":"脱硫入口2",
+        "ContinueTimeLength":"65",
+        "CountTimeLength":"79"
     }
 
 ]
