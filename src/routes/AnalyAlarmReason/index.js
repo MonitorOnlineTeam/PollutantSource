@@ -78,9 +78,6 @@ export default class AnalyAlarmReason extends Component {
   state = {
       value: undefined,
   }
-  renderForm() {
-      return this.state.expandForm ? this.renderSimpleForm() : this.renderAllForm();
-  }
   onChange = (value) => {
       console.log(value);
       this.setState({ value });
@@ -88,77 +85,8 @@ export default class AnalyAlarmReason extends Component {
   _handleDateChange=(date, dateString) => {
       this.setState({rangeDate: date});
   };
-  renderSimpleForm() {
-      return (
-          <Row style={{marginBottom: 30}}>
-              <Col span="8">
-                  <span >企业：<EnterpriseAutoComplete width={160} placeholder="请选择企业" /></span>
-              </Col>
-              <Col span="10">
-                  <span className="gutter-box">时间：<RangePicker_ style={{width: 200}} placeholder="请选择时间" format="YYYY-MM-DD" onChange={this._handleDateChange} dateValue={this.state.rangeDate} /></span>
-              </Col>
-              <Col span="6">
-                  <span ><Button style={{width: 90}} type="primary" onClick={this._Processes}>查询</Button><a style={{ marginLeft: 8 }} onClick={this.toggleForm}>
-                            展开 <Icon type="down" /> </a></span>
-              </Col>
-          </Row>
-      );
-  }
-
-  toggleForm = () => {
-      this.setState({
-          expandForm: !this.state.expandForm,
-      });
-  };
-  renderAllForm() {
-      const treeData = this.state.IndustryTypes;
-      return (
-          <div>
-              <Row style={{marginBottom: 30}}>
-                  <Col span="8">
-                      <span >企业：<EnterpriseAutoComplete width={160} placeholder="请选择企业" /></span>
-                  </Col>
-                  <Col span="10">
-                      <span className="gutter-box">时间：<RangePicker_ style={{width: 200}} placeholder="请选择时间" format="YYYY-MM-DD" onChange={this._handleDateChange} dateValue={this.state.rangeDate} /></span>
-                  </Col>
-                  <Col span="6">
-                      <span ><Button style={{width: 90}} type="primary" onClick={this._Processes}>查询</Button><a style={{ marginLeft: 8 }} onClick={this.toggleForm}>
-                            收起 <Icon type="up" />
-                      </a></span>
-                  </Col>
-              </Row>
-              <Row>
-                  <Col span="8">
-                      <span > 级别：<Attention placeholder="请选择控制级别" width={160} /></span>
-                  </Col>
-                  <Col span="10">
-                      <span>
-                          <span>行业：</span>
-                          <TreeSelect
-                              showSearch={true}
-                              style={{ width: 200 }}
-                              value={this.state.value}
-                              dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
-                              placeholder="请选择行业"
-                              allowClear={true}
-                              treeDefaultExpandAll={true}
-                              onChange={this.onChange}
-                              treeData={treeData}
-                          />
-                      </span>
-                  </Col>
-              </Row>
-          </div>
-      );
-  }
   render() {
       const option = {
-          grid: {
-              right: '4%',
-              top: '10%',
-              bottom: '10%',
-              containLabel: true
-          },
           tooltip: {
               trigger: 'item',
               formatter: '{a} <br/>{b} : {c} ({d}%)'
@@ -178,7 +106,7 @@ export default class AnalyAlarmReason extends Component {
                   name: '访问来源',
                   type: 'pie',
                   radius: '80%',
-                  center: ['50%', '40%'],
+                  center: ['50%', '50%'],
                   data: this.state.sumbings,
               }
           ]
@@ -237,22 +165,55 @@ export default class AnalyAlarmReason extends Component {
           DataCause: ColDataCauses,
           EquipmentCause: ColEquipmentCauses,
       });
-
+      const treeData = this.state.IndustryTypes;
       return (
-          <PageHeaderLayout title="报警原因统计">
+          <PageHeaderLayout>
               <div>
                   <Card>
                       <Row >
                           <Col span={10} >
                               <Layout >
                                   <Content><ReactEcharts
-                                      style={{height: 'calc(100vh - 0px)'}}
+                                      style={{height: 'calc(100vh - 160px)'}}
                                       option={option}
                                       notMerge={true}
                                       lazyUpdate={true} /></Content>
                               </Layout></Col>
                           <Col span={13} style={{marginLeft: 30}}>
-                              <div className={styles.tableListForm}>{this.renderForm()}</div>
+                              <div>
+                                  <Row style={{marginBottom: 30}}>
+                                      <Col span="8">
+                                          <span >企业：<EnterpriseAutoComplete width={160} placeholder="请选择企业" /></span>
+                                      </Col>
+                                      <Col span="10">
+                                          <span className="gutter-box">时间：<RangePicker_ style={{width: 200}} placeholder="请选择时间" format="YYYY-MM-DD" onChange={this._handleDateChange} dateValue={this.state.rangeDate} /></span>
+                                      </Col>
+                                  </Row>
+                                  <Row>
+                                      <Col span="8">
+                                          <span > 级别：<Attention placeholder="请选择控制级别" width={160} /></span>
+                                      </Col>
+                                      <Col span="10">
+                                          <span>
+                                              <span>行业：</span>
+                                              <TreeSelect
+                                                  showSearch={true}
+                                                  style={{ width: 200 }}
+                                                  value={this.state.value}
+                                                  dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+                                                  placeholder="请选择行业"
+                                                  allowClear={true}
+                                                  treeDefaultExpandAll={true}
+                                                  onChange={this.onChange}
+                                                  treeData={treeData}
+                                              />
+                                          </span>
+                                      </Col>
+                                      <Col span="6">
+                                          <span ><Button style={{width: 90}} type="primary" onClick={this._Processes}>查询</Button></span>
+                                      </Col>
+                                  </Row>
+                              </div>
                               <Row>
                                   <Col >
                                       <Table
