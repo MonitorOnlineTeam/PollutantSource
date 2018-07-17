@@ -5,6 +5,7 @@ import moment from 'moment';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import TaxJson from '../../mockdata/DischargeTax/GroupTax.json';
 import Cookie from 'js-cookie';
+import ConclusionInfo from '../../components/EnterpriseList/Conclusion';
 
 const {RangePicker} = DatePicker;
 const Option = Select.Option;
@@ -111,22 +112,16 @@ export default class GroupTax extends Component {
                         <RangePicker style={{width: 300, marginLeft: 10}} defaultValue={[moment('2018-07-01', dateFormat), moment('2018-08-01', dateFormat)]} format={dateFormat} />
                     </div>
                 } >
-                    <Tabs defaultActiveKey="1" tabPosition={'left'} style={{marginTop: '10px'}}>
+                    <Tabs defaultActiveKey="1" tabPosition={'left'} >
                         <TabPane tab={<span><Icon type="bar-chart" />排污量</span>} key="1">
-                            <div>
-                                <ReactEcharts option={option} lazyUpdate={true} notMerge={true} style={{ width: '100%', height: 'calc(100vh - 485px)'}} />
-                                <Card title="说明" style={{width: '100%'}}>
-                                    <p>{Tax.FlowSummer[0]}</p>
-                                    <p>{Tax.FlowSummer[1]}</p>
-                                </Card>
-                            </div>
+                            <ConclusionInfo content={Tax.FlowSummer}>
+                                <ReactEcharts option={option} lazyUpdate={true} notMerge={true} style={{width: '100%', height: 'calc(100vh - 395px)'}} />
+                            </ConclusionInfo>
                         </TabPane>
                         <TabPane tab={<span><Icon type="line-chart" />环保税</span>} key="2">
-                            <ReactEcharts option={option2} lazyUpdate={true} notMerge={true} style={{ width: '100%', height: 'calc(100vh - 485px)' }} />
-                            <Card title="说明" style={{width: '100%'}}>
-                                <p>{Tax.TaxSummer[0]}</p>
-                                <p>{Tax.TaxSummer[1]}</p>
-                            </Card>
+                            <ConclusionInfo content={Tax.FlowSummer}>
+                                <ReactEcharts option={option2} lazyUpdate={true} notMerge={true} style={{ width: '100%', height: 'calc(100vh - 395px)' }} />
+                            </ConclusionInfo>
                         </TabPane>
                     </Tabs>
                 </Card>
