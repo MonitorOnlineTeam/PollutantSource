@@ -7,13 +7,20 @@ import EnterpriseAutoComplete from '../../components/EnterpriseAutoComplete/inde
 import WorkbenchCard from '../../components/Workbench/WorkbenchCard';
 import {getPointEnterprise} from '../../mockdata/Base/commonbase';
 import todolist from '../../mockdata/Workbench/todolist.json';
+import Cookie from 'js-cookie';
 
 function getTodolist(operationaction, enterprise) {
+    const user = JSON.parse(Cookie.get('token'));
+    if (user.User_Account === 'lisonggui') { operationaction = '3'; }
     let todoArray = [];
     const points = getPointEnterprise();
-    todolist.forEach(a => {
+    for (const a of todolist) {
+        debugger;
         let point = points.find(t => t.DGIMN === a.DGIMN);
         if (point) {
+            if (user.User_Account === 'chengyun' && a.operationaction.toString() === '3') {
+                continue;
+            }
             if (!operationaction && !enterprise) {
                 todoArray.push({...point, ...a});
             }
@@ -27,7 +34,7 @@ function getTodolist(operationaction, enterprise) {
                 todoArray.push({...point, ...a});
             }
         }
-    });
+    }
     return todoArray;
 }
 
@@ -61,7 +68,8 @@ export default class TodolistWorkbenchCard extends Component {
     }
     render() {
         const titleCnt1 = this.state.todoArray.length;
-        const toduOperationActionSelect = [{'id': '1', 'text': '例行运维'}, {'id': '2', 'text': '应急运维'}, {'id': '3', 'text': '运维审核'}];
+        const user = JSON.parse(Cookie.get('token'));
+        const toduOperationActionSelect = user.User_Account === 'lisonggui' ? [{'id': '3', 'text': '运维审核'}] : [{'id': '1', 'text': '例行运维'}, {'id': '2', 'text': '应急运维'}];
         return (
             <Spin spinning={this.state.loading}>
                 <WorkbenchCard title={<span>待办事项 | <a href="javascript:void(0)" onClick={this.aclick} target="_blank" style={{color: 'red', fontWeight: 'bold'}}>{titleCnt1}</a></span>}
