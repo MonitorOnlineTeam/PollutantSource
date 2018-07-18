@@ -47,61 +47,22 @@ export default class AnalyAlarmhourarea extends Component {
             });
             // var summarize = timedata;
         });
+        let table = [];
+        AlarmTimeRange.map((item, _key) => {
+            item.Child.map((items) => {
+                table.push(item.comment);
+            });
+        });
+        var commentinfo = table[0];
         this.state = {
             rangeDate: [moment('2018-06-23 00:00:00'), moment('2018-06-25 00:00:00')],
             AlarmTimeRangeList: AlarmTimeRange,
             DataLists: dataList,
             PointName: PointNames,
-            comments: [],
+            comments: commentinfo,
         };
     }
-    SearchDataList = (value) => {
-        this.setState({
-            AlarmTimeRangeList: [],
-            DataLists: [],
-            Enterprise: value,
-            PointName: [],
-        });
-        let AlarmTimeRangeLists = [];
-        let Data = [];
-        let Name = [];
-        let table = [];
-        AlarmTimeRange.map((item, _key) => {
-            item.Child.map((items) => {
-                if (value.indexOf(item.EntCode) > -1) {
-                    table.push(item.comment);
-                    AlarmTimeRangeLists.push(items);
-                }
-            });
-        });
-        var commentinfo = table[0];
-        AlarmTimeRangeLists.map((item) => {
-            var timedata = [];
-            var times = item.time.split(',');
-            times.map((item) => {
-                timedata.push(item);
-            });
-            Name.push(item.PointName);
-            Data.push({
-                name: item.PointName,
-                type: 'bar',
-                stack: '总量',
-                label: {
-                    normal: {
-                        show: true,
-                        position: 'insideRight'
-                    }
-                },
-                data: timedata
-            });
-        });
-        this.setState({
-            AlarmTimeRangeList: AlarmTimeRangeLists,
-            DataLists: Data,
-            PointName: Name,
-            comments: commentinfo,
-        });
-    };
+
     render() {
         let option = {
             tooltip: {
@@ -131,23 +92,20 @@ export default class AnalyAlarmhourarea extends Component {
         };
         return (
             <div style={{ width: '100%',
-                height: 'calc(100vh - 67px)' }}>
-                <EnterpriseList IsShowChk={'none'} handleChange={this.SearchDataList}>
-                    <PageHeaderLayout>
-                        <div>
-                            <ConclusionInfo content={this.state.comments}>
-                                <Card style={{ height: 'calc(100vh - 245px)' }}>
-                                    <div style={{textAlign: 'right'}}>
-                                        <RangePicker_ style={{width: 250}} dateValue={this.state.rangeDate} format="YYYY-MM-DD" onChange={this._handleDateChange} />
-                                    </div>
+            }}>
+                <PageHeaderLayout title="报警时间范围分布情况">
+                    <div>
+                        <ConclusionInfo content={this.state.comments}>
+                            <Card >
+                                <div style={{textAlign: 'right'}}>
+                                    <RangePicker_ style={{width: 250}} dateValue={this.state.rangeDate} format="YYYY-MM-DD" onChange={this._handleDateChange} />
+                                </div>
 
-                                    <ReactEcharts option={option} lazyUpdate={true} notMerge={true} style={{ width: '100%', height: 'calc(100vh - 330px)' }} />
-                                </Card>
-                            </ConclusionInfo>
-                        </div>
-                    </PageHeaderLayout>
-
-                </EnterpriseList>
+                                <ReactEcharts option={option} lazyUpdate={true} notMerge={true} style={{ width: '100%', height: 'calc(100vh - 350px)' }} />
+                            </Card>
+                        </ConclusionInfo>
+                    </div>
+                </PageHeaderLayout>
             </div>
         );
     }

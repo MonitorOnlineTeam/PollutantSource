@@ -28,19 +28,19 @@
   "data":[  {
     "PointName":"北京绿都供暖有限责任公司",
     "AlarmEnterprise":"43",
-    "AlarmState":"86",
+    "AlarmState":"56",
     "AlarmFault":"40"
     },
     {
         "PointName":"巴中垃圾焚烧电厂",
         "AlarmEnterprise":"86",
-        "AlarmState":"75",
+        "AlarmState":"45",
         "AlarmFault":"94"
     },
     {
         "PointName":"大唐供热集团",
         "AlarmEnterprise":"16",
-        "AlarmState":"85",
+        "AlarmState":"55",
         "AlarmFault":"23"
     }]
 }]
