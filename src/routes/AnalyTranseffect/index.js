@@ -87,7 +87,7 @@ export default class AnalyTranseffect extends Component {
             legend: {
                 orient: 'vertical',
                 left: 'left',
-                data: ['有效', '无效']
+                data: ['传输', '未传输']
             },
             series: [
                 {
@@ -96,8 +96,8 @@ export default class AnalyTranseffect extends Component {
                     radius: '55%',
                     center: ['50%', '60%'],
                     data: [
-                        {value: 95, name: '有效'},
-                        {value: 5, name: '无效'}
+                        {value: 0.95, name: '传输'},
+                        {value: 0.05, name: '未传输'}
                     ],
                     itemStyle: {
                         emphasis: {
@@ -130,7 +130,7 @@ export default class AnalyTranseffect extends Component {
                     radius: '55%',
                     center: ['50%', '60%'],
                     data: [
-                        {value: 100, name: '有效'},
+                        {value: 1, name: '有效'},
                         {value: 0, name: '无效'}
                     ],
                     itemStyle: {
@@ -164,7 +164,7 @@ export default class AnalyTranseffect extends Component {
                     radius: '55%',
                     center: ['50%', '60%'],
                     data: [
-                        {value: 100, name: '传输有效'},
+                        {value: 1, name: '传输有效'},
                         {value: 0, name: '非传输/无效'}
                     ],
                     itemStyle: {
@@ -180,8 +180,8 @@ export default class AnalyTranseffect extends Component {
         return (
             <div>
                 <PageHeaderLayout>
-                    <div style={{height: 'calc(100vh - 135px)'}}>
-                        <Card title="设备传输有效率统计" style={{height: 'calc(100vh - 160px)'}} extra={
+                    <div style={{height: 'calc(100vh - 164px)', overflow: 'hidden', overflowY: 'scroll'}}>
+                        <Card title="设备传输有效率统计" extra={// style={{height: 'calc(100vh - 164px)'}}
                             <div>
                                 <EnterprisePointCascadeMultiSelect initValue={['bjldgn']} cascadeSize={3} width="300px" />
                             </div>
@@ -190,13 +190,12 @@ export default class AnalyTranseffect extends Component {
                             <Row gutter={16}>
                                 <Table
                                     rowKey="Key"
-                                    size="small"// middle
+                                    size="middle"// middle
                                     columns={columns}
                                     dataSource={tableData}
                                     pagination={false}
                                     bordered={true}
                                     minHeight={500}
-                                    scroll={this.state.scrollStyle}
                                 />
                             </Row>
                             <Row style={{marginTop: 100}}>
