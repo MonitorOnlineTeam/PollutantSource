@@ -7,7 +7,6 @@ import ReactEcharts from 'echarts-for-react';
 import { Link } from 'dva/router';
 import moment from 'moment';
 import AlarmTimeRange from '../../mockdata/AnalyAlarmhourarea/AlarmTimeRange';
-import EnterpriseList from '../../components/EnterpriseList/EnterpriseList';
 import ConclusionInfo from '../../components/EnterpriseList/Conclusion';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 /*
@@ -22,6 +21,7 @@ export default class AnalyAlarmhourarea extends Component {
     };
     constructor(props) {
         super(props);
+        debugger;
         var dataList = [];
         var PointNames = [];
         AlarmTimeRange.map((item) => {
@@ -32,19 +32,20 @@ export default class AnalyAlarmhourarea extends Component {
                     timedata.push(item);
                 });
                 PointNames.push(items.PointName);
+                dataList.push({
+                    name: items.PointName,
+                    type: 'bar',
+                    stack: '总量',
+                    label: {
+                        normal: {
+                            show: true,
+                            position: 'insideRight'
+                        }
+                    },
+                    data: timedata
+                });
             });
-            dataList.push({
-                name: item.EntName,
-                type: 'bar',
-                stack: '总量',
-                label: {
-                    normal: {
-                        show: true,
-                        position: 'insideRight'
-                    }
-                },
-                data: timedata
-            });
+
             // var summarize = timedata;
         });
         let table = [];
