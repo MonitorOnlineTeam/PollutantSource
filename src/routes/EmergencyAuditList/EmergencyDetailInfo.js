@@ -14,7 +14,7 @@ const { Description } = DescriptionList;
 const { TextArea } = Input;
 const Step = Steps.Step;
 const customDot = (dot, { status, index }) => (
-    <Popover content={<span>step {index} status: {status}</span>}>
+    <Popover content={<span>步骤 {(index + 1)} 状态: {status === 'finish' ? '完成' : '进行中'}</span>}>
         {dot}
     </Popover>
 );
@@ -138,7 +138,7 @@ export default class EmergencyDetailInfo extends Component {
             <PageHeaderLayout title="应急任务详情">
                 <div style={{height: 'calc(100vh - 190px)'}} className={styles.ExceptionDetailDiv}>
                     <Card title="" style={{ }} bordered={false}>
-                        <Steps progressDot={customDot} current={currentProcess.length}>
+                        <Steps progressDot={customDot} current={3}>
                             {
                                 taskProcess.map((item) => {
                                     return (<Step title={item.ProcessName} description={
@@ -176,13 +176,13 @@ export default class EmergencyDetailInfo extends Component {
                             <Description term="设备类型">{taskBasicInfo.length === 0 ? '' : taskBasicInfo[0].DeviceType}</Description>
                             <Description term="设备品牌">{taskBasicInfo.length === 0 ? '' : taskBasicInfo[0].DeviceBrand}</Description>
                             <Description term="设备编号">{taskBasicInfo.length === 0 ? '' : taskBasicInfo[0].DeviceNo}</Description>
-                            <Description term="设备型号">{taskBasicInfo.length === 0 ? '' : taskBasicInfo[0].DeviceType}</Description>
+                            <Description term="设备型号">{taskBasicInfo.length === 0 ? '' : taskBasicInfo[0].DeviceXh}</Description>
                         </DescriptionList>
                     </Card>
                     <Card title="应急处理" style={{ marginTop: 20}} bordered={false}>
                         <DescriptionList className={styles.headerList} size="large" col="1">
                             <Description term="处理说明">
-                                <TextArea style={{width: '400px'}} autosize={{ minRows: 2, maxRows: 6 }} value={emergencyHandle.length === 0 ? '' : emergencyHandle[0].HandleContent} />
+                                <TextArea style={{width: '400px'}} autosize={{ minRows: 2, maxRows: 6 }} disabled={true} value={emergencyHandle.length === 0 ? '' : emergencyHandle[0].HandleContent} />
                             </Description>
                             <Description term="处理记录">
                                 <Button style={{marginBottom: '5px'}} icon="check-circle-o" onClick={this.SeeDetailInfo}>气态分析仪运行状况检查记录表</Button><br />
@@ -231,7 +231,20 @@ export default class EmergencyDetailInfo extends Component {
                             }
                         </Steps>
                     </Card>
-
+                    <Card title="附件" style={{marginTop: 20 }} bordered={false}>
+                        <Row gutter={16} justify="center" align="middle">
+                            <Col span={6} align="center">
+                                <img src="../../../pic1.jpg" />
+                            </Col>
+                            <Col span={6} align="center">
+                                <img src="../../../pic2.jpg" />
+                            </Col>
+                            <Col span={6} align="center">
+                                <img src="../../../pic3.jpg" />
+                            </Col>
+                            <Col span={6} align="center" />
+                        </Row>
+                    </Card>
                     <Card title="日志表" style={{marginTop: 20 }} bordered={false}>
                         <Table columns={LogColumn}
                             dataSource={logDataList}
@@ -278,7 +291,7 @@ export default class EmergencyDetailInfo extends Component {
                         onCancel={() => {
                             this.setState({
                                 showaudio: false
-                            }); 
+                            });
                         }}>
                         <div>
                             <Form>

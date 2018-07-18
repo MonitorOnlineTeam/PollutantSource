@@ -17,7 +17,7 @@ import { Card,
 } from 'antd';
 import {routerRedux} from 'dva/router';
 import styles from './index.less';
-
+import Videos from '../../components/AlarmRecord/Video';
 import {connect} from 'dva';
 @connect(() => ({
 
@@ -34,6 +34,7 @@ class AlarmRecord extends Component {
             PollutantValue: '',
             DateValue: '',
             numberValue: '',
+            visible: false,
         };
     }
     _handleAlarmChange=(e) => {
@@ -58,6 +59,10 @@ class AlarmRecord extends Component {
         console.log(dateString);// ['2018-06-23','2018-06-25']
         this.setState({rangeDate: date});
     };
+    stationclick = () => {
+        console.log(this);
+        this.props.dispatch(routerRedux.push(`/monitor/operation/emergency/emergencytodolist`));
+    }
     stationclick = () => {
         console.log(this);
         this.props.dispatch(routerRedux.push(`/monitor/operation/emergency/emergencytodolist`));
@@ -117,7 +122,7 @@ class AlarmRecord extends Component {
                             });
                         }}>
                         {
-                            this.state.type === 'add' ? <Process /> : null
+                            this.state.type === 'add' ? <Videos /> : null
                         }
                     </Modal>
                 </Card>
@@ -234,6 +239,20 @@ class AlarmRecord extends Component {
             render: (text, record, index) => { return <Button type="primary" shape="circle" icon="link" size={'small'} onClick={this.stationclick} id={record.key} />; }
         },
         {
+            title: '报警视频',
+            dataIndex: 'AlarmVideo',
+            key: 'AlarmVideo',
+            width: 110,
+            render: (text, record, index) => {
+                return <Button type="primary" shape="circle" icon="play-circle-o" size={'small'} onClick={() => {
+                    this.setState({
+                        visible: true,
+                        title: '报警视频',
+                    });
+                }} id={record.key} />;
+            }
+        },
+        {
             title: '预计恢复时间',
             dataIndex: 'ExceptRecoverTime',
             key: 'ExceptRecoverTime',
@@ -246,6 +265,7 @@ class AlarmRecord extends Component {
         }];
         const data = this.state.ExceptionProcessingList;
         return (
+
             <Card>
                 <div className={styles.tableListForm}>{this.renderForm()}</div>
                 <Row gutter={18} >
@@ -253,9 +273,30 @@ class AlarmRecord extends Component {
                         <Table
                             columns={columns}
                             dataSource={data}
-                            scroll={{ x: 1950, y: 'calc(100vh - 465px)' }}
+                            scroll={{ x: 2060, y: 'calc(100vh - 430px)' }}
                             rowSelection={rowSelection}
                         />
+                        <div>
+                            <Modal
+                                visible={this.state.visible}
+                                title="报警视频"
+                                width="800px"
+                                height="500px"
+                                onOk={() => {
+                                    this.setState({
+                                        visible: false
+                                    });
+                                }}
+                                onCancel={() => {
+                                    this.setState({
+                                        visible: false
+                                    });
+                                }}>
+                                {
+                                    <Videos />
+                                }
+                            </Modal>
+                        </div>
                     </Col>
                 </Row>
             </Card>

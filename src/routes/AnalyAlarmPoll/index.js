@@ -7,8 +7,8 @@ import RangePicker_ from '../../components/PointDetail/RangePicker_';
 import Attention from '../../components/AnalyAlarmReason/AttentionDegree';
 import EnterpriseAutoComplete from '../../components/EnterpriseAutoComplete/index';
 import moment from 'moment';
-import AlarmFactor from '../../mockdata/Base/Code/T_Cod_AlarmFactor';
-import IndustryType from '../../mockdata/Base/Code/T_Cod_IndustryType';
+import AlarmFactor from '../../mockdata/AnalyAlarmPoll/AlarmFactor';
+import ConclusionInfo from '../../components/EnterpriseList/Conclusion';
 /*
 页面：报警因子统计
 描述：分别统计各个设备污染因子报警分布情况
@@ -32,7 +32,7 @@ export default class AnalyAlarmPoll extends Component {
         var zs01 = [];
         var zs02 = [];
         var zs03 = [];
-        AlarmFactor.map((item) => {
+        AlarmFactor[0].data.map((item) => {
             a01.push(item.a01);
             a02.push(item.a02);
             a03.push(item.a03);
@@ -84,10 +84,9 @@ export default class AnalyAlarmPoll extends Component {
         var colzs03 = zs03.reduce(function(first, second) {
             return Number.parseInt(first) + Number.parseInt(second);
         }, 0);
-        this.state = {
-            rangeDate: [moment('2018-06-23 00:00:00'), moment('2018-06-25 00:00:00')],
-            expandForm: true,
-        };
+        debugger;
+        var summarize = AlarmFactor[0].summer;
+
         sum.push(cola01);
         sum.push(cola02);
         sum.push(cola03);
@@ -199,119 +198,53 @@ export default class AnalyAlarmPoll extends Component {
             }
         });
         // 递归获取行业下拉框
-        var industryList = [];
-        IndustryType.map((item) => {
-            if (item.ParentNode === 'root') {
-                industryList.push({
-                    label: item.IndustryTypeName,
-                    value: item.IndustryTypeName,
-                    key: item.IndustryTypeName,
-                    children: getSecond(item.IndustryTypeCode)
-                });
-            }
-        });
-        function getSecond(Code) {
-            var children = [];
-            IndustryType.map((item) => {
-                if (item.ParentNode === Code) {
-                    children.push({
-                        label: item.IndustryTypeName,
-                        value: item.IndustryTypeName,
-                        key: item.IndustryTypeName,
-                        children: getSecond(item.IndustryTypeCode)
-                    }
-                    );
-                }
-            });
-            return children;
-        }
+        // var industryList = [];
+        // IndustryType.map((item) => {
+        //     if (item.ParentNode === 'root') {
+        //         industryList.push({
+        //             label: item.IndustryTypeName,
+        //             value: item.IndustryTypeName,
+        //             key: item.IndustryTypeName,
+        //             children: getSecond(item.IndustryTypeCode)
+        //         });
+        //     }
+        // });
+        // function getSecond(Code) {
+        //     var children = [];
+        //     IndustryType.map((item) => {
+        //         if (item.ParentNode === Code) {
+        //             children.push({
+        //                 label: item.IndustryTypeName,
+        //                 value: item.IndustryTypeName,
+        //                 key: item.IndustryTypeName,
+        //                 children: getSecond(item.IndustryTypeCode)
+        //             }
+        //             );
+        //         }
+        //     });
+        //     return children;
+        // }
         this.state = {
             rangeDate: [moment('2018-06-23 00:00:00'), moment('2018-06-25 00:00:00')],
             expandForm: true,
             pollutantSum: sum,
             sumbings: sumbing,
-            IndustryTypes: industryList,
+            // IndustryTypes: industryList,
             histogram: PointName,
+            summarizes: summarize,
         };
-    }
-    renderForm() {
-        return this.state.expandForm ? this.renderSimpleForm() : this.renderAllForm();
     }
     onChange = (value) => {
         console.log(value);
         this.setState({ value });
     }
-    renderSimpleForm() {
-        return (
 
-            <Row style={{marginBottom: 30}}>
-                <Col span="8">
-                    <span >企业：<EnterpriseAutoComplete width={200} placeholder="请选择企业" /></span>
-                </Col>
-                <Col span="9">
-                    <span className="gutter-box">时间：<RangePicker_ style={{width: 250}} placeholder="请选择时间" format="YYYY-MM-DD" onChange={this._handleDateChange} dateValue={this.state.rangeDate} /></span>
-                </Col>
-                <Col span="7">
-                    <span ><Button style={{width: 90}} type="primary" onClick={this._Processes}>查询</Button><a style={{ marginLeft: 8 }} onClick={this.toggleForm}>
-                              展开 <Icon type="down" /> </a></span>
-                </Col>
-            </Row>
-        );
-    }
-
-    toggleForm = () => {
-        this.setState({
-            expandForm: !this.state.expandForm,
-        });
-    };
-    renderAllForm() {
-        const treeData = this.state.IndustryTypes;
-        return (
-            <div>
-                <Row style={{marginBottom: 30}}>
-                    <Col span="8">
-                        <span >企业：<EnterpriseAutoComplete width={200} placeholder="请选择企业" /></span>
-                    </Col>
-                    <Col span="9">
-                        <span className="gutter-box">时间：<RangePicker_ style={{width: 250}} placeholder="请选择时间" format="YYYY-MM-DD" onChange={this._handleDateChange} dateValue={this.state.rangeDate} /></span>
-                    </Col>
-
-                    <Col span="7">
-                        <span ><Button style={{width: 90}} type="primary" onClick={this._Processes}>查询</Button><a style={{ marginLeft: 8 }} onClick={this.toggleForm}>
-                              收起 <Icon type="up" />
-                        </a></span>
-                    </Col>
-                </Row>
-                <Row style={{marginBottom: 30}}>
-                    <Col span="8">
-                        <span > 级别：<Attention placeholder="请选择控制级别" width={200} /></span>
-                    </Col>
-                    <Col span="8">
-                        <span>
-                            <span>行业：</span>
-                            <TreeSelect
-                                showSearch={true}
-                                style={{ width: 200 }}
-                                value={this.state.value}
-                                dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
-                                placeholder="请选择行业"
-                                allowClear={true}
-                                treeDefaultExpandAll={true}
-                                onChange={this.onChange}
-                                treeData={treeData}
-                            />
-                        </span>
-                    </Col>
-                </Row>
-            </div>
-        );
-    }
     render() {
         const columns = [{
-            title: '排口名称',
+            title: '名称',
             dataIndex: 'PointName',
             key: 'PointName',
-            width: 100,
+            width: 150,
             fixed: 'left',
         }, {
             title: '实测烟尘',
@@ -386,7 +319,7 @@ export default class AnalyAlarmPoll extends Component {
         ];
         // 循环求数据
         const dataSource = [];
-        for (let item of AlarmFactor) {
+        for (let item of AlarmFactor[0].data) {
             dataSource.push({
                 PointName: item.PointName,
                 a01: item.a01,
@@ -484,15 +417,8 @@ export default class AnalyAlarmPoll extends Component {
 
         });
         let Circleoption = {
-            grid: { // 控制图的大小，调整下面这些值就可以，
-                x: 80,
-                // x2: 50,
-                //  y2: 50, // y2可以控制 X轴跟Zoom控件之间的间隔，避免以为倾斜后造成 label重叠到zoom上
-                left: '3%',
-                right: '4%',
-                bottom: '3%',
-                top: '10%',
-                containLabel: true
+            title: {
+                text: '报警因子占比'
             },
             tooltip: {
                 trigger: 'item',
@@ -509,15 +435,8 @@ export default class AnalyAlarmPoll extends Component {
             ]
         };
         let histogramoption = {
-            grid: { // 控制图的大小，调整下面这些值就可以，
-                x: 80,
-                // x2: 50,
-                //  y2: 50, // y2可以控制 X轴跟Zoom控件之间的间隔，避免以为倾斜后造成 label重叠到zoom上
-                left: '3%',
-                right: '4%',
-                bottom: '3%',
-                top: '10%',
-                containLabel: true
+            title: {
+                text: '报警因子排名'
             },
             xAxis: {
                 type: 'value',
@@ -525,83 +444,64 @@ export default class AnalyAlarmPoll extends Component {
             yAxis: {
                 type: 'category',
                 data: this.state.histogram,
-                axisLabel: {
-                    interval: 0,
-                    rotate: -30
-                },
             },
             series: [{
                 data: this.state.pollutantSum,
                 type: 'bar',
-                barWidth: 15,
+                barWidth: 23,
             }],
         };
-
         return (
             <div>
-                <PageHeaderLayout title="报警因子统计">
-                    <Row style={{width: '100%'}}>
-                        <Col span={8}>
-                            <Card style={{width: '100%', height: 'calc(100vh - 180px)'}}>
-                                <Card>
-                                    <ReactEcharts
-                                        style={{height: 400}}
-                                        option={Circleoption}
-                                        notMerge={true}
-                                        lazyUpdate={true} />
-                                </Card>
-                                <Card title="因子排名">
-                                    <ReactEcharts
-                                        style={{height: 300}}
-                                        option={histogramoption}
-                                        notMerge={true}
-                                        lazyUpdate={true} />
-                                </Card>
-                            </Card>
-                        </Col>
-                        <Col span={14} style={{marginLeft: 30}}>
-                            <div className={styles.tableListForm}>{this.renderForm()}</div>
-                            <Row>
-                                <Col >
-                                    <Table
-                                        style={{marginTop: 10}}
-                                        dataSource={dataSource}
-                                        columns={columns}
-                                        scroll={{ x: 1400, y: 350 }}
-                                        onRow={(record, index) => {
-                                            return {
-                                                onClick: (a, b, c) => {
-                                                    let {selectid} = this.state;
-                                                    let index = selectid.findIndex(t => t === record.key);
-                                                    if (index !== -1) {
-                                                        selectid.splice(index, 1);
-                                                    } else {
-                                                        selectid.push(record.key);
-                                                    }
-                                                    this.setState({selectid: selectid});
-                                                }, // 点击行
-                                                onMouseEnter: () => {}, // 鼠标移入行
-                                            };
-                                        }}
-                                    />
-                                    <Card style={{marginTop: 20}} title={'总结'}>
-                                        <p>
-                                            实测烟尘报警84次；实测二氧化硫报警154次；实测氮氧化物报警173次；流量报警319次；氧含量报警65次；流速报警111次；延期温度报警50次；烟气湿度报警122次；烟气静压报警158次；烟尘报警329次，二氧化硫报警278次；氮氧化物报警157次。
-                                        </p>
-                                        <p>
-                                            实测烟尘最大为脱硫出口1排口；最小为锅炉小号烟囱1排口、脱硫入口1排口、脱硫入口2排口
-                                        </p>
-                                        <p>
-                                            实测二氧化硫最大为脱硫出口1排口；最小为锅炉小号烟囱1排口、脱硫入口1排口、脱硫入口2排口
-                                        </p>
-                                        <p>
-                                            实测氮氧化物最大为锅炉小号烟囱1排口、脱硫入口1排口、脱硫入口2排口；最小为脱硫出口1排口
-                                        </p>
-                                    </Card>
-                                </Col>
-                            </Row>
-                        </Col>
-                    </Row>
+                <PageHeaderLayout>
+                    <Card extra={
+                        <div>
+                            <RangePicker_ style={{width: 250}} placeholder="请选择时间" format="YYYY-MM-DD" onChange={this._handleDateChange} dateValue={this.state.rangeDate} />
+                        </div>
+                    }>
+                        <Row>
+                            <Col span={12} >
+                                <ReactEcharts
+                                    style={{height: 450}}
+                                    option={histogramoption}
+                                    notMerge={true}
+                                    lazyUpdate={true} />
+                            </Col>
+                            <Col span={12} >
+
+                                <ReactEcharts
+                                    style={{height: 450}}
+                                    option={Circleoption}
+                                    notMerge={true}
+                                    lazyUpdate={true} />
+                            </Col>
+
+                        </Row>
+                        <ConclusionInfo content={this.state.summarizes}>
+                            <Table
+                                pagination={false}
+                                style={{marginTop: -10, marginBottom: 15}}
+                                dataSource={dataSource}
+                                columns={columns}
+                                scroll={{ x: 1400, y: 350 }}
+                                onRow={(record, index) => {
+                                    return {
+                                        onClick: (a, b, c) => {
+                                            let {selectid} = this.state;
+                                            let index = selectid.findIndex(t => t === record.key);
+                                            if (index !== -1) {
+                                                selectid.splice(index, 1);
+                                            } else {
+                                                selectid.push(record.key);
+                                            }
+                                            this.setState({selectid: selectid});
+                                        }, // 点击行
+                                        onMouseEnter: () => {}, // 鼠标移入行
+                                    };
+                                }}
+                            />
+                        </ConclusionInfo>
+                    </Card>
                 </PageHeaderLayout>
             </div>
         );

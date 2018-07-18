@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
-import { Select } from 'antd';
+import {Select, Card} from 'antd';
 import ReactEcharts from 'echarts-for-react';
 import TaxData from '../../mockdata/DischargeTax/DischargeAndTax.json';
 import EntList from '../../components/EnterpriseList/EnterpriseList';
@@ -143,12 +143,16 @@ export default class AnalyEnvironmentTaxDischarge extends Component {
                       <Option value="2017">2017</Option>
                       <Option value="2016">2016</Option>
                   </Select>
-                  <Select defaultValue="Dust" style={{ width: 120, marginLeft: 40 }} onChange={this.handlePollutantChange}>
-                      <Option value="Dust">颗粒物</Option>
+                  <Select defaultValue="SO2" style={{ width: 120, marginLeft: 40 }} onChange={this.handlePollutantChange}>
                       <Option value="SO2">SO2</Option>
                       <Option value="NOx">NOx</Option>
+                      <Option value="Dust">烟尘</Option>
                   </Select>
-                  <ReactEcharts option={option} lazyUpdate={true} notMerge={true} id="rightLine" style={{ width: '100%', height: 'calc(100vh - 380px)' }} />
+                  <ReactEcharts option={option} lazyUpdate={true} notMerge={true} id="rightLine" style={{ width: '100%', height: 'calc(100vh - 390px)' }} />
+                  <Card title="说明" style={{width: '100%'}} >                   
+                      <p>2018/01/01~2018/07/31,北京绿都供暖有限责任公司SO2排污排污总量为26.1t ，环保税总额为80.32万元</p>
+                      <p>其中5月排污量最高为6.5t，环保税20.8万元，6月排污量最为1.2t，环保税为3.84万元，</p>
+                  </Card>
               </PageHeaderLayout>
           </EntList>
 

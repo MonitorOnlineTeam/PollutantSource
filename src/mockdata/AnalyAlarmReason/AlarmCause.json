@@ -1,0 +1,27 @@
+[
+    {
+        "summer":[
+            "数据原因报警150次,设备原因报警15次,其中数据原因最多排口为脱硫入口1,最少为锅炉小号烟囱1;设备原因最多排口为脱硫入口1,最少为锅炉小号烟囱1。"
+       
+      ],
+      "data":   [ {
+        "PointName":"锅炉小号烟囱1",
+        "DataCause":"40",
+        "EquipmentCause":"4"
+        },
+        {
+        "PointName":"脱硫出口1",
+        "DataCause":"50",
+        "EquipmentCause":"5"
+        },
+        {
+        "PointName":"脱硫入口1",
+        "DataCause":"60",
+        "EquipmentCause":"6"
+        }
+
+    ]
+    }
+    ]
+    
+    

@@ -70,9 +70,9 @@ export default class PointsList extends Component {
                                           backgroundImage: 'url(/dui.png)',
                                           backgroundRepeat: 'no-repeat'
                                       } : {}}
-                                          onClick={
+                                      onClick={
                                           () => {
-                                            let dgimns = this.state.selDGIMNS;
+                                              let dgimns = this.state.selDGIMNS;
                                               if (isMore === 'true') {
                                                   if (dgimns.indexOf(item.DGIMN) === -1) {
                                                       dgimns.push(item.DGIMN);

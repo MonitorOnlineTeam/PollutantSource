@@ -1,5 +1,5 @@
 module.exports = {
-    name: '污染源环境智能分析平台',
+    name: '污染源智能分析平台',
     logindesc: 'SDL 您身边的环境污染分析专家',
     prefix: 'monitorOnline',
     footerText: '环境监控平台   2018 sdl',
