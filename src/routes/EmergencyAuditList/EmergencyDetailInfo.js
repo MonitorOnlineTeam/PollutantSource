@@ -231,7 +231,20 @@ export default class EmergencyDetailInfo extends Component {
                             }
                         </Steps>
                     </Card>
-
+                    <Card title="附件" style={{marginTop: 20 }} bordered={false}>
+                        <Row gutter={16} justify="center" align="middle">
+                            <Col span={6} align="center">
+                                <img src="../../../pic1.jpg" />
+                            </Col>
+                            <Col span={6} align="center">
+                                <img src="../../../pic2.jpg" />
+                            </Col>
+                            <Col span={6} align="center">
+                                <img src="../../../pic3.jpg" />
+                            </Col>
+                            <Col span={6} align="center" />
+                        </Row>
+                    </Card>
                     <Card title="日志表" style={{marginTop: 20 }} bordered={false}>
                         <Table columns={LogColumn}
                             dataSource={logDataList}
