@@ -226,9 +226,7 @@ class DataQuery extends Component {
                     saveAsImage: {}
                 }
             },
-            grid: [
-                {x: '5%', y: '7%', y2: '5%', x2: '5%'}
-            ],
+
             xAxis: {
                 type: 'category',
                 name: '时间',
@@ -301,25 +299,7 @@ class DataQuery extends Component {
         return (
             <div className={styles.cardTitle}>
                 <Row>
-                    <Col span={18} push={6} >
-                        <Card title="监测趋势图" extra={
-                            <div>
-                                <PollutantSelect_
-                                    optionDatas={this.state.pollutantDatas}
-                                    ref={(r) => { this.select_Pollutant = r; }}
-                                    defaultValue={this.state.searchData.pollutantCode}
-                                    style={{width: 200}}
-                                    onChange={this._handlePollutantChange}
-                                />
-                                <RangePicker_ style={{width: 250}} dateValue={this.state.searchData.rangeDate} format="YYYY-MM-DD" onChange={this._handleDateChange} />
-                                <ButtonGroup_ checked={this.state.searchData.dataType} onChange={this._handleDateTypeChange} />
-
-                            </div>
-                        } style={{ width: '100%', height: 'calc(100vh - 225px)' }}>
-                            <ReactEcharts option={option} lazyUpdate={true} notMerge={true} id="rightLine" style={{ width: '100%', height: 'calc(100vh - 380px)' }} />
-                        </Card>
-                    </Col>
-                    <Col span={6} pull={18}>
+                    <Col xs={8} lg={6}>
                         <Card title="监测维度" extra={<a href="#" />} style={{ width: '98%', height: 'calc(100vh - 225px)' }}>
                             <Table
                                 rowKey="Key"
@@ -332,6 +312,26 @@ class DataQuery extends Component {
                             <a className="login-form-forgot" href="">加载更多……</a>
                         </Card>
                     </Col>
+                    <Col xs={16} lg={18}>
+
+                        <Card title="监测趋势图" extra={
+                            <div>
+                                <PollutantSelect_
+                                    optionDatas={this.state.pollutantDatas}
+                                    ref={(r) => { this.select_Pollutant = r; }}
+                                    defaultValue={this.state.searchData.pollutantCode}
+                                    style={{width: 150}}
+                                    onChange={this._handlePollutantChange}
+                                />
+                                <RangePicker_ style={{width: 250}} dateValue={this.state.searchData.rangeDate} format="YYYY-MM-DD" onChange={this._handleDateChange} />
+                                <ButtonGroup_ checked={this.state.searchData.dataType} onChange={this._handleDateTypeChange} />
+
+                            </div>
+                        } style={{ width: '100%', height: 'calc(100vh - 225px)' }}>
+                            <ReactEcharts option={option} lazyUpdate={true} notMerge={true} id="rightLine" style={{ width: '100%', height: 'calc(100vh - 380px)' }} />
+                        </Card>
+                    </Col>
+
                 </Row>
 
             </div>

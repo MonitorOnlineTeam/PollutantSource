@@ -1,15 +1,11 @@
 import React, { Component } from 'react';
-import { Row, Col, Layout, TreeSelect, Table, Card, Button, Icon} from 'antd';
+import { Row, Col, Table, Card} from 'antd';
 import ReactEcharts from 'echarts-for-react';
-import styles from './index.less';
 import RangePicker_ from '../../components/PointDetail/RangePicker_';
-import Attention from '../../components/AnalyAlarmReason/AttentionDegree';
-import EnterpriseAutoComplete from '../../components/EnterpriseAutoComplete/index';
-import AlarmCause from '../../mockdata/Base/Code/T_Cod_AlarmCause';
+import AlarmCause from '../../mockdata/AnalyAlarmReason/AlarmCause';
 import moment from 'moment';
-const { Content} = Layout;
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
-import IndustryType from '../../mockdata/Base/Code/T_Cod_IndustryType';
+import ConclusionInfo from '../../components/EnterpriseList/Conclusion';
 /*
 页面：报警原因
 描述：设备原因或数据原因占比
@@ -22,7 +18,7 @@ export default class AnalyAlarmReason extends Component {
         super(props);
         var DataCauses = [];
         var EquipmentCauses = [];
-        AlarmCause.map((item) => {
+        AlarmCause[0].data.map((item) => {
             DataCauses.push(item.DataCause);
             EquipmentCauses.push(item.EquipmentCause);
         });
@@ -41,37 +37,12 @@ export default class AnalyAlarmReason extends Component {
             value: colEquipmentCause,
             name: '设备原因'
         });
-        var industryList = [];
-        IndustryType.map((item) => {
-            if (item.ParentNode === 'root') {
-                industryList.push({
-                    label: item.IndustryTypeName,
-                    value: item.IndustryTypeName,
-                    key: item.IndustryTypeName,
-                    children: getSecond(item.IndustryTypeCode)
-                });
-            }
-        });
-        function getSecond(Code) {
-            var children = [];
-            IndustryType.map((item) => {
-                if (item.ParentNode === Code) {
-                    children.push({
-                        label: item.IndustryTypeName,
-                        value: item.IndustryTypeName,
-                        key: item.IndustryTypeName,
-                        children: getSecond(item.IndustryTypeCode)
-                    }
-                    );
-                }
-            });
-            return children;
-        }
+        var summarize = AlarmCause[0].summer;
         this.state = {
             rangeDate: [moment('2018-06-23 00:00:00'), moment('2018-06-25 00:00:00')],
             expandForm: true,
             sumbings: sumbing,
-            IndustryTypes: industryList,
+            summarizes: summarize,
         };
     }
 
@@ -105,7 +76,7 @@ export default class AnalyAlarmReason extends Component {
                   },
                   name: '访问来源',
                   type: 'pie',
-                  radius: '80%',
+                  radius: '70%',
                   center: ['50%', '50%'],
                   data: this.state.sumbings,
               }
@@ -113,7 +84,7 @@ export default class AnalyAlarmReason extends Component {
       };
 
       const columns = [{
-          title: '排口名称',
+          title: '名称',
           dataIndex: 'PointName',
           key: 'PointName',
           width: 110,
@@ -139,7 +110,7 @@ export default class AnalyAlarmReason extends Component {
       ];
       // 循环求数据
       const dataSource = [];
-      for (let item of AlarmCause) {
+      for (let item of AlarmCause[0].data) {
           dataSource.push({
               PointName: item.PointName,
               DataCause: item.DataCause,
@@ -165,89 +136,49 @@ export default class AnalyAlarmReason extends Component {
           DataCause: ColDataCauses,
           EquipmentCause: ColEquipmentCauses,
       });
-      const treeData = this.state.IndustryTypes;
       return (
           <PageHeaderLayout>
-              <div>
-                  <Card>
-                      <Row >
-                          <Col span={10} >
-                              <Layout >
-                                  <Content><ReactEcharts
-                                      style={{height: 'calc(100vh - 160px)'}}
-                                      option={option}
-                                      notMerge={true}
-                                      lazyUpdate={true} /></Content>
-                              </Layout></Col>
-                          <Col span={13} style={{marginLeft: 30}}>
-                              <div>
-                                  <Row style={{marginBottom: 30}}>
-                                      <Col span="8">
-                                          <span >企业：<EnterpriseAutoComplete width={160} placeholder="请选择企业" /></span>
-                                      </Col>
-                                      <Col span="10">
-                                          <span className="gutter-box">时间：<RangePicker_ style={{width: 200}} placeholder="请选择时间" format="YYYY-MM-DD" onChange={this._handleDateChange} dateValue={this.state.rangeDate} /></span>
-                                      </Col>
-                                  </Row>
-                                  <Row>
-                                      <Col span="8">
-                                          <span > 级别：<Attention placeholder="请选择控制级别" width={160} /></span>
-                                      </Col>
-                                      <Col span="10">
-                                          <span>
-                                              <span>行业：</span>
-                                              <TreeSelect
-                                                  showSearch={true}
-                                                  style={{ width: 200 }}
-                                                  value={this.state.value}
-                                                  dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
-                                                  placeholder="请选择行业"
-                                                  allowClear={true}
-                                                  treeDefaultExpandAll={true}
-                                                  onChange={this.onChange}
-                                                  treeData={treeData}
-                                              />
-                                          </span>
-                                      </Col>
-                                      <Col span="6">
-                                          <span ><Button style={{width: 90}} type="primary" onClick={this._Processes}>查询</Button></span>
-                                      </Col>
-                                  </Row>
-                              </div>
-                              <Row>
-                                  <Col >
-                                      <Table
-                                          style={{marginTop: 10}}
-                                          dataSource={dataSource}
-                                          columns={columns}
-                                          scroll={{ x: 550, y: 350 }}
-                                          onRow={(record, index) => {
-                                              return {
-                                                  onClick: (a, b, c) => {
-                                                      let {selectid} = this.state;
-                                                      let index = selectid.findIndex(t => t === record.key);
-                                                      if (index !== -1) {
-                                                          selectid.splice(index, 1);
-                                                      } else {
-                                                          selectid.push(record.key);
-                                                      }
-                                                      this.setState({selectid: selectid});
-                                                  }, // 点击行
-                                                  onMouseEnter: () => {}, // 鼠标移入行
-                                              };
-                                          }}
-                                      />
-                                      <Card style={{marginTop: 20, marginLeft: -20}} title={'总结'}>
-                                          <p>
-                                              <span> 数据原因报警150，设备原因报警15，总计165，其中数据原因最多排口为脱硫入口1，最少为锅炉小号烟囱1；设备原因最多排口为脱硫入口1，最少为锅炉小号烟囱1</span>
-                                          </p>
-                                      </Card>
-                                  </Col>
-                              </Row>
-                          </Col>
-                      </Row>
-                  </Card>
-              </div>
+              <Card
+                  extra={
+                      <div>
+                          <RangePicker_ style={{width: 250}} placeholder="请选择时间" format="YYYY-MM-DD" onChange={this._handleDateChange} dateValue={this.state.rangeDate} />
+                      </div>
+                  }>
+                  <Row>
+                      <Col span={24} >
+                          <ReactEcharts
+                              style={{height: 450}}
+                              option={option}
+                              notMerge={true}
+                              lazyUpdate={true} />
+                      </Col>
+
+                  </Row>
+                  <ConclusionInfo content={this.state.summarizes}>
+                      <Table
+                          pagination={false}
+                          style={{marginTop: 10}}
+                          dataSource={dataSource}
+                          columns={columns}
+                          scroll={{ x: 550, y: 350 }}
+                          onRow={(record, index) => {
+                              return {
+                                  onClick: (a, b, c) => {
+                                      let {selectid} = this.state;
+                                      let index = selectid.findIndex(t => t === record.key);
+                                      if (index !== -1) {
+                                          selectid.splice(index, 1);
+                                      } else {
+                                          selectid.push(record.key);
+                                      }
+                                      this.setState({selectid: selectid});
+                                  }, // 点击行
+                                  onMouseEnter: () => {}, // 鼠标移入行
+                              };
+                          }}
+                      />
+                  </ConclusionInfo>
+              </Card>
           </PageHeaderLayout>
       );
   }
