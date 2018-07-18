@@ -147,7 +147,7 @@ export default class AnalyAlarmReason extends Component {
                   <Row>
                       <Col span={24} >
                           <ReactEcharts
-                              style={{height: 450}}
+                              style={{height: 350}}
                               option={option}
                               notMerge={true}
                               lazyUpdate={true} />
