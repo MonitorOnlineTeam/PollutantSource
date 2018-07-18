@@ -84,7 +84,7 @@ export default class AnalyAlarmReason extends Component {
       };
 
       const columns = [{
-          title: '排口名称',
+          title: '名称',
           dataIndex: 'PointName',
           key: 'PointName',
           width: 110,
@@ -138,15 +138,16 @@ export default class AnalyAlarmReason extends Component {
       });
       return (
           <PageHeaderLayout>
-              <Card extra={
-                  <div>
-                      <RangePicker_ style={{width: 250}} placeholder="请选择时间" format="YYYY-MM-DD" onChange={this._handleDateChange} dateValue={this.state.rangeDate} />
-                  </div>
-              }>
+              <Card
+                  extra={
+                      <div>
+                          <RangePicker_ style={{width: 250}} placeholder="请选择时间" format="YYYY-MM-DD" onChange={this._handleDateChange} dateValue={this.state.rangeDate} />
+                      </div>
+                  }>
                   <Row>
                       <Col span={24} >
                           <ReactEcharts
-                              style={{height: 500}}
+                              style={{height: 450}}
                               option={option}
                               notMerge={true}
                               lazyUpdate={true} />

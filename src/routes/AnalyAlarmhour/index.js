@@ -143,7 +143,6 @@ export default class AnalyAlarmhour extends Component {
             ],
             series: [
                 {
-                    center: ['90%', '50%'],
                     name: '连续报警时长',
                     type: 'bar',
                     data: this.state.ContinueTimeLength,
@@ -186,21 +185,18 @@ export default class AnalyAlarmhour extends Component {
             ],
         };
         return (
-            <PointList handleChange={this.SearchEmergencyDataList} IsMoreSelect="true">
-                <PageHeaderLayout>
-                    <ConclusionInfo content={this.state.summarizes}>
+            <PageHeaderLayout title="报警时长统计">
+                <ConclusionInfo content={this.state.summarizes}>
+                    <Card style={{textAlign: 'right'}}>
+                        <RangePicker_ style={{width: 250, marginLeft: 5}} placeholder="请选择时间" format="YYYY-MM-DD" onChange={this._handleDateChange} dateValue={this.state.rangeDate} />
+                    </Card>
+                    <Card style={{marginBottom: 15}}>
+                        <ReactEcharts option={option} lazyUpdate={true} notMerge={true} style={{ width: '100%', height: 'calc(100vh - 420px)' }} />
+                    </Card>
 
-                        <Card style={{textAlign: 'right'}}>
-                            <RangePicker_ style={{width: 250, marginLeft: 5}} placeholder="请选择时间" format="YYYY-MM-DD" onChange={this._handleDateChange} dateValue={this.state.rangeDate} />
-                        </Card>
-                        <Card style={{marginBottom: 15}}>
-                            <ReactEcharts option={option} lazyUpdate={true} notMerge={true} style={{ width: '100%', height: 'calc(100vh - 400px)' }} />
-                        </Card>
+                </ConclusionInfo>
 
-                    </ConclusionInfo>
-
-                </PageHeaderLayout>
-            </PointList>
+            </PageHeaderLayout>
         );
     }
 }
