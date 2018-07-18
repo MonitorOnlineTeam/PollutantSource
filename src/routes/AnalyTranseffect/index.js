@@ -180,7 +180,7 @@ export default class AnalyTranseffect extends Component {
         return (
             <div>
                 <PageHeaderLayout>
-                    <div style={{height: 'calc(100vh - 164px)', overflow: 'hidden', overflowY: 'scroll'}}>
+                    <div style={{height: 'calc(100vh - 165px)', overflow: 'auto'}}>
                         <Card title="设备传输有效率统计" extra={// style={{height: 'calc(100vh - 164px)'}}
                             <div>
                                 <EnterprisePointCascadeMultiSelect initValue={['bjldgn']} cascadeSize={3} width="300px" />
