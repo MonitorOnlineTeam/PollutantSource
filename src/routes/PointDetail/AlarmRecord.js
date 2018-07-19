@@ -61,12 +61,11 @@ class AlarmRecord extends Component {
     };
     stationclick = () => {
         console.log(this);
-        this.props.dispatch(routerRedux.push(`/monitor/operation/emergency/emergencytodolist`));
+        this.props.dispatch(routerRedux.push(`/monitor/emergency/emergencydetailinfo/${this.state.selectid}`));
     }
-    stationclick = () => {
-        console.log(this);
-        this.props.dispatch(routerRedux.push(`/monitor/operation/emergency/emergencytodolist`));
-    }
+    // '/monitor/emergency/emergencydetailinfo/:exceptionhandleid': {
+    //     component: dynamicWrapper(app, ['points'], () =>
+    //   import('../routes/EmergencyTodoList/EmergencyDetailInfo')),
 
     // 按钮查询事件
     _Processes=() => {
@@ -265,7 +264,6 @@ class AlarmRecord extends Component {
         }];
         const data = this.state.ExceptionProcessingList;
         return (
-
             <Card>
                 <div className={styles.tableListForm}>{this.renderForm()}</div>
                 <Row gutter={18} >
