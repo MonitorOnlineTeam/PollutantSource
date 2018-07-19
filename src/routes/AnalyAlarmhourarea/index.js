@@ -30,9 +30,10 @@ export default class AnalyAlarmhourarea extends Component {
         debugger;
         var dataList = [];
         var PointNames = [];
-        var timedata = [];
+
         Alarm.data.map((item) => {
             var times = item.time.split(',');
+            var timedata = [];
             times.map((item) => {
                 timedata.push(item);
             });
