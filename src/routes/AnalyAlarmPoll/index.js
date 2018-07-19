@@ -483,7 +483,7 @@ export default class AnalyAlarmPoll extends Component {
                                 style={{marginTop: -10, marginBottom: 15}}
                                 dataSource={dataSource}
                                 columns={columns}
-                                scroll={{ x: 1400, y: 350 }}
+                                scroll={{ x: 1400, y: 400 }}
                                 onRow={(record, index) => {
                                     return {
                                         onClick: (a, b, c) => {
