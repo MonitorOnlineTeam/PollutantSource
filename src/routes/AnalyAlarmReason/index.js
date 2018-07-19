@@ -6,19 +6,26 @@ import AlarmCause from '../../mockdata/AnalyAlarmReason/AlarmCause';
 import moment from 'moment';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import ConclusionInfo from '../../components/EnterpriseList/Conclusion';
+import Cookie from 'js-cookie';
 /*
 页面：报警原因
 描述：设备原因或数据原因占比
 add by cg 18.6.8
 modify by
 */
-
+let Alarm = AlarmCause[1];
 export default class AnalyAlarmReason extends Component {
     constructor(props) {
         super(props);
+
+        const user = JSON.parse(Cookie.get('token'));
+        if (user.User_Account === 'lisonggui') {
+            Alarm = AlarmCause[0];
+        }
+
         var DataCauses = [];
         var EquipmentCauses = [];
-        AlarmCause[0].data.map((item) => {
+        Alarm.data.map((item) => {
             DataCauses.push(item.DataCause);
             EquipmentCauses.push(item.EquipmentCause);
         });
@@ -37,7 +44,7 @@ export default class AnalyAlarmReason extends Component {
             value: colEquipmentCause,
             name: '设备原因'
         });
-        var summarize = AlarmCause[0].summer;
+        var summarize = Alarm.summer;
         this.state = {
             rangeDate: [moment('2018-06-23 00:00:00'), moment('2018-06-25 00:00:00')],
             expandForm: true,
@@ -110,7 +117,7 @@ export default class AnalyAlarmReason extends Component {
       ];
       // 循环求数据
       const dataSource = [];
-      for (let item of AlarmCause[0].data) {
+      for (let item of Alarm.data) {
           dataSource.push({
               PointName: item.PointName,
               DataCause: item.DataCause,

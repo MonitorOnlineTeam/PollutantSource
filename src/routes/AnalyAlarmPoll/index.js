@@ -9,17 +9,22 @@ import EnterpriseAutoComplete from '../../components/EnterpriseAutoComplete/inde
 import moment from 'moment';
 import AlarmFactor from '../../mockdata/AnalyAlarmPoll/AlarmFactor';
 import ConclusionInfo from '../../components/EnterpriseList/Conclusion';
+import Cookie from 'js-cookie';
 /*
 页面：报警因子统计
 描述：分别统计各个设备污染因子报警分布情况
 add by cg 18.6.8
 modify by
 */
-
+let Alarm = AlarmFactor[1];
 export default class AnalyAlarmPoll extends Component {
     constructor(props) {
         super(props);
         debugger;
+        const user = JSON.parse(Cookie.get('token'));
+        if (user.User_Account === 'lisonggui') {
+            Alarm = AlarmFactor[0];
+        }
         var a01 = [];
         var a02 = [];
         var a03 = [];
@@ -32,7 +37,7 @@ export default class AnalyAlarmPoll extends Component {
         var zs01 = [];
         var zs02 = [];
         var zs03 = [];
-        AlarmFactor[0].data.map((item) => {
+        Alarm.data.map((item) => {
             a01.push(item.a01);
             a02.push(item.a02);
             a03.push(item.a03);
@@ -85,7 +90,7 @@ export default class AnalyAlarmPoll extends Component {
             return Number.parseInt(first) + Number.parseInt(second);
         }, 0);
         debugger;
-        var summarize = AlarmFactor[0].summer;
+        var summarize = Alarm.summer;
 
         sum.push(cola01);
         sum.push(cola02);
@@ -238,20 +243,23 @@ export default class AnalyAlarmPoll extends Component {
         console.log(value);
         this.setState({ value });
     }
-
+    _handleDateChange=(date, dateString) => {
+        console.log(date);// [moment,moment]
+        console.log(dateString);// ['2018-06-23','2018-06-25']
+        this.setState({rangeDate: date});
+    };
     render() {
         const columns = [{
             title: '名称',
             dataIndex: 'PointName',
             key: 'PointName',
-            width: 150,
+            width: 250,
             fixed: 'left',
         }, {
             title: '实测烟尘',
             dataIndex: 'a01',
             key: 'a01',
             width: 100,
-
         }, {
             title: '实测二氧化硫',
             dataIndex: 'a02',
@@ -319,7 +327,7 @@ export default class AnalyAlarmPoll extends Component {
         ];
         // 循环求数据
         const dataSource = [];
-        for (let item of AlarmFactor[0].data) {
+        for (let item of Alarm.data) {
             dataSource.push({
                 PointName: item.PointName,
                 a01: item.a01,

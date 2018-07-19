@@ -17,26 +17,32 @@ import { Link } from 'dva/router';
 import ReactEcharts from 'echarts-for-react';
 import AlarmContinue from '../../mockdata/AlarmHour/AlarmContinue.json';
 import ConclusionInfo from '../../components/EnterpriseList/Conclusion';
+import Cookie from 'js-cookie';
 /*
 页面：报警时长统计
 描述：分别统计各个设备的累计报警时长和连续报警时长
 add by cg 18.6.8
 modify by
 */
+let Alarm = AlarmContinue[1];
 export default class AnalyAlarmhour extends Component {
     constructor(props) {
         super(props);
+        const user = JSON.parse(Cookie.get('token'));
+        if (user.User_Account === 'lisonggui') {
+            Alarm = AlarmContinue[0];
+        }
         var name = [];
         var ContinueTime = [];
         var CountTime = [];
         debugger;
-        AlarmContinue[0].data.map((item) => {
+        Alarm.data.map((item) => {
             debugger;
             name.push(item.PointName);
             ContinueTime.push(item.ContinueTimeLength);
             CountTime.push(item.CountTimeLength);
         });
-        var summarize = AlarmContinue[0].summer;
+        var summarize = Alarm.summer;
         // var industryList = [];
         // IndustryType.map((item) => {
         //     if (item.ParentNode === 'root') {
@@ -75,6 +81,11 @@ export default class AnalyAlarmhour extends Component {
     }
     state = {
         value: undefined,
+    };
+    _handleDateChange=(date, dateString) => {
+        console.log(date);// [moment,moment]
+        console.log(dateString);// ['2018-06-23','2018-06-25']
+        this.setState({rangeDate: date});
     };
     SearchEmergencyDataList = (value) => {
         debugger;
@@ -185,11 +196,15 @@ export default class AnalyAlarmhour extends Component {
             ],
         };
         return (
-            <PageHeaderLayout title="报警时长统计">
+            <PageHeaderLayout>
                 <ConclusionInfo content={this.state.summarizes}>
-                    <Card style={{textAlign: 'right'}}>
-                        <RangePicker_ style={{width: 250, marginLeft: 5}} placeholder="请选择时间" format="YYYY-MM-DD" onChange={this._handleDateChange} dateValue={this.state.rangeDate} />
-                    </Card>
+                    <Card
+                        extra={
+                            <div>
+                                <RangePicker_ style={{width: 250}} placeholder="请选择时间" format="YYYY-MM-DD" onChange={this._handleDateChange} dateValue={this.state.rangeDate} />
+                            </div>
+                        }
+                    />
                     <Card style={{marginBottom: 15}}>
                         <ReactEcharts option={option} lazyUpdate={true} notMerge={true} style={{ width: '100%', height: 'calc(100vh - 420px)' }} />
                     </Card>

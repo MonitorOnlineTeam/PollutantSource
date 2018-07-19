@@ -265,8 +265,8 @@ class AlarmRecord extends Component {
         const data = this.state.ExceptionProcessingList;
         return (
             <Card>
-                <div style={{marginTop: -10}} className={styles.tableListForm}>{this.renderForm()}</div>
-                <Row gutter={18} style={{marginTop: -10}} >
+                <div className={styles.tableListForm}>{this.renderForm()}</div>
+                <Row gutter={18} >
                     <Col span={24}>
                         <Table
                             columns={columns}

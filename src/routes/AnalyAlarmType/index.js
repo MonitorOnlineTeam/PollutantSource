@@ -122,7 +122,11 @@ export default class AnalyAlarmType extends Component {
             conclusion: conclusion2,
         };
     }
-
+    _handleDateChange=(date, dateString) => {
+        console.log(date);// [moment,moment]
+        console.log(dateString);// ['2018-06-23','2018-06-25']
+        this.setState({rangeDate: date});
+    };
     onChange = (value) => {
         this.setState({ value });
     }
