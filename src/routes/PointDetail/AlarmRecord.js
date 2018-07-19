@@ -265,13 +265,13 @@ class AlarmRecord extends Component {
         const data = this.state.ExceptionProcessingList;
         return (
             <Card>
-                <div className={styles.tableListForm}>{this.renderForm()}</div>
-                <Row gutter={18} >
+                <div style={{marginTop: -10}} className={styles.tableListForm}>{this.renderForm()}</div>
+                <Row gutter={18} style={{marginTop: -10}} >
                     <Col span={24}>
                         <Table
                             columns={columns}
                             dataSource={data}
-                            scroll={{ x: 2060, y: 'calc(100vh - 430px)' }}
+                            scroll={{ x: 2060, y: 'calc(100vh - 475px)' }}
                             rowSelection={rowSelection}
                         />
                         <div>

@@ -249,7 +249,7 @@ class WarningRecord extends Component {
                       <Table
                           columns={columns}
                           dataSource={data}
-                          scroll={{ x: 1950, y: 'calc(100vh - 465px)' }}
+                          scroll={{ x: 1950, y: 'calc(100vh - 475px)' }}
                           rowSelection={rowSelection}
                       />
                   </Col>
