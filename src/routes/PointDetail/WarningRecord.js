@@ -6,7 +6,10 @@ import { Card,
     Modal,
     Table,
     Button,
-    Icon
+    Icon,
+    Form,
+    Radio,
+    Input,
 } from 'antd';
 import VerifyPerson from '../../components/PointDetail/VerifyPerson';
 import VerifyState from '../../components/PointDetail/VerifyState';
@@ -14,7 +17,12 @@ import Verify from '../../components/WarningRecord/Verify';
 import RangePicker_ from '../../components/PointDetail/RangePicker_';
 import EarlyWarningTypeSelect from '../../components/EarlyWarningTypeSelect/index';
 import WarningRecords from '../../mockdata/Base/Code/T_Cod_WarningRecord';
+const FormItem = Form.Item;
+const RadioGroup = Radio.Group;
+const { TextArea } = Input;
 import styles from './index.less';
+@Form.create()
+
 /*
 页面：5、预警记录
 描述：可按各种条件查询预警信息并进行核实，核实记录、核实人记录在案。人工核实确定报警信息的，可手工触发报警。
@@ -28,6 +36,10 @@ class WarningRecord extends Component {
             expandForm: true,
             rangeDate: [],
             selectedRowKeys: [],
+            data: {
+                result: 1,
+                description: ''
+            }
         };
     }
     _handleDateChange=(date, dateString) => {
@@ -44,6 +56,7 @@ class WarningRecord extends Component {
   }
 
   renderSimpleForm() {
+      const { getFieldDecorator } = this.props.form;
       return (
           <div style={{ width: '100%' }}>
               <Card>
@@ -72,7 +85,7 @@ class WarningRecord extends Component {
                   <Modal
                       visible={this.state.visible}
                       title={this.state.title}
-                      width={this.state.width}
+                      width={900}
                       onOk={() => {
                           this.setState({
                               visible: false
@@ -83,9 +96,37 @@ class WarningRecord extends Component {
                               visible: false
                           });
                       }}>
-                      {
-                          this.state.type === 'add' ? <Verify /> : null
-                      }
+                      <div>
+                          <Form>
+                              <Row gutter={16}>
+                                  <Col xs={2} sm={6} md={12} lg={12} xl={12} xxl={12}>
+                                      <FormItem
+                                          labelCol={{ span: 8 }}
+                                          wrapperCol={{ span: 12 }}
+                                          label="核实状态">
+                                          {getFieldDecorator('result')(
+                                              <RadioGroup onChange={this.onRadioChange} value={this.state.data.result}>
+                                                  <Radio key={1} value={1}>通过</Radio>
+                                                  <Radio key={2} value={2}>打回</Radio>
+                                              </RadioGroup>
+                                          )}
+                                      </FormItem>
+                                  </Col>
+                              </Row>
+                              <Row gutter={16} style={{ marginTop: 8 }}>
+                                  <Col xs={2} sm={6} md={24} lg={24} xl={24} xxl={24}>
+                                      <FormItem
+                                          labelCol={{ span: 4 }}
+                                          wrapperCol={{ span: 16 }}
+                                          label="审核意见">
+                                          {getFieldDecorator('description')(
+                                              <TextArea rows={4} style={{width: '100%'}} value={this.state.description} />
+                                          )}
+                                      </FormItem>
+                                  </Col>
+                              </Row>
+                          </Form>
+                      </div>
                   </Modal>
               </Card>
           </div>
