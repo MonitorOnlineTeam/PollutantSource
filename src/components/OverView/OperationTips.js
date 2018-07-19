@@ -94,7 +94,7 @@ class OperationTips extends Component {
                         </div>
                         <div className={styles.clearboth} />
                     </div>
-                    <div style={{ width: 300, border: '1px solid #d9d9d9', borderRadius: 4, marginLeft: '10px' }}>
+                    <div className={styles.calendar} style={{ width: 300, border: '1px solid #d9d9d9', borderRadius: 4, marginLeft: '10px' }}>
                         <Calendar disabledDate={this.CalendarClick} dateFullCellRender={this.dateCellRender} fullscreen={false} />
                     </div>
                     <div style={{paddingBottom: '10px'}}>

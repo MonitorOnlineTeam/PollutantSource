@@ -20,7 +20,7 @@ export default class RealTimeVideo extends Component {
         return (
             <div >
                 <Row gutter={24}>
-                    <Col xl={19} lg={24} md={24} sm={24} xs={24} style={{ marginBottom: 10, height: 480 }}>
+                    <Col xl={18} lg={24} md={24} sm={24} xs={24} style={{ marginBottom: 10, height: 480 }}>
                         <div className={styles.videoComponent} />
                     </Col>
                     <Col xl={5} lg={24} md={24} sm={24} xs={24}>
@@ -65,8 +65,8 @@ export default class RealTimeVideo extends Component {
                                 <Col className={styles.gutterleft} span={8} ><Button>-</Button></Col>
                             </Row>
                         </Card>
-
                     </Col>
+                    <Col xl={1} lg={24} md={24} sm={24} xs={24} />
                 </Row>
 
                 <Row gutter={24}>
