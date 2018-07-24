@@ -18,50 +18,114 @@ modify by
 */
 let Alarm = AlarmTimeRange[1];
 export default class AnalyAlarmhourarea extends Component {
-    _handleDateChange=(date, dateString) => {
-        this.setState({rangeDate: date});
-    };
     constructor(props) {
         super(props);
+        var date = new Date();
+        // 判断登陆用户是集团用户还是赴南昌用户1
         const user = JSON.parse(Cookie.get('token'));
         if (user.User_Account === 'lisonggui') {
             Alarm = AlarmTimeRange[0];
         }
-        debugger;
+
+        // 循环求取数据
         var dataList = [];
         var PointNames = [];
-
+        var year = date.getFullYear();
+        var month = date.getMonth() + 1;
+        var dates = date.getDate();
         Alarm.data.map((item) => {
-            var times = item.time.split(',');
-            var timedata = [];
-            times.map((item) => {
-                timedata.push(item);
-            });
-            PointNames.push(item.PointName);
-            dataList.push({
-                name: item.PointName,
-                type: 'bar',
-                stack: '总量',
-                label: {
-                    normal: {
-                        show: true,
-                        position: 'insideRight'
-                    }
-                },
-                data: timedata
-            });
+            debugger;
+            var time = new Date((item.datetimes).replace(/-/g, '/'));
+            var nowtime = new Date((year + '-' + month + '-' + dates).replace(/-/g, '/'));
+            if (time >= nowtime && time <= nowtime) {
+                var times = item.time.split(',');
+                var timedata = [];
+                times.map((item) => {
+                    timedata.push(item);
+                });
+                PointNames.push(item.PointName);
+                dataList.push({
+                    name: item.PointName,
+                    type: 'bar',
+                    stack: '总量',
+                    label: {
+                        normal: {
+                            show: true,
+                            position: 'insideRight'
+                        }
+                    },
+                    data: timedata
+                });
+            }
         });
 
         var commentinfo = Alarm.comment;
+        var time = [];
+        console.log(AlarmTimeRange[2].time[0].split(','));
+        AlarmTimeRange[2].time[0].split(',').map((item) => {
+            time.push(item);
+        });
+
         this.state = {
-            rangeDate: [moment('2018-06-23 00:00:00'), moment('2018-06-25 00:00:00')],
+            rangeDate: [moment(date), moment(date)],
             AlarmTimeRangeList: AlarmTimeRange,
             DataLists: dataList,
             PointName: PointNames,
             comments: commentinfo,
+            times: time,
         };
     }
+    _handleDateChange=(date, dateString) => {
+        this.setState({
+            DataLists: [],
+            PointName: [],
+        });
+        debugger;
+        console.log(`${date[0].format('YYYY-MM-DD 00:00:00')}`);
+        // console.log(typeof (`${Alarm.data[0].datetimes}`));
+        console.log(typeof (begin));
+        var dataList = [];
+        var PointNames = [];
+        var beginyear = date[0]._d.getFullYear();
+        var beginmonth = date[0]._d.getMonth() + 1;
+        var begindate = date[0]._d.getDate();
+        var endyear = date[1]._d.getFullYear();
+        var endmonth = date[1]._d.getMonth() + 1;
+        var enddate = date[1]._d.getDate();
+        // if (beginyear === endyear && beginmonth === endmonth && begindate === enddate) {
 
+        // }
+        var begintime = new Date((beginyear + '-' + beginmonth + '-' + begindate).replace(/-/g, '/'));
+        var endtime = new Date((endyear + '-' + endmonth + '-' + enddate).replace(/-/g, '/'));
+        Alarm.data.map((item) => {
+            var time = new Date((item.datetimes).replace(/-/g, '/'));
+            if (time >= begintime && time <= endtime) {
+                var times = item.time.split(',');
+                var timedata = [];
+                times.map((item) => {
+                    timedata.push(item);
+                });
+                PointNames.push(item.PointName);
+                dataList.push({
+                    name: item.PointName,
+                    type: 'bar',
+                    stack: '总量',
+                    label: {
+                        normal: {
+                            show: true,
+                            position: 'insideRight'
+                        }
+                    },
+                    data: timedata
+                });
+            }
+        });
+        this.setState({
+            rangeDate: date,
+            DataLists: dataList,
+            PointName: PointNames,
+        });
+    };
     render() {
         let option = {
             tooltip: {
@@ -81,7 +145,7 @@ export default class AnalyAlarmhourarea extends Component {
             },
             xAxis: {
                 type: 'category',
-                data: ['0时', '1时', '2时', '3时', '4时', '5时', '6时', '7时', '8时', '9时', '10时', '11时', '12时', '13时', '14时', '15时', '16时', '17时', '18时', '19时', '20时', '21时', '22时', '23时']
+                data: this.state.times,
 
             },
             yAxis: {
