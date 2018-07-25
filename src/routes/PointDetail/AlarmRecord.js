@@ -34,7 +34,8 @@ class AlarmRecord extends Component {
             PollutantValue: '',
             DateValue: '',
             numberValue: '',
-            visible: false,
+            process: false,
+            video: false,
         };
     }
     _handleAlarmChange=(e) => {
@@ -62,6 +63,13 @@ class AlarmRecord extends Component {
     stationclick = () => {
         console.log(this);
         this.props.dispatch(routerRedux.push(`/monitor/emergency/emergencydetailinfo/${this.state.selectid}`));
+    }
+    VideoClick=() => {
+        this.setState({video: true});
+    }
+    ProcessCilck=() => {
+        debugger;
+        this.setState({process: true});
     }
     // '/monitor/emergency/emergencydetailinfo/:exceptionhandleid': {
     //     component: dynamicWrapper(app, ['points'], () =>
@@ -92,38 +100,13 @@ class AlarmRecord extends Component {
                             <span >时间: <RangePicker_ style={{width: 250}} format="YYYY-MM-DD" onChange={this._handleDateChange} dateValue={this.state.rangeDate} /></span>
                         </Col>
                         <Col span={2}>
-                            <span ><Button style={{width: 90}} type="primary" onClick={() => {
-                                this.setState({
-                                    visible: true,
-                                    type: 'add',
-                                    title: '处理',
-                                    width: 530
-                                });
-                            }}>处理</Button></span>
+                            <span ><Button style={{width: 90}} type="primary" onClick={this.ProcessCilck}>处理</Button></span>
                         </Col>
                         <Col>
                             <span ><Button style={{width: 90}} type="primary" onClick={this._Processes}>查询</Button>  <a style={{ marginLeft: 8 }} onClick={this.toggleForm}>
                             展开 <Icon type="down" /> </a></span>
                         </Col>
                     </Row>
-                    <Modal
-                        visible={this.state.visible}
-                        title={this.state.title}
-                        width={this.state.width}
-                        onOk={() => {
-                            this.setState({
-                                visible: false
-                            });
-                        }}
-                        onCancel={() => {
-                            this.setState({
-                                visible: false
-                            });
-                        }}>
-                        {
-                            this.state.type === 'add' ? <Videos /> : null
-                        }
-                    </Modal>
                 </Card>
             </div>
         );
@@ -146,14 +129,7 @@ class AlarmRecord extends Component {
                         </Col>
 
                         <Col span={2}>
-                            <span ><Button style={{width: 90}} type="primary" onClick={() => {
-                                this.setState({
-                                    visible: true,
-                                    type: 'add',
-                                    title: '处理',
-                                    width: 530
-                                });
-                            }}>处理</Button></span>
+                            <span ><Button style={{width: 90}} type="primary" onClick={this.ProcessCilck}>处理</Button></span>
 
                         </Col>
                         <Col>
@@ -170,25 +146,6 @@ class AlarmRecord extends Component {
                             <span >报警持续时长: <InputNumber onChange={this.numberChange} min={1} max={1000} style={{width: 60}} defaultValue={1} />小时以上</span>
                         </Col>
                     </Row>
-                    <Modal
-                        visible={this.state.visible}
-                        title={this.state.title}
-                        width={this.state.width}
-                        onOk={() => {
-                            this.setState({
-                                visible: false
-                            });
-                        }}
-                        onCancel={() => {
-                            this.setState({
-                                visible: false
-                            });
-                        }}>
-                        {
-                            this.state.type === 'add' ? <Process /> : null
-                        }
-                    </Modal>
-
                 </Card>
             </div>
         );
@@ -243,12 +200,7 @@ class AlarmRecord extends Component {
             key: 'AlarmVideo',
             width: 110,
             render: (text, record, index) => {
-                return <Button type="primary" shape="circle" icon="play-circle-o" size={'small'} onClick={() => {
-                    this.setState({
-                        visible: true,
-                        title: '报警视频',
-                    });
-                }} id={record.key} />;
+                return <Button type="primary" shape="circle" icon="play-circle-o" size={'small'} onClick={this.VideoClick} id={record.key} />;
             }
         },
         {
@@ -276,18 +228,37 @@ class AlarmRecord extends Component {
                         />
                         <div>
                             <Modal
-                                visible={this.state.visible}
+                                visible={this.state.process}
                                 title="报警视频"
                                 width="800px"
                                 height="500px"
                                 onOk={() => {
                                     this.setState({
-                                        visible: false
+                                        process: false
                                     });
                                 }}
                                 onCancel={() => {
                                     this.setState({
-                                        visible: false
+                                        process: false
+                                    });
+                                }}>
+                                {
+                                    <Process />
+                                }
+                            </Modal>
+                            <Modal
+                                visible={this.state.video}
+                                title="档案下载"
+                                width="50%"
+                                footer={null}
+                                onOk={() => {
+                                    this.setState({
+                                        video: false
+                                    });
+                                }}
+                                onCancel={() => {
+                                    this.setState({
+                                        video: false
                                     });
                                 }}>
                                 {
