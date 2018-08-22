@@ -1,8 +1,13 @@
 import { isUrl } from '../utils/utils';
 import allMenu from '../mockdata/Menu/data_all.json';
-import complexMenu from '../mockdata/Menu/data_complex.json';
-import factoryMenu from '../mockdata/Menu/data_factory.json';
-import operationMenu from '../mockdata/Menu/data_operation.json';
+import dataEnterpriseLeaderMenu from '../mockdata/Menu/data_enterprise_leader.json';
+import dataEnterpriseWorkerMenu from '../mockdata/Menu/data_enterprise_worker.json';
+import dataHbjLeaderMenu from '../mockdata/Menu/data_hbj_leader.json';
+import dataHbjSuperviseMenu from '../mockdata/Menu/data_hbj_supervise.json';
+import dataOperationDirectorMenu from '../mockdata/Menu/data_operation_director.json';
+import dataOperationLeaderMenu from '../mockdata/Menu/data_operation_leader.json';
+import dataOperationPersonMenu from '../mockdata/Menu/data_operation_person.json';
+
 import Cookie from 'js-cookie';
 
 function formatter(data, parentPath = '') {
@@ -30,16 +35,36 @@ export const getMenuData = () => {
         account = user.User_Account;
     } catch (error) {
     }
-    // 管理员
-    if (account === 'system') {
-        data = allMenu;
-    } else if (account === 'wangnailin') { // 集团人员
-        data = complexMenu;
-    } else if (account === 'lisonggui') { // 分厂人员
-        data = factoryMenu;
-    } else if (account === 'chengyun') { // 运维人员
-        data = operationMenu;
+
+    switch (account) {
+        case 'system':
+            data = allMenu;
+            break;
+        case 'wangyongyan': // 监测站主任
+            data = dataHbjLeaderMenu;
+            break;
+        case 'wanggang': // 监测专员
+            data = dataHbjSuperviseMenu;
+            break;
+        case 'wangnailin': // 企业高管
+            data = dataEnterpriseLeaderMenu;
+            break;
+        case 'lisonggui': // 环保专员
+            data = dataEnterpriseWorkerMenu;
+            break;
+        case 'liyunjun': // 运维高管
+            data = dataOperationLeaderMenu;
+            break;
+        case 'zhaofangyuan': // 运维主管
+            data = dataOperationDirectorMenu;
+            break;
+        case 'chengyun': // 运维人员
+            data = dataOperationPersonMenu;
+            break;
+        default:
+            break;
     }
+
     return formatter(data);
 };
 
@@ -51,16 +76,36 @@ export const getMenuArray = () => {
         account = user.User_Account;
     } catch (error) {
     }
-    // 管理员
-    if (account === 'system') {
-        data = allMenu;
-    } else if (account === 'wangnailin') { // 集团人员
-        data = complexMenu;
-    } else if (account === 'lisonggui') { // 分厂人员
-        data = factoryMenu;
-    } else if (account === 'chengyun') { // 运维人员
-        data = operationMenu;
+
+    switch (account) {
+        case 'system':
+            data = allMenu;
+            break;
+        case 'wangyongyan': // 监测站主任
+            data = dataHbjLeaderMenu;
+            break;
+        case 'wanggang': // 监测专员
+            data = dataHbjSuperviseMenu;
+            break;
+        case 'wangnailin': // 企业高管
+            data = dataEnterpriseLeaderMenu;
+            break;
+        case 'lisonggui': // 环保专员
+            data = dataEnterpriseWorkerMenu;
+            break;
+        case 'liyunjun': // 运维高管
+            data = dataOperationLeaderMenu;
+            break;
+        case 'zhaofangyuan': // 运维主管
+            data = dataOperationDirectorMenu;
+            break;
+        case 'chengyun': // 运维人员
+            data = dataOperationPersonMenu;
+            break;
+        default:
+            break;
     }
+
     return getMenuArrays(formatter(data));
 };
 

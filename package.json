@@ -24,7 +24,7 @@
     "dva-loading": "^1.0.4",
     "echarts": "^4.1.0",
     "echarts-for-react": "^2.0.12-beta.0",
-    "echarts-liquidfill": "^2.0.1",
+    "echarts-liquidfill": "^2.0.2",
     "g-cloud": "^1.0.2-beta",
     "g2": "^2.3.13",
     "g2-plugin-slider": "^1.2.1",
