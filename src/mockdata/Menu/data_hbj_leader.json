@@ -1,0 +1,15 @@
+
+[
+    {
+        "layout": "MonitorLayout",
+        "name": "首页", 
+        "path": "monitor",
+        "children": [
+            {
+                "name": "监控总览",
+                "path": "hbjleaderdatacolumn",
+                "icon": "home"
+            }
+        ]
+    }
+]

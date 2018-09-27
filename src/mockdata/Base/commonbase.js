@@ -1,22 +1,31 @@
 import Enterprise_AllJson from './Enterprise_All.json';
 import Point_AllJson from './Point_All.json';
-import Point_FactoryJson from './Point_Factory.json';
-import Point_ComplexJson from './Point_Complex.json';
-import Point_OperationJson from './Point_Operation.json';
 import relationJson from './Point_MonitorPointBase.json';
 import Cookie from 'js-cookie';
+import Point_EnterpriseLeaderJson from './point_enterprise_leader.json';
+import Point_EnterpriseWorkerJson from './point_enterprise_worker.json';
+import Point_HbjLeaderJson from './point_hbj_leader.json';
+import Point_HbjSuperviseJson from './point_hbj_supervise.json';
+import Point_OperationDirectorJson from './point_operation_director.json';
+import Point_OperationLeaderJson from './point_operation_leader.json';
+import Point_OperationPersonJson from './point_operation_person.json';
 import regions from '../Regions/region.json';
 import industrys from './Code/T_Cod_IndustryType.json';
 import attentions from './Code/T_Cod_AttentionDegree.json';
 import PollutantDatas from './Code/T_Cod_Pollutant.json';
 import moment from 'moment';
+
 const enterpriseArray = Enterprise_AllJson;
 const allpointArray = Point_AllJson;
-const complexpointArray = Point_ComplexJson;
-const factorypointArray = Point_FactoryJson;
-const operationpointArray = Point_OperationJson;
 const relationArray = relationJson;
 const enterpriseArraySon = getEnterpriseSon();
+const EnterpriseLeaderpointArray = Point_EnterpriseLeaderJson;
+const EnterpriseWorkerArray = Point_EnterpriseWorkerJson;
+const HbjLeaderpointArray = Point_HbjLeaderJson;
+const HbjSupervisepointArray = Point_HbjSuperviseJson;
+const OperationDirectorArray = Point_OperationDirectorJson;
+const OperationLeaderArray = Point_OperationLeaderJson;
+const OperationPersonArray = Point_OperationPersonJson;
 
 function getEnterpriseSon() {
     let result = [];
@@ -46,8 +55,8 @@ export function getEnterprise() {
     // 管理员
     if (user.User_Account === 'system') {
         result = enterpriseArraySon;
-    } else if (user.User_Account === 'wangnailin') { // 集团人员
-        for (const p of complexpointArray) {
+    } else if (user.User_Account === 'wangyongyan') { // 环保局领导
+        for (const p of HbjLeaderpointArray) {
             for (const r of relationArray) {
                 for (const e of enterpriseArraySon) {
                     if (r.BaseCode === e.EntCode && r.DGIMN === p.DGIMN) {
@@ -59,8 +68,60 @@ export function getEnterprise() {
                 }
             }
         }
-    } else if (user.User_Account === 'lisonggui') { // 分厂人员
-        for (const p of factorypointArray) {
+    } else if (user.User_Account === 'wanggang') { // 监管专员
+        for (const p of HbjSupervisepointArray) {
+            for (const r of relationArray) {
+                for (const e of enterpriseArraySon) {
+                    if (r.BaseCode === e.EntCode && r.DGIMN === p.DGIMN) {
+                        if (result.find((n) => n.EntCode === e.EntCode) === undefined) {
+                            result.push(e);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+    } else if (user.User_Account === 'wangnailin') { // 企业高管
+        for (const p of EnterpriseLeaderpointArray) {
+            for (const r of relationArray) {
+                for (const e of enterpriseArraySon) {
+                    if (r.BaseCode === e.EntCode && r.DGIMN === p.DGIMN) {
+                        if (result.find((n) => n.EntCode === e.EntCode) === undefined) {
+                            result.push(e);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+    } else if (user.User_Account === 'lisonggui') { // 环保专员
+        for (const p of EnterpriseWorkerArray) {
+            for (const r of relationArray) {
+                for (const e of enterpriseArraySon) {
+                    if (r.BaseCode === e.EntCode && r.DGIMN === p.DGIMN) {
+                        if (result.find((n) => n.EntCode === e.EntCode) === undefined) {
+                            result.push(e);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+    } else if (user.User_Account === 'liyunjun') { // 运维高管
+        for (const p of OperationLeaderArray) {
+            for (const r of relationArray) {
+                for (const e of enterpriseArraySon) {
+                    if (r.BaseCode === e.EntCode && r.DGIMN === p.DGIMN) {
+                        if (result.find((n) => n.EntCode === e.EntCode) === undefined) {
+                            result.push(e);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+    } else if (user.User_Account === 'zhaofangyuan') { // 运维主管
+        for (const p of OperationDirectorArray) {
             for (const r of relationArray) {
                 for (const e of enterpriseArraySon) {
                     if (r.BaseCode === e.EntCode && r.DGIMN === p.DGIMN) {
@@ -73,7 +134,7 @@ export function getEnterprise() {
             }
         }
     } else if (user.User_Account === 'chengyun') { // 运维人员
-        for (const p of operationpointArray) {
+        for (const p of OperationPersonArray) {
             for (const r of relationArray) {
                 for (const e of enterpriseArraySon) {
                     if (r.BaseCode === e.EntCode && r.DGIMN === p.DGIMN) {
@@ -95,16 +156,35 @@ export function getPointEnterprise() {
     let result = [];
 
     let points;
-    // 管理员
-    if (user.User_Account === 'system') {
-        points = allpointArray;
-    } else if (user.User_Account === 'wangnailin') { // 集团人员
-        points = complexpointArray;
-    } else if (user.User_Account === 'lisonggui') { // 分厂人员
-        points = factorypointArray;
-    } else if (user.User_Account === 'chengyun') { // 运维人员
-        points = operationpointArray;
+    switch (user.User_Account) {
+        case 'system':
+            points = allpointArray;
+            break;
+        case 'wangyongyan': // 环保局领导
+            points = HbjLeaderpointArray;
+            break;
+        case 'wanggang': // 监管专员
+            points = HbjSupervisepointArray;
+            break;
+        case 'wangnailin': // 企业高管
+            points = EnterpriseLeaderpointArray;
+            break;
+        case 'lisonggui': // 环保专员
+            points = EnterpriseWorkerArray;
+            break;
+        case 'liyunjun': // 运维高管
+            points = OperationLeaderArray;
+            break;
+        case 'zhaofangyuan': // 运维主管
+            points = OperationDirectorArray;
+            break;
+        case 'chengyun': // 运维人员
+            points = OperationPersonArray;
+            break;
+        default:
+            break;
     }
+
     for (const p of points) {
         let relation = relationArray.find((r) => r.DGIMN === p.DGIMN);
         let enterprise = enterpriseArraySon.find((e) => e.EntCode === relation.BaseCode);
