@@ -10,18 +10,22 @@ import { Card,
     InputNumber,
     Row,
     Col,
+    Radio,
     Modal,
     Table,
     Button,
     Icon,
+    Form,
 } from 'antd';
 import {routerRedux} from 'dva/router';
 import styles from './index.less';
 import Videos from '../../components/AlarmRecord/Video';
 import {connect} from 'dva';
+const FormItem = Form.Item;
 @connect(() => ({
 
 }))
+
 class AlarmRecord extends Component {
     constructor(props) {
         super(props);
@@ -36,6 +40,8 @@ class AlarmRecord extends Component {
             numberValue: '',
             process: false,
             video: false,
+            value: 1,
+            selectid: ''
         };
     }
     _handleAlarmChange=(e) => {
@@ -116,6 +122,12 @@ class AlarmRecord extends Component {
             expandForm: !this.state.expandForm,
         });
     };
+    onChange = (e) => {
+        console.log('radio checked', e.target.value);
+        this.setState({
+            value: e.target.value,
+        });
+    }
     renderAllForm() {
         return (
             <div style={{ width: '100%' }}>
@@ -151,82 +163,92 @@ class AlarmRecord extends Component {
         );
     }
     render() {
-        const rowSelection = {
-            onChange: (selectedRowKeys, selectedRows) => {
-                console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
-            },
-            getCheckboxProps: record => ({
-                disabled: record.name === 'Disabled User', // Column configuration not to be checked
-                name: record.name,
-            }),
-        };
+        const RadioGroup = Radio.Group;
+    
         const columns = [{
-            title: '污染物',
-            dataIndex: 'PollutantName',
-            key: 'PollutantName',
-            width: 110,
+            title: '运维人',
+            dataIndex: 'OperationPerson',
+            key: 'OperationPerson',
+            width: '60px'
         },
-        { title: '报警时间',
-            dataIndex: 'AlarmTime',
-            key: 'AlarmTime',
-            width: 150,
+        { title: '状态',
+            dataIndex: 'State',
+            key: 'State',
+            width: '60px'
         }, {
+            title: '设备名称',
+            dataIndex: 'DeviceName',
+            key: 'DeviceName',
+            width: '60px'
+        }, {
+            title: '规格/型号',
+            dataIndex: 'Size',
+            key: 'Size',
+            width: '80px'
+        },
+        {
+            title: '初次报警时间',
+            dataIndex: 'FirstAlarmTime',
+            key: 'FirstAlarmTime',
+            width: '80px'
+        },
+        {
+            title: '报警次数',
+            dataIndex: 'Alarmcount',
+            key: 'Alarmcount',
+            width: '60px'
+            // render: (text, record, index) => { return <Button type="primary" shape="circle" icon="link" size={'small'} onClick={this.stationclick} id={record.key} />; }
+        },
+        {
+            title: '最近一次报警时间',
+            dataIndex: 'LastAlarmTime',
+            key: 'LastAlarmTime',
+            width: '80px'
+            // render: (text, record, index) => {
+            //     return <Button type="primary" shape="circle" icon="play-circle-o" size={'small'} onClick={this.VideoClick} id={record.key} />;
+            // }
+        },
+        {
             title: '报警类别',
             dataIndex: 'AlarmType',
             key: 'AlarmType',
-            width: 110,
-        }, {
-            title: '报警状态',
-            dataIndex: 'State',
-            key: 'State',
-            width: 110,
-        },
-        {
-            title: '报警持续时长(小时)',
-            dataIndex: 'AlarmContinuedTime',
-            key: 'AlarmContinuedTime',
-            width: 150,
-        },
-        {
-            title: '运维单',
-            dataIndex: 'ViewOperation',
-            key: 'ViewOperation',
-            width: 80,
-            render: (text, record, index) => { return <Button type="primary" shape="circle" icon="link" size={'small'} onClick={this.stationclick} id={record.key} />; }
-        },
-        {
-            title: '报警视频',
-            dataIndex: 'AlarmVideo',
-            key: 'AlarmVideo',
-            width: 110,
-            render: (text, record, index) => {
-                return <Button type="primary" shape="circle" icon="play-circle-o" size={'small'} onClick={this.VideoClick} id={record.key} />;
-            }
-        },
-        {
-            title: '预计恢复时间',
-            dataIndex: 'ExceptRecoverTime',
-            key: 'ExceptRecoverTime',
-            width: 180,
-        }, {
-            title: '描述',
-            dataIndex: 'AlarmMsg',
-            key: 'AlarmMsg',
-            width: 800,
+            width: '80px'
         }];
+
         const data = this.state.ExceptionProcessingList;
         return (
             <Card>
-                <div className={styles.tableListForm}>{this.renderForm()}</div>
+                {/* <div className={styles.tableListForm}>{this.renderForm()}</div> */}
+                <Card>
+                    <Form layout="inline">
+                        <Row gutter={{ md: 8, lg: 8, xl: 8 }}>
+                            <Col span={12}>
+                                <FormItem label="超标时间">
+                                    <RangePicker_ style={{width: 250}} format="YYYY-MM-DD" onChange={this._handleDateChange} dateValue={this.state.rangeDate} />
+                                </FormItem>
+                            </Col>
+                            <Col span={12}>
+                                <FormItem label="状态">
+                                    <RadioGroup onChange={this.onChange} value={this.state.value}>
+                                        <Radio value={1}>全部</Radio>
+                                        <Radio value={2}>已处理</Radio>
+                                        <Radio value={3}>未处理</Radio>
+                                    </RadioGroup>
+                                </FormItem>
+                            </Col>
+                        </Row>
+                    </Form>
+
+                </Card>
                 <Row gutter={18} >
                     <Col span={24}>
                         <Table
                             columns={columns}
                             dataSource={data}
-                            scroll={{ x: 2060, y: 'calc(100vh - 475px)' }}
-                            rowSelection={rowSelection}
+                            rowKey="InspectionTaskId"
+                            scroll={{ x: '1720px', y: 'calc(100vh - 475px)' }}
                         />
-                        <div>
+                        {/* <div>
                             <Modal
                                 visible={this.state.process}
                                 title="报警视频"
@@ -265,7 +287,7 @@ class AlarmRecord extends Component {
                                     <Videos />
                                 }
                             </Modal>
-                        </div>
+                        </div> */}
                     </Col>
                 </Row>
             </Card>

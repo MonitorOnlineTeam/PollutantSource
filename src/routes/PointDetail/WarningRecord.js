@@ -15,8 +15,10 @@ import VerifyPerson from '../../components/PointDetail/VerifyPerson';
 import VerifyState from '../../components/PointDetail/VerifyState';
 import Verify from '../../components/WarningRecord/Verify';
 import RangePicker_ from '../../components/PointDetail/RangePicker_';
+import moment from 'moment';
 import EarlyWarningTypeSelect from '../../components/EarlyWarningTypeSelect/index';
 import WarningRecords from '../../mockdata/Base/Code/T_Cod_WarningRecord';
+import ExceptionProcessing from '../../mockdata/Base/Code/T_Cod_ExceptionProcessing';
 const FormItem = Form.Item;
 const RadioGroup = Radio.Group;
 const { TextArea } = Input;
@@ -33,8 +35,10 @@ class WarningRecord extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            value: 1,
+            rangeDate: [moment('2018-06-23 00:00:00'), moment('2018-06-25 00:00:00')],
+            ExceptionProcessingList: ExceptionProcessing,
             expandForm: true,
-            rangeDate: [],
             selectedRowKeys: [],
             data: {
                 result: 1,
@@ -198,59 +202,87 @@ class WarningRecord extends Component {
   }
 
   render() {
-      const { selectedRowKeys } = this.state;
-      const rowSelection = {
-          selectedRowKeys,
-          onChange: this.onSelectChange,
-          hideDefaultSelections: true,
-          onSelection: this.onSelection,
-      };
-      const columns = [{
-          title: '预警类别',
-          dataIndex: 'EarlyWorningType',
-          key: 'EarlyWorningType',
-          width: 110,
 
+      const columns = [{
+          title: '运维人',
+          dataIndex: 'OperationPerson',
+          key: 'OperationPerson',
+          width: '60px'
       },
-      { title: '预警时间',
-          dataIndex: 'EarlyWorningTime',
-          key: 'EarlyWorningTime',
-          width: 180,
-      }, {
-          title: '核实状态',
+      { title: '状态',
           dataIndex: 'State',
           key: 'State',
-          width: 110,
+          width: '60px'
       }, {
-          title: '核实人',
-          dataIndex: 'CheckPerson',
-          key: 'CheckPerson',
-          width: 110,
+          title: '设备名称',
+          dataIndex: 'DeviceName',
+          key: 'DeviceName',
+          width: '60px'
+      }, {
+          title: '规格/型号',
+          dataIndex: 'Size',
+          key: 'Size',
+          width: '80px'
       },
       {
-          title: '核实时间',
-          dataIndex: 'CheckTime',
-          key: 'CheckTime',
-          width: 180,
+          title: '初次报警时间',
+          dataIndex: 'FirstAlarmTime',
+          key: 'FirstAlarmTime',
+          width: '80px'
       },
       {
-          title: '描述',
-          dataIndex: 'Comment',
-          key: 'Comment',
-          width: 500,
+          title: '报警次数',
+          dataIndex: 'Alarmcount',
+          key: 'Alarmcount',
+          width: '60px'
+          // render: (text, record, index) => { return <Button type="primary" shape="circle" icon="link" size={'small'} onClick={this.stationclick} id={record.key} />; }
+      },
+      {
+          title: '最近一次报警时间',
+          dataIndex: 'LastAlarmTime',
+          key: 'LastAlarmTime',
+          width: '80px'
+          // render: (text, record, index) => {
+          //     return <Button type="primary" shape="circle" icon="play-circle-o" size={'small'} onClick={this.VideoClick} id={record.key} />;
+          // }
+      },
+      {
+          title: '报警类别',
+          dataIndex: 'AlarmType',
+          key: 'AlarmType',
+          width: '80px'
       }];
 
-      const data = WarningRecords;
+      const data = this.state.ExceptionProcessingList;
       return (
           <Card>
-              <div className={styles.tableListForm}>{this.renderForm()}</div>
+              <Card>
+                  <Form layout="inline">
+                      <Row gutter={{ md: 8, lg: 8, xl: 8 }}>
+                          <Col span={12}>
+                              <FormItem label="超标时间">
+                                  <RangePicker_ style={{width: 250}} format="YYYY-MM-DD" onChange={this._handleDateChange} dateValue={this.state.rangeDate} />
+                              </FormItem>
+                          </Col>
+                          <Col span={12}>
+                              <FormItem label="状态">
+                                  <RadioGroup onChange={this.onChange} value={this.state.value}>
+                                      <Radio value={1}>全部</Radio>
+                                      <Radio value={2}>已处理</Radio>
+                                      <Radio value={3}>未处理</Radio>
+                                  </RadioGroup>
+                              </FormItem>
+                          </Col>
+                      </Row>
+                  </Form>
+
+              </Card>
               <Row gutter={18} >
                   <Col span={24}>
                       <Table
                           columns={columns}
                           dataSource={data}
-                          scroll={{ x: 1950, y: 'calc(100vh - 475px)' }}
-                          rowSelection={rowSelection}
+                          scroll={{ x: '1720px', y: 'calc(100vh - 475px)' }}
                       />
                   </Col>
               </Row>

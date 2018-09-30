@@ -269,6 +269,22 @@ export const getRouterData = (app) => {
             component: dynamicWrapper(app, ['points'], () =>
           import('../routes/StopManagement')),
         },
+        '/monitor/operation/history': {
+            component: dynamicWrapper(app, ['points'], () =>
+          import('../routes/History')),
+        },
+        '/monitor/operation/TurnOver': {
+            component: dynamicWrapper(app, ['points'], () =>
+          import('../routes/TurnOver')),
+        },
+        '/monitor/operation/StaffweeklyCalendar': {
+            component: dynamicWrapper(app, ['points'], () =>
+          import('../routes/StaffweeklyCalendar')),
+        },
+        '/monitor/operation/OperationAndMaintenanceMemorabilia': {
+            component: dynamicWrapper(app, ['points'], () =>
+          import('../routes/OperationAndMaintenanceMemorabilia')),
+        },
         /* 登陆 */
         '/user': {
             component: dynamicWrapper(app, [], () =>

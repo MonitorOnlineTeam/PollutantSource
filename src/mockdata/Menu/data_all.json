@@ -190,6 +190,26 @@
                     "name": "停产管理",
                     "path": "stopmanagement",
                     "icon": "appstore"
+                },
+                {
+                    "name": "历史记录",
+                    "path": "History",
+                    "icon": "appstore"
+                },
+                {
+                    "name": "人员调整",
+                    "path": "TurnOver",
+                    "icon": "appstore"
+                },
+                {
+                    "name": "人员周历",
+                    "path": "StaffweeklyCalendar",
+                    "icon": "appstore"
+                },
+                {
+                    "name": "运维大事记",
+                    "path": "OperationAndMaintenanceMemorabilia",
+                    "icon": "appstore"
                 }
                 ]
             }

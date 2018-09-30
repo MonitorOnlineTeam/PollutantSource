@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import styles from '../EmergencyTodoList/EmergencyDetailInfo.less';
-import {Steps, Card, Popover, Divider, Button, Input, Table, Modal, Row, Col,Icon } from 'antd';
+import {Steps, Card, Popover, Divider, Button, Input, Table, Modal, Row, Col, Icon } from 'antd';
 import DescriptionList from '../../components/DescriptionList';
 import EmergencyInfo from '../../mockdata/EmergencyTodoList/EmergencyDetailInfo.json';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
@@ -36,6 +36,43 @@ export default class EmergencyDetailInfo extends Component {
         const SCREEN_WIDTH = document.querySelector('body').offsetWidth;
         const { match} = this.props;
         const emergencyId = match.params.exceptionhandleid; // 任务ID
+        const dataSource = [{
+            key: '1',
+            BeginAlarmTime: '2018-08-30 3:20',
+            LastAlarmTime: '2018-08-30 5:20',
+            AlarmInfo: 'SO2连续值异常',
+            AlarmCount: '15'
+        }, {
+            key: '2',
+            BeginAlarmTime: '2018-08-30 7:20',
+            LastAlarmTime: '2018-08-30 9:00',
+            AlarmInfo: '烟尘零值异常',
+            AlarmCount: '14'
+        }, {
+            key: '3',
+            BeginAlarmTime: '2018-08-30 9:00',
+            LastAlarmTime: '2018-08-30 11:00',
+            AlarmInfo: '气态分析仪温度过高',
+            AlarmCount: '13'
+        }];
+
+        const columns = [{
+            title: '开始报警时间',
+            dataIndex: 'BeginAlarmTime',
+            key: 'BeginAlarmTime',
+        }, {
+            title: '最后一次报警时间',
+            dataIndex: 'LastAlarmTime',
+            key: 'LastAlarmTime',
+        }, {
+            title: '报警信息',
+            dataIndex: 'AlarmInfo',
+            key: 'AlarmInfo',
+        }, {
+            title: '报警次数',
+            dataIndex: 'AlarmCount',
+            key: 'AlarmCount',
+        }];
         const LogColumn = [
             {
                 title: '步骤',
@@ -95,7 +132,7 @@ export default class EmergencyDetailInfo extends Component {
         const taskBasicInfo = EmergencyInfo.TaskBasicInfo.filter((item) => {
             return item.ExceptionHandleId === emergencyId;
         });
-
+        console.log(taskBasicInfo);
         // 应急处理
         const emergencyHandle = EmergencyInfo.EmergencyHandle.filter((item) => {
             return item.ExceptionHandleId === emergencyId;
@@ -120,9 +157,9 @@ export default class EmergencyDetailInfo extends Component {
         });
 
         return (
-            <PageHeaderLayout title="应急任务详情">
+            <PageHeaderLayout title="">
                 <div style={{height: 'calc(100vh - 190px)'}} className={styles.ExceptionDetailDiv}>
-                    <Card title="" style={{ }} bordered={false}>
+                    {/* <Card title="" style={{ }} bordered={false}>
                         <Steps progressDot={customDot} current={currentProcess.length}>
                             {
                                 taskProcess.map((item) => {
@@ -137,20 +174,20 @@ export default class EmergencyDetailInfo extends Component {
                                 })
                             }
                         </Steps>
-                    </Card>
+                    </Card> */}
                     <Card title="任务信息" style={{marginTop: 20 }} bordered={false}>
                         <DescriptionList className={styles.headerList} size="large" col="3">
                             <Description term="任务单号">{taskBasicInfo.length === 0 ? '' : taskBasicInfo[0].TaskNo}</Description>
-                            <Description term="排口" style={{fontWeight: '1000'}}>{taskBasicInfo.length === 0 ? '' : taskBasicInfo[0].PointName}</Description>
+                            <Description term="排口" >{taskBasicInfo.length === 0 ? '' : taskBasicInfo[0].PointName}</Description>
                             <Description term="企业">{taskBasicInfo.length === 0 ? '' : taskBasicInfo[0].EnterName}</Description>
                             <Description term="省份">{taskBasicInfo.length === 0 ? '' : taskBasicInfo[0].Province}</Description>
                             <Description term="城市">{taskBasicInfo.length === 0 ? '' : taskBasicInfo[0].City}</Description>
                         </DescriptionList>
                         <DescriptionList style={{marginTop: 20}} className={styles.headerList} size="large" col="3">
                             <Description term="任务来源">{taskBasicInfo.length === 0 ? '' : taskBasicInfo[0].TaskSource}</Description>
-                            <Description term="紧急程度" style={{fontWeight: '1000'}}>{taskBasicInfo.length === 0 ? '' : taskBasicInfo[0].Emergence}</Description>
-                            <Description term="任务状态">{taskBasicInfo.length === 0 ? '' : taskBasicInfo[0].TaskStatus}</Description>
-                            <Description term="任务内容" style={{fontWeight: '1000'}}>{taskBasicInfo.length === 0 ? '' : taskBasicInfo[0].TaskContent}</Description>
+                            <Description term="紧急程度"><div style={{color: 'red'}}>{taskBasicInfo.length === 0 ? '' : taskBasicInfo[0].Emergence}</div></Description>
+                            <Description term="任务状态"> <div style={{color: '#32CD32'}}>{taskBasicInfo.length === 0 ? '' : taskBasicInfo[0].TaskStatus }</div></Description>
+                            <Description term="任务内容">{taskBasicInfo.length === 0 ? '' : taskBasicInfo[0].TaskContent}</Description>
                         </DescriptionList>
                         <DescriptionList style={{marginTop: 20}} className={styles.headerList} size="large" col="3">
                             <Description term="创建人">{taskBasicInfo.length === 0 ? '' : taskBasicInfo[0].CreatePerson}</Description>
@@ -164,12 +201,18 @@ export default class EmergencyDetailInfo extends Component {
                             <Description term="设备型号">{taskBasicInfo.length === 0 ? '' : taskBasicInfo[0].DeviceXh}</Description>
                         </DescriptionList>
                     </Card>
-                    <Card title="应急处理" style={{ marginTop: 20}} bordered={false}>
+                    <Table style={{ marginTop: 20, backgroundColor: 'white'}} bordered={false} dataSource={dataSource} pagination={false} columns={columns} />
+                    <Card title="处理说明" style={{ marginTop: 20}} bordered={false}>
                         <DescriptionList className={styles.headerList} size="large" col="1">
-                            <Description term="处理说明">
-                                <TextArea style={{width: '400px'}} autosize={{ minRows: 2, maxRows: 6 }} value={emergencyHandle.length === 0 ? '' : emergencyHandle[0].HandleContent} />
+                            <Description>
+                                <TextArea rows={8} style={{width: '600px'}} placeholder="更换备机，原主机返厂进行检修。" value={emergencyHandle.length === 0 ? '' : emergencyHandle[0].HandleContent} />
                             </Description>
-                            <Description term="处理记录">
+                        </DescriptionList>
+
+                    </Card>
+                    <Card title="处理记录" style={{ marginTop: 20}} bordered={false}>
+                        <DescriptionList className={styles.headerList} size="large" col="1">
+                            <Description>
                                 <Button style={{marginBottom: '5px'}} icon="check-circle-o" onClick={this.SeeDetailInfo}>气态分析仪运行状况检查记录表</Button><br />
                                 <Button icon="check-circle-o">备品备件更换记录</Button><br />
                             </Description>
@@ -183,7 +226,7 @@ export default class EmergencyDetailInfo extends Component {
                             </Description>
                         </DescriptionList>
                     </Card>
-                    <Card title="校准" style={{ marginTop: 20}} bordered={false}>
+                    {/* <Card title="校准" style={{ marginTop: 20}} bordered={false}>
                         <DescriptionList className={styles.headerList} size="large" col="1">
                             <Description term="校准记录">
                                 <Button style={{marginBottom: '5px'}} icon="check-circle-o">校准信息记录表</Button>
@@ -215,21 +258,19 @@ export default class EmergencyDetailInfo extends Component {
                                 })
                             }
                         </Steps>
-                    </Card>
+                    </Card> */}
                     <Card title="附件" style={{marginTop: 20 }} bordered={false}>
                         <Row gutter={16} justify="center" align="middle">
-                        <Col span={6} align="center">
-                            <img src='../../../pic1.jpg' />
-                            </Col>
-                        <Col span={6} align="center">
-                        <img src='../../../pic2.jpg' />
+                            <Col span={6} align="center">
+                                <img src="../../../pic1.jpg" />
                             </Col>
                             <Col span={6} align="center">
-                            <img src='../../../pic3.jpg' />
+                                <img src="../../../pic2.jpg" />
                             </Col>
-                        <Col span={6} align="center">
-                                    
+                            <Col span={6} align="center">
+                                <img src="../../../pic3.jpg" />
                             </Col>
+                            <Col span={6} align="center" />
                         </Row>
                     </Card>
                     <Card title="日志表" style={{marginTop: 20 }} bordered={false}>
@@ -241,10 +282,16 @@ export default class EmergencyDetailInfo extends Component {
                         />
                     </Card>
                     <div className={styles.returnLastPage}>
-                        <Button type="solid" icon="left" onClick={() => {
+                        {/* <Button type="solid" icon="left" onClick={() => {
                             this.props.history.goBack(-1);
                             // this.props.dispatch(routerRedux.push(`/monitor/operation/emergency/emergencytodolist/`));
-                        }}>返回</Button>
+                        }}>返回</Button> */}
+
+                    </div>
+                    <div className={styles.Toexamine} >
+                        <Button size="large"><Icon type="left" />退回</Button>
+                        &nbsp;
+                        <Button type="primary" size="large" >通过<Icon type="right" /></Button >
                     </div>
                     <Modal
                         title="气态分析仪运行状况检查记录表"

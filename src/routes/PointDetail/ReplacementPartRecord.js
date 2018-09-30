@@ -1,9 +1,11 @@
 // import liraries
 import React, { Component } from 'react';
-import {Table, Button, Modal} from 'antd';
+import {Card, Row, Col, Form, Table} from 'antd';
 import ReplaceData from '../../mockdata/PointDetail/UseMaterialData.json';
-import InMaterial from '../../components/PointDetail/InMaterial';
-
+import EnterprisePointCascadeMultiSelect from '../../components/EnterprisePointCascadeMultiSelect/index';
+import RangePicker_ from '../../components/PointDetail/RangePicker_';
+// import InMaterial from '../../components/PointDetail/InMaterial';
+const FormItem = Form.Item;
 /*
 页面：9、备品备件使用记录
 描述：现场对备品备件出库使用信息记录、耗材消耗成本
@@ -19,46 +21,49 @@ class ReplacementPartRecord extends Component {
     }
 
     render() {
-        const columns = [{
-            title: '备品备件名称',
-            dataIndex: 'MaterialName',
-            width: 50
-        }, {
-            title: '规格/型号',
-            dataIndex: 'Specifications',
-            width: 50
-        }, {
-            title: '数量',
-            dataIndex: 'Num',
-            width: 50
-        }, {
-            title: '使用日期',
-            dataIndex: 'UseDate',
-            width: 50
-        }, {
-            title: '耗材成本',
-            dataIndex: 'TotalMoney',
-            width: 50
-        }, {
-            title: '生产日期',
-            dataIndex: 'ManufactureDate',
-            width: 50
-        }, {
-            title: '有效日期',
-            dataIndex: 'ValidateDate',
-            width: 50
-        }, {
-            title: '下次更换日期',
-            dataIndex: 'NextChangeDate',
-            width: 50
-        }];
-
+        const columns = [
+            {
+                title: '运维人',
+                dataIndex: 'OperationPerson',
+                width: 50
+            },
+            {
+                title: '设备',
+                dataIndex: 'Mothion',
+                width: 50
+            },
+            {
+                title: '备品备件名称',
+                dataIndex: 'MaterialName',
+                width: 50
+            }, {
+                title: '规格/型号',
+                dataIndex: 'Specifications',
+                width: 50
+            }, {
+                title: '更换日期',
+                dataIndex: 'ReplaceDate',
+                width: 50
+            }, {
+                title: '下次更换日期',
+                dataIndex: 'NextChangeDate',
+                width: 50
+            }, {
+                title: '有效日期',
+                dataIndex: 'ValidateDate',
+                width: 50
+            }, {
+                title: '数量',
+                dataIndex: 'Number',
+                width: 50
+            }];
         return (
+
             <div
                 style={{ width: '100%',
                     height: 'calc(100vh - 225px)' }}
             >
-                <Modal
+                {/* <Modal
                     visible={this.state.visible}
                     title="使用备件"
                     width="950px"
@@ -76,13 +81,31 @@ class ReplacementPartRecord extends Component {
                     {
                         <InMaterial />
                     }
-                </Modal>
-                <Button type="primary" style={{margin: 10}} onClick={() => {
+                </Modal> */}
+                {/* <Button type="primary" style={{margin: 10}} onClick={() => {
                     this.setState({
                         visible: true
                     });
-                }}>出库</Button>
-                <Table size="large" bordered={true} columns={columns} dataSource={ReplaceData} pagination={false} scroll={{y: 'calc(100vh - 225px)'}} />
+                }}>出库</Button> */}
+                <Card>
+                    <Form layout="inline">
+                        <Row gutter={{ md: 8, lg: 8, xl: 8 }}>
+                            <Col span={12}>
+                                <FormItem label="排口名称">
+                                    <EnterprisePointCascadeMultiSelect initValue={['bjldgn']} width="300px" cascadeSize={2} />
+                                </FormItem>
+                            </Col>
+                            <Col span={12}>
+                                <FormItem label="选择日期">
+                                    <RangePicker_ style={{width: 350}} format="YYYY-MM-DD HH:mm:ss" onChange={this._handleDateChange} dateValue={this.state.rangeDate} />
+                                </FormItem>
+                            </Col>
+                        </Row>
+                    </Form>
+
+                </Card>
+
+                <Table size="large" bordered={true} columns={columns} dataSource={ReplaceData} scroll={{y: 'calc(100vh - 450px)'}} />
             </div>
         );
     }
