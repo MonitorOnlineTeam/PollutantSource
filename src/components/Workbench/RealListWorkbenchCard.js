@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Table, Card, Icon } from 'antd';
+import { Table, Spin, Icon, Card } from 'antd';
 const dataSource = [{
     key: '1',
     PointName: '法电大唐-脱硫入口1',
@@ -86,11 +86,31 @@ const columns = [{
     key: 'Action',
 }];
 class RealListWorkbenchCard extends Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            loading: true
+        };
+    }
+    componentDidMount() {
+        const _this = this;
+        setTimeout(function() {
+            _this.setState({
+                loading: false
+            });
+        }, 1000);
+    }
     render() {
         return (
-            <Card style={{ height: 'calc(100vh/2 - 85px)' }}>
-                <Table dataSource={dataSource} columns={columns} />
-            </Card>
+            <Spin spinning={this.state.loading}>
+                <Card>
+                    <div style={{ height: 'calc(100vh/2 - 1px)' }}>
+                        <Table dataSource={dataSource} columns={columns} />
+                    </div>
+                </Card>
+
+            </Spin>
 
         );
     }
