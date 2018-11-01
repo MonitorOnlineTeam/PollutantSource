@@ -26,14 +26,16 @@ const getIcon = (icon) => {
     }
     return icon;
 };
-@connect(({ search }) => ({
+@connect(({ search, user }) => ({
     lxsearchinfo: search.lxsearchinfo,
     fullfulltextinfo: search.fullfulltextinfo,
+    menuData: user.currentMenu
 }))
 export default class MonitorHeader extends PureComponent {
     constructor(props) {
         super(props);
-        this.menus = props.menuData;
+        // debugger;
+        // this.props.menuData = this.props.menuData;
         this.state = {
             openKeys: this.getDefaultCollapsedSubMenus(props),
             showdetail: false,
@@ -118,7 +120,7 @@ export default class MonitorHeader extends PureComponent {
     getFlatMenuKeys(menus) {
         let keys = [];
         menus.forEach((item) => {
-            if (item.children) {
+            if (item.children && item.children.length > 0) {
                 keys.push(item.path);
                 keys = keys.concat(this.getFlatMenuKeys(item.children));
             } else {
@@ -128,7 +130,7 @@ export default class MonitorHeader extends PureComponent {
         return keys;
     }
     getSelectedMenuKeys = (path) => {
-        const flatMenuKeys = this.getFlatMenuKeys(this.menus);
+        const flatMenuKeys = this.getFlatMenuKeys(this.props.menuData);
         return flatMenuKeys.filter((item) => {
             return pathToRegexp(`/${item}`).test(path);
         });
@@ -165,8 +167,7 @@ export default class MonitorHeader extends PureComponent {
    * get SubMenu or Item
    */
   getSubMenuOrItem=(item) => {
-      if (item.children && item.children.filter(it => it.name
-       && !it.hideInMenu).length !== 0 && item.children.some(child => child.name)) {
+      if (item.children && item.children.filter(it => it.name).length !== 0 && item.children.some(child => child.name)) {
           return (
               <SubMenu
                   title={
@@ -199,7 +200,7 @@ export default class MonitorHeader extends PureComponent {
           return [];
       }
       return menusData
-          .filter(item => item.name && !item.hideInMenu)
+          .filter(item => item.name)
           .map((item) => {
               if (item.name === '首页') {
                   return this.getNavMenuItems(item.children);
@@ -232,7 +233,7 @@ export default class MonitorHeader extends PureComponent {
   }
   handleOpenChange = (openKeys) => {
       const lastOpenKey = openKeys[openKeys.length - 1];
-      const isMainMenu = this.menus.some(
+      const isMainMenu = this.props.menuData.some(
           item => lastOpenKey && (item.key === lastOpenKey || item.path === lastOpenKey)
       );
       this.setState({
@@ -281,7 +282,7 @@ onChange=(value) => {
         oldvalue: value,
     });
     setTimeout(() => {
-        if (_this.state.oldvalue == value) {
+        if (_this.state.oldvalue === value) {
             _this.props.dispatch({
                 type: 'search/queryLxSearchResult',
                 payload: {
@@ -378,7 +379,7 @@ render() {
                 selectedKeys={selectedKeys}
                 style={{ padding: '12px 0', height: '64px' }}
             >
-                {this.getNavMenuItems(this.menus)}
+                {this.getNavMenuItems(this.props.menuData)}
             </Menu>
 
             <Modal

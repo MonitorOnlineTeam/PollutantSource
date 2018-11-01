@@ -120,7 +120,7 @@ export function getEnterprise() {
                 }
             }
         }
-    } else if (user.User_Account === 'zhaofangyuan') { // 运维主管
+    } else if (user.User_Account === 'liudajun') { // 运维主管 zhaofangyuan
         for (const p of OperationDirectorArray) {
             for (const r of relationArray) {
                 for (const e of enterpriseArraySon) {
@@ -175,7 +175,7 @@ export function getPointEnterprise() {
         case 'liyunjun': // 运维高管
             points = OperationLeaderArray;
             break;
-        case 'zhaofangyuan': // 运维主管
+        case 'liudajun': // 运维主管zhaofangyuan
             points = OperationDirectorArray;
             break;
         case 'chengyun': // 运维人员

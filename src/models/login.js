@@ -1,28 +1,48 @@
 import { routerRedux } from 'dva/router';
 import Cookie from 'js-cookie';
 
-import { fakeAccountLogin } from '../services/api';
+import { fakeAccountLogin, sendCaptcha } from '../services/user';
 import { Model } from '../dvapack';
-
+import { message } from 'antd';
+const delay = (timeout) => {
+    return new Promise(resolve => {
+        setTimeout(resolve, timeout);
+    });
+};
 export default Model.extend({
     namespace: 'login',
     state: {
         status: undefined,
+        getCaptchaStatus: false,
+        smgCodeText: '获取验证码',
+        second: 10,
+        MsgId: '111'
     },
     effects: {
-        * login({ payload }, { call, put, take }) {
+        * login({ payload }, { call, put, take, select }) {
+            // debugger;
+
+            let MsgId = yield select(state => state.login.MsgId);
+            if (payload.type === 'mobile') {
+                if (!MsgId) {
+                    message.info('验证码过期，请重新获取');
+                    return false;
+                }
+            }
             yield put({
                 type: 'changeSubmitting',
                 payload: true,
             });
-            const response = yield call(fakeAccountLogin, payload);
+            const response = yield call(fakeAccountLogin, {...payload, MsgId: MsgId});
             yield put({
                 type: 'changeLoginStatus',
                 payload: { status: response.requstresult === '1' ? 'ok' : 'faild' },
             });
             // Login successfully
             if (response.requstresult === '1') {
+                // debugger;
                 Cookie.set('token', response.data);
+
                 yield put({ type: 'global/fetchPolluantType', payload: { } });
                 yield take('global/fetchPolluantType/@@end');
                 yield put(routerRedux.push('/'));
@@ -38,6 +58,53 @@ export default Model.extend({
             Cookie.remove('token');
             yield put(routerRedux.push('/user/login'));
         },
+        * getCaptcha({ payload }, { call, put, take }) {
+            // debugger;
+            yield put({
+                type: 'updateCaptchaInfo',
+                payload: {
+                    second: 10,
+                    getCaptchaStatus: false
+                }
+            });
+
+            const response = yield call(sendCaptcha, payload);
+            // debugger;
+            if (response.requstresult === '1') {
+                // getCaptcha successfully
+                message.success('验证码已发送您的手机，请注意查看');
+                yield put({
+                    type: 'updateCaptchaInfo',
+                    payload: {
+                        getCaptchaStatus: true,
+                        MsgId: response.data.MsgId
+                    }
+                });
+
+                let i = 10;
+                while (i > 0) {
+                    i--;
+                    yield call(delay, 1000);
+                    yield put({
+                        type: 'updateCaptchaInfo',
+                        payload: {
+                            second: i
+                        }
+                    });
+                    if (i === 0) {
+                        yield put({
+                            type: 'updateCaptchaInfo',
+                            payload: {
+                                second: 10,
+                                getCaptchaStatus: false
+                            }
+                        });
+                    }
+                }
+            } else {
+                message.error(response.reason);
+            }
+        }
     },
 
     reducers: {
@@ -52,6 +119,12 @@ export default Model.extend({
             return {
                 ...state,
                 submitting: payload,
+            };
+        },
+        updateCaptchaInfo(state, { payload }) {
+            return {
+                ...state,
+                ...payload,
             };
         },
     },

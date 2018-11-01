@@ -82,7 +82,7 @@ export const getRouterData = (app) => {
           import('../layouts/MonitorLayout')),
         },
         '/monitor/overview': {
-            component: dynamicWrapper(app, ['points'], () =>
+            component: dynamicWrapper(app, ['points', 'user'], () =>
           import('../routes/OverView')),
         },
         '/monitor/datalist': {
@@ -291,7 +291,7 @@ export const getRouterData = (app) => {
           import('../layouts/UserLayout')),
         },
         '/user/login': {
-            component: dynamicWrapper(app, ['login'], () =>
+            component: dynamicWrapper(app, ['login', 'user'], () =>
           import('../routes/User/UserLogin')),
         },
         '/user/register-result': {

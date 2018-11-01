@@ -107,7 +107,7 @@ export default Model.extend({
                     });
                     dataitem.key = key + 1;
                     data.push(dataitem);
-                    if (GroupID.indexOf(item.groupID) == -1 && item.groupID != null) {
+                    if (GroupID.indexOf(item.groupID) === -1 && item.groupID != null) {
                         GroupID.push(item.groupID);
                     }
                     payload.GroupID = GroupID;

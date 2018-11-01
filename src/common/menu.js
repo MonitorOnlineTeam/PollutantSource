@@ -11,6 +11,8 @@ import dataOperationPersonMenu from '../mockdata/Menu/data_operation_person.json
 import Cookie from 'js-cookie';
 
 function formatter(data, parentPath = '') {
+    // debugger;
+    if (!data || data.length === 0) { return []; }
     return data.map((item) => {
         let { path } = item;
         if (!isUrl(path)) {
@@ -30,8 +32,10 @@ function formatter(data, parentPath = '') {
 export const getMenuData = () => {
     let data;
     let account = 'system';
+    // debugger;
     try {
         const user = JSON.parse(Cookie.get('token'));
+        // debugger;
         account = user.User_Account;
     } catch (error) {
     }
@@ -64,7 +68,6 @@ export const getMenuData = () => {
         default:
             break;
     }
-
     return formatter(data);
 };
 
@@ -105,7 +108,6 @@ export const getMenuArray = () => {
         default:
             break;
     }
-
     return getMenuArrays(formatter(data));
 };
 

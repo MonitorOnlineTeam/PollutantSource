@@ -1,24 +1,28 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
 import { Link } from 'dva/router';
-import { Form, Input, Tabs, Button, Icon, Checkbox, Row, Col, Alert } from 'antd';
+import { Form, Input, Tabs, Button, Icon, Checkbox, Row, Col, Alert, InputNumber } from 'antd';
 import styles from './Login.less';
 
 const FormItem = Form.Item;
 const { TabPane } = Tabs;
 
-@connect(state => ({
-    login: state.login,
+@connect(({ login }) => ({
+    login: login,
+    getCaptchaStatus: login.getCaptchaStatus,
+    second: login.second,
+    smgCodeText: login.smgCodeText
 }))
+// @connect(state => ({
+//     login: state.login,
+// }))
 @Form.create()
 export default class Login extends Component {
   state = {
-      count: 0,
       type: 'account',
   }
 
   componentWillUnmount() {
-      clearInterval(this.interval);
   }
 
   onSwitch = (type) => {
@@ -26,15 +30,20 @@ export default class Login extends Component {
   }
 
   onGetCaptcha = () => {
-      let count = 59;
-      this.setState({ count });
-      this.interval = setInterval(() => {
-          count -= 1;
-          this.setState({ count });
-          if (count === 0) {
-              clearInterval(this.interval);
+      this.props.form.validateFields(['mobile'], { force: true },
+          (err, values) => {
+              debugger;
+              if (!err) {
+                  this.props.dispatch({
+                      type: 'login/getCaptcha',
+                      payload: {
+                          ...values,
+                          type: this.state.type,
+                      },
+                  });
+              }
           }
-      }, 1000);
+      );
   }
 
   handleSubmit = (e) => {
@@ -66,16 +75,16 @@ export default class Login extends Component {
   }
   // 临时使用，用于每次输入用户名和密码
   componentDidMount() {
-      this.props.form.setFieldsValue({
-          User_Account: 'system',
-          User_Pwd: '123456'
-      });
+      //   this.props.form.setFieldsValue({
+      //       User_Account: 'system',
+      //       User_Pwd: '123456'
+      //   });
   }
 
   render() {
-      const { form, login } = this.props;
+      const { form, login, getCaptchaStatus, second, smgCodeText } = this.props;
       const { getFieldDecorator } = form;
-      const { count, type } = this.state;
+      const { type } = this.state;
       return (
           <div className={styles.main}>
               <Form onSubmit={this.handleSubmit}>
@@ -95,7 +104,7 @@ export default class Login extends Component {
                                   <Input
                                       size="large"
                                       prefix={<Icon type="user" className={styles.prefixIcon} />}
-                                      placeholder="admin"
+                                      placeholder="请输入账户名"
                                   />
                               )}
                           </FormItem>
@@ -108,7 +117,7 @@ export default class Login extends Component {
                                   <Input
                                       size="large"
                                       prefix={<Icon type="lock" className={styles.prefixIcon} />}
-                                      placeholder="888888" type="password"
+                                      placeholder="请输入密码" type="password"
                                   />
                               )}
                           </FormItem>
@@ -143,8 +152,15 @@ export default class Login extends Component {
                                               required: type === 'mobile', message: '请输入验证码！',
                                           }],
                                       })(
+                                          //   <InputNumber size="large"
+                                          //       min={6} max={6}
+                                          //       prefix={<Icon type="mail" className={styles.prefixIcon} />}
+                                          //       placeholder="验证码"
+                                          //   />
                                           <Input
                                               size="large"
+                                              maxLength={6}
+                                              minLength={6}
                                               prefix={<Icon type="mail" className={styles.prefixIcon} />}
                                               placeholder="验证码"
                                           />
@@ -152,12 +168,12 @@ export default class Login extends Component {
                                   </Col>
                                   <Col span={8}>
                                       <Button
-                                          disabled={count}
+                                          disabled={getCaptchaStatus}
                                           className={styles.getCaptcha}
                                           size="large"
                                           onClick={this.onGetCaptcha}
                                       >
-                                          {count ? `${count} s` : '获取验证码'}
+                                          {getCaptchaStatus ? `${second} s` : smgCodeText}
                                       </Button>
                                   </Col>
                               </Row>
@@ -171,7 +187,7 @@ export default class Login extends Component {
                       })(
                           <Checkbox className={styles.autoLogin}>自动登录</Checkbox>
                       )}
-                      <Link className={styles.forgot} to="/user/register-result">忘记密码</Link>
+                      {/* <Link className={styles.forgot} to="/user/register-result">忘记密码</Link> */}
                       <Button size="large" loading={login.submitting} className={styles.submit} type="primary" htmlType="submit">
               登录
                       </Button>

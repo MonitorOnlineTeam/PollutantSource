@@ -13,60 +13,60 @@ const copyright = <div>Copyright <Icon type="copyright" /> 2017 蚂蚁金服体�
 
 class UserLayout extends React.PureComponent {
   static childContextTypes = {
-    location: PropTypes.object,
+      location: PropTypes.object,
   }
   getChildContext() {
-    const { location } = this.props;
-    return { location };
+      const { location } = this.props;
+      return { location };
   }
   getPageTitle() {
-    const { routerData, location } = this.props;
-    const { pathname } = location;
-    let title = config.name;
-    if (routerData[pathname] && routerData[pathname].name) {
-      title = `${routerData[pathname].name} - ${config.name}`;
-    }
-    return title;
+      const { routerData, location } = this.props;
+      const { pathname } = location;
+      let title = config.name;
+      if (routerData[pathname] && routerData[pathname].name) {
+          title = `${routerData[pathname].name} - ${config.name}`;
+      }
+      return title;
   }
 
   render() {
-    const { routerData, match } = this.props;
+      const { routerData, match } = this.props;
 
-    return (
-      <DocumentTitle title={this.getPageTitle()}>
-        <div className={styles.container}>
-          <div className={styles.top}>
-            <div className={styles.header}>
-              <Link to="/">
-                <img alt="logo" className={styles.logo} src={logo} />
-                <span className={styles.title}>{config.name}</span>
-              </Link>
-            </div>
-            <div className={styles.desc}>{config.logindesc}</div>
-          </div>
-          {
-            getRoutes(match.path, routerData).map(item =>
-              (
-                <Route
-                  key={item.key}
-                  path={item.path}
-                  component={item.component}
-                  exact={item.exact}
-                />
-              )
-            )
-          }
-          <GlobalFooter
-            links={[]}
-            copyright={
-              <div>
+      return (
+          <DocumentTitle title={this.getPageTitle()}>
+              <div className={styles.container}>
+                  <div className={styles.top}>
+                      <div className={styles.header}>
+                          <Link to="/">
+                              <img alt="logo" className={styles.logo} src={logo} />
+                              <span className={styles.title}>{config.name}</span>
+                          </Link>
+                      </div>
+                      <div className={styles.desc}>{config.logindesc}</div>
+                  </div>
+                  {
+                      getRoutes(match.path, routerData).map(item =>
+                          (
+                              <Route
+                                  key={item.key}
+                                  path={item.path}
+                                  component={item.component}
+                                  exact={item.exact}
+                              />
+                          )
+                      )
+                  }
+                  <GlobalFooter
+                      links={[]}
+                      copyright={
+                          <div>
               Copyright <Icon type="copyright" />{config.footerText}
+                          </div>
+                      }
+                  />
               </div>
-          }
-          />
-        </div>
-      </DocumentTitle>
-    );
+          </DocumentTitle>
+      );
   }
 }
 

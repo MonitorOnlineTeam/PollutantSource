@@ -77,7 +77,7 @@ export default Model.extend({
             // yield put({type: 'fetchNotices', payload: {
             //     data
             // }});
-        }
+        },
     },
 
     reducers: {
