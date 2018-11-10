@@ -285,6 +285,11 @@ export const getRouterData = (app) => {
             component: dynamicWrapper(app, ['points'], () =>
           import('../routes/OperationAndMaintenanceMemorabilia')),
         },
+        /* 系统管理 */
+        '/monitor/sysmanage/Userinfo': {
+            component: dynamicWrapper(app, ['userinfo'], () =>
+            import('../routes/Userinfo')),
+        },
         /* 登陆 */
         '/user': {
             component: dynamicWrapper(app, [], () =>
