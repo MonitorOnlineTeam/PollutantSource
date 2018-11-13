@@ -290,6 +290,10 @@ export const getRouterData = (app) => {
             component: dynamicWrapper(app, ['userinfo'], () =>
             import('../routes/Userinfo')),
         },
+        '/monitor/sysmanage/UserDetail/:UserId': {
+            component: dynamicWrapper(app, ['userinfo'], () =>
+            import('../routes/Userinfo/AddUser')),
+        },
         /* 登陆 */
         '/user': {
             component: dynamicWrapper(app, [], () =>

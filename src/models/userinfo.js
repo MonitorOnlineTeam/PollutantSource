@@ -9,8 +9,12 @@ export default Model.extend({
 
     state: {
         list: [],
+        edituser: null,
         total: 0,
         loading: false,
+        pageSize: 0,
+        pageIndex: 0,
+
     },
     subscriptions: {
         setup({
@@ -18,35 +22,39 @@ export default Model.extend({
             history
         }) {
             history.listen((location) => {
-                if (location.pathname === '/monitor/sysmanage/userinfo') {
-                    // 初始化testId的值为10
-                    dispatch({
-                        type: 'fetchuserlist',
-                        payload: {
+                // if (location.pathname === '/monitor/sysmanage/userinfo') {
+                //     // 初始化testId的值为10
+                //     dispatch({
+                //         type: 'fetchuserlist',
+                //         payload: {
 
-                        },
-                    });
-                }
+                //         },
+                //     });
+                // }
             });
         },
     },
     effects: {
         * fetchuserlist({
-            payload
+            payload: {
+                pageIndex,
+            }
         }, {
             call,
             put,
             update,
             select
         }) {
-            const result = yield call(getList, payload);
+            const pageSize = 1;
+            const result = yield call(getList, {pageIndex: pageIndex, pageSize: pageSize});
             yield update({
                 list: result.data,
-                total: result.total
+                total: result.total,
+                pageIndex: pageIndex,
+                pageSize: pageSize
             });
         },
     },
-
     reducers: {
         save(state, action) {
             return {
@@ -83,7 +91,7 @@ export default Model.extend({
             };
         },
         setCurrentMenu(state, action) {
-            // debugger;
+            // ;
             return {
                 ...state,
                 currentMenu: action.payload,

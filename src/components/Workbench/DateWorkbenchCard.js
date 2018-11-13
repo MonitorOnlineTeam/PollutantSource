@@ -18,7 +18,7 @@ class DateWorkbenchCard extends Component {
         }, 1000);
     }
     dateCellRender(value) {
-        debugger;
+        ;
         let listData;
         switch (value.date()) {
             case 8:

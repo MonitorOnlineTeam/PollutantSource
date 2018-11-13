@@ -74,7 +74,7 @@ class AlarmRecord extends Component {
         this.setState({video: true});
     }
     ProcessCilck=() => {
-        debugger;
+        ;
         this.setState({process: true});
     }
     // '/monitor/emergency/emergencydetailinfo/:exceptionhandleid': {

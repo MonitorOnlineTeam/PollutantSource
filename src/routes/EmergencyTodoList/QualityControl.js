@@ -15,7 +15,7 @@ export default class QualityControl extends Component {
 
     render() {
         const SCREEN_HEIGHT = document.querySelector('body').offsetHeight - 150;
-        debugger;
+        ;
         const { emergencyId } = this.props;
         // 气态分析仪运行状况
         const inspectionRecord = EmergencyInfo.InspectionRecord.filter(function(item) {

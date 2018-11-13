@@ -126,7 +126,7 @@ class MonitorLayout extends React.PureComponent {
             window.history.replaceState(null, 'redirect', urlParams.href);
         } else {
             let rtnpath = this.findFirstRedirectMenu(menuData);
-            debugger;
+            ;
             if (rtnpath && rtnpath.indexOf('http') === 0) {
                 return rtnpath;
             } else {
@@ -144,7 +144,7 @@ class MonitorLayout extends React.PureComponent {
         return redirect;
     }
     findFirstRedirectMenu=(data) => {
-        // debugger;
+        // ;
         const menus = data.filter(item => item.name);
         if (menus.length !== 0) {
             if (menus[0].children && menus[0].children.length !== 0) {
@@ -180,14 +180,14 @@ class MonitorLayout extends React.PureComponent {
         const {
             currentUser, collapsed, fetchingNotices, notices, match, navData, location, dispatch, routerData, currentMenu
         } = this.props;
-        // debugger;
+        // ;
         // currentMenu.forEach(getRedirect);
         let bashRedirect = currentMenu.length !== 0 ? this.getBashRedirect(currentMenu) : '';
         if (!bashRedirect) {
             bashRedirect = '/user/login';
         }
         // console.log(redirectData);
-        // debugger;
+        // ;
         // console.log(this.props.currentMenu);
         const layout = (
             <Layout className="layout">

@@ -52,12 +52,12 @@ export function init() {
     /**
      * 根据六个面的信息，new出六个对象放入场景中
      */
-    debugger;
+    ;
     for (let i = 0; i < sides.length; i++) {
         const side = sides[ i ];
 
         const element = this.refs[`surface_${i}`];
-        debugger;
+        ;
         element.width = 1026; // 2 pixels extra to close the gap.多余的2像素用于闭合正方体
 
         const object = new THREE.CSS3DObject(element);

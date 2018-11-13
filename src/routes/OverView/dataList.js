@@ -146,10 +146,10 @@ class dataList extends PureComponent {
                 key: item.Value,
                 width: 150,
                 render: (value, record, index) => {
-                    // debugger;
+                    // ;
                     let dot;
                     // 01-IsExceed +
-                    // debugger;
+                    // ;
                     record.PollutantCode = value.split(',')[1];
                     value = value.split(',')[0];
                     record.IsExceed = record[record.PollutantCode + '-IsExceed'];

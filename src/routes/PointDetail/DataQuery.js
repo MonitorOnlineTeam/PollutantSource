@@ -111,7 +111,7 @@ class DataQuery extends Component {
     }
 
     _formatDate=(time) => {
-        debugger;
+        ;
         let formats;
         switch (this.state.searchData.dataType) {
             case 'realtime':formats = 'YYYY-MM-DD HH:mm:ss'; break;
@@ -256,7 +256,7 @@ class DataQuery extends Component {
                 className: 'table_concentration',
                 width: 150,
                 render: (text, row, index) => {
-                    // debugger
+                    // 
                     // let color = (+row.Concentration) > (+row.Standard) ? 'red' : 'none';
                     // console.log(row);
                     // console.log(row.Concentration + ' ' + row.Standard);

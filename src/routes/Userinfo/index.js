@@ -11,6 +11,7 @@ import {
 } from 'antd';
 import Add from '../Userinfo/AddUser';
 import DataFilter from '../Userinfo/DataFilter';
+import {routerRedux} from 'dva/router';
 import {connect} from 'dva';
 const Option = Select.Option;
 const Search = Input.Search;
@@ -18,7 +19,10 @@ const Search = Input.Search;
 @connect(({loading, userinfo}) => ({
     ...loading,
     list: userinfo.list,
-    total: userinfo.total
+    total: userinfo.total,
+    pageSize: userinfo.pageSize,
+    pageIndex: userinfo.pageIndex,
+
 }))
 export default class UserList extends Component {
     constructor(props) {
@@ -33,15 +37,20 @@ export default class UserList extends Component {
             width: 400,
         };
     }
-    handleChange = (pagination, filters, sorter) => {
-        console.log('Various parameters', pagination, filters, sorter);
-        this.setState({
-            filteredInfo: filters,
-            sortedInfo: sorter,
+    componentWillMount() {
+        this.onChange();
+    };
+
+    onChange(pageNumber) {
+        this.props.dispatch({
+            type: 'userinfo/fetchuserlist',
+            payload: {
+                pageIndex: pageNumber,
+            },
         });
     }
-    handleChanges(value) {
-        console.log(`selected ${value}`);
+    handleOK=(e) => {
+        this.addForm.handleSubmit();
     }
     render() {
         const columns = [{
@@ -130,31 +139,6 @@ export default class UserList extends Component {
             }
         },
         ];
-        const data = [{
-            key: '1',
-            User_Account: 'liudajun',
-            User_Name: '刘大军',
-            User_Sex: '男',
-            Phone: '13612345678',
-            AlarmType: '实时报警',
-            AlarmTime: '1,2,3',
-            SendPush: '短信推送,APP推送',
-            DeleteMark: '启用',
-            Roles_Name: '运维主管,运维人员',
-        },
-        {
-            key: '2',
-            User_Account: 'xiaoliu',
-            User_Name: '小刘',
-            User_Sex: '女',
-            Roles_Name: '运维人员',
-            Phone: '13612345678',
-            AlarmTime: '1,2,3',
-            SendPush: 'APP推送',
-            DeleteMark: '禁用',
-            AlarmType: '定时报警',
-        }
-        ];
         const rowSelection = {
             onChange: (selectedRowKeys, selectedRows) => {
                 console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
@@ -169,19 +153,20 @@ export default class UserList extends Component {
                                 <Search placeholder="姓名/登录名" onSearch={value => console.log(value)}
                                     style={{ width: 200 }} /></Col>
                             <Col span={2} >
-                                <Select defaultValue="0" style={{ width: 120 }}>
-                                    <Option value="0">全部</Option>
+                                <Select defaultValue="" style={{ width: 120 }}>
+                                    <Option value="">全部</Option>
                                     <Option value="1">启用</Option>
                                     <Option value="2">禁用</Option>
                                 </Select></Col>
                             <Col span={1} ><Button type="primary"
                                 onClick={() => {
-                                    this.setState({
-                                        Addvisible: true,
-                                        type: 'add',
-                                        title: '新建用户',
-                                        width: 1130
-                                    });
+                                    // this.setState({
+                                    //     Addvisible: true,
+                                    //     type: 'add',
+                                    //     title: '新建用户',
+                                    //     width: 1130
+                                    // });
+                                    this.props.dispatch(routerRedux.push(`/monitor/sysmanage/UserDetail/null`));
                                 }}>添加</Button></Col>
                             <Col span={1} ><Button type="danger">删除</Button></Col>
                             <Col span={1} ><Button type="primary"
@@ -198,7 +183,7 @@ export default class UserList extends Component {
                     </Form>
                 </Card>
                 <Table
-                    loading={this.state.loading}
+                    loading={this.props.effects['userinfo/fetchuserlist']}
                     rowSelection={rowSelection}
                     columns={columns}
                     dataSource={this.props.list}
@@ -206,9 +191,10 @@ export default class UserList extends Component {
                     pagination={{
                         showSizeChanger: true,
                         showQuickJumper: true,
-                        'total': 45,
-                        'pageSize': 20,
-                        'current': 1
+                        'total': this.props.total,
+                        'pageSize': this.props.pageSize,
+                        'current': this.props.pageIndex,
+                        onChange: this.onChange
                     }}
                 />
                 <Modal
@@ -216,9 +202,7 @@ export default class UserList extends Component {
                     title={this.state.title}
                     width={this.state.width}
                     onOk={() => {
-                        this.setState({
-                            Addvisible: false
-                        });
+                        this.handleOK().bind(this);
                     }}
                     onCancel={() => {
                         this.setState({
@@ -226,18 +210,13 @@ export default class UserList extends Component {
                         });
                     }}>
                     {
-                        this.state.type === 'add' ? <Add /> : ''
+                        this.state.type === 'add' ? <Add wrappedComponentRef={(inst) => this.addForm = inst} /> : ''
                     }
                 </Modal>
                 <Modal
                     visible={this.state.DataFiltervisible}
                     title={this.state.title}
                     width={this.state.width}
-                    onOk={() => {
-                        this.setState({
-                            DataFiltervisible: false
-                        });
-                    }}
                     onCancel={() => {
                         this.setState({
                             DataFiltervisible: false

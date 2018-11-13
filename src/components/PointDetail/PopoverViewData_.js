@@ -127,7 +127,7 @@ class PopoverViewData_ extends Component {
     // 弹出模态窗口
     _openModal=(modalVisible, modalType) => {
         let setData = this.state;
-        // debugger;
+        // ;
         setData.lookDataParamModal = modalVisible;
         if (modalVisible) {
             setData.modalType = modalType;
@@ -284,7 +284,7 @@ class PopoverViewData_ extends Component {
     };
     // 选中行改变事件
     _onSelectChange = (keys, selectedRows) => {
-        // debugger;
+        // ;
         if (keys.length > 2 || keys.length === 0) { return false; }
         let { selectedRowKeys } = this.state;
         let _thisKeys = keys;
