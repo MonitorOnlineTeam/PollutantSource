@@ -182,7 +182,10 @@ class MonitorLayout extends React.PureComponent {
         } = this.props;
         // debugger;
         // currentMenu.forEach(getRedirect);
-        const bashRedirect = currentMenu.length !== 0 ? this.getBashRedirect(currentMenu) : '';
+        let bashRedirect = currentMenu.length !== 0 ? this.getBashRedirect(currentMenu) : '';
+        if (!bashRedirect) {
+            bashRedirect = '/user/login';
+        }
         // console.log(redirectData);
         // debugger;
         // console.log(this.props.currentMenu);
