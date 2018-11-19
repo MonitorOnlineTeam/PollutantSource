@@ -238,3 +238,132 @@ export async function queryentinfolist(params) {
     const result = await post('/api/rest/AtmosphereApi/PointAndData/GetTargetList', body, null);
     return result === null ? { data: null } : result;
 }
+
+export async function querypolluntantentinfolist(params) {
+    const body = {
+        parentIDs: params.parentID
+    };
+    const result = await post('/api/rest/PollutantSourceApi/PPointAndData/GetTargetList', body, null);
+    return result === null ? { data: null } : result.data;
+}
+
+export async function queryregionlist(params) {
+    const body = {
+        parentCode: 0,
+        recursionNum: params.recursionNum
+    };
+    const result = await post('/api/rest/PollutantSourceApi/PRegion/GetRegions', body, null);
+    return result === null ? { data: null } : result.data;
+}
+
+export async function queryindustrytypelist() {
+    const body = {
+    };
+    const result = await post('/api/rest/PollutantSourceApi/PPointAndData/IndustryTypeList', body, null);
+    return result === null ? { data: null } : result.data;
+}
+export async function queryattentiondegreelist() {
+    const body = {
+    };
+    const result = await post('/api/rest/PollutantSourceApi/PPointAndData/AttentionDegreeList', body, null);
+    return result === null ? { data: null } : result.data;
+}
+export async function queryunittypelist() {
+    const body = {
+    };
+    const result = await post('/api/rest/PollutantSourceApi/PPointAndData/UnitTypeList', body, null);
+    return result === null ? { data: null } : result.data;
+}
+export async function queryPSScalelist() {
+    const body = {
+    };
+    const result = await post('/api/rest/PollutantSourceApi/PPointAndData/PSScaleList', body, null);
+    return result === null ? { data: null } : result.data;
+}
+
+export async function queryregisttypelist() {
+    const body = {
+    };
+    const result = await post('/api/rest/PollutantSourceApi/PPointAndData/RegistTypeList', body, null);
+    return result === null ? { data: null } : result.data;
+}
+export async function querysubjectionrelationlist() {
+    const body = {
+    };
+    const result = await post('/api/rest/PollutantSourceApi/PPointAndData/SubjectionRelationList', body, null);
+    return result === null ? { data: null } : result.data;
+}
+
+export async function queryentedit(params) {
+    console.log(params.latlon.split(',')[1]);
+    const body = {
+        name: params.entallname,
+        code: params.parentID,
+        longitude: params.latlon.split(',')[0],
+        latitude: params.latlon.split(',')[1],
+        // photo:
+        pSScaleCode: params.pollutionsources,
+        abbreviation: params.enteasyname,
+        address: params.address,
+        attentionCode: params.concern,
+        corporationCode: params.personnum,
+        corporationName: params.personname,
+        environmentPrincipal: params.chargeman,
+        industryTypeCode: params.industry,
+        officePhone: params.phone,
+        regionCode: params.area,
+        registTypeCode: params.registration,
+        subjectionRelationCode: params.subjection,
+        unitTypeCode: params.unit
+    };
+    const result = await post('/api/rest/PollutantSourceApi/PPointAndData/EditEnt', body, null);
+    return result === null ? { data: null } : result.requstresult;
+}
+
+export async function queryupload(params) {
+    const body = {
+        fileName: params.fileName,
+        fileType: params.fileType,
+        img: params.img,
+        attachID: params.attachId,
+        IsUploadSuccess: params.IsUploadSuccess,
+        IsPc: params.IsPc,
+        uuid: params.uuid,
+    };
+
+    const result = await post('/api/rest/PollutantSourceApi/PUploadImage/UploadImage', body, null);
+    return result === null ? { data: null } : result.requstresult;
+}
+export async function querydeleteimg(params) {
+    const body = {
+        attachID: params.attachId,
+    };
+    const result = await post('/api/rest/PollutantSourceApi/PUploadImage/DeleteImage', body, null);
+    return result === null ? { data: null } : result.requstresult;
+}
+
+export async function queryeeplist() {
+    const body = {
+    };
+    const result = await post('/api/rest/PollutantSourceApi/PEmissionPermits/GetPDPermitList', body, null);
+    return result === null ? { data: null } : result.data;
+}
+export async function queryaddeep(params) {
+    const body = {
+        epnum: params.epnum,
+        begintime: params.effectivetime[0],
+        endtime: params.effectivetime[1],
+        describe: params.describe,
+        epname: params.epname,
+        code: params.code
+    };
+    const result = await post('/api/rest/PollutantSourceApi/PEmissionPermits/EditPDPermit', body, null);
+    return result === null ? { data: null } : result.requstresult;
+}
+export async function querydelep(params) {
+    const body = {
+        code: params.code
+    };
+    const result = await post('/api/rest/PollutantSourceApi/PEmissionPermits/DeletePDPermit', body, null);
+    return result === null ? { data: null } : result.data;
+}

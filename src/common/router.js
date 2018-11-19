@@ -285,6 +285,14 @@ export const getRouterData = (app) => {
             component: dynamicWrapper(app, ['points'], () =>
           import('../routes/OperationAndMaintenanceMemorabilia')),
         },
+        '/monitor/entInfo/entoperation': {
+            component: dynamicWrapper(app, ['baseinfo'], () =>
+        import('../routes/EnterpriseInfo')),
+        },
+        '/monitor/emissionpermits': {
+            component: dynamicWrapper(app, ['baseinfo'], () =>
+        import('../routes/EmissionPermits')),
+        },
         /* 登陆 */
         '/user': {
             component: dynamicWrapper(app, [], () =>
