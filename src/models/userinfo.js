@@ -2,19 +2,21 @@ import {
     Model
 } from '../dvapack';
 import {
-    getList
+    getList, deleteuser, enableduser, isexistenceuser, adduser, getuser, edituser
 } from '../services/userlist';
 export default Model.extend({
     namespace: 'userinfo',
 
     state: {
+        editUser: null,
+        requstresult: null,
         list: [],
         edituser: null,
         total: 0,
         loading: false,
-        pageSize: 0,
-        pageIndex: 0,
-
+        pageSize: 10,
+        pageIndex: 1,
+        reason: null,
     },
     subscriptions: {
         setup({
@@ -38,6 +40,9 @@ export default Model.extend({
         * fetchuserlist({
             payload: {
                 pageIndex,
+                pageSize,
+                UserAccount,
+                DeleteMark
             }
         }, {
             call,
@@ -45,14 +50,217 @@ export default Model.extend({
             update,
             select
         }) {
-            const pageSize = 1;
-            const result = yield call(getList, {pageIndex: pageIndex, pageSize: pageSize});
-            yield update({
-                list: result.data,
-                total: result.total,
-                pageIndex: pageIndex,
-                pageSize: pageSize
+            const result = yield call(getList, {pageIndex: pageIndex, pageSize: pageSize, UserAccount: UserAccount, DeleteMark: DeleteMark});
+
+            if (result.requstresult === '1') {
+                yield update({
+                    requstresult: result.requstresult,
+                    list: result.data,
+                    total: result.total,
+                    pageIndex: pageIndex,
+                    pageSize: pageSize
+                });
+            } else {
+                yield update({
+                    requstresult: result.requstresult,
+                    list: [],
+                    total: 0,
+                    pageIndex: null,
+                    pageSize: null
+                });
+            }
+        },
+        * deleteuser({
+            payload: {
+                UserId,
+                pageIndex,
+                pageSize,
+                UserAccount,
+                DeleteMark
+            }
+        }, {
+            call,
+            put,
+            update,
+            select
+        }) {
+            const result = yield call(deleteuser, {
+                UserId: UserId,
             });
+            yield update({
+                requstresult: result.requstresult,
+            });
+            yield put({
+                type: 'fetchuserlist',
+                payload: {
+                    pageIndex,
+                    pageSize,
+                    UserAccount,
+                    DeleteMark
+                },
+            });
+        },
+        * enableduser({
+            payload: {
+                UserId,
+                Enalbe,
+                pageIndex,
+                pageSize,
+                UserAccount,
+                DeleteMark
+            }
+        }, {
+            call,
+            put,
+            update,
+            select
+        }) {
+            const result = yield call(enableduser, {
+                UserId: UserId,
+                Enalbe: Enalbe,
+            });
+            yield update({
+                requstresult: result.requstresult,
+            });
+            yield put({
+                type: 'fetchuserlist',
+                payload: {
+                    pageIndex,
+                    pageSize,
+                    UserAccount,
+                    DeleteMark
+                },
+            });
+        },
+        * isexistenceuser({
+            payload: {
+                UserAccount,
+                callback,
+            }
+        }, {
+            call,
+            put,
+            update,
+            select
+        }) {
+            const result = yield call(isexistenceuser, {
+                UserAccount: UserAccount,
+            });
+            yield update({
+                requstresult: result.requstresult,
+                reason: result.reason
+            });
+            callback();
+        },
+        * adduser({
+            payload: {
+                UserAccount,
+                UserName,
+                UserSex,
+                Email,
+                Phone,
+                Title,
+                UserOrderby,
+                SendPush,
+                AlarmType,
+                AlarmTime,
+                UserRemark,
+                DeleteMark,
+                RolesId,
+                callback
+            }
+        }, {
+            call,
+            put,
+            update,
+            select
+        }) {
+            const result = yield call(adduser, {
+                UserAccount: UserAccount,
+                UserName: UserName,
+                UserSex: UserSex,
+                Email: Email,
+                Phone: Phone,
+                Title: Title,
+                UserOrderby: UserOrderby,
+                SendPush: SendPush,
+                AlarmType: AlarmType,
+                AlarmTime: AlarmTime,
+                UserRemark: UserRemark,
+                DeleteMark: DeleteMark,
+                RolesId: RolesId
+            });
+            yield update({
+                requstresult: result.requstresult,
+                reason: result.reason
+            });
+            callback();
+        },
+        * getuser({
+            payload: {
+                UserId,
+                callback
+            }
+        }, {
+            call,
+            put,
+            update,
+            select
+        }) {
+            const result = yield call(getuser, {
+                UserId: UserId
+            });
+            yield update({
+                requstresult: result.requstresult,
+                editUser: result.data[0]
+            });
+            callback();
+        },
+        * edituser({
+            payload: {
+                UserId,
+                UserAccount,
+                UserName,
+                UserSex,
+                Email,
+                Phone,
+                Title,
+                UserOrderby,
+                SendPush,
+                AlarmType,
+                AlarmTime,
+                UserRemark,
+                DeleteMark,
+                RolesId,
+                callback
+            }
+        }, {
+            call,
+            put,
+            update,
+            select
+        }) {
+            const result = yield call(edituser, {
+                UserId: UserId,
+                UserAccount: UserAccount,
+                UserName: UserName,
+                UserSex: UserSex,
+                Email: Email,
+                Phone: Phone,
+                Title: Title,
+                UserOrderby: UserOrderby,
+                SendPush: SendPush,
+                AlarmType: AlarmType,
+                AlarmTime: AlarmTime,
+                UserRemark: UserRemark,
+                DeleteMark: DeleteMark,
+                RolesId: RolesId
+            });
+            yield update({
+                requstresult: result.requstresult,
+                reason: result.reason
+            });
+            callback();
         },
     },
     reducers: {

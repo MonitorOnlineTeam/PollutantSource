@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import {
     Button,
     Input,
@@ -7,7 +7,7 @@ import {
     Col,
     Table,
     Form,
-    Select, Modal,
+    Select, Modal, message, Tag,
 } from 'antd';
 import Add from '../Userinfo/AddUser';
 import DataFilter from '../Userinfo/DataFilter';
@@ -15,6 +15,7 @@ import {routerRedux} from 'dva/router';
 import {connect} from 'dva';
 const Option = Select.Option;
 const Search = Input.Search;
+const confirm = Modal.confirm;
 
 @connect(({loading, userinfo}) => ({
     ...loading,
@@ -22,7 +23,7 @@ const Search = Input.Search;
     total: userinfo.total,
     pageSize: userinfo.pageSize,
     pageIndex: userinfo.pageIndex,
-
+    requstresult: userinfo.requstresult,
 }))
 export default class UserList extends Component {
     constructor(props) {
@@ -35,29 +36,100 @@ export default class UserList extends Component {
             type: '',
             title: '',
             width: 400,
+            DeleteMark: '',
+            UserAccount: '',
+            selectedRowKeys: [],
+            userId: '',
         };
     }
     componentWillMount() {
         this.onChange();
     };
-
-    onChange(pageNumber) {
+    selectRow = (record) => {
+        this.setState({
+            userId: record.key
+        });
+    }
+    onSelectedRowKeysChange = (selectedRowKeys) => {
+        this.setState({
+            selectedRowKeys
+        });
+    }
+    onShowSizeChange = (pageIndex, pageSize) => {
         this.props.dispatch({
             type: 'userinfo/fetchuserlist',
             payload: {
-                pageIndex: pageNumber,
+                pageIndex: pageIndex,
+                pageSize: pageSize
             },
+        });
+    }
+    onChange = (pageIndex, pageSize) => {
+        this.props.dispatch({
+            type: 'userinfo/fetchuserlist',
+            payload: {
+                pageIndex: pageIndex,
+                pageSize: pageSize
+            },
+        });
+    }
+    onSelectChange = (selectedRowKeys) => {
+        this.setState({
+            selectedRowKeys
         });
     }
     handleOK=(e) => {
         this.addForm.handleSubmit();
     }
+    deleteuserbyid=(e) => {
+        this.props.dispatch({
+            type: 'userinfo/deleteuser',
+            payload: {
+                pageIndex: this.props.pageIndex,
+                pageSize: this.props.pageSize,
+                DeleteMark: this.props.DeleteMark,
+                UserAccount: this.props.UserAccount,
+                UserId: this.state.selectedRowKeys,
+            },
+        });
+    }
+    delete=(e) => {
+        if (this.state.selectedRowKeys.length > 0) {
+            confirm({
+                title: '确定要删除吗?',
+                // content: 'Some descriptions',
+                okText: 'Yes',
+                okType: 'danger',
+                cancelText: 'No',
+                onOk: () => this.deleteuserbyid(),
+                onCancel() {
+                    console.log('Cancel');
+                },
+            });
+        } else {
+            message.error('请选择要删除的数据！');
+        }
+    };
+    IsEnabled = (type, record) => {
+        this.props.dispatch({
+            type: 'userinfo/enableduser',
+            payload: {
+                pageIndex: this.props.pageIndex,
+                pageSize: this.props.pageSize,
+                DeleteMark: this.props.DeleteMark,
+                UserAccount: this.props.UserAccount,
+                UserId: record.User_ID,
+                Enalbe: type
+            },
+        });
+    };
     render() {
         const columns = [{
             title: '登录名称',
             dataIndex: 'User_Account',
             key: 'User_Account',
-            width: '60px',
+            width: '150px',
+            sorter: (a, b) => a.User_Account.length - b.User_Account.length,
             render: (text, record) => {
                 return text;
             }
@@ -66,7 +138,7 @@ export default class UserList extends Component {
             title: '用户名称',
             dataIndex: 'User_Name',
             key: 'User_Name',
-            width: '60px',
+            width: '80px',
             render: (text, record) => {
                 return text;
             }
@@ -75,7 +147,7 @@ export default class UserList extends Component {
             title: '性别',
             dataIndex: 'User_Sex',
             key: 'User_Sex',
-            width: '30px',
+            width: '10px',
             render: (text, record) => {
                 return text;
             }
@@ -93,7 +165,7 @@ export default class UserList extends Component {
             title: '电话号码',
             dataIndex: 'Phone',
             key: 'Phone',
-            width: '80px',
+            width: '120px',
             render: (text, record) => {
                 return text;
             }
@@ -102,7 +174,7 @@ export default class UserList extends Component {
             title: '报警类型',
             dataIndex: 'AlarmType',
             key: 'AlarmType',
-            width: '80px',
+            width: '100px',
             render: (text, record) => {
                 return text;
             }
@@ -128,47 +200,79 @@ export default class UserList extends Component {
         { title: '状态',
             dataIndex: 'DeleteMark',
             key: 'DeleteMark',
-            width: '60px',
-            sorter: (a, b) => a.Emergency - b.Emergency,
-            render: (text, row, index) => {
+            width: '80px',
+            render: (text, record) => {
                 if (text === '禁用') {
-                    return <div style={{color: 'red'}}>{text}</div>;
+                    return <span > <Tag color="red" > <a onClick={
+                        () => this.IsEnabled(1, record)
+                    } > {text} </a></Tag > </span>;
                 } else {
-                    return <div >{text}</div>;
+                    return <span > <Tag color="blue" > <a onClick={
+                        () => this.IsEnabled(2, record)
+                    } > {text} </a></Tag > </span>;
                 }
             }
         },
+        {
+            title: '操作',
+            width: '50px',
+            render: (text, record) => (<Fragment >
+                <a onClick={
+                    () => this.props.dispatch(routerRedux.push(`/monitor/sysmanage/UserDetail/${record.key}`))
+                } > 编辑 </a> </Fragment>
+            ),
+        },
         ];
+        const { selectedRowKeys } = this.state;
         const rowSelection = {
-            onChange: (selectedRowKeys, selectedRows) => {
-                console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
-            }
+            selectedRowKeys,
+            onChange: this.onSelectedRowKeysChange,
         };
+
         return (
-            <Card>
+            <Card bordered={false}>
                 <Card>
                     <Form layout="inline">
                         <Row gutter={8}>
                             <Col span={3} >
-                                <Search placeholder="姓名/登录名" onSearch={value => console.log(value)}
-                                    style={{ width: 200 }} /></Col>
+                                <Search placeholder="姓名/登录名" onSearch={(value) => {
+                                    this.setState({
+                                        UserAccount: value
+                                    });
+                                    this.props.dispatch({
+                                        type: 'userinfo/fetchuserlist',
+                                        payload: {
+                                            pageIndex: 1,
+                                            pageSize: 10,
+                                            DeleteMark: this.state.DeleteMark,
+                                            UserAccount: value,
+                                        },
+                                    });
+                                }}style={{ width: 200 }} /></Col>
                             <Col span={2} >
-                                <Select defaultValue="" style={{ width: 120 }}>
+                                <Select value={this.state.DeleteMark} style={{ width: 120 }} onChange={(value) => {
+                                    this.setState({
+                                        DeleteMark: value
+                                    });
+                                    this.props.dispatch({
+                                        type: 'userinfo/fetchuserlist',
+                                        payload: {
+                                            pageIndex: 1,
+                                            pageSize: 10,
+                                            DeleteMark: value,
+                                            UserAccount: this.state.UserAccount
+                                        },
+                                    });
+                                }}>
                                     <Option value="">全部</Option>
                                     <Option value="1">启用</Option>
                                     <Option value="2">禁用</Option>
                                 </Select></Col>
                             <Col span={1} ><Button type="primary"
                                 onClick={() => {
-                                    // this.setState({
-                                    //     Addvisible: true,
-                                    //     type: 'add',
-                                    //     title: '新建用户',
-                                    //     width: 1130
-                                    // });
                                     this.props.dispatch(routerRedux.push(`/monitor/sysmanage/UserDetail/null`));
                                 }}>添加</Button></Col>
-                            <Col span={1} ><Button type="danger">删除</Button></Col>
+                            <Col span={1} ><Button type="danger" onClick={this.delete}>删除</Button></Col>
                             <Col span={1} ><Button type="primary"
                                 onClick={() => {
                                     this.setState({
@@ -186,7 +290,7 @@ export default class UserList extends Component {
                     loading={this.props.effects['userinfo/fetchuserlist']}
                     rowSelection={rowSelection}
                     columns={columns}
-                    dataSource={this.props.list}
+                    dataSource={this.props.requstresult === '1' ? this.props.list : null}
                     scroll={{ y: 'calc(100vh - 455px)' }}
                     pagination={{
                         showSizeChanger: true,
@@ -194,7 +298,9 @@ export default class UserList extends Component {
                         'total': this.props.total,
                         'pageSize': this.props.pageSize,
                         'current': this.props.pageIndex,
-                        onChange: this.onChange
+                        onChange: this.onChange,
+                        onShowSizeChange: this.onShowSizeChange,
+                        pageSizeOptions: ['5', '10', '20', '30', '40']
                     }}
                 />
                 <Modal
