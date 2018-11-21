@@ -4,15 +4,14 @@ import {
 }
     from '../dvapack/request';
 // 排口列表
-export async function getList(params) {
+export async function getpointlist(params) {
     const body = {
         pageIndex: params.pageIndex,
         pageSize: params.pageSize,
-        User_Account: params.UserAccount,
-        DeleteMark: params.DeleteMark,
+        DGIMNs: params.DGIMNs
     };
 
-    const result = post('/api/rest/PollutantSourceApi/PUserInfo/GetAllUserInfo', body, null);
+    const result = post('/api/rest/PollutantSourceApi/PPointAndData/GetPointList', body, null);
     return result === null ? {
         data: null
     } : result;

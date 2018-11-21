@@ -16,7 +16,7 @@ export async function changepwd(params) {
         UserPwdNew: params.password,
         UserPwdTwo: params.confirm,
     };
-    const result = post('/api/rest/Author/ResetPwd', body, null);
+    const result = post('/api/rest/PollutantSourceApi/PAuthor/ResetPwd', body, null);
     return result === null ? { data: null } : result;
 }
 /**

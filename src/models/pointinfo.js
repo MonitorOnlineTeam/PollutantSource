@@ -2,13 +2,12 @@ import {
     Model
 } from '../dvapack';
 import {
-    getList,
+    getpointlist,
 } from '../services/pointinfo';
 export default Model.extend({
     namespace: 'pointinfo',
 
     state: {
-        editUser: null,
         requstresult: null,
         list: [],
         edituser: null,
@@ -37,12 +36,11 @@ export default Model.extend({
         },
     },
     effects: {
-        * fetchuserlist({
+        * getpointlist({
             payload: {
                 pageIndex,
                 pageSize,
-                UserAccount,
-                DeleteMark
+                DGIMNs
             }
         }, {
             call,
@@ -50,11 +48,10 @@ export default Model.extend({
             update,
             select
         }) {
-            const result = yield call(getList, {
+            const result = yield call(getpointlist, {
                 pageIndex: pageIndex,
                 pageSize: pageSize,
-                UserAccount: UserAccount,
-                DeleteMark: DeleteMark
+                DGIMNs: DGIMNs
             });
 
             if (result.requstresult === '1') {
