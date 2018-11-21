@@ -287,12 +287,20 @@ export const getRouterData = (app) => {
         },
         /* 系统管理 */
         '/monitor/sysmanage/Userinfo': {
-            component: dynamicWrapper(app, ['userinfo'], () =>
+            component: dynamicWrapper(app, ['userinfo', 'userdgimndata'], () =>
             import('../routes/Userinfo')),
         },
         '/monitor/sysmanage/UserDetail/:UserId': {
             component: dynamicWrapper(app, ['userinfo'], () =>
             import('../routes/Userinfo/AddUser')),
+        },
+        '/monitor/entInfo/entoperation': {
+            component: dynamicWrapper(app, ['baseinfo'], () =>
+                    import('../routes/EnterpriseInfo')),
+        },
+        '/monitor/emissionpermits': {
+            component: dynamicWrapper(app, ['baseinfo'], () =>
+                    import('../routes/EmissionPermits')),
         },
         /* 登陆 */
         '/user': {

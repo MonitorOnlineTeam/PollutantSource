@@ -83,7 +83,6 @@ export async function getuser(params) {
 }
 // 编辑用户
 export async function edituser(params) {
-    debugger;
     const body = {
         User_ID: params.UserId,
         User_Account: params.UserAccount,
@@ -101,6 +100,19 @@ export async function edituser(params) {
         Roles_Id: params.RolesId
     };
     const result = post('/api/rest/PollutantSourceApi/PUserInfo/EditUserInfo', body, null);
+    return result === null ? {
+        data: null
+    } : result;
+}
+// 获取数据过滤排口列表
+export async function userDgimnDataFilter(params) {
+    const body = {
+        UserId: params.UserId,
+        TestKey: params.TestKey,
+        pageIndex: params.pageIndex,
+        pageSize: params.pageSize,
+    };
+    const result = post('/api/rest/PollutantSourceApi/PUserInfo/GetUserDgimnDataFilter', body, null);
     return result === null ? {
         data: null
     } : result;

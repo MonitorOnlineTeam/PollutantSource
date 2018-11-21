@@ -2,7 +2,7 @@ import {
     Model
 } from '../dvapack';
 import {
-    getList, deleteuser, enableduser, isexistenceuser, adduser, getuser, edituser
+    getList, deleteuser, enableduser, isexistenceuser, adduser, getuser, edituser, userDgimnDataFilter
 } from '../services/userlist';
 export default Model.extend({
     namespace: 'userinfo',
@@ -261,6 +261,44 @@ export default Model.extend({
                 reason: result.reason
             });
             callback();
+        },
+        * userDgimnDataFilter({
+            payload: {
+                UserId,
+                TestKey,
+                pageIndex,
+                pageSize,
+            }
+        }, {
+            call,
+            put,
+            update,
+            select
+        }) {
+            const result = yield call(userDgimnDataFilter, {
+                UserId: UserId,
+                TestKey: TestKey,
+                pageIndex: pageIndex,
+                pageSize: pageSize,
+            });
+
+            if (result.requstresult === '1') {
+                yield update({
+                    requstresult: result.requstresult,
+                    list: result.data,
+                    total: result.total,
+                    pageIndex: pageIndex,
+                    pageSize: pageSize
+                });
+            } else {
+                yield update({
+                    requstresult: result.requstresult,
+                    list: [],
+                    total: 0,
+                    pageIndex: null,
+                    pageSize: null
+                });
+            }
         },
     },
     reducers: {

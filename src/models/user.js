@@ -90,6 +90,7 @@ export default Model.extend({
         },
         * changepwd({ payload }, { call, put, update, select }) {
             const response = Cookie.get('token');
+            
             if (response) {
                 // const user = JSON.parse(response);
                 const res = yield call(changepwd, payload);

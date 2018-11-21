@@ -123,6 +123,20 @@ export default class UserList extends Component {
             },
         });
     };
+    onRef1 = (ref) => {
+        this.child = ref;
+    }
+    AddCompletion = () => {
+        this.setState({
+            DataFiltervisible: false,
+            type: 'datafilter',
+            title: '数据过滤',
+            width: 1130
+        });
+    }
+    AddData=() => {
+        this.child.AddDataFilter();
+    }
     render() {
         const columns = [{
             title: '登录名称',
@@ -275,12 +289,20 @@ export default class UserList extends Component {
                             <Col span={1} ><Button type="danger" onClick={this.delete}>删除</Button></Col>
                             <Col span={1} ><Button type="primary"
                                 onClick={() => {
-                                    this.setState({
-                                        DataFiltervisible: true,
-                                        type: 'datafilter',
-                                        title: '数据过滤',
-                                        width: 1130
-                                    });
+                                    if (this.state.selectedRowKeys.length === 1) {
+                                        this.setState({
+                                            DataFiltervisible: true,
+                                            type: 'datafilter',
+                                            title: '数据过滤',
+                                            width: 1130
+                                        });
+                                    }
+                                    if (this.state.selectedRowKeys.length > 1) {
+                                        message.warning('请选择一位用户');
+                                    }
+                                    if (this.state.selectedRowKeys.length === 0) {
+                                        message.warning('请选择用户');
+                                    }
                                 }}
                             >数据过滤</Button></Col>
                         </Row>
@@ -304,32 +326,21 @@ export default class UserList extends Component {
                     }}
                 />
                 <Modal
-                    visible={this.state.Addvisible}
-                    title={this.state.title}
-                    width={this.state.width}
-                    onOk={() => {
-                        this.handleOK().bind(this);
-                    }}
-                    onCancel={() => {
-                        this.setState({
-                            Addvisible: false
-                        });
-                    }}>
-                    {
-                        this.state.type === 'add' ? <Add wrappedComponentRef={(inst) => this.addForm = inst} /> : ''
-                    }
-                </Modal>
-                <Modal
                     visible={this.state.DataFiltervisible}
                     title={this.state.title}
                     width={this.state.width}
+                    destroyOnClose={true}// 清除上次数据
+                    onOk={() => {
+                        this.AddData();
+                    }
+                    }
                     onCancel={() => {
                         this.setState({
                             DataFiltervisible: false
                         });
                     }}>
                     {
-                        this.state.type === 'datafilter' ? <DataFilter /> : ''
+                        this.state.type === 'datafilter' ? <DataFilter pid={this.state.selectedRowKeys} onRef={this.onRef1} complant={this.AddCompletion} /> : ''
                     }
                 </Modal>
             </Card>
