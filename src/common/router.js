@@ -294,6 +294,10 @@ export const getRouterData = (app) => {
             component: dynamicWrapper(app, ['userinfo'], () =>
             import('../routes/Userinfo/AddUser')),
         },
+        '/monitor/sysmanage/PointInfo': {
+            component: dynamicWrapper(app, ['points'], () =>
+            import('../routes/PointInfo/')),
+        },
         '/monitor/entInfo/entoperation': {
             component: dynamicWrapper(app, ['baseinfo'], () =>
                     import('../routes/EnterpriseInfo')),
