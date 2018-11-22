@@ -14,6 +14,6 @@ module.exports = {
     CORS: [],
     openPages: ['/login'],
     apiPrefix: '/mock',
-    webSocketPushURL: '172.16.12.133:40001',
+    webSocketPushURL: '172.16.9.43:40001',
     imgaddress: 'http://localhost:51047/upload/'
 };
