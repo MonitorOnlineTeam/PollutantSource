@@ -8,7 +8,7 @@
   ],
   "proxy": {
       "/api": {
-      "target" : "http://localhost:51047", // "http://172.16.12.133:8016",
+      "target" : "http://172.16.12.152:8011/api",
       "changeOrigin": true,
       "pathRewrite": { "^/api" : "" }
     }
