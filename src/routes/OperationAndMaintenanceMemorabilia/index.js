@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
-import { Tabs, Card, Checkbox, Row, Col, Switch, Timeline, Icon } from 'antd';
+import { Tabs, Card, Checkbox, Row, Col, Switch, Timeline, Icon, Button } from 'antd';
 import RangePicker_ from '../../components/PointDetail/RangePicker_';
+import {routerRedux} from 'dva/router';
+import { connect } from 'dva';
 
 import moment from 'moment';
 const TabPane = Tabs.TabPane;
-
+@connect()
 export default class OperationAndMaintenanceMemorabilia extends Component {
     constructor(props) {
         super(props);
@@ -61,6 +63,14 @@ export default class OperationAndMaintenanceMemorabilia extends Component {
                                 <Switch checkedChildren="开" unCheckedChildren="关" defaultChecked={true} onChange={this.OpenonChange} />
                             </Col>
                         </Row>
+                        <Row style={{marginTop: '20px'}}>
+                            <Col span={3}>
+                                <Button style={{marginLeft: 10, marginBottom: 10}} onClick={() => {
+                                    this.props.dispatch(routerRedux.push(`/monitor/emergency/emergencydetailinfo/00553062-ade0-420d-a7d4-c657397dbf20/766f911d-5e41-4bbf-b705-add427a16e77`));
+                                }
+                                }> 查看任务详情 </Button>
+                            </Col>
+                        </Row>
                     </Card>
                     <div style={{height: 'calc(100vh - 190px)', width: '60%', paddingBottom: '20px', backgroundColor: 'rgb(238,241,246)', overflowX: 'hidden', overflowY: 'scroll', margin: 'auto', marginTop: '20px'}}>
                         <Card >
@@ -85,6 +95,7 @@ export default class OperationAndMaintenanceMemorabilia extends Component {
                                     </Row>
                                     <Col offset={15} span={4}>
                                         <a style={{textDecoration: 'underline', color: 'rgb(166,210,255)'}}>查看详情</a>
+
                                     </Col>
                                     <Row />
                                 </Timeline.Item>

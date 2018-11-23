@@ -1,23 +1,19 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import styles from '../EmergencyTodoList/EmergencyDetailInfo.less';
-import {Steps, Card, Popover, Divider, Button, Input, Table, Modal, Row, Col, Icon } from 'antd';
+import {Card, Divider, Button, Input, Table, Row, Col, Icon } from 'antd';
 import DescriptionList from '../../components/DescriptionList';
-import EmergencyInfo from '../../mockdata/EmergencyTodoList/EmergencyDetailInfo.json';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
-import {routerRedux} from 'dva/router';
 import { connect } from 'dva';
-import QualityControl from './QualityControl';
+import {EnumRequstResult, EnumPatrolTaskType} from '../../utils/enum';
 
 const { Description } = DescriptionList;
 const { TextArea } = Input;
-const Step = Steps.Step;
-const customDot = (dot, { status, index }) => (
-    <Popover content={<span>step {index} status: {status}</span>}>
-        {dot}
-    </Popover>
-);
 
-@connect()
+@connect(({ task, loading }) => ({
+    isloading: loading.effects['task/GetTaskDetailInfo'],
+    taskInfo: task.TaskInfo
+}))
+
 export default class EmergencyDetailInfo extends Component {
     constructor(props) {
         super(props);
@@ -31,285 +27,226 @@ export default class EmergencyDetailInfo extends Component {
             showforminfo: true
         });
     }
-
+    componentDidMount() {
+        this.props.dispatch({
+            type: 'task/GetTaskDetailInfo',
+            payload: {
+                TaskID: this.props.match.params.TaskID,
+                UserID: this.props.match.params.UserID
+            }
+        });
+    }
     render() {
         const SCREEN_WIDTH = document.querySelector('body').offsetWidth;
-        const { match} = this.props;
-        const emergencyId = match.params.exceptionhandleid; // 任务ID
-        const dataSource = [{
-            key: '1',
-            BeginAlarmTime: '2018-08-30 3:20',
-            LastAlarmTime: '2018-08-30 5:20',
-            AlarmInfo: 'SO2连续值异常',
-            AlarmCount: '15'
-        }, {
-            key: '2',
-            BeginAlarmTime: '2018-08-30 7:20',
-            LastAlarmTime: '2018-08-30 9:00',
-            AlarmInfo: '烟尘零值异常',
-            AlarmCount: '14'
-        }, {
-            key: '3',
-            BeginAlarmTime: '2018-08-30 9:00',
-            LastAlarmTime: '2018-08-30 11:00',
-            AlarmInfo: '气态分析仪温度过高',
-            AlarmCount: '13'
-        }];
 
-        const columns = [{
-            title: '开始报警时间',
-            dataIndex: 'BeginAlarmTime',
-            key: 'BeginAlarmTime',
-        }, {
-            title: '最后一次报警时间',
-            dataIndex: 'LastAlarmTime',
-            key: 'LastAlarmTime',
-        }, {
-            title: '报警信息',
-            dataIndex: 'AlarmInfo',
-            key: 'AlarmInfo',
-        }, {
-            title: '报警次数',
-            dataIndex: 'AlarmCount',
-            key: 'AlarmCount',
-        }];
-        const LogColumn = [
-            {
-                title: '步骤',
-                width: '10%',
-                dataIndex: 'StepName',
-                align: 'center',
-                render: (value, row, index) => {
-                    const obj = {
-                        children: value,
-                        props: {},
-                    };
-                    if (index === 3) {
-                        obj.props.rowSpan = 3;
-                    }
-                    if (index > 3) {
-                        obj.props.rowSpan = 0;
-                    }
-                    return obj;
-                },
+        if (this.props.taskInfo === null || this.props.isloading) {
+            return (
+                <div>
+                    正在加载中
+                </div>
+            );
+        } else {
+            let TaskCode = ''; // 任务编号
+            let PointName = ''; // 排口名称
+            let EnterpriseName = ''; // 企业名称
+            let TaskFrom = ''; // 任务来源
+            let EmergencyStatusText = ''; // 紧急程度
+            let TaskStatusText = ''; // 任务状态
+            let TaskDescription = ''; // 任务描述
+            let OperationsUserName = ''; // 运维人
+            let CreateTime = ''; // 任务创建时间
+            let RecordInfoList = []; // 报警记录
+            let Remark = ''; // 处理说明
+            let Attachments = ''; // 附件
+            let TaskLogList = []; // 任务日志列表
+            let TaskType = ''; // 任务类型
+            let data = null; // 任务信息
+            const taskInfo = this.props.taskInfo;
+            if (taskInfo.requstresult == EnumRequstResult.Success) {
+                data = taskInfo.data[0];
+                TaskCode = data.TaskCode;
+                PointName = data.PointName;
+                EnterpriseName = data.EnterpriseName;
+                TaskFrom = data.TaskFrom;
+                EmergencyStatusText = data.EmergencyStatusText;
+                TaskStatusText = data.TaskStatusText;
+                TaskDescription = data.TaskDescription;
+                OperationsUserName = data.OperationsUserName;
+                CreateTime = data.CreateTime;
+                RecordInfoList = data.RecordInfoList;
+                Remark = data.Remark;
+                Attachments = data.Attachments;
+                TaskLogList = data.TaskLogList;
+                TaskType = data.TaskType;
+            }
+
+            const pics = Attachments !== '' ? Attachments.LowimgList : [];
+            const dataSource = [{
+                key: '1',
+                BeginAlarmTime: '2018-08-30 3:20',
+                LastAlarmTime: '2018-08-30 5:20',
+                AlarmInfo: 'SO2连续值异常',
+                AlarmCount: '15'
             }, {
-                title: '处理人',
-                width: '20%',
-                dataIndex: 'User_Name',
-                align: 'center'
+                key: '2',
+                BeginAlarmTime: '2018-08-30 7:20',
+                LastAlarmTime: '2018-08-30 9:00',
+                AlarmInfo: '烟尘零值异常',
+                AlarmCount: '14'
             }, {
-                title: '开始时间',
-                width: '20%',
-                dataIndex: 'BeginTime',
-                align: 'center'
-            }, {
-                title: '完成时间',
-                width: '20%',
-                dataIndex: 'EndTime',
-                align: 'center'
-            }, {
-                title: '说明',
-                width: '20%',
-                dataIndex: 'Remark',
-                align: 'center'
-            }, {
-                title: '处理状态',
-                width: '10%',
-                dataIndex: 'HandlingState',
-                align: 'center'
+                key: '3',
+                BeginAlarmTime: '2018-08-30 9:00',
+                LastAlarmTime: '2018-08-30 11:00',
+                AlarmInfo: '气态分析仪温度过高',
+                AlarmCount: '13'
             }];
 
-            // 任务处理进程
-        const taskProcess = EmergencyInfo.TaskProcess.filter(function(item) {
-            return item.ExceptionHandleId === emergencyId;
-        });
+            const columns = [{
+                title: '开始报警时间',
+                dataIndex: 'BeginAlarmTime',
+                key: 'BeginAlarmTime',
+            }, {
+                title: '最后一次报警时间',
+                dataIndex: 'LastAlarmTime',
+                key: 'LastAlarmTime',
+            }, {
+                title: '报警信息',
+                dataIndex: 'AlarmInfo',
+                key: 'AlarmInfo',
+            }, {
+                title: '报警次数',
+                dataIndex: 'AlarmCount',
+                key: 'AlarmCount',
+            }];
+            const LogColumn = [
+                {
+                    title: '步骤',
+                    width: '10%',
+                    dataIndex: 'Remark',
+                    align: 'center'
+                }, {
+                    title: '处理人',
+                    width: '20%',
+                    dataIndex: 'CreateUserName',
+                    align: 'center'
+                }, {
+                    title: '创建时间',
+                    width: '20%',
+                    dataIndex: 'CreateTime',
+                    align: 'center'
+                }, {
+                    title: '说明',
+                    width: '20%',
+                    dataIndex: 'TaskRemark',
+                    align: 'center'
+                }, {
+                    title: '处理状态',
+                    width: '10%',
+                    dataIndex: 'TaskStatusText',
+                    align: 'center'
+                }];
 
-        const currentProcess = taskProcess.filter(function(item) {
-            return item.UserName !== '';
-        });
-
-        // 任务单基本信息
-        const taskBasicInfo = EmergencyInfo.TaskBasicInfo.filter((item) => {
-            return item.ExceptionHandleId === emergencyId;
-        });
-        console.log(taskBasicInfo);
-        // 应急处理
-        const emergencyHandle = EmergencyInfo.EmergencyHandle.filter((item) => {
-            return item.ExceptionHandleId === emergencyId;
-        });
-
-        // 校准信息
-        const correctInfo = EmergencyInfo.CorrectInfo.filter((item) => {
-            return item.ExceptionHandleId === emergencyId;
-        });
-
-        // 审批流程
-        const approvalProcess = EmergencyInfo.ApprovalProcess.filter((item) => {
-            return item.ExceptionHandleId === emergencyId;
-        });
-
-        const currentApprovalProcess = approvalProcess.filter(function(item) {
-            return item.CheckName !== '';
-        });
-
-        const logDataList = EmergencyInfo.LogDataList.filter((item) => {
-            return item.ExceptionHandleId === emergencyId;
-        });
-
-        return (
-            <PageHeaderLayout title="">
-                <div style={{height: 'calc(100vh - 190px)'}} className={styles.ExceptionDetailDiv}>
-                    {/* <Card title="" style={{ }} bordered={false}>
-                        <Steps progressDot={customDot} current={currentProcess.length}>
+            return (
+                <PageHeaderLayout title="">
+                    <div style={{height: 'calc(100vh - 190px)'}} className={styles.ExceptionDetailDiv}>
+                        <Card title={<span style={{fontWeight: '900'}}>任务信息</span>} bordered={false}>
+                            <DescriptionList className={styles.headerList} size="large" col="3">
+                                <Description term="任务单号">{TaskCode}</Description>
+                                <Description term="排口" >{PointName}</Description>
+                                <Description term="企业">{EnterpriseName}</Description>
+                            </DescriptionList>
+                            <DescriptionList style={{marginTop: 20}} className={styles.headerList} size="large" col="3">
+                                <Description term="任务来源">{TaskFrom}</Description>
+                                <Description term="紧急程度"><div style={{color: 'red'}}>{EmergencyStatusText}</div></Description>
+                                <Description term="任务状态"> <div style={{color: '#32CD32'}}>{TaskStatusText }</div></Description>
+                                <Description term="任务内容">{TaskDescription}</Description>
+                            </DescriptionList>
+                            <DescriptionList style={{marginTop: 20}} className={styles.headerList} size="large" col="3">
+                                <Description term="运维人">{OperationsUserName}</Description>
+                                <Description term="创建时间">{CreateTime}</Description>
+                            </DescriptionList>
                             {
-                                taskProcess.map((item) => {
-                                    return (<Step title={item.ProcessName} description={
-                                        <div className={styles.stepDescription}>
-                                            <Fragment>
-                                                {item.UserName}
-                                            </Fragment>
-                                            <div>{item.CreateTime}</div>
-                                        </div>
-                                    } />);
-                                })
+                                TaskType === EnumPatrolTaskType.PatrolTask ? null
+                                    : <Divider style={{ marginBottom: 20}} />
                             }
-                        </Steps>
-                    </Card> */}
-                    <Card title="任务信息" style={{marginTop: 20 }} bordered={false}>
-                        <DescriptionList className={styles.headerList} size="large" col="3">
-                            <Description term="任务单号">{taskBasicInfo.length === 0 ? '' : taskBasicInfo[0].TaskNo}</Description>
-                            <Description term="排口" >{taskBasicInfo.length === 0 ? '' : taskBasicInfo[0].PointName}</Description>
-                            <Description term="企业">{taskBasicInfo.length === 0 ? '' : taskBasicInfo[0].EnterName}</Description>
-                            <Description term="省份">{taskBasicInfo.length === 0 ? '' : taskBasicInfo[0].Province}</Description>
-                            <Description term="城市">{taskBasicInfo.length === 0 ? '' : taskBasicInfo[0].City}</Description>
-                        </DescriptionList>
-                        <DescriptionList style={{marginTop: 20}} className={styles.headerList} size="large" col="3">
-                            <Description term="任务来源">{taskBasicInfo.length === 0 ? '' : taskBasicInfo[0].TaskSource}</Description>
-                            <Description term="紧急程度"><div style={{color: 'red'}}>{taskBasicInfo.length === 0 ? '' : taskBasicInfo[0].Emergence}</div></Description>
-                            <Description term="任务状态"> <div style={{color: '#32CD32'}}>{taskBasicInfo.length === 0 ? '' : taskBasicInfo[0].TaskStatus }</div></Description>
-                            <Description term="任务内容">{taskBasicInfo.length === 0 ? '' : taskBasicInfo[0].TaskContent}</Description>
-                        </DescriptionList>
-                        <DescriptionList style={{marginTop: 20}} className={styles.headerList} size="large" col="3">
-                            <Description term="创建人">{taskBasicInfo.length === 0 ? '' : taskBasicInfo[0].CreatePerson}</Description>
-                            <Description term="创建时间">{taskBasicInfo.length === 0 ? '' : taskBasicInfo[0].CreateTime}</Description>
-                        </DescriptionList>
-                        <Divider style={{ marginBottom: 20 }} />
-                        <DescriptionList className={styles.headerList} size="large" col="3">
-                            <Description term="设备类型">{taskBasicInfo.length === 0 ? '' : taskBasicInfo[0].DeviceType}</Description>
-                            <Description term="设备品牌">{taskBasicInfo.length === 0 ? '' : taskBasicInfo[0].DeviceBrand}</Description>
-                            <Description term="设备编号">{taskBasicInfo.length === 0 ? '' : taskBasicInfo[0].DeviceNo}</Description>
-                            <Description term="设备型号">{taskBasicInfo.length === 0 ? '' : taskBasicInfo[0].DeviceXh}</Description>
-                        </DescriptionList>
-                    </Card>
-                    <Table style={{ marginTop: 20, backgroundColor: 'white'}} bordered={false} dataSource={dataSource} pagination={false} columns={columns} />
-                    <Card title="处理说明" style={{ marginTop: 20}} bordered={false}>
-                        <DescriptionList className={styles.headerList} size="large" col="1">
-                            <Description>
-                                <TextArea rows={8} style={{width: '600px'}} placeholder="更换备机，原主机返厂进行检修。" value={emergencyHandle.length === 0 ? '' : emergencyHandle[0].HandleContent} />
-                            </Description>
-                        </DescriptionList>
-
-                    </Card>
-                    <Card title="处理记录" style={{ marginTop: 20}} bordered={false}>
-                        <DescriptionList className={styles.headerList} size="large" col="1">
-                            <Description>
-                                <Button style={{marginBottom: '5px'}} icon="check-circle-o" onClick={this.SeeDetailInfo}>气态分析仪运行状况检查记录表</Button><br />
-                                <Button icon="check-circle-o">备品备件更换记录</Button><br />
-                            </Description>
-                        </DescriptionList>
-                        <DescriptionList style={{marginTop: 20}} className={styles.headerList} size="large" col="2">
-                            <Description term="处理人">
-                                {emergencyHandle.length === 0 ? '' : emergencyHandle[0].HandlePerson}
-                            </Description>
-                            <Description term="处理时间">
-                                {emergencyHandle.length === 0 ? '' : emergencyHandle[0].HandleTime}
-                            </Description>
-                        </DescriptionList>
-                    </Card>
-                    {/* <Card title="校准" style={{ marginTop: 20}} bordered={false}>
-                        <DescriptionList className={styles.headerList} size="large" col="1">
-                            <Description term="校准记录">
-                                <Button style={{marginBottom: '5px'}} icon="check-circle-o">校准信息记录表</Button>
-                            </Description>
-                        </DescriptionList>
-                        <DescriptionList style={{marginTop: 20}} className={styles.headerList} size="large" col="2">
-                            <Description term="校准人">
-                                {correctInfo.length === 0 ? '' : correctInfo[0].HandlePerson}
-                            </Description>
-                            <Description term="校准时间">
-                                {correctInfo.length === 0 ? '' : correctInfo[0].HandleTime}
-                            </Description>
-                        </DescriptionList>
-                    </Card>
-                    <Card title="审核" style={{ marginTop: 20}} bordered={false}>
-                        <Steps direction="vertical" size="large" current={currentApprovalProcess.length}>
                             {
-                                approvalProcess.map((item) => {
-                                    return (
-                                        <Step title={<div><span>{item.NodeName}</span><span className={styles.stepCheckName}>{item.CheckName}</span><span className={styles.stepCheckName}>{item.CheckTime}</span></div>}
-                                            description={
-                                                <div className={styles.stepDescription}>
-                                                    <div style={{width: '50%', height: '40px'}}>
-                                                        {item.CheckContent}
-                                                    </div>
-                                                </div>
-                                            } />
-                                    );
-                                })
+                                TaskType === EnumPatrolTaskType.PatrolTask ? null
+                                    : <Table style={{ backgroundColor: 'white'}} bordered={false} dataSource={dataSource} pagination={false} columns={columns} />
                             }
-                        </Steps>
-                    </Card> */}
-                    <Card title="附件" style={{marginTop: 20 }} bordered={false}>
-                        <Row gutter={16} justify="center" align="middle">
-                            <Col span={6} align="center">
-                                <img src="../../../pic1.jpg" />
-                            </Col>
-                            <Col span={6} align="center">
-                                <img src="../../../pic2.jpg" />
-                            </Col>
-                            <Col span={6} align="center">
-                                <img src="../../../pic3.jpg" />
-                            </Col>
-                            <Col span={6} align="center" />
-                        </Row>
-                    </Card>
-                    <Card title="日志表" style={{marginTop: 20 }} bordered={false}>
-                        <Table columns={LogColumn}
-                            dataSource={logDataList}
-                            rowKey="StepID"
-                            bordered={true}
-                            pagination={false}
-                        />
-                    </Card>
-                    <div className={styles.returnLastPage}>
-                        {/* <Button type="solid" icon="left" onClick={() => {
-                            this.props.history.goBack(-1);
-                            // this.props.dispatch(routerRedux.push(`/monitor/operation/emergency/emergencytodolist/`));
-                        }}>返回</Button> */}
 
+                        </Card>
+                        <Card title={<span style={{fontWeight: '900'}}>处理说明</span>} style={{ marginTop: 20}} bordered={false}>
+                            <DescriptionList className={styles.headerList} size="large" col="1">
+                                <Description>
+                                    <TextArea rows={8} style={{width: '600px'}} />
+                                </Description>
+                            </DescriptionList>
+
+                        </Card>
+                        <Card title={<span style={{fontWeight: '900'}}>处理记录</span>} style={{ marginTop: 20}} bordered={false}>
+                            <DescriptionList className={styles.headerList} size="large" col="1">
+                                <Description>
+                                    <Button style={{marginBottom: '5px'}} icon="check-circle-o" onClick={this.SeeDetailInfo}>气态分析仪运行状况检查记录表</Button><br />
+                                    <Button icon="check-circle-o">备品备件更换记录</Button><br />
+                                </Description>
+                            </DescriptionList>
+                            <DescriptionList style={{marginTop: 20}} className={styles.headerList} size="large" col="2">
+                                <Description term="处理人">
+                                    {OperationsUserName}
+                                </Description>
+                                <Description term="处理时间">
+                                    {}
+                                </Description>
+                            </DescriptionList>
+                        </Card>
+                        <Card title={<span style={{fontWeight: '900'}}>附件</span>} bordered={false}>
+                            <Row gutter={16} justify="center" align="middle">
+                                {
+                                    pics.map((item) => {
+                                        var srcValue = `../../../${item}`;
+                                        return (
+                                            <Col span={6} align="center">
+                                                <img src={srcValue} />
+                                            </Col>
+                                        );
+                                    })
+                                }
+                            </Row>
+                        </Card>
+                        <Card title={<span style={{fontWeight: '900'}}>日志表</span>} style={{marginTop: 20 }} bordered={false}>
+                            <Table columns={LogColumn}
+                                dataSource={TaskLogList}
+                                rowKey="StepID"
+                                bordered={true}
+                                pagination={false}
+                            />
+                        </Card>
+                        <div className={styles.Toexamine} >
+                            <Button size="large" onClick={() => {
+                                this.props.history.goBack(-1);
+                                // this.props.dispatch(routerRedux.push(`/monitor/operation/emergency/emergencytodolist/`));
+                            }}><Icon type="left" />退回</Button>
+                            &nbsp;
+                            <Button type="primary" size="large" >通过<Icon type="right" /></Button >
+                        </div>
+                        {/* <Modal
+                            title="气态分析仪运行状况检查记录表"
+                            visible={this.state.showforminfo}
+                            width={SCREEN_WIDTH - 400}
+                            style={{ top: 20 }}
+                            bodyStyle={{ padding: 5, backgroundColor: 'rgb(240,242,245)' }}
+                            onCancel={() => {
+                                this.setState({
+                                    showforminfo: false
+                                });
+                            }}
+                            footer={null}
+                        >
+                            <QualityControl {...this.props} emergencyId={emergencyId} />
+                        </Modal> */}
                     </div>
-                    <div className={styles.Toexamine} >
-                        <Button size="large"><Icon type="left" />退回</Button>
-                        &nbsp;
-                        <Button type="primary" size="large" >通过<Icon type="right" /></Button >
-                    </div>
-                    <Modal
-                        title="气态分析仪运行状况检查记录表"
-                        visible={this.state.showforminfo}
-                        width={SCREEN_WIDTH - 400}
-                        style={{ top: 20 }}
-                        bodyStyle={{ padding: 5, backgroundColor: 'rgb(240,242,245)' }}
-                        onCancel={() => {
-                            this.setState({
-                                showforminfo: false
-                            });
-                        }}
-                        footer={null}
-                    >
-                        <QualityControl {...this.props} emergencyId={emergencyId} />
-                    </Modal>
-                </div>
-            </PageHeaderLayout>
-        );
+                </PageHeaderLayout>
+            );
+        }
     }
 }
