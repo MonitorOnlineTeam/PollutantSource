@@ -1,18 +1,25 @@
 import React, { Component } from 'react';
 import { routerRedux } from 'dva/router';
 import Add from '../../components/Video/addVideoInfo';
-import { Table, Card, Button, Modal } from 'antd';
+import Update from '../../components/Video/updateVideoInfo';
+import { Table, Card, Button, Modal, message } from 'antd';
 import { connect } from 'dva';
 import moment from 'moment';
-@connect()
+const confirm = Modal.confirm;
+@connect(({loading, videolist}) => ({
+    ...loading,
+    list: videolist.list,
+    total: videolist.total,
+    pageSize: videolist.pageSize,
+    pageIndex: videolist.pageIndex,
+    requstresult: videolist.requstresult,
+}))
 export default class VideoList extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
             rangeDate: [moment('2018-06-23 00:00:00'), moment('2018-06-25 00:00:00')],
-            selectid: [],
-            item: [],
             visible: false,
             attentionvisible: false,
             type: 'add',
@@ -20,22 +27,81 @@ export default class VideoList extends Component {
             width: 400,
             expandForm: false,
             loading: true,
+            DGIMN: 'sgjt001003',
+            pointName: '脱硫入口'
         };
     }
 
+    componentWillMount() {
+        this.onChange();
+    };
+    onChange = () => {
+        this.props.dispatch({
+            type: 'videolist/fetchuserlist',
+            payload: {
+                DGIMN: 'sgjt001003',
+            },
+        });
+    }
+    onRef1 = (ref) => {
+        this.child = ref;
+    }
+    onCancel=() => {
+        this.setState({
+            visible: false
+        });
+    }
+    // 添加
+    AddData=() => {
+        this.child.handleSubmit();
+    }
+    // 修改
+    updateData=() => {
+        this.child.handleSubmitupdate();
+    }
+    deleteVideoInfo=(e) => {
+        if (this.state.selectedRowKeys === undefined) {
+            message.error('请选择要删除的数据！');
+        } else {
+            confirm({
+                title: '确定要删除吗?',
+                okText: '是',
+                okType: 'danger',
+                cancelText: '否',
+                onOk: () => this.delete(),
+                onCancel() {
+                    console.log('Cancel');
+                },
+            });
+        }
+    };
+    delete=() => {
+        this.props.dispatch({
+            type: 'videolist/deleteVideoInfo',
+            payload: {
+                DGIMN: this.state.DGIMN,
+                VedioCamera_ID: this.state.item.VedioCamera_ID,
+                VedioDevice_ID: this.state.item.VedioDevice_ID,
+                CameraMonitorID: this.state.item.CameraMonitorID,
+            },
+        });
+    }
     render() {
         const columns = [
-            { title: '关联监测点', width: 150, dataIndex: 'pointname', key: 'name', fixed: 'left' },
-            { title: '设备名称', width: 150, dataIndex: 'devicename', key: 'age' },
-            { title: '设备型号', width: 150, dataIndex: 'xinghao', key: '1' },
-            { title: '设备IP', width: 150, dataIndex: 'ip', key: '2' },
-            { title: 'IP端口', width: 150, dataIndex: 'address', key: '3' },
-            { title: '登录名', width: 150, dataIndex: 'name', key: '4' },
-            { title: '登陆密码', width: 150, dataIndex: 'password', key: '5' },
-            { title: '设备存放位置', width: 250, dataIndex: 'cun', key: '6' },
-            { title: '摄像头名称', width: 150, dataIndex: 'position', key: '7' },
-            { title: '摄像头编号', width: 150, dataIndex: 'video', key: '8' },
-            { title: '型号', width: 150, dataIndex: 'xing', key: '9' },
+            { title: '设备名称', width: 150, dataIndex: 'VedioDevice_Name', key: 'VedioDevice_Name' },
+            { title: '设备编号', width: 150, dataIndex: 'VedioDevice_No', key: 'VedioDevice_No' },
+            { title: '设备位置', width: 150, dataIndex: 'VedioDevice_Position', key: 'VedioDevice_Position' },
+            { title: 'IP', width: 150, dataIndex: 'IP', key: 'IP' },
+            { title: '用户名', width: 150, dataIndex: 'User_Name', key: 'User_Name' },
+            { title: '密码', width: 200, dataIndex: 'User_Pwd', key: 'User_Pwd' },
+            { title: '端口', width: 150, dataIndex: 'Device_Port', key: 'Device_Port' },
+            { title: '相机名称', width: 150, dataIndex: 'VedioCamera_Name', key: 'VedioCamera_Name' },
+            { title: '通道号', width: 100, dataIndex: 'VedioCamera_No', key: 'VedioCamera_No' },
+            { title: '相机位置', width: 250, dataIndex: 'VedioCamera_Position', key: 'VedioCamera_Position' },
+            { title: '生产日期', width: 250, dataIndex: 'ProduceDate', key: 'ProduceDate' },
+            { title: '相机编号', width: 150, dataIndex: 'VedioCamera_Version', key: 'VedioCamera_Version' },
+            { title: '经度', width: 150, dataIndex: 'Longitude', key: 'Longitude' },
+            { title: '纬度', width: 150, dataIndex: 'Latitude', key: 'Latitude' },
             // {
             //     title: 'Action',
             //     key: 'operation',
@@ -45,166 +111,10 @@ export default class VideoList extends Component {
             // },
         ];
 
-        const data = [{
-            key: '1',
-            pointname: '废气排口1',
-            devicename: '大唐集团',
-            xinghao: 'Android',
-            ip: '172.16.12.133',
-            address: '8018',
-            name: 'admin',
-            password: '123456',
-            cun: '江西省吉安市世纪大道110号',
-            position: '废气排口1',
-            video: '分片1',
-            xing: 'A380',
-        },
-        {
-            key: '2',
-            pointname: '废气排口2',
-            devicename: '大唐集团',
-            xinghao: 'Android',
-            ip: '172.16.12.133',
-            address: '8018',
-            name: 'admin',
-            password: '123456',
-            cun: '江西省吉安市世纪大道110号',
-            position: '废气排口1',
-            video: '分片1',
-            xing: 'A380',
-        },
-        {
-            key: '3',
-            pointname: '废气排口3',
-            devicename: '大唐集团',
-            xinghao: 'Android',
-            ip: '172.16.12.133',
-            address: '8018',
-            name: 'admin',
-            password: '123456',
-            cun: '江西省吉安市世纪大道110号',
-            position: '废气排口1',
-            video: '分片1',
-            xing: 'A380',
-        },
-        {
-            key: '4',
-            pointname: '废气排口4',
-            devicename: '大唐集团',
-            xinghao: 'Android',
-            ip: '172.16.12.133',
-            address: '8018',
-            name: 'admin',
-            password: '123456',
-            cun: '江西省吉安市世纪大道110号',
-            position: '废气排口1',
-            video: '分片1',
-            xing: 'A380',
-        },
-        {
-            key: '5',
-            pointname: '废气排口5',
-            devicename: '大唐集团',
-            xinghao: 'Android',
-            ip: '172.16.12.133',
-            address: '8018',
-            name: 'admin',
-            password: '123456',
-            cun: '江西省吉安市世纪大道110号',
-            position: '废气排口1',
-            video: '分片1',
-            xing: 'A380',
-        },
-        {
-            key: '6',
-            pointname: '废气排口6',
-            devicename: '大唐集团',
-            xinghao: 'Android',
-            ip: '172.16.12.133',
-            address: '8018',
-            name: 'admin',
-            password: '123456',
-            cun: '江西省吉安市世纪大道110号',
-            position: '废气排口1',
-            video: '分片1',
-            xing: 'A380',
-        },
-        {
-            key: '7',
-            pointname: '废气排口7',
-            devicename: '大唐集团',
-            xinghao: 'Android',
-            ip: '172.16.12.133',
-            address: '8018',
-            name: 'admin',
-            password: '123456',
-            cun: '江西省吉安市世纪大道110号',
-            position: '废气排口1',
-            video: '分片1',
-            xing: 'A380',
-        },
-        {
-            key: '8',
-            pointname: '废气排口8',
-            devicename: '大唐集团',
-            xinghao: 'Android',
-            ip: '172.16.12.133',
-            address: '8018',
-            name: 'admin',
-            password: '123456',
-            cun: '江西省吉安市世纪大道110号',
-            position: '废气排口1',
-            video: '分片1',
-            xing: 'A380',
-        },
-        {
-            key: '9',
-            pointname: '废气排口9',
-            devicename: '大唐集团',
-            xinghao: 'Android',
-            ip: '172.16.12.133',
-            address: '8018',
-            name: 'admin',
-            password: '123456',
-            cun: '江西省吉安市世纪大道110号',
-            position: '废气排口1',
-            video: '分片1',
-            xing: 'A380',
-        }, {
-            key: '10',
-            pointname: '废气排口10',
-            devicename: '大唐集团',
-            xinghao: 'Android',
-            ip: '172.16.12.133',
-            address: '8018',
-            name: 'admin',
-            password: '123456',
-            cun: '江西省吉安市世纪大道110号',
-            position: '废气排口1',
-            video: '分片1',
-            xing: 'A380',
-        }];
         const rowSelection = {
-            onChange: (selectedRowKeys, selectedRows) => {
-                debugger;
-                let keys = [];
-                selectedRowKeys.map(t => {
-                    if (Array.isArray(t)) {
-                        t.map(a => {
-                            if (a !== '') { keys.push(a); }
-                        });
-                    } else {
-                        if (t !== '') { keys.push(t); }
-                    }
-                });
-                this.setState({ selectid: keys, item: selectedRows });
-                console.log(this.state.selectid);
-                console.log(this.state.item);
-            },
-            selectedRowKeys: this.state.selectid
+            selectedRowKeys: [this.state.selectedRowKeys]
         };
         return (
-
             <Card bordered={false}>
                 <Button style={{ marginBottom: 10 }} type="primary" onClick={() => {
                     this.setState({
@@ -215,64 +125,75 @@ export default class VideoList extends Component {
                     });
                 }}> 增加 </Button>
                 <Button style={{ marginLeft: 10, marginBottom: 10 }} type="primary" onClick={() => {
-                    this.setState({
-                        visible: true,
-                        type: 'info',
-                        title: '查看',
-                        width: 1130
-                    });
+                    if (this.state.selectedRowKeys === undefined) {
+                        message.warning('请选择一条信息');
+                    } else {
+                        this.setState({
+                            visible: true,
+                            type: 'update',
+                            title: '编辑视频信息',
+                            width: 1130
+                        });
+                    }
                 }}> 编辑 </Button>
                 <Button style={{ marginLeft: 10, marginBottom: 10 }} onClick={() => {
-
+                    if (this.state.selectedRowKeys === undefined) {
+                        message.warning('请选择一条信息');
+                    } else {
+                        this.deleteVideoInfo();
+                    }
                 }}> 删除 </Button>
                 <Table
                     // type={import('antd').Radio}
                     columns={columns}
-                    dataSource={data}
-                    pagination={{
-                        showSizeChanger: true,
-                        showQuickJumper: true,
-                        'total': 20,
-                        'pageSize': 10,
-                        'current': 1
-                    }}
+                    dataSource={this.props.requstresult === '1' ? this.props.list : null}
+                    // pagination={{
+                    //     showSizeChanger: true,
+                    //     showQuickJumper: true,
+                    //     'total': 20,
+                    //     'pageSize': 10,
+                    //     'current': 1
+                    // }}
                     scroll={
                         {
-                            x: 1950,
-                            y: 'calc(100vh -  110px)'
+                            x: 2450,
+                            y: 'calc(100vh -  440px)'
                         }
                     }
                     rowSelection={rowSelection}
-                    // type="Radio"
-                // onRow={(record, index) => {
-                //     return {
-                //         onClick: (a, b, c) => {
-                //             debugger;
-                //             this.setState({selectid: record.key});
-                //             this.setState({item: record});
-                //             console.log(this.state.item);
-                //             console.log(this.state.selectid);
-                //         }, // 点击行
-                //         onMouseEnter: () => {}, // 鼠标移入行
-                //     };
-                // }}
+                    rowKey="VedioCamera_ID"
+                    onRow={(record, index) => {
+                        return {
+                            onClick: (a, b, c) => {
+                                console.log(record);
+                                console.log(index);
+                                this.setState({
+                                    item: record,
+                                    selectedRowKeys: record.VedioCamera_ID
+                                });
+                            }, // 点击行
+                            onMouseEnter: () => {}, // 鼠标移入行
+                        };
+                    }}
                 />
                 <Modal
                     visible={this.state.visible}
                     title={this.state.title}
                     width={this.state.width}
                     onOk={() => {
-                        this.setState({
-                            visible: false
-                        });
+                        if (this.state.type === 'add') {
+                            this.AddData();
+                            // let index = this.props.dispatch(routerRedux.push(`./videolist`));
+                            // message.success('添加成功', 3).then(() => index);
+                            message.success('添加成功');
+                        } else {
+                            this.updateData();
+                            message.success('修改成功');
+                        }
                     }}
-                    onCancel={() => {
-                        this.setState({
-                            visible: false
-                        });
-                    }}>
+                    onCancel={this.onCancel}>
                     {
-                        this.state.type === 'add' ? <Add item={this.state.item} /> : <Add />
+                        this.state.type === 'add' ? <Add onCancels={this.onCancel} dgimn={this.state.DGIMN} name={this.state.pointName} onRef={this.onRef1} /> : <Update onCancels={this.onCancel} dgimn={this.state.DGIMN} item={this.state.item} onRef={this.onRef1} />
                     }
                 </Modal>
             </Card>

@@ -135,7 +135,7 @@ export const getRouterData = (app) => {
           import('../routes/PointDetail/WarningRecord')),
         },
         '/monitor/pointdetail/:pointcode/videolist': {
-            component: dynamicWrapper(app, ['points'], () =>
+            component: dynamicWrapper(app, ['videolist'], () =>
           import('../routes/PointDetail/VideoList')),
         },
 
