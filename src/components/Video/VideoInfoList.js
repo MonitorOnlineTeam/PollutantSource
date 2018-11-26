@@ -14,7 +14,7 @@ const {TextArea} = Input;
 
 @connect()
 @Form.create()
-export default class updateVideoInfo extends Component {
+export default class VideoInfoList extends Component {
     constructor(props) {
         super(props);
 
@@ -28,43 +28,6 @@ export default class updateVideoInfo extends Component {
     componentWillMount() {
         this.props.onRef(this);
     }
-    handleSubmitupdate = (e) => {
-        ;
-        console.log(this.props.dgimn);
-        let flag = true;
-        this.props.form.validateFieldsAndScroll((err, values) => {
-            if (!err && flag === true) {
-                this.props.dispatch({
-                    type: 'videolist/updateVideoInfos',
-                    payload: {
-                        VedioDevice_Name: values.VedioDevice_Name,
-                        VedioDevice_No: values.VedioDevice_No,
-                        VedioDevice_Position: values.VedioDevice_Position,
-                        IP: values.IP,
-                        User_Name: values.User_Name,
-                        User_Pwd: values.User_Pwd,
-                        Device_Port: values.Device_Port,
-                        VedioCamera_Name: values.VedioCamera_Name,
-                        VedioCamera_No: values.VedioCamera_No,
-                        VedioCamera_Position: values.VedioCamera_Position,
-                        ProduceDate: values.ProduceDate,
-                        VedioCamera_Version: values.VedioCamera_Version,
-                        Longitude: values.Longitude,
-                        Latitude: values.Latitude,
-                        VedioCamera_ID: values.VedioCamera_ID,
-                        VedioDevice_ID: values.VedioDevice_ID,
-                        CameraMonitorID: values.CameraMonitorID,
-                        DGIMN: this.props.dgimn,
-                    },
-                });
-                this.props.onCancels();
-                message.success('修改成功');
-            } else {
-
-            }
-        });
-    }
-
     render() {
         console.log(this.props.item);
         const { getFieldDecorator } = this.props.form;
@@ -93,7 +56,7 @@ export default class updateVideoInfo extends Component {
                                     initialValue: this.props.item.PointName,
 
                                 })(
-                                    <Input readOnly="true" />
+                                    <Input style={{border: 0}} readOnly="true" />
                                 )}
                             </FormItem>
                         </Col>
@@ -105,7 +68,7 @@ export default class updateVideoInfo extends Component {
                                     initialValue: this.props.item.VedioDevice_Name,
 
                                 })(
-                                    <Input placeholder="请输入设备名称" />
+                                    <Input style={{border: 0}} readOnly="true" />
                                 )}
                             </FormItem>
                         </Col>
@@ -120,7 +83,7 @@ export default class updateVideoInfo extends Component {
                                     initialValue: this.props.item.VedioDevice_No,
 
                                 })(
-                                    <Input placeholder="请输入设备编号" />
+                                    <Input style={{border: 0}} readOnly="true" />
                                 )}
                             </FormItem>
                         </Col>
@@ -132,7 +95,7 @@ export default class updateVideoInfo extends Component {
                                     initialValue: this.props.item.VedioDevice_Position,
 
                                 })(
-                                    <Input placeholder="请输入设备位置" />
+                                    <Input style={{border: 0}} readOnly="true" />
                                 )}
                             </FormItem>
                         </Col>
@@ -145,12 +108,8 @@ export default class updateVideoInfo extends Component {
                                 label={'IP'}>
                                 {getFieldDecorator('IP', {
                                     initialValue: this.props.item.IP,
-                                    rules: [{
-                                        required: true,
-                                        message: '请输入设备IP',
-                                    }],
                                 })(
-                                    <Input placeholder="请输入设备IP" />
+                                    <Input style={{border: 0}} readOnly="true" />
                                 )}
                             </FormItem>
                         </Col>
@@ -160,12 +119,8 @@ export default class updateVideoInfo extends Component {
                                 label={'端口'}>
                                 {getFieldDecorator('Device_Port', {
                                     initialValue: this.props.item.Device_Port,
-                                    rules: [{
-                                        required: true,
-                                        message: '请输入端口',
-                                    }],
                                 })(
-                                    <Input placeholder="请输入端口" />
+                                    <Input style={{border: 0}} readOnly="true" />
                                 )}
                             </FormItem>
                         </Col>
@@ -178,12 +133,8 @@ export default class updateVideoInfo extends Component {
                                 label={'登录名'}>
                                 {getFieldDecorator('User_Name', {
                                     initialValue: this.props.item.User_Name,
-                                    rules: [{
-                                        required: true,
-                                        message: '请输入登录名',
-                                    }],
                                 })(
-                                    <Input placeholder="请输入登录名" />
+                                    <Input style={{border: 0}} readOnly="true" />
                                 )}
                             </FormItem>
                         </Col>
@@ -193,12 +144,8 @@ export default class updateVideoInfo extends Component {
                                 label={'密码'}>
                                 {getFieldDecorator('User_Pwd', {
                                     initialValue: this.props.item.User_Pwd,
-                                    rules: [{
-                                        required: true,
-                                        message: '请输入登陆密码',
-                                    }],
                                 })(
-                                    <Input placeholder="请输入登陆密码" />
+                                    <Input style={{border: 0}} readOnly="true" />
                                 )}
                             </FormItem>
                         </Col>
@@ -212,7 +159,7 @@ export default class updateVideoInfo extends Component {
                                 {getFieldDecorator('VedioCamera_Name', {
                                     initialValue: this.props.item.VedioCamera_Name,
                                 })(
-                                    <Input placeholder="请输入相机名称" />
+                                    <Input style={{border: 0}} readOnly="true" />
                                 )}
                             </FormItem>
                         </Col>
@@ -224,7 +171,7 @@ export default class updateVideoInfo extends Component {
                                     initialValue: this.props.item.VedioCamera_Position,
 
                                 })(
-                                    <Input placeholder="请输入相机位置" />
+                                    <Input style={{border: 0}} readOnly="true" />
                                 )}
                             </FormItem>
                         </Col>
@@ -237,12 +184,8 @@ export default class updateVideoInfo extends Component {
                                 label={'通道号'}>
                                 {getFieldDecorator('VedioCamera_No', {
                                     initialValue: this.props.item.VedioCamera_No,
-                                    rules: [{
-                                        required: true,
-                                        message: '请输入通道号',
-                                    }],
                                 })(
-                                    <Input placeholder="请输入通道号" />
+                                    <Input style={{border: 0}} readOnly="true" />
                                 )}
                             </FormItem>
                         </Col>
@@ -254,7 +197,7 @@ export default class updateVideoInfo extends Component {
                                     initialValue: this.props.item.VedioCamera_Version,
 
                                 })(
-                                    <Input placeholder="请输入相机编号" />
+                                    <Input style={{border: 0}} readOnly="true" />
                                 )}
                             </FormItem>
                         </Col>
@@ -268,7 +211,7 @@ export default class updateVideoInfo extends Component {
                                 {getFieldDecorator('Longitude', {
                                     initialValue: this.props.item.Longitude,
                                 })(
-                                    <Input type="number" placeholder="请输入经度" />
+                                    <Input style={{border: 0}} readOnly="true" />
                                 )}
                             </FormItem>
                         </Col>
@@ -280,7 +223,7 @@ export default class updateVideoInfo extends Component {
                                     initialValue: this.props.item.Latitude,
 
                                 })(
-                                    <Input type="number" placeholder="请输入纬度" />
+                                    <Input style={{border: 0}} readOnly="true" />
                                 )}
                             </FormItem>
                         </Col>
@@ -295,9 +238,9 @@ export default class updateVideoInfo extends Component {
                             >
                                 {getFieldDecorator('ProduceDate',
                                     {
-                                        initialValue: moment(this.props.item.ProduceDate === null ? Date.now() : this.props.item.ProduceDate),
+                                        initialValue: this.props.item.ProduceDate,
                                     })(
-                                        <DatePicker />
+                                    <Input style={{border: 0}} readOnly="true" />
                                 )}
                             </FormItem>
                         </Col>
@@ -309,7 +252,7 @@ export default class updateVideoInfo extends Component {
                                     initialValue: this.props.item.VedioDevice_ID,
 
                                 })(
-                                    <Input placeholder="请输入纬度" />
+                                    <Input style={{border: 0}} readOnly="true" />
                                 )}
                             </FormItem>
                         </Col>
@@ -321,7 +264,7 @@ export default class updateVideoInfo extends Component {
                                     initialValue: this.props.item.CameraMonitorID,
 
                                 })(
-                                    <Input placeholder="请输入纬度" />
+                                    <Input style={{border: 0}} readOnly="true" />
                                 )}
                             </FormItem>
                         </Col>
@@ -332,7 +275,7 @@ export default class updateVideoInfo extends Component {
                                 {getFieldDecorator('VedioCamera_ID', {
                                     initialValue: this.props.item.VedioCamera_ID,
                                 })(
-                                    <Input placeholder="请输入纬度" />
+                                    <Input style={{border: 0}} readOnly="true" />
                                 )}
                             </FormItem>
                         </Col>

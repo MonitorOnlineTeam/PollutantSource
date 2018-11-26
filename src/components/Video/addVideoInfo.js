@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Input, Select, InputNumber, Form, Button, Upload, DatePicker, Row, Col, Radio} from 'antd';
+import { Input, Select, InputNumber, Form, Button, Upload, DatePicker, Row, Col, Radio, message} from 'antd';
 import { connect } from 'dva';
 import RangePicker_ from '../../components/PointDetail/RangePicker_';
 import EnterprisePointCascadeMultiSelect from '../../components/EnterprisePointCascadeMultiSelect/index';
@@ -50,6 +50,7 @@ export default class addVideoInfo extends Component {
                     },
                 });
                 this.props.onCancels();
+                message.success('添加成功');
             } else {
             }
         });
@@ -77,12 +78,8 @@ export default class addVideoInfo extends Component {
                                 label={'监测点名称'}>
                                 {getFieldDecorator('PointName', {
                                     initialValue: this.props.name,
-                                    rules: [{
-                                        message: '请输入纬度',
-                                    }],
-
                                 })(
-                                    <Input placeholder="请输入纬度" value={121212} />
+                                    <Input readOnly="true" />
                                 )}
                             </FormItem>
                         </Col>

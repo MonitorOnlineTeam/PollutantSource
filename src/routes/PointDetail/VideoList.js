@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import { routerRedux } from 'dva/router';
 import Add from '../../components/Video/addVideoInfo';
 import Update from '../../components/Video/updateVideoInfo';
-import { Table, Card, Button, Modal, message } from 'antd';
+import InfoList from '../../components/Video/VideoInfoList';
+import { Table, Card, Button, Modal, message, Divider, Icon, Row, Col, Menu, Dropdown } from 'antd';
 import { connect } from 'dva';
 import moment from 'moment';
 const confirm = Modal.confirm;
@@ -28,7 +29,14 @@ export default class VideoList extends Component {
             expandForm: false,
             loading: true,
             DGIMN: 'sgjt001003',
-            pointName: '脱硫入口'
+            pointName: '脱硫入口',
+            footer: <div>
+                <Button key="back" onClick={this.handleCancel}>Return</Button>,
+                <Button key="submit" type="primary" onClick={this.handleOk}>
+                  Submit
+                </Button>
+            </div>
+
         };
     }
 
@@ -59,49 +67,57 @@ export default class VideoList extends Component {
     updateData=() => {
         this.child.handleSubmitupdate();
     }
-    deleteVideoInfo=(e) => {
-        if (this.state.selectedRowKeys === undefined) {
-            message.error('请选择要删除的数据！');
-        } else {
-            confirm({
-                title: '确定要删除吗?',
-                okText: '是',
-                okType: 'danger',
-                cancelText: '否',
-                onOk: () => this.delete(),
-                onCancel() {
-                    console.log('Cancel');
-                },
-            });
-        }
+    deleteVideoInfo=(record) => {
+        confirm({
+            title: '确定要删除吗?',
+            okText: '是',
+            okType: 'danger',
+            cancelText: '否',
+            onOk: () => this.deleteVideoInfobyIndex(record),
+            onCancel() {
+                console.log('Cancel');
+            },
+        });
     };
-    delete=() => {
+    deleteVideoInfobyIndex=(record) => {
         this.props.dispatch({
             type: 'videolist/deleteVideoInfo',
             payload: {
                 DGIMN: this.state.DGIMN,
-                VedioCamera_ID: this.state.item.VedioCamera_ID,
-                VedioDevice_ID: this.state.item.VedioDevice_ID,
-                CameraMonitorID: this.state.item.CameraMonitorID,
+                VedioCamera_ID: record.VedioCamera_ID,
+                VedioDevice_ID: record.VedioDevice_ID,
+                CameraMonitorID: record.CameraMonitorID,
             },
+        });
+    }
+    info() {
+        Modal.info({
+            title: 'This is a notification message',
+            content: (
+                <div>
+                    <p>some messages...some messages...</p>
+                    <p>some messages...some messages...</p>
+                </div>
+            ),
+            onOk() {},
         });
     }
     render() {
         const columns = [
-            { title: '设备名称', width: 150, dataIndex: 'VedioDevice_Name', key: 'VedioDevice_Name' },
-            { title: '设备编号', width: 150, dataIndex: 'VedioDevice_No', key: 'VedioDevice_No' },
-            { title: '设备位置', width: 150, dataIndex: 'VedioDevice_Position', key: 'VedioDevice_Position' },
-            { title: 'IP', width: 150, dataIndex: 'IP', key: 'IP' },
-            { title: '用户名', width: 150, dataIndex: 'User_Name', key: 'User_Name' },
-            { title: '密码', width: 200, dataIndex: 'User_Pwd', key: 'User_Pwd' },
-            { title: '端口', width: 150, dataIndex: 'Device_Port', key: 'Device_Port' },
-            { title: '相机名称', width: 150, dataIndex: 'VedioCamera_Name', key: 'VedioCamera_Name' },
-            { title: '通道号', width: 100, dataIndex: 'VedioCamera_No', key: 'VedioCamera_No' },
-            { title: '相机位置', width: 250, dataIndex: 'VedioCamera_Position', key: 'VedioCamera_Position' },
-            { title: '生产日期', width: 250, dataIndex: 'ProduceDate', key: 'ProduceDate' },
-            { title: '相机编号', width: 150, dataIndex: 'VedioCamera_Version', key: 'VedioCamera_Version' },
-            { title: '经度', width: 150, dataIndex: 'Longitude', key: 'Longitude' },
-            { title: '纬度', width: 150, dataIndex: 'Latitude', key: 'Latitude' },
+            { title: '设备名称', dataIndex: 'VedioDevice_Name', key: 'VedioDevice_Name' },
+            { title: '相机名称', dataIndex: 'VedioCamera_Name', key: 'VedioCamera_Name' },
+            // { title: '设备编号', width: 150, dataIndex: 'VedioDevice_No', key: 'VedioDevice_No' },
+            // { title: '设备位置', width: 150, dataIndex: 'VedioDevice_Position', key: 'VedioDevice_Position' },
+            { title: 'IP', dataIndex: 'IP', key: 'IP' },
+            { title: '端口', dataIndex: 'Device_Port', key: 'Device_Port' },
+            { title: '用户名', dataIndex: 'User_Name', key: 'User_Name' },
+            { title: '密码', dataIndex: 'User_Pwd', key: 'User_Pwd' },
+            { title: '通道号', dataIndex: 'VedioCamera_No', key: 'VedioCamera_No' },
+            // { title: '相机位置', width: 250, dataIndex: 'VedioCamera_Position', key: 'VedioCamera_Position' },
+            // { title: '生产日期', width: 250, dataIndex: 'ProduceDate', key: 'ProduceDate' },
+            // { title: '相机编号', width: 150, dataIndex: 'VedioCamera_Version', key: 'VedioCamera_Version' },
+            // { title: '经度', width: 150, dataIndex: 'Longitude', key: 'Longitude' },
+            // { title: '纬度', width: 150, dataIndex: 'Latitude', key: 'Latitude' },
             // {
             //     title: 'Action',
             //     key: 'operation',
@@ -109,93 +125,103 @@ export default class VideoList extends Component {
             //     width: 100,
             //     render: () => <a href="javascript:;">action</a>,
             // },
-        ];
+            {
+                title: '操作',
+                key: 'action',
+                render: (text, record, index) => (
+                    <span>
+                        <a onClick={() => {
+                            this.setState({
+                                visible: true,
+                                type: 'details',
+                                title: '视频详情信息',
+                                width: 1130,
+                                data: record,
+                                footer: null
+                            });
+                        }}>详情</a>
+                        <Divider type="vertical" />
+                        <a onClick={() => {
+                            console.log(record);
+                            this.setState({
+                                visible: true,
+                                type: 'update',
+                                title: '编辑视频信息',
+                                width: 1130,
+                                data: record,
+                                footer: <div>
+                                    <Button key="back" onClick={this.onCancel}>取消</Button>
+                                    <Button key="submit" type="primary" onClick={this.updateData}>
+                                  确定
+                                    </Button>
+                                </div>
+                            });
+                        }}>编辑</a>
+                        <Divider type="vertical" />
+                        <a onClick={() => {
+                            this.deleteVideoInfo(record);
+                        }}>删除</a>
+                    </span>
+                ),
+            }
 
-        const rowSelection = {
-            selectedRowKeys: [this.state.selectedRowKeys]
-        };
+        ];
         return (
             <Card bordered={false}>
-                <Button style={{ marginBottom: 10 }} type="primary" onClick={() => {
-                    this.setState({
-                        visible: true,
-                        type: 'add',
-                        title: '添加视频信息',
-                        width: 1130
-                    });
-                }}> 增加 </Button>
-                <Button style={{ marginLeft: 10, marginBottom: 10 }} type="primary" onClick={() => {
-                    if (this.state.selectedRowKeys === undefined) {
-                        message.warning('请选择一条信息');
-                    } else {
-                        this.setState({
-                            visible: true,
-                            type: 'update',
-                            title: '编辑视频信息',
-                            width: 1130
-                        });
-                    }
-                }}> 编辑 </Button>
-                <Button style={{ marginLeft: 10, marginBottom: 10 }} onClick={() => {
-                    if (this.state.selectedRowKeys === undefined) {
-                        message.warning('请选择一条信息');
-                    } else {
-                        this.deleteVideoInfo();
-                    }
-                }}> 删除 </Button>
-                <Table
-                    // type={import('antd').Radio}
-                    columns={columns}
-                    dataSource={this.props.requstresult === '1' ? this.props.list : null}
-                    // pagination={{
-                    //     showSizeChanger: true,
-                    //     showQuickJumper: true,
-                    //     'total': 20,
-                    //     'pageSize': 10,
-                    //     'current': 1
-                    // }}
-                    scroll={
-                        {
-                            x: 2450,
-                            y: 'calc(100vh -  440px)'
-                        }
-                    }
-                    rowSelection={rowSelection}
-                    rowKey="VedioCamera_ID"
-                    onRow={(record, index) => {
-                        return {
-                            onClick: (a, b, c) => {
-                                console.log(record);
-                                console.log(index);
+                <Row>
+                    <Col span={24}>
+                        <Row>
+                            <Table
+                                columns={columns}
+                                dataSource={this.props.requstresult === '1' ? this.props.list : null}
+                                pagination={false}
+                                rowKey="VedioCamera_ID"
+                                onRow={(record, index) => {
+                                    return {
+                                        onClick: (a, b, c) => {
+                                            this.setState({
+                                                item: record,
+                                                selectedRowKeys: record.VedioCamera_ID
+                                            });
+                                        }, // 点击行
+                                        onMouseEnter: () => {}, // 鼠标移入行
+                                    };
+                                }}
+                            />
+                            <Modal
+                                footer={this.state.footer}
+                                destroyOnClose="true"
+                                visible={this.state.visible}
+                                title={this.state.title}
+                                width={this.state.width}
+                                onCancel={this.onCancel}>
+                                {
+                                    this.state.type === 'add' ? <Add onCancels={this.onCancel} dgimn={this.state.DGIMN} name={this.state.pointName} onRef={this.onRef1} /> : this.state.type === 'update' ? <Update onCancels={this.onCancel} dgimn={this.state.DGIMN} item={this.state.data} onRef={this.onRef1} /> : <InfoList onCancels={this.onCancel} dgimn={this.state.DGIMN} item={this.state.data} onRef={this.onRef1} />
+                                }
+
+                            </Modal>
+                        </Row>
+                        <Row>
+                            <Button type="dashed" onClick={() => {
                                 this.setState({
-                                    item: record,
-                                    selectedRowKeys: record.VedioCamera_ID
+                                    visible: true,
+                                    type: 'add',
+                                    title: '添加视频信息',
+                                    width: 1130,
+                                    footer: <div>
+                                        <Button key="back" onClick={this.onCancel}>取消</Button>
+                                        <Button key="submit" type="primary" onClick={this.AddData}>
+                                  确定
+                                        </Button>
+                                    </div>
                                 });
-                            }, // 点击行
-                            onMouseEnter: () => {}, // 鼠标移入行
-                        };
-                    }}
-                />
-                <Modal
-                    visible={this.state.visible}
-                    title={this.state.title}
-                    width={this.state.width}
-                    onOk={() => {
-                        if (this.state.type === 'add') {
-                            this.AddData();
-                            // let index = this.props.dispatch(routerRedux.push(`./videolist`));
-                            // message.success('添加成功', 3).then(() => index);
-                            message.success('添加成功');
-                        } else {
-                            this.updateData();
-                            message.success('修改成功');
-                        }
-                    }}
-                    onCancel={this.onCancel}>
-                    {
-                        this.state.type === 'add' ? <Add onCancels={this.onCancel} dgimn={this.state.DGIMN} name={this.state.pointName} onRef={this.onRef1} /> : <Update onCancels={this.onCancel} dgimn={this.state.DGIMN} item={this.state.item} onRef={this.onRef1} />
-                    }
-                </Modal>
+                            }} style={{ width: '100%' }}>
+                                <Icon type="plus" /> 添加
+                            </Button>
+                        </Row>
+                    </Col>
+                </Row>
+
             </Card>
 
         );
