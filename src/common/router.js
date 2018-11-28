@@ -307,9 +307,13 @@ export const getRouterData = (app) => {
             component: dynamicWrapper(app, ['pointinfo'], () =>
             import('../routes/PointInfo/')),
         },
-        '/monitor/sysmanage/PointDetail/:PointCode': {
+        '/monitor/sysmanage/PointDetail/:DGIMN': {
             component: dynamicWrapper(app, ['pointinfo'], () =>
               import('../routes/PointInfo/AddPoint')),
+        },
+        '/monitor/sysmanage/StandardLibrary': {
+            component: dynamicWrapper(app, ['standardlibrary'], () =>
+            import('../routes/StandardLibrary/')),
         },
         '/monitor/entInfo/entoperation': {
             component: dynamicWrapper(app, ['baseinfo'], () =>
