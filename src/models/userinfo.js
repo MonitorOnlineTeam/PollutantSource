@@ -76,7 +76,8 @@ export default Model.extend({
                 pageIndex,
                 pageSize,
                 UserAccount,
-                DeleteMark
+                DeleteMark,
+                callback
             }
         }, {
             call,
@@ -99,6 +100,7 @@ export default Model.extend({
                     DeleteMark
                 },
             });
+            callback();
         },
         * enableduser({
             payload: {

@@ -217,7 +217,7 @@ export default class DataFilter extends Component {
                           size="small"
                           renderItem={(item) => {
                               return (<List.Item >
-                                  <Card>
+                                  <Card style={{width: 330, height: 150}}>
                                       <Row gutter={1}>
                                           <Col span={2}>
                                               <Checkbox checked={this.state.selected.get(item.DGIMN)} onChange={(e) => {

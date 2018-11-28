@@ -161,11 +161,12 @@ export default class AddUser extends Component {
  };
  componentWillMount() {
      const UserId = this.props.match.params.UserId;
-     this.setState({
-         UserId: UserId,
 
-     });
      if (UserId !== 'null') {
+         this.setState({
+             UserId: UserId,
+
+         });
          this.props.dispatch({
              type: 'userinfo/getuser',
              payload: {
@@ -280,7 +281,8 @@ export default class AddUser extends Component {
                                     label="用户状态">
                                     {getFieldDecorator('DeleteMark',
                                         {
-                                            initialValue: this.state.DeleteMark
+                                            initialValue: this.state.DeleteMark,
+                                            valuePropName: 'checked',
                                         })(<Switch checkedChildren="启用" unCheckedChildren="禁用" defaultChecked={this.state.DeleteMark} />
                                     )}
                                 </FormItem>
@@ -411,6 +413,7 @@ export default class AddUser extends Component {
                                             }]
                                         })(
                                             <Select placeholder="请选择" >
+                                                <Option value="adae6f9a-396f-44b0-baf4-39e2f1d9fa9f" > 企业高管 </Option>
                                                 <Option value="58735f8d-9adc-4a2c-8baf-6d54fd9044cb" > 环保专工 </Option>
                                                 <Option value="eec719c2-7c94-4132-be32-39fe57e738c9" > 运维人员 </Option>
                                             </Select>

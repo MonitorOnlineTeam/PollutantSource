@@ -7,7 +7,7 @@ import {
     Col,
     Table,
     Form,
-    Select, Modal, message, Tag,
+    Select, Modal, message, Tag, Radio, Checkbox,
 } from 'antd';
 import Add from '../Userinfo/AddUser';
 import DataFilter from '../Userinfo/DataFilter';
@@ -90,6 +90,11 @@ export default class UserList extends Component {
                 DeleteMark: this.props.DeleteMark,
                 UserAccount: this.props.UserAccount,
                 UserId: this.state.selectedRowKeys,
+                callback: () => {
+                    this.setState({
+                        selectedRowKeys: [],
+                    });
+                }
             },
         });
     }
