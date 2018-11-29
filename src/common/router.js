@@ -311,8 +311,12 @@ export const getRouterData = (app) => {
             component: dynamicWrapper(app, ['pointinfo'], () =>
               import('../routes/PointInfo/AddPoint')),
         },
+        '/monitor/sysmanage/PointDetail/:ID/:Name': {
+            component: dynamicWrapper(app, ['pointinfo'], () =>
+              import('../routes/PointInfo/PointView')),
+        },
         '/monitor/sysmanage/StandardLibrary': {
-            component: dynamicWrapper(app, ['standardlibrary'], () =>
+            component: dynamicWrapper(app, ['pointinfo'], () =>
             import('../routes/StandardLibrary/')),
         },
         '/monitor/entInfo/entoperation': {
