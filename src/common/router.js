@@ -126,11 +126,11 @@ export const getRouterData = (app) => {
           import('../routes/PointDetail/AlarmRecord')),
         },
         '/monitor/pointdetail/:pointcode/realvideo': {
-            component: dynamicWrapper(app, ['points'], () =>
+            component: dynamicWrapper(app, ['videolist'], () =>
           import('../routes/PointDetail/RealVideo')),
         },
         '/monitor/pointdetail/:pointcode/hisvideo': {
-            component: dynamicWrapper(app, ['points'], () =>
+            component: dynamicWrapper(app, ['videolist'], () =>
         import('../routes/PointDetail/HisVideo')),
         },
 

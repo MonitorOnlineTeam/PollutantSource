@@ -2,7 +2,7 @@ import {
     Model
 } from '../dvapack';
 import {
-    getList, deleteVideoInfo, enableduser, updateVideoInfos, addVideoInfo, getuser, edituser, userDgimnDataFilter
+    getList, deleteVideoInfo, gethistoryVideoList, updateVideoInfos, addVideoInfo, getAlarmHistory, updateAlarmHistory, userDgimnDataFilter
 } from '../services/videodata';
 export default Model.extend({
     namespace: 'videolist',
@@ -11,6 +11,8 @@ export default Model.extend({
         editUser: null,
         requstresult: null,
         list: [],
+        historyVideolist: [],
+        AlarmInfoList: [],
         edituser: null,
         total: 0,
         loading: false,
@@ -93,7 +95,7 @@ export default Model.extend({
             update,
             select
         }) {
-            debugger
+            ;
             const result = yield call(updateVideoInfos, {
                 VedioDevice_Name: VedioDevice_Name,
                 VedioDevice_No: VedioDevice_No,
@@ -203,7 +205,113 @@ export default Model.extend({
                 },
             });
         },
-
+        * gethistoryVideoList({
+            payload: {
+                DGIMN,
+                MonitorTime
+            }
+        }, {
+            call,
+            put,
+            update,
+            select
+        }) {
+            ;
+            const result = yield call(gethistoryVideoList, {
+                DGIMN: DGIMN,
+                MonitorTime: MonitorTime,
+            });
+            if (result.requstresult === '1') {
+                yield update({
+                    requstresult: result.requstresult,
+                    historyVideolist: result.data,
+                    // total: result.total,
+                    // pageIndex: pageIndex,
+                    // pageSize: pageSize
+                });
+            } else {
+                yield update({
+                    requstresult: result.requstresult,
+                    historyVideolist: [],
+                    // total: 0,
+                    // pageIndex: null,
+                    // pageSize: null
+                });
+            }
+            // yield put({
+            //     type: 'fetchuserlist',
+            //     payload: {
+            //         DGIMN
+            //     },
+            // });
+        },
+        * getAlarmHistory({
+            payload: {
+                DGIMN,
+                beginDate,
+                endDate
+            }
+        }, {
+            call,
+            put,
+            update,
+            select
+        }) {
+            ;
+            const result = yield call(getAlarmHistory, {
+                DGIMN: DGIMN,
+                beginDate: beginDate,
+                endDate: endDate,
+            });
+            if (result.requstresult === '1') {
+                yield update({
+                    requstresult: result.requstresult,
+                    AlarmInfoList: result.data,
+                });
+            } else {
+                yield update({
+                    requstresult: result.requstresult,
+                    AlarmInfoList: [],
+                });
+            }
+        },
+        * updateAlarmHistory({
+            payload: {
+                DGIMN,
+                beginDate,
+                endDate
+            }
+        }, {
+            call,
+            put,
+            update,
+            select
+        }) {
+            const result = yield call(updateAlarmHistory, {
+                DGIMN: DGIMN,
+                beginDate: beginDate,
+                endDate: endDate,
+            });
+            if (result.requstresult === '1') {
+                yield update({
+                    requstresult: result.requstresult,
+                    AlarmInfoList: result.data,
+                });
+            } else {
+                yield update({
+                    requstresult: result.requstresult,
+                    AlarmInfoList: [],
+                });
+            }
+            yield put({
+                type: 'getAlarmHistory',
+                payload: {
+                    DGIMN,
+                    beginDate,
+                    endDate
+                },
+            });
+        },
     },
     reducers: {
         save(state, action) {

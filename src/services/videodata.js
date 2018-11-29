@@ -20,7 +20,7 @@ export async function getList(params) {
 }
 // 删除视频信息
 export async function deleteVideoInfo(params) {
-    debugger
+    ;
     const body = {
         VedioCamera_ID: params.VedioCamera_ID,
         VedioDevice_ID: params.VedioDevice_ID,
@@ -77,6 +77,41 @@ export async function updateVideoInfos(params) {
         VedioCamera_ID: params.VedioCamera_ID,
     };
     const result = post('/api/rest/PollutantSourceApi/Video/UpdateVideoInfo', body, null);
+    return result === null ? {
+        data: null
+    } : result;
+}
+// 查看历史实时视频信息
+export async function gethistoryVideoList(params) {
+    const body = {
+        DGIMN: params.DGIMN,
+        MonitorTime: params.MonitorTime,
+    };
+    const result = post('/api/rest/PollutantSourceApi/Video/GetLastestDataByPoint', body, null);
+    return result === null ? {
+        data: null
+    } : result;
+}
+// 查看报警历史信息
+export async function getAlarmHistory(params) {
+    const body = {
+        DGIMN: params.DGIMN,
+        beginDate: params.beginDate,
+        endDate: params.endDate,
+    };
+    const result = post('/api/rest/PollutantSourceApi/Video/GetAlarmListbyTime', body, null);
+    return result === null ? {
+        data: null
+    } : result;
+}
+// 查看报警历史信息
+export async function updateAlarmHistory(params) {
+    const body = {
+        DGIMN: params.DGIMN,
+        beginDate: params.beginDate,
+        endDate: params.endDate,
+    };
+    const result = post('/api/rest/PollutantSourceApi/Video/UpdateAlarmListbyTime', body, null);
     return result === null ? {
         data: null
     } : result;
