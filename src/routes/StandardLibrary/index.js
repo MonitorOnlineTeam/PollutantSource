@@ -12,11 +12,13 @@ import {
     Form,
     Modal,
     message,
+    Popconfirm,
     Tag,
     Menu,
     Icon,
-    Badge,
+    Radio,
     Dropdown,
+    Divider,
 } from 'antd';
 import {routerRedux} from 'dva/router';
 import {connect} from 'dva';
@@ -32,60 +34,98 @@ const menu = (
         </Menu.Item>
     </Menu>
 );
-export default class UserList extends Component {
+@connect(({loading, standardlibrary}) => ({
+    ...loading,
+    list: standardlibrary.list,
+    pollutantList: standardlibrary.pollutantList,
+    total: standardlibrary.total,
+    pageSize: standardlibrary.pageSize,
+    pageIndex: standardlibrary.pageIndex,
+    requstresult: standardlibrary.requstresult,
+}))
+export default class StandardLibrary extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            Name: null,
+            Type: null,
+            pollutantList: [],
         };
     }
-    // componentWillMount() {
-    //     this.onChange();
-    // };
+    componentWillMount() {
+        this.onChange();
+    };
 
     onShowSizeChange = (pageIndex, pageSize) => {
         this.props.dispatch({
-            type: 'userinfo/fetchuserlist',
+            type: 'standardlibrary/getlist',
             payload: {
                 pageIndex: pageIndex,
-                pageSize: pageSize
+                pageSize: pageSize,
+                Name: this.state.Name,
+                Type: this.state.Type,
+
             },
         });
     }
     onChange = (pageIndex, pageSize) => {
         this.props.dispatch({
-            type: 'userinfo/fetchuserlist',
+            type: 'standardlibrary/getlist',
             payload: {
                 pageIndex: pageIndex,
-                pageSize: pageSize
+                pageSize: pageSize,
+                Name: this.state.Name,
+                Type: this.state.Type,
             },
         });
     }
-    deleteuserbyid=(e) => {
+    getPollutant = (key) => {
         this.props.dispatch({
-            type: 'userinfo/deleteuser',
+            type: 'standardlibrary/getpollutantListlist',
+            payload: {
+                StandardLibraryID: key,
+                callback: () => {
+                    if (this.props.requstresult === '1') {
+                        this.setState({
+                            pollutantList: this.props.pollutantList,
+                        });
+                    } else {
+                        this.setState({
+                            pollutantList: null,
+                        });
+                    }
+                }
+            },
+        });
+    }
+    confirm = (id) => {
+        this.props.dispatch({
+            type: 'standardlibrary/deletestandardlibrarybyid',
             payload: {
                 pageIndex: this.props.pageIndex,
                 pageSize: this.props.pageSize,
-                DeleteMark: this.props.DeleteMark,
-                UserAccount: this.props.UserAccount,
-                UserId: this.state.selectedRowKeys,
+                Name: this.state.Name,
+                Type: this.state.Type,
+                StandardLibraryID: id,
                 callback: () => {
-                    this.setState({
-                        selectedRowKeys: [],
-                    });
+                    if (this.props.requstresult === '1') {
+                        message.success('删除成功！');
+                    } else {
+                        message.success('删除失败！');
+                    }
                 }
             },
         });
     }
     IsEnabled = (type, record) => {
         this.props.dispatch({
-            type: 'userinfo/enableduser',
+            type: 'standardlibrary/enableordisable',
             payload: {
                 pageIndex: this.props.pageIndex,
                 pageSize: this.props.pageSize,
-                DeleteMark: this.props.DeleteMark,
-                UserAccount: this.props.UserAccount,
-                UserId: record.User_ID,
+                Name: this.state.Name,
+                Type: this.state.Type,
+                StandardLibraryID: record.key,
                 Enalbe: type
             },
         });
@@ -95,47 +135,31 @@ export default class UserList extends Component {
     }
     render() {
         const expandedRowRender = (record) => {
-            const name = record.Name;
-            console.log(name);
+            let arr = record.child;
             const columns = [
-                { title: 'key', dataIndex: 'key', key: 'key' },
                 { title: '污染物编号', dataIndex: 'PollutantCode', key: 'PollutantCode' },
-                { title: '污染物类型', dataIndex: 'Type', key: 'Type' },
-                { title: '报警类型', dataIndex: 'AlarmType', key: 'AlarmType' },
+                { title: '污染物名称', dataIndex: 'PollutantName', key: 'PollutantName' },
                 { title: '上限', dataIndex: 'UpperLimit', key: 'upgradeNum' },
                 { title: '下限', dataIndex: 'LowerLimit', key: 'LowerLimit' },
+                { title: '报警类型', dataIndex: 'AlarmType', key: 'AlarmType' },
                 {
                     title: '操作',
                     dataIndex: 'operation',
                     key: 'operation',
                     render: () => (
-                        <span className="table-operation">
-                            <a href="javascript:;">Pause</a>
-                            <a href="javascript:;">Stop</a>
-                            <Dropdown overlay={menu}>
-                                <a href="javascript:;">
-                More <Icon type="down" />
-                                </a>
-                            </Dropdown>
-                        </span>
+                        <Fragment >
+                            <a href="javascript:;">编辑</a>
+                            <Divider type="vertical" />
+                            <a href="javascript:;">删除</a>
+                        </Fragment>
                     ),
                 },
             ];
-
-            const data = [
-                {
-                    'key': name,
-                    'PollutantCode': 'SO2 ',
-                    'Type': '气体污染物',
-                    'AlarmType': '上限报警',
-                    'UpperLimit': '30',
-                    'LowerLimit': '50',
-                }
-            ];
             return (
                 <Table
+                    // loading={this.props.effects['standardlibrary/getpollutantListlist']}
                     columns={columns}
-                    dataSource={data}
+                    dataSource={arr.length > 1 ? arr : null}
                     pagination={false}
                 />
             );
@@ -145,7 +169,6 @@ export default class UserList extends Component {
             dataIndex: 'Name',
             key: 'Name',
             width: '350px',
-            sorter: (a, b) => a.User_Account.length - b.User_Account.length,
             render: (text, record) => {
                 return text;
             }
@@ -155,8 +178,16 @@ export default class UserList extends Component {
             dataIndex: 'Type',
             key: 'Type',
             width: '100px',
+            sorter: (a, b) => a.Type - b.Type,
             render: (text, record) => {
-                return text;
+                if (text === 1) {
+                    return <span > <Tag color="lime" > 国标 </Tag > </span >;
+                }
+                if (text === 2) {
+                    return <span > <Tag color="green" > 地标 </Tag > </span >;
+                } else {
+                    return <span > <Tag color="cyan" > 行标 </Tag > </span >;
+                }
             }
         },
         {
@@ -172,42 +203,34 @@ export default class UserList extends Component {
             dataIndex: 'IsUsed',
             key: 'IsUsed',
             width: '80px',
+            sorter: (a, b) => a.IsUsed - b.IsUsed,
             render: (text, record) => {
-                if (text === '禁用') {
+                if (text === 0) {
                     return <span > <Tag color="red" > <a onClick={
                         () => this.IsEnabled(1, record)
-                    } > {text} </a></Tag > </span>;
+                    } > 禁用 </a></Tag > </span>;
                 } else {
                     return <span > <Tag color="blue" > <a onClick={
-                        () => this.IsEnabled(2, record)
-                    } > {text} </a></Tag > </span>;
+                        () => this.IsEnabled(0, record)
+                    } > 启用 </a></Tag > </span>;
                 }
             }
         },
         {
             title: '操作',
-            width: '50px',
+            width: '150px',
             render: (text, record) => (<Fragment >
                 <a onClick={
                     () => this.props.dispatch(routerRedux.push(`/monitor/sysmanage/UserDetail/${record.key}`))
-                } > 编辑 </a> </Fragment>
+                } > 应用到排口 </a> <Divider type="vertical" />
+                <a onClick={
+                    () => this.props.dispatch(routerRedux.push(`/monitor/sysmanage/UserDetail/${record.key}`))
+                } > 编辑 </a> <Divider type="vertical" />
+                <Popconfirm placement="left" title="确定要删除此标准下所有数据吗？" onConfirm={() => this.confirm(record.key)} okText="是" cancelText="否">
+                    <a href="#" > 删除 </a>
+                </Popconfirm>
+            </Fragment >
             ),
-        },
-        ];
-        const data
-        = [{
-            'key': '1',
-            'Name': '大气污染物综合排放标准 GB 16297-1996 ',
-            'Type': '国标',
-            'AttachmentID': '33',
-            'IsUsed': '启用',
-        },
-        {
-            'key': '2',
-            'Name': '环境监测技术规范 第二册 大气和废气部分 国家环境保护局（1986）年',
-            'Type': '省标',
-            'AttachmentID': '33',
-            'IsUsed': '禁用',
         },
         ];
         return (
@@ -216,17 +239,17 @@ export default class UserList extends Component {
                     <Form layout="inline">
                         <Row gutter={8}>
                             <Col span={3} >
-                                <Search placeholder="姓名/登录名" onSearch={(value) => {
+                                <Search placeholder="标准名称" onSearch={(value) => {
                                     this.setState({
-                                        UserAccount: value
+                                        Name: value
                                     });
                                     this.props.dispatch({
-                                        type: 'userinfo/fetchuserlist',
+                                        type: 'standardlibrary/getlist',
                                         payload: {
                                             pageIndex: 1,
                                             pageSize: 10,
-                                            DeleteMark: this.state.DeleteMark,
-                                            UserAccount: value,
+                                            Type: this.state.Type,
+                                            Name: value,
                                         },
                                     });
                                 }}style={{ width: 200 }} /></Col>
@@ -234,45 +257,47 @@ export default class UserList extends Component {
                                 onClick={() => {
                                     this.props.dispatch(routerRedux.push(`/monitor/sysmanage/UserDetail/null`));
                                 }}>添加</Button></Col>
-                            <Col span={1} ><Button type="danger" onClick={this.delete}>删除</Button></Col>
-                            <Col span={1} ><Button type="primary"
-                                onClick={() => {
-                                    if (this.state.selectedRowKeys.length === 1) {
-                                        this.setState({
-                                            DataFiltervisible: true,
-                                            type: 'datafilter',
-                                            title: '数据过滤',
-                                            width: 1130
-                                        });
-                                    }
-                                    if (this.state.selectedRowKeys.length > 1) {
-                                        message.warning('请选择一位用户');
-                                    }
-                                    if (this.state.selectedRowKeys.length === 0) {
-                                        message.warning('请选择用户');
-                                    }
-                                }}
-                            >数据过滤</Button></Col>
+                            <Col span={12} >
+                                <Radio.Group defaultValue="0" buttonStyle="solid" onChange={(e) => {
+                                    console.log(e.target.value);
+                                    this.setState({
+                                        Type: e.target.value
+                                    });
+                                    this.props.dispatch({
+                                        type: 'standardlibrary/getlist',
+                                        payload: {
+                                            pageIndex: 1,
+                                            pageSize: 10,
+                                            Type: e.target.value,
+                                            Name: this.state.Name,
+                                        },
+                                    });
+                                }}>
+                                    <Radio.Button value="0">全部</Radio.Button>
+                                    <Radio.Button value="1" style={{background: 'lime'}}>国标</Radio.Button>
+                                    <Radio.Button value="2" style={{background: 'green'}}>地标</Radio.Button>
+                                    <Radio.Button value="3" style={{background: 'cyan'}}>行标</Radio.Button>
+                                </Radio.Group>
+                            </Col>
                         </Row>
                     </Form>
                 </Card>
                 <Table
-                    // loading={this.props.effects['userinfo/fetchuserlist']}
-                    // rowSelection={rowSelection}
+                    loading={this.props.effects['standardlibrary/getlist']}
                     columns={columns}
-                    dataSource={data}
+                    dataSource={this.props.requstresult === '1' ? this.props.list : null}
                     expandedRowRender={expandedRowRender}
                     scroll={{ y: 'calc(100vh - 455px)' }}
-                    // pagination={{
-                    //     showSizeChanger: true,
-                    //     showQuickJumper: true,
-                    //     'total': this.props.total,
-                    //     'pageSize': this.props.pageSize,
-                    //     'current': this.props.pageIndex,
-                    //     onChange: this.onChange,
-                    //     onShowSizeChange: this.onShowSizeChange,
-                    //     pageSizeOptions: ['5', '10', '20', '30', '40']
-                    // }}
+                    pagination={{
+                        showSizeChanger: true,
+                        showQuickJumper: true,
+                        'total': this.props.total,
+                        'pageSize': this.props.pageSize,
+                        'current': this.props.pageIndex,
+                        onChange: this.onChange,
+                        onShowSizeChange: this.onShowSizeChange,
+                        pageSizeOptions: ['5', '10', '20', '30', '40']
+                    }}
                 />
             </Card>
         );

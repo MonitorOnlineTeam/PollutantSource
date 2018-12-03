@@ -316,7 +316,7 @@ export const getRouterData = (app) => {
               import('../routes/PointInfo/PointView')),
         },
         '/monitor/sysmanage/StandardLibrary': {
-            component: dynamicWrapper(app, ['pointinfo'], () =>
+            component: dynamicWrapper(app, ['standardlibrary'], () =>
             import('../routes/StandardLibrary/')),
         },
         '/monitor/entInfo/entoperation': {
