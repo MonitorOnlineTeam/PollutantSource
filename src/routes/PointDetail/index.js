@@ -30,7 +30,8 @@ class PointDetail extends Component {
                 { key: 'replacementpartrecord', tab: '备品备件使用记录' },
                 { key: 'stopmanagement', tab: '停产管理' },
                 { key: 'stationthree', tab: '站房全景' },
-                { key: 'videolist', tab: '视频管理' }
+                { key: 'videolist', tab: '视频管理' },
+                { key: 'ywdsjlist', tab: '运维大事记' }
             ],
         };
     }

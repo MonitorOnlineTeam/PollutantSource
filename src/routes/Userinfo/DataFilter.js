@@ -48,6 +48,8 @@ export default class DataFilter extends Component {
                 pageIndex: pageIndex,
                 pageSize: pageSize,
                 callback: () => {
+                    console.log(this.props.ischecked);
+
                     this.setState((state) => {
                         // copy the map rather than modifying state.
                         const selected = new Map(state.selected);
@@ -62,6 +64,7 @@ export default class DataFilter extends Component {
                             selected
                         };
                     });
+
                     this.setState((state) => {
                         // copy the map rather than modifying state.
                         const alldgimn = new Map(state.alldgimn);

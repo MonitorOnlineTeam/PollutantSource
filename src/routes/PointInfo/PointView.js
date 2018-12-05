@@ -114,7 +114,7 @@ export default class pointview extends Component {
                             <Description term="排口地址" > {this.state.Address} </Description>
                         </DescriptionList>
                     </Card.Grid>
-                    <Card.Grid style={gridStyle}>Content</Card.Grid>
+                    <Card.Grid style={gridStyle}>放仪器表</Card.Grid>
                 </Card>
             </div>
         );

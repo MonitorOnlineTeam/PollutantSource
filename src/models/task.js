@@ -1,10 +1,14 @@
-import { GetTaskDetails } from '../services/taskapi';
+import { GetTaskDetails, GetYwdsj, GetRecordTypeByTaskID } from '../services/taskapi';
 import { Model } from '../dvapack';
+import {EnumRequstResult} from '../utils/enum';
 
 export default Model.extend({
     namespace: 'task',
     state: {
-        TaskInfo: null
+        TaskInfo: null,
+        OperationInfo: [],
+        IsOver: false,
+        RecordType: []
     },
 
     effects: {
@@ -17,6 +21,35 @@ export default Model.extend({
                 yield update({
                     TaskInfo: taskInfo
                 });
+            }
+        },
+        // 运维大事记
+        * GetYwdsj({
+            payload,
+        }, { call, update, select }) {
+            const DataInfo = yield call(GetYwdsj, payload);
+            if (DataInfo != null && DataInfo.requstresult == EnumRequstResult.Success) {
+                const isLoadMoreOpt = payload.isLoadMoreOpt; // 是否是加载更多操作
+                let { OperationInfo } = yield select(_ => _.task);
+                if (isLoadMoreOpt) {
+                    if (DataInfo.data.length > 0) {
+                        DataInfo.data.map((item) => {
+                            OperationInfo.push(item);
+                        });
+                        yield update({ OperationInfo: OperationInfo });
+                    }
+
+                    if (OperationInfo.length === DataInfo.total) {
+                        yield update({ IsOver: true });
+                    }
+                } else {
+                    yield update({ OperationInfo: DataInfo.data });
+                    if (DataInfo.data.length === DataInfo.total) {
+                        yield update({ IsOver: true });
+                    } else {
+                        yield update({ IsOver: false });
+                    }
+                }
             }
         }
     }

@@ -21,7 +21,6 @@ import {
 import {
     connect
 } from 'dva';
-import View from '../PointInfo/PointView';
 const Search = Input.Search;
 const confirm = Modal.confirm;
 
