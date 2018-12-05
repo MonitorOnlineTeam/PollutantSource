@@ -46,6 +46,8 @@ export default class pointlist extends Component {
             width: 400,
             selectedRowKeys: [],
             DGIMNs: '',
+            pointviewvisible: false,
+            ID: '',
         };
     }
     componentWillMount() {
@@ -84,15 +86,19 @@ export default class pointlist extends Component {
   handleOK = (e) => {
       this.addForm.handleSubmit();
   }
-  deleteuserbyid = (e) => {
+  deletepoint = (e) => {
       this.props.dispatch({
-          type: 'userinfo/deleteuser',
+          type: 'pointinfo/deletepoint',
           payload: {
               pageIndex: this.props.pageIndex,
               pageSize: this.props.pageSize,
-              DeleteMark: this.props.DeleteMark,
-              UserAccount: this.props.UserAccount,
-              UserId: this.state.selectedRowKeys,
+              DGIMNs: this.state.DGIMNs,
+              DGIMN: this.state.selectedRowKeys,
+              callback: () => {
+                  this.setState({
+                      selectedRowKeys: [],
+                  });
+              }
           },
       });
   }
@@ -100,42 +106,32 @@ export default class pointlist extends Component {
       if (this.state.selectedRowKeys.length > 0) {
           confirm({
               title: '确定要删除吗?',
-              // content: 'Some descriptions',
               okText: 'Yes',
               okType: 'danger',
               cancelText: 'No',
-              onOk: () => this.deleteuserbyid(),
+              onOk: () => this.deletepoint(),
               onCancel() {
                   console.log('Cancel');
               },
           });
       } else {
-          message.error('请选择要删除的数据！');
+          message.error('请选择要删除的排口！');
       }
-  };
-  IsEnabled = (type, record) => {
-      this.props.dispatch({
-          type: 'userinfo/enableduser',
-          payload: {
-              pageIndex: this.props.pageIndex,
-              pageSize: this.props.pageSize,
-              DeleteMark: this.props.DeleteMark,
-              UserAccount: this.props.UserAccount,
-              UserId: record.User_ID,
-              Enalbe: type
-          },
-      });
   };
   onRef1 = (ref) => {
       this.child = ref;
   }
-  AddCompletion = () => {
-      this.setState({
-          DataFiltervisible: false,
-          type: 'datafilter',
-          title: '数据过滤',
-          width: 1130
-      });
+  editpoint = () => {
+      console.log(this.state.selectedRowKeys);
+      if (this.state.selectedRowKeys.length === 1) {
+          this.props.dispatch(routerRedux.push(`/monitor/sysmanage/PointDetail/${this.state.selectedRowKeys}`));
+      }
+      if (this.state.selectedRowKeys.length > 1) {
+          message.warning('请选择一个排口进行编辑');
+      }
+      if (this.state.selectedRowKeys.length === 0) {
+          message.warning('请选择排口');
+      }
   }
   AddData = () => {
       this.child.AddDataFilter();
@@ -146,7 +142,7 @@ export default class pointlist extends Component {
           dataIndex: 'pointName',
           key: 'pointName',
           width: '150px',
-          sorter: (a, b) => a.pointName.length - b.pointName.length,
+          fixed: 'left',
           render: (text, record) => {
               return text;
           }
@@ -156,25 +152,61 @@ export default class pointlist extends Component {
           dataIndex: 'DGIMN',
           key: 'DGIMN',
           width: '180px',
+          fixed: 'left',
           render: (text, record) => {
               return text;
           }
       },
       {
-          title: '设备厂商',
-          dataIndex: 'Device',
-          key: 'Device',
-          width: '180px',
-          render: (text, record) => {
-              return text;
-          }
-      },
-      {
-          title: '排口类型',
+          title: '排放类型',
           dataIndex: 'OutputType',
           key: 'OutputType',
           width: '180px',
-          sorter: (a, b) => a.OutputType.length - b.OutputType.length,
+          render: (text, record) => {
+              return text;
+          }
+      },
+      {
+          title: '污染物类型',
+          dataIndex: 'pollutantTypeName',
+          key: 'pollutantTypeName',
+          width: '180px',
+          render: (text, record) => {
+              return text;
+          }
+      },
+      {
+          title: '责任人',
+          dataIndex: 'linkman',
+          key: 'linkman',
+          width: '180px',
+          render: (text, record) => {
+              return text;
+          }
+      },
+      {
+          title: '电话号',
+          dataIndex: 'mobilePhone',
+          key: 'mobilePhone',
+          width: '180px',
+          render: (text, record) => {
+              return text;
+          }
+      },
+      {
+          title: '排口经度',
+          dataIndex: 'latitude',
+          key: 'latitude',
+          width: '180px',
+          render: (text, record) => {
+              return text;
+          }
+      },
+      {
+          title: '排口维度',
+          dataIndex: 'longitude',
+          key: 'longitude',
+          width: '180px',
           render: (text, record) => {
               return text;
           }
@@ -202,18 +234,18 @@ export default class pointlist extends Component {
           dataIndex: 'IsSj',
           key: 'IsSj',
           width: '180px',
-          sorter: (a, b) => a.IsSj.length - b.IsSj.length,
           render: (text, record) => {
               if (text === '1') {
-                  return <span > <Tag color="red" >烧结</Tag > </span>;
+                  return <span > <Tag color="#f50" >烧结</Tag > </span>;
               } else {
-                  return <span > <Tag color="blue" >非烧结</Tag > </span>;
+                  return <span > <Tag color="#2db7f5" >非烧结</Tag > </span>;
               }
           }
       },
       {
           title: '操作',
-          
+          fixed: 'right',
+          width: '380px',
           render: (text, record) => (<Fragment >
               <a onClick={
                   () => this.props.dispatch(routerRedux.push(`/monitor/sysmanage/UserDetail/${record.key}`))
@@ -224,7 +256,7 @@ export default class pointlist extends Component {
               } > 监测标准 </a>
               <Divider type="vertical" />
               <a onClick={
-                  () => this.props.dispatch(routerRedux.push(`/monitor/sysmanage/UserDetail/${record.key}`))
+                  () => this.props.dispatch(routerRedux.push(`/monitor/sysmanage/PointDetail/${record.key}/${record.pointName}`))
               } > 详情 </a>
               <Divider type="vertical" />
               <a onClick={
@@ -278,7 +310,7 @@ export default class pointlist extends Component {
                               <Button type="primary"
                                   onClick={
                                       () => {
-                                          this.props.dispatch(routerRedux.push(`/monitor/sysmanage/UserDetail/null`));
+                                          this.editpoint();
                                       }
                                   } > 编辑 </Button></Col >
                           <Col span={1} >
@@ -319,7 +351,8 @@ export default class pointlist extends Component {
                   }
                   scroll={
                       {
-                          y: 'calc(100vh - 455px)'
+                          x: 2400,
+                          y: 800
                       }
                   }
                   pagination={

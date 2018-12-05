@@ -126,11 +126,11 @@ export const getRouterData = (app) => {
           import('../routes/PointDetail/AlarmRecord')),
         },
         '/monitor/pointdetail/:pointcode/realvideo': {
-            component: dynamicWrapper(app, ['points'], () =>
+            component: dynamicWrapper(app, ['videolist'], () =>
           import('../routes/PointDetail/RealVideo')),
         },
         '/monitor/pointdetail/:pointcode/hisvideo': {
-            component: dynamicWrapper(app, ['points'], () =>
+            component: dynamicWrapper(app, ['videolist'], () =>
         import('../routes/PointDetail/HisVideo')),
         },
 
@@ -139,7 +139,7 @@ export const getRouterData = (app) => {
           import('../routes/PointDetail/WarningRecord')),
         },
         '/monitor/pointdetail/:pointcode/videolist': {
-            component: dynamicWrapper(app, ['points'], () =>
+            component: dynamicWrapper(app, ['videolist'], () =>
           import('../routes/PointDetail/VideoList')),
         },
 
@@ -315,9 +315,17 @@ export const getRouterData = (app) => {
             component: dynamicWrapper(app, ['pointinfo'], () =>
             import('../routes/PointInfo/')),
         },
-        '/monitor/sysmanage/PointDetail/:PointCode': {
+        '/monitor/sysmanage/PointDetail/:DGIMN': {
             component: dynamicWrapper(app, ['pointinfo'], () =>
               import('../routes/PointInfo/AddPoint')),
+        },
+        '/monitor/sysmanage/PointDetail/:ID/:Name': {
+            component: dynamicWrapper(app, ['pointinfo'], () =>
+              import('../routes/PointInfo/PointView')),
+        },
+        '/monitor/sysmanage/StandardLibrary': {
+            component: dynamicWrapper(app, ['standardlibrary'], () =>
+            import('../routes/StandardLibrary/')),
         },
         '/monitor/entInfo/entoperation': {
             component: dynamicWrapper(app, ['baseinfo'], () =>

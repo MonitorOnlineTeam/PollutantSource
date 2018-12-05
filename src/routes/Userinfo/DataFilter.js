@@ -48,6 +48,8 @@ export default class DataFilter extends Component {
                 pageIndex: pageIndex,
                 pageSize: pageSize,
                 callback: () => {
+                    console.log(this.props.ischecked);
+
                     this.setState((state) => {
                         // copy the map rather than modifying state.
                         const selected = new Map(state.selected);
@@ -62,6 +64,7 @@ export default class DataFilter extends Component {
                             selected
                         };
                     });
+
                     this.setState((state) => {
                         // copy the map rather than modifying state.
                         const alldgimn = new Map(state.alldgimn);
@@ -217,7 +220,7 @@ export default class DataFilter extends Component {
                           size="small"
                           renderItem={(item) => {
                               return (<List.Item >
-                                  <Card>
+                                  <Card style={{width: 330, height: 150}}>
                                       <Row gutter={1}>
                                           <Col span={2}>
                                               <Checkbox checked={this.state.selected.get(item.DGIMN)} onChange={(e) => {

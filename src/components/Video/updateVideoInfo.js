@@ -4,6 +4,9 @@ import { connect } from 'dva';
 import RangePicker_ from '../../components/PointDetail/RangePicker_';
 import EnterprisePointCascadeMultiSelect from '../../components/EnterprisePointCascadeMultiSelect/index';
 import moment from 'moment';
+import {
+    routerRedux
+} from 'dva/router';
 const Option = Select.Option;
 const FormItem = Form.Item;
 const RadioGroup = Radio.Group;
@@ -11,7 +14,7 @@ const {TextArea} = Input;
 
 @connect()
 @Form.create()
-export default class addVideoInfo extends Component {
+export default class updateVideoInfo extends Component {
     constructor(props) {
         super(props);
 
@@ -25,12 +28,14 @@ export default class addVideoInfo extends Component {
     componentWillMount() {
         this.props.onRef(this);
     }
-    handleSubmit = (e) => {
+    handleSubmitupdate = (e) => {
+        ;
+        console.log(this.props.dgimn);
         let flag = true;
         this.props.form.validateFieldsAndScroll((err, values) => {
             if (!err && flag === true) {
                 this.props.dispatch({
-                    type: 'videolist/addVideoInfos',
+                    type: 'videolist/updateVideoInfos',
                     payload: {
                         VedioDevice_Name: values.VedioDevice_Name,
                         VedioDevice_No: values.VedioDevice_No,
@@ -46,16 +51,22 @@ export default class addVideoInfo extends Component {
                         VedioCamera_Version: values.VedioCamera_Version,
                         Longitude: values.Longitude,
                         Latitude: values.Latitude,
-                        DGIMN: values.DGIMN,
+                        VedioCamera_ID: values.VedioCamera_ID,
+                        VedioDevice_ID: values.VedioDevice_ID,
+                        CameraMonitorID: values.CameraMonitorID,
+                        DGIMN: this.props.dgimn,
                     },
                 });
                 this.props.onCancels();
-                message.success('添加成功');
+                message.success('修改成功');
             } else {
+
             }
         });
     }
+
     render() {
+        console.log(this.props.item);
         const { getFieldDecorator } = this.props.form;
         const formItemLayout = {
             labelCol: {
@@ -68,16 +79,19 @@ export default class addVideoInfo extends Component {
             },
         };
         return (
+
             <div>
-                <Form onSubmit={this.handleSubmit}>
+                <Form onSubmit={this.handleSubmitupdate}>
 
                     <Row gutter={24}>
                         <Col xs={2} sm={6} md={12} lg={12} xl={12} xxl={12} >
                             <FormItem
+
                                 {...formItemLayout}
                                 label={'监测点名称'}>
                                 {getFieldDecorator('PointName', {
-                                    initialValue: this.props.name,
+                                    initialValue: this.props.item.PointName,
+
                                 })(
                                     <Input readOnly="true" />
                                 )}
@@ -88,6 +102,8 @@ export default class addVideoInfo extends Component {
                                 {...formItemLayout}
                                 label={'设备名称'}>
                                 {getFieldDecorator('VedioDevice_Name', {
+                                    initialValue: this.props.item.VedioDevice_Name,
+
                                 })(
                                     <Input placeholder="请输入设备名称" />
                                 )}
@@ -101,6 +117,8 @@ export default class addVideoInfo extends Component {
                                 {...formItemLayout}
                                 label={'设备编号'}>
                                 {getFieldDecorator('VedioDevice_No', {
+                                    initialValue: this.props.item.VedioDevice_No,
+
                                 })(
                                     <Input placeholder="请输入设备编号" />
                                 )}
@@ -111,6 +129,8 @@ export default class addVideoInfo extends Component {
                                 {...formItemLayout}
                                 label={'设备位置'}>
                                 {getFieldDecorator('VedioDevice_Position', {
+                                    initialValue: this.props.item.VedioDevice_Position,
+
                                 })(
                                     <Input placeholder="请输入设备位置" />
                                 )}
@@ -124,6 +144,7 @@ export default class addVideoInfo extends Component {
                                 {...formItemLayout}
                                 label={'IP'}>
                                 {getFieldDecorator('IP', {
+                                    initialValue: this.props.item.IP,
                                     rules: [{
                                         required: true,
                                         message: '请输入设备IP',
@@ -138,6 +159,7 @@ export default class addVideoInfo extends Component {
                                 {...formItemLayout}
                                 label={'端口'}>
                                 {getFieldDecorator('Device_Port', {
+                                    initialValue: this.props.item.Device_Port,
                                     rules: [{
                                         required: true,
                                         message: '请输入端口',
@@ -155,6 +177,7 @@ export default class addVideoInfo extends Component {
                                 {...formItemLayout}
                                 label={'登录名'}>
                                 {getFieldDecorator('User_Name', {
+                                    initialValue: this.props.item.User_Name,
                                     rules: [{
                                         required: true,
                                         message: '请输入登录名',
@@ -169,6 +192,7 @@ export default class addVideoInfo extends Component {
                                 {...formItemLayout}
                                 label={'密码'}>
                                 {getFieldDecorator('User_Pwd', {
+                                    initialValue: this.props.item.User_Pwd,
                                     rules: [{
                                         required: true,
                                         message: '请输入登陆密码',
@@ -186,6 +210,7 @@ export default class addVideoInfo extends Component {
                                 {...formItemLayout}
                                 label={'相机名称'}>
                                 {getFieldDecorator('VedioCamera_Name', {
+                                    initialValue: this.props.item.VedioCamera_Name,
                                 })(
                                     <Input placeholder="请输入相机名称" />
                                 )}
@@ -196,6 +221,8 @@ export default class addVideoInfo extends Component {
                                 {...formItemLayout}
                                 label={'相机位置'}>
                                 {getFieldDecorator('VedioCamera_Position', {
+                                    initialValue: this.props.item.VedioCamera_Position,
+
                                 })(
                                     <Input placeholder="请输入相机位置" />
                                 )}
@@ -209,6 +236,7 @@ export default class addVideoInfo extends Component {
                                 {...formItemLayout}
                                 label={'通道号'}>
                                 {getFieldDecorator('VedioCamera_No', {
+                                    initialValue: this.props.item.VedioCamera_No,
                                     rules: [{
                                         required: true,
                                         message: '请输入通道号',
@@ -223,6 +251,8 @@ export default class addVideoInfo extends Component {
                                 {...formItemLayout}
                                 label={'相机编号'}>
                                 {getFieldDecorator('VedioCamera_Version', {
+                                    initialValue: this.props.item.VedioCamera_Version,
+
                                 })(
                                     <Input placeholder="请输入相机编号" />
                                 )}
@@ -236,8 +266,9 @@ export default class addVideoInfo extends Component {
                                 {...formItemLayout}
                                 label={'经度'}>
                                 {getFieldDecorator('Longitude', {
+                                    initialValue: this.props.item.Longitude,
                                 })(
-                                    <Input placeholder="请输入经度" />
+                                    <Input type="number" placeholder="请输入经度" />
                                 )}
                             </FormItem>
                         </Col>
@@ -246,8 +277,10 @@ export default class addVideoInfo extends Component {
                                 {...formItemLayout}
                                 label={'纬度'}>
                                 {getFieldDecorator('Latitude', {
+                                    initialValue: this.props.item.Latitude,
+
                                 })(
-                                    <Input placeholder="请输入纬度" />
+                                    <Input type="number" placeholder="请输入纬度" />
                                 )}
                             </FormItem>
                         </Col>
@@ -258,9 +291,13 @@ export default class addVideoInfo extends Component {
                             <FormItem
                                 {...formItemLayout}
                                 label="生产日期"
+
                             >
-                                {getFieldDecorator('ProduceDate')(
-                                    <DatePicker />
+                                {getFieldDecorator('ProduceDate',
+                                    {
+                                        initialValue: moment(this.props.item.ProduceDate === null ? Date.now() : this.props.item.ProduceDate),
+                                    })(
+                                        <DatePicker />
                                 )}
                             </FormItem>
                         </Col>
@@ -268,11 +305,34 @@ export default class addVideoInfo extends Component {
                             <FormItem
                                 {...formItemLayout}
                                 label={'点编号'}>
-                                {getFieldDecorator('DGIMN', {
-                                    initialValue: this.props.dgimn,
+                                {getFieldDecorator('VedioDevice_ID', {
+                                    initialValue: this.props.item.VedioDevice_ID,
 
                                 })(
-                                    <Input placeholder="请输入纬度" value={121212} />
+                                    <Input placeholder="请输入纬度" />
+                                )}
+                            </FormItem>
+                        </Col>
+                        <Col xs={2} sm={6} md={12} lg={12} xl={12} xxl={12} style={{display: 'none'}}>
+                            <FormItem
+                                {...formItemLayout}
+                                label={'点编号'}>
+                                {getFieldDecorator('CameraMonitorID', {
+                                    initialValue: this.props.item.CameraMonitorID,
+
+                                })(
+                                    <Input placeholder="请输入纬度" />
+                                )}
+                            </FormItem>
+                        </Col>
+                        <Col xs={2} sm={6} md={12} lg={12} xl={12} xxl={12} style={{display: 'none'}}>
+                            <FormItem
+                                {...formItemLayout}
+                                label={'点编号'}>
+                                {getFieldDecorator('VedioCamera_ID', {
+                                    initialValue: this.props.item.VedioCamera_ID,
+                                })(
+                                    <Input placeholder="请输入纬度" />
                                 )}
                             </FormItem>
                         </Col>
