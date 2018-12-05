@@ -105,11 +105,11 @@ export const getRouterData = (app) => {
             component: dynamicWrapper(app, ['points'], () =>
           import('../routes/EmergencyAuditList/EmergencyDetailInfo')),
         },
-        '/monitor/emergency/emergencydetailinfo/:exceptionhandleid': {
-            component: dynamicWrapper(app, ['points'], () =>
-          import('../routes/EmergencyTodoList/EmergencyDetailInfo')),
-        },
-        '/monitor/emergency/emergencydetailinfo/:TaskID/:UserID': {
+        // '/monitor/emergency/emergencydetailinfo/:exceptionhandleid': {
+        //     component: dynamicWrapper(app, ['points'], () =>
+        //   import('../routes/EmergencyTodoList/EmergencyDetailInfo')),
+        // },
+        '/monitor/emergency/emergencydetailinfo/:TaskID': {
             component: dynamicWrapper(app, ['task'], () =>
           import('../routes/EmergencyTodoList/EmergencyDetailInfo')),
         },
@@ -166,6 +166,14 @@ export const getRouterData = (app) => {
         '/monitor/pointdetail/:pointcode/stationthree': {
             component: dynamicWrapper(app, ['points'], () =>
         import('../routes/PointDetail/StationThree')),
+        },
+        '/monitor/pointdetail/:pointcode/ywdsjlist': {
+            component: dynamicWrapper(app, ['task'], () =>
+        import('../routes/PointDetail/Ywdsjlist')),
+        },
+        '/monitor/EmergencyTodoList/JzRecordInfo/:TaskID/:TypeID': {
+            component: dynamicWrapper(app, ['task'], () =>
+        import('../routes/EmergencyTodoList/JzRecordInfo')),
         },
         /* 工作台 */
         '/monitor/workbench': {
@@ -290,8 +298,8 @@ export const getRouterData = (app) => {
             component: dynamicWrapper(app, ['points'], () =>
           import('../routes/StaffweeklyCalendar')),
         },
-        '/monitor/operation/OperationAndMaintenanceMemorabilia': {
-            component: dynamicWrapper(app, ['points'], () =>
+        '/monitor/operation/OperationAndMaintenanceMemorabilia/:DGIMNs': {
+            component: dynamicWrapper(app, ['task'], () =>
           import('../routes/OperationAndMaintenanceMemorabilia')),
         },
         /* 系统管理 */

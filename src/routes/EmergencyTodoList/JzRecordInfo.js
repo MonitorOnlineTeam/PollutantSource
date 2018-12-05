@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import styles from '../EmergencyTodoList/QualityControl.less';
+import styles from '../EmergencyTodoList/JzRecordInfo.less';
 import {Input, Select, Button} from 'antd';
 import EmergencyInfo from '../../mockdata/EmergencyTodoList/EmergencyDetailInfo.json';
 
 const { Option } = Select;
 const { TextArea } = Input;
-export default class QualityControl extends Component {
+export default class JzRecordInfo extends Component {
     constructor(props) {
         super(props);
         this.state = {
