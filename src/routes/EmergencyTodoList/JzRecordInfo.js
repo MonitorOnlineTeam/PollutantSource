@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import styles from '../EmergencyTodoList/JzRecordInfo.less';
-import {Input, Select, Button} from 'antd';
-import EmergencyInfo from '../../mockdata/EmergencyTodoList/EmergencyDetailInfo.json';
+import {Spin, Button, Icon} from 'antd';
+import { connect } from 'dva';
 
-const { Option } = Select;
-const { TextArea } = Input;
+@connect(({ task, loading }) => ({
+    isloading: loading.effects['task/GetJzRecord'],
+    JzRecord: task.JzRecord
+}))
 export default class JzRecordInfo extends Component {
     constructor(props) {
         super(props);
@@ -13,488 +15,272 @@ export default class JzRecordInfo extends Component {
         };
     }
 
+    componentDidMount() {
+        this.props.dispatch({
+            type: 'task/GetJzRecord',
+            payload: {
+                TaskID: this.props.match.params.TaskID,
+                TypeID: this.props.match.params.TypeID
+            }
+        });
+    }
+    renderItem=(record, code) => {
+        const rtnVal = [];
+        if (code != null && code.length > 0) {
+            if (record != null && record.length > 0) {
+                code.map((item) => {
+                    let rd = record.filter(function(item1) {
+                        return item1.ItemID === item;
+                    });
+                    if (rd) {
+                        rtnVal.push(<table className={styles.FormTable}>
+                            <tbody>
+                                <tr>
+                                    <td colSpan="7" style={{height: '30px', fontWeight: 'bold'}}>{item}分析仪校准</td>
+                                </tr>
+                                <tr>
+                                    <td style={{width: '16%', height: '30px'}}>分析仪原理</td>
+                                    <td colSpan="2">{rd[0].FxyYl}</td>
+                                    <td style={{width: '14%', height: '30px'}}>分析仪量程</td>
+                                    <td style={{width: '14%', height: '30px'}}>{rd[0].FxyLc}</td>
+                                    <td style={{width: '14%', height: '30px'}}>计量单位</td>
+                                    <td style={{width: '14%', height: '30px'}}>{rd[0].JlUnit}</td>
+                                </tr>
+                                <tr>
+                                    <td rowSpan="2" style={{width: '16%', height: '30px'}}>零点漂移校准</td>
+                                    <td style={{width: '14%', height: '30px'}}>{item !== '颗粒物' ? '零气浓度值' : '零气'}</td>
+                                    <td style={{width: '14%', height: '30px'}}>上次校准后测试值</td>
+                                    <td style={{width: '14%', height: '30px'}}>校前测试值</td>
+                                    <td style={{width: '14%', height: '30px'}}>零点漂移%F.S.</td>
+                                    <td style={{width: '14%', height: '30px'}}>仪器校准是否正常</td>
+                                    <td style={{width: '14%', height: '30px'}}>校准后测试值</td>
+                                </tr>
+                                <tr>
+                                    <td style={{width: '14%', height: '30px'}}>{rd[0].LqNdz}</td>
+                                    <td style={{width: '14%', height: '30px'}}>{rd[0].LdLastCalibrationValue}</td>
+                                    <td style={{width: '14%', height: '30px'}}>{rd[0].LdCalibrationPreValue}</td>
+                                    <td style={{width: '14%', height: '30px'}}>{rd[0].LdPy}</td>
+                                    <td style={{width: '14%', height: '30px'}}>{rd[0].LdCalibrationIsOk}</td>
+                                    <td style={{width: '14%', height: '30px'}}>{rd[0].LdCalibrationSufValue}</td>
+                                </tr>
+                                <tr>
+                                    <td rowSpan="2" style={{width: '16%'}}>量程漂移校准</td>
+                                    <td style={{width: '14%', height: '30px'}}>{item !== '颗粒物' ? '标气浓度值' : '校准用量程值'}</td>
+                                    <td style={{width: '14%', height: '30px'}}>上次校准后测试值</td>
+                                    <td style={{width: '14%', height: '30px'}}>校前测试值</td>
+                                    <td style={{width: '14%', height: '30px'}}>量程漂移%F.S.</td>
+                                    <td style={{width: '14%', height: '30px'}}>仪器校准是否正常</td>
+                                    <td style={{width: '14%', height: '30px'}}>校准后测试值</td>
+                                </tr>
+                                <tr>
+                                    <td style={{width: '14%', height: '30px'}}>{rd[0].BqNdz}</td>
+                                    <td style={{width: '14%', height: '30px'}}>{rd[0].LcLastCalibrationValue}</td>
+                                    <td style={{width: '14%', height: '30px'}}>{rd[0].LcCalibrationPreValue}</td>
+                                    <td style={{width: '14%', height: '30px'}}>{rd[0].LcPy}</td>
+                                    <td style={{width: '14%', height: '30px'}}>{rd[0].LcCalibrationIsOk}</td>
+                                    <td style={{width: '14%', height: '30px'}}>{rd[0].LcCalibrationSufValue}</td>
+                                </tr>
+                            </tbody>
+                        </table>);
+                    } else {
+                        rtnVal.push(<table className={styles.FormTable}>
+                            <tbody>
+                                <tr>
+                                    <td colSpan="7" style={{height: '30px', fontWeight: 'bold'}}>{item}分析仪校准</td>
+                                </tr>
+                                <tr>
+                                    <td style={{width: '16%', height: '30px'}}>分析仪原理</td>
+                                    <td colSpan="2" />
+                                    <td style={{width: '14%', height: '30px'}}>分析仪量程</td>
+                                    <td style={{width: '14%', height: '30px'}} />
+                                    <td style={{width: '14%', height: '30px'}}>计量单位</td>
+                                    <td style={{width: '14%', height: '30px'}} />
+                                </tr>
+                                <tr>
+                                    <td rowSpan="2" style={{width: '16%', height: '30px'}}>零点漂移校准</td>
+                                    <td style={{width: '14%', height: '30px'}}>{item !== '颗粒物' ? '零气浓度值' : '零气'}</td>
+                                    <td style={{width: '14%', height: '30px'}}>上次校准后测试值</td>
+                                    <td style={{width: '14%', height: '30px'}}>校前测试值</td>
+                                    <td style={{width: '14%', height: '30px'}}>零点漂移%F.S.</td>
+                                    <td style={{width: '14%', height: '30px'}}>仪器校准是否正常</td>
+                                    <td style={{width: '14%', height: '30px'}}>校准后测试值</td>
+                                </tr>
+                                <tr>
+                                    <td style={{width: '14%', height: '30px'}} />
+                                    <td style={{width: '14%', height: '30px'}} />
+                                    <td style={{width: '14%', height: '30px'}} />
+                                    <td style={{width: '14%', height: '30px'}} />
+                                    <td style={{width: '14%', height: '30px'}} />
+                                    <td style={{width: '14%', height: '30px'}} />
+                                </tr>
+                                <tr>
+                                    <td rowSpan="2" style={{width: '16%', height: '30px'}}>量程漂移校准</td>
+                                    <td style={{width: '14%', height: '30px'}}>{item !== '颗粒物' ? '标气浓度值' : '校准用量程值'}</td>
+                                    <td style={{width: '14%', height: '30px'}}>上次校准后测试值</td>
+                                    <td style={{width: '14%', height: '30px'}}>校前测试值</td>
+                                    <td style={{width: '14%', height: '30px'}}>量程漂移%F.S.</td>
+                                    <td style={{width: '14%', height: '30px'}}>仪器校准是否正常</td>
+                                    <td style={{width: '14%', height: '30px'}}>校准后测试值</td>
+                                </tr>
+                                <tr>
+                                    <td style={{width: '14%', height: '30px'}} />
+                                    <td style={{width: '14%', height: '30px'}} />
+                                    <td style={{width: '14%', height: '30px'}} />
+                                    <td style={{width: '14%', height: '30px'}} />
+                                    <td style={{width: '14%', height: '30px'}} />
+                                    <td style={{width: '14%', height: '30px'}} />
+                                </tr>
+                            </tbody>
+                        </table>);
+                    }
+                });
+            } else {
+
+            }
+        }
+        return rtnVal;
+    }
     render() {
         const SCREEN_HEIGHT = document.querySelector('body').offsetHeight - 150;
-        ;
-        const { emergencyId } = this.props;
-        // 气态分析仪运行状况
-        const inspectionRecord = EmergencyInfo.InspectionRecord.filter(function(item) {
-            return item.ExceptionHandleId === emergencyId;
-        });
-      
-        return (
-            <div className={styles.FormDiv} style={{height: SCREEN_HEIGHT}}>
-                <table className={styles.FormTable}>
-                    <tbody>
-                        <tr>
-                            <td colSpan="2" rowSpan="3" style={{width: '19%', textAlign: 'left'}}>
-    参比法对比测试仪
-                            </td>
-                            <td>
-    仪器名称
-                            </td>
-                            <td colSpan="3" rowSpan="1" style={{width: '55%'}}>
-                                <Input style={{ width: 250 }} value={inspectionRecord.length === 0 ? '' : inspectionRecord[0].DeviceName} />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td style={{width: '19%', textAlign: 'left'}}>
-    仪器型号
-                            </td>
-                            <td colSpan="3" rowSpan="1" style={{width: '62%'}}>
-                                <Input style={{ width: 250 }} value={inspectionRecord.length === 0 ? '' : inspectionRecord[0].DeviceType} />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td style={{width: '19%', textAlign: 'left', fontSize: '13px'}}>
-    仪器供应商
-                            </td>
-                            <td colSpan="3" rowSpan="1" style={{width: '62%', textAlign: 'left'}}>
-                                <Input style={{ width: 250 }} value={inspectionRecord.length === 0 ? '' : inspectionRecord[0].DeviceProvider} />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td rowSpan="4" style={{width: '12%', textAlign: 'left'}}>
-    烟尘比对监测
-                            </td>
-                            <td style={{width: '19%', textAlign: 'left'}}>
-    对比测试仪原理
-                            </td>
-                            <td colSpan="1" rowSpan="1" style={{width: '25%', textAlign: 'left'}}>
-                                <Input style={{ width: 250 }} value={inspectionRecord.length === 0 ? '' : inspectionRecord[0].Yc_PrincipleOfContrastTester} />
-                            </td>
-                            <td style={{width: '19%', textAlign: 'left'}}>
-    CEMS分析仪原理
-                            </td>
-                            <td colSpan="1" rowSpan="1" style={{width: '25%', textAlign: 'left'}}>
-                                <Input style={{ width: 250 }} value={inspectionRecord.length === 0 ? '' : inspectionRecord[0].Yc_PrincipleOfCEMSAnalyzer} />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-    参比三次均值 （mg/m3）
-                            </td>
-                            <td colSpan="1" rowSpan="1">
-                                <Input style={{ width: 250 }} value={inspectionRecord.length === 0 ? '' : inspectionRecord[0].Yc_CbThreeJz} />
-                            </td>
-                            <td>
-    CEMS测定均值（mg/m3）
-                            </td>
-                            <td colSpan="1" rowSpan="1">
-                                <Input style={{ width: 250 }} value={inspectionRecord.length === 0 ? '' : inspectionRecord[0].Yc_CbCdJz} />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-    公式
-                            </td>
-                            <td colSpan="1" rowSpan="1">
-                                <Select style={{ width: 120 }} value={inspectionRecord.length === 0 ? '' : inspectionRecord[0].Yc_formula}>
-                                    <Option value="相对误差">相对误差</Option>
-                                    <Option value="绝对误差">绝对误差</Option>
-                                </Select>
-                            </td>
-                            <td colSpan="1" rowSpan="1">
-                                <Button>计算</Button>
-                            </td>
-                            <td colSpan="1" rowSpan="1">
-                                <Input style={{ width: 250 }} value={inspectionRecord.length === 0 ? '' : inspectionRecord[0].Yc_EvaluationResults} />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-    评价结果
-                            </td>
-                            <td colSpan="3" rowSpan="1">
-                                <Input style={{ width: 250 }}  />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td rowSpan="4" style={{width: '12%', textAlign: 'left'}}>
-    SO2校准
-                            </td>
-                            <td style={{textAlign: 'left'}}>
-    对比测试仪原理
-                            </td>
-                            <td colSpan="1" rowSpan="1" style={{width: '25%', textAlign: 'left'}}>
-                                <Input style={{ width: 250 }} value={inspectionRecord.length === 0 ? '' : inspectionRecord[0].SO2_Jz_PrincipleOfContrastTester} />
-                            </td>
-                            <td style={{width: '18%', textAlign: 'left'}}>
-    CEMS分析仪原理
-                            </td>
-                            <td colSpan="1" rowSpan="1" style={{width: '25%', textAlign: 'left'}}>
-                                <Input style={{ width: 250 }} value={inspectionRecord.length === 0 ? '' : inspectionRecord[0].SO2_Jz_PrincipleOfCEMSAnalyzer} />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-    标准气浓度 （mg/m3）
-                            </td>
-                            <td colSpan="1" rowSpan="1">
-                                <Input style={{ width: 250 }} value={inspectionRecord.length === 0 ? '' : inspectionRecord[0].SO2_Jz_CbThreeJz} />
-                            </td>
-                            <td>
-    CEMS测定均值 （mg/m3）
-                            </td>
-                            <td colSpan="1" rowSpan="1">
-                                <Input style={{ width: 250 }} value={inspectionRecord.length === 0 ? '' : inspectionRecord[0].SO2_Jz_CbCdJz} />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-    公式
-                            </td>
-                            <td colSpan="1" rowSpan="1">
-                                <Select style={{ width: 120 }} value={inspectionRecord.length === 0 ? '' : inspectionRecord[0].SO2_Jz_formula}>
-                                    <Option value="相对误差">相对误差</Option>
-                                    <Option value="绝对误差">绝对误差</Option>
-                                </Select>
-                            </td>
-                            <td colSpan="1" rowSpan="1">
-                                <Button>计算</Button>
-                            </td>
-                            <td colSpan="1" rowSpan="1">
-                                <Input style={{ width: 250 }} value={inspectionRecord.length === 0 ? '' : inspectionRecord[0].SO2_Jz_EvaluationResults} />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-    评价结果
-                            </td>
-                            <td colSpan="3" rowSpan="1">
-                                <Input style={{ width: 250 }}  />
-                            </td>
-                        </tr><tr>
-                            <td rowSpan="4" style={{width: '12%', textAlign: 'left'}}>
-    SO2比对监测
-                            </td>
-                            <td style={{textAlign: 'left'}}>
-    对比测试仪原理
-                            </td>
-                            <td colSpan="1" rowSpan="1" style={{width: '25%', textAlign: 'left'}}>
-                                <Input style={{ width: 250 }} value={inspectionRecord.length === 0 ? '' : inspectionRecord[0].SO2_Bd_PrincipleOfContrastTester} />
-                            </td>
-                            <td style={{width: '18%', textAlign: 'left'}}>
-    CEMS分析仪原理
-                            </td>
-                            <td colSpan="1" rowSpan="1" style={{width: '25%', textAlign: 'left'}}>
-                                <Input style={{ width: 250 }} value={inspectionRecord.length === 0 ? '' : inspectionRecord[0].SO2_Bd_PrincipleOfCEMSAnalyzer} />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-    参比六次均值 （mg/m3）
-                            </td>
-                            <td colSpan="1" rowSpan="1">
-                                <Input style={{ width: 250 }} value={inspectionRecord.length === 0 ? '' : inspectionRecord[0].SO2_Bd_CbThreeJz} />
-                            </td>
-                            <td>
-    CEMS测定均值 （mg/m3）
-                            </td>
-                            <td colSpan="1" rowSpan="1">
-                                <Input style={{ width: 250 }} value={inspectionRecord.length === 0 ? '' : inspectionRecord[0].SO2_Bd_CbCdJz} />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-    公式
-                            </td>
-                            <td colSpan="1" rowSpan="1">
-                                <Select style={{ width: 120 }} value={inspectionRecord.length === 0 ? '' : inspectionRecord[0].SO2_Bd_formula}>
-                                    <Option value="相对误差">相对误差</Option>
-                                    <Option value="绝对误差">绝对误差</Option>
-                                </Select>
-                            </td>
-                            <td colSpan="1" rowSpan="1">
-                                <Button>计算</Button>
-                            </td>
-                            <td colSpan="1" rowSpan="1">
-                                <Input style={{ width: 250 }} value={inspectionRecord.length === 0 ? '' : inspectionRecord[0].SO2_Bd_EvaluationResults} />
-                            </td></tr><tr>
+        const JzRecord = this.props.JzRecord;
+        if (this.props.isloading) {
+            return (
+                <div className={styles.loadContent}>
+                    <Spin size="large" />
+                </div>
+            );
+        } else {
+            let EnterpriseName = null;
+            let PointPosition = null;
+            let MaintenanceManagementUnit = null;
+            let GasCemsEquipmentManufacturer = null;
+            let GasCemsCode = null;
+            let KlwCemsEquipmentManufacturer = null;
+            let KlwCemsCode = null;
+            let AdjustDate = null;
+            let AdjustStartTime = null;
+            let AdjustEndTime = null;
+            let Record = null;
+            let Code = null;
+            let RecordList = null;
+            let CreateUserID = null;
+            let SignContent = null;
+            let SignTime = null;
+            if (JzRecord != null) {
+                Record = JzRecord.record;
+                Code = JzRecord.code;
+                RecordList = Record.RecordList;
+                EnterpriseName = Record.Content.EnterpriseName;
+                PointPosition = Record.Content.PointPosition;
+                MaintenanceManagementUnit = Record.Content.MaintenanceManagementUnit;
+                GasCemsEquipmentManufacturer = Record.Content.GasCemsEquipmentManufacturer;
+                GasCemsCode = Record.Content.GasCemsCode;
+                KlwCemsEquipmentManufacturer = Record.Content.KlwCemsEquipmentManufacturer;
+                KlwCemsCode = Record.Content.KlwCemsCode;
+                AdjustDate = Record.Content.AdjustDate;
+                AdjustStartTime = Record.Content.AdjustStartTime;
+                AdjustEndTime = Record.Content.AdjustEndTime;
+                CreateUserID = Record.CreateUserID;
+                SignContent = Record.SignContent === null ? null : `data:image/jpeg;base64,${Record.SignContent}`;
+                SignTime = Record.SignTime;
+            }
+
+            return (
+                <div className={styles.FormDiv} style={{height: SCREEN_HEIGHT}}>
+                    <div className={styles.FormName}>CEMS零点量程漂移与校准记录表</div>
+                    <div className={styles.HeadDiv} style={{fontWeight: 'bold'}}>企业名称：{EnterpriseName}</div>
+                    <table className={styles.FormTable}>
+                        <tbody>
+                            <tr>
+                                <td style={{width: '18%', height: '30px', textAlign: 'left'}}>
+                            气态污染物CEMS设备生产商
+                                </td>
+                                <td style={{width: '16%', height: '30px'}}>
+                                    {GasCemsEquipmentManufacturer}
+                                </td>
                                 <td>
-    评价结果
-                            </td>
-                                <td colSpan="3" rowSpan="1">
-                                <Input style={{ width: 250 }}  />
-                            </td>
-                            </tr><tr>
-                            <td rowSpan="4" style={{width: '12%', textAlign: 'left'}}>
-    NOx校准
+                            气态污染物CEMS设备规格型号
                                 </td>
-                            <td style={{textAlign: 'left'}}>
-    对比测试仪原理
+                                <td style={{width: '18%', height: '30px'}}>
+                                    {GasCemsCode}
                                 </td>
-                            <td colSpan="1" rowSpan="1" style={{width: '25%', textAlign: 'left'}}>
-                                    <Input style={{ width: 250 }} value={inspectionRecord.length === 0 ? '' : inspectionRecord[0].NOX_Jz_PrincipleOfContrastTester} />
-                                </td>
-                            <td style={{width: '18%', textAlign: 'left'}}>
-    CEMS分析仪原理
-                                </td>
-                            <td colSpan="1" rowSpan="1" style={{width: '25%', textAlign: 'left'}}>
-                                    <Input style={{ width: 250 }} value={inspectionRecord.length === 0 ? '' : inspectionRecord[0].NOX_Jz_PrincipleOfCEMSAnalyzer} />
-                                </td>
-                        </tr><tr>
                                 <td>
-    标准气浓度 （mg/m3）
-                            </td>
-                                <td colSpan="1" rowSpan="1">
-                                <Input style={{ width: 250 }} value={inspectionRecord.length === 0 ? '' : inspectionRecord[0].NOX_Jz_CbThreeJz} />
-                            </td>
-                                <td>
-    CEMS测定均值 （mg/m3）
-                            </td>
-                                <td colSpan="1" rowSpan="1">
-                                <Input style={{ width: 250 }} value={inspectionRecord.length === 0 ? '' : inspectionRecord[0].NOX_Jz_CbCdJz} />
-                            </td>
-                            </tr><tr>
-                            <td>
-    公式
+                            校准日期
                                 </td>
-                            <td colSpan="1" rowSpan="1">
-                                    <Select style={{ width: 120 }} value={inspectionRecord.length === 0 ? '' : inspectionRecord[0].NOX_Jz_formula}>
-                                    <Option value="相对误差">相对误差</Option>
-                                    <Option value="绝对误差">绝对误差</Option>
-                                </Select>
+                                <td style={{width: '16%', height: '30px'}}>
+                                    {AdjustDate}
                                 </td>
-                            <td colSpan="1" rowSpan="1">
-                                    <Button>计算</Button>
-                                </td>
-                            <td colSpan="1" rowSpan="1">
-                                    <Input style={{ width: 250 }} value={inspectionRecord.length === 0 ? '' : inspectionRecord[0].NOX_Jz_EvaluationResults} />
-                                </td></tr><tr>
-                                <td>
-    评价结果
-                            </td>
-                            <td colSpan="3" rowSpan="1">
-                                        <Input style={{ width: 250 }}  />
-                            </td>
-                            </tr><tr>
-                                    <td rowSpan="4" style={{width: '12%', textAlign: 'left'}}>
-    NOx比对监测
-                            </td>
-                                    <td style={{textAlign: 'left'}}>
-    对比测试仪原理
-                            </td>
-                                    <td colSpan="1" rowSpan="1" style={{width: '25%', textAlign: 'left'}}>
-                                <Input style={{ width: 250 }} value={inspectionRecord.length === 0 ? '' : inspectionRecord[0].NOX_Db_PrincipleOfContrastTester} />
-                            </td>
-                                    <td style={{width: '18%', textAlign: 'left'}}>
-    CEMS分析仪原理
-                            </td>
-                                    <td colSpan="1" rowSpan="1" style={{width: '25%', textAlign: 'left'}}>
-                                <Input style={{ width: 250 }} value={inspectionRecord.length === 0 ? '' : inspectionRecord[0].NOX_Db_PrincipleOfCEMSAnalyzer} />
-                            </td>
-                                </tr><tr>
-                            <td>
-    参比六次均值 （mg/m3）
-                                </td>
-                            <td colSpan="1" rowSpan="1">
-                                    <Input style={{ width: 250 }} value={inspectionRecord.length === 0 ? '' : inspectionRecord[0].NOX_Db_CbThreeJz} />
-                                </td>
-                            <td>
-    CEMS测定均值 （mg/m3）
-                                </td>
-                            <td colSpan="1" rowSpan="1">
-                                    <Input style={{ width: 250 }} value={inspectionRecord.length === 0 ? '' : inspectionRecord[0].NOX_Db_CbCdJz} />
-                                </td>
-                        </tr><tr>
-                                <td>
-    公式
-                            </td>
-                                <td colSpan="1" rowSpan="1">
-                                <Select style={{ width: 120 }} value={inspectionRecord.length === 0 ? '' : inspectionRecord[0].NOX_Db_formula}>
-                                        <Option value="相对误差">相对误差</Option>
-                                        <Option value="绝对误差">绝对误差</Option>
-                                    </Select>
-                            </td>
-                                <td colSpan="1" rowSpan="1">
-                                <Button>计算</Button>
-                            </td>
-                                <td colSpan="1" rowSpan="1">
-                                <Input style={{ width: 250 }} value={inspectionRecord.length === 0 ? '' : inspectionRecord[0].NOX_Db_EvaluationResults} />
-                            </td></tr><tr>
-                                    <td>
-    评价结果
-                                </td>
-                            <td colSpan="3" rowSpan="1">
-                                    <Input style={{ width: 250 }}  />
-                                </td>
-                                </tr><tr>
-                            <td rowSpan="4" style={{width: '12%', textAlign: 'left'}}>
-    O2比对监测
-                                            </td>
-                            <td style={{textAlign: 'left'}}>
-    对比测试仪原理
-                                            </td>
-                            <td colSpan="1" rowSpan="1" style={{width: '25%', textAlign: 'left'}}>
-                                                <Input style={{ width: 250 }} value={inspectionRecord.length === 0 ? '' : inspectionRecord[0].O2_Bd_PrincipleOfContrastTester} />
-                                            </td>
-                                <td style={{width: '18%', textAlign: 'left'}}>
-    CEMS分析仪原理
-                                            </td>
-                                <td colSpan="1" rowSpan="1" style={{width: '25%', textAlign: 'left'}}>
-                                                <Input style={{ width: 250 }} value={inspectionRecord.length === 0 ? '' : inspectionRecord[0].O2_Bd_PrincipleOfCEMSAnalyzer} />
-                                            </td>
-                        </tr><tr>
-                                            <td>
-    参比三次均值 （%）
-                            </td>
-                                            <td colSpan="1" rowSpan="1">
-                                <Input style={{ width: 250 }} value={inspectionRecord.length === 0 ? '' : inspectionRecord[0].O2_Bd_CbThreeJz} />
-                            </td>
-                                            <td>
-    CEMS测定均值 （%）
-                            </td>
-                                            <td colSpan="1" rowSpan="1">
-                                <Input style={{ width: 250 }} value={inspectionRecord.length === 0 ? '' : inspectionRecord[0].O2_Bd_CbCdJz} />
-                            </td>
-                                        </tr><tr>
-                            <td>
-    公式
-                                    </td>
-                            <td colSpan="1" rowSpan="1">
-                                        <Select style={{ width: 120 }} value={inspectionRecord.length === 0 ? '' : inspectionRecord[0].O2_Bd_formula}>
-                                    <Option value="相对误差">相对误差</Option>
-                                    <Option value="绝对误差">绝对误差</Option>
-                                </Select>
-                                    </td>
-                            <td colSpan="1" rowSpan="1">
-                                        <Button>计算</Button>
-                                    </td>
-                            <td colSpan="1" rowSpan="1">
-                                        <Input style={{ width: 250 }} value={inspectionRecord.length === 0 ? '' : inspectionRecord[0].O2_Bd_EvaluationResults} />
-                                    </td></tr><tr>
-                                <td>
-    评价结果
-                            </td>
-                            <td colSpan="3" rowSpan="1">
-                                    <Input style={{ width: 250 }}  />
-                                </td>
-                            </tr><tr>
-                            <td rowSpan="4" style={{width: '12%', textAlign: 'left'}}>
-    流速比对监测
-                            </td>
-                            <td style={{textAlign: 'left'}}>
-    对比测试仪原理
-                            </td>
-                            <td colSpan="1" rowSpan="1" style={{width: '25%', textAlign: 'left'}}>
-                                <Input style={{ width: 250 }} value={inspectionRecord.length === 0 ? '' : inspectionRecord[0].Ls_Bd_PrincipleOfContrastTester} />
-                            </td>
-                            <td style={{width: '18%', textAlign: 'left'}}>
-    CEMS分析仪原理
-                            </td>
-                            <td colSpan="1" rowSpan="1" style={{width: '25%', textAlign: 'left'}}>
-                                <Input style={{ width: 250 }} value={inspectionRecord.length === 0 ? '' : inspectionRecord[0].Ls_Bd_PrincipleOfCEMSAnalyzer} />
-                            </td>
-                        </tr><tr>
-                            <td>
-    参比三次均值 （m/s）
-                                    </td>
-                            <td colSpan="1" rowSpan="1">
-                                        <Input style={{ width: 250 }} value={inspectionRecord.length === 0 ? '' : inspectionRecord[0].Ls_Bd_CbThreeJz} />
-                                    </td>
-                            <td>
-    CEMS测定均值 （m/s）
-                                    </td>
-                            <td colSpan="1" rowSpan="1">
-                                        <Input style={{ width: 250 }} value={inspectionRecord.length === 0 ? '' : inspectionRecord[0].Ls_Bd_CbCdJz} />
-                                    </td>
-                        </tr><tr>
-                                    <td>
-    公式
-                            </td>
-                                    <td colSpan="1" rowSpan="1">
-                                <Select style={{ width: 120 }} value={inspectionRecord.length === 0 ? '' : inspectionRecord[0].Ls_Bd_formula}>
-                                        <Option value="相对误差">相对误差</Option>
-                                        <Option value="绝对误差">绝对误差</Option>
-                                    </Select>
-                            </td>
-                                    <td colSpan="1" rowSpan="1">
-                                <Button>计算</Button>
-                            </td>
-                                    <td colSpan="1" rowSpan="1">
-                                <Input style={{ width: 250 }} value={inspectionRecord.length === 0 ? '' : inspectionRecord[0].Ls_Bd_EvaluationResults} />
-                            </td></tr><tr>
-                                    <td>
-    评价结果
-                                </td>
-                                    <td colSpan="3" rowSpan="1">
-                                <Input style={{ width: 250 }}  />
-                            </td>
-                        </tr><tr>
-                                <td rowSpan="4" style={{width: '12%', textAlign: 'left'}}>
-    温度比对监测
-                            </td>
-                                <td style={{textAlign: 'left'}}>
-    对比测试仪原理
-                            </td>
-                                <td colSpan="1" rowSpan="1" style={{width: '25%', textAlign: 'left'}}>
-                                <Input style={{ width: 250 }} value={inspectionRecord.length === 0 ? '' : inspectionRecord[0].Temperature_Bd_PrincipleOfContrastTester} />
-                            </td>
-                                <td style={{width: '18%', textAlign: 'left'}}>
-    CEMS分析仪原理
-                            </td>
-                                <td colSpan="1" rowSpan="1" style={{width: '25%', textAlign: 'left'}}>
-                                <Input style={{ width: 250 }} value={inspectionRecord.length === 0 ? '' : inspectionRecord[0].Temperature_Bd_PrincipleOfCEMSAnalyzer} />
-                            </td>
                             </tr>
-                        <tr>
-                            <td>
-    参比三次均值 （℃）
-                            </td>
-                            <td colSpan="1" rowSpan="1">
-                                <Input style={{ width: 250 }} value={inspectionRecord.length === 0 ? '' : inspectionRecord[0].Temperature_Bd_CbThreeJz} />
-                            </td>
-                            <td>
-    CEMS测定均值 （℃）
-                            </td>
-                            <td colSpan="1" rowSpan="1">
-                                <Input style={{ width: 250 }} value={inspectionRecord.length === 0 ? '' : inspectionRecord[0].Temperature_Bd_CbCdJz} />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-    公式
-                            </td>
-                            <td colSpan="1" rowSpan="1">
-                                <Select style={{ width: 120 }} value={inspectionRecord.length === 0 ? '' : inspectionRecord[0].Temperature_Bd_formula}>
-                                    <Option value="相对误差">相对误差</Option>
-                                    <Option value="绝对误差">绝对误差</Option>
-                                </Select>
-                            </td>
-                            <td colSpan="1" rowSpan="1">
-                                <Button>计算</Button>
-                            </td>
-                            <td colSpan="1" rowSpan="1">
-                                <Input style={{ width: 250 }} value={inspectionRecord.length === 0 ? '' : inspectionRecord[0].Temperature_Bd_EvaluationResults} />
-                            </td></tr><tr>
+                            <tr>
+                                <td style={{width: '18%', height: '30px', textAlign: 'left'}}>
+                            颗粒物CEMS设备生产商
+                                </td>
+                                <td style={{width: '16%', height: '30px'}}>
+                                    {KlwCemsEquipmentManufacturer}
+                                </td>
                                 <td>
-    评价结果
-                            </td>
-                                <td colSpan="3" rowSpan="1">
-                                <Input style={{ width: 250 }}  />
-                            </td>
-                            </tr><tr>
-                            <td rowSpan="2">
-    校验结论
+                            颗粒物CEMS设备规格型号
                                 </td>
-                            <td colSpan="2">
-    总体校准和比对监测是否合格
+                                <td style={{width: '18%', height: '30px'}}>
+                                    {KlwCemsCode}
                                 </td>
-                            <td colSpan="2" rowSpan="1">
-                                    <TextArea style={{width: '400px'}} autosize={{ minRows: 2, maxRows: 6 }} value={inspectionRecord.length === 0 ? '' : inspectionRecord[0].Result1} />
+                                <td style={{width: '16%', height: '30px'}}>
+                            校准开始日期
                                 </td>
-                        </tr><tr>
-                                <td colSpan="2">
-    如果总体校准和对比监测有不合格现象， 采取了哪些措施？计划还将采取什么措施？
-                            </td>
-                                <td colSpan="2" rowSpan="1">
-                                <TextArea style={{width: '400px'}} autosize={{ minRows: 2, maxRows: 6 }} value={inspectionRecord.length === 0 ? '' : inspectionRecord[0].Result2} />
-                            </td>
+                                <td style={{width: '16%', height: '30px'}}>
+                                    {AdjustStartTime}
+                                </td>
                             </tr>
-                    </tbody>
-                </table>
-            </div>
-        );
+                            <tr>
+                                <td style={{width: '18%', height: '30px', textAlign: 'left'}}>
+                            安装地点
+                                </td>
+                                <td style={{width: '16%', height: '30px'}}>
+                                    {PointPosition}
+                                </td>
+                                <td style={{width: '18%', height: '30px', textAlign: 'left'}}>
+                            维护管理单位
+                                </td>
+                                <td colSpan="3">
+                                    {MaintenanceManagementUnit}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    {
+                        this.renderItem(RecordList, Code)
+                    }
+                    <table className={styles.FormTable} style={{border: '0'}}>
+                        <tbody>
+                            <tr>
+                                <td style={{width: '25%', height: '30px'}}>校准人：</td>
+                                <td style={{width: '25%', height: '30px'}}>{CreateUserID}</td>
+                                <td style={{width: '25%', height: '30px'}}>校准结束时间：</td>
+                                <td style={{width: '25%', height: '30px'}}>{AdjustEndTime}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <table className={styles.FormTable}>
+                        <tbody>
+                            <tr>
+                                <td style={{width: '75%', height: '30px', textAlign: 'right', border: '0', fontWeight: 'bold'}}>负责人签名：</td>
+                                <td style={{width: '25%', height: '30px', border: '0'}}><img src={SignContent} /></td>
+                            </tr>
+                            <tr>
+                                <td style={{width: '75%', height: '30px', textAlign: 'right', border: '0', fontWeight: 'bold'}}>签名时间：</td>
+                                <td style={{width: '25%', height: '30px', border: '0'}}>{SignTime}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div className={styles.Toexamine} >
+                        <Button size="large" onClick={() => {
+                            this.props.history.goBack(-1);
+                            // this.props.dispatch(routerRedux.push(`/monitor/operation/emergency/emergencytodolist/`));
+                        }}><Icon type="left" />退回</Button>
+                    </div>
+                </div>
+            );
+        }
     }
 }

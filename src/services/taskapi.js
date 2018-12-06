@@ -23,3 +23,13 @@ export async function GetYwdsj(params) {
     const result = await post('/api/rest/PollutantSourceApi/PTaskProcessing/GetOperationPageList', body, null);
     return result === null ? { data: null } : result;
 }
+
+// 获取校准记录
+export async function GetJzRecord(params) {
+    const body = {
+        TaskID: params.TaskID,
+        TypeID: params.TypeID
+    };
+    const result = await post('/api/rest/PollutantSourceApi/PTaskForm/GetBdRecord', body, null);
+    return result === null ? { data: null } : result;
+}
