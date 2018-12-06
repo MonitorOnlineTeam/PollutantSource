@@ -54,7 +54,6 @@ class DataQuery extends Component {
         });
     }
 
-<<<<<<< HEAD
     _handleDateChange=(date, dateString) => {
         this.setState({rangeDate: date, current: 1});
         const pollutantCode = this.state.pollutantCode ? this.state.pollutantCode : this.props.pollutantlist[0].pollutantCode;
@@ -77,10 +76,6 @@ class DataQuery extends Component {
           }
       };
     _handleDateTypeChange=(e) => {
-=======
-    _formatDate=(time) => {
-        ;
->>>>>>> 8e10179f834684a42a0e4fb0d5f9f52bccfb05a8
         let formats;
         let beginTime = moment(new Date()).add(-60, 'minutes');
         let endTime = moment(new Date());
