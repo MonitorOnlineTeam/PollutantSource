@@ -1,4 +1,4 @@
-import { GetTaskDetails, GetYwdsj, GetRecordTypeByTaskID } from '../services/taskapi';
+import { GetTaskDetails, GetYwdsj, GetJzRecord } from '../services/taskapi';
 import { Model } from '../dvapack';
 import {EnumRequstResult} from '../utils/enum';
 
@@ -8,7 +8,7 @@ export default Model.extend({
         TaskInfo: null,
         OperationInfo: [],
         IsOver: false,
-        RecordType: []
+        JzRecord: null
     },
 
     effects: {
@@ -49,6 +49,17 @@ export default Model.extend({
                     } else {
                         yield update({ IsOver: false });
                     }
+                }
+            }
+        },
+        // 运维校准记录
+        * GetJzRecord({
+            payload,
+        }, { call, update }) {
+            const DataInfo = yield call(GetJzRecord, payload);
+            if (DataInfo != null && DataInfo.requstresult == EnumRequstResult.Success) {
+                if (DataInfo.data != null) {
+                    yield update({ JzRecord: DataInfo.data });
                 }
             }
         }
