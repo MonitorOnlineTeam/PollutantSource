@@ -335,11 +335,11 @@ export const getRouterData = (app) => {
             component: dynamicWrapper(app, ['baseinfo'], () =>
                     import('../routes/EmissionPermits')),
         },
-        '/monitor/sysmanage/ConsumablesReplaceRecord/:Taskid': {
+        '/monitor/sysmanage/ConsumablesReplaceRecord/:TaskIds/:TypeIDs': {
             component: dynamicWrapper(app, ['baseinfo'], () =>
                     import('../routes/EmergencyTodoList/ConsumablesReplaceRecord')),
         },
-        '/monitor/sysmanage/StandardGasRepalceRecord/:Taskid': {
+        '/monitor/sysmanage/StandardGasRepalceRecord/:StandardGasTaskIds/:StandardGasTypeIDs': {
             component: dynamicWrapper(app, ['baseinfo'], () =>
                     import('../routes/EmergencyTodoList/StandardGasRepalceRecord')),
         },

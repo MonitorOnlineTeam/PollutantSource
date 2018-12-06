@@ -1,8 +1,12 @@
 import React, { Component } from 'react';
-import { Row, Col, Layout, Table, List } from 'antd';
+import { Row, Col, Layout, Table, List, Button, Icon } from 'antd';
+import { connect } from 'dva';
 const {
     Header, Footer, Sider, Content,
 } = Layout;
+@connect(({ task, loading }) => ({
+    ConsumablesReplaceRecordList: task.ConsumablesReplaceRecordList
+}))
 class ConsumablesReplaceRecord extends Component {
     constructor(props) {
         super(props);
@@ -11,46 +15,58 @@ class ConsumablesReplaceRecord extends Component {
 
         };
     }
+    componentWillMount() {
+        this.onChange();
+    };
+    onChange = () => {
+        this.props.dispatch({
+            type: 'task/fetchuserlist',
+            payload: {
+                TaskIds: this.props.match.params.TaskIds,
+                TypeIDs: this.props.match.params.TypeIDs
+            },
+        });
+    }
     render() {
         const columnsone = [{
-            title: 'Cash Assets',
-            dataIndex: 'a',
-            key: 'a',
+            title: 'EnterpriseNameTitle',
+            dataIndex: 'EnterpriseNameTitle',
+            key: 'EnterpriseNameTitle',
             width: '14%',
             align: 'center',
         }, {
-            title: 'Cash Assets',
-            dataIndex: 's',
-            key: 's',
+            title: 'EnterpriseNameContent',
+            dataIndex: 'EnterpriseNameContent',
+            key: 'EnterpriseNameContent',
             width: '19.3%',
             align: 'center',
 
         }, {
-            title: 'Address',
-            dataIndex: 'd',
-            key: 'd',
+            title: 'CodeTitle',
+            dataIndex: 'CodeTitle',
+            key: 'CodeTitle',
             width: '16%',
             align: 'center',
 
         },
         {
-            title: 'Name',
-            dataIndex: 'f',
-            key: 'f',
+            title: 'CodeContent',
+            dataIndex: 'CodeContent',
+            key: 'CodeContent',
             width: '18%',
             align: 'center',
 
         }, {
-            title: 'Cash Assets',
-            dataIndex: 'g',
-            key: 'g',
+            title: 'EquipmentTitle',
+            dataIndex: 'EquipmentTitle',
+            key: 'EquipmentTitle',
             width: '13%',
             align: 'center',
 
         }, {
-            title: 'Address',
-            dataIndex: 'h',
-            key: 'h',
+            title: 'EquipmentContent',
+            dataIndex: 'EquipmentContent',
+            key: 'EquipmentContent',
             width: '19.7%',
             align: 'center',
 
@@ -58,39 +74,39 @@ class ConsumablesReplaceRecord extends Component {
         ];
         const dataone = [{
             key: '1',
-            a: '设备名称',
-            s: 'CEMS',
-            d: '规格型号',
-            f: '002',
-            g: '设备编号',
-            h: '10252102',
+            EnterpriseNameTitle: '设备名称',
+            EnterpriseNameContent: 'CEMS',
+            CodeTitle: '规格型号',
+            CodeContent: this.props.ConsumablesReplaceRecordList.length === 0 ? null : this.props.ConsumablesReplaceRecordList[0].record[0].Content['Code'],
+            EquipmentTitle: '设备编号',
+            EquipmentContent: this.props.ConsumablesReplaceRecordList.length === 0 ? null : this.props.ConsumablesReplaceRecordList[0].record[0].Content['EquipmentCode'],
         }];
         const columnstwo = [{
-            title: 'Cash Assets',
-            dataIndex: 'a',
-            key: 'a',
+            title: 'MaintenanceManagementUnitTitle',
+            dataIndex: 'MaintenanceManagementUnitTitle',
+            key: 'MaintenanceManagementUnitTitle',
             width: '20%',
             align: 'center',
 
         }, {
-            title: 'Cash Assets',
-            dataIndex: 's',
-            key: 's',
+            title: 'MaintenanceManagementUnitContent',
+            dataIndex: 'MaintenanceManagementUnitContent',
+            key: 'MaintenanceManagementUnitContent',
             width: '29.3%',
             align: 'center',
 
         }, {
-            title: 'Address',
-            dataIndex: 'd',
-            key: 'd',
+            title: 'PointPositionTitle',
+            dataIndex: 'PointPositionTitle',
+            key: 'PointPositionTitle',
             width: '18%',
             align: 'center',
 
         },
         {
-            title: 'Name',
-            dataIndex: 'f',
-            key: 'f',
+            title: 'PointPositionContent',
+            dataIndex: 'PointPositionContent',
+            key: 'PointPositionContent',
             width: '32.7%',
             align: 'center',
 
@@ -98,68 +114,68 @@ class ConsumablesReplaceRecord extends Component {
         ];
         const datatwo = [{
             key: '1',
-            a: '维护管理单位',
-            s: '北京雪迪龙',
-            d: '安装地点',
-            f: '北京雪迪龙智慧环保研究室',
+            MaintenanceManagementUnitTitle: '维护管理单位',
+            MaintenanceManagementUnitContent: this.props.ConsumablesReplaceRecordList.length === 0 ? null : this.props.ConsumablesReplaceRecordList[0].record[0].Content['MaintenanceManagementUnit'],
+            PointPositionTitle: '安装地点',
+            PointPositionContent: this.props.ConsumablesReplaceRecordList.length === 0 ? null : this.props.ConsumablesReplaceRecordList[0].record[0].Content['PointPosition'],
         }];
         const columnsthree = [{
-            title: 'Cash Assets',
-            dataIndex: 'a',
-            key: 'a',
+            title: 'CreateUserIDTitle',
+            dataIndex: 'CreateUserIDTitle',
+            key: 'CreateUserIDTitle',
             width: '14%',
             align: 'center',
 
         }, {
-            title: 'Cash Assets',
-            dataIndex: 's',
-            key: 's',
+            title: 'CreateUserIDTitleContent',
+            dataIndex: 'CreateUserIDTitleContent',
+            key: 'CreateUserIDTitleContent',
             width: '9%',
             align: 'center',
 
         }, {
-            title: 'Address',
-            dataIndex: 'd',
-            key: 'd',
+            title: 'CreateTimeTitle',
+            dataIndex: 'CreateTimeTitle',
+            key: 'CreateTimeTitle',
             width: '9%',
             align: 'center',
 
         },
         {
-            title: 'Name',
-            dataIndex: 'f',
-            key: 'f',
+            title: 'CreateTimeContent',
+            dataIndex: 'CreateTimeContent',
+            key: 'CreateTimeContent',
             width: '17.3%',
             align: 'center',
 
         }, {
-            title: 'Address',
-            dataIndex: 'g',
-            key: 'g',
+            title: 'SignContentTitle',
+            dataIndex: 'SignContentTitle',
+            key: 'SignContentTitle',
             width: '10%',
             align: 'center',
 
         },
         {
-            title: 'Name',
-            dataIndex: 'h',
-            key: 'h',
+            title: 'SignContentcontent',
+            dataIndex: 'SignContentcontent',
+            key: 'SignContentcontent',
             width: '10%',
             align: 'center',
 
         },
         {
-            title: 'Address',
-            dataIndex: 'j',
-            key: 'j',
+            title: 'SignTimetitle',
+            dataIndex: 'SignTimetitle',
+            key: 'SignTimetitle',
             width: '10%',
             align: 'center',
 
         },
         {
-            title: 'Name',
-            dataIndex: 'k',
-            key: 'k',
+            title: 'SignTimetitlecontent',
+            dataIndex: 'SignTimetitlecontent',
+            key: 'SignTimetitlecontent',
             width: '20.7%',
             align: 'center',
 
@@ -167,101 +183,76 @@ class ConsumablesReplaceRecord extends Component {
         ];
         const datathree = [{
             key: '1',
-            a: '运行维护人员:',
-            s: '刘大军',
-            d: '时间:',
-            f: '2018-10-10 08:00:00',
-            g: '负责人:',
-            h: '成云',
-            j: '时间:',
-            k: '2018-10-10 08:00:00',
+            CreateUserIDTitle: '运行维护人员:',
+            CreateUserIDTitleContent: this.props.ConsumablesReplaceRecordList.length === 0 ? null : this.props.ConsumablesReplaceRecordList[0].record[0].CreateUserID,
+            CreateTimeTitle: '时间:',
+            CreateTimeContent: this.props.ConsumablesReplaceRecordList.length === 0 ? null : this.props.ConsumablesReplaceRecordList[0].record[0].CreateTime,
+            SignContentTitle: '负责人:',
+            SignContentcontent: this.props.ConsumablesReplaceRecordList.length === 0 ? null : this.props.ConsumablesReplaceRecordList[0].record[0].SignContent,
+            SignTimetitle: '时间:',
+            SignTimetitlecontent: this.props.ConsumablesReplaceRecordList.length === 0 ? null : this.props.ConsumablesReplaceRecordList[0].record[0].SignTime,
         }];
         const columns = [{
             title: '序号',
-            dataIndex: 'name',
-            width: '11%',
+            dataIndex: 'ID',
+            width: '9%',
             align: 'center',
+            render(text, record, index) {
+                return (
+                    <span>{index + 1}</span>
+                );
+            }
         }, {
             title: '更换日期',
-            dataIndex: 'money',
-            width: '13%',
+            dataIndex: 'ReplaceDate',
+            width: '17%',
+            align: 'center',
         }, {
             title: '易耗品名称',
-            dataIndex: 'address',
-            width: '13%',
+            dataIndex: 'ConsumablesName',
+            width: '12%',
             align: 'center',
         }, {
             title: '规格型号',
-            dataIndex: 'money1',
-            width: '13%',
+            dataIndex: 'Model',
+            width: '12%',
             align: 'center',
         }, {
             title: '单位',
-            dataIndex: 'money2',
+            dataIndex: 'Unit',
             width: '13%',
             align: 'center',
         }, {
             title: '数量',
-            dataIndex: 'money3',
+            dataIndex: 'Num',
             width: '13%',
             align: 'center',
         }, {
             title: '更换原因说明（备注）',
-            dataIndex: 'money4',
+            dataIndex: 'Remark',
             width: '24%',
             align: 'center',
         }];
-        const data = [{
-            key: '1',
-            name: 'John Brown',
-            money: '￥300,000.00',
-            address: 'New York',
-            money1: '123456',
-            money2: '123456',
-            money3: '123456',
-            money4: '123456',
-        }, {
-            key: '2',
-            name: 'John Brown',
-            money: '￥300,000.00',
-            address: 'New Yor',
-            money1: '123456',
-            money2: '123456',
-            money3: '123456',
-            money4: '123456',
-        }, {
-            key: '3',
-            name: 'John Brown',
-            money: '￥300,000.00',
-            address: 'New Yor',
-            money1: '123456',
-            money2: '123456',
-            money3: '123456',
-            money4: '123456',
-        }, {
-            key: '2',
-            name: 'John Brown',
-            money: '￥300,000.00',
-            address: 'New Yor',
-            money1: '123456',
-            money2: '123456',
-            money3: '123456',
-            money4: '123456',
-        }];
         return (
+
             <Layout style={{backgroundColor: 'white'}}>
                 <Content style={{margin: 'auto', marginTop: 50}}>
+                    <div style={{position: 'absolute', right: 15, top: 85}} >
+                        <Button size="large" onClick={() => {
+                            this.props.history.goBack(-1);
+                        }}><Icon type="left" />退回</Button>
+                    </div>
                     <div style={{textAlign: 'center'}}>
                         <h2>
                           易耗品更换记录表
                         </h2>
                     </div>
                     <div style={{backgroundColor: 'white', marginTop: 10}}>
-                        <h3>企业名称:</h3>
+                        <h3>企业名称：{this.props.ConsumablesReplaceRecordList.length === 0 ? null : this.props.ConsumablesReplaceRecordList[0].record[0].Content['EnterpriseName']}</h3>
                         <Table
                             style={{width: 1000}}
                             columns={columns}
-                            dataSource={data}
+                            dataSource={this.props.ConsumablesReplaceRecordList.length === 0 ? null : this.props.ConsumablesReplaceRecordList[0].record[0].RecordList}
                             bordered={true}
                             pagination={false}
                             scroll={{ y: 330 }}
@@ -308,9 +299,6 @@ class ConsumablesReplaceRecord extends Component {
                 </Content>
 
             </Layout>
-            // <div>
-            //     {this.props.match.params.Taskid}
-            // </div>
         );
     }
 }
