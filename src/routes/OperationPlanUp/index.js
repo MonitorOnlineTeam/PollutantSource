@@ -73,7 +73,7 @@ export default class OperationPlanUp extends Component {
             loading: true,
         });
         setTimeout(() => {
-            debugger;
+            ;
             if (this.clickedCancel) {
                 this.clickedCancel = false;
                 return;

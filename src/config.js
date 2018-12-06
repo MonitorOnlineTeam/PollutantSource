@@ -4,7 +4,6 @@ module.exports = {
     prefix: 'monitorOnline',
     footerText: '环境监控平台   2018 sdl',
     amapKey: 'c5cb4ec7ca3ba4618348693dd449002d',
-    enterpriceid: '51216eae-8f11-4578-ad63-5127f78f6cca',
     centerlongitude: '116.418067',
     centerlatitude: '39.930871',
     zoom: 12,

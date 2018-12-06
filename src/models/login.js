@@ -20,7 +20,7 @@ export default Model.extend({
     },
     effects: {
         * login({ payload }, { call, put, take, select }) {
-            // debugger;
+            // ;
 
             let MsgId = yield select(state => state.login.MsgId);
             if (payload.type === 'mobile') {
@@ -40,7 +40,7 @@ export default Model.extend({
             });
             // Login successfully
             if (response.requstresult === '1') {
-                // debugger;
+                // ;
                 Cookie.set('token', response.data);
 
                 yield put({ type: 'global/fetchPolluantType', payload: { } });
@@ -59,7 +59,7 @@ export default Model.extend({
             yield put(routerRedux.push('/user/login'));
         },
         * getCaptcha({ payload }, { call, put, take }) {
-            // debugger;
+            // ;
             yield put({
                 type: 'updateCaptchaInfo',
                 payload: {
@@ -69,7 +69,7 @@ export default Model.extend({
             });
 
             const response = yield call(sendCaptcha, payload);
-            // debugger;
+            // ;
             if (response.requstresult === '1') {
                 // getCaptcha successfully
                 message.success('验证码已发送您的手机，请注意查看');

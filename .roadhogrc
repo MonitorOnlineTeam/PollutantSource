@@ -8,7 +8,11 @@
   ],
   "proxy": {
       "/api": {
+<<<<<<< HEAD
       "target" : "http://localhost:52144", // "http://172.16.12.133:8016",
+=======
+      "target" : "http://localhost:52144",
+>>>>>>> 8e10179f834684a42a0e4fb0d5f9f52bccfb05a8
       "changeOrigin": true,
       "pathRewrite": { "^/api" : "" }
     }

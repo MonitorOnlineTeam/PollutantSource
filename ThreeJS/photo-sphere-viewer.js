@@ -324,7 +324,7 @@ export const PhotoSphereViewer = function(args) {
 
         // CORS when the panorama is not given as a base64 string
         if (cors_anonymous && !panorama.match(/^data:image\/[a-z]+;base64/)) { img.setAttribute('crossOrigin', 'anonymous'); }
-        debugger;
+        ;
         console.log(panorama);
         img.src = panorama;
     };

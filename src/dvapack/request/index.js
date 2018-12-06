@@ -68,7 +68,7 @@ async function request(url, _options) {
         }
         if (json.requstresult) {
             if (json && json != null) {
-                if (json.requstresult === '1') {
+                if (json.requstresult === '1' || json.requstresult === '0') {
                     return json;
                 }
                 notification.error({

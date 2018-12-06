@@ -16,14 +16,14 @@ export async function changepwd(params) {
         UserPwdNew: params.password,
         UserPwdTwo: params.confirm,
     };
-    const result = post('/api/rest/Author/ResetPwd', body, null);
+    const result = post('/api/rest/PollutantSourceApi/PAuthor/ResetPwd', body, null);
     return result === null ? { data: null } : result;
 }
 /**
  * 用户账户登录
  */
 export async function fakeAccountLogin(params) {
-    // debugger;
+    // ;
     const body = {
         User_Account: params.User_Account,
         USer_Pwd: params.User_Pwd,
@@ -34,7 +34,7 @@ export async function fakeAccountLogin(params) {
 
     const result = await post(params.type === 'mobile' ? pageUrl.PhoneLogin : pageUrl.Login, body, null, 'notooken');
 
-    // debugger;
+    // ;
     // let userArray = Array.from(users).filter(t => t.User_Account === params.User_Account && t.User_Pwd === params.User_Pwd);
     // let result = {'requstresult': '0', 'reason': '验证失败', 'operation': 'Post', 'data': {}, 'total': 0};
     // // = await post('/api/rest/AtmosphereApi/Author/IsLogins/', body, null, 'notooken');
@@ -52,7 +52,7 @@ export async function sendCaptcha(params) {
         UserPhone: params.mobile
     };
     const result = await post(pageUrl.SendCaptcha, body, null, 'notooken');
-    // debugger;
+    // ;
     return result === null ? { data: null } : result;
 }
 
@@ -60,12 +60,12 @@ export async function sendCaptcha(params) {
  * 获取权限菜单
  */
 export async function getMenuData(params) {
-    // debugger;
+    // ;
     const body = {
         menu_id: params.menuId || '06cd7c3a-2d2e-4625-94db-35d95647153d',
         user_id: params.userId || 'eb85dbe8-49fd-4918-9ba1-34f7c337bd44'
     };
     const result = await post(pageUrl.Menu, body, null, body.user_id);
-    // debugger;
+    // ;
     return result === null ? { data: null } : result;
 }

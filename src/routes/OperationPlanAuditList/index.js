@@ -36,7 +36,7 @@ export default class OperationPlanAuditList extends Component {
                             if (a !== '') { keys.push(a); }
                         });
                     } else {
-                        debugger;
+                        ;
                         if (t !== '') { keys.push(t); }
                     }
                 });

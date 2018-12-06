@@ -20,7 +20,6 @@ let Alarm = AlarmFactor[1];
 export default class AnalyAlarmPoll extends Component {
     constructor(props) {
         super(props);
-        debugger;
         const user = JSON.parse(Cookie.get('token'));
         if (user.User_Account === 'lisonggui') {
             Alarm = AlarmFactor[0];
@@ -89,7 +88,6 @@ export default class AnalyAlarmPoll extends Component {
         var colzs03 = zs03.reduce(function(first, second) {
             return Number.parseInt(first) + Number.parseInt(second);
         }, 0);
-        debugger;
         var summarize = Alarm.summer;
 
         sum.push(cola01);
@@ -155,7 +153,7 @@ export default class AnalyAlarmPoll extends Component {
         let i = sum.length;
         let j = sum.length;
         let len = sum.length;
-        debugger;
+        ;
         for (i = 0; i < len; i++) {
             for (j = i; j < len; j++) {
                 if (sum[i] > sum[j]) {

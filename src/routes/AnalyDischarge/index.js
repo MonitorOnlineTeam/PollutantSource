@@ -137,7 +137,7 @@ export default class AnalyDischarge extends Component {
           };
 
           SearchDataList() {
-              debugger;
+              ;
               let dataInfo = [];
               const so2Range = this.state.So2Range;
               const noxRange = this.state.NoxRange;

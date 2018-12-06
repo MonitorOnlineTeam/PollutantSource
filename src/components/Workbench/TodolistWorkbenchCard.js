@@ -15,7 +15,7 @@ function getTodolist(operationaction, enterprise) {
     let todoArray = [];
     const points = getPointEnterprise();
     for (const a of todolist) {
-        debugger;
+        ;
         let point = points.find(t => t.DGIMN === a.DGIMN);
         if (point) {
             if (user.User_Account === 'chengyun' && a.operationaction.toString() === '3') {

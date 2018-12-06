@@ -34,7 +34,7 @@ const getIcon = (icon) => {
 export default class MonitorHeader extends PureComponent {
     constructor(props) {
         super(props);
-        // debugger;
+        // ;
         // this.props.menuData = this.props.menuData;
         this.state = {
             openKeys: this.getDefaultCollapsedSubMenus(props),

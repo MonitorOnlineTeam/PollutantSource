@@ -105,8 +105,12 @@ export const getRouterData = (app) => {
             component: dynamicWrapper(app, ['points'], () =>
           import('../routes/EmergencyAuditList/EmergencyDetailInfo')),
         },
-        '/monitor/emergency/emergencydetailinfo/:exceptionhandleid': {
-            component: dynamicWrapper(app, ['points'], () =>
+        // '/monitor/emergency/emergencydetailinfo/:exceptionhandleid': {
+        //     component: dynamicWrapper(app, ['points'], () =>
+        //   import('../routes/EmergencyTodoList/EmergencyDetailInfo')),
+        // },
+        '/monitor/emergency/emergencydetailinfo/:TaskID': {
+            component: dynamicWrapper(app, ['task'], () =>
           import('../routes/EmergencyTodoList/EmergencyDetailInfo')),
         },
         '/monitor/pointdetail/:pointcode/processflowdiagram': {
@@ -122,11 +126,11 @@ export const getRouterData = (app) => {
           import('../routes/PointDetail/AlarmRecord')),
         },
         '/monitor/pointdetail/:pointcode/realvideo': {
-            component: dynamicWrapper(app, ['points'], () =>
+            component: dynamicWrapper(app, ['videolist'], () =>
           import('../routes/PointDetail/RealVideo')),
         },
         '/monitor/pointdetail/:pointcode/hisvideo': {
-            component: dynamicWrapper(app, ['points'], () =>
+            component: dynamicWrapper(app, ['videolist'], () =>
         import('../routes/PointDetail/HisVideo')),
         },
 
@@ -134,6 +138,11 @@ export const getRouterData = (app) => {
             component: dynamicWrapper(app, ['points'], () =>
           import('../routes/PointDetail/WarningRecord')),
         },
+        '/monitor/pointdetail/:pointcode/videolist': {
+            component: dynamicWrapper(app, ['videolist'], () =>
+          import('../routes/PointDetail/VideoList')),
+        },
+
         '/monitor/pointdetail/:pointcode/emergencymaintenancerecord': {
             component: dynamicWrapper(app, ['points'], () =>
           import('../routes/PointDetail/EmergencyMaintenanceRecord')),
@@ -157,6 +166,14 @@ export const getRouterData = (app) => {
         '/monitor/pointdetail/:pointcode/stationthree': {
             component: dynamicWrapper(app, ['points'], () =>
         import('../routes/PointDetail/StationThree')),
+        },
+        '/monitor/pointdetail/:pointcode/ywdsjlist': {
+            component: dynamicWrapper(app, ['task'], () =>
+        import('../routes/PointDetail/Ywdsjlist')),
+        },
+        '/monitor/EmergencyTodoList/JzRecordInfo/:TaskID/:TypeID': {
+            component: dynamicWrapper(app, ['task'], () =>
+        import('../routes/EmergencyTodoList/JzRecordInfo')),
         },
         /* 工作台 */
         '/monitor/workbench': {
@@ -281,17 +298,50 @@ export const getRouterData = (app) => {
             component: dynamicWrapper(app, ['points'], () =>
           import('../routes/StaffweeklyCalendar')),
         },
-        '/monitor/operation/OperationAndMaintenanceMemorabilia': {
-            component: dynamicWrapper(app, ['points'], () =>
+        '/monitor/operation/OperationAndMaintenanceMemorabilia/:DGIMNs': {
+            component: dynamicWrapper(app, ['task'], () =>
           import('../routes/OperationAndMaintenanceMemorabilia')),
+        },
+        /* 系统管理 */
+        '/monitor/sysmanage/Userinfo': {
+            component: dynamicWrapper(app, ['userinfo', 'userdgimndata'], () =>
+            import('../routes/Userinfo')),
+        },
+        '/monitor/sysmanage/UserDetail/:UserId': {
+            component: dynamicWrapper(app, ['userinfo'], () =>
+            import('../routes/Userinfo/AddUser')),
+        },
+        '/monitor/sysmanage/PointInfo': {
+            component: dynamicWrapper(app, ['pointinfo'], () =>
+            import('../routes/PointInfo/')),
+        },
+        '/monitor/sysmanage/PointDetail/:DGIMN': {
+            component: dynamicWrapper(app, ['pointinfo'], () =>
+              import('../routes/PointInfo/AddPoint')),
+        },
+        '/monitor/sysmanage/PointDetail/:ID/:Name': {
+            component: dynamicWrapper(app, ['pointinfo'], () =>
+              import('../routes/PointInfo/PointView')),
+        },
+        '/monitor/sysmanage/StandardLibrary': {
+            component: dynamicWrapper(app, ['standardlibrary'], () =>
+            import('../routes/StandardLibrary/')),
         },
         '/monitor/entInfo/entoperation': {
             component: dynamicWrapper(app, ['baseinfo'], () =>
-        import('../routes/EnterpriseInfo')),
+                    import('../routes/EnterpriseInfo')),
         },
         '/monitor/emissionpermits': {
             component: dynamicWrapper(app, ['baseinfo'], () =>
-        import('../routes/EmissionPermits')),
+                    import('../routes/EmissionPermits')),
+        },
+        '/monitor/sysmanage/ConsumablesReplaceRecord/:Taskid': {
+            component: dynamicWrapper(app, ['baseinfo'], () =>
+                    import('../routes/EmergencyTodoList/ConsumablesReplaceRecord')),
+        },
+        '/monitor/sysmanage/StandardGasRepalceRecord/:Taskid': {
+            component: dynamicWrapper(app, ['baseinfo'], () =>
+                    import('../routes/EmergencyTodoList/StandardGasRepalceRecord')),
         },
         /* 登陆 */
         '/user': {

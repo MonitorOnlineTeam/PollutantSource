@@ -32,7 +32,7 @@ export default class Login extends Component {
   onGetCaptcha = () => {
       this.props.form.validateFields(['mobile'], { force: true },
           (err, values) => {
-              debugger;
+              ;
               if (!err) {
                   this.props.dispatch({
                       type: 'login/getCaptcha',

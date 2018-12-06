@@ -35,9 +35,8 @@ export default class AnalyAlarmhour extends Component {
         var name = [];
         var ContinueTime = [];
         var CountTime = [];
-        debugger;
         Alarm.data.map((item) => {
-            debugger;
+            ;
             name.push(item.PointName);
             ContinueTime.push(item.ContinueTimeLength);
             CountTime.push(item.CountTimeLength);
@@ -88,7 +87,7 @@ export default class AnalyAlarmhour extends Component {
         this.setState({rangeDate: date});
     };
     SearchEmergencyDataList = (value) => {
-        debugger;
+        ;
         this.setState({
             AlarmContinueList: [],
             DGIMNS: value,

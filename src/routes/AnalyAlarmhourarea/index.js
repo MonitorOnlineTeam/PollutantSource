@@ -34,7 +34,6 @@ export default class AnalyAlarmhourarea extends Component {
         var month = date.getMonth() + 1;
         var dates = date.getDate();
         Alarm.data.map((item) => {
-            debugger;
             var time = new Date((item.datetimes).replace(/-/g, '/'));
             var nowtime = new Date((year + '-' + month + '-' + dates).replace(/-/g, '/'));
             if (time >= nowtime && time <= nowtime) {
@@ -80,7 +79,6 @@ export default class AnalyAlarmhourarea extends Component {
             DataLists: [],
             PointName: [],
         });
-        debugger;
         console.log(`${date[0].format('YYYY-MM-DD 00:00:00')}`);
         // console.log(typeof (`${Alarm.data[0].datetimes}`));
         console.log(typeof (begin));

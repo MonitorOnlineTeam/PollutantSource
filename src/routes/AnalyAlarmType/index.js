@@ -110,7 +110,7 @@ export default class AnalyAlarmType extends Component {
             });
             return children;
         }
-        debugger;
+        ;
         var conclusion2 = standard.summer;
         this.state = {
             rangeDate: [moment('2018-06-23 00:00:00'), moment('2018-06-25 00:00:00')],

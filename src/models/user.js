@@ -35,9 +35,9 @@ export default Model.extend({
     },
     subscriptions: {
         // setup({ dispatch, history }) {
-        //     // debugger;
+        //     // ;
         //     history.listen((location) => {
-        //         // debugger;
+        //         // ;
         //         if (location.pathname === '/overview') {
         //             // 初始化testId的值为10
         //             dispatch({
@@ -69,10 +69,10 @@ export default Model.extend({
             if (response) {
                 const user = JSON.parse(response);
                 const responseMenu = yield call(getMenuData, {menuId: '99dbc722-033f-481a-932a-3c6436e17245', userId: user.User_ID});
-                debugger;
+                ;
                 if (responseMenu.requstresult === '1') {
                     const _currentMenu = yield call(formatter, responseMenu.data);
-                    debugger;
+                    ;
                     yield put({
                         type: 'saveCurrentUser',
                         payload: {
@@ -90,6 +90,7 @@ export default Model.extend({
         },
         * changepwd({ payload }, { call, put, update, select }) {
             const response = Cookie.get('token');
+            
             if (response) {
                 // const user = JSON.parse(response);
                 const res = yield call(changepwd, payload);
@@ -112,12 +113,12 @@ export default Model.extend({
         },
         * getCurrentMenu({ payload }, { call, put, update, select }) {
             const response = Cookie.get('token');
-            // debugger;
+            // ;
             if (response) {
-                // debugger;
+                // ;
                 // const user = JSON.parse(response);
                 const responseMenu = yield call(getMenuData, payload);
-                // debugger;
+                // ;
                 if (responseMenu.requstresult === '1') {
                     yield update({ currentMenu: responseMenu.data });
                     // const dddd = yield select(state => state.user.currentMenu);
@@ -168,7 +169,7 @@ export default Model.extend({
             };
         },
         setCurrentMenu(state, action) {
-            // debugger;
+            // ;
             return {
                 ...state,
                 currentMenu: action.payload,

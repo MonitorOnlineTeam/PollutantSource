@@ -6,7 +6,6 @@ import EmergencyInfo from '../../mockdata/EmergencyTodoList/EmergencyDetailInfo.
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import {routerRedux} from 'dva/router';
 import { connect } from 'dva';
-import QualityControl from '../EmergencyTodoList/QualityControl';
 
 const FormItem = Form.Item;
 const RadioGroup = Radio.Group;
@@ -263,21 +262,7 @@ export default class EmergencyDetailInfo extends Component {
                             this.setState({showaudio: true});
                         }}>审核</Button>
                     </div>
-                    <Modal
-                        title="气态分析仪运行状况检查记录表"
-                        visible={this.state.showforminfo}
-                        width={SCREEN_WIDTH - 400}
-                        style={{ top: 20 }}
-                        bodyStyle={{ padding: 5, backgroundColor: 'rgb(240,242,245)' }}
-                        onCancel={() => {
-                            this.setState({
-                                showforminfo: false
-                            });
-                        }}
-                        footer={null}
-                    >
-                        <QualityControl {...this.props} emergencyId={emergencyId} />
-                    </Modal>
+                    
                     <Modal
                         visible={this.state.showaudio}
                         title={'审核'}
