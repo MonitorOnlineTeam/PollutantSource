@@ -28,7 +28,7 @@ class StandardGasRepalceRecord extends Component {
         });
     }
     render() {
-        console.log(this.props.StandardGasRepalceRecordList);
+        const signContent = this.props.StandardGasRepalceRecordList.length === 0 ? null : `data:image/jpeg;base64,${this.props.StandardGasRepalceRecordList[0].record[0].SignContent}`;
         const columnstwo = [{
             title: 'MaintenanceManagementUnitTitle',
             dataIndex: 'MaintenanceManagementUnitTitle',
@@ -40,7 +40,7 @@ class StandardGasRepalceRecord extends Component {
             title: 'MaintenanceManagementUnitContent',
             dataIndex: 'MaintenanceManagementUnitContent',
             key: 'MaintenanceManagementUnitContent',
-            width: '29.2%',
+            width: '29.3%',
             align: 'center',
 
         }, {
@@ -55,7 +55,7 @@ class StandardGasRepalceRecord extends Component {
             title: 'PointPositionContent',
             dataIndex: 'PointPositionContent',
             key: 'PointPositionContent',
-            width: '32.8%',
+            width: '32.7%',
             align: 'center',
 
         }
@@ -93,7 +93,7 @@ class StandardGasRepalceRecord extends Component {
             title: 'CreateTimeContent',
             dataIndex: 'CreateTimeContent',
             key: 'CreateTimeContent',
-            width: '17.2%',
+            width: '17.3%',
             align: 'center',
 
         }, {
@@ -124,7 +124,7 @@ class StandardGasRepalceRecord extends Component {
             title: 'SignTimetitlecontent',
             dataIndex: 'SignTimetitlecontent',
             key: 'SignTimetitlecontent',
-            width: '20.8%',
+            width: '20.7%',
             align: 'center',
 
         }
@@ -136,9 +136,22 @@ class StandardGasRepalceRecord extends Component {
             CreateTimeTitle: '时间:',
             CreateTimeContent: this.props.StandardGasRepalceRecordList.length === 0 ? null : this.props.StandardGasRepalceRecordList[0].record[0].CreateTime,
             SignContentTitle: '负责人:',
-            SignContentcontent: this.props.StandardGasRepalceRecordList.length === 0 ? null : this.props.StandardGasRepalceRecordList[0].record[0].SignContent,
+            SignContentcontent: <img src={signContent} />,
             SignTimetitle: '时间:',
             SignTimetitlecontent: this.props.StandardGasRepalceRecordList.length === 0 ? null : this.props.StandardGasRepalceRecordList[0].record[0].SignTime,
+        }];
+        const columnsfour = [{
+            title: 'Detail',
+            dataIndex: 'Detail',
+            key: 'Detail',
+            width: '100%',
+
+        }
+        ];
+
+        const datafour = [{
+            key: '1',
+            Detail: ' 注：更换标准气体时应及时记录，每半年汇总存档。',
         }];
         const columns = [{
             title: '序号',
@@ -194,24 +207,30 @@ class StandardGasRepalceRecord extends Component {
                             this.props.history.goBack(-1);
                         }}><Icon type="left" />退回</Button>
                     </div>
-                    <div style={{textAlign: 'center'}}>
-                        <h2>
-                          标准气体更换记录表
-                        </h2>
+                    <div style={{ width: '80%',
+                        height: '50px',
+                        lineHeight: '50px',
+                        margin: 'auto',
+                        fontSize: '20px',
+                        textAlign: 'center',
+                        fontWeight: 'bold'}}>
+
+                        标准气体更换记录表
+
                     </div>
                     <div style={{backgroundColor: 'white'}}>
-                        <h3>企业名称：{this.props.StandardGasRepalceRecordList.length === 0 ? null : this.props.StandardGasRepalceRecordList[0].record[0].Content['EnterpriseName']}</h3>
+                        <div style={{fontWeight: 'bold', marginBottom: 3}}>企业名称：{this.props.StandardGasRepalceRecordList.length === 0 ? null : this.props.StandardGasRepalceRecordList[0].record[0].Content['EnterpriseName']}</div>
                         <Table
-                            style={{width: 1000}}
+                            style={{width: 1200}}
                             columns={columns}
                             dataSource={this.props.StandardGasRepalceRecordList.length === 0 ? null : this.props.StandardGasRepalceRecordList[0].record[0].RecordList}
                             bordered={true}
                             pagination={false}
                             scroll={{ y: 330 }}
                             title={() =>
-                                <div style={{marginLeft: -17, marginBottom: -16, marginTop: -16, marginRight: -17, backgroundColor: '#FAFAFA'}}>
+                                <div style={{marginLeft: -17, marginBottom: -16, marginTop: -16, marginRight: -17, backgroundColor: 'white'}}>
                                     <Table
-                                        style={{width: 1000}}
+                                        style={{width: 1200}}
                                         columns={columnstwo}
                                         dataSource={datatwo}
                                         bordered={true}
@@ -221,20 +240,23 @@ class StandardGasRepalceRecord extends Component {
                                 </div>
                             }
                             footer={() =>
-                                <div style={{marginLeft: -17, marginTop: -17, marginBottom: -16, backgroundColor: '#FAFAFA'}}>
+                                <div style={{marginLeft: -17, marginTop: -17, marginBottom: -16, backgroundColor: 'white'}}>
                                     <Table
-                                        style={{width: 1000}}
+                                        style={{width: 1200}}
                                         columns={columnsthree}
                                         dataSource={datathree}
                                         bordered={true}
                                         showHeader={false}
                                         pagination={false}
                                     />
-                                    <div style={{height: 50, lineHeight: '50px', marginLeft: 10}}>
-
-                                       注：更换标准气体时应及时记录，每半年汇总存档。
-                                    </div>
-
+                                    <Table
+                                        style={{width: 1200}}
+                                        columns={columnsfour}
+                                        dataSource={datafour}
+                                        bordered={true}
+                                        showHeader={false}
+                                        pagination={false}
+                                    />
                                 </div>
                             }
                         />

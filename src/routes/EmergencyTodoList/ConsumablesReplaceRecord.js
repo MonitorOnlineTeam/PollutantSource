@@ -12,7 +12,6 @@ class ConsumablesReplaceRecord extends Component {
         super(props);
 
         this.state = {
-
         };
     }
     componentWillMount() {
@@ -28,6 +27,7 @@ class ConsumablesReplaceRecord extends Component {
         });
     }
     render() {
+        const signContent = this.props.ConsumablesReplaceRecordList.length === 0 ? null : `data:image/jpeg;base64,${this.props.ConsumablesReplaceRecordList[0].record[0].SignContent}`;
         const columnsone = [{
             title: 'EnterpriseNameTitle',
             dataIndex: 'EnterpriseNameTitle',
@@ -181,6 +181,19 @@ class ConsumablesReplaceRecord extends Component {
 
         }
         ];
+        const columnsfour = [{
+            title: 'Detail',
+            dataIndex: 'Detail',
+            key: 'Detail',
+            width: '100%',
+
+        }
+        ];
+
+        const datafour = [{
+            key: '1',
+            Detail: ' 注：更换易耗品时应及时记录，每半年汇总存档。',
+        }];
         const datathree = [{
             key: '1',
             CreateUserIDTitle: '运行维护人员:',
@@ -188,7 +201,7 @@ class ConsumablesReplaceRecord extends Component {
             CreateTimeTitle: '时间:',
             CreateTimeContent: this.props.ConsumablesReplaceRecordList.length === 0 ? null : this.props.ConsumablesReplaceRecordList[0].record[0].CreateTime,
             SignContentTitle: '负责人:',
-            SignContentcontent: this.props.ConsumablesReplaceRecordList.length === 0 ? null : this.props.ConsumablesReplaceRecordList[0].record[0].SignContent,
+            SignContentcontent: <img src={signContent} />,
             SignTimetitle: '时间:',
             SignTimetitlecontent: this.props.ConsumablesReplaceRecordList.length === 0 ? null : this.props.ConsumablesReplaceRecordList[0].record[0].SignTime,
         }];
@@ -242,24 +255,30 @@ class ConsumablesReplaceRecord extends Component {
                             this.props.history.goBack(-1);
                         }}><Icon type="left" />退回</Button>
                     </div>
-                    <div style={{textAlign: 'center'}}>
-                        <h2>
+                    <div style={{ width: '80%',
+                        height: '50px',
+                        lineHeight: '50px',
+                        margin: 'auto',
+                        fontSize: '20px',
+                        textAlign: 'center',
+                        fontWeight: 'bold'}}>
+
                           易耗品更换记录表
-                        </h2>
+
                     </div>
                     <div style={{backgroundColor: 'white', marginTop: 10}}>
-                        <h3>企业名称：{this.props.ConsumablesReplaceRecordList.length === 0 ? null : this.props.ConsumablesReplaceRecordList[0].record[0].Content['EnterpriseName']}</h3>
+                        <div style={{fontWeight: 'bold', marginBottom: 3}}>企业名称：{this.props.ConsumablesReplaceRecordList.length === 0 ? null : this.props.ConsumablesReplaceRecordList[0].record[0].Content['EnterpriseName']}</div>
                         <Table
-                            style={{width: 1000}}
+                            style={{width: 1200, backgroundColor: 'white'}}
                             columns={columns}
                             dataSource={this.props.ConsumablesReplaceRecordList.length === 0 ? null : this.props.ConsumablesReplaceRecordList[0].record[0].RecordList}
                             bordered={true}
                             pagination={false}
                             scroll={{ y: 330 }}
                             title={() =>
-                                <div style={{marginLeft: -17, marginBottom: -16, marginTop: -16, marginRight: -17, backgroundColor: '#FAFAFA'}}>
+                                <div style={{marginLeft: -17, marginBottom: -17, marginTop: -16, marginRight: -17, backgroundColor: 'white'}}>
                                     <Table
-                                        style={{width: 1000}}
+                                        style={{width: 1200}}
                                         columns={columnsone}
                                         dataSource={dataone}
                                         bordered={true}
@@ -267,7 +286,7 @@ class ConsumablesReplaceRecord extends Component {
                                         pagination={false}
                                     />
                                     <Table
-                                        style={{width: 1000}}
+                                        style={{width: 1200}}
                                         columns={columnstwo}
                                         dataSource={datatwo}
                                         bordered={true}
@@ -277,19 +296,23 @@ class ConsumablesReplaceRecord extends Component {
                                 </div>
                             }
                             footer={() =>
-                                <div style={{marginLeft: -17, marginTop: -17, marginBottom: -16, backgroundColor: '#FAFAFA'}}>
+                                <div style={{marginLeft: -17, marginTop: -17, marginBottom: -16, backgroundColor: 'white'}}>
                                     <Table
-                                        style={{width: 1000}}
+                                        style={{width: 1200}}
                                         columns={columnsthree}
                                         dataSource={datathree}
                                         bordered={true}
                                         showHeader={false}
                                         pagination={false}
                                     />
-                                    <div style={{height: 50, lineHeight: '50px', marginLeft: 10}}>
-
-                                       注：更换易耗品时应及时记录，每半年汇总存档。
-                                    </div>
+                                    <Table
+                                        style={{width: 1200}}
+                                        columns={columnsfour}
+                                        dataSource={datafour}
+                                        bordered={true}
+                                        showHeader={false}
+                                        pagination={false}
+                                    />
 
                                 </div>
                             }
