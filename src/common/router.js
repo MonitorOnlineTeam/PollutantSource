@@ -335,6 +335,14 @@ export const getRouterData = (app) => {
             component: dynamicWrapper(app, ['baseinfo'], () =>
                     import('../routes/EmissionPermits')),
         },
+        '/monitor/sysmanage/ConsumablesReplaceRecord/:Taskid': {
+            component: dynamicWrapper(app, ['baseinfo'], () =>
+                    import('../routes/EmergencyTodoList/ConsumablesReplaceRecord')),
+        },
+        '/monitor/sysmanage/StandardGasRepalceRecord/:Taskid': {
+            component: dynamicWrapper(app, ['baseinfo'], () =>
+                    import('../routes/EmergencyTodoList/StandardGasRepalceRecord')),
+        },
         /* 登陆 */
         '/user': {
             component: dynamicWrapper(app, [], () =>
