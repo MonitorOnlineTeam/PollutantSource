@@ -14,26 +14,14 @@ import {
     message,
     Popconfirm,
     Tag,
-    Menu,
     Icon,
     Radio,
-    Dropdown,
     Divider,
 } from 'antd';
 import {routerRedux} from 'dva/router';
 import {connect} from 'dva';
+import FilesList from '../StandardLibrary/FilesList';
 const Search = Input.Search;
-const confirm = Modal.confirm;
-const menu = (
-    <Menu>
-        <Menu.Item>
-      Action 1
-        </Menu.Item>
-        <Menu.Item>
-      Action 2
-        </Menu.Item>
-    </Menu>
-);
 @connect(({loading, standardlibrary}) => ({
     ...loading,
     list: standardlibrary.list,
@@ -50,6 +38,10 @@ export default class StandardLibrary extends Component {
             Name: null,
             Type: null,
             pollutantList: [],
+            Fvisible: false,
+            title: '',
+            width: '500',
+            StandardLibraryID: null,
         };
     }
     componentWillMount() {
@@ -130,6 +122,14 @@ export default class StandardLibrary extends Component {
             },
         });
     };
+    showFile=(id) => {
+        this.setState({
+            StandardLibraryID: id,
+            Fvisible: true,
+            title: '文件列表',
+            width: 800
+        });
+    }
     onRef1 = (ref) => {
         this.child = ref;
     }
@@ -184,7 +184,9 @@ export default class StandardLibrary extends Component {
             key: 'AttachmentID',
             width: '100px',
             render: (text, record) => {
-                return text;
+                return <a onClick={
+                    () => this.showFile(record.key)
+                } > <Icon type="copy" theme="twoTone" /></a>;
             }
         },
         { title: '状态',
@@ -287,6 +289,23 @@ export default class StandardLibrary extends Component {
                         pageSizeOptions: ['5', '10', '20', '30', '40']
                     }}
                 />
+                <Modal
+                    visible={this.state.Fvisible}
+                    title={this.state.title}
+                    width={this.state.width}
+                    destroyOnClose={true}// 清除上次数据
+                    footer={false}
+                    onCancel={
+                        () => {
+                            this.setState({
+                                Fvisible: false
+                            });
+                        }
+                    } >
+                    {
+                        <FilesList pid={this.state.StandardLibraryID} onRef={this.onRef1} />
+                    }
+                </Modal>
             </Card>
         );
     }

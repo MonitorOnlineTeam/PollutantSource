@@ -83,6 +83,7 @@ export default class AddStandardLibraryPollutant extends Component {
                       that.props.dispatch({
                           type: 'standardlibrary/editstandardlibrarypollutant',
                           payload: {
+                              Guid:this.state.Id,
                               PollutantCode: values.PollutantCode,
                               AlarmType: values.AlarmType,
                               UpperLimit: values.UpperLimit,
