@@ -142,18 +142,6 @@ export default class StandardLibrary extends Component {
                 { title: '上限', dataIndex: 'UpperLimit', key: 'upgradeNum' },
                 { title: '下限', dataIndex: 'LowerLimit', key: 'LowerLimit' },
                 { title: '报警类型', dataIndex: 'AlarmType', key: 'AlarmType' },
-                {
-                    title: '操作',
-                    dataIndex: 'operation',
-                    key: 'operation',
-                    render: () => (
-                        <Fragment >
-                            <a href="javascript:;">编辑</a>
-                            <Divider type="vertical" />
-                            <a href="javascript:;">删除</a>
-                        </Fragment>
-                    ),
-                },
             ];
             return (
                 <Table
@@ -224,7 +212,7 @@ export default class StandardLibrary extends Component {
                     () => this.props.dispatch(routerRedux.push(`/monitor/sysmanage/UserDetail/${record.key}`))
                 } > 应用到排口 </a> <Divider type="vertical" />
                 <a onClick={
-                    () => this.props.dispatch(routerRedux.push(`/monitor/sysmanage/UserDetail/${record.key}`))
+                    () => this.props.dispatch(routerRedux.push(`/monitor/sysmanage/StandardLibraryDetail/${record.key}`))
                 } > 编辑 </a> <Divider type="vertical" />
                 <Popconfirm placement="left" title="确定要删除此标准下所有数据吗？" onConfirm={() => this.confirm(record.key)} okText="是" cancelText="否">
                     <a href="#" > 删除 </a>
@@ -255,7 +243,7 @@ export default class StandardLibrary extends Component {
                                 }}style={{ width: 200 }} /></Col>
                             <Col span={1} ><Button type="primary"
                                 onClick={() => {
-                                    this.props.dispatch(routerRedux.push(`/monitor/sysmanage/UserDetail/null`));
+                                    this.props.dispatch(routerRedux.push(`/monitor/sysmanage/StandardLibraryDetail/null`));
                                 }}>添加</Button></Col>
                             <Col span={12} >
                                 <Radio.Group defaultValue="0" buttonStyle="solid" onChange={(e) => {
@@ -274,9 +262,9 @@ export default class StandardLibrary extends Component {
                                     });
                                 }}>
                                     <Radio.Button value="0">全部</Radio.Button>
-                                    <Radio.Button value="1" style={{background: 'lime'}}>国标</Radio.Button>
-                                    <Radio.Button value="2" style={{background: 'green'}}>地标</Radio.Button>
-                                    <Radio.Button value="3" style={{background: 'cyan'}}>行标</Radio.Button>
+                                    <Radio.Button value="1">国标</Radio.Button>
+                                    <Radio.Button value="2">地标</Radio.Button>
+                                    <Radio.Button value="3">行标</Radio.Button>
                                 </Radio.Group>
                             </Col>
                         </Row>

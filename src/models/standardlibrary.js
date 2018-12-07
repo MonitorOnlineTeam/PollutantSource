@@ -2,7 +2,8 @@ import {
     Model
 } from '../dvapack';
 import {
-    getlist, getpollutantListlist, enableordisable, deletestandardlibrarybyid
+    getlist, enableordisable, deletestandardlibrarybyid, addstandardlibrary, addstandardlibrarypollutant, uploadfiles, getStandardlibrarybyid, deletefiles
+    , editstandardlibrary, getpollutantlist, getstandardlibrarypollutantlist, deletestandardlibrarypollutantbyid, editStandardlibrarypollutant, getStandardlibrarypollutantbyid
 } from '../services/standardlibrary';
 export default Model.extend({
     namespace: 'standardlibrary',
@@ -16,6 +17,11 @@ export default Model.extend({
         pageSize: 10,
         pageIndex: 1,
         reason: null,
+        editstandardlibrary: null,
+        StandardLibraryID: null,
+        PollutantList: [],
+        editstandardlibrarypollutant: null,
+        standardlibrarypollutant: [],
     },
     subscriptions: {
         setup({
@@ -74,7 +80,7 @@ export default Model.extend({
                 });
             }
         },
-        * getpollutantListlist({
+        * getstandardlibrarypollutantlist({
             payload: {
                 StandardLibraryID
             }
@@ -84,20 +90,20 @@ export default Model.extend({
             update,
             select
         }) {
-            const result = yield call(getpollutantListlist, {
+            const result = yield call(getstandardlibrarypollutantlist, {
                 StandardLibraryID: StandardLibraryID,
             });
 
             if (result.requstresult === '1') {
                 yield update({
                     requstresult: result.requstresult,
-                    pollutantList: result.data,
+                    standardlibrarypollutant: result.data,
                     total: result.total,
                 });
             } else {
                 yield update({
                     requstresult: result.requstresult,
-                    pollutantList: [],
+                    standardlibrarypollutant: [],
                 });
             }
         },
@@ -164,6 +170,219 @@ export default Model.extend({
                     Name,
                     Type
                 },
+            });
+            callback();
+        },
+        * deletestandardlibrarypollutantbyid({
+            payload: {
+                StandardLibraryID,
+                Id,
+                callback
+            }
+        }, {
+            call,
+            put,
+            update,
+            select
+        }) {
+            const result = yield call(deletestandardlibrarypollutantbyid, {
+                Id: Id,
+            });
+            yield update({
+                requstresult: result.requstresult,
+                reason: result.reason
+            });
+            yield put({
+                type: 'getstandardlibrarypollutantlist',
+                payload: {
+                    StandardLibraryID,
+                },
+            });
+            callback();
+        },
+        * addstandardlibrary({
+            payload: {
+                Name,
+                Type,
+                IsUsed,
+                Files,
+                callback,
+            }
+        }, {
+            call,
+            put,
+            update,
+            select
+        }) {
+            const result = yield call(addstandardlibrary, {
+                Name: Name,
+                Type: Type,
+                IsUsed: IsUsed,
+                Files: Files,
+            });
+            yield update({
+                StandardLibraryID: result.data,
+                requstresult: result.requstresult,
+                reason: result.reason
+            });
+            callback();
+        },
+        * addstandardlibrarypollutant({
+            payload: {
+                StandardLibraryID,
+                PollutantCode,
+                AlarmType,
+                UpperLimit,
+                LowerLimit,
+                callback,
+            }
+        }, {
+            call,
+            put,
+            update,
+            select
+        }) {
+            const result = yield call(addstandardlibrarypollutant, {
+                StandardLibraryID: StandardLibraryID,
+                PollutantCode: PollutantCode,
+                AlarmType: AlarmType,
+                UpperLimit: UpperLimit,
+                LowerLimit: LowerLimit,
+            });
+            yield update({
+                requstresult: result.requstresult,
+                reason: result.reason
+            });
+            callback();
+        },
+        * editstandardlibrary({
+            payload: {
+                StandardLibraryID,
+                Name,
+                Type,
+                IsUsed,
+                Files,
+                callback,
+            }
+        }, {
+            call,
+            put,
+            update,
+            select
+        }) {
+            const result = yield call(editstandardlibrary, {
+                StandardLibraryID: StandardLibraryID,
+                Name: Name,
+                Type: Type,
+                IsUsed: IsUsed,
+                Files: Files,
+            });
+            yield update({
+                requstresult: result.requstresult,
+                reason: result.reason
+            });
+            callback();
+        },
+        * uploadfiles({
+            payload: {
+                file,
+                fileName,
+                callback,
+            }
+        }, {
+            call,
+            put,
+            update,
+            select
+        }) {
+            const result = yield call(uploadfiles, {
+                file: file,
+                fileName: fileName,
+            });
+            yield update({
+                requstresult: result.requstresult,
+                reason: result.reason
+            });
+            callback();
+        },
+        * deletefiles({
+            payload: {
+                guid,
+                callback,
+            }
+        }, {
+            call,
+            put,
+            update,
+            select
+        }) {
+            const result = yield call(deletefiles, {
+                guid: guid,
+            });
+            yield update({
+                requstresult: result.requstresult,
+                reason: result.reason
+            });
+            callback();
+        },
+        * getStandardlibrarybyid({
+            payload: {
+                StandardLibraryID,
+                callback
+            }
+        }, {
+            call,
+            put,
+            update,
+            select
+        }) {
+            const result = yield call(getStandardlibrarybyid, {
+                StandardLibraryID: StandardLibraryID,
+            });
+            yield update({
+                editstandardlibrary: result.data[0],
+                requstresult: result.requstresult,
+                reason: result.reason
+            });
+            callback();
+        },
+        * getStandardlibrarypollutantbyid({
+            payload: {
+                Guid,
+                callback
+            }
+        }, {
+            call,
+            put,
+            update,
+            select
+        }) {
+            const result = yield call(getStandardlibrarypollutantbyid, {
+                Guid: Guid,
+            });
+            yield update({
+                editstandardlibrarypollutant: result.data[0],
+                requstresult: result.requstresult,
+                reason: result.reason
+            });
+            callback();
+        },
+        * getpollutantlist({
+            payload: {
+                callback
+            }
+        }, {
+            call,
+            put,
+            update,
+            select
+        }) {
+            const result = yield call(getpollutantlist, {
+            });
+            yield update({
+                PollutantList: result.data,
+                requstresult: result.requstresult,
+                reason: result.reason
             });
             callback();
         },

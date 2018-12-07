@@ -319,6 +319,10 @@ export const getRouterData = (app) => {
             component: dynamicWrapper(app, ['standardlibrary'], () =>
             import('../routes/StandardLibrary/')),
         },
+        '/monitor/sysmanage/StandardLibraryDetail/:StandardLibraryID': {
+            component: dynamicWrapper(app, ['standardlibrary'], () =>
+            import('../routes/StandardLibrary/AddStandardLibrary')),
+        },
         '/monitor/entInfo/entoperation': {
             component: dynamicWrapper(app, ['baseinfo'], () =>
                     import('../routes/EnterpriseInfo')),
