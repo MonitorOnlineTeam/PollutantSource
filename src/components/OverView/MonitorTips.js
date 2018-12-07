@@ -7,7 +7,7 @@ import {
 } from 'antd';
 import ReactEcharts from 'echarts-for-react';
 import img from '../../../public/timg.jpg';
-import markerspoint from '../../mockdata/OverView/markersInfo.json';
+// import markerspoint from '../../mockdata/OverView/markersInfo.json';
 import AlarmTips from '../../components/OverView/AlarmTips';
 import AlarmButtom from '../../components/OverView/AlarmButtom';
 
@@ -38,8 +38,8 @@ class MonitorTips extends Component {
                             showHeader={false}
                             bordered={true}
                             size="small"
-                            columns={markerspoint.wryinfo}
-                            dataSource={markerspoint.wrydata}
+                            /* columns={markerspoint.wryinfo}
+                            dataSource={markerspoint.wrydata} */
                             pagination={false} />
                     </div>
                     <div style={{paddingTop: '5px', paddingBottom: '10px'}}>
@@ -47,7 +47,7 @@ class MonitorTips extends Component {
                         <ReactEcharts
                             className={styles.echartdiv}
                             style={{width: '95%', height: '110px'}}
-                            option={markerspoint.monitorTrend}
+                            /* option={markerspoint.monitorTrend} */
                             notMerge={true}
                             lazyUpdate={true} />
                     </div>

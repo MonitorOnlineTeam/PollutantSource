@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import ReactEcharts from 'echarts-for-react';
 import styles from './OverView.less';
-import markerspoint from '../../mockdata/OverView/markersInfo.json';
+/* import markerspoint from '../../mockdata/OverView/markersInfo.json'; */
 import AlarmTips from '../../components/OverView/AlarmTips';
 import AlarmButtom from '../../components/OverView/AlarmButtom';
 import {
@@ -15,7 +15,7 @@ class SewageTips extends Component {
         if (Isbutton && this.props.alarmType) {
             isAlarm = true;
         }
-        console.log(markerspoint.sewagepieoption);
+        /* console.log(markerspoint.sewagepieoption); */
         return (
             isAlarm
                 ? <AlarmTips selectpoint={this.props.selectpoint} AlarmClick={this.props.AlarmClick} />
@@ -25,7 +25,7 @@ class SewageTips extends Component {
                         <ReactEcharts
 
                             style={{width: '95%', height: '100px'}}
-                            option={markerspoint.sewageoption}
+                            /* option={markerspoint.sewageoption} */
                             notMerge={true}
                             lazyUpdate={true} />
                     </div>
@@ -41,7 +41,7 @@ class SewageTips extends Component {
                         <h4 style={{marginBottom: '5px'}} className={styles.pointInfo}>排量占比</h4>
                         <ReactEcharts
                             style={{width: '95%', height: '150px'}}
-                            option={markerspoint.sewagepieoption}
+                            /* option={markerspoint.sewagepieoption} */
                             notMerge={true}
                             lazyUpdate={true} />
 

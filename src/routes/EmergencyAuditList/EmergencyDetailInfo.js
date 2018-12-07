@@ -1,317 +1,317 @@
-import React, { Component, Fragment } from 'react';
-import styles from '../EmergencyTodoList/EmergencyDetailInfo.less';
-import {Steps, Card, Popover, Divider, Button, Input, Table, Modal, Form, Row, Col, Select, Radio } from 'antd';
-import DescriptionList from '../../components/DescriptionList';
-import EmergencyInfo from '../../mockdata/EmergencyTodoList/EmergencyDetailInfo.json';
-import PageHeaderLayout from '../../layouts/PageHeaderLayout';
-import {routerRedux} from 'dva/router';
-import { connect } from 'dva';
+// import React, { Component, Fragment } from 'react';
+// import styles from '../EmergencyTodoList/EmergencyDetailInfo.less';
+// import {Steps, Card, Popover, Divider, Button, Input, Table, Modal, Form, Row, Col, Select, Radio } from 'antd';
+// import DescriptionList from '../../components/DescriptionList';
+// import EmergencyInfo from '../../mockdata/EmergencyTodoList/EmergencyDetailInfo.json';
+// import PageHeaderLayout from '../../layouts/PageHeaderLayout';
+// import {routerRedux} from 'dva/router';
+// import { connect } from 'dva';
 
-const FormItem = Form.Item;
-const RadioGroup = Radio.Group;
-const { Description } = DescriptionList;
-const { TextArea } = Input;
-const Step = Steps.Step;
-const customDot = (dot, { status, index }) => (
-    <Popover content={<span>步骤 {(index + 1)} 状态: {status === 'finish' ? '完成' : '进行中'}</span>}>
-        {dot}
-    </Popover>
-);
+// const FormItem = Form.Item;
+// const RadioGroup = Radio.Group;
+// const { Description } = DescriptionList;
+// const { TextArea } = Input;
+// const Step = Steps.Step;
+// const customDot = (dot, { status, index }) => (
+//     <Popover content={<span>步骤 {(index + 1)} 状态: {status === 'finish' ? '完成' : '进行中'}</span>}>
+//         {dot}
+//     </Popover>
+// );
 
-@Form.create()
-export default class EmergencyDetailInfo extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            showforminfo: false,
-            showaudio: false,
-            data: {
-                result: 1,
-                description: ''
-            }
-        };
-    }
+// @Form.create()
+// export default class EmergencyDetailInfo extends Component {
+//     constructor(props) {
+//         super(props);
+//         this.state = {
+//             showforminfo: false,
+//             showaudio: false,
+//             data: {
+//                 result: 1,
+//                 description: ''
+//             }
+//         };
+//     }
 
-    SeeDetailInfo = () => {
-        this.setState({
-            showforminfo: true
-        });
-    }
-    onRadioChange = (e) => {
-        console.log('radio checked', e.target.value);
-        this.setState({
-            value: e.target.value,
-        });
-    }
-    render() {
-        const SCREEN_WIDTH = document.querySelector('body').offsetWidth;
-        const { match} = this.props;
+//     SeeDetailInfo = () => {
+//         this.setState({
+//             showforminfo: true
+//         });
+//     }
+//     onRadioChange = (e) => {
+//         console.log('radio checked', e.target.value);
+//         this.setState({
+//             value: e.target.value,
+//         });
+//     }
+//     render() {
+//         const SCREEN_WIDTH = document.querySelector('body').offsetWidth;
+//         const { match} = this.props;
 
-        const emergencyId = match.params.exceptionhandleid; // 任务ID
-        const LogColumn = [
-            {
-                title: '步骤',
-                width: '10%',
-                dataIndex: 'StepName',
-                align: 'center',
-                render: (value, row, index) => {
-                    const obj = {
-                        children: value,
-                        props: {},
-                    };
-                    if (index === 3) {
-                        obj.props.rowSpan = 3;
-                    }
-                    if (index > 3) {
-                        obj.props.rowSpan = 0;
-                    }
-                    return obj;
-                },
-            }, {
-                title: '处理人',
-                width: '20%',
-                dataIndex: 'User_Name',
-                align: 'center'
-            }, {
-                title: '开始时间',
-                width: '20%',
-                dataIndex: 'BeginTime',
-                align: 'center'
-            }, {
-                title: '完成时间',
-                width: '20%',
-                dataIndex: 'EndTime',
-                align: 'center'
-            }, {
-                title: '说明',
-                width: '20%',
-                dataIndex: 'Remark',
-                align: 'center'
-            }, {
-                title: '处理状态',
-                width: '10%',
-                dataIndex: 'HandlingState',
-                align: 'center'
-            }];
+//         const emergencyId = match.params.exceptionhandleid; // 任务ID
+//         const LogColumn = [
+//             {
+//                 title: '步骤',
+//                 width: '10%',
+//                 dataIndex: 'StepName',
+//                 align: 'center',
+//                 render: (value, row, index) => {
+//                     const obj = {
+//                         children: value,
+//                         props: {},
+//                     };
+//                     if (index === 3) {
+//                         obj.props.rowSpan = 3;
+//                     }
+//                     if (index > 3) {
+//                         obj.props.rowSpan = 0;
+//                     }
+//                     return obj;
+//                 },
+//             }, {
+//                 title: '处理人',
+//                 width: '20%',
+//                 dataIndex: 'User_Name',
+//                 align: 'center'
+//             }, {
+//                 title: '开始时间',
+//                 width: '20%',
+//                 dataIndex: 'BeginTime',
+//                 align: 'center'
+//             }, {
+//                 title: '完成时间',
+//                 width: '20%',
+//                 dataIndex: 'EndTime',
+//                 align: 'center'
+//             }, {
+//                 title: '说明',
+//                 width: '20%',
+//                 dataIndex: 'Remark',
+//                 align: 'center'
+//             }, {
+//                 title: '处理状态',
+//                 width: '10%',
+//                 dataIndex: 'HandlingState',
+//                 align: 'center'
+//             }];
 
-            // 任务处理进程
-        const taskProcess = EmergencyInfo.TaskProcess.filter(function(item) {
-            return item.ExceptionHandleId === emergencyId;
-        });
+//             // 任务处理进程
+//         const taskProcess = EmergencyInfo.TaskProcess.filter(function(item) {
+//             return item.ExceptionHandleId === emergencyId;
+//         });
 
-        const currentProcess = taskProcess.filter(function(item) {
-            return item.UserName !== '';
-        });
+//         const currentProcess = taskProcess.filter(function(item) {
+//             return item.UserName !== '';
+//         });
 
-        // 任务单基本信息
-        const taskBasicInfo = EmergencyInfo.TaskBasicInfo.filter((item) => {
-            return item.ExceptionHandleId === emergencyId;
-        });
+//         // 任务单基本信息
+//         const taskBasicInfo = EmergencyInfo.TaskBasicInfo.filter((item) => {
+//             return item.ExceptionHandleId === emergencyId;
+//         });
 
-        // 应急处理
-        const emergencyHandle = EmergencyInfo.EmergencyHandle.filter((item) => {
-            return item.ExceptionHandleId === emergencyId;
-        });
+//         // 应急处理
+//         const emergencyHandle = EmergencyInfo.EmergencyHandle.filter((item) => {
+//             return item.ExceptionHandleId === emergencyId;
+//         });
 
-        // 校准信息
-        const correctInfo = EmergencyInfo.CorrectInfo.filter((item) => {
-            return item.ExceptionHandleId === emergencyId;
-        });
+//         // 校准信息
+//         const correctInfo = EmergencyInfo.CorrectInfo.filter((item) => {
+//             return item.ExceptionHandleId === emergencyId;
+//         });
 
-        // 审批流程
-        const approvalProcess = EmergencyInfo.ApprovalProcess.filter((item) => {
-            return item.ExceptionHandleId === emergencyId;
-        });
+//         // 审批流程
+//         const approvalProcess = EmergencyInfo.ApprovalProcess.filter((item) => {
+//             return item.ExceptionHandleId === emergencyId;
+//         });
 
-        const currentApprovalProcess = approvalProcess.filter(function(item) {
-            return item.CheckName !== '';
-        });
+//         const currentApprovalProcess = approvalProcess.filter(function(item) {
+//             return item.CheckName !== '';
+//         });
 
-        const logDataList = EmergencyInfo.LogDataList.filter((item) => {
-            return item.ExceptionHandleId === emergencyId;
-        });
+//         const logDataList = EmergencyInfo.LogDataList.filter((item) => {
+//             return item.ExceptionHandleId === emergencyId;
+//         });
 
-        const { getFieldDecorator } = this.props.form;
-        const { TextArea } = Input;
-        return (
-            <PageHeaderLayout title="应急任务详情">
-                <div style={{height: 'calc(100vh - 190px)'}} className={styles.ExceptionDetailDiv}>
-                    <Card title="" style={{ }} bordered={false}>
-                        <Steps progressDot={customDot} current={3}>
-                            {
-                                taskProcess.map((item) => {
-                                    return (<Step title={item.ProcessName} description={
-                                        <div className={styles.stepDescription}>
-                                            <Fragment>
-                                                {item.UserName}
-                                            </Fragment>
-                                            <div>{item.CreateTime}</div>
-                                        </div>
-                                    } />);
-                                })
-                            }
-                        </Steps>
-                    </Card>
-                    <Card title="任务信息" style={{marginTop: 20 }} bordered={false}>
-                        <DescriptionList className={styles.headerList} size="large" col="3">
-                            <Description term="任务单号">{taskBasicInfo.length === 0 ? '' : taskBasicInfo[0].TaskNo}</Description>
-                            <Description term="排口" style={{fontWeight: '1000'}}>{taskBasicInfo.length === 0 ? '' : taskBasicInfo[0].PointName}</Description>
-                            <Description term="企业">{taskBasicInfo.length === 0 ? '' : taskBasicInfo[0].EnterName}</Description>
-                            <Description term="省份">{taskBasicInfo.length === 0 ? '' : taskBasicInfo[0].Province}</Description>
-                            <Description term="城市">{taskBasicInfo.length === 0 ? '' : taskBasicInfo[0].City}</Description>
-                        </DescriptionList>
-                        <DescriptionList style={{marginTop: 20}} className={styles.headerList} size="large" col="3">
-                            <Description term="任务来源">{taskBasicInfo.length === 0 ? '' : taskBasicInfo[0].TaskSource}</Description>
-                            <Description term="紧急程度" style={{fontWeight: '1000'}}>{taskBasicInfo.length === 0 ? '' : taskBasicInfo[0].Emergence}</Description>
-                            <Description term="任务状态">{taskBasicInfo.length === 0 ? '' : taskBasicInfo[0].TaskStatus}</Description>
-                            <Description term="任务内容" style={{fontWeight: '1000'}}>{taskBasicInfo.length === 0 ? '' : taskBasicInfo[0].TaskContent}</Description>
-                        </DescriptionList>
-                        <DescriptionList style={{marginTop: 20}} className={styles.headerList} size="large" col="3">
-                            <Description term="创建人">{taskBasicInfo.length === 0 ? '' : taskBasicInfo[0].CreatePerson}</Description>
-                            <Description term="创建时间">{taskBasicInfo.length === 0 ? '' : taskBasicInfo[0].CreateTime}</Description>
-                        </DescriptionList>
-                        <Divider style={{ marginBottom: 20 }} />
-                        <DescriptionList className={styles.headerList} size="large" col="3">
-                            <Description term="设备类型">{taskBasicInfo.length === 0 ? '' : taskBasicInfo[0].DeviceType}</Description>
-                            <Description term="设备品牌">{taskBasicInfo.length === 0 ? '' : taskBasicInfo[0].DeviceBrand}</Description>
-                            <Description term="设备编号">{taskBasicInfo.length === 0 ? '' : taskBasicInfo[0].DeviceNo}</Description>
-                            <Description term="设备型号">{taskBasicInfo.length === 0 ? '' : taskBasicInfo[0].DeviceXh}</Description>
-                        </DescriptionList>
-                    </Card>
-                    <Card title="应急处理" style={{ marginTop: 20}} bordered={false}>
-                        <DescriptionList className={styles.headerList} size="large" col="1">
-                            <Description term="处理说明">
-                                <TextArea style={{width: '400px'}} autosize={{ minRows: 2, maxRows: 6 }} disabled={true} value={emergencyHandle.length === 0 ? '' : emergencyHandle[0].HandleContent} />
-                            </Description>
-                            <Description term="处理记录">
-                                <Button style={{marginBottom: '5px'}} icon="check-circle-o" onClick={this.SeeDetailInfo}>气态分析仪运行状况检查记录表</Button><br />
-                                <Button icon="check-circle-o">备品备件更换记录</Button><br />
-                            </Description>
-                        </DescriptionList>
-                        <DescriptionList style={{marginTop: 20}} className={styles.headerList} size="large" col="2">
-                            <Description term="处理人">
-                                {emergencyHandle.length === 0 ? '' : emergencyHandle[0].HandlePerson}
-                            </Description>
-                            <Description term="处理时间">
-                                {emergencyHandle.length === 0 ? '' : emergencyHandle[0].HandleTime}
-                            </Description>
-                        </DescriptionList>
-                    </Card>
-                    <Card title="校准" style={{ marginTop: 20}} bordered={false}>
-                        <DescriptionList className={styles.headerList} size="large" col="1">
-                            <Description term="校准记录">
-                                <Button style={{marginBottom: '5px'}} icon="check-circle-o">校准信息记录表</Button>
-                            </Description>
-                        </DescriptionList>
-                        <DescriptionList style={{marginTop: 20}} className={styles.headerList} size="large" col="2">
-                            <Description term="校准人">
-                                {correctInfo.length === 0 ? '' : correctInfo[0].HandlePerson}
-                            </Description>
-                            <Description term="校准时间">
-                                {correctInfo.length === 0 ? '' : correctInfo[0].HandleTime}
-                            </Description>
-                        </DescriptionList>
-                    </Card>
-                    <Card title="审核" style={{ marginTop: 20}} bordered={false}>
-                        <Steps direction="vertical" size="large" current={currentApprovalProcess.length}>
-                            {
-                                approvalProcess.map((item) => {
-                                    return (
-                                        <Step title={<div><span>{item.NodeName}</span><span className={styles.stepCheckName}>{item.CheckName}</span><span className={styles.stepCheckName}>{item.CheckTime}</span></div>}
-                                            description={
-                                                <div className={styles.stepDescription}>
-                                                    <div style={{width: '50%', height: '40px'}}>
-                                                        {item.CheckContent}
-                                                    </div>
-                                                </div>
-                                            } />
-                                    );
-                                })
-                            }
-                        </Steps>
-                    </Card>
-                    <Card title="附件" style={{marginTop: 20 }} bordered={false}>
-                        <Row gutter={16} justify="center" align="middle">
-                            <Col span={6} align="center">
-                                <img src="../../../pic1.jpg" />
-                            </Col>
-                            <Col span={6} align="center">
-                                <img src="../../../pic2.jpg" />
-                            </Col>
-                            <Col span={6} align="center">
-                                <img src="../../../pic3.jpg" />
-                            </Col>
-                            <Col span={6} align="center" />
-                        </Row>
-                    </Card>
-                    <Card title="日志表" style={{marginTop: 20 }} bordered={false}>
-                        <Table columns={LogColumn}
-                            dataSource={logDataList}
-                            rowKey="StepID"
-                            bordered={true}
-                            pagination={false}
-                        />
-                    </Card>
-                    <div className={styles.returnLastPage}>
-                        <Button type="solid" icon="left" onClick={() => {
-                            this.props.history.goBack(-1);
-                            // this.props.dispatch(routerRedux.push(`/operation/emergency/emergencytodolist/`));
-                        }}>返回</Button>
-                        &nbsp;&nbsp;&nbsp;
-                        <Button type="solid" icon="flag" onClick={() => {
-                            this.setState({showaudio: true});
-                        }}>审核</Button>
-                    </div>
+//         const { getFieldDecorator } = this.props.form;
+//         const { TextArea } = Input;
+//         return (
+//             <PageHeaderLayout title="应急任务详情">
+//                 <div style={{height: 'calc(100vh - 190px)'}} className={styles.ExceptionDetailDiv}>
+//                     <Card title="" style={{ }} bordered={false}>
+//                         <Steps progressDot={customDot} current={3}>
+//                             {
+//                                 taskProcess.map((item) => {
+//                                     return (<Step title={item.ProcessName} description={
+//                                         <div className={styles.stepDescription}>
+//                                             <Fragment>
+//                                                 {item.UserName}
+//                                             </Fragment>
+//                                             <div>{item.CreateTime}</div>
+//                                         </div>
+//                                     } />);
+//                                 })
+//                             }
+//                         </Steps>
+//                     </Card>
+//                     <Card title="任务信息" style={{marginTop: 20 }} bordered={false}>
+//                         <DescriptionList className={styles.headerList} size="large" col="3">
+//                             <Description term="任务单号">{taskBasicInfo.length === 0 ? '' : taskBasicInfo[0].TaskNo}</Description>
+//                             <Description term="排口" style={{fontWeight: '1000'}}>{taskBasicInfo.length === 0 ? '' : taskBasicInfo[0].PointName}</Description>
+//                             <Description term="企业">{taskBasicInfo.length === 0 ? '' : taskBasicInfo[0].EnterName}</Description>
+//                             <Description term="省份">{taskBasicInfo.length === 0 ? '' : taskBasicInfo[0].Province}</Description>
+//                             <Description term="城市">{taskBasicInfo.length === 0 ? '' : taskBasicInfo[0].City}</Description>
+//                         </DescriptionList>
+//                         <DescriptionList style={{marginTop: 20}} className={styles.headerList} size="large" col="3">
+//                             <Description term="任务来源">{taskBasicInfo.length === 0 ? '' : taskBasicInfo[0].TaskSource}</Description>
+//                             <Description term="紧急程度" style={{fontWeight: '1000'}}>{taskBasicInfo.length === 0 ? '' : taskBasicInfo[0].Emergence}</Description>
+//                             <Description term="任务状态">{taskBasicInfo.length === 0 ? '' : taskBasicInfo[0].TaskStatus}</Description>
+//                             <Description term="任务内容" style={{fontWeight: '1000'}}>{taskBasicInfo.length === 0 ? '' : taskBasicInfo[0].TaskContent}</Description>
+//                         </DescriptionList>
+//                         <DescriptionList style={{marginTop: 20}} className={styles.headerList} size="large" col="3">
+//                             <Description term="创建人">{taskBasicInfo.length === 0 ? '' : taskBasicInfo[0].CreatePerson}</Description>
+//                             <Description term="创建时间">{taskBasicInfo.length === 0 ? '' : taskBasicInfo[0].CreateTime}</Description>
+//                         </DescriptionList>
+//                         <Divider style={{ marginBottom: 20 }} />
+//                         <DescriptionList className={styles.headerList} size="large" col="3">
+//                             <Description term="设备类型">{taskBasicInfo.length === 0 ? '' : taskBasicInfo[0].DeviceType}</Description>
+//                             <Description term="设备品牌">{taskBasicInfo.length === 0 ? '' : taskBasicInfo[0].DeviceBrand}</Description>
+//                             <Description term="设备编号">{taskBasicInfo.length === 0 ? '' : taskBasicInfo[0].DeviceNo}</Description>
+//                             <Description term="设备型号">{taskBasicInfo.length === 0 ? '' : taskBasicInfo[0].DeviceXh}</Description>
+//                         </DescriptionList>
+//                     </Card>
+//                     <Card title="应急处理" style={{ marginTop: 20}} bordered={false}>
+//                         <DescriptionList className={styles.headerList} size="large" col="1">
+//                             <Description term="处理说明">
+//                                 <TextArea style={{width: '400px'}} autosize={{ minRows: 2, maxRows: 6 }} disabled={true} value={emergencyHandle.length === 0 ? '' : emergencyHandle[0].HandleContent} />
+//                             </Description>
+//                             <Description term="处理记录">
+//                                 <Button style={{marginBottom: '5px'}} icon="check-circle-o" onClick={this.SeeDetailInfo}>气态分析仪运行状况检查记录表</Button><br />
+//                                 <Button icon="check-circle-o">备品备件更换记录</Button><br />
+//                             </Description>
+//                         </DescriptionList>
+//                         <DescriptionList style={{marginTop: 20}} className={styles.headerList} size="large" col="2">
+//                             <Description term="处理人">
+//                                 {emergencyHandle.length === 0 ? '' : emergencyHandle[0].HandlePerson}
+//                             </Description>
+//                             <Description term="处理时间">
+//                                 {emergencyHandle.length === 0 ? '' : emergencyHandle[0].HandleTime}
+//                             </Description>
+//                         </DescriptionList>
+//                     </Card>
+//                     <Card title="校准" style={{ marginTop: 20}} bordered={false}>
+//                         <DescriptionList className={styles.headerList} size="large" col="1">
+//                             <Description term="校准记录">
+//                                 <Button style={{marginBottom: '5px'}} icon="check-circle-o">校准信息记录表</Button>
+//                             </Description>
+//                         </DescriptionList>
+//                         <DescriptionList style={{marginTop: 20}} className={styles.headerList} size="large" col="2">
+//                             <Description term="校准人">
+//                                 {correctInfo.length === 0 ? '' : correctInfo[0].HandlePerson}
+//                             </Description>
+//                             <Description term="校准时间">
+//                                 {correctInfo.length === 0 ? '' : correctInfo[0].HandleTime}
+//                             </Description>
+//                         </DescriptionList>
+//                     </Card>
+//                     <Card title="审核" style={{ marginTop: 20}} bordered={false}>
+//                         <Steps direction="vertical" size="large" current={currentApprovalProcess.length}>
+//                             {
+//                                 approvalProcess.map((item) => {
+//                                     return (
+//                                         <Step title={<div><span>{item.NodeName}</span><span className={styles.stepCheckName}>{item.CheckName}</span><span className={styles.stepCheckName}>{item.CheckTime}</span></div>}
+//                                             description={
+//                                                 <div className={styles.stepDescription}>
+//                                                     <div style={{width: '50%', height: '40px'}}>
+//                                                         {item.CheckContent}
+//                                                     </div>
+//                                                 </div>
+//                                             } />
+//                                     );
+//                                 })
+//                             }
+//                         </Steps>
+//                     </Card>
+//                     <Card title="附件" style={{marginTop: 20 }} bordered={false}>
+//                         <Row gutter={16} justify="center" align="middle">
+//                             <Col span={6} align="center">
+//                                 <img src="../../../pic1.jpg" />
+//                             </Col>
+//                             <Col span={6} align="center">
+//                                 <img src="../../../pic2.jpg" />
+//                             </Col>
+//                             <Col span={6} align="center">
+//                                 <img src="../../../pic3.jpg" />
+//                             </Col>
+//                             <Col span={6} align="center" />
+//                         </Row>
+//                     </Card>
+//                     <Card title="日志表" style={{marginTop: 20 }} bordered={false}>
+//                         <Table columns={LogColumn}
+//                             dataSource={logDataList}
+//                             rowKey="StepID"
+//                             bordered={true}
+//                             pagination={false}
+//                         />
+//                     </Card>
+//                     <div className={styles.returnLastPage}>
+//                         <Button type="solid" icon="left" onClick={() => {
+//                             this.props.history.goBack(-1);
+//                             // this.props.dispatch(routerRedux.push(`/operation/emergency/emergencytodolist/`));
+//                         }}>返回</Button>
+//                         &nbsp;&nbsp;&nbsp;
+//                         <Button type="solid" icon="flag" onClick={() => {
+//                             this.setState({showaudio: true});
+//                         }}>审核</Button>
+//                     </div>
                     
-                    <Modal
-                        visible={this.state.showaudio}
-                        title={'审核'}
-                        width={900}
-                        onOk={() => {
-                            this.setState({
-                                showaudio: false
-                            });
-                            this.props.history.goBack(-1);
-                        }}
-                        onCancel={() => {
-                            this.setState({
-                                showaudio: false
-                            });
-                        }}>
-                        <div>
-                            <Form>
-                                <Row gutter={16}>
-                                    <Col xs={2} sm={6} md={12} lg={12} xl={12} xxl={12}>
-                                        <FormItem
-                                            labelCol={{ span: 8 }}
-                                            wrapperCol={{ span: 12 }}
-                                            label="审核结果">
-                                            {getFieldDecorator('result')(
-                                                <RadioGroup onChange={this.onRadioChange} value={this.state.data.result}>
-                                                    <Radio key={1} value={1}>通过</Radio>
-                                                    <Radio key={2} value={2}>打回</Radio>
-                                                </RadioGroup>
-                                            )}
-                                        </FormItem>
-                                    </Col>
-                                </Row>
-                                <Row gutter={16} style={{marginTop: 8 }}>
-                                    <Col xs={2} sm={6} md={24} lg={24} xl={24} xxl={24}>
-                                        <FormItem
-                                            labelCol={{ span: 4 }}
-                                            wrapperCol={{ span: 16 }}
-                                            label="审核意见">
-                                            {getFieldDecorator('description')(
-                                                <TextArea rows={4} style={{width: '100%'}} value={this.state.description} />
-                                            )}
-                                        </FormItem>
-                                    </Col>
-                                </Row>
-                            </Form>
-                        </div>
-                    </Modal>
-                </div>
-            </PageHeaderLayout>
-        );
-    }
-}
+//                     <Modal
+//                         visible={this.state.showaudio}
+//                         title={'审核'}
+//                         width={900}
+//                         onOk={() => {
+//                             this.setState({
+//                                 showaudio: false
+//                             });
+//                             this.props.history.goBack(-1);
+//                         }}
+//                         onCancel={() => {
+//                             this.setState({
+//                                 showaudio: false
+//                             });
+//                         }}>
+//                         <div>
+//                             <Form>
+//                                 <Row gutter={16}>
+//                                     <Col xs={2} sm={6} md={12} lg={12} xl={12} xxl={12}>
+//                                         <FormItem
+//                                             labelCol={{ span: 8 }}
+//                                             wrapperCol={{ span: 12 }}
+//                                             label="审核结果">
+//                                             {getFieldDecorator('result')(
+//                                                 <RadioGroup onChange={this.onRadioChange} value={this.state.data.result}>
+//                                                     <Radio key={1} value={1}>通过</Radio>
+//                                                     <Radio key={2} value={2}>打回</Radio>
+//                                                 </RadioGroup>
+//                                             )}
+//                                         </FormItem>
+//                                     </Col>
+//                                 </Row>
+//                                 <Row gutter={16} style={{marginTop: 8 }}>
+//                                     <Col xs={2} sm={6} md={24} lg={24} xl={24} xxl={24}>
+//                                         <FormItem
+//                                             labelCol={{ span: 4 }}
+//                                             wrapperCol={{ span: 16 }}
+//                                             label="审核意见">
+//                                             {getFieldDecorator('description')(
+//                                                 <TextArea rows={4} style={{width: '100%'}} value={this.state.description} />
+//                                             )}
+//                                         </FormItem>
+//                                     </Col>
+//                                 </Row>
+//                             </Form>
+//                         </div>
+//                     </Modal>
+//                 </div>
+//             </PageHeaderLayout>
+//         );
+//     }
+// }

@@ -6,7 +6,6 @@ import { Link, routerRedux, Switch, Redirect } from 'dva/router';
 import { getRoutes } from '../../utils/utils';
 import styles from './index.less';
 import AuthorizedRoute from '../../components/AuthorizedRoute';
-import { getPointEnterprise } from '../../mockdata/Base/commonbase';
 import Cookie from 'js-cookie';
 const { TabPane } = Tabs;
 

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {Form, Input, Select, Row, Col, Button, Table} from 'antd';
-import InData from '../../mockdata/PointDetail/InMaterialData.json';
+// import InData from '../../mockdata/PointDetail/InMaterialData.json';
 import styles from './InMaterial.less';
 /*
 页面：
@@ -145,7 +145,7 @@ export default class InMaterial extends Component {
                 <div className={styles.tableListForm}>{this.renderForm()}</div>
                 <Table
                     columns={columns}
-                    dataSource={InData}
+                    /* dataSource={InData} */
                     bordered={true}
                     pagination={{
                         showSizeChanger: true,

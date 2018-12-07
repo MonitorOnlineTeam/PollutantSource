@@ -3,7 +3,7 @@ import CascadeMultiSelect from 'uxcore/lib/CascadeMultiSelect';
 import blue from '../../../node_modules/uxcore/assets/blue.css';
 import iconfont from '../../../node_modules/uxcore/assets/iconfont.css';
 import sytles from './index.less';
-import {getEnterprise, getPointEnterprise} from '../../mockdata/Base/commonbase';
+// import {getEnterprise, getPointEnterprise} from '../../mockdata/Base/commonbase';
 
 let options = [
     {
@@ -69,18 +69,18 @@ export default class EnterprisePointCascadeMultiSelect extends Component {
     componentWillMount() {
         this.setState({initValue: this.props.initValue});
         options = [];
-        const enters = getEnterprise();
-        const points = getPointEnterprise();
-        options = enters.map(e => {
-            let children = [];
-            points.map(p => {
-                if (p.EntCode === e.EntCode) { children.push({value: p.DGIMN, label: p.PointName}); }
-            });
-            if (children.length > 0) {
-                return {value: e.EntCode, label: e.EntName, children: children};
-            }
-            return {value: e.EntCode, label: e.EntName};
-        });
+        // const enters = getEnterprise();
+        // const points = getPointEnterprise();
+        // options = enters.map(e => {
+        //     let children = [];
+        //     points.map(p => {
+        //         if (p.EntCode === e.EntCode) { children.push({value: p.DGIMN, label: p.PointName}); }
+        //     });
+        //     if (children.length > 0) {
+        //         return {value: e.EntCode, label: e.EntName, children: children};
+        //     }
+        //     return {value: e.EntCode, label: e.EntName};
+        // });
     }
     getSelectPoints() {
         return this.state.initValue;
