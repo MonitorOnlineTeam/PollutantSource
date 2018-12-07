@@ -1,4 +1,4 @@
-import { GetTaskDetails, GetYwdsj, GetJzRecord } from '../services/taskapi';
+import { GetTaskDetails, GetYwdsj, GetJzRecord, GetRecordType, GetJzHistoryRecord } from '../services/taskapi';
 import { Model } from '../dvapack';
 import {EnumRequstResult} from '../utils/enum';
 
@@ -8,7 +8,9 @@ export default Model.extend({
         TaskInfo: null,
         OperationInfo: [],
         IsOver: false,
-        JzRecord: null
+        JzRecord: null,
+        RecordTypes: [],
+        JzHistoryRecord: []
     },
 
     effects: {
@@ -60,6 +62,28 @@ export default Model.extend({
             if (DataInfo != null && DataInfo.requstresult == EnumRequstResult.Success) {
                 if (DataInfo.data != null) {
                     yield update({ JzRecord: DataInfo.data });
+                }
+            }
+        },
+        // 获取运维表单类型
+        * GetRecordType({
+            payload,
+        }, { call, update }) {
+            const DataInfo = yield call(GetRecordType, payload);
+            if (DataInfo != null && DataInfo.requstresult == EnumRequstResult.Success) {
+                if (DataInfo.data != null) {
+                    yield update({ RecordTypes: DataInfo.data });
+                }
+            }
+        },
+        // 获取校准历史记录
+        * GetJzHistoryRecord({
+            payload,
+        }, { call, update }) {
+            const DataInfo = yield call(GetJzHistoryRecord, payload);
+            if (DataInfo != null && DataInfo.requstresult == EnumRequstResult.Success) {
+                if (DataInfo.data != null) {
+                    yield update({ RecordTypes: DataInfo.data });
                 }
             }
         }

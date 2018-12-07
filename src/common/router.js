@@ -171,9 +171,21 @@ export const getRouterData = (app) => {
             component: dynamicWrapper(app, ['task'], () =>
         import('../routes/PointDetail/Ywdsjlist')),
         },
+        '/monitor/pointdetail/:pointcode/qcontrollist': {
+            component: dynamicWrapper(app, ['task'], () =>
+        import('../routes/PointDetail/qcontrollist')),
+        },
         '/monitor/EmergencyTodoList/JzRecordInfo/:TaskID/:TypeID': {
             component: dynamicWrapper(app, ['task'], () =>
         import('../routes/EmergencyTodoList/JzRecordInfo')),
+        },
+        '/monitor/pointdetail/:pointcode/qcontrollist/JzHistoryRecords/:TypeID': {
+            component: dynamicWrapper(app, ['task'], () =>
+        import('../routes/EmergencyTodoList/JzHistoryRecords')),
+        },
+        '/monitor/pointdetail/:pointcode/qcontrollist/RepairHistoryRecods/:TypeID': {
+            component: dynamicWrapper(app, ['task'], () =>
+        import('../routes/EmergencyTodoList/RepairHistoryRecods')),
         },
         /* 工作台 */
         '/monitor/workbench': {
