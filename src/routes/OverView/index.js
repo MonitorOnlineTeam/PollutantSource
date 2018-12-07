@@ -70,7 +70,7 @@ class OverViewMap extends PureComponent {
         };
     }
      stationClick = () => {
-         this.props.dispatch(routerRedux.push('/monitor/pointdetail/' + this.state.selectpoint.DGIMN));
+         this.props.dispatch(routerRedux.push('/pointdetail/' + this.state.selectpoint.DGIMN));
      };
 
     markersEvents = {
