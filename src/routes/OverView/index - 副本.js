@@ -240,7 +240,7 @@ class OverViewMap extends PureComponent {
             _this.statusChange(row);
         };
         this.stationClick = () => {
-            this.props.dispatch(routerRedux.push('/monitor/pointdetail/' + this.state.selectpoint.DGIMN));
+            this.props.dispatch(routerRedux.push('/pointdetail/' + this.state.selectpoint.DGIMN));
         };
         this.StationBuildingClick = () => {
             _this.setState({modalvisible: true});

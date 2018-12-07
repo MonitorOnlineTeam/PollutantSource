@@ -16,6 +16,14 @@ const { TextArea } = Input;
 export default class EmergencyDetailInfo extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            TaskIds: '62409e78-8d89-42f7-b17f-017d24cc61ce',
+            TypeIDs: 3,
+            StandardGasTaskIds: '999363d6-0167-47f2-8a8e-da50849401de',
+            StandardGasTypeIDs: 4,
+            CqfPatrolTaskIds: '62409e78-8d89-42f7-b17f-017d24cc61ce',
+            CqfPatrolTypeIDs: 5,
+        };
     }
 
     componentDidMount() {
@@ -29,6 +37,11 @@ export default class EmergencyDetailInfo extends Component {
     }
 
     renderItem=(data, taskID) => {
+        data[2].FormMainID = '323e0a8d-c90a-4d80-9fd1-d08dae5e9d2f';
+        data[3].FormMainID = '3202407a-3ce0-47f9-ad30-4dab35990559';
+        data[4].FormMainID = '4d44a51c-b0d8-464f-a52c-d51c6bd05e60';
+        console.log(data[2].FormMainID = '323e0a8d-c90a-4d80-9fd1-d08dae5e9d2f');
+        console.log(taskID);
         const rtnVal = [];
         data.map((item) => {
             if (item.FormMainID != null) {
@@ -45,17 +58,17 @@ export default class EmergencyDetailInfo extends Component {
                         break;
                     case EnumPsOperationForm.YhpReplace:
                         rtnVal.push(<p style={{marginBottom: 0}}><Button style={{marginBottom: '5px'}} icon="check-circle-o" onClick={() => {
-                            this.props.dispatch(routerRedux.push(``));
+                            this.props.dispatch(routerRedux.push(`/sysmanage/ConsumablesReplaceRecord/${this.state.TaskIds}/${this.state.TypeIDs}`));
                         }}>{item.TypeName}</Button></p>);
                         break;
                     case EnumPsOperationForm.StandardGasReplace:
                         rtnVal.push(<p style={{marginBottom: 0}}><Button style={{marginBottom: '5px'}} icon="check-circle-o" onClick={() => {
-                            this.props.dispatch(routerRedux.push(``));
+                            this.props.dispatch(routerRedux.push(`/sysmanage/StandardGasRepalceRecord/${this.state.StandardGasTaskIds}/${this.state.StandardGasTypeIDs}`));
                         }}>{item.TypeName}</Button></p>);
                         break;
                     case EnumPsOperationForm.CqfPatrol:
                         rtnVal.push(<p style={{marginBottom: 0}}><Button style={{marginBottom: '5px'}} icon="check-circle-o" onClick={() => {
-                            this.props.dispatch(routerRedux.push(``));
+                            this.props.dispatch(routerRedux.push(`/monitor/sysmanage/CompleteExtraction/${this.state.CqfPatrolTaskIds}/${this.state.CqfPatrolTypeIDs}`));
                         }}>{item.TypeName}</Button></p>);
                         break;
                     case EnumPsOperationForm.CyfPatrol:
@@ -109,14 +122,16 @@ export default class EmergencyDetailInfo extends Component {
             let TaskDescription = ''; // 任务描述
             let OperationsUserName = ''; // 运维人
             let CreateTime = ''; // 任务创建时间
-            let RecordInfoList = []; // 报警记录
+            let AlarmList = []; // 报警记录
             let Remark = ''; // 处理说明
             let Attachments = ''; // 附件
             let TaskLogList = []; // 任务日志列表
             let TaskType = ''; // 任务类型
             let data = null; // 任务信息
             let RecordTypeInfo = [];
+            let CompleteTime = null;
             const taskInfo = this.props.taskInfo;
+
             if (taskInfo.requstresult == EnumRequstResult.Success) {
                 data = taskInfo.data[0];
                 TaskID = data.ID;
@@ -129,50 +144,46 @@ export default class EmergencyDetailInfo extends Component {
                 TaskDescription = data.TaskDescription;
                 OperationsUserName = data.OperationsUserName;
                 CreateTime = data.CreateTime;
-                RecordInfoList = data.RecordInfoList;
+                // AlarmList = data.AlarmList;
                 Remark = data.Remark;
                 Attachments = data.Attachments;
                 TaskLogList = data.TaskLogList;
                 TaskType = data.TaskType;
                 RecordTypeInfo = data.TaskFormList;
+                CompleteTime = data.CompleteTime;
+                if (data.AlarmList != null && data.AlarmList.length > 0) {
+                    data.AlarmList.map((item) => {
+                        AlarmList.push({
+                            key: item.key,
+                            BeginAlarmTime: item.FirstTime,
+                            AlarmTime: item.AlarmTime,
+                            AlarmMsg: item.AlarmMsg,
+                            AlarmCount: item.AlarmCount
+                        });
+                    });
+                }
             }
 
             const pics = Attachments !== '' ? Attachments.LowimgList : [];
-            const dataSource = [{
-                key: '1',
-                BeginAlarmTime: '2018-08-30 3:20',
-                LastAlarmTime: '2018-08-30 5:20',
-                AlarmInfo: 'SO2连续值异常',
-                AlarmCount: '15'
-            }, {
-                key: '2',
-                BeginAlarmTime: '2018-08-30 7:20',
-                LastAlarmTime: '2018-08-30 9:00',
-                AlarmInfo: '烟尘零值异常',
-                AlarmCount: '14'
-            }, {
-                key: '3',
-                BeginAlarmTime: '2018-08-30 9:00',
-                LastAlarmTime: '2018-08-30 11:00',
-                AlarmInfo: '气态分析仪温度过高',
-                AlarmCount: '13'
-            }];
-
             const columns = [{
                 title: '开始报警时间',
+                width: '20%',
                 dataIndex: 'BeginAlarmTime',
                 key: 'BeginAlarmTime',
             }, {
                 title: '最后一次报警时间',
-                dataIndex: 'LastAlarmTime',
-                key: 'LastAlarmTime',
+                width: '20%',
+                dataIndex: 'AlarmTime',
+                key: 'AlarmTime',
             }, {
                 title: '报警信息',
-                dataIndex: 'AlarmInfo',
-                key: 'AlarmInfo',
+                dataIndex: 'AlarmMsg',
+                width: '45%',
+                key: 'AlarmMsg',
             }, {
                 title: '报警次数',
                 dataIndex: 'AlarmCount',
+                width: '15%',
                 key: 'AlarmCount',
             }];
             const LogColumn = [
@@ -234,14 +245,16 @@ export default class EmergencyDetailInfo extends Component {
                                 }
                                 {
                                     TaskType === EnumPatrolTaskType.PatrolTask ? null
-                                        : <Table style={{ backgroundColor: 'white'}} bordered={false} dataSource={dataSource} pagination={false} columns={columns} />
+                                        : <Table style={{ backgroundColor: 'white'}} bordered={false} dataSource={AlarmList} pagination={false} columns={columns} />
                                 }
 
                             </Card>
                             <Card title={<span style={{fontWeight: '900'}}>处理说明</span>} style={{ marginTop: 20}} bordered={false}>
                                 <DescriptionList className={styles.headerList} size="large" col="1">
                                     <Description>
-                                        <TextArea rows={8} style={{width: '600px'}} />
+                                        <TextArea rows={8} style={{width: '600px'}}>
+                                            {Remark}
+                                        </TextArea>
                                     </Description>
                                 </DescriptionList>
 
@@ -259,7 +272,7 @@ export default class EmergencyDetailInfo extends Component {
                                         {OperationsUserName}
                                     </Description>
                                     <Description term="处理时间">
-                                        {}
+                                        {CompleteTime}
                                     </Description>
                                 </DescriptionList>
                             </Card>
