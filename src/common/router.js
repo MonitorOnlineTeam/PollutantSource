@@ -351,11 +351,11 @@ export const getRouterData = (app) => {
             component: dynamicWrapper(app, ['baseinfo'], () =>
                     import('../routes/EmissionPermits')),
         },
-        '/sysmanage/ConsumablesReplaceRecord/:Taskid': {
+        '/sysmanage/ConsumablesReplaceRecord/:TaskIds/:TypeIDs': {
             component: dynamicWrapper(app, ['baseinfo'], () =>
                     import('../routes/EmergencyTodoList/ConsumablesReplaceRecord')),
         },
-        '/sysmanage/StandardGasRepalceRecord/:Taskid': {
+        '/sysmanage/StandardGasRepalceRecord/:StandardGasTaskIds/:StandardGasTypeIDs': {
             component: dynamicWrapper(app, ['baseinfo'], () =>
                     import('../routes/EmergencyTodoList/StandardGasRepalceRecord')),
         },

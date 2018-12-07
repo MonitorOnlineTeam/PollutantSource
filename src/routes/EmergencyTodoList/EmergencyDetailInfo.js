@@ -58,12 +58,12 @@ export default class EmergencyDetailInfo extends Component {
                         break;
                     case EnumPsOperationForm.YhpReplace:
                         rtnVal.push(<p style={{marginBottom: 0}}><Button style={{marginBottom: '5px'}} icon="check-circle-o" onClick={() => {
-                            this.props.dispatch(routerRedux.push(`/monitor/sysmanage/ConsumablesReplaceRecord/${this.state.TaskIds}/${this.state.TypeIDs}`));
+                            this.props.dispatch(routerRedux.push(`/sysmanage/ConsumablesReplaceRecord/${this.state.TaskIds}/${this.state.TypeIDs}`));
                         }}>{item.TypeName}</Button></p>);
                         break;
                     case EnumPsOperationForm.StandardGasReplace:
                         rtnVal.push(<p style={{marginBottom: 0}}><Button style={{marginBottom: '5px'}} icon="check-circle-o" onClick={() => {
-                            this.props.dispatch(routerRedux.push(`/monitor/sysmanage/StandardGasRepalceRecord/${this.state.StandardGasTaskIds}/${this.state.StandardGasTypeIDs}`));
+                            this.props.dispatch(routerRedux.push(`/sysmanage/StandardGasRepalceRecord/${this.state.StandardGasTaskIds}/${this.state.StandardGasTypeIDs}`));
                         }}>{item.TypeName}</Button></p>);
                         break;
                     case EnumPsOperationForm.CqfPatrol:
