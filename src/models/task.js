@@ -1,4 +1,4 @@
-import { GetTaskDetails, GetYwdsj, GetJzRecord, GetConsumablesReplaceRecordList, GetStandardGasRepalceRecordList } from '../services/taskapi';
+import { GetTaskDetails, GetYwdsj, GetJzRecord, GetConsumablesReplaceRecordList, GetStandardGasRepalceRecordList, GetPatrolRecordListPC } from '../services/taskapi';
 import { Model } from '../dvapack';
 import {EnumRequstResult} from '../utils/enum';
 
@@ -11,6 +11,7 @@ export default Model.extend({
         JzRecord: null,
         ConsumablesReplaceRecordList: [],
         StandardGasRepalceRecordList: [],
+        PatrolRecordListPC: [],
     },
 
     effects: {
@@ -114,6 +115,32 @@ export default Model.extend({
                 yield update({
                     requstresult: result.requstresult,
                     StandardGasRepalceRecordList: [],
+                });
+            }
+        },
+        // 根据任务id和类型id获取巡检记录表(PC单独接口与手机端不一致)
+        * GetPatrolRecordListPC({
+            payload: {
+                TaskIds,
+                TypeIDs
+            }
+        }, {
+            call,
+            put,
+            update,
+            select
+        }) {
+            const result = yield call(GetPatrolRecordListPC, {TaskIds: TaskIds, TypeIDs: TypeIDs});
+
+            if (result.requstresult === '1') {
+                yield update({
+                    requstresult: result.requstresult,
+                    PatrolRecordListPC: result.data,
+                });
+            } else {
+                yield update({
+                    requstresult: result.requstresult,
+                    PatrolRecordListPC: [],
                 });
             }
         },

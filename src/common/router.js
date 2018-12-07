@@ -343,6 +343,10 @@ export const getRouterData = (app) => {
             component: dynamicWrapper(app, ['baseinfo'], () =>
                     import('../routes/EmergencyTodoList/StandardGasRepalceRecord')),
         },
+        '/monitor/sysmanage/CompleteExtraction/:CqfPatrolTaskIds/:CqfPatrolTypeIDs': {
+            component: dynamicWrapper(app, ['baseinfo'], () =>
+                    import('../routes/EmergencyTodoList/CompleteExtraction')),
+        },
         /* 登陆 */
         '/user': {
             component: dynamicWrapper(app, [], () =>
