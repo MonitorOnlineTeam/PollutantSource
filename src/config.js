@@ -13,5 +13,34 @@ module.exports = {
     CORS: [],
     openPages: ['/login'],
     apiPrefix: '/mock',
-    webSocketPushURL: '172.16.12.133:40001'
+    webSocketPushURL: '172.16.12.133:40001',
+    imgaddress: 'http://localhost:51047/upload/',
+    mainpollutantInfo: [{
+        pollutantCode: '01',
+        pollutantName: '烟尘',
+        unit: 'mg/m³'
+    }, {
+        pollutantCode: '02',
+        pollutantName: 'SO2',
+        unit: 'mg/m³'
+    }, {
+        pollutantCode: '03',
+        pollutantName: 'NOx',
+        unit: 'mg/m³'
+    }
+    ],
+    zspollutantInfo: [{
+        pollutantCode: '01',
+        pollutantName: '烟尘',
+        unit: 'mg/m³'
+    }, {
+        pollutantCode: '02',
+        pollutantName: 'SO2',
+        unit: 'mg/m³'
+    }, {
+        pollutantCode: '03',
+        pollutantName: 'NOx',
+        unit: 'mg/m³'
+    }
+    ]
 };

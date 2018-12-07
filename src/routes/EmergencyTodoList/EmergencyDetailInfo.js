@@ -16,6 +16,14 @@ const { TextArea } = Input;
 export default class EmergencyDetailInfo extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            TaskIds: '62409e78-8d89-42f7-b17f-017d24cc61ce',
+            TypeIDs: 3,
+            StandardGasTaskIds: '999363d6-0167-47f2-8a8e-da50849401de',
+            StandardGasTypeIDs: 4,
+            CqfPatrolTaskIds: '62409e78-8d89-42f7-b17f-017d24cc61ce',
+            CqfPatrolTypeIDs: 5,
+        };
     }
 
     componentDidMount() {
@@ -29,6 +37,11 @@ export default class EmergencyDetailInfo extends Component {
     }
 
     renderItem=(data, taskID) => {
+        data[2].FormMainID = '323e0a8d-c90a-4d80-9fd1-d08dae5e9d2f';
+        data[3].FormMainID = '3202407a-3ce0-47f9-ad30-4dab35990559';
+        data[4].FormMainID = '4d44a51c-b0d8-464f-a52c-d51c6bd05e60';
+        console.log(data[2].FormMainID = '323e0a8d-c90a-4d80-9fd1-d08dae5e9d2f');
+        console.log(taskID);
         const rtnVal = [];
         data.map((item) => {
             if (item.FormMainID != null) {
@@ -45,17 +58,17 @@ export default class EmergencyDetailInfo extends Component {
                         break;
                     case EnumPsOperationForm.YhpReplace:
                         rtnVal.push(<p style={{marginBottom: 0}}><Button style={{marginBottom: '5px'}} icon="check-circle-o" onClick={() => {
-                            this.props.dispatch(routerRedux.push(``));
+                            this.props.dispatch(routerRedux.push(`/monitor/sysmanage/ConsumablesReplaceRecord/${this.state.TaskIds}/${this.state.TypeIDs}`));
                         }}>{item.TypeName}</Button></p>);
                         break;
                     case EnumPsOperationForm.StandardGasReplace:
                         rtnVal.push(<p style={{marginBottom: 0}}><Button style={{marginBottom: '5px'}} icon="check-circle-o" onClick={() => {
-                            this.props.dispatch(routerRedux.push(``));
+                            this.props.dispatch(routerRedux.push(`/monitor/sysmanage/StandardGasRepalceRecord/${this.state.StandardGasTaskIds}/${this.state.StandardGasTypeIDs}`));
                         }}>{item.TypeName}</Button></p>);
                         break;
                     case EnumPsOperationForm.CqfPatrol:
                         rtnVal.push(<p style={{marginBottom: 0}}><Button style={{marginBottom: '5px'}} icon="check-circle-o" onClick={() => {
-                            this.props.dispatch(routerRedux.push(``));
+                            this.props.dispatch(routerRedux.push(`/monitor/sysmanage/CompleteExtraction/${this.state.CqfPatrolTaskIds}/${this.state.CqfPatrolTypeIDs}`));
                         }}>{item.TypeName}</Button></p>);
                         break;
                     case EnumPsOperationForm.CyfPatrol:

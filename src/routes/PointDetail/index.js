@@ -10,7 +10,10 @@ import { getPointEnterprise } from '../../mockdata/Base/commonbase';
 import Cookie from 'js-cookie';
 const { TabPane } = Tabs;
 
-@connect()
+@connect(({points, loading}) => ({
+    pointInfo: points.selectpoint,
+    isloading: loading.effects['points/querysinglepointinfo']
+}))
 class PointDetail extends Component {
     constructor(props) {
         super(props);
@@ -36,59 +39,68 @@ class PointDetail extends Component {
             ],
         };
     }
+    componentDidMount() {
+        this.props.dispatch({
+            type: 'points/querysinglepointinfo',
+            payload: {
+                dgimn: this.props.match.params.pointcode
+            }
+        });
+    }
+
     render() {
         const { match, routerData, location } = this.props;
         const routes = getRoutes(match.path, routerData);
         
         const defaultroute = routes[0].path;
         Cookie.set('seldgimn', match.params.pointcode);
-        const pointInfo = getPointEnterprise().find((item) => {
-            return item.DGIMN === match.params.pointcode;
-        });
+        const pointInfo = this.props.pointInfo;
         return (
             <div
                 style={{ width: '100%',
                     height: 'calc(100vh - 67px)' }}
             >
-                <div className={styles.pageHeader}>
-                    <Breadcrumb className={styles.breadcrumb} >
-                        <Breadcrumb.Item key="home">
-                            <Link to="/monitor/overview">监控总览</Link>
-                        </Breadcrumb.Item>
-                        <Breadcrumb.Item key="home">
+                {!this.props.isloading ? <div>
+                    <div className={styles.pageHeader}>
+                        <Breadcrumb className={styles.breadcrumb} >
+                            <Breadcrumb.Item key="home">
+                                <Link to="/monitor/overview">监控总览</Link>
+                            </Breadcrumb.Item>
+                            <Breadcrumb.Item key="home">
+                                {
+                                    pointInfo ? pointInfo.pointName : ''
+                                }
+                            </Breadcrumb.Item>
+                        </Breadcrumb>
+                    </div>
+                    <div style={{ backgroundColor: '#fff', margin: 10, padding: 10 }}>
+                        <Tabs
+                            className={styles.tabs}
+                            activeKey={location.pathname.replace(`${match.url}/`, '')}
+                            onChange={(key) => {
+                                const { dispatch, match } = this.props;
+                                dispatch(routerRedux.push(`${match.url}/${key}`));
+                            }}
+                        >
+                            {this.state.tablist.map(item => <TabPane dgimn={match.params.pointcode} pointInfo={pointInfo} tab={item.tab} key={item.key} />)}
+                        </Tabs>
+                        <Switch>
                             {
-                                pointInfo.Abbreviation + '-' + pointInfo.PointName
+                                routes.map(item => (
+                                    <AuthorizedRoute
+                                        key={item.key}
+                                        path={item.path}
+                                        component={item.component}
+                                        exact={item.exact}
+                                    />
+                                ))
                             }
-                        </Breadcrumb.Item>
-                    </Breadcrumb>
-                </div>
-                <div style={{ backgroundColor: '#fff', margin: 10, padding: 10 }}>
-                    <Tabs
-                        className={styles.tabs}
-                        activeKey={location.pathname.replace(`${match.url}/`, '')}
-                        onChange={(key) => {
-                            const { dispatch, match } = this.props;
-                            dispatch(routerRedux.push(`${match.url}/${key}`));
-                        }}
-                    >
-                        {this.state.tablist.map(item => <TabPane pointInfo={pointInfo} tab={item.tab} key={item.key} />)}
-                    </Tabs>
-                    <Switch>
-                        {
-                            routes.map(item => (
-                                <AuthorizedRoute
-                                    key={item.key}
-                                    path={item.path}
-                                    component={item.component}
-                                    exact={item.exact}
-                                />
-                            ))
-                        }
-                        {
-                            <Redirect from={match.url} to={`${match.url}/${defaultroute.replace(`${match.path}/`, '')}`} />
-                        }
-                    </Switch>
-                </div>
+                            {
+                                <Redirect from={match.url} to={`${match.url}/${defaultroute.replace(`${match.path}/`, '')}`} />
+                            }
+                        </Switch>
+                    </div>
+                </div> : ''}
             </div>
         );
     }

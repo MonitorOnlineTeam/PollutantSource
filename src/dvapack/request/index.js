@@ -110,49 +110,17 @@ export function test(url, params) {
             });
     });
 }
-export async function upload(url, body, optionscall, tooken) {
-    const options = {
+export async function upload(url, data, options, tooken) {
+    url = await geturl(url, tooken);
+    return request(url, {
         method: 'POST',
         headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
+            'Access-Control-Allow-Headers': 'Content-Type',
+            'Content-Type': 'application/json; charset=utf-8',
         },
-        body: JSON.stringify(body),
-        ...optionscall,
-    };
-
-    const resp = await fetch(url.toString(), options);
-    console.log(`status${resp.status}`);
-
-    const text = await resp.text();
-
-    console.log('RESP:', text);
-
-    const json = JSON.parse(text);
-
-    // 如果请求失败
-    if (resp.status !== 200) {
-        const errortext = codeMessage[resp.status] || resp.statusText;
-        notification.error({
-            message: `服务器出错了,${resp.status}`,
-            description: errortext,
-        });
-    }
-    if (json.requstresult) {
-        if (json && json != null) {
-            if (json.requstresult === '1') {
-                return json;
-            }
-            notification.error({
-                message: '服务器信息',
-                description: json.reason,
-            });
-            return null;
-        }
-        return null;
-    }
-
-    return json;
+        body: JSON.stringify(data),
+        ...options,
+    });
 }
 export async function get(url, params, options, tooken) {
     if (params) {
@@ -178,7 +146,7 @@ export async function get(url, params, options, tooken) {
         ...options,
     });
 }
-
+// application/x-www-form-urlencoded
 export async function post(url, data, options, tooken) {
     url = await geturl(url, tooken);
     return request(url, {

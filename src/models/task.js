@@ -1,4 +1,4 @@
-import { GetTaskDetails, GetYwdsj, GetJzRecord, GetRecordType, GetJzHistoryRecord } from '../services/taskapi';
+import { GetTaskDetails, GetYwdsj, GetJzRecord, GetRecordType, GetJzHistoryRecord, GetConsumablesReplaceRecordList, GetStandardGasRepalceRecordList, GetPatrolRecordListPC } from '../services/taskapi';
 import { Model } from '../dvapack';
 import {EnumRequstResult} from '../utils/enum';
 
@@ -10,7 +10,10 @@ export default Model.extend({
         IsOver: false,
         JzRecord: null,
         RecordTypes: [],
-        JzHistoryRecord: []
+        JzHistoryRecord: [],
+        ConsumablesReplaceRecordList: [],
+        StandardGasRepalceRecordList: [],
+        PatrolRecordListPC: []
     },
 
     effects: {
@@ -86,6 +89,83 @@ export default Model.extend({
                     yield update({ RecordTypes: DataInfo.data });
                 }
             }
-        }
+        },
+        // 根据任务id和类型id获取易耗品列表
+        * fetchuserlist({
+            payload: {
+                TaskIds,
+                TypeIDs
+            }
+        }, {
+            call,
+            put,
+            update,
+            select
+        }) {
+            const result = yield call(GetConsumablesReplaceRecordList, {TaskIds: TaskIds, TypeIDs: TypeIDs});
+            if (result.requstresult === '1') {
+                yield update({
+                    requstresult: result.requstresult,
+                    ConsumablesReplaceRecordList: result.data,
+                });
+            } else {
+                yield update({
+                    requstresult: result.requstresult,
+                    ConsumablesReplaceRecordList: [],
+                });
+            }
+        },
+        // 根据任务id和类型id获取标气列表
+        * StandardGasRepalceRecordList({
+            payload: {
+                TaskIds,
+                TypeIDs
+            }
+        }, {
+            call,
+            put,
+            update,
+            select
+        }) {
+            const result = yield call(GetStandardGasRepalceRecordList, {TaskIds: TaskIds, TypeIDs: TypeIDs});
+
+            if (result.requstresult === '1') {
+                yield update({
+                    requstresult: result.requstresult,
+                    StandardGasRepalceRecordList: result.data,
+                });
+            } else {
+                yield update({
+                    requstresult: result.requstresult,
+                    StandardGasRepalceRecordList: [],
+                });
+            }
+        },
+        // 根据任务id和类型id获取巡检记录表(PC单独接口与手机端不一致)
+        * GetPatrolRecordListPC({
+            payload: {
+                TaskIds,
+                TypeIDs
+            }
+        }, {
+            call,
+            put,
+            update,
+            select
+        }) {
+            const result = yield call(GetPatrolRecordListPC, {TaskIds: TaskIds, TypeIDs: TypeIDs});
+
+            if (result.requstresult === '1') {
+                yield update({
+                    requstresult: result.requstresult,
+                    PatrolRecordListPC: result.data,
+                });
+            } else {
+                yield update({
+                    requstresult: result.requstresult,
+                    PatrolRecordListPC: [],
+                });
+            }
+        },
     }
 });
