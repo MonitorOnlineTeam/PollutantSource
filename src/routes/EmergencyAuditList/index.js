@@ -216,7 +216,7 @@ export default class EmergencyAuditList extends Component {
                                 if (this.state.selectid === '') {
                                     message.info('请选择应急任务！');
                                 } else {
-                                    this.props.dispatch(routerRedux.push(`/monitor/emergency/emergencyauditdetailinfo/${this.state.selectid}`));
+                                    this.props.dispatch(routerRedux.push(`/emergency/emergencyauditdetailinfo/${this.state.selectid}`));
                                 }
                             }}> 审核 </Button>
                             <Table

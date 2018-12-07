@@ -255,7 +255,7 @@ export default class EmergencyDetailInfo extends Component {
                     <div className={styles.returnLastPage}>
                         <Button type="solid" icon="left" onClick={() => {
                             this.props.history.goBack(-1);
-                            // this.props.dispatch(routerRedux.push(`/monitor/operation/emergency/emergencytodolist/`));
+                            // this.props.dispatch(routerRedux.push(`/operation/emergency/emergencytodolist/`));
                         }}>返回</Button>
                         &nbsp;&nbsp;&nbsp;
                         <Button type="solid" icon="flag" onClick={() => {

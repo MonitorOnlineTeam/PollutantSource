@@ -109,7 +109,7 @@ export default class AddStandardLibraryPollutant extends Component {
           });
       };
  success = (Id) => {
-     //  let index = this.props.dispatch(routerRedux.push(`/monitor/sysmanage/Userinfo`));
+     //  let index = this.props.dispatch(routerRedux.push(`/sysmanage/Userinfo`));
      //  if (this.state.UserId !== null) {
      //      message.success('修改成功', 3).then(() => index);
      //  } else {

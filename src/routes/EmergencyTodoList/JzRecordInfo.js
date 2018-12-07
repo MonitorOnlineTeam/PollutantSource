@@ -276,7 +276,7 @@ export default class JzRecordInfo extends Component {
                     <div className={styles.Toexamine} >
                         <Button size="large" onClick={() => {
                             this.props.history.goBack(-1);
-                            // this.props.dispatch(routerRedux.push(`/monitor/operation/emergency/emergencytodolist/`));
+                            // this.props.dispatch(routerRedux.push(`/operation/emergency/emergencytodolist/`));
                         }}><Icon type="left" />退回</Button>
                     </div>
                 </div>

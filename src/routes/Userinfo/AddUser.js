@@ -153,7 +153,7 @@ export default class AddUser extends Component {
         });
     }
  success = () => {
-     let index = this.props.dispatch(routerRedux.push(`/monitor/sysmanage/Userinfo`));
+     let index = this.props.dispatch(routerRedux.push(`/sysmanage/Userinfo`));
      if (this.state.UserId !== null) {
          message.success('修改成功', 3).then(() => index);
      } else {
@@ -446,7 +446,7 @@ export default class AddUser extends Component {
                           保存
                                 </Button><Divider type="vertical" />
                                 <Button type="dashed" onClick={
-                                    () => this.props.dispatch(routerRedux.push(`/monitor/sysmanage/userinfo`))
+                                    () => this.props.dispatch(routerRedux.push(`/sysmanage/userinfo`))
                                 } >
                           返回
                                 </Button>

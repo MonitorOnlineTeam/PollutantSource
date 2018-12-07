@@ -191,7 +191,7 @@ return (
                     if (this.state.selectid === '') {
                         message.info('请选择应急任务！');
                     } else {
-                        this.props.dispatch(routerRedux.push(`/monitor/emergency/emergencydetailinfo/${this.state.selectid}`));
+                        this.props.dispatch(routerRedux.push(`/emergency/emergencydetailinfo/${this.state.selectid}`));
                     }
                 }}> 查看 </Button>
                 <Table

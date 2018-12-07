@@ -209,10 +209,10 @@ export default class StandardLibrary extends Component {
             width: '150px',
             render: (text, record) => (<Fragment >
                 <a onClick={
-                    () => this.props.dispatch(routerRedux.push(`/monitor/sysmanage/UserDetail/${record.key}`))
+                    () => this.props.dispatch(routerRedux.push(`/sysmanage/UserDetail/${record.key}`))
                 } > 应用到排口 </a> <Divider type="vertical" />
                 <a onClick={
-                    () => this.props.dispatch(routerRedux.push(`/monitor/sysmanage/StandardLibraryDetail/${record.key}`))
+                    () => this.props.dispatch(routerRedux.push(`/sysmanage/StandardLibraryDetail/${record.key}`))
                 } > 编辑 </a> <Divider type="vertical" />
                 <Popconfirm placement="left" title="确定要删除此标准下所有数据吗？" onConfirm={() => this.confirm(record.key)} okText="是" cancelText="否">
                     <a href="#" > 删除 </a>
@@ -243,7 +243,7 @@ export default class StandardLibrary extends Component {
                                 }}style={{ width: 200 }} /></Col>
                             <Col span={1} ><Button type="primary"
                                 onClick={() => {
-                                    this.props.dispatch(routerRedux.push(`/monitor/sysmanage/StandardLibraryDetail/null`));
+                                    this.props.dispatch(routerRedux.push(`/sysmanage/StandardLibraryDetail/null`));
                                 }}>添加</Button></Col>
                             <Col span={12} >
                                 <Radio.Group defaultValue="0" buttonStyle="solid" onChange={(e) => {

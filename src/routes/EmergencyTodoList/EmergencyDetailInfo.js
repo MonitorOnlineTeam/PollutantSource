@@ -70,7 +70,7 @@ export default class EmergencyDetailInfo extends Component {
                         break;
                     case EnumPsOperationForm.CheckRecord:
                         rtnVal.push(<p style={{marginBottom: 0}}><Button style={{marginBottom: '5px'}} icon="check-circle-o" onClick={() => {
-                            this.props.dispatch(routerRedux.push(`/monitor/EmergencyTodoList/JzRecordInfo/${taskID}/${item.ID}`));
+                            this.props.dispatch(routerRedux.push(`/EmergencyTodoList/JzRecordInfo/${taskID}/${item.ID}`));
                         }}>{item.TypeName}</Button></p>);
                         break;
                     case EnumPsOperationForm.TestRecord:
@@ -288,7 +288,7 @@ export default class EmergencyDetailInfo extends Component {
                             <div className={styles.Toexamine} >
                                 <Button size="large" onClick={() => {
                                     this.props.history.goBack(-1);
-                                    // this.props.dispatch(routerRedux.push(`/monitor/operation/emergency/emergencytodolist/`));
+                                    // this.props.dispatch(routerRedux.push(`/operation/emergency/emergencytodolist/`));
                                 }}><Icon type="left" />退回</Button>
                             </div>
                         </div>
