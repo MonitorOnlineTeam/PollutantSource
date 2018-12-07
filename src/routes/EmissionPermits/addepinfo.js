@@ -35,7 +35,6 @@ class addepinfo extends PureComponent {
                 payload: {...allvalue, ...this.props.defaultvalue}
             });
             _this.props.hideModal();
-         
         };
     }
     render() {

@@ -201,6 +201,7 @@ class index extends PureComponent {
                                 <Col span={6} pull={3}>
                                     <FormItem label="企业简称" labelCol={{span: 6}} wrapperCol={{span: 10}}>
                                         {getFieldDecorator('enteasyname', {
+                                            initialValue: baseinfo.abbreviation,
                                             rules: [{
                                                 required: true, message: '请输入企业简称!',
                                             }],
