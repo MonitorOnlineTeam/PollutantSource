@@ -30,7 +30,30 @@ export async function GetJzRecord(params) {
         TaskID: params.TaskID,
         TypeID: params.TypeID
     };
-    const result = await post('/api/rest/PollutantSourceApi/PTaskForm/GetBdRecord', body, null);
+    const result = await post('/api/rest/PollutantSourceApi/PTaskForm/GetJzRecord', body, null);
+    return result === null ? { data: null } : result;
+}
+
+// 获取校准记录
+export async function GetRecordType(params) {
+    const body = {
+
+    };
+    const result = await post('/api/rest/PollutantSourceApi/PTaskForm/GetRecordType', body, null);
+    return result === null ? { data: null } : result;
+}
+
+// 获取校准历史记录
+export async function GetJzHistoryRecord(params) {
+    const body = {
+        pageIndex: params.pageIndex,
+        pageSize: params.pageSize,
+        TypeID: params.TypeID,
+        DGIMN: params.DGIMN,
+        BeginTime: params.BeginTime,
+        EndTime: params.EndTime
+    };
+    const result = await post('/api/rest/PollutantSourceApi/PTaskForm/GetJzRecord', body, null);
     return result === null ? { data: null } : result;
 }
 // 根据任务id和类型id获取易耗品列表
