@@ -267,7 +267,7 @@ class ConsumablesReplaceRecord extends Component {
 
                     </div>
                     <div style={{backgroundColor: 'white', marginTop: 10}}>
-                        <div style={{fontWeight: 'bold', marginBottom: 3}}>企业名称：{this.props.ConsumablesReplaceRecordList.length === 0 ? null : this.props.ConsumablesReplaceRecordList[0].record[0].Content['EnterpriseName']}</div>
+                        <div style={{fontWeight: 'bold', marginBottom: 12, marginTop: 10}}>企业名称：{this.props.ConsumablesReplaceRecordList.length === 0 ? null : this.props.ConsumablesReplaceRecordList[0].record[0].Content['EnterpriseName']}</div>
                         <Table
                             style={{width: 1200, backgroundColor: 'white'}}
                             columns={columns}

@@ -219,7 +219,7 @@ class StandardGasRepalceRecord extends Component {
 
                     </div>
                     <div style={{backgroundColor: 'white'}}>
-                        <div style={{fontWeight: 'bold', marginBottom: 3}}>企业名称：{this.props.StandardGasRepalceRecordList.length === 0 ? null : this.props.StandardGasRepalceRecordList[0].record[0].Content['EnterpriseName']}</div>
+                        <div style={{fontWeight: 'bold', marginBottom: 12, marginTop: 10}}>企业名称：{this.props.StandardGasRepalceRecordList.length === 0 ? null : this.props.StandardGasRepalceRecordList[0].record[0].Content['EnterpriseName']}</div>
                         <Table
                             style={{width: 1200}}
                             columns={columns}
