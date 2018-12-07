@@ -141,6 +141,21 @@ export async function editstandardlibrary(params) {
         data: null
     } : result;
 }
+// 添加标准库子表
+export async function editstandardlibrarypollutant(params) {
+    const body = {
+        Key: params.Guid,
+        PollutantCode: params.PollutantCode,
+        AlarmType: params.AlarmType,
+        UpperLimit: params.UpperLimit,
+        LowerLimit: params.LowerLimit,
+        Type: 2,
+    };
+    const result = post('/api/rest/PollutantSourceApi/StandardLibrary/EditStandardLibraryPollutant', body, null);
+    return result === null ? {
+        data: null
+    } : result;
+}
 // 获取所有污染物
 export async function getpollutantlist(params) {
     const body = {

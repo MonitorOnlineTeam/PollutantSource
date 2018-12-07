@@ -81,16 +81,21 @@ export default class AddStandardLibraryPollutant extends Component {
               } else {
                   if (!err && flag === true) {
                       that.props.dispatch({
-                          type: 'standardlibrary/editstandardlibrary',
+                          type: 'standardlibrary/editstandardlibrarypollutant',
                           payload: {
-                              StandardLibraryID: this.state.StandardLibraryID,
-                              Name: values.Name,
-                              Type: values.Type,
-                              IsUsed: values.OutputType === true ? '1' : '0',
-                              Files: this.state.fileList,
+                              PollutantCode: values.PollutantCode,
+                              AlarmType: values.AlarmType,
+                              UpperLimit: values.UpperLimit,
+                              LowerLimit: values.LowerLimit,
                               callback: () => {
                                   if (this.props.requstresult === '1') {
-                                      this.success();
+                                      this.props.dispatch({
+                                          type: 'standardlibrary/getstandardlibrarypollutantlist',
+                                          payload: {
+                                              StandardLibraryID: this.state.StandardLibraryID,
+                                          },
+                                      });
+                                      this.props.getlist();
                                   } else {
                                       message.error(this.props.reason);
                                   }

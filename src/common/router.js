@@ -81,269 +81,269 @@ export const getRouterData = (app) => {
             component: dynamicWrapper(app, ['user', 'login', 'search'], () =>
           import('../layouts/MonitorLayout')),
         },
-        '/monitor/overview': {
+        '/overview': {
             component: dynamicWrapper(app, ['points', 'overview', 'user', 'baseinfo'], () =>
           import('../routes/OverView')),
         },
-        '/monitor/datalist': {
+        '/datalist': {
             component: dynamicWrapper(app, ['overview'], () =>
           import('../routes/OverView/dataList')),
         },
-        '/monitor/statuslist': {
+        '/statuslist': {
             component: dynamicWrapper(app, ['points'], () =>
           import('../routes/OverView/statusList')),
         },
-        '/monitor/stationbuilding/:pointcode': {
+        '/stationbuilding/:pointcode': {
             component: dynamicWrapper(app, ['points'], () =>
           import('../components/OverView/StationBuilding')),
         },
-        '/monitor/pointdetail/:pointcode': {
+        '/pointdetail/:pointcode': {
             component: dynamicWrapper(app, ['points'], () =>
           import('../routes/PointDetail')),
         },
-        '/monitor/emergency/emergencyauditdetailinfo/:exceptionhandleid': {
+        '/emergency/emergencyauditdetailinfo/:exceptionhandleid': {
             component: dynamicWrapper(app, ['points'], () =>
           import('../routes/EmergencyAuditList/EmergencyDetailInfo')),
         },
-        // '/monitor/emergency/emergencydetailinfo/:exceptionhandleid': {
+        // '/emergency/emergencydetailinfo/:exceptionhandleid': {
         //     component: dynamicWrapper(app, ['points'], () =>
         //   import('../routes/EmergencyTodoList/EmergencyDetailInfo')),
         // },
-        '/monitor/emergency/emergencydetailinfo/:TaskID': {
+        '/emergency/emergencydetailinfo/:TaskID': {
             component: dynamicWrapper(app, ['task'], () =>
           import('../routes/EmergencyTodoList/EmergencyDetailInfo')),
         },
-        '/monitor/pointdetail/:pointcode/processflowdiagram': {
+        '/pointdetail/:pointcode/processflowdiagram': {
             component: dynamicWrapper(app, ['points'], () =>
           import('../routes/PointDetail/ProcessFlowDiagram')),
         },
-        '/monitor/pointdetail/:pointcode/dataquery': {
+        '/pointdetail/:pointcode/dataquery': {
             component: dynamicWrapper(app, ['points'], () =>
           import('../routes/PointDetail/DataQuery')),
         },
-        '/monitor/pointdetail/:pointcode/alarmrecord': {
+        '/pointdetail/:pointcode/alarmrecord': {
             component: dynamicWrapper(app, ['points'], () =>
           import('../routes/PointDetail/AlarmRecord')),
         },
-        '/monitor/pointdetail/:pointcode/realvideo': {
+        '/pointdetail/:pointcode/realvideo': {
             component: dynamicWrapper(app, ['videolist'], () =>
           import('../routes/PointDetail/RealVideo')),
         },
-        '/monitor/pointdetail/:pointcode/hisvideo': {
+        '/pointdetail/:pointcode/hisvideo': {
             component: dynamicWrapper(app, ['videolist'], () =>
         import('../routes/PointDetail/HisVideo')),
         },
 
-        '/monitor/pointdetail/:pointcode/warningrecord': {
+        '/pointdetail/:pointcode/warningrecord': {
             component: dynamicWrapper(app, ['points'], () =>
           import('../routes/PointDetail/WarningRecord')),
         },
-        '/monitor/pointdetail/:pointcode/videolist': {
+        '/pointdetail/:pointcode/videolist': {
             component: dynamicWrapper(app, ['videolist'], () =>
           import('../routes/PointDetail/VideoList')),
         },
 
-        '/monitor/pointdetail/:pointcode/emergencymaintenancerecord': {
+        '/pointdetail/:pointcode/emergencymaintenancerecord': {
             component: dynamicWrapper(app, ['points'], () =>
           import('../routes/PointDetail/EmergencyMaintenanceRecord')),
         },
-        '/monitor/pointdetail/:pointcode/operationplanrecord': {
+        '/pointdetail/:pointcode/operationplanrecord': {
             component: dynamicWrapper(app, ['points'], () =>
           import('../routes/PointDetail/OperationPlanRecord')),
         },
-        '/monitor/pointdetail/:pointcode/inspectiontaskrecord': {
+        '/pointdetail/:pointcode/inspectiontaskrecord': {
             component: dynamicWrapper(app, ['points'], () =>
           import('../routes/PointDetail/InspectionTaskRecord')),
         },
-        '/monitor/pointdetail/:pointcode/replacementpartrecord': {
+        '/pointdetail/:pointcode/replacementpartrecord': {
             component: dynamicWrapper(app, ['points'], () =>
           import('../routes/PointDetail/ReplacementPartRecord')),
         },
-        '/monitor/pointdetail/:pointcode/stopmanagement': {
+        '/pointdetail/:pointcode/stopmanagement': {
             component: dynamicWrapper(app, ['points'], () =>
           import('../routes/PointDetail/StopManagement')),
         },
-        '/monitor/pointdetail/:pointcode/stationthree': {
+        '/pointdetail/:pointcode/stationthree': {
             component: dynamicWrapper(app, ['points'], () =>
         import('../routes/PointDetail/StationThree')),
         },
-        '/monitor/pointdetail/:pointcode/ywdsjlist': {
+        '/pointdetail/:pointcode/ywdsjlist': {
             component: dynamicWrapper(app, ['task'], () =>
         import('../routes/PointDetail/Ywdsjlist')),
         },
-        '/monitor/EmergencyTodoList/JzRecordInfo/:TaskID/:TypeID': {
+        '/EmergencyTodoList/JzRecordInfo/:TaskID/:TypeID': {
             component: dynamicWrapper(app, ['task'], () =>
         import('../routes/EmergencyTodoList/JzRecordInfo')),
         },
         /* 工作台 */
-        '/monitor/workbench': {
+        '/workbench': {
             component: dynamicWrapper(app, ['user', 'points'], () =>
           import('../routes/Workbench')),
         },
         /* 综合分析 */
-        '/monitor/analysis/alarmsubject/alarmtypeanaly': {
+        '/analysis/alarmsubject/alarmtypeanaly': {
             component: dynamicWrapper(app, ['points'], () =>
           import('../routes/AnalyAlarmType')),
         },
-        '/monitor/analysis/alarmsubject/alarmhouranaly': {
+        '/analysis/alarmsubject/alarmhouranaly': {
             component: dynamicWrapper(app, ['points'], () =>
           import('../routes/AnalyAlarmhour')),
         },
-        '/monitor/analysis/alarmsubject/alarmpollanaly': {
+        '/analysis/alarmsubject/alarmpollanaly': {
             component: dynamicWrapper(app, ['points'], () =>
           import('../routes/AnalyAlarmPoll')),
         },
-        '/monitor/analysis/alarmsubject/alarmhourareaanaly': {
+        '/analysis/alarmsubject/alarmhourareaanaly': {
             component: dynamicWrapper(app, ['points'], () =>
           import('../routes/AnalyAlarmhourarea')),
         },
-        '/monitor/analysis/alarmsubject/alarmreasonanaly': {
+        '/analysis/alarmsubject/alarmreasonanaly': {
             component: dynamicWrapper(app, ['points'], () =>
           import('../routes/AnalyAlarmReason')),
         },
-        '/monitor/analysis/operationsubject/transeffectanaly': {
+        '/analysis/operationsubject/transeffectanaly': {
             component: dynamicWrapper(app, ['points'], () =>
           import('../routes/AnalyTranseffect')),
         },
-        '/monitor/analysis/operationsubject/devicehouranaly': {
+        '/analysis/operationsubject/devicehouranaly': {
             component: dynamicWrapper(app, ['points'], () =>
           import('../routes/AnalyDevicehour')),
         },
-        '/monitor/analysis/operationsubject/replacepartanaly': {
+        '/analysis/operationsubject/replacepartanaly': {
             component: dynamicWrapper(app, ['points'], () =>
           import('../routes/AnalyReplacePart')),
         },
-        '/monitor/analysis/operationsubject/costinganaly': {
+        '/analysis/operationsubject/costinganaly': {
             component: dynamicWrapper(app, ['points'], () =>
           import('../routes/AnalyCosting')),
         },
-        '/monitor/analysis/pollsubject/dischargeanaly': {
+        '/analysis/pollsubject/dischargeanaly': {
             component: dynamicWrapper(app, ['points'], () =>
           import('../routes/AnalyDischarge')),
         },
-        '/monitor/analysis/pollsubject/timehouranaly': {
+        '/analysis/pollsubject/timehouranaly': {
             component: dynamicWrapper(app, ['points'], () =>
           import('../routes/AnalyTimehour')),
         },
-        '/monitor/analysis/pollsubject/polldischargeanaly': {
+        '/analysis/pollsubject/polldischargeanaly': {
             component: dynamicWrapper(app, ['points'], () =>
           import('../routes/AnalyPollDischarge')),
         },
-        '/monitor/analysis/pollsubject/environmenttaxanaly': {
+        '/analysis/pollsubject/environmenttaxanaly': {
             component: dynamicWrapper(app, ['points'], () =>
           import('../routes/AnalyEnvironmentTax')),
         },
-        '/monitor/analysis/pollsubject/environmenttaxdischargeanaly': {
+        '/analysis/pollsubject/environmenttaxdischargeanaly': {
             component: dynamicWrapper(app, ['points'], () =>
           import('../routes/AnalyEnvironmentTaxDischarge/GroupTax')),
         },
-        '/monitor/analysis/pollsubject/reachstandardanaly': {
+        '/analysis/pollsubject/reachstandardanaly': {
             component: dynamicWrapper(app, ['points'], () =>
           import('../routes/AnalyReachStandard')),
         },
         /* 运维相关 */
-        '/monitor/operation/emergency/emergencyauditlist': {
+        '/operation/emergency/emergencyauditlist': {
             component: dynamicWrapper(app, ['points'], () =>
           import('../routes/EmergencyAuditList')),
         },
-        '/monitor/operation/emergency/emergencymaintenancelist': {
+        '/operation/emergency/emergencymaintenancelist': {
             component: dynamicWrapper(app, ['points'], () =>
           import('../routes/EmergencyMaintenanceList')),
         },
-        '/monitor/operation/emergency/emergencytodolist': {
+        '/operation/emergency/emergencytodolist': {
             component: dynamicWrapper(app, ['points'], () =>
           import('../routes/EmergencyTodoList')),
         },
-        '/monitor/operation/inspection/inspectiontasklist': {
+        '/operation/inspection/inspectiontasklist': {
             component: dynamicWrapper(app, ['points'], () =>
           import('../routes/InspectionTaskList')),
         },
-        '/monitor/operation/inspection/inspectiontaskreplacementpartlist': {
+        '/operation/inspection/inspectiontaskreplacementpartlist': {
             component: dynamicWrapper(app, ['points'], () =>
           import('../routes/InspectionTaskReplacementPartList')),
         },
-        '/monitor/operation/inspection/inspectiontasktodolist': {
+        '/operation/inspection/inspectiontasktodolist': {
             component: dynamicWrapper(app, ['points'], () =>
           import('../routes/InspectionTaskTodoList')),
         },
-        '/monitor/operation/plan/operationplanauditlist': {
+        '/operation/plan/operationplanauditlist': {
             component: dynamicWrapper(app, ['points'], () =>
           import('../routes/OperationPlanAuditList')),
         },
-        '/monitor/operation/plan/operationplanlist': {
+        '/operation/plan/operationplanlist': {
             component: dynamicWrapper(app, ['points'], () =>
           import('../routes/OperationPlanList')),
         },
-        '/monitor/operation/plan/operationplanup': {
+        '/operation/plan/operationplanup': {
             component: dynamicWrapper(app, ['points'], () =>
           import('../routes/OperationPlanUp')),
         },
-        '/monitor/operation/replacementpartadd': {
+        '/operation/replacementpartadd': {
             component: dynamicWrapper(app, ['points'], () =>
           import('../routes/ReplacementPartAdd')),
         },
-        '/monitor/operation/stopmanagement': {
+        '/operation/stopmanagement': {
             component: dynamicWrapper(app, ['points'], () =>
           import('../routes/StopManagement')),
         },
-        '/monitor/operation/history': {
+        '/operation/history': {
             component: dynamicWrapper(app, ['points'], () =>
           import('../routes/History')),
         },
-        '/monitor/operation/TurnOver': {
+        '/operation/TurnOver': {
             component: dynamicWrapper(app, ['points'], () =>
           import('../routes/TurnOver')),
         },
-        '/monitor/operation/StaffweeklyCalendar': {
+        '/operation/StaffweeklyCalendar': {
             component: dynamicWrapper(app, ['points'], () =>
           import('../routes/StaffweeklyCalendar')),
         },
-        '/monitor/operation/OperationAndMaintenanceMemorabilia/:DGIMNs': {
+        '/operation/OperationAndMaintenanceMemorabilia/:DGIMNs': {
             component: dynamicWrapper(app, ['task'], () =>
           import('../routes/OperationAndMaintenanceMemorabilia')),
         },
         /* 系统管理 */
-        '/monitor/sysmanage/Userinfo': {
+        '/sysmanage/Userinfo': {
             component: dynamicWrapper(app, ['userinfo', 'userdgimndata'], () =>
             import('../routes/Userinfo')),
         },
-        '/monitor/sysmanage/UserDetail/:UserId': {
+        '/sysmanage/UserDetail/:UserId': {
             component: dynamicWrapper(app, ['userinfo'], () =>
             import('../routes/Userinfo/AddUser')),
         },
-        '/monitor/sysmanage/PointInfo': {
+        '/sysmanage/PointInfo': {
             component: dynamicWrapper(app, ['pointinfo'], () =>
             import('../routes/PointInfo/')),
         },
-        '/monitor/sysmanage/PointDetail/:DGIMN': {
+        '/sysmanage/PointDetail/:DGIMN': {
             component: dynamicWrapper(app, ['pointinfo'], () =>
               import('../routes/PointInfo/AddPoint')),
         },
-        '/monitor/sysmanage/PointDetail/:ID/:Name': {
+        '/sysmanage/PointDetail/:ID/:Name': {
             component: dynamicWrapper(app, ['pointinfo'], () =>
               import('../routes/PointInfo/PointView')),
         },
-        '/monitor/sysmanage/StandardLibrary': {
+        '/sysmanage/StandardLibrary': {
             component: dynamicWrapper(app, ['standardlibrary'], () =>
             import('../routes/StandardLibrary/')),
         },
-        '/monitor/sysmanage/StandardLibraryDetail/:StandardLibraryID': {
+        '/sysmanage/StandardLibraryDetail/:StandardLibraryID': {
             component: dynamicWrapper(app, ['standardlibrary'], () =>
             import('../routes/StandardLibrary/AddStandardLibrary')),
         },
-        '/monitor/entInfo/entoperation': {
+        '/entInfo/entoperation': {
             component: dynamicWrapper(app, ['baseinfo'], () =>
                     import('../routes/EnterpriseInfo')),
         },
-        '/monitor/emissionpermits': {
+        '/emissionpermits': {
             component: dynamicWrapper(app, ['baseinfo'], () =>
                     import('../routes/EmissionPermits')),
         },
-        '/monitor/sysmanage/ConsumablesReplaceRecord/:Taskid': {
+        '/sysmanage/ConsumablesReplaceRecord/:Taskid': {
             component: dynamicWrapper(app, ['baseinfo'], () =>
                     import('../routes/EmergencyTodoList/ConsumablesReplaceRecord')),
         },
-        '/monitor/sysmanage/StandardGasRepalceRecord/:Taskid': {
+        '/sysmanage/StandardGasRepalceRecord/:Taskid': {
             component: dynamicWrapper(app, ['baseinfo'], () =>
                     import('../routes/EmergencyTodoList/StandardGasRepalceRecord')),
         },

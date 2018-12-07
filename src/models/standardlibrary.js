@@ -3,7 +3,7 @@ import {
 } from '../dvapack';
 import {
     getlist, enableordisable, deletestandardlibrarybyid, addstandardlibrary, addstandardlibrarypollutant, uploadfiles, getStandardlibrarybyid, deletefiles
-    , editstandardlibrary, getpollutantlist, getstandardlibrarypollutantlist, deletestandardlibrarypollutantbyid, editStandardlibrarypollutant, getStandardlibrarypollutantbyid
+    , editstandardlibrary, getpollutantlist, getstandardlibrarypollutantlist, deletestandardlibrarypollutantbyid, editstandardlibrarypollutant, getStandardlibrarypollutantbyid
 } from '../services/standardlibrary';
 export default Model.extend({
     namespace: 'standardlibrary',
@@ -276,6 +276,34 @@ export default Model.extend({
                 Type: Type,
                 IsUsed: IsUsed,
                 Files: Files,
+            });
+            yield update({
+                requstresult: result.requstresult,
+                reason: result.reason
+            });
+            callback();
+        },
+        * editstandardlibrarypollutant({
+            payload: {
+                Guid,
+                PollutantCode,
+                AlarmType,
+                UpperLimit,
+                LowerLimit,
+                callback,
+            }
+        }, {
+            call,
+            put,
+            update,
+            select
+        }) {
+            const result = yield call(editstandardlibrarypollutant, {
+                Guid: Guid,
+                PollutantCode: PollutantCode,
+                AlarmType: AlarmType,
+                UpperLimit: UpperLimit,
+                LowerLimit: LowerLimit,
             });
             yield update({
                 requstresult: result.requstresult,
