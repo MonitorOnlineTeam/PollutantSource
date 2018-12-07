@@ -11,6 +11,7 @@ import {
     Select,
     Button,
     Card,
+    Divider,
 } from 'antd';
 import PageHeader from '../../components/PageHeader';
 import {
@@ -181,7 +182,7 @@ export default class AddUser extends Component {
                  }
              },
          });
-     }
+     } 
  }
     IsExistence = (rule, value, callback) => {
         this.props.dispatch({
@@ -438,12 +439,17 @@ export default class AddUser extends Component {
                             <Col span={12} />
                         </Row>
                         <Row gutter={48}>
-                            <Col span={10} />
-                            <Col span={12} ><Button type="primary"
-                                htmlType="submit"
-                                className="login-form-button" >
+                            <Col span={24} style={{textAlign: 'center'}}>
+                                <Button type="primary"
+                                    htmlType="submit"
+                                    className="login-form-button" >
                           保存
-                            </Button>
+                                </Button><Divider type="vertical" />
+                                <Button type="dashed" onClick={
+                                    () => this.props.dispatch(routerRedux.push(`/monitor/sysmanage/userinfo`))
+                                } >
+                          返回
+                                </Button>
                             </Col>
                         </Row>
                     </Card>

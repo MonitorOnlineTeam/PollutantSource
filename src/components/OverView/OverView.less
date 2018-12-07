@@ -87,7 +87,31 @@
       line-height: 14px;
     }
   }
-
+.treeTable :global{
+  .ant-table-thead > tr:first-child > th:first-child {
+    border-top-left-radius: 7px;
+  }
+  .ant-table-thead > tr:first-child > th:last-child {
+    border-top-right-radius: 7px;
+  }
+  .ant-table-thead tr th{
+    line-height: 35px;
+  }
+  .ant-table-small > .ant-table-content > .ant-table-body > table > .ant-table-thead > tr > th{
+    background: #55A0D3 ;
+    color: #fff;
+  }
+  .ant-table-small > .ant-table-content > .ant-table-body > table
+  {
+    padding: 0
+  }
+  .ant-table-row{
+    line-height: 35px;
+  }
+}
+.treeTable{
+  border-radius: 7px;
+}
 
   @-webkit-keyframes  shineRed {  
     from { -webkit-box-shadow: 0 0 5px #bbb; }  
@@ -142,6 +166,10 @@
 .dispatchinput{
    width:200px;
 }
+.statusborder{
+  border: 2px solid #EBEBEB;
+  margin: 5px 0 5px 0;
+}
 
 .stationimg{
   width: 120px;
@@ -149,8 +177,47 @@
   float: right;
   margin:30px 0 0 0;
 }
+.statuslist{
+     padding: 15px 0 0 60px
+}
+
+.statuslist span{
+     margin-right: 15px;
+}
+.statuslist img{
+   margin: 0 7px 5px 0
+}
+.tablerow{
+   height: 300;
+}
+.backButton{
+    float: right;
+    margin-right: 20px;
+    background: #5DB4FF;
+    color: #fff;
+    height: 28px;
+    line-height: 27px;
+    font-size: 15px;
+}
+.statustoolbar{
+    float: right;
+    margin-right: 20px;
+}
+
+.teimgbg{
+   background: url('../../../public/group.png') no-repeat;
+   width: 130px;
+   height: 65px;
+   color: #fff;
+   padding: 8px 0 0 15px;
+   font-size: 15px;
+   float: left;
+   margin: 20px 0 0px 7px;
+}
+.rate{
+  text-align: center;
+  font-size: 18px;
+}
+
 
   
-  
-
- 

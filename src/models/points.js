@@ -1,9 +1,14 @@
 import moment from 'moment';
+import React from 'react';
 import { loadMonitorPoint, loadLastdata, queryentpointlist, loadMonitorDatalist
-    , maploadMonitorDatalist, loadPointDetail, queryentinfolist, loadCountryMonitorDatalist} from '../services/api';
+    , maploadMonitorDatalist, loadPointDetail, queryentinfolist, querypollutantlist,
+    queryhistorydatalist, queryoverdatalist, queryprocesschart, querysinglepointinfo } from '../services/api';
 import { Model } from '../dvapack';
-import { debug } from 'util';
 
+import {
+    Popover,
+    Badge
+} from 'antd';
 export default Model.extend({
     namespace: 'points',
     state: {
@@ -16,43 +21,34 @@ export default Model.extend({
         selectpoint: [],
         isfinished: false,
         selpoint: null,
-        columns: [ {
-            title: '监控时间',
-            dataIndex: 'MonitorTime',
-            key: 'MonitorTime',
-            width: 280,
-            fixed: 'left',
-            align: 'center'
-        }, {
-            title: '浓度',
-            dataIndex: 'MonitorValue',
-            key: 'MonitorValue',
-            width: 100,
-            render: (text, record) => (
-                <div style={{ color: record.color}}>{text}</div>
-            ),
-        }],
         data: [],
-        total: 0,
         size: 30,
         current: 1,
         querydate: [],
         monitortype: 'realtime',
         selpollutant: null,
         dateformat: 'YYYY-MM-DD HH:mm:ss',
-        chartdata: [],
         Tablewidth: 280,
         countryArray: [],
         countryid: [],
         pointName: '',
         levels: [],
-        selent: []
+        selent: [],
+
+        pollutantlist: [],
+        datalist: [],
+        chartdata: [],
+        columns: [],
+        datatable: [],
+        total: 0,
+        overdata: [],
+        overtotal: 0,
+        processchart: {}
     },
     effects: {
         * querypointdetail({
             payload,
-        }, { call, update, put, select}) {
-            let { pointName } = yield select(_ => _.points);
+        }, { call, update, put, select }) {
             let { countryid } = yield select(_ => _.points);
             let { countryArray } = yield select(_ => _.points);
             let { columns } = yield select(_ => _.points);
@@ -72,7 +68,7 @@ export default Model.extend({
                 width: 100,
 
                 render: (text, record) => (
-                    <div style={{ color: record.color}}>{text}</div>
+                    <div style={{ color: record.color }}>{text}</div>
                 ),
             }];
             countryid = [];
@@ -94,7 +90,7 @@ export default Model.extend({
                     current: 1,
                     dateformat: 'YYYY-MM-DD HH:mm:ss' },
             });
-            yield update({ selpoint: data[0], Tablewidth, columns, pointName: data[0].pointName, countryid, countryArray});
+            yield update({ selpoint: data[0], Tablewidth, columns, pointName: data[0].pointName, countryid, countryArray });
         // 获取报警级别
         // let levels=data.MonitorPointPollutant[0].Levels;
         // yield update({ levels });
@@ -342,7 +338,7 @@ export default Model.extend({
             if (payload.countrydgimn) {
                 yield put({
                     type: 'querychartpointdata',
-                    payload: { ...payload, isclear: true},
+                    payload: { ...payload, isclear: true },
                 });
             }
         },
@@ -401,6 +397,163 @@ export default Model.extend({
             const result = yield call(queryentpointlist, payload);
             const resultent = yield call(queryentinfolist, payload);
             yield update({ entpointlist: result.data, selectent: resultent.data[0] });
+        },
+        * querypollutantlist({ payload
+        }, {select, call, put, update}) {
+            const result = yield call(querypollutantlist, payload);
+            yield update({ pollutantlist: result });
+            const params = {
+                pollutantCode: result[0].pollutantCode,
+                datatype: 'realtime',
+                dgimn: payload.dgimn,
+                pageIndex: 1,
+                pollutantName: result[0].pollutantName,
+                pollutantInfo: result[0]
+            };
+            yield put({
+                type: 'queryhistorydatalist',
+                payload: params
+            });
+        },
+        * queryhistorydatalist({ payload
+        }, {select, call, update}) {
+            const { pollutantlist } = yield select(_ => _.points);
+            let pageSize = 10;
+            if (payload.pageSize) { pageSize = payload.pageSize; };
+            const resultlist = yield call(queryhistorydatalist, {...payload, pageSize: pageSize});
+            const result = resultlist.data;
+            let xAxis = [];
+            let seriesdata = [];
+            let markLine = {};
+
+            result.map((item, key) => {
+                xAxis = xAxis.concat(item.MonitorTime);
+                seriesdata = seriesdata.concat(item[payload.pollutantCode]);
+            });
+            let polluntinfo;
+            if (payload.pollutantInfo) { polluntinfo = payload.pollutantInfo; }
+            polluntinfo = pollutantlist.find((value, index, arr) => {
+                return value.pollutantCode === payload.pollutantCode;
+            });
+            let pollutantcols = [];
+            pollutantlist.map((item, key) => {
+                pollutantcols = pollutantcols.concat({
+                    title: item.pollutantName + '(' + item.unit + ')',
+                    dataIndex: item.pollutantCode,
+                    key: item.pollutantCode,
+                    render: (value, record, index) => {
+                        const additional = record[item.pollutantCode + '_params'];
+                        if (additional) {
+                            const additionalInfo = additional.split('§');
+                            if (additionalInfo[0] === 'IsOver') {
+                                const content = (<div>
+                                    <li style={{listStyle: 'none', marginBottom: 10}}>
+                                        <Badge status="success" text={`标准值：${additionalInfo[2]}`} />
+                                    </li>
+                                    <li style={{listStyle: 'none', marginBottom: 10}}>
+                                        <Badge status="error" text={`超标倍数：${additionalInfo[3]}`} />
+                                    </li>
+                                    <li style={{borderBottom: '1px solid #e8e8e8', listStyle: 'none', marginBottom: 5}} />
+                                </div>);
+                                return (<Popover content={content}><span style={{ color: `${additionalInfo[1]}`, cursor: 'pointer' }}>{value}</span></Popover>);
+                            } else {
+                                const content = (<div>
+                                    <li style={{listStyle: 'none', marginBottom: 10}}>
+                                        <Badge status="warning" text={`异常原因：${additionalInfo[1]}`} />
+                                    </li>
+                                    <li style={{borderBottom: '1px solid #e8e8e8', listStyle: 'none', marginBottom: 5}} />
+                                </div>);
+                                return (<Popover content={content}><span style={{ color: '#F3AC00', cursor: 'pointer' }}>{value}</span></Popover>);
+                            }
+                        } else {
+                            return value;
+                        }
+                    }
+                });
+            });
+            // let datatable = [];
+            let columns = [{
+                title: '时间',
+                dataIndex: 'MonitorTime',
+                key: 'MonitorTime'
+            }];
+            columns = columns.concat(pollutantcols);
+            if (polluntinfo.standardValue) {
+                markLine = {
+                    symbol: 'none', // 去掉警戒线最后面的箭头
+                    data: [{
+                        lineStyle: {
+                            type: 'dash',
+                            color: polluntinfo.color,
+                        },
+                        yAxis: polluntinfo.standardValue
+                    }]
+                };
+            }
+            const option = {
+                title: {
+                    // text: '2018-05-17~2018-05-18'
+                },
+                tooltip: {
+                    trigger: 'axis'
+                },
+                toolbox: {
+                    show: true,
+                    feature: {
+                        saveAsImage: {}
+                    }
+                },
+                xAxis: {
+                    type: 'category',
+                    name: '时间',
+                    boundaryGap: false,
+                    data: xAxis
+                },
+                yAxis: {
+                    type: 'value',
+                    name: '浓度(' + `${payload.pollutantName}` + `${polluntinfo.unit}` + ')',
+                    axisLabel: {
+                        formatter: '{value}'
+                    },
+                },
+                series: [{
+                    type: 'line',
+                    name: payload.pollutantName,
+                    data: seriesdata,
+                    markLine: markLine
+                }]
+            };
+            yield update({ datalist: result, chartdata: option, columns, datatable: result, total: resultlist.total });
+        },
+        * queryoverdatalist({
+            payload
+        }, {call, update}) {
+            const res = yield call(queryoverdatalist, {...payload});
+            if (res.data) {
+                let reslist = [];
+                res.data.map((item, key) => {
+                    reslist = reslist.concat({
+                        ...item,
+                        overValue: item.value + '(' + item.unit + ')',
+                        key: key
+                    });
+                });
+                yield update({ overdata: reslist, overtotal: res.total });
+            } else {
+                yield update({ overdata: [], overtotal: 0 });
+            }
+        },
+        * queryprocesschart({
+            payload
+        }, {call, update}) {
+            const res = yield call(queryprocesschart, {...payload});
+            yield update({ processchart: res });
+        },
+        * querysinglepointinfo({
+            payload
+        }, {call, update}) {
+            const res = yield call(querysinglepointinfo, {...payload});
+            yield update({ selectpoint: res });
         }
     },
     subscriptions: {

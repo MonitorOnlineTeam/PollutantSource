@@ -1,17 +1,16 @@
 // 监控总览-数据查询
 import React, { Component } from 'react';
 import ReactEcharts from 'echarts-for-react';
-import {getPollutantDatas, getAllConcentration} from '../../mockdata/Base/commonbase';
 import RangePicker_ from '../../components/PointDetail/RangePicker_';
 import ButtonGroup_ from '../../components/PointDetail/ButtonGroup_';
 import PollutantSelect_ from '../../components/PointDetail/PollutantSelect_';
-import PopoverViewData_ from '../../components/PointDetail/PopoverViewData_';
 import styles from './index.less';
+import { connect } from 'dva';
 import {
+    Spin,
+    Card,
     Table,
-    Row,
-    Col,
-    Card
+    Switch,
 } from 'antd';
 import moment from 'moment';
 
@@ -21,320 +20,158 @@ import moment from 'moment';
 add by cg 18.6.8
 modify by
 */
-const pollutantDatas = getPollutantDatas();
-
+@connect(({points, loading}) => ({
+    pollutantlist: points.pollutantlist,
+    option: points.chartdata,
+    isloading: loading.effects['points/querypollutantlist'],
+    columns: points.columns,
+    datatable: points.datatable,
+    total: points.total
+}))
 class DataQuery extends Component {
     constructor(props) {
         super(props);
-        // console.log(this.props.match.params.pointcode);
-        const defaultPollutant = pollutantDatas[0];
-        var defaultOption = {
-            legend: [],
-            xAxisData: [],
-            series: [{
-                name: '',
-                type: 'line',
-                data: [],
-                markPoint: {
-                    data: [
-                        {type: 'max', name: '最大值'},
-                        {type: 'min', name: '最小值'}
-                    ]
-                },
-                markLine: {
-                    data: [
-                        // {type: 'average', name: '平均值'}
-                        {name: '标准值', yAxis: defaultPollutant.Standard}
-                    ]
-                }
-            }]
-        };
-
-        const obj = {
-            startTime: '',
-            endTime: '',
-            concentration: [pollutantDatas[0].Value],
+        // 默认值
+        const defaultValue = {
+            formats: 'YYYY-MM-DD HH:mm',
             dataType: 'realtime',
-            point: [this.props.match.params.pointcode] || []
+            current: 1,
+            pageSize: 10,
+            rangeDate: [moment(new Date()).add(-60, 'minutes'), moment(new Date())],
         };
-        let concentrationDatas = getAllConcentration(obj);
-        let defaultTableDatas = [];
-        // console.log(defaultPollutant.Value);
-        let t = 1;
-        concentrationDatas.map((item) => {
-            let _thisPollutantInfo = {};
-            item.MonitoringDatas.map((time) => {
-                let _thisPollutant = time.PollutantDatas.find((pollutants) => {
-                    return pollutants.PollutantCode === defaultPollutant.Value;
-                });
-                _thisPollutantInfo = _thisPollutant;
-                _thisPollutantInfo.MonitoringTime = time.MonitoringTime;
-                defaultOption.xAxisData.push(_thisPollutantInfo.MonitoringTime);
-                defaultOption.series[0].data.push((+_thisPollutantInfo.Concentration));
-                defaultOption.series[0].name = _thisPollutantInfo.PollutantName;
-                let _rowData = {};
-                _rowData = _thisPollutantInfo;
-                _rowData.Key = t++;
-                // _rowData.MonitoringTime = _thisPollutantInfo.MonitoringTime;
-                // _rowData.Concentration = _thisPollutantInfo.Concentration;
-                defaultTableDatas.push(_rowData);
-            });
-        });
-
         this.state = {
-            pollutantDatas: getPollutantDatas(),
-            searchData: {
-                pollutantCode: defaultPollutant.Value,
-                pollutantText: defaultPollutant.Name,
-                rangeDate: [],
-                dataType: 'realtime'
-            },
-            optionData: {
-                legendData: [defaultPollutant.Name],
-                xAxisData: defaultOption.xAxisData,
-                series: defaultOption.series,
-                unit: defaultPollutant.Unit,
-                min: defaultPollutant.Min,
-                max: defaultPollutant.Max,
-                standard: defaultPollutant.Standard
-
-            },
-            tableData: defaultTableDatas,
-            tempDataParam: obj,
-            lookDataParamModal: false,
-            modalData: {
-                allParamData: [],
-                statusData: []
-            },
-            dgmin: obj.point
+            ...defaultValue,
+            displayType: 'chart',
+            displayName: '查看数据'
         };
     }
+    componentWillMount() {
+        this.props.dispatch({
+            type: 'points/querypollutantlist',
+            payload: {
+                dgimn: 'sgjt001003'
+            }
+        });
+    }
 
-    _formatDate=(time) => {
-        ;
+    _handleDateChange=(date, dateString) => {
+        this.setState({rangeDate: date, current: 1});
+        const pollutantCode = this.state.pollutantCode ? this.state.pollutantCode : this.props.pollutantlist[0].pollutantCode;
+        const pollutantName = this.state.pollutantName ? this.state.pollutantName : this.props.pollutantlist[0].pollutantName;
+        this.reloaddatalist(pollutantCode, this.state.dataType, this.state.current, this.state.pageSize, date[0], date[1], pollutantName);
+    };
+
+    // 图表转换
+      displayChange = (checked) => {
+          if (!checked) {
+              this.setState({
+                  displayType: 'table',
+                  displayName: '查看图表'
+              });
+          } else {
+              this.setState({
+                  displayType: 'chart',
+                  displayName: '查看数据'
+              });
+          }
+      };
+    _handleDateTypeChange=(e) => {
         let formats;
-        switch (this.state.searchData.dataType) {
-            case 'realtime':formats = 'YYYY-MM-DD HH:mm:ss'; break;
-            case 'minutes': formats = 'YYYY-MM-DD HH:mm'; break;
-            case 'hour': formats = 'YYYY-MM-DD HH'; break;
-            case 'day': formats = 'YYYY-MM-DD'; break;
+        let beginTime = moment(new Date()).add(-60, 'minutes');
+        let endTime = moment(new Date());
+        switch (e.target.value) {
+            case 'realtime':
+                beginTime = moment(new Date()).add(-60, 'minutes');
+                formats = 'YYYY-MM-DD HH:mm:ss';
+                break;
+            case 'minute':
+                beginTime = moment(new Date()).add(-1, 'day');
+                formats = 'YYYY-MM-DD HH:mm';
+                break;
+            case 'hour':
+                beginTime = moment(new Date()).add(-1, 'day');
+                formats = 'YYYY-MM-DD HH';
+                break;
+            case 'day':
+                beginTime = moment(new Date()).add(-1, 'month');
+                formats = 'YYYY-MM-DD';
+                break;
         };
-        return moment(time).format(formats);
+        this.setState({
+            formats: formats,
+            dataType: e.target.value,
+            rangeDate: [beginTime, endTime],
+            current: 1
+        });
+        const pollutantCode = this.state.pollutantCode ? this.state.pollutantCode : this.props.pollutantlist[0].pollutantCode;
+        const pollutantName = this.state.pollutantName ? this.state.pollutantName : this.props.pollutantlist[0].pollutantName;
+        this.reloaddatalist(pollutantCode, e.target.value, this.state.current, this.state.pageSize, beginTime, endTime, pollutantName);
     }
+
     // 污染物
     _handlePollutantChange=(value, selectedOptions) => {
-        let setData = this.state;
-        setData.searchData.pollutantCode = selectedOptions.props.value;
-        setData.searchData.pollutantText = selectedOptions.props.children;
-        setData.optionData.unit = selectedOptions.props.Unit;
-        setData.optionData.min = selectedOptions.props.minValue;
-        setData.optionData.max = selectedOptions.props.maxValue;
-        setData.optionData.standard = selectedOptions.props.Standard;
-        this._reloadData(setData);
-    };
-    // 时间范围
-    _handleDateChange=(date, dateString) => {
-        let setData = this.state;
-        setData.searchData.rangeDate = date;
-        if (date.length === 0) {
-            this._reloadData(setData);
-        } else {
-            let filterTableDatas = [];
-            setData.tableData.map((item) => {
-                let thisMonitoringTime = `${item.MonitoringTime}`;
-                if (thisMonitoringTime >= `${date[0].format('YYYY-MM-DD 00:00:00')}` && thisMonitoringTime <= `${date[1].format('YYYY-MM-DD HH:mm:ss')}`) {
-                    item.MonitoringTime = this._formatDate(item.MonitoringTime);
-                    filterTableDatas.push(item);
-                }
-            });
-
-            setData.tableData = [];
-            setData.tableData = filterTableDatas;
-            let isFilter = true;
-            this._reloadData(setData, isFilter);
-        }
-    };
-    // 时间类型
-    _handleDateTypeChange=(e) => {
-        let setData = this.state;
-        setData.searchData.dataType = e.target.value;
-        this._reloadData(setData);
-    }
-    // 刷新
-    _reloadData=(stateParam, isFilter) => {
-        let setData = stateParam;
-
-        if (!isFilter) {
-            setData.tableData = [];
-
-            let _thisTableDatas = getAllConcentration({
-                dataType: setData.searchData.dataType,
-                pollutantCodes: [setData.searchData.pollutantCode],
-                point: setData.dgmin || []
-            });
-            // console.log(_thisTableDatas);
-            let t = 1;
-            _thisTableDatas.map((item) => {
-                item.MonitoringDatas.map((time) => {
-                    // console.log(time);
-                    let _thisPollutantInfo = {};
-                    let _thisPollutant = time.PollutantDatas.find((pollutants) => {
-                        return pollutants.PollutantCode === setData.searchData.pollutantCode;
-                    });
-
-                    _thisPollutantInfo = _thisPollutant;
-                    _thisPollutantInfo.MonitoringTime = this._formatDate(time.MonitoringTime);
-
-                    let _rowData = {};
-                    _rowData = _thisPollutantInfo;
-                    _rowData.Key = t++;
-                    setData.tableData.push(_rowData);
-                });
-            });
-        }
-        setData.optionData.legendData = [setData.searchData.pollutantText];
-        setData.optionData.xAxisData = [];
-        setData.optionData.series[0].name = setData.searchData.pollutantText;
-        setData.optionData.series[0].data = [];
-
-        setData.tableData.map((item) => {
-            setData.optionData.xAxisData.push(this._formatDate(item.MonitoringTime));
-            setData.optionData.series[0].data.push((+item.Concentration));
+        this.setState({
+            pollutantCode: value,
+            pollutantName: selectedOptions.props.children,
+            current: 1
         });
-        this.setState({setData});
+        this.reloaddatalist(value, this.state.dataType, this.state.current, this.state.pageSize, this.state.rangeDate[0], this.state.rangeDate[1], selectedOptions.props.children);
     };
-    // 查看数据参数弹窗
-    _lookDataParamModal=(modalVisible) => {
-        let setData = this.state;
-        setData.lookDataParamModal = modalVisible;
-        this.setState({ setData });
-    };
+    pageIndexChange=(page, pageSize) => {
+        this.setState({
+            current: page,
+        });
+        const pollutantCode = this.state.pollutantCode ? this.state.pollutantCode : this.props.pollutantlist[0].pollutantCode;
+        const pollutantName = this.state.pollutantName ? this.state.pollutantName : this.props.pollutantlist[0].pollutantName;
+        this.reloaddatalist(pollutantCode, this.state.dataType, page, pageSize, this.state.rangeDate[0], this.state.rangeDate[1], pollutantName);
+    }
+    reloaddatalist=(pollutantCode, datatype, pageIndex, pageSize, beginTime, endTime, pollutantName) => {
+        this.props.dispatch({
+            type: 'points/queryhistorydatalist',
+            payload: {
+                pollutantCode: pollutantCode,
+                datatype: datatype,
+                dgimn: 'sgjt001003',
+                pageIndex: pageIndex,
+                pageSize: pageSize,
+                beginTime: beginTime,
+                endTime: endTime,
+                pollutantName: pollutantName,
+            }
+        });
+    }
     render() {
-        const option = {
-            title: {
-                // text: '2018-05-17~2018-05-18'
-            },
-            tooltip: {
-                trigger: 'axis'
-            },
-            legend: {
-                data: this.state.optionData.legendData
-            },
-            toolbox: {
-                show: true,
-                feature: {
-                    saveAsImage: {}
-                }
-            },
-
-            xAxis: {
-                type: 'category',
-                name: '时间',
-                boundaryGap: false,
-                data: this.state.optionData.xAxisData
-            },
-            yAxis: {
-                type: 'value',
-                name: '浓度(' + `${this.state.optionData.unit}` + ')',
-                axisLabel: {
-                    formatter: '{value}'
-                },
-                min: 0, // this.state.optionData.min,
-                max: Math.floor((this.state.optionData.min + this.state.optionData.max) * 1.5)
-            },
-            series: this.state.optionData.series
-        };
-        const columns = [
-            {
-                title: '时间',
-                dataIndex: 'MonitoringTime',
-                width: 200,
-                key: 'MonitoringTime'
-            }, {
-                title: '浓度(' + `${this.state.optionData.unit}` + ')',
-                dataIndex: 'Concentration',
-                className: 'table_concentration',
-                width: 150,
-                render: (text, row, index) => {
-                    // 
-                    // let color = (+row.Concentration) > (+row.Standard) ? 'red' : 'none';
-                    // console.log(row);
-                    // console.log(row.Concentration + ' ' + row.Standard);
-                    let dot;
-                    if (row.IsExceed > 0 || row.IsException > 0) {
-                        dot = (
-
-                            <a style={{color: 'red', cursor: 'pointer'}}>{row.Concentration}</a>
-
-                        );
-                    } else {
-                        dot = (
-
-                            <a style={{cursor: 'pointer'}}>{row.Concentration}</a>
-
-                        );
-                    }
-                    return (
-                        <PopoverViewData_
-                            dataParam={{
-                                dataType: this.state.searchData.dataType,
-                                pollutantCode: this.state.searchData.pollutantCode,
-                                point: this.state.dgmin || [],
-                                rowTime: row.MonitoringTime,
-                                isExceed: row.IsExceed, // 是否超标
-                                exceedValue: row.ExceedValue, // 超标倍数
-                                isException: row.IsException, // 是否异常
-                                exceptionText: row.ExceptionText, // 异常类型
-                                standard: row.Standard, // 标准值
-                                sort: 'asc'
-                            }}
-                        >
-                            {dot}
-                            {/* <a style={{color: color, cursor: 'pointer'}}>{row.Concentration}</a> */}
-                        </PopoverViewData_>
-                    );
-                },
-                key: 'Concentration'
-            }];
         return (
             <div className={styles.cardTitle}>
-                <Row>
-                    <Col xs={8} lg={6}>
-                        <Card title="监测维度" extra={<a href="#" />} style={{ width: '98%', height: 'calc(100vh - 225px)' }}>
-                            <Table
-                                rowKey="Key"
-                                size="middle"
-                                columns={columns}
-                                dataSource={this.state.tableData}
-                                pagination={false}
-                                bordered={false}
-                                scroll={{ x: '100%', y: 'calc(100vh - 385px)' }} />
-                            <a className="login-form-forgot" href="">加载更多……</a>
-                        </Card>
-                    </Col>
-                    <Col xs={16} lg={18}>
+                { this.props.isloading ? <Spin style={{width: '100%',
+                    height: 'calc(100vh - 260px)',
+                    marginTop: 260 }} size="large" />
+                    : <Card title="监测趋势图" extra={
+                        <div>
+                            { this.state.displayType === 'chart' ? <PollutantSelect_
+                                optionDatas={this.props.pollutantlist}
+                                defaultValue={this.props.pollutantlist[0] ? this.props.pollutantlist[0].pollutantCode : ''}
+                                style={{width: 150}}
+                                onChange={this._handlePollutantChange}
+                            /> : ''}
+                            <RangePicker_ style={{width: 350}} dateValue={this.state.rangeDate} format={this.state.formats} onChange={this._handleDateChange} />
+                            <ButtonGroup_ style={{marginRight: 20}} checked="realtime" onChange={this._handleDateTypeChange} />
+                            <Switch checkedChildren="图表" unCheckedChildren="数据" onChange={this.displayChange} defaultChecked={true} />
+                        </div>
+                    } style={{ width: '100%', height: 'calc(100vh - 225px)' }}>
+                        {this.state.displayType === 'chart' ? <ReactEcharts option={this.props.option} lazyUpdate={true}
+                            notMerge={true} id="rightLine" style={{ width: '100%', height: 'calc(100vh - 380px)' }} />
+                            : <Table rowKey="MonitorTime" dataSource={this.props.datatable} columns={this.props.columns}
+                                pagination={{
+                                    'total': this.props.total,
+                                    'pageSize': this.state.pageSize,
+                                    'current': this.state.current,
+                                    onChange: this.pageIndexChange
+                                }} />
 
-                        <Card title="监测趋势图" extra={
-                            <div>
-                                <PollutantSelect_
-                                    optionDatas={this.state.pollutantDatas}
-                                    ref={(r) => { this.select_Pollutant = r; }}
-                                    defaultValue={this.state.searchData.pollutantCode}
-                                    style={{width: 150}}
-                                    onChange={this._handlePollutantChange}
-                                />
-                                <RangePicker_ style={{width: 250}} dateValue={this.state.searchData.rangeDate} format="YYYY-MM-DD" onChange={this._handleDateChange} />
-                                <ButtonGroup_ checked={this.state.searchData.dataType} onChange={this._handleDateTypeChange} />
-
-                            </div>
-                        } style={{ width: '100%', height: 'calc(100vh - 225px)' }}>
-                            <ReactEcharts option={option} lazyUpdate={true} notMerge={true} id="rightLine" style={{ width: '100%', height: 'calc(100vh - 380px)' }} />
-                        </Card>
-                    </Col>
-
-                </Row>
-
-            </div>
+                        }
+                    </Card>
+                }</div>
         );
     }
 }
