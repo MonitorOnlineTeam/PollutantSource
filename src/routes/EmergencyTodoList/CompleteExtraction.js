@@ -5,6 +5,11 @@ import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 @connect(({ task, loading }) => ({
     PatrolRecordListPC: task.PatrolRecordListPC
 }))
+
+/*
+页面：完全抽取法CEMS日常巡检记录表
+*/
+
 class CompleteExtraction extends Component {
     componentWillMount() {
         this.onChange();
@@ -21,8 +26,7 @@ class CompleteExtraction extends Component {
     }
 
     render() {
-        console.log(this.props.PatrolRecordListPC.length === 0 ? null : this.props.PatrolRecordListPC[0].record[0].Content.GasCemsEquipmentManufacturer);
-        // .Content[0].GasCemsEquipmentManufacturer
+        console.log(this.props.PatrolRecordListPC.length === 0 ? null : this.props.PatrolRecordListPC);
         const columns = [{
             title: '项目',
             dataIndex: 'parentName',
@@ -36,6 +40,8 @@ class CompleteExtraction extends Component {
                 if (row.count !== 0) {
                     if (row.parentName === '巡检人员签字') {
                         obj.props.colSpan = 2;
+                    } else if (row.parentId === '备注') {
+                        obj.props.colSpan = 4;
                     } else {
                         obj.props.rowSpan = row.count;
                     }
@@ -56,6 +62,8 @@ class CompleteExtraction extends Component {
                 };
                 if (row.parentName === '巡检人员签字') {
                     obj.props.colSpan = 0;
+                } else if (row.parentId === '备注') {
+                    obj.props.colSpan = 0;
                 } else if (row.parentName === '异常情况处理') {
                     obj.props.colSpan = 3;
                 }
@@ -72,7 +80,14 @@ class CompleteExtraction extends Component {
                     props: {},
                 };
                 if (row.parentName === '巡检人员签字') {
-                    obj.props.colSpan = 2;
+                    return {
+                        children: <img src={value === null ? null : `data:image/jpeg;base64,${value}`} />,
+                        props: {
+                            colSpan: 2,
+                        },
+                    };
+                } else if (row.parentId === '备注') {
+                    obj.props.colSpan = 0;
                 } else if (row.parentName === '异常情况处理') {
                     obj.props.colSpan = 0;
                 }
@@ -90,6 +105,8 @@ class CompleteExtraction extends Component {
                 };
                 if (row.count !== 0) {
                     if (row.parentName === '巡检人员签字') {
+                        obj.props.colSpan = 0;
+                    } else if (row.parentId === '备注') {
                         obj.props.colSpan = 0;
                     } else if (row.parentName === '异常情况处理') {
                         obj.props.colSpan = 0;
@@ -143,11 +160,8 @@ class CompleteExtraction extends Component {
                         fontSize: '20px',
                         textAlign: 'center',
                         fontWeight: 'bold'}}>
-
-                        标准气体更换记录表
-
+                        完全抽取法CEMS日常巡检记录表
                     </div>
-
                     <div style={{
                         height: 'calc(100vh - 165px)',
                         width: '65%',
@@ -182,13 +196,10 @@ class CompleteExtraction extends Component {
                             bordered={true}
                             pagination={false}
                         />
-
                     </div>
                 </PageHeaderLayout>
             </div>
-
         );
     }
 }
-
 export default CompleteExtraction;
