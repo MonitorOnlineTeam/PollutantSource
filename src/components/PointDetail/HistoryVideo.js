@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 import {Row, Col, Card, Divider, Button, DatePicker, Table} from 'antd';
 import img from '../../../public/video.png';
 import styles from './Video.less';
-import VideoAlarmData from '../../mockdata/PointDetail/VideoAlarmData.json';
-import HistoryData from '../../mockdata/PointDetail/HisotryMonitorData.json';
 import { connect } from 'dva';
 import moment from 'moment';
 const {RangePicker} = DatePicker;

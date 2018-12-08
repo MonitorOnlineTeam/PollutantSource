@@ -171,9 +171,21 @@ export const getRouterData = (app) => {
             component: dynamicWrapper(app, ['task'], () =>
         import('../routes/PointDetail/Ywdsjlist')),
         },
+        '/monitor/pointdetail/:pointcode/qcontrollist': {
+            component: dynamicWrapper(app, ['task'], () =>
+        import('../routes/PointDetail/qcontrollist')),
+        },
         '/EmergencyTodoList/JzRecordInfo/:TaskID/:TypeID': {
             component: dynamicWrapper(app, ['task'], () =>
         import('../routes/EmergencyTodoList/JzRecordInfo')),
+        },
+        '/pointdetail/:pointcode/qcontrollist/JzHistoryRecords/:TypeID': {
+            component: dynamicWrapper(app, ['task'], () =>
+        import('../routes/EmergencyTodoList/JzHistoryRecords')),
+        },
+        '/pointdetail/:pointcode/qcontrollist/RepairHistoryRecods/:TypeID': {
+            component: dynamicWrapper(app, ['task'], () =>
+        import('../routes/EmergencyTodoList/RepairHistoryRecods')),
         },
         /* 工作台 */
         '/workbench': {
@@ -339,11 +351,11 @@ export const getRouterData = (app) => {
             component: dynamicWrapper(app, ['baseinfo'], () =>
                     import('../routes/EmissionPermits')),
         },
-        '/sysmanage/ConsumablesReplaceRecord/:Taskid': {
+        '/sysmanage/ConsumablesReplaceRecord/:TaskIds/:TypeIDs': {
             component: dynamicWrapper(app, ['baseinfo'], () =>
                     import('../routes/EmergencyTodoList/ConsumablesReplaceRecord')),
         },
-        '/sysmanage/StandardGasRepalceRecord/:Taskid': {
+        '/sysmanage/StandardGasRepalceRecord/:StandardGasTaskIds/:StandardGasTypeIDs': {
             component: dynamicWrapper(app, ['baseinfo'], () =>
                     import('../routes/EmergencyTodoList/StandardGasRepalceRecord')),
         },

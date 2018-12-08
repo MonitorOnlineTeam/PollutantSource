@@ -193,7 +193,7 @@ export default class AddPoint extends Component {
         });
     };
      success = () => {
-         let index = this.props.dispatch(routerRedux.push(`/monitor/sysmanage/PointInfo`));
+         let index = this.props.dispatch(routerRedux.push(`/sysmanage/PointInfo`));
          if (this.state.DGIMN !== null) {
              message.success('修改成功', 3).then(() => index);
          } else {

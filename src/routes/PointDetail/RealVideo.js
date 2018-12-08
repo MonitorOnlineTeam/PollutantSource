@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 // import Answersheet from '../../components/Video/webVideoCtrl';
 import {Row, Col, Button, List, Table, Card, Select, Divider, Message} from 'antd';
-import MonitorData from '../../mockdata/PointDetail/VideoMonitorData.json';
-import StateData from '../../mockdata/PointDetail/StateData.json';
+// import MonitorData from '../../mockdata/PointDetail/VideoMonitorData.json';
+// import StateData from '../../mockdata/PointDetail/StateData.json';
 import styles from './video.less';
 import { connect } from 'dva';
 import moment from 'moment';
@@ -205,7 +205,7 @@ export default class RealVideo extends Component {
                                 bordered={true}
                                 size="small"
                                 itemLayout="horizontal"
-                                dataSource={MonitorData}
+                                /* dataSource={MonitorData} */
                                 renderItem={item => (
                                     <List.Item>
                                         <List.Item.Meta title={item.MonitorItem} />
@@ -217,7 +217,7 @@ export default class RealVideo extends Component {
                     </Col>
                     <Col xl={12} lg={24} sm={24} xs={24}>
                         <Card title="设备参数实时信息" >
-                            <Table size="small" borderd={true} columns={columns} dataSource={StateData} pagination={false} />
+                            /* <Table size="small" borderd={true} columns={columns} dataSource={StateData} pagination={false} /> */
                         </Card>
                     </Col>
                 </Row>

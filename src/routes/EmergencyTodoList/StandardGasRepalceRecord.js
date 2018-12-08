@@ -7,12 +7,15 @@ const {
 @connect(({ task, loading }) => ({
     StandardGasRepalceRecordList: task.StandardGasRepalceRecordList
 }))
+
+/*
+页面：标准气体更换记录表
+*/
+
 class StandardGasRepalceRecord extends Component {
     constructor(props) {
         super(props);
-
         this.state = {
-
         };
     }
     componentWillMount() {
@@ -30,34 +33,26 @@ class StandardGasRepalceRecord extends Component {
     render() {
         const signContent = this.props.StandardGasRepalceRecordList.length === 0 ? null : `data:image/jpeg;base64,${this.props.StandardGasRepalceRecordList[0].record[0].SignContent}`;
         const columnstwo = [{
-            title: 'MaintenanceManagementUnitTitle',
             dataIndex: 'MaintenanceManagementUnitTitle',
             key: 'MaintenanceManagementUnitTitle',
             width: '20%',
             align: 'center',
-
         }, {
-            title: 'MaintenanceManagementUnitContent',
             dataIndex: 'MaintenanceManagementUnitContent',
             key: 'MaintenanceManagementUnitContent',
             width: '29.3%',
             align: 'center',
-
         }, {
-            title: 'PointPositionTitle',
             dataIndex: 'PointPositionTitle',
             key: 'PointPositionTitle',
             width: '18%',
             align: 'center',
-
         },
         {
-            title: 'PointPositionContent',
             dataIndex: 'PointPositionContent',
             key: 'PointPositionContent',
             width: '32.7%',
             align: 'center',
-
         }
         ];
         const datatwo = [{
@@ -68,65 +63,49 @@ class StandardGasRepalceRecord extends Component {
             PointPositionContent: this.props.StandardGasRepalceRecordList.length === 0 ? null : this.props.StandardGasRepalceRecordList[0].record[0].Content['PointPosition'],
         }];
         const columnsthree = [{
-            title: 'CreateUserIDTitle',
             dataIndex: 'CreateUserIDTitle',
             key: 'CreateUserIDTitle',
             width: '14%',
             align: 'center',
-
         }, {
-            title: 'CreateUserIDTitleContent',
             dataIndex: 'CreateUserIDTitleContent',
             key: 'CreateUserIDTitleContent',
             width: '9%',
             align: 'center',
-
         }, {
-            title: 'CreateTimeTitle',
             dataIndex: 'CreateTimeTitle',
             key: 'CreateTimeTitle',
             width: '9%',
             align: 'center',
-
         },
         {
-            title: 'CreateTimeContent',
             dataIndex: 'CreateTimeContent',
             key: 'CreateTimeContent',
             width: '17.3%',
             align: 'center',
-
         }, {
-            title: 'SignContentTitle',
             dataIndex: 'SignContentTitle',
             key: 'SignContentTitle',
             width: '10%',
             align: 'center',
-
         },
         {
-            title: 'SignContentcontent',
             dataIndex: 'SignContentcontent',
             key: 'SignContentcontent',
             width: '10%',
             align: 'center',
-
         },
         {
-            title: 'SignTimetitle',
             dataIndex: 'SignTimetitle',
             key: 'SignTimetitle',
             width: '10%',
             align: 'center',
-
         },
         {
-            title: 'SignTimetitlecontent',
             dataIndex: 'SignTimetitlecontent',
             key: 'SignTimetitlecontent',
             width: '20.7%',
             align: 'center',
-
         }
         ];
         const datathree = [{
@@ -145,10 +124,8 @@ class StandardGasRepalceRecord extends Component {
             dataIndex: 'Detail',
             key: 'Detail',
             width: '100%',
-
         }
         ];
-
         const datafour = [{
             key: '1',
             Detail: ' 注：更换标准气体时应及时记录，每半年汇总存档。',
@@ -214,12 +191,10 @@ class StandardGasRepalceRecord extends Component {
                         fontSize: '20px',
                         textAlign: 'center',
                         fontWeight: 'bold'}}>
-
                         标准气体更换记录表
-
                     </div>
                     <div style={{backgroundColor: 'white'}}>
-                        <div style={{fontWeight: 'bold', marginBottom: 3}}>企业名称：{this.props.StandardGasRepalceRecordList.length === 0 ? null : this.props.StandardGasRepalceRecordList[0].record[0].Content['EnterpriseName']}</div>
+                        <div style={{fontWeight: 'bold', marginBottom: 12, marginTop: 10}}>企业名称：{this.props.StandardGasRepalceRecordList.length === 0 ? null : this.props.StandardGasRepalceRecordList[0].record[0].Content['EnterpriseName']}</div>
                         <Table
                             style={{width: 1200}}
                             columns={columns}
@@ -261,13 +236,8 @@ class StandardGasRepalceRecord extends Component {
                             }
                         />
                     </div>
-
                 </Content>
-
             </Layout>
-            // <div>
-            //     {this.props.match.params.Taskid}
-            // </div>
         );
     }
 }

@@ -78,7 +78,7 @@ export default class OperationAndMaintenanceMemorabilia extends Component {
                         {<Row style={{marginTop: '20px'}}>
                             <Col span={3}>
                                 <Button style={{marginLeft: 10, marginBottom: 10}} onClick={() => {
-                                    this.props.dispatch(routerRedux.push(`/monitor/emergency/emergencydetailinfo/00553062-ade0-420d-a7d4-c657397dbf20/766f911d-5e41-4bbf-b705-add427a16e77`));
+                                    this.props.dispatch(routerRedux.push(`/emergency/emergencydetailinfo/00553062-ade0-420d-a7d4-c657397dbf20/766f911d-5e41-4bbf-b705-add427a16e77`));
                                 }
                                 }> 查看任务详情 </Button>
                             </Col>

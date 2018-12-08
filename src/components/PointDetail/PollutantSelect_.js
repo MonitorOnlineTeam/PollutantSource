@@ -2,7 +2,6 @@
 
 import React, { Component } from 'react';
 import { Select } from 'antd';
-import {getPollutantDatas} from '../../mockdata/Base/commonbase';
 
 const Option = Select.Option;
 export default class PollutantSelect_ extends Component {
