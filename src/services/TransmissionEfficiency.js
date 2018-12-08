@@ -14,6 +14,7 @@ export async function getMonthsTransmissionEfficiency(params) {
         DGIMNs: params.DGIMNs,
         beginTime: params.beginTime,
         endTime: params.endTime,
+        TERSort: params.TERSort,
         pageIndex: params.pageIndex || 1,
         pageSize: params.pageSize || 15
     };

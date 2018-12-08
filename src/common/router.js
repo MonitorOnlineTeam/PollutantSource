@@ -319,6 +319,10 @@ export const getRouterData = (app) => {
             component: dynamicWrapper(app, ['userinfo', 'userdgimndata', 'TransmissionEfficiency'], () =>
             import('../routes/Userinfo')),
         },
+        '/sysmanage/TransmissionEfficiency': {
+            component: dynamicWrapper(app, ['userinfo', 'userdgimndata', 'TransmissionEfficiency'], () =>
+            import('../routes/Userinfo/TransmissionEfficiency')),
+        },
         '/sysmanage/UserDetail/:UserId': {
             component: dynamicWrapper(app, ['userinfo'], () =>
             import('../routes/Userinfo/AddUser')),
