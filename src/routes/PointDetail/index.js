@@ -50,10 +50,14 @@ class PointDetail extends Component {
     render() {
         const { match, routerData, location } = this.props;
         const routes = getRoutes(match.path, routerData);
-        
+
         const defaultroute = routes[0].path;
         Cookie.set('seldgimn', match.params.pointcode);
         const pointInfo = this.props.pointInfo;
+        let activeKey = 'qcontrollist';
+        if (location.pathname.indexOf('RepairHistoryRecods') === -1) {
+            activeKey = location.pathname.replace(`${match.url}/`, '');
+        }
         return (
             <div
                 style={{ width: '100%',
@@ -75,7 +79,7 @@ class PointDetail extends Component {
                     <div style={{ backgroundColor: '#fff', margin: 10, padding: 10 }}>
                         <Tabs
                             className={styles.tabs}
-                            activeKey={location.pathname.replace(`${match.url}/`, '')}
+                            activeKey={activeKey}
                             onChange={(key) => {
                                 const { dispatch, match } = this.props;
                                 dispatch(routerRedux.push(`${match.url}/${key}`));
