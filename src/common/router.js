@@ -81,13 +81,24 @@ export const getRouterData = (app) => {
             component: dynamicWrapper(app, ['user', 'login', 'search'], () =>
           import('../layouts/MonitorLayout')),
         },
-        '/overview': {
+        /* 主页 */
+        '/homepage': {
             component: dynamicWrapper(app, ['points', 'overview', 'user', 'baseinfo'], () =>
-          import('../routes/OverView')),
+          import('../routes/HomePage')),
         },
-        '/datalist': {
-            component: dynamicWrapper(app, ['overview'], () =>
+        /* 工作台 */
+        '/workbench': {
+            component: dynamicWrapper(app, ['user', 'points'], () =>
+          import('../routes/SpecialWorkbench')),
+        },
+        /* 智能监控 */
+        '/overview/datalistview': {
+            component: dynamicWrapper(app, ['points', 'overview', 'user', 'baseinfo'], () =>
           import('../routes/OverView/dataList')),
+        },
+        '/overview/mapview': {
+            component: dynamicWrapper(app, ['overview'], () =>
+          import('../routes/OverView/index')),
         },
         '/statuslist': {
             component: dynamicWrapper(app, ['points'], () =>
@@ -125,7 +136,6 @@ export const getRouterData = (app) => {
             component: dynamicWrapper(app, ['videolist'], () =>
         import('../routes/PointDetail/HisVideo')),
         },
-
         '/pointdetail/:pointcode/warningrecord': {
             component: dynamicWrapper(app, ['points'], () =>
           import('../routes/PointDetail/WarningRecord')),
@@ -203,12 +213,12 @@ export const getRouterData = (app) => {
             component: dynamicWrapper(app, ['baseinfo'], () =>
                     import('../routes/EmergencyTodoList/DirectMeasurement')),
         },
-        /* 工作台 */
-        '/workbench': {
-            component: dynamicWrapper(app, ['user', 'points'], () =>
-          import('../routes/Workbench')),
+        /* 智能分析 */
+        '/analysis/TransmissionEfficiency': {
+            component: dynamicWrapper(app, ['userinfo', 'userdgimndata', 'TransmissionEfficiency'], () =>
+            import('../routes/Userinfo/TransmissionEfficiency')),
         },
-        /* 综合分析 */
+
         '/analysis/alarmsubject/alarmtypeanaly': {
             component: dynamicWrapper(app, ['points'], () =>
           import('../routes/AnalyAlarmType')),
@@ -331,17 +341,9 @@ export const getRouterData = (app) => {
           import('../routes/OperationAndMaintenanceMemorabilia')),
         },
         /* 系统管理 */
-        '/sysmanage/Userinfo': {
-            component: dynamicWrapper(app, ['userinfo', 'userdgimndata', 'TransmissionEfficiency'], () =>
-            import('../routes/Userinfo')),
-        },
-        '/sysmanage/TransmissionEfficiency': {
-            component: dynamicWrapper(app, ['userinfo', 'userdgimndata', 'TransmissionEfficiency'], () =>
-            import('../routes/Userinfo/TransmissionEfficiency')),
-        },
-        '/sysmanage/UserDetail/:UserId': {
-            component: dynamicWrapper(app, ['userinfo'], () =>
-            import('../routes/Userinfo/AddUser')),
+        '/sysmanage/entoperation': {
+            component: dynamicWrapper(app, ['baseinfo'], () =>
+                    import('../routes/EnterpriseInfo')),
         },
         '/sysmanage/PointInfo': {
             component: dynamicWrapper(app, ['pointinfo'], () =>
@@ -355,6 +357,14 @@ export const getRouterData = (app) => {
             component: dynamicWrapper(app, ['pointinfo'], () =>
               import('../routes/PointInfo/PointView')),
         },
+        '/sysmanage/Userinfo': {
+            component: dynamicWrapper(app, ['userinfo', 'userdgimndata', 'TransmissionEfficiency'], () =>
+            import('../routes/Userinfo')),
+        },
+        '/sysmanage/UserDetail/:UserId': {
+            component: dynamicWrapper(app, ['userinfo'], () =>
+            import('../routes/Userinfo/AddUser')),
+        },
         '/sysmanage/StandardLibrary': {
             component: dynamicWrapper(app, ['standardlibrary'], () =>
             import('../routes/StandardLibrary/')),
@@ -362,10 +372,6 @@ export const getRouterData = (app) => {
         '/sysmanage/StandardLibraryDetail/:StandardLibraryID': {
             component: dynamicWrapper(app, ['standardlibrary'], () =>
             import('../routes/StandardLibrary/AddStandardLibrary')),
-        },
-        '/entInfo/entoperation': {
-            component: dynamicWrapper(app, ['baseinfo'], () =>
-                    import('../routes/EnterpriseInfo')),
         },
         '/emissionpermits': {
             component: dynamicWrapper(app, ['baseinfo'], () =>
