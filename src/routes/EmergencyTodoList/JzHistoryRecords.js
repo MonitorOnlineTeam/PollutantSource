@@ -57,6 +57,7 @@ export default class JzHistoryRecords extends Component {
     _handleDateChange=(date, dateString) => {
         this.setState(
             {
+                rangeDate: [moment(moment(dateString[0]).format('YYYY-MM-DD 00:00:00')), moment(moment(dateString[1]).format('YYYY-MM-DD 23:59:59'))],
                 beginTime: dateString[0],
                 endTime: dateString[1]
             }
@@ -73,7 +74,7 @@ export default class JzHistoryRecords extends Component {
     }
 
     seeDetail=(record) => {
-        this.props.dispatch(routerRedux.push(`/EmergencyTodoList/JzRecordInfo/${record.TaskID}/${record.TypeID}`));
+        this.props.dispatch(routerRedux.push(`/pointdetail/:pointcode/JzRecordInfo/${record.TaskID}/${record.TypeID}`));
     }
 
     render() {
@@ -110,7 +111,7 @@ export default class JzHistoryRecords extends Component {
                 <Card>
                     <Form layout="inline">
                         <Row gutter={8}>
-                            <Col span={3} >
+                            <Col span={2} >
                             记录创建时间：
                             </Col>
                             <Col span={3} >
