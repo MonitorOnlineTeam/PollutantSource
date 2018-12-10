@@ -213,12 +213,36 @@ export const getRouterData = (app) => {
             component: dynamicWrapper(app, ['baseinfo'], () =>
                     import('../routes/EmergencyTodoList/DirectMeasurement')),
         },
-        /* 智能分析 */
-        '/analysis/TransmissionEfficiency': {
-            component: dynamicWrapper(app, ['userinfo', 'userdgimndata', 'TransmissionEfficiency'], () =>
-            import('../routes/Userinfo/TransmissionEfficiency')),
+        /* 智能质控 */
+        /**
+         * 传输有效率
+         */
+        '/QualityControl/TransmissionEfficiency': {
+            component: dynamicWrapper(app, ['TransmissionEfficiencyModel'], () =>
+            import('../routes/QualityControl/TransmissionEfficiency')),
         },
-
+        /** 
+         * 设备运转率
+        */
+        '/QualityControl/EquipmentOperatingRate': {
+            component: dynamicWrapper(app, ['EquipmentOperatingRateModel'], () =>
+            import('../routes/QualityControl/EquipmentOperatingRate')),
+        },
+        /* 智能分析 */
+        /** 
+         * 月度排放量分析
+        */
+        '/Analysis/PollutantEmissions': {
+            component: dynamicWrapper(app, ['points', 'PollutantEmissionsModel'], () =>
+          import('../routes/Analysis/PollutantEmissions')),
+        },
+        /** 
+         * 报警及时响应统计分析
+        */
+        '/Analysis/AlarmResponse': {
+            component: dynamicWrapper(app, ['points', 'AlarmResponseModel'], () =>
+          import('../routes/Analysis/AlarmResponse')),
+        },
         '/analysis/alarmsubject/alarmtypeanaly': {
             component: dynamicWrapper(app, ['points'], () =>
           import('../routes/AnalyAlarmType')),
@@ -356,10 +380,6 @@ export const getRouterData = (app) => {
         '/sysmanage/PointDetail/:ID/:Name': {
             component: dynamicWrapper(app, ['pointinfo'], () =>
               import('../routes/PointInfo/PointView')),
-        },
-        '/sysmanage/Userinfo': {
-            component: dynamicWrapper(app, ['userinfo', 'userdgimndata', 'TransmissionEfficiency'], () =>
-            import('../routes/Userinfo')),
         },
         '/sysmanage/UserDetail/:UserId': {
             component: dynamicWrapper(app, ['userinfo'], () =>

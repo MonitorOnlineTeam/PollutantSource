@@ -19,18 +19,18 @@ import {connect} from 'dva';
 const { MonthPicker } = DatePicker;
 const monthFormat = 'YYYY-MM';
 const pageUrl = {
-    updateState: 'TransmissionEfficiency/updateState',
-    getData: 'TransmissionEfficiency/getData'
+    updateState: 'PollutantEmissionsModel/updateState',
+    getData: 'PollutantEmissionsModel/getData'
 };
 @connect(({
     loading,
-    TransmissionEfficiency
+    PollutantEmissionsModel
 }) => ({
     loading: loading.effects[pageUrl.getData],
-    total: TransmissionEfficiency.total,
-    pageSize: TransmissionEfficiency.pageSize,
-    pageIndex: TransmissionEfficiency.pageIndex,
-    tableDatas: TransmissionEfficiency.tableDatas,
+    total: PollutantEmissionsModel.total,
+    pageSize: PollutantEmissionsModel.pageSize,
+    pageIndex: PollutantEmissionsModel.pageIndex,
+    tableDatas: PollutantEmissionsModel.tableDatas,
 }))
 export default class PollutantEmissions extends Component {
     constructor(props) {
