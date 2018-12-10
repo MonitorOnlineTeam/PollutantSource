@@ -93,6 +93,21 @@ export async function GetStandardGasRepalceRecordList(params) {
         data: null
     } : result;
 }
+// 获取标气历史记录列表
+export async function GetHistoryStandardGasRepalceRecordList(params) {
+    const body = {
+        pageIndex: params.pageIndex,
+        pageSize: params.pageSize,
+        TypeID: params.TypeID,
+        DGIMN: params.DGIMN,
+        BeginTime: params.BeginTime,
+        EndTime: params.EndTime,
+    };
+    const result = post('/api/rest/PollutantSourceApi/PTaskForm/GetStandardGasRepalceRecordHistoryList', body, null);
+    return result === null ? {
+        data: null
+    } : result;
+}
 // 根据任务id和类型id获取巡检记录表（不通于手机端PC单独做接口)
 export async function GetPatrolRecordListPC(params) {
     const body = {
