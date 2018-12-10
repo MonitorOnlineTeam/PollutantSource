@@ -363,6 +363,14 @@ export const getRouterData = (app) => {
             component: dynamicWrapper(app, ['baseinfo'], () =>
                     import('../routes/EmergencyTodoList/CompleteExtraction')),
         },
+        '/monitor/sysmanage/DilutionSampling/:CyfPatrolTaskIds/:CyfPatrolTypeIDs': {
+            component: dynamicWrapper(app, ['baseinfo'], () =>
+                    import('../routes/EmergencyTodoList/DilutionSampling')),
+        },
+        '/monitor/sysmanage/DirectMeasurement/:ClfPatrolTaskIds/:ClfPatrolTypeIDs': {
+            component: dynamicWrapper(app, ['baseinfo'], () =>
+                    import('../routes/EmergencyTodoList/DirectMeasurement')),
+        },
         /* 登陆 */
         '/user': {
             component: dynamicWrapper(app, [], () =>

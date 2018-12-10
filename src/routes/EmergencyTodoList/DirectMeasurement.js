@@ -7,10 +7,10 @@ import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 }))
 
 /*
-页面：完全抽取法CEMS日常巡检记录表
+页面：直接测量法CEMS日常巡检记录表
 */
 
-class CompleteExtraction extends Component {
+class DirectMeasurement extends Component {
     // constructor(props) {
     //     super(props);
     //     this.state = {
@@ -25,8 +25,8 @@ class CompleteExtraction extends Component {
         this.props.dispatch({
             type: 'task/GetPatrolRecordListPC',
             payload: {
-                TaskIds: this.props.match.params.CqfPatrolTaskIds,
-                TypeIDs: this.props.match.params.CqfPatrolTypeIDs
+                TaskIds: this.props.match.params.ClfPatrolTaskIds,
+                TypeIDs: this.props.match.params.ClfPatrolTypeIDs
             },
         });
     }
@@ -165,7 +165,7 @@ class CompleteExtraction extends Component {
                         fontSize: '20px',
                         textAlign: 'center',
                         fontWeight: 'bold'}}>
-                        完全抽取法CEMS日常巡检记录表
+                        直接测量法CEMS日常巡检记录表
                     </div>
                     <div style={{
                         height: 'calc(100vh - 165px)',
@@ -207,4 +207,4 @@ class CompleteExtraction extends Component {
         );
     }
 }
-export default CompleteExtraction;
+export default DirectMeasurement;
