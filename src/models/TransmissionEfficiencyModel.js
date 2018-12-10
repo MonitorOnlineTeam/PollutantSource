@@ -5,7 +5,7 @@
  */
 
 import { Model } from '../dvapack';
-import { getMonthsTransmissionEfficiency } from '../services/TransmissionEfficiency';
+import { getMonthsTransmissionEfficiency } from '../services/TransmissionEfficiencyApi';
 import moment from 'moment';
 
 export default Model.extend({
