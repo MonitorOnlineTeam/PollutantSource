@@ -17,7 +17,7 @@ export default Model.extend({
         tableDatas: [],
         beginTime: moment().format('YYYY-MM-01 HH:mm:ss'),
         endTime: moment().format('YYYY-MM-DD HH:mm:ss'),
-        transmissionEffectiveRate: 'descend'
+        transmissionEffectiveRate: 'ascend'
     },
     subscriptions: {
     },
