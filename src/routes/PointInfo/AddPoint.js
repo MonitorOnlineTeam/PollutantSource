@@ -53,7 +53,7 @@ export default class AddPoint extends Component {
             DGIMN: null,
             DGIMNdisabled: false,
         };
-    };
+    }
     componentWillMount() {
         const DGIMN = this.props.match.params.DGIMN;
         if (DGIMN !== 'null') {
@@ -99,7 +99,7 @@ export default class AddPoint extends Component {
         }
 
         this.getOperationer();
-    };
+    }
      onRef1 = (ref) => {
          this.child = ref;
      }
@@ -109,7 +109,7 @@ export default class AddPoint extends Component {
              address: this.child.props.form.getFieldValue('position'),
              Mapvisible: false,
          });
-     };
+     }
     getOperationer=(e) => {
         this.props.dispatch({
             type: 'pointinfo/getoperationsuserList',
@@ -161,7 +161,6 @@ export default class AddPoint extends Component {
                         },
                     });
                 } else {
-
                 }
             } else {
                 if (!err && flag === true) {
@@ -215,7 +214,7 @@ export default class AddPoint extends Component {
                  breadcrumbList={
                      [{
                          title: '排口列表',
-                         href: '/monitor/sysmanage/PointInfo',
+                         href: '/sysmanage/PointInfo',
                      }, {
                          title: '添加排口',
                      }]
