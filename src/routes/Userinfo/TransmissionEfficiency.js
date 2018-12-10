@@ -1,5 +1,5 @@
 /**
- * 页面功能：传输有效率
+ * 功  能：传输有效率
  * 创建人：吴建伟
  * 创建时间：2018.12.08
  */
@@ -18,50 +18,41 @@ import styles from './index.less';
 import {connect} from 'dva';
 const { MonthPicker } = DatePicker;
 const monthFormat = 'YYYY-MM';
-
+const pageUrl = {
+    updateState: 'TransmissionEfficiencyModel/updateState',
+    getData: 'TransmissionEfficiencyModel/getData'
+};
 @connect(({
     loading,
-    TransmissionEfficiency
+    TransmissionEfficiencyModel
 }) => ({
-    loading: loading.effects['TransmissionEfficiency/getData'],
-    total: TransmissionEfficiency.total,
-    pageSize: TransmissionEfficiency.pageSize,
-    pageIndex: TransmissionEfficiency.pageIndex,
-    tableDatas: TransmissionEfficiency.tableDatas,
+    loading: loading.effects[pageUrl.getData],
+    total: TransmissionEfficiencyModel.total,
+    pageSize: TransmissionEfficiencyModel.pageSize,
+    pageIndex: TransmissionEfficiencyModel.pageIndex,
+    tableDatas: TransmissionEfficiencyModel.tableDatas,
 }))
 export default class TransmissionEfficiency extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            Addvisible: false,
-            DataFiltervisible: false,
-            loading: false,
-            type: '',
-            title: '',
-            width: 400,
-            DeleteMark: '',
-            UserAccount: '',
-            selectedRowKeys: [],
-            userId: '',
-            checked: true,
             beginTime: moment(moment().format('YYYY-MM')),
             endTime: ''
         };
     }
     componentWillMount() {
-        console.log(this.props.pageIndex);
-        this.onChange(1);
+        this.getTableData(1);
     };
-
-    selectRow = (record) => {
-        this.setState({
-            userId: record.key
+    updateState = (payload) => {
+        this.props.dispatch({
+            type: pageUrl.updateState,
+            payload: payload,
         });
     }
-    onChange = (pageIndex) => {
+    getTableData = (pageIndex) => {
         this.props.dispatch({
-            type: 'TransmissionEfficiency/getData',
+            type: pageUrl.getData,
             payload: {
                 pageIndex: pageIndex,
             },
@@ -69,28 +60,19 @@ export default class TransmissionEfficiency extends Component {
     }
     handleTableChange =(pagination, filters, sorter) => {
         if (sorter.order) {
-            this.props.dispatch({
-                type: 'TransmissionEfficiency/updateState',
-                payload: {
-                    transmissionEffectiveRate: sorter.order,
-                    pageIndex: pagination.current,
-                    pageSize: pagination.pageSize
-                },
+            this.updateState({
+                transmissionEffectiveRate: sorter.order,
+                pageIndex: pagination.current,
+                pageSize: pagination.pageSize
             });
         } else {
-            this.props.dispatch({
-                type: 'TransmissionEfficiency/updateState',
-                payload: {
-                    transmissionEffectiveRate: 'ascend',
-                    pageIndex: pagination.current,
-                    pageSize: pagination.pageSize
-                },
+            this.updateState({
+                transmissionEffectiveRate: 'ascend',
+                pageIndex: pagination.current,
+                pageSize: pagination.pageSize
             });
         }
-        this.onChange(pagination.current);
-    }
-    checkableTagChange = (checked) => {
-        this.setState({ checked });
+        this.getTableData(pagination.current);
     }
     onDateChange = (value, dateString) => {
         let endTime = moment(dateString).add(1, 'months').add(-1, 'days').format('YYYY-MM-DD HH:mm:ss');
@@ -98,15 +80,11 @@ export default class TransmissionEfficiency extends Component {
         if (moment(dateString).add(1, 'months').add(-1, 'days') > moment()) {
             endTime = moment().format('YYYY-MM-DD HH:mm:ss');
         }
-
-        this.props.dispatch({
-            type: 'TransmissionEfficiency/updateState',
-            payload: {
-                beginTime: moment(dateString).format('YYYY-MM-01 HH:mm:ss'),
-                endTime: endTime
-            }
+        this.updateState({
+            beginTime: moment(dateString).format('YYYY-MM-01 HH:mm:ss'),
+            endTime: endTime
         });
-        this.onChange(this.props.pageIndex);
+        this.getTableData(this.props.pageIndex);
     }
     render() {
         const columns = [
@@ -212,10 +190,8 @@ export default class TransmissionEfficiency extends Component {
                         <Row>
                             <Col span={24}>
                                 <div style={{textAlign: 'center', marginBottom: 20}}>
-                                    <Button style={{marginRight: 20}}><span style={{fontSize: 16, color: '#52c41a'}}>■</span> 排口传输有效率达标</Button>
-                                    <Button style={{marginRight: 20}}><span style={{fontSize: 16, color: '#f5222d'}}>■</span> 排口传输有效率未达标</Button>
-                                    {/* <Tag color="#f50" checked={this.state.checked} onChange={this.checkableTagChange} />排口传输有效率达标
-                                    <Tag color="#87d068" checked={this.state.checked} onChange={this.checkableTagChange} />排口传输有效率未达标 */}
+                                    <Button style={{marginRight: 20}}><span style={{fontSize: 16, color: '#52c41a', marginRight: 3}}>■</span> 排口传输有效率达标</Button>
+                                    <Button style={{marginRight: 20}}><span style={{fontSize: 16, color: '#f5222d', marginRight: 3}}>■</span> 排口传输有效率未达标</Button>
                                 </div>
                             </Col>
                         </Row>
@@ -242,9 +218,7 @@ export default class TransmissionEfficiency extends Component {
                                     'total': this.props.total,
                                     'pageSize': this.props.pageSize,
                                     'current': this.props.pageIndex,
-                                    // onChange: this.onChange,
-                                    // onShowSizeChange: this.onShowSizeChange,
-                                    pageSizeOptions: ['5', '10', '20', '30', '40']
+                                    pageSizeOptions: ['10', '20', '30', '40', '50']
                                 }}
                             />
                         </Row>
