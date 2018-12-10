@@ -141,7 +141,7 @@ export default class JzRecordInfo extends Component {
         return rtnVal;
     }
     render() {
-        const SCREEN_HEIGHT = document.querySelector('body').offsetHeight - 150;
+        const SCREEN_HEIGHT = document.querySelector('body').offsetHeight - 250;
         const JzRecord = this.props.JzRecord;
         if (this.props.isloading) {
             return (

@@ -58,17 +58,17 @@ export default class EmergencyDetailInfo extends Component {
                         break;
                     case EnumPsOperationForm.YhpReplace:
                         rtnVal.push(<p style={{marginBottom: 0}}><Button style={{marginBottom: '5px'}} icon="check-circle-o" onClick={() => {
-                            this.props.dispatch(routerRedux.push(`/monitor/sysmanage/ConsumablesReplaceRecord/${this.state.TaskIds}/${this.state.TypeIDs}`));
+                            this.props.dispatch(routerRedux.push(`/sysmanage/ConsumablesReplaceRecord/${this.state.TaskIds}/${this.state.TypeIDs}`));
                         }}>{item.TypeName}</Button></p>);
                         break;
                     case EnumPsOperationForm.StandardGasReplace:
                         rtnVal.push(<p style={{marginBottom: 0}}><Button style={{marginBottom: '5px'}} icon="check-circle-o" onClick={() => {
-                            this.props.dispatch(routerRedux.push(`/monitor/sysmanage/StandardGasRepalceRecord/${this.state.StandardGasTaskIds}/${this.state.StandardGasTypeIDs}`));
+                            this.props.dispatch(routerRedux.push(`/sysmanage/StandardGasRepalceRecord/${this.state.StandardGasTaskIds}/${this.state.StandardGasTypeIDs}`));
                         }}>{item.TypeName}</Button></p>);
                         break;
                     case EnumPsOperationForm.CqfPatrol:
                         rtnVal.push(<p style={{marginBottom: 0}}><Button style={{marginBottom: '5px'}} icon="check-circle-o" onClick={() => {
-                            this.props.dispatch(routerRedux.push(`/monitor/sysmanage/CompleteExtraction/${this.state.CqfPatrolTaskIds}/${this.state.CqfPatrolTypeIDs}`));
+                            this.props.dispatch(routerRedux.push(`/sysmanage/CompleteExtraction/${this.state.CqfPatrolTaskIds}/${this.state.CqfPatrolTypeIDs}`));
                         }}>{item.TypeName}</Button></p>);
                         break;
                     case EnumPsOperationForm.CyfPatrol:
@@ -83,7 +83,7 @@ export default class EmergencyDetailInfo extends Component {
                         break;
                     case EnumPsOperationForm.CheckRecord:
                         rtnVal.push(<p style={{marginBottom: 0}}><Button style={{marginBottom: '5px'}} icon="check-circle-o" onClick={() => {
-                            this.props.dispatch(routerRedux.push(`/monitor/EmergencyTodoList/JzRecordInfo/${taskID}/${item.ID}`));
+                            this.props.dispatch(routerRedux.push(`/pointdetail/:pointcode/JzRecordInfo/${taskID}/${item.ID}`));
                         }}>{item.TypeName}</Button></p>);
                         break;
                     case EnumPsOperationForm.TestRecord:
@@ -222,7 +222,7 @@ export default class EmergencyDetailInfo extends Component {
             } else {
                 return (
                     <PageHeaderLayout title="">
-                        <div style={{height: 'calc(100vh - 190px)'}} className={styles.ExceptionDetailDiv}>
+                        <div style={{height: 'calc(100vh - 290px)'}} className={styles.ExceptionDetailDiv}>
                             <Card title={<span style={{fontWeight: '900'}}>任务信息</span>} bordered={false}>
                                 <DescriptionList className={styles.headerList} size="large" col="3">
                                     <Description term="任务单号">{TaskCode}</Description>
@@ -301,7 +301,6 @@ export default class EmergencyDetailInfo extends Component {
                             <div className={styles.Toexamine} >
                                 <Button size="large" onClick={() => {
                                     this.props.history.goBack(-1);
-                                    // this.props.dispatch(routerRedux.push(`/monitor/operation/emergency/emergencytodolist/`));
                                 }}><Icon type="left" />退回</Button>
                             </div>
                         </div>
