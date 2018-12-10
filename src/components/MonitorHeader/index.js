@@ -157,7 +157,9 @@ export default class MonitorHeader extends PureComponent {
                 to={itemPath}
                 target={target}
                 replace={itemPath === this.props.location.pathname}
-                onClick={this.props.isMobile ? () => { this.props.onCollapse(true); } : undefined}
+                onClick={this.props.isMobile ? () => {
+                    this.props.onCollapse(true);
+                } : undefined}
             >
                 {icon}<span>{name}</span>
             </Link>
@@ -183,13 +185,12 @@ export default class MonitorHeader extends PureComponent {
                   {this.getNavMenuItems(item.children)}
               </SubMenu>
           );
-      } else {
-          return (
-              <Menu.Item key={item.path}>
-                  {this.getMenuItemPath(item)}
-              </Menu.Item>
-          );
       }
+      return (
+          <Menu.Item key={item.path}>
+              {this.getMenuItemPath(item)}
+          </Menu.Item>
+      );
   }
   /**
   * 获得菜单子节点
@@ -202,12 +203,8 @@ export default class MonitorHeader extends PureComponent {
       return menusData
           .filter(item => item.name)
           .map((item) => {
-              if (item.name === '首页') {
-                  return this.getNavMenuItems(item.children);
-              } else {
-                  const ItemDom = this.getSubMenuOrItem(item);
-                  return ItemDom;
-              }
+              const ItemDom = this.getSubMenuOrItem(item);
+              return ItemDom;
           })
           .filter(item => !!item);
   }
@@ -227,9 +224,8 @@ export default class MonitorHeader extends PureComponent {
   conversionPath=(path) => {
       if (path && path.indexOf('http') === 0) {
           return path;
-      } else {
-          return `/${path || ''}`.replace(/\/+/g, '/');
       }
+      return `/${path || ''}`.replace(/\/+/g, '/');
   }
   handleOpenChange = (openKeys) => {
       const lastOpenKey = openKeys[openKeys.length - 1];
@@ -316,7 +312,6 @@ render() {
     if (!selectedKeys.length) {
         selectedKeys = [openKeys[openKeys.length - 1]];
     }
-
     return (
         <Header className={styles.header}>
             <div className={styles.logo}>
@@ -379,7 +374,9 @@ render() {
                 selectedKeys={selectedKeys}
                 style={{ padding: '12px 0', height: '64px' }}
             >
-                {this.getNavMenuItems(this.props.menuData)}
+                {
+                    this.getNavMenuItems(this.props.menuData)
+                }
             </Menu>
 
             <Modal
