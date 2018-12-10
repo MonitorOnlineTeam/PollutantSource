@@ -80,7 +80,7 @@ export default class AddPoint extends Component {
                                     OutputType: this.state.OutputType,
                                     MobilePhone: this.props.editpoint.mobilePhone,
                                     Linkman: this.props.editpoint.linkman === isNullOrUndefined ? '' : this.props.editpoint.linkman,
-                                    PointTypeId: this.props.editpoint.PointTypeId === '' ? undefined : this.props.editpoint.PointTypeId,
+                                    PointType: this.props.editpoint.PointTypeId === '' ? undefined : this.props.editpoint.PointTypeId,
                                     PollutantType: this.props.editpoint.pollutantType === '' ? undefined : this.props.editpoint.pollutantType,
                                     IsSj: this.state.IsSj,
                                     OutputDiameter: this.props.editpoint.OutputDiameter,
