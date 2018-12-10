@@ -58,6 +58,7 @@ export default class Ywdsjlist extends Component {
     _handleDateChange=(date, dateString) => {
         this.setState(
             {
+                rangeDate: [moment(moment(dateString[0]).format('YYYY-MM-DD 00:00:00')), moment(moment(dateString[1]).format('YYYY-MM-DD 23:59:59'))],
                 beginTime: dateString[0],
                 endTime: dateString[1],
                 pageIndex: pageIndex
