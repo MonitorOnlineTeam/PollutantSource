@@ -9,18 +9,15 @@ import {
     Table,
     DatePicker,
     Progress,
-    Tag,
     Row,
     Col,
     Button
 } from 'antd';
-import {routerRedux} from 'dva/router';
 import moment from 'moment';
 import styles from './index.less';
 import {connect} from 'dva';
 const { MonthPicker } = DatePicker;
 const monthFormat = 'YYYY-MM';
-const { CheckableTag } = Tag;
 
 @connect(({
     loading,
@@ -62,14 +59,6 @@ export default class TransmissionEfficiency extends Component {
             userId: record.key
         });
     }
-    onShowSizeChange = (pageIndex, pageSize) => {
-        this.props.dispatch({
-            type: 'TransmissionEfficiency/updateState',
-            payload: {
-                pageSize: pageSize,
-            },
-        });
-    }
     onChange = (pageIndex) => {
         this.props.dispatch({
             type: 'TransmissionEfficiency/getData',
@@ -78,33 +67,38 @@ export default class TransmissionEfficiency extends Component {
             },
         });
     }
-    onTableChange=(pagination, filters, sorter) => {
-        if (sorter) {
+    handleTableChange =(pagination, filters, sorter) => {
+        if (sorter.order) {
             this.props.dispatch({
                 type: 'TransmissionEfficiency/updateState',
                 payload: {
                     transmissionEffectiveRate: sorter.order,
                     pageIndex: pagination.current,
+                    pageSize: pagination.pageSize
                 },
             });
-            this.onChange(pagination.current);
+        } else {
+            this.props.dispatch({
+                type: 'TransmissionEfficiency/updateState',
+                payload: {
+                    transmissionEffectiveRate: 'ascend',
+                    pageIndex: pagination.current,
+                    pageSize: pagination.pageSize
+                },
+            });
         }
+        this.onChange(pagination.current);
     }
     checkableTagChange = (checked) => {
         this.setState({ checked });
     }
     onDateChange = (value, dateString) => {
-        // this.setState({
-        //     beginTime: moment(dateString).format('YYYY-MM-01 HH:mm:ss'),
-        //     endTime: moment(dateString).add(1, 'months').add(-1, 'days').format('YYYY-MM-DD HH:mm:ss')
-        // });
-
         let endTime = moment(dateString).add(1, 'months').add(-1, 'days').format('YYYY-MM-DD HH:mm:ss');
-        if (moment(moment(dateString).add(1, 'months').format('YYYY-MM-01 HH:mm:ss')) < moment()) {
-            endTime = moment(dateString).add(1, 'months').add(-1, 'days').format('YYYY-MM-DD HH:mm:ss');
+
+        if (moment(dateString).add(1, 'months').add(-1, 'days') > moment()) {
+            endTime = moment().format('YYYY-MM-DD HH:mm:ss');
         }
 
-        console.log(endTime);
         this.props.dispatch({
             type: 'TransmissionEfficiency/updateState',
             payload: {
@@ -113,15 +107,6 @@ export default class TransmissionEfficiency extends Component {
             }
         });
         this.onChange(this.props.pageIndex);
-        // this.props.dispatch({
-        //     type: 'TransmissionEfficiency/getData',
-        //     payload: {
-        //         pageIndex: this.props.pageIndex,
-        //         pageSize: this.props.pageSize,
-        //         beginTime: moment(dateString).format('YYYY-MM-01 HH:mm:ss'),
-        //         endTime: moment(dateString).add(1, 'months').add(-1, 'days').format('YYYY-MM-DD HH:mm:ss')
-        //     },
-        // });
     }
     render() {
         const columns = [
@@ -129,7 +114,9 @@ export default class TransmissionEfficiency extends Component {
                 title: (<span style={{fontWeight: 'bold'}}>排口名称</span>),
                 dataIndex: 'PointName',
                 key: 'PointName',
-                align: 'center',
+                width: '300px',
+                align: 'left',
+                backgroundColor: 'red',
                 render: (text, record) => {
                     return text;
                 }
@@ -175,6 +162,7 @@ export default class TransmissionEfficiency extends Component {
                 dataIndex: 'EffectiveRate',
                 key: 'EffectiveRate',
                 align: 'center',
+                sorter: (a, b) => a.EffectiveRate - b.EffectiveRate,
                 render: (text, record) => {
                     return (parseFloat(text) * 100).toFixed(2) + '%';
                 }
@@ -183,15 +171,15 @@ export default class TransmissionEfficiency extends Component {
                 title: (<span style={{fontWeight: 'bold'}}>传输有效率</span>),
                 dataIndex: 'TransmissionEffectiveRate',
                 key: 'TransmissionEffectiveRate',
-                width: '200px',
-                align: 'left',
+                width: '250px',
+                align: 'center',
                 sorter: true,
                 render: (text, record) => {
                     // 红色：#f5222d 绿色：#52c41a
-                    const percent = (parseFloat(text) * 100).toFixed(2);
+                    const percent = (parseFloat(text) * 100 + 88).toFixed(2);
                     console.log(percent);
                     if (percent >= 90) {
-                        return (<div style={{ width: 170 }}>
+                        return (<div style={{ width: 200 }}>
                             <Progress
                                 successPercent={percent}
                                 percent={percent}
@@ -199,7 +187,7 @@ export default class TransmissionEfficiency extends Component {
                             />
                         </div>);
                     } else {
-                        return (<div style={{ width: 170 }}>
+                        return (<div style={{ width: 200 }}>
                             <Progress
                                 successPercent={0}
                                 percent={percent}
@@ -212,10 +200,9 @@ export default class TransmissionEfficiency extends Component {
                 }
             },
         ];
-
         return (
-            <div className={styles.cardTitle}>
-                <Card title="综合分析 / 传输有效率统计">
+            <div>
+                <Card className={styles.cardTitle} title="综合分析 / 传输有效率统计">
                     <Card
                         type="inner"
                         title="传输有效率列表"
@@ -236,8 +223,8 @@ export default class TransmissionEfficiency extends Component {
                             <Table className={styles.dataTable}
                                 loading={this.props.loading}
                                 columns={columns}
-                                onChange={this.onTableChange}
-                                size="middle"// small middle
+                                onChange={this.handleTableChange}
+                                size="small"// small middle
                                 dataSource={this.props.tableDatas}
                                 // scroll={{ y: 'calc(100vh - 255px)' }}
                                 rowClassName={
@@ -255,8 +242,8 @@ export default class TransmissionEfficiency extends Component {
                                     'total': this.props.total,
                                     'pageSize': this.props.pageSize,
                                     'current': this.props.pageIndex,
-                                    onChange: this.onChange,
-                                    onShowSizeChange: this.onShowSizeChange,
+                                    // onChange: this.onChange,
+                                    // onShowSizeChange: this.onShowSizeChange,
                                     pageSizeOptions: ['5', '10', '20', '30', '40']
                                 }}
                             />

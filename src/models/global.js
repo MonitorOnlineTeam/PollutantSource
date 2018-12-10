@@ -3,7 +3,6 @@ import { Model } from '../dvapack';
 import { getTimeDistance } from '../utils/utils';
 import { loadPollutantType, getAllPointAlarmInfo } from '../services/api';
 import * as service from '../dvapack/websocket/mywebsocket';
-import { debug } from 'util';
 
 export default Model.extend({
     namespace: 'global',
@@ -116,7 +115,7 @@ export default Model.extend({
                 let obj = JSON.parse(data);
                 switch (obj.MessageType) {
                     case 'RealTimeData':
-                        //跳转到对应的effect，把实体带过去更新state达到页面刷新的目的
+                        // 跳转到对应的effect，把实体带过去更新state达到页面刷新的目的
                         dispatch({
                             type: 'user/fetchCurrent',
                             payload: obj.Message
@@ -131,6 +130,12 @@ export default Model.extend({
                         dispatch({
                             type: 'welcome'
                         });
+                        break;
+                    case 'DynamicControlParam':
+                        break;
+                    case 'DynamicControlState':
+                        break;
+                    default:
                         break;
                 }
             });

@@ -173,16 +173,35 @@ export default class AddUser extends Component {
              payload: {
                  UserId: UserId,
                  callback: () => {
-                     this.setState({
-                         AlarmTime: this.props.editUser.AlarmTime === '' ? undefined : this.props.editUser.AlarmTime.split(','),
-                         SendPush: this.props.editUser.SendPush === '' ? undefined : this.props.editUser.SendPush.split(','),
-                         UserStatus: true,
-                         DeleteMark: this.props.editUser.DeleteMark
-                     });
+                     if (this.props.requstresult === '1') {
+                         this.setState({
+                             AlarmTime: this.props.editUser.AlarmTime === '' ? undefined : this.props.editUser.AlarmTime.split(','),
+                             SendPush: this.props.editUser.SendPush === '' ? undefined : this.props.editUser.SendPush.split(','),
+                             UserStatus: true,
+                             DeleteMark: this.props.editUser.DeleteMark
+                         }, () => {
+                             this.props.form.setFieldsValue({
+                                 User_Name: this.props.editUser.User_Name,
+                                 User_Account: this.props.editUser.User_Account,
+                                 User_Sex: this.props.editUser.User_Sex,
+                                 DeleteMark: this.props.editUser.DeleteMark,
+                                 Email: this.props.editUser.Email,
+                                 Phone: this.props.editUser.Phone,
+                                 Title: this.props.editUser.Title,
+                                 orderby: this.props.editUser.orderby,
+                                 AlarmType: this.props.editUser.AlarmType === '' ? undefined : this.props.editUser.AlarmType,
+                                 SendPush: this.props.editUser.SendPush === '' ? undefined : this.props.editUser.SendPush.split(','),
+                                 AlarmTime: this.props.editUser.AlarmTime === '' ? undefined : this.props.editUser.AlarmTime.split(','),
+                                 Roles_Name: this.props.editUser.Roles_Name,
+                                 User_Remark: this.props.editUser.User_Remark,
+
+                             });
+                         });
+                     }
                  }
              },
          });
-     } 
+     }
  }
     IsExistence = (rule, value, callback) => {
         this.props.dispatch({
@@ -212,7 +231,7 @@ export default class AddUser extends Component {
                     breadcrumbList={
                         [{
                             title: '用户列表',
-                            href: '/monitor/sysmanage/userinfo',
+                            href: '/sysmanage/userinfo',
                         }, {
                             title: '添加用户',
                         }]
@@ -228,7 +247,6 @@ export default class AddUser extends Component {
                                     label="用户名称">
                                     {getFieldDecorator('User_Name'
                                         , {
-                                            initialValue: this.props.editUser !== null ? this.props.editUser.User_Name : '',
                                             rules: [{
                                                 required: true,
                                                 message: '请输入用户名称!'
@@ -246,7 +264,6 @@ export default class AddUser extends Component {
                                     label="登录名称">
                                     {getFieldDecorator('User_Account'
                                         , {
-                                            initialValue: this.props.editUser !== null ? this.props.editUser.User_Account : '',
                                             rules: [{
                                                 required: true,
                                                 message: '请输入登录名称!'
@@ -265,7 +282,7 @@ export default class AddUser extends Component {
                                     label="用户性别">
                                     {getFieldDecorator('User_Sex'
                                         , {
-                                            initialValue: this.props.editUser !== null ? this.props.editUser.User_Sex : 1,
+                                            initialValue: 1,
                                         }
                                     )(
                                         <RadioGroup onChange={this.onChange}>
@@ -284,7 +301,7 @@ export default class AddUser extends Component {
                                         {
                                             initialValue: this.state.DeleteMark,
                                             valuePropName: 'checked',
-                                        })(<Switch checkedChildren="启用" unCheckedChildren="禁用" defaultChecked={this.state.DeleteMark} />
+                                        })(<Switch checkedChildren="启用" unCheckedChildren="禁用" />
                                     )}
                                 </FormItem>
                             </Col>
@@ -297,7 +314,6 @@ export default class AddUser extends Component {
                                     label="E-mail">
                                     {getFieldDecorator('Email'
                                         , {
-                                            initialValue: this.props.editUser !== null ? this.props.editUser.Email : '',
                                             rules: [{ type: 'email', message: '请输入正确的邮箱!' }]
                                         })(<Input placeholder="E-mail" />
                                     )}
@@ -310,7 +326,6 @@ export default class AddUser extends Component {
                                     label="联系方式">
                                     {getFieldDecorator('Phone'
                                         , {
-                                            initialValue: this.props.editUser !== null ? this.props.editUser.Phone : '',
                                             rules: [{ pattern: /^1\d{10}$/, message: '请输入正确的手机号!' }]
                                         })(<Input placeholder="手机号" />
                                     )}
@@ -325,7 +340,6 @@ export default class AddUser extends Component {
                                     label="用户职称">
                                     {
                                         getFieldDecorator('Title', {
-                                            initialValue: this.props.editUser !== null ? this.props.editUser.Title : '',
                                         })(
                                             <Input placeholder="用户职称" />
                                         )}
@@ -338,7 +352,7 @@ export default class AddUser extends Component {
                                     label="用户序号">
                                     {getFieldDecorator('User_Orderby',
                                         {
-                                            initialValue: this.props.editUser !== null ? this.props.editUser.User_Orderby : this.state.orderby
+                                            initialValue: this.state.orderby
                                         }
                                     )(
                                         <InputNumber min={1} max={1000} />
@@ -353,7 +367,7 @@ export default class AddUser extends Component {
                                     wrapperCol={{ span: 12 }}
                                     label="报警类型">
                                     {getFieldDecorator('AlarmType', {
-                                        initialValue: this.props.editUser !== null ? this.props.editUser.AlarmType + '' : undefined
+                                        initialValue: undefined
                                     })(
                                         <Select placeholder="请选择" >
                                             <Option value="1">实时报警</Option>
@@ -368,7 +382,7 @@ export default class AddUser extends Component {
                                     wrapperCol={{ span: 12 }}
                                     label="报警时间">
                                     {getFieldDecorator('AlarmTime', {
-                                        initialValue: this.props.editUser !== null ? this.state.AlarmTime : undefined
+                                        initialValue: undefined
                                     })(
                                         <Select
                                             mode="multiple"
@@ -388,7 +402,7 @@ export default class AddUser extends Component {
                                     wrapperCol={{ span: 12 }}
                                     label="推送类型">
                                     {getFieldDecorator('SendPush', {
-                                        initialValue: this.props.editUser !== null ? this.state.SendPush : undefined,
+                                        initialValue: undefined,
                                     })(
                                         <Select
                                             mode="multiple"
@@ -407,7 +421,7 @@ export default class AddUser extends Component {
                                     wrapperCol={{ span: 12 }}
                                     label="角色名称" > {
                                         getFieldDecorator('Roles_Name', {
-                                            initialValue: this.props.editUser !== null ? this.props.editUser.Roles_Name : undefined,
+                                            initialValue: undefined,
                                             rules: [{
                                                 required: true,
                                                 message: '请选择角色!'
@@ -430,7 +444,6 @@ export default class AddUser extends Component {
                                     wrapperCol={{ span: 12 }}
                                     label="备注">
                                     {getFieldDecorator('User_Remark', {
-                                        initialValue: this.props.editUser !== null ? this.props.editUser.User_Remark : '',
                                     })(
                                         <TextArea rows={4} style={{width: '100%'}} />
                                     )}

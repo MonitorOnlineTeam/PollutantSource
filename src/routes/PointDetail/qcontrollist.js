@@ -28,10 +28,13 @@ export default class qcontrollist extends Component {
             { key: EnumPsOperationForm.TestRecord, name: 'CEMS校验测试记录', src: '' },
             { key: EnumPsOperationForm.DataException, name: 'CEMS设备数据异常记录表', src: '' }
         ];
+        const path1 = this.props.location.pathname.split('/')[this.props.location.pathname.split('/').length - 1];
+        const path2 = this.props.location.pathname.split('/')[this.props.location.pathname.split('/').length - 2];
         this.state = {
             iconLoading: false,
             srclist: srclist,
-            key: srclist[0].key
+            key: path1 === 'qcontrollist' ? srclist[0].key.toString() : path1,
+            src: path1 === 'qcontrollist' ? srclist[0].src : path2
         };
     }
 
@@ -78,7 +81,7 @@ export default class qcontrollist extends Component {
                                 ))
                             }
                             {
-                                <Redirect from={match.url} to={`${match.url}/${this.state.srclist[0].src}/${this.state.srclist[0].key}`} />
+                                <Redirect from={match.url} to={`${match.url}/${this.state.src}/${this.state.key}`} />
                             }
                         </Switch>
                     </Content>
