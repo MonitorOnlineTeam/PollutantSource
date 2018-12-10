@@ -53,7 +53,7 @@ export async function GetJzHistoryRecord(params) {
         BeginTime: params.BeginTime,
         EndTime: params.EndTime
     };
-    const result = await post('/api/rest/PollutantSourceApi/PTaskForm/GetJzRecord', body, null);
+    const result = await post('/api/rest/PollutantSourceApi/PTaskForm/GetJzHistoryInfo', body, null);
     return result === null ? { data: null } : result;
 }
 // 根据任务id和类型id获取易耗品列表

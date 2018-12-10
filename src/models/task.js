@@ -13,7 +13,8 @@ export default Model.extend({
         JzHistoryRecord: [],
         ConsumablesReplaceRecordList: [],
         StandardGasRepalceRecordList: [],
-        PatrolRecordListPC: []
+        PatrolRecordListPC: [],
+        RecordCount: null
     },
 
     effects: {
@@ -86,7 +87,7 @@ export default Model.extend({
             const DataInfo = yield call(GetJzHistoryRecord, payload);
             if (DataInfo != null && DataInfo.requstresult == EnumRequstResult.Success) {
                 if (DataInfo.data != null) {
-                    yield update({ RecordTypes: DataInfo.data });
+                    yield update({ JzHistoryRecord: DataInfo.data, RecordCount: DataInfo.total });
                 }
             }
         },

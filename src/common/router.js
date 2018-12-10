@@ -105,14 +105,6 @@ export const getRouterData = (app) => {
             component: dynamicWrapper(app, ['points'], () =>
           import('../routes/EmergencyAuditList/EmergencyDetailInfo')),
         },
-        // '/emergency/emergencydetailinfo/:exceptionhandleid': {
-        //     component: dynamicWrapper(app, ['points'], () =>
-        //   import('../routes/EmergencyTodoList/EmergencyDetailInfo')),
-        // },
-        '/emergency/emergencydetailinfo/:TaskID': {
-            component: dynamicWrapper(app, ['task'], () =>
-          import('../routes/EmergencyTodoList/EmergencyDetailInfo')),
-        },
         '/pointdetail/:pointcode/processflowdiagram': {
             component: dynamicWrapper(app, ['points'], () =>
           import('../routes/PointDetail/ProcessFlowDiagram')),
@@ -171,11 +163,15 @@ export const getRouterData = (app) => {
             component: dynamicWrapper(app, ['task'], () =>
         import('../routes/PointDetail/Ywdsjlist')),
         },
-        '/monitor/pointdetail/:pointcode/qcontrollist': {
+        '/pointdetail/:pointcode/emergencydetailinfo/:TaskID': {
+            component: dynamicWrapper(app, ['task'], () =>
+          import('../routes/EmergencyTodoList/EmergencyDetailInfo')),
+        },
+        '/pointdetail/:pointcode/qcontrollist': {
             component: dynamicWrapper(app, ['task'], () =>
         import('../routes/PointDetail/qcontrollist')),
         },
-        '/EmergencyTodoList/JzRecordInfo/:TaskID/:TypeID': {
+        '/pointdetail/:pointcode/JzRecordInfo/:TaskID/:TypeID': {
             component: dynamicWrapper(app, ['task'], () =>
         import('../routes/EmergencyTodoList/JzRecordInfo')),
         },

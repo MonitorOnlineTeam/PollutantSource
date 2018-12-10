@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import { Tabs, Layout, Icon } from 'antd';
+import { Tabs, Layout } from 'antd';
 import {EnumPsOperationForm} from '../../utils/enum';
 import { routerRedux, Switch, Redirect } from 'dva/router';
 import { getRoutes } from '../../utils/utils';
@@ -16,19 +16,6 @@ const {
 export default class qcontrollist extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            iconLoading: false
-        };
-    }
-
-    componentDidMount() {
-        this.props.dispatch({
-            type: 'task/GetRecordType'
-        });
-    }
-
-    render() {
-        const rType = this.props.RecordTypes;
         const srclist = [
             { key: EnumPsOperationForm.Repair, name: '维修记录表', src: 'RepairHistoryRecods' },
             { key: EnumPsOperationForm.StopMachine, name: '停机记录表', src: '' },
@@ -41,20 +28,40 @@ export default class qcontrollist extends Component {
             { key: EnumPsOperationForm.TestRecord, name: 'CEMS校验测试记录', src: '' },
             { key: EnumPsOperationForm.DataException, name: 'CEMS设备数据异常记录表', src: '' }
         ];
+        this.state = {
+            iconLoading: false,
+            srclist: srclist,
+            key: srclist[0].key
+        };
+    }
 
+    componentDidMount() {
+        this.props.dispatch({
+            type: 'task/GetRecordType'
+        });
+    }
+
+    render() {
+        const rType = this.props.RecordTypes;
         const { match, routerData } = this.props;
         const routes = getRoutes(match.path, routerData);
+        debugger;
+        console.log(this.state.key);
         return (
             <div style={{ width: '100%', height: 'calc(100vh - 222px)' }}>
                 {<Layout style={{ padding: '24px 0', background: '#fff' }}>
-                    <Sider width={300} style={{ background: '#fff' }} >
+                    <Sider width={252} style={{ background: '#fff' }} >
                         <Tabs tabPosition="left"
+                            activeKey={this.state.key}
                             onChange={(key) => {
-                                let rd = srclist.filter(function(item) {
+                                this.setState({
+                                    key: key
+                                });
+                                let rd = this.state.srclist.filter(function(item) {
                                     return item.key == key;
                                 });
                                 let srcValue = rd[0].src;
-                                this.props.dispatch(routerRedux.push(`/monitor/pointdetail/${this.props.match.params.pointcode}/qcontrollist/${srcValue}/${key}`));
+                                this.props.dispatch(routerRedux.push(`/pointdetail/${this.props.match.params.pointcode}/qcontrollist/${srcValue}/${key}`));
                             }}
                         >
                             {rType.map(item => <TabPane tab={item.TypeName} key={item.TypeId} />)}
@@ -73,7 +80,7 @@ export default class qcontrollist extends Component {
                                 ))
                             }
                             {
-                                <Redirect from={match.url} to={`${match.url}/${srclist[0].src}/${srclist[0].key}`} />
+                                <Redirect from={match.url} to={`${match.url}/${this.state.srclist[0].src}/${this.state.srclist[0].key}`} />
                             }
                         </Switch>
                     </Content>
