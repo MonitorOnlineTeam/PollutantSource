@@ -17,7 +17,8 @@ const FormItem = Form.Item;
     pollutantlist: points.pollutantlist,
     isloading: loading.effects['points/querypollutantlist'],
     data: points.overdata,
-    total: points.overtotal
+    total: points.overtotal,
+    selectpoint: points.selectpoint,
 }))
 
 class AlarmRecord extends Component {
@@ -33,7 +34,7 @@ class AlarmRecord extends Component {
         this.props.dispatch({
             type: 'points/querypollutantlist',
             payload: {
-                dgimn: 'sgjt001003'
+                dgimn: this.props.selectpoint.DGIMN
             }
         });
         this.reloaddatalist(this.state.pollutantCode, this.state.current, this.state.pageSize, this.state.rangeDate[0], this.state.rangeDate[1]);
@@ -65,7 +66,7 @@ class AlarmRecord extends Component {
           this.props.dispatch({
               type: 'points/queryoverdatalist',
               payload: {
-                  dgimn: 'sgjt001003',
+                  dgimn: this.props.selectpoint.DGIMN,
                   pollutantCode: pollutantCode,
                   beginTime: beginTime,
                   endTime: endTime,

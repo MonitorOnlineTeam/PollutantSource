@@ -25,7 +25,7 @@ export default class GyProcessPic extends Component {
         this.props.dispatch({
             type: 'points/queryprocesschart',
             payload: {
-                dgimn: 'sgjt001003'
+                dgimn: 'sgjt001003' // this.props.pointInfo.DGIMN
             }
         });
     }
@@ -60,9 +60,7 @@ export default class GyProcessPic extends Component {
     }
     render() {
         const { scale, translation } = this.state;
-        const { flows, isloading, pointInfo } = this.props;
-        console.log(pointInfo);
-        console.log(flows);
+        const { flows, isloading } = this.props;
         return (
             <div className={styles.GyProcessPic} style={{height: 'calc(100vh - 225px)'}}>
                 { isloading ? <Spin style={{width: '100%',
@@ -79,8 +77,8 @@ export default class GyProcessPic extends Component {
                         showControls={true}>
                         <div className={styles.imgBg} >
                             <div style={{width: '200px', height: '20px', position: 'relative', left: '1250px', top: '20px', fontWeight: '1000', fontSize: '13px'}}>CEMS运行状态： {this.getstatus()}</div>
-                            <div style={{width: '100px', height: '20px', position: 'relative', left: '400px', top: '186px', fontWeight: '700', fontSize: '10px'}}>管线：{flows ? '' : flows.GxTemperature}</div>
-                            <div style={{width: '100px', height: '20px', position: 'relative', left: '635px', top: '152px', fontWeight: '700', fontSize: '10px'}}>制冷温度：{flows ? '' : flows.LnqZlTemperature}</div>
+                            <div style={{width: '100px', height: '20px', position: 'relative', left: '400px', top: '186px', fontWeight: '700', fontSize: '10px'}}>管线温度：{!flows ? '' : flows['系统采样管线温度'] + '°C'}</div>
+                            <div style={{width: '100px', height: '20px', position: 'relative', left: '635px', top: '152px', fontWeight: '700', fontSize: '10px'}}>制冷温度：{!flows ? '' : flows['系统冷凝器温度'] + '°C'}</div>
                             <div style={{width: '100px', height: '20px', position: 'relative', left: '720px', top: '172px', fontWeight: '700', fontSize: '10px'}}>电磁阀：{flows ? '' : flows.Jldcf}</div>
                             <div style={{width: '100px', height: '20px', position: 'relative', left: '890px', top: '160px', fontWeight: '700', fontSize: '10px'}}>下次更换时间：{flows ? '' : flows.CybNextChangeTime}</div>
                             <div style={{width: '100px', height: '20px', position: 'relative', left: '890px', top: '182px', fontWeight: '700', fontSize: '10px'}}><span className={flows ? styles.AlarmCommon : (flows.Status !== '0' ? styles.shine_red : styles.AlarmCommon)}>{flows ? '' : flows.SdAlarm}</span></div>
@@ -88,13 +86,12 @@ export default class GyProcessPic extends Component {
                             <div style={{width: '100px', height: '20px', position: 'relative', left: '860px', top: '240px', fontWeight: '700', fontSize: '10px'}}>下次更换时间：{flows ? '' : flows.RdbNextChangeTime}</div>
                             <div style={{width: '120px', height: '20px', position: 'relative', left: '720px', top: '275px', fontWeight: '700', fontSize: '10px'}}>滤芯下次更换时间：{flows ? '' : flows.LxNextChangeTime}</div>
                             <div style={{width: '120px', height: '20px', position: 'relative', left: '320px', top: '105px', fontWeight: '700', fontSize: '10px'}}>滤芯下次更换时间：{flows ? '' : flows.TtLxNextChangeTime}</div>
-                            <div style={{width: '120px', height: '20px', position: 'relative', left: '1323px', top: '465px', fontWeight: '700', fontSize: '10px'}}>液位值：{flows ? '' : flows.Ywz}</div>
-                            <div style={{width: '120px', height: '20px', position: 'relative', left: '367px', top: '-120px', fontWeight: '700', fontSize: '10px'}}>探头温度：{flows ? '' : flows.TtTemperature}</div>
-                            <div style={{width: '120px', height: '20px', position: 'relative', left: '367px', top: '-120px', fontWeight: '700', fontSize: '10px'}}>报警开关：{flows ? '' : flows.TtAlarmKg}</div>
-                            <div style={{width: '120px', height: '20px', position: 'relative', left: '367px', top: '-120px', fontWeight: '700', fontSize: '10px'}}>反吹状态：{flows ? '' : flows.TtFc}</div>
-                            <div style={{width: '120px', height: '20px', position: 'relative', left: '527px', top: '-40px', fontWeight: '700', fontSize: '10px'}}>截止阀状态：{flows ? '' : flows.Jzf}</div>
-                            <div style={{width: '120px', height: '20px', position: 'relative', left: '207px', top: '-160px', fontWeight: '700', fontSize: '10px'}}>压差：{flows ? '' : flows.Cy}</div>
-                            <div style={{width: '120px', height: '20px', position: 'relative', left: '207px', top: '-160px', fontWeight: '700', fontSize: '10px'}}>皮托管吹扫：{flows ? '' : flows.PtgCsStatus}</div>
+                            <div style={{width: '120px', height: '20px', position: 'relative', left: '1323px', top: '465px', fontWeight: '700', fontSize: '10px'}}>液位值：{!flows ? '' : flows['液位高度']}</div>
+                            <div style={{width: '120px', height: '20px', position: 'relative', left: '367px', top: '-120px', fontWeight: '700', fontSize: '10px'}}>探头温度：{!flows ? '' : flows['系统采样探头温度'] + '°C'}</div>
+                            <div style={{width: '120px', height: '20px', position: 'relative', left: '367px', top: '-120px', fontWeight: '700', fontSize: '10px'}}>工作状态：{!flows ? '' : flows['工作状态']}</div>
+                            <div style={{width: '120px', height: '20px', position: 'relative', left: '527px', top: '-30px', fontWeight: '700', fontSize: '10px'}}>截止阀状态：{!flows ? '' : flows['截止阀故障']}</div>
+                            <div style={{width: '120px', height: '20px', position: 'relative', left: '207px', top: '-145px', fontWeight: '700', fontSize: '10px'}}>压差：{flows ? '' : flows.Cy}</div>
+                            <div style={{width: '120px', height: '20px', position: 'relative', left: '207px', top: '-145px', fontWeight: '700', fontSize: '10px'}}>皮托管吹扫：{flows ? '' : flows.PtgCsStatus}</div>
                             <div style={{width: '120px', height: '20px', position: 'relative', left: '378px', top: '400px', fontWeight: '700', fontSize: '10px'}}>状态：<span className={flows ? styles.AlarmCommon : (flows.Status !== '0' ? styles.shine_red : styles.AlarmCommon)}>{flows ? '' : flows.QtFxy}</span></div>
                             <div style={{width: '120px', height: '20px', position: 'relative', left: '893px', top: '380px', fontWeight: '700', fontSize: '10px'}}>状态：<span className={flows ? styles.AlarmCommon : (flows.Status !== '0' ? styles.shine_red : styles.AlarmCommon)}>{flows ? '' : flows.YqcsFxy}</span></div>
                             <div style={{width: '120px', height: '20px', position: 'relative', left: '1395px', top: '360px', fontWeight: '700', fontSize: '10px'}}>状态：<span className={flows ? styles.AlarmCommon : (flows.Status !== '0' ? styles.shine_red : styles.AlarmCommon)}>{flows ? '' : flows.YcFxy}</span></div>
@@ -108,7 +105,7 @@ export default class GyProcessPic extends Component {
                                             <tbody>
                                                 <tr>
                                                     <td style={{width: '40%', textAlign: 'left'}}>烟尘(mg/m3)</td>
-                                                    <td style={{width: '60%', textAlign: 'center'}}>{!flows ? '' : flows['01']}</td>
+                                                    <td style={{width: '60%', textAlign: 'center'}}>{!flows ? '' : flows['zs01']}</td>
                                                 </tr>
                                                 {
                                                     this.addstateInfo('01')
@@ -123,7 +120,7 @@ export default class GyProcessPic extends Component {
                                             <tbody>
                                                 <tr>
                                                     <td style={{width: '40%', textAlign: 'left'}}>二氧化硫(mg/m3)</td>
-                                                    <td style={{width: '60%', textAlign: 'center'}}>{!flows ? '' : flows['02']}</td>
+                                                    <td style={{width: '60%', textAlign: 'center'}}>{!flows ? '' : flows['zs02']}</td>
                                                 </tr>
                                                 {
                                                     this.addstateInfo('02')
@@ -138,7 +135,7 @@ export default class GyProcessPic extends Component {
                                             <tbody>
                                                 <tr>
                                                     <td style={{width: '40%', textAlign: 'left'}}>氮氧化物(mg/m3)</td>
-                                                    <td style={{width: '60%', textAlign: 'center'}}>{!flows ? '' : flows['03']}</td>
+                                                    <td style={{width: '60%', textAlign: 'center'}}>{!flows ? '' : flows['zs03']}</td>
                                                 </tr>
                                                 {
                                                     this.addstateInfo('03')

@@ -23,6 +23,7 @@ modify by
 @connect(({points, loading}) => ({
     pollutantlist: points.pollutantlist,
     option: points.chartdata,
+    selectpoint: points.selectpoint,
     isloading: loading.effects['points/querypollutantlist'],
     columns: points.columns,
     datatable: points.datatable,
@@ -49,7 +50,7 @@ class DataQuery extends Component {
         this.props.dispatch({
             type: 'points/querypollutantlist',
             payload: {
-                dgimn: 'sgjt001003'
+                dgimn: this.props.selectpoint.DGIMN
             }
         });
     }
@@ -131,7 +132,7 @@ class DataQuery extends Component {
             payload: {
                 pollutantCode: pollutantCode,
                 datatype: datatype,
-                dgimn: 'sgjt001003',
+                dgimn: this.props.selectpoint.DGIMN,
                 pageIndex: pageIndex,
                 pageSize: pageSize,
                 beginTime: beginTime,
@@ -159,8 +160,8 @@ class DataQuery extends Component {
                             <Switch checkedChildren="图表" unCheckedChildren="数据" onChange={this.displayChange} defaultChecked={true} />
                         </div>
                     } style={{ width: '100%', height: 'calc(100vh - 225px)' }}>
-                        {this.state.displayType === 'chart' ? <ReactEcharts option={this.props.option} lazyUpdate={true}
-                            notMerge={true} id="rightLine" style={{ width: '100%', height: 'calc(100vh - 380px)' }} />
+                        {this.state.displayType === 'chart' ? (!this.props.option[0] ? <div style={{textAlign: 'center'}}>暂无数据</div> : <ReactEcharts option={this.props.option} lazyUpdate={true}
+                            notMerge={true} id="rightLine" style={{ width: '100%', height: 'calc(100vh - 380px)' }} />)
                             : <Table rowKey="MonitorTime" dataSource={this.props.datatable} columns={this.props.columns}
                                 pagination={{
                                     'total': this.props.total,
