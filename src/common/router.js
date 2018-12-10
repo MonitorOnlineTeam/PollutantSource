@@ -381,6 +381,10 @@ export const getRouterData = (app) => {
             component: dynamicWrapper(app, ['pointinfo'], () =>
               import('../routes/PointInfo/PointView')),
         },
+        '/sysmanage/Userinfo': {
+            component: dynamicWrapper(app, ['userinfo', 'userdgimndata'], () =>
+            import('../routes/Userinfo')),
+        },
         '/sysmanage/UserDetail/:UserId': {
             component: dynamicWrapper(app, ['userinfo'], () =>
             import('../routes/Userinfo/AddUser')),
