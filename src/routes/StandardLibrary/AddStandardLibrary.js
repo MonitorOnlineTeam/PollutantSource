@@ -180,7 +180,7 @@ export default class AddStandardLibrary extends Component {
           });
       };
  success = (StandardLibraryID) => {
-     //  let index = this.props.dispatch(routerRedux.push(`/monitor/sysmanage/Userinfo`));
+     //  let index = this.props.dispatch(routerRedux.push(`/sysmanage/Userinfo`));
      //  if (this.state.UserId !== null) {
      //      message.success('修改成功', 3).then(() => index);
      //  } else {
@@ -427,7 +427,7 @@ export default class AddStandardLibrary extends Component {
                                   <Divider type="vertical" />
                                   <Button type="dashed"
                                       onClick={
-                                          () => this.props.dispatch(routerRedux.push(`/monitor/sysmanage/StandardLibrary`))
+                                          () => this.props.dispatch(routerRedux.push(`/sysmanage/StandardLibrary`))
                                       } >
                           返回
                                   </Button>

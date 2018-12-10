@@ -124,7 +124,7 @@ export default class pointlist extends Component {
   editpoint = () => {
       console.log(this.state.selectedRowKeys);
       if (this.state.selectedRowKeys.length === 1) {
-          this.props.dispatch(routerRedux.push(`/monitor/sysmanage/PointDetail/${this.state.selectedRowKeys}`));
+          this.props.dispatch(routerRedux.push(`/sysmanage/PointDetail/${this.state.selectedRowKeys}`));
       }
       if (this.state.selectedRowKeys.length > 1) {
           message.warning('请选择一个排口进行编辑');
@@ -248,19 +248,19 @@ export default class pointlist extends Component {
           width: '380px',
           render: (text, record) => (<Fragment >
               <a onClick={
-                  () => this.props.dispatch(routerRedux.push(`/monitor/sysmanage/UserDetail/${record.key}`))
+                  () => this.props.dispatch(routerRedux.push(`/sysmanage/UserDetail/${record.key}`))
               } > 停产管理 </a>
               <Divider type="vertical" />
               <a onClick={
-                  () => this.props.dispatch(routerRedux.push(`/monitor/sysmanage/UserDetail/${record.key}`))
+                  () => this.props.dispatch(routerRedux.push(`/sysmanage/UserDetail/${record.key}`))
               } > 监测标准 </a>
               <Divider type="vertical" />
               <a onClick={
-                  () => this.props.dispatch(routerRedux.push(`/monitor/sysmanage/PointDetail/${record.key}/${record.pointName}`))
+                  () => this.props.dispatch(routerRedux.push(`/sysmanage/PointDetail/${record.key}/${record.pointName}`))
               } > 详情 </a>
               <Divider type="vertical" />
               <a onClick={
-                  () => this.props.dispatch(routerRedux.push(`/monitor/sysmanage/UserDetail/${record.key}`))
+                  () => this.props.dispatch(routerRedux.push(`/sysmanage/UserDetail/${record.key}`))
               } > 视频管理 </a>
           </Fragment >
           ),
@@ -301,7 +301,7 @@ export default class pointlist extends Component {
                               <Button type="primary"
                                   onClick={
                                       () => {
-                                          this.props.dispatch(routerRedux.push(`/monitor/sysmanage/PointDetail/null`));
+                                          this.props.dispatch(routerRedux.push(`/sysmanage/PointDetail/null`));
                                       }
                                   } > 添加 </Button></Col >
                           <Col span={

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import markerspoint from '../../mockdata/OverView/markersInfo.json';
+/* import markerspoint from '../../mockdata/OverView/markersInfo.json'; */
 import moment from 'moment';
 import styles from './Operation.less';
 import {
@@ -103,8 +103,8 @@ class OperationTips extends Component {
                             showHeader={false}
                             bordered={true}
                             size="small"
-                            columns={markerspoint.consumablescol}
-                            dataSource={markerspoint.consumablesdata}
+                          /*   columns={markerspoint.consumablescol}
+                            dataSource={markerspoint.consumablesdata} */
                             pagination={false} />
                     </div>
                     {/* <div style={{ margin: '8px 0 0 10px', paddingBottom: '5px' }}>

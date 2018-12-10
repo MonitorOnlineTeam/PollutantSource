@@ -165,3 +165,13 @@ export async function getpollutantlist(params) {
         data: null
     } : result;
 }
+// 获取所有附件
+export async function getstandardlibraryfiles(params) {
+    const body = {
+        StandardLibraryID: params.StandardLibraryID
+    };
+    const result = post('/api/rest/PollutantSourceApi/StandardLibrary/GetStandardLibraryFiles', body, null);
+    return result === null ? {
+        data: null
+    } : result;
+}

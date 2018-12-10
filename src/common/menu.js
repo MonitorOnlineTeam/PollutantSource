@@ -1,12 +1,12 @@
 import { isUrl } from '../utils/utils';
-import allMenu from '../mockdata/Menu/data_all.json';
-import dataEnterpriseLeaderMenu from '../mockdata/Menu/data_enterprise_leader.json';
-import dataEnterpriseWorkerMenu from '../mockdata/Menu/data_enterprise_worker.json';
-import dataHbjLeaderMenu from '../mockdata/Menu/data_hbj_leader.json';
-import dataHbjSuperviseMenu from '../mockdata/Menu/data_hbj_supervise.json';
-import dataOperationDirectorMenu from '../mockdata/Menu/data_operation_director.json';
-import dataOperationLeaderMenu from '../mockdata/Menu/data_operation_leader.json';
-import dataOperationPersonMenu from '../mockdata/Menu/data_operation_person.json';
+// import allMenu from '../mockdata/Menu/data_all.json';
+// import dataEnterpriseLeaderMenu from '../mockdata/Menu/data_enterprise_leader.json';
+// import dataEnterpriseWorkerMenu from '../mockdata/Menu/data_enterprise_worker.json';
+// import dataHbjLeaderMenu from '../mockdata/Menu/data_hbj_leader.json';
+// import dataHbjSuperviseMenu from '../mockdata/Menu/data_hbj_supervise.json';
+// import dataOperationDirectorMenu from '../mockdata/Menu/data_operation_director.json';
+// import dataOperationLeaderMenu from '../mockdata/Menu/data_operation_leader.json';
+// import dataOperationPersonMenu from '../mockdata/Menu/data_operation_person.json';
 
 import Cookie from 'js-cookie';
 
@@ -40,7 +40,7 @@ export const getMenuData = () => {
     } catch (error) {
     }
 
-    switch (account) {
+   /*  switch (account) {
         case 'system':
             data = allMenu;
             break;
@@ -67,7 +67,7 @@ export const getMenuData = () => {
             break;
         default:
             break;
-    }
+    } */
     return formatter(data);
 };
 

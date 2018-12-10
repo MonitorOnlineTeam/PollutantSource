@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Select } from 'antd';
-import AttentionDegrees from '../../mockdata/Base/Code/T_Cod_AttentionDegree.json';
+// import AttentionDegrees from '../../mockdata/Base/Code/T_Cod_AttentionDegree.json';
 const Option = Select.Option;
 class AttentionDegree extends Component {
     handleChange(value) {
@@ -16,9 +16,9 @@ class AttentionDegree extends Component {
     }
     constructor(props) {
         super(props);
-        const AttentionDegreess = AttentionDegrees;
+        // const AttentionDegreess = AttentionDegrees;
         this.state = {
-            defaultOption: AttentionDegreess,
+            // defaultOption: AttentionDegreess,
         };
 
         console.log(this.state);
