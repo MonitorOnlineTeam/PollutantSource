@@ -3,7 +3,6 @@ import { Model } from '../dvapack';
 import { getTimeDistance } from '../utils/utils';
 import { loadPollutantType, getAllPointAlarmInfo } from '../services/api';
 import * as service from '../dvapack/websocket/mywebsocket';
-import { debug } from 'util';
 
 export default Model.extend({
     namespace: 'global',
@@ -135,6 +134,8 @@ export default Model.extend({
                     case 'DynamicControlParam':
                         break;
                     case 'DynamicControlState':
+                        break;
+                    default:
                         break;
                 }
             });
