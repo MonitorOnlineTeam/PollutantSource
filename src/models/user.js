@@ -71,7 +71,6 @@ export default Model.extend({
                 const responseMenu = yield call(getMenuData, {menuId: '99dbc722-033f-481a-932a-3c6436e17245', userId: user.User_ID});
                 if (responseMenu.requstresult === '1') {
                     const _currentMenu = yield call(formatter, responseMenu.data);
-                    debugger;
                     yield put({
                         type: 'saveCurrentUser',
                         payload: {
