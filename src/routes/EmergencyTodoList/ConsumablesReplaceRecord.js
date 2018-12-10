@@ -215,8 +215,8 @@ class ConsumablesReplaceRecord extends Component {
         }];
         return (
             <Layout style={{backgroundColor: 'white'}}>
-                <Content style={{margin: 'auto', marginTop: 50}}>
-                    <div style={{position: 'absolute', right: 15, top: 85}} >
+                <Content style={{margin: 'auto'}}>
+                    <div style={{position: 'absolute', right: 40, top: 198}} >
                         <Button size="large" onClick={() => {
                             this.props.history.goBack(-1);
                         }}><Icon type="left" />退回</Button>
@@ -230,7 +230,12 @@ class ConsumablesReplaceRecord extends Component {
                         fontWeight: 'bold'}}>
                           易耗品更换记录表
                     </div>
-                    <div style={{backgroundColor: 'white', marginTop: 10}}>
+                    <div style={{
+                        height: 'calc(100vh - 290px)',
+                        paddingBottom: '20px',
+                        margin: 'auto',
+                    }}
+                    >
                         <div style={{fontWeight: 'bold', marginBottom: 12, marginTop: 10}}>企业名称：{this.props.ConsumablesReplaceRecordList.length === 0 ? null : this.props.ConsumablesReplaceRecordList[0].record.length === 0 ? this.props.ConsumablesReplaceRecordList[0].info[0].EnterpriseName : this.props.ConsumablesReplaceRecordList[0].record[0].Content['EnterpriseName']}</div>
                         <Table
                             id="table-to-xls"

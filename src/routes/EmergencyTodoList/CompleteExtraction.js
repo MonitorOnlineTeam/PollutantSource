@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Table, Button, Icon } from 'antd';
+import { Table, Button, Icon, Layout } from 'antd';
 import { connect } from 'dva';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 @connect(({ task, loading }) => ({
@@ -152,13 +152,13 @@ class CompleteExtraction extends Component {
         ];
         return (
             <div style={{backgroundColor: 'white'}}>
-                <div style={{position: 'absolute', right: 15, top: 85}} >
+                <div style={{position: 'absolute', right: 40, top: 198}} >
                     <Button size="large" onClick={() => {
                         this.props.history.goBack(-1);
                     }}><Icon type="left" />退回</Button>
                 </div>
-                <PageHeaderLayout title="">
-                    <div style={{ width: '80%',
+                <Layout style={{backgroundColor: 'white'}}>
+                    <div style={{ width: '100%',
                         height: '50px',
                         lineHeight: '50px',
                         margin: 'auto',
@@ -168,7 +168,7 @@ class CompleteExtraction extends Component {
                         完全抽取法CEMS日常巡检记录表
                     </div>
                     <div style={{
-                        height: 'calc(100vh - 165px)',
+                        height: 'calc(100vh - 273px)',
                         width: '65%',
                         paddingBottom: '20px',
                         backgroundColor: 'white',
@@ -202,7 +202,7 @@ class CompleteExtraction extends Component {
                             pagination={false}
                         />
                     </div>
-                </PageHeaderLayout>
+                </Layout>
             </div>
         );
     }
