@@ -32,12 +32,6 @@ export async function addpoint(params) {
         OutputHigh: params.OutputHigh,
         Sort: params.Sort,
         Address: params.Address,
-        CemsCode: params.CemsCode,
-        CemsSupplier: params.CemsSupplier,
-        GasCemsSupplier: params.GasCemsSupplier,
-        GasCemsCode: params.GasCemsCode,
-        PmCemsCode: params.PmCemsCode,
-        PmCemsSupplier: params.PmCemsSupplier,
         OutputType: params.OutputType,
         OperationerId: params.OperationerId
     };
@@ -83,12 +77,6 @@ export async function editpoint(params) {
         OutputHigh: params.OutputHigh,
         Sort: params.Sort,
         Address: params.Address,
-        CemsCode: params.CemsCode,
-        CemsSupplier: params.CemsSupplier,
-        GasCemsSupplier: params.GasCemsSupplier,
-        GasCemsCode: params.GasCemsCode,
-        PmCemsCode: params.PmCemsCode,
-        PmCemsSupplier: params.PmCemsSupplier,
         OutputType: params.OutputType,
         OperationerId: params.OperationerId
     };
