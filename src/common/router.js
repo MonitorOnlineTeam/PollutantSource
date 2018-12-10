@@ -105,14 +105,6 @@ export const getRouterData = (app) => {
             component: dynamicWrapper(app, ['points'], () =>
           import('../routes/EmergencyAuditList/EmergencyDetailInfo')),
         },
-        // '/emergency/emergencydetailinfo/:exceptionhandleid': {
-        //     component: dynamicWrapper(app, ['points'], () =>
-        //   import('../routes/EmergencyTodoList/EmergencyDetailInfo')),
-        // },
-        '/emergency/emergencydetailinfo/:TaskID': {
-            component: dynamicWrapper(app, ['task'], () =>
-          import('../routes/EmergencyTodoList/EmergencyDetailInfo')),
-        },
         '/pointdetail/:pointcode/processflowdiagram': {
             component: dynamicWrapper(app, ['points'], () =>
           import('../routes/PointDetail/ProcessFlowDiagram')),
@@ -171,11 +163,15 @@ export const getRouterData = (app) => {
             component: dynamicWrapper(app, ['task'], () =>
         import('../routes/PointDetail/Ywdsjlist')),
         },
-        '/monitor/pointdetail/:pointcode/qcontrollist': {
+        '/pointdetail/:pointcode/emergencydetailinfo/:TaskID': {
+            component: dynamicWrapper(app, ['task'], () =>
+          import('../routes/EmergencyTodoList/EmergencyDetailInfo')),
+        },
+        '/pointdetail/:pointcode/qcontrollist': {
             component: dynamicWrapper(app, ['task'], () =>
         import('../routes/PointDetail/qcontrollist')),
         },
-        '/EmergencyTodoList/JzRecordInfo/:TaskID/:TypeID': {
+        '/pointdetail/:pointcode/JzRecordInfo/:TaskID/:TypeID': {
             component: dynamicWrapper(app, ['task'], () =>
         import('../routes/EmergencyTodoList/JzRecordInfo')),
         },
@@ -186,6 +182,26 @@ export const getRouterData = (app) => {
         '/pointdetail/:pointcode/qcontrollist/RepairHistoryRecods/:TypeID': {
             component: dynamicWrapper(app, ['task'], () =>
         import('../routes/EmergencyTodoList/RepairHistoryRecods')),
+        },
+        '/pointdetail/:pointcode/ConsumablesReplaceRecord/:TaskIds/:TypeIDs': {
+            component: dynamicWrapper(app, ['baseinfo'], () =>
+                    import('../routes/EmergencyTodoList/ConsumablesReplaceRecord')),
+        },
+        '/pointdetail/:pointcode/StandardGasRepalceRecord/:StandardGasTaskIds/:StandardGasTypeIDs': {
+            component: dynamicWrapper(app, ['baseinfo'], () =>
+                    import('../routes/EmergencyTodoList/StandardGasRepalceRecord')),
+        },
+        '/pointdetail/:pointcode/CompleteExtraction/:CqfPatrolTaskIds/:CqfPatrolTypeIDs': {
+            component: dynamicWrapper(app, ['baseinfo'], () =>
+                    import('../routes/EmergencyTodoList/CompleteExtraction')),
+        },
+        '/pointdetail/:pointcode/DilutionSampling/:CyfPatrolTaskIds/:CyfPatrolTypeIDs': {
+            component: dynamicWrapper(app, ['baseinfo'], () =>
+                    import('../routes/EmergencyTodoList/DilutionSampling')),
+        },
+        '/pointdetail/:pointcode/DirectMeasurement/:ClfPatrolTaskIds/:ClfPatrolTypeIDs': {
+            component: dynamicWrapper(app, ['baseinfo'], () =>
+                    import('../routes/EmergencyTodoList/DirectMeasurement')),
         },
         /* 工作台 */
         '/workbench': {
@@ -354,18 +370,6 @@ export const getRouterData = (app) => {
         '/emissionpermits': {
             component: dynamicWrapper(app, ['baseinfo'], () =>
                     import('../routes/EmissionPermits')),
-        },
-        '/sysmanage/ConsumablesReplaceRecord/:TaskIds/:TypeIDs': {
-            component: dynamicWrapper(app, ['baseinfo'], () =>
-                    import('../routes/EmergencyTodoList/ConsumablesReplaceRecord')),
-        },
-        '/sysmanage/StandardGasRepalceRecord/:StandardGasTaskIds/:StandardGasTypeIDs': {
-            component: dynamicWrapper(app, ['baseinfo'], () =>
-                    import('../routes/EmergencyTodoList/StandardGasRepalceRecord')),
-        },
-        '/monitor/sysmanage/CompleteExtraction/:CqfPatrolTaskIds/:CqfPatrolTypeIDs': {
-            component: dynamicWrapper(app, ['baseinfo'], () =>
-                    import('../routes/EmergencyTodoList/CompleteExtraction')),
         },
         /* 登陆 */
         '/user': {

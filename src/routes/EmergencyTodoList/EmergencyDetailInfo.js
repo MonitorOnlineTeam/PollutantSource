@@ -23,6 +23,10 @@ export default class EmergencyDetailInfo extends Component {
             StandardGasTypeIDs: 4,
             CqfPatrolTaskIds: '62409e78-8d89-42f7-b17f-017d24cc61ce',
             CqfPatrolTypeIDs: 5,
+            CyfPatrolTaskIds: '62409e78-8d89-42f7-b17f-017d24cc61ce',
+            CyfPatrolTypeIDs: 6,
+            ClfPatrolTaskIds: '62409e78-8d89-42f7-b17f-017d24cc61ce',
+            ClfPatrolTypeIDs: 7,
         };
     }
 
@@ -40,10 +44,13 @@ export default class EmergencyDetailInfo extends Component {
         data[2].FormMainID = '323e0a8d-c90a-4d80-9fd1-d08dae5e9d2f';
         data[3].FormMainID = '3202407a-3ce0-47f9-ad30-4dab35990559';
         data[4].FormMainID = '4d44a51c-b0d8-464f-a52c-d51c6bd05e60';
+        data[5].FormMainID = '5d44a51c-b0d8-464f-a52c-d51c6bd05e60';
+        data[6].FormMainID = '6d44a51c-b0d8-464f-a52c-d51c6bd05e60';
         console.log(data[2].FormMainID = '323e0a8d-c90a-4d80-9fd1-d08dae5e9d2f');
         console.log(taskID);
         const rtnVal = [];
         data.map((item) => {
+            console.log(item);
             if (item.FormMainID != null) {
                 switch (item.ID) {
                     case EnumPsOperationForm.Repair:
@@ -58,32 +65,32 @@ export default class EmergencyDetailInfo extends Component {
                         break;
                     case EnumPsOperationForm.YhpReplace:
                         rtnVal.push(<p style={{marginBottom: 0}}><Button style={{marginBottom: '5px'}} icon="check-circle-o" onClick={() => {
-                            this.props.dispatch(routerRedux.push(`/sysmanage/ConsumablesReplaceRecord/${this.state.TaskIds}/${this.state.TypeIDs}`));
+                            this.props.dispatch(routerRedux.push(`/pointdetail/:pointcode/ConsumablesReplaceRecord/${this.state.TaskIds}/${this.state.TypeIDs}`));
                         }}>{item.TypeName}</Button></p>);
                         break;
                     case EnumPsOperationForm.StandardGasReplace:
                         rtnVal.push(<p style={{marginBottom: 0}}><Button style={{marginBottom: '5px'}} icon="check-circle-o" onClick={() => {
-                            this.props.dispatch(routerRedux.push(`/sysmanage/StandardGasRepalceRecord/${this.state.StandardGasTaskIds}/${this.state.StandardGasTypeIDs}`));
+                            this.props.dispatch(routerRedux.push(`/pointdetail/:pointcode/StandardGasRepalceRecord/${this.state.StandardGasTaskIds}/${this.state.StandardGasTypeIDs}`));
                         }}>{item.TypeName}</Button></p>);
                         break;
                     case EnumPsOperationForm.CqfPatrol:
                         rtnVal.push(<p style={{marginBottom: 0}}><Button style={{marginBottom: '5px'}} icon="check-circle-o" onClick={() => {
-                            this.props.dispatch(routerRedux.push(`/monitor/sysmanage/CompleteExtraction/${this.state.CqfPatrolTaskIds}/${this.state.CqfPatrolTypeIDs}`));
+                            this.props.dispatch(routerRedux.push(`/pointdetail/:pointcode/CompleteExtraction/${this.state.CqfPatrolTaskIds}/${this.state.CqfPatrolTypeIDs}`));
                         }}>{item.TypeName}</Button></p>);
                         break;
                     case EnumPsOperationForm.CyfPatrol:
                         rtnVal.push(<p style={{marginBottom: 0}}><Button style={{marginBottom: '5px'}} icon="check-circle-o" onClick={() => {
-                            this.props.dispatch(routerRedux.push(``));
+                            this.props.dispatch(routerRedux.push(`/pointdetail/:pointcode/DilutionSampling/${this.state.CyfPatrolTaskIds}/${this.state.CyfPatrolTypeIDs}`));
                         }}>{item.TypeName}</Button></p>);
                         break;
                     case EnumPsOperationForm.ClfPatrol:
                         rtnVal.push(<p style={{marginBottom: 0}}><Button style={{marginBottom: '5px'}} icon="check-circle-o" onClick={() => {
-                            this.props.dispatch(routerRedux.push(``));
+                            this.props.dispatch(routerRedux.push(`/pointdetail/:pointcode/DirectMeasurement/${this.state.ClfPatrolTaskIds}/${this.state.ClfPatrolTypeIDs}`));
                         }}>{item.TypeName}</Button></p>);
                         break;
                     case EnumPsOperationForm.CheckRecord:
                         rtnVal.push(<p style={{marginBottom: 0}}><Button style={{marginBottom: '5px'}} icon="check-circle-o" onClick={() => {
-                            this.props.dispatch(routerRedux.push(`/EmergencyTodoList/JzRecordInfo/${taskID}/${item.ID}`));
+                            this.props.dispatch(routerRedux.push(`/pointdetail/:pointcode/JzRecordInfo/${taskID}/${item.ID}`));
                         }}>{item.TypeName}</Button></p>);
                         break;
                     case EnumPsOperationForm.TestRecord:
@@ -222,7 +229,7 @@ export default class EmergencyDetailInfo extends Component {
             } else {
                 return (
                     <PageHeaderLayout title="">
-                        <div style={{height: 'calc(100vh - 190px)'}} className={styles.ExceptionDetailDiv}>
+                        <div style={{height: 'calc(100vh - 290px)'}} className={styles.ExceptionDetailDiv}>
                             <Card title={<span style={{fontWeight: '900'}}>任务信息</span>} bordered={false}>
                                 <DescriptionList className={styles.headerList} size="large" col="3">
                                     <Description term="任务单号">{TaskCode}</Description>
@@ -301,7 +308,6 @@ export default class EmergencyDetailInfo extends Component {
                             <div className={styles.Toexamine} >
                                 <Button size="large" onClick={() => {
                                     this.props.history.goBack(-1);
-                                    // this.props.dispatch(routerRedux.push(`/operation/emergency/emergencytodolist/`));
                                 }}><Icon type="left" />退回</Button>
                             </div>
                         </div>
