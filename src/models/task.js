@@ -1,4 +1,4 @@
-import { GetTaskDetails, GetYwdsj, GetJzRecord, GetRecordType, GetJzHistoryRecord, GetConsumablesReplaceRecordList, GetStandardGasRepalceRecordList, GetPatrolRecordListPC } from '../services/taskapi';
+import { GetTaskDetails, GetYwdsj, GetJzRecord, GetRecordType, GetJzHistoryRecord, GetConsumablesReplaceRecordList, GetStandardGasRepalceRecordList, GetPatrolRecordListPC, GetHistoryConsumablesReplaceRecord } from '../services/taskapi';
 import { Model } from '../dvapack';
 import {EnumRequstResult} from '../utils/enum';
 
@@ -14,7 +14,9 @@ export default Model.extend({
         ConsumablesReplaceRecordList: [],
         StandardGasRepalceRecordList: [],
         PatrolRecordListPC: [],
-        RecordCount: null
+        RecordCount: null,
+        HistoryConsumablesReplaceRecord: [],
+        HistoryConsumablesReplaceRecordCount: null,
     },
 
     effects: {
@@ -113,6 +115,38 @@ export default Model.extend({
                 yield update({
                     requstresult: result.requstresult,
                     ConsumablesReplaceRecordList: [],
+                });
+            }
+        },
+        // 获取易耗品历史记录方法
+        * GetHistoryConsumablesReplaceRecord({
+            payload: {
+                pageIndex,
+                pageSize,
+                TypeID,
+                DGIMN,
+                BeginTime,
+                EndTime,
+            }
+        }, {
+            call,
+            put,
+            update,
+            select
+        }) {
+            const result = yield call(GetHistoryConsumablesReplaceRecord, {pageIndex: pageIndex, pageSize: pageSize, TypeID: TypeID, DGIMN: DGIMN, BeginTime: BeginTime, EndTime: EndTime});
+
+            if (result.requstresult === '1') {
+                yield update({
+                    requstresult: result.requstresult,
+                    HistoryConsumablesReplaceRecord: result.data,
+                    HistoryConsumablesReplaceRecordCount: result.total
+                });
+            } else {
+                yield update({
+                    requstresult: result.requstresult,
+                    HistoryConsumablesReplaceRecord: [],
+                    HistoryConsumablesReplaceRecordCount: result.total
                 });
             }
         },
