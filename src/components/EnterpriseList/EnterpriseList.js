@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import styles from './EnterpriseList.less';
 import { List, Input, Layout, Icon } from 'antd';
-import { getEnterprise } from '../../mockdata/Base/commonbase';
+// import { getEnterprise } from '../../mockdata/Base/commonbase';
 const Search = Input.Search;
 const { Content, Sider } = Layout;
 
@@ -9,11 +9,11 @@ export default class PointsList extends Component {
     constructor(props) {
         super(props);
 
-        const dataList = getEnterprise();
+        // const dataList = getEnterprise();
         this.state = {
             collapsed: false,
-            enterpriseslist: dataList,
-            AllEnterpriseslist: dataList,
+            // enterpriseslist: dataList,
+            // AllEnterpriseslist: dataList,
             selEntCodes: []
         };
     }
@@ -37,7 +37,7 @@ export default class PointsList extends Component {
 
               if (isexist) { markerInfo.push(item); }
           });
-          
+
           if (markerInfo.length > 0) {
               this.setState({
                   selEntCodes: [markerInfo[0].EntCode]
@@ -87,7 +87,7 @@ export default class PointsList extends Component {
                                           backgroundImage: 'url(/dui1.png)',
                                           backgroundRepeat: 'no-repeat'
                                       } : {}}
-                                          onClick={
+                                      onClick={
                                           () => {
                                               let entcodes = this.state.selEntCodes;
                                               if (isMore === 'true') {

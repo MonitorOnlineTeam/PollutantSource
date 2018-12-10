@@ -89,12 +89,6 @@ export default Model.extend({
                 OutputHigh,
                 Sort,
                 Address,
-                CemsCode,
-                CemsSupplier,
-                GasCemsSupplier,
-                GasCemsCode,
-                PmCemsSupplier,
-                PmCemsCode,
                 OutputType,
                 OperationerId,
                 callback
@@ -120,13 +114,7 @@ export default Model.extend({
                 OutputHigh: OutputHigh,
                 Sort: Sort,
                 Address: Address,
-                CemsCode: CemsCode,
-                CemsSupplier: CemsSupplier,
-                GasCemsSupplier: GasCemsSupplier,
-                GasCemsCode: GasCemsCode,
-                PmCemsCode: PmCemsCode,
                 OutputType: OutputType,
-                PmCemsSupplier: PmCemsSupplier,
                 OperationerId: OperationerId,
             });
             yield update({
@@ -198,12 +186,6 @@ export default Model.extend({
                 OutputHigh,
                 Sort,
                 Address,
-                CemsCode,
-                CemsSupplier,
-                GasCemsSupplier,
-                GasCemsCode,
-                PmCemsSupplier,
-                PmCemsCode,
                 OutputType,
                 OperationerId,
                 callback
@@ -229,13 +211,7 @@ export default Model.extend({
                 OutputHigh: OutputHigh,
                 Sort: Sort,
                 Address: Address,
-                CemsCode: CemsCode,
-                CemsSupplier: CemsSupplier,
-                GasCemsSupplier: GasCemsSupplier,
-                GasCemsCode: GasCemsCode,
-                PmCemsCode: PmCemsCode,
                 OutputType: OutputType,
-                PmCemsSupplier: PmCemsSupplier,
                 OperationerId: OperationerId,
             });
             yield update({

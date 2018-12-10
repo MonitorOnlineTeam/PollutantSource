@@ -58,6 +58,7 @@ export default class Ywdsjlist extends Component {
     _handleDateChange=(date, dateString) => {
         this.setState(
             {
+                rangeDate: [moment(moment(dateString[0]).format('YYYY-MM-DD 00:00:00')), moment(moment(dateString[1]).format('YYYY-MM-DD 23:59:59'))],
                 beginTime: dateString[0],
                 endTime: dateString[1],
                 pageIndex: pageIndex
@@ -156,7 +157,7 @@ export default class Ywdsjlist extends Component {
                             <Timeline.Item dot={<img style={{width: '38px', height: '38px'}} src="../../../patrol.png" />}>
                                 <p style={{marginLeft: '10px'}}><span style={{color: '#40B0F5', marginRight: '10px'}}>{valueName}</span>{value}</p>
                                 <p><Button type="primary" size="small" style={{fontSise: '10px'}} onClick={() => {
-                                    this.props.dispatch(routerRedux.push(`/monitor/emergency/emergencydetailinfo/${item1.ID}`));
+                                    this.props.dispatch(routerRedux.push(`/pointdetail/${this.props.match.params.pointcode}/emergencydetailinfo/${item1.ID}`));
                                 }
                                 }>查看详情</Button></p>
                             </Timeline.Item>
@@ -168,7 +169,7 @@ export default class Ywdsjlist extends Component {
                             <Timeline.Item dot={<img style={{width: '38px', height: '38px'}} src="../../../emergeny.png" />}>
                                 <p style={{marginLeft: '10px'}}><span style={{color: '#40B0F5', marginRight: '10px'}}>{valueName1}</span>{value1}</p>
                                 <p><Button type="primary" size="small" style={{fontSise: '10px'}} onClick={() => {
-                                    this.props.dispatch(routerRedux.push(`/monitor/emergency/emergencydetailinfo/${item1.ID}`));
+                                    this.props.dispatch(routerRedux.push(`/pointdetail/${this.props.match.params.pointcode}/emergencydetailinfo/${item1.ID}`));
                                 }
                                 }>查看详情</Button></p>
                             </Timeline.Item>
@@ -181,7 +182,6 @@ export default class Ywdsjlist extends Component {
                             <Timeline.Item dot={<img style={{width: '38px', height: '38px'}} src="../../../alarm.png" />}>
                                 <p style={{marginLeft: '10px'}}><span style={{color: '#40B0F5', marginRight: '10px'}}>{valueName2}</span>{value2}</p>
                                 <p className={Ywdsjlistss.pLoad}>{value3}</p>
-                                <p><Button type="primary" size="small" style={{fontSise: '10px'}}>查看详情</Button></p>
                             </Timeline.Item>
                         );
                     }

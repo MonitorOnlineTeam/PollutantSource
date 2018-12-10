@@ -237,7 +237,7 @@ export default class UserList extends Component {
             width: '50px',
             render: (text, record) => (<Fragment >
                 <a onClick={
-                    () => this.props.dispatch(routerRedux.push(`/monitor/sysmanage/UserDetail/${record.key}`))
+                    () => this.props.dispatch(routerRedux.push(`/sysmanage/UserDetail/${record.key}`))
                 } > 编辑 </a> </Fragment>
             ),
         },
@@ -289,7 +289,7 @@ export default class UserList extends Component {
                                 </Select></Col>
                             <Col span={1} ><Button type="primary"
                                 onClick={() => {
-                                    this.props.dispatch(routerRedux.push(`/monitor/sysmanage/UserDetail/null`));
+                                    this.props.dispatch(routerRedux.push(`/sysmanage/UserDetail/null`));
                                 }}>添加</Button></Col>
                             <Col span={1} ><Button type="danger" onClick={this.delete}>删除</Button></Col>
                             <Col span={1} ><Button type="primary"
@@ -309,7 +309,8 @@ export default class UserList extends Component {
                                         message.warning('请选择用户');
                                     }
                                 }}
-                            >数据过滤</Button></Col>
+                            >数据过滤</Button>
+                            </Col>
                         </Row>
                     </Form>
                 </Card>

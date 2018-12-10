@@ -14,26 +14,14 @@ import {
     message,
     Popconfirm,
     Tag,
-    Menu,
     Icon,
     Radio,
-    Dropdown,
     Divider,
 } from 'antd';
 import {routerRedux} from 'dva/router';
 import {connect} from 'dva';
+import FilesList from '../StandardLibrary/FilesList';
 const Search = Input.Search;
-const confirm = Modal.confirm;
-const menu = (
-    <Menu>
-        <Menu.Item>
-      Action 1
-        </Menu.Item>
-        <Menu.Item>
-      Action 2
-        </Menu.Item>
-    </Menu>
-);
 @connect(({loading, standardlibrary}) => ({
     ...loading,
     list: standardlibrary.list,
@@ -50,6 +38,10 @@ export default class StandardLibrary extends Component {
             Name: null,
             Type: null,
             pollutantList: [],
+            Fvisible: false,
+            title: '',
+            width: '500',
+            StandardLibraryID: null,
         };
     }
     componentWillMount() {
@@ -130,6 +122,18 @@ export default class StandardLibrary extends Component {
             },
         });
     };
+    showFile=(record) => {
+        if (record.IsFiles === 1) {
+            this.setState({
+                StandardLibraryID: record.id,
+                Fvisible: true,
+                title: '文件列表',
+                width: 800
+            });
+        } else {
+            message.error('没有可以下载的文件');
+        }
+    }
     onRef1 = (ref) => {
         this.child = ref;
     }
@@ -180,11 +184,13 @@ export default class StandardLibrary extends Component {
         },
         {
             title: '文件',
-            dataIndex: 'AttachmentID',
-            key: 'AttachmentID',
+            dataIndex: 'IsFiles',
+            key: 'IsFiles',
             width: '100px',
             render: (text, record) => {
-                return text;
+                return <a onClick={
+                    () => this.showFile(record)
+                } > <Icon type="copy" theme="twoTone" /></a>;
             }
         },
         { title: '状态',
@@ -209,10 +215,10 @@ export default class StandardLibrary extends Component {
             width: '150px',
             render: (text, record) => (<Fragment >
                 <a onClick={
-                    () => this.props.dispatch(routerRedux.push(`/monitor/sysmanage/UserDetail/${record.key}`))
+                    () => this.props.dispatch(routerRedux.push(`/sysmanage/UserDetail/${record.key}`))
                 } > 应用到排口 </a> <Divider type="vertical" />
                 <a onClick={
-                    () => this.props.dispatch(routerRedux.push(`/monitor/sysmanage/StandardLibraryDetail/${record.key}`))
+                    () => this.props.dispatch(routerRedux.push(`/sysmanage/StandardLibraryDetail/${record.key}`))
                 } > 编辑 </a> <Divider type="vertical" />
                 <Popconfirm placement="left" title="确定要删除此标准下所有数据吗？" onConfirm={() => this.confirm(record.key)} okText="是" cancelText="否">
                     <a href="#" > 删除 </a>
@@ -243,7 +249,7 @@ export default class StandardLibrary extends Component {
                                 }}style={{ width: 200 }} /></Col>
                             <Col span={1} ><Button type="primary"
                                 onClick={() => {
-                                    this.props.dispatch(routerRedux.push(`/monitor/sysmanage/StandardLibraryDetail/null`));
+                                    this.props.dispatch(routerRedux.push(`/sysmanage/StandardLibraryDetail/null`));
                                 }}>添加</Button></Col>
                             <Col span={12} >
                                 <Radio.Group defaultValue="0" buttonStyle="solid" onChange={(e) => {
@@ -287,6 +293,23 @@ export default class StandardLibrary extends Component {
                         pageSizeOptions: ['5', '10', '20', '30', '40']
                     }}
                 />
+                <Modal
+                    visible={this.state.Fvisible}
+                    title={this.state.title}
+                    width={this.state.width}
+                    destroyOnClose={true}// 清除上次数据
+                    footer={false}
+                    onCancel={
+                        () => {
+                            this.setState({
+                                Fvisible: false
+                            });
+                        }
+                    } >
+                    {
+                        <FilesList pid={this.state.StandardLibraryID} />
+                    }
+                </Modal>
             </Card>
         );
     }

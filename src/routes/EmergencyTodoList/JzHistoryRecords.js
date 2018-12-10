@@ -1,13 +1,26 @@
 import React, { Component } from 'react';
-import styles from '../EmergencyTodoList/JzRecordInfo.less';
-import {Spin, Button, Icon} from 'antd';
+import styles from '../EmergencyTodoList/JzHistoryRecords.less';
+import {
+    Button,
+    Input,
+    Card,
+    Row,
+    Col,
+    Table,
+    Form,
+    Select, Modal, message, Tag, Radio, Checkbox,
+} from 'antd';
 import { connect } from 'dva';
 import moment from 'moment';
+import RangePicker_ from '../../components/PointDetail/RangePicker_';
+import {routerRedux} from 'dva/router';
+
 const pageIndex = 1;
 const pageSize = 10;
 @connect(({ task, loading }) => ({
     isloading: loading.effects['task/GetJzHistoryRecord'],
-    JzHistoryRecord: task.JzHistoryRecord
+    JzHistoryRecord: task.JzHistoryRecord,
+    RecordCount: task.RecordCount
 }))
 export default class JzHistoryRecords extends Component {
     constructor(props) {
@@ -44,12 +57,25 @@ export default class JzHistoryRecords extends Component {
     _handleDateChange=(date, dateString) => {
         this.setState(
             {
+                rangeDate: [moment(moment(dateString[0]).format('YYYY-MM-DD 00:00:00')), moment(moment(dateString[1]).format('YYYY-MM-DD 23:59:59'))],
                 beginTime: dateString[0],
                 endTime: dateString[1]
             }
         );
         this.GetHistoryRecord(pageIndex, pageSize, this.state.dgimn, this.state.typeID, dateString[0], dateString[1]);
     };
+
+    onShowSizeChange = (pageIndex, pageSize) => {
+        this.GetHistoryRecord(pageIndex, pageSize, this.state.dgimn, this.state.typeID, this.state.BeginTime, this.state.EndTime);
+    }
+
+    onChange = (pageIndex, pageSize) => {
+        this.GetHistoryRecord(pageIndex, pageSize, this.state.dgimn, this.state.typeID, this.state.BeginTime, this.state.EndTime);
+    }
+
+    seeDetail=(record) => {
+        this.props.dispatch(routerRedux.push(`/pointdetail/:pointcode/JzRecordInfo/${record.TaskID}/${record.TypeID}`));
+    }
 
     render() {
         const SCREEN_HEIGHT = document.querySelector('body').offsetHeight - 150;
@@ -58,27 +84,59 @@ export default class JzHistoryRecords extends Component {
             title: '校准人',
             width: '20%',
             dataIndex: 'JzPerson',
-            key: 'JzPerson',
+            key: 'JzPerson'
         }, {
             title: '分析仪校准是否正常',
             width: '45%',
-            dataIndex: 'CreateTime',
-            key: 'CreateTime',
+            dataIndex: 'Content',
+            key: 'Content'
         }, {
             title: '记录创建时间',
-            dataIndex: 'Content',
+            dataIndex: 'CreateTime',
             width: '20%',
-            key: 'Content',
+            key: 'CreateTime'
         }, {
             title: '详细',
             dataIndex: 'TaskID',
             width: '15%',
             key: 'TaskID',
+            render: (text, record) => {
+                return <a onClick={
+                    () => this.seeDetail(record)
+                } > 详细 </a>;
+            }
         }];
         return (
-            <div className={styles.FormDiv} style={{height: SCREEN_HEIGHT}}>
-                <Table style={{ backgroundColor: 'white'}} bordered={false} dataSource={dataSource} pagination={false} columns={columns} />
-            </div>
+            <Card bordered={false}>
+                <Card>
+                    <Form layout="inline">
+                        <Row gutter={8}>
+                            <Col span={2} >
+                            记录创建时间：
+                            </Col>
+                            <Col span={3} >
+                                <RangePicker_ style={{width: 350}} onChange={this._handleDateChange} dateValue={this.state.rangeDate} />
+                            </Col>
+                        </Row>
+                    </Form>
+                </Card>
+                <Table
+                    loading={this.props.isloading}
+                    columns={columns}
+                    dataSource={dataSource}
+                    scroll={{ y: 'calc(100vh - 455px)' }}
+                    pagination={{
+                        showSizeChanger: true,
+                        showQuickJumper: true,
+                        'total': this.props.RecordCount,
+                        'pageSize': this.props.pageSize,
+                        'current': this.props.pageIndex,
+                        onChange: this.onChange,
+                        onShowSizeChange: this.onShowSizeChange,
+                        pageSizeOptions: ['5', '10', '20', '30', '40']
+                    }}
+                />
+            </Card>
         );
     }
 }

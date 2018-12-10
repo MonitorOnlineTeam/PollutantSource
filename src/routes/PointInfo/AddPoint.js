@@ -14,6 +14,7 @@ import {
     Button,
     Card,
     Modal,
+    Divider,
 } from 'antd';
 import PageHeader from '../../components/PageHeader';
 import {
@@ -23,6 +24,7 @@ import {
     routerRedux
 } from 'dva/router';
 import ModalMap from '../PointInfo/ModalMap';
+import { isNullOrUndefined } from 'util';
 const FormItem = Form.Item;
 const Option = Select.Option;
 const Search = Input.Search;
@@ -51,7 +53,7 @@ export default class AddPoint extends Component {
             DGIMN: null,
             DGIMNdisabled: false,
         };
-    };
+    }
     componentWillMount() {
         const DGIMN = this.props.match.params.DGIMN;
         if (DGIMN !== 'null') {
@@ -64,24 +66,40 @@ export default class AddPoint extends Component {
                 payload: {
                     DGIMN: DGIMN,
                     callback: () => {
-                        console.log(this.props.editpoint.OutputTypeId);
-
-                        this.setState({
-                            OutputType: this.props.editpoint.OutputTypeId === '1',
-                            IsSj: this.props.editpoint.IsSj === '1',
-                            address: this.props.editpoint.Address,
-                            coordinate: this.props.editpoint.longitude + ',' + this.props.editpoint.latitude
-                        });
-                        this.props.form.setFieldsValue({
-                            OutputType: this.state.OutputType,
-                        });
+                        if (this.props.requstresult === '1') {
+                            console.log(this.props.editpoint);
+                            this.setState({
+                                OutputType: this.props.editpoint.OutputTypeId === '1',
+                                IsSj: this.props.editpoint.IsSj === '1',
+                                address: this.props.editpoint.Address,
+                                coordinate: this.props.editpoint.longitude + ',' + this.props.editpoint.latitude
+                            }, () => {
+                                this.props.form.setFieldsValue({
+                                    PointName: this.props.editpoint.pointName,
+                                    DGIMN: this.props.editpoint.DGIMN,
+                                    OutputType: this.state.OutputType,
+                                    MobilePhone: this.props.editpoint.mobilePhone,
+                                    Linkman: this.props.editpoint.linkman === isNullOrUndefined ? '' : this.props.editpoint.linkman,
+                                    PointType: this.props.editpoint.PointTypeId === '' ? undefined : this.props.editpoint.PointTypeId,
+                                    PollutantType: this.props.editpoint.pollutantType === '' ? undefined : this.props.editpoint.pollutantType,
+                                    IsSj: this.state.IsSj,
+                                    OutputDiameter: this.props.editpoint.OutputDiameter,
+                                    OutputHigh: this.props.editpoint.OutputHigh,
+                                    OutPutWhitherCode: this.props.editpoint.OutPutWhitherCode === '' ? undefined : this.props.editpoint.OutPutWhitherCode,
+                                    Sort: this.props.editpoint.Sort === isNullOrUndefined ? 1 : this.props.editpoint.Sort,
+                                    OperationerId: this.props.editpoint.OperationerId === '' ? undefined : this.props.editpoint.OperationerId,
+                                    Address: this.state.address,
+                                    Coordinate: this.state.coordinate
+                                });
+                            });
+                        }
                     }
                 },
             });
         }
 
         this.getOperationer();
-    };
+    }
      onRef1 = (ref) => {
          this.child = ref;
      }
@@ -91,7 +109,7 @@ export default class AddPoint extends Component {
              address: this.child.props.form.getFieldValue('position'),
              Mapvisible: false,
          });
-     };
+     }
     getOperationer=(e) => {
         this.props.dispatch({
             type: 'pointinfo/getoperationsuserList',
@@ -129,12 +147,6 @@ export default class AddPoint extends Component {
                             Linkman: values.Linkman === undefined ? '' : values.Linkman,
                             OutputDiameter: values.OutputDiameter === undefined ? '' : values.OutputDiameter,
                             OutputHigh: values.OutputHigh === undefined ? '' : values.OutputHigh,
-                            CemsCode: values.CemsCode,
-                            CemsSupplier: values.CemsSupplier,
-                            GasCemsSupplier: values.GasCemsSupplier,
-                            GasCemsCode: values.GasCemsCode,
-                            PmCemsSupplier: values.PmCemsSupplier,
-                            PmCemsCode: values.PmCemsCode,
                             OutputType: values.OutputType === true ? '1' : '0',
                             Address: values.Address,
                             MobilePhone: values.MobilePhone === undefined ? '' : values.MobilePhone,
@@ -149,7 +161,6 @@ export default class AddPoint extends Component {
                         },
                     });
                 } else {
-
                 }
             } else {
                 if (!err && flag === true) {
@@ -167,12 +178,6 @@ export default class AddPoint extends Component {
                             Linkman: values.Linkman === undefined ? '' : values.Linkman,
                             OutputDiameter: values.OutputDiameter === undefined ? '' : values.OutputDiameter,
                             OutputHigh: values.OutputHigh === undefined ? '' : values.OutputHigh,
-                            CemsCode: values.CemsCode,
-                            CemsSupplier: values.CemsSupplier,
-                            GasCemsSupplier: values.GasCemsSupplier,
-                            GasCemsCode: values.GasCemsCode,
-                            PmCemsSupplier: values.PmCemsSupplier,
-                            PmCemsCode: values.PmCemsCode,
                             OutputType: values.OutputType === true ? '1' : '0',
                             Address: values.Address,
                             MobilePhone: values.MobilePhone === undefined ? '' : values.MobilePhone,
@@ -193,7 +198,7 @@ export default class AddPoint extends Component {
         });
     };
      success = () => {
-         let index = this.props.dispatch(routerRedux.push(`/monitor/sysmanage/PointInfo`));
+         let index = this.props.dispatch(routerRedux.push(`/sysmanage/PointInfo`));
          if (this.state.DGIMN !== null) {
              message.success('修改成功', 3).then(() => index);
          } else {
@@ -209,7 +214,7 @@ export default class AddPoint extends Component {
                  breadcrumbList={
                      [{
                          title: '排口列表',
-                         href: '/monitor/sysmanage/PointInfo',
+                         href: '/sysmanage/PointInfo',
                      }, {
                          title: '添加排口',
                      }]
@@ -222,7 +227,6 @@ export default class AddPoint extends Component {
                                  wrapperCol={{span: 12}}
                                  label="排口名称" > {
                                      getFieldDecorator('PointName', {
-                                         initialValue: this.props.editpoint !== null ? this.props.editpoint.pointName : '',
                                          rules: [{
                                              required: true,
                                              message: '请输入排口名称!'
@@ -236,7 +240,6 @@ export default class AddPoint extends Component {
                                  wrapperCol={{span: 12}}
                                  label="排口编号" > {
                                      getFieldDecorator('DGIMN', {
-                                         initialValue: this.props.editpoint !== null ? this.props.editpoint.DGIMN : '',
                                          rules: [{
                                              required: true,
                                              message: '请输入排口编号!'
@@ -255,10 +258,8 @@ export default class AddPoint extends Component {
                              <FormItem labelCol={{span: 8}}
                                  wrapperCol={{span: 12}}
                                  label="负责人" > {
-                                     getFieldDecorator('Linkman',
-                                         {
-                                             initialValue: this.props.editpoint !== null ? this.props.editpoint.linkman : '',
-                                         })(<Input placeholder="负责人" />
+                                     getFieldDecorator('Linkman'
+                                     )(<Input placeholder="负责人" />
                                      )}
                              </FormItem>
                          </Col>
@@ -267,7 +268,6 @@ export default class AddPoint extends Component {
                                  wrapperCol={{span: 12}}
                                  label="负责人电话" > {
                                      getFieldDecorator('MobilePhone', {
-                                         initialValue: this.props.editpoint !== null ? this.props.editpoint.mobilePhone : '',
                                          rules: [{
                                              pattern: /^1\d{10}$/,
                                              message: '请输入正确的手机号!'
@@ -283,7 +283,7 @@ export default class AddPoint extends Component {
                                  label="排口类型" > {
                                      getFieldDecorator('PointType',
                                          {
-                                             initialValue: this.props.editpoint !== null ? this.props.editpoint.PointTypeId : undefined,
+                                             initialValue: undefined,
                                          }
                                      )(<Select placeholder="请选择" >
                                          <Option value="1" > 工艺废气排放口 </Option>
@@ -297,7 +297,7 @@ export default class AddPoint extends Component {
                                  label="污染物类型" > {
                                      getFieldDecorator('PollutantType',
                                          {
-                                             initialValue: this.props.editpoint !== null ? this.props.editpoint.pollutantType : undefined,
+                                             initialValue: undefined,
                                          }
                                      )(
                                          <Select placeholder="请选择" >
@@ -314,7 +314,7 @@ export default class AddPoint extends Component {
                                  label="排放类型" > {
                                      getFieldDecorator('OutputType',
                                          {
-                                             initialValue: this.state.OutputType,
+                                             initialValue: undefined,
                                              valuePropName: 'checked',
                                          }
                                      )(
@@ -329,7 +329,7 @@ export default class AddPoint extends Component {
                                  label="是否烧结" > {
                                      getFieldDecorator('IsSj',
                                          {
-                                             initialValue: this.state.IsSj,
+                                             initialValue: undefined,
                                              valuePropName: 'checked',
                                          }
                                      )(
@@ -345,9 +345,6 @@ export default class AddPoint extends Component {
                                  wrapperCol={{span: 12}}
                                  label="排口直径" > {
                                      getFieldDecorator('OutputDiameter',
-                                         {
-                                             initialValue: this.props.editpoint !== null ? this.props.editpoint.OutputDiameter : '',
-                                         }
                                      )(
                                          <InputNumber min={0} max={10000} />)
                                  } </FormItem>
@@ -357,9 +354,6 @@ export default class AddPoint extends Component {
                                  wrapperCol={{span: 12}}
                                  label="排口高度" > {
                                      getFieldDecorator('OutputHigh',
-                                         {
-                                             initialValue: this.props.editpoint !== null ? this.props.editpoint.OutputHigh : '',
-                                         }
                                      )(
                                          <InputNumber min={0} max={10000} />)
                                  } </FormItem>
@@ -372,7 +366,7 @@ export default class AddPoint extends Component {
                                  label="排放去向" > {
                                      getFieldDecorator('OutPutWhitherCode',
                                          {
-                                             initialValue: this.props.editpoint !== null ? this.props.editpoint.OutPutWhitherCode : undefined,
+                                             initialValue: undefined,
                                          }
                                      )(
                                          <Select placeholder="请选择" >
@@ -392,10 +386,7 @@ export default class AddPoint extends Component {
                              <FormItem labelCol={{span: 8}}
                                  wrapperCol={{span: 12}}
                                  label="排序" > {
-                                     getFieldDecorator('Sort',
-                                         {
-                                             initialValue: this.props.editpoint !== null ? this.props.editpoint.Sort : '',
-                                         }
+                                     getFieldDecorator('Sort'
                                      )(
                                          <InputNumber min={0} max={10000} />)
                                  } </FormItem>
@@ -407,7 +398,6 @@ export default class AddPoint extends Component {
                                  wrapperCol={{span: 12}}
                                  label="排口地址" > {
                                      getFieldDecorator('Address', {
-                                         initialValue: this.state.address,
                                          rules: [{
                                              required: true,
                                              message: '请输入排口地址!'
@@ -423,7 +413,6 @@ export default class AddPoint extends Component {
                                  wrapperCol={{span: 12}}
                                  label="排口坐标" > {
                                      getFieldDecorator('Coordinate', {
-                                         initialValue: this.state.coordinate,
                                          rules: [{
                                              required: true,
                                              message: '请输入排口坐标!'
@@ -443,105 +432,6 @@ export default class AddPoint extends Component {
                                  } </FormItem>
                          </Col>
                      </Row>
-                     <Row gutter={48}>
-                         <Col span={12}>
-                             <FormItem labelCol={{span: 8}}
-                                 wrapperCol={{span: 12}}
-                                 label="CEMS规格型号" > {
-                                     getFieldDecorator('CemsCode', {
-                                         initialValue: this.props.editpoint !== null ? this.props.editpoint.CemsCode : '',
-                                         rules: [{
-                                             required: true,
-                                             message: '请输入CEMS规格型号!'
-                                         } ]
-
-                                     })(
-                                         <Input placeholder="CEMS规格型号" />)
-                                 }
-                             </FormItem>
-                         </Col>
-                         <Col span={12} >
-                             <FormItem labelCol={{span: 8}}
-                                 wrapperCol={{span: 12}}
-                                 label="CEMS供应商" > {
-                                     getFieldDecorator('CemsSupplier', {
-                                         initialValue: this.props.editpoint !== null ? this.props.editpoint.CemsSupplier : '',
-                                         rules: [{
-                                             required: true,
-                                             message: '请输入CEMS供应商!'
-                                         } ]
-
-                                     })(
-                                         <Input placeholder="CEMS供应商" />)
-                                 } </FormItem>
-                         </Col>
-                     </Row>
-                     <Row gutter={48}>
-                         <Col span={12} >
-                             <FormItem labelCol={{span: 8}}
-                                 wrapperCol={{span: 12}}
-                                 label="气态污染物CEMS设备规格型号" > {
-                                     getFieldDecorator('GasCemsCode', {
-                                         initialValue: this.props.editpoint !== null ? this.props.editpoint.GasCemsCode : '',
-                                         rules: [{
-                                             required: true,
-                                             message: '请输入气态污染物CEMS设备规格型号!'
-                                         } ]
-
-                                     })(
-                                         <Input placeholder="气态污染物CEMS设备规格型号" />)
-                                 } </FormItem>
-                         </Col>
-                         <Col span={12}>
-                             <FormItem labelCol={{span: 8}}
-                                 wrapperCol={{span: 12}}
-                                 label="气态污染物CEMS设备生产商" > {
-                                     getFieldDecorator('GasCemsSupplier', {
-                                         initialValue: this.props.editpoint !== null ? this.props.editpoint.GasCemsSupplier : '',
-                                         rules: [{
-                                             required: true,
-                                             message: '请输入气态污染物CEMS设备生产商!'
-                                         } ]
-
-                                     })(
-                                         <Input placeholder="气态污染物CEMS设备生产商" />)
-                                 }
-                             </FormItem>
-                         </Col>
-                     </Row>
-                     <Row gutter={48}>
-                         <Col span={12}>
-                             <FormItem labelCol={{span: 8}}
-                                 wrapperCol={{span: 12}}
-                                 label="颗粒物CEMS设备规格型号" > {
-                                     getFieldDecorator('PmCemsCode', {
-                                         initialValue: this.props.editpoint !== null ? this.props.editpoint.PmCemsCode : '',
-                                         rules: [{
-                                             required: true,
-                                             message: '请输入颗粒物CEMS设备规格型号!'
-                                         } ]
-
-                                     })(
-                                         <Input placeholder="颗粒物CEMS设备规格型号" />)
-                                 }
-                             </FormItem>
-                         </Col>
-                         <Col span={12} >
-                             <FormItem labelCol={{span: 8}}
-                                 wrapperCol={{span: 12}}
-                                 label="颗粒物CEMS设备生产商" > {
-                                     getFieldDecorator('PmCemsSupplier', {
-                                         initialValue: this.props.editpoint !== null ? this.props.editpoint.PmCemsSupplier : '',
-                                         rules: [{
-                                             required: true,
-                                             message: '请输入颗粒物CEMS设备生产商!'
-                                         } ]
-
-                                     })(
-                                         <Input placeholder="颗粒物CEMS设备生产商" />)
-                                 } </FormItem>
-                         </Col>
-                     </Row>
                      <Row gutter={48} >
                          <Col span={12} >
                              <FormItem
@@ -549,7 +439,7 @@ export default class AddPoint extends Component {
                                  wrapperCol={{ span: 12 }}
                                  label="运维人">
                                  {getFieldDecorator('OperationerId', {
-                                     initialValue: this.props.editpoint !== null ? this.props.editpoint.OperationerId : undefined,
+                                     initialValue: undefined,
                                      rules: [{
                                          required: true,
                                          message: '请选择运维人!'
@@ -567,8 +457,21 @@ export default class AddPoint extends Component {
                                  )}
                              </FormItem>
                          </Col>
-                         <Col span={12} >
-                             <Button type="primary" htmlType="submit" className="login-form-button" >保存 </Button>
+                         <Col span={12} />
+                     </Row>
+                     <Row gutter={48}>
+                         <Col span={24} style={{textAlign: 'center'}}>
+                             <Button type="primary"
+                                 htmlType="submit">
+                          保存
+                             </Button>
+                             <Divider type="vertical" />
+                             <Button type="dashed"
+                                 onClick={
+                                     () => this.props.dispatch(routerRedux.push(`/sysmanage/PointInfo`))
+                                 } >
+                          返回
+                             </Button>
                          </Col>
                      </Row>
                  </Card>

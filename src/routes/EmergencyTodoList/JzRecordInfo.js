@@ -48,7 +48,7 @@ export default class JzRecordInfo extends Component {
                                 </tr>
                                 <tr>
                                     <td rowSpan="2" style={{width: '16%', height: '30px'}}>零点漂移校准</td>
-                                    <td style={{width: '14%', height: '30px'}}>{item !== '颗粒物' ? '零气浓度值' : '零气'}</td>
+                                    <td style={{width: '14%', height: '30px'}}>{item !== '颗粒物' ? '零气浓度值' : '零气校准参考值'}</td>
                                     <td style={{width: '14%', height: '30px'}}>上次校准后测试值</td>
                                     <td style={{width: '14%', height: '30px'}}>校前测试值</td>
                                     <td style={{width: '14%', height: '30px'}}>零点漂移%F.S.</td>
@@ -65,7 +65,7 @@ export default class JzRecordInfo extends Component {
                                 </tr>
                                 <tr>
                                     <td rowSpan="2" style={{width: '16%'}}>量程漂移校准</td>
-                                    <td style={{width: '14%', height: '30px'}}>{item !== '颗粒物' ? '标气浓度值' : '校准用量程值'}</td>
+                                    <td style={{width: '14%', height: '30px'}}>{item !== '颗粒物' ? '标气浓度值' : '量程校准参考值'}</td>
                                     <td style={{width: '14%', height: '30px'}}>上次校准后测试值</td>
                                     <td style={{width: '14%', height: '30px'}}>校前测试值</td>
                                     <td style={{width: '14%', height: '30px'}}>量程漂移%F.S.</td>
@@ -141,7 +141,7 @@ export default class JzRecordInfo extends Component {
         return rtnVal;
     }
     render() {
-        const SCREEN_HEIGHT = document.querySelector('body').offsetHeight - 150;
+        const SCREEN_HEIGHT = document.querySelector('body').offsetHeight - 250;
         const JzRecord = this.props.JzRecord;
         if (this.props.isloading) {
             return (
@@ -276,7 +276,7 @@ export default class JzRecordInfo extends Component {
                     <div className={styles.Toexamine} >
                         <Button size="large" onClick={() => {
                             this.props.history.goBack(-1);
-                            // this.props.dispatch(routerRedux.push(`/monitor/operation/emergency/emergencytodolist/`));
+                            // this.props.dispatch(routerRedux.push(`/operation/emergency/emergencytodolist/`));
                         }}><Icon type="left" />退回</Button>
                     </div>
                 </div>

@@ -110,9 +110,9 @@ export default class WorkbenchCard extends Component {
     aclick=(e) => {
         const user = JSON.parse(Cookie.get('token'));
         if (user.User_Account === 'lisonggui') {
-            that.props.dispatch(routerRedux.push(`/monitor/emergency/emergencyauditdetailinfo/28`));
+            that.props.dispatch(routerRedux.push(`/emergency/emergencyauditdetailinfo/28`));
         } else {
-            that.props.dispatch(routerRedux.push(`/monitor/emergency/emergencydetailinfo/28`));
+            that.props.dispatch(routerRedux.push(`/emergency/emergencydetailinfo/28`));
         }
     };
     componentDidMount() {

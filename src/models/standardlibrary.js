@@ -4,6 +4,7 @@ import {
 import {
     getlist, enableordisable, deletestandardlibrarybyid, addstandardlibrary, addstandardlibrarypollutant, uploadfiles, getStandardlibrarybyid, deletefiles
     , editstandardlibrary, getpollutantlist, getstandardlibrarypollutantlist, deletestandardlibrarypollutantbyid, editstandardlibrarypollutant, getStandardlibrarypollutantbyid
+    , getstandardlibraryfiles,
 } from '../services/standardlibrary';
 export default Model.extend({
     namespace: 'standardlibrary',
@@ -22,6 +23,7 @@ export default Model.extend({
         PollutantList: [],
         editstandardlibrarypollutant: null,
         standardlibrarypollutant: [],
+        fileslist: [],
     },
     subscriptions: {
         setup({
@@ -409,6 +411,27 @@ export default Model.extend({
             });
             yield update({
                 PollutantList: result.data,
+                requstresult: result.requstresult,
+                reason: result.reason
+            });
+            callback();
+        },
+        * getstandardlibraryfiles({
+            payload: {
+                StandardLibraryID,
+                callback
+            }
+        }, {
+            call,
+            put,
+            update,
+            select
+        }) {
+            const result = yield call(getstandardlibraryfiles, {
+                StandardLibraryID: StandardLibraryID
+            });
+            yield update({
+                fileslist: result.data,
                 requstresult: result.requstresult,
                 reason: result.reason
             });

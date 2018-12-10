@@ -1,58 +1,54 @@
 import React, { Component } from 'react';
-import { Table } from 'antd';
+import { Table, Button, Icon, Layout } from 'antd';
 import { connect } from 'dva';
+import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 @connect(({ task, loading }) => ({
     PatrolRecordListPC: task.PatrolRecordListPC
 }))
+
+/*
+页面：完全抽取法CEMS日常巡检记录表
+*/
+
 class CompleteExtraction extends Component {
+    // constructor(props) {
+    //     super(props);
+    //     this.state = {
+    //         values: null,
+    //     };
+    // }
     componentWillMount() {
         this.onChange();
     };
     onChange = () => {
+        ;
         this.props.dispatch({
             type: 'task/GetPatrolRecordListPC',
             payload: {
-                TaskIds: this.props.match.params.TaskIds,
-                TypeIDs: this.props.match.params.TypeIDs
+                TaskIds: this.props.match.params.CqfPatrolTaskIds,
+                TypeIDs: this.props.match.params.CqfPatrolTypeIDs
             },
         });
     }
 
     render() {
-        console.log(this.props.PatrolRecordListPC);
-        // const renderContent = (value, row, index) => {
-        //     const obj = {
-        //         children: value,
-        //         props: {},
-        //     };
-        //     if (index === 4) {
-        //         obj.props.colSpan = 0;
-        //     }
-        //     return obj;
-        // };
-        // const renderContent = (value, row, index) => {
-        //     const obj = {
-        //         children: value,
-        //         props: {},
-        //     };
-        //     if (row.parentname === '巡检人员签字') {
-        //         obj.props.colSpan = 0;
-        //     }
-        //     return obj;
-        // };
         const columns = [{
-            title: 'parentname',
-            dataIndex: 'parentname',
+            title: '项目',
+            dataIndex: 'parentName',
+            width: '20%',
+            align: 'center',
             render: (value, row, index) => {
                 const obj = {
                     children: value,
                     props: {},
                 };
-                if (row.age !== 0) {
-                    if (row.parentname === '巡检人员签字') {
+                if (row.count !== 0) {
+                    if (row.parentName === '巡检人员签字') {
                         obj.props.colSpan = 2;
+                    } else if (row.parentId === '备注') {
+                        obj.props.colSpan = 4;
                     } else {
-                        obj.props.rowSpan = row.age;
+                        obj.props.rowSpan = row.count;
                     }
                 } else {
                     obj.props.rowSpan = 0;
@@ -60,150 +56,155 @@ class CompleteExtraction extends Component {
                 return obj;
             },
         }, {
-            title: 'Name',
-            dataIndex: 'name',
+            title: '内容',
+            dataIndex: 'childName',
+            width: '40%',
+            align: 'center',
             render: (value, row, index) => {
                 const obj = {
                     children: value,
                     props: {},
                 };
-                if (row.parentname === '巡检人员签字') {
+                if (row.parentName === '巡检人员签字') {
                     obj.props.colSpan = 0;
-                } else if (row.parentname === '异常情况处理') {
+                } else if (row.parentId === '备注') {
+                    obj.props.colSpan = 0;
+                } else if (row.parentName === '异常情况处理') {
                     obj.props.colSpan = 3;
                 }
                 return obj;
             },
         }, {
-            title: 'tel',
-            dataIndex: 'tel',
+            title: '维护情况',
+            dataIndex: 'MintenanceDescription',
+            width: '20%',
+            align: 'center',
             render: (value, row, index) => {
                 const obj = {
                     children: value,
                     props: {},
                 };
-                if (row.parentname === '巡检人员签字') {
-                    obj.props.colSpan = 2;
-                } else if (row.parentname === '异常情况处理') {
+                if (row.parentName === '巡检人员签字') {
+                    return {
+                        children: <img src={value === null ? null : `data:image/jpeg;base64,${value}`} />,
+                        props: {
+                            colSpan: 2,
+                        },
+                    };
+                } else if (row.parentId === '备注') {
+                    obj.props.colSpan = 0;
+                } else if (row.parentName === '异常情况处理') {
                     obj.props.colSpan = 0;
                 }
                 return obj;
             },
         }, {
-            title: 'Address',
-            dataIndex: 'address',
+            title: '备注',
+            dataIndex: 'MaintenanceSituation',
+            width: '20%',
+            align: 'center',
             render: (value, row, index) => {
                 const obj = {
                     children: value,
                     props: {},
                 };
-                if (row.age !== 0) {
-                    if (row.parentname === '巡检人员签字') {
+                if (row.count !== 0) {
+                    if (row.parentName === '巡检人员签字') {
                         obj.props.colSpan = 0;
-                    } else if (row.parentname === '异常情况处理') {
+                    } else if (row.parentId === '备注') {
+                        obj.props.colSpan = 0;
+                    } else if (row.parentName === '异常情况处理') {
                         obj.props.colSpan = 0;
                     } else {
-                        obj.props.rowSpan = row.age;
+                        obj.props.rowSpan = row.count;
                     }
                 } else {
                     obj.props.rowSpan = 0;
                 }
                 return obj;
             },
-            // render: renderContent,
         }];
-
-        const data = [{
-            parentname: '123',
-            name: '4560570571-220989091-220989090571-22098909',
-            tel: '0571-22098909',
-            age: 3,
-            address: 'New York No. 1 Lake Park',
-            detail: '是'
+        const columnTitle = [{
+            title: '项目',
+            dataIndex: 'producter',
+            width: '20%',
+            align: 'center',
         }, {
-            parentname: '123',
-            name: '40571-220989090571-220989090571-2209890944',
-            tel: '0571-22098333',
-
-            age: 0,
-            address: 'London No. 1 Lake Park',
-            detail: '是'
-        }, {
-            parentname: '123',
-            name: '550571-220989090571-220989090571-220989095',
-            tel: '0571-22098333',
-
-            age: 0,
-            address: 'London No. 1 Lake Park',
-            detail: '是'
-        }, {
-            parentname: '123',
-            name: '440571-220989090571-220989090571-220989094',
-            tel: '0571-22098333',
-
-            age: 2,
-            address: 'London No. 1 Lake Park',
-            detail: '否'
-        }, {
-            parentname: '123',
-            name: '50571-220989090571-220989090571-2209890955',
-            tel: '0571-22098333',
-
-            age: 0,
-            address: 'London No. 1 Lake Park',
-            detail: '否'
-        }, {
-            parentname: '123',
-            name: '550571-220989090571-220989090571-220989095',
-            tel: '0571-22098333',
-
-            age: 4,
-            address: 'London No. 1 Lake Park',
-            detail: '是'
-        }, {
-            parentname: '123',
-            name: '50571-220989090571-220989090571-2209890955',
-            tel: '0571-22098333',
-
-            age: 0,
-            address: 'London No. 1 Lake Park',
-            detail: '是'
-        }, {
-            parentname: '123',
-            name: '50571-220989090571-220989090571-2209890955',
-            tel: '0571-22098333',
-
-            age: 0,
-            address: 'London No. 1 Lake Park',
-            detail: '是'
-        }, {
-            parentname: '123',
-            name: '50571-220989090571-220989090571-2209890955',
-            tel: '0571-22098333',
-            age: 0,
-            address: 'London No. 1 Lake Park',
-            detail: '是'
-        }, {
-            parentname: '巡检人员签字',
-            name: '50571-220989090571-220989090571-2209890955',
-            tel: '0571-22098333',
-            age: 1,
-            address: 'London No. 1 Lake Park',
-            detail: '是'
-        }, {
-            parentname: '异常情况处理',
-            name: '50571-220989090571-220989090571-2209890955',
-            tel: '0571-22098333',
-            age: 1,
-            address: 'London No. 1 Lake Park',
-            detail: '是'
+            title: '内容',
+            dataIndex: 'format',
+            width: '40%',
+            align: 'center',
         }];
+        const dataTitle = [{
+            key: '0',
+            producter: this.props.PatrolRecordListPC.length === 0 ? null : this.props.PatrolRecordListPC[0].record.length === 0 ? this.props.PatrolRecordListPC[0].info[0].GasCemsEquipmentManufacturer : this.props.PatrolRecordListPC[0].record[0].Content.GasCemsEquipmentManufacturer,
+            format: this.props.PatrolRecordListPC.length === 0 ? null : this.props.PatrolRecordListPC[0].record.length === 0 ? this.props.PatrolRecordListPC[0].info[0].GasCemsCode : this.props.PatrolRecordListPC[0].record[0].Content.GasCemsCode,
+        },
+        {
+            key: '1',
+            producter: this.props.PatrolRecordListPC.length === 0 ? null : this.props.PatrolRecordListPC[0].record.length === 0 ? this.props.PatrolRecordListPC[0].info[0].KlwCemsEquipmentManufacturer : this.props.PatrolRecordListPC[0].record[0].Content.KlwCemsEquipmentManufacturer,
+            format: this.props.PatrolRecordListPC.length === 0 ? null : this.props.PatrolRecordListPC[0].record.length === 0 ? this.props.PatrolRecordListPC[0].info[0].KlwCemsCode : this.props.PatrolRecordListPC[0].record[0].Content.KlwCemsCode,
+        }, {
+            key: '2',
+            producter: this.props.PatrolRecordListPC.length === 0 ? null : this.props.PatrolRecordListPC[0].record.length === 0 ? this.props.PatrolRecordListPC[0].info[0].PointPosition : this.props.PatrolRecordListPC[0].record[0].Content.PointPosition,
+            format: this.props.PatrolRecordListPC.length === 0 ? null : this.props.PatrolRecordListPC[0].record.length === 0 ? this.props.PatrolRecordListPC[0].info[0].MaintenanceManagementUnit : this.props.PatrolRecordListPC[0].record[0].Content.MaintenanceManagementUnit,
+        }
+        ];
         return (
-            <div style={{width: '60%'}}>
-                <Table columns={columns} dataSource={data} bordered={true} />
+            <div style={{backgroundColor: 'white'}}>
+                <div style={{position: 'absolute', right: 40, top: 198}} >
+                    <Button size="large" onClick={() => {
+                        this.props.history.goBack(-1);
+                    }}><Icon type="left" />退回</Button>
+                </div>
+                <Layout style={{backgroundColor: 'white'}}>
+                    <div style={{ width: '100%',
+                        height: '50px',
+                        lineHeight: '50px',
+                        margin: 'auto',
+                        fontSize: '20px',
+                        textAlign: 'center',
+                        fontWeight: 'bold'}}>
+                        完全抽取法CEMS日常巡检记录表
+                    </div>
+                    <div style={{
+                        height: 'calc(100vh - 273px)',
+                        width: '65%',
+                        paddingBottom: '20px',
+                        backgroundColor: 'white',
+                        overflowX: 'hidden',
+                        overflowY: 'scroll',
+                        margin: 'auto',
+                    }}
+                    >
+                        <table style={{
+                            width: '100%',
+                            marginBottom: 12,
+                            marginTop: 10,
+                            fontWeight: 'bold'}}>
+                            <tr>
+                                <td>企业名称： {this.props.PatrolRecordListPC.length === 0 ? null : this.props.PatrolRecordListPC[0].record.length === 0 ? this.props.PatrolRecordListPC[0].info[0].EnterpriseName : this.props.PatrolRecordListPC[0].record[0].Content.EnterpriseName}</td>
+                                <td>巡检日期： {this.props.PatrolRecordListPC.length === 0 ? null : this.props.PatrolRecordListPC[0].record.length === 0 ? null : this.props.PatrolRecordListPC[0].record[0].Content.PatrolDate }</td>
+                            </tr>
+                        </table>
+                        <Table
+                            columns={columnTitle}
+                            dataSource={dataTitle}
+                            bordered={true}
+                            pagination={false}
+                            showHeader={false}
+                        />
+                        <div style={{fontWeight: 'bold', marginBottom: 12, marginTop: 12}}>运行维护内容及处理说明：</div>
+                        <Table
+                            columns={columns}
+                            dataSource={this.props.PatrolRecordListPC.length === 0 ? null : this.props.PatrolRecordListPC[0].record.length === 0 ? this.props.PatrolRecordListPC[0].code1 : this.props.PatrolRecordListPC[0].record[0].RecordList}
+                            bordered={true}
+                            pagination={false}
+                        />
+                    </div>
+                </Layout>
             </div>
         );
     }
 }
-
 export default CompleteExtraction;

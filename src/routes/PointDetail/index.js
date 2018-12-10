@@ -6,7 +6,6 @@ import { Link, routerRedux, Switch, Redirect } from 'dva/router';
 import { getRoutes } from '../../utils/utils';
 import styles from './index.less';
 import AuthorizedRoute from '../../components/AuthorizedRoute';
-import { getPointEnterprise } from '../../mockdata/Base/commonbase';
 import Cookie from 'js-cookie';
 const { TabPane } = Tabs;
 
@@ -37,6 +36,10 @@ class PointDetail extends Component {
                 { key: 'ywdsjlist', tab: '运维大事记' },
                 { key: 'qcontrollist', tab: '质控记录' }
             ],
+            recordType: [
+                'RepairHistoryRecods',
+                'JzHistoryRecords'
+            ]
         };
     }
     componentDidMount() {
@@ -51,10 +54,27 @@ class PointDetail extends Component {
     render() {
         const { match, routerData, location } = this.props;
         const routes = getRoutes(match.path, routerData);
-        
+
         const defaultroute = routes[0].path;
         Cookie.set('seldgimn', match.params.pointcode);
         const pointInfo = this.props.pointInfo;
+        let activeKey = 'qcontrollist';
+        // if (location.pathname.indexOf('JzHistoryRecords') === -1) {
+        //     activeKey = location.pathname.replace(`${match.url}/`, '');
+        // }
+
+        if (location.pathname.indexOf('qcontrollist') === -1) {
+            activeKey = location.pathname.replace(`${match.url}/`, '');
+        } 
+        // else {
+        //     this.state.recordType.map((item) => {
+        //         if (location.pathname.indexOf(item) === -1) {
+        //             activeKey = location.pathname.replace(`${match.url}/`, '');
+        //             return null;
+        //         }
+        //     });
+        // }
+        // console.log(activeKey);
         return (
             <div
                 style={{ width: '100%',
@@ -76,7 +96,7 @@ class PointDetail extends Component {
                     <div style={{ backgroundColor: '#fff', margin: 10, padding: 10 }}>
                         <Tabs
                             className={styles.tabs}
-                            activeKey={location.pathname.replace(`${match.url}/`, '')}
+                            activeKey={activeKey}
                             onChange={(key) => {
                                 const { dispatch, match } = this.props;
                                 dispatch(routerRedux.push(`${match.url}/${key}`));
