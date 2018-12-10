@@ -1,8 +1,5 @@
 import React, { Component } from 'react';
 import { Row, Col, Layout, Table, List, Button, Icon } from 'antd';
-import { exportExcel } from 'xlsx-oc';
-import ReactHTMLTableToExcel from 'react-html-table-to-excel';
-import ExportJsonExcel from 'js-export-excel';
 import { connect } from 'dva';
 const {
     Header, Footer, Sider, Content,
