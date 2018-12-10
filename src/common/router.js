@@ -316,8 +316,12 @@ export const getRouterData = (app) => {
         },
         /* 系统管理 */
         '/sysmanage/Userinfo': {
-            component: dynamicWrapper(app, ['userinfo', 'userdgimndata'], () =>
+            component: dynamicWrapper(app, ['userinfo', 'userdgimndata', 'TransmissionEfficiency'], () =>
             import('../routes/Userinfo')),
+        },
+        '/sysmanage/TransmissionEfficiency': {
+            component: dynamicWrapper(app, ['userinfo', 'userdgimndata', 'TransmissionEfficiency'], () =>
+            import('../routes/Userinfo/TransmissionEfficiency')),
         },
         '/sysmanage/UserDetail/:UserId': {
             component: dynamicWrapper(app, ['userinfo'], () =>
