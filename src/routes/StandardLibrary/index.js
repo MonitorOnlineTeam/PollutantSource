@@ -122,13 +122,17 @@ export default class StandardLibrary extends Component {
             },
         });
     };
-    showFile=(id) => {
-        this.setState({
-            StandardLibraryID: id,
-            Fvisible: true,
-            title: '文件列表',
-            width: 800
-        });
+    showFile=(record) => {
+        if (record.IsFiles === 1) {
+            this.setState({
+                StandardLibraryID: record.id,
+                Fvisible: true,
+                title: '文件列表',
+                width: 800
+            });
+        } else {
+            message.error('没有可以下载的文件');
+        }
     }
     onRef1 = (ref) => {
         this.child = ref;
@@ -180,12 +184,12 @@ export default class StandardLibrary extends Component {
         },
         {
             title: '文件',
-            dataIndex: 'AttachmentID',
-            key: 'AttachmentID',
+            dataIndex: 'IsFiles',
+            key: 'IsFiles',
             width: '100px',
             render: (text, record) => {
                 return <a onClick={
-                    () => this.showFile(record.key)
+                    () => this.showFile(record)
                 } > <Icon type="copy" theme="twoTone" /></a>;
             }
         },
@@ -303,7 +307,7 @@ export default class StandardLibrary extends Component {
                         }
                     } >
                     {
-                        <FilesList pid={this.state.StandardLibraryID} onRef={this.onRef1} />
+                        <FilesList pid={this.state.StandardLibraryID} />
                     }
                 </Modal>
             </Card>

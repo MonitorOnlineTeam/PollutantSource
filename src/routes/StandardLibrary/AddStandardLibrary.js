@@ -105,7 +105,6 @@ export default class AddStandardLibrary extends Component {
         }) => {
             let imglist = [];
             if (file.status === 'done') {
-
             } else if (file.status === 'removed') {
                 if (_this.state.StandardLibraryID !== null) {
                     this.props.dispatch({
@@ -125,6 +124,10 @@ export default class AddStandardLibrary extends Component {
                         }
                     });
                 }
+                imglist = fileList;
+                this.setState({
+                    fileList: imglist
+                });
             }
         };
     };
@@ -208,10 +211,18 @@ export default class AddStandardLibrary extends Component {
                  StandardLibraryID: StandardLibraryID,
                  callback: () => {
                      console.log(this.props.editstandardlibrary);
-                     this.setState({
-                         IsUsed: this.props.editstandardlibrary.IsUsed,
-                         fileList: this.props.editstandardlibrary.Filelist,
-                     });
+                     if (this.props.requstresult === '1') {
+                         this.setState({
+                             IsUsed: this.props.editstandardlibrary.IsUsed,
+                             fileList: this.props.editstandardlibrary.Filelist,
+                         }, () => {
+                             this.props.form.setFieldsValue({
+                                 Name: this.props.editstandardlibrary.Name,
+                                 Type: this.props.editstandardlibrary.Type,
+                                 IsUsed: this.props.editstandardlibrary.IsUsed
+                             });
+                         });
+                     }
                  }
              },
          });
@@ -352,7 +363,6 @@ export default class AddStandardLibrary extends Component {
                                       label="标准库名称">
                                       {getFieldDecorator('Name'
                                           , {
-                                              initialValue: this.props.editstandardlibrary !== null ? this.props.editstandardlibrary.Name : '',
                                               rules: [{
                                                   required: true,
                                                   message: '请输入标准库名称!'
@@ -370,7 +380,6 @@ export default class AddStandardLibrary extends Component {
                                       label="标准库类型">
                                       {getFieldDecorator('Type'
                                           , {
-                                              initialValue: this.props.editstandardlibrary !== null ? this.props.editstandardlibrary.Type : undefined,
                                               rules: [{
                                                   required: true,
                                                   message: '请选择标准库类型!'
@@ -411,7 +420,6 @@ export default class AddStandardLibrary extends Component {
                                       label="启用状态">
                                       {getFieldDecorator('IsUsed',
                                           {
-                                              initialValue: this.state.IsUsed,
                                               valuePropName: 'checked',
                                           })(<Switch checkedChildren="启用" unCheckedChildren="禁用" />
                                       )}
@@ -455,7 +463,7 @@ export default class AddStandardLibrary extends Component {
                       <Table
                           loading={this.props.effects['standardlibrary/getstandardlibrarypollutantlist']}
                           columns={columns}
-                          dataSource={this.props.standardlibrarypollutant.length > 0 ? this.props.standardlibrarypollutant : null}
+                          dataSource={this.state.StandardLibraryID !== null ? this.props.standardlibrarypollutant : null}
                           pagination={false}
                       />
                   </Card>

@@ -32,9 +32,13 @@ export default class FilesList extends Component {
             },
         });
     };
+    Down(url) {
+        document.getElementById('ifile').src = url;
+    }
     render() {
         return (
             <div>
+                <iframe id="ifile" />
                 <Card >
                     <List
                         grid={
@@ -59,12 +63,14 @@ export default class FilesList extends Component {
                         renderItem={(item) => {
                             return (<List.Item >
                                 <Card
-                                    style={{ width: 150 }}
-                                    cover={<img alt="example" src="../../../public/file-word.png" />}
-                                    actions={[<Icon type="down-circle" theme="twoTone" />]}
+                                    style={{ width: 150, height: 300 }}
+                                    cover={<img alt="example" src={'../../../' + item.FileType} />}
+                                    actions={[<Icon type="down-circle" theme="twoTone" onClick={() => {
+                                        this.Down(item.url);
+                                    }} />]}
                                 >
                                     <Meta
-                                        description={item.FileName}
+                                        description={<a href="upload/vsCode.txt" >ddd</a>}
                                     />
                                 </Card>
                             </List.Item>
