@@ -14,12 +14,12 @@ import moment from 'moment';
 import RangePicker_ from '../../components/PointDetail/RangePicker_';
 import {routerRedux} from 'dva/router';
 
-const pageIndex = 1;
-const pageSize = 10;
 @connect(({ task, loading }) => ({
     // isloading: loading.effects['task/GetJzHistoryRecord'],
     HistoryConsumablesReplaceRecord: task.HistoryConsumablesReplaceRecord,
-    HistoryConsumablesReplaceRecordCount: task.HistoryConsumablesReplaceRecordCount
+    HistoryConsumablesReplaceRecordCount: task.HistoryConsumablesReplaceRecordCount,
+    pageIndex: task.pageIndex,
+    pageSize: task.pageSize,
 }))
 /*
 页面：易耗品历史记录
@@ -29,21 +29,18 @@ export default class RepairHistoryRecods extends Component {
         super(props);
         this.state = {
             rangeDate: [moment(moment(new Date()).subtract(11, 'month').format('YYYY-MM-DD 00:00:00')), moment(moment(new Date()).format('YYYY-MM-DD 23:59:59'))], // 最近七天
-            pageIndex: pageIndex,
-            pageSize: pageSize,
             BeginTime: moment().subtract(11, 'month').format('YYYY-MM-DD 00:00:00'),
             EndTime: moment().format('YYYY-MM-DD 23:59:59'),
             DGIMN: this.props.match.params.pointcode,
-            typeID: this.props.match.params.key,
+            typeID: this.props.match.params.TypeID,
         };
     }
-
     componentDidMount() {
-        alert(this.props.match.params.key);
-        this.GetHistoryRecord(pageIndex, pageSize, this.state.DGIMN, this.state.typeID, this.state.BeginTime, this.state.EndTime);
+        this.GetHistoryRecord(this.props.pageIndex, this.props.pageSize, this.state.DGIMN, this.state.typeID, this.state.BeginTime, this.state.EndTime);
     }
 
     GetHistoryRecord=(pageIndex, pageSize, DGIMN, typeID, BeginTime, EndTime) => {
+        debugger
         this.props.dispatch({
             type: 'task/GetHistoryConsumablesReplaceRecord',
             payload: {
@@ -64,7 +61,7 @@ export default class RepairHistoryRecods extends Component {
                 EndTime: dateString[1]
             }
         );
-        this.GetHistoryRecord(pageIndex, pageSize, this.state.DGIMN, this.state.typeID, dateString[0], dateString[1]);
+        this.GetHistoryRecord(this.props.pageIndex, this.props.pageSize, this.state.DGIMN, this.state.typeID, dateString[0], dateString[1]);
     };
 
     onShowSizeChange = (pageIndex, pageSize) => {
@@ -76,7 +73,6 @@ export default class RepairHistoryRecods extends Component {
     }
 
     seeDetail=(record) => {
-        ;
         this.props.dispatch(routerRedux.push(`../routes/EmergencyTodoList/ConsumablesReplaceRecord/${record.taskId}/${this.state.TypeID}`));
     }
 

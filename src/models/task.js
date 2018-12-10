@@ -17,6 +17,8 @@ export default Model.extend({
         RecordCount: null,
         HistoryConsumablesReplaceRecord: [],
         HistoryConsumablesReplaceRecordCount: null,
+        pageIndex: 1,
+        pageSize: 10,
     },
 
     effects: {
@@ -140,13 +142,17 @@ export default Model.extend({
                 yield update({
                     requstresult: result.requstresult,
                     HistoryConsumablesReplaceRecord: result.data,
-                    HistoryConsumablesReplaceRecordCount: result.total
+                    HistoryConsumablesReplaceRecordCount: result.total,
+                    pageIndex: pageIndex,
+                    pageSize: pageSize
                 });
             } else {
                 yield update({
                     requstresult: result.requstresult,
                     HistoryConsumablesReplaceRecord: [],
-                    HistoryConsumablesReplaceRecordCount: result.total
+                    HistoryConsumablesReplaceRecordCount: result.total,
+                    pageIndex: pageIndex,
+                    pageSize: pageSize
                 });
             }
         },
