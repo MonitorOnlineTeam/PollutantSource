@@ -1,26 +1,26 @@
 /**
- * 功  能：传输有效率相关接口
+ * 功  能：设备运转率接口
  * 创建人：吴建伟
- * 创建时间：2018.12.07
+ * 创建时间：2018.12.10
  */
 
 import {post} from '../dvapack/request';
 
 /**
- * 【传输有效率】获取一个或多个排口传输有效率等等
+ * 【设备运转率】获取一个或多个设备运转率（不传MN则查询所有设备）
  * @params {"DGIMNs": ["sgjt001003","sgjt001004"],"beginTime":"2018-11-01 00:00:00","endTime":"2018-11-30 00:00:00"}
  */
-export async function getMonthsTransmissionEfficiency(params) {
+export async function getEquipmentOperatingRateForPoints(params) {
     const body = {
         DGIMNs: params.DGIMNs,
         beginTime: params.beginTime,
         endTime: params.endTime,
-        TERSort: params.TERSort,
+        EORSort: params.EORSort,
         pageIndex: params.pageIndex || 1,
         pageSize: params.pageSize || 15
     };
 
-    const result = post('/api/rest/PollutantSourceApi/DataStatistics/GetTransmissionEfficiencyForPoints', body, null);
+    const result = post('/api/rest/PollutantSourceApi/DataStatistics/GetEquipmentOperatingRateForPoints', body, null);
 
     return result === null ? {
         data: null

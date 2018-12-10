@@ -117,7 +117,7 @@ export default Model.extend({
                     case 'RealTimeData':
                         // 跳转到对应的effect，把实体带过去更新state达到页面刷新的目的
                         dispatch({
-                            type: 'user/fetchCurrent',
+                            type: 'overview/welcome',
                             payload: obj.Message
                         });
                         break;

@@ -1,5 +1,5 @@
 /**
- * 功  能：设备运转率
+ * 功  能：污染物月度排放量分析
  * 创建人：吴建伟
  * 创建时间：2018.12.10
  */
@@ -14,28 +14,25 @@ import {
     Button
 } from 'antd';
 import moment from 'moment';
-import {routerRedux} from 'dva/router';
 import styles from './index.less';
 import {connect} from 'dva';
 const { MonthPicker } = DatePicker;
 const monthFormat = 'YYYY-MM';
 const pageUrl = {
-    updateState: 'EquipmentOperatingRateModel/updateState',
-    getData: 'EquipmentOperatingRateModel/getData'
+    updateState: 'TransmissionEfficiency/updateState',
+    getData: 'TransmissionEfficiency/getData'
 };
 @connect(({
     loading,
-    EquipmentOperatingRateModel
+    TransmissionEfficiency
 }) => ({
     loading: loading.effects[pageUrl.getData],
-    total: EquipmentOperatingRateModel.total,
-    beginTime: EquipmentOperatingRateModel.beginTime,
-    endTime: EquipmentOperatingRateModel.endTime,
-    pageSize: EquipmentOperatingRateModel.pageSize,
-    pageIndex: EquipmentOperatingRateModel.pageIndex,
-    tableDatas: EquipmentOperatingRateModel.tableDatas,
+    total: TransmissionEfficiency.total,
+    pageSize: TransmissionEfficiency.pageSize,
+    pageIndex: TransmissionEfficiency.pageIndex,
+    tableDatas: TransmissionEfficiency.tableDatas,
 }))
-export default class EquipmentOperatingRate extends Component {
+export default class PollutantEmissions extends Component {
     constructor(props) {
         super(props);
 
@@ -64,13 +61,13 @@ export default class EquipmentOperatingRate extends Component {
     handleTableChange =(pagination, filters, sorter) => {
         if (sorter.order) {
             this.updateState({
-                EORSort: sorter.order,
+                transmissionEffectiveRate: sorter.order,
                 pageIndex: pagination.current,
                 pageSize: pagination.pageSize
             });
         } else {
             this.updateState({
-                EORSort: 'ascend',
+                transmissionEffectiveRate: 'ascend',
                 pageIndex: pagination.current,
                 pageSize: pagination.pageSize
             });
@@ -103,38 +100,57 @@ export default class EquipmentOperatingRate extends Component {
                 }
             },
             {
-                title: (<span style={{fontWeight: 'bold'}}>正常运转时间</span>),
-                dataIndex: 'NormalRunTime',
-                key: 'NormalRunTime',
+                title: (<span style={{fontWeight: 'bold'}}>应传个数</span>),
+                dataIndex: 'ShouldNumber',
+                key: 'ShouldNumber',
                 align: 'center',
                 render: (text, record) => {
                     return text;
                 }
             },
             {
-                title: (<span style={{fontWeight: 'bold'}}>生产时间</span>),
-                dataIndex: 'ProducesTime',
-                key: 'ProducesTime',
+                title: (<span style={{fontWeight: 'bold'}}>实传个数</span>),
+                dataIndex: 'TransmissionNumber',
+                key: 'TransmissionNumber',
                 align: 'center',
                 render: (text, record) => {
                     return text;
                 }
             },
             {
-                title: (<span style={{fontWeight: 'bold'}}>停产时间</span>),
-                dataIndex: 'StopProductionTime',
-                key: 'StopProductionTime',
+                title: (<span style={{fontWeight: 'bold'}}>有效个数</span>),
+                dataIndex: 'EffectiveNumber',
+                key: 'EffectiveNumber',
                 align: 'center',
                 render: (text, record) => {
                     return text;
                 }
             },
             {
-                title: (<span style={{fontWeight: 'bold'}}>运转率</span>),
-                dataIndex: 'RunningRate',
-                key: 'RunningRate',
+                title: (<span style={{fontWeight: 'bold'}}>传输率</span>),
+                dataIndex: 'TransmissionRate',
+                key: 'TransmissionRate',
+                align: 'center',
+                render: (text, record) => {
+                    return (parseFloat(text) * 100).toFixed(2) + '%';
+                }
+            },
+            {
+                title: (<span style={{fontWeight: 'bold'}}>有效率</span>),
+                dataIndex: 'EffectiveRate',
+                key: 'EffectiveRate',
+                align: 'center',
+                sorter: (a, b) => a.EffectiveRate - b.EffectiveRate,
+                render: (text, record) => {
+                    return (parseFloat(text) * 100).toFixed(2) + '%';
+                }
+            },
+            {
+                title: (<span style={{fontWeight: 'bold'}}>传输有效率</span>),
+                dataIndex: 'TransmissionEffectiveRate',
+                key: 'TransmissionEffectiveRate',
                 width: '250px',
-                align: 'left',
+                align: 'center',
                 sorter: true,
                 render: (text, record) => {
                     // 红色：#f5222d 绿色：#52c41a
@@ -161,36 +177,21 @@ export default class EquipmentOperatingRate extends Component {
                     }
                 }
             },
-            {
-                title: (<span style={{fontWeight: 'bold'}}>操作</span>),
-                dataIndex: 'opt',
-                key: 'opt',
-                width: '100px',
-                align: 'center',
-                render: (text, record) => {
-                    console.log(`/pointdetail/${record.DGIMN}/ywdsjlist/${this.props.beginTime}/${this.props.endTime}`);
-                    return (
-                        <a onClick={
-                            () => this.props.dispatch(routerRedux.push(`/pointdetail/${record.DGIMN}/ywdsjlist/${this.props.beginTime}/${this.props.endTime}`))
-                        } > 查看运维 </a>
-                    );
-                }
-            }
         ];
         return (
             <div>
-                <Card className={styles.cardTitle} title="综合分析 / 设备运转率统计">
+                <Card className={styles.cardTitle} title="综合分析 / 传输有效率统计">
                     <Card
                         type="inner"
-                        title="设备运转率列表"
+                        title="传输有效率列表"
                         extra={<MonthPicker defaultValue={this.state.beginTime} format={monthFormat} onChange={this.onDateChange} />}
                     >
 
                         <Row>
                             <Col span={24}>
                                 <div style={{textAlign: 'center', marginBottom: 20}}>
-                                    <Button style={{marginRight: 20}}><span style={{fontSize: 16, color: '#52c41a', marginRight: 3}}>■</span> 排口设备运转率达标</Button>
-                                    <Button style={{marginRight: 20}}><span style={{fontSize: 16, color: '#f5222d', marginRight: 3}}>■</span> 排口设备运转率未达标</Button>
+                                    <Button style={{marginRight: 20}}><span style={{fontSize: 16, color: '#52c41a', marginRight: 3}}>■</span> 排口传输有效率达标</Button>
+                                    <Button style={{marginRight: 20}}><span style={{fontSize: 16, color: '#f5222d', marginRight: 3}}>■</span> 排口传输有效率未达标</Button>
                                 </div>
                             </Col>
                         </Row>
@@ -217,8 +218,6 @@ export default class EquipmentOperatingRate extends Component {
                                     'total': this.props.total,
                                     'pageSize': this.props.pageSize,
                                     'current': this.props.pageIndex,
-                                    // onChange: this.onChange,
-                                    // onShowSizeChange: this.onShowSizeChange,
                                     pageSizeOptions: ['10', '20', '30', '40', '50']
                                 }}
                             />
