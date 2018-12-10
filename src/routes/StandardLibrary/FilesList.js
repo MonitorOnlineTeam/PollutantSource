@@ -19,7 +19,7 @@ export default class FilesList extends Component {
         super(props);
         this.state = {
         };
-    };
+    }
     componentWillMount() {
         const StandardLibraryID = this.props.pid;
         this.props.dispatch({
@@ -31,7 +31,7 @@ export default class FilesList extends Component {
                 }
             },
         });
-    };
+    }
     Down(url) {
         document.getElementById('ifile').src = url;
     }

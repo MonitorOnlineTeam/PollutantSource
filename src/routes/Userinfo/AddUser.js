@@ -231,7 +231,7 @@ export default class AddUser extends Component {
                     breadcrumbList={
                         [{
                             title: '用户列表',
-                            href: '/monitor/sysmanage/userinfo',
+                            href: '/sysmanage/userinfo',
                         }, {
                             title: '添加用户',
                         }]
