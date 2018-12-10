@@ -31,7 +31,7 @@ class StandardGasRepalceRecord extends Component {
         });
     }
     render() {
-        const signContent = this.props.StandardGasRepalceRecordList.length === 0 ? null : `data:image/jpeg;base64,${this.props.StandardGasRepalceRecordList[0].record[0].SignContent}`;
+        const signContent = this.props.StandardGasRepalceRecordList.length === 0 ? null : `data:image/jpeg;base64,${this.props.StandardGasRepalceRecordList[0].record.length === 0 ? null : this.props.StandardGasRepalceRecordList[0].record[0].SignContent}`;
         const columnstwo = [{
             dataIndex: 'MaintenanceManagementUnitTitle',
             key: 'MaintenanceManagementUnitTitle',
@@ -58,30 +58,30 @@ class StandardGasRepalceRecord extends Component {
         const datatwo = [{
             key: '1',
             MaintenanceManagementUnitTitle: '维护管理单位',
-            MaintenanceManagementUnitContent: this.props.StandardGasRepalceRecordList.length === 0 ? null : this.props.StandardGasRepalceRecordList[0].record[0].Content['MaintenanceManagementUnit'],
+            MaintenanceManagementUnitContent: this.props.StandardGasRepalceRecordList.length === 0 ? null : this.props.StandardGasRepalceRecordList[0].record.length === 0 ? this.props.StandardGasRepalceRecordList[0].info[0].MaintenanceManagementUnit : this.props.StandardGasRepalceRecordList[0].record[0].Content['MaintenanceManagementUnit'],
             PointPositionTitle: '安装地点',
-            PointPositionContent: this.props.StandardGasRepalceRecordList.length === 0 ? null : this.props.StandardGasRepalceRecordList[0].record[0].Content['PointPosition'],
+            PointPositionContent: this.props.StandardGasRepalceRecordList.length === 0 ? null : this.props.StandardGasRepalceRecordList[0].record.length === 0 ? this.props.StandardGasRepalceRecordList[0].info[0].PointPosition : this.props.StandardGasRepalceRecordList[0].record[0].Content['PointPosition'],
         }];
         const columnsthree = [{
             dataIndex: 'CreateUserIDTitle',
             key: 'CreateUserIDTitle',
-            width: '14%',
+            width: '13%',
             align: 'center',
         }, {
             dataIndex: 'CreateUserIDTitleContent',
             key: 'CreateUserIDTitleContent',
-            width: '9%',
+            width: '11%',
             align: 'center',
         }, {
             dataIndex: 'CreateTimeTitle',
             key: 'CreateTimeTitle',
-            width: '9%',
+            width: '11%',
             align: 'center',
         },
         {
             dataIndex: 'CreateTimeContent',
             key: 'CreateTimeContent',
-            width: '17.3%',
+            width: '18.1%',
             align: 'center',
         }, {
             dataIndex: 'SignContentTitle',
@@ -92,7 +92,7 @@ class StandardGasRepalceRecord extends Component {
         {
             dataIndex: 'SignContentcontent',
             key: 'SignContentcontent',
-            width: '10%',
+            width: '100px',
             align: 'center',
         },
         {
@@ -104,20 +104,20 @@ class StandardGasRepalceRecord extends Component {
         {
             dataIndex: 'SignTimetitlecontent',
             key: 'SignTimetitlecontent',
-            width: '20.7%',
+            width: '20%',
             align: 'center',
         }
         ];
         const datathree = [{
             key: '1',
             CreateUserIDTitle: '运行维护人员:',
-            CreateUserIDTitleContent: this.props.StandardGasRepalceRecordList.length === 0 ? null : this.props.StandardGasRepalceRecordList[0].record[0].CreateUserID,
+            CreateUserIDTitleContent: this.props.StandardGasRepalceRecordList.length === 0 ? null : this.props.StandardGasRepalceRecordList[0].record.length === 0 ? null : this.props.StandardGasRepalceRecordList[0].record[0].CreateUserID,
             CreateTimeTitle: '时间:',
-            CreateTimeContent: this.props.StandardGasRepalceRecordList.length === 0 ? null : this.props.StandardGasRepalceRecordList[0].record[0].CreateTime,
+            CreateTimeContent: this.props.StandardGasRepalceRecordList.length === 0 ? null : this.props.StandardGasRepalceRecordList[0].record.length === 0 ? null : this.props.StandardGasRepalceRecordList[0].record[0].CreateTime,
             SignContentTitle: '负责人:',
-            SignContentcontent: <img src={signContent} />,
+            SignContentcontent: this.props.StandardGasRepalceRecordList.length === 0 ? null : this.props.StandardGasRepalceRecordList[0].record.length === 0 ? null : <img src={signContent} />,
             SignTimetitle: '时间:',
-            SignTimetitlecontent: this.props.StandardGasRepalceRecordList.length === 0 ? null : this.props.StandardGasRepalceRecordList[0].record[0].SignTime,
+            SignTimetitlecontent: this.props.StandardGasRepalceRecordList.length === 0 ? null : this.props.StandardGasRepalceRecordList[0].record.length === 0 ? null : this.props.StandardGasRepalceRecordList[0].record[0].SignTime,
         }];
         const columnsfour = [{
             title: 'Detail',
@@ -178,8 +178,8 @@ class StandardGasRepalceRecord extends Component {
         }];
         return (
             <Layout style={{backgroundColor: 'white'}}>
-                <Content style={{margin: 'auto', marginTop: 50}}>
-                    <div style={{position: 'absolute', right: 15, top: 85}} >
+                <Content style={{margin: 'auto'}}>
+                    <div style={{position: 'absolute', right: 40, top: 198}} >
                         <Button size="large" onClick={() => {
                             this.props.history.goBack(-1);
                         }}><Icon type="left" />退回</Button>
@@ -193,12 +193,17 @@ class StandardGasRepalceRecord extends Component {
                         fontWeight: 'bold'}}>
                         标准气体更换记录表
                     </div>
-                    <div style={{backgroundColor: 'white'}}>
-                        <div style={{fontWeight: 'bold', marginBottom: 12, marginTop: 10}}>企业名称：{this.props.StandardGasRepalceRecordList.length === 0 ? null : this.props.StandardGasRepalceRecordList[0].record[0].Content['EnterpriseName']}</div>
+                    <div style={{
+                        height: 'calc(100vh - 290px)',
+                        paddingBottom: '20px',
+                        margin: 'auto',
+                    }}
+                    >
+                        <div style={{fontWeight: 'bold', marginBottom: 12, marginTop: 10}}>企业名称：{this.props.StandardGasRepalceRecordList.length === 0 ? null : this.props.StandardGasRepalceRecordList[0].record.length === 0 ? this.props.StandardGasRepalceRecordList[0].info[0].EnterpriseName : this.props.StandardGasRepalceRecordList[0].record[0].Content['EnterpriseName']}</div>
                         <Table
                             style={{width: 1200}}
                             columns={columns}
-                            dataSource={this.props.StandardGasRepalceRecordList.length === 0 ? null : this.props.StandardGasRepalceRecordList[0].record[0].RecordList}
+                            dataSource={this.props.StandardGasRepalceRecordList.length === 0 ? null : this.props.StandardGasRepalceRecordList[0].record.length === 0 ? null : this.props.StandardGasRepalceRecordList[0].record[0].RecordList}
                             bordered={true}
                             pagination={false}
                             scroll={{ y: 330 }}

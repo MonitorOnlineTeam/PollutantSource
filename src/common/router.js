@@ -183,6 +183,26 @@ export const getRouterData = (app) => {
             component: dynamicWrapper(app, ['task'], () =>
         import('../routes/EmergencyTodoList/RepairHistoryRecods')),
         },
+        '/pointdetail/:pointcode/ConsumablesReplaceRecord/:TaskIds/:TypeIDs': {
+            component: dynamicWrapper(app, ['baseinfo'], () =>
+                    import('../routes/EmergencyTodoList/ConsumablesReplaceRecord')),
+        },
+        '/pointdetail/:pointcode/StandardGasRepalceRecord/:StandardGasTaskIds/:StandardGasTypeIDs': {
+            component: dynamicWrapper(app, ['baseinfo'], () =>
+                    import('../routes/EmergencyTodoList/StandardGasRepalceRecord')),
+        },
+        '/pointdetail/:pointcode/CompleteExtraction/:CqfPatrolTaskIds/:CqfPatrolTypeIDs': {
+            component: dynamicWrapper(app, ['baseinfo'], () =>
+                    import('../routes/EmergencyTodoList/CompleteExtraction')),
+        },
+        '/pointdetail/:pointcode/DilutionSampling/:CyfPatrolTaskIds/:CyfPatrolTypeIDs': {
+            component: dynamicWrapper(app, ['baseinfo'], () =>
+                    import('../routes/EmergencyTodoList/DilutionSampling')),
+        },
+        '/pointdetail/:pointcode/DirectMeasurement/:ClfPatrolTaskIds/:ClfPatrolTypeIDs': {
+            component: dynamicWrapper(app, ['baseinfo'], () =>
+                    import('../routes/EmergencyTodoList/DirectMeasurement')),
+        },
         /* 工作台 */
         '/workbench': {
             component: dynamicWrapper(app, ['user', 'points'], () =>
@@ -350,18 +370,6 @@ export const getRouterData = (app) => {
         '/emissionpermits': {
             component: dynamicWrapper(app, ['baseinfo'], () =>
                     import('../routes/EmissionPermits')),
-        },
-        '/sysmanage/ConsumablesReplaceRecord/:TaskIds/:TypeIDs': {
-            component: dynamicWrapper(app, ['baseinfo'], () =>
-                    import('../routes/EmergencyTodoList/ConsumablesReplaceRecord')),
-        },
-        '/sysmanage/StandardGasRepalceRecord/:StandardGasTaskIds/:StandardGasTypeIDs': {
-            component: dynamicWrapper(app, ['baseinfo'], () =>
-                    import('../routes/EmergencyTodoList/StandardGasRepalceRecord')),
-        },
-        '/monitor/sysmanage/CompleteExtraction/:CqfPatrolTaskIds/:CqfPatrolTypeIDs': {
-            component: dynamicWrapper(app, ['baseinfo'], () =>
-                    import('../routes/EmergencyTodoList/CompleteExtraction')),
         },
         /* 登陆 */
         '/user': {
