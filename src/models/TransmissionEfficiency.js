@@ -7,7 +7,6 @@
 import { Model } from '../dvapack';
 import { getMonthsTransmissionEfficiency } from '../services/TransmissionEfficiency';
 import moment from 'moment';
-import { debug } from 'util';
 
 export default Model.extend({
     namespace: 'TransmissionEfficiency',
@@ -23,9 +22,7 @@ export default Model.extend({
     },
     effects: {
         * getData({payload}, { call, put, update, select }) {
-            ;
             const {beginTime, endTime, pageSize, transmissionEffectiveRate} = yield select(state => state.TransmissionEfficiency);
-            debugger;
             let body = {
                 // 'DGIMNs': ['sgjt001003', 'sgjt001004'],
                 // 'beginTime': '2018-11-01 00:00:00',

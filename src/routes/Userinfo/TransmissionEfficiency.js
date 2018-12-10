@@ -9,18 +9,15 @@ import {
     Table,
     DatePicker,
     Progress,
-    Tag,
     Row,
     Col,
     Button
 } from 'antd';
-import {routerRedux} from 'dva/router';
 import moment from 'moment';
 import styles from './index.less';
 import {connect} from 'dva';
 const { MonthPicker } = DatePicker;
 const monthFormat = 'YYYY-MM';
-const { CheckableTag } = Tag;
 
 @connect(({
     loading,
@@ -62,14 +59,6 @@ export default class TransmissionEfficiency extends Component {
             userId: record.key
         });
     }
-    // onShowSizeChange = (pageIndex, pageSize) => {
-    //     this.props.dispatch({
-    //         type: 'TransmissionEfficiency/updateState',
-    //         payload: {
-    //             pageSize: pageSize,
-    //         },
-    //     });
-    // }
     onChange = (pageIndex) => {
         this.props.dispatch({
             type: 'TransmissionEfficiency/getData',
@@ -104,22 +93,12 @@ export default class TransmissionEfficiency extends Component {
         this.setState({ checked });
     }
     onDateChange = (value, dateString) => {
-        // this.setState({
-        //     beginTime: moment(dateString).format('YYYY-MM-01 HH:mm:ss'),
-        //     endTime: moment(dateString).add(1, 'months').add(-1, 'days').format('YYYY-MM-DD HH:mm:ss')
-        // });
-
         let endTime = moment(dateString).add(1, 'months').add(-1, 'days').format('YYYY-MM-DD HH:mm:ss');
 
         if (moment(dateString).add(1, 'months').add(-1, 'days') > moment()) {
             endTime = moment().format('YYYY-MM-DD HH:mm:ss');
         }
 
-        // if (moment(moment(dateString).add(1, 'months').format('YYYY-MM-01 HH:mm:ss')) < moment()) {
-        //     endTime = moment(dateString).add(1, 'months').add(-1, 'days').format('YYYY-MM-DD HH:mm:ss');
-        // }
-
-        console.log(endTime);
         this.props.dispatch({
             type: 'TransmissionEfficiency/updateState',
             payload: {
@@ -128,15 +107,6 @@ export default class TransmissionEfficiency extends Component {
             }
         });
         this.onChange(this.props.pageIndex);
-        // this.props.dispatch({
-        //     type: 'TransmissionEfficiency/getData',
-        //     payload: {
-        //         pageIndex: this.props.pageIndex,
-        //         pageSize: this.props.pageSize,
-        //         beginTime: moment(dateString).format('YYYY-MM-01 HH:mm:ss'),
-        //         endTime: moment(dateString).add(1, 'months').add(-1, 'days').format('YYYY-MM-DD HH:mm:ss')
-        //     },
-        // });
     }
     render() {
         const columns = [
