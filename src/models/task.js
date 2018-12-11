@@ -19,7 +19,7 @@ export default Model.extend({
         HistoryConsumablesReplaceRecordCount: null,
         pageIndex: 1,
         pageSize: 10,
-        HistoryStandardGasRepalceRecordList,
+        HistoryStandardGasRepalceRecordList:[],
     },
 
     effects: {
@@ -137,6 +137,7 @@ export default Model.extend({
             update,
             select
         }) {
+            debugger
             const result = yield call(GetHistoryConsumablesReplaceRecord, {pageIndex: pageIndex, pageSize: pageSize, TypeID: TypeID, DGIMN: DGIMN, BeginTime: BeginTime, EndTime: EndTime});
 
             if (result.requstresult === '1') {
