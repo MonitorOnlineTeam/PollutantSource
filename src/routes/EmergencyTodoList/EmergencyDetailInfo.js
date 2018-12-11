@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import styles from '../EmergencyTodoList/EmergencyDetailInfo.less';
-import {Card, Divider, Button, Input, Table, Row, Col, Icon, Spin,Modal } from 'antd';
+import {Card, Divider, Button, Input, Table, Row, Col, Icon, Spin,Modal,Avatar } from 'antd';
 import DescriptionList from '../../components/DescriptionList';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import { connect } from 'dva';
 import {EnumRequstResult, EnumPatrolTaskType, EnumPsOperationForm} from '../../utils/enum';
 import { routerRedux } from 'dva/router';
 import {imgaddress} from '../../config.js';
+import { CALL_HISTORY_METHOD } from 'react-router-redux';
 const { Description } = DescriptionList;
 const { TextArea } = Input;
 
@@ -30,6 +31,22 @@ export default class EmergencyDetailInfo extends Component {
                 TaskID: this.props.match.params.TaskID,
                 UserID: this.props.match.params.UserID
             }
+        });
+    }
+
+    handlePreview = (item) => {
+        // debugger;
+        // this.setState({
+        //     //previewImage: item !== null ? item.replace('_thumbnail','') : '',
+        //     previewVisible: true,
+        // });
+        console.log('内容：');
+        console.log(item);
+    }
+
+    handleCancel=() => {
+        this.setState({
+            previewVisible: false
         });
     }
 
@@ -96,24 +113,6 @@ export default class EmergencyDetailInfo extends Component {
         });
         return rtnVal;
     }
-
-    handlePreview = (item) => {
-        this.setState({
-            previewImage: item,
-            previewVisible: true,
-        });
-    }
-
-    // renderPicItem=(data) => {
-    //     const rtnVal = [];
-    //     debugger;
-    //     data.map((item) => {
-    //         let picSrc=`${imgaddress}${item}`;
-    //         rtnVal.push(<Col span={6} align="center"><img src={picSrc} /></Col>);
-    //     });
-    //     debugger;
-    //     return rtnVal;
-    // }
 
     render() {
         const SCREEN_WIDTH = document.querySelector('body').offsetWidth;
@@ -271,8 +270,8 @@ export default class EmergencyDetailInfo extends Component {
                         <DescriptionList className={styles.headerList} size="large" col="1">
                             <Description>
                                 <TextArea rows={8} style={{width: '600px'}}>
-                                {Remark}
-                            </TextArea>
+                                    {Remark}
+                                </TextArea>
                             </Description>
                         </DescriptionList>
 
@@ -299,7 +298,11 @@ export default class EmergencyDetailInfo extends Component {
                             {
                                 pics.map((item) => {
                                     let picSrc = `${imgaddress}${item}`;
-                                    return (<Col span={3} align="center"><img className={styles.imgFj} src={picSrc} onPreview={this.handlePreview(item)} /></Col>);
+                                    return (
+                                    <Col span={3} align="center">
+                                    {/* <img className={styles.imgFj} src={picSrc} onClick={this.handlePreview(picSrc)} /> */}
+                                    <Avatar shape="square" size={164} src={picSrc}>{this.state.user}</Avatar>
+                                    </Col>);
                                 })
                             }
                         </Row>
@@ -317,10 +320,10 @@ export default class EmergencyDetailInfo extends Component {
                             this.props.history.goBack(-1);
                         }}><Icon type="left" />退回</Button>
                     </div>
+                    {/* <Modal visible={this.state.previewVisible} footer={null} onCancel={this.handleCancel}>
+                        <img alt="example" style={{ width: '100%' }} src={this.state.previewImage} />
+                    </Modal> */}
                 </div>
-                <Modal visible={previewVisible} footer={null} onCancel={this.handleCancel}>
-                    <img alt="example" style={{ width: '100%' }} src={previewImage} />
-                </Modal>
             </PageHeaderLayout>
         );
     }
