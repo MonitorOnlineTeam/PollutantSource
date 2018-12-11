@@ -26,7 +26,7 @@ const plugins = [
             }
         }
     }
-];
+]; let _thismap;
 @connect(({loading, points, overview, global, baseinfo}) => ({
     datalist: overview.data,
     treecol: overview.mainpcol,
@@ -36,9 +36,11 @@ const plugins = [
     detaildata: overview.detaildata,
     chartdata: overview.chartdata,
     existdata: overview.existdata,
-    chartloading: loading.effects['overview/queryoptionData'],
+    chartloading: loading.effects['overview/queryoptionDataOnClick'],
     selectdata: overview.selectdata,
-    pollutantName: overview.pollutantName
+    pollutantName: overview.pollutantName,
+    treedataloading: loading.effects['overview/querydatalist'],
+    detailloading: loading.effects['overview/queryoptionData']
 }))
 
 class OverViewMap extends PureComponent {
@@ -56,19 +58,18 @@ class OverViewMap extends PureComponent {
                 0, 0
             ],
         };
-        let _thismap;
-        this.mapEvents = {
-            created(m) {
-                _thismap = m;
-            },
-            zoomchange: (value) => {
-
-            },
-            complete: () => {
-                // _thismap.setZoomAndCenter(17, [118.510962, 38.976271]);
-            }
-        };
     }
+    mapEvents = {
+        created(m) {
+            _thismap = m;
+        },
+        zoomchange: (value) => {
+
+        },
+        complete: () => {
+            // _thismap.setZoomAndCenter(17, [118.510962, 38.976271]);
+        }
+    };
      stationClick = () => {
          this.props.dispatch(routerRedux.push('/pointdetail/' + this.state.selectpoint.DGIMN));
      };
@@ -121,12 +122,12 @@ class OverViewMap extends PureComponent {
            selectpoint: row,
            detailed: true,
            pointName: row.pointName,
-
        });
+       _thismap.setZoomAndCenter(12, [row.longitude, row.latitude]);
    };
    detialTreeClick=(row) => {
        this.props.dispatch({
-           type: 'overview/queryoptionData',
+           type: 'overview/queryoptionDataOnClick',
            payload: {
                datatype: 'hour',
                dgimn: row.dgimn,
@@ -144,14 +145,14 @@ class OverViewMap extends PureComponent {
    render() {
        const entInfo = this.props.entInfoModel ? this.props.entInfoModel[0] : '';
        const allcoo = entInfo ? eval(entInfo.coordinateSet) : '';
-       const center = entInfo ? [entInfo.longitude, entInfo.latitude] : '';
+       const {chartloading, detailloading} = this.props;
        return (
            <div
                style={{
                    width: '100%',
                    height: 'calc(100vh - 67px)'
                }}>
-               <Map events={this.mapEvents} resizeEnable={true} center={center}
+               <Map events={this.mapEvents} resizeEnable={true}
                    zoom={13} loading={<Spin />} amapkey={amapKey} plugins={plugins}
                >
                    <div style={{ width: 450,
@@ -167,23 +168,26 @@ class OverViewMap extends PureComponent {
                                <TreeStatus datalist={this.props.datalist} />
                            </div>
                            <div style={{marginTop: 15}}>
-                               <TreeList treeCilck={this.treeCilck} treecol={this.props.treecol} pointInfo={this.props.datalist} />
+                               <TreeList treedataloading={this.props.treedataloading} treeCilck={this.treeCilck} treecol={this.props.treecol} pointInfo={this.props.datalist} />
                            </div>
                        </div>
-                           : <div style={{ marginLeft: 10, marginTop: 10 }}>
-                               <div>
-                                   <TreeStatus datalist={this.props.datalist} stationClick={this.stationClick} backTreeList={this.backTreeList} pointName={this.state.pointName} detailed={this.state.detailed} />
+                           : detailloading ? <Spin style={{width: '100%',
+                               height: 'calc(100vh - 260px)',
+                               marginTop: 260 }} size="large" />
+                               : <div style={{ marginLeft: 10, marginTop: 10 }}>
+                                   <div>
+                                       <TreeStatus datalist={this.props.datalist} stationClick={this.stationClick} backTreeList={this.backTreeList} pointName={this.state.pointName} detailed={this.state.detailed} />
+                                   </div>
+                                   <div style={{marginTop: 15}}>
+                                       <TransmissionEfficiency selectdata={this.props.selectdata} />
+                                   </div>
+                                   <div style={{marginTop: 15}}>
+                                       <MapPollutantDetail detialTreeClick={this.detialTreeClick} detailpcol={this.props.detailpcol} detaildata={this.props.detaildata} />
+                                   </div>
+                                   <div style={{marginTop: 15}}>
+                                       <ChartData pollutantName={this.props.pollutantName} isloading={chartloading} chartdata={this.props.chartdata} existdata={this.props.existdata} />
+                                   </div>
                                </div>
-                               <div style={{marginTop: 15}}>
-                                   <TransmissionEfficiency selectdata={this.props.selectdata} />
-                               </div>
-                               <div style={{marginTop: 15}}>
-                                   <MapPollutantDetail detialTreeClick={this.detialTreeClick} detailpcol={this.props.detailpcol} detaildata={this.props.detaildata} />
-                               </div>
-                               <div style={{marginTop: 15}}>
-                                   <ChartData pollutantName={this.props.pollutantName} isloading={this.props.chartloading} chartdata={this.props.chartdata} existdata={this.props.existdata} />
-                               </div>
-                           </div>
                        }
                    </div>
                    <div

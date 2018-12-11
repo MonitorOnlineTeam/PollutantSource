@@ -88,6 +88,34 @@
     }
   }
 .treeTable :global{
+
+  .ant-table-small > .ant-table-content .ant-table-header
+  {
+    background: #fff;
+    height: 70px;
+    overflow: hidden;
+  }
+  .ant-table-body{
+    &::-webkit-scrollbar-track-piece{
+        -webkit-border-radius:0;
+       }
+       &::-webkit-scrollbar{
+        width:8px;
+        height:8px;
+       }
+       &::-webkit-scrollbar-thumb{
+        height:50px;
+        background-color:#61A1D5;
+        -webkit-border-radius:4px;
+        outline-offset:-2px;
+        border: 2px solid #61A1D5;
+       }
+       &::-webkit-scrollbar-thumb:hover{
+        height:50px;
+        background-color:#61A1D5;
+        -webkit-border-radius:4px;
+       }
+  }
   .ant-table-thead > tr:first-child > th:first-child {
     border-top-left-radius: 7px;
   }
@@ -97,7 +125,9 @@
   .ant-table-thead tr th{
     line-height: 35px;
   }
-  .ant-table-small > .ant-table-content > .ant-table-body > table > .ant-table-thead > tr > th{
+
+  .ant-table-small > .ant-table-content > .ant-table-scroll > .ant-table-header > table > .ant-table-thead > tr > th
+  {
     background: #55A0D3 ;
     color: #fff;
   }

@@ -67,7 +67,21 @@ export async function GetConsumablesReplaceRecordList(params) {
         data: null
     } : result;
 }
-
+// 获取易耗品历史记录列表
+export async function GetHistoryConsumablesReplaceRecord(params) {
+    const body = {
+        pageIndex: params.pageIndex,
+        pageSize: params.pageSize,
+        TypeID: params.TypeID,
+        DGIMN: params.DGIMN,
+        BeginTime: params.BeginTime,
+        EndTime: params.EndTime,
+    };
+    const result = post('/api/rest/PollutantSourceApi/PTaskForm/GetFormHistoryList', body, null);
+    return result === null ? {
+        data: null
+    } : result;
+}
 // 根据任务id和类型id获取标气列表
 export async function GetStandardGasRepalceRecordList(params) {
     const body = {
@@ -75,6 +89,21 @@ export async function GetStandardGasRepalceRecordList(params) {
         TypeID: params.TypeIDs
     };
     const result = post('/api/rest/PollutantSourceApi/PTaskForm/GetStandardGasRepalceRecordList', body, null);
+    return result === null ? {
+        data: null
+    } : result;
+}
+// 获取标气历史记录列表
+export async function GetHistoryStandardGasRepalceRecordList(params) {
+    const body = {
+        pageIndex: params.pageIndex,
+        pageSize: params.pageSize,
+        TypeID: params.TypeID,
+        DGIMN: params.DGIMN,
+        BeginTime: params.BeginTime,
+        EndTime: params.EndTime,
+    };
+    const result = post('/api/rest/PollutantSourceApi/PTaskForm/GetStandardGasRepalceRecordHistoryList', body, null);
     return result === null ? {
         data: null
     } : result;

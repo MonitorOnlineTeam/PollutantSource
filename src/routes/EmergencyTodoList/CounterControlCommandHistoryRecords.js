@@ -24,15 +24,14 @@ import {routerRedux} from 'dva/router';
 /*
 页面：易耗品历史记录
 */
-export default class RepairHistoryRecods extends Component {
+export default class CounterControlCommandHistoryRecords extends Component {
     constructor(props) {
         super(props);
         this.state = {
             rangeDate: [moment(moment(new Date()).subtract(11, 'month').format('YYYY-MM-DD 00:00:00')), moment(moment(new Date()).format('YYYY-MM-DD 23:59:59'))], // 最近七天
             BeginTime: moment().subtract(11, 'month').format('YYYY-MM-DD 00:00:00'),
             EndTime: moment().format('YYYY-MM-DD 23:59:59'),
-            DGIMN:"sgjt001003",
-            // DGIMN: this.props.match.params.pointcode,
+            DGIMN: this.props.match.params.pointcode,
             typeID: this.props.match.params.TypeID,
         };
     }
@@ -74,7 +73,8 @@ export default class RepairHistoryRecods extends Component {
     }
 
     seeDetail=(record) => {
-        this.props.dispatch(routerRedux.push(`../routes/EmergencyTodoList/ConsumablesReplaceRecord/${record.taskId}/${this.state.TypeID}`));
+        debugger
+        this.props.dispatch(routerRedux.push(`/pointdetail/:pointcode/ConsumablesReplaceRecord/${record.taskId}/${this.state.typeID}`));
     }
 
     render() {

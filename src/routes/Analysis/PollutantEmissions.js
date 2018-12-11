@@ -15,22 +15,23 @@ import {
 } from 'antd';
 import moment from 'moment';
 import styles from './index.less';
+import ReactEcharts from 'echarts-for-react';
 import {connect} from 'dva';
 const { MonthPicker } = DatePicker;
 const monthFormat = 'YYYY-MM';
 const pageUrl = {
-    updateState: 'TransmissionEfficiency/updateState',
-    getData: 'TransmissionEfficiency/getData'
+    updateState: 'PollutantEmissionsModel/updateState',
+    getData: 'PollutantEmissionsModel/getData'
 };
 @connect(({
     loading,
-    TransmissionEfficiency
+    PollutantEmissionsModel
 }) => ({
     loading: loading.effects[pageUrl.getData],
-    total: TransmissionEfficiency.total,
-    pageSize: TransmissionEfficiency.pageSize,
-    pageIndex: TransmissionEfficiency.pageIndex,
-    tableDatas: TransmissionEfficiency.tableDatas,
+    total: PollutantEmissionsModel.total,
+    pageSize: PollutantEmissionsModel.pageSize,
+    pageIndex: PollutantEmissionsModel.pageIndex,
+    tableDatas: PollutantEmissionsModel.tableDatas,
 }))
 export default class PollutantEmissions extends Component {
     constructor(props) {
@@ -42,7 +43,7 @@ export default class PollutantEmissions extends Component {
         };
     }
     componentWillMount() {
-        this.getTableData(1);
+        // this.getTableData(1);
     };
     updateState = (payload) => {
         this.props.dispatch({
@@ -85,6 +86,50 @@ export default class PollutantEmissions extends Component {
             endTime: endTime
         });
         this.getTableData(this.props.pageIndex);
+    }
+    getOption = () => {
+        let option = {
+            color: ['#3398DB'],
+            tooltip : {
+                trigger: 'axis',
+                axisPointer : {            // 坐标轴指示器，坐标轴触发有效
+                    type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                }
+            },
+            legend: {
+                data:['排放总量']
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            xAxis : [
+                {
+                    type : 'category',
+                    data : ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
+                    axisTick: {
+                        alignWithLabel: true
+                    }
+                }
+            ],
+            yAxis : [
+                {
+                    type : 'value',
+                    name : '单位：(吨)'
+                }
+            ],
+            series : [
+                {
+                    name:'排放总量',
+                    type:'bar',
+                    barWidth: '30%',
+                    data:[800, 1000, 1100, 1200, 1300, 550, 820, 830, 1000, 1050, 1000, 900]
+                }
+            ]
+        };
+        return option;
     }
     render() {
         const columns = [
@@ -180,13 +225,19 @@ export default class PollutantEmissions extends Component {
         ];
         return (
             <div>
-                <Card className={styles.cardTitle} title="综合分析 / 传输有效率统计">
+                <Card className={styles.cardTitle} title="智能分析 / 月度排放量分析">
                     <Card
                         type="inner"
-                        title="传输有效率列表"
+                        title="二氧化硫排放量统计"
                         extra={<MonthPicker defaultValue={this.state.beginTime} format={monthFormat} onChange={this.onDateChange} />}
                     >
-
+                        <Row>
+                        <ReactEcharts
+                            option={this.getOption()}
+                            style={{height: '300px', width: '100%'}}
+                            className='echarts-for-echarts'
+                            theme='my_theme' />
+                        </Row>
                         <Row>
                             <Col span={24}>
                                 <div style={{textAlign: 'center', marginBottom: 20}}>
