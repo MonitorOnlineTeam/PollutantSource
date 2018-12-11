@@ -80,34 +80,34 @@ export const getMenuArray = () => {
     } catch (error) {
     }
 
-    switch (account) {
-        case 'system':
-            data = allMenu;
-            break;
-        case 'wangyongyan': // 监测站主任
-            data = dataHbjLeaderMenu;
-            break;
-        case 'wanggang': // 监测专员
-            data = dataHbjSuperviseMenu;
-            break;
-        case 'wangnailin': // 企业高管
-            data = dataEnterpriseLeaderMenu;
-            break;
-        case 'lisonggui': // 环保专员
-            data = dataEnterpriseWorkerMenu;
-            break;
-        case 'liyunjun': // 运维高管
-            data = dataOperationLeaderMenu;
-            break;
-        case 'zhaofangyuan': // 运维主管
-            data = dataOperationDirectorMenu;
-            break;
-        case 'chengyun': // 运维人员
-            data = dataOperationPersonMenu;
-            break;
-        default:
-            break;
-    }
+    // switch (account) {
+    //     case 'system':
+    //         data = allMenu;
+    //         break;
+    //     case 'wangyongyan': // 监测站主任
+    //         data = dataHbjLeaderMenu;
+    //         break;
+    //     case 'wanggang': // 监测专员
+    //         data = dataHbjSuperviseMenu;
+    //         break;
+    //     case 'wangnailin': // 企业高管
+    //         data = dataEnterpriseLeaderMenu;
+    //         break;
+    //     case 'lisonggui': // 环保专员
+    //         data = dataEnterpriseWorkerMenu;
+    //         break;
+    //     case 'liyunjun': // 运维高管
+    //         data = dataOperationLeaderMenu;
+    //         break;
+    //     case 'zhaofangyuan': // 运维主管
+    //         data = dataOperationDirectorMenu;
+    //         break;
+    //     case 'chengyun': // 运维人员
+    //         data = dataOperationPersonMenu;
+    //         break;
+    //     default:
+    //         break;
+    // }
     return getMenuArrays(formatter(data));
 };
 

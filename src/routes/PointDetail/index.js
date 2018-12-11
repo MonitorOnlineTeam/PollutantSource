@@ -59,22 +59,9 @@ class PointDetail extends Component {
         Cookie.set('seldgimn', match.params.pointcode);
         const pointInfo = this.props.pointInfo;
         let activeKey = 'qcontrollist';
-        // if (location.pathname.indexOf('JzHistoryRecords') === -1) {
-        //     activeKey = location.pathname.replace(`${match.url}/`, '');
-        // }
-
         if (location.pathname.indexOf('qcontrollist') === -1) {
             activeKey = location.pathname.replace(`${match.url}/`, '');
-        } 
-        // else {
-        //     this.state.recordType.map((item) => {
-        //         if (location.pathname.indexOf(item) === -1) {
-        //             activeKey = location.pathname.replace(`${match.url}/`, '');
-        //             return null;
-        //         }
-        //     });
-        // }
-        // console.log(activeKey);
+        }
         return (
             <div
                 style={{ width: '100%',
