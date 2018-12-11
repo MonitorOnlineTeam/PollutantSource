@@ -115,7 +115,7 @@ class StandardGasRepalceRecord extends Component {
             CreateTimeTitle: '时间:',
             CreateTimeContent: this.props.StandardGasRepalceRecordList.length === 0 ? null : this.props.StandardGasRepalceRecordList[0].record.length === 0 ? null : this.props.StandardGasRepalceRecordList[0].record[0].CreateTime,
             SignContentTitle: '负责人:',
-            SignContentcontent: this.props.StandardGasRepalceRecordList.length === 0 ? null : this.props.StandardGasRepalceRecordList[0].record.length === 0 ? null : <img src={signContent} />,
+            SignContentcontent: this.props.StandardGasRepalceRecordList.length === 0 ? null : this.props.StandardGasRepalceRecordList[0].record.length === 0 ? null : this.props.StandardGasRepalceRecordList[0].record[0].SignContent===null?null: <img src={signContent} />,
             SignTimetitle: '时间:',
             SignTimetitlecontent: this.props.StandardGasRepalceRecordList.length === 0 ? null : this.props.StandardGasRepalceRecordList[0].record.length === 0 ? null : this.props.StandardGasRepalceRecordList[0].record[0].SignTime,
         }];

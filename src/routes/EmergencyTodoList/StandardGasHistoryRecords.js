@@ -31,8 +31,7 @@ export default class StandardGasHistoryRecords extends Component {
             rangeDate: [moment(moment(new Date()).subtract(11, 'month').format('YYYY-MM-DD 00:00:00')), moment(moment(new Date()).format('YYYY-MM-DD 23:59:59'))], // 最近七天
             BeginTime: moment().subtract(11, 'month').format('YYYY-MM-DD 00:00:00'),
             EndTime: moment().format('YYYY-MM-DD 23:59:59'),
-            DGIMN:"sgjt001005",
-            // DGIMN: this.props.match.params.pointcode,
+            DGIMN: this.props.match.params.pointcode,
             typeID: this.props.match.params.TypeID,
         };
     }
@@ -74,7 +73,7 @@ export default class StandardGasHistoryRecords extends Component {
     }
 
     seeDetail=(record) => {
-        this.props.dispatch(routerRedux.push(`../routes/EmergencyTodoList/StandardGasRepalceRecord/${record.taskId}/${this.state.TypeID}`));
+        this.props.dispatch(routerRedux.push(`/pointdetail/:pointcode/StandardGasRepalceRecord/${record.taskId}/${this.state.typeID}`));
     }
 
     render() {
