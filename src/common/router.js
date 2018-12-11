@@ -224,16 +224,16 @@ export const getRouterData = (app) => {
             component: dynamicWrapper(app, ['baseinfo'], () =>
                 import('../routes/EmergencyTodoList/DirectMeasurement')),
         },
-        // /*停机记录明细*/
-        // '/pointdetail/:pointcode/StopCemsInfo/:TaskID/:TypeID': {
-        //     component: dynamicWrapper(app, ['task'], () =>
-        //         import('../routes/EmergencyTodoList/StopCemsInfo')),
-        // },
-        // /*维修记录明细*/
-        // '/pointdetail/:pointcode/RepairRecordDetail/:TaskID/:TypeID': {
-        //     component: dynamicWrapper(app, ['task'], () =>
-        //         import('../routes/EmergencyTodoList/RepairRecordDetail')),
-        // },
+        /*停机记录明细*/
+        '/pointdetail/:pointcode/StopCemsInfo/:TaskID/:TypeID': {
+            component: dynamicWrapper(app, ['task'], () =>
+                import('../routes/EmergencyTodoList/StopCemsInfo')),
+        },
+        /*维修记录明细*/
+        '/pointdetail/:pointcode/RepairRecordDetail/:TaskID/:TypeID': {
+            component: dynamicWrapper(app, ['task'], () =>
+                import('../routes/EmergencyTodoList/RepairRecordDetail')),
+        },
 
         /* 智能质控 */
         /**
