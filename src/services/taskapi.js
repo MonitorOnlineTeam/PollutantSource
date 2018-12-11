@@ -119,3 +119,24 @@ export async function GetPatrolRecordListPC(params) {
         data: null
     } : result;
 }
+
+
+// 获取停机记录内容
+export async function GetStopCemsDetail(params) {
+    const body = {
+        TaskID: params.TaskID,
+        TypeID: params.TypeID
+    };
+    const result = await post('/api/rest/PollutantSourceApi/PTaskForm/PostStopCemsDetail', body, null);
+    return result === null ? { data: null } : result;
+}
+
+// 获取维修记录内容
+export async function GetRepairDetail(params) {
+    const body = {
+        TaskID: params.TaskID,
+        TypeID: params.TypeID
+    };
+    const result = await post('/api/rest/PollutantSourceApi/PTaskForm/RepairRecordDetail', body, null);
+    return result === null ? { data: null } : result;
+}

@@ -165,7 +165,7 @@ class ConsumablesReplaceRecord extends Component {
             CreateTimeTitle: '时间:',
             CreateTimeContent: this.props.ConsumablesReplaceRecordList.length === 0 ? null : this.props.ConsumablesReplaceRecordList[0].record.length === 0 ? null : this.props.ConsumablesReplaceRecordList[0].record[0].CreateTime,
             SignContentTitle: '负责人:',
-            SignContentcontent: this.props.ConsumablesReplaceRecordList.length === 0 ? null : this.props.ConsumablesReplaceRecordList[0].record.length === 0 ? null : <img src={signContent} />,
+            SignContentcontent: this.props.ConsumablesReplaceRecordList.length === 0 ? null : this.props.ConsumablesReplaceRecordList[0].record.length === 0 ? null :this.props.ConsumablesReplaceRecordList[0].record[0].SignContent===null?null: <img src={signContent} />,
             SignTimetitle: '时间:',
             SignTimetitlecontent: this.props.ConsumablesReplaceRecordList.length === 0 ? null : this.props.ConsumablesReplaceRecordList[0].record.length === 0 ? null : this.props.ConsumablesReplaceRecordList[0].record[0].SignTime,
         }];
