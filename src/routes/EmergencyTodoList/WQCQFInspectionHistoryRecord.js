@@ -1,20 +1,20 @@
 
-    import React, { Component } from 'react';
-    import {
-        Button,
-        Input,
-        Card,
-        Row,
-        Col,
-        Table,
-        Form,
-        Select, Modal, message, Tag, Radio, Checkbox,
-    } from 'antd';
-    import { connect } from 'dva';
-    import moment from 'moment';
-    import RangePicker_ from '../../components/PointDetail/RangePicker_';
-    import {routerRedux} from 'dva/router';
-    
+import React, { Component } from 'react';
+import {
+    Button,
+    Input,
+    Card,
+    Row,
+    Col,
+    Table,
+    Form,
+    Select, Modal, message, Tag, Radio, Checkbox,
+} from 'antd';
+import { connect } from 'dva';
+import moment from 'moment';
+import RangePicker_ from '../../components/PointDetail/RangePicker_';
+import {routerRedux} from 'dva/router';
+
     @connect(({ task, loading }) => ({
         HistoryInspectionHistoryRecordList: task.HistoryInspectionHistoryRecordList,
         HistoryInspectionHistoryRecordListCount: task.HistoryInspectionHistoryRecordListCount,
@@ -24,7 +24,7 @@
     /*
     页面：完全抽取法CEMS日常巡检记录表(历史记录)
     */
-    export default class WQCQFInspectionHistoryRecord extends Component {
+export default class WQCQFInspectionHistoryRecord extends Component {
         constructor(props) {
             super(props);
             this.state = {
@@ -39,9 +39,9 @@
         componentDidMount() {
             this.GetHistoryRecord(this.props.pageIndex, this.props.pageSize, this.state.DGIMN, this.state.typeID, this.state.BeginTime, this.state.EndTime);
         }
-    
+
         GetHistoryRecord=(pageIndex, pageSize, DGIMN, typeID, BeginTime, EndTime) => {
-            debugger
+            debugger;
             this.props.dispatch({
                 type: 'task/GetHistoryInspectionHistoryRecord',
                 payload: {
@@ -54,30 +54,30 @@
                 }
             });
         };
-    
+
         _handleDateChange=(date, dateString) => {
             this.setState(
                 {
-                    rangeDate:date,
+                    rangeDate: date,
                     BeginTime: dateString[0],
                     EndTime: dateString[1]
                 }
             );
             this.GetHistoryRecord(this.props.pageIndex, this.props.pageSize, this.state.DGIMN, this.state.typeID, dateString[0], dateString[1]);
         };
-    
+
         onShowSizeChange = (pageIndex, pageSize) => {
             this.GetHistoryRecord(pageIndex, pageSize, this.state.DGIMN, this.state.typeID, this.state.BeginTime, this.state.EndTime);
         }
-    
+
         onChange = (pageIndex, pageSize) => {
             this.GetHistoryRecord(pageIndex, pageSize, this.state.DGIMN, this.state.typeID, this.state.BeginTime, this.state.EndTime);
         }
-    
+
         seeDetail=(record) => {
             this.props.dispatch(routerRedux.push(`/pointdetail/:pointcode/CompleteExtraction/${record.taskId}/${this.state.typeID}`));
         }
-    
+
         render() {
             const dataSource = this.props.HistoryInspectionHistoryRecordList === null ? null : this.props.HistoryInspectionHistoryRecordList;
             const columns = [{
@@ -116,7 +116,7 @@
                                 记录创建时间：
                                     </Col>
                                     <Col span={3} >
-                                        <RangePicker_ style={{width: 350}} onChange={this._handleDateChange} format="YYYY-MM-DD"  dateValue={this.state.rangeDate} />
+                                        <RangePicker_ style={{width: 350}} onChange={this._handleDateChange} format="YYYY-MM-DD" dateValue={this.state.rangeDate} />
                                     </Col>
                                 </Row>
                             </Form>
@@ -142,4 +142,4 @@
             );
         }
     }
-    
+
