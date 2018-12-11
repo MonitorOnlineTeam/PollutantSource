@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import styles from '../EmergencyTodoList/EmergencyDetailInfo.less';
-import {Card, Divider, Button, Input, Table, Row, Col, Icon, Spin } from 'antd';
+import {Card, Divider, Button, Input, Table, Row, Col, Icon, Spin,Modal } from 'antd';
 import DescriptionList from '../../components/DescriptionList';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import { connect } from 'dva';
@@ -18,6 +18,8 @@ export default class EmergencyDetailInfo extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            previewVisible: false,
+            previewImage: ''
         };
     }
 
@@ -95,17 +97,26 @@ export default class EmergencyDetailInfo extends Component {
         return rtnVal;
     }
 
-    renderPicItem=(data) => {
-        const rtnVal = [];
-        data.map((item) => {
-            rtnVal.push(<Col span={6} align="center"><img src={item} /></Col>);
+    handlePreview = (item) => {
+        this.setState({
+            previewImage: item,
+            previewVisible: true,
         });
-        return rtnVal;
     }
+
+    // renderPicItem=(data) => {
+    //     const rtnVal = [];
+    //     debugger;
+    //     data.map((item) => {
+    //         let picSrc=`${imgaddress}${item}`;
+    //         rtnVal.push(<Col span={6} align="center"><img src={picSrc} /></Col>);
+    //     });
+    //     debugger;
+    //     return rtnVal;
+    // }
 
     render() {
         const SCREEN_WIDTH = document.querySelector('body').offsetWidth;
-
         if (this.props.taskInfo === null) {
             return (
                 <div />
@@ -163,7 +174,15 @@ export default class EmergencyDetailInfo extends Component {
             }
         }
 
-        const pics = Attachments !== '' ? Attachments.LowimgList : [];
+        //const pics = Attachments !== '' ? Attachments.LowimgList : [];
+        const pics = ['0ede7647-6318-4b57-851b-953a00984548_thumbnail.jpg',
+            '0ede7647-6318-4b57-851b-953a00984548_thumbnail.jpg',
+            '0ede7647-6318-4b57-851b-953a00984548_thumbnail.jpg',
+            '0ede7647-6318-4b57-851b-953a00984548_thumbnail.jpg',
+            '0ede7647-6318-4b57-851b-953a00984548_thumbnail.jpg',
+            '0ede7647-6318-4b57-851b-953a00984548_thumbnail.jpg',
+            '0ede7647-6318-4b57-851b-953a00984548_thumbnail.jpg',
+            '0ede7647-6318-4b57-851b-953a00984548_thumbnail.jpg'];
         const columns = [{
             title: '开始报警时间',
             width: '20%',
@@ -240,7 +259,7 @@ export default class EmergencyDetailInfo extends Component {
                         </DescriptionList>
                         {
                             TaskType === EnumPatrolTaskType.PatrolTask ? null :
-                            <Divider style={{ marginBottom: 20}} />
+                                <Divider style={{ marginBottom: 20}} />
                         }
                         {
                             TaskType === EnumPatrolTaskType.PatrolTask ? null :
@@ -252,8 +271,8 @@ export default class EmergencyDetailInfo extends Component {
                         <DescriptionList className={styles.headerList} size="large" col="1">
                             <Description>
                                 <TextArea rows={8} style={{width: '600px'}}>
-                                    {Remark}
-                                </TextArea>
+                                {Remark}
+                            </TextArea>
                             </Description>
                         </DescriptionList>
 
@@ -277,7 +296,12 @@ export default class EmergencyDetailInfo extends Component {
                     </Card>
                     <Card title={<span style={{fontWeight: '900'}}>附件</span>} bordered={false}>
                         <Row gutter={16} justify="center" align="middle">
-                            {this.renderPicItem(RecordTypeInfo, TaskID)}
+                            {
+                                pics.map((item) => {
+                                    let picSrc = `${imgaddress}${item}`;
+                                    return (<Col span={3} align="center"><img className={styles.imgFj} src={picSrc} onPreview={this.handlePreview(item)} /></Col>);
+                                })
+                            }
                         </Row>
                     </Card>
                     <Card title={<span style={{fontWeight: '900'}}>日志表</span>} style={{marginTop: 20 }} bordered={false}>
@@ -294,6 +318,9 @@ export default class EmergencyDetailInfo extends Component {
                         }}><Icon type="left" />退回</Button>
                     </div>
                 </div>
+                <Modal visible={previewVisible} footer={null} onCancel={this.handleCancel}>
+                    <img alt="example" style={{ width: '100%' }} src={previewImage} />
+                </Modal>
             </PageHeaderLayout>
         );
     }

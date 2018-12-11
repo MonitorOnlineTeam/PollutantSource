@@ -1,4 +1,4 @@
-import { GetTaskDetails, GetYwdsj, GetJzRecord, GetRecordType, GetJzHistoryRecord, GetConsumablesReplaceRecordList, GetStandardGasRepalceRecordList, GetPatrolRecordListPC, GetHistoryConsumablesReplaceRecord, GetHistoryStandardGasRepalceRecordList, GetStopCemsDetail, GetRepairDetail } from '../services/taskapi';
+import { GetTaskDetails, GetYwdsj, GetJzRecord, GetRecordType, GetJzHistoryRecord, GetConsumablesReplaceRecordList, GetStandardGasRepalceRecordList, GetPatrolRecordListPC, GetHistoryConsumablesReplaceRecord,GetHistoryStandardGasRepalceRecordList, GetHistoryInspectionHistoryRecord, GetStopCemsDetail, GetRepairDetail} from '../services/taskapi';
 import { Model } from '../dvapack';
 import { EnumRequstResult } from '../utils/enum';
 
@@ -21,6 +21,10 @@ export default Model.extend({
         pageSize: 10,
         HistoryStandardGasRepalceRecordList: [],
         HistoryStandardGasRepalceRecordListCount: null,
+        HistoryInspectionHistoryRecordList: [],
+        HistoryInspectionHistoryRecordListCount: null,
+        XSCYFHistoryInspectionHistoryRecord: [],
+        XSCYFHistoryInspectionHistoryRecordCount: null,
         StopCems: null,
         Repair: null,
     },
@@ -140,7 +144,7 @@ export default Model.extend({
             update,
             select
         }) {
-            debugger
+            debugger;
             const result = yield call(GetHistoryConsumablesReplaceRecord, { pageIndex: pageIndex, pageSize: pageSize, TypeID: TypeID, DGIMN: DGIMN, BeginTime: BeginTime, EndTime: EndTime });
 
             if (result.requstresult === '1') {
@@ -249,8 +253,45 @@ export default Model.extend({
                 });
             }
         },
+        // 获取完全抽取法CEMS日常巡检记录表（历史记录表）
+        * GetHistoryInspectionHistoryRecord({
+            payload: {
+                pageIndex,
+                pageSize,
+                TypeID,
+                DGIMN,
+                BeginTime,
+                EndTime,
+            }
+        }, {
+            call,
+            put,
+            update,
+            select
+        }) {
+            debugger;
+            const result = yield call(GetHistoryInspectionHistoryRecord, {pageIndex: pageIndex, pageSize: pageSize, TypeID: TypeID, DGIMN: DGIMN, BeginTime: BeginTime, EndTime: EndTime});
+
+            if (result.requstresult === '1') {
+                yield update({
+                    requstresult: result.requstresult,
+                    HistoryInspectionHistoryRecordList: result.data,
+                    HistoryInspectionHistoryRecordListCount: result.total,
+                    pageIndex: pageIndex,
+                    pageSize: pageSize
+                });
+            } else {
+                yield update({
+                    requstresult: result.requstresult,
+                    HistoryInspectionHistoryRecordList: [],
+                    HistoryInspectionHistoryRecordListCount: result.total,
+                    pageIndex: pageIndex,
+                    pageSize: pageSize
+                });
+            }
+        },
         //获取停机记录表单明细
-        *GetStopCemsDetail({
+        * GetStopCemsDetail({
             payload,
         }, { call, update }) {
             const DataInfo = yield call(GetStopCemsDetail, payload);
@@ -261,14 +302,13 @@ export default Model.extend({
             }
         },
         //获取维修记录表单明细
-        *GetRepairDetail({
+        * GetRepairDetail({
             payload,
         }, { call, update }) {
             const DataInfo = yield call(GetRepairDetail, payload);
             if (DataInfo != null && DataInfo.requstresult == EnumRequstResult.Success) {
                 if (DataInfo.data != null) {
                     yield update({ Repair: DataInfo.data });
-
                 }
             }
         },

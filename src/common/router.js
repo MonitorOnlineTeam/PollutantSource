@@ -204,6 +204,18 @@ export const getRouterData = (app) => {
             component: dynamicWrapper(app, ['task'], () =>
         import('../routes/EmergencyTodoList/StandardGasHistoryRecords')),
         },
+        '/pointdetail/:pointcode/qcontrollist/WQCQFInspectionHistoryRecord/:TypeID': {
+            component: dynamicWrapper(app, ['task'], () =>
+        import('../routes/EmergencyTodoList/WQCQFInspectionHistoryRecord')),
+        },
+        '/pointdetail/:pointcode/qcontrollist/XSCYFInspectionHistoryRecord/:TypeID': {
+            component: dynamicWrapper(app, ['task'], () =>
+        import('../routes/EmergencyTodoList/XSCYFInspectionHistoryRecord')),
+        },
+        '/pointdetail/:pointcode/qcontrollist/ZZCLFInspectionHistoryRecord/:TypeID': {
+            component: dynamicWrapper(app, ['task'], () =>
+        import('../routes/EmergencyTodoList/ZZCLFInspectionHistoryRecord')),
+        },
         '/pointdetail/:pointcode/ConsumablesReplaceRecord/:TaskIds/:TypeIDs': {
             component: dynamicWrapper(app, ['baseinfo'], () =>
                 import('../routes/EmergencyTodoList/ConsumablesReplaceRecord')),
