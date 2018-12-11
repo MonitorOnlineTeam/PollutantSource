@@ -20,6 +20,7 @@ export default Model.extend({
         pageIndex: 1,
         pageSize: 10,
         HistoryStandardGasRepalceRecordList:[],
+        HistoryStandardGasRepalceRecordListCount:null,
     },
 
     effects: {

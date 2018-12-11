@@ -16,22 +16,22 @@ import {routerRedux} from 'dva/router';
 
 @connect(({ task, loading }) => ({
     // isloading: loading.effects['task/GetJzHistoryRecord'],
-    HistoryStandardGasRepalceRecordList: task.HistoryStandardGasRepalceRecordList,
-    HistoryStandardGasRepalceRecordListCount: task.HistoryStandardGasRepalceRecordListCount,
+    HistoryConsumablesReplaceRecord: task.HistoryConsumablesReplaceRecord,
+    HistoryConsumablesReplaceRecordCount: task.HistoryConsumablesReplaceRecordCount,
     pageIndex: task.pageIndex,
     pageSize: task.pageSize,
 }))
 /*
-页面：标准气体历史记录
+页面：易耗品历史记录
 */
-export default class StandardGasHistoryRecords extends Component {
+export default class CounterControlCommandHistoryRecords extends Component {
     constructor(props) {
         super(props);
         this.state = {
             rangeDate: [moment(moment(new Date()).subtract(11, 'month').format('YYYY-MM-DD 00:00:00')), moment(moment(new Date()).format('YYYY-MM-DD 23:59:59'))], // 最近七天
             BeginTime: moment().subtract(11, 'month').format('YYYY-MM-DD 00:00:00'),
             EndTime: moment().format('YYYY-MM-DD 23:59:59'),
-            DGIMN:"sgjt001005",
+            DGIMN:"sgjt001003",
             // DGIMN: this.props.match.params.pointcode,
             typeID: this.props.match.params.TypeID,
         };
@@ -43,7 +43,7 @@ export default class StandardGasHistoryRecords extends Component {
     GetHistoryRecord=(pageIndex, pageSize, DGIMN, typeID, BeginTime, EndTime) => {
         debugger
         this.props.dispatch({
-            type: 'task/GetHistoryStandardGasRepalceRecordList',
+            type: 'task/GetHistoryConsumablesReplaceRecord',
             payload: {
                 pageIndex: pageIndex,
                 pageSize: pageSize,
@@ -74,18 +74,20 @@ export default class StandardGasHistoryRecords extends Component {
     }
 
     seeDetail=(record) => {
-        this.props.dispatch(routerRedux.push(`../routes/EmergencyTodoList/StandardGasRepalceRecord/${record.taskId}/${this.state.TypeID}`));
+        this.props.dispatch(routerRedux.push(`../routes/EmergencyTodoList/ConsumablesReplaceRecord/${record.taskId}/${this.state.TypeID}`));
     }
 
     render() {
-        const dataSource = this.props.HistoryStandardGasRepalceRecordList === null ? null : this.props.HistoryStandardGasRepalceRecordList;
+        // console.log(this.state.TypeID);
+        // console.log(this.props.HistoryConsumablesReplaceRecord === null ? null : this.props.HistoryConsumablesReplaceRecord);
+        const dataSource = this.props.HistoryConsumablesReplaceRecord === null ? null : this.props.HistoryConsumablesReplaceRecord;
         const columns = [{
             title: '校准人',
             width: '20%',
             dataIndex: 'operationPerson',
             key: 'operationPerson'
         }, {
-            title: '标准物质名称（名称-有效期）',
+            title: '易耗品（数量）',
             width: '45%',
             dataIndex: 'name',
             key: 'name'
@@ -128,7 +130,7 @@ export default class StandardGasHistoryRecords extends Component {
                         pagination={{
                             showSizeChanger: true,
                             showQuickJumper: true,
-                            'total': this.props.HistoryStandardGasRepalceRecordListCount,
+                            'total': this.props.HistoryConsumablesReplaceRecordCount,
                             'pageSize': this.props.pageSize,
                             'current': this.props.pageIndex,
                             onChange: this.onChange,
