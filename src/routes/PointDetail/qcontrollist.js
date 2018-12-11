@@ -19,8 +19,8 @@ export default class qcontrollist extends Component {
         const srclist = [
             { key: EnumPsOperationForm.Repair, name: '维修记录表', src: 'RepairHistoryRecods' },
             { key: EnumPsOperationForm.StopMachine, name: '停机记录表', src: '' },
-            { key: EnumPsOperationForm.YhpReplace, name: '易耗品更换记录表', src: '' },
-            { key: EnumPsOperationForm.StandardGasReplace, name: '标准气体更换记录表', src: '' },
+            { key: EnumPsOperationForm.YhpReplace, name: '易耗品更换记录表', src: 'RepairHistoryRecods' },
+            { key: EnumPsOperationForm.StandardGasReplace, name: '标准气体更换记录表', src: 'StandardGasHistoryRecords' },
             { key: EnumPsOperationForm.CqfPatrol, name: '完全抽取法CEMS日常巡检记录表', src: '' },
             { key: EnumPsOperationForm.CyfPatrol, name: '稀释采样法CEMS日常巡检记录表', src: '' },
             { key: EnumPsOperationForm.ClfPatrol, name: '直接测量法CEMS日常巡检记录表', src: '' },

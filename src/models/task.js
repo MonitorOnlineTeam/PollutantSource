@@ -1,4 +1,4 @@
-import { GetTaskDetails, GetYwdsj, GetJzRecord, GetRecordType, GetJzHistoryRecord, GetConsumablesReplaceRecordList, GetStandardGasRepalceRecordList, GetPatrolRecordListPC } from '../services/taskapi';
+import { GetTaskDetails, GetYwdsj, GetJzRecord, GetRecordType, GetJzHistoryRecord, GetConsumablesReplaceRecordList, GetStandardGasRepalceRecordList, GetPatrolRecordListPC, GetHistoryConsumablesReplaceRecord,GetHistoryStandardGasRepalceRecordList } from '../services/taskapi';
 import { Model } from '../dvapack';
 import {EnumRequstResult} from '../utils/enum';
 
@@ -14,7 +14,12 @@ export default Model.extend({
         ConsumablesReplaceRecordList: [],
         StandardGasRepalceRecordList: [],
         PatrolRecordListPC: [],
-        RecordCount: null
+        RecordCount: null,
+        HistoryConsumablesReplaceRecord: [],
+        HistoryConsumablesReplaceRecordCount: null,
+        pageIndex: 1,
+        pageSize: 10,
+        HistoryStandardGasRepalceRecordList,
     },
 
     effects: {
@@ -116,6 +121,42 @@ export default Model.extend({
                 });
             }
         },
+        // 获取易耗品历史记录方法
+        * GetHistoryConsumablesReplaceRecord({
+            payload: {
+                pageIndex,
+                pageSize,
+                TypeID,
+                DGIMN,
+                BeginTime,
+                EndTime,
+            }
+        }, {
+            call,
+            put,
+            update,
+            select
+        }) {
+            const result = yield call(GetHistoryConsumablesReplaceRecord, {pageIndex: pageIndex, pageSize: pageSize, TypeID: TypeID, DGIMN: DGIMN, BeginTime: BeginTime, EndTime: EndTime});
+
+            if (result.requstresult === '1') {
+                yield update({
+                    requstresult: result.requstresult,
+                    HistoryConsumablesReplaceRecord: result.data,
+                    HistoryConsumablesReplaceRecordCount: result.total,
+                    pageIndex: pageIndex,
+                    pageSize: pageSize
+                });
+            } else {
+                yield update({
+                    requstresult: result.requstresult,
+                    HistoryConsumablesReplaceRecord: [],
+                    HistoryConsumablesReplaceRecordCount: result.total,
+                    pageIndex: pageIndex,
+                    pageSize: pageSize
+                });
+            }
+        },
         // 根据任务id和类型id获取标气列表
         * StandardGasRepalceRecordList({
             payload: {
@@ -142,6 +183,42 @@ export default Model.extend({
                 });
             }
         },
+               // 获取标气历史记录方法
+               * GetHistoryStandardGasRepalceRecordList({
+                payload: {
+                    pageIndex,
+                    pageSize,
+                    TypeID,
+                    DGIMN,
+                    BeginTime,
+                    EndTime,
+                }
+            }, {
+                call,
+                put,
+                update,
+                select
+            }) {
+                const result = yield call(GetHistoryStandardGasRepalceRecordList, {pageIndex: pageIndex, pageSize: pageSize, TypeID: TypeID, DGIMN: DGIMN, BeginTime: BeginTime, EndTime: EndTime});
+    
+                if (result.requstresult === '1') {
+                    yield update({
+                        requstresult: result.requstresult,
+                        HistoryStandardGasRepalceRecordList: result.data,
+                        HistoryStandardGasRepalceRecordListCount: result.total,
+                        pageIndex: pageIndex,
+                        pageSize: pageSize
+                    });
+                } else {
+                    yield update({
+                        requstresult: result.requstresult,
+                        HistoryStandardGasRepalceRecordList: [],
+                        HistoryStandardGasRepalceRecordListCount: result.total,
+                        pageIndex: pageIndex,
+                        pageSize: pageSize
+                    });
+                }
+            },
         // 根据任务id和类型id获取巡检记录表(PC单独接口与手机端不一致)
         * GetPatrolRecordListPC({
             payload: {

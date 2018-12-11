@@ -10,11 +10,11 @@ class AListRadio extends Component {
         const _this = this;
         this.onchange = (value) => {
             if (value.target.value === 'a') {
-                _this.props.dispatch(routerRedux.push('/monitor/overview'));
+                _this.props.dispatch(routerRedux.push('/overview'));
             } else if (value.target.value === 'b') {
-                _this.props.dispatch(routerRedux.push('/monitor/datalist'));
+                _this.props.dispatch(routerRedux.push('/datalist'));
             } else {
-                _this.props.dispatch(routerRedux.push('/monitor/statuslist'));
+                _this.props.dispatch(routerRedux.push('/statuslist'));
             }
         };
     }

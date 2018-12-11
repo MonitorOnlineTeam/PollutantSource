@@ -401,19 +401,21 @@ export default Model.extend({
         * querypollutantlist({ payload
         }, {select, call, put, update}) {
             const result = yield call(querypollutantlist, payload);
-            yield update({ pollutantlist: result });
-            const params = {
-                pollutantCode: result[0].pollutantCode,
-                datatype: 'realtime',
-                dgimn: payload.dgimn,
-                pageIndex: 1,
-                pollutantName: result[0].pollutantName,
-                pollutantInfo: result[0]
-            };
-            yield put({
-                type: 'queryhistorydatalist',
-                payload: params
-            });
+            if (result && result[0]) {
+                yield update({ pollutantlist: result });
+                const params = {
+                    pollutantCode: result[0].pollutantCode,
+                    datatype: 'realtime',
+                    dgimn: payload.dgimn,
+                    pageIndex: 1,
+                    pollutantName: result[0].pollutantName,
+                    pollutantInfo: result[0]
+                };
+                yield put({
+                    type: 'queryhistorydatalist',
+                    payload: params
+                });
+            }
         },
         * queryhistorydatalist({ payload
         }, {select, call, update}) {

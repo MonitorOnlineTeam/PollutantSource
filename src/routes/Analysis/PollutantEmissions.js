@@ -1,7 +1,7 @@
 /**
- * 页面功能：传输有效率
+ * 功  能：污染物月度排放量分析
  * 创建人：吴建伟
- * 创建时间：2018.12.08
+ * 创建时间：2018.12.10
  */
 import React, { Component } from 'react';
 import {
@@ -15,53 +15,45 @@ import {
 } from 'antd';
 import moment from 'moment';
 import styles from './index.less';
+import ReactEcharts from 'echarts-for-react';
 import {connect} from 'dva';
 const { MonthPicker } = DatePicker;
 const monthFormat = 'YYYY-MM';
-
+const pageUrl = {
+    updateState: 'PollutantEmissionsModel/updateState',
+    getData: 'PollutantEmissionsModel/getData'
+};
 @connect(({
     loading,
-    TransmissionEfficiency
+    PollutantEmissionsModel
 }) => ({
-    loading: loading.effects['TransmissionEfficiency/getData'],
-    total: TransmissionEfficiency.total,
-    pageSize: TransmissionEfficiency.pageSize,
-    pageIndex: TransmissionEfficiency.pageIndex,
-    tableDatas: TransmissionEfficiency.tableDatas,
+    loading: loading.effects[pageUrl.getData],
+    total: PollutantEmissionsModel.total,
+    pageSize: PollutantEmissionsModel.pageSize,
+    pageIndex: PollutantEmissionsModel.pageIndex,
+    tableDatas: PollutantEmissionsModel.tableDatas,
 }))
-export default class TransmissionEfficiency extends Component {
+export default class PollutantEmissions extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            Addvisible: false,
-            DataFiltervisible: false,
-            loading: false,
-            type: '',
-            title: '',
-            width: 400,
-            DeleteMark: '',
-            UserAccount: '',
-            selectedRowKeys: [],
-            userId: '',
-            checked: true,
             beginTime: moment(moment().format('YYYY-MM')),
             endTime: ''
         };
     }
     componentWillMount() {
-        console.log(this.props.pageIndex);
-        this.onChange(1);
+        // this.getTableData(1);
     };
-
-    selectRow = (record) => {
-        this.setState({
-            userId: record.key
+    updateState = (payload) => {
+        this.props.dispatch({
+            type: pageUrl.updateState,
+            payload: payload,
         });
     }
-    onChange = (pageIndex) => {
+    getTableData = (pageIndex) => {
         this.props.dispatch({
-            type: 'TransmissionEfficiency/getData',
+            type: pageUrl.getData,
             payload: {
                 pageIndex: pageIndex,
             },
@@ -69,28 +61,19 @@ export default class TransmissionEfficiency extends Component {
     }
     handleTableChange =(pagination, filters, sorter) => {
         if (sorter.order) {
-            this.props.dispatch({
-                type: 'TransmissionEfficiency/updateState',
-                payload: {
-                    transmissionEffectiveRate: sorter.order,
-                    pageIndex: pagination.current,
-                    pageSize: pagination.pageSize
-                },
+            this.updateState({
+                transmissionEffectiveRate: sorter.order,
+                pageIndex: pagination.current,
+                pageSize: pagination.pageSize
             });
         } else {
-            this.props.dispatch({
-                type: 'TransmissionEfficiency/updateState',
-                payload: {
-                    transmissionEffectiveRate: 'ascend',
-                    pageIndex: pagination.current,
-                    pageSize: pagination.pageSize
-                },
+            this.updateState({
+                transmissionEffectiveRate: 'ascend',
+                pageIndex: pagination.current,
+                pageSize: pagination.pageSize
             });
         }
-        this.onChange(pagination.current);
-    }
-    checkableTagChange = (checked) => {
-        this.setState({ checked });
+        this.getTableData(pagination.current);
     }
     onDateChange = (value, dateString) => {
         let endTime = moment(dateString).add(1, 'months').add(-1, 'days').format('YYYY-MM-DD HH:mm:ss');
@@ -98,15 +81,55 @@ export default class TransmissionEfficiency extends Component {
         if (moment(dateString).add(1, 'months').add(-1, 'days') > moment()) {
             endTime = moment().format('YYYY-MM-DD HH:mm:ss');
         }
-
-        this.props.dispatch({
-            type: 'TransmissionEfficiency/updateState',
-            payload: {
-                beginTime: moment(dateString).format('YYYY-MM-01 HH:mm:ss'),
-                endTime: endTime
-            }
+        this.updateState({
+            beginTime: moment(dateString).format('YYYY-MM-01 HH:mm:ss'),
+            endTime: endTime
         });
-        this.onChange(this.props.pageIndex);
+        this.getTableData(this.props.pageIndex);
+    }
+    getOption = () => {
+        let option = {
+            color: ['#3398DB'],
+            tooltip : {
+                trigger: 'axis',
+                axisPointer : {            // 坐标轴指示器，坐标轴触发有效
+                    type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                }
+            },
+            legend: {
+                data:['排放总量']
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            xAxis : [
+                {
+                    type : 'category',
+                    data : ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
+                    axisTick: {
+                        alignWithLabel: true
+                    }
+                }
+            ],
+            yAxis : [
+                {
+                    type : 'value',
+                    name : '单位：(吨)'
+                }
+            ],
+            series : [
+                {
+                    name:'排放总量',
+                    type:'bar',
+                    barWidth: '30%',
+                    data:[800, 1000, 1100, 1200, 1300, 550, 820, 830, 1000, 1050, 1000, 900]
+                }
+            ]
+        };
+        return option;
     }
     render() {
         const columns = [
@@ -202,20 +225,24 @@ export default class TransmissionEfficiency extends Component {
         ];
         return (
             <div>
-                <Card className={styles.cardTitle} title="综合分析 / 传输有效率统计">
+                <Card className={styles.cardTitle} title="智能分析 / 月度排放量分析">
                     <Card
                         type="inner"
-                        title="传输有效率列表"
+                        title="二氧化硫排放量统计"
                         extra={<MonthPicker defaultValue={this.state.beginTime} format={monthFormat} onChange={this.onDateChange} />}
                     >
-
+                        <Row>
+                        <ReactEcharts
+                            option={this.getOption()}
+                            style={{height: '300px', width: '100%'}}
+                            className='echarts-for-echarts'
+                            theme='my_theme' />
+                        </Row>
                         <Row>
                             <Col span={24}>
                                 <div style={{textAlign: 'center', marginBottom: 20}}>
-                                    <Button style={{marginRight: 20}}><span style={{fontSize: 16, color: '#52c41a'}}>■</span> 排口传输有效率达标</Button>
-                                    <Button style={{marginRight: 20}}><span style={{fontSize: 16, color: '#f5222d'}}>■</span> 排口传输有效率未达标</Button>
-                                    {/* <Tag color="#f50" checked={this.state.checked} onChange={this.checkableTagChange} />排口传输有效率达标
-                                    <Tag color="#87d068" checked={this.state.checked} onChange={this.checkableTagChange} />排口传输有效率未达标 */}
+                                    <Button style={{marginRight: 20}}><span style={{fontSize: 16, color: '#52c41a', marginRight: 3}}>■</span> 排口传输有效率达标</Button>
+                                    <Button style={{marginRight: 20}}><span style={{fontSize: 16, color: '#f5222d', marginRight: 3}}>■</span> 排口传输有效率未达标</Button>
                                 </div>
                             </Col>
                         </Row>
@@ -242,9 +269,7 @@ export default class TransmissionEfficiency extends Component {
                                     'total': this.props.total,
                                     'pageSize': this.props.pageSize,
                                     'current': this.props.pageIndex,
-                                    // onChange: this.onChange,
-                                    // onShowSizeChange: this.onShowSizeChange,
-                                    pageSizeOptions: ['5', '10', '20', '30', '40']
+                                    pageSizeOptions: ['10', '20', '30', '40', '50']
                                 }}
                             />
                         </Row>

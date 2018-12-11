@@ -22,9 +22,9 @@ import {routerRedux} from 'dva/router';
     pageSize: task.pageSize,
 }))
 /*
-页面：易耗品历史记录
+页面：标准气体历史记录
 */
-export default class RepairHistoryRecods extends Component {
+export default class StandardGasHistoryRecords extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -42,7 +42,7 @@ export default class RepairHistoryRecods extends Component {
     GetHistoryRecord=(pageIndex, pageSize, DGIMN, typeID, BeginTime, EndTime) => {
         debugger
         this.props.dispatch({
-            type: 'task/GetHistoryConsumablesReplaceRecord',
+            type: 'task/GetHistoryStandardGasRepalceRecordList',
             payload: {
                 pageIndex: pageIndex,
                 pageSize: pageSize,
@@ -86,7 +86,7 @@ export default class RepairHistoryRecods extends Component {
             dataIndex: 'operationPerson',
             key: 'operationPerson'
         }, {
-            title: '易耗品（数量）',
+            title: '标准物质名称（名称-有效期）',
             width: '45%',
             dataIndex: 'name',
             key: 'name'

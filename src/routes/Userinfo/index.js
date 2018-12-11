@@ -311,20 +311,6 @@ export default class UserList extends Component {
                                 }}
                             >数据过滤</Button>
                             </Col>
-                            <Col span={2} >
-                                <Button
-                                    onClick={() => {
-                                        this.props.dispatch(routerRedux.push(`/sysmanage/TransmissionEfficiency`));
-                                        // this.props.dispatch({
-                                        //     type: 'TransmissionEfficiency/getData',
-                                        //     payload: {
-                                        //         pageIndex: 1,
-                                        //         pageSize: 10
-                                        //     },
-                                        // });
-                                    }}
-                                >测试1</Button>
-                            </Col>
                         </Row>
                     </Form>
                 </Card>

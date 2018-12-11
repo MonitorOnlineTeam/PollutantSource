@@ -19,7 +19,7 @@ export default class FilesList extends Component {
         super(props);
         this.state = {
         };
-    };
+    }
     componentWillMount() {
         const StandardLibraryID = this.props.pid;
         this.props.dispatch({
@@ -31,14 +31,13 @@ export default class FilesList extends Component {
                 }
             },
         });
-    };
+    }
     Down(url) {
         document.getElementById('ifile').src = url;
     }
     render() {
         return (
             <div>
-                <iframe id="ifile" />
                 <Card >
                     <List
                         grid={
@@ -63,14 +62,12 @@ export default class FilesList extends Component {
                         renderItem={(item) => {
                             return (<List.Item >
                                 <Card
-                                    style={{ width: 150, height: 300 }}
-                                    cover={<img alt="example" src={'../../../' + item.FileType} />}
-                                    actions={[<Icon type="down-circle" theme="twoTone" onClick={() => {
-                                        this.Down(item.url);
-                                    }} />]}
+                                    style={{ width: 150, height: 200 }}
+                                    cover={<img alt="example" src={'../../../' + item.FileType} style={{width: 80,height: 80,textAlign: 'center'}} />}
+                                    // actions={[<a href="../upload/新建XLS 工作表.xls"><Icon type="down-circle" theme="twoTone" /></a>]}
                                 >
                                     <Meta
-                                        description={<a href="upload/vsCode.txt" >ddd</a>}
+                                        description={<a href={'../upload/' + item.FileName}>{item.FileName}</a>}
                                     />
                                 </Card>
                             </List.Item>

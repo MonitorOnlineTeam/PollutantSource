@@ -8,19 +8,19 @@ class TransmissionEfficiency extends Component {
                 <div className={styles.teimgbg}>
                   传输有效率
                     <div className={styles.rate}>
-                        { selectdata ? selectdata.transmissionEffectiveRate : ''}
+                        { selectdata ? (selectdata.transmissionEffectiveRate ? selectdata.transmissionEffectiveRate : '-') : '-'}
                     </div>
                 </div>
                 <div className={styles.teimgbg}>
                   传输率
                     <div className={styles.rate}>
-                        { selectdata ? selectdata.transmissionRate : ''}
+                        { selectdata ? (selectdata.transmissionRate ? selectdata.transmissionRate : '-') : '-'}
                     </div>
                 </div>
                 <div className={styles.teimgbg}>
                   有效率
                     <div className={styles.rate}>
-                        { selectdata ? selectdata.effectiveRate : ''}
+                        { selectdata ? (selectdata.effectiveRate ? selectdata.effectiveRate : '-') : '-'}
                     </div>
                 </div>
             </div>
