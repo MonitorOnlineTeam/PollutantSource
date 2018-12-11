@@ -234,6 +234,11 @@ export const getRouterData = (app) => {
             component: dynamicWrapper(app, ['task'], () =>
                 import('../routes/EmergencyTodoList/RepairRecordDetail')),
         },
+        /*维修记录明细*/
+        '/pointdetail/:pointcode/DeviceExceptionDetail/:TaskID/:TypeID': {
+            component: dynamicWrapper(app, ['task'], () =>
+                import('../routes/EmergencyTodoList/DeviceExceptionDetail')),
+        },
 
         /* 智能质控 */
         /**
