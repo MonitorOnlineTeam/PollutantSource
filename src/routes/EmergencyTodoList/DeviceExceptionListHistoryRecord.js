@@ -13,18 +13,19 @@ import { connect } from 'dva';
 import moment from 'moment';
 import RangePicker_ from '../../components/PointDetail/RangePicker_';
 import {routerRedux} from 'dva/router';
+import { DEFAULT_ENCODING } from 'crypto';
 
 @connect(({ task, loading }) => ({
     // isloading: loading.effects['task/GetJzHistoryRecord'],
-    HistoryStandardGasRepalceRecordList: task.List,
-    HistoryStandardGasRepalceRecordListCount: task.total,
+    HistoryDeviceExceptionList: task.List,
+    HistoryDeviceExceptionListCount: task.total,
     pageIndex: task.pageIndex,
     pageSize: task.pageSize,
 }))
 /*
-页面：标准气体历史记录
+页面：异常历史记录
 */
-export default class StandardGasHistoryRecords extends Component {
+export default class DeviceExceptionListHistoryRecord extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -36,13 +37,14 @@ export default class StandardGasHistoryRecords extends Component {
         };
     }
     componentDidMount() {
+        debugger
         this.GetHistoryRecord(this.props.pageIndex, this.props.pageSize, this.state.DGIMN, this.state.typeID, this.state.BeginTime, this.state.EndTime);
     }
 
     GetHistoryRecord=(pageIndex, pageSize, DGIMN, typeID, BeginTime, EndTime) => {
-        debugger;
+        debugger
         this.props.dispatch({
-            type: 'task/GetHistoryStandardGasRepalceRecordList',
+            type: 'task/GetHistoryStopCemsList',
             payload: {
                 pageIndex: pageIndex,
                 pageSize: pageSize,
@@ -74,26 +76,26 @@ export default class StandardGasHistoryRecords extends Component {
     }
 
     seeDetail=(record) => {
-        this.props.dispatch(routerRedux.push(`/pointdetail/:pointcode/StandardGasRepalceRecord/${record.taskId}/${this.state.typeID}`));
+        this.props.dispatch(routerRedux.push(`../routes/EmergencyTodoList/ConsumablesReplaceRecord/${record.taskId}/${this.state.TypeID}`));////////跳转页面没做（跳转的页面还没有完成）
     }
 
     render() {
-        const dataSource = this.props.HistoryStandardGasRepalceRecordList === null ? null : this.props.HistoryStandardGasRepalceRecordList;
+        const dataSource = this.props.HistoryDeviceExceptionList === null ? null : this.props.HistoryDeviceExceptionList;
         const columns = [{
             title: '校准人',
             width: '20%',
-            dataIndex: 'operationPerson',
-            key: 'operationPerson'
+            dataIndex: 'CreateUserID',
+            key: 'CreateUserID'
         }, {
-            title: '标准物质名称（名称-有效期）',
+            title: '停机时长',
             width: '45%',
-            dataIndex: 'name',
-            key: 'name'
+            dataIndex: 'StopHour',
+            key: 'StopHour'
         }, {
             title: '记录创建时间',
-            dataIndex: 'createTime',
+            dataIndex: 'CreateTime',
             width: '20%',
-            key: 'createTime'
+            key: 'CreateTime'
         }, {
             title: '详细',
             dataIndex: 'TaskID',
@@ -128,7 +130,7 @@ export default class StandardGasHistoryRecords extends Component {
                         pagination={{
                             showSizeChanger: true,
                             showQuickJumper: true,
-                            'total': this.props.HistoryStandardGasRepalceRecordListCount,
+                            'total': this.props.HistoryDeviceExceptionListCount,
                             'pageSize': this.props.pageSize,
                             'current': this.props.pageIndex,
                             onChange: this.onChange,

@@ -119,6 +119,21 @@ export async function GetPatrolRecordListPC(params) {
         data: null
     } : result;
 }
+// 获取CEMS日常巡检记录表（历史记录表）
+export async function GetHistoryInspectionHistoryRecord(params) {
+    const body = {
+        pageIndex: params.pageIndex,
+        pageSize: params.pageSize,
+        TypeID: params.TypeID,
+        DGIMN: params.DGIMN,
+        BeginTime: params.BeginTime,
+        EndTime: params.EndTime,
+    };
+    const result = post('/api/rest/PollutantSourceApi/PTaskForm/GetPatrolRecordHistoryList', body, null);
+    return result === null ? {
+        data: null
+    } : result;
+}
 
 
 // 获取停机记录内容
@@ -130,7 +145,21 @@ export async function GetStopCemsDetail(params) {
     const result = await post('/api/rest/PollutantSourceApi/PTaskForm/PostStopCemsDetail', body, null);
     return result === null ? { data: null } : result;
 }
-
+// 获取停机记录列表（历史记录表）
+export async function GetHistoryStopCemsList(params) {
+    const body = {
+        pageIndex: params.pageIndex,
+        pageSize: params.pageSize,
+        TypeID: params.TypeID,
+        DGIMN: params.DGIMN,
+        BeginTime: params.BeginTime,
+        EndTime: params.EndTime,
+    };
+    const result = post('/api/rest/PollutantSourceApi/PTaskForm/PostStopCemsList', body, null);
+    return result === null ? {
+        data: null
+    } : result;
+}
 // 获取维修记录内容
 export async function GetRepairDetail(params) {
     const body = {
@@ -139,4 +168,34 @@ export async function GetRepairDetail(params) {
     };
     const result = await post('/api/rest/PollutantSourceApi/PTaskForm/RepairRecordDetail', body, null);
     return result === null ? { data: null } : result;
+}
+// 获取维修记录列表（历史记录表）
+export async function GetHistoryRepairDetail(params) {
+    const body = {
+        pageIndex: params.pageIndex,
+        pageSize: params.pageSize,
+        TypeID: params.TypeID,
+        DGIMN: params.DGIMN,
+        BeginTime: params.BeginTime,
+        EndTime: params.EndTime,
+    };
+    const result = post('/api/rest/PollutantSourceApi/PTaskForm/RepairRecordList', body, null);
+    return result === null ? {
+        data: null
+    } : result;
+}
+// 获取异常记录列表（历史记录表）
+export async function GetDeviceExceptionList(params) {
+    const body = {
+        pageIndex: params.pageIndex,
+        pageSize: params.pageSize,
+        TypeID: params.TypeID,
+        DGIMN: params.DGIMN,
+        BeginTime: params.BeginTime,
+        EndTime: params.EndTime,
+    };
+    const result = post('/api/rest/PollutantSourceApi/PTaskForm/DeviceExceptionList', body, null);
+    return result === null ? {
+        data: null
+    } : result;
 }
