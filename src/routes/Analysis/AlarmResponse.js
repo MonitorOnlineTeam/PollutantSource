@@ -7,31 +7,43 @@ import React, { Component } from 'react';
 import {
     Card,
     Table,
-    DatePicker,
-    Progress,
     Row,
-    Col,
-    Button
+    Modal,
+    Select
 } from 'antd';
 import moment from 'moment';
 import styles from './index.less';
 import ReactEcharts from 'echarts-for-react';
 import {connect} from 'dva';
-const { MonthPicker } = DatePicker;
-const monthFormat = 'YYYY-MM';
+const Option = Select.Option;
 const pageUrl = {
     updateState: 'AlarmResponseModel/updateState',
-    getData: 'AlarmResponseModel/getData'
+    getChartData: 'AlarmResponseModel/getChartData',
+    getPointsData: 'AlarmResponseModel/getPointsData',
+    getPointDaysData: 'AlarmResponseModel/getPointDaysData'
 };
+const dateChildren = [];
+const dateYear = moment().get('year');
+for (let i = dateYear; i > dateYear - 10; --i) {
+    dateChildren.push(<Option key={i}>{i}</Option>);
+}
 @connect(({
     loading,
     AlarmResponseModel
 }) => ({
-    loading: loading.effects[pageUrl.getData],
+    loadingPointsTable: loading.effects[pageUrl.getPointsData],
+    loadingDays: loading.effects[pageUrl.getPointDaysData],
     total: AlarmResponseModel.total,
     pageSize: AlarmResponseModel.pageSize,
     pageIndex: AlarmResponseModel.pageIndex,
-    tableDatas: AlarmResponseModel.tableDatas,
+    selectedDate: AlarmResponseModel.selectedDate,
+    clickDate: AlarmResponseModel.clickDate,
+    queryDGIMNs: AlarmResponseModel.queryDGIMNs,
+    xAxisData: AlarmResponseModel.xAxisData,
+    seriesData2: AlarmResponseModel.seriesData2,
+    seriesData8: AlarmResponseModel.seriesData8,
+    pointsTableData: AlarmResponseModel.pointsTableData,
+    pointDaysTableData: AlarmResponseModel.pointDaysTableData
 }))
 export default class AlarmResponse extends Component {
     constructor(props) {
@@ -39,41 +51,70 @@ export default class AlarmResponse extends Component {
 
         this.state = {
             beginTime: moment(moment().format('YYYY-MM')),
-            endTime: ''
+            endTime: '',
+            pointName: '-'
         };
     }
     componentWillMount() {
-        this.getTableData(1);
-    };
+        this.getChartData(1);
+        this.getPointsTableData(1);
+    }
     updateState = (payload) => {
         this.props.dispatch({
             type: pageUrl.updateState,
             payload: payload,
         });
     }
-    getTableData = (pageIndex) => {
+    // 更新图表数据
+    getChartData = (pageIndex) => {
         this.props.dispatch({
-            type: pageUrl.getData,
+            type: pageUrl.getChartData,
+            payload: {
+                pageIndex: pageIndex,
+            },
+        });
+    }
+    // 更新所有排口列表数据
+    getPointsTableData = (pageIndex) => {
+        this.props.dispatch({
+            type: pageUrl.getPointsData,
+            payload: {
+                pageIndex: pageIndex,
+            },
+        });
+    }
+    // 更新弹窗列表数据
+    getPointDaysTableData = (pageIndex) => {
+        this.props.dispatch({
+            type: pageUrl.getPointDaysData,
             payload: {
                 pageIndex: pageIndex,
             },
         });
     }
     handleTableChange =(pagination, filters, sorter) => {
+        debugger;
         if (sorter.order) {
             this.updateState({
-                transmissionEffectiveRate: sorter.order,
+                sort2: sorter.field === 'LessThan2Hour' ? sorter.order : '',
+                sort8: sorter.field === 'GreaterThan8Hour' ? sorter.order : '',
                 pageIndex: pagination.current,
                 pageSize: pagination.pageSize
             });
         } else {
             this.updateState({
-                transmissionEffectiveRate: 'ascend',
+                sort2: '',
+                sort8: '',
                 pageIndex: pagination.current,
                 pageSize: pagination.pageSize
             });
         }
-        this.getTableData(pagination.current);
+
+        if (this.state.modalVisible) {
+            this.getPointDaysTableData(pagination.current);
+        } else {
+            this.getPointsTableData(pagination.current);
+        }
     }
     onDateChange = (value, dateString) => {
         let endTime = moment(dateString).add(1, 'months').add(-1, 'days').format('YYYY-MM-DD HH:mm:ss');
@@ -85,19 +126,91 @@ export default class AlarmResponse extends Component {
             beginTime: moment(dateString).format('YYYY-MM-01 HH:mm:ss'),
             endTime: endTime
         });
-        this.getTableData(this.props.pageIndex);
+        this.getChartData(this.props.pageIndex);
+    }
+    // 年份选择改变事件
+    handleChangeDate = (value) => {
+        debugger;
+        let Year = moment().get('year');
+        let Month = moment().get('month') + 1;
+        const beginTime = moment(`${value}-01-01 00:00:00`).format('YYYY-01-01 HH:mm:ss');
+        const endTime = moment(`${value}-01-01 00:00:00`).add(1,'years').format('YYYY-01-01 HH:mm:ss');
+        // 本年份
+        if ((+value) === Year) {
+            this.updateState({
+                beginTime: beginTime,
+                endTime: endTime,
+                selectedDate: `${Year}-${Month}-01 00:00:00`,
+                clickDate: `${Year}-${Month}-01 00:00:00`,
+                pointsTableData: []
+            });
+        } else {
+            this.updateState({
+                beginTime: beginTime,
+                endTime: endTime,
+                selectedDate: `${value}-01-01 00:00:00`,
+                clickDate: `${Year}-01-01 00:00:00`,
+                pointsTableData: []
+            });
+        }
+        this.getChartData();
+        this.getPointsTableData(1);
+    }
+    showModal = (params) => {
+        debugger;
+        this.setState({
+            modalVisible: true,
+            pointName: params.PointName
+        });
+        this.updateState({
+            queryDGIMNs: params.DGIMNs,
+            // queryDate: this.props.clickDate,
+            pointDaysTableData: []
+
+        });
+        this.getPointDaysTableData(1);
+    }
+    handleModalOk = (e) => {
+        console.log(e);
+        this.setState({
+            modalVisible: false,
+        });
+    }
+
+    handleModalCancel = (e) => {
+    // console.log(e);
+        this.setState({
+            modalVisible: false,
+        });
+    }
+    onChartClick = (opt) => {
+        // debugger;
+        let { selectedDate } = this.props;
+        console.log(selectedDate);
+        let clickDate = moment(selectedDate).format(`YYYY-${opt.dataIndex + 1}-01 00:00:00`);
+
+        this.updateState({
+            clickDate: clickDate
+        });
+        this.getPointsTableData(1);
     }
     getOption = () => {
         let option = {
-            color: ['rgb(66,186,161)','rgb(250,203,1)'],
-            tooltip : {
+            color: ['rgb(66,186,161)','rgb(250,203,1)'],// 66 186 161 ['rgb(102,163,255)','rgb(250,203,1)']
+            tooltip: {
                 trigger: 'axis',
-                axisPointer : {            // 坐标轴指示器，坐标轴触发有效
-                    type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                axisPointer: { // 坐标轴指示器，坐标轴触发有效
+                    type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+                },
+                formatter: (params) => {
+                    // debugger;
+                    var tar = params[0];
+                    var tar1 = params[1];
+                    return tar.name + '<br/>' + tar.seriesName + ' : ' + tar.value + ' 个<br/>' + tar1.seriesName + ' : ' + tar1.value + ' 个';
                 }
             },
             legend: {
-                data:['2小时内','超8小时']
+                data: ['2小时内','超8小时']
             },
             grid: {
                 left: '3%',
@@ -105,131 +218,135 @@ export default class AlarmResponse extends Component {
                 bottom: '3%',
                 containLabel: true
             },
-            xAxis : [
+            xAxis: [
                 {
-                    type : 'category',
-                    data : ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
+                    type: 'category',
+                    data: this.props.xAxisData,// ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
                     axisTick: {
                         alignWithLabel: true
                     }
                 }
             ],
-            yAxis : [
+            yAxis: [
                 {
-                    type : 'value',
-                    name : '单位：(小时)'
+                    type: 'value',
+                    name: '单位：(个)'
                 }
             ],
-            series : [
+            series: [
                 {
-                    name:'2小时内',
-                    type:'bar',
-                    stack: '搜索引擎',
+                    name: '2小时内',
+                    type: 'bar',
+                    stack: '月响应情况',
                     barWidth: '30%',
-                    data:[800, 1000, 1100, 1200, 1300, 550, 820, 830, 1000, 1050, 1000, 900]
+                    label: {
+                        normal: {
+                            show: true,
+                            position: 'inside'
+                        }
+                    },
+                    data: this.props.seriesData2 ,// [800, 1000, 1100, 1200, 1300, 550, 820, 830, 1000, 1050, 1000, 900]
                 },
                 {
-                    name:'超8小时',
-                    type:'bar',
-                    stack: '搜索引擎',
+                    name: '超8小时',
+                    type: 'bar',
+                    stack: '月响应情况',
                     barWidth: '30%',
-                    data:[800, 1000, 1100, 1200, 1300, 550, 820, 830, 1000, 1050, 1000, 900]
+                    label: {
+                        normal: {
+                            show: true,
+                            position: 'inside'
+                        }
+                    },
+                    data: this.props.seriesData8 // [800, 1000, 1100, 1200, 1300, 550, 820, 830, 1000, 1050, 1000, 900]
                 }
             ]
         };
         return option;
     }
     render() {
-        const columns = [
+        const columnsPoints = [
             {
                 title: (<span style={{fontWeight: 'bold'}}>排口名称</span>),
                 dataIndex: 'PointName',
                 key: 'PointName',
-                width: '300px',
+                width: '50%',
                 align: 'left',
-                backgroundColor: 'red',
                 render: (text, record) => {
-                    return text;
+                    return (
+                        <a onClick={
+                            () => this.showModal(record)
+                        } > {text} </a>
+                    );
                 }
             },
             {
-                title: (<span style={{fontWeight: 'bold'}}>应传个数</span>),
-                dataIndex: 'ShouldNumber',
-                key: 'ShouldNumber',
-                align: 'center',
-                render: (text, record) => {
-                    return text;
-                }
-            },
-            {
-                title: (<span style={{fontWeight: 'bold'}}>实传个数</span>),
-                dataIndex: 'TransmissionNumber',
-                key: 'TransmissionNumber',
-                align: 'center',
-                render: (text, record) => {
-                    return text;
-                }
-            },
-            {
-                title: (<span style={{fontWeight: 'bold'}}>有效个数</span>),
-                dataIndex: 'EffectiveNumber',
-                key: 'EffectiveNumber',
-                align: 'center',
-                render: (text, record) => {
-                    return text;
-                }
-            },
-            {
-                title: (<span style={{fontWeight: 'bold'}}>传输率</span>),
-                dataIndex: 'TransmissionRate',
-                key: 'TransmissionRate',
-                align: 'center',
-                render: (text, record) => {
-                    return (parseFloat(text) * 100).toFixed(2) + '%';
-                }
-            },
-            {
-                title: (<span style={{fontWeight: 'bold'}}>有效率</span>),
-                dataIndex: 'EffectiveRate',
-                key: 'EffectiveRate',
-                align: 'center',
-                sorter: (a, b) => a.EffectiveRate - b.EffectiveRate,
-                render: (text, record) => {
-                    return (parseFloat(text) * 100).toFixed(2) + '%';
-                }
-            },
-            {
-                title: (<span style={{fontWeight: 'bold'}}>传输有效率</span>),
-                dataIndex: 'TransmissionEffectiveRate',
-                key: 'TransmissionEffectiveRate',
-                width: '250px',
-                align: 'center',
+                title: (<span style={{fontWeight: 'bold'}}>2小时内</span>),
+                dataIndex: 'LessThan2Hour',
+                key: 'LessThan2Hour',
+                align: 'left',
+                width: '25%',
                 sorter: true,
                 render: (text, record) => {
-                    // 红色：#f5222d 绿色：#52c41a
-                    const percent = (parseFloat(text) * 100 + 88).toFixed(2);
-                    console.log(percent);
-                    if (percent >= 90) {
-                        return (<div style={{ width: 200 }}>
-                            <Progress
-                                successPercent={percent}
-                                percent={percent}
-                                size="small" format={percent => (<span style={{color: 'black'}}>{percent}%</span>)}
-                            />
-                        </div>);
-                    } else {
-                        return (<div style={{ width: 200 }}>
-                            <Progress
-                                successPercent={0}
-                                percent={percent}
-                                status="exception"
-                                size="small"
-                                format={percent => (<span style={{color: 'black'}}>{percent}%</span>)}
-                            />
-                        </div>);
-                    }
+                    return text;
                 }
             },
+            {
+                title: (<span style={{fontWeight: 'bold'}}>超8小时</span>),
+                dataIndex: 'GreaterThan8Hour',
+                key: 'GreaterThan8Hour',
+                align: 'left',
+                width: '25%',
+                sorter: true,
+                render: (text, record) => {
+                    return text;
+                }
+            }
+        ];
+
+        const columnsDays = [
+            {
+                title: (<span style={{fontWeight: 'bold'}}>排口名称</span>),
+                dataIndex: 'PointName',
+                key: 'PointName',
+                width: '25%',
+                align: 'left',
+                render: (text, record) => {
+                    return text;
+                }
+            },
+            {
+                title: (<span style={{fontWeight: 'bold'}}>时间</span>),
+                dataIndex: 'AlarmResponseTime',
+                key: 'AlarmResponseTime',
+                align: 'left',
+                width: '25%',
+                render: (text, record) => {
+                    return text;
+                }
+            },
+            {
+                title: (<span style={{fontWeight: 'bold'}}>2小时内</span>),
+                dataIndex: 'LessThan2Hour',
+                key: 'LessThan2Hour',
+                align: 'left',
+                width: '25%',
+                sorter: true,
+                render: (text, record) => {
+                    return text;
+                }
+            },
+            {
+                title: (<span style={{fontWeight: 'bold'}}>超8小时</span>),
+                dataIndex: 'GreaterThan8Hour',
+                key: 'GreaterThan8Hour',
+                align: 'left',
+                width: '25%',
+                sorter: true,
+                render: (text, record) => {
+                    return text;
+                }
+            }
         ];
         return (
             <div>
@@ -237,39 +354,75 @@ export default class AlarmResponse extends Component {
                     <Card
                         type="inner"
                         title="报警及时响应统计"
-                        extra={<MonthPicker defaultValue={this.state.beginTime} format={monthFormat} onChange={this.onDateChange} />}
+                        extra={
+                            <span style={{color: '#b3b3b3'}}>
+                            时间选择：
+                                <Select
+                                    size="default"
+                                    defaultValue={dateYear}
+                                    onChange={this.handleChangeDate}
+                                    style={{ width: 200 }}>
+                                    {dateChildren}
+                                </Select>
+                            </span>
+                        }
+                        style={{
+                            height: 'calc(100vh - 205px)'
+                        }}
                     >
-                    <Row>
-                        <ReactEcharts
-                        option={this.getOption()}
-                        style={{height: '300px', width: '100%'}}
-                        className='echarts-for-echarts'
-                        theme='my_theme' />
-                    </Row>
                         <Row>
-                            <Col span={24}>
-                                <div style={{textAlign: 'center', marginBottom: 20}}>
-                                    <Button style={{marginRight: 20}}><span style={{fontSize: 16, color: '#52c41a', marginRight: 3}}>■</span> 排口传输有效率达标</Button>
-                                    <Button style={{marginRight: 20}}><span style={{fontSize: 16, color: '#f5222d', marginRight: 3}}>■</span> 排口传输有效率未达标</Button>
-                                </div>
-                            </Col>
+                            <ReactEcharts
+                                option={this.getOption()}
+                                style={{height: '300px', width: '100%'}}
+                                className="echarts-for-echarts"
+                                onEvents={{'click': this.onChartClick}}
+                                theme="my_theme" />
                         </Row>
-                        <Row>
-                            <Table className={styles.dataTable}
-                                loading={this.props.loading}
-                                columns={columns}
+
+                        <Row style={styles.cardTitle.cardBg}>
+
+                            <Card
+                                style={{ marginTop: 16 }}
+                                // type="inner"
+                                bordered={false}
+                                title={`${moment(this.props.clickDate).format('YYYY-MM')}月响应情况`}>
+                                <Table
+                                    style={{ marginTop: 16 }}
+                                    className={styles.dataTable}
+                                    loading={this.props.loadingPointsTable}
+                                    columns={columnsPoints}
+                                    onChange={this.handleTableChange}
+                                    size="small"// small middle
+                                    dataSource={this.props.pointsTableData}
+                                    scroll={{ y: 200 }}
+                                    pagination={{
+                                        showSizeChanger: true,
+                                        showQuickJumper: true,
+                                        sorter: true,
+                                        'total': this.props.total,
+                                        'pageSize': this.props.pageSize,
+                                        'current': this.props.pageIndex,
+                                        pageSizeOptions: ['10', '20', '30', '40', '50']
+                                    }}
+                                />
+                            </Card>
+
+                        </Row>
+                        <Modal
+                            title={`${moment(this.props.clickDate).format('YYYY-MM')}月-${this.state.pointName}`}
+                            width="50%"
+                            visible={this.state.modalVisible}
+                            onOk={this.handleModalOk}
+                            onCancel={this.handleModalCancel}
+                            destroyOnClose={true}
+                        >
+                            <Table style={{ marginTop: 16 }} className={styles.dataTable}
+                                loading={this.props.loadingDays}
+                                columns={columnsDays}
                                 onChange={this.handleTableChange}
                                 size="small"// small middle
-                                dataSource={this.props.tableDatas}
-                                // scroll={{ y: 'calc(100vh - 255px)' }}
-                                rowClassName={
-                                    (record, index, indent) => {
-                                        if (index === 0) { return; }
-                                        if (index % 2 !== 0) {
-                                            return 'light';
-                                        }
-                                    }
-                                }
+                                dataSource={this.props.pointDaysTableData}
+                                scroll={{ y: 500 }}
                                 pagination={{
                                     showSizeChanger: true,
                                     showQuickJumper: true,
@@ -280,8 +433,7 @@ export default class AlarmResponse extends Component {
                                     pageSizeOptions: ['10', '20', '30', '40', '50']
                                 }}
                             />
-                        </Row>
-
+                        </Modal>
                     </Card>
                 </Card>
             </div>

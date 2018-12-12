@@ -10,11 +10,11 @@ class AListRadio extends Component {
         const _this = this;
         this.onchange = (value) => {
             if (value.target.value === 'a') {
-                _this.props.dispatch(routerRedux.push('/overview'));
+                _this.props.dispatch(routerRedux.push('/overview/mapview'));
             } else if (value.target.value === 'b') {
-                _this.props.dispatch(routerRedux.push('/datalist'));
+                _this.props.dispatch(routerRedux.push('/overview/datalistview'));
             } else {
-                _this.props.dispatch(routerRedux.push('/statuslist'));
+             //   _this.props.dispatch(routerRedux.push('/statuslist'));
             }
         };
     }
@@ -26,7 +26,7 @@ class AListRadio extends Component {
                 defaultValue={this.props.dvalue}>
                 <Radio.Button value="a">地图</Radio.Button>
                 <Radio.Button value="b">数据</Radio.Button>
-                <Radio.Button value="c">状态</Radio.Button>
+                {/* <Radio.Button value="c">状态</Radio.Button> */}
             </Radio.Group>
         );
     }

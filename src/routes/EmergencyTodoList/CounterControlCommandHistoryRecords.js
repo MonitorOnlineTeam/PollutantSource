@@ -16,8 +16,8 @@ import {routerRedux} from 'dva/router';
 
 @connect(({ task, loading }) => ({
     // isloading: loading.effects['task/GetJzHistoryRecord'],
-    HistoryConsumablesReplaceRecord: task.HistoryConsumablesReplaceRecord,
-    HistoryConsumablesReplaceRecordCount: task.HistoryConsumablesReplaceRecordCount,
+    HistoryConsumablesReplaceRecord: task.List,
+    HistoryConsumablesReplaceRecordCount: task.total,
     pageIndex: task.pageIndex,
     pageSize: task.pageSize,
 }))
@@ -40,7 +40,7 @@ export default class CounterControlCommandHistoryRecords extends Component {
     }
 
     GetHistoryRecord=(pageIndex, pageSize, DGIMN, typeID, BeginTime, EndTime) => {
-        debugger
+        debugger;
         this.props.dispatch({
             type: 'task/GetHistoryConsumablesReplaceRecord',
             payload: {
@@ -48,8 +48,8 @@ export default class CounterControlCommandHistoryRecords extends Component {
                 pageSize: pageSize,
                 TypeID: typeID,
                 DGIMN: DGIMN,
-                BeginTime: BeginTime,
-                EndTime: EndTime,
+                BeginTime: moment(BeginTime).format('YYYY-MM-DD 00:00:00'),
+                EndTime: moment(EndTime).format('YYYY-MM-DD 23:59:59'),
             }
         });
     };
@@ -57,7 +57,8 @@ export default class CounterControlCommandHistoryRecords extends Component {
     _handleDateChange=(date, dateString) => {
         this.setState(
             {
-                beginTime: dateString[0],
+                rangeDate: date,
+                BeginTime: dateString[0],
                 EndTime: dateString[1]
             }
         );
@@ -65,21 +66,21 @@ export default class CounterControlCommandHistoryRecords extends Component {
     };
 
     onShowSizeChange = (pageIndex, pageSize) => {
+        debugger;
         this.GetHistoryRecord(pageIndex, pageSize, this.state.DGIMN, this.state.typeID, this.state.BeginTime, this.state.EndTime);
     }
 
     onChange = (pageIndex, pageSize) => {
+        debugger;
         this.GetHistoryRecord(pageIndex, pageSize, this.state.DGIMN, this.state.typeID, this.state.BeginTime, this.state.EndTime);
     }
 
     seeDetail=(record) => {
-        debugger
+        debugger;
         this.props.dispatch(routerRedux.push(`/pointdetail/:pointcode/ConsumablesReplaceRecord/${record.taskId}/${this.state.typeID}`));
     }
 
     render() {
-        // console.log(this.state.TypeID);
-        // console.log(this.props.HistoryConsumablesReplaceRecord === null ? null : this.props.HistoryConsumablesReplaceRecord);
         const dataSource = this.props.HistoryConsumablesReplaceRecord === null ? null : this.props.HistoryConsumablesReplaceRecord;
         const columns = [{
             title: '校准人',
@@ -117,7 +118,7 @@ export default class CounterControlCommandHistoryRecords extends Component {
                             记录创建时间：
                                 </Col>
                                 <Col span={3} >
-                                    <RangePicker_ style={{width: 350}} onChange={this._handleDateChange} dateValue={this.state.rangeDate} />
+                                    <RangePicker_ style={{width: 350}} onChange={this._handleDateChange} format="YYYY-MM-DD" dateValue={this.state.rangeDate} />
                                 </Col>
                             </Row>
                         </Form>

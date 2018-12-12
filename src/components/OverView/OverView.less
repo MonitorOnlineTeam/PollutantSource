@@ -139,9 +139,15 @@
     line-height: 35px;
   }
 }
-.treeTable{
-  border-radius: 7px;
-}
+.treeTable :global
+{
+  .ant-table-small > .ant-table-content > .ant-table-body > table > .ant-table-thead > tr > th
+  {
+    background: #55A0D3 ;
+    color: #fff;
+
+  }
+} 
 
   @-webkit-keyframes  shineRed {  
     from { -webkit-box-shadow: 0 0 5px #bbb; }  
@@ -227,7 +233,7 @@
     color: #fff;
     height: 28px;
     line-height: 27px;
-    font-size: 15px;
+    font-size: 14px;
 }
 .statustoolbar{
     float: right;
@@ -246,7 +252,7 @@
 }
 .rate{
   text-align: center;
-  font-size: 18px;
+  font-size: 14px;
 }
 
 

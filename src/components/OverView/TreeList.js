@@ -11,7 +11,7 @@ class TreeList extends Component {
                     loading={this.props.treedataloading}
                     className={styles.treeTable}
                     scroll={{ y: 'calc(100vh - 340px)' }}
-                    style={{ fontSize: '12px', height: 'calc(100vh - 340px)', background: '#fff', width: 420, borderRadius: 5 }}
+                    style={{ fontSize: '12px', height: 'calc(100vh - 340px)', background: '#fff', width: 420, borderRadius: 5,boxShadow:'rgba(136, 136, 136, 0.41) 4px 4px 9px' }}
                     onRow={record => ({
                         onClick: () => {
                             this.props.treeCilck(record);
