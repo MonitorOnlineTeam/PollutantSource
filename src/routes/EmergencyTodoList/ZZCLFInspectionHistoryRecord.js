@@ -16,8 +16,8 @@ import RangePicker_ from '../../components/PointDetail/RangePicker_';
 import {routerRedux} from 'dva/router';
 
     @connect(({ task, loading }) => ({
-        HistoryInspectionHistoryRecordList: task.HistoryInspectionHistoryRecordList,
-        HistoryInspectionHistoryRecordListCount: task.HistoryInspectionHistoryRecordListCount,
+        HistoryInspectionHistoryRecordList: task.List,
+        HistoryInspectionHistoryRecordListCount: task.total,
         pageIndex: task.pageIndex,
         pageSize: task.pageSize,
     }))

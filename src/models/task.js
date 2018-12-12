@@ -1,4 +1,4 @@
-import { GetTaskDetails, GetYwdsj, GetJzRecord, GetRecordType, GetJzHistoryRecord, GetConsumablesReplaceRecordList, GetStandardGasRepalceRecordList, GetPatrolRecordListPC, GetHistoryConsumablesReplaceRecord,GetHistoryStandardGasRepalceRecordList, GetHistoryInspectionHistoryRecord, GetStopCemsDetail, GetRepairDetail} from '../services/taskapi';
+import { GetTaskDetails, GetYwdsj, GetJzRecord, GetRecordType, GetJzHistoryRecord, GetConsumablesReplaceRecordList, GetStandardGasRepalceRecordList, GetPatrolRecordListPC, GetHistoryConsumablesReplaceRecord,GetHistoryStandardGasRepalceRecordList, GetHistoryInspectionHistoryRecord, GetStopCemsDetail, GetRepairDetail,GetHistoryRepairDetail,GetHistoryStopCemsList } from '../services/taskapi';
 import { Model } from '../dvapack';
 import { EnumRequstResult } from '../utils/enum';
 
@@ -11,20 +11,12 @@ export default Model.extend({
         JzRecord: null,
         RecordTypes: [],
         JzHistoryRecord: [],
-        ConsumablesReplaceRecordList: [],
-        StandardGasRepalceRecordList: [],
+        List: [],
         PatrolRecordListPC: [],
         RecordCount: null,
-        HistoryConsumablesReplaceRecord: [],
-        HistoryConsumablesReplaceRecordCount: null,
         pageIndex: 1,
-        pageSize: 10,
-        HistoryStandardGasRepalceRecordList: [],
-        HistoryStandardGasRepalceRecordListCount: null,
-        HistoryInspectionHistoryRecordList: [],
-        HistoryInspectionHistoryRecordListCount: null,
-        XSCYFHistoryInspectionHistoryRecord: [],
-        XSCYFHistoryInspectionHistoryRecordCount: null,
+        pageSize: 5,
+        total: null,
         StopCems: null,
         Repair: null,
     },
@@ -119,12 +111,12 @@ export default Model.extend({
             if (result.requstresult === '1') {
                 yield update({
                     requstresult: result.requstresult,
-                    ConsumablesReplaceRecordList: result.data,
+                    List: result.data,
                 });
             } else {
                 yield update({
                     requstresult: result.requstresult,
-                    ConsumablesReplaceRecordList: [],
+                    List: [],
                 });
             }
         },
@@ -144,22 +136,21 @@ export default Model.extend({
             update,
             select
         }) {
-            debugger;
             const result = yield call(GetHistoryConsumablesReplaceRecord, { pageIndex: pageIndex, pageSize: pageSize, TypeID: TypeID, DGIMN: DGIMN, BeginTime: BeginTime, EndTime: EndTime });
 
             if (result.requstresult === '1') {
                 yield update({
                     requstresult: result.requstresult,
-                    HistoryConsumablesReplaceRecord: result.data,
-                    HistoryConsumablesReplaceRecordCount: result.total,
+                    List: result.data,
+                    total: result.total,
                     pageIndex: pageIndex,
                     pageSize: pageSize
                 });
             } else {
                 yield update({
                     requstresult: result.requstresult,
-                    HistoryConsumablesReplaceRecord: [],
-                    HistoryConsumablesReplaceRecordCount: result.total,
+                    List: [],
+                    total: result.total,
                     pageIndex: pageIndex,
                     pageSize: pageSize
                 });
@@ -182,12 +173,12 @@ export default Model.extend({
             if (result.requstresult === '1') {
                 yield update({
                     requstresult: result.requstresult,
-                    StandardGasRepalceRecordList: result.data,
+                    List: result.data,
                 });
             } else {
                 yield update({
                     requstresult: result.requstresult,
-                    StandardGasRepalceRecordList: [],
+                    List: [],
                 });
             }
         },
@@ -212,16 +203,16 @@ export default Model.extend({
             if (result.requstresult === '1') {
                 yield update({
                     requstresult: result.requstresult,
-                    HistoryStandardGasRepalceRecordList: result.data,
-                    HistoryStandardGasRepalceRecordListCount: result.total,
+                    List: result.data,
+                    total: result.total,
                     pageIndex: pageIndex,
                     pageSize: pageSize
                 });
             } else {
                 yield update({
                     requstresult: result.requstresult,
-                    HistoryStandardGasRepalceRecordList: [],
-                    HistoryStandardGasRepalceRecordListCount: result.total,
+                    List: [],
+                    total: result.total,
                     pageIndex: pageIndex,
                     pageSize: pageSize
                 });
@@ -269,22 +260,21 @@ export default Model.extend({
             update,
             select
         }) {
-            debugger;
             const result = yield call(GetHistoryInspectionHistoryRecord, {pageIndex: pageIndex, pageSize: pageSize, TypeID: TypeID, DGIMN: DGIMN, BeginTime: BeginTime, EndTime: EndTime});
 
             if (result.requstresult === '1') {
                 yield update({
                     requstresult: result.requstresult,
-                    HistoryInspectionHistoryRecordList: result.data,
-                    HistoryInspectionHistoryRecordListCount: result.total,
+                    List: result.data,
+                    total: result.total,
                     pageIndex: pageIndex,
                     pageSize: pageSize
                 });
             } else {
                 yield update({
                     requstresult: result.requstresult,
-                    HistoryInspectionHistoryRecordList: [],
-                    HistoryInspectionHistoryRecordListCount: result.total,
+                    List: [],
+                    total: result.total,
                     pageIndex: pageIndex,
                     pageSize: pageSize
                 });
@@ -301,6 +291,42 @@ export default Model.extend({
                 }
             }
         },
+        //获取停机记录历史
+        * GetHistoryStopCemsList({
+            // 获取完全抽取法CEMS日常巡检记录表（历史记录表）
+            payload: {
+                pageIndex,
+                pageSize,
+                TypeID,
+                DGIMN,
+                BeginTime,
+                EndTime,
+            }
+        }, {
+            call,
+            put,
+            update,
+            select
+        }) {
+            const result = yield call(GetHistoryStopCemsList, {pageIndex: pageIndex, pageSize: pageSize, TypeID: TypeID, DGIMN: DGIMN, BeginTime: BeginTime, EndTime: EndTime});
+            if (result.requstresult === '1') {
+                yield update({
+                    requstresult: result.requstresult,
+                    List: result.data,
+                    total: result.total,
+                    pageIndex: pageIndex,
+                    pageSize: pageSize
+                });
+            } else {
+                yield update({
+                    requstresult: result.requstresult,
+                    List: [],
+                    total: result.total,
+                    pageIndex: pageIndex,
+                    pageSize: pageSize
+                });
+            }
+        },
         //获取维修记录表单明细
         * GetRepairDetail({
             payload,
@@ -310,6 +336,78 @@ export default Model.extend({
                 if (DataInfo.data != null) {
                     yield update({ Repair: DataInfo.data });
                 }
+            }
+        },
+        //获取维修记录历史
+        * GetHistoryRepairDetail({
+            payload: {
+                pageIndex,
+                pageSize,
+                TypeID,
+                DGIMN,
+                BeginTime,
+                EndTime,
+            }
+        }, {
+            call,
+            put,
+            update,
+            select
+        }) {
+            const result = yield call(GetHistoryRepairDetail, {pageIndex: pageIndex, pageSize: pageSize, TypeID: TypeID, DGIMN: DGIMN, BeginTime: BeginTime, EndTime: EndTime});
+
+            if (result.requstresult === '1') {
+                yield update({
+                    requstresult: result.requstresult,
+                    List: result.data,
+                    total: result.total,
+                    pageIndex: pageIndex,
+                    pageSize: pageSize
+                });
+            } else {
+                yield update({
+                    requstresult: result.requstresult,
+                    List: [],
+                    total: result.total,
+                    pageIndex: pageIndex,
+                    pageSize: pageSize
+                });
+            }
+        },
+        //异常记录历史
+        * GetDeviceExceptionList({
+            payload: {
+                pageIndex,
+                pageSize,
+                TypeID,
+                DGIMN,
+                BeginTime,
+                EndTime,
+            }
+        }, {
+            call,
+            put,
+            update,
+            select
+        }) {
+            const result = yield call(GetDeviceExceptionList, {pageIndex: pageIndex, pageSize: pageSize, TypeID: TypeID, DGIMN: DGIMN, BeginTime: BeginTime, EndTime: EndTime});
+
+            if (result.requstresult === '1') {
+                yield update({
+                    requstresult: result.requstresult,
+                    List: result.data,
+                    total: result.total,
+                    pageIndex: pageIndex,
+                    pageSize: pageSize
+                });
+            } else {
+                yield update({
+                    requstresult: result.requstresult,
+                    List: [],
+                    total: result.total,
+                    pageIndex: pageIndex,
+                    pageSize: pageSize
+                });
             }
         },
     }

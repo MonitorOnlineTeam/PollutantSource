@@ -13,16 +13,17 @@ import { connect } from 'dva';
 import moment from 'moment';
 import RangePicker_ from '../../components/PointDetail/RangePicker_';
 import {routerRedux} from 'dva/router';
+import { DEFAULT_ENCODING } from 'crypto';
 
 @connect(({ task, loading }) => ({
     // isloading: loading.effects['task/GetJzHistoryRecord'],
-    HistoryConsumablesReplaceRecord: task.HistoryConsumablesReplaceRecord,
-    HistoryConsumablesReplaceRecordCount: task.HistoryConsumablesReplaceRecordCount,
+    HistoryRepairHistoryRecods: task.List,
+    HistoryRepairHistoryRecodsCount: task.total,
     pageIndex: task.pageIndex,
     pageSize: task.pageSize,
 }))
 /*
-页面：易耗品历史记录
+页面：维修历史记录
 */
 export default class RepairHistoryRecods extends Component {
     constructor(props) {
@@ -31,8 +32,7 @@ export default class RepairHistoryRecods extends Component {
             rangeDate: [moment(moment(new Date()).subtract(11, 'month').format('YYYY-MM-DD 00:00:00')), moment(moment(new Date()).format('YYYY-MM-DD 23:59:59'))], // 最近七天
             BeginTime: moment().subtract(11, 'month').format('YYYY-MM-DD 00:00:00'),
             EndTime: moment().format('YYYY-MM-DD 23:59:59'),
-            DGIMN:"sgjt001003",
-            // DGIMN: this.props.match.params.pointcode,
+            DGIMN: this.props.match.params.pointcode,
             typeID: this.props.match.params.TypeID,
         };
     }
@@ -43,14 +43,14 @@ export default class RepairHistoryRecods extends Component {
     GetHistoryRecord=(pageIndex, pageSize, DGIMN, typeID, BeginTime, EndTime) => {
         debugger
         this.props.dispatch({
-            type: 'task/GetHistoryConsumablesReplaceRecord',
+            type: 'task/GetHistoryRepairDetail',
             payload: {
                 pageIndex: pageIndex,
                 pageSize: pageSize,
                 TypeID: typeID,
                 DGIMN: DGIMN,
-                BeginTime: BeginTime,
-                EndTime: EndTime,
+                BeginTime: moment(BeginTime).format('YYYY-MM-DD 00:00:00'),
+                EndTime: moment(EndTime).format('YYYY-MM-DD 23:59:59'),
             }
         });
     };
@@ -58,7 +58,8 @@ export default class RepairHistoryRecods extends Component {
     _handleDateChange=(date, dateString) => {
         this.setState(
             {
-                beginTime: dateString[0],
+                rangeDate: date,
+                BeginTime: dateString[0],
                 EndTime: dateString[1]
             }
         );
@@ -70,32 +71,31 @@ export default class RepairHistoryRecods extends Component {
     }
 
     onChange = (pageIndex, pageSize) => {
+        debugger
         this.GetHistoryRecord(pageIndex, pageSize, this.state.DGIMN, this.state.typeID, this.state.BeginTime, this.state.EndTime);
     }
 
     seeDetail=(record) => {
-        this.props.dispatch(routerRedux.push(`../routes/EmergencyTodoList/ConsumablesReplaceRecord/${record.taskId}/${this.state.TypeID}`));
+        this.props.dispatch(routerRedux.push(`../routes/EmergencyTodoList/ConsumablesReplaceRecord/${record.taskId}/${this.state.TypeID}`));////////跳转页面没做（跳转的页面还没有完成）
     }
 
     render() {
-        // console.log(this.state.TypeID);
-        // console.log(this.props.HistoryConsumablesReplaceRecord === null ? null : this.props.HistoryConsumablesReplaceRecord);
-        const dataSource = this.props.HistoryConsumablesReplaceRecord === null ? null : this.props.HistoryConsumablesReplaceRecord;
+        const dataSource = this.props.HistoryRepairHistoryRecods === null ? null : this.props.HistoryRepairHistoryRecods;
         const columns = [{
             title: '校准人',
             width: '20%',
-            dataIndex: 'operationPerson',
-            key: 'operationPerson'
+            dataIndex: 'CreateUserID',
+            key: 'CreateUserID'
         }, {
-            title: '易耗品（数量）',
+            title: '维修项目',
             width: '45%',
-            dataIndex: 'name',
-            key: 'name'
+            dataIndex: 'RecordItem',
+            key: 'RecordItem'
         }, {
             title: '记录创建时间',
-            dataIndex: 'createTime',
+            dataIndex: 'CreateTime',
             width: '20%',
-            key: 'createTime'
+            key: 'CreateTime'
         }, {
             title: '详细',
             dataIndex: 'TaskID',
@@ -117,7 +117,7 @@ export default class RepairHistoryRecods extends Component {
                             记录创建时间：
                                 </Col>
                                 <Col span={3} >
-                                    <RangePicker_ style={{width: 350}} onChange={this._handleDateChange} dateValue={this.state.rangeDate} />
+                                    <RangePicker_ style={{width: 350}} onChange={this._handleDateChange} format="YYYY-MM-DD" dateValue={this.state.rangeDate} />
                                 </Col>
                             </Row>
                         </Form>
@@ -130,7 +130,7 @@ export default class RepairHistoryRecods extends Component {
                         pagination={{
                             showSizeChanger: true,
                             showQuickJumper: true,
-                            'total': this.props.HistoryConsumablesReplaceRecordCount,
+                            'total': this.props.HistoryRepairHistoryRecodsCount,
                             'pageSize': this.props.pageSize,
                             'current': this.props.pageIndex,
                             onChange: this.onChange,
