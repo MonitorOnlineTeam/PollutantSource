@@ -87,7 +87,7 @@ export default class pointview extends Component {
                     breadcrumbList={
                         [{
                             title: '排口列表',
-                            href: '/monitor/sysmanage/PointInfo',
+                            href: '/sysmanage/PointInfo',
                         }, {
                             title: '排口详情',
                         }]

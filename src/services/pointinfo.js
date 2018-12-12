@@ -88,7 +88,7 @@ export async function editpoint(params) {
 // 删除排口
 export async function deletepoint(params) {
     const body = {
-        DGIMNs: params.DGIMN.join(',')
+        DGIMNs: params.DGIMN
     };
     const result = post('/api/rest/PollutantSourceApi/PPointAndData/DeletePoint', body, null);
     return result === null ? {
