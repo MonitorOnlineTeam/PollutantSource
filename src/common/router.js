@@ -41,7 +41,7 @@ const dynamicWrapper = (app, models, component) => {
         models: () => models.filter(
             model => modelNotExisted(app, model)).map(m =>
                 import(`../models/${m}.js`)
-            ),
+        ),
         // add routerData prop
         component: () => {
             if (!routerDataCache) {
@@ -243,7 +243,7 @@ export const getRouterData = (app) => {
             component: dynamicWrapper(app, ['TransmissionEfficiencyModel'], () =>
                 import('../routes/QualityControl/TransmissionEfficiency')),
         },
-        /** 
+        /**
          * 设备运转率
         */
         '/QualityControl/EquipmentOperatingRate': {
@@ -251,14 +251,14 @@ export const getRouterData = (app) => {
                 import('../routes/QualityControl/EquipmentOperatingRate')),
         },
         /* 智能分析 */
-        /** 
+        /**
          * 月度排放量分析
         */
         '/Analysis/PollutantEmissions': {
             component: dynamicWrapper(app, ['points', 'PollutantEmissionsModel'], () =>
                 import('../routes/Analysis/PollutantEmissions')),
         },
-        /** 
+        /**
          * 报警及时响应统计分析
         */
         '/Analysis/AlarmResponse': {
@@ -418,6 +418,10 @@ export const getRouterData = (app) => {
         '/sysmanage/StandardLibraryDetail/:StandardLibraryID': {
             component: dynamicWrapper(app, ['standardlibrary'], () =>
                 import('../routes/StandardLibrary/AddStandardLibrary')),
+        },
+        '/sysmanage/UseStandardLibrary/:DGIMN/:PointName': {
+            component: dynamicWrapper(app, ['standardlibrary'], () =>
+             import('../routes/StandardLibrary/UseStandardLibrary')),
         },
         '/emissionpermits': {
             component: dynamicWrapper(app, ['baseinfo'], () =>

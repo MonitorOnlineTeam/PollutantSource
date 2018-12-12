@@ -252,7 +252,7 @@ export default class pointlist extends Component {
               } > 停产管理 </a>
               <Divider type="vertical" />
               <a onClick={
-                  () => this.props.dispatch(routerRedux.push(`/sysmanage/UserDetail/${record.key}`))
+                  () => this.props.dispatch(routerRedux.push(`/sysmanage/UseStandardLibrary/${record.key}/${record.pointName}`))
               } > 监测标准 </a>
               <Divider type="vertical" />
               <a onClick={
