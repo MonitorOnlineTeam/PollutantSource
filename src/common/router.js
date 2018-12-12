@@ -97,7 +97,7 @@ export const getRouterData = (app) => {
           import('../routes/OverView/dataList')),
         },
         '/overview/mapview': {
-            component: dynamicWrapper(app, ['overview'], () =>
+            component: dynamicWrapper(app, ['overview','baseinfo'], () =>
           import('../routes/OverView/index')),
         },
         '/statuslist': {

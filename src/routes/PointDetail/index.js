@@ -84,7 +84,7 @@ class PointDetail extends Component {
                     <div className={styles.pageHeader}>
                         <Breadcrumb className={styles.breadcrumb} >
                             <Breadcrumb.Item key="home">
-                                <Link to="/monitor/overview">监控总览</Link>
+                                <Link to="/overview/mapview">监控总览</Link>
                             </Breadcrumb.Item>
                             <Breadcrumb.Item key="home">
                                 {

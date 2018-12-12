@@ -38,7 +38,7 @@ export default Model.extend({
                 type: 'querydatalist',
                 payload: payload,
             });
-            yield take('overview/querydatalist/@@end');
+            yield take('querydatalist/@@end');
             if (data) { gwidth = gwidth + 200 * data.length; }
             yield update({ columns: data, gwidth });
         },
@@ -114,7 +114,7 @@ export default Model.extend({
                                         <a style={{fontSize: 12, cursor: 'pointer', color: '#575757'}} onClick={() => this._openModal(true, 1)}>查看各参数数据</a>
                                     </li>
                                 </div>);
-                                return (<Popover content={content}><span style={{ color: '#ff0000', cursor: 'pointer' }}>{value}</span></Popover>);
+                                return (<Popover content={content}><span style={{ color: '#ff0000', cursor: 'pointer' }}>{value?value:'-'}</span></Popover>);
                             } else {
                                 const content = (<div>
                                     <li style={{listStyle: 'none', marginBottom: 10}}>
@@ -122,10 +122,10 @@ export default Model.extend({
                                     </li>
                                     <li style={{borderBottom: '1px solid #e8e8e8', listStyle: 'none', marginBottom: 5}} />
                                 </div>);
-                                return (<Popover content={content}><span style={{ color: '#F3AC00', cursor: 'pointer' }}>{value}</span></Popover>);
+                                return (<Popover content={content}><span style={{ color: '#F3AC00', cursor: 'pointer' }}>{value?value:'-'}</span></Popover>);
                             }
                         } else {
-                            return value;
+                            return value?value:'-';
                         }
                     }
                 });
