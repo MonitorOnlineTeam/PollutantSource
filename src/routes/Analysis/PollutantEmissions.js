@@ -357,11 +357,12 @@ export default class PollutantEmissions extends Component {
                                 theme="my_theme" />
                         </Row>
 
-                        <Row>
+                        <Row style={styles.cardTitle.cardBg}>
 
                             <Card
                                 style={{ marginTop: 16 }}
-                                type="inner"
+                                // type="inner"
+                                bordered={false}
                                 title={`${moment(this.props.clickDate).format('YYYY-MM')}月排放量排口统计`}
                             >
                                 <Table style={{ marginTop: 16 }} className={styles.dataTable}

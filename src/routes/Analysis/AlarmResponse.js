@@ -196,7 +196,7 @@ export default class AlarmResponse extends Component {
     }
     getOption = () => {
         let option = {
-            color: ['rgb(102,163,255)','rgb(250,203,1)'],
+            color: ['rgb(66,186,161)','rgb(250,203,1)'],// 66 186 161 ['rgb(102,163,255)','rgb(250,203,1)']
             tooltip: {
                 trigger: 'axis',
                 axisPointer: { // 坐标轴指示器，坐标轴触发有效
@@ -379,11 +379,12 @@ export default class AlarmResponse extends Component {
                                 theme="my_theme" />
                         </Row>
 
-                        <Row>
+                        <Row style={styles.cardTitle.cardBg}>
 
                             <Card
                                 style={{ marginTop: 16 }}
-                                type="inner"
+                                // type="inner"
+                                bordered={false}
                                 title={`${moment(this.props.clickDate).format('YYYY-MM')}月响应情况`}>
                                 <Table
                                     style={{ marginTop: 16 }}
