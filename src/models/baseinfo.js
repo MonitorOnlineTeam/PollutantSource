@@ -137,7 +137,7 @@ export default Model.extend({
     subscriptions: {
         setup({ dispatch, history }) {
             return history.listen(({ pathname, payload }) => {
-                if (pathname === '/monitor/entInfo/entoperation') {
+                if (pathname === '/sysmanage/entoperation') {
                     dispatch({ type: 'queryentdetail',
                         payload: {},
                     });

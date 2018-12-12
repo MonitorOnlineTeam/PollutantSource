@@ -100,8 +100,8 @@ export const getRouterData = (app) => {
                 import('../routes/OverView/dataList')),
         },
         '/overview/mapview': {
-            component: dynamicWrapper(app, ['overview'], () =>
-                import('../routes/OverView/index')),
+            component: dynamicWrapper(app, ['overview','baseinfo'], () =>
+          import('../routes/OverView/index')),
         },
         '/statuslist': {
             component: dynamicWrapper(app, ['points'], () =>

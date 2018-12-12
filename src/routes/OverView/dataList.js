@@ -15,7 +15,7 @@ class dataList extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {
-            nowdate: moment(new Date()).add(-1, 'hour')
+            nowdate: moment(new Date()).add(-1, 'hour'),
         };
     }
     componentDidMount() {
@@ -25,7 +25,6 @@ class dataList extends PureComponent {
                 code: 2,
                 time: this.state.nowdate.format('YYYY-MM-DD HH:00:00'),
                 EnterStation: (DGIMN) => {
-                    // alert(DGIMN);
                 }
             }
         });
@@ -47,6 +46,7 @@ class dataList extends PureComponent {
             dataIndex: 'status',
             key: 'status',
             width: 70,
+            align:'center',
             fixed: 'left',
             render: (value, record, index) => {
                 if (value === 0) {
@@ -68,12 +68,12 @@ class dataList extends PureComponent {
             render: (value, record, index) => {
                 const content = (<div>
                     <li style={{listStyle: 'none', marginBottom: 5}}>
-                        <Button size="large" onClick={() => {
+                        <Button onClick={() => {
                             this.props.dispatch(routerRedux.push('/pointdetail/' + record.DGIMN));
                         }}><Icon type="book" style={{color: '#3C9FDA', marginRight: 5}} theme="filled" />进入站房</Button>
                     </li>
                     <li style={{listStyle: 'none'}}>
-                        <Button size="large"><Icon type="phone" style={{color: '#3C9FDA', marginRight: 5}} theme="filled" />紧急派单</Button>
+                        <Button><Icon type="phone" style={{color: '#3C9FDA', marginRight: 5}} theme="filled" />紧急派单</Button>
                     </li></div>);
                 if (record.scene === 1) {
                     return <Popover trigger="click" content={content}><span style={{ cursor: 'pointer' }}><Icon type="user" style={{color: '#3B91FF'}} />{value}</span></Popover>;
@@ -88,12 +88,13 @@ class dataList extends PureComponent {
             key: 'transmissionEffectiveRate',
             width: 140,
             fixed: 'left',
+            align:'center',
             render: (value, record, index) => {
                 return {
                     props: {
                         className: ((value && value.split('%')[0] < 90)) ? styles.red : '',
                     },
-                    children: value};
+                    children:(value && value.split('%')[0] < 90)?(<span className={styles.tscolor}> {value} </span>):value};
             }
         }
         ];
@@ -106,48 +107,49 @@ class dataList extends PureComponent {
                 align: 'center',
                 width: 200,
                 render: (value, record, index) => {
-                    const additional = record[item.field + '_params'];
-                    if (additional) {
-                        const additionalInfo = additional.split('§');
-                        if (additionalInfo[0] === 'IsOver') {
-                            const content = (<div>
-                                <div style={{marginBottom: 10}}>
-                                    <Icon style={{ color: '#ff0000', fontSize: 25, marginRight: 10 }} type="warning" />
-                                    <span style={{fontWeight: 'Bold', fontSize: 16}}>数据超标</span>
-                                </div>
-                                <li style={{listStyle: 'none', marginBottom: 10}}>
-                                    <Badge status="success" text={`标准值：${additionalInfo[2]}`} />
-                                </li>
-                                <li style={{listStyle: 'none', marginBottom: 10}}>
-                                    <Badge status="error" text={`超标倍数：${additionalInfo[3]}`} />
-                                </li>
-                                <li style={{borderBottom: '1px solid #e8e8e8', listStyle: 'none', marginBottom: 5}} />
-
-                                <li style={{listStyle: 'none'}}>
-                                    <Icon type="laptop" style={{ fontSize: 14, color: '#08c' }} />
-                                    <Divider type="vertical" />
-                                    <a style={{fontSize: 12, cursor: 'pointer', color: '#575757'}} onClick={() => this._openModal(true, 2)}>查看仪器状态参数</a>
-                                </li>
-                                <li style={{listStyle: 'none'}}>
-                                    <Icon type="table" style={{ fontSize: 14, color: '#08c' }} />
-                                    <Divider type="vertical" />
-                                    <a style={{fontSize: 12, cursor: 'pointer', color: '#575757'}} onClick={() => this._openModal(true, 1)}>查看各参数数据</a>
-                                </li>
-                            </div>);
-                            return (<Popover content={content}><span style={{ color: '#ff0000', cursor: 'pointer' }}>{value}</span></Popover>);
+                        const additional = record[item.field + '_params'];
+                        if (additional) {
+                            const additionalInfo = additional.split('§');
+                            if (additionalInfo[0] === 'IsOver') {
+                                const content = (<div>
+                                    <div style={{marginBottom: 10}}>
+                                        <Icon style={{ color: '#ff0000', fontSize: 25, marginRight: 10 }} type="warning" />
+                                        <span style={{fontWeight: 'Bold', fontSize: 16}}>数据超标</span>
+                                    </div>
+                                    <li style={{listStyle: 'none', marginBottom: 10}}>
+                                        <Badge status="success" text={`标准值：${additionalInfo[2]}`} />
+                                    </li>
+                                    <li style={{listStyle: 'none', marginBottom: 10}}>
+                                        <Badge status="error" text={`超标倍数：${additionalInfo[3]}`} />
+                                    </li>
+                                    <li style={{borderBottom: '1px solid #e8e8e8', listStyle: 'none', marginBottom: 5}} />
+    
+                                    <li style={{listStyle: 'none'}}>
+                                        <Icon type="laptop" style={{ fontSize: 14, color: '#08c' }} />
+                                        <Divider type="vertical" />
+                                        <a style={{fontSize: 12, cursor: 'pointer', color: '#575757'}} onClick={() => this._openModal(true, 2)}>查看仪器状态参数</a>
+                                    </li>
+                                    <li style={{listStyle: 'none'}}>
+                                        <Icon type="table" style={{ fontSize: 14, color: '#08c' }} />
+                                        <Divider type="vertical" />
+                                        <a style={{fontSize: 12, cursor: 'pointer', color: '#575757'}} onClick={() => this._openModal(true, 1)}>查看各参数数据</a>
+                                    </li>
+                                </div>);
+                                return (<Popover content={content}><span style={{ color: '#ff0000', cursor: 'pointer' }}>{value?value:'-'}</span></Popover>);
+                            } else {
+                                const content = (<div>
+                                    <li style={{listStyle: 'none', marginBottom: 10}}>
+                                        <Badge status="warning" text={`异常原因：${additionalInfo[1]}`} />
+                                    </li>
+                                    <li style={{borderBottom: '1px solid #e8e8e8', listStyle: 'none', marginBottom: 5}} />
+                                </div>);
+                                return (<Popover content={content}><span style={{ color: '#F3AC00', cursor: 'pointer' }}>{value?value:'-'}</span></Popover>);
+                            }
                         } else {
-                            const content = (<div>
-                                <li style={{listStyle: 'none', marginBottom: 10}}>
-                                    <Badge status="warning" text={`异常原因：${additionalInfo[1]}`} />
-                                </li>
-                                <li style={{borderBottom: '1px solid #e8e8e8', listStyle: 'none', marginBottom: 5}} />
-                            </div>);
-                            return (<Popover content={content}><span style={{ color: '#F3AC00', cursor: 'pointer' }}>{value}</span></Popover>);
+                            return value?value:'-';
                         }
-                    } else {
-                        return value;
                     }
-                }
+                 
             });
         }) : [];
         return (
@@ -191,8 +193,8 @@ class dataList extends PureComponent {
                             scroll={{ x: this.props.gwidth, y: 'calc(100vh - 190px)' }}
                             bordered={true}
                             rowKey="DGIMN"
-                            onRow={record => ({
-                            })}
+                            onRow={record => {
+                            }}
                         />}
 
                 </Card >

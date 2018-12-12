@@ -7,7 +7,7 @@ import {
 } from 'antd';
 import AListRadio from '../../components/OverView/AListRadio';
 import {routerRedux} from 'dva/router';
-import {amapKey} from '../../config';
+import {amapKey,centerlongitude,centerlatitude} from '../../config';
 import TreeStatus from '../../components/OverView/TreeStatus';
 import TreeList from '../../components/OverView/TreeList';
 import MapPollutantDetail from '../../components/OverView/MapPollutantDetail';
@@ -27,7 +27,7 @@ const plugins = [
         }
     }
 ]; let _thismap;
-@connect(({loading, points, overview, global, baseinfo}) => ({
+@connect(({loading, overview, global, baseinfo}) => ({
     datalist: overview.data,
     treecol: overview.mainpcol,
     entInfoModel: baseinfo.entbaseinfo,
@@ -50,8 +50,6 @@ class OverViewMap extends PureComponent {
         this.map = null;
         this.state = {
             visible: false,
-            longitude: 100.300317,
-            latitude: 39.01278,
             selectpoint: {},
             detailed: false,
             position: [
@@ -67,7 +65,7 @@ class OverViewMap extends PureComponent {
 
         },
         complete: () => {
-            // _thismap.setZoomAndCenter(17, [118.510962, 38.976271]);
+           _thismap.setZoomAndCenter(13, [centerlongitude, centerlatitude]);
         }
     };
      stationClick = () => {
@@ -139,13 +137,14 @@ class OverViewMap extends PureComponent {
    }
    backTreeList=() => {
        this.setState({
-           detailed: false
+           detailed: false,
+           visible:false
        });
    }
    render() {
        const entInfo = this.props.entInfoModel ? this.props.entInfoModel[0] : '';
        const allcoo = entInfo ? eval(entInfo.coordinateSet) : '';
-       const {chartloading, detailloading} = this.props;
+       const {chartloading, detailloading,entloading} = this.props;
        return (
            <div
                style={{
@@ -167,14 +166,14 @@ class OverViewMap extends PureComponent {
                            <div>
                                <TreeStatus datalist={this.props.datalist} />
                            </div>
-                           <div style={{marginTop: 15}}>
+                           <div style={{marginTop: 15 }}>
                                <TreeList treedataloading={this.props.treedataloading} treeCilck={this.treeCilck} treecol={this.props.treecol} pointInfo={this.props.datalist} />
                            </div>
                        </div>
                            : detailloading ? <Spin style={{width: '100%',
                                height: 'calc(100vh - 260px)',
                                marginTop: 260 }} size="large" />
-                               : <div style={{ marginLeft: 10, marginTop: 10 }}>
+                               : <div style={{ marginLeft: 10, marginTop: 10 }}> 
                                    <div>
                                        <TreeStatus datalist={this.props.datalist} stationClick={this.stationClick} backTreeList={this.backTreeList} pointName={this.state.pointName} detailed={this.state.detailed} />
                                    </div>
@@ -230,11 +229,10 @@ class OverViewMap extends PureComponent {
                        position={this.state.position}
                        visible={this.state.visible}
                        isCustom={true}
-                       offset={[0, -20]}
-                   >
+                       offset={[0, -20]}>
                        {this.state.selectpoint.pointName}
                    </InfoWindow>
-               </Map>
+               </Map> 
            </div>
 
        );
