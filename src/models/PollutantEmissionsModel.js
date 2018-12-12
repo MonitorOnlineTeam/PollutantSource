@@ -23,10 +23,9 @@ export default Model.extend({
         beginTime: moment().format('YYYY-01-01 00:00:00'),
         endTime: moment().add(1,'years').format('YYYY-01-01 00:00:00'),
         monthTime: moment().format('YYYY-MM-01 00:00:00'),
-        emissionsSort: 'descend',
+        emissionsSort: '',
         xAxisData: [],
         seriesData: [],
-        EORSort: 'ascend',
         queryDGIMNs: '',
         // queryDate: moment().format('YYYY-MM-01 00:00:00')
     },
@@ -58,8 +57,8 @@ export default Model.extend({
                     seriesData: SeriesData
                 });
             }
-            const tableDatasNew = yield select(state => state.PollutantEmissionsModel.tableDatas);
-            console.log('new', tableDatasNew);
+            // const xAxisData = yield select(state => state.PollutantEmissionsModel.xAxisData);
+            // console.log('new', xAxisData);
         },
         * getPointsData({payload}, { call, put, update, select }) {
             const {clickDate, pageIndex, pageSize, pollutantCodes, emissionsSort} = yield select(state => state.PollutantEmissionsModel);
@@ -80,8 +79,8 @@ export default Model.extend({
                     total: response.total,
                 });
             }
-            const tableDatasNew = yield select(state => state.PollutantEmissionsModel.tableDatas);
-            console.log('new', tableDatasNew);
+            // const tableDatasNew = yield select(state => state.PollutantEmissionsModel.tableDatas);
+            // console.log('new', tableDatasNew);
         },
         * getPointDaysData({payload}, { call, put, update, select }) {
             const {clickDate, pageIndex, pageSize, pollutantCodes, emissionsSort,queryDGIMNs} = yield select(state => state.PollutantEmissionsModel);
@@ -103,8 +102,8 @@ export default Model.extend({
                     total: response.total,
                 });
             }
-            const pointDaysDatas = yield select(state => state.PollutantEmissionsModel.pointDaysDatas);
-            console.log('new', pointDaysDatas);
+            // const pointDaysDatas = yield select(state => state.PollutantEmissionsModel.pointDaysDatas);
+            // console.log('new', pointDaysDatas);
         },
     },
 });

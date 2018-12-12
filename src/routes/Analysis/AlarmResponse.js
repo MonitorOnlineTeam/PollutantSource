@@ -276,6 +276,7 @@ export default class AlarmResponse extends Component {
                 title: (<span style={{fontWeight: 'bold'}}>排口名称</span>),
                 dataIndex: 'PointName',
                 key: 'PointName',
+                width: '50%',
                 align: 'left',
                 render: (text, record) => {
                     return (
@@ -290,7 +291,7 @@ export default class AlarmResponse extends Component {
                 dataIndex: 'LessThan2Hour',
                 key: 'LessThan2Hour',
                 align: 'left',
-                width: '300px',
+                width: '25%',
                 sorter: true,
                 render: (text, record) => {
                     return text;
@@ -301,7 +302,7 @@ export default class AlarmResponse extends Component {
                 dataIndex: 'GreaterThan8Hour',
                 key: 'GreaterThan8Hour',
                 align: 'left',
-                width: '300px',
+                width: '25%',
                 sorter: true,
                 render: (text, record) => {
                     return text;
@@ -314,7 +315,7 @@ export default class AlarmResponse extends Component {
                 title: (<span style={{fontWeight: 'bold'}}>排口名称</span>),
                 dataIndex: 'PointName',
                 key: 'PointName',
-                width: '300px',
+                width: '25%',
                 align: 'left',
                 render: (text, record) => {
                     return text;
@@ -325,7 +326,7 @@ export default class AlarmResponse extends Component {
                 dataIndex: 'AlarmResponseTime',
                 key: 'AlarmResponseTime',
                 align: 'left',
-                width: '300px',
+                width: '25%',
                 render: (text, record) => {
                     return text;
                 }
@@ -335,7 +336,7 @@ export default class AlarmResponse extends Component {
                 dataIndex: 'LessThan2Hour',
                 key: 'LessThan2Hour',
                 align: 'left',
-                width: '300px',
+                width: '25%',
                 sorter: true,
                 render: (text, record) => {
                     return text;
@@ -346,7 +347,7 @@ export default class AlarmResponse extends Component {
                 dataIndex: 'GreaterThan8Hour',
                 key: 'GreaterThan8Hour',
                 align: 'left',
-                width: '300px',
+                width: '25%',
                 sorter: true,
                 render: (text, record) => {
                     return text;
@@ -371,6 +372,9 @@ export default class AlarmResponse extends Component {
                                 </Select>
                             </span>
                         }
+                        style={{
+                            height: 'calc(100vh - 205px)'
+                        }}
                     >
                         <Row>
                             <ReactEcharts
@@ -395,6 +399,7 @@ export default class AlarmResponse extends Component {
                                     onChange={this.handleTableChange}
                                     size="small"// small middle
                                     dataSource={this.props.pointsTableData}
+                                    scroll={{ y: 200 }}
                                     pagination={{
                                         showSizeChanger: true,
                                         showQuickJumper: true,
@@ -422,6 +427,7 @@ export default class AlarmResponse extends Component {
                                 onChange={this.handleTableChange}
                                 size="small"// small middle
                                 dataSource={this.props.pointDaysTableData}
+                                scroll={{ y: 500 }}
                                 pagination={{
                                     showSizeChanger: true,
                                     showQuickJumper: true,

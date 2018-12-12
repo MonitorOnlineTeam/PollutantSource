@@ -52,7 +52,6 @@ for (let i = dateYear; i > dateYear - 10; --i) {
     seriesData: PollutantEmissionsModel.seriesData,
     pollutantCodes: PollutantEmissionsModel.pollutantCodes,
     emissionsSort: PollutantEmissionsModel.emissionsSort,
-    // queryDate: PollutantEmissionsModel.queryDate,
     selectedDate: PollutantEmissionsModel.selectedDate,
     clickDate: PollutantEmissionsModel.clickDate,
 }))
@@ -109,7 +108,7 @@ export default class PollutantEmissions extends Component {
             });
         } else {
             this.updateState({
-                emissionsSort: 'descend',
+                emissionsSort: '',
                 pageIndex: pagination.current,
                 pageSize: pagination.pageSize
             });
@@ -125,10 +124,7 @@ export default class PollutantEmissions extends Component {
         let Year = moment().get('year');
         let Month = moment().get('month') + 1;
         let beginTime = moment(`${value}-01-01 00:00:00`);
-        // this.updateState({
-        //     beginTime: beginTime.format('YYYY-MM-01 HH:mm:ss'),
-        //     endTime: beginTime.add(1,'years').format('YYYY-01-01 00:00:00')
-        // });
+        
         // 本年份
         if ((+value) === Year) {
             this.updateState({
@@ -155,6 +151,7 @@ export default class PollutantEmissions extends Component {
             pollutantCodes: [`${value}`]
         });
         this.getChartData();
+        this.getPointsTableData(1);
     }
     showModal = (params) => {
         // debugger
@@ -255,6 +252,7 @@ export default class PollutantEmissions extends Component {
                 title: (<span style={{fontWeight: 'bold'}}>排口名称</span>),
                 dataIndex: 'PointName',
                 key: 'PointName',
+                width: '66.66%',
                 align: 'left',
                 render: (text, record) => {
                     return (
@@ -269,7 +267,8 @@ export default class PollutantEmissions extends Component {
                 dataIndex: 'Emissions',
                 key: 'Emissions',
                 align: 'left',
-                width: '300px',
+                width: '33.33%',
+
                 sorter: true,
                 render: (text, record) => {
                     return text;
@@ -282,6 +281,7 @@ export default class PollutantEmissions extends Component {
                 dataIndex: 'PointName',
                 key: 'PointName',
                 align: 'left',
+                width: '33.33%',
                 render: (text, record) => {
                     return text;
                 }
@@ -291,6 +291,7 @@ export default class PollutantEmissions extends Component {
                 dataIndex: 'DataDate',
                 key: 'DataDate',
                 align: 'left',
+                width: '33.33%',
                 show: true,
                 render: (text, record) => {
                     return text;
@@ -301,6 +302,7 @@ export default class PollutantEmissions extends Component {
                 dataIndex: 'Emissions',
                 key: 'Emissions',
                 align: 'left',
+                width: '33.33%',
                 // width: '300px',
                 sorter: true,
                 render: (text, record) => {
@@ -309,7 +311,6 @@ export default class PollutantEmissions extends Component {
             }
         ];
 
-        let clickDate = this.props.clickDate;
         return (
             <div>
                 <Card className={styles.cardTitle} title="智能分析 / 月度排放量分析">
@@ -361,7 +362,7 @@ export default class PollutantEmissions extends Component {
                             <Card
                                 style={{ marginTop: 16 }}
                                 type="inner"
-                                title={`${moment(this.props.clickDate).format('YYYY-MM')}月排放量列表`}
+                                title={`${moment(this.props.clickDate).format('YYYY-MM')}月排放量排口统计`}
                             >
                                 <Table style={{ marginTop: 16 }} className={styles.dataTable}
                                     loading={this.props.loadingTable}
@@ -369,6 +370,7 @@ export default class PollutantEmissions extends Component {
                                     onChange={this.handleTableChange}
                                     size="small"// small middle
                                     dataSource={this.props.tableDatas}
+                                    scroll={{ y: 200 }}
                                     pagination={{
                                         showSizeChanger: true,
                                         showQuickJumper: true,
@@ -383,7 +385,7 @@ export default class PollutantEmissions extends Component {
 
                         </Row>
                         <Modal
-                            title={`${moment(this.props.clickDate).format('YYYY-MM')}月-${this.state.pointName}`}
+                            title={`${moment(this.props.clickDate).format('YYYY-MM')}月-${this.state.pointName} 排放量详情`}
                             width="50%"
                             visible={this.state.modalVisible}
                             onOk={this.handleModalOk}
@@ -396,6 +398,7 @@ export default class PollutantEmissions extends Component {
                                 onChange={this.handleTableChange}
                                 size="small"// small middle
                                 dataSource={this.props.pointDaysDatas}
+                                scroll={{ y: 500 }}
                                 pagination={{
                                     showSizeChanger: true,
                                     showQuickJumper: true,
