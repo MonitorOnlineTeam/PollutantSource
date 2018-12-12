@@ -124,7 +124,7 @@ export default class PollutantEmissions extends Component {
         let Year = moment().get('year');
         let Month = moment().get('month') + 1;
         let beginTime = moment(`${value}-01-01 00:00:00`);
-        
+
         // 本年份
         if ((+value) === Year) {
             this.updateState({

@@ -10,8 +10,7 @@ import {
     DatePicker,
     Progress,
     Row,
-    Col,
-    Button
+    Col
 } from 'antd';
 import moment from 'moment';
 import {routerRedux} from 'dva/router';

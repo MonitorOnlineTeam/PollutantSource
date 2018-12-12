@@ -78,7 +78,7 @@ export default Model.extend({
         },
         * getPointDaysData({payload}, { call, put, update, select }) {
             const {clickDate, pageIndex, pageSize, sort2,sort8,queryDGIMNs} = yield select(state => state.AlarmResponseModel);
-            debugger
+            // debugger
             let body = {
                 monthTime: clickDate,
                 pageIndex: pageIndex,

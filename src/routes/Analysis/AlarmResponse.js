@@ -7,11 +7,7 @@ import React, { Component } from 'react';
 import {
     Card,
     Table,
-    DatePicker,
-    Progress,
     Row,
-    Col,
-    Button,
     Modal,
     Select
 } from 'antd';
@@ -19,8 +15,6 @@ import moment from 'moment';
 import styles from './index.less';
 import ReactEcharts from 'echarts-for-react';
 import {connect} from 'dva';
-const { MonthPicker } = DatePicker;
-const monthFormat = 'YYYY-MM';
 const Option = Select.Option;
 const pageUrl = {
     updateState: 'AlarmResponseModel/updateState',
