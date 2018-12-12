@@ -21,11 +21,16 @@ const pageSize = 10;
 export default class Ywdsjlist extends Component {
     constructor(props) {
         super(props);
+        const beginTime = this.props.match.params.begintime;
+        const endTime = this.props.match.params.begintime;
         this.state = {
+            //rangeDate: beginTime !== null && endTime !== null ? [beginTime,endTime] : [moment(moment(new Date()).subtract(7, 'day').format('YYYY-MM-DD 00:00:00')), moment(moment(new Date()).format('YYYY-MM-DD 23:59:59'))],
             rangeDate: [moment(moment(new Date()).subtract(7, 'day').format('YYYY-MM-DD 00:00:00')), moment(moment(new Date()).format('YYYY-MM-DD 23:59:59'))],
             pageIndex: pageIndex,
             pageSize: pageSize,
             IsAlarmTimeout: true,
+            // beginTime: beginTime !== null ? beginTime : moment().subtract(7, 'day').format('YYYY-MM-DD 00:00:00'),
+            // endTime: endTime !== null ? endTime : moment().format('YYYY-MM-DD 23:59:59'),
             beginTime: moment().subtract(7, 'day').format('YYYY-MM-DD 00:00:00'),
             endTime: moment().format('YYYY-MM-DD 23:59:59'),
             taskType: 0,
@@ -147,7 +152,7 @@ export default class Ywdsjlist extends Component {
             const rtnVal = [];
             data.map((item) => {
                 rtnVal.push(<Timeline.Item dot={<div className={Ywdsjlistss.DateLoad} />}>
-                    <p style={{color: '#66C7F9', marginLeft: '-100px'}}>{item.NodeDate}</p>
+                    <p className={Ywdsjlistss.taskDate}>{item.NodeDate}</p>
                 </Timeline.Item>);
                 item.NodeList.map((item1) => {
                     if (item1.TaskType === EnumPatrolTaskType.PatrolTask) {
@@ -155,11 +160,12 @@ export default class Ywdsjlist extends Component {
                         var valueName = `${item1.OperationsUserName}`;
                         rtnVal.push(
                             <Timeline.Item dot={<img style={{width: '38px', height: '38px'}} src="../../../patrol.png" />}>
-                                <p style={{marginLeft: '10px'}}><span style={{color: '#40B0F5', marginRight: '10px'}}>{valueName}</span>{value}</p>
-                                <p><Button type="primary" size="small" style={{fontSise: '10px'}} onClick={() => {
+                                <p className={Ywdsjlistss.taskDetail}><span style={{color: '#40B0F5', marginRight: '10px'}}>{valueName}</span>{value}</p>
+                                <div className={Ywdsjlistss.seeDetail} onClick={() => {
                                     this.props.dispatch(routerRedux.push(`/pointdetail/${this.props.match.params.pointcode}/emergencydetailinfo/${item1.ID}`));
-                                }
-                                }>查看详情</Button></p>
+                                }}>
+                                查看详情
+                                </div>
                             </Timeline.Item>
                         );
                     } else if (item1.TaskType === EnumPatrolTaskType.ExceptionTask) {
@@ -167,11 +173,12 @@ export default class Ywdsjlist extends Component {
                         var valueName1 = `${item1.OperationsUserName}`;
                         rtnVal.push(
                             <Timeline.Item dot={<img style={{width: '38px', height: '38px'}} src="../../../emergeny.png" />}>
-                                <p style={{marginLeft: '10px'}}><span style={{color: '#40B0F5', marginRight: '10px'}}>{valueName1}</span>{value1}</p>
-                                <p><Button type="primary" size="small" style={{fontSise: '10px'}} onClick={() => {
+                                <p className={Ywdsjlistss.taskDetail}><span style={{color: '#40B0F5', marginRight: '10px'}}>{valueName1}</span>{value1}</p>
+                                <div className={Ywdsjlistss.seeDetail} onClick={() => {
                                     this.props.dispatch(routerRedux.push(`/pointdetail/${this.props.match.params.pointcode}/emergencydetailinfo/${item1.ID}`));
-                                }
-                                }>查看详情</Button></p>
+                                }}>
+                                查看详情
+                                </div>
                             </Timeline.Item>
                         );
                     } else {
@@ -179,8 +186,8 @@ export default class Ywdsjlist extends Component {
                         var valueName2 = `${item1.OperationsUserName}`;
                         var value3 = `${item1.Remark === null ? '' : item1.Remark}`;
                         rtnVal.push(
-                            <Timeline.Item dot={<img style={{width: '38px', height: '38px'}} src="../../../alarm.png" />}>
-                                <p style={{marginLeft: '10px'}}><span style={{color: '#40B0F5', marginRight: '10px'}}>{valueName2}</span>{value2}</p>
+                            <Timeline.Item dot={<img style={{width: '38px', height: '38px'}} src="../../../alarmpic.png" />}>
+                                <p className={Ywdsjlistss.taskDetail}><span style={{color: '#40B0F5', marginRight: '10px'}}>{valueName2}</span>{value2}</p>
                                 <p className={Ywdsjlistss.pLoad}>{value3}</p>
                             </Timeline.Item>
                         );
@@ -188,9 +195,8 @@ export default class Ywdsjlist extends Component {
                 });
             });
             return rtnVal;
-        } else {
-            return (<div>暂无数据</div>);
         }
+        return (<div>暂无数据</div>);
     }
 
     render() {
@@ -202,17 +208,17 @@ export default class Ywdsjlist extends Component {
                 <Card >
                     <div bordered="false" className={styless.tableListForm}>{this.renderSimpleForm()}</div>
                     <div>
-                        { this.props.isloading ? <div style={{height: 'calc(100vh - 400px)'}} className={Ywdsjlistss.divTimeLine}><Spin className={Ywdsjlistss.divTimeLine} /></div>
-                            : <div style={{height: 'calc(100vh - 400px)'}} className={Ywdsjlistss.divTimeLine}><Timeline mode="left">
-                                {
+                        { this.props.isloading ? <div style={{height: 'calc(100vh - 400px)'}} className={Ywdsjlistss.divTimeLine}><Spin className={Ywdsjlistss.divTimeLine} /></div> :
+                            <div style={{height: 'calc(100vh - 400px)'}} className={Ywdsjlistss.divTimeLine}><Timeline mode="left">
+                            {
                                     this.renderItem(data)
                                 }
-                            </Timeline>
+                        </Timeline>
                             {data != null && data.length > 0 ? (IsOver ? <div>已加载全部</div> : <Button
-                                loading={this.state.iconLoading} onClick={this.enterIconLoading}>
+                                    loading={this.state.iconLoading} onClick={this.enterIconLoading}>
                              加载更多
-                            </Button>):''}
-                            </div> }
+                                </Button>) : ''}
+                        </div> }
 
                     </div>
                 </Card>

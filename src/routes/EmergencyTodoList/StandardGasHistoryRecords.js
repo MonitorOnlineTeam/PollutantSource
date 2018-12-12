@@ -13,19 +13,18 @@ import { connect } from 'dva';
 import moment from 'moment';
 import RangePicker_ from '../../components/PointDetail/RangePicker_';
 import {routerRedux} from 'dva/router';
-import { DEFAULT_ENCODING } from 'crypto';
 
 @connect(({ task, loading }) => ({
     // isloading: loading.effects['task/GetJzHistoryRecord'],
-    HistoryRepairHistoryRecods: task.List,
-    HistoryRepairHistoryRecodsCount: task.total,
+    HistoryStandardGasRepalceRecordList: task.List,
+    HistoryStandardGasRepalceRecordListCount: task.total,
     pageIndex: task.pageIndex,
     pageSize: task.pageSize,
 }))
 /*
-页面：维修历史记录
+页面：标准气体历史记录
 */
-export default class RepairHistoryRecods extends Component {
+export default class StandardGasHistoryRecords extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -41,9 +40,9 @@ export default class RepairHistoryRecods extends Component {
     }
 
     GetHistoryRecord=(pageIndex, pageSize, DGIMN, typeID, BeginTime, EndTime) => {
-        debugger
+        debugger;
         this.props.dispatch({
-            type: 'task/GetHistoryRepairDetail',
+            type: 'task/GetHistoryStandardGasRepalceRecordList',
             payload: {
                 pageIndex: pageIndex,
                 pageSize: pageSize,
@@ -71,31 +70,30 @@ export default class RepairHistoryRecods extends Component {
     }
 
     onChange = (pageIndex, pageSize) => {
-        debugger
         this.GetHistoryRecord(pageIndex, pageSize, this.state.DGIMN, this.state.typeID, this.state.BeginTime, this.state.EndTime);
     }
 
     seeDetail=(record) => {
-        this.props.dispatch(routerRedux.push(`../routes/EmergencyTodoList/ConsumablesReplaceRecord/${record.taskId}/${this.state.TypeID}`));////////跳转页面没做（跳转的页面还没有完成）
+        this.props.dispatch(routerRedux.push(`/pointdetail/:pointcode/StandardGasRepalceRecord/${record.taskId}/${this.state.typeID}`));
     }
 
     render() {
-        const dataSource = this.props.HistoryRepairHistoryRecods === null ? null : this.props.HistoryRepairHistoryRecods;
+        const dataSource = this.props.HistoryStandardGasRepalceRecordList === null ? null : this.props.HistoryStandardGasRepalceRecordList;
         const columns = [{
             title: '校准人',
             width: '20%',
-            dataIndex: 'CreateUserID',
-            key: 'CreateUserID'
+            dataIndex: 'operationPerson',
+            key: 'operationPerson'
         }, {
-            title: '维修项目',
+            title: '标准物质名称（名称-有效期）',
             width: '45%',
-            dataIndex: 'RecordItem',
-            key: 'RecordItem'
+            dataIndex: 'name',
+            key: 'name'
         }, {
             title: '记录创建时间',
-            dataIndex: 'CreateTime',
+            dataIndex: 'createTime',
             width: '20%',
-            key: 'CreateTime'
+            key: 'createTime'
         }, {
             title: '详细',
             dataIndex: 'TaskID',
@@ -130,7 +128,7 @@ export default class RepairHistoryRecods extends Component {
                         pagination={{
                             showSizeChanger: true,
                             showQuickJumper: true,
-                            'total': this.props.HistoryRepairHistoryRecodsCount,
+                            'total': this.props.HistoryStandardGasRepalceRecordListCount,
                             'pageSize': this.props.pageSize,
                             'current': this.props.pageIndex,
                             onChange: this.onChange,

@@ -17,15 +17,15 @@ import { DEFAULT_ENCODING } from 'crypto';
 
 @connect(({ task, loading }) => ({
     // isloading: loading.effects['task/GetJzHistoryRecord'],
-    HistoryRepairHistoryRecods: task.List,
-    HistoryRepairHistoryRecodsCount: task.total,
+    HistoryStopCemsListHistoryRecords: task.List,
+    HistoryStopCemsListHistoryRecordsCount: task.total,
     pageIndex: task.pageIndex,
     pageSize: task.pageSize,
 }))
 /*
-页面：维修历史记录
+页面：停机历史记录
 */
-export default class RepairHistoryRecods extends Component {
+export default class StopCemsListHistoryRecords extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -37,13 +37,14 @@ export default class RepairHistoryRecods extends Component {
         };
     }
     componentDidMount() {
+        debugger
         this.GetHistoryRecord(this.props.pageIndex, this.props.pageSize, this.state.DGIMN, this.state.typeID, this.state.BeginTime, this.state.EndTime);
     }
 
     GetHistoryRecord=(pageIndex, pageSize, DGIMN, typeID, BeginTime, EndTime) => {
         debugger
         this.props.dispatch({
-            type: 'task/GetHistoryRepairDetail',
+            type: 'task/GetHistoryStopCemsList',
             payload: {
                 pageIndex: pageIndex,
                 pageSize: pageSize,
@@ -71,7 +72,6 @@ export default class RepairHistoryRecods extends Component {
     }
 
     onChange = (pageIndex, pageSize) => {
-        debugger
         this.GetHistoryRecord(pageIndex, pageSize, this.state.DGIMN, this.state.typeID, this.state.BeginTime, this.state.EndTime);
     }
 
@@ -80,17 +80,17 @@ export default class RepairHistoryRecods extends Component {
     }
 
     render() {
-        const dataSource = this.props.HistoryRepairHistoryRecods === null ? null : this.props.HistoryRepairHistoryRecods;
+        const dataSource = this.props.HistoryStopCemsListHistoryRecords === null ? null : this.props.HistoryStopCemsListHistoryRecords;
         const columns = [{
             title: '校准人',
             width: '20%',
             dataIndex: 'CreateUserID',
             key: 'CreateUserID'
         }, {
-            title: '维修项目',
+            title: '停机时长',
             width: '45%',
-            dataIndex: 'RecordItem',
-            key: 'RecordItem'
+            dataIndex: 'StopHour',
+            key: 'StopHour'
         }, {
             title: '记录创建时间',
             dataIndex: 'CreateTime',
@@ -130,7 +130,7 @@ export default class RepairHistoryRecods extends Component {
                         pagination={{
                             showSizeChanger: true,
                             showQuickJumper: true,
-                            'total': this.props.HistoryRepairHistoryRecodsCount,
+                            'total': this.props.HistoryStopCemsListHistoryRecordsCount,
                             'pageSize': this.props.pageSize,
                             'current': this.props.pageIndex,
                             onChange: this.onChange,

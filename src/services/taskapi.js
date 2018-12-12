@@ -67,7 +67,21 @@ export async function GetConsumablesReplaceRecordList(params) {
         data: null
     } : result;
 }
-
+// 获取易耗品历史记录列表
+export async function GetHistoryConsumablesReplaceRecord(params) {
+    const body = {
+        pageIndex: params.pageIndex,
+        pageSize: params.pageSize,
+        TypeID: params.TypeID,
+        DGIMN: params.DGIMN,
+        BeginTime: params.BeginTime,
+        EndTime: params.EndTime,
+    };
+    const result = post('/api/rest/PollutantSourceApi/PTaskForm/GetFormHistoryList', body, null);
+    return result === null ? {
+        data: null
+    } : result;
+}
 // 根据任务id和类型id获取标气列表
 export async function GetStandardGasRepalceRecordList(params) {
     const body = {
@@ -79,6 +93,21 @@ export async function GetStandardGasRepalceRecordList(params) {
         data: null
     } : result;
 }
+// 获取标气历史记录列表
+export async function GetHistoryStandardGasRepalceRecordList(params) {
+    const body = {
+        pageIndex: params.pageIndex,
+        pageSize: params.pageSize,
+        TypeID: params.TypeID,
+        DGIMN: params.DGIMN,
+        BeginTime: params.BeginTime,
+        EndTime: params.EndTime,
+    };
+    const result = post('/api/rest/PollutantSourceApi/PTaskForm/GetStandardGasRepalceRecordHistoryList', body, null);
+    return result === null ? {
+        data: null
+    } : result;
+}
 // 根据任务id和类型id获取巡检记录表（不通于手机端PC单独做接口)
 export async function GetPatrolRecordListPC(params) {
     const body = {
@@ -86,6 +115,86 @@ export async function GetPatrolRecordListPC(params) {
         TypeID: params.TypeIDs
     };
     const result = post('/api/rest/PollutantSourceApi/PTaskForm/GetPatrolRecordListPC', body, null);
+    return result === null ? {
+        data: null
+    } : result;
+}
+// 获取CEMS日常巡检记录表（历史记录表）
+export async function GetHistoryInspectionHistoryRecord(params) {
+    const body = {
+        pageIndex: params.pageIndex,
+        pageSize: params.pageSize,
+        TypeID: params.TypeID,
+        DGIMN: params.DGIMN,
+        BeginTime: params.BeginTime,
+        EndTime: params.EndTime,
+    };
+    const result = post('/api/rest/PollutantSourceApi/PTaskForm/GetPatrolRecordHistoryList', body, null);
+    return result === null ? {
+        data: null
+    } : result;
+}
+
+
+// 获取停机记录内容
+export async function GetStopCemsDetail(params) {
+    const body = {
+        TaskID: params.TaskID,
+        TypeID: params.TypeID
+    };
+    const result = await post('/api/rest/PollutantSourceApi/PTaskForm/PostStopCemsDetail', body, null);
+    return result === null ? { data: null } : result;
+}
+// 获取停机记录列表（历史记录表）
+export async function GetHistoryStopCemsList(params) {
+    const body = {
+        pageIndex: params.pageIndex,
+        pageSize: params.pageSize,
+        TypeID: params.TypeID,
+        DGIMN: params.DGIMN,
+        BeginTime: params.BeginTime,
+        EndTime: params.EndTime,
+    };
+    const result = post('/api/rest/PollutantSourceApi/PTaskForm/PostStopCemsList', body, null);
+    return result === null ? {
+        data: null
+    } : result;
+}
+// 获取维修记录内容
+export async function GetRepairDetail(params) {
+    const body = {
+        TaskID: params.TaskID,
+        TypeID: params.TypeID
+    };
+    const result = await post('/api/rest/PollutantSourceApi/PTaskForm/RepairRecordDetail', body, null);
+    return result === null ? { data: null } : result;
+}
+// 获取维修记录列表（历史记录表）
+export async function GetHistoryRepairDetail(params) {
+    const body = {
+        pageIndex: params.pageIndex,
+        pageSize: params.pageSize,
+        TypeID: params.TypeID,
+        DGIMN: params.DGIMN,
+        BeginTime: params.BeginTime,
+        EndTime: params.EndTime,
+    };
+    const result = post('/api/rest/PollutantSourceApi/PTaskForm/RepairRecordList', body, null);
+    return result === null ? {
+        data: null
+    } : result;
+}
+// 获取异常记录列表（历史记录表）
+export async function GetDeviceExceptionList(params) {
+    const body = {
+        pageIndex: params.pageIndex,
+        pageSize: params.pageSize,
+        TypeID: params.TypeID,
+        DGIMN: params.DGIMN,
+        BeginTime: params.BeginTime,
+        EndTime: params.EndTime,
+    };
+    const result = post('/api/rest/PollutantSourceApi/PTaskForm/DeviceExceptionList', body, null);
     return result === null ? {
         data: null
     } : result;

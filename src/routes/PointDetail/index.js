@@ -32,7 +32,6 @@ class PointDetail extends Component {
                 // { key: 'replacementpartrecord', tab: '备品备件使用记录' },
                 { key: 'stopmanagement', tab: '停产管理' },
                 // { key: 'stationthree', tab: '站房全景' },
-                { key: 'videolist', tab: '视频管理' },
                 { key: 'ywdsjlist', tab: '运维大事记' },
                 { key: 'qcontrollist', tab: '质控记录' }
             ],
@@ -59,22 +58,9 @@ class PointDetail extends Component {
         Cookie.set('seldgimn', match.params.pointcode);
         const pointInfo = this.props.pointInfo;
         let activeKey = 'qcontrollist';
-        // if (location.pathname.indexOf('JzHistoryRecords') === -1) {
-        //     activeKey = location.pathname.replace(`${match.url}/`, '');
-        // }
-
         if (location.pathname.indexOf('qcontrollist') === -1) {
             activeKey = location.pathname.replace(`${match.url}/`, '');
-        } 
-        // else {
-        //     this.state.recordType.map((item) => {
-        //         if (location.pathname.indexOf(item) === -1) {
-        //             activeKey = location.pathname.replace(`${match.url}/`, '');
-        //             return null;
-        //         }
-        //     });
-        // }
-        // console.log(activeKey);
+        }
         return (
             <div
                 style={{ width: '100%',

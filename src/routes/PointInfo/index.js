@@ -260,7 +260,7 @@ export default class pointlist extends Component {
               } > 详情 </a>
               <Divider type="vertical" />
               <a onClick={
-                  () => this.props.dispatch(routerRedux.push(`/sysmanage/UserDetail/${record.key}`))
+                  () => this.props.dispatch(routerRedux.push(`/sysmanage/VideoLists/${record.key}`))
               } > 视频管理 </a>
           </Fragment >
           ),
