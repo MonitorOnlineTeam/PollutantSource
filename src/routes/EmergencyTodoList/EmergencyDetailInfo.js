@@ -138,7 +138,7 @@ export default class EmergencyDetailInfo extends Component {
         let CompleteTime = null;
         const taskInfo = this.props.taskInfo;
 
-        if (taskInfo.requstresult == EnumRequstResult.Success) {
+        if (taskInfo.requstresult == EnumRequstResult.Success && taskInfo.data !== null) {
             data = taskInfo.data[0];
             TaskID = data.ID;
             TaskCode = data.TaskCode;
@@ -242,83 +242,83 @@ export default class EmergencyDetailInfo extends Component {
             fileList: [...fileList]
         };
         return (
-                <div style={{height: 'calc(100vh - 220px)'}} className={styles.ExceptionDetailDiv}>
-                    <Card title={<span style={{fontWeight: '900'}}>任务信息</span>}>
-                        <DescriptionList className={styles.headerList} size="large" col="3">
-                            <Description term="任务单号">{TaskCode}</Description>
-                            <Description term="排口" >{PointName}</Description>
-                            <Description term="企业">{EnterpriseName}</Description>
-                        </DescriptionList>
-                        <DescriptionList style={{marginTop: 20}} className={styles.headerList} size="large" col="3">
-                            <Description term="任务来源">{TaskFrom}</Description>
-                            <Description term="紧急程度"><div style={{color: 'red'}}>{EmergencyStatusText}</div></Description>
-                            <Description term="任务状态"> <div style={{color: '#32CD32'}}>{TaskStatusText }</div></Description>
-                            <Description term="任务内容">{TaskDescription}</Description>
-                        </DescriptionList>
-                        <DescriptionList style={{marginTop: 20}} className={styles.headerList} size="large" col="3">
-                            <Description term="运维人">{OperationsUserName}</Description>
-                            <Description term="创建时间">{CreateTime}</Description>
-                        </DescriptionList>
-                        {
-                            TaskType === EnumPatrolTaskType.PatrolTask ? null :
-                                <Divider style={{ marginBottom: 20}} />
-                        }
-                        {
-                            TaskType === EnumPatrolTaskType.PatrolTask ? null :
+            <div style={{height: 'calc(100vh - 220px)'}} className={styles.ExceptionDetailDiv}>
+                <Card title={<span style={{fontWeight: '900'}}>任务信息</span>}>
+                    <DescriptionList className={styles.headerList} size="large" col="3">
+                        <Description term="任务单号">{TaskCode}</Description>
+                        <Description term="排口" >{PointName}</Description>
+                        <Description term="企业">{EnterpriseName}</Description>
+                    </DescriptionList>
+                    <DescriptionList style={{marginTop: 20}} className={styles.headerList} size="large" col="3">
+                        <Description term="任务来源">{TaskFrom}</Description>
+                        <Description term="紧急程度"><div style={{color: 'red'}}>{EmergencyStatusText}</div></Description>
+                        <Description term="任务状态"> <div style={{color: '#32CD32'}}>{TaskStatusText }</div></Description>
+                        <Description term="任务内容">{TaskDescription}</Description>
+                    </DescriptionList>
+                    <DescriptionList style={{marginTop: 20}} className={styles.headerList} size="large" col="3">
+                        <Description term="运维人">{OperationsUserName}</Description>
+                        <Description term="创建时间">{CreateTime}</Description>
+                    </DescriptionList>
+                    {
+                        TaskType === EnumPatrolTaskType.PatrolTask ? null :
+                            <Divider style={{ marginBottom: 20}} />
+                    }
+                    {
+                        TaskType === EnumPatrolTaskType.PatrolTask ? null :
                             <Table style={{ backgroundColor: 'white'}} bordered={false} dataSource={AlarmList} pagination={false} columns={columns} />
-                        }
+                    }
 
-                    </Card>
-                    <Card title={<span style={{fontWeight: '900'}}>处理说明</span>} style={{ marginTop: 20}}>
-                        <DescriptionList className={styles.headerList} size="large" col="1">
-                            <Description>
-                                <TextArea rows={8} style={{width: '600px'}}>
-                                    {Remark}
-                                </TextArea>
-                            </Description>
-                        </DescriptionList>
+                </Card>
+                <Card title={<span style={{fontWeight: '900'}}>处理说明</span>} style={{ marginTop: 20}}>
+                    <DescriptionList className={styles.headerList} size="large" col="1">
+                        <Description>
+                            <TextArea rows={8} style={{width: '600px'}}>
+                                {Remark}
+                            </TextArea>
+                        </Description>
+                    </DescriptionList>
 
-                    </Card>
-                    <Card title={<span style={{fontWeight: '900'}}>处理记录</span>} style={{ marginTop: 20}}>
-                        <DescriptionList className={styles.headerList} size="large" col="1">
-                            <Description>
-                                {
-                                    this.renderItem(RecordTypeInfo, TaskID)
-                                }
-                            </Description>
-                        </DescriptionList>
-                        <DescriptionList style={{marginTop: 20}} className={styles.headerList} size="large" col="2">
-                            <Description term="处理人">
-                                {OperationsUserName}
-                            </Description>
-                            <Description term="处理时间">
-                                {CompleteTime}
-                            </Description>
-                        </DescriptionList>
-                    </Card>
-                    <Card title={<span style={{fontWeight: '900'}}>附件</span>}>
-                        <Upload
-                            {...upload}
-                            onPreview={this.handlePreview}
-                        />
-                    </Card>
-                    <Card title={<span style={{fontWeight: '900'}}>日志表</span>} style={{marginTop: 20 }}>
-                        <Table columns={LogColumn}
-                            dataSource={TaskLogList}
-                            rowKey="StepID"
-                            bordered={true}
-                            pagination={false}
-                        />
-                    </Card>
-                    <div className={styles.Toexamine} >
-                        <Button size="large" onClick={() => {
-                            this.props.history.goBack(-1);
-                        }}><Icon type="left" />退回</Button>
-                    </div>
-                    <Modal width="65%" visible={this.state.previewVisible} footer={null} onCancel={this.handleCancel}>
-                        <img alt="example" style={{ width: '100%',marginTop: '20px' }} src={this.state.previewImage} />
-                    </Modal>
+                </Card>
+                <Card title={<span style={{fontWeight: '900'}}>处理记录</span>} style={{ marginTop: 20}}>
+                    <DescriptionList className={styles.headerList} size="large" col="1">
+                        <Description>
+                            {
+                                this.renderItem(RecordTypeInfo, TaskID)
+                            }
+                        </Description>
+                    </DescriptionList>
+                    <DescriptionList style={{marginTop: 20}} className={styles.headerList} size="large" col="2">
+                        <Description term="处理人">
+                            {OperationsUserName}
+                        </Description>
+                        <Description term="处理时间">
+                            {CompleteTime}
+                        </Description>
+                    </DescriptionList>
+                </Card>
+                <Card title={<span style={{fontWeight: '900'}}>附件</span>}>
+                    <Upload
+                        {...upload}
+                        onPreview={this.handlePreview}
+                    />
+                </Card>
+                <Card title={<span style={{fontWeight: '900'}}>日志表</span>} style={{marginTop: 20 }}>
+                    <Table columns={LogColumn}
+                        dataSource={TaskLogList}
+                        rowKey="StepID"
+                        bordered={true}
+                        pagination={false}
+                    />
+                </Card>
+                <div className={styles.Toexamine} >
+                    <Button size="large" onClick={() => {
+                        this.props.history.goBack(-1);
+                    }}><Icon type="left" />退回</Button>
                 </div>
+                <Modal width="65%" visible={this.state.previewVisible} footer={null} onCancel={this.handleCancel}>
+                    <img alt="example" style={{ width: '100%',marginTop: '20px' }} src={this.state.previewImage} />
+                </Modal>
+            </div>
         );
     }
 }
