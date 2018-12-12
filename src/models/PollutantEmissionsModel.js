@@ -7,7 +7,7 @@
 import { Model } from '../dvapack';
 import { getAllMonthPollutantEmissions, getSingleMonthAllPointEmissions, getSinglePointDaysEmissions } from '../services/PollutantEmissionsApi';
 import moment from 'moment';
-import { message } from 'antd';
+// import { message } from 'antd';
 
 export default Model.extend({
     namespace: 'PollutantEmissionsModel',
@@ -18,8 +18,8 @@ export default Model.extend({
         pointDaysDatas: [],
         enterpriseCodes: [],
         pollutantCodes: ['02'],
-        selectedDate:moment().format('YYYY-MM-01 00:00:00'),
-        clickDate:moment().format('YYYY-MM-01 00:00:00'),
+        selectedDate: moment().format('YYYY-MM-01 00:00:00'),
+        clickDate: moment().format('YYYY-MM-01 00:00:00'),
         beginTime: moment().format('YYYY-01-01 00:00:00'),
         endTime: moment().add(1,'years').format('YYYY-01-01 00:00:00'),
         monthTime: moment().format('YYYY-MM-01 00:00:00'),
@@ -34,7 +34,7 @@ export default Model.extend({
     },
     effects: {
         * getChartData({payload}, { call, put, update, select }) {
-            const {beginTime, endTime, pageSize, pollutantCodes, xAxisData, seriesData} = yield select(state => state.PollutantEmissionsModel);
+            const {beginTime, endTime, pageSize, pollutantCodes} = yield select(state => state.PollutantEmissionsModel);
             // debugger
             let body = {
                 beginTime: beginTime,
@@ -44,13 +44,14 @@ export default Model.extend({
             };
             const response = yield call(getAllMonthPollutantEmissions, body);
 
-            if(response.data)
+            if (response.data)
             {
-                let XAxisData=[],SeriesData=[];
-                response.data.map((ele)=>{
-                    XAxisData.push(ele.DataDate.split('-')[1]+'月');
+                let XAxisData = [];
+                let SeriesData = [];
+                response.data.map((ele) => {
+                    XAxisData.push(ele.DataDate.split('-')[1] + '月');
                     SeriesData.push(ele.Emissions.toFixed(2));
-                })
+                });
                 yield update({
                     total: response.total,
                     xAxisData: XAxisData,
@@ -72,7 +73,7 @@ export default Model.extend({
             };
             const response = yield call(getSingleMonthAllPointEmissions, body);
 
-            if(response.data)
+            if (response.data)
             {
                 yield update({
                     tableDatas: response.data,
@@ -95,7 +96,7 @@ export default Model.extend({
             };
             const response = yield call(getSinglePointDaysEmissions, body);
 
-            if(response.data)
+            if (response.data)
             {
                 yield update({
                     pointDaysDatas: response.data,

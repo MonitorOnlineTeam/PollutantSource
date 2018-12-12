@@ -18,7 +18,7 @@ export async function getAllMonthPollutantEmissions(params) {
         pageIndex: params.pageIndex || 1,
         pageSize: params.pageSize || 20
     };
-    const result= post('/api/rest/PollutantSourceApi/DataStatistics/GetAllMonthPollutantEmissions', body, null);
+    const result = post('/api/rest/PollutantSourceApi/DataStatistics/GetAllMonthPollutantEmissions', body, null);
 
     return result === null ? {
         data: null
@@ -37,7 +37,7 @@ export async function getSingleMonthAllPointEmissions(params) {
         pageIndex: params.pageIndex || 1,
         pageSize: params.pageSize || 20
     };
-    const result= post('/api/rest/PollutantSourceApi/DataStatistics/GetSingleMonthAllPointEmissions', body, null);
+    const result = post('/api/rest/PollutantSourceApi/DataStatistics/GetSingleMonthAllPointEmissions', body, null);
 
     return result === null ? {
         data: null
@@ -57,7 +57,7 @@ export async function getSinglePointDaysEmissions(params) {
         pageIndex: params.pageIndex || 1,
         pageSize: params.pageSize || 20
     };
-    const result= post('/api/rest/PollutantSourceApi/DataStatistics/GetSinglePointDaysEmissions', body, null);
+    const result = post('/api/rest/PollutantSourceApi/DataStatistics/GetSinglePointDaysEmissions', body, null);
 
     return result === null ? {
         data: null
