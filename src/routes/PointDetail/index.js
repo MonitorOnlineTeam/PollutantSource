@@ -32,7 +32,6 @@ class PointDetail extends Component {
                 // { key: 'replacementpartrecord', tab: '备品备件使用记录' },
                 { key: 'stopmanagement', tab: '停产管理' },
                 // { key: 'stationthree', tab: '站房全景' },
-                { key: 'videolist', tab: '视频管理' },
                 { key: 'ywdsjlist', tab: '运维大事记' },
                 { key: 'qcontrollist', tab: '质控记录' }
             ],
@@ -71,7 +70,7 @@ class PointDetail extends Component {
                     <div className={styles.pageHeader}>
                         <Breadcrumb className={styles.breadcrumb} >
                             <Breadcrumb.Item key="home">
-                                <Link to="/monitor/overview">监控总览</Link>
+                                <Link to="/overview/mapview">监控总览</Link>
                             </Breadcrumb.Item>
                             <Breadcrumb.Item key="home">
                                 {

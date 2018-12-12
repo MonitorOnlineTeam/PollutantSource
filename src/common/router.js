@@ -41,7 +41,7 @@ const dynamicWrapper = (app, models, component) => {
         models: () => models.filter(
             model => modelNotExisted(app, model)).map(m =>
                 import(`../models/${m}.js`)
-            ),
+        ),
         // add routerData prop
         component: () => {
             if (!routerDataCache) {
@@ -100,8 +100,8 @@ export const getRouterData = (app) => {
                 import('../routes/OverView/dataList')),
         },
         '/overview/mapview': {
-            component: dynamicWrapper(app, ['overview'], () =>
-                import('../routes/OverView/index')),
+            component: dynamicWrapper(app, ['overview','baseinfo'], () =>
+          import('../routes/OverView/index')),
         },
         '/statuslist': {
             component: dynamicWrapper(app, ['points'], () =>
@@ -142,10 +142,6 @@ export const getRouterData = (app) => {
         '/pointdetail/:pointcode/warningrecord': {
             component: dynamicWrapper(app, ['points'], () =>
                 import('../routes/PointDetail/WarningRecord')),
-        },
-        '/pointdetail/:pointcode/videolist': {
-            component: dynamicWrapper(app, ['videolist'], () =>
-                import('../routes/PointDetail/VideoList')),
         },
 
         '/pointdetail/:pointcode/emergencymaintenancerecord': {
@@ -195,6 +191,14 @@ export const getRouterData = (app) => {
         '/pointdetail/:pointcode/qcontrollist/RepairHistoryRecods/:TypeID': {
             component: dynamicWrapper(app, ['task'], () =>
                 import('../routes/EmergencyTodoList/RepairHistoryRecods')),
+        },
+        '/pointdetail/:pointcode/qcontrollist/StopCemsListHistoryRecords/:TypeID': {
+            component: dynamicWrapper(app, ['task'], () =>
+                import('../routes/EmergencyTodoList/StopCemsListHistoryRecords')),
+        },
+        '/pointdetail/:pointcode/qcontrollist/DeviceExceptionListHistoryRecord/:TypeID': {
+            component: dynamicWrapper(app, ['task'], () =>
+                import('../routes/EmergencyTodoList/DeviceExceptionListHistoryRecord')),
         },
         '/pointdetail/:pointcode/qcontrollist/CounterControlCommandHistoryRecords/:TypeID': {
             component: dynamicWrapper(app, ['task'], () =>
@@ -260,7 +264,7 @@ export const getRouterData = (app) => {
             component: dynamicWrapper(app, ['TransmissionEfficiencyModel'], () =>
                 import('../routes/QualityControl/TransmissionEfficiency')),
         },
-        /** 
+        /**
          * 设备运转率
         */
         '/QualityControl/EquipmentOperatingRate': {
@@ -268,14 +272,14 @@ export const getRouterData = (app) => {
                 import('../routes/QualityControl/EquipmentOperatingRate')),
         },
         /* 智能分析 */
-        /** 
+        /**
          * 月度排放量分析
         */
         '/Analysis/PollutantEmissions': {
             component: dynamicWrapper(app, ['points', 'PollutantEmissionsModel'], () =>
                 import('../routes/Analysis/PollutantEmissions')),
         },
-        /** 
+        /**
          * 报警及时响应统计分析
         */
         '/Analysis/AlarmResponse': {
@@ -439,6 +443,14 @@ export const getRouterData = (app) => {
         '/emissionpermits': {
             component: dynamicWrapper(app, ['baseinfo'], () =>
                 import('../routes/EmissionPermits')),
+        },
+        // '/pointdetail/:pointcode/videolist': {
+        //     component: dynamicWrapper(app, ['videolist'], () =>
+        //         import('../routes/PointDetail/VideoList')),
+        // },
+        '/sysmanage/VideoLists/:pointcode': {
+            component: dynamicWrapper(app, ['videolist'], () =>
+                import('../routes/PointInfo/VideoList')),
         },
         /* 登陆 */
         '/user': {

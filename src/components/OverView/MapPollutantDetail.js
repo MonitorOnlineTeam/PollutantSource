@@ -7,6 +7,7 @@ class MapPollutantDetail extends Component {
             <div>
                 <Table size="small" columns={this.props.detailpcol} dataSource={this.props.detaildata} pagination={false}
                     className={styles.treeTable}
+                    rowKey="pcode"
                     style={{ fontSize: '12px', height: 207, background: '#fff', width: 420, borderRadius: 10 }}
                     onRow={record => ({
                         onClick: () => {

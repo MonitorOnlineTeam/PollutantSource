@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import styles from '../EmergencyTodoList/EmergencyDetailInfo.less';
-import {Card, Divider, Button, Input, Table, Row, Col, Icon, Spin,Modal,Avatar } from 'antd';
+import {Card, Divider, Button, Input, Table, Icon, Spin,Modal,Upload } from 'antd';
 import DescriptionList from '../../components/DescriptionList';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import { connect } from 'dva';
@@ -34,14 +34,11 @@ export default class EmergencyDetailInfo extends Component {
         });
     }
 
-    handlePreview = (item) => {
-        // debugger;
-        // this.setState({
-        //     //previewImage: item !== null ? item.replace('_thumbnail','') : '',
-        //     previewVisible: true,
-        // });
-        console.log('内容：');
-        console.log(item);
+    handlePreview = (file) => {
+        this.setState({
+            previewImage: `${imgaddress}${file.name}`,
+            previewVisible: true,
+        });
     }
 
     handleCancel=() => {
@@ -173,15 +170,16 @@ export default class EmergencyDetailInfo extends Component {
             }
         }
 
-        //const pics = Attachments !== '' ? Attachments.LowimgList : [];
-        const pics = ['0ede7647-6318-4b57-851b-953a00984548_thumbnail.jpg',
-            '0ede7647-6318-4b57-851b-953a00984548_thumbnail.jpg',
-            '0ede7647-6318-4b57-851b-953a00984548_thumbnail.jpg',
-            '0ede7647-6318-4b57-851b-953a00984548_thumbnail.jpg',
-            '0ede7647-6318-4b57-851b-953a00984548_thumbnail.jpg',
-            '0ede7647-6318-4b57-851b-953a00984548_thumbnail.jpg',
-            '0ede7647-6318-4b57-851b-953a00984548_thumbnail.jpg',
-            '0ede7647-6318-4b57-851b-953a00984548_thumbnail.jpg'];
+        const pics = Attachments !== '' ? Attachments.ThumbimgList : [];
+        const fileList = [];
+        pics.map((item) => {
+            fileList.push({
+                uid: item,
+                name: item.replace('_thumbnail',''),
+                status: 'done',
+                url: `${imgaddress}${item}`,
+            });
+        });
         const columns = [{
             title: '开始报警时间',
             width: '20%',
@@ -237,10 +235,15 @@ export default class EmergencyDetailInfo extends Component {
                 </div>
             );
         }
+
+        const upload = {
+            showUploadList: {showPreviewIcon: true, showRemoveIcon: false },
+            listType: 'picture-card',
+            fileList: [...fileList]
+        };
         return (
-            <PageHeaderLayout title="">
-                <div style={{height: 'calc(100vh - 290px)'}} className={styles.ExceptionDetailDiv}>
-                    <Card title={<span style={{fontWeight: '900'}}>任务信息</span>} bordered={false}>
+                <div style={{height: 'calc(100vh - 220px)'}} className={styles.ExceptionDetailDiv}>
+                    <Card title={<span style={{fontWeight: '900'}}>任务信息</span>}>
                         <DescriptionList className={styles.headerList} size="large" col="3">
                             <Description term="任务单号">{TaskCode}</Description>
                             <Description term="排口" >{PointName}</Description>
@@ -266,7 +269,7 @@ export default class EmergencyDetailInfo extends Component {
                         }
 
                     </Card>
-                    <Card title={<span style={{fontWeight: '900'}}>处理说明</span>} style={{ marginTop: 20}} bordered={false}>
+                    <Card title={<span style={{fontWeight: '900'}}>处理说明</span>} style={{ marginTop: 20}}>
                         <DescriptionList className={styles.headerList} size="large" col="1">
                             <Description>
                                 <TextArea rows={8} style={{width: '600px'}}>
@@ -276,7 +279,7 @@ export default class EmergencyDetailInfo extends Component {
                         </DescriptionList>
 
                     </Card>
-                    <Card title={<span style={{fontWeight: '900'}}>处理记录</span>} style={{ marginTop: 20}} bordered={false}>
+                    <Card title={<span style={{fontWeight: '900'}}>处理记录</span>} style={{ marginTop: 20}}>
                         <DescriptionList className={styles.headerList} size="large" col="1">
                             <Description>
                                 {
@@ -293,21 +296,13 @@ export default class EmergencyDetailInfo extends Component {
                             </Description>
                         </DescriptionList>
                     </Card>
-                    <Card title={<span style={{fontWeight: '900'}}>附件</span>} bordered={false}>
-                        <Row gutter={16} justify="center" align="middle">
-                            {
-                                pics.map((item) => {
-                                    let picSrc = `${imgaddress}${item}`;
-                                    return (
-                                    <Col span={3} align="center">
-                                    {/* <img className={styles.imgFj} src={picSrc} onClick={this.handlePreview(picSrc)} /> */}
-                                    <Avatar shape="square" size={164} src={picSrc}>{this.state.user}</Avatar>
-                                    </Col>);
-                                })
-                            }
-                        </Row>
+                    <Card title={<span style={{fontWeight: '900'}}>附件</span>}>
+                        <Upload
+                            {...upload}
+                            onPreview={this.handlePreview}
+                        />
                     </Card>
-                    <Card title={<span style={{fontWeight: '900'}}>日志表</span>} style={{marginTop: 20 }} bordered={false}>
+                    <Card title={<span style={{fontWeight: '900'}}>日志表</span>} style={{marginTop: 20 }}>
                         <Table columns={LogColumn}
                             dataSource={TaskLogList}
                             rowKey="StepID"
@@ -320,11 +315,10 @@ export default class EmergencyDetailInfo extends Component {
                             this.props.history.goBack(-1);
                         }}><Icon type="left" />退回</Button>
                     </div>
-                    {/* <Modal visible={this.state.previewVisible} footer={null} onCancel={this.handleCancel}>
-                        <img alt="example" style={{ width: '100%' }} src={this.state.previewImage} />
-                    </Modal> */}
+                    <Modal width="65%" visible={this.state.previewVisible} footer={null} onCancel={this.handleCancel}>
+                        <img alt="example" style={{ width: '100%',marginTop: '20px' }} src={this.state.previewImage} />
+                    </Modal>
                 </div>
-            </PageHeaderLayout>
         );
     }
 }
