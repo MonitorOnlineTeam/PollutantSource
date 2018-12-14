@@ -18,7 +18,7 @@ class ConsumablesReplaceRecord extends Component {
     }
     componentWillMount() {
         this.onChange();
-    };
+    }
     onChange = () => {
         this.props.dispatch({
             type: 'task/fetchuserlist',
@@ -29,7 +29,8 @@ class ConsumablesReplaceRecord extends Component {
         });
     }
     render() {
-        const signContent = this.props.ConsumablesReplaceRecordList.length === 0 ? null : `data:image/jpeg;base64,${this.props.ConsumablesReplaceRecordList[0].record.length === 0 ? null : this.props.ConsumablesReplaceRecordList[0].record[0].SignContent}`;
+        console.log(this.props.ConsumablesReplaceRecordList.length === 0 ? null : this.props.ConsumablesReplaceRecordList[0]);
+        const signContent = this.props.ConsumablesReplaceRecordList.length === 0 ? null : `data:image/jpeg;base64,${this.props.ConsumablesReplaceRecordList[0].Record.length === 0 ? null : this.props.ConsumablesReplaceRecordList[0].Record[0].SignContent}`;
         const columnsone = [{
             dataIndex: 'EnterpriseNameTitle',
             key: 'EnterpriseNameTitle',
@@ -68,9 +69,9 @@ class ConsumablesReplaceRecord extends Component {
             EnterpriseNameTitle: '设备名称',
             EnterpriseNameContent: 'CEMS',
             CodeTitle: '规格型号',
-            CodeContent: this.props.ConsumablesReplaceRecordList.length === 0 ? null : this.props.ConsumablesReplaceRecordList[0].record.length === 0 ? this.props.ConsumablesReplaceRecordList[0].info[0].Code : this.props.ConsumablesReplaceRecordList[0].record[0].Content['Code'],
+            CodeContent: this.props.ConsumablesReplaceRecordList.length === 0 ? null : this.props.ConsumablesReplaceRecordList[0].Record[0].Content['Code'],
             EquipmentTitle: '设备编号',
-            EquipmentContent: this.props.ConsumablesReplaceRecordList.length === 0 ? null : this.props.ConsumablesReplaceRecordList[0].record.length === 0 ? this.props.ConsumablesReplaceRecordList[0].info[0].EquipmentCode : this.props.ConsumablesReplaceRecordList[0].record[0].Content['EquipmentCode'],
+            EquipmentContent: this.props.ConsumablesReplaceRecordList.length === 0 ? null : this.props.ConsumablesReplaceRecordList[0].Record[0].Content['EquipmentCode'],
         }];
         const columnstwo = [{
             dataIndex: 'MaintenanceManagementUnitTitle',
@@ -98,9 +99,9 @@ class ConsumablesReplaceRecord extends Component {
         const datatwo = [{
             key: '1',
             MaintenanceManagementUnitTitle: '维护管理单位',
-            MaintenanceManagementUnitContent: this.props.ConsumablesReplaceRecordList.length === 0 ? null : this.props.ConsumablesReplaceRecordList[0].record.length === 0 ? this.props.ConsumablesReplaceRecordList[0].info[0].MaintenanceManagementUnit : this.props.ConsumablesReplaceRecordList[0].record[0].Content['MaintenanceManagementUnit'],
+            MaintenanceManagementUnitContent: this.props.ConsumablesReplaceRecordList.length === 0 ? null : this.props.ConsumablesReplaceRecordList[0].Record[0].Content['MaintenanceManagementUnit'],
             PointPositionTitle: '安装地点',
-            PointPositionContent: this.props.ConsumablesReplaceRecordList.length === 0 ? null : this.props.ConsumablesReplaceRecordList[0].record.length === 0 ? this.props.ConsumablesReplaceRecordList[0].info[0].PointPosition : this.props.ConsumablesReplaceRecordList[0].record[0].Content['PointPosition'],
+            PointPositionContent: this.props.ConsumablesReplaceRecordList.length === 0 ? null : this.props.ConsumablesReplaceRecordList[0].Record[0].Content['PointPosition'],
         }];
         const columnsthree = [{
             dataIndex: 'CreateUserIDTitle',
@@ -161,13 +162,13 @@ class ConsumablesReplaceRecord extends Component {
         const datathree = [{
             key: '1',
             CreateUserIDTitle: '运行维护人员:',
-            CreateUserIDTitleContent: this.props.ConsumablesReplaceRecordList.length === 0 ? null : this.props.ConsumablesReplaceRecordList[0].record.length === 0 ? null : this.props.ConsumablesReplaceRecordList[0].record[0].CreateUserID,
+            CreateUserIDTitleContent: this.props.ConsumablesReplaceRecordList.length === 0 ? null : this.props.ConsumablesReplaceRecordList[0].Record.length === 0 ? null : this.props.ConsumablesReplaceRecordList[0].Record[0].CreateUserID,
             CreateTimeTitle: '时间:',
-            CreateTimeContent: this.props.ConsumablesReplaceRecordList.length === 0 ? null : this.props.ConsumablesReplaceRecordList[0].record.length === 0 ? null : this.props.ConsumablesReplaceRecordList[0].record[0].CreateTime,
+            CreateTimeContent: this.props.ConsumablesReplaceRecordList.length === 0 ? null : this.props.ConsumablesReplaceRecordList[0].Record.length === 0 ? null : this.props.ConsumablesReplaceRecordList[0].Record[0].CreateTime,
             SignContentTitle: '负责人:',
-            SignContentcontent: this.props.ConsumablesReplaceRecordList.length === 0 ? null : this.props.ConsumablesReplaceRecordList[0].record.length === 0 ? null :this.props.ConsumablesReplaceRecordList[0].record[0].SignContent===null?null: <img src={signContent} />,
+            SignContentcontent: this.props.ConsumablesReplaceRecordList.length === 0 ? null : this.props.ConsumablesReplaceRecordList[0].Record.length === 0 ? null : this.props.ConsumablesReplaceRecordList[0].Record[0].SignContent === null ? null : <img src={signContent} />,
             SignTimetitle: '时间:',
-            SignTimetitlecontent: this.props.ConsumablesReplaceRecordList.length === 0 ? null : this.props.ConsumablesReplaceRecordList[0].record.length === 0 ? null : this.props.ConsumablesReplaceRecordList[0].record[0].SignTime,
+            SignTimetitlecontent: this.props.ConsumablesReplaceRecordList.length === 0 ? null : this.props.ConsumablesReplaceRecordList[0].Record.length === 0 ? null : this.props.ConsumablesReplaceRecordList[0].Record[0].SignTime,
         }];
         const columns = [{
             title: '序号',
@@ -233,13 +234,13 @@ class ConsumablesReplaceRecord extends Component {
                         margin: 'auto',
                     }}
                     >
-                        <div style={{fontWeight: 'bold', marginBottom: 12, marginTop: 10}}>企业名称：{this.props.ConsumablesReplaceRecordList.length === 0 ? null : this.props.ConsumablesReplaceRecordList[0].record.length === 0 ? this.props.ConsumablesReplaceRecordList[0].info[0].EnterpriseName : this.props.ConsumablesReplaceRecordList[0].record[0].Content['EnterpriseName']}</div>
+                        <div style={{fontWeight: 'bold', marginBottom: 12, marginTop: 10}}>企业名称：{this.props.ConsumablesReplaceRecordList.length === 0 ? null : this.props.ConsumablesReplaceRecordList[0].Record.length === 0 ? this.props.ConsumablesReplaceRecordList[0].info[0].EnterpriseName : this.props.ConsumablesReplaceRecordList[0].Record[0].Content['EnterpriseName']}</div>
                         <Table
                             id="table-to-xls"
                             ref="table"
                             style={{width: 1200, backgroundColor: 'white'}}
                             columns={columns}
-                            dataSource={this.props.ConsumablesReplaceRecordList.length === 0 ? null : this.props.ConsumablesReplaceRecordList[0].record.length === 0 ? null : this.props.ConsumablesReplaceRecordList[0].record[0].RecordList}
+                            dataSource={this.props.ConsumablesReplaceRecordList.length === 0 ? null : this.props.ConsumablesReplaceRecordList[0].Record.length === 0 ? null : this.props.ConsumablesReplaceRecordList[0].Record[0].RecordList}
                             bordered={true}
                             pagination={false}
                             scroll={{ y: 330 }}

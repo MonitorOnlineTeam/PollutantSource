@@ -196,6 +196,10 @@ export const getRouterData = (app) => {
             component: dynamicWrapper(app, ['task'], () =>
                 import('../routes/EmergencyTodoList/StopCemsListHistoryRecords')),
         },
+        '/pointdetail/:pointcode/qcontrollist/BdHistoryInfoHistoryRecords/:TypeID': {
+            component: dynamicWrapper(app, ['task'], () =>
+                import('../routes/EmergencyTodoList/BdHistoryInfoHistoryRecords')),
+        },
         '/pointdetail/:pointcode/qcontrollist/DeviceExceptionListHistoryRecord/:TypeID': {
             component: dynamicWrapper(app, ['task'], () =>
                 import('../routes/EmergencyTodoList/DeviceExceptionListHistoryRecord')),

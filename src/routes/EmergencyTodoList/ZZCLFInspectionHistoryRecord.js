@@ -73,7 +73,8 @@ export default class ZZCLFInspectionHistoryRecord extends Component {
         }
 
         seeDetail=(record) => {
-            this.props.dispatch(routerRedux.push(`/pointdetail/:pointcode/DirectMeasurement/${record.taskId}/${this.state.typeID}`));
+            debugger
+            this.props.dispatch(routerRedux.push(`/pointdetail/:pointcode/DirectMeasurement/${record.TaskID}/${this.state.typeID}`));
         }
 
         render() {
@@ -81,18 +82,18 @@ export default class ZZCLFInspectionHistoryRecord extends Component {
             const columns = [{
                 title: '校准人',
                 width: '20%',
-                dataIndex: 'operationPerson',
-                key: 'operationPerson'
+                dataIndex: 'CreateUserID',
+                key: 'CreateUserID'
             }, {
-                title: '异常情况处理',
+                title: '维护情况',
                 width: '45%',
-                dataIndex: 'content',
-                key: 'content'
+                dataIndex: 'Content',
+                key: 'Content'
             }, {
                 title: '记录创建时间',
-                dataIndex: 'createTime',
+                dataIndex: 'CreateTime',
                 width: '20%',
-                key: 'createTime'
+                key: 'CreateTime'
             }, {
                 title: '详细',
                 dataIndex: 'TaskID',

@@ -199,3 +199,18 @@ export async function GetDeviceExceptionList(params) {
         data: null
     } : result;
 }
+// 校验测试历史记录列表（历史记录表）
+export async function GetBdHistoryInfoList(params) {
+    const body = {
+        pageIndex: params.pageIndex,
+        pageSize: params.pageSize,
+        TypeID: params.TypeID,
+        DGIMN: params.DGIMN,
+        BeginTime: params.BeginTime,
+        EndTime: params.EndTime,
+    };
+    const result = post('/api/rest/PollutantSourceApi/PTaskForm/GetBdHistoryInfo', body, null);
+    return result === null ? {
+        data: null
+    } : result;
+}

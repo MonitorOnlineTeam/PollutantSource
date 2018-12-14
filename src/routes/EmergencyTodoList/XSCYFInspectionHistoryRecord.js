@@ -22,7 +22,7 @@ import {routerRedux} from 'dva/router';
         pageSize: task.pageSize,
     }))
     /*
-    页面：完全抽取法CEMS日常巡检记录表(历史记录)
+    页面：稀释采样法CEMS日常巡检记录表(历史记录)
     */
 export default class XSCYFInspectionHistoryRecord extends Component {
         constructor(props) {
@@ -75,7 +75,7 @@ export default class XSCYFInspectionHistoryRecord extends Component {
 
         seeDetail=(record) => {
             debugger;
-            this.props.dispatch(routerRedux.push(`/pointdetail/:pointcode/DilutionSampling/${record.taskId}/${this.state.typeID}`));
+            this.props.dispatch(routerRedux.push(`/pointdetail/:pointcode/DilutionSampling/${record.TaskID}/${this.state.typeID}`));
         }
 
         render() {
@@ -83,18 +83,18 @@ export default class XSCYFInspectionHistoryRecord extends Component {
             const columns = [{
                 title: '校准人',
                 width: '20%',
-                dataIndex: 'operationPerson',
-                key: 'operationPerson'
+                dataIndex: 'CreateUserID',
+                key: 'CreateUserID'
             }, {
-                title: '异常情况处理',
+                title: '维护情况',
                 width: '45%',
-                dataIndex: 'content',
-                key: 'content'
+                dataIndex: 'Content',
+                key: 'Content'
             }, {
                 title: '记录创建时间',
-                dataIndex: 'createTime',
+                dataIndex: 'CreateTime',
                 width: '20%',
-                key: 'createTime'
+                key: 'CreateTime'
             }, {
                 title: '详细',
                 dataIndex: 'TaskID',

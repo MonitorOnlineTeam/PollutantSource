@@ -13,18 +13,19 @@ import { connect } from 'dva';
 import moment from 'moment';
 import RangePicker_ from '../../components/PointDetail/RangePicker_';
 import {routerRedux} from 'dva/router';
+import { DEFAULT_ENCODING } from 'crypto';
 
 @connect(({ task, loading }) => ({
     // isloading: loading.effects['task/GetJzHistoryRecord'],
-    HistoryStandardGasRepalceRecordList: task.List,
-    HistoryStandardGasRepalceRecordListCount: task.total,
+    BdHistoryInfoList: task.List,
+    BdHistoryInfoListCount: task.total,
     pageIndex: task.pageIndex,
     pageSize: task.pageSize,
 }))
 /*
-页面：标准气体历史记录
+页面：校验测试历史记录
 */
-export default class StandardGasHistoryRecords extends Component {
+export default class BdHistoryInfoHistoryRecords extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -36,13 +37,14 @@ export default class StandardGasHistoryRecords extends Component {
         };
     }
     componentDidMount() {
+        debugger;
         this.GetHistoryRecord(this.props.pageIndex, this.props.pageSize, this.state.DGIMN, this.state.typeID, this.state.BeginTime, this.state.EndTime);
     }
 
     GetHistoryRecord=(pageIndex, pageSize, DGIMN, typeID, BeginTime, EndTime) => {
         debugger;
         this.props.dispatch({
-            type: 'task/GetHistoryStandardGasRepalceRecordList',
+            type: 'task/GetBdHistoryInfoList',
             payload: {
                 pageIndex: pageIndex,
                 pageSize: pageSize,
@@ -74,22 +76,21 @@ export default class StandardGasHistoryRecords extends Component {
     }
 
     seeDetail=(record) => {
-        this.props.dispatch(routerRedux.push(`/pointdetail/:pointcode/StandardGasRepalceRecord/${record.TaskID}/${this.state.typeID}`));
+        this.props.dispatch(routerRedux.push(`../routes/EmergencyTodoList/ConsumablesReplaceRecord/${record.taskId}/${this.state.TypeID}`));////////跳转页面没做（跳转的页面还没有完成）
     }
 
     render() {
-        console.log(this.props.HistoryStandardGasRepalceRecordList === null ? null : this.props.HistoryStandardGasRepalceRecordList);
-        const dataSource = this.props.HistoryStandardGasRepalceRecordList === null ? null : this.props.HistoryStandardGasRepalceRecordList;
+        const dataSource = this.props.BdHistoryInfoList === null ? null : this.props.BdHistoryInfoList;
         const columns = [{
             title: '校准人',
             width: '20%',
             dataIndex: 'CreateUserID',
             key: 'CreateUserID'
         }, {
-            title: '标准物质名称（名称-有效期）',
+            title: '评价结果',
             width: '45%',
-            dataIndex: 'Content',
-            key: 'Content'
+            dataIndex: 'DealingSituations',
+            key: 'DealingSituations'
         }, {
             title: '记录创建时间',
             dataIndex: 'CreateTime',
@@ -129,7 +130,7 @@ export default class StandardGasHistoryRecords extends Component {
                         pagination={{
                             showSizeChanger: true,
                             showQuickJumper: true,
-                            'total': this.props.HistoryStandardGasRepalceRecordListCount,
+                            'total': this.props.BdHistoryInfoListCount,
                             'pageSize': this.props.pageSize,
                             'current': this.props.pageIndex,
                             onChange: this.onChange,
