@@ -33,21 +33,21 @@ export default class RepairHistoryRecods extends Component {
             BeginTime: moment().subtract(11, 'month').format('YYYY-MM-DD 00:00:00'),
             EndTime: moment().format('YYYY-MM-DD 23:59:59'),
             DGIMN: this.props.match.params.pointcode,
-            typeID: this.props.match.params.TypeID,
+            TypeID: this.props.match.params.TypeID,
         };
     }
     componentDidMount() {
-        this.GetHistoryRecord(this.props.pageIndex, this.props.pageSize, this.state.DGIMN, this.state.typeID, this.state.BeginTime, this.state.EndTime);
+        this.GetHistoryRecord(this.props.pageIndex, this.props.pageSize, this.state.DGIMN, this.state.TypeID, this.state.BeginTime, this.state.EndTime);
     }
 
-    GetHistoryRecord=(pageIndex, pageSize, DGIMN, typeID, BeginTime, EndTime) => {
-        debugger
+    GetHistoryRecord=(pageIndex, pageSize, DGIMN, TypeID, BeginTime, EndTime) => {
+        debugger;
         this.props.dispatch({
             type: 'task/GetHistoryRepairDetail',
             payload: {
                 pageIndex: pageIndex,
                 pageSize: pageSize,
-                TypeID: typeID,
+                TypeID: TypeID,
                 DGIMN: DGIMN,
                 BeginTime: moment(BeginTime).format('YYYY-MM-DD 00:00:00'),
                 EndTime: moment(EndTime).format('YYYY-MM-DD 23:59:59'),
@@ -63,20 +63,20 @@ export default class RepairHistoryRecods extends Component {
                 EndTime: dateString[1]
             }
         );
-        this.GetHistoryRecord(this.props.pageIndex, this.props.pageSize, this.state.DGIMN, this.state.typeID, dateString[0], dateString[1]);
+        this.GetHistoryRecord(this.props.pageIndex, this.props.pageSize, this.state.DGIMN, this.state.TypeID, dateString[0], dateString[1]);
     };
 
     onShowSizeChange = (pageIndex, pageSize) => {
-        this.GetHistoryRecord(pageIndex, pageSize, this.state.DGIMN, this.state.typeID, this.state.BeginTime, this.state.EndTime);
+        this.GetHistoryRecord(pageIndex, pageSize, this.state.DGIMN, this.state.TypeID, this.state.BeginTime, this.state.EndTime);
     }
 
     onChange = (pageIndex, pageSize) => {
-        debugger
-        this.GetHistoryRecord(pageIndex, pageSize, this.state.DGIMN, this.state.typeID, this.state.BeginTime, this.state.EndTime);
+        this.GetHistoryRecord(pageIndex, pageSize, this.state.DGIMN, this.state.TypeID, this.state.BeginTime, this.state.EndTime);
     }
 
     seeDetail=(record) => {
-        this.props.dispatch(routerRedux.push(`../routes/EmergencyTodoList/ConsumablesReplaceRecord/${record.taskId}/${this.state.TypeID}`));////////跳转页面没做（跳转的页面还没有完成）
+        debugger;
+        this.props.dispatch(routerRedux.push(`/pointdetail/:pointcode/RepairRecordDetail/${record.TaskID}/${this.state.TypeID}`));////////跳转页面没做（跳转的页面还没有完成）
     }
 
     render() {

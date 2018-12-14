@@ -337,8 +337,8 @@ debugger
             payload,
         }, { call, update }) {
             const DataInfo = yield call(GetRepairDetail, payload);
-            if (DataInfo != null && DataInfo.requstresult == EnumRequstResult.Success) {
-                if (DataInfo.data != null) {
+            if (DataInfo !== null && DataInfo.requstresult === EnumRequstResult.Success) {
+                if (DataInfo.data !== null) {
                     yield update({ Repair: DataInfo.data });
                 }
             }
