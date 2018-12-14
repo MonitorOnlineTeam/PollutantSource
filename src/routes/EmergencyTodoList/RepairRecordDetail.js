@@ -16,7 +16,6 @@ export default class RepairRecordDetail extends Component {
     }
 
     componentDidMount() {
-        debugger
         this.props.dispatch({
             type: 'task/GetRepairDetail',
             payload: {
@@ -25,10 +24,12 @@ export default class RepairRecordDetail extends Component {
             }
         });
     }
-    renderItem = (record) => {
+    renderItem = (Repair) => {
+        console.log(Repair);
+        debugger
         const rtnVal = [];
-        if (record !== null && record.length > 0) {
-            record.map((item, index) => {
+        if (Repair !== null && Repair.length > 0) {
+            Repair.map((item, index) => {
                 rtnVal.push(
                     <tr>
                         <th rowSpan="2" style={{ width: '20%', height: '30px', textAlign: 'left' }}>
@@ -59,7 +60,6 @@ export default class RepairRecordDetail extends Component {
         return rtnVal;
     }
     render() {
-        console.log();
         const SCREEN_HEIGHT = document.querySelector('body').offsetHeight - 250;
         const Repair = this.props.Repair;
         if (this.props.isloading) {
@@ -115,7 +115,7 @@ export default class RepairRecordDetail extends Component {
                         </tr>
 
                         {
-                            this.renderItem(RecordList)
+                            this.renderItem(Repair)
                         }
                         <tr>
                             <th style={{ width: '18%', height: '30px', textAlign: 'left' }}>

@@ -110,9 +110,7 @@ export default Model.extend({
             select
         }) {
             const result = yield call(GetConsumablesReplaceRecordList, { TaskIds: TaskIds, TypeIDs: TypeIDs });
-            debugger;
             if (result.requstresult === '1') {
-                debugger;
                 yield update({
                     requstresult: result.requstresult,
                     ConsumablesReplaceRecordList: result.data,
@@ -263,9 +261,7 @@ export default Model.extend({
             update,
             select
         }) {
-            debugger
             const result = yield call(GetHistoryInspectionHistoryRecord, {pageIndex: pageIndex, pageSize: pageSize, TypeID: TypeID, DGIMN: DGIMN, BeginTime: BeginTime, EndTime: EndTime});
-debugger
             if (result.requstresult === '1') {
                 yield update({
                     requstresult: result.requstresult,
@@ -313,7 +309,6 @@ debugger
             select
         }) {
             const result = yield call(GetHistoryStopCemsList, {pageIndex: pageIndex, pageSize: pageSize, TypeID: TypeID, DGIMN: DGIMN, BeginTime: BeginTime, EndTime: EndTime});
-            debugger;
             if (result.requstresult === '1') {
                 yield update({
                     requstresult: result.requstresult,
@@ -337,7 +332,7 @@ debugger
             payload,
         }, { call, update }) {
             const DataInfo = yield call(GetRepairDetail, payload);
-            if (DataInfo !== null && DataInfo.requstresult === EnumRequstResult.Success) {
+            if (DataInfo !== null && DataInfo.requstresult === '1') {
                 if (DataInfo.data !== null) {
                     yield update({ Repair: DataInfo.data });
                 }
@@ -431,9 +426,7 @@ debugger
             update,
             select
         }) {
-            debugger
             const result = yield call(GetBdHistoryInfoList, {pageIndex: pageIndex, pageSize: pageSize, TypeID: TypeID, DGIMN: DGIMN, BeginTime: BeginTime, EndTime: EndTime});
-
             if (result.requstresult === '1') {
                 yield update({
                     requstresult: result.requstresult,
