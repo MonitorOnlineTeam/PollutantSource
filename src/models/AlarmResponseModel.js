@@ -5,42 +5,98 @@
  */
 
 import { Model } from '../dvapack';
-import { getAlarmResponseAllMonthStatistics } from '../services/AlarmResponseApi';
+import { getAlarmResponseAllMonthStatistics,getSingleMonthAllPointAlarmResponseStatistics,getSinglePointDaysAlarmResponseStatistics } from '../services/AlarmResponseApi';
 import moment from 'moment';
 
 export default Model.extend({
     namespace: 'AlarmResponseModel',
     state: {
-        pageSize: 10,
+        pageSize: 20,
         pageIndex: 1,
-        tableDatas: [],
-        beginTime: moment().format('YYYY-MM-01 HH:mm:ss'),
-        endTime: moment().format('YYYY-MM-DD HH:mm:ss'),
-        EORSort: 'ascend'
+        beginTime: moment().format('YYYY-01-01 HH:mm:ss'),
+        endTime: moment().add(1,'years').format('YYYY-01-01 00:00:00'),
+        selectedDate: moment().format('YYYY-MM-01 HH:mm:ss'),
+        clickDate: moment().format('YYYY-MM-01 HH:mm:ss'),
+        xAxisData: [],
+        seriesData2: [],
+        seriesData8: [],
+        pointsTableData: [],
+        pointDaysTableData: [],
+        sort2: '',
+        sort8: '',
+        queryDGIMNs: ''
     },
     subscriptions: {
     },
     effects: {
-        * getData({payload}, { call, put, update, select }) {
-            const {beginTime, endTime, pageSize, EORSort} = yield select(state => state.AlarmResponseModel);
+        * getChartData({payload}, { call, put, update, select }) {
+            const {beginTime, endTime} = yield select(state => state.AlarmResponseModel);
             let body = {
-                // 'DGIMNs': ['sgjt001003', 'sgjt001004'],
-                // 'beginTime': '2018-11-01 00:00:00',
-                // 'endTime': '2018-11-30 00:00:00'
                 beginTime: beginTime,
                 endTime: endTime,
-                pageSize: pageSize,
-                EORSort: EORSort,
-                pageIndex: payload.pageIndex,
             };
             const response = yield call(getAlarmResponseAllMonthStatistics, body);
-            yield update({
-                tableDatas: response.data,
-                total: response.total,
-                pageIndex: payload.pageIndex || 1,
-            });
-            const tableDatasNew = yield select(state => state.AlarmResponseModel.tableDatas);
-            console.log('new', tableDatasNew);
+
+            if (response.data) {
+                let XAxisData = [];
+                let SeriesData2 = [];
+                let SeriesData8 = [];
+                response.data.map((ele) => {
+                    XAxisData.push(ele.AlarmResponseTime.split('-')[1] + '月');
+                    SeriesData2.push(ele.LessThan2Hour);
+                    SeriesData8.push(ele.GreaterThan8Hour);
+                });
+                yield update({
+                    total: response.total,
+                    xAxisData: XAxisData,
+                    seriesData2: SeriesData2,
+                    seriesData8: SeriesData8
+                });
+            }
+            console.log('new', response);
+        },
+        * getPointsData({payload}, { call, put, update, select }) {
+            const {clickDate, pageIndex, pageSize, sort2, sort8} = yield select(state => state.AlarmResponseModel);
+            // debugger
+            let body = {
+                monthTime: clickDate,
+                pageIndex: pageIndex,
+                pageSize: pageSize,
+                sort2: sort2,
+                sort8: sort8
+            };
+            const response = yield call(getSingleMonthAllPointAlarmResponseStatistics, body);
+
+            if (response.data) {
+                yield update({
+                    pointsTableData: response.data,
+                    total: response.total,
+                });
+            }
+            const pointsTableData = yield select(state => state.AlarmResponseModel.pointsTableData);
+            console.log('new', pointsTableData);
+        },
+        * getPointDaysData({payload}, { call, put, update, select }) {
+            const {clickDate, pageIndex, pageSize, sort2,sort8,queryDGIMNs} = yield select(state => state.AlarmResponseModel);
+            // debugger
+            let body = {
+                monthTime: clickDate,
+                pageIndex: pageIndex,
+                pageSize: pageSize,
+                DGIMNs: queryDGIMNs,
+                sort2: sort2,
+                sort8: sort8,
+            };
+            const response = yield call(getSinglePointDaysAlarmResponseStatistics, body);
+
+            if (response.data) {
+                yield update({
+                    pointDaysTableData: response.data,
+                    total: response.total,
+                });
+            }
+            const pointDaysTableData = yield select(state => state.AlarmResponseModel.pointDaysTableData);
+            console.log('new', pointDaysTableData);
         },
     },
 });

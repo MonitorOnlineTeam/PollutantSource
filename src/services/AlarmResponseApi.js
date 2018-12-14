@@ -16,10 +16,51 @@ export async function getAlarmResponseAllMonthStatistics(params) {
         endTime: params.endTime,
         // EORSort: params.EORSort,
         pageIndex: params.pageIndex || 1,
-        pageSize: params.pageSize || 15
+        pageSize: params.pageSize || 20
     };
 
     const result = post('/api/rest/PollutantSourceApi/DataStatistics/GetAlarmResponseAllMonthStatistics', body, null);
+
+    return result === null ? {
+        data: null
+    } : result;
+}
+
+/**
+ * 【报警及时响应】根据月份获取所有排口报警及时响应数据
+ * @params {"monthTime":"2018-11-01 00:00:00"}
+ */
+export async function getSingleMonthAllPointAlarmResponseStatistics(params) {
+    const body = {
+        monthTime: params.monthTime,
+        sort2: params.sort2 || '',
+        sort8: params.sort8 || '',
+        pageIndex: params.pageIndex || 1,
+        pageSize: params.pageSize || 20
+    };
+
+    const result = post('/api/rest/PollutantSourceApi/DataStatistics/GetSingleMonthAllPointAlarmResponseStatistics', body, null);
+
+    return result === null ? {
+        data: null
+    } : result;
+}
+
+/**
+ * 【报警及时响应】根据月份、排口获取单个排口每一天所有报警及时响应数据
+ * @params {"DGIMNs":"sgjt001003","monthTime":"2018-12-01 00:00:00"}
+ */
+export async function getSinglePointDaysAlarmResponseStatistics(params) {
+    const body = {
+        monthTime: params.monthTime,
+        DGIMNs: params.DGIMNs,
+        sort2: params.sort2 || '',
+        sort8: params.sort8 || '',
+        pageIndex: params.pageIndex || 1,
+        pageSize: params.pageSize || 20
+    };
+
+    const result = post('/api/rest/PollutantSourceApi/DataStatistics/GetSinglePointDaysAlarmResponseStatistics', body, null);
 
     return result === null ? {
         data: null

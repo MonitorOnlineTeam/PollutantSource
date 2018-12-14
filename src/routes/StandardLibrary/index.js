@@ -46,7 +46,7 @@ export default class StandardLibrary extends Component {
     }
     componentWillMount() {
         this.onChange();
-    };
+    }
 
     onShowSizeChange = (pageIndex, pageSize) => {
         this.props.dispatch({
@@ -177,9 +177,8 @@ export default class StandardLibrary extends Component {
                 }
                 if (text === 2) {
                     return <span > <Tag color="green" > 地标 </Tag > </span >;
-                } else {
-                    return <span > <Tag color="cyan" > 行标 </Tag > </span >;
                 }
+                return <span > <Tag color="cyan" > 行标 </Tag > </span >;
             }
         },
         {
@@ -203,11 +202,10 @@ export default class StandardLibrary extends Component {
                     return <span > <Tag color="red" > <a onClick={
                         () => this.IsEnabled(1, record)
                     } > 禁用 </a></Tag > </span>;
-                } else {
-                    return <span > <Tag color="blue" > <a onClick={
-                        () => this.IsEnabled(0, record)
-                    } > 启用 </a></Tag > </span>;
                 }
+                return <span > <Tag color="blue" > <a onClick={
+                    () => this.IsEnabled(0, record)
+                } > 启用 </a></Tag > </span>;
             }
         },
         {

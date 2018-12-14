@@ -187,7 +187,7 @@ class index extends PureComponent {
                                 <Col span={10} offset={1}>
                                     <FormItem label="企业名称" labelCol={{span: 4}} wrapperCol={{span: 10}} >
                                         {getFieldDecorator('entallname', {
-                                            initialValue: baseinfo.name,
+                                            initialValue: baseinfo?baseinfo.name:'',
                                             rules: [{
                                                 required: true, message: '请输入企业名称!',
                                             }],
@@ -201,7 +201,7 @@ class index extends PureComponent {
                                 <Col span={6} pull={3}>
                                     <FormItem label="企业简称" labelCol={{span: 6}} wrapperCol={{span: 10}}>
                                         {getFieldDecorator('enteasyname', {
-                                            initialValue: baseinfo.abbreviation,
+                                            initialValue: baseinfo?baseinfo.abbreviation:'',
                                             rules: [{
                                                 required: true, message: '请输入企业简称!',
                                             }],
@@ -218,7 +218,7 @@ class index extends PureComponent {
                                     <FormItem label="行政区" labelCol={{span: 4}} wrapperCol={{span: 10}}>
 
                                         {getFieldDecorator('area', {
-                                            initialValue: baseinfo.regionCode,
+                                            initialValue: baseinfo?baseinfo.regionCode:'',
                                             rules: [{
                                                 required: true,
                                                 message: '请输入行政区!',
@@ -238,7 +238,7 @@ class index extends PureComponent {
                                 <Col span={6} pull={3}>
                                     <FormItem label="所属行业" labelCol={{span: 6}} wrapperCol={{span: 10}}>
                                         {getFieldDecorator('industry', {
-                                            initialValue: baseinfo.industryTypeName,
+                                            initialValue: baseinfo?baseinfo.industryTypeName:'',
                                             rules: [{
                                                 required: true,
                                                 message: '请输入所属行业!',
@@ -259,7 +259,7 @@ class index extends PureComponent {
                                 <Col span={10} offset={1}>
                                     <FormItem label="地址" labelCol={{span: 4}} wrapperCol={{span: 10}}>
                                         {getFieldDecorator('adress', {
-                                            initialValue: baseinfo.address,
+                                            initialValue: baseinfo?baseinfo.address:'',
                                             rules: [{
                                                 required: true,
                                                 message: '请输地址!',
@@ -276,7 +276,7 @@ class index extends PureComponent {
                                 <Col span={6} pull={3}>
                                     <FormItem label="关注程度" labelCol={{span: 6}} wrapperCol={{span: 10}}>
                                         {getFieldDecorator('concern', {
-                                            initialValue: baseinfo.attentionName,
+                                            initialValue: baseinfo?baseinfo.attentionName:'',
                                             rules: [{
                                                 required: true,
                                                 message: '请输入关注程度!',
@@ -297,7 +297,7 @@ class index extends PureComponent {
                                 <Col span={10} offset={1}>
                                     <FormItem label="法人编号" labelCol={{span: 4}} wrapperCol={{span: 10}}>
                                         {getFieldDecorator('personnum', {
-                                            initialValue: baseinfo.corporationCode,
+                                            initialValue: baseinfo?baseinfo.corporationCode:'',
                                             rules: [{
                                                 required: true,
                                                 message: '请输入法人编号!',
@@ -314,7 +314,7 @@ class index extends PureComponent {
                                 <Col span={6} pull={3} >
                                     <FormItem label="法人" labelCol={{span: 6}} wrapperCol={{span: 10}}>
                                         {getFieldDecorator('personname', {
-                                            initialValue: baseinfo.corporationName,
+                                            initialValue: baseinfo?baseinfo.corporationName:'',
                                             rules: [{
                                                 required: true,
                                                 message: '请输入法人名称!',
@@ -333,7 +333,7 @@ class index extends PureComponent {
                                 <Col span={10} offset={1}>
                                     <FormItem label="单位类型" labelCol={{span: 4}} wrapperCol={{span: 10}}>
                                         {getFieldDecorator('unit', {
-                                            initialValue: baseinfo.UnitTypeName,
+                                            initialValue: baseinfo?baseinfo.UnitTypeName:'',
                                             rules: [{
                                                 required: true,
                                                 message: '请输入单位类型!',
@@ -371,7 +371,7 @@ class index extends PureComponent {
                                 <Col span={10} offset={1}>
                                     <FormItem label="污染源规模" labelCol={{span: 4}} wrapperCol={{span: 10}}>
                                         {getFieldDecorator('pollutionsources', {
-                                            initialValue: baseinfo.PSScaleName,
+                                            initialValue: baseinfo?baseinfo.PSScaleName:'',
                                             rules: [{
                                                 required: true,
                                                 message: '请输入污染源规模!',
@@ -390,7 +390,7 @@ class index extends PureComponent {
                                 <Col span={6} pull={3}>
                                     <FormItem label="经纬度" labelCol={{span: 6}} wrapperCol={{span: 10}}>
                                         {getFieldDecorator('latlon', {
-                                            initialValue: baseinfo.longitude + ',' + baseinfo.latitude,
+                                            initialValue: baseinfo?baseinfo.longitude:'' + ',' + (baseinfo?baseinfo.latitude:''),
                                             rules: [{
                                                 required: true,
                                                 message: '请输入经纬度!',
@@ -425,7 +425,7 @@ class index extends PureComponent {
                                 <Col span={6} pull={3}>
                                     <FormItem label="注册类型" labelCol={{span: 6}} wrapperCol={{span: 10}}>
                                         {getFieldDecorator('registration', {
-                                            initialValue: baseinfo.registTypeName,
+                                            initialValue: baseinfo?baseinfo.registTypeName:'',
                                             rules: [{
                                                 required: true,
                                                 message: '请输入注册类型!',
@@ -462,7 +462,7 @@ class index extends PureComponent {
                                 <Col span={6} pull={3}>
                                     <FormItem label="环保负责人" labelCol={{span: 6}} wrapperCol={{span: 10}}>
                                         {getFieldDecorator('chargeman', {
-                                            initialValue: baseinfo.environmentPrincipal,
+                                            initialValue: baseinfo?baseinfo.environmentPrincipal:'',
                                             rules: [{
                                                 required: true,
                                                 message: '请输入环保负责人!',
@@ -481,7 +481,7 @@ class index extends PureComponent {
                                 <Col span={10} offset={1}>
                                     <FormItem label="办公电话" labelCol={{span: 4}} wrapperCol={{span: 10}}>
                                         {getFieldDecorator('phone', {
-                                            initialValue: baseinfo.officePhone,
+                                            initialValue: baseinfo?baseinfo.officePhone:'',
                                             rules: [{
                                                 required: true,
                                                 message: '请输入办公电话!',
@@ -498,7 +498,7 @@ class index extends PureComponent {
                                 <Col span={6} pull={3}>
                                     <FormItem label="隶属关系" labelCol={{span: 6}} wrapperCol={{span: 10}}>
                                         {getFieldDecorator('subjection', {
-                                            initialValue: baseinfo.subjectionRelationName,
+                                            initialValue: baseinfo?baseinfo.subjectionRelationName:'',
                                             rules: [{
                                                 required: true,
                                                 message: '请输入隶属关系!',
@@ -521,7 +521,7 @@ class index extends PureComponent {
                                         allcoo ? allcoo.map((item, key) => {
                                             return (
                                                 <Polygon
-                                                    key={baseinfo.code}
+                                                    key={baseinfo?baseinfo.code:''}
                                                     style={{
                                                         strokeColor: '#FF33FF',
                                                         strokeOpacity: 0.2,
@@ -543,9 +543,9 @@ class index extends PureComponent {
                                 <div style={{marginTop: 20}}>
                                     <Carousel autoplay={true} >
                                         {
-                                            baseinfo.imgNamelist.map(item => {
+                                          baseinfo?baseinfo.imgNamelist.map(item => {
                                                 return (<img key={item.imgname} style={{width: 550}} src={imgaddress + item.imgname} />);
-                                            })
+                                            }):''
                                         }
                                     </Carousel>
                                     <Button onClick={this.imgshowModal} style={{marginLeft: 450, marginTop: 10}}>图片管理</Button>
@@ -556,7 +556,7 @@ class index extends PureComponent {
                                         footer={null}
                                         width={1000}
                                     >
-                                        <ImgInfo imagelist={baseinfo.imgNamelist} uuid={baseinfo.Photo} />
+                                        <ImgInfo imagelist={baseinfo?baseinfo.imgNamelist:''} uuid={baseinfo?baseinfo.Photo:''} />
                                     </Modal>
                                 </div>
                             </div>

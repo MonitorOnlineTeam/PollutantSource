@@ -100,8 +100,8 @@ export const getRouterData = (app) => {
                 import('../routes/OverView/dataList')),
         },
         '/overview/mapview': {
-            component: dynamicWrapper(app, ['overview'], () =>
-                import('../routes/OverView/index')),
+            component: dynamicWrapper(app, ['overview','baseinfo'], () =>
+          import('../routes/OverView/index')),
         },
         '/statuslist': {
             component: dynamicWrapper(app, ['points'], () =>
@@ -443,6 +443,10 @@ export const getRouterData = (app) => {
         '/sysmanage/StandardLibraryDetail/:StandardLibraryID': {
             component: dynamicWrapper(app, ['standardlibrary'], () =>
                 import('../routes/StandardLibrary/AddStandardLibrary')),
+        },
+        '/sysmanage/UseStandardLibrary/:DGIMN/:PointName': {
+            component: dynamicWrapper(app, ['standardlibrary'], () =>
+             import('../routes/StandardLibrary/UseStandardLibrary')),
         },
         '/emissionpermits': {
             component: dynamicWrapper(app, ['baseinfo'], () =>
