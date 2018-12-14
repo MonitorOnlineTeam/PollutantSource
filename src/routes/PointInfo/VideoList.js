@@ -30,7 +30,7 @@ export default class VideoList extends Component {
             expandForm: false,
             loading: true,
             DGIMN: this.props.match.params.pointcode,
-            pointName: '脱硫入口',
+            pointName: this.props.match.params.pointname,
             footer: <div>
                 <Button key="back" onClick={this.handleCancel}>Return</Button>,
                 <Button key="submit" type="primary" onClick={this.handleOk}>

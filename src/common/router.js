@@ -456,7 +456,7 @@ export const getRouterData = (app) => {
         //     component: dynamicWrapper(app, ['videolist'], () =>
         //         import('../routes/PointDetail/VideoList')),
         // },
-        '/sysmanage/VideoLists/:pointcode': {
+        '/sysmanage/VideoLists/:pointcode/:pointname': {
             component: dynamicWrapper(app, ['videolist'], () =>
                 import('../routes/PointInfo/VideoList')),
         },
