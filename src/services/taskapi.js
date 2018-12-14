@@ -27,8 +27,7 @@ export async function GetYwdsj(params) {
 // 获取校准记录
 export async function GetJzRecord(params) {
     const body = {
-        TaskID: params.TaskID,
-        TypeID: params.TypeID
+        TaskID: params.TaskID
     };
     const result = await post('/api/rest/PollutantSourceApi/PTaskForm/GetJzRecord', body, null);
     return result === null ? { data: null } : result;
@@ -48,7 +47,6 @@ export async function GetJzHistoryRecord(params) {
     const body = {
         pageIndex: params.pageIndex,
         pageSize: params.pageSize,
-        TypeID: params.TypeID,
         DGIMN: params.DGIMN,
         BeginTime: params.BeginTime,
         EndTime: params.EndTime
@@ -195,6 +193,21 @@ export async function GetDeviceExceptionList(params) {
         EndTime: params.EndTime,
     };
     const result = post('/api/rest/PollutantSourceApi/PTaskForm/DeviceExceptionList', body, null);
+    return result === null ? {
+        data: null
+    } : result;
+}
+// 校验测试历史记录列表（历史记录表）
+export async function GetBdHistoryInfoList(params) {
+    const body = {
+        pageIndex: params.pageIndex,
+        pageSize: params.pageSize,
+        TypeID: params.TypeID,
+        DGIMN: params.DGIMN,
+        BeginTime: params.BeginTime,
+        EndTime: params.EndTime,
+    };
+    const result = post('/api/rest/PollutantSourceApi/PTaskForm/GetBdHistoryInfo', body, null);
     return result === null ? {
         data: null
     } : result;

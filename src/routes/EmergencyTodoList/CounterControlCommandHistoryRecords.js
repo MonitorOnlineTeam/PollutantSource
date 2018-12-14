@@ -28,7 +28,7 @@ export default class CounterControlCommandHistoryRecords extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            rangeDate: [moment(moment(new Date()).subtract(11, 'month').format('YYYY-MM-DD 00:00:00')), moment(moment(new Date()).format('YYYY-MM-DD 23:59:59'))], // 最近七天
+            rangeDate: [moment(moment(new Date()).subtract(3, 'month').format('YYYY-MM-DD 00:00:00')), moment(moment(new Date()).format('YYYY-MM-DD 23:59:59'))], // 最近七天
             BeginTime: moment().subtract(11, 'month').format('YYYY-MM-DD 00:00:00'),
             EndTime: moment().format('YYYY-MM-DD 23:59:59'),
             DGIMN: this.props.match.params.pointcode,
@@ -77,7 +77,7 @@ export default class CounterControlCommandHistoryRecords extends Component {
 
     seeDetail=(record) => {
         debugger;
-        this.props.dispatch(routerRedux.push(`/pointdetail/:pointcode/ConsumablesReplaceRecord/${record.taskId}/${this.state.typeID}`));
+        this.props.dispatch(routerRedux.push(`/pointdetail/:pointcode/ConsumablesReplaceRecord/${record.TaskID}/${this.state.typeID}`));
     }
 
     render() {
@@ -85,18 +85,18 @@ export default class CounterControlCommandHistoryRecords extends Component {
         const columns = [{
             title: '校准人',
             width: '20%',
-            dataIndex: 'operationPerson',
-            key: 'operationPerson'
+            dataIndex: 'CreateUserID',
+            key: 'CreateUserID'
         }, {
             title: '易耗品（数量）',
             width: '45%',
-            dataIndex: 'name',
-            key: 'name'
+            dataIndex: 'Content',
+            key: 'Content'
         }, {
             title: '记录创建时间',
-            dataIndex: 'createTime',
+            dataIndex: 'CreateTime',
             width: '20%',
-            key: 'createTime'
+            key: 'CreateTime'
         }, {
             title: '详细',
             dataIndex: 'TaskID',

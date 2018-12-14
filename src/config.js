@@ -15,7 +15,7 @@ module.exports = {
     enterpriceid:'51216eae-8f11-4578-ad63-5127f78f6cca',
     apiPrefix: '/mock',
     webSocketPushURL: '172.16.4.200:40001',
-    imgaddress: 'http://localhost:51047/upload/',
+    imgaddress: 'http://localhost:52199/upload/',
     mainpollutantInfo: [{
         pollutantCode: '01',
         pollutantName: '烟尘',

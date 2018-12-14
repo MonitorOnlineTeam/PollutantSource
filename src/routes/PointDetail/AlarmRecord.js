@@ -16,6 +16,7 @@ const FormItem = Form.Item;
 @connect(({points, loading}) => ({
     pollutantlist: points.pollutantlist,
     isloading: loading.effects['points/querypollutantlist'],
+    dataloading: loading.effects['points/queryoverdatalist'],
     data: points.overdata,
     total: points.overtotal,
     selectpoint: points.selectpoint,
@@ -98,16 +99,15 @@ class AlarmRecord extends Component {
               dataIndex: 'overMul',
               key: 'overMul'
           }];
-
           return (
               <div>
-                  {this.props.isloading ? <Spin style={{width: '100%',
+                  {(this.props.isloading || this.props.dataloading) ? <Spin style={{width: '100%',
                       height: 'calc(100vh - 260px)',
-                      marginTop: 260 }} size="large" />
-                      : <Card>
-                          <Card>
+                      marginTop: 260 }} size="large" /> :
+                      <Card>
+                      <Card>
                               <Form layout="inline">
-                                  <Row gutter={{ md: 8, lg: 8, xl: 8 }}>
+                              <Row gutter={{ md: 8, lg: 8, xl: 8 }}>
                                       <Col span={12}>
                                           <FormItem label="超标时间">
                                               <RangePicker_ style={{width: 250}} format="YYYY-MM-DD" onChange={this._handleDateChange} dateValue={this.state.rangeDate} />
@@ -123,11 +123,11 @@ class AlarmRecord extends Component {
                                           />
                                       </Col>
                                   </Row>
-                              </Form>
+                          </Form>
                           </Card>
-                          <Row gutter={18} >
+                      <Row gutter={18} >
                               <Col span={24}>
-                                  <Table
+                              <Table
                                       columns={columns}
                                       dataSource={this.props.data}
                                       rowKey="key"
@@ -138,9 +138,9 @@ class AlarmRecord extends Component {
                                           onChange: this.pageIndexChange
                                       }}
                                   />
-                              </Col>
+                          </Col>
                           </Row>
-                      </Card>
+                  </Card>
                   }</div>
           );
       }

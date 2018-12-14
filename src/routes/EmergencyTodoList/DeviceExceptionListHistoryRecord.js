@@ -29,7 +29,7 @@ export default class DeviceExceptionListHistoryRecord extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            rangeDate: [moment(moment(new Date()).subtract(11, 'month').format('YYYY-MM-DD 00:00:00')), moment(moment(new Date()).format('YYYY-MM-DD 23:59:59'))], // 最近七天
+            rangeDate: [moment(moment(new Date()).subtract(3, 'month').format('YYYY-MM-DD 00:00:00')), moment(moment(new Date()).format('YYYY-MM-DD 23:59:59'))], // 最近七天
             BeginTime: moment().subtract(11, 'month').format('YYYY-MM-DD 00:00:00'),
             EndTime: moment().format('YYYY-MM-DD 23:59:59'),
             DGIMN: this.props.match.params.pointcode,
@@ -44,7 +44,7 @@ export default class DeviceExceptionListHistoryRecord extends Component {
     GetHistoryRecord=(pageIndex, pageSize, DGIMN, typeID, BeginTime, EndTime) => {
         debugger
         this.props.dispatch({
-            type: 'task/GetHistoryStopCemsList',
+            type: 'task/GetDeviceExceptionList',
             payload: {
                 pageIndex: pageIndex,
                 pageSize: pageSize,
@@ -83,23 +83,33 @@ export default class DeviceExceptionListHistoryRecord extends Component {
         const dataSource = this.props.HistoryDeviceExceptionList === null ? null : this.props.HistoryDeviceExceptionList;
         const columns = [{
             title: '校准人',
-            width: '20%',
+            width: '15%',
             dataIndex: 'CreateUserID',
             key: 'CreateUserID'
         }, {
-            title: '停机时长',
-            width: '45%',
-            dataIndex: 'StopHour',
-            key: 'StopHour'
+            title: '异常状况',
+            width: '20%',
+            dataIndex: 'ExceptionStatus',
+            key: 'ExceptionStatus'
+        }, {
+            title: '异常原因',
+            width: '20%',
+            dataIndex: 'ExceptionReason',
+            key: 'ExceptionReason'
+        }, {
+            title: '处理情况',
+            width: '20%',
+            dataIndex: 'DealingSituations',
+            key: 'DealingSituations'
         }, {
             title: '记录创建时间',
             dataIndex: 'CreateTime',
-            width: '20%',
+            width: '15%',
             key: 'CreateTime'
         }, {
             title: '详细',
             dataIndex: 'TaskID',
-            width: '15%',
+            width: '10%',
             key: 'TaskID',
             render: (text, record) => {
                 return <a onClick={

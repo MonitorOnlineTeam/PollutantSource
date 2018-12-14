@@ -1,7 +1,13 @@
+'use strict';
+
 import React, { Component } from 'react';
 import styles from '../EmergencyTodoList/JzRecordInfo.less';
 import {Spin, Button, Icon} from 'antd';
 import { connect } from 'dva';
+
+import saveAs from 'file-saver';
+
+//import * as fstream from 'fstream';
 
 @connect(({ task, loading }) => ({
     isloading: loading.effects['task/GetJzRecord'],
@@ -19,11 +25,25 @@ export default class JzRecordInfo extends Component {
         this.props.dispatch({
             type: 'task/GetJzRecord',
             payload: {
-                TaskID: this.props.match.params.TaskID,
-                TypeID: this.props.match.params.TypeID
+                TaskID: this.props.match.params.TaskID
             }
         });
     }
+
+
+    onExport=() => {
+        var docx = require('docx');
+        const doc = new docx.Document();
+        const table = doc.createTable(4, 4);
+        table.getCell(2, 2).addContent(new docx.TextRun('dfsdf'));
+        table.getCell(1, 1).addContent('asdasdasd');
+        const packer = new docx.Packer();
+        packer.toBlob(doc).then((blob) => {
+            // saveAs from FileSaver will download the file
+            saveAs(blob, 'example.docx');
+        });
+    }
+
     renderItem=(record, code) => {
         const rtnVal = [];
         if (code != null && code.length > 0) {
@@ -134,12 +154,11 @@ export default class JzRecordInfo extends Component {
                         </table>);
                     }
                 });
-            } else {
-
             }
         }
         return rtnVal;
     }
+
     render() {
         const SCREEN_HEIGHT = document.querySelector('body').offsetHeight - 250;
         const JzRecord = this.props.JzRecord;
@@ -149,138 +168,140 @@ export default class JzRecordInfo extends Component {
                     <Spin size="large" />
                 </div>
             );
-        } else {
-            let EnterpriseName = null;
-            let PointPosition = null;
-            let MaintenanceManagementUnit = null;
-            let GasCemsEquipmentManufacturer = null;
-            let GasCemsCode = null;
-            let KlwCemsEquipmentManufacturer = null;
-            let KlwCemsCode = null;
-            let AdjustDate = null;
-            let AdjustStartTime = null;
-            let AdjustEndTime = null;
-            let Record = null;
-            let Code = null;
-            let RecordList = null;
-            let CreateUserID = null;
-            let SignContent = null;
-            let SignTime = null;
-            if (JzRecord != null) {
-                Record = JzRecord.record;
-                Code = JzRecord.code;
-                RecordList = Record.RecordList;
-                EnterpriseName = Record.Content.EnterpriseName;
-                PointPosition = Record.Content.PointPosition;
-                MaintenanceManagementUnit = Record.Content.MaintenanceManagementUnit;
-                GasCemsEquipmentManufacturer = Record.Content.GasCemsEquipmentManufacturer;
-                GasCemsCode = Record.Content.GasCemsCode;
-                KlwCemsEquipmentManufacturer = Record.Content.KlwCemsEquipmentManufacturer;
-                KlwCemsCode = Record.Content.KlwCemsCode;
-                AdjustDate = Record.Content.AdjustDate;
-                AdjustStartTime = Record.Content.AdjustStartTime;
-                AdjustEndTime = Record.Content.AdjustEndTime;
-                CreateUserID = Record.CreateUserID;
-                SignContent = Record.SignContent === null ? null : `data:image/jpeg;base64,${Record.SignContent}`;
-                SignTime = Record.SignTime;
-            }
-
-            return (
-                <div className={styles.FormDiv} style={{height: SCREEN_HEIGHT}}>
-                    <div className={styles.FormName}>CEMS零点量程漂移与校准记录表</div>
-                    <div className={styles.HeadDiv} style={{fontWeight: 'bold'}}>企业名称：{EnterpriseName}</div>
-                    <table className={styles.FormTable}>
-                        <tbody>
-                            <tr>
-                                <td style={{width: '18%', height: '30px', textAlign: 'left'}}>
-                            气态污染物CEMS设备生产商
-                                </td>
-                                <td style={{width: '16%', height: '30px'}}>
-                                    {GasCemsEquipmentManufacturer}
-                                </td>
-                                <td>
-                            气态污染物CEMS设备规格型号
-                                </td>
-                                <td style={{width: '18%', height: '30px'}}>
-                                    {GasCemsCode}
-                                </td>
-                                <td>
-                            校准日期
-                                </td>
-                                <td style={{width: '16%', height: '30px'}}>
-                                    {AdjustDate}
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style={{width: '18%', height: '30px', textAlign: 'left'}}>
-                            颗粒物CEMS设备生产商
-                                </td>
-                                <td style={{width: '16%', height: '30px'}}>
-                                    {KlwCemsEquipmentManufacturer}
-                                </td>
-                                <td>
-                            颗粒物CEMS设备规格型号
-                                </td>
-                                <td style={{width: '18%', height: '30px'}}>
-                                    {KlwCemsCode}
-                                </td>
-                                <td style={{width: '16%', height: '30px'}}>
-                            校准开始日期
-                                </td>
-                                <td style={{width: '16%', height: '30px'}}>
-                                    {AdjustStartTime}
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style={{width: '18%', height: '30px', textAlign: 'left'}}>
-                            安装地点
-                                </td>
-                                <td style={{width: '16%', height: '30px'}}>
-                                    {PointPosition}
-                                </td>
-                                <td style={{width: '18%', height: '30px', textAlign: 'left'}}>
-                            维护管理单位
-                                </td>
-                                <td colSpan="3">
-                                    {MaintenanceManagementUnit}
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    {
-                        this.renderItem(RecordList, Code)
-                    }
-                    <table className={styles.FormTable} style={{border: '0'}}>
-                        <tbody>
-                            <tr>
-                                <td style={{width: '25%', height: '30px'}}>校准人：</td>
-                                <td style={{width: '25%', height: '30px'}}>{CreateUserID}</td>
-                                <td style={{width: '25%', height: '30px'}}>校准结束时间：</td>
-                                <td style={{width: '25%', height: '30px'}}>{AdjustEndTime}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <table className={styles.FormTable}>
-                        <tbody>
-                            <tr>
-                                <td style={{width: '75%', height: '30px', textAlign: 'right', border: '0', fontWeight: 'bold'}}>负责人签名：</td>
-                                <td style={{width: '25%', height: '30px', border: '0'}}><img src={SignContent} /></td>
-                            </tr>
-                            <tr>
-                                <td style={{width: '75%', height: '30px', textAlign: 'right', border: '0', fontWeight: 'bold'}}>签名时间：</td>
-                                <td style={{width: '25%', height: '30px', border: '0'}}>{SignTime}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-
-                    <div className={styles.Toexamine} >
-                        <Button size="large" onClick={() => {
-                            this.props.history.goBack(-1);
-                            // this.props.dispatch(routerRedux.push(`/operation/emergency/emergencytodolist/`));
-                        }}><Icon type="left" />退回</Button>
-                    </div>
-                </div>
-            );
         }
+        let EnterpriseName = null;
+        let PointPosition = null;
+        let MaintenanceManagementUnit = null;
+        let GasCemsEquipmentManufacturer = null;
+        let GasCemsCode = null;
+        let KlwCemsEquipmentManufacturer = null;
+        let KlwCemsCode = null;
+        let AdjustDate = null;
+        let AdjustStartTime = null;
+        let AdjustEndTime = null;
+        let Record = null;
+        let Code = null;
+        let RecordList = null;
+        let CreateUserID = null;
+        let SignContent = null;
+        let SignTime = null;
+        if (JzRecord != null) {
+            Record = JzRecord.record;
+            Code = JzRecord.code;
+            RecordList = Record.RecordList;
+            EnterpriseName = Record.Content.EnterpriseName;
+            PointPosition = Record.Content.PointPosition;
+            MaintenanceManagementUnit = Record.Content.MaintenanceManagementUnit;
+            GasCemsEquipmentManufacturer = Record.Content.GasCemsEquipmentManufacturer;
+            GasCemsCode = Record.Content.GasCemsCode;
+            KlwCemsEquipmentManufacturer = Record.Content.KlwCemsEquipmentManufacturer;
+            KlwCemsCode = Record.Content.KlwCemsCode;
+            AdjustDate = Record.Content.AdjustDate;
+            AdjustStartTime = Record.Content.AdjustStartTime;
+            AdjustEndTime = Record.Content.AdjustEndTime;
+            CreateUserID = Record.CreateUserID;
+            SignContent = Record.SignContent === null ? null : `data:image/jpeg;base64,${Record.SignContent}`;
+            SignTime = Record.SignTime;
+        }
+
+        return (
+            <div className={styles.FormDiv} style={{height: SCREEN_HEIGHT}}>
+                <div className={styles.FormName}>CEMS零点量程漂移与校准记录表</div>
+                <div className={styles.HeadDiv} style={{fontWeight: 'bold'}}>企业名称：{EnterpriseName}</div>
+                <table className={styles.FormTable}>
+                    <tbody>
+                        <tr>
+                            <td style={{width: '18%', height: '30px', textAlign: 'left'}}>
+                            气态污染物CEMS设备生产商
+                            </td>
+                            <td style={{width: '16%', height: '30px'}}>
+                                {GasCemsEquipmentManufacturer}
+                            </td>
+                            <td>
+                            气态污染物CEMS设备规格型号
+                            </td>
+                            <td style={{width: '18%', height: '30px'}}>
+                                {GasCemsCode}
+                            </td>
+                            <td>
+                            校准日期
+                            </td>
+                            <td style={{width: '16%', height: '30px'}}>
+                                {AdjustDate}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style={{width: '18%', height: '30px', textAlign: 'left'}}>
+                            颗粒物CEMS设备生产商
+                            </td>
+                            <td style={{width: '16%', height: '30px'}}>
+                                {KlwCemsEquipmentManufacturer}
+                            </td>
+                            <td>
+                            颗粒物CEMS设备规格型号
+                            </td>
+                            <td style={{width: '18%', height: '30px'}}>
+                                {KlwCemsCode}
+                            </td>
+                            <td style={{width: '16%', height: '30px'}}>
+                            校准开始日期
+                            </td>
+                            <td style={{width: '16%', height: '30px'}}>
+                                {AdjustStartTime}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style={{width: '18%', height: '30px', textAlign: 'left'}}>
+                            安装地点
+                            </td>
+                            <td style={{width: '16%', height: '30px'}}>
+                                {PointPosition}
+                            </td>
+                            <td style={{width: '18%', height: '30px', textAlign: 'left'}}>
+                            维护管理单位
+                            </td>
+                            <td colSpan="3">
+                                {MaintenanceManagementUnit}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                {
+                    this.renderItem(RecordList, Code)
+                }
+                <table className={styles.FormTable} style={{border: '0'}}>
+                    <tbody>
+                        <tr>
+                            <td style={{width: '25%', height: '30px'}}>校准人：</td>
+                            <td style={{width: '25%', height: '30px'}}>{CreateUserID}</td>
+                            <td style={{width: '25%', height: '30px'}}>校准结束时间：</td>
+                            <td style={{width: '25%', height: '30px'}}>{AdjustEndTime}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table className={styles.FormTable}>
+                    <tbody>
+                        <tr>
+                            <td style={{width: '75%', height: '30px', textAlign: 'right', border: '0', fontWeight: 'bold'}}>负责人签名：</td>
+                            <td style={{width: '25%', height: '30px', border: '0'}}><img src={SignContent} /></td>
+                        </tr>
+                        <tr>
+                            <td style={{width: '75%', height: '30px', textAlign: 'right', border: '0', fontWeight: 'bold'}}>签名时间：</td>
+                            <td style={{width: '25%', height: '30px', border: '0'}}>{SignTime}</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div className={styles.Toexamine} >
+                    <Button size="large" icon="left" onClick={() => {
+                        this.props.history.goBack(-1);
+                    }}>退回</Button>
+                    <br />
+                    <Button size="large" icon="export" onClick={this.onExport}>
+                    导出
+                    </Button>
+                </div>
+            </div>
+        );
     }
 }

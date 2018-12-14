@@ -26,10 +26,10 @@ export default class JzHistoryRecords extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            rangeDate: [moment(moment(new Date()).subtract(7, 'day').format('YYYY-MM-DD 00:00:00')), moment(moment(new Date()).format('YYYY-MM-DD 23:59:59'))],
+            rangeDate: [moment(moment(new Date()).subtract(3, 'month').format('YYYY-MM-DD 00:00:00')), moment(moment(new Date()).format('YYYY-MM-DD 23:59:59'))],
             pageIndex: pageIndex,
             pageSize: pageSize,
-            beginTime: moment().subtract(7, 'day').format('YYYY-MM-DD 00:00:00'),
+            beginTime: moment().subtract(3, 'month').format('YYYY-MM-DD 00:00:00'),
             endTime: moment().format('YYYY-MM-DD 23:59:59'),
             dgimn: this.props.match.params.pointcode,
             typeID: this.props.match.params.TypeID,
@@ -83,8 +83,8 @@ export default class JzHistoryRecords extends Component {
         const columns = [{
             title: '校准人',
             width: '20%',
-            dataIndex: 'JzPerson',
-            key: 'JzPerson'
+            dataIndex: 'CreateUserID',
+            key: 'CreateUserID'
         }, {
             title: '分析仪校准是否正常',
             width: '45%',

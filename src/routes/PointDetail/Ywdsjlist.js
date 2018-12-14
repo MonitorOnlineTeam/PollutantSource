@@ -24,14 +24,11 @@ export default class Ywdsjlist extends Component {
         const beginTime = this.props.match.params.begintime;
         const endTime = this.props.match.params.begintime;
         this.state = {
-            //rangeDate: beginTime !== null && endTime !== null ? [beginTime,endTime] : [moment(moment(new Date()).subtract(7, 'day').format('YYYY-MM-DD 00:00:00')), moment(moment(new Date()).format('YYYY-MM-DD 23:59:59'))],
-            rangeDate: [moment(moment(new Date()).subtract(7, 'day').format('YYYY-MM-DD 00:00:00')), moment(moment(new Date()).format('YYYY-MM-DD 23:59:59'))],
+            rangeDate: [moment(moment(new Date()).subtract(3, 'month').format('YYYY-MM-DD 00:00:00')), moment(moment(new Date()).format('YYYY-MM-DD 23:59:59'))],
             pageIndex: pageIndex,
             pageSize: pageSize,
             IsAlarmTimeout: true,
-            // beginTime: beginTime !== null ? beginTime : moment().subtract(7, 'day').format('YYYY-MM-DD 00:00:00'),
-            // endTime: endTime !== null ? endTime : moment().format('YYYY-MM-DD 23:59:59'),
-            beginTime: moment().subtract(7, 'day').format('YYYY-MM-DD 00:00:00'),
+            beginTime: moment().subtract(3, 'month').format('YYYY-MM-DD 00:00:00'),
             endTime: moment().format('YYYY-MM-DD 23:59:59'),
             taskType: 0,
             checkedList: defaultCheckedList,
