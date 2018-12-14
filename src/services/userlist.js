@@ -21,7 +21,7 @@ export async function getList(params) {
 // 删除用户
 export async function deleteuser(params) {
     const body = {
-        UserId: params.UserId.join(',')
+        UserId: params.UserId
     };
     const result = post('/api/rest/PollutantSourceApi/PUserInfo/DeleteUserInfo', body, null);
     return result === null ? {

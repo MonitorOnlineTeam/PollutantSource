@@ -20,7 +20,7 @@ class StandardGasRepalceRecord extends Component {
     }
     componentWillMount() {
         this.onChange();
-    };
+    }
     onChange = () => {
         this.props.dispatch({
             type: 'task/StandardGasRepalceRecordList',
@@ -31,7 +31,8 @@ class StandardGasRepalceRecord extends Component {
         });
     }
     render() {
-        const signContent = this.props.StandardGasRepalceRecordList.length === 0 ? null : `data:image/jpeg;base64,${this.props.StandardGasRepalceRecordList[0].record.length === 0 ? null : this.props.StandardGasRepalceRecordList[0].record[0].SignContent}`;
+        console.log(this.props.StandardGasRepalceRecordList.length === 0 ? null : this.props.StandardGasRepalceRecordList);
+        const signContent = this.props.StandardGasRepalceRecordList.length === 0 ? null : `data:image/jpeg;base64,${this.props.StandardGasRepalceRecordList[0].Record.length === 0 ? null : this.props.StandardGasRepalceRecordList[0].Record[0].SignContent}`;
         const columnstwo = [{
             dataIndex: 'MaintenanceManagementUnitTitle',
             key: 'MaintenanceManagementUnitTitle',
@@ -58,9 +59,9 @@ class StandardGasRepalceRecord extends Component {
         const datatwo = [{
             key: '1',
             MaintenanceManagementUnitTitle: '维护管理单位',
-            MaintenanceManagementUnitContent: this.props.StandardGasRepalceRecordList.length === 0 ? null : this.props.StandardGasRepalceRecordList[0].record.length === 0 ? this.props.StandardGasRepalceRecordList[0].info[0].MaintenanceManagementUnit : this.props.StandardGasRepalceRecordList[0].record[0].Content['MaintenanceManagementUnit'],
+            MaintenanceManagementUnitContent: this.props.StandardGasRepalceRecordList.length === 0 ? null : this.props.StandardGasRepalceRecordList[0].Record[0].Content['MaintenanceManagementUnit'],
             PointPositionTitle: '安装地点',
-            PointPositionContent: this.props.StandardGasRepalceRecordList.length === 0 ? null : this.props.StandardGasRepalceRecordList[0].record.length === 0 ? this.props.StandardGasRepalceRecordList[0].info[0].PointPosition : this.props.StandardGasRepalceRecordList[0].record[0].Content['PointPosition'],
+            PointPositionContent: this.props.StandardGasRepalceRecordList.length === 0 ? null : this.props.StandardGasRepalceRecordList[0].Record[0].Content['PointPosition'],
         }];
         const columnsthree = [{
             dataIndex: 'CreateUserIDTitle',
@@ -111,13 +112,13 @@ class StandardGasRepalceRecord extends Component {
         const datathree = [{
             key: '1',
             CreateUserIDTitle: '运行维护人员:',
-            CreateUserIDTitleContent: this.props.StandardGasRepalceRecordList.length === 0 ? null : this.props.StandardGasRepalceRecordList[0].record.length === 0 ? null : this.props.StandardGasRepalceRecordList[0].record[0].CreateUserID,
+            CreateUserIDTitleContent: this.props.StandardGasRepalceRecordList.length === 0 ? null : this.props.StandardGasRepalceRecordList[0].Record.length === 0 ? null : this.props.StandardGasRepalceRecordList[0].Record[0].CreateUserID,
             CreateTimeTitle: '时间:',
-            CreateTimeContent: this.props.StandardGasRepalceRecordList.length === 0 ? null : this.props.StandardGasRepalceRecordList[0].record.length === 0 ? null : this.props.StandardGasRepalceRecordList[0].record[0].CreateTime,
+            CreateTimeContent: this.props.StandardGasRepalceRecordList.length === 0 ? null : this.props.StandardGasRepalceRecordList[0].Record.length === 0 ? null : this.props.StandardGasRepalceRecordList[0].Record[0].CreateTime,
             SignContentTitle: '负责人:',
-            SignContentcontent: this.props.StandardGasRepalceRecordList.length === 0 ? null : this.props.StandardGasRepalceRecordList[0].record.length === 0 ? null : this.props.StandardGasRepalceRecordList[0].record[0].SignContent===null?null: <img src={signContent} />,
+            SignContentcontent: this.props.StandardGasRepalceRecordList.length === 0 ? null : this.props.StandardGasRepalceRecordList[0].Record.length === 0 ? null : this.props.StandardGasRepalceRecordList[0].Record[0].SignContent === null ? null : <img src={signContent} />,
             SignTimetitle: '时间:',
-            SignTimetitlecontent: this.props.StandardGasRepalceRecordList.length === 0 ? null : this.props.StandardGasRepalceRecordList[0].record.length === 0 ? null : this.props.StandardGasRepalceRecordList[0].record[0].SignTime,
+            SignTimetitlecontent: this.props.StandardGasRepalceRecordList.length === 0 ? null : this.props.StandardGasRepalceRecordList[0].Record.length === 0 ? null : this.props.StandardGasRepalceRecordList[0].Record[0].SignTime,
         }];
         const columnsfour = [{
             title: 'Detail',
@@ -199,11 +200,11 @@ class StandardGasRepalceRecord extends Component {
                         margin: 'auto',
                     }}
                     >
-                        <div style={{fontWeight: 'bold', marginBottom: 12, marginTop: 10}}>企业名称：{this.props.StandardGasRepalceRecordList.length === 0 ? null : this.props.StandardGasRepalceRecordList[0].record.length === 0 ? this.props.StandardGasRepalceRecordList[0].info[0].EnterpriseName : this.props.StandardGasRepalceRecordList[0].record[0].Content['EnterpriseName']}</div>
+                        <div style={{fontWeight: 'bold', marginBottom: 12, marginTop: 10}}>企业名称：{this.props.StandardGasRepalceRecordList.length === 0 ? null : this.props.StandardGasRepalceRecordList[0].Record[0].Content['EnterpriseName']}</div>
                         <Table
                             style={{width: 1200}}
                             columns={columns}
-                            dataSource={this.props.StandardGasRepalceRecordList.length === 0 ? null : this.props.StandardGasRepalceRecordList[0].record.length === 0 ? null : this.props.StandardGasRepalceRecordList[0].record[0].RecordList}
+                            dataSource={this.props.StandardGasRepalceRecordList.length === 0 ? null : this.props.StandardGasRepalceRecordList[0].Record.length === 0 ? null : this.props.StandardGasRepalceRecordList[0].Record[0].RecordList}
                             bordered={true}
                             pagination={false}
                             scroll={{ y: 330 }}

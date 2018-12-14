@@ -25,7 +25,7 @@ export default class qcontrollist extends Component {
             { key: EnumPsOperationForm.CyfPatrol, name: '稀释采样法CEMS日常巡检记录表', src: 'XSCYFInspectionHistoryRecord' },
             { key: EnumPsOperationForm.ClfPatrol, name: '直接测量法CEMS日常巡检记录表', src: 'ZZCLFInspectionHistoryRecord' },
             { key: EnumPsOperationForm.CheckRecord, name: 'CEMS零点量程漂移与校准记录表', src: 'JzHistoryRecords' },
-            { key: EnumPsOperationForm.TestRecord, name: 'CEMS校验测试记录', src: '' },
+            { key: EnumPsOperationForm.TestRecord, name: 'CEMS校验测试记录', src: 'BdHistoryInfoHistoryRecords' },
             { key: EnumPsOperationForm.DataException, name: 'CEMS设备数据异常记录表', src: 'DeviceExceptionListHistoryRecord' }
         ];
         const path1 = this.props.location.pathname.split('/')[this.props.location.pathname.split('/').length - 1];

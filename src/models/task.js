@@ -1,4 +1,4 @@
-import { GetTaskDetails, GetYwdsj, GetJzRecord, GetRecordType, GetJzHistoryRecord, GetConsumablesReplaceRecordList, GetStandardGasRepalceRecordList, GetPatrolRecordListPC, GetHistoryConsumablesReplaceRecord,GetHistoryStandardGasRepalceRecordList, GetHistoryInspectionHistoryRecord, GetStopCemsDetail, GetRepairDetail,GetHistoryRepairDetail,GetHistoryStopCemsList } from '../services/taskapi';
+import { GetTaskDetails, GetYwdsj, GetJzRecord, GetRecordType, GetJzHistoryRecord, GetConsumablesReplaceRecordList, GetStandardGasRepalceRecordList, GetPatrolRecordListPC, GetHistoryConsumablesReplaceRecord,GetHistoryStandardGasRepalceRecordList, GetHistoryInspectionHistoryRecord, GetStopCemsDetail, GetRepairDetail,GetHistoryRepairDetail,GetHistoryStopCemsList,GetDeviceExceptionList,GetBdHistoryInfoList } from '../services/taskapi';
 import { Model } from '../dvapack';
 import { EnumRequstResult } from '../utils/enum';
 
@@ -19,6 +19,8 @@ export default Model.extend({
         total: null,
         StopCems: null,
         Repair: null,
+        ConsumablesReplaceRecordList: [],
+        StandardGasRepalceRecordList: [],
     },
 
     effects: {
@@ -108,15 +110,17 @@ export default Model.extend({
             select
         }) {
             const result = yield call(GetConsumablesReplaceRecordList, { TaskIds: TaskIds, TypeIDs: TypeIDs });
+            debugger;
             if (result.requstresult === '1') {
+                debugger;
                 yield update({
                     requstresult: result.requstresult,
-                    List: result.data,
+                    ConsumablesReplaceRecordList: result.data,
                 });
             } else {
                 yield update({
                     requstresult: result.requstresult,
-                    List: [],
+                    ConsumablesReplaceRecordList: [],
                 });
             }
         },
@@ -173,12 +177,12 @@ export default Model.extend({
             if (result.requstresult === '1') {
                 yield update({
                     requstresult: result.requstresult,
-                    List: result.data,
+                    StandardGasRepalceRecordList: result.data,
                 });
             } else {
                 yield update({
                     requstresult: result.requstresult,
-                    List: [],
+                    StandardGasRepalceRecordList: [],
                 });
             }
         },
@@ -231,7 +235,6 @@ export default Model.extend({
             select
         }) {
             const result = yield call(GetPatrolRecordListPC, { TaskIds: TaskIds, TypeIDs: TypeIDs });
-
             if (result.requstresult === '1') {
                 yield update({
                     requstresult: result.requstresult,
@@ -260,8 +263,9 @@ export default Model.extend({
             update,
             select
         }) {
+            debugger
             const result = yield call(GetHistoryInspectionHistoryRecord, {pageIndex: pageIndex, pageSize: pageSize, TypeID: TypeID, DGIMN: DGIMN, BeginTime: BeginTime, EndTime: EndTime});
-
+debugger
             if (result.requstresult === '1') {
                 yield update({
                     requstresult: result.requstresult,
@@ -309,6 +313,7 @@ export default Model.extend({
             select
         }) {
             const result = yield call(GetHistoryStopCemsList, {pageIndex: pageIndex, pageSize: pageSize, TypeID: TypeID, DGIMN: DGIMN, BeginTime: BeginTime, EndTime: EndTime});
+            debugger;
             if (result.requstresult === '1') {
                 yield update({
                     requstresult: result.requstresult,
@@ -332,8 +337,8 @@ export default Model.extend({
             payload,
         }, { call, update }) {
             const DataInfo = yield call(GetRepairDetail, payload);
-            if (DataInfo != null && DataInfo.requstresult == EnumRequstResult.Success) {
-                if (DataInfo.data != null) {
+            if (DataInfo !== null && DataInfo.requstresult === EnumRequstResult.Success) {
+                if (DataInfo.data !== null) {
                     yield update({ Repair: DataInfo.data });
                 }
             }
@@ -391,6 +396,43 @@ export default Model.extend({
             select
         }) {
             const result = yield call(GetDeviceExceptionList, {pageIndex: pageIndex, pageSize: pageSize, TypeID: TypeID, DGIMN: DGIMN, BeginTime: BeginTime, EndTime: EndTime});
+
+            if (result.requstresult === '1') {
+                yield update({
+                    requstresult: result.requstresult,
+                    List: result.data,
+                    total: result.total,
+                    pageIndex: pageIndex,
+                    pageSize: pageSize
+                });
+            } else {
+                yield update({
+                    requstresult: result.requstresult,
+                    List: [],
+                    total: result.total,
+                    pageIndex: pageIndex,
+                    pageSize: pageSize
+                });
+            }
+        },
+        //校验测试记录历史
+        * GetBdHistoryInfoList({
+            payload: {
+                pageIndex,
+                pageSize,
+                TypeID,
+                DGIMN,
+                BeginTime,
+                EndTime,
+            }
+        }, {
+            call,
+            put,
+            update,
+            select
+        }) {
+            debugger
+            const result = yield call(GetBdHistoryInfoList, {pageIndex: pageIndex, pageSize: pageSize, TypeID: TypeID, DGIMN: DGIMN, BeginTime: BeginTime, EndTime: EndTime});
 
             if (result.requstresult === '1') {
                 yield update({

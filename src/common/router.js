@@ -196,6 +196,10 @@ export const getRouterData = (app) => {
             component: dynamicWrapper(app, ['task'], () =>
                 import('../routes/EmergencyTodoList/StopCemsListHistoryRecords')),
         },
+        '/pointdetail/:pointcode/qcontrollist/BdHistoryInfoHistoryRecords/:TypeID': {
+            component: dynamicWrapper(app, ['task'], () =>
+                import('../routes/EmergencyTodoList/BdHistoryInfoHistoryRecords')),
+        },
         '/pointdetail/:pointcode/qcontrollist/DeviceExceptionListHistoryRecord/:TypeID': {
             component: dynamicWrapper(app, ['task'], () =>
                 import('../routes/EmergencyTodoList/DeviceExceptionListHistoryRecord')),
@@ -440,6 +444,10 @@ export const getRouterData = (app) => {
             component: dynamicWrapper(app, ['standardlibrary'], () =>
                 import('../routes/StandardLibrary/AddStandardLibrary')),
         },
+        '/sysmanage/UseStandardLibrary/:DGIMN/:PointName': {
+            component: dynamicWrapper(app, ['standardlibrary'], () =>
+             import('../routes/StandardLibrary/UseStandardLibrary')),
+        },
         '/emissionpermits': {
             component: dynamicWrapper(app, ['baseinfo'], () =>
                 import('../routes/EmissionPermits')),
@@ -448,7 +456,7 @@ export const getRouterData = (app) => {
         //     component: dynamicWrapper(app, ['videolist'], () =>
         //         import('../routes/PointDetail/VideoList')),
         // },
-        '/sysmanage/VideoLists/:pointcode': {
+        '/sysmanage/VideoLists/:pointcode/:pointname': {
             component: dynamicWrapper(app, ['videolist'], () =>
                 import('../routes/PointInfo/VideoList')),
         },

@@ -17,15 +17,15 @@ import { DEFAULT_ENCODING } from 'crypto';
 
 @connect(({ task, loading }) => ({
     // isloading: loading.effects['task/GetJzHistoryRecord'],
-    HistoryRepairHistoryRecods: task.List,
-    HistoryRepairHistoryRecodsCount: task.total,
+    BdHistoryInfoList: task.List,
+    BdHistoryInfoListCount: task.total,
     pageIndex: task.pageIndex,
     pageSize: task.pageSize,
 }))
 /*
-页面：维修历史记录
+页面：校验测试历史记录
 */
-export default class RepairHistoryRecods extends Component {
+export default class BdHistoryInfoHistoryRecords extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -33,21 +33,22 @@ export default class RepairHistoryRecods extends Component {
             BeginTime: moment().subtract(11, 'month').format('YYYY-MM-DD 00:00:00'),
             EndTime: moment().format('YYYY-MM-DD 23:59:59'),
             DGIMN: this.props.match.params.pointcode,
-            TypeID: this.props.match.params.TypeID,
+            typeID: this.props.match.params.TypeID,
         };
     }
     componentDidMount() {
-        this.GetHistoryRecord(this.props.pageIndex, this.props.pageSize, this.state.DGIMN, this.state.TypeID, this.state.BeginTime, this.state.EndTime);
+        debugger;
+        this.GetHistoryRecord(this.props.pageIndex, this.props.pageSize, this.state.DGIMN, this.state.typeID, this.state.BeginTime, this.state.EndTime);
     }
 
-    GetHistoryRecord=(pageIndex, pageSize, DGIMN, TypeID, BeginTime, EndTime) => {
+    GetHistoryRecord=(pageIndex, pageSize, DGIMN, typeID, BeginTime, EndTime) => {
         debugger;
         this.props.dispatch({
-            type: 'task/GetHistoryRepairDetail',
+            type: 'task/GetBdHistoryInfoList',
             payload: {
                 pageIndex: pageIndex,
                 pageSize: pageSize,
-                TypeID: TypeID,
+                TypeID: typeID,
                 DGIMN: DGIMN,
                 BeginTime: moment(BeginTime).format('YYYY-MM-DD 00:00:00'),
                 EndTime: moment(EndTime).format('YYYY-MM-DD 23:59:59'),
@@ -63,34 +64,33 @@ export default class RepairHistoryRecods extends Component {
                 EndTime: dateString[1]
             }
         );
-        this.GetHistoryRecord(this.props.pageIndex, this.props.pageSize, this.state.DGIMN, this.state.TypeID, dateString[0], dateString[1]);
+        this.GetHistoryRecord(this.props.pageIndex, this.props.pageSize, this.state.DGIMN, this.state.typeID, dateString[0], dateString[1]);
     };
 
     onShowSizeChange = (pageIndex, pageSize) => {
-        this.GetHistoryRecord(pageIndex, pageSize, this.state.DGIMN, this.state.TypeID, this.state.BeginTime, this.state.EndTime);
+        this.GetHistoryRecord(pageIndex, pageSize, this.state.DGIMN, this.state.typeID, this.state.BeginTime, this.state.EndTime);
     }
 
     onChange = (pageIndex, pageSize) => {
-        this.GetHistoryRecord(pageIndex, pageSize, this.state.DGIMN, this.state.TypeID, this.state.BeginTime, this.state.EndTime);
+        this.GetHistoryRecord(pageIndex, pageSize, this.state.DGIMN, this.state.typeID, this.state.BeginTime, this.state.EndTime);
     }
 
     seeDetail=(record) => {
-        debugger;
-        this.props.dispatch(routerRedux.push(`/pointdetail/:pointcode/RepairRecordDetail/${record.TaskID}/${this.state.TypeID}`));////////跳转页面没做（跳转的页面还没有完成）
+        this.props.dispatch(routerRedux.push(`../routes/EmergencyTodoList/ConsumablesReplaceRecord/${record.taskId}/${this.state.TypeID}`));////////跳转页面没做（跳转的页面还没有完成）
     }
 
     render() {
-        const dataSource = this.props.HistoryRepairHistoryRecods === null ? null : this.props.HistoryRepairHistoryRecods;
+        const dataSource = this.props.BdHistoryInfoList === null ? null : this.props.BdHistoryInfoList;
         const columns = [{
             title: '校准人',
             width: '20%',
             dataIndex: 'CreateUserID',
             key: 'CreateUserID'
         }, {
-            title: '维修项目',
+            title: '评价结果',
             width: '45%',
-            dataIndex: 'RecordItem',
-            key: 'RecordItem'
+            dataIndex: 'DealingSituations',
+            key: 'DealingSituations'
         }, {
             title: '记录创建时间',
             dataIndex: 'CreateTime',
@@ -130,7 +130,7 @@ export default class RepairHistoryRecods extends Component {
                         pagination={{
                             showSizeChanger: true,
                             showQuickJumper: true,
-                            'total': this.props.HistoryRepairHistoryRecodsCount,
+                            'total': this.props.BdHistoryInfoListCount,
                             'pageSize': this.props.pageSize,
                             'current': this.props.pageIndex,
                             onChange: this.onChange,
