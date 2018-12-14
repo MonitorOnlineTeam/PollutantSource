@@ -445,8 +445,8 @@ export const getRouterData = (app) => {
              import('../routes/StandardLibrary/UseStandardLibrary')),
         },
         '/sysmanage/StopManagement/:DGIMN/:PointName': {
-            component: dynamicWrapper(app, ['standardlibrary'], () =>
-            import('../routes/StopManagement/')),
+            component: dynamicWrapper(app, ['stopmanagement'], () =>
+            import('../routes/StopManagement/content')),
         },
         '/emissionpermits': {
             component: dynamicWrapper(app, ['baseinfo'], () =>
