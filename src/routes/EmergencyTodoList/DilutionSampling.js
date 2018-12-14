@@ -19,9 +19,8 @@ class DilutionSampling extends Component {
     // }
     componentWillMount() {
         this.onChange();
-    };
+    }
     onChange = () => {
-        ;
         this.props.dispatch({
             type: 'task/GetPatrolRecordListPC',
             payload: {
@@ -45,8 +44,6 @@ class DilutionSampling extends Component {
                 if (row.count !== 0) {
                     if (row.parentName === '巡检人员签字') {
                         obj.props.colSpan = 2;
-                    } else if (row.parentId === '备注') {
-                        obj.props.colSpan = 4;
                     } else {
                         obj.props.rowSpan = row.count;
                     }
@@ -67,9 +64,7 @@ class DilutionSampling extends Component {
                 };
                 if (row.parentName === '巡检人员签字') {
                     obj.props.colSpan = 0;
-                } else if (row.parentId === '备注') {
-                    obj.props.colSpan = 0;
-                } else if (row.parentName === '异常情况处理') {
+                } else if (row.parentName === '维护情况') {
                     obj.props.colSpan = 3;
                 }
                 return obj;
@@ -91,9 +86,7 @@ class DilutionSampling extends Component {
                             colSpan: 2,
                         },
                     };
-                } else if (row.parentId === '备注') {
-                    obj.props.colSpan = 0;
-                } else if (row.parentName === '异常情况处理') {
+                } else if (row.parentName === '维护情况') {
                     obj.props.colSpan = 0;
                 }
                 return obj;
@@ -111,9 +104,7 @@ class DilutionSampling extends Component {
                 if (row.count !== 0) {
                     if (row.parentName === '巡检人员签字') {
                         obj.props.colSpan = 0;
-                    } else if (row.parentId === '备注') {
-                        obj.props.colSpan = 0;
-                    } else if (row.parentName === '异常情况处理') {
+                    } else if (row.parentName === '维护情况') {
                         obj.props.colSpan = 0;
                     } else {
                         obj.props.rowSpan = row.count;
@@ -137,17 +128,17 @@ class DilutionSampling extends Component {
         }];
         const dataTitle = [{
             key: '0',
-            producter: this.props.PatrolRecordListPC.length === 0 ? null : this.props.PatrolRecordListPC[0].record.length === 0 ? this.props.PatrolRecordListPC[0].info[0].GasCemsEquipmentManufacturer : this.props.PatrolRecordListPC[0].record[0].Content.GasCemsEquipmentManufacturer,
-            format: this.props.PatrolRecordListPC.length === 0 ? null : this.props.PatrolRecordListPC[0].record.length === 0 ? this.props.PatrolRecordListPC[0].info[0].GasCemsCode : this.props.PatrolRecordListPC[0].record[0].Content.GasCemsCode,
+            producter: this.props.PatrolRecordListPC.length === 0 ? null : this.props.PatrolRecordListPC[0].Record[0].Content.GasCemsEquipmentManufacturer,
+            format: this.props.PatrolRecordListPC.length === 0 ? null : this.props.PatrolRecordListPC[0].Record[0].Content.GasCemsCode,
         },
         {
             key: '1',
-            producter: this.props.PatrolRecordListPC.length === 0 ? null : this.props.PatrolRecordListPC[0].record.length === 0 ? this.props.PatrolRecordListPC[0].info[0].KlwCemsEquipmentManufacturer : this.props.PatrolRecordListPC[0].record[0].Content.KlwCemsEquipmentManufacturer,
-            format: this.props.PatrolRecordListPC.length === 0 ? null : this.props.PatrolRecordListPC[0].record.length === 0 ? this.props.PatrolRecordListPC[0].info[0].KlwCemsCode : this.props.PatrolRecordListPC[0].record[0].Content.KlwCemsCode,
+            producter: this.props.PatrolRecordListPC.length === 0 ? null : this.props.PatrolRecordListPC[0].Record[0].Content.KlwCemsEquipmentManufacturer,
+            format: this.props.PatrolRecordListPC.length === 0 ? null : this.props.PatrolRecordListPC[0].Record[0].Content.KlwCemsCode,
         }, {
             key: '2',
-            producter: this.props.PatrolRecordListPC.length === 0 ? null : this.props.PatrolRecordListPC[0].record.length === 0 ? this.props.PatrolRecordListPC[0].info[0].PointPosition : this.props.PatrolRecordListPC[0].record[0].Content.PointPosition,
-            format: this.props.PatrolRecordListPC.length === 0 ? null : this.props.PatrolRecordListPC[0].record.length === 0 ? this.props.PatrolRecordListPC[0].info[0].MaintenanceManagementUnit : this.props.PatrolRecordListPC[0].record[0].Content.MaintenanceManagementUnit,
+            producter: this.props.PatrolRecordListPC.length === 0 ? null : this.props.PatrolRecordListPC[0].Record.length === 0 ? this.props.PatrolRecordListPC[0].info[0].PointPosition : this.props.PatrolRecordListPC[0].Record[0].Content.PointPosition,
+            format: this.props.PatrolRecordListPC.length === 0 ? null : this.props.PatrolRecordListPC[0].Record[0].Content.MaintenanceManagementUnit,
         }
         ];
         return (
@@ -183,8 +174,8 @@ class DilutionSampling extends Component {
                             marginTop: 10,
                             fontWeight: 'bold'}}>
                             <tr>
-                                <td>企业名称： {this.props.PatrolRecordListPC.length === 0 ? null : this.props.PatrolRecordListPC[0].record.length === 0 ? this.props.PatrolRecordListPC[0].info[0].EnterpriseName : this.props.PatrolRecordListPC[0].record[0].Content.EnterpriseName}</td>
-                                <td>巡检日期： {this.props.PatrolRecordListPC.length === 0 ? null : this.props.PatrolRecordListPC[0].record.length === 0 ? null : this.props.PatrolRecordListPC[0].record[0].Content.PatrolDate }</td>
+                                <td>企业名称： {this.props.PatrolRecordListPC.length === 0 ? null : this.props.PatrolRecordListPC[0].Record[0].Content.EnterpriseName}</td>
+                                <td>巡检日期： {this.props.PatrolRecordListPC.length === 0 ? null : this.props.PatrolRecordListPC[0].Record.length === 0 ? null : this.props.PatrolRecordListPC[0].Record[0].Content.PatrolDate }</td>
                             </tr>
                         </table>
                         <Table
@@ -197,7 +188,7 @@ class DilutionSampling extends Component {
                         <div style={{fontWeight: 'bold', marginBottom: 12, marginTop: 12}}>运行维护内容及处理说明：</div>
                         <Table
                             columns={columns}
-                            dataSource={this.props.PatrolRecordListPC.length === 0 ? null : this.props.PatrolRecordListPC[0].record.length === 0 ? this.props.PatrolRecordListPC[0].code1 : this.props.PatrolRecordListPC[0].record[0].RecordList}
+                            dataSource={this.props.PatrolRecordListPC.length === 0 ? null : this.props.PatrolRecordListPC[0].Record.length === 0 ? this.props.PatrolRecordListPC[0].Code : this.props.PatrolRecordListPC[0].Record[0].RecordList}
                             bordered={true}
                             pagination={false}
                         />

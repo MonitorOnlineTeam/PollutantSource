@@ -30,7 +30,7 @@ export default class VideoList extends Component {
             expandForm: false,
             loading: true,
             DGIMN: this.props.match.params.pointcode,
-            pointName: '脱硫入口',
+            pointName: this.props.match.params.pointname,
             footer: <div>
                 <Button key="back" onClick={this.handleCancel}>Return</Button>,
                 <Button key="submit" type="primary" onClick={this.handleOk}>
@@ -170,6 +170,11 @@ export default class VideoList extends Component {
         ];
         return (
             <div>
+                <div style={{position: 'absolute', right: 40, top: 98}} >
+                    <Button size="large" onClick={() => {
+                        this.props.history.goBack(-1);
+                    }}><Icon type="left" />退回</Button>
+                </div>
                 <PageHeader title="视频管理"
                     breadcrumbList={
                         [{

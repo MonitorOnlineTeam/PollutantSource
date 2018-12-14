@@ -50,8 +50,7 @@ export default class Ywdsjlist extends Component {
                 pageIndex: pageIndex,
                 pageSize: this.state.pageSize,
                 taskType: taskType,
-                // DGIMNs: this.props.match.params.pointcode,
-                DGIMNs: 'sgjt001003',
+                DGIMNs: this.props.match.params.pointcode,
                 IsAlarmTimeout: IsAlarmTimeout,
                 beginTime: beginTime,
                 endTime: endTime,
@@ -123,30 +122,26 @@ export default class Ywdsjlist extends Component {
         return (
             <Form layout="inline">
                 <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
-                    <Col md={9} sm={24}>
+                    <Col md={7} sm={24}>
                         <FormItem label="开始时间">
                             <RangePicker_ style={{width: 350}} onChange={this._handleDateChange} dateValue={this.state.rangeDate} />
                         </FormItem>
                     </Col>
-                    <Col md={5} sm={24}>
+                    <Col md={4} sm={24}>
                         <FormItem label="任务状态">
                             <CheckboxGroup options={plainOptions} value={this.state.checkedList} onChange={this.onChange} />
                         </FormItem>
                     </Col>
-                    <Col md={5} sm={24}>
-                        <span>
-                            报警响应超时:&nbsp;
-                        </span>
-                        <Switch checkedChildren="开" unCheckedChildren="关" defaultChecked={true} onChange={this.OpenonChange} />
+                    <Col md={3} sm={24}>
+                        <FormItem label="报警响应超时">
+                            <Switch checkedChildren="开" unCheckedChildren="关" defaultChecked={true} onChange={this.OpenonChange} />
+                        </FormItem>
                     </Col>
                 </Row>
             </Form>
         );
     }
 
-    renderForm() {
-        return this.renderSimpleForm();
-    }
     renderItem=(data) => {
         if (data != null && data.length > 0) {
             const rtnVal = [];
@@ -196,31 +191,28 @@ export default class Ywdsjlist extends Component {
             });
             return rtnVal;
         }
-        return (<div>暂无数据</div>);
+        return (<div style={{paddingLeft: '20%'}}>暂无数据</div>);
     }
 
     render() {
         let data = this.props.OperationInfo;
         const IsOver = this.props.IsOver;
-
         return (
             <div style={{ width: '100%', height: 'calc(100vh - 222px)' }}>
                 <Card >
                     <div bordered="false" className={styless.tableListForm}>{this.renderSimpleForm()}</div>
-                    <div>
-                        { this.props.isloading ? <div style={{height: 'calc(100vh - 400px)'}} className={Ywdsjlistss.divTimeLine}><Spin className={Ywdsjlistss.divTimeLine} /></div> :
-                            <div style={{height: 'calc(100vh - 400px)'}} className={Ywdsjlistss.divTimeLine}><Timeline mode="left">
+                    { this.props.isloading ? <div className={Ywdsjlistss.divSpin}><Spin size="large" /></div> :
+                    <div style={{height: 'calc(100vh - 400px)'}} className={Ywdsjlistss.divTimeLine}>
+                            <Timeline mode="left">
                             {
                                     this.renderItem(data)
                                 }
                         </Timeline>
                             {data != null && data.length > 0 ? (IsOver ? <div>已加载全部</div> : <Button
-                                    loading={this.state.iconLoading} onClick={this.enterIconLoading}>
+                            loading={this.state.iconLoading} onClick={this.enterIconLoading}>
                              加载更多
-                                </Button>) : ''}
+                        </Button>) : ''}
                         </div> }
-
-                    </div>
                 </Card>
             </div>
 

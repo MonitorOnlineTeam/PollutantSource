@@ -31,22 +31,22 @@ export default class DataFilter extends Component {
             alldgimn: (new Map(): Map < string, boolean >),
             testkey: null,
         };
-    };
+    }
     componentWillMount() {
         this.setState({
-            userid: this.props.pid.join(',')
+            userid: this.props.pid
         });
         this.props.onRef(this);
         this.onChange();
-    };
+    }
     // {this.props.ischecked.IsCheck}
     onChange = (pageIndex, pageSize) => {
         this.props.dispatch({
             type: 'userdgimndata/userDgimnDataFilter',
             payload: {
-                UserId: this.props.pid.join(','),
+                UserId: this.props.pid,
                 pageIndex: pageIndex,
-                pageSize: pageSize,
+                pageSize: pageSize === undefined ? 9 : pageSize,
                 callback: () => {
                     console.log(this.props.ischecked);
 
@@ -214,7 +214,7 @@ export default class DataFilter extends Component {
                                   'current': this.props.pageIndex,
                                   onChange: this.PonChange,
                                   onShowSizeChange: this.onShowSizeChange,
-                                  pageSizeOptions: ['10', '20', '30', '40']
+                                  pageSizeOptions: ['9', '12', '15', '18']
                               }
                           }
                           size="small"

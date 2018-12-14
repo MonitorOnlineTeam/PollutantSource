@@ -10,8 +10,7 @@ import {
     DatePicker,
     Progress,
     Row,
-    Col,
-    Button
+    Col
 } from 'antd';
 import moment from 'moment';
 import styles from './index.less';
@@ -43,7 +42,7 @@ export default class TransmissionEfficiency extends Component {
     }
     componentWillMount() {
         this.getTableData(1);
-    };
+    }
     updateState = (payload) => {
         this.props.dispatch({
             type: pageUrl.updateState,
@@ -92,9 +91,8 @@ export default class TransmissionEfficiency extends Component {
                 title: (<span style={{fontWeight: 'bold'}}>排口名称</span>),
                 dataIndex: 'PointName',
                 key: 'PointName',
-                width: '300px',
+                width: '15%',
                 align: 'left',
-                backgroundColor: 'red',
                 render: (text, record) => {
                     return text;
                 }
@@ -103,6 +101,7 @@ export default class TransmissionEfficiency extends Component {
                 title: (<span style={{fontWeight: 'bold'}}>应传个数</span>),
                 dataIndex: 'ShouldNumber',
                 key: 'ShouldNumber',
+                width: '13%',
                 align: 'center',
                 render: (text, record) => {
                     return text;
@@ -112,6 +111,7 @@ export default class TransmissionEfficiency extends Component {
                 title: (<span style={{fontWeight: 'bold'}}>实传个数</span>),
                 dataIndex: 'TransmissionNumber',
                 key: 'TransmissionNumber',
+                width: '13%',
                 align: 'center',
                 render: (text, record) => {
                     return text;
@@ -121,6 +121,7 @@ export default class TransmissionEfficiency extends Component {
                 title: (<span style={{fontWeight: 'bold'}}>有效个数</span>),
                 dataIndex: 'EffectiveNumber',
                 key: 'EffectiveNumber',
+                width: '15%',
                 align: 'center',
                 render: (text, record) => {
                     return text;
@@ -130,6 +131,7 @@ export default class TransmissionEfficiency extends Component {
                 title: (<span style={{fontWeight: 'bold'}}>传输率</span>),
                 dataIndex: 'TransmissionRate',
                 key: 'TransmissionRate',
+                width: '15%',
                 align: 'center',
                 render: (text, record) => {
                     return (parseFloat(text) * 100).toFixed(2) + '%';
@@ -139,6 +141,7 @@ export default class TransmissionEfficiency extends Component {
                 title: (<span style={{fontWeight: 'bold'}}>有效率</span>),
                 dataIndex: 'EffectiveRate',
                 key: 'EffectiveRate',
+                width: '15%',
                 align: 'center',
                 sorter: (a, b) => a.EffectiveRate - b.EffectiveRate,
                 render: (text, record) => {
@@ -149,7 +152,7 @@ export default class TransmissionEfficiency extends Component {
                 title: (<span style={{fontWeight: 'bold'}}>传输有效率</span>),
                 dataIndex: 'TransmissionEffectiveRate',
                 key: 'TransmissionEffectiveRate',
-                width: '250px',
+                // width: '250px',
                 align: 'center',
                 sorter: true,
                 render: (text, record) => {
@@ -164,17 +167,16 @@ export default class TransmissionEfficiency extends Component {
                                 size="small" format={percent => (<span style={{color: 'black'}}>{percent}%</span>)}
                             />
                         </div>);
-                    } else {
-                        return (<div style={{ width: 200 }}>
-                            <Progress
-                                successPercent={0}
-                                percent={percent}
-                                status="exception"
-                                size="small"
-                                format={percent => (<span style={{color: 'black'}}>{percent}%</span>)}
-                            />
-                        </div>);
                     }
+                    return (<div style={{ width: 200 }}>
+                        <Progress
+                            successPercent={0}
+                            percent={percent}
+                            status="exception"
+                            size="small"
+                            format={percent => (<span style={{color: 'black'}}>{percent}%</span>)}
+                        />
+                    </div>);
                 }
             },
         ];
@@ -184,14 +186,42 @@ export default class TransmissionEfficiency extends Component {
                     <Card
                         type="inner"
                         title="传输有效率列表"
-                        extra={<MonthPicker defaultValue={this.state.beginTime} format={monthFormat} onChange={this.onDateChange} />}
+                        extra={
+                            <span style={{color: '#b3b3b3'}}>
+                            时间选择：
+                                <MonthPicker defaultValue={this.state.beginTime} format={monthFormat} onChange={this.onDateChange} />
+                            </span>
+                        }
+                        style={{
+                            height: 'calc(100vh - 205px)'
+                        }}
                     >
 
                         <Row>
                             <Col span={24}>
                                 <div style={{textAlign: 'center', marginBottom: 20}}>
-                                    <Button style={{marginRight: 20}}><span style={{fontSize: 16, color: '#52c41a', marginRight: 3}}>■</span> 排口传输有效率达标</Button>
+                                    <div style={{
+                                        width: 20,
+                                        height: 9,
+                                        backgroundColor: '#52c41a',
+                                        display: 'inline-block',
+                                        borderRadius: '20%',
+                                        cursor: 'pointer',
+                                        marginRight: 3
+                                    }} /> <span style={{cursor: 'pointer'}}> 排口传输有效率达标</span>
+                                    <div style={{
+                                        width: 20,
+                                        height: 9,
+                                        backgroundColor: '#f5222d',
+                                        display: 'inline-block',
+                                        borderRadius: '20%',
+                                        cursor: 'pointer',
+                                        marginLeft: 100,
+                                        marginRight: 3
+                                    }} /><span style={{cursor: 'pointer'}}> 排口传输有效率未达标</span>
+                                    {/** <Button style={{marginRight: 20}}><span style={{fontSize: 16, color: '#52c41a', marginRight: 3}}>■</span> 排口传输有效率达标</Button>
                                     <Button style={{marginRight: 20}}><span style={{fontSize: 16, color: '#f5222d', marginRight: 3}}>■</span> 排口传输有效率未达标</Button>
+                                **/}
                                 </div>
                             </Col>
                         </Row>
@@ -202,10 +232,12 @@ export default class TransmissionEfficiency extends Component {
                                 onChange={this.handleTableChange}
                                 size="small"// small middle
                                 dataSource={this.props.tableDatas}
-                                // scroll={{ y: 'calc(100vh - 255px)' }}
+                                scroll={{ y: 550 }}
                                 rowClassName={
                                     (record, index, indent) => {
-                                        if (index === 0) { return; }
+                                        if (index === 0) {
+                                            return;
+                                        }
                                         if (index % 2 !== 0) {
                                             return 'light';
                                         }
