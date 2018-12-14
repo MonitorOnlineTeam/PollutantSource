@@ -6,8 +6,7 @@ import { loadMonitorPoint, loadLastdata, queryentpointlist, loadMonitorDatalist
 import { Model } from '../dvapack';
 
 import {
-    Popover,
-    Badge
+    Icon, Popover, Badge, Divider
 } from 'antd';
 export default Model.extend({
     namespace: 'points',
@@ -34,10 +33,9 @@ export default Model.extend({
         pointName: '',
         levels: [],
         selent: [],
-
         pollutantlist: [],
         datalist: [],
-        chartdata: [],
+        chartdata: null,
         columns: [],
         datatable: [],
         total: 0,
@@ -399,7 +397,7 @@ export default Model.extend({
             yield update({ entpointlist: result.data, selectent: resultent.data[0] });
         },
         * querypollutantlist({ payload
-        }, {select, call, put, update}) {
+        }, { select, call, put, update, take }) {
             const result = yield call(querypollutantlist, payload);
             if (result && result[0]) {
                 yield update({ pollutantlist: result });
@@ -407,7 +405,7 @@ export default Model.extend({
                     pollutantCode: result[0].pollutantCode,
                     datatype: 'realtime',
                     dgimn: payload.dgimn,
-                    pageIndex: 1,
+                    //  pageIndex: 1,
                     pollutantName: result[0].pollutantName,
                     pollutantInfo: result[0]
                 };
@@ -415,15 +413,18 @@ export default Model.extend({
                     type: 'queryhistorydatalist',
                     payload: params
                 });
+                yield take('queryhistorydatalist/@@end');
             }
         },
         * queryhistorydatalist({ payload
         }, {select, call, update}) {
             const { pollutantlist } = yield select(_ => _.points);
-            let pageSize = 10;
-            if (payload.pageSize) { pageSize = payload.pageSize; };
-            const resultlist = yield call(queryhistorydatalist, {...payload, pageSize: pageSize});
+            const resultlist = yield call(queryhistorydatalist, {...payload});
             const result = resultlist.data;
+            if (!result) {
+                yield update({ datalist: null, chartdata: null, columns: null, datatable: null, total: 0 });
+                return;
+            }
             let xAxis = [];
             let seriesdata = [];
             let markLine = {};
@@ -433,7 +434,9 @@ export default Model.extend({
                 seriesdata = seriesdata.concat(item[payload.pollutantCode]);
             });
             let polluntinfo;
-            if (payload.pollutantInfo) { polluntinfo = payload.pollutantInfo; }
+            if (payload.pollutantInfo) {
+                polluntinfo = payload.pollutantInfo;
+            }
             polluntinfo = pollutantlist.find((value, index, arr) => {
                 return value.pollutantCode === payload.pollutantCode;
             });
@@ -449,6 +452,10 @@ export default Model.extend({
                             const additionalInfo = additional.split('§');
                             if (additionalInfo[0] === 'IsOver') {
                                 const content = (<div>
+                                    <div style={{marginBottom: 10}}>
+                                        <Icon style={{ color: '#ff0000', fontSize: 25, marginRight: 10 }} type="warning" />
+                                        <span style={{fontWeight: 'Bold', fontSize: 16}}>数据超标</span>
+                                    </div>
                                     <li style={{listStyle: 'none', marginBottom: 10}}>
                                         <Badge status="success" text={`标准值：${additionalInfo[2]}`} />
                                     </li>
@@ -456,24 +463,36 @@ export default Model.extend({
                                         <Badge status="error" text={`超标倍数：${additionalInfo[3]}`} />
                                     </li>
                                     <li style={{borderBottom: '1px solid #e8e8e8', listStyle: 'none', marginBottom: 5}} />
-                                </div>);
-                                return (<Popover content={content}><span style={{ color: `${additionalInfo[1]}`, cursor: 'pointer' }}>{value}</span></Popover>);
-                            } else {
-                                const content = (<div>
-                                    <li style={{listStyle: 'none', marginBottom: 10}}>
-                                        <Badge status="warning" text={`异常原因：${additionalInfo[1]}`} />
+
+                                    <li style={{listStyle: 'none'}}>
+                                        <Icon type="laptop" style={{ fontSize: 14, color: '#08c' }} />
+                                        <Divider type="vertical" />
+                                        <a style={{fontSize: 12, cursor: 'pointer', color: '#575757'}} onClick={() => this._openModal(true, 2)}>查看仪器状态参数</a>
                                     </li>
-                                    <li style={{borderBottom: '1px solid #e8e8e8', listStyle: 'none', marginBottom: 5}} />
+                                    <li style={{listStyle: 'none'}}>
+                                        <Icon type="table" style={{ fontSize: 14, color: '#08c' }} />
+                                        <Divider type="vertical" />
+                                        <a style={{fontSize: 12, cursor: 'pointer', color: '#575757'}} onClick={() => this._openModal(true, 1)}>查看各参数数据</a>
+                                    </li>
                                 </div>);
-                                return (<Popover content={content}><span style={{ color: '#F3AC00', cursor: 'pointer' }}>{value}</span></Popover>);
+                                return (<Popover content={content}><span style={{ color: '#ff0000', cursor: 'pointer' }}>{ value || (value === 0 ? 0 : '-') }</span></Popover>);
                             }
-                        } else {
-                            return value;
+                            const content = (<div>
+                                <div style={{marginBottom: 10}}>
+                                    <Icon style={{ color: '#ff0000', fontSize: 25, marginRight: 10 }} type="close-circle" />
+                                    <span style={{fontWeight: 'Bold', fontSize: 16}}>数据异常</span>
+                                </div>
+                                <li style={{listStyle: 'none', marginBottom: 10}}>
+                                    <Badge status="warning" text={`异常原因：${additionalInfo[2]}`} />
+                                </li>
+                                <li style={{borderBottom: '1px solid #e8e8e8', listStyle: 'none', marginBottom: 5}} />
+                            </div>);
+                            return (<Popover content={content}><span style={{ color: '#F3AC00', cursor: 'pointer' }}>{value || (value === 0 ? 0 : '-')}</span></Popover>);
                         }
+                        return value || (value === 0 ? 0 : '-');
                     }
                 });
             });
-            // let datatable = [];
             let columns = [{
                 title: '时间',
                 dataIndex: 'MonitorTime',
@@ -492,39 +511,51 @@ export default Model.extend({
                     }]
                 };
             }
-            const option = {
-                title: {
-                    // text: '2018-05-17~2018-05-18'
-                },
-                tooltip: {
-                    trigger: 'axis'
-                },
-                toolbox: {
-                    show: true,
-                    feature: {
-                        saveAsImage: {}
-                    }
-                },
-                xAxis: {
-                    type: 'category',
-                    name: '时间',
-                    boundaryGap: false,
-                    data: xAxis
-                },
-                yAxis: {
-                    type: 'value',
-                    name: '浓度(' + `${payload.pollutantName}` + `${polluntinfo.unit}` + ')',
-                    axisLabel: {
-                        formatter: '{value}'
+            let option = null;
+            if (seriesdata && seriesdata.length > 0) {
+                option = {
+                    title: {
+                        // text: '2018-05-17~2018-05-18'
                     },
-                },
-                series: [{
-                    type: 'line',
-                    name: payload.pollutantName,
-                    data: seriesdata,
-                    markLine: markLine
-                }]
-            };
+                    tooltip: {
+                        trigger: 'axis'
+                    },
+                    toolbox: {
+                        show: true,
+                        feature: {
+                            saveAsImage: {}
+                        }
+                    },
+                    xAxis: {
+                        type: 'category',
+                        name: '时间',
+                        boundaryGap: false,
+                        data: xAxis
+                    },
+                    yAxis: {
+                        type: 'value',
+                        name: '浓度(' + `${payload.pollutantName}` + `${polluntinfo.unit}` + ')',
+                        axisLabel: {
+                            formatter: '{value}'
+                        },
+                    },
+                    series: [{
+                        type: 'line',
+                        name: payload.pollutantName,
+                        data: seriesdata,
+                        markLine: markLine,
+                        itemStyle: {
+                            normal: {
+                                color: '#54A8FF',
+                                lineStyle: {
+                                    color: '#54A8FF'
+                                }
+                            }
+                        },
+                    }]
+                };
+            }
+
             yield update({ datalist: result, chartdata: option, columns, datatable: result, total: resultlist.total });
         },
         * queryoverdatalist({

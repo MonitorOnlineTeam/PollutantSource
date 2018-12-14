@@ -27,7 +27,8 @@ modify by
     isloading: loading.effects['points/querypollutantlist'],
     columns: points.columns,
     datatable: points.datatable,
-    total: points.total
+    total: points.total,
+    dataloading: loading.effects['points/queryhistorydatalist'],
 }))
 class DataQuery extends Component {
     constructor(props) {
@@ -97,7 +98,7 @@ class DataQuery extends Component {
                 beginTime = moment(new Date()).add(-1, 'month');
                 formats = 'YYYY-MM-DD';
                 break;
-        };
+        }
         this.setState({
             formats: formats,
             dataType: e.target.value,
@@ -127,6 +128,10 @@ class DataQuery extends Component {
         this.reloaddatalist(pollutantCode, this.state.dataType, page, pageSize, this.state.rangeDate[0], this.state.rangeDate[1], pollutantName);
     }
     reloaddatalist=(pollutantCode, datatype, pageIndex, pageSize, beginTime, endTime, pollutantName) => {
+        if (this.state.displayType === 'chart' || this.state.displayType === 'table') {
+            pageSize = 0;
+            pageIndex = 0;
+        }
         this.props.dispatch({
             type: 'points/queryhistorydatalist',
             payload: {
@@ -141,35 +146,41 @@ class DataQuery extends Component {
             }
         });
     }
+
     render() {
+        const option = this.props.option;
+        console.log(option);
         return (
             <div className={styles.cardTitle}>
                 { this.props.isloading ? <Spin style={{width: '100%',
                     height: 'calc(100vh - 260px)',
-                    marginTop: 260 }} size="large" />
-                    : <Card title="监测趋势图" extra={
+                    marginTop: 260 }} size="large" /> :
+                <Card title="监测趋势图" extra={
                         <div>
-                            { this.state.displayType === 'chart' ? <PollutantSelect_
+                        { this.state.displayType === 'chart' ? <PollutantSelect_
                                 optionDatas={this.props.pollutantlist}
                                 defaultValue={this.props.pollutantlist[0] ? this.props.pollutantlist[0].pollutantCode : ''}
                                 style={{width: 150}}
                                 onChange={this._handlePollutantChange}
                             /> : ''}
-                            <RangePicker_ style={{width: 350}} dateValue={this.state.rangeDate} format={this.state.formats} onChange={this._handleDateChange} />
-                            <ButtonGroup_ style={{marginRight: 20}} checked="realtime" onChange={this._handleDateTypeChange} />
-                            <Switch checkedChildren="图表" unCheckedChildren="数据" onChange={this.displayChange} defaultChecked={true} />
-                        </div>
+                        <RangePicker_ style={{width: 350}} dateValue={this.state.rangeDate} format={this.state.formats} onChange={this._handleDateChange} />
+                        <ButtonGroup_ style={{marginRight: 20}} checked="realtime" onChange={this._handleDateTypeChange} />
+                        <Switch checkedChildren="图表" unCheckedChildren="数据" onChange={this.displayChange} defaultChecked={true} />
+                    </div>
                     } style={{ width: '100%', height: 'calc(100vh - 225px)' }}>
-                        {this.state.displayType === 'chart' ? (!this.props.option[0] ? <div style={{textAlign: 'center'}}>暂无数据</div> : <ReactEcharts option={this.props.option} lazyUpdate={true}
-                            notMerge={true} id="rightLine" style={{ width: '100%', height: 'calc(100vh - 380px)' }} />)
-                            : <Table rowKey="MonitorTime" dataSource={this.props.datatable} columns={this.props.columns}
-                                pagination={{
-                                    'total': this.props.total,
-                                    'pageSize': this.state.pageSize,
-                                    'current': this.state.current,
-                                    onChange: this.pageIndexChange
-                                }} />
-
+                        {
+                            this.props.dataloading ? <Spin style={{width: '100%',
+                                height: 'calc(100vh - 260px)',
+                                marginTop: 260 }} size="large" /> :
+                                (this.state.displayType === 'chart' ? (!option ? <div style={{textAlign: 'center'}}>暂无数据</div> : <ReactEcharts option={this.props.option} lazyUpdate={true}
+                                    notMerge={true} id="rightLine" style={{ width: '100%', height: 'calc(100vh - 380px)' }} />) :
+                                <Table rowKey="MonitorTime" dataSource={this.props.datatable} columns={this.props.columns}
+                                        pagination={{
+                                            'total': this.props.total,
+                                            'pageSize': this.state.pageSize,
+                                            'current': this.state.current,
+                                            onChange: this.pageIndexChange
+                                        }} />)
                         }
                     </Card>
                 }</div>
