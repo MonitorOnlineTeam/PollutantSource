@@ -26,7 +26,8 @@ export default Model.extend({
         gwidth: 0,
         gheight: 0,
         selectdata: [],
-        pollutantName: []
+        pollutantName: [],
+        detailtime: null
     },
     effects: {
         * querypollutanttypecode({
@@ -39,7 +40,9 @@ export default Model.extend({
                 payload: payload,
             });
             yield take('querydatalist/@@end');
-            if (data) { gwidth = gwidth + 200 * data.length; }
+            if (data) {
+                gwidth = gwidth + 200 * data.length;
+            }
             yield update({ columns: data, gwidth });
         },
         * querydatalist({
@@ -80,8 +83,8 @@ export default Model.extend({
             }];
             mainpollutantInfo.map((item, key) => {
                 col = col.concat({
-                    title: item.pollutantName
-                    + '(' + item.unit + ')',
+                    title: item.pollutantName +
+                    '(' + item.unit + ')',
                     dataIndex: item.pollutantCode,
                     key: item.pollutantCode,
                     align: 'center',
@@ -114,19 +117,21 @@ export default Model.extend({
                                         <a style={{fontSize: 12, cursor: 'pointer', color: '#575757'}} onClick={() => this._openModal(true, 1)}>查看各参数数据</a>
                                     </li>
                                 </div>);
-                                return (<Popover content={content}><span style={{ color: '#ff0000', cursor: 'pointer' }}>{value?value:'-'}</span></Popover>);
-                            } else {
-                                const content = (<div>
-                                    <li style={{listStyle: 'none', marginBottom: 10}}>
-                                        <Badge status="warning" text={`异常原因：${additionalInfo[1]}`} />
-                                    </li>
-                                    <li style={{borderBottom: '1px solid #e8e8e8', listStyle: 'none', marginBottom: 5}} />
-                                </div>);
-                                return (<Popover content={content}><span style={{ color: '#F3AC00', cursor: 'pointer' }}>{value?value:'-'}</span></Popover>);
+                                return (<Popover content={content}><span style={{ color: '#ff0000', cursor: 'pointer' }}>{value || (value === 0 ? 0 : '-')}</span></Popover>);
                             }
-                        } else {
-                            return value?value:'-';
+                            const content = (<div>
+                                <div style={{marginBottom: 10}}>
+                                    <Icon style={{ color: '#ff0000', fontSize: 25, marginRight: 10 }} type="close-circle" />
+                                    <span style={{fontWeight: 'Bold', fontSize: 16}}>数据异常</span>
+                                </div>
+                                <li style={{listStyle: 'none', marginBottom: 10}}>
+                                    <Badge status="warning" text={`异常原因：${additionalInfo[2]}`} />
+                                </li>
+                                <li style={{borderBottom: '1px solid #e8e8e8', listStyle: 'none', marginBottom: 5}} />
+                            </div>);
+                            return (<Popover content={content}><span style={{ color: '#F3AC00', cursor: 'pointer' }}>{value || (value === 0 ? 0 : '-')}</span></Popover>);
                         }
+                        return value || (value === 0 ? 0 : '-');
                     }
                 });
             });
@@ -140,7 +145,7 @@ export default Model.extend({
                 title: '因子',
                 dataIndex: 'pollutantName',
                 key: 'pollutantName',
-                align: 'center'
+                align: 'center',
             }, {
                 title: '实测(mg/m³)',
                 dataIndex: 'pollutantCode',
@@ -153,35 +158,38 @@ export default Model.extend({
                 align: 'center'
             } ];
             let detaildata = [];
+            let detailtime = null;
             const res = yield call(querylastestdatalist, payload);
 
             if (res.data && res.data[0]) {
+                detailtime = res.data[0].MonitorTime;
                 detaildata = [
                     {
                         pollutantName: '烟尘',
                         pollutantCode: res.data[0]['01'] ? res.data[0]['01'] : '-',
                         zspollutantCode: res.data[0]['zs01'] ? res.data[0]['zs01'] : '-',
                         dgimn: payload.dgimn,
-                        pcode: '01'
+                        pcode: '01',
                     },
                     {
                         pollutantName: '二氧化硫',
                         pollutantCode: res.data[0]['02'] ? res.data[0]['02'] : '-',
-                        zspollutantCode: res.data[0]['zs03'] ? res.data[0]['zs03'] : '-',
+                        zspollutantCode: res.data[0]['zs02'] ? res.data[0]['zs02'] : '-',
                         dgimn: payload.dgimn,
-                        pcode: '02'
+                        pcode: '02',
                     },
                     {
                         pollutantName: '氮氧化物',
                         pollutantCode: res.data[0]['03'] ? res.data[0]['03'] : '-',
                         zspollutantCode: res.data[0]['zs03'] ? res.data[0]['zs03'] : '-',
                         dgimn: payload.dgimn,
-                        pcode: '03'
+                        pcode: '03',
                     }
                 ];
             }
             const selectdata = res.data ? res.data[0] : '';
             yield update({
+                detailtime,
                 detaildata,
                 detailpcol,
                 selectdata
@@ -193,12 +201,14 @@ export default Model.extend({
             const resultlist = yield call(queryhistorydatalist, {...payload});
             const pollutantlist = yield call(querypollutantlist, {...payload});
             let seriesdata = [];
+            let zsseriesdata = [];
             let xData = [];
             if (resultlist && resultlist.data) {
                 resultlist.data.map(item => {
                     const time = moment(item.MonitorTime).hour();
                     xData = xData.concat(time);
                     seriesdata = seriesdata.concat(item[payload.pollutantCodes]);
+                    zsseriesdata = zsseriesdata.concat(item['zs' + payload.pollutantCodes]);
                 });
             }
             let polluntinfo;
@@ -214,18 +224,23 @@ export default Model.extend({
                     data: [{
                         lineStyle: {
                             type: 'dash',
-                            color: polluntinfo.color,
+                            color: '#ff0000',
                         },
                         yAxis: polluntinfo.standardValue
                     }]
                 };
             }
             let existdata = true;
-            if (!seriesdata[0]) { existdata = false; };
+            if (!seriesdata[0] && !zsseriesdata[0]) {
+                existdata = false;
+            }
             const option = {
-            // title: {
-            //     text: <span style={{alignContent: 'center'}}> {polluntinfo.pollutantName} + '24小时趋势图' </span>
-            // },
+                legend: {
+                    data: [
+                        payload.pollutantName,
+                        '折算' + payload.pollutantName,
+                    ]
+                },
                 tooltip: {
                     trigger: 'axis'
                 },
@@ -250,7 +265,7 @@ export default Model.extend({
                 },
                 series: [{
                     type: 'line',
-                    name: polluntinfo ? polluntinfo.pollutantName : '',
+                    name: payload.pollutantName,
                     data: seriesdata,
                     markLine: markLine,
                     itemStyle: {
@@ -261,13 +276,19 @@ export default Model.extend({
                             }
                         }
                     },
-                }]
+                },
+                {
+                    type: 'line',
+                    name: '折算' + payload.pollutantName,
+                    data: zsseriesdata,
+                }
+                ]
             };
 
             yield update({
                 chartdata: option,
                 existdata,
-                pollutantName: polluntinfo ? polluntinfo.pollutantName : ''
+                pollutantName: payload.pollutantName,
             });
         },
         * queryoptionDataOnClick({payload}, {
@@ -276,12 +297,14 @@ export default Model.extend({
             const resultlist = yield call(queryhistorydatalist, {...payload});
             const pollutantlist = yield call(querypollutantlist, {...payload});
             let seriesdata = [];
+            let zsseriesdata = [];
             let xData = [];
             if (resultlist && resultlist.data) {
                 resultlist.data.map(item => {
                     const time = moment(item.MonitorTime).hour();
                     xData = xData.concat(time);
                     seriesdata = seriesdata.concat(item[payload.pollutantCodes]);
+                    zsseriesdata = zsseriesdata.concat(item['zs' + payload.pollutantCodes]);
                 });
             }
             let polluntinfo;
@@ -297,18 +320,23 @@ export default Model.extend({
                     data: [{
                         lineStyle: {
                             type: 'dash',
-                            color: polluntinfo.color,
+                            color: '#ff0000',
                         },
                         yAxis: polluntinfo.standardValue
                     }]
                 };
             }
             let existdata = true;
-            if (!seriesdata[0]) { existdata = false; };
+            if (!seriesdata[0] && !zsseriesdata[0]) {
+                existdata = false;
+            }
             const option = {
-                // title: {
-                //     text: <span style={{alignContent: 'center'}}> {polluntinfo.pollutantName} + '24小时趋势图' </span>
-                // },
+                legend: {
+                    data: [
+                        payload.pollutantName,
+                        '折算' + payload.pollutantName,
+                    ]
+                },
                 tooltip: {
                     trigger: 'axis'
                 },
@@ -333,7 +361,7 @@ export default Model.extend({
                 },
                 series: [{
                     type: 'line',
-                    name: polluntinfo ? polluntinfo.pollutantName : '',
+                    name: payload.pollutantName,
                     data: seriesdata,
                     markLine: markLine,
                     itemStyle: {
@@ -344,13 +372,19 @@ export default Model.extend({
                             }
                         }
                     },
-                }]
+                },
+                {
+                    type: 'line',
+                    name: '折算' + payload.pollutantName,
+                    data: zsseriesdata,
+                }
+                ]
             };
 
             yield update({
                 chartdata: option,
                 existdata,
-                pollutantName: polluntinfo ? polluntinfo.pollutantName : ''
+                pollutantName: payload.pollutantName,
             });
         }
     }
