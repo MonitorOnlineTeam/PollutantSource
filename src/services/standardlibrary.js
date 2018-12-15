@@ -212,3 +212,45 @@ export async function usepoint(params) {
         data: null
     } : result;
 }
+// 是否应用当前污染物
+export async function isusepollutant(params) {
+    const body = {
+        DGIMN: params.DGIMN,
+        PollutantCode: params.PollutantCode,
+        Enalbe: params.Enalbe
+    };
+    const result = post('/api/rest/PollutantSourceApi/StandardLibrary/IsUsePollutant', body, null);
+    return result === null ? {
+        data: null
+    } : result;
+}
+// 根据排口和污染物编号查询实体
+export async function getmonitorpointpollutant(params) {
+    const body = {
+        DGIMN: params.DGIMN,
+        PollutantCode: params.PollutantCode,
+    };
+    const result = post('/api/rest/PollutantSourceApi/StandardLibrary/GetMonitorPointPollutant', body, null);
+    return result === null ? {
+        data: null
+    } : result;
+}
+// 编辑污染物
+export async function editmonitorpointPollutant(params) {
+    const body = {
+        DGIMN: params.DGIMN,
+        PollutantCode: params.PollutantCode,
+        AlarmType: params.AlarmType,
+        LowerLimit: params.LowerLimit,
+        UpperLimit: params.UpperLimit,
+        AlarmDescription: params.AlarmDescription,
+        AlarmContinuityCount: params.AlarmContinuityCount,
+        OverrunContinuityCount: params.OverrunContinuityCount,
+        ZeroContinuityCount: params.ZeroContinuityCount,
+        SerialContinuityCount: params.SerialContinuityCount,
+    };
+    const result = post('/api/rest/PollutantSourceApi/StandardLibrary/EditMonitorPointPollutant', body, null);
+    return result === null ? {
+        data: null
+    } : result;
+}
