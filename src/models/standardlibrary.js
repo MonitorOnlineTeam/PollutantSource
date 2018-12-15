@@ -4,7 +4,7 @@ import {
 import {
     getlist, enableordisable, deletestandardlibrarybyid, addstandardlibrary, addstandardlibrarypollutant, uploadfiles, getStandardlibrarybyid, deletefiles
     , editstandardlibrary, getpollutantlist, getstandardlibrarypollutantlist, deletestandardlibrarypollutantbyid, editstandardlibrarypollutant, getStandardlibrarypollutantbyid
-    , getstandardlibraryfiles,
+    , getstandardlibraryfiles, getuselist, getpollutantbydgimn, usepoint, isusepollutant, getmonitorpointpollutant, editmonitorpointPollutant
 } from '../services/standardlibrary';
 export default Model.extend({
     namespace: 'standardlibrary',
@@ -24,6 +24,9 @@ export default Model.extend({
         editstandardlibrarypollutant: null,
         standardlibrarypollutant: [],
         fileslist: [],
+        uselist: [],
+        PollutantListByDGIMN: [],
+        editpollutant: null,
     },
     subscriptions: {
         setup({
@@ -76,6 +79,69 @@ export default Model.extend({
                 yield update({
                     requstresult: result.requstresult,
                     list: [],
+                    total: 0,
+                    pageIndex: null,
+                    pageSize: null
+                });
+            }
+        },
+        * getpollutantbydgimn({
+            payload: {
+                DGIMN,
+            }
+        }, {
+            call,
+            put,
+            update,
+            select
+        }) {
+            const result = yield call(getpollutantbydgimn, {
+                DGIMN: DGIMN,
+            });
+            if (result.requstresult === '1') {
+                yield update({
+                    requstresult: result.requstresult,
+                    PollutantListByDGIMN: result.data,
+                });
+            } else {
+                yield update({
+                    requstresult: result.requstresult,
+                    PollutantListByDGIMN: [],
+                });
+            }
+        },
+        * getuselist({
+            payload: {
+                pageIndex,
+                pageSize,
+                Name,
+                Type
+            }
+        }, {
+            call,
+            put,
+            update,
+            select
+        }) {
+            const result = yield call(getuselist, {
+                pageIndex: pageIndex,
+                pageSize: pageSize,
+                Name: Name,
+                Type: Type
+            });
+            debugger;
+            if (result.requstresult === '1') {
+                yield update({
+                    requstresult: result.requstresult,
+                    uselist: result.data,
+                    total: result.total,
+                    pageIndex: pageIndex,
+                    pageSize: pageSize
+                });
+            } else {
+                yield update({
+                    requstresult: result.requstresult,
+                    uselist: [],
                     total: 0,
                     pageIndex: null,
                     pageSize: null
@@ -139,6 +205,32 @@ export default Model.extend({
                     pageSize,
                     Name,
                     Type
+                },
+            });
+        },
+        * usepoint({
+            payload: {
+                StandardLibraryID,
+                DGIMN,
+            }
+        }, {
+            call,
+            put,
+            update,
+            select
+        }) {
+            const result = yield call(usepoint, {
+                StandardLibraryID: StandardLibraryID,
+                DGIMN: DGIMN
+            });
+            yield update({
+                requstresult: result.requstresult,
+                reason: result.reason
+            });
+            yield put({
+                type: 'getpollutantbydgimn',
+                payload: {
+                    DGIMN: DGIMN,
                 },
             });
         },
@@ -434,6 +526,101 @@ export default Model.extend({
                 fileslist: result.data,
                 requstresult: result.requstresult,
                 reason: result.reason
+            });
+            callback();
+        },
+        * isusepollutant({
+            payload: {
+                DGIMN,
+                PollutantCode,
+                Enalbe
+            }
+        }, {
+            call,
+            put,
+            update,
+            select
+        }) {
+            const result = yield call(isusepollutant, {
+                DGIMN: DGIMN,
+                PollutantCode: PollutantCode,
+                Enalbe: Enalbe,
+            });
+            yield update({
+                requstresult: result.requstresult,
+                reason: result.reason
+            });
+            yield put({
+                type: 'getpollutantbydgimn',
+                payload: {
+                    DGIMN,
+                },
+            });
+        },
+        * getmonitorpointpollutant({
+            payload: {
+                DGIMN,
+                PollutantCode,
+                callback
+            }
+        }, {
+            call,
+            put,
+            update,
+            select
+        }) {
+            const result = yield call(getmonitorpointpollutant, {
+                DGIMN: DGIMN,
+                PollutantCode: PollutantCode,
+            });
+            yield update({
+                editpollutant: result.data[0],
+                requstresult: result.requstresult,
+                reason: result.reason
+            });
+            callback();
+        },
+        * editmonitorpointPollutant({
+            payload: {
+                DGIMN,
+                PollutantCode,
+                AlarmType,
+                LowerLimit,
+                UpperLimit,
+                AlarmDescription,
+                AlarmContinuityCount,
+                OverrunContinuityCount,
+                ZeroContinuityCount,
+                SerialContinuityCount,
+                callback
+            }
+        }, {
+            call,
+            put,
+            update,
+            select
+        }) {
+            const result = yield call(editmonitorpointPollutant, {
+                DGIMN: DGIMN,
+                PollutantCode: PollutantCode,
+                AlarmType: AlarmType,
+                LowerLimit: LowerLimit,
+                UpperLimit: UpperLimit,
+                AlarmDescription: AlarmDescription,
+                AlarmContinuityCount: AlarmContinuityCount,
+                OverrunContinuityCount: OverrunContinuityCount,
+                ZeroContinuityCount: ZeroContinuityCount,
+                SerialContinuityCount: SerialContinuityCount,
+            });
+            yield update({
+                requstresult: result.requstresult,
+                reason: result.reason
+            });
+            yield put({
+                type: 'getpollutantbydgimn',
+                payload: {
+                    DGIMN,
+                },
             });
             callback();
         },

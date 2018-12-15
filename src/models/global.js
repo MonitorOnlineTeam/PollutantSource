@@ -116,20 +116,20 @@ export default Model.extend({
                 switch (obj.MessageType) {
                     case 'RealTimeData':
                         // 跳转到对应的effect，把实体带过去更新state达到页面刷新的目的
-                        dispatch({
-                            type: 'overview/welcome',
-                            payload: obj.Message
-                        });
+                        // dispatch({
+                        //     type: 'overview/welcome',
+                        //     payload: obj.Message
+                        // });
                         break;
                     case 'MinuteData':
-                        dispatch({
-                            type: 'welcome'
-                        });
+                        // dispatch({
+                        //     type: 'welcome'
+                        // });
                         break;
                     case 'HourData':
-                        dispatch({
-                            type: 'welcome'
-                        });
+                        // dispatch({
+                        //     type: 'welcome'
+                        // });
                         break;
                     case 'DynamicControlParam':
                         break;

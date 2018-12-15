@@ -67,7 +67,6 @@ export default class AddPoint extends Component {
                     DGIMN: DGIMN,
                     callback: () => {
                         if (this.props.requstresult === '1') {
-                            console.log(this.props.editpoint);
                             this.setState({
                                 OutputType: this.props.editpoint.OutputTypeId === '1',
                                 IsSj: this.props.editpoint.IsSj === '1',
@@ -104,10 +103,16 @@ export default class AddPoint extends Component {
          this.child = ref;
      }
      GetData() {
+         debugger;
          this.setState({
              coordinate: this.child.props.form.getFieldValue('longitude') + ',' + this.child.props.form.getFieldValue('latitude'),
              address: this.child.props.form.getFieldValue('position'),
              Mapvisible: false,
+         },() => {
+             this.props.form.setFieldsValue({
+                 Address: this.state.address,
+                 Coordinate: this.state.coordinate
+             });
          });
      }
     getOperationer=(e) => {

@@ -7,97 +7,195 @@ import React, { Component } from 'react';
 import {
     Card,
     Table,
-    DatePicker,
-    Progress,
+    // DatePicker,
+    // Progress,
     Row,
     Col,
-    Button
+    // Button,
+    Select,
+    Modal
 } from 'antd';
 import moment from 'moment';
 import styles from './index.less';
 import ReactEcharts from 'echarts-for-react';
 import {connect} from 'dva';
-const { MonthPicker } = DatePicker;
-const monthFormat = 'YYYY-MM';
+// import { debug } from 'util';
+// const { MonthPicker } = DatePicker;
+const Option = Select.Option;
+// const monthFormat = 'YYYY';
 const pageUrl = {
     updateState: 'PollutantEmissionsModel/updateState',
-    getData: 'PollutantEmissionsModel/getData'
+    getChartData: 'PollutantEmissionsModel/getChartData',
+    getPointsData: 'PollutantEmissionsModel/getPointsData',
+    getPointDaysData: 'PollutantEmissionsModel/getPointDaysData'
 };
+
+const dateChildren = [];
+const dateYear = moment().get('year');
+for (let i = dateYear; i > dateYear - 10; --i) {
+    dateChildren.push(<Option key={i}>{i}</Option>);
+}
+
 @connect(({
     loading,
     PollutantEmissionsModel
 }) => ({
-    loading: loading.effects[pageUrl.getData],
+    loadingTable: loading.effects[pageUrl.getPointsData],
+    loadingChart: loading.effects[pageUrl.getChartData],
+    loadingDays: loading.effects[pageUrl.getPointDaysData],
     total: PollutantEmissionsModel.total,
     pageSize: PollutantEmissionsModel.pageSize,
     pageIndex: PollutantEmissionsModel.pageIndex,
     tableDatas: PollutantEmissionsModel.tableDatas,
+    pointDaysDatas: PollutantEmissionsModel.pointDaysDatas,
+    xAxisData: PollutantEmissionsModel.xAxisData,
+    seriesData: PollutantEmissionsModel.seriesData,
+    pollutantCodes: PollutantEmissionsModel.pollutantCodes,
+    emissionsSort: PollutantEmissionsModel.emissionsSort,
+    selectedDate: PollutantEmissionsModel.selectedDate,
+    clickDate: PollutantEmissionsModel.clickDate,
 }))
 export default class PollutantEmissions extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            beginTime: moment(moment().format('YYYY-MM')),
-            endTime: ''
+            beginTime: moment(moment().format('YYYY')),
+            endTime: '',
+            modalVisible: false,
+            pointName: '-'
         };
     }
     componentWillMount() {
-        // this.getTableData(1);
-    };
+        this.getChartData();
+        this.getPointsTableData(1);
+    }
+    getChartData = () => {
+        this.props.dispatch({
+            type: pageUrl.getChartData,
+            payload: {
+            },
+        });
+    }
     updateState = (payload) => {
         this.props.dispatch({
             type: pageUrl.updateState,
             payload: payload,
         });
     }
-    getTableData = (pageIndex) => {
+    getPointsTableData = (pageIndex) => {
         this.props.dispatch({
-            type: pageUrl.getData,
+            type: pageUrl.getPointsData,
             payload: {
                 pageIndex: pageIndex,
             },
         });
     }
-    handleTableChange =(pagination, filters, sorter) => {
+    getPointDaysTableData = (pageIndex) => {
+        this.props.dispatch({
+            type: pageUrl.getPointDaysData,
+            payload: {
+                pageIndex: pageIndex,
+            },
+        });
+    }
+    handleTableChange = (pagination, filters, sorter) => {
         if (sorter.order) {
             this.updateState({
-                transmissionEffectiveRate: sorter.order,
+                emissionsSort: sorter.order,
                 pageIndex: pagination.current,
                 pageSize: pagination.pageSize
             });
         } else {
             this.updateState({
-                transmissionEffectiveRate: 'ascend',
+                emissionsSort: '',
                 pageIndex: pagination.current,
                 pageSize: pagination.pageSize
             });
         }
-        this.getTableData(pagination.current);
-    }
-    onDateChange = (value, dateString) => {
-        let endTime = moment(dateString).add(1, 'months').add(-1, 'days').format('YYYY-MM-DD HH:mm:ss');
-
-        if (moment(dateString).add(1, 'months').add(-1, 'days') > moment()) {
-            endTime = moment().format('YYYY-MM-DD HH:mm:ss');
+        if (this.state.modalVisible) {
+            this.getPointDaysTableData(pagination.current);
+        } else {
+            this.getPointsTableData(pagination.current);
         }
+    }
+    handleChangeDate = (value) => {
+        // debugger;
+        let Year = moment().get('year');
+        let Month = moment().get('month') + 1;
+        let beginTime = moment(`${value}-01-01 00:00:00`);
+
+        // 本年份
+        if ((+value) === Year) {
+            this.updateState({
+                beginTime: beginTime.format('YYYY-MM-01 HH:mm:ss'),
+                endTime: beginTime.add(1,'years').format('YYYY-01-01 00:00:00'),
+                selectedDate: `${Year}-${Month}-01 00:00:00`,
+                clickDate: `${Year}-${Month}-01 00:00:00`,
+                tableDatas: []
+            });
+        } else {
+            this.updateState({
+                beginTime: beginTime.format('YYYY-MM-01 HH:mm:ss'),
+                endTime: beginTime.add(1,'years').format('YYYY-01-01 00:00:00'),
+                selectedDate: `${value}-01-01 00:00:00`,// beginTime.format('YYYY-01-01 HH:mm:ss'),
+                clickDate: `${value}-01-01 00:00:00`,
+                tableDatas: []
+            });
+        }
+        this.getChartData();
+        this.getPointsTableData(1);
+    }
+    handleChangePollutant = (value) => {
         this.updateState({
-            beginTime: moment(dateString).format('YYYY-MM-01 HH:mm:ss'),
-            endTime: endTime
+            pollutantCodes: [`${value}`]
         });
-        this.getTableData(this.props.pageIndex);
+        this.getChartData();
+        this.getPointsTableData(1);
+    }
+    showModal = (params) => {
+        // debugger
+        this.setState({
+            modalVisible: true,
+            pointName: params.PointName
+        });
+        this.updateState({
+            queryDGIMNs: params.DGIMNs,
+            queryDate: this.props.queryDate,
+            pointDaysDatas: []
+
+        });
+        this.getPointDaysTableData(1);
+    }
+    handleModalOk = (e) => {
+        console.log(e);
+        this.setState({
+            modalVisible: false,
+        });
+    }
+
+    handleModalCancel = (e) => {
+    // console.log(e);
+        this.setState({
+            modalVisible: false,
+        });
     }
     getOption = () => {
         let option = {
-            color: ['#3398DB'],
-            tooltip : {
+            color: ['rgb(91,176,255)'],
+            tooltip: {
                 trigger: 'axis',
-                axisPointer : {            // 坐标轴指示器，坐标轴触发有效
-                    type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                axisPointer: { // 坐标轴指示器，坐标轴触发有效
+                    type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+                },
+                formatter: (params) => {
+                    // debugger;
+                    var tar = params[0];
+                    return tar.name + '<br/>' + tar.seriesName + ' : ' + tar.value + ' kg';
                 }
             },
             legend: {
-                data:['排放总量']
+                data: ['排放总量']
             },
             grid: {
                 left: '3%',
@@ -105,31 +203,48 @@ export default class PollutantEmissions extends Component {
                 bottom: '3%',
                 containLabel: true
             },
-            xAxis : [
+            xAxis: [
                 {
-                    type : 'category',
-                    data : ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
+                    type: 'category',
+                    data: this.props.xAxisData,// ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
                     axisTick: {
                         alignWithLabel: true
                     }
                 }
             ],
-            yAxis : [
+            yAxis: [
                 {
-                    type : 'value',
-                    name : '单位：(吨)'
+                    type: 'value',
+                    name: '单位：(kg)'
                 }
             ],
-            series : [
+            series: [
                 {
-                    name:'排放总量',
-                    type:'bar',
+                    name: '排放总量',
+                    type: 'bar',
                     barWidth: '30%',
-                    data:[800, 1000, 1100, 1200, 1300, 550, 820, 830, 1000, 1050, 1000, 900]
+                    label: {
+                        normal: {
+                            show: true,
+                            position: 'top'
+                        }
+                    },
+                    data: this.props.seriesData, // [800, 1000, 1100, 1200, 1300, 550, 820, 830, 1000, 1050, 1000, 900]
                 }
             ]
         };
         return option;
+    }
+    onChartClick = (opt) => {
+        // debugger;
+        let { selectedDate } = this.props;
+        console.log(selectedDate);
+        let clickDate = moment(selectedDate).format(`YYYY-${opt.dataIndex + 1}-01 00:00:00`);
+
+        this.updateState({
+            clickDate: clickDate
+        });
+        this.getPointsTableData(1);
     }
     render() {
         const columns = [
@@ -137,131 +252,154 @@ export default class PollutantEmissions extends Component {
                 title: (<span style={{fontWeight: 'bold'}}>排口名称</span>),
                 dataIndex: 'PointName',
                 key: 'PointName',
-                width: '300px',
+                width: '66.66%',
                 align: 'left',
-                backgroundColor: 'red',
                 render: (text, record) => {
-                    return text;
+                    return (
+                        <a onClick={
+                            () => this.showModal(record)
+                        } > {text} </a>
+                    );
                 }
             },
             {
-                title: (<span style={{fontWeight: 'bold'}}>应传个数</span>),
-                dataIndex: 'ShouldNumber',
-                key: 'ShouldNumber',
-                align: 'center',
-                render: (text, record) => {
-                    return text;
-                }
-            },
-            {
-                title: (<span style={{fontWeight: 'bold'}}>实传个数</span>),
-                dataIndex: 'TransmissionNumber',
-                key: 'TransmissionNumber',
-                align: 'center',
-                render: (text, record) => {
-                    return text;
-                }
-            },
-            {
-                title: (<span style={{fontWeight: 'bold'}}>有效个数</span>),
-                dataIndex: 'EffectiveNumber',
-                key: 'EffectiveNumber',
-                align: 'center',
-                render: (text, record) => {
-                    return text;
-                }
-            },
-            {
-                title: (<span style={{fontWeight: 'bold'}}>传输率</span>),
-                dataIndex: 'TransmissionRate',
-                key: 'TransmissionRate',
-                align: 'center',
-                render: (text, record) => {
-                    return (parseFloat(text) * 100).toFixed(2) + '%';
-                }
-            },
-            {
-                title: (<span style={{fontWeight: 'bold'}}>有效率</span>),
-                dataIndex: 'EffectiveRate',
-                key: 'EffectiveRate',
-                align: 'center',
-                sorter: (a, b) => a.EffectiveRate - b.EffectiveRate,
-                render: (text, record) => {
-                    return (parseFloat(text) * 100).toFixed(2) + '%';
-                }
-            },
-            {
-                title: (<span style={{fontWeight: 'bold'}}>传输有效率</span>),
-                dataIndex: 'TransmissionEffectiveRate',
-                key: 'TransmissionEffectiveRate',
-                width: '250px',
-                align: 'center',
+                title: (<span style={{fontWeight: 'bold'}}>排放量(kg)</span>),
+                dataIndex: 'Emissions',
+                key: 'Emissions',
+                align: 'left',
+                width: '33.33%',
+
                 sorter: true,
                 render: (text, record) => {
-                    // 红色：#f5222d 绿色：#52c41a
-                    const percent = (parseFloat(text) * 100 + 88).toFixed(2);
-                    console.log(percent);
-                    if (percent >= 90) {
-                        return (<div style={{ width: 200 }}>
-                            <Progress
-                                successPercent={percent}
-                                percent={percent}
-                                size="small" format={percent => (<span style={{color: 'black'}}>{percent}%</span>)}
-                            />
-                        </div>);
-                    } else {
-                        return (<div style={{ width: 200 }}>
-                            <Progress
-                                successPercent={0}
-                                percent={percent}
-                                status="exception"
-                                size="small"
-                                format={percent => (<span style={{color: 'black'}}>{percent}%</span>)}
-                            />
-                        </div>);
-                    }
+                    return text;
+                }
+            }
+        ];
+        const columnsDays = [
+            {
+                title: (<span style={{fontWeight: 'bold'}}>排口名称</span>),
+                dataIndex: 'PointName',
+                key: 'PointName',
+                align: 'left',
+                width: '33.33%',
+                render: (text, record) => {
+                    return text;
                 }
             },
+            {
+                title: (<span style={{fontWeight: 'bold'}}>时间</span>),
+                dataIndex: 'DataDate',
+                key: 'DataDate',
+                align: 'left',
+                width: '33.33%',
+                show: true,
+                render: (text, record) => {
+                    return text;
+                }
+            },
+            {
+                title: (<span style={{fontWeight: 'bold'}}>排放量(kg)</span>),
+                dataIndex: 'Emissions',
+                key: 'Emissions',
+                align: 'left',
+                width: '33.33%',
+                // width: '300px',
+                sorter: true,
+                render: (text, record) => {
+                    return text;
+                }
+            }
         ];
+
         return (
             <div>
                 <Card className={styles.cardTitle} title="智能分析 / 月度排放量分析">
                     <Card
                         type="inner"
-                        title="二氧化硫排放量统计"
-                        extra={<MonthPicker defaultValue={this.state.beginTime} format={monthFormat} onChange={this.onDateChange} />}
-                    >
+                        title="排放量统计">
                         <Row>
-                        <ReactEcharts
-                            option={this.getOption()}
-                            style={{height: '300px', width: '100%'}}
-                            className='echarts-for-echarts'
-                            theme='my_theme' />
-                        </Row>
-                        <Row>
-                            <Col span={24}>
-                                <div style={{textAlign: 'center', marginBottom: 20}}>
-                                    <Button style={{marginRight: 20}}><span style={{fontSize: 16, color: '#52c41a', marginRight: 3}}>■</span> 排口传输有效率达标</Button>
-                                    <Button style={{marginRight: 20}}><span style={{fontSize: 16, color: '#f5222d', marginRight: 3}}>■</span> 排口传输有效率未达标</Button>
-                                </div>
+                            <Col span={4}>
+                                <span>污染物：
+                                    <Select
+                                        size="default"
+                                        defaultValue={this.props.pollutantCodes[0]}
+                                        onChange={this.handleChangePollutant}
+                                        style={{ width: 200 }}
+                                    >
+                                        <Option key="01">实测烟尘</Option>
+                                        <Option key="02">实测二氧化硫</Option>
+                                        <Option key="03">实测氮氧化物</Option>
+                                    </Select>
+                                </span>
+                            </Col>
+                            <Col span={4}>
+                                <span>时间：
+                                    <Select
+                                        size="default"
+                                        defaultValue={dateYear}
+                                        onChange={this.handleChangeDate}
+                                        style={{ width: 200 }}
+                                    >
+                                        {dateChildren}
+                                    </Select>
+                                </span>
                             </Col>
                         </Row>
-                        <Row>
-                            <Table className={styles.dataTable}
-                                loading={this.props.loading}
-                                columns={columns}
+
+                        <Row loading={this.props.loadingChart}>
+                            <ReactEcharts
+                                option={this.getOption()}
+                                lazyUpdate={true}
+                                style={{height: '300px', width: '100%'}}
+                                className="echarts-for-echarts"
+                                onChartReady={this.onChartReadyCallback}
+                                onEvents={{'click': this.onChartClick}}
+                                theme="my_theme" />
+                        </Row>
+
+                        <Row style={styles.cardTitle.cardBg}>
+
+                            <Card
+                                style={{ marginTop: 16 }}
+                                // type="inner"
+                                bordered={false}
+                                title={`${moment(this.props.clickDate).format('YYYY-MM')}月排放量排口统计`}
+                            >
+                                <Table style={{ marginTop: 16 }} className={styles.dataTable}
+                                    loading={this.props.loadingTable}
+                                    columns={columns}
+                                    onChange={this.handleTableChange}
+                                    size="small"// small middle
+                                    dataSource={this.props.tableDatas}
+                                    scroll={{ y: 200 }}
+                                    pagination={{
+                                        showSizeChanger: true,
+                                        showQuickJumper: true,
+                                        sorter: true,
+                                        'total': this.props.total,
+                                        'pageSize': this.props.pageSize,
+                                        'current': this.props.pageIndex,
+                                        pageSizeOptions: ['10', '20', '30', '40', '50']
+                                    }}
+                                />
+                            </Card>
+
+                        </Row>
+                        <Modal
+                            title={`${moment(this.props.clickDate).format('YYYY-MM')}月-${this.state.pointName} 排放量详情`}
+                            width="50%"
+                            visible={this.state.modalVisible}
+                            onOk={this.handleModalOk}
+                            onCancel={this.handleModalCancel}
+                            destroyOnClose={true}
+                        >
+                            <Table style={{ marginTop: 16 }} className={styles.dataTable}
+                                loading={this.props.loadingDays}
+                                columns={columnsDays}
                                 onChange={this.handleTableChange}
                                 size="small"// small middle
-                                dataSource={this.props.tableDatas}
-                                // scroll={{ y: 'calc(100vh - 255px)' }}
-                                rowClassName={
-                                    (record, index, indent) => {
-                                        if (index === 0) { return; }
-                                        if (index % 2 !== 0) {
-                                            return 'light';
-                                        }
-                                    }
-                                }
+                                dataSource={this.props.pointDaysDatas}
+                                scroll={{ y: 500 }}
                                 pagination={{
                                     showSizeChanger: true,
                                     showQuickJumper: true,
@@ -272,8 +410,7 @@ export default class PollutantEmissions extends Component {
                                     pageSizeOptions: ['10', '20', '30', '40', '50']
                                 }}
                             />
-                        </Row>
-
+                        </Modal>
                     </Card>
                 </Card>
             </div>

@@ -4,6 +4,7 @@ import Add from '../../components/Video/addVideoInfo';
 import Update from '../../components/Video/updateVideoInfo';
 import InfoList from '../../components/Video/VideoInfoList';
 import { Table, Card, Button, Modal, message, Divider, Icon, Row, Col, Menu, Dropdown } from 'antd';
+import PageHeader from '../../components/PageHeader';
 import { connect } from 'dva';
 import moment from 'moment';
 const confirm = Modal.confirm;
@@ -28,8 +29,8 @@ export default class VideoList extends Component {
             width: 400,
             expandForm: false,
             loading: true,
-            DGIMN: 'sgjt001003',
-            pointName: '脱硫入口',
+            DGIMN: this.props.match.params.pointcode,
+            pointName: this.props.match.params.pointname,
             footer: <div>
                 <Button key="back" onClick={this.handleCancel}>Return</Button>,
                 <Button key="submit" type="primary" onClick={this.handleOk}>
@@ -42,12 +43,12 @@ export default class VideoList extends Component {
 
     componentWillMount() {
         this.onChange();
-    };
+    }
     onChange = () => {
         this.props.dispatch({
             type: 'videolist/fetchuserlist',
             payload: {
-                DGIMN: 'sgjt001003',
+                DGIMN: this.state.DGIMN,
             },
         });
     }
@@ -103,6 +104,7 @@ export default class VideoList extends Component {
         });
     }
     render() {
+        console.log(this.props.match.params.pointcode === null ? null : this.props.match.params.pointcode);
         const columns = [
             { title: '设备名称', dataIndex: 'VedioDevice_Name', key: 'VedioDevice_Name' },
             { title: '相机名称', dataIndex: 'VedioCamera_Name', key: 'VedioCamera_Name' },
@@ -167,62 +169,80 @@ export default class VideoList extends Component {
 
         ];
         return (
-            <Card bordered={false}>
-                <Row>
-                    <Col span={24}>
-                        <Row>
-                            <Table
-                                columns={columns}
-                                dataSource={this.props.requstresult === '1' ? this.props.list : null}
-                                pagination={false}
-                                rowKey="VedioCamera_ID"
-                                onRow={(record, index) => {
-                                    return {
-                                        onClick: (a, b, c) => {
-                                            this.setState({
-                                                item: record,
-                                                selectedRowKeys: record.VedioCamera_ID
-                                            });
-                                        }, // 点击行
-                                        onMouseEnter: () => {}, // 鼠标移入行
-                                    };
-                                }}
-                            />
-                            <Modal
-                                footer={this.state.footer}
-                                destroyOnClose="true"
-                                visible={this.state.visible}
-                                title={this.state.title}
-                                width={this.state.width}
-                                onCancel={this.onCancel}>
-                                {
-                                    this.state.type === 'add' ? <Add onCancels={this.onCancel} dgimn={this.state.DGIMN} name={this.state.pointName} onRef={this.onRef1} /> : this.state.type === 'update' ? <Update onCancels={this.onCancel} dgimn={this.state.DGIMN} item={this.state.data} onRef={this.onRef1} /> : <InfoList onCancels={this.onCancel} dgimn={this.state.DGIMN} item={this.state.data} onRef={this.onRef1} />
-                                }
+            <div>
+                <div style={{position: 'absolute', right: 40, top: 98}} >
+                    <Button size="large" onClick={() => {
+                        this.props.history.goBack(-1);
+                    }}><Icon type="left" />退回</Button>
+                </div>
+                <PageHeader title="视频管理"
+                    breadcrumbList={
+                        [{
+                            title: '排口管理',
+                            href: '/sysmanage/PointInfo',
+                        }, {
+                            title: '视频管理',
+                        }]
+                    }
+                />
+                <Card bordered={false}>
+                    <Row>
+                        <Col span={24}>
+                            <Row>
+                                <Table
+                                    columns={columns}
+                                    dataSource={this.props.requstresult === '1' ? this.props.list : null}
+                                    pagination={false}
+                                    rowKey="VedioCamera_ID"
+                                    onRow={(record, index) => {
+                                        return {
+                                            onClick: (a, b, c) => {
+                                                this.setState({
+                                                    item: record,
+                                                    selectedRowKeys: record.VedioCamera_ID
+                                                });
+                                            }, // 点击行
+                                            onMouseEnter: () => {}, // 鼠标移入行
+                                        };
+                                    }}
+                                />
+                                <Modal
+                                    footer={this.state.footer}
+                                    destroyOnClose="true"
+                                    visible={this.state.visible}
+                                    title={this.state.title}
+                                    width={this.state.width}
+                                    onCancel={this.onCancel}>
+                                    {
+                                        this.state.type === 'add' ? <Add onCancels={this.onCancel} dgimn={this.state.DGIMN} name={this.state.pointName} onRef={this.onRef1} /> : this.state.type === 'update' ? <Update onCancels={this.onCancel} dgimn={this.state.DGIMN} item={this.state.data} onRef={this.onRef1} /> : <InfoList onCancels={this.onCancel} dgimn={this.state.DGIMN} item={this.state.data} onRef={this.onRef1} />
+                                    }
 
-                            </Modal>
-                        </Row>
-                        <Row>
-                            <Button type="dashed" onClick={() => {
-                                this.setState({
-                                    visible: true,
-                                    type: 'add',
-                                    title: '添加视频信息',
-                                    width: 1130,
-                                    footer: <div>
-                                        <Button key="back" onClick={this.onCancel}>取消</Button>
-                                        <Button key="submit" type="primary" onClick={this.AddData}>
+                                </Modal>
+                            </Row>
+                            <Row>
+                                <Button type="dashed" onClick={() => {
+                                    this.setState({
+                                        visible: true,
+                                        type: 'add',
+                                        title: '添加视频信息',
+                                        width: 1130,
+                                        footer: <div>
+                                            <Button key="back" onClick={this.onCancel}>取消</Button>
+                                            <Button key="submit" type="primary" onClick={this.AddData}>
                                   确定
-                                        </Button>
-                                    </div>
-                                });
-                            }} style={{ width: '100%' }}>
-                                <Icon type="plus" /> 添加
-                            </Button>
-                        </Row>
-                    </Col>
-                </Row>
+                                            </Button>
+                                        </div>
+                                    });
+                                }} style={{ width: '100%' }}>
+                                    <Icon type="plus" /> 添加
+                                </Button>
+                            </Row>
+                        </Col>
+                    </Row>
 
-            </Card>
+                </Card>
+            </div>
+
 
         );
     }

@@ -7,14 +7,15 @@ import {
 } from 'antd';
 import AListRadio from '../../components/OverView/AListRadio';
 import {routerRedux} from 'dva/router';
-import {amapKey} from '../../config';
+import {amapKey,centerlongitude,centerlatitude} from '../../config';
 import TreeStatus from '../../components/OverView/TreeStatus';
 import TreeList from '../../components/OverView/TreeList';
 import MapPollutantDetail from '../../components/OverView/MapPollutantDetail';
 import ChartData from '../../components/OverView/ChartData';
 import TransmissionEfficiency from '../../components/OverView/TransmissionEfficiency';
+import UrgentDispatch from '../../components/OverView/UrgentDispatch';
+import TreeDetailStatus from '../../components/OverView/TreeDetailStatus';
 import moment from 'moment';
-import styles from './index.less';
 const plugins = [
     'MapType',
     'Scale', {
@@ -27,7 +28,7 @@ const plugins = [
         }
     }
 ]; let _thismap;
-@connect(({loading, points, overview, global, baseinfo}) => ({
+@connect(({loading, overview, global, baseinfo}) => ({
     datalist: overview.data,
     treecol: overview.mainpcol,
     entInfoModel: baseinfo.entbaseinfo,
@@ -40,20 +41,19 @@ const plugins = [
     selectdata: overview.selectdata,
     pollutantName: overview.pollutantName,
     treedataloading: loading.effects['overview/querydatalist'],
-    detailloading: loading.effects['overview/queryoptionData']
+    detailloading: loading.effects['overview/queryoptionData'],
+    detailtime: overview.detailtime
 }))
 
 class OverViewMap extends PureComponent {
     constructor(props) {
         super(props);
-        const _this = this;
         this.map = null;
         this.state = {
             visible: false,
-            longitude: 100.300317,
-            latitude: 39.01278,
             selectpoint: {},
             detailed: false,
+            pdvisible: false,
             position: [
                 0, 0
             ],
@@ -67,7 +67,7 @@ class OverViewMap extends PureComponent {
 
         },
         complete: () => {
-            // _thismap.setZoomAndCenter(17, [118.510962, 38.976271]);
+            _thismap.setZoomAndCenter(13, [centerlongitude, centerlatitude]);
         }
     };
      stationClick = () => {
@@ -107,8 +107,9 @@ class OverViewMap extends PureComponent {
                datatype: 'hour',
                dgimn: row.DGIMN,
                pollutantCodes: '01',
-               endTime: moment(new Date()).add('hour', -1),
-               beginTime: moment(new Date()).add('hour', -24),
+               pollutantName: '烟尘',
+               endTime: (moment(new Date()).add('hour', -1)).format('YYYY-MM-DD HH:00:00'),
+               beginTime: (moment(new Date()).add('hour', -24)).format('YYYY-MM-DD HH:00:00'),
            }
        });
        this.setState({
@@ -130,16 +131,28 @@ class OverViewMap extends PureComponent {
            type: 'overview/queryoptionDataOnClick',
            payload: {
                datatype: 'hour',
+               pollutantName: row.pollutantName,
                dgimn: row.dgimn,
                pollutantCodes: row.pcode,
-               endTime: moment(new Date()).add('hour', -1),
-               beginTime: moment(new Date()).add('hour', -24),
+               endTime: (moment(new Date()).add('hour', -1)).format('YYYY-MM-DD HH:00:00'),
+               beginTime: (moment(new Date()).add('hour', -24)).format('YYYY-MM-DD HH:00:00'),
            }
+       });
+   }
+   onCancel=() => {
+       this.setState({
+           pdvisible: false,
+       });
+   }
+   pdShow=() => {
+       this.setState({
+           pdvisible: true,
        });
    }
    backTreeList=() => {
        this.setState({
-           detailed: false
+           detailed: false,
+           visible: false
        });
    }
    render() {
@@ -153,8 +166,12 @@ class OverViewMap extends PureComponent {
                    height: 'calc(100vh - 67px)'
                }}>
                <Map events={this.mapEvents} resizeEnable={true}
-                   zoom={13} loading={<Spin />} amapkey={amapKey} plugins={plugins}
+                   zoom={13} loading={<Spin style={{width: '100%',
+                       height: 'calc(100vh - 260px)',
+                       marginTop: 260 }} size="large" />} amapkey={amapKey} plugins={plugins}
                >
+                   <UrgentDispatch onCancel={this.onCancel}
+                       visible={this.state.pdvisible} pointName={this.state.selectpoint ? this.state.selectpoint.pointName : ''} />
                    <div style={{ width: 450,
                        height: 'calc(100vh - 90px)',
                        position: 'absolute',
@@ -167,34 +184,34 @@ class OverViewMap extends PureComponent {
                            <div>
                                <TreeStatus datalist={this.props.datalist} />
                            </div>
-                           <div style={{marginTop: 15}}>
+                           <div style={{ marginTop: 15 }}>
                                <TreeList treedataloading={this.props.treedataloading} treeCilck={this.treeCilck} treecol={this.props.treecol} pointInfo={this.props.datalist} />
                            </div>
-                       </div>
-                           : detailloading ? <Spin style={{width: '100%',
+                       </div> :
+                           detailloading ? <Spin style={{width: '100%',
                                height: 'calc(100vh - 260px)',
-                               marginTop: 260 }} size="large" />
-                               : <div style={{ marginLeft: 10, marginTop: 10 }}>
-                                   <div>
-                                       <TreeStatus datalist={this.props.datalist} stationClick={this.stationClick} backTreeList={this.backTreeList} pointName={this.state.pointName} detailed={this.state.detailed} />
+                               marginTop: 260 }} size="large" /> :
+                               <div style={{ marginLeft: 10, marginTop: 10 }}>
+                               <div>
+                                       <TreeDetailStatus pdShow={this.pdShow} detailtime={this.props.detailtime} stationClick={this.stationClick} backTreeList={this.backTreeList} pointName={this.state.pointName} detailed={this.state.detailed} />
                                    </div>
-                                   <div style={{marginTop: 15}}>
+                               <div style={{marginTop: 15}}>
                                        <TransmissionEfficiency selectdata={this.props.selectdata} />
                                    </div>
-                                   <div style={{marginTop: 15}}>
+                               <div style={{marginTop: 15}}>
                                        <MapPollutantDetail detialTreeClick={this.detialTreeClick} detailpcol={this.props.detailpcol} detaildata={this.props.detaildata} />
                                    </div>
-                                   <div style={{marginTop: 15}}>
+                               <div style={{marginTop: 15}}>
                                        <ChartData pollutantName={this.props.pollutantName} isloading={chartloading} chartdata={this.props.chartdata} existdata={this.props.existdata} />
                                    </div>
-                               </div>
+                           </div>
                        }
                    </div>
                    <div
                        style={{
                            position: 'absolute',
                            top: 10,
-                           right: 200
+                           right: 100
                        }}>
                        <AListRadio dvalue="a" />
                    </div>
@@ -222,18 +239,17 @@ class OverViewMap extends PureComponent {
                                return <img src="../../../gisnormal.png" />;
                            } else if (extData.status === 2) {
                                return <img src="../../../gisover.png" />;
-                           } else {
-                               return <img src="../../../gisexception.png" />;
                            }
+                           return <img src="../../../gisexception.png" />;
                        }} />
                    <InfoWindow
                        position={this.state.position}
                        visible={this.state.visible}
                        isCustom={true}
-                       offset={[0, -20]}
-                   >
+                       offset={[0, -20]}>
                        {this.state.selectpoint.pointName}
                    </InfoWindow>
+                   <UrgentDispatch />
                </Map>
            </div>
 

@@ -18,15 +18,15 @@ export default class qcontrollist extends Component {
         super(props);
         const srclist = [
             { key: EnumPsOperationForm.Repair, name: '维修记录表', src: 'RepairHistoryRecods' },
-            { key: EnumPsOperationForm.StopMachine, name: '停机记录表', src: '' },
+            { key: EnumPsOperationForm.StopMachine, name: '停机记录表', src: 'StopCemsListHistoryRecords' },
             { key: EnumPsOperationForm.YhpReplace, name: '易耗品更换记录表', src: 'CounterControlCommandHistoryRecords' },
             { key: EnumPsOperationForm.StandardGasReplace, name: '标准气体更换记录表', src: 'StandardGasHistoryRecords' },
-            { key: EnumPsOperationForm.CqfPatrol, name: '完全抽取法CEMS日常巡检记录表', src: '' },
-            { key: EnumPsOperationForm.CyfPatrol, name: '稀释采样法CEMS日常巡检记录表', src: '' },
-            { key: EnumPsOperationForm.ClfPatrol, name: '直接测量法CEMS日常巡检记录表', src: '' },
+            { key: EnumPsOperationForm.CqfPatrol, name: '完全抽取法CEMS日常巡检记录表', src: 'WQCQFInspectionHistoryRecord' },
+            { key: EnumPsOperationForm.CyfPatrol, name: '稀释采样法CEMS日常巡检记录表', src: 'XSCYFInspectionHistoryRecord' },
+            { key: EnumPsOperationForm.ClfPatrol, name: '直接测量法CEMS日常巡检记录表', src: 'ZZCLFInspectionHistoryRecord' },
             { key: EnumPsOperationForm.CheckRecord, name: 'CEMS零点量程漂移与校准记录表', src: 'JzHistoryRecords' },
-            { key: EnumPsOperationForm.TestRecord, name: 'CEMS校验测试记录', src: '' },
-            { key: EnumPsOperationForm.DataException, name: 'CEMS设备数据异常记录表', src: '' }
+            { key: EnumPsOperationForm.TestRecord, name: 'CEMS校验测试记录', src: 'BdHistoryInfoHistoryRecords' },
+            { key: EnumPsOperationForm.DataException, name: 'CEMS设备数据异常记录表', src: 'DeviceExceptionListHistoryRecord' }
         ];
         const path1 = this.props.location.pathname.split('/')[this.props.location.pathname.split('/').length - 1];
         const path2 = this.props.location.pathname.split('/')[this.props.location.pathname.split('/').length - 2];

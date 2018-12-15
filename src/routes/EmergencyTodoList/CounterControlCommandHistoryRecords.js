@@ -16,8 +16,8 @@ import {routerRedux} from 'dva/router';
 
 @connect(({ task, loading }) => ({
     // isloading: loading.effects['task/GetJzHistoryRecord'],
-    HistoryConsumablesReplaceRecord: task.HistoryConsumablesReplaceRecord,
-    HistoryConsumablesReplaceRecordCount: task.HistoryConsumablesReplaceRecordCount,
+    HistoryConsumablesReplaceRecord: task.List,
+    HistoryConsumablesReplaceRecordCount: task.total,
     pageIndex: task.pageIndex,
     pageSize: task.pageSize,
 }))
@@ -28,7 +28,7 @@ export default class CounterControlCommandHistoryRecords extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            rangeDate: [moment(moment(new Date()).subtract(11, 'month').format('YYYY-MM-DD 00:00:00')), moment(moment(new Date()).format('YYYY-MM-DD 23:59:59'))], // 最近七天
+            rangeDate: [moment(moment(new Date()).subtract(3, 'month').format('YYYY-MM-DD 00:00:00')), moment(moment(new Date()).format('YYYY-MM-DD 23:59:59'))], // 最近七天
             BeginTime: moment().subtract(11, 'month').format('YYYY-MM-DD 00:00:00'),
             EndTime: moment().format('YYYY-MM-DD 23:59:59'),
             DGIMN: this.props.match.params.pointcode,
@@ -40,7 +40,7 @@ export default class CounterControlCommandHistoryRecords extends Component {
     }
 
     GetHistoryRecord=(pageIndex, pageSize, DGIMN, typeID, BeginTime, EndTime) => {
-        debugger
+        debugger;
         this.props.dispatch({
             type: 'task/GetHistoryConsumablesReplaceRecord',
             payload: {
@@ -48,8 +48,8 @@ export default class CounterControlCommandHistoryRecords extends Component {
                 pageSize: pageSize,
                 TypeID: typeID,
                 DGIMN: DGIMN,
-                BeginTime: BeginTime,
-                EndTime: EndTime,
+                BeginTime: moment(BeginTime).format('YYYY-MM-DD 00:00:00'),
+                EndTime: moment(EndTime).format('YYYY-MM-DD 23:59:59'),
             }
         });
     };
@@ -57,7 +57,8 @@ export default class CounterControlCommandHistoryRecords extends Component {
     _handleDateChange=(date, dateString) => {
         this.setState(
             {
-                beginTime: dateString[0],
+                rangeDate: date,
+                BeginTime: dateString[0],
                 EndTime: dateString[1]
             }
         );
@@ -65,37 +66,37 @@ export default class CounterControlCommandHistoryRecords extends Component {
     };
 
     onShowSizeChange = (pageIndex, pageSize) => {
+        debugger;
         this.GetHistoryRecord(pageIndex, pageSize, this.state.DGIMN, this.state.typeID, this.state.BeginTime, this.state.EndTime);
     }
 
     onChange = (pageIndex, pageSize) => {
+        debugger;
         this.GetHistoryRecord(pageIndex, pageSize, this.state.DGIMN, this.state.typeID, this.state.BeginTime, this.state.EndTime);
     }
 
     seeDetail=(record) => {
-        debugger
-        this.props.dispatch(routerRedux.push(`/pointdetail/:pointcode/ConsumablesReplaceRecord/${record.taskId}/${this.state.typeID}`));
+        debugger;
+        this.props.dispatch(routerRedux.push(`/pointdetail/:pointcode/ConsumablesReplaceRecord/${record.TaskID}/${this.state.typeID}`));
     }
 
     render() {
-        // console.log(this.state.TypeID);
-        // console.log(this.props.HistoryConsumablesReplaceRecord === null ? null : this.props.HistoryConsumablesReplaceRecord);
         const dataSource = this.props.HistoryConsumablesReplaceRecord === null ? null : this.props.HistoryConsumablesReplaceRecord;
         const columns = [{
             title: '校准人',
             width: '20%',
-            dataIndex: 'operationPerson',
-            key: 'operationPerson'
+            dataIndex: 'CreateUserID',
+            key: 'CreateUserID'
         }, {
             title: '易耗品（数量）',
             width: '45%',
-            dataIndex: 'name',
-            key: 'name'
+            dataIndex: 'Content',
+            key: 'Content'
         }, {
             title: '记录创建时间',
-            dataIndex: 'createTime',
+            dataIndex: 'CreateTime',
             width: '20%',
-            key: 'createTime'
+            key: 'CreateTime'
         }, {
             title: '详细',
             dataIndex: 'TaskID',
@@ -113,10 +114,10 @@ export default class CounterControlCommandHistoryRecords extends Component {
                     <Card>
                         <Form layout="inline">
                             <Row gutter={8}>
-                                <Col span={3} >
+                                <Col span={5} >
                             记录创建时间：
                                 </Col>
-                                <Col span={3} >
+                                <Col span={5} >
                                     <RangePicker_ style={{width: 350}} onChange={this._handleDateChange} dateValue={this.state.rangeDate} />
                                 </Col>
                             </Row>

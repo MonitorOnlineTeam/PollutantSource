@@ -5,42 +5,105 @@
  */
 
 import { Model } from '../dvapack';
-import { getAllMonthPollutantEmissions } from '../services/PollutantEmissionsApi';
+import { getAllMonthPollutantEmissions, getSingleMonthAllPointEmissions, getSinglePointDaysEmissions } from '../services/PollutantEmissionsApi';
 import moment from 'moment';
+// import { message } from 'antd';
 
 export default Model.extend({
     namespace: 'PollutantEmissionsModel',
     state: {
-        pageSize: 10,
+        pageSize: 20,
         pageIndex: 1,
         tableDatas: [],
-        beginTime: moment().format('YYYY-MM-01 HH:mm:ss'),
-        endTime: moment().format('YYYY-MM-DD HH:mm:ss'),
-        EORSort: 'ascend'
+        pointDaysDatas: [],
+        enterpriseCodes: [],
+        pollutantCodes: ['02'],
+        selectedDate: moment().format('YYYY-MM-01 00:00:00'),
+        clickDate: moment().format('YYYY-MM-01 00:00:00'),
+        beginTime: moment().format('YYYY-01-01 00:00:00'),
+        endTime: moment().add(1,'years').format('YYYY-01-01 00:00:00'),
+        monthTime: moment().format('YYYY-MM-01 00:00:00'),
+        emissionsSort: '',
+        xAxisData: [],
+        seriesData: [],
+        queryDGIMNs: '',
+        // queryDate: moment().format('YYYY-MM-01 00:00:00')
     },
     subscriptions: {
     },
     effects: {
-        * getData({payload}, { call, put, update, select }) {
-            const {beginTime, endTime, pageSize, EORSort} = yield select(state => state.PollutantEmissionsModel);
+        * getChartData({payload}, { call, put, update, select }) {
+            const {beginTime, endTime, pageSize, pollutantCodes} = yield select(state => state.PollutantEmissionsModel);
+            // debugger
             let body = {
-                // 'DGIMNs': ['sgjt001003', 'sgjt001004'],
-                // 'beginTime': '2018-11-01 00:00:00',
-                // 'endTime': '2018-11-30 00:00:00'
                 beginTime: beginTime,
                 endTime: endTime,
                 pageSize: pageSize,
-                EORSort: EORSort,
-                pageIndex: payload.pageIndex,
+                pollutantCodes: pollutantCodes,
             };
             const response = yield call(getAllMonthPollutantEmissions, body);
-            yield update({
-                tableDatas: response.data,
-                total: response.total,
-                pageIndex: payload.pageIndex || 1,
-            });
-            const tableDatasNew = yield select(state => state.PollutantEmissionsModel.tableDatas);
-            console.log('new', tableDatasNew);
+
+            if (response.data)
+            {
+                let XAxisData = [];
+                let SeriesData = [];
+                response.data.map((ele) => {
+                    XAxisData.push(ele.DataDate.split('-')[1] + '月');
+                    SeriesData.push(ele.Emissions.toFixed(2));
+                });
+                yield update({
+                    total: response.total,
+                    xAxisData: XAxisData,
+                    seriesData: SeriesData
+                });
+            }
+            // const xAxisData = yield select(state => state.PollutantEmissionsModel.xAxisData);
+            // console.log('new', xAxisData);
+        },
+        * getPointsData({payload}, { call, put, update, select }) {
+            const {clickDate, pageIndex, pageSize, pollutantCodes, emissionsSort} = yield select(state => state.PollutantEmissionsModel);
+            // debugger
+            let body = {
+                monthTime: clickDate,
+                pageIndex: pageIndex,
+                pageSize: pageSize,
+                emissionsSort: emissionsSort,
+                pollutantCodes: pollutantCodes,
+            };
+            const response = yield call(getSingleMonthAllPointEmissions, body);
+
+            if (response.data)
+            {
+                yield update({
+                    tableDatas: response.data,
+                    total: response.total,
+                });
+            }
+            // const tableDatasNew = yield select(state => state.PollutantEmissionsModel.tableDatas);
+            // console.log('new', tableDatasNew);
+        },
+        * getPointDaysData({payload}, { call, put, update, select }) {
+            const {clickDate, pageIndex, pageSize, pollutantCodes, emissionsSort,queryDGIMNs} = yield select(state => state.PollutantEmissionsModel);
+            // debugger
+            let body = {
+                monthTime: clickDate,
+                pageIndex: pageIndex,
+                pageSize: pageSize,
+                DGIMNs: queryDGIMNs,
+                emissionsSort: emissionsSort,
+                pollutantCodes: pollutantCodes,
+            };
+            const response = yield call(getSinglePointDaysEmissions, body);
+
+            if (response.data)
+            {
+                yield update({
+                    pointDaysDatas: response.data,
+                    total: response.total,
+                });
+            }
+            // const pointDaysDatas = yield select(state => state.PollutantEmissionsModel.pointDaysDatas);
+            // console.log('new', pointDaysDatas);
         },
     },
 });

@@ -27,8 +27,7 @@ export async function GetYwdsj(params) {
 // 获取校准记录
 export async function GetJzRecord(params) {
     const body = {
-        TaskID: params.TaskID,
-        TypeID: params.TypeID
+        TaskID: params.TaskID
     };
     const result = await post('/api/rest/PollutantSourceApi/PTaskForm/GetJzRecord', body, null);
     return result === null ? { data: null } : result;
@@ -48,7 +47,6 @@ export async function GetJzHistoryRecord(params) {
     const body = {
         pageIndex: params.pageIndex,
         pageSize: params.pageSize,
-        TypeID: params.TypeID,
         DGIMN: params.DGIMN,
         BeginTime: params.BeginTime,
         EndTime: params.EndTime
@@ -115,6 +113,101 @@ export async function GetPatrolRecordListPC(params) {
         TypeID: params.TypeIDs
     };
     const result = post('/api/rest/PollutantSourceApi/PTaskForm/GetPatrolRecordListPC', body, null);
+    return result === null ? {
+        data: null
+    } : result;
+}
+// 获取CEMS日常巡检记录表（历史记录表）
+export async function GetHistoryInspectionHistoryRecord(params) {
+    const body = {
+        pageIndex: params.pageIndex,
+        pageSize: params.pageSize,
+        TypeID: params.TypeID,
+        DGIMN: params.DGIMN,
+        BeginTime: params.BeginTime,
+        EndTime: params.EndTime,
+    };
+    const result = post('/api/rest/PollutantSourceApi/PTaskForm/GetPatrolRecordHistoryList', body, null);
+    return result === null ? {
+        data: null
+    } : result;
+}
+
+
+// 获取停机记录内容
+export async function GetStopCemsDetail(params) {
+    const body = {
+        TaskID: params.TaskID,
+        TypeID: params.TypeID
+    };
+    const result = await post('/api/rest/PollutantSourceApi/PTaskForm/PostStopCemsDetail', body, null);
+    return result === null ? { data: null } : result;
+}
+// 获取停机记录列表（历史记录表）
+export async function GetHistoryStopCemsList(params) {
+    const body = {
+        pageIndex: params.pageIndex,
+        pageSize: params.pageSize,
+        TypeID: params.TypeID,
+        DGIMN: params.DGIMN,
+        BeginTime: params.BeginTime,
+        EndTime: params.EndTime,
+    };
+    const result = post('/api/rest/PollutantSourceApi/PTaskForm/PostStopCemsList', body, null);
+    return result === null ? {
+        data: null
+    } : result;
+}
+// 获取维修记录内容
+export async function GetRepairDetail(params) {
+    const body = {
+        TaskID: params.TaskID,
+        TypeID: params.TypeID
+    };
+    const result = await post('/api/rest/PollutantSourceApi/PTaskForm/RepairRecordDetail', body, null);
+    return result === null ? { data: null } : result;
+}
+// 获取维修记录列表（历史记录表）
+export async function GetHistoryRepairDetail(params) {
+    const body = {
+        pageIndex: params.pageIndex,
+        pageSize: params.pageSize,
+        TypeID: params.TypeID,
+        DGIMN: params.DGIMN,
+        BeginTime: params.BeginTime,
+        EndTime: params.EndTime,
+    };
+    const result = post('/api/rest/PollutantSourceApi/PTaskForm/RepairRecordList', body, null);
+    return result === null ? {
+        data: null
+    } : result;
+}
+// 获取异常记录列表（历史记录表）
+export async function GetDeviceExceptionList(params) {
+    const body = {
+        pageIndex: params.pageIndex,
+        pageSize: params.pageSize,
+        TypeID: params.TypeID,
+        DGIMN: params.DGIMN,
+        BeginTime: params.BeginTime,
+        EndTime: params.EndTime,
+    };
+    const result = post('/api/rest/PollutantSourceApi/PTaskForm/DeviceExceptionList', body, null);
+    return result === null ? {
+        data: null
+    } : result;
+}
+// 校验测试历史记录列表（历史记录表）
+export async function GetBdHistoryInfoList(params) {
+    const body = {
+        pageIndex: params.pageIndex,
+        pageSize: params.pageSize,
+        TypeID: params.TypeID,
+        DGIMN: params.DGIMN,
+        BeginTime: params.BeginTime,
+        EndTime: params.EndTime,
+    };
+    const result = post('/api/rest/PollutantSourceApi/PTaskForm/GetBdHistoryInfo', body, null);
     return result === null ? {
         data: null
     } : result;

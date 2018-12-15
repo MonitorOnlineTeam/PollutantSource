@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import styles from '../EmergencyTodoList/EmergencyDetailInfo.less';
-import {Card, Divider, Button, Input, Table, Row, Col, Icon, Spin } from 'antd';
+import {Card, Divider, Button, Input, Table, Icon, Spin,Modal,Upload } from 'antd';
 import DescriptionList from '../../components/DescriptionList';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import { connect } from 'dva';
 import {EnumRequstResult, EnumPatrolTaskType, EnumPsOperationForm} from '../../utils/enum';
 import { routerRedux } from 'dva/router';
 import {imgaddress} from '../../config.js';
+import { CALL_HISTORY_METHOD } from 'react-router-redux';
 const { Description } = DescriptionList;
 const { TextArea } = Input;
 
@@ -18,6 +19,8 @@ export default class EmergencyDetailInfo extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            previewVisible: false,
+            previewImage: ''
         };
     }
 
@@ -31,6 +34,19 @@ export default class EmergencyDetailInfo extends Component {
         });
     }
 
+    handlePreview = (file) => {
+        this.setState({
+            previewImage: `${imgaddress}${file.name}`,
+            previewVisible: true,
+        });
+    }
+
+    handleCancel=() => {
+        this.setState({
+            previewVisible: false
+        });
+    }
+
     renderItem=(data, taskID) => {
         const rtnVal = [];
         data.map((item) => {
@@ -38,12 +54,13 @@ export default class EmergencyDetailInfo extends Component {
                 switch (item.ID) {
                     case EnumPsOperationForm.Repair:
                         rtnVal.push(<p style={{marginBottom: 0}}><Button style={{marginBottom: '5px'}} icon="check-circle-o" onClick={() => {
-                            this.props.dispatch(routerRedux.push(``));
+                            this.props.dispatch(routerRedux.push(`/pointdetail/:pointcode/RepairRecordDetail/${taskID}/${item.ID}`));
                         }}>{item.TypeName}</Button></p>);
                         break;
                     case EnumPsOperationForm.StopMachine:
                         rtnVal.push(<p style={{marginBottom: 0}}><Button style={{marginBottom: '5px'}} icon="check-circle-o" onClick={() => {
-                            this.props.dispatch(routerRedux.push(``));
+                            //this.props.dispatch(routerRedux.push(`/pointdetail/:pointcode/StopCemsInfo/${this.state.TaskIds}/${this.state.TypeIDs}`));
+                            this.props.dispatch(routerRedux.push(`/pointdetail/:pointcode/StopCemsInfo/${taskID}/${item.ID}`));
                         }}>{item.TypeName}</Button></p>);
                         break;
                     case EnumPsOperationForm.YhpReplace:
@@ -94,17 +111,8 @@ export default class EmergencyDetailInfo extends Component {
         return rtnVal;
     }
 
-    renderPicItem=(data) => {
-        const rtnVal = [];
-        data.map((item) => {
-            rtnVal.push(<Col span={6} align="center"><img src={item} /></Col>);
-        });
-        return rtnVal;
-    }
-
     render() {
         const SCREEN_WIDTH = document.querySelector('body').offsetWidth;
-
         if (this.props.taskInfo === null) {
             return (
                 <div />
@@ -130,7 +138,7 @@ export default class EmergencyDetailInfo extends Component {
         let CompleteTime = null;
         const taskInfo = this.props.taskInfo;
 
-        if (taskInfo.requstresult == EnumRequstResult.Success) {
+        if (taskInfo.requstresult == EnumRequstResult.Success && taskInfo.data !== null) {
             data = taskInfo.data[0];
             TaskID = data.ID;
             TaskCode = data.TaskCode;
@@ -162,7 +170,16 @@ export default class EmergencyDetailInfo extends Component {
             }
         }
 
-        const pics = Attachments !== '' ? Attachments.LowimgList : [];
+        const pics = Attachments !== '' ? Attachments.ThumbimgList : [];
+        const fileList = [];
+        pics.map((item) => {
+            fileList.push({
+                uid: item,
+                name: item.replace('_thumbnail',''),
+                status: 'done',
+                url: `${imgaddress}${item}`,
+            });
+        });
         const columns = [{
             title: '开始报警时间',
             width: '20%',
@@ -218,82 +235,90 @@ export default class EmergencyDetailInfo extends Component {
                 </div>
             );
         }
+
+        const upload = {
+            showUploadList: {showPreviewIcon: true, showRemoveIcon: false },
+            listType: 'picture-card',
+            fileList: [...fileList]
+        };
         return (
-            <PageHeaderLayout title="">
-                <div style={{height: 'calc(100vh - 290px)'}} className={styles.ExceptionDetailDiv}>
-                    <Card title={<span style={{fontWeight: '900'}}>任务信息</span>} bordered={false}>
-                        <DescriptionList className={styles.headerList} size="large" col="3">
-                            <Description term="任务单号">{TaskCode}</Description>
-                            <Description term="排口" >{PointName}</Description>
-                            <Description term="企业">{EnterpriseName}</Description>
-                        </DescriptionList>
-                        <DescriptionList style={{marginTop: 20}} className={styles.headerList} size="large" col="3">
-                            <Description term="任务来源">{TaskFrom}</Description>
-                            <Description term="紧急程度"><div style={{color: 'red'}}>{EmergencyStatusText}</div></Description>
-                            <Description term="任务状态"> <div style={{color: '#32CD32'}}>{TaskStatusText }</div></Description>
-                            <Description term="任务内容">{TaskDescription}</Description>
-                        </DescriptionList>
-                        <DescriptionList style={{marginTop: 20}} className={styles.headerList} size="large" col="3">
-                            <Description term="运维人">{OperationsUserName}</Description>
-                            <Description term="创建时间">{CreateTime}</Description>
-                        </DescriptionList>
-                        {
-                            TaskType === EnumPatrolTaskType.PatrolTask ? null :
+            <div style={{height: 'calc(100vh - 220px)'}} className={styles.ExceptionDetailDiv}>
+                <Card title={<span style={{fontWeight: '900'}}>任务信息</span>}>
+                    <DescriptionList className={styles.headerList} size="large" col="3">
+                        <Description term="任务单号">{TaskCode}</Description>
+                        <Description term="排口" >{PointName}</Description>
+                        <Description term="企业">{EnterpriseName}</Description>
+                    </DescriptionList>
+                    <DescriptionList style={{marginTop: 20}} className={styles.headerList} size="large" col="3">
+                        <Description term="任务来源">{TaskFrom}</Description>
+                        <Description term="紧急程度"><div style={{color: 'red'}}>{EmergencyStatusText}</div></Description>
+                        <Description term="任务状态"> <div style={{color: '#32CD32'}}>{TaskStatusText }</div></Description>
+                        <Description term="任务内容">{TaskDescription}</Description>
+                    </DescriptionList>
+                    <DescriptionList style={{marginTop: 20}} className={styles.headerList} size="large" col="3">
+                        <Description term="运维人">{OperationsUserName}</Description>
+                        <Description term="创建时间">{CreateTime}</Description>
+                    </DescriptionList>
+                    {
+                        TaskType === EnumPatrolTaskType.PatrolTask ? null :
                             <Divider style={{ marginBottom: 20}} />
-                        }
-                        {
-                            TaskType === EnumPatrolTaskType.PatrolTask ? null :
+                    }
+                    {
+                        TaskType === EnumPatrolTaskType.PatrolTask ? null :
                             <Table style={{ backgroundColor: 'white'}} bordered={false} dataSource={AlarmList} pagination={false} columns={columns} />
-                        }
+                    }
 
-                    </Card>
-                    <Card title={<span style={{fontWeight: '900'}}>处理说明</span>} style={{ marginTop: 20}} bordered={false}>
-                        <DescriptionList className={styles.headerList} size="large" col="1">
-                            <Description>
-                                <TextArea rows={8} style={{width: '600px'}}>
-                                    {Remark}
-                                </TextArea>
-                            </Description>
-                        </DescriptionList>
+                </Card>
+                <Card title={<span style={{fontWeight: '900'}}>处理说明</span>} style={{ marginTop: 20}}>
+                    <DescriptionList className={styles.headerList} size="large" col="1">
+                        <Description>
+                            <TextArea rows={8} style={{width: '600px'}}>
+                                {Remark}
+                            </TextArea>
+                        </Description>
+                    </DescriptionList>
 
-                    </Card>
-                    <Card title={<span style={{fontWeight: '900'}}>处理记录</span>} style={{ marginTop: 20}} bordered={false}>
-                        <DescriptionList className={styles.headerList} size="large" col="1">
-                            <Description>
-                                {
-                                    this.renderItem(RecordTypeInfo, TaskID)
-                                }
-                            </Description>
-                        </DescriptionList>
-                        <DescriptionList style={{marginTop: 20}} className={styles.headerList} size="large" col="2">
-                            <Description term="处理人">
-                                {OperationsUserName}
-                            </Description>
-                            <Description term="处理时间">
-                                {CompleteTime}
-                            </Description>
-                        </DescriptionList>
-                    </Card>
-                    <Card title={<span style={{fontWeight: '900'}}>附件</span>} bordered={false}>
-                        <Row gutter={16} justify="center" align="middle">
-                            {this.renderPicItem(RecordTypeInfo, TaskID)}
-                        </Row>
-                    </Card>
-                    <Card title={<span style={{fontWeight: '900'}}>日志表</span>} style={{marginTop: 20 }} bordered={false}>
-                        <Table columns={LogColumn}
-                            dataSource={TaskLogList}
-                            rowKey="StepID"
-                            bordered={true}
-                            pagination={false}
-                        />
-                    </Card>
-                    <div className={styles.Toexamine} >
-                        <Button size="large" onClick={() => {
-                            this.props.history.goBack(-1);
-                        }}><Icon type="left" />退回</Button>
-                    </div>
+                </Card>
+                <Card title={<span style={{fontWeight: '900'}}>处理记录</span>} style={{ marginTop: 20}}>
+                    <DescriptionList className={styles.headerList} size="large" col="1">
+                        <Description>
+                            {
+                                this.renderItem(RecordTypeInfo, TaskID)
+                            }
+                        </Description>
+                    </DescriptionList>
+                    <DescriptionList style={{marginTop: 20}} className={styles.headerList} size="large" col="2">
+                        <Description term="处理人">
+                            {OperationsUserName}
+                        </Description>
+                        <Description term="处理时间">
+                            {CompleteTime}
+                        </Description>
+                    </DescriptionList>
+                </Card>
+                <Card title={<span style={{fontWeight: '900'}}>附件</span>}>
+                    <Upload
+                        {...upload}
+                        onPreview={this.handlePreview}
+                    />
+                </Card>
+                <Card title={<span style={{fontWeight: '900'}}>日志表</span>} style={{marginTop: 20 }}>
+                    <Table columns={LogColumn}
+                        dataSource={TaskLogList}
+                        rowKey="StepID"
+                        bordered={true}
+                        pagination={false}
+                    />
+                </Card>
+                <div className={styles.Toexamine} >
+                    <Button size="large" onClick={() => {
+                        this.props.history.goBack(-1);
+                    }}><Icon type="left" />退回</Button>
                 </div>
-            </PageHeaderLayout>
+                <Modal width="65%" visible={this.state.previewVisible} footer={null} onCancel={this.handleCancel}>
+                    <img alt="example" style={{ width: '100%',marginTop: '20px' }} src={this.state.previewImage} />
+                </Modal>
+            </div>
         );
     }
 }

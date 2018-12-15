@@ -11,7 +11,7 @@ export async function fakeAccountLogin(params) {
     let result = {'requstresult': '0', 'reason': '验证失败', 'operation': 'Post', 'data': {}, 'total': 0};
     // = await post('/api/rest/AtmosphereApi/Author/IsLogins/', body, null, 'notooken');
     //if (userArray.length > 0) {
-        result = {'requstresult': '1', 'reason': '验证成功', 'operation': 'Post', 'data': {...userArray[0]}, 'total': 1};
+    result = {'requstresult': '1', 'reason': '验证成功', 'operation': 'Post', 'data': {...userArray[0]}, 'total': 1};
     //}
     return result === null ? { data: null } : result;
 }
@@ -385,6 +385,8 @@ export async function querypollutantlist(params) {
 }
 // 获取历史数据
 export async function queryhistorydatalist(params) {
+    console.log(params.beginTime);
+    console.log(params.endTime);
     const body = {
         DGIMNs: params.dgimn,
         // pollutantCodes: params.pollutantCode,
