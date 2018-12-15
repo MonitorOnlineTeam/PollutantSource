@@ -75,7 +75,6 @@ export default class RepairHistoryRecods extends Component {
     }
 
     seeDetail=(record) => {
-        debugger;
         this.props.dispatch(routerRedux.push(`/pointdetail/:pointcode/RepairRecordDetail/${record.TaskID}/${this.state.TypeID}`));////////跳转页面没做（跳转的页面还没有完成）
     }
 
@@ -113,11 +112,11 @@ export default class RepairHistoryRecods extends Component {
                     <Card>
                         <Form layout="inline">
                             <Row gutter={8}>
-                                <Col span={3} >
+                                <Col span={5} >
                             记录创建时间：
                                 </Col>
-                                <Col span={3} >
-                                    <RangePicker_ style={{width: 350}} onChange={this._handleDateChange} format="YYYY-MM-DD" dateValue={this.state.rangeDate} />
+                                <Col span={5} >
+                                    <RangePicker_ style={{width: 350}} onChange={this._handleDateChange} dateValue={this.state.rangeDate} />
                                 </Col>
                             </Row>
                         </Form>
