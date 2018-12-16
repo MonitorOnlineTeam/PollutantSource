@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Row, Col, Layout, Table, List, Button, Icon } from 'antd';
+import styles from '../EmergencyTodoList/ConsumablesReplaceRecord.less';
 import { connect } from 'dva';
 const {
     Header, Footer, Sider, Content,
@@ -14,6 +15,7 @@ class ConsumablesReplaceRecord extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            loading: false
         };
     }
     componentWillMount() {
@@ -28,266 +30,172 @@ class ConsumablesReplaceRecord extends Component {
             },
         });
     }
-    render() {
-        console.log(this.props.ConsumablesReplaceRecordList.length === 0 ? null : this.props.ConsumablesReplaceRecordList[0]);
-        const signContent = this.props.ConsumablesReplaceRecordList.length === 0 ? null : `data:image/jpeg;base64,${this.props.ConsumablesReplaceRecordList[0].Record.length === 0 ? null : this.props.ConsumablesReplaceRecordList[0].Record[0].SignContent}`;
-        const columnsone = [{
-            dataIndex: 'EnterpriseNameTitle',
-            key: 'EnterpriseNameTitle',
-            width: '14%',
-            align: 'center',
-        }, {
-            dataIndex: 'EnterpriseNameContent',
-            key: 'EnterpriseNameContent',
-            width: '19.3%',
-            align: 'center',
-        }, {
-            dataIndex: 'CodeTitle',
-            key: 'CodeTitle',
-            width: '16%',
-            align: 'center',
-        },
-        {
-            dataIndex: 'CodeContent',
-            key: 'CodeContent',
-            width: '18%',
-            align: 'center',
-        }, {
-            dataIndex: 'EquipmentTitle',
-            key: 'EquipmentTitle',
-            width: '13%',
-            align: 'center',
-        }, {
-            dataIndex: 'EquipmentContent',
-            key: 'EquipmentContent',
-            width: '19.7%',
-            align: 'center',
-        },
-        ];
-        const dataone = [{
-            key: '1',
-            EnterpriseNameTitle: '设备名称',
-            EnterpriseNameContent: 'CEMS',
-            CodeTitle: '规格型号',
-            CodeContent: this.props.ConsumablesReplaceRecordList.length === 0 ? null : this.props.ConsumablesReplaceRecordList[0].Record[0].Content['Code'],
-            EquipmentTitle: '设备编号',
-            EquipmentContent: this.props.ConsumablesReplaceRecordList.length === 0 ? null : this.props.ConsumablesReplaceRecordList[0].Record[0].Content['EquipmentCode'],
-        }];
-        const columnstwo = [{
-            dataIndex: 'MaintenanceManagementUnitTitle',
-            key: 'MaintenanceManagementUnitTitle',
-            width: '20%',
-            align: 'center',
-        }, {
-            dataIndex: 'MaintenanceManagementUnitContent',
-            key: 'MaintenanceManagementUnitContent',
-            width: '29.3%',
-            align: 'center',
-        }, {
-            dataIndex: 'PointPositionTitle',
-            key: 'PointPositionTitle',
-            width: '18%',
-            align: 'center',
-        },
-        {
-            dataIndex: 'PointPositionContent',
-            key: 'PointPositionContent',
-            width: '32.7%',
-            align: 'center',
-        }
-        ];
-        const datatwo = [{
-            key: '1',
-            MaintenanceManagementUnitTitle: '维护管理单位',
-            MaintenanceManagementUnitContent: this.props.ConsumablesReplaceRecordList.length === 0 ? null : this.props.ConsumablesReplaceRecordList[0].Record[0].Content['MaintenanceManagementUnit'],
-            PointPositionTitle: '安装地点',
-            PointPositionContent: this.props.ConsumablesReplaceRecordList.length === 0 ? null : this.props.ConsumablesReplaceRecordList[0].Record[0].Content['PointPosition'],
-        }];
-        const columnsthree = [{
-            dataIndex: 'CreateUserIDTitle',
-            key: 'CreateUserIDTitle',
-            width: '13%',
-            align: 'center',
-        }, {
-            dataIndex: 'CreateUserIDTitleContent',
-            key: 'CreateUserIDTitleContent',
-            width: '11%',
-            align: 'center',
-        }, {
-            dataIndex: 'CreateTimeTitle',
-            key: 'CreateTimeTitle',
-            width: '11%',
-            align: 'center',
-        },
-        {
-            dataIndex: 'CreateTimeContent',
-            key: 'CreateTimeContent',
-            width: '18%',
-            align: 'center',
-        }, {
-            dataIndex: 'SignContentTitle',
-            key: 'SignContentTitle',
-            width: '10%',
-            align: 'center',
-        },
-        {
-            dataIndex: 'SignContentcontent',
-            key: 'SignContentcontent',
-            width: '100px',
-            align: 'center',
-        },
-        {
-            dataIndex: 'SignTimetitle',
-            key: 'SignTimetitle',
-            width: '10%',
-            align: 'center',
-        },
-        {
-            dataIndex: 'SignTimetitlecontent',
-            key: 'SignTimetitlecontent',
-            width: '20%',
-            align: 'center',
-        }
-        ];
-        const columnsfour = [{
-            dataIndex: 'Detail',
-            key: 'Detail',
-            width: '100%',
-        }
-        ];
-        const datafour = [{
-            key: '1',
-            Detail: ' 注：更换易耗品时应及时记录，每半年汇总存档。',
-        }];
-        const datathree = [{
-            key: '1',
-            CreateUserIDTitle: '运行维护人员:',
-            CreateUserIDTitleContent: this.props.ConsumablesReplaceRecordList.length === 0 ? null : this.props.ConsumablesReplaceRecordList[0].Record.length === 0 ? null : this.props.ConsumablesReplaceRecordList[0].Record[0].CreateUserID,
-            CreateTimeTitle: '时间:',
-            CreateTimeContent: this.props.ConsumablesReplaceRecordList.length === 0 ? null : this.props.ConsumablesReplaceRecordList[0].Record.length === 0 ? null : this.props.ConsumablesReplaceRecordList[0].Record[0].CreateTime,
-            SignContentTitle: '负责人:',
-            SignContentcontent: this.props.ConsumablesReplaceRecordList.length === 0 ? null : this.props.ConsumablesReplaceRecordList[0].Record.length === 0 ? null : this.props.ConsumablesReplaceRecordList[0].Record[0].SignContent === null ? null : <img src={signContent} />,
-            SignTimetitle: '时间:',
-            SignTimetitlecontent: this.props.ConsumablesReplaceRecordList.length === 0 ? null : this.props.ConsumablesReplaceRecordList[0].Record.length === 0 ? null : this.props.ConsumablesReplaceRecordList[0].Record[0].SignTime,
-        }];
-        const columns = [{
-            title: '序号',
-            dataIndex: 'ID',
-            width: '9%',
-            align: 'center',
-            render(text, record, index) {
-                return (
-                    <span>{index + 1}</span>
+    renderItem = (record) => {
+        const rtnVal = [];
+        if (record !== null && record.length > 0) {
+            record.map((item,index) => {
+                rtnVal.push(
+                    <tr>
+                        <td style={{ height: '50px', textAlign: 'center',fontSize: '14px' }}>
+                            {index + 1}
+                        </td>
+                        <td style={{ height: '50px', textAlign: 'center',fontSize: '14px' }}>
+                            {item.ReplaceDate}
+                        </td >
+                        <td style={{ height: '50px', textAlign: 'center',fontSize: '14px' }}>
+                            {item.ConsumablesName}
+                        </td>
+                        <td style={{ height: '50px', textAlign: 'center',fontSize: '14px' }}>
+                            {item.Model}
+                        </td>
+                        <td style={{ height: '50px', textAlign: 'center',fontSize: '14px' }}>
+                            {item.Unit}
+                        </td>
+                        <td style={{ height: '50px', textAlign: 'center',fontSize: '14px' }}>
+                            {item.Num}
+                        </td>
+                        <td style={{ height: '50px', textAlign: 'center',fontSize: '14px' }}>
+                            {item.Remark}
+                        </td>
+                    </tr>
                 );
-            }
-        }, {
-            title: '更换日期',
-            dataIndex: 'ReplaceDate',
-            width: '17%',
-            align: 'center',
-        }, {
-            title: '易耗品名称',
-            dataIndex: 'ConsumablesName',
-            width: '12%',
-            align: 'center',
-        }, {
-            title: '规格型号',
-            dataIndex: 'Model',
-            width: '12%',
-            align: 'center',
-        }, {
-            title: '单位',
-            dataIndex: 'Unit',
-            width: '13%',
-            align: 'center',
-        }, {
-            title: '数量',
-            dataIndex: 'Num',
-            width: '13%',
-            align: 'center',
-        }, {
-            title: '更换原因说明（备注）',
-            dataIndex: 'Remark',
-            width: '24%',
-            align: 'center',
-        }];
+            });
+        }
+
+        return rtnVal;
+    }
+    render() {
+        const SCREEN_HEIGHT = document.querySelector('body').offsetHeight - 250;
+        var DataLength = this.props.ConsumablesReplaceRecordList.length;
+        var Data = DataLength === 0 ? null : this.props.ConsumablesReplaceRecordList[0];
+        var DataList = DataLength === 0 ? null : Data.Record.length === 0 ? null : Data.Record[0].RecordList;
+        var EnterpriseName = null; //企业名称
+        var SignContent = null; //签名
+        var SignTime = null; // 签名时间
+        var DeviceName = 'CEMS'; //设备名称
+        var Equipment = null; //设备编号
+        var Code = null; //规格型号
+        var MaintenanceManagementUnit = null; //维护管理单位
+        var PointPosition = null; //安装地点
+        var CreateUserID = null; //运行维护人员
+        var CreateTime = null; //创建时间
+        if (Data !== null) {
+            SignContent = `Data:image/jpeg;base64,${Data.Record[0].SignContent}`;
+            EnterpriseName = Data.Record.length === 0 ? Data.info[0].EnterpriseName : Data.Record[0].Content['EnterpriseName'];
+            Code = DataLength === 0 ? null : Data.Record[0].Content['Code'];
+            Equipment = DataLength === 0 ? null : Data.Record[0].Content['EquipmentCode'];
+            MaintenanceManagementUnit = DataLength === 0 ? null : Data.Record[0].Content['MaintenanceManagementUnit'];
+            PointPosition = DataLength === 0 ? null : Data.Record[0].Content['PointPosition'];
+            CreateUserID = DataLength === 0 ? null : Data.Record.length === 0 ? null : Data.Record[0].CreateUserID;
+            CreateTime = DataLength === 0 ? null : Data.Record.length === 0 ? null : Data.Record[0].CreateTime;
+            SignTime = DataLength === 0 ? null : Data.Record.length === 0 ? null : Data.Record[0].SignTime;
+        }
         return (
-            <Layout style={{backgroundColor: 'white'}}>
-                <Content style={{margin: 'auto'}}>
-                    <div style={{position: 'absolute', right: 40, top: 198}} >
-                        <Button size="large" onClick={() => {
-                            this.props.history.goBack(-1);
-                        }}><Icon type="left" />退回</Button>
-                    </div>
-                    <div style={{ width: '80%',
-                        height: '50px',
-                        lineHeight: '50px',
-                        margin: 'auto',
-                        fontSize: '20px',
-                        textAlign: 'center',
-                        fontWeight: 'bold'}}>
-                          易耗品更换记录表
-                    </div>
-                    <div style={{
-                        height: 'calc(100vh - 290px)',
-                        paddingBottom: '20px',
-                        margin: 'auto',
-                    }}
-                    >
-                        <div style={{fontWeight: 'bold', marginBottom: 12, marginTop: 10}}>企业名称：{this.props.ConsumablesReplaceRecordList.length === 0 ? null : this.props.ConsumablesReplaceRecordList[0].Record.length === 0 ? this.props.ConsumablesReplaceRecordList[0].info[0].EnterpriseName : this.props.ConsumablesReplaceRecordList[0].Record[0].Content['EnterpriseName']}</div>
-                        <Table
-                            id="table-to-xls"
-                            ref="table"
-                            style={{width: 1200, backgroundColor: 'white'}}
-                            columns={columns}
-                            dataSource={this.props.ConsumablesReplaceRecordList.length === 0 ? null : this.props.ConsumablesReplaceRecordList[0].Record.length === 0 ? null : this.props.ConsumablesReplaceRecordList[0].Record[0].RecordList}
-                            bordered={true}
-                            pagination={false}
-                            scroll={{ y: 330 }}
-                            title={() =>
-                                <div style={{marginLeft: -17, marginBottom: -17, marginTop: -16, marginRight: -17, backgroundColor: 'white'}}>
-                                    <Table
-                                        style={{width: 1200}}
-                                        columns={columnsone}
-                                        dataSource={dataone}
-                                        bordered={true}
-                                        showHeader={false}
-                                        pagination={false}
-                                    />
-                                    <Table
-                                        style={{width: 1200}}
-                                        columns={columnstwo}
-                                        dataSource={datatwo}
-                                        bordered={true}
-                                        showHeader={false}
-                                        pagination={false}
-                                    />
-                                </div>
-                            }
-                            footer={() =>
-                                <div style={{marginLeft: -17, marginTop: -17, marginBottom: -16, backgroundColor: 'white'}}>
-                                    <Table
-                                        style={{width: 1200}}
-                                        columns={columnsthree}
-                                        dataSource={datathree}
-                                        bordered={true}
-                                        showHeader={false}
-                                        pagination={false}
-                                    />
-                                    <Table
-                                        style={{width: 1200}}
-                                        columns={columnsfour}
-                                        dataSource={datafour}
-                                        bordered={true}
-                                        showHeader={false}
-                                        pagination={false}
-                                    />
-                                </div>
-                            }
-                        />
-                    </div>
-                </Content>
-            </Layout>
+            <div className={styles.FormDiv} style={{ height: SCREEN_HEIGHT }}>
+                <div className={styles.FormName}>易耗品更换记录表</div>
+                <div className={styles.HeadDiv} style={{ fontWeight: 'bold' }}>企业名称：{EnterpriseName}</div>
+                <table
+                    className={styles.FormTable}>
+                    <tbody>
+                        <tr>
+                            <td style={{ width: '12%', height: '50px', textAlign: 'center',fontSize: '14px' }}>
+                                设备名称
+                            </td>
+                            <td style={{width: '16%',textAlign: 'center',fontSize: '14px'}}>
+                                {DeviceName}
+                            </td>
+                            <td style={{ width: '13%', height: '50px', textAlign: 'center',fontSize: '14px' }}>
+                                规格型号
+                            </td>
+                            <td style={{width: '13%',textAlign: 'center',fontSize: '14px'}}>
+                                {Code}
+                            </td>
+                            <td style={{ width: '12%', height: '50px', textAlign: 'center',fontSize: '14px' }}>
+                                设备编号
+                            </td>
+                            <td colSpan="2" style={{width: '30%',textAlign: 'center',fontSize: '14px'}}>
+                                {Equipment}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colSpan="2" style={{ width: '18%', height: '50px', textAlign: 'center',fontSize: '14px' }}>
+                                维护管理单位
+                            </td>
+                            <td colSpan="2" style={{textAlign: 'center',fontSize: '14px'}}>
+                                {MaintenanceManagementUnit}
+                            </td>
+                            <td colSpan="2" style={{ width: '18%', height: '50px', textAlign: 'center',fontSize: '14px' }}>
+                                安装地点
+                            </td>
+                            <td style={{textAlign: 'center',fontSize: '14px'}}>
+                                {PointPosition}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style={{ width: '9%', height: '50px', textAlign: 'center', backgroundColor: '#FAFAFA',fontSize: '14px',fontWeight: '600' }}>
+                            序号
+                            </td>
+                            <td style={{ width: '18%', height: '50px', textAlign: 'center' , backgroundColor: '#FAFAFA' ,fontSize: '14px',fontWeight: '600' }}>
+                            更换日期
+                            </td >
+                            <td style={{ width: '14%', height: '50px', textAlign: 'center' , backgroundColor: '#FAFAFA',fontSize: '14px',fontWeight: '600' }}>
+                            易耗品名称
+                            </td>
+                            <td style={{ width: '12%', height: '50px', textAlign: 'center' , backgroundColor: '#FAFAFA',fontSize: '14px',fontWeight: '600' }}>
+                            规格型号
+                            </td>
+                            <td style={{ width: '12%', height: '50px', textAlign: 'center' , backgroundColor: '#FAFAFA',fontSize: '14px',fontWeight: '600' }}>
+                            单位
+                            </td>
+                            <td style={{ width: '12%', height: '50px', textAlign: 'center' , backgroundColor: '#FAFAFA',fontSize: '14px',fontWeight: '600' }}>
+                            数量
+                            </td>
+                            <td style={{ width: '23%', height: '50px', textAlign: 'center' , backgroundColor: '#FAFAFA',fontSize: '14px',fontWeight: '600' }}>
+                            更换原因说明（备注）
+                            </td>
+                        </tr>
+                        {
+                            this.renderItem(DataList)
+                        }
+                        <tr>
+                            <td colSpan="2" style={{ height: '50px', textAlign: 'center',fontSize: '14px' }}>
+                                运行维护人员
+                            </td>
+                            <td colSpan="2" style={{textAlign: 'center',fontSize: '14px'}}>
+                                {CreateUserID}
+                            </td>
+                            <td colSpan="2" style={{ height: '50px', textAlign: 'center',fontSize: '14px' }}>
+                                时间
+                            </td>
+                            <td style={{textAlign: 'center',fontSize: '14px',colSpan: '2'}}>
+                                {CreateTime}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colSpan="7" style={{ width: '18%', height: '50px',fontSize: '14px',paddingLeft: 15 }}>
+                            注：更换易耗品时应及时记录，每半年汇总存档。
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table className={styles.FormTable}>
+                    <tbody>
+                        <tr>
+                            <td style={{width: '87%', height: '50px', textAlign: 'right', border: '0', fontWeight: 'bold'}}>负责人签名：</td>
+                            <td style={{width: '13%', height: '50px', border: '0'}}>{DataLength === 0 ? null : Data.Record.length === 0 ? null : Data.Record[0].SignContent === null ? null : <img src={SignContent} />}</td>
+                        </tr>
+                        <tr>
+                            <td style={{width: '87%', height: '50px', textAlign: 'right', border: '0', fontWeight: 'bold'}}>签名时间：</td>
+                            <td style={{width: '13%', height: '50px', border: '0'}}>{SignTime}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div className={styles.Toexamine} >
+                    <Button size="large" onClick={() => {
+                        this.props.history.goBack(-1);
+                    }}><Icon type="left" />退回</Button>
+                </div>
+            </div>
         );
     }
 }

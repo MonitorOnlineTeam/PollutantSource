@@ -16,7 +16,7 @@ import {routerRedux} from 'dva/router';
 
 @connect(({ task, loading }) => ({
     // isloading: loading.effects['task/GetJzHistoryRecord'],
-    HistoryStandardGasRepalceRecordList: task.List,
+    HistoryStandardGasRepalceRecordList: task.HistoryStandardGasRepalceRecordList,
     HistoryStandardGasRepalceRecordListCount: task.total,
     pageIndex: task.pageIndex,
     pageSize: task.pageSize,
@@ -112,7 +112,7 @@ export default class StandardGasHistoryRecords extends Component {
                     <Card>
                         <Form layout="inline">
                             <Row gutter={8}>
-                                <Col span={5} >
+                                <Col span={4} >
                             记录创建时间：
                                 </Col>
                                 <Col span={5} >

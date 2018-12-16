@@ -51,6 +51,7 @@ export default class VideoList extends Component {
                 DGIMN: this.state.DGIMN,
             },
         });
+     
     }
     onRef1 = (ref) => {
         this.child = ref;
@@ -205,6 +206,7 @@ export default class VideoList extends Component {
                                             onMouseEnter: () => {}, // 鼠标移入行
                                         };
                                     }}
+                                    loading={this.props.effects['videolist/fetchuserlist']}
                                 />
                                 <Modal
                                     footer={this.state.footer}
