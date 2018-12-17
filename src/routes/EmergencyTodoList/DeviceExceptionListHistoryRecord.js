@@ -37,12 +37,12 @@ export default class DeviceExceptionListHistoryRecord extends Component {
         };
     }
     componentDidMount() {
-        debugger
+        debugger;
         this.GetHistoryRecord(this.props.pageIndex, this.props.pageSize, this.state.DGIMN, this.state.typeID, this.state.BeginTime, this.state.EndTime);
     }
 
     GetHistoryRecord=(pageIndex, pageSize, DGIMN, typeID, BeginTime, EndTime) => {
-        debugger
+        debugger;
         this.props.dispatch({
             type: 'task/GetDeviceExceptionList',
             payload: {
@@ -123,11 +123,11 @@ export default class DeviceExceptionListHistoryRecord extends Component {
                     <Card>
                         <Form layout="inline">
                             <Row gutter={8}>
-                                <Col span={3} >
+                                <Col span={5} >
                             记录创建时间：
                                 </Col>
-                                <Col span={3} >
-                                    <RangePicker_ style={{width: 350}} onChange={this._handleDateChange} format="YYYY-MM-DD" dateValue={this.state.rangeDate} />
+                                <Col span={5} >
+                                    <RangePicker_ style={{width: 350}} onChange={this._handleDateChange} dateValue={this.state.rangeDate} />
                                 </Col>
                             </Row>
                         </Form>

@@ -1,6 +1,8 @@
 
 import React, { Component } from 'react';
 import {Col, Row} from 'antd';
+import arrow_left from '../../../public/image/arrow_left.png';
+
 /*
 页面：工作台
 add by cg 18.6.8
@@ -15,34 +17,20 @@ class SpecialWorkbench extends Component {
             loading: false,
             hasMore: true,
         };
+        // this.test = this.test.bind(this);
+    }
+    test(i) {
+        alert(i);
     }
     render() {
+        let arr = [1,2,3];
         return (
             <div style={{ background: '#ECECEC', padding: '30px' }}>
-                <Row gutter={16}>
-                    <Col xs={2} sm={6} md={12} lg={12} xl={12} xxl={12}>
-                        sdf
-                    </Col>
-                    <Col xs={2} sm={6} md={12} lg={12} xl={12} xxl={12}>
-                        bbb
-                    </Col>
-                </Row>
-                <Row gutter={16} style={{marginTop: 10}}>
-                    <Col xs={2} sm={6} md={12} lg={12} xl={12} xxl={12}>
-                        ddd
-                    </Col>
-                    <Col xs={2} sm={6} md={12} lg={12} xl={12} xxl={12}>
-                        cccc
-                    </Col>
-                </Row>
-                <Row gutter={16} style={{marginTop: 10}}>
-                    <Col xs={2} sm={6} md={8} lg={8} xl={8} xxl={8}>
-                        aaaa
-                    </Col>
-                    <Col xs={2} sm={6} md={16} lg={16} xl={16} xxl={16}>
-                            aaaa
-                    </Col>
-                </Row>
+                {
+                    arr.map((i) => {
+                        return <img src={require('../../../public/image/arrow_left.png')} onClick={this.test.bind(this,i)} key={i} />;
+                    })
+                }
             </div>
         );
     }
