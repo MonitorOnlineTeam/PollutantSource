@@ -15,7 +15,7 @@ export default Model.extend({
         PatrolRecordListPC: [],
         RecordCount: null,
         pageIndex: 1,
-        pageSize: 5,
+        pageSize: 10,
         total: null,
         StopCems: null,
         Repair: null,

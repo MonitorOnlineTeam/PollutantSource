@@ -11,10 +11,18 @@ export default class RepairRecordDetail extends Component {
     constructor(props) {
         super(props);
         this.state = {
-
         };
     }
 
+    // componentDidMount() {
+    //     this.props.dispatch({
+    //         type: 'task/GetRepairDetail',
+    //         payload: {
+    //             TaskID: this.props.match.params.TaskID,
+    //             TypeID: this.props.match.params.TypeID
+    //         }
+    //     });
+    // }
     componentDidMount() {
         this.props.dispatch({
             type: 'task/GetRepairDetail',
@@ -23,7 +31,12 @@ export default class RepairRecordDetail extends Component {
                 TypeID: this.props.match.params.TypeID
             }
         });
+        const _this = this;
+        _this.setState({
+            loading: false
+        });
     }
+
     renderItem = (Repair) => {
         console.log(Repair);
         debugger;
@@ -104,13 +117,6 @@ export default class RepairRecordDetail extends Component {
     render() {
         const SCREEN_HEIGHT = document.querySelector('body').offsetHeight - 250;
         const Repair = this.props.Repair;
-        if (this.props.isloading) {
-            return (
-                <div className={styles.loadContent}>
-                    <Spin size="large" />
-                </div>
-            );
-        }
         let EnterpriseName = null;
         let PointPosition = null;
         let IsClear = null;
@@ -141,77 +147,79 @@ export default class RepairRecordDetail extends Component {
         }
 
         return (
-            <div className={styles.FormDiv} style={{ height: SCREEN_HEIGHT }}>
-                <div className={styles.FormName}>CEMS 维修记录表</div>
-                <div className={styles.HeadDiv} style={{ fontWeight: 'bold' }}>企业名称：{EnterpriseName}</div>
-                <table className={styles.FormTable}>
-                    <tbody>
-                        <tr>
-                            <td style={{ width: '20%', height: '50px', textAlign: 'center',fontSize: '14px' }}>
+            <Spin spinning={this.state.loading}>
+                <div className={styles.FormDiv} style={{ height: SCREEN_HEIGHT }}>
+                    <div className={styles.FormName}>CEMS 维修记录表</div>
+                    <div className={styles.HeadDiv} style={{ fontWeight: 'bold' }}>企业名称：{EnterpriseName}</div>
+                    <table className={styles.FormTable}>
+                        <tbody>
+                            <tr>
+                                <td style={{ width: '20%', height: '50px', textAlign: 'center',fontSize: '14px' }}>
                                     安装地点
-                            </td>
-                            <td colSpan="2" style={{textAlign: 'center',fontSize: '14px'}}>
-                                {PointPosition}
-                            </td>
-                        </tr>
-                        {
-                            this.renderItem(Repair)
-                        }
-                        <tr>
-                            <td style={{ width: '18%', height: '50px', textAlign: 'center',fontSize: '14px' }}>
+                                </td>
+                                <td colSpan="2" style={{textAlign: 'center',fontSize: '14px'}}>
+                                    {PointPosition}
+                                </td>
+                            </tr>
+                            {
+                                this.renderItem(Repair)
+                            }
+                            <tr>
+                                <td style={{ width: '18%', height: '50px', textAlign: 'center',fontSize: '14px' }}>
                                     站房是否清理
-                            </td>
-                            <td colSpan="2" style={{textAlign: 'center',fontSize: '14px'}}>
-                                {IsClear}
-                            </td>
-                        </tr>
-                        <tr>
-                            <td style={{ width: '18%', height: '50px', textAlign: 'center',fontSize: '14px' }}>
+                                </td>
+                                <td colSpan="2" style={{textAlign: 'center',fontSize: '14px'}}>
+                                    {IsClear}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style={{ width: '18%', height: '50px', textAlign: 'center',fontSize: '14px' }}>
                                     维修情况总结
-                            </td>
-                            <td colSpan="2" style={{textAlign: 'center',fontSize: '14px'}}>
-                                {RepairSummary}
-                            </td>
-                        </tr>
-                        <tr>
-                            <td style={{ width: '18%', height: '50px', textAlign: 'center' ,fontSize: '14px' }}>
+                                </td>
+                                <td colSpan="2" style={{textAlign: 'center',fontSize: '14px'}}>
+                                    {RepairSummary}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style={{ width: '18%', height: '50px', textAlign: 'center' ,fontSize: '14px' }}>
                                     备注
-                            </td>
-                            <td colSpan="2"style={{ width: '25%', height: '50px', textAlign: 'center',fontSize: '14px' }}>
-                                {Remark}
-                            </td>
-                        </tr>
-                        <tr>
-                            <td style={{ width: '18%', height: '50px', textAlign: 'center' ,fontSize: '14px' }}>
-                                <b>维修人:</b>{CreateUserID}
-                            </td>
+                                </td>
+                                <td colSpan="2"style={{ width: '25%', height: '50px', textAlign: 'center',fontSize: '14px' }}>
+                                    {Remark}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style={{ width: '18%', height: '50px', textAlign: 'center' ,fontSize: '14px' }}>
+                                    <b>维修人:</b>{CreateUserID}
+                                </td>
 
-                            <td style={{ width: '25%', height: '50px', textAlign: 'center',fontSize: '14px' }} colSpan="2">
-                                <b>维修时间&nbsp;：</b>{StartTime === null ? '--' : StartTime} &nbsp;至&nbsp;{EndTime === null ? '--' : EndTime}
-                            </td>
+                                <td style={{ width: '25%', height: '50px', textAlign: 'center',fontSize: '14px' }} colSpan="2">
+                                    <b>维修时间&nbsp;：</b>{StartTime === null ? '--' : StartTime} &nbsp;至&nbsp;{EndTime === null ? '--' : EndTime}
+                                </td>
 
-                        </tr>
-                    </tbody>
-                </table>
-                <table className={styles.FormTable}>
-                    <tbody>
-                        <tr>
-                            <td style={{ width: '87%', height: '50px', textAlign: 'right', border: '0', fontWeight: 'bold' }}>负责人签名：</td>
-                            <td style={{ width: '13%', height: '50px', border: '0' }}><img src={SignContent} /></td>
-                        </tr>
-                        <tr>
-                            <td style={{ width: '87%', height: '50px', textAlign: 'right', border: '0', fontWeight: 'bold' }}>签名时间：</td>
-                            <td style={{ width: '13%', height: '50px', border: '0' }}>{SignTime}</td>
-                        </tr>
-                    </tbody>
-                </table>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <table className={styles.FormTable}>
+                        <tbody>
+                            <tr>
+                                <td style={{ width: '87%', height: '50px', textAlign: 'right', border: '0', fontWeight: 'bold' }}>负责人签名：</td>
+                                <td style={{ width: '13%', height: '50px', border: '0' }}><img src={SignContent} /></td>
+                            </tr>
+                            <tr>
+                                <td style={{ width: '87%', height: '50px', textAlign: 'right', border: '0', fontWeight: 'bold' }}>签名时间：</td>
+                                <td style={{ width: '13%', height: '50px', border: '0' }}>{SignTime}</td>
+                            </tr>
+                        </tbody>
+                    </table>
 
-                <div className={styles.Toexamine} >
-                    <Button size="large" onClick={() => {
-                        this.props.history.goBack(-1);
-                    }}><Icon type="left" />退回</Button>
+                    <div className={styles.Toexamine} >
+                        <Button size="large" onClick={() => {
+                            this.props.history.goBack(-1);
+                        }}><Icon type="left" />退回</Button>
+                    </div>
                 </div>
-            </div>
+            </Spin>
         );
     }
 }

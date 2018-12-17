@@ -1,10 +1,7 @@
 import React, { Component } from 'react';
-import { Row, Col, Layout, Table, List, Button, Icon } from 'antd';
+import { Button, Icon,Spin,Tag } from 'antd';
 import styles from '../EmergencyTodoList/ConsumablesReplaceRecord.less';
 import { connect } from 'dva';
-const {
-    Header, Footer, Sider, Content,
-} = Layout;
 @connect(({ task, loading }) => ({
     ConsumablesReplaceRecordList: task.ConsumablesReplaceRecordList
 }))
@@ -15,11 +12,14 @@ class ConsumablesReplaceRecord extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            loading: false
         };
     }
-    componentWillMount() {
+    componentDidMount() {
         this.onChange();
+        const _this = this;
+        _this.setState({
+            loading: false
+        });
     }
     onChange = () => {
         this.props.dispatch({
@@ -91,111 +91,113 @@ class ConsumablesReplaceRecord extends Component {
             SignTime = DataLength === 0 ? null : Data.Record.length === 0 ? null : Data.Record[0].SignTime;
         }
         return (
-            <div className={styles.FormDiv} style={{ height: SCREEN_HEIGHT }}>
-                <div className={styles.FormName}>易耗品更换记录表</div>
-                <div className={styles.HeadDiv} style={{ fontWeight: 'bold' }}>企业名称：{EnterpriseName}</div>
-                <table
-                    className={styles.FormTable}>
-                    <tbody>
-                        <tr>
-                            <td style={{ width: '12%', height: '50px', textAlign: 'center',fontSize: '14px' }}>
+            <Spin spinning={this.state.loading}>
+                <div className={styles.FormDiv} style={{ height: SCREEN_HEIGHT }}>
+                    <div className={styles.FormName}>易耗品更换记录表</div>
+                    <div className={styles.HeadDiv} style={{ fontWeight: 'bold' }}>企业名称：{EnterpriseName}</div>
+                    <table
+                        className={styles.FormTable}>
+                        <tbody>
+                            <tr>
+                                <td style={{ width: '12%', height: '50px', textAlign: 'center',fontSize: '14px' }}>
                                 设备名称
-                            </td>
-                            <td style={{width: '16%',textAlign: 'center',fontSize: '14px'}}>
-                                {DeviceName}
-                            </td>
-                            <td style={{ width: '13%', height: '50px', textAlign: 'center',fontSize: '14px' }}>
+                                </td>
+                                <td style={{width: '16%',textAlign: 'center',fontSize: '14px'}}>
+                                    {DeviceName}
+                                </td>
+                                <td style={{ width: '13%', height: '50px', textAlign: 'center',fontSize: '14px' }}>
                                 规格型号
-                            </td>
-                            <td style={{width: '13%',textAlign: 'center',fontSize: '14px'}}>
-                                {Code}
-                            </td>
-                            <td style={{ width: '12%', height: '50px', textAlign: 'center',fontSize: '14px' }}>
+                                </td>
+                                <td style={{width: '13%',textAlign: 'center',fontSize: '14px'}}>
+                                    {Code}
+                                </td>
+                                <td style={{ width: '12%', height: '50px', textAlign: 'center',fontSize: '14px' }}>
                                 设备编号
-                            </td>
-                            <td colSpan="2" style={{width: '30%',textAlign: 'center',fontSize: '14px'}}>
-                                {Equipment}
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colSpan="2" style={{ width: '18%', height: '50px', textAlign: 'center',fontSize: '14px' }}>
+                                </td>
+                                <td colSpan="2" style={{width: '30%',textAlign: 'center',fontSize: '14px'}}>
+                                    {Equipment}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colSpan="2" style={{ width: '18%', height: '50px', textAlign: 'center',fontSize: '14px' }}>
                                 维护管理单位
-                            </td>
-                            <td colSpan="2" style={{textAlign: 'center',fontSize: '14px'}}>
-                                {MaintenanceManagementUnit}
-                            </td>
-                            <td colSpan="2" style={{ width: '18%', height: '50px', textAlign: 'center',fontSize: '14px' }}>
+                                </td>
+                                <td colSpan="2" style={{textAlign: 'center',fontSize: '14px'}}>
+                                    {MaintenanceManagementUnit}
+                                </td>
+                                <td colSpan="2" style={{ width: '18%', height: '50px', textAlign: 'center',fontSize: '14px' }}>
                                 安装地点
-                            </td>
-                            <td style={{textAlign: 'center',fontSize: '14px'}}>
-                                {PointPosition}
-                            </td>
-                        </tr>
-                        <tr>
-                            <td style={{ width: '9%', height: '50px', textAlign: 'center', backgroundColor: '#FAFAFA',fontSize: '14px',fontWeight: '600' }}>
+                                </td>
+                                <td style={{textAlign: 'center',fontSize: '14px'}}>
+                                    {PointPosition}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style={{ width: '9%', height: '50px', textAlign: 'center', backgroundColor: '#FAFAFA',fontSize: '14px',fontWeight: '600' }}>
                             序号
-                            </td>
-                            <td style={{ width: '18%', height: '50px', textAlign: 'center' , backgroundColor: '#FAFAFA' ,fontSize: '14px',fontWeight: '600' }}>
+                                </td>
+                                <td style={{ width: '18%', height: '50px', textAlign: 'center' , backgroundColor: '#FAFAFA' ,fontSize: '14px',fontWeight: '600' }}>
                             更换日期
-                            </td >
-                            <td style={{ width: '14%', height: '50px', textAlign: 'center' , backgroundColor: '#FAFAFA',fontSize: '14px',fontWeight: '600' }}>
+                                </td >
+                                <td style={{ width: '14%', height: '50px', textAlign: 'center' , backgroundColor: '#FAFAFA',fontSize: '14px',fontWeight: '600' }}>
                             易耗品名称
-                            </td>
-                            <td style={{ width: '12%', height: '50px', textAlign: 'center' , backgroundColor: '#FAFAFA',fontSize: '14px',fontWeight: '600' }}>
+                                </td>
+                                <td style={{ width: '12%', height: '50px', textAlign: 'center' , backgroundColor: '#FAFAFA',fontSize: '14px',fontWeight: '600' }}>
                             规格型号
-                            </td>
-                            <td style={{ width: '12%', height: '50px', textAlign: 'center' , backgroundColor: '#FAFAFA',fontSize: '14px',fontWeight: '600' }}>
+                                </td>
+                                <td style={{ width: '12%', height: '50px', textAlign: 'center' , backgroundColor: '#FAFAFA',fontSize: '14px',fontWeight: '600' }}>
                             单位
-                            </td>
-                            <td style={{ width: '12%', height: '50px', textAlign: 'center' , backgroundColor: '#FAFAFA',fontSize: '14px',fontWeight: '600' }}>
+                                </td>
+                                <td style={{ width: '12%', height: '50px', textAlign: 'center' , backgroundColor: '#FAFAFA',fontSize: '14px',fontWeight: '600' }}>
                             数量
-                            </td>
-                            <td style={{ width: '23%', height: '50px', textAlign: 'center' , backgroundColor: '#FAFAFA',fontSize: '14px',fontWeight: '600' }}>
+                                </td>
+                                <td style={{ width: '23%', height: '50px', textAlign: 'center' , backgroundColor: '#FAFAFA',fontSize: '14px',fontWeight: '600' }}>
                             更换原因说明（备注）
-                            </td>
-                        </tr>
-                        {
-                            this.renderItem(DataList)
-                        }
-                        <tr>
-                            <td colSpan="2" style={{ height: '50px', textAlign: 'center',fontSize: '14px' }}>
+                                </td>
+                            </tr>
+                            {
+                                this.renderItem(DataList)
+                            }
+                            <tr>
+                                <td colSpan="2" style={{ height: '50px', textAlign: 'center',fontSize: '14px' }}>
                                 运行维护人员
-                            </td>
-                            <td colSpan="2" style={{textAlign: 'center',fontSize: '14px'}}>
-                                {CreateUserID}
-                            </td>
-                            <td colSpan="2" style={{ height: '50px', textAlign: 'center',fontSize: '14px' }}>
+                                </td>
+                                <td colSpan="2" style={{textAlign: 'center',fontSize: '14px'}}>
+                                    {CreateUserID}
+                                </td>
+                                <td colSpan="2" style={{ height: '50px', textAlign: 'center',fontSize: '14px' }}>
                                 时间
-                            </td>
-                            <td style={{textAlign: 'center',fontSize: '14px',colSpan: '2'}}>
-                                {CreateTime}
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colSpan="7" style={{ width: '18%', height: '50px',fontSize: '14px',paddingLeft: 15 }}>
+                                </td>
+                                <td style={{textAlign: 'center',fontSize: '14px',colSpan: '2'}}>
+                                    {CreateTime}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colSpan="7" style={{ width: '18%', height: '50px',fontSize: '14px',paddingLeft: 15 }}>
                             注：更换易耗品时应及时记录，每半年汇总存档。
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-                <table className={styles.FormTable}>
-                    <tbody>
-                        <tr>
-                            <td style={{width: '87%', height: '50px', textAlign: 'right', border: '0', fontWeight: 'bold'}}>负责人签名：</td>
-                            <td style={{width: '13%', height: '50px', border: '0'}}>{DataLength === 0 ? null : Data.Record.length === 0 ? null : Data.Record[0].SignContent === null ? null : <img src={SignContent} />}</td>
-                        </tr>
-                        <tr>
-                            <td style={{width: '87%', height: '50px', textAlign: 'right', border: '0', fontWeight: 'bold'}}>签名时间：</td>
-                            <td style={{width: '13%', height: '50px', border: '0'}}>{SignTime}</td>
-                        </tr>
-                    </tbody>
-                </table>
-                <div className={styles.Toexamine} >
-                    <Button size="large" onClick={() => {
-                        this.props.history.goBack(-1);
-                    }}><Icon type="left" />退回</Button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <table className={styles.FormTable}>
+                        <tbody>
+                            <tr>
+                                <td style={{width: '87%', height: '50px', textAlign: 'right', border: '0', fontWeight: 'bold'}}>负责人签名：</td>
+                                <td style={{width: '13%', height: '50px', border: '0'}}>{DataLength === 0 ? null : Data.Record.length === 0 ? null : Data.Record[0].SignContent === null ? null : <img src={SignContent} />}</td>
+                            </tr>
+                            <tr>
+                                <td style={{width: '87%', height: '50px', textAlign: 'right', border: '0', fontWeight: 'bold'}}>签名时间：</td>
+                                <td style={{width: '13%', height: '50px', border: '0'}}>{SignTime}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div className={styles.Toexamine} >
+                        <Button size="large" onClick={() => {
+                            this.props.history.goBack(-1);
+                        }}><Icon type="left" />退回</Button>
+                    </div>
                 </div>
-            </div>
+            </Spin>
         );
     }
 }

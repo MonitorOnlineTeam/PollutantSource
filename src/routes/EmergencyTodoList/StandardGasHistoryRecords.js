@@ -1,21 +1,20 @@
 import React, { Component } from 'react';
 import {
-    Button,
-    Input,
     Card,
     Row,
     Col,
     Table,
     Form,
-    Select, Modal, message, Tag, Radio, Checkbox,
+    Spin,
+    Tag
 } from 'antd';
 import { connect } from 'dva';
 import moment from 'moment';
 import RangePicker_ from '../../components/PointDetail/RangePicker_';
+import styles from '../EmergencyTodoList/StandardGasHistoryRecords.less';
 import {routerRedux} from 'dva/router';
 
 @connect(({ task, loading }) => ({
-    // isloading: loading.effects['task/GetJzHistoryRecord'],
     HistoryStandardGasRepalceRecordList: task.HistoryStandardGasRepalceRecordList,
     HistoryStandardGasRepalceRecordListCount: task.total,
     pageIndex: task.pageIndex,
@@ -38,9 +37,11 @@ export default class StandardGasHistoryRecords extends Component {
     componentDidMount() {
         this.GetHistoryRecord(this.props.pageIndex, this.props.pageSize, this.state.DGIMN, this.state.typeID, this.state.BeginTime, this.state.EndTime);
     }
-
     GetHistoryRecord=(pageIndex, pageSize, DGIMN, typeID, BeginTime, EndTime) => {
-        debugger;
+        const _this = this;
+        _this.setState({
+            loading: true
+        });
         this.props.dispatch({
             type: 'task/GetHistoryStandardGasRepalceRecordList',
             payload: {
@@ -52,6 +53,11 @@ export default class StandardGasHistoryRecords extends Component {
                 EndTime: moment(EndTime).format('YYYY-MM-DD 23:59:59'),
             }
         });
+        setTimeout(function() {
+            _this.setState({
+                loading: false
+            });
+        },100);
     };
 
     _handleDateChange=(date, dateString) => {
@@ -78,7 +84,6 @@ export default class StandardGasHistoryRecords extends Component {
     }
 
     render() {
-        console.log(this.props.HistoryStandardGasRepalceRecordList === null ? null : this.props.HistoryStandardGasRepalceRecordList);
         const dataSource = this.props.HistoryStandardGasRepalceRecordList === null ? null : this.props.HistoryStandardGasRepalceRecordList;
         const columns = [{
             title: '校准人',
@@ -89,12 +94,27 @@ export default class StandardGasHistoryRecords extends Component {
             title: '标准物质名称（名称-有效期）',
             width: '45%',
             dataIndex: 'Content',
-            key: 'Content'
+            key: 'Content',
+            render: (text, record) => {
+                if (text !== undefined) {
+                    var content = text.split(',');
+                    var resu = [];
+                    content.map((item,key) => {
+                        item = item.replace('(',' - ');
+                        item = item.replace(')','');
+                        resu.push(
+                            <Tag color="#108ee9">{item}</Tag>
+                        );
+                    });
+                }
+                return resu;
+            }
         }, {
             title: '记录创建时间',
             dataIndex: 'CreateTime',
             width: '20%',
-            key: 'CreateTime'
+            key: 'CreateTime',
+            sorter: (a, b) => Date.parse(a.CreateTime) - Date.parse(b.CreateTime),
         }, {
             title: '详细',
             dataIndex: 'TaskID',
@@ -107,38 +127,39 @@ export default class StandardGasHistoryRecords extends Component {
             }
         }];
         return (
-            <div>
-                <Card bordered={false}>
-                    <Card>
-                        <Form layout="inline">
-                            <Row gutter={8}>
-                                <Col span={4} >
+            <Spin spinning={this.state.loading}>
+                <div>
+                    <Card bordered={false}>
+                        <Card>
+                            <Form layout="inline">
+                                <Row gutter={8}>
+                                    <Col span={4} >
                             记录创建时间：
-                                </Col>
-                                <Col span={5} >
-                                    <RangePicker_ style={{width: 350}} onChange={this._handleDateChange} dateValue={this.state.rangeDate} />
-                                </Col>
-                            </Row>
-                        </Form>
+                                    </Col>
+                                    <Col span={5} >
+                                        <RangePicker_ style={{width: 350}} onChange={this._handleDateChange} format={'YYYY-MM-DD'} dateValue={this.state.rangeDate} />
+                                    </Col>
+                                </Row>
+                            </Form>
+                        </Card>
+                        <Table
+                            className={styles.tableCss}
+                            columns={columns}
+                            dataSource={dataSource}
+                            pagination={{
+                                showSizeChanger: true,
+                                showQuickJumper: true,
+                                'total': this.props.HistoryStandardGasRepalceRecordListCount,
+                                'pageSize': this.props.pageSize,
+                                'current': this.props.pageIndex,
+                                onChange: this.onChange,
+                                onShowSizeChange: this.onShowSizeChange,
+                                pageSizeOptions: ['10', '20', '30', '40']
+                            }}
+                        />
                     </Card>
-                    <Table
-                        // loading={this.props.isloading}
-                        columns={columns}
-                        dataSource={dataSource}
-                        scroll={{ y: 'calc(100vh - 455px)' }}
-                        pagination={{
-                            showSizeChanger: true,
-                            showQuickJumper: true,
-                            'total': this.props.HistoryStandardGasRepalceRecordListCount,
-                            'pageSize': this.props.pageSize,
-                            'current': this.props.pageIndex,
-                            onChange: this.onChange,
-                            onShowSizeChange: this.onShowSizeChange,
-                            pageSizeOptions: ['5', '10', '20', '30', '40']
-                        }}
-                    />
-                </Card>
-            </div>
+                </div>
+            </Spin>
         );
     }
 }

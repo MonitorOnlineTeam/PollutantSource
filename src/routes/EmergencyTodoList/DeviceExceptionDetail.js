@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import styles from '../EmergencyTodoList/RepairRecordDetail.less';
+import styles from '../EmergencyTodoList/DeviceExceptionDetail.less';
 import { Spin, Button, Icon } from 'antd';
 import { connect } from 'dva';
 
@@ -23,6 +23,10 @@ export default class DeviceExceptionDetail extends Component {
                 TaskID: this.props.match.params.TaskID,
                 TypeID: this.props.match.params.TypeID
             }
+        });
+        const _this = this;
+        _this.setState({
+            loading: false
         });
     }
     render() {
@@ -56,94 +60,96 @@ export default class DeviceExceptionDetail extends Component {
         }
 
         return (
-            <div className={styles.FormDiv} style={{ height: SCREEN_HEIGHT }}>
-                <div className={styles.FormName}>CEMS设备数据异常记录表</div>
-                <table className={styles.FormTable}>
-                    <tbody>
-                        <tr>
-                            <td style={{ width: '20%', height: '50px', textAlign: 'center',fontSize: '14px' }}>
+            <Spin spinning={this.state.loading}>
+                <div className={styles.FormDiv} style={{ height: SCREEN_HEIGHT }}>
+                    <div className={styles.FormName}>CEMS设备数据异常记录表</div>
+                    <table className={styles.FormTable}>
+                        <tbody>
+                            <tr>
+                                <td style={{ width: '20%', height: '50px', textAlign: 'center',fontSize: '14px' }}>
                                     站点名称
-                            </td>
-                            <td style={{ width: '30%', height: '50px', textAlign: 'center',fontSize: '14px' }}>
-                                {PointPosition}
-                            </td>
-                            <td style={{ width: '20%', height: '50px', textAlign: 'center',fontSize: '14px' }}>
+                                </td>
+                                <td style={{ width: '30%', height: '50px', textAlign: 'center',fontSize: '14px' }}>
+                                    {PointPosition}
+                                </td>
+                                <td style={{ width: '20%', height: '50px', textAlign: 'center',fontSize: '14px' }}>
                                     设备名称
-                            </td>
-                            <td style={{ width: '30%', height: '50px', textAlign: 'center',fontSize: '14px' }}>
-                                {DeviceName}
-                            </td>
-                        </tr>
-                        <tr>
-                            <td rowSpan="3" style={{ height: '100px', textAlign: 'center',fontSize: '14px' }}>
+                                </td>
+                                <td style={{ width: '30%', height: '50px', textAlign: 'center',fontSize: '14px' }}>
+                                    {DeviceName}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td rowSpan="3" style={{ height: '100px', textAlign: 'center',fontSize: '14px' }}>
                             数据异常
-                            </td>
-                            <td style={{ height: '100px', textAlign: 'center',fontSize: '14px' }}>
+                                </td>
+                                <td style={{ height: '100px', textAlign: 'center',fontSize: '14px' }}>
                             异常状况
-                            </td>
-                            <td colSpan="2" style={{ height: '100px', textAlign: 'center',fontSize: '14px' }}>
-                                {ExceptionStatus}
-                            </td>
-                        </tr>
-                        <tr>
-                            <td style={{ height: '100px', textAlign: 'center',fontSize: '14px' }}>
+                                </td>
+                                <td colSpan="2" style={{ height: '100px', textAlign: 'center',fontSize: '14px' }}>
+                                    {ExceptionStatus}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style={{ height: '100px', textAlign: 'center',fontSize: '14px' }}>
                             异常原因
-                            </td>
-                            <td colSpan="2" style={{ height: '100px', textAlign: 'center',fontSize: '14px' }}>
-                                {ExceptionReason}
-                            </td>
-                        </tr>
-                        <tr>
-                            <td style={{ height: '100px', textAlign: 'center',fontSize: '14px' }}>
+                                </td>
+                                <td colSpan="2" style={{ height: '100px', textAlign: 'center',fontSize: '14px' }}>
+                                    {ExceptionReason}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style={{ height: '100px', textAlign: 'center',fontSize: '14px' }}>
                             处理情况
-                            </td>
-                            <td colSpan="2" style={{ height: '100px', textAlign: 'center',fontSize: '14px' }}>
-                                {DealingSituations}
-                            </td>
-                        </tr>
-                        <tr>
-                            <td style={{ width: '30%', height: '50px', textAlign: 'center',fontSize: '14px' }}>
+                                </td>
+                                <td colSpan="2" style={{ height: '100px', textAlign: 'center',fontSize: '14px' }}>
+                                    {DealingSituations}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style={{ width: '30%', height: '50px', textAlign: 'center',fontSize: '14px' }}>
                             是否正常恢复运行
-                            </td>
-                            <td colSpan="3" style={{ width: '30%', height: '50px', textAlign: 'center',fontSize: '14px' }}>
-                                {IsOk === 1 ? '是' : '否'}
-                            </td>
-                        </tr>
-                        <tr>
-                            <td style={{ width: '20%', height: '50px', textAlign: 'center',fontSize: '14px' }}>
+                                </td>
+                                <td colSpan="3" style={{ width: '30%', height: '50px', textAlign: 'center',fontSize: '14px' }}>
+                                    {IsOk === 1 ? '是' : '否'}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style={{ width: '20%', height: '50px', textAlign: 'center',fontSize: '14px' }}>
                                     维护人
-                            </td>
-                            <td style={{ width: '30%', height: '50px', textAlign: 'center',fontSize: '14px' }}>
-                                {CreateUserID}
-                            </td>
-                            <td style={{ width: '20%', height: '50px', textAlign: 'center',fontSize: '14px' }}>
+                                </td>
+                                <td style={{ width: '30%', height: '50px', textAlign: 'center',fontSize: '14px' }}>
+                                    {CreateUserID}
+                                </td>
+                                <td style={{ width: '20%', height: '50px', textAlign: 'center',fontSize: '14px' }}>
                                     维护时间
-                            </td>
-                            <td style={{ width: '30%', height: '50px', textAlign: 'center',fontSize: '14px' }}>
-                                {CreateTime}
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-                <table className={styles.FormTable}>
-                    <tbody>
-                        <tr>
-                            <td style={{ width: '87%', height: '50px', textAlign: 'right', border: '0', fontWeight: 'bold' }}>负责人签名：</td>
-                            <td style={{ width: '13%', height: '50px', border: '0' }}><img src={SignContent} /></td>
-                        </tr>
-                        <tr>
-                            <td style={{ width: '87%', height: '50px', textAlign: 'right', border: '0', fontWeight: 'bold' }}>签名时间：</td>
-                            <td style={{ width: '13%', height: '50px', border: '0' }}>{SignTime}</td>
-                        </tr>
-                    </tbody>
-                </table>
+                                </td>
+                                <td style={{ width: '30%', height: '50px', textAlign: 'center',fontSize: '14px' }}>
+                                    {CreateTime}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <table className={styles.FormTable}>
+                        <tbody>
+                            <tr>
+                                <td style={{ width: '87%', height: '50px', textAlign: 'right', border: '0', fontWeight: 'bold' }}>负责人签名：</td>
+                                <td style={{ width: '13%', height: '50px', border: '0' }}><img src={SignContent} /></td>
+                            </tr>
+                            <tr>
+                                <td style={{ width: '87%', height: '50px', textAlign: 'right', border: '0', fontWeight: 'bold' }}>签名时间：</td>
+                                <td style={{ width: '13%', height: '50px', border: '0' }}>{SignTime}</td>
+                            </tr>
+                        </tbody>
+                    </table>
 
-                <div className={styles.Toexamine} >
-                    <Button size="large" onClick={() => {
-                        this.props.history.goBack(-1);
-                    }}><Icon type="left" />退回</Button>
+                    <div className={styles.Toexamine} >
+                        <Button size="large" onClick={() => {
+                            this.props.history.goBack(-1);
+                        }}><Icon type="left" />退回</Button>
+                    </div>
                 </div>
-            </div>
+            </Spin>
         );
     }
 }
