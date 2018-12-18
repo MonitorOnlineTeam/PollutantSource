@@ -1,8 +1,10 @@
-// @import "~antd/lib/style/themes/default.less";
-// @import "../../utils/utils.less";
+@import "~antd/lib/style/themes/default.less";
+@import "../../utils/utils.less";
 
 .cardTitle{
-  
+  margin-left: 24px;
+  margin-right: 24px;
+  height: 'calc(100vh - 135px)';
     :global {
       // height: 998px;
       // overflow: hidden;
@@ -26,5 +28,14 @@
    
       
 }
+.pageHeader{
+  background: @component-background;
+  padding: 16px 32px 0 32px;
+  border-bottom: @border-width-base @border-style-base @border-color-split;
+  margin-bottom: 10px;
+  .breadcrumb {
+    margin-bottom: 16px;
+  }
 
+}
 
