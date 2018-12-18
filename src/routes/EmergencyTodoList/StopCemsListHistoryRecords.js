@@ -14,6 +14,7 @@ import styles from '../EmergencyTodoList/StopCemsListHistoryRecords.less';
 import {routerRedux} from 'dva/router';
 
 @connect(({ task, loading }) => ({
+    loading: loading.effects['task/GetHistoryStopCemsList'],
     HistoryStopCemsListHistoryRecords: task.HistoryStopCemsList,
     HistoryStopCemsListHistoryRecordsCount: task.total,
     pageIndex: task.pageIndex,
@@ -42,10 +43,6 @@ export default class StopCemsListHistoryRecords extends Component {
     }
 
     GetHistoryRecord=(pageIndex, pageSize, DGIMN, typeID, BeginTime, EndTime) => {
-        const _this = this;
-        _this.setState({
-            loading: true
-        });
         this.props.dispatch({
             type: 'task/GetHistoryStopCemsList',
             payload: {
@@ -57,11 +54,6 @@ export default class StopCemsListHistoryRecords extends Component {
                 EndTime: moment(EndTime).format('YYYY-MM-DD 23:59:59'),
             }
         });
-        setTimeout(function() {
-            _this.setState({
-                loading: false
-            });
-        },100);
     };
 
     _handleDateChange=(date, dateString) => {
@@ -96,7 +88,7 @@ export default class StopCemsListHistoryRecords extends Component {
             dataIndex: 'CreateUserID',
             key: 'CreateUserID'
         }, {
-            title: '停机时长',
+            title: '停机时长(小时)',
             width: '45%',
             dataIndex: 'StopHour',
             key: 'StopHour'
@@ -118,39 +110,38 @@ export default class StopCemsListHistoryRecords extends Component {
             }
         }];
         return (
-            <Spin spinning={this.state.loading}>
-                <div>
-                    <Card bordered={false}>
-                        <Card>
-                            <Form layout="inline">
-                                <Row gutter={8}>
-                                    <Col span={4} >
+            <div>
+                <Card bordered={false}>
+                    <Card>
+                        <Form layout="inline">
+                            <Row gutter={8}>
+                                <Col span={4} >
                             记录创建时间：
-                                    </Col>
-                                    <Col span={5} >
-                                        <RangePicker_ style={{width: 350}} onChange={this._handleDateChange} format={'YYYY-MM-DD'} dateValue={this.state.rangeDate} />
-                                    </Col>
-                                </Row>
-                            </Form>
-                        </Card>
-                        <Table
-                            className={styles.tableCss}
-                            columns={columns}
-                            dataSource={dataSource}
-                            pagination={{
-                                showSizeChanger: true,
-                                showQuickJumper: true,
-                                'total': this.props.HistoryStopCemsListHistoryRecordsCount,
-                                'pageSize': this.props.pageSize,
-                                'current': this.props.pageIndex,
-                                onChange: this.onChange,
-                                onShowSizeChange: this.onShowSizeChange,
-                                pageSizeOptions: ['10', '20', '30', '40']
-                            }}
-                        />
+                                </Col>
+                                <Col span={5} >
+                                    <RangePicker_ style={{width: 350}} onChange={this._handleDateChange} format={'YYYY-MM-DD'} dateValue={this.state.rangeDate} />
+                                </Col>
+                            </Row>
+                        </Form>
                     </Card>
-                </div>
-            </Spin>
+                    <Table
+                        loading={this.props.loading}
+                        className={styles.tableCss}
+                        columns={columns}
+                        dataSource={dataSource}
+                        pagination={{
+                            showSizeChanger: true,
+                            showQuickJumper: true,
+                            'total': this.props.HistoryStopCemsListHistoryRecordsCount,
+                            'pageSize': this.props.pageSize,
+                            'current': this.props.pageIndex,
+                            onChange: this.onChange,
+                            onShowSizeChange: this.onShowSizeChange,
+                            pageSizeOptions: ['10', '20', '30', '40']
+                        }}
+                    />
+                </Card>
+            </div>
         );
     }
 }

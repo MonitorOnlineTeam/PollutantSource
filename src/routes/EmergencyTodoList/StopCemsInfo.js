@@ -15,6 +15,7 @@ export default class StopCemsInfo extends Component {
         };
     }
     componentDidMount() {
+        debugger
         this.props.dispatch({
             type: 'task/GetStopCemsDetail',
             payload: {

@@ -89,7 +89,21 @@ export default class JzHistoryRecords extends Component {
             title: '分析仪校准是否正常',
             width: '45%',
             dataIndex: 'Content',
-            key: 'Content'
+            key: 'Content',
+            // render: (text, record) => {
+            //     if (text !== undefined) {
+            //         var content = text.split(',');
+            //         var resu = [];
+            //         content.map((item,key) => {
+            //             item = item.replace('(',' - ');
+            //             item = item.replace(')','');
+            //             resu.push(
+            //                 <Tag color="#108ee9">{item}</Tag>
+            //             );
+            //         });
+            //     }
+            //     return resu;
+            // }
         }, {
             title: '记录创建时间',
             dataIndex: 'CreateTime',
@@ -115,16 +129,16 @@ export default class JzHistoryRecords extends Component {
                             记录创建时间：
                             </Col>
                             <Col span={3} >
-                                <RangePicker_ style={{width: 350}} onChange={this._handleDateChange} dateValue={this.state.rangeDate} />
+                                <RangePicker_ style={{width: 350}} onChange={this._handleDateChange} format={'YYYY-MM-DD'} dateValue={this.state.rangeDate} />
                             </Col>
                         </Row>
                     </Form>
                 </Card>
                 <Table
+                    className={styles.tableCss}
                     loading={this.props.isloading}
                     columns={columns}
                     dataSource={dataSource}
-                    scroll={{ y: 'calc(100vh - 455px)' }}
                     pagination={{
                         showSizeChanger: true,
                         showQuickJumper: true,
@@ -133,7 +147,7 @@ export default class JzHistoryRecords extends Component {
                         'current': this.props.pageIndex,
                         onChange: this.onChange,
                         onShowSizeChange: this.onShowSizeChange,
-                        pageSizeOptions: ['5', '10', '20', '30', '40']
+                        pageSizeOptions: ['10', '20', '30', '40']
                     }}
                 />
             </Card>
