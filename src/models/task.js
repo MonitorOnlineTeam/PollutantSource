@@ -1,4 +1,4 @@
-import { GetTaskDetails, GetYwdsj, GetJzRecord, GetRecordType, GetJzHistoryRecord, GetConsumablesReplaceRecordList, GetStandardGasRepalceRecordList, GetPatrolRecordListPC, GetHistoryConsumablesReplaceRecord,GetHistoryStandardGasRepalceRecordList, GetHistoryInspectionHistoryRecord, GetStopCemsDetail, GetRepairDetail,GetHistoryRepairDetail,GetHistoryStopCemsList,GetDeviceExceptionList,GetBdHistoryInfoList } from '../services/taskapi';
+import { GetTaskDetails, GetYwdsj, GetJzRecord, GetRecordType, GetJzHistoryRecord, GetConsumablesReplaceRecordList, GetStandardGasRepalceRecordList, GetPatrolRecordListPC, GetHistoryConsumablesReplaceRecord,GetHistoryStandardGasRepalceRecordList, GetHistoryInspectionHistoryRecord, GetStopCemsDetail, GetRepairDetail,GetHistoryRepairDetail,GetHistoryStopCemsList,GetDeviceExceptionList,GetBdHistoryInfoList,GetDeviceExceptionDetail } from '../services/taskapi';
 import { Model } from '../dvapack';
 import { EnumRequstResult } from '../utils/enum';
 
@@ -15,12 +15,18 @@ export default Model.extend({
         PatrolRecordListPC: [],
         RecordCount: null,
         pageIndex: 1,
-        pageSize: 5,
+        pageSize: 10,
         total: null,
         StopCems: null,
         Repair: null,
         ConsumablesReplaceRecordList: [],
         StandardGasRepalceRecordList: [],
+        HistoryConsumablesReplaceRecordList: [],
+        HistoryStandardGasRepalceRecordList: [],
+        HistoryInspectionHistoryRecordList: [],
+        HistoryStopCemsList: [],
+        loading: false,
+        ExceptionDetail: [],
     },
 
     effects: {
@@ -143,7 +149,7 @@ export default Model.extend({
             if (result.requstresult === '1') {
                 yield update({
                     requstresult: result.requstresult,
-                    List: result.data,
+                    HistoryConsumablesReplaceRecordList: result.data,
                     total: result.total,
                     pageIndex: pageIndex,
                     pageSize: pageSize
@@ -151,7 +157,7 @@ export default Model.extend({
             } else {
                 yield update({
                     requstresult: result.requstresult,
-                    List: [],
+                    HistoryConsumablesReplaceRecordList: [],
                     total: result.total,
                     pageIndex: pageIndex,
                     pageSize: pageSize
@@ -205,7 +211,7 @@ export default Model.extend({
             if (result.requstresult === '1') {
                 yield update({
                     requstresult: result.requstresult,
-                    List: result.data,
+                    HistoryStandardGasRepalceRecordList: result.data,
                     total: result.total,
                     pageIndex: pageIndex,
                     pageSize: pageSize
@@ -213,7 +219,7 @@ export default Model.extend({
             } else {
                 yield update({
                     requstresult: result.requstresult,
-                    List: [],
+                    HistoryStandardGasRepalceRecordList: [],
                     total: result.total,
                     pageIndex: pageIndex,
                     pageSize: pageSize
@@ -232,6 +238,7 @@ export default Model.extend({
             update,
             select
         }) {
+            debugger;
             const result = yield call(GetPatrolRecordListPC, { TaskIds: TaskIds, TypeIDs: TypeIDs });
             if (result.requstresult === '1') {
                 yield update({
@@ -265,7 +272,7 @@ export default Model.extend({
             if (result.requstresult === '1') {
                 yield update({
                     requstresult: result.requstresult,
-                    List: result.data,
+                    HistoryInspectionHistoryRecordList: result.data,
                     total: result.total,
                     pageIndex: pageIndex,
                     pageSize: pageSize
@@ -273,7 +280,7 @@ export default Model.extend({
             } else {
                 yield update({
                     requstresult: result.requstresult,
-                    List: [],
+                    HistoryInspectionHistoryRecordList: [],
                     total: result.total,
                     pageIndex: pageIndex,
                     pageSize: pageSize
@@ -312,7 +319,7 @@ export default Model.extend({
             if (result.requstresult === '1') {
                 yield update({
                     requstresult: result.requstresult,
-                    List: result.data,
+                    HistoryStopCemsList: result.data,
                     total: result.total,
                     pageIndex: pageIndex,
                     pageSize: pageSize
@@ -320,7 +327,7 @@ export default Model.extend({
             } else {
                 yield update({
                     requstresult: result.requstresult,
-                    List: [],
+                    HistoryStopCemsList: [],
                     total: result.total,
                     pageIndex: pageIndex,
                     pageSize: pageSize
@@ -372,6 +379,18 @@ export default Model.extend({
                     pageIndex: pageIndex,
                     pageSize: pageSize
                 });
+            }
+        },
+        //获取异常记录表单明细
+        * GetDeviceExceptionDetail({
+            payload,
+        }, { call, update }) {
+            debugger
+            const DataInfo = yield call(GetDeviceExceptionDetail, payload);
+            if (DataInfo !== null && DataInfo.requstresult === '1') {
+                if (DataInfo.data !== null) {
+                    yield update({ ExceptionDetail: DataInfo.data });
+                }
             }
         },
         //异常记录历史
@@ -445,5 +464,6 @@ export default Model.extend({
                 });
             }
         },
-    }
+    },
+
 });
