@@ -4,7 +4,7 @@
 .tableCss {
     :global {
         .ant-table-body {
-            height: calc(100vh - 45px);
+            height: calc(100vh - 48px);
             overflow: hidden;
             overflow-y: scroll;
             &::-webkit-scrollbar{
@@ -21,6 +21,11 @@
                 height:50px;
                 background-color:#61A1D5;
                }
+        }
+        .ant-table-placeholder{
+            position: absolute;
+            top:50px;
+            width:100%;
         }
       }
 }

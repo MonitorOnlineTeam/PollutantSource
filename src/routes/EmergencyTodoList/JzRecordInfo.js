@@ -44,12 +44,12 @@ export default class JzRecordInfo extends Component {
         });
     }
 
-    renderItem=(record, code) => {
+    renderItem=(Record, code) => {
         const rtnVal = [];
         if (code != null && code.length > 0) {
-            if (record != null && record.length > 0) {
+            if (Record != null && Record.length > 0) {
                 code.map((item) => {
-                    let rd = record.filter(function(item1) {
+                    let rd = Record.filter(function(item1) {
                         return item1.ItemID === item;
                     });
                     if (rd) {
@@ -186,7 +186,7 @@ export default class JzRecordInfo extends Component {
         let SignContent = null;
         let SignTime = null;
         if (JzRecord != null) {
-            Record = JzRecord.record;
+            Record = JzRecord.Record;
             Code = JzRecord.code;
             RecordList = Record.RecordList;
             EnterpriseName = Record.Content.EnterpriseName;

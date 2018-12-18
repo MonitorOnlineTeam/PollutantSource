@@ -11,7 +11,7 @@ import moment from 'moment';
 export default Model.extend({
     namespace: 'TransmissionEfficiencyModel',
     state: {
-        pageSize: 10,
+        pageSize: 20,
         pageIndex: 1,
         tableDatas: [],
         beginTime: moment().format('YYYY-MM-01 HH:mm:ss'),

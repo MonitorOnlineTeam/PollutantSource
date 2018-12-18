@@ -36,7 +36,7 @@ export async function GetJzRecord(params) {
 // 获取校准记录
 export async function GetRecordType(params) {
     const body = {
-
+        DGIMN: params.DGIMN
     };
     const result = await post('/api/rest/PollutantSourceApi/PTaskForm/GetRecordType', body, null);
     return result === null ? { data: null } : result;
@@ -164,7 +164,8 @@ export async function GetRepairDetail(params) {
         TaskID: params.TaskID,
         TypeID: params.TypeID
     };
-    const result = await post('/api/rest/PollutantSourceApi/PTaskForm/RepairRecordDetail', body, null);
+    debugger
+    const result = post('/api/rest/PollutantSourceApi/PTaskForm/RepairRecordDetail', body, null);
     return result === null ? { data: null } : result;
 }
 // 获取维修记录列表（历史记录表）

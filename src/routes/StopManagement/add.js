@@ -19,6 +19,7 @@ const FormItem = Form.Item;
     pageSize: stopmanagement.pageSize,
     pageIndex: stopmanagement.pageIndex,
     requstresult: stopmanagement.requstresult,
+    reason: stopmanagement.reason,
 }))
 @Form.create()
 export default class add extends Component {
@@ -116,7 +117,7 @@ export default class add extends Component {
                          DGIMN: this.state.DGIMN,
                          Data: this.state.rangeDate.join(','),
                          callback: () => {
-                             if (that.props.requstresult === '0') {
+                             if (that.props.reason === '0') {
                                  flag = false;
                                  that.props.form.setFields({ // 设置验证返回错误
                                      realtime: {
@@ -182,7 +183,7 @@ export default class add extends Component {
                                 {getFieldDecorator('realtime', {
                                     rules: [{ required: true, message: '请输入停产开始结束时间!' }]
                                 })(
-                                    <RangePicker_ style={{width: 350}} format="YYYY-MM-DD HH:mm:ss" onChange={this._handleDateChange}
+                                    <RangePicker_ style={{width: 350}} showTime={{format: 'HH'}} format="YYYY-MM-DD HH:mm:ss" onChange={this._handleDateChange}
                                         dateValue={this.state.Datestring} />
                                 )}
                             </FormItem>

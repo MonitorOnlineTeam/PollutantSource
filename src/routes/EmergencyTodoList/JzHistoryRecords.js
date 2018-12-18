@@ -73,8 +73,8 @@ export default class JzHistoryRecords extends Component {
         this.GetHistoryRecord(pageIndex, pageSize, this.state.dgimn, this.state.typeID, this.state.BeginTime, this.state.EndTime);
     }
 
-    seeDetail=(record) => {
-        this.props.dispatch(routerRedux.push(`/pointdetail/:pointcode/JzRecordInfo/${record.TaskID}/${record.TypeID}`));
+    seeDetail=(Record) => {
+        this.props.dispatch(routerRedux.push(`/pointdetail/:pointcode/JzRecordInfo/${Record.TaskID}/${Record.TypeID}`));
     }
 
     render() {
@@ -90,20 +90,23 @@ export default class JzHistoryRecords extends Component {
             width: '45%',
             dataIndex: 'Content',
             key: 'Content',
-            // render: (text, record) => {
-            //     if (text !== undefined) {
-            //         var content = text.split(',');
-            //         var resu = [];
-            //         content.map((item,key) => {
-            //             item = item.replace('(',' - ');
-            //             item = item.replace(')','');
-            //             resu.push(
-            //                 <Tag color="#108ee9">{item}</Tag>
-            //             );
-            //         });
-            //     }
-            //     return resu;
-            // }
+            render: (text, Record) => {
+                if (text !== undefined) {
+                    var content = text.split('),');
+                    var resu = [];
+                    content.map((item,key) => {
+                        // item = item.replace('(',' - ');
+                        // item = item.replace(')','');
+                        if (key !== content.length - 1) {
+                            item = item + ')';
+                        }
+                        resu.push(
+                            <Tag style={{marginBottom: 1.5,marginTop: 1.5}} color="#108ee9">{item}</Tag>
+                        );
+                    });
+                }
+                return resu;
+            }
         }, {
             title: '记录创建时间',
             dataIndex: 'CreateTime',
@@ -114,9 +117,9 @@ export default class JzHistoryRecords extends Component {
             dataIndex: 'TaskID',
             width: '15%',
             key: 'TaskID',
-            render: (text, record) => {
+            render: (text, Record) => {
                 return <a onClick={
-                    () => this.seeDetail(record)
+                    () => this.seeDetail(Record)
                 } > 详细 </a>;
             }
         }];
@@ -135,6 +138,7 @@ export default class JzHistoryRecords extends Component {
                     </Form>
                 </Card>
                 <Table
+                    size={'middle'}
                     className={styles.tableCss}
                     loading={this.props.isloading}
                     columns={columns}
