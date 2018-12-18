@@ -102,7 +102,7 @@ export default class TransmissionEfficiency extends Component {
                 title: (<span style={{fontWeight: 'bold'}}>应传个数</span>),
                 dataIndex: 'ShouldNumber',
                 key: 'ShouldNumber',
-                width: '13%',
+                width: 100,
                 align: 'center',
                 render: (text, record) => {
                     return text;
@@ -112,7 +112,7 @@ export default class TransmissionEfficiency extends Component {
                 title: (<span style={{fontWeight: 'bold'}}>实传个数</span>),
                 dataIndex: 'TransmissionNumber',
                 key: 'TransmissionNumber',
-                width: '13%',
+                width: 100,
                 align: 'center',
                 render: (text, record) => {
                     return text;
@@ -183,8 +183,10 @@ export default class TransmissionEfficiency extends Component {
         ];
         return (
             <div
-                style={{ width: '100%',
-                    height: 'calc(100vh - 67px)' }}
+                style={{
+                    width: '100%',
+                    height: 'calc(100vh - 67px)'
+                }}
             >
                 <div className={styles.pageHeader}>
                     <Breadcrumb className={styles.breadcrumb} >
@@ -193,79 +195,84 @@ export default class TransmissionEfficiency extends Component {
                         <Breadcrumb.Item>传输有效率</Breadcrumb.Item>
                     </Breadcrumb>
                 </div>
-                <Row className={styles.cardTitle}>
-                    <Card
+                <div className={{}}>
+                    <Row className={styles.cardTitle}>
+                        <Card
                         // type="inner"
-                        title="传输有效率列表"
-                        bordered={false}
-                        extra={
-                            <span style={{color: '#b3b3b3'}}>
+                            title="传输有效率列表"
+                            bordered={false}
+                            extra={
+                                <span style={{color: '#b3b3b3'}}>
                             时间选择：
-                                <MonthPicker defaultValue={this.state.beginTime} format={monthFormat} onChange={this.onDateChange} />
-                            </span>
-                        }
-                        style={{
-                            height: 'calc(100vh - 135px)'
-                        }}
-                    >
+                                    <MonthPicker defaultValue={this.state.beginTime} format={monthFormat} onChange={this.onDateChange} />
+                                </span>
+                            }
+                            style={{
+                                height: 'calc(100vh - 145px)'
+                            }}
+                        >
 
-                        <Row>
-                            <Col span={24}>
-                                <div style={{textAlign: 'center', marginBottom: 20}}>
-                                    <div style={{
-                                        width: 20,
-                                        height: 9,
-                                        backgroundColor: '#52c41a',
-                                        display: 'inline-block',
-                                        borderRadius: '20%',
-                                        cursor: 'pointer',
-                                        marginRight: 3
-                                    }} /> <span style={{cursor: 'pointer'}}> 排口传输有效率达标</span>
-                                    <div style={{
-                                        width: 20,
-                                        height: 9,
-                                        backgroundColor: '#f5222d',
-                                        display: 'inline-block',
-                                        borderRadius: '20%',
-                                        cursor: 'pointer',
-                                        marginLeft: 100,
-                                        marginRight: 3
-                                    }} /><span style={{cursor: 'pointer'}}> 排口传输有效率未达标</span>
-                                </div>
-                            </Col>
-                        </Row>
-                        <Row>
-                            <Table className={styles.dataTable}
-                                loading={this.props.loading}
-                                columns={columns}
-                                onChange={this.handleTableChange}
-                                size="small"// small middle
-                                dataSource={this.props.tableDatas}
-                                scroll={{ y: 550 }}
-                                rowClassName={
-                                    (record, index, indent) => {
-                                        if (index === 0) {
-                                            return;
-                                        }
-                                        if (index % 2 !== 0) {
-                                            return 'light';
+                            <Row>
+                                <Col span={24}>
+                                    <div style={{textAlign: 'center', marginBottom: 20}}>
+                                        <div style={{
+                                            width: 20,
+                                            height: 9,
+                                            backgroundColor: '#52c41a',
+                                            display: 'inline-block',
+                                            borderRadius: '20%',
+                                            cursor: 'pointer',
+                                            marginRight: 3
+                                        }} /> <span style={{cursor: 'pointer'}}> 排口传输有效率达标</span>
+                                        <div style={{
+                                            width: 20,
+                                            height: 9,
+                                            backgroundColor: '#f5222d',
+                                            display: 'inline-block',
+                                            borderRadius: '20%',
+                                            cursor: 'pointer',
+                                            marginLeft: 100,
+                                            marginRight: 3
+                                        }} /><span style={{cursor: 'pointer'}}> 排口传输有效率未达标</span>
+                                    </div>
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Table className={styles.dataTable}
+                                    loading={this.props.loading}
+                                    columns={columns}
+                                    bordered={false}
+                                    onChange={this.handleTableChange}
+                                    size="small"// small middle
+                                    dataSource={this.props.tableDatas}
+                                    scroll={{ y: 'calc(100vh - 10px)' }}
+                                    // scroll={{ y: 550 }}
+                                    rowClassName={
+                                        (record, index, indent) => {
+                                            if (index === 0) {
+                                                return;
+                                            }
+                                            if (index % 2 !== 0) {
+                                                return 'light';
+                                            }
                                         }
                                     }
-                                }
-                                pagination={{
-                                    showSizeChanger: true,
-                                    showQuickJumper: true,
-                                    sorter: true,
-                                    'total': this.props.total,
-                                    'pageSize': this.props.pageSize,
-                                    'current': this.props.pageIndex,
-                                    pageSizeOptions: ['10', '20', '30', '40', '50']
-                                }}
-                            />
-                        </Row>
+                                    pagination={{
+                                        showSizeChanger: true,
+                                        showQuickJumper: true,
+                                        sorter: true,
+                                        'total': this.props.total,
+                                        'pageSize': this.props.pageSize,
+                                        'current': this.props.pageIndex,
+                                        pageSizeOptions: ['10', '20', '30', '40', '50']
+                                    }}
+                                />
+                            </Row>
 
-                    </Card>
-                </Row>
+                        </Card>
+                    </Row>
+                </div>
+
 
                 <Card className={styles.cardTitle} title="综合分析 / 传输有效率统计" style={{display: 'none'}}>
                     {// <Card
