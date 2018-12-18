@@ -39,10 +39,6 @@ export default class DeviceExceptionListHistoryRecord extends Component {
     }
 
     GetHistoryRecord=(pageIndex, pageSize, DGIMN, TypeID, BeginTime, EndTime) => {
-        // const _this = this;
-        // _this.setState({
-        //     loading: true
-        // });
         this.props.dispatch({
             type: 'task/GetDeviceExceptionList',
             payload: {
@@ -54,11 +50,6 @@ export default class DeviceExceptionListHistoryRecord extends Component {
                 EndTime: moment(EndTime).format('YYYY-MM-DD 23:59:59'),
             }
         });
-        // setTimeout(function() {
-        //     _this.setState({
-        //         loading: false
-        //     });
-        // },100);
     };
 
     _handleDateChange=(date, dateString) => {
@@ -139,6 +130,7 @@ export default class DeviceExceptionListHistoryRecord extends Component {
                         </Form>
                     </Card>
                     <Table
+                        size={'middle'}
                         loading={this.props.loading}
                         className={styles.tableCss}
                         columns={columns}

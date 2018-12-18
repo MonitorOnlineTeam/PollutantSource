@@ -28,10 +28,10 @@ export default class StopCemsInfo extends Component {
             loading: false
         });
     }
-    renderItem = (record) => {
+    renderItem = (Record) => {
         const rtnVal = [];
-        if (record !== null && record.length > 0) {
-            record.map((item,index) => {
+        if (Record !== null && Record.length > 0) {
+            Record.map((item,index) => {
                 rtnVal.push(
                     <tr>
                         <td style={{ width: '18%', height: '50px', textAlign: 'center',fontSize: '14px' }}>
@@ -65,7 +65,7 @@ export default class StopCemsInfo extends Component {
         let SignContent = null;
         let SignTime = null;
         if (StopCems !== null) {
-            Record = StopCems.record;
+            Record = StopCems.Record;
             RecordList = Record.RecordList;
             EnterpriseName = Record.Content.EnterpriseName;
             PointPosition = Record.Content.PointPosition;

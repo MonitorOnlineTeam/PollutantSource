@@ -93,7 +93,7 @@ export default class RepairHistoryRecods extends Component {
                     var resu = [];
                     content.map((item,key) => {
                         resu.push(
-                            <Tag color="#108ee9">{item}</Tag>
+                            <Tag style={{marginBottom: 1.5,marginTop: 1.5}} color="#108ee9">{item}</Tag>
                         );
                     });
                 }
@@ -133,6 +133,7 @@ export default class RepairHistoryRecods extends Component {
                         </Form>
                     </Card>
                     <Table
+                        size={'middle'}
                         loading={this.props.loading}
                         className={styles.tableCss}
                         columns={columns}
