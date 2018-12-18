@@ -155,34 +155,34 @@ class DataQuery extends Component {
                 { this.props.isloading ? <Spin style={{width: '100%',
                     height: 'calc(100vh - 260px)',
                     marginTop: 260 }} size="large" /> :
-                <Card title="监测趋势图" extra={
-                        <div>
-                        { this.state.displayType === 'chart' ? <PollutantSelect_
-                                optionDatas={this.props.pollutantlist}
-                                defaultValue={this.props.pollutantlist[0] ? this.props.pollutantlist[0].pollutantCode : ''}
-                                style={{width: 150}}
-                                onChange={this._handlePollutantChange}
+                    <Card title="监测趋势图" extra={
+                    <div>
+                            { this.state.displayType === 'chart' ? <PollutantSelect_
+                            optionDatas={this.props.pollutantlist}
+                            defaultValue={this.props.pollutantlist[0] ? this.props.pollutantlist[0].pollutantCode : ''}
+                            style={{width: 150}}
+                            onChange={this._handlePollutantChange}
                             /> : ''}
-                        <RangePicker_ style={{width: 350}} dateValue={this.state.rangeDate} format={this.state.formats} onChange={this._handleDateChange} />
-                        <ButtonGroup_ style={{marginRight: 20}} checked="realtime" onChange={this._handleDateTypeChange} />
-                        <Switch checkedChildren="图表" unCheckedChildren="数据" onChange={this.displayChange} defaultChecked={true} />
-                    </div>
+                            <RangePicker_ style={{width: 350}} dateValue={this.state.rangeDate} format={this.state.formats} onChange={this._handleDateChange} />
+                            <ButtonGroup_ style={{marginRight: 20}} checked="realtime" onChange={this._handleDateTypeChange} />
+                            <Switch checkedChildren="图表" unCheckedChildren="数据" onChange={this.displayChange} defaultChecked={true} />
+                        </div>
                     } style={{ width: '100%', height: 'calc(100vh - 225px)' }}>
-                        {
+                    {
                             this.props.dataloading ? <Spin style={{width: '100%',
                                 height: 'calc(100vh - 260px)',
                                 marginTop: 260 }} size="large" /> :
                                 (this.state.displayType === 'chart' ? (!option ? <div style={{textAlign: 'center'}}>暂无数据</div> : <ReactEcharts option={this.props.option} lazyUpdate={true}
                                     notMerge={true} id="rightLine" style={{ width: '100%', height: 'calc(100vh - 380px)' }} />) :
-                                <Table rowKey="MonitorTime" dataSource={this.props.datatable} columns={this.props.columns}
-                                        pagination={{
+                                    <Table rowKey="MonitorTime" dataSource={this.props.datatable} columns={this.props.columns}
+                                    pagination={{
                                             'total': this.props.total,
                                             'pageSize': this.state.pageSize,
                                             'current': this.state.current,
                                             onChange: this.pageIndexChange
                                         }} />)
                         }
-                    </Card>
+                </Card>
                 }</div>
         );
     }

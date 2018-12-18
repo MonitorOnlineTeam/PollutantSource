@@ -386,6 +386,7 @@ export default Model.extend({
                 payload.pollutantType = pollutanttype[0].PollutantTypeCode;
             }
             const result = yield call(loadMonitorPoint, payload);
+
             const pointlist = result.data;
             yield update({ pointlist });
         },
@@ -414,6 +415,8 @@ export default Model.extend({
                     payload: params
                 });
                 yield take('queryhistorydatalist/@@end');
+            } else {
+                yield update({ pollutantlist: [],datalist: null, chartdata: null, columns: null, datatable: null, total: 0 });
             }
         },
         * queryhistorydatalist({ payload
