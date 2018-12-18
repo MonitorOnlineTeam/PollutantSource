@@ -16,6 +16,7 @@ export default Model.extend({
         pageIndex: 1,
         reason: null,
         fileslist: [],
+        editlsit: null,
     },
     subscriptions: {
         setup({
@@ -104,11 +105,24 @@ export default Model.extend({
                 requstresult: result.requstresult,
                 reason: result.reason
             });
+            yield put({
+                type: 'getlist',
+                payload: {
+                    StopHours: '',
+                    RecordUserName: '',
+                    Data: '',
+                    datatype: '',
+                    pageIndex: 1,
+                    pageSize: 10,
+                    DGIMN: DGIMN,
+                },
+            });
             callback();
         },
         * getlistbyid({
             payload: {
-                OutputStopID
+                OutputStopID,
+                callback
             }
         }, {
             call,
@@ -132,6 +146,7 @@ export default Model.extend({
                     reason: result.reason,
                 });
             }
+            callback();
         },
         * deletebyid({
             payload: {
@@ -143,42 +158,39 @@ export default Model.extend({
                 DGIMN,
                 Data,
                 datatype,
+                callback
             }
         }, {
             call,
             put,
             update,
             select,
-            callback
         }) {
             const result = yield call(deletebyid, {
                 OutputStopID: OutputStopID
             });
 
-            if (result.requstresult === '1') {
-                yield update({
-                    requstresult: result.requstresult,
-                    reason: result.reason,
-                });
-                yield put({
-                    type: 'getpollutantbydgimn',
-                    payload: {
-                        pageIndex: pageIndex,
-                        pageSize: pageSize,
-                        StopHours: StopHours,
-                        RecordUserName: RecordUserName,
-                        DGIMN: DGIMN,
-                        Data: Data,
-                        datatype: datatype,
-                    },
-                });
-            } else {
-                yield update({
-                    requstresult: result.requstresult,
-                    reason: result.reason,
-                });
-            }
+            yield update({
+                requstresult: result.requstresult,
+                reason: result.reason,
+            });
+            yield put({
+                type: 'getlist',
+                payload: {
+                    pageIndex: pageIndex,
+                    pageSize: pageSize,
+                    StopHours: StopHours,
+                    RecordUserName: RecordUserName,
+                    DGIMN: DGIMN,
+                    Data: Data,
+                    datatype: datatype,
+                },
+            });
             callback();
+            yield update({
+                requstresult: result.requstresult,
+                reason: result.reason,
+            });
         },
         * uploadfiles({
             payload: {
