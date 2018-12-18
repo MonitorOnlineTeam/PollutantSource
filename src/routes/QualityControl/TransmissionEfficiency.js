@@ -92,7 +92,7 @@ export default class TransmissionEfficiency extends Component {
                 title: (<span style={{fontWeight: 'bold'}}>排口名称</span>),
                 dataIndex: 'PointName',
                 key: 'PointName',
-                width: '15%',
+                width: '20%',
                 align: 'left',
                 render: (text, record) => {
                     return text;
@@ -102,7 +102,7 @@ export default class TransmissionEfficiency extends Component {
                 title: (<span style={{fontWeight: 'bold'}}>应传个数</span>),
                 dataIndex: 'ShouldNumber',
                 key: 'ShouldNumber',
-                width: 100,
+                width: '10%',
                 align: 'center',
                 render: (text, record) => {
                     return text;
@@ -112,7 +112,7 @@ export default class TransmissionEfficiency extends Component {
                 title: (<span style={{fontWeight: 'bold'}}>实传个数</span>),
                 dataIndex: 'TransmissionNumber',
                 key: 'TransmissionNumber',
-                width: 100,
+                width: '10%',
                 align: 'center',
                 render: (text, record) => {
                     return text;
@@ -122,7 +122,7 @@ export default class TransmissionEfficiency extends Component {
                 title: (<span style={{fontWeight: 'bold'}}>有效个数</span>),
                 dataIndex: 'EffectiveNumber',
                 key: 'EffectiveNumber',
-                width: '15%',
+                width: '13%',
                 align: 'center',
                 render: (text, record) => {
                     return text;
@@ -132,7 +132,7 @@ export default class TransmissionEfficiency extends Component {
                 title: (<span style={{fontWeight: 'bold'}}>传输率</span>),
                 dataIndex: 'TransmissionRate',
                 key: 'TransmissionRate',
-                width: '15%',
+                width: '13%',
                 align: 'center',
                 render: (text, record) => {
                     return (parseFloat(text) * 100).toFixed(2) + '%';
@@ -142,7 +142,7 @@ export default class TransmissionEfficiency extends Component {
                 title: (<span style={{fontWeight: 'bold'}}>有效率</span>),
                 dataIndex: 'EffectiveRate',
                 key: 'EffectiveRate',
-                width: '15%',
+                width: '13%',
                 align: 'center',
                 sorter: (a, b) => a.EffectiveRate - b.EffectiveRate,
                 render: (text, record) => {
@@ -154,7 +154,8 @@ export default class TransmissionEfficiency extends Component {
                 dataIndex: 'TransmissionEffectiveRate',
                 key: 'TransmissionEffectiveRate',
                 // width: '250px',
-                align: 'center',
+                width: '20%',
+                // align: 'center',
                 sorter: true,
                 render: (text, record) => {
                     // 红色：#f5222d 绿色：#52c41a
@@ -185,7 +186,9 @@ export default class TransmissionEfficiency extends Component {
             <div
                 style={{
                     width: '100%',
-                    height: 'calc(100vh - 67px)'
+                    height: 'calc(100vh - 67px)',
+                    overflow: 'auto',
+                    minHeight: 800
                 }}
             >
                 <div className={styles.pageHeader}>
@@ -195,8 +198,12 @@ export default class TransmissionEfficiency extends Component {
                         <Breadcrumb.Item>传输有效率</Breadcrumb.Item>
                     </Breadcrumb>
                 </div>
-                <div className={{}}>
-                    <Row className={styles.cardTitle}>
+                <div className={styles.cardTitle} style={{
+                    // height: 'calc(100vh - 505px)',
+                    minHeight: 500
+                }}
+                >
+                    <Row>
                         <Card
                         // type="inner"
                             title="传输有效率列表"
@@ -207,9 +214,7 @@ export default class TransmissionEfficiency extends Component {
                                     <MonthPicker defaultValue={this.state.beginTime} format={monthFormat} onChange={this.onDateChange} />
                                 </span>
                             }
-                            style={{
-                                height: 'calc(100vh - 145px)'
-                            }}
+                            // style={{minHeight: 500}}
                         >
 
                             <Row>
@@ -241,11 +246,11 @@ export default class TransmissionEfficiency extends Component {
                                 <Table className={styles.dataTable}
                                     loading={this.props.loading}
                                     columns={columns}
-                                    bordered={false}
+                                    bordered={true}
                                     onChange={this.handleTableChange}
                                     size="small"// small middle
                                     dataSource={this.props.tableDatas}
-                                    scroll={{ y: 'calc(100vh - 10px)' }}
+                                    scroll={{ y: 'calc(100vh - 400px)' }}
                                     // scroll={{ y: 550 }}
                                     rowClassName={
                                         (record, index, indent) => {
@@ -272,81 +277,6 @@ export default class TransmissionEfficiency extends Component {
                         </Card>
                     </Row>
                 </div>
-
-
-                <Card className={styles.cardTitle} title="综合分析 / 传输有效率统计" style={{display: 'none'}}>
-                    {// <Card
-                    //     type="inner"
-                    //     title="传输有效率列表"
-                    //     extra={
-                    //         <span style={{color: '#b3b3b3'}}>
-                    //         时间选择：
-                    //             <MonthPicker defaultValue={this.state.beginTime} format={monthFormat} onChange={this.onDateChange} />
-                    //         </span>
-                    //     }
-                    //     style={{
-                    //         height: 'calc(100vh - 205px)'
-                    //     }}
-                    // >
-
-                    //     <Row>
-                    //         <Col span={24}>
-                    //             <div style={{textAlign: 'center', marginBottom: 20}}>
-                    //                 <div style={{
-                    //                     width: 20,
-                    //                     height: 9,
-                    //                     backgroundColor: '#52c41a',
-                    //                     display: 'inline-block',
-                    //                     borderRadius: '20%',
-                    //                     cursor: 'pointer',
-                    //                     marginRight: 3
-                    //                 }} /> <span style={{cursor: 'pointer'}}> 排口传输有效率达标</span>
-                    //                 <div style={{
-                    //                     width: 20,
-                    //                     height: 9,
-                    //                     backgroundColor: '#f5222d',
-                    //                     display: 'inline-block',
-                    //                     borderRadius: '20%',
-                    //                     cursor: 'pointer',
-                    //                     marginLeft: 100,
-                    //                     marginRight: 3
-                    //                 }} /><span style={{cursor: 'pointer'}}> 排口传输有效率未达标</span>
-                    //             </div>
-                    //         </Col>
-                    //     </Row>
-                    //     <Row>
-                    //         <Table className={styles.dataTable}
-                    //             loading={this.props.loading}
-                    //             columns={columns}
-                    //             onChange={this.handleTableChange}
-                    //             size="small"// small middle
-                    //             dataSource={this.props.tableDatas}
-                    //             scroll={{ y: 550 }}
-                    //             rowClassName={
-                    //                 (record, index, indent) => {
-                    //                     if (index === 0) {
-                    //                         return;
-                    //                     }
-                    //                     if (index % 2 !== 0) {
-                    //                         return 'light';
-                    //                     }
-                    //                 }
-                    //             }
-                    //             pagination={{
-                    //                 showSizeChanger: true,
-                    //                 showQuickJumper: true,
-                    //                 sorter: true,
-                    //                 'total': this.props.total,
-                    //                 'pageSize': this.props.pageSize,
-                    //                 'current': this.props.pageIndex,
-                    //                 pageSizeOptions: ['10', '20', '30', '40', '50']
-                    //             }}
-                    //         />
-                    //     </Row>
-
-                    // </Card>
-                    }
-                </Card>
             </div>
         );
     }
