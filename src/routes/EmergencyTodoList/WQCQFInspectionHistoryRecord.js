@@ -98,7 +98,7 @@ export default class WQCQFInspectionHistoryRecord extends Component {
                             item = item.replace('(','  ');
                             item = item.replace(')','');
                             resu.push(
-                                <Tag color="#108ee9">{item}</Tag>
+                                <Tag style={{marginBottom: 1.5,marginTop: 1.5}} color="#108ee9">{item}</Tag>
                             );
                         });
                     }
@@ -137,6 +137,7 @@ export default class WQCQFInspectionHistoryRecord extends Component {
                             </Form>
                         </Card>
                         <Table
+                            size={'middle'}
                             loading={this.props.loading}
                             className={styles.tableCss}
                             columns={columns}

@@ -5,7 +5,7 @@ import {
     Col,
     Table,
     Form,
-    Spin,
+    Tag,
 } from 'antd';
 import { connect } from 'dva';
 import moment from 'moment';
@@ -72,7 +72,7 @@ export default class BdHistoryInfoHistoryRecords extends Component {
     }
 
     seeDetail=(record) => {
-        this.props.dispatch(routerRedux.push(`../routes/EmergencyTodoList/ConsumablesReplaceRecord/${record.taskId}/${this.state.TypeID}`));////////跳转页面没做（跳转的页面还没有完成）
+        this.props.dispatch(routerRedux.push(`../routes/EmergencyTodoList/ConsumablesReplaceRecord/${record.taskId}/${this.state.TypeID}`));
     }
 
     render() {
@@ -86,7 +86,21 @@ export default class BdHistoryInfoHistoryRecords extends Component {
             title: '评价结果',
             width: '45%',
             dataIndex: 'DealingSituations',
-            key: 'DealingSituations'
+            key: 'DealingSituations',
+            render: (text, record) => {
+                if (text !== undefined) {
+                    var content = text.split(',');
+                    var resu = [];
+                    content.map((item,key) => {
+                        item = item.replace('(','  ');
+                        item = item.replace(')','');
+                        resu.push(
+                            <Tag style={{marginBottom: 1.5,marginTop: 1.5}} color="#108ee9">{item}</Tag>
+                        );
+                    });
+                }
+                return resu;
+            }
         }, {
             title: '记录创建时间',
             dataIndex: 'CreateTime',
@@ -120,6 +134,7 @@ export default class BdHistoryInfoHistoryRecords extends Component {
                         </Form>
                     </Card>
                     <Table
+                        size={'middle'}
                         loading={this.props.loading}
                         className={styles.tableCss}
                         columns={columns}
