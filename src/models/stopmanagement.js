@@ -2,7 +2,7 @@ import {
     Model
 } from '../dvapack';
 import {
-    getlist, getlistbyid, deletebyid, addoutputstop,
+    getlist, getlistbyid, deletebyid, addoutputstop, uploadfiles, deletefiles, outputstoptimechecked, getoutputstopfiles
 } from '../services/stopmanagement';
 export default Model.extend({
     namespace: 'stopmanagement',
@@ -15,6 +15,7 @@ export default Model.extend({
         pageSize: 10,
         pageIndex: 1,
         reason: null,
+        fileslist: [],
     },
     subscriptions: {
         setup({
@@ -82,8 +83,7 @@ export default Model.extend({
         * addoutputstop({
             payload: {
                 DGIMN,
-                BeginTime,
-                EndTime,
+                Data,
                 StopDescription,
                 Files,
                 callback,
@@ -96,8 +96,7 @@ export default Model.extend({
         }) {
             const result = yield call(addoutputstop, {
                 DGIMN: DGIMN,
-                BeginTime: BeginTime,
-                EndTime: EndTime,
+                Data: Data,
                 StopDescription: StopDescription,
                 Files: Files,
             });
@@ -179,6 +178,91 @@ export default Model.extend({
                     reason: result.reason,
                 });
             }
+            callback();
+        },
+        * uploadfiles({
+            payload: {
+                file,
+                fileName,
+                callback,
+            }
+        }, {
+            call,
+            put,
+            update,
+            select
+        }) {
+            const result = yield call(uploadfiles, {
+                file: file,
+                fileName: fileName,
+            });
+            yield update({
+                requstresult: result.requstresult,
+                reason: result.reason
+            });
+            callback();
+        },
+        * deletefiles({
+            payload: {
+                guid,
+                callback,
+            }
+        }, {
+            call,
+            put,
+            update,
+            select
+        }) {
+            const result = yield call(deletefiles, {
+                guid: guid,
+            });
+            yield update({
+                requstresult: result.requstresult,
+                reason: result.reason
+            });
+            callback();
+        },
+        * outputstoptimechecked({
+            payload: {
+                DGIMN,
+                Data,
+                callback,
+            }
+        }, {
+            call,
+            put,
+            update,
+            select
+        }) {
+            const result = yield call(outputstoptimechecked, {
+                DGIMN: DGIMN,
+                Data: Data,
+            });
+            yield update({
+                requstresult: result.requstresult,
+                reason: result.reason
+            });
+            callback();
+        },
+        * getoutputstopfiles({
+            payload: {
+                OutputStopID,
+                callback
+            }
+        }, {
+            call,
+            put,
+            update,
+            select
+        }) {
+            const result = yield call(getoutputstopfiles, {
+                OutputStopID: OutputStopID
+            });
+            yield update({
+                fileslist: result.data,
+                requstresult: result.requstresult,
+                reason: result.reason
+            });
             callback();
         },
     },

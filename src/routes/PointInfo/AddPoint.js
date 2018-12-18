@@ -67,6 +67,8 @@ export default class AddPoint extends Component {
                     DGIMN: DGIMN,
                     callback: () => {
                         if (this.props.requstresult === '1') {
+                            console.log(this.props.editpoint);
+                            console.log(this.props.editpoint);
                             this.setState({
                                 OutputType: this.props.editpoint.OutputTypeId === '1',
                                 IsSj: this.props.editpoint.IsSj === '1',

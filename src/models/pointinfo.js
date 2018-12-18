@@ -161,6 +161,7 @@ export default Model.extend({
             update,
             select
         }) {
+            
             const result = yield call(getpoint, {
                 DGIMN: DGIMN
             });

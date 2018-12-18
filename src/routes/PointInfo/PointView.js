@@ -79,7 +79,7 @@ export default class pointview extends Component {
     };
     render() {
         const gridStyle = {
-            width: '50%',
+            width: '100%',
         };
         return (
             <div>

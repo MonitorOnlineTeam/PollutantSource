@@ -1,6 +1,6 @@
 import request from '../utils/request';
 import {
-    post
+    post, upload
 }
     from '../dvapack/request';
 // 获取当前排口下的停产列表
@@ -42,12 +42,54 @@ export async function deletebyid(params) {
 // 添加停产
 export async function addoutputstop(params) {
     const body = {
-        BeginTime: params.BeginTime,
-        EndTime: params.EndTime,
         DGIMN: params.DGIMN,
+        Data: params.Data,
+        Files: params.Files,
         StopDescription: params.StopDescription,
     };
     const result = post('/api/rest/PollutantSourceApi/POutputStop/AddOutputStop', body, null);
+    return result === null ? {
+        data: null
+    } : result;
+}
+// 上传附件
+export async function uploadfiles(params) {
+    const body = {
+        file: params.file,
+        fileName: params.fileName,
+    };
+    const result = upload('/api/rest/PollutantSourceApi/PUploadImage/UploadFilse', body, null);
+    return result === null ? {
+        data: null
+    } : result;
+}
+// 删除附件
+export async function deletefiles(params) {
+    const body = {
+        guid: params.guid,
+    };
+    const result = upload('/api/rest/PollutantSourceApi/PUploadImage/DeleteFilse', body, null);
+    return result === null ? {
+        data: null
+    } : result;
+}
+// 验证时间是否冲突
+export async function outputstoptimechecked(params) {
+    const body = {
+        DGIMN: params.DGIMN,
+        Data: params.Data,
+    };
+    const result = upload('/api/rest/PollutantSourceApi/POutputStop/OutputStopTimeChecked', body, null);
+    return result === null ? {
+        data: null
+    } : result;
+}
+// 档案列表
+export async function getoutputstopfiles(params) {
+    const body = {
+        OutputStopID: params.OutputStopID,
+    };
+    const result = upload('/api/rest/PollutantSourceApi/POutputStop/GetOutputStopFiles', body, null);
     return result === null ? {
         data: null
     } : result;
