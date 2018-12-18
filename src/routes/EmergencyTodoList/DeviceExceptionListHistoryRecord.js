@@ -1,22 +1,20 @@
 import React, { Component } from 'react';
 import {
-    Button,
-    Input,
     Card,
     Row,
     Col,
     Table,
     Form,
-    Select, Modal, message, Tag, Radio, Checkbox,
+    Spin
 } from 'antd';
 import { connect } from 'dva';
 import moment from 'moment';
 import RangePicker_ from '../../components/PointDetail/RangePicker_';
+import styles from '../EmergencyTodoList/DeviceExceptionListHistoryRecord.less';
 import {routerRedux} from 'dva/router';
-import { DEFAULT_ENCODING } from 'crypto';
 
 @connect(({ task, loading }) => ({
-    // isloading: loading.effects['task/GetJzHistoryRecord'],
+    loading: loading.effects['task/GetDeviceExceptionList'],
     HistoryDeviceExceptionList: task.List,
     HistoryDeviceExceptionListCount: task.total,
     pageIndex: task.pageIndex,
@@ -33,27 +31,34 @@ export default class DeviceExceptionListHistoryRecord extends Component {
             BeginTime: moment().subtract(11, 'month').format('YYYY-MM-DD 00:00:00'),
             EndTime: moment().format('YYYY-MM-DD 23:59:59'),
             DGIMN: this.props.match.params.pointcode,
-            typeID: this.props.match.params.TypeID,
+            TypeID: this.props.match.params.TypeID,
         };
     }
     componentDidMount() {
-        debugger;
-        this.GetHistoryRecord(this.props.pageIndex, this.props.pageSize, this.state.DGIMN, this.state.typeID, this.state.BeginTime, this.state.EndTime);
+        this.GetHistoryRecord(this.props.pageIndex, this.props.pageSize, this.state.DGIMN, this.state.TypeID, this.state.BeginTime, this.state.EndTime);
     }
 
-    GetHistoryRecord=(pageIndex, pageSize, DGIMN, typeID, BeginTime, EndTime) => {
-        debugger;
+    GetHistoryRecord=(pageIndex, pageSize, DGIMN, TypeID, BeginTime, EndTime) => {
+        // const _this = this;
+        // _this.setState({
+        //     loading: true
+        // });
         this.props.dispatch({
             type: 'task/GetDeviceExceptionList',
             payload: {
                 pageIndex: pageIndex,
                 pageSize: pageSize,
-                TypeID: typeID,
+                TypeID: TypeID,
                 DGIMN: DGIMN,
                 BeginTime: moment(BeginTime).format('YYYY-MM-DD 00:00:00'),
                 EndTime: moment(EndTime).format('YYYY-MM-DD 23:59:59'),
             }
         });
+        // setTimeout(function() {
+        //     _this.setState({
+        //         loading: false
+        //     });
+        // },100);
     };
 
     _handleDateChange=(date, dateString) => {
@@ -76,36 +81,37 @@ export default class DeviceExceptionListHistoryRecord extends Component {
     }
 
     seeDetail=(record) => {
-        this.props.dispatch(routerRedux.push(`../routes/EmergencyTodoList/ConsumablesReplaceRecord/${record.taskId}/${this.state.TypeID}`));////////跳转页面没做（跳转的页面还没有完成）
+        this.props.dispatch(routerRedux.push(`/pointdetail/:pointcode/DeviceExceptionDetail/${record.TaskID}/${this.state.TypeID}`));
     }
 
     render() {
         const dataSource = this.props.HistoryDeviceExceptionList === null ? null : this.props.HistoryDeviceExceptionList;
         const columns = [{
             title: '校准人',
-            width: '15%',
+            width: '13%',
             dataIndex: 'CreateUserID',
             key: 'CreateUserID'
         }, {
             title: '异常状况',
-            width: '20%',
+            width: '19%',
             dataIndex: 'ExceptionStatus',
             key: 'ExceptionStatus'
         }, {
             title: '异常原因',
-            width: '20%',
+            width: '19%',
             dataIndex: 'ExceptionReason',
             key: 'ExceptionReason'
         }, {
             title: '处理情况',
-            width: '20%',
+            width: '19%',
             dataIndex: 'DealingSituations',
             key: 'DealingSituations'
         }, {
             title: '记录创建时间',
             dataIndex: 'CreateTime',
-            width: '15%',
-            key: 'CreateTime'
+            width: '20%',
+            key: 'CreateTime',
+            sorter: (a, b) => Date.parse(a.CreateTime) - Date.parse(b.CreateTime),
         }, {
             title: '详细',
             dataIndex: 'TaskID',
@@ -123,20 +129,20 @@ export default class DeviceExceptionListHistoryRecord extends Component {
                     <Card>
                         <Form layout="inline">
                             <Row gutter={8}>
-                                <Col span={5} >
+                                <Col span={4} >
                             记录创建时间：
                                 </Col>
                                 <Col span={5} >
-                                    <RangePicker_ style={{width: 350}} onChange={this._handleDateChange} dateValue={this.state.rangeDate} />
+                                    <RangePicker_ style={{width: 350}} onChange={this._handleDateChange} format={'YYYY-MM-DD'} dateValue={this.state.rangeDate} />
                                 </Col>
                             </Row>
                         </Form>
                     </Card>
                     <Table
-                        // loading={this.props.isloading}
+                        loading={this.props.loading}
+                        className={styles.tableCss}
                         columns={columns}
                         dataSource={dataSource}
-                        scroll={{ y: 'calc(100vh - 455px)' }}
                         pagination={{
                             showSizeChanger: true,
                             showQuickJumper: true,
@@ -145,7 +151,7 @@ export default class DeviceExceptionListHistoryRecord extends Component {
                             'current': this.props.pageIndex,
                             onChange: this.onChange,
                             onShowSizeChange: this.onShowSizeChange,
-                            pageSizeOptions: ['5', '10', '20', '30', '40']
+                            pageSizeOptions: ['10', '20', '30', '40']
                         }}
                     />
                 </Card>

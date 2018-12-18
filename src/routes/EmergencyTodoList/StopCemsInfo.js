@@ -14,8 +14,8 @@ export default class StopCemsInfo extends Component {
 
         };
     }
-
     componentDidMount() {
+        debugger
         this.props.dispatch({
             type: 'task/GetStopCemsDetail',
             payload: {
@@ -23,10 +23,13 @@ export default class StopCemsInfo extends Component {
                 TypeID: this.props.match.params.TypeID
             }
         });
+        const _this = this;
+        _this.setState({
+            loading: false
+        });
     }
     renderItem = (record) => {
         const rtnVal = [];
-        //console.log(record);
         if (record !== null && record.length > 0) {
             record.map((item,index) => {
                 rtnVal.push(
@@ -47,24 +50,14 @@ export default class StopCemsInfo extends Component {
                 );
             });
         }
-
         return rtnVal;
     }
     render() {
-        console.log();
         const SCREEN_HEIGHT = document.querySelector('body').offsetHeight - 250;
         const StopCems = this.props.StopCems;
-        if (this.props.isloading) {
-            return (
-                <div className={styles.loadContent}>
-                    <Spin size="large" />
-                </div>
-            );
-        }
         let EnterpriseName = null;
         let PointPosition = null;
         let StopSummary = null;
-
         let CreateTime = null;
         let Record = null;
         let RecordList = null;
@@ -84,80 +77,80 @@ export default class StopCemsInfo extends Component {
         }
 
         return (
-            <div className={styles.FormDiv} style={{ height: SCREEN_HEIGHT }}>
-                <div className={styles.FormName}>CEMS 停机记录表</div>
-                <div className={styles.HeadDiv} style={{ fontWeight: 'bold' }}>企业名称：{EnterpriseName}</div>
-                <table className={styles.FormTable}>
-                    <tbody>
-                        <tr>
-                            <td style={{ width: '18%', height: '50px', textAlign: 'center',fontSize: '14px' }}>
+            <Spin spinning={this.state.loading}>
+                <div className={styles.FormDiv} style={{ height: SCREEN_HEIGHT }}>
+                    <div className={styles.FormName}>CEMS 停机记录表</div>
+                    <div className={styles.HeadDiv} style={{ fontWeight: 'bold' }}>企业名称：{EnterpriseName}</div>
+                    <table className={styles.FormTable}>
+                        <tbody>
+                            <tr>
+                                <td style={{ width: '18%', height: '50px', textAlign: 'center',fontSize: '14px' }}>
                                     安装地点
-                            </td>
-                            <td colSpan="3" style={{textAlign: 'center',fontSize: '14px'}}>
-                                {PointPosition}
-                            </td>
-
-                        </tr>
-                        <tr>
-                            <td style={{ width: '18%', height: '50px', textAlign: 'center', backgroundColor: '#FAFAFA',fontSize: '14px',fontWeight: '600' }}>
+                                </td>
+                                <td colSpan="3" style={{textAlign: 'center',fontSize: '14px'}}>
+                                    {PointPosition}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style={{ width: '18%', height: '50px', textAlign: 'center', backgroundColor: '#FAFAFA',fontSize: '14px',fontWeight: '600' }}>
                                     序号
-                            </td>
-                            <td style={{ width: '25%', height: '50px', textAlign: 'center' , backgroundColor: '#FAFAFA' ,fontSize: '14px',fontWeight: '600' }}>
+                                </td>
+                                <td style={{ width: '25%', height: '50px', textAlign: 'center' , backgroundColor: '#FAFAFA' ,fontSize: '14px',fontWeight: '600' }}>
                                     停机开始时间
-                            </td >
-                            <td style={{ width: '25%', height: '50px', textAlign: 'center' , backgroundColor: '#FAFAFA',fontSize: '14px',fontWeight: '600' }}>
+                                </td >
+                                <td style={{ width: '25%', height: '50px', textAlign: 'center' , backgroundColor: '#FAFAFA',fontSize: '14px',fontWeight: '600' }}>
                                     停机结束时间
-                            </td>
-                            <td style={{ width: '32%', height: '50px', textAlign: 'center' , backgroundColor: '#FAFAFA',fontSize: '14px',fontWeight: '600' }}>
+                                </td>
+                                <td style={{ width: '32%', height: '50px', textAlign: 'center' , backgroundColor: '#FAFAFA',fontSize: '14px',fontWeight: '600' }}>
                                     停机原因
-                            </td>
-                        </tr>
-                        {
-                            this.renderItem(RecordList)
-                        }
-                        <tr>
-                            <td style={{ width: '18%', height: '50px', textAlign: 'center',fontSize: '14px' }}>
+                                </td>
+                            </tr>
+                            {
+                                this.renderItem(RecordList)
+                            }
+                            <tr>
+                                <td style={{ width: '18%', height: '50px', textAlign: 'center',fontSize: '14px' }}>
                                     停机情况总结
-                            </td>
-                            <td colSpan="3" style={{textAlign: 'center',fontSize: '14px'}}>
-                                {StopSummary}
-                            </td>
-                        </tr>
-                        <tr>
-                            <td style={{ width: '18%', height: '50px', textAlign: 'center',fontSize: '14px' }}>
+                                </td>
+                                <td colSpan="3" style={{textAlign: 'center',fontSize: '14px'}}>
+                                    {StopSummary}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style={{ width: '18%', height: '50px', textAlign: 'center',fontSize: '14px' }}>
                                     停机人
-                            </td>
-                            <td style={{ width: '25%', height: '50px', textAlign: 'center',fontSize: '14px' }}>
-                                {CreateUserID}
-                            </td >
-                            <td style={{ width: '25%', height: '50px', textAlign: 'center',fontSize: '14px' }}>
+                                </td>
+                                <td style={{ width: '25%', height: '50px', textAlign: 'center',fontSize: '14px' }}>
+                                    {CreateUserID}
+                                </td >
+                                <td style={{ width: '25%', height: '50px', textAlign: 'center',fontSize: '14px' }}>
                                     时间
-                            </td>
-                            <td style={{ width: '32%', height: '50px', textAlign: 'center',fontSize: '14px' }}>
-                                {CreateTime}
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-                <table className={styles.FormTable}>
-                    <tbody>
-                        <tr>
-                            <td style={{width: '87%', height: '50px', textAlign: 'right', border: '0', fontWeight: 'bold'}}>负责人签名：</td>
-                            <td style={{width: '13%', height: '50px', border: '0'}}><img src={SignContent} /></td>
-                        </tr>
-                        <tr>
-                            <td style={{width: '87%', height: '50px', textAlign: 'right', border: '0', fontWeight: 'bold'}}>签名时间：</td>
-                            <td style={{width: '13%', height: '50px', border: '0'}}>{SignTime}</td>
-                        </tr>
-                    </tbody>
-                </table>
-
-                <div className={styles.Toexamine} >
-                    <Button size="large" onClick={() => {
-                        this.props.history.goBack(-1);
-                    }}><Icon type="left" />退回</Button>
+                                </td>
+                                <td style={{ width: '32%', height: '50px', textAlign: 'center',fontSize: '14px' }}>
+                                    {CreateTime}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <table className={styles.FormTable}>
+                        <tbody>
+                            <tr>
+                                <td style={{width: '87%', height: '50px', textAlign: 'right', border: '0', fontWeight: 'bold'}}>负责人签名：</td>
+                                <td style={{width: '13%', height: '50px', border: '0'}}><img src={SignContent} /></td>
+                            </tr>
+                            <tr>
+                                <td style={{width: '87%', height: '50px', textAlign: 'right', border: '0', fontWeight: 'bold'}}>签名时间：</td>
+                                <td style={{width: '13%', height: '50px', border: '0'}}>{SignTime}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div className={styles.Toexamine} >
+                        <Button size="large" onClick={() => {
+                            this.props.history.goBack(-1);
+                        }}><Icon type="left" />退回</Button>
+                    </div>
                 </div>
-            </div>
+            </Spin>
         );
     }
 }

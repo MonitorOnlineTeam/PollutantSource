@@ -106,7 +106,7 @@ export async function GetHistoryStandardGasRepalceRecordList(params) {
         data: null
     } : result;
 }
-// 根据任务id和类型id获取巡检记录表（不通于手机端PC单独做接口)
+// 根据任务id和类型id获取巡检记录表
 export async function GetPatrolRecordListPC(params) {
     const body = {
         TaskID: params.TaskIds,
@@ -196,6 +196,16 @@ export async function GetDeviceExceptionList(params) {
     return result === null ? {
         data: null
     } : result;
+}
+
+// 获取异常记录表内容
+export async function GetDeviceExceptionDetail(params) {
+    const body = {
+        TaskID: params.TaskID,
+        TypeID: params.TypeID
+    };
+    const result = await post('/api/rest/PollutantSourceApi/PTaskForm/DeviceExceptionDetail', body, null);
+    return result === null ? { data: null } : result;
 }
 // 校验测试历史记录列表（历史记录表）
 export async function GetBdHistoryInfoList(params) {
