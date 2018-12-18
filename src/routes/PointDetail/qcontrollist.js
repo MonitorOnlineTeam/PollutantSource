@@ -21,9 +21,9 @@ export default class qcontrollist extends Component {
             { key: EnumPsOperationForm.StopMachine, name: '停机记录表', src: 'StopCemsListHistoryRecords' },
             { key: EnumPsOperationForm.YhpReplace, name: '易耗品更换记录表', src: 'CounterControlCommandHistoryRecords' },
             { key: EnumPsOperationForm.StandardGasReplace, name: '标准气体更换记录表', src: 'StandardGasHistoryRecords' },
-            { key: EnumPsOperationForm.CqfPatrol, name: '完全抽取法CEMS日常巡检记录表', src: 'WQCQFInspectionHistoryRecord' },
-            { key: EnumPsOperationForm.CyfPatrol, name: '稀释采样法CEMS日常巡检记录表', src: 'XSCYFInspectionHistoryRecord' },
-            { key: EnumPsOperationForm.ClfPatrol, name: '直接测量法CEMS日常巡检记录表', src: 'ZZCLFInspectionHistoryRecord' },
+            { key: EnumPsOperationForm.CqfPatrol, name: '日常巡检记录表', src: 'WQCQFInspectionHistoryRecord' },
+            { key: EnumPsOperationForm.CyfPatrol, name: '日常巡检记录表', src: 'XSCYFInspectionHistoryRecord' },
+            { key: EnumPsOperationForm.ClfPatrol, name: '日常巡检记录表', src: 'ZZCLFInspectionHistoryRecord' },
             { key: EnumPsOperationForm.CheckRecord, name: 'CEMS零点量程漂移与校准记录表', src: 'JzHistoryRecords' },
             { key: EnumPsOperationForm.TestRecord, name: 'CEMS校验测试记录', src: 'BdHistoryInfoHistoryRecords' },
             { key: EnumPsOperationForm.DataException, name: 'CEMS设备数据异常记录表', src: 'DeviceExceptionListHistoryRecord' }
@@ -40,22 +40,27 @@ export default class qcontrollist extends Component {
 
     componentDidMount() {
         this.props.dispatch({
-            type: 'task/GetRecordType'
+            type: 'task/GetRecordType',
+            payload: {
+                DGIMN: this.props.match.params.pointcode,
+            }
         });
     }
 
     render() {
+        // console.log(this.props.RecordTypes === null ? null : this.props.RecordTypes);
         const rType = this.props.RecordTypes;
         const { match, routerData } = this.props;
         const routes = getRoutes(match.path, routerData);
         return (
             <div style={{ width: '100%', height: 'calc(100vh - 222px)' }}>
                 {<Layout style={{ padding: '24px 0', background: '#fff' }}>
-                    <Sider width={252} style={{ background: '#fff' }} >
+                    <Sider width={270} style={{ background: '#fff' }} >
                         <Tabs tabPosition="left"
+                            size="default"
                             activeKey={this.state.key}
                             onChange={(key) => {
-                                debugger
+                                debugger;
                                 this.setState({
                                     key: key
                                 });
@@ -63,7 +68,7 @@ export default class qcontrollist extends Component {
                                     return item.key == key;
                                 });
                                 let srcValue = rd[0].src;
-                                
+
                                 this.props.dispatch(routerRedux.push(`/pointdetail/${this.props.match.params.pointcode}/qcontrollist/${srcValue}/${key}`));
                             }}
                         >
