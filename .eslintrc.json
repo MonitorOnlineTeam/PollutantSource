@@ -58,7 +58,9 @@
         "react/jsx-indent-props": [2, 4],
         "react/jsx-boolean-value": [2, "always"],
         "react/prop-types": [0],
-        "jsx-quotes": [2, "prefer-double"]
+        "jsx-quotes": [2, "prefer-double"],
+        "react/jsx-no-bind":0
+        
     },
     "extends": ["standard", "standard-react"]
 }

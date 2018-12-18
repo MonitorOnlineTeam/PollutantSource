@@ -29,7 +29,6 @@ export default class addcoordinate extends Component {
         let lat = '';
         console.log(coordinate);
         if (coordinate === undefined || coordinate === null || coordinate === '') {
-
         } else {
             let coordinatearr = coordinate.replace('，', ',').split(',');
             console.log(coordinatearr);

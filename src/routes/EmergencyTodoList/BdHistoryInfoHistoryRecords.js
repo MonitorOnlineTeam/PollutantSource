@@ -1,22 +1,20 @@
 import React, { Component } from 'react';
 import {
-    Button,
-    Input,
     Card,
     Row,
     Col,
     Table,
     Form,
-    Select, Modal, message, Tag, Radio, Checkbox,
+    Spin,
 } from 'antd';
 import { connect } from 'dva';
 import moment from 'moment';
 import RangePicker_ from '../../components/PointDetail/RangePicker_';
+import styles from './BdHistoryInfoHistoryRecords.less';
 import {routerRedux} from 'dva/router';
-import { DEFAULT_ENCODING } from 'crypto';
 
 @connect(({ task, loading }) => ({
-    // isloading: loading.effects['task/GetJzHistoryRecord'],
+    loading: loading.effects['task/GetBdHistoryInfoList'],
     BdHistoryInfoList: task.List,
     BdHistoryInfoListCount: task.total,
     pageIndex: task.pageIndex,
@@ -37,12 +35,10 @@ export default class BdHistoryInfoHistoryRecords extends Component {
         };
     }
     componentDidMount() {
-        debugger;
         this.GetHistoryRecord(this.props.pageIndex, this.props.pageSize, this.state.DGIMN, this.state.typeID, this.state.BeginTime, this.state.EndTime);
     }
 
     GetHistoryRecord=(pageIndex, pageSize, DGIMN, typeID, BeginTime, EndTime) => {
-        debugger;
         this.props.dispatch({
             type: 'task/GetBdHistoryInfoList',
             payload: {
@@ -95,7 +91,8 @@ export default class BdHistoryInfoHistoryRecords extends Component {
             title: '记录创建时间',
             dataIndex: 'CreateTime',
             width: '20%',
-            key: 'CreateTime'
+            key: 'CreateTime',
+            sorter: (a, b) => Date.parse(a.CreateTime) - Date.parse(b.CreateTime),
         }, {
             title: '详细',
             dataIndex: 'TaskID',
@@ -113,20 +110,20 @@ export default class BdHistoryInfoHistoryRecords extends Component {
                     <Card>
                         <Form layout="inline">
                             <Row gutter={8}>
-                                <Col span={3} >
+                                <Col span={4} >
                             记录创建时间：
                                 </Col>
-                                <Col span={3} >
-                                    <RangePicker_ style={{width: 350}} onChange={this._handleDateChange} format="YYYY-MM-DD" dateValue={this.state.rangeDate} />
+                                <Col span={5} >
+                                    <RangePicker_ style={{width: 350}} onChange={this._handleDateChange} format={'YYYY-MM-DD'} dateValue={this.state.rangeDate} />
                                 </Col>
                             </Row>
                         </Form>
                     </Card>
                     <Table
-                        // loading={this.props.isloading}
+                        loading={this.props.loading}
+                        className={styles.tableCss}
                         columns={columns}
                         dataSource={dataSource}
-                        scroll={{ y: 'calc(100vh - 455px)' }}
                         pagination={{
                             showSizeChanger: true,
                             showQuickJumper: true,
@@ -135,7 +132,7 @@ export default class BdHistoryInfoHistoryRecords extends Component {
                             'current': this.props.pageIndex,
                             onChange: this.onChange,
                             onShowSizeChange: this.onShowSizeChange,
-                            pageSizeOptions: ['5', '10', '20', '30', '40']
+                            pageSizeOptions: ['10', '20', '30', '40']
                         }}
                     />
                 </Card>

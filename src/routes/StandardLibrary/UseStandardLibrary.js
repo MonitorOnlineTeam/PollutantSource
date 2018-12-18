@@ -1,11 +1,13 @@
-import React, { Component,Fragment } from 'react';
+import React, { Component } from 'react';
 import {
-    Card, Icon, Divider, Table, message, Tag, Popconfirm
+    Card, Icon, Divider, Table, message, Tag, Modal, Pagination, Carousel
 } from 'antd';
 import {
     connect
 } from 'dva';
 import PageHeader from '../../components/PageHeader';
+import EditPollutant from '../StandardLibrary/EditPollutant';
+import PollutantView from '../StandardLibrary/PollutantView';
 import styles from './index.less';
 @connect(({loading, standardlibrary}) => ({
     ...loading,
@@ -22,20 +24,30 @@ export default class UseStandardLibrary extends Component {
         this.state = {
             DGIMN: this.props.match.params.DGIMN,
             Fvisible: false,
+            Pvisible: false,
             title: '',
             width: '500',
+            PollutantCode: null,
         };
     }
-    componentWillMount() {
-        this.onChange();
-        this.getpollutantbydgimn();
-    }
+     onRef1 = (ref) => {
+         this.child = ref;
+     };
+     oncancel = () => {
+         this.setState({
+             Fvisible: false,
+         });
+     }
+     componentWillMount() {
+         this.onChange();
+         this.getpollutantbydgimn();
+     }
      onChange = (pageIndex, pageSize) => {
          this.props.dispatch({
              type: 'standardlibrary/getuselist',
              payload: {
-                 pageIndex: pageIndex,
-                 pageSize: pageSize,
+                 pageIndex: pageIndex === undefined ? 1 : pageIndex ,
+                 pageSize: pageSize === undefined ? 4 : pageSize,
              },
          });
      }
@@ -63,43 +75,42 @@ export default class UseStandardLibrary extends Component {
              },
          });
      }
-     confirm = (id,dgimn) => {
+     IsEnabled = (type, record) => {
          this.props.dispatch({
-             type: 'standardlibrary/deletestandardlibrarybyid',
+             type: 'standardlibrary/isusepollutant',
              payload: {
-                 DGIMN: dgimn,
-                 PollutantCode: id,
-                 callback: () => {
-                     if (this.props.requstresult === '1') {
-                         message.success('删除成功！');
-                     } else {
-                         message.success('删除失败！');
-                     }
-                 }
+                 PollutantCode: record.PollutantCode,
+                 DGIMN: this.state.DGIMN,
+                 Enalbe: type,
+                 StandardLibraryID: null,
              },
          });
-     }
+     };
      renderStandardList=() => {
          const rtnVal = [];
          const that = this;
          this.props.list.map(function(item) {
-             if (item.child.length > 1) {
-                 rtnVal.push(
-                     <div className={styles.item}>
-                         <div className={styles.standardlibrary}>{item.Name}</div>
-                         <div className={styles.child}>{that.renderPollutantItem(item.child)}</div>
-                         <div className={styles.foot}>
-                             <div className={styles.use}>
-                                 <a className={styles.a} onClick={() => {
-                                 }}> <Icon type="search"style={{marginRight: 5}} />查看更多</a>
-                                 <Divider type="vertical" />
-                                 <a className={styles.a} onClick={() => {
-                                     that.UseALL(item.key);
-                                 }}> <Icon type="appstore" style={{marginRight: 5}} />应用全部</a>
-                             </div>
+             rtnVal.push(
+                 <div className={styles.item}>
+                     <div className={styles.standardlibrary}>{item.Name}</div>
+                     <div className={styles.child}>{that.renderPollutantItem(item.child)}</div>
+                     <div className={styles.foot}>
+                         <div className={styles.use}>
+                             <a className={styles.a} onClick={() => {
+                                 that.setState({
+                                     StandardLibraryID: item.key,
+                                     Pvisible: true,
+                                     title: item.Name + '中的污染物',
+                                     width: '90%',
+                                 });
+                             }}> <Icon type="search"style={{marginRight: 5}} />查看更多</a>
+                             <Divider type="vertical" />
+                             <a className={styles.a} onClick={() => {
+                                 that.UseALL(item.key);
+                             }}> <Icon type="appstore" style={{marginRight: 5}} />应用全部</a>
                          </div>
-                     </div>);
-             }
+                     </div>
+                 </div>);
          });
          return rtnVal;
      }
@@ -127,7 +138,7 @@ export default class UseStandardLibrary extends Component {
                  title: '污染物名称',
                  dataIndex: 'PollutantName',
                  key: 'PollutantName',
-                 width: '50%',
+                 width: '40%',
                  render: (text, record) => {
                      return text;
                  }
@@ -139,12 +150,12 @@ export default class UseStandardLibrary extends Component {
                  width: '10%',
                  render: (text, record) => {
                      if (text === 0) {
-                         return <span > <Tag color="lime" > 区间报警 </Tag > </span >;
+                         return <span style={{color: 'blue'}} >  区间报警  </span >;
                      }
                      if (text === 1) {
-                         return <span > <Tag color="green" > 上限报警 </Tag > </span >;
+                         return <span style={{color: 'red'}} >上限报警  </span >;
                      }
-                     return <span > <Tag color="cyan" > 下线报警 </Tag > </span >;
+                     return <span style={{color: 'green'}} >  下线报警 </span >;
                  }
              },
              {
@@ -166,21 +177,38 @@ export default class UseStandardLibrary extends Component {
                  }
              },
              {
+                 title: '监测状态',
+                 dataIndex: 'IsUse',
+                 key: 'IsUse',
+                 width: '10%',
+                 render: (text, record) => {
+                     if (text === '0') {
+                         return <span > <Tag color="red" > <a title="单击设置为监测中" onClick={
+                             () => this.IsEnabled(1, record)
+                         } ><Icon type="play-circle" />  未监测 </a></Tag > </span>;
+                     }
+                     return <span > <Tag color="blue" > <a title="单击从监测中移除"
+                         onClick={
+                             () => this.IsEnabled(0, record)
+                         } ><Icon type="play-circle" spin={true} /> 监测中 </a></Tag > </span>;
+                 }
+             },
+             {
                  title: '操作',
                  width: '10%',
-                 render: (text, record) => (<Fragment >
-                     <a onClick={
-                         () => this.setState({
-                             Fvisible: true,
-                             title: '编辑污染物',
-                             width: '50%',
-                         })
-                     } > 编辑 </a> <Divider type="vertical" />
-                     <Popconfirm placement="left" title="确定要删除此条数据吗？" onConfirm={() => this.confirm(record.PollutantCode,record.DGIMN)} okText="是" cancelText="否">
-                         <a href="#" > 删除 </a>
-                     </Popconfirm>
-                 </Fragment >
-                 ),
+                 render: (text, record) => {
+                     if (record.IsUse === '1') {
+                         return <a onClick={
+                             () => this.setState({
+                                 Fvisible: true,
+                                 title: '编辑污染物',
+                                 width: '50%',
+                                 PollutantCode: record.PollutantCode
+                             })
+                         } > 编辑 </a>;
+                     }
+                     return <a style={{color: 'gray'}} > 编辑 </a>;
+                 }
              },
          ];
          return (
@@ -200,7 +228,15 @@ export default class UseStandardLibrary extends Component {
                          this.renderStandardList()
                      }
                  </div>
-
+                 <div className={styles.Pagination}>
+                     <Pagination
+                         defaultCurrent={1}
+                         pageSize={4}
+                         total={this.props.total}
+                         current={this.props.pageIndex}
+                         onChange={this.onChange}
+                     />
+                 </div>
                  <div className={styles.pageHeader}>
                      <h3>污染物标准选择</h3>
                  </div>
@@ -212,10 +248,44 @@ export default class UseStandardLibrary extends Component {
                              columns={columns}
                              size="small"
                              dataSource={this.props.requstresult === '1' ? this.props.PollutantListByDGIMN : null}
-                             pagination={false}
+                             pagination={true}
                          />
                      </div>
                  </Card>
+                 <Modal
+                     visible={this.state.Fvisible}
+                     title={this.state.title}
+                     width={this.state.width}
+                     footer={false}
+                     destroyOnClose={true}// 清除上次数据
+                     onCancel={
+                         () => {
+                             this.setState({
+                                 Fvisible: false
+                             });
+                         }
+                     } >
+                     {
+                         <EditPollutant pid={this.state.PollutantCode} DGIMN={this.state.DGIMN} onRef={this.onRef1} oncancel={this.oncancel} />
+                     }
+                 </Modal>
+                 <Modal
+                     visible={this.state.Pvisible}
+                     title={this.state.title}
+                     width={this.state.width}
+                     footer={false}
+                     destroyOnClose={true}// 清除上次数据
+                     onCancel={
+                         () => {
+                             this.setState({
+                                 Pvisible: false
+                             });
+                         }
+                     } >
+                     {
+                         <PollutantView StandardLibraryID={this.state.StandardLibraryID} />
+                     }
+                 </Modal>
              </div>
          );
      }

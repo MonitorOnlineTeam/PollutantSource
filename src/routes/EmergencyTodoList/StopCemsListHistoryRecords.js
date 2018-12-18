@@ -1,23 +1,21 @@
 import React, { Component } from 'react';
 import {
-    Button,
-    Input,
     Card,
     Row,
     Col,
     Table,
     Form,
-    Select, Modal, message, Tag, Radio, Checkbox,
+    Spin
 } from 'antd';
 import { connect } from 'dva';
 import moment from 'moment';
 import RangePicker_ from '../../components/PointDetail/RangePicker_';
+import styles from '../EmergencyTodoList/StopCemsListHistoryRecords.less';
 import {routerRedux} from 'dva/router';
-import { DEFAULT_ENCODING } from 'crypto';
 
 @connect(({ task, loading }) => ({
-    // isloading: loading.effects['task/GetJzHistoryRecord'],
-    HistoryStopCemsListHistoryRecords: task.List,
+    loading: loading.effects['task/GetHistoryStopCemsList'],
+    HistoryStopCemsListHistoryRecords: task.HistoryStopCemsList,
     HistoryStopCemsListHistoryRecordsCount: task.total,
     pageIndex: task.pageIndex,
     pageSize: task.pageSize,
@@ -37,12 +35,14 @@ export default class StopCemsListHistoryRecords extends Component {
         };
     }
     componentDidMount() {
-        debugger
         this.GetHistoryRecord(this.props.pageIndex, this.props.pageSize, this.state.DGIMN, this.state.TypeID, this.state.BeginTime, this.state.EndTime);
+        const _this = this;
+        _this.setState({
+            loading: false
+        });
     }
 
     GetHistoryRecord=(pageIndex, pageSize, DGIMN, typeID, BeginTime, EndTime) => {
-        debugger
         this.props.dispatch({
             type: 'task/GetHistoryStopCemsList',
             payload: {
@@ -76,8 +76,8 @@ export default class StopCemsListHistoryRecords extends Component {
     }
 
     seeDetail=(record) => {
-        debugger
-        this.props.dispatch(routerRedux.push(`/pointdetail/:pointcode/StopCemsInfo/${record.TaskID}/${this.state.TypeID}`));////////跳转页面没做（跳转的页面还没有完成）
+        debugger;
+        this.props.dispatch(routerRedux.push(`/pointdetail/:pointcode/StopCemsInfo/${record.TaskID}/${this.state.TypeID}`));
     }
 
     render() {
@@ -88,7 +88,7 @@ export default class StopCemsListHistoryRecords extends Component {
             dataIndex: 'CreateUserID',
             key: 'CreateUserID'
         }, {
-            title: '停机时长',
+            title: '停机时长(小时)',
             width: '45%',
             dataIndex: 'StopHour',
             key: 'StopHour'
@@ -96,7 +96,8 @@ export default class StopCemsListHistoryRecords extends Component {
             title: '记录创建时间',
             dataIndex: 'CreateTime',
             width: '20%',
-            key: 'CreateTime'
+            key: 'CreateTime',
+            sorter: (a, b) => Date.parse(a.CreateTime) - Date.parse(b.CreateTime),
         }, {
             title: '详细',
             dataIndex: 'TaskID',
@@ -114,20 +115,20 @@ export default class StopCemsListHistoryRecords extends Component {
                     <Card>
                         <Form layout="inline">
                             <Row gutter={8}>
-                                <Col span={3} >
+                                <Col span={4} >
                             记录创建时间：
                                 </Col>
-                                <Col span={3} >
-                                    <RangePicker_ style={{width: 350}} onChange={this._handleDateChange} format="YYYY-MM-DD" dateValue={this.state.rangeDate} />
+                                <Col span={5} >
+                                    <RangePicker_ style={{width: 350}} onChange={this._handleDateChange} format={'YYYY-MM-DD'} dateValue={this.state.rangeDate} />
                                 </Col>
                             </Row>
                         </Form>
                     </Card>
                     <Table
-                        // loading={this.props.isloading}
+                        loading={this.props.loading}
+                        className={styles.tableCss}
                         columns={columns}
                         dataSource={dataSource}
-                        scroll={{ y: 'calc(100vh - 455px)' }}
                         pagination={{
                             showSizeChanger: true,
                             showQuickJumper: true,
@@ -136,7 +137,7 @@ export default class StopCemsListHistoryRecords extends Component {
                             'current': this.props.pageIndex,
                             onChange: this.onChange,
                             onShowSizeChange: this.onShowSizeChange,
-                            pageSizeOptions: ['5', '10', '20', '30', '40']
+                            pageSizeOptions: ['10', '20', '30', '40']
                         }}
                     />
                 </Card>

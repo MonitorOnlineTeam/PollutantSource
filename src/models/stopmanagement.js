@@ -2,21 +2,20 @@ import {
     Model
 } from '../dvapack';
 import {
-    getpointlist, addpoint, getoperationsuserList, getpoint, editpoint, deletepoint
-} from '../services/pointinfo';
+    getlist, getlistbyid, deletebyid, addoutputstop, uploadfiles, deletefiles, outputstoptimechecked, getoutputstopfiles
+} from '../services/stopmanagement';
 export default Model.extend({
-    namespace: 'pointinfo',
+    namespace: 'stopmanagement',
 
     state: {
         requstresult: null,
         list: [],
-        userlist: [],
-        editpoint: null,
         total: 0,
         loading: false,
         pageSize: 10,
         pageIndex: 1,
         reason: null,
+        fileslist: [],
     },
     subscriptions: {
         setup({
@@ -37,11 +36,15 @@ export default Model.extend({
         },
     },
     effects: {
-        * getpointlist({
+        * getlist({
             payload: {
                 pageIndex,
                 pageSize,
-                DGIMNs
+                StopHours,
+                RecordUserName,
+                DGIMN,
+                Data,
+                datatype
             }
         }, {
             call,
@@ -49,10 +52,14 @@ export default Model.extend({
             update,
             select
         }) {
-            const result = yield call(getpointlist, {
+            const result = yield call(getlist, {
                 pageIndex: pageIndex,
                 pageSize: pageSize,
-                DGIMNs: DGIMNs
+                StopHours: StopHours,
+                RecordUserName: RecordUserName,
+                DGIMN: DGIMN,
+                Data: Data,
+                datatype: datatype,
             });
 
             if (result.requstresult === '1') {
@@ -73,25 +80,13 @@ export default Model.extend({
                 });
             }
         },
-        * addpoint({
+        * addoutputstop({
             payload: {
                 DGIMN,
-                PointName,
-                PointType,
-                PollutantType,
-                IsSj,
-                Coordinate,
-                OutPutWhitherCode,
-                Linkman,
-                MobilePhone,
-                GasOutputTypeCode,
-                OutputDiameter,
-                OutputHigh,
-                Sort,
-                Address,
-                OutputType,
-                OperationerId,
-                callback
+                Data,
+                StopDescription,
+                Files,
+                callback,
             }
         }, {
             call,
@@ -99,33 +94,21 @@ export default Model.extend({
             update,
             select
         }) {
-            const result = yield call(addpoint, {
+            const result = yield call(addoutputstop, {
                 DGIMN: DGIMN,
-                PointName: PointName,
-                PointType: PointType,
-                PollutantType: PollutantType,
-                IsSj: IsSj,
-                Coordinate: Coordinate,
-                OutPutWhitherCode: OutPutWhitherCode,
-                Linkman: Linkman,
-                MobilePhone: MobilePhone,
-                GasOutputTypeCode: GasOutputTypeCode,
-                OutputDiameter: OutputDiameter,
-                OutputHigh: OutputHigh,
-                Sort: Sort,
-                Address: Address,
-                OutputType: OutputType,
-                OperationerId: OperationerId,
+                Data: Data,
+                StopDescription: StopDescription,
+                Files: Files,
             });
             yield update({
                 requstresult: result.requstresult,
-                reason: result.reason,
+                reason: result.reason
             });
             callback();
         },
-        * getoperationsuserList({
+        * getlistbyid({
             payload: {
-                callback
+                OutputStopID
             }
         }, {
             call,
@@ -133,27 +116,75 @@ export default Model.extend({
             update,
             select
         }) {
-            const result = yield call(getoperationsuserList, {
+            const result = yield call(getlistbyid, {
+                OutputStopID: OutputStopID
             });
+
             if (result.requstresult === '1') {
                 yield update({
                     requstresult: result.requstresult,
-                    userlist: result.data,
-                    total: result.total,
+                    editlsit: result.data[0],
                 });
             } else {
                 yield update({
                     requstresult: result.requstresult,
-                    userlist: [],
-                    total: 0,
+                    editlsit: null,
+                    reason: result.reason,
+                });
+            }
+        },
+        * deletebyid({
+            payload: {
+                OutputStopID,
+                pageIndex,
+                pageSize,
+                StopHours,
+                RecordUserName,
+                DGIMN,
+                Data,
+                datatype,
+            }
+        }, {
+            call,
+            put,
+            update,
+            select,
+            callback
+        }) {
+            const result = yield call(deletebyid, {
+                OutputStopID: OutputStopID
+            });
+
+            if (result.requstresult === '1') {
+                yield update({
+                    requstresult: result.requstresult,
+                    reason: result.reason,
+                });
+                yield put({
+                    type: 'getpollutantbydgimn',
+                    payload: {
+                        pageIndex: pageIndex,
+                        pageSize: pageSize,
+                        StopHours: StopHours,
+                        RecordUserName: RecordUserName,
+                        DGIMN: DGIMN,
+                        Data: Data,
+                        datatype: datatype,
+                    },
+                });
+            } else {
+                yield update({
+                    requstresult: result.requstresult,
+                    reason: result.reason,
                 });
             }
             callback();
         },
-        * getpoint({
+        * uploadfiles({
             payload: {
-                DGIMN,
-                callback
+                file,
+                fileName,
+                callback,
             }
         }, {
             call,
@@ -161,35 +192,20 @@ export default Model.extend({
             update,
             select
         }) {
-            
-            const result = yield call(getpoint, {
-                DGIMN: DGIMN
+            const result = yield call(uploadfiles, {
+                file: file,
+                fileName: fileName,
             });
             yield update({
                 requstresult: result.requstresult,
-                editpoint: result.data[0]
+                reason: result.reason
             });
             callback();
         },
-        * editpoint({
+        * deletefiles({
             payload: {
-                DGIMN,
-                PointName,
-                PointType,
-                PollutantType,
-                IsSj,
-                Coordinate,
-                OutPutWhitherCode,
-                Linkman,
-                MobilePhone,
-                GasOutputTypeCode,
-                OutputDiameter,
-                OutputHigh,
-                Sort,
-                Address,
-                OutputType,
-                OperationerId,
-                callback
+                guid,
+                callback,
             }
         }, {
             call,
@@ -197,36 +213,40 @@ export default Model.extend({
             update,
             select
         }) {
-            const result = yield call(editpoint, {
+            const result = yield call(deletefiles, {
+                guid: guid,
+            });
+            yield update({
+                requstresult: result.requstresult,
+                reason: result.reason
+            });
+            callback();
+        },
+        * outputstoptimechecked({
+            payload: {
+                DGIMN,
+                Data,
+                callback,
+            }
+        }, {
+            call,
+            put,
+            update,
+            select
+        }) {
+            const result = yield call(outputstoptimechecked, {
                 DGIMN: DGIMN,
-                PointName: PointName,
-                PointType: PointType,
-                PollutantType: PollutantType,
-                IsSj: IsSj,
-                Coordinate: Coordinate,
-                OutPutWhitherCode: OutPutWhitherCode,
-                Linkman: Linkman,
-                MobilePhone: MobilePhone,
-                GasOutputTypeCode: GasOutputTypeCode,
-                OutputDiameter: OutputDiameter,
-                OutputHigh: OutputHigh,
-                Sort: Sort,
-                Address: Address,
-                OutputType: OutputType,
-                OperationerId: OperationerId,
+                Data: Data,
             });
             yield update({
                 requstresult: result.requstresult,
-                reason: result.reason,
+                reason: result.reason
             });
             callback();
         },
-        * deletepoint({
+        * getoutputstopfiles({
             payload: {
-                DGIMN,
-                DGIMNs,
-                pageIndex,
-                pageSize,
+                OutputStopID,
                 callback
             }
         }, {
@@ -235,20 +255,13 @@ export default Model.extend({
             update,
             select
         }) {
-            const result = yield call(deletepoint, {
-                DGIMN: DGIMN
+            const result = yield call(getoutputstopfiles, {
+                OutputStopID: OutputStopID
             });
             yield update({
+                fileslist: result.data,
                 requstresult: result.requstresult,
-                reason: result.reason,
-            });
-            yield put({
-                type: 'getpointlist',
-                payload: {
-                    pageIndex,
-                    pageSize,
-                    DGIMNs,
-                },
+                reason: result.reason
             });
             callback();
         },

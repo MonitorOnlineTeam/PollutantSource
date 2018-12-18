@@ -1,22 +1,23 @@
 
 import React, { Component } from 'react';
 import {
-    Button,
-    Input,
     Card,
     Row,
     Col,
     Table,
     Form,
-    Select, Modal, message, Tag, Radio, Checkbox,
+    Spin,
+    Tag
 } from 'antd';
 import { connect } from 'dva';
 import moment from 'moment';
 import RangePicker_ from '../../components/PointDetail/RangePicker_';
+import styles from '../EmergencyTodoList/ZZCLFInspectionHistoryRecord.less';
 import {routerRedux} from 'dva/router';
 
     @connect(({ task, loading }) => ({
-        HistoryInspectionHistoryRecordList: task.List,
+        loading: loading.effects['task/GetHistoryInspectionHistoryRecord'],
+        HistoryInspectionHistoryRecordList: task.HistoryInspectionHistoryRecordList,
         HistoryInspectionHistoryRecordListCount: task.total,
         pageIndex: task.pageIndex,
         pageSize: task.pageSize,
@@ -38,7 +39,6 @@ export default class ZZCLFInspectionHistoryRecord extends Component {
         componentDidMount() {
             this.GetHistoryRecord(this.props.pageIndex, this.props.pageSize, this.state.DGIMN, this.state.typeID, this.state.BeginTime, this.state.EndTime);
         }
-
         GetHistoryRecord=(pageIndex, pageSize, DGIMN, typeID, BeginTime, EndTime) => {
             this.props.dispatch({
                 type: 'task/GetHistoryInspectionHistoryRecord',
@@ -73,7 +73,7 @@ export default class ZZCLFInspectionHistoryRecord extends Component {
         }
 
         seeDetail=(record) => {
-            debugger
+            debugger;
             this.props.dispatch(routerRedux.push(`/pointdetail/:pointcode/DirectMeasurement/${record.TaskID}/${this.state.typeID}`));
         }
 
@@ -88,12 +88,27 @@ export default class ZZCLFInspectionHistoryRecord extends Component {
                 title: '维护情况',
                 width: '45%',
                 dataIndex: 'Content',
-                key: 'Content'
+                key: 'Content',
+                render: (text, record) => {
+                    if (text !== undefined) {
+                        var content = text.split(',');
+                        var resu = [];
+                        content.map((item,key) => {
+                            item = item.replace('(','  ');
+                            item = item.replace(')','');
+                            resu.push(
+                                <Tag color="#108ee9">{item}</Tag>
+                            );
+                        });
+                    }
+                    return resu;
+                }
             }, {
                 title: '记录创建时间',
                 dataIndex: 'CreateTime',
                 width: '20%',
-                key: 'CreateTime'
+                key: 'CreateTime',
+                sorter: (a, b) => Date.parse(a.CreateTime) - Date.parse(b.CreateTime),
             }, {
                 title: '详细',
                 dataIndex: 'TaskID',
@@ -111,20 +126,20 @@ export default class ZZCLFInspectionHistoryRecord extends Component {
                         <Card>
                             <Form layout="inline">
                                 <Row gutter={8}>
-                                    <Col span={3} >
+                                    <Col span={4} >
                                 记录创建时间：
                                     </Col>
-                                    <Col span={3} >
-                                        <RangePicker_ style={{width: 350}} onChange={this._handleDateChange} format="YYYY-MM-DD" dateValue={this.state.rangeDate} />
+                                    <Col span={5} >
+                                        <RangePicker_ style={{width: 350}} onChange={this._handleDateChange} format={'YYYY-MM-DD'} dateValue={this.state.rangeDate} />
                                     </Col>
                                 </Row>
                             </Form>
                         </Card>
                         <Table
-                            // loading={this.props.isloading}
+                            loading={this.props.loading}
+                            className={styles.tableCss}
                             columns={columns}
                             dataSource={dataSource}
-                            scroll={{ y: 'calc(100vh - 455px)' }}
                             pagination={{
                                 showSizeChanger: true,
                                 showQuickJumper: true,
@@ -133,7 +148,7 @@ export default class ZZCLFInspectionHistoryRecord extends Component {
                                 'current': this.props.pageIndex,
                                 onChange: this.onChange,
                                 onShowSizeChange: this.onShowSizeChange,
-                                pageSizeOptions: ['5', '10', '20', '30', '40']
+                                pageSizeOptions: ['10', '20', '30', '40']
                             }}
                         />
                     </Card>

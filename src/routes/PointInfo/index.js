@@ -115,6 +115,7 @@ export default class pointlist extends Component {
              this.props.dispatch(routerRedux.push(`/sysmanage/UseStandardLibrary/${id}/${name}`));
              break;
          case '2':
+             this.props.dispatch(routerRedux.push(`/sysmanage/StopManagement/${id}/${name}`));
              break;
          case '3':
              this.props.dispatch(routerRedux.push(`/sysmanage/VideoLists/${id}/${name}`));

@@ -1,3 +1,26 @@
 .columnStyle{
     text-align: center;
 }
+.tableCss {
+    :global {
+        .ant-table-body {
+            height: calc(100vh - 45px);
+            overflow: hidden;
+            overflow-y: scroll;
+            &::-webkit-scrollbar{
+                width:8px;
+                height:8px;
+               }
+               &::-webkit-scrollbar-thumb{
+                height:50px;
+                background-color:#61A1D5;
+                outline-offset:-2px;
+                border: 2px solid #61A1D5;
+               }
+               &::-webkit-scrollbar-thumb:hover{
+                height:50px;
+                background-color:#61A1D5;
+               }
+        }
+      }
+}
