@@ -135,6 +135,7 @@ export default class StopCemsListHistoryRecords extends Component {
                     </Card>
                     <Table
                         size={'middle'}
+                        scroll={{ y: 'calc(100vh - 190px)' }}
                         loading={this.props.loading}
                         className={styles.tableCss}
                         columns={columns}
