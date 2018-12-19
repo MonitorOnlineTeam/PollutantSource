@@ -10,6 +10,7 @@ import {
     Select, Modal, message, Tag, Divider, Dropdown,Icon,Menu
 } from 'antd';
 import DataFilter from '../Userinfo/DataFilter';
+import NewDataFilter from '../Userinfo/DataFilterNew';
 import {routerRedux} from 'dva/router';
 import {connect} from 'dva';
 const Option = Select.Option;
@@ -105,7 +106,9 @@ export default class UserList extends Component {
                 DeleteMark: this.props.DeleteMark,
                 UserAccount: this.props.UserAccount,
                 UserId: record.User_ID,
-                Enalbe: type
+                Enalbe: type,
+                NewDataFiltervisible: false,
+
             },
         });
     };
@@ -137,6 +140,14 @@ export default class UserList extends Component {
                     userId: id,
                 });
                 break;
+            case '3':
+                this.setState({
+                    NewDataFiltervisible: true,
+                    title: '数据过滤',
+                    width: 1130,
+                    userId: id,
+                });
+                break;
             default:
                 break;
         }
@@ -148,6 +159,7 @@ export default class UserList extends Component {
             }}>
                 <Menu.Item key="1"><Icon type="delete" />删除</Menu.Item>
                 <Menu.Item key="2"><Icon type="setting" />数据过滤</Menu.Item>
+                <Menu.Item key="3"><Icon type="setting" />新数据过滤</Menu.Item>
             </Menu>
         );
         const columns = [{
@@ -333,6 +345,21 @@ export default class UserList extends Component {
                     }}>
                     {
                         this.state.type === 'datafilter' ? <DataFilter pid={this.state.userId} onRef={this.onRef1} complant={this.AddCompletion} /> : ''
+                    }
+                </Modal>
+                <Modal
+                    visible={this.state.NewDataFiltervisible}
+                    title={this.state.title}
+                    width={this.state.width}
+                    destroyOnClose={true}// 清除上次数据
+                    footer={false}
+                    onCancel={() => {
+                        this.setState({
+                            NewDataFiltervisible: false
+                        });
+                    }}>
+                    {
+                        <NewDataFilter pid={this.state.userId} />
                     }
                 </Modal>
             </Card>
