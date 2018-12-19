@@ -17,12 +17,12 @@ export async function userDgimnDataFilter(params) {
     } : result;
 }
 // 添加数据权限
-export async function adduserDgimnDataFilter(params) {
+export async function addAllDgimnDataFilter(params) {
     const body = {
         UserId: params.UserId,
         DGIMNS: params.DGIMNS,
     };
-    const result = post('/api/rest/PollutantSourceApi/PUserInfo/AddUserDgimnDataFilter', body, null);
+    const result = post('/api/rest/PollutantSourceApi/PUserInfo/AddAllDgimnDataFilter', body, null);
     return result === null ? {
         data: null
     } : result;

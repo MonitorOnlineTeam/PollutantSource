@@ -14,7 +14,8 @@ const Search = Input.Search;
     loading,
     userdgimndata
 }) => ({
-    isloading: loading.effects['userdgimndata/userDgimnDataFilter'],
+    addloading: loading.effects['userdgimndata/addAllDgimnDataFilter'],
+    listloading: loading.effects['userdgimndata/userDgimnDataFilter'],
     list: userdgimndata.list,
     total: userdgimndata.total,
     pageSize: userdgimndata.pageSize,
@@ -39,7 +40,6 @@ export default class DataFilterNew extends Component {
         });
         this.onChange();
     }
-    // {this.props.ischecked.IsCheck}
     onChange = (pageIndex, pageSize) => {
         this.props.dispatch({
             type: 'userdgimndata/userDgimnDataFilter',
@@ -47,8 +47,12 @@ export default class DataFilterNew extends Component {
                 UserId: this.props.pid,
                 pageIndex: pageIndex === undefined ? 1 : pageIndex,
                 pageSize: pageSize === undefined ? 12 : pageSize,
-
+                TestKey: this.state.testkey,
                 callback: () => {
+                    this.setState({
+                        selected: (new Map(): Map < string, boolean >),
+                        alldgimn: (new Map(): Map < string, boolean >),
+                    });
                     this.setState((state) => {
                         // copy the map rather than modifying state.
                         const selected = new Map(state.selected);
@@ -106,33 +110,65 @@ export default class DataFilterNew extends Component {
               },
           });
       }
-      AddDataFilter=() => {
+      AddAllPointClick = () => {
           const selected = new Map(this.state.selected);
-          let arr = [];
-
-          if (selected.size > 0) {
-              selected.forEach((item, key, mapObj) => {
-                  arr.push(key);
-              });
+          const alldgimn = new Map(this.state.alldgimn);
+          if (selected.size === alldgimn.size) {
               this.props.dispatch({
-                  type: 'userdgimndata/adduserDgimnDataFilter',
+                  type: 'userdgimndata/addAllDgimnDataFilter',
                   payload: {
                       UserId: this.state.userid,
-                      DGIMNS: arr.join(','),
+                      DGIMNS: '',
                       callback: () => {
                           if (this.props.requstresult === '1') {
-                              message.success('关联排口成功', 3).then(() => this.props.complant());
+                              this.setState((state) => {
+                                  selected.clear();
+                                  return {
+                                      selected
+                                  };
+                              });
                           } else {
-                              message.error('添加失败');
+                              message.error('全选失败，请重试！');
                           }
                       }
                   },
               });
           } else {
-              message.error('请选择排口');
+              let arr = [];
+              if (alldgimn.size > 0) {
+                  alldgimn.forEach((item, key, mapObj) => {
+                      arr.push(key);
+                  });
+                  this.props.dispatch({
+                      type: 'userdgimndata/addAllDgimnDataFilter',
+                      payload: {
+                          UserId: this.state.userid,
+                          DGIMNS: arr.join(','),
+                          callback: () => {
+                              if (this.props.requstresult === '1') {
+                                  this.setState((state) => {
+                                      const selected = new Map(state.selected);
+                                      this.props.alldgimn.map((item, key) => {
+                                          if (selected.get(item) === undefined) {
+                                              selected.set(item, true); // toggle
+                                          }
+                                      });
+                                      return {
+                                          selected
+                                      };
+                                  });
+                              } else {
+                                  message.error('全选失败，请重试！');
+                              }
+                          }
+                      },
+                  });
+              } else {
+                  message.error('请选择排口');
+              }
           }
       }
-      handleClick = (DGIMN) => {
+      AddPointClick = (DGIMN) => {
           this.props.dispatch({
               type: 'userdgimndata/addDgimnDataFilter',
               payload: {
@@ -163,7 +199,7 @@ export default class DataFilterNew extends Component {
              const that = this;
              this.props.list.map(function(item) {
                  rtnVal.push(<div onClick={() => {
-                     that.handleClick(item.DGIMN)
+                     that.AddPointClick(item.DGIMN)
                      ;
                  }} className={that.state.selected.get(item.DGIMN) ? `${styles.item} ${styles.CorrelationYes}` : `${styles.item} ${styles.CorrelationNo}`}>
                      <div className={styles.PointName}>
@@ -187,77 +223,51 @@ export default class DataFilterNew extends Component {
          }
          render() {
              return (
-                 <Spin spinning={this.props.isloading}>
-                     <div>
-                         <Card>
-                             <Form layout="inline">
-                                 <Row gutter={16} >
-                                     <Col span={5} >
-                                         <Search placeholder="排口名称、排口编号"
-                                             style={{ width: 200 }}
-                                             onSearch={
-                                                 (value) => {
-                                                     this.setState({
-                                                         testkey: value
-                                                     });
-                                                     this.props.dispatch({
-                                                         type: 'userdgimndata/userDgimnDataFilter',
-                                                         payload: {
-                                                             UserId: this.state.userid,
-                                                             pageIndex: this.props.pageIndex,
-                                                             pageSize: this.props.pageSize,
-                                                             TestKey: value,
-                                                             callback: () => {
-
-                                                             }
-                                                         },
-                                                     });
-                                                 }
-                                             } />
-                                     </Col>
-                                     <Col span={5} >
-                                         <Button type="primary" onClick={() => {
-                                             this.setState((state) => {
-                                             // copy the map rather than modifying state.
-                                                 const selected = new Map(state.selected);
-
-                                                 const alldgimn = new Map(state.alldgimn);
-
-                                                 if (selected.size === alldgimn.size) {
-                                                     selected.clear();
-                                                 } else {
-                                                     this.props.alldgimn.map((item, key) => {
-                                                         if (selected.get(item) === undefined) {
-                                                             selected.set(item, true); // toggle
-                                                         }
-                                                     });
-                                                 }
-                                                 return {
-                                                     selected
-                                                 };
-                                             });
-                                         }}>全选</Button>
-                                     </Col>
-                                 </Row>
-                             </Form>
-                         </Card>
-                         <div className={styles.card}>
-                             {this.renderStandardList()}
+                 <Spin spinning={this.props.listloading}>
+                     <Spin spinning={this.props.addloading}>
+                         <div>
+                             <Card>
+                                 <Form layout="inline">
+                                     <Row gutter={16} >
+                                         <Col span={5} >
+                                             <Search placeholder="排口名称、排口编号"
+                                                 style={{ width: 200 }}
+                                                 onSearch={
+                                                     (value) => {
+                                                         this.setState({
+                                                             testkey: value
+                                                         },() => {
+                                                             this.onChange();
+                                                         });
+                                                     }
+                                                 } />
+                                         </Col>
+                                         <Col span={5} >
+                                             <Button type="primary" onClick={() => {
+                                                 this.AddAllPointClick();
+                                             }}>全选</Button>
+                                         </Col>
+                                     </Row>
+                                 </Form>
+                             </Card>
+                             <div className={styles.card}>
+                                 {this.renderStandardList()}
+                             </div>
+                             <div style={{textAlign: 'center',marginTop: 20}}>
+                                 <Pagination
+                                     size={'small'}
+                                     showSizeChanger={true}
+                                     showQuickJumper={true}
+                                     total={this.props.total}
+                                     pageSize={this.props.pageSize}
+                                     current={this.props.pageIndex}
+                                     onChange={this.PonChange}
+                                     onShowSizeChange={this.onShowSizeChange}
+                                     pageSizeOptions={['12', '16', '20', '24', '28']}
+                                 />
+                             </div>
                          </div>
-                         <div style={{textAlign: 'center',marginTop: 20}}>
-                             <Pagination
-                                 size={'small'}
-                                 showSizeChanger={true}
-                                 showQuickJumper={true}
-                                 total={this.props.total}
-                                 pageSize={this.props.pageSize}
-                                 current={this.props.pageIndex}
-                                 onChange={this.PonChange}
-                                 onShowSizeChange={this.onShowSizeChange}
-                                 pageSizeOptions={['12', '16', '20', '24', '28']}
-                             />
-                         </div>
-                     </div>
+                     </Spin>
                  </Spin>
              );
          }
