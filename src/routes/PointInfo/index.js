@@ -24,6 +24,9 @@ import {
 import {
     connect
 } from 'dva';
+import MonitorContent from '../../components/MonitorContent/index';
+import styles from './index.less';
+import { Styles } from 'docx';
 const Search = Input.Search;
 const confirm = Modal.confirm;
 
@@ -229,9 +232,10 @@ export default class pointlist extends Component {
      },
      ];
      return (
-         <Card bordered={false}>
-             <Card >
-                 <Form layout="inline" >
+         <MonitorContent>
+             <Card bordered={false}>
+
+                 <Form layout="inline" style={{marginBottom: 10}}>
                      <Row gutter={8} >
                          <Col span={3} >
                              <Search placeholder="排口名称/编号"
@@ -260,26 +264,29 @@ export default class pointlist extends Component {
                                  } > 添加 </Button></Col >
                      </Row>
                  </Form>
+                 <Table loading={this.props.effects['pointinfo/getpointlist']}
+                     columns={
+                         columns
+                     }
+                     dataSource={
+                         this.props.requstresult === '1' ? this.props.list : null
+                     }
+                     className={styles.dataTable}
+                     size="small"// small middle
+                     scroll={{ y: 'calc(100vh - 68px)' }}
+                     pagination={
+                         {
+                             showSizeChanger: true,
+                             showQuickJumper: true,
+                             'total': this.props.total,
+                             'pageSize': this.props.pageSize,
+                             'current': this.props.pageIndex,
+                             onChange: this.onChange,
+                             onShowSizeChange: this.onShowSizeChange,
+                             pageSizeOptions: ['10', '20', '30', '40']
+                         }} />
              </Card>
-             <Table loading={this.props.effects['pointinfo/getpointlist']}
-                 columns={
-                     columns
-                 }
-                 dataSource={
-                     this.props.requstresult === '1' ? this.props.list : null
-                 }
-                 pagination={
-                     {
-                         showSizeChanger: true,
-                         showQuickJumper: true,
-                         'total': this.props.total,
-                         'pageSize': this.props.pageSize,
-                         'current': this.props.pageIndex,
-                         onChange: this.onChange,
-                         onShowSizeChange: this.onShowSizeChange,
-                         pageSizeOptions: ['10', '20', '30', '40']
-                     }} />
-         </Card>
+         </MonitorContent>
      );
  }
 }
