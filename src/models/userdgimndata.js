@@ -2,7 +2,7 @@ import {
     Model
 } from '../dvapack';
 import {
-    userDgimnDataFilter, adduserDgimnDataFilter
+    userDgimnDataFilter, adduserDgimnDataFilter, addDgimnDataFilter
 } from '../services/userDgimnData';
 export default Model.extend({
     namespace: 'userdgimndata',
@@ -89,7 +89,6 @@ export default Model.extend({
             update,
             select
         }) {
-            debugger;
             const result = yield call(adduserDgimnDataFilter, {
                 UserId: UserId,
                 DGIMNS: DGIMNS,
@@ -103,6 +102,27 @@ export default Model.extend({
                     requstresult: result.requstresult,
                 });
             }
+            callback();
+        },
+        * addDgimnDataFilter({
+            payload: {
+                UserId,
+                DGIMNS,
+                callback
+            }
+        }, {
+            call,
+            put,
+            update,
+            select
+        }) {
+            const result = yield call(addDgimnDataFilter, {
+                UserId: UserId,
+                DGIMNS: DGIMNS,
+            });
+            yield update({
+                requstresult: result.requstresult,
+            });
             callback();
         },
     },

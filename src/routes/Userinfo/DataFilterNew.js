@@ -14,7 +14,7 @@ const Search = Input.Search;
     loading,
     userdgimndata
 }) => ({
-    ...loading,
+    isloading: loading.effects['userdgimndata/userDgimnDataFilter'],
     list: userdgimndata.list,
     total: userdgimndata.total,
     pageSize: userdgimndata.pageSize,
@@ -133,7 +133,30 @@ export default class DataFilterNew extends Component {
           }
       }
       handleClick = (DGIMN) => {
-          alert(DGIMN);
+          this.props.dispatch({
+              type: 'userdgimndata/addDgimnDataFilter',
+              payload: {
+                  UserId: this.state.userid,
+                  DGIMNS: DGIMN,
+                  callback: () => {
+                      if (this.props.requstresult === '1') {
+                          this.setState((state) => {
+                              const selected = new Map(state.selected);
+                              if (selected.get(DGIMN) === undefined) {
+                                  selected.set(DGIMN, true);
+                              } else {
+                                  selected.delete(DGIMN);
+                              }
+                              return {
+                                  selected
+                              };
+                          });
+                      } else {
+                          message.error('关联排口失败，请重试！');
+                      }
+                  }
+              },
+          });
       }
          renderStandardList=() => {
              const rtnVal = [];
@@ -164,76 +187,78 @@ export default class DataFilterNew extends Component {
          }
          render() {
              return (
-                 <div>
-                     <Card>
-                         <Form layout="inline">
-                             <Row gutter={16} >
-                                 <Col span={5} >
-                                     <Search placeholder="排口名称、DGIMN"
-                                         style={{ width: 200 }}
-                                         onSearch={
-                                             (value) => {
-                                                 this.setState({
-                                                     testkey: value
-                                                 });
-                                                 this.props.dispatch({
-                                                     type: 'userdgimndata/userDgimnDataFilter',
-                                                     payload: {
-                                                         UserId: this.state.userid,
-                                                         pageIndex: this.props.pageIndex,
-                                                         pageSize: this.props.pageSize,
-                                                         TestKey: value,
-                                                         callback: () => {
+                 <Spin spinning={this.props.isloading}>
+                     <div>
+                         <Card>
+                             <Form layout="inline">
+                                 <Row gutter={16} >
+                                     <Col span={5} >
+                                         <Search placeholder="排口名称、排口编号"
+                                             style={{ width: 200 }}
+                                             onSearch={
+                                                 (value) => {
+                                                     this.setState({
+                                                         testkey: value
+                                                     });
+                                                     this.props.dispatch({
+                                                         type: 'userdgimndata/userDgimnDataFilter',
+                                                         payload: {
+                                                             UserId: this.state.userid,
+                                                             pageIndex: this.props.pageIndex,
+                                                             pageSize: this.props.pageSize,
+                                                             TestKey: value,
+                                                             callback: () => {
 
-                                                         }
-                                                     },
-                                                 });
-                                             }
-                                         } />
-                                 </Col>
-                                 <Col span={5} >
-                                     <Button type="primary" onClick={() => {
-                                         this.setState((state) => {
+                                                             }
+                                                         },
+                                                     });
+                                                 }
+                                             } />
+                                     </Col>
+                                     <Col span={5} >
+                                         <Button type="primary" onClick={() => {
+                                             this.setState((state) => {
                                              // copy the map rather than modifying state.
-                                             const selected = new Map(state.selected);
+                                                 const selected = new Map(state.selected);
 
-                                             const alldgimn = new Map(state.alldgimn);
+                                                 const alldgimn = new Map(state.alldgimn);
 
-                                             if (selected.size === alldgimn.size) {
-                                                 selected.clear();
-                                             } else {
-                                                 this.props.alldgimn.map((item, key) => {
-                                                     if (selected.get(item) === undefined) {
-                                                         selected.set(item, true); // toggle
-                                                     }
-                                                 });
-                                             }
-                                             return {
-                                                 selected
-                                             };
-                                         });
-                                     }}>全选</Button>
-                                 </Col>
-                             </Row>
-                         </Form>
-                     </Card>
-                     <div className={styles.card}>
-                         {this.renderStandardList()}
+                                                 if (selected.size === alldgimn.size) {
+                                                     selected.clear();
+                                                 } else {
+                                                     this.props.alldgimn.map((item, key) => {
+                                                         if (selected.get(item) === undefined) {
+                                                             selected.set(item, true); // toggle
+                                                         }
+                                                     });
+                                                 }
+                                                 return {
+                                                     selected
+                                                 };
+                                             });
+                                         }}>全选</Button>
+                                     </Col>
+                                 </Row>
+                             </Form>
+                         </Card>
+                         <div className={styles.card}>
+                             {this.renderStandardList()}
+                         </div>
+                         <div style={{textAlign: 'center',marginTop: 20}}>
+                             <Pagination
+                                 size={'small'}
+                                 showSizeChanger={true}
+                                 showQuickJumper={true}
+                                 total={this.props.total}
+                                 pageSize={this.props.pageSize}
+                                 current={this.props.pageIndex}
+                                 onChange={this.PonChange}
+                                 onShowSizeChange={this.onShowSizeChange}
+                                 pageSizeOptions={['12', '16', '20', '24', '28']}
+                             />
+                         </div>
                      </div>
-                     <div style={{textAlign: 'center',marginTop: 20}}>
-                         <Pagination
-                             size={'small'}
-                             showSizeChanger={true}
-                             showQuickJumper={true}
-                             total={this.props.total}
-                             pageSize={this.props.pageSize}
-                             current={this.props.pageIndex}
-                             onChange={this.PonChange}
-                             onShowSizeChange={this.onShowSizeChange}
-                             pageSizeOptions={['12', '16', '20', '24', '28']}
-                         />
-                     </div>
-                 </div>
+                 </Spin>
              );
          }
 }
