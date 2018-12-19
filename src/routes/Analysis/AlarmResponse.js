@@ -14,6 +14,7 @@ import {
 import moment from 'moment';
 import styles from './index.less';
 import ReactEcharts from 'echarts-for-react';
+import MonitorContent from '../../components/MonitorContent/index';
 import {connect} from 'dva';
 const Option = Select.Option;
 const pageUrl = {
@@ -349,10 +350,10 @@ export default class AlarmResponse extends Component {
             }
         ];
         return (
-            <div>
-                <Card className={styles.cardTitle} title="智能分析 / 报警及时响应情况">
+            <MonitorContent>
+                <div className={styles.cardTitle} >
                     <Card
-                        type="inner"
+                        // type="inner"
                         title="报警及时响应统计"
                         extra={
                             <span style={{color: '#b3b3b3'}}>
@@ -366,9 +367,6 @@ export default class AlarmResponse extends Component {
                                 </Select>
                             </span>
                         }
-                        style={{
-                            height: 'calc(100vh - 205px)'
-                        }}
                     >
                         <Row>
                             <ReactEcharts
@@ -387,14 +385,14 @@ export default class AlarmResponse extends Component {
                                 bordered={false}
                                 title={`${moment(this.props.clickDate).format('YYYY-MM')}月响应情况`}>
                                 <Table
-                                    style={{ marginTop: 16 }}
+                                    style={{ }}
                                     className={styles.dataTable}
                                     loading={this.props.loadingPointsTable}
                                     columns={columnsPoints}
                                     onChange={this.handleTableChange}
                                     size="small"// small middle
                                     dataSource={this.props.pointsTableData}
-                                    scroll={{ y: 200 }}
+                                    scroll={{ y: 'calc(100vh - 760px)' }}
                                     pagination={{
                                         showSizeChanger: true,
                                         showQuickJumper: true,
@@ -435,8 +433,8 @@ export default class AlarmResponse extends Component {
                             />
                         </Modal>
                     </Card>
-                </Card>
-            </div>
+                </div>
+            </MonitorContent>
         );
     }
 }
