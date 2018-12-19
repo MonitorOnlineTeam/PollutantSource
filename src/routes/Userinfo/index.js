@@ -9,6 +9,8 @@ import {
     Form,
     Select, Modal, message, Tag, Divider, Dropdown,Icon,Menu
 } from 'antd';
+import styles from './index.less';
+import MonitorContent from '../../components/MonitorContent/index';
 import DataFilter from '../Userinfo/DataFilter';
 import NewDataFilter from '../Userinfo/DataFilterNew';
 import {routerRedux} from 'dva/router';
@@ -268,9 +270,10 @@ export default class UserList extends Component {
         },
         ];
         return (
-            <Card bordered={false}>
-                <Card>
-                    <Form layout="inline">
+            <MonitorContent>
+                <Card bordered={false}>
+
+                    <Form layout="inline" style={{marginBottom: 10}}>
                         <Row gutter={8}>
                             <Col span={3} >
                                 <Search placeholder="姓名/登录名" onSearch={(value) => {
@@ -312,57 +315,45 @@ export default class UserList extends Component {
                                 }}>添加</Button></Col>
                         </Row>
                     </Form>
+
+                    <Table
+                        loading={this.props.effects['userinfo/fetchuserlist']}
+                        columns={columns}
+                        className={styles.dataTable}
+                        size="small"// small middle
+                        dataSource={this.props.requstresult === '1' ? this.props.list : null}
+                        scroll={{ y: 'calc(100vh - 68px)' }}
+                        pagination={{
+                            showSizeChanger: true,
+                            showQuickJumper: true,
+                            'total': this.props.total,
+                            'pageSize': this.props.pageSize,
+                            'current': this.props.pageIndex,
+                            onChange: this.onChange,
+                            onShowSizeChange: this.onShowSizeChange,
+                            pageSizeOptions: ['5', '10', '20', '30', '40']
+                        }}
+                    />
+                    <Modal
+                        visible={this.state.DataFiltervisible}
+                        title={this.state.title}
+                        width={this.state.width}
+                        destroyOnClose={true}// 清除上次数据
+                        onOk={() => {
+                            this.AddData();
+                        }
+                        }
+                        onCancel={() => {
+                            this.setState({
+                                DataFiltervisible: false
+                            });
+                        }}>
+                        {
+                            this.state.type === 'datafilter' ? <DataFilter pid={this.state.userId} onRef={this.onRef1} complant={this.AddCompletion} /> : ''
+                        }
+                    </Modal>
                 </Card>
-                <Table
-                    loading={this.props.effects['userinfo/fetchuserlist']}
-                    columns={columns}
-                    dataSource={this.props.requstresult === '1' ? this.props.list : null}
-                    scroll={{ y: 'calc(100vh - 455px)' }}
-                    pagination={{
-                        showSizeChanger: true,
-                        showQuickJumper: true,
-                        'total': this.props.total,
-                        'pageSize': this.props.pageSize,
-                        'current': this.props.pageIndex,
-                        onChange: this.onChange,
-                        onShowSizeChange: this.onShowSizeChange,
-                        pageSizeOptions: ['5', '10', '20', '30', '40']
-                    }}
-                />
-                <Modal
-                    visible={this.state.DataFiltervisible}
-                    title={this.state.title}
-                    width={this.state.width}
-                    destroyOnClose={true}// 清除上次数据
-                    onOk={() => {
-                        this.AddData();
-                    }
-                    }
-                    onCancel={() => {
-                        this.setState({
-                            DataFiltervisible: false
-                        });
-                    }}>
-                    {
-                        this.state.type === 'datafilter' ? <DataFilter pid={this.state.userId} onRef={this.onRef1} complant={this.AddCompletion} /> : ''
-                    }
-                </Modal>
-                <Modal
-                    visible={this.state.NewDataFiltervisible}
-                    title={this.state.title}
-                    width={this.state.width}
-                    destroyOnClose={true}// 清除上次数据
-                    footer={false}
-                    onCancel={() => {
-                        this.setState({
-                            NewDataFiltervisible: false
-                        });
-                    }}>
-                    {
-                        <NewDataFilter pid={this.state.userId} />
-                    }
-                </Modal>
-            </Card>
+            </MonitorContent>
         );
     }
 }
