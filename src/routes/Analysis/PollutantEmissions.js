@@ -363,7 +363,7 @@ export default class PollutantEmissions extends Component {
                         <Row style={styles.cardTitle.cardBg}>
 
                             <Card
-                                style={{ marginTop: 16 }}
+                                style={{  }}
                                 // type="inner"
                                 bordered={false}
                                 title={`${moment(this.props.clickDate).format('YYYY-MM')}月排放量排口统计`}
