@@ -26,7 +26,7 @@ import {
 } from 'dva';
 import MonitorContent from '../../components/MonitorContent/index';
 import styles from './index.less';
-import { Styles } from 'docx';
+
 const Search = Input.Search;
 const confirm = Modal.confirm;
 
