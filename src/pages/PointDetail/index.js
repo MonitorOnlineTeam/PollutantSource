@@ -71,9 +71,9 @@ class PointDetail extends Component {
                             </Breadcrumb.Item>
                         </Breadcrumb>
                     </div> */}
-                    <div className={styles.pageHeader}>
-                        <img src='../../../point.png'  style={{width:37,position:"fixed",marginTop:-4}}/>
-                        <span style={{marginLeft:60,marginRight:10,color:'#ccc'}}>当前排口：</span>
+                    <div className={styles.pageHeader} style={{paddingBottom:10,paddingTop:10}}>
+                        <img src='../../../point.png'  style={{width:37,position:"absolute",marginTop:-4}}/>
+                        <span style={{marginLeft:50,marginRight:10,color:'#ccc'}}>当前排口：</span>
                         <Select defaultValue={pointInfo.pointName} style={{ width: 200 }}>
                             <Option value={pointInfo.pointcode}>{pointInfo.pointName}</Option>
                             {/* <Option value="lucy">Lucy</Option>
