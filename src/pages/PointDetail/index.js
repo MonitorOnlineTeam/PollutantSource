@@ -78,8 +78,8 @@ class PointDetail extends Component {
                         {/* <Select defaultValue={pointInfo.pointName} style={{ width: 200 }}>
                             <Option value={pointInfo.pointcode}>{pointInfo.pointName}</Option>
                         </Select> */}
-                        <Button style={{float:"right",marginRight:30}}><Link to="/overview/mapview">返回</Link></Button>
-                        <Button type="primary" ghost style={{float:"right",marginRight:30}}>派单</Button>
+                        <Button style={{float:"right",marginRight:30}}><Link to="/overview/mapview"><Icon type="left" />返回</Link></Button>
+                        <Button type="primary" ghost style={{float:"right",marginRight:30}}><Icon type="bell" />派单</Button>
                     </div>
                     <div style={{ backgroundColor: '#fff', margin: 10, padding: 10 }}>
                         <Tabs
