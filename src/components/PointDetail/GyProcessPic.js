@@ -7,7 +7,6 @@ import {
     Spin,
     Card
 } from 'antd';
-import { normalFromMat4 } from 'gl-matrix/src/gl-matrix/mat3';
 
 @connect(({ points, loading }) => ({
     isloading: loading.effects['points/queryprocesschart'],

@@ -1,0 +1,47 @@
+@import "~antd/lib/style/themes/default.less";
+@import "../../utils/utils.less";
+
+.contentDiv{
+    // width: '100%';
+    // height: 'calc(100vh - 125px)';
+    // overflow: 'auto';
+    &::-webkit-scrollbar-track-piece{
+        -webkit-border-radius:0;
+       }
+       &::-webkit-scrollbar{
+        width:5px;
+        height:8px;
+       }
+       &::-webkit-scrollbar-thumb{
+        height:50px;
+        background-color:#9ca0a2;
+        -webkit-border-radius:4px;
+        outline-offset:-20px;
+        border: 2px solid #9ca0a2;
+       }
+       &::-webkit-scrollbar-thumb:hover{
+        height:50px;
+        background-color:#9ca0a2;
+        -webkit-border-radius:4px;
+       }
+}
+
+.contentCSS{
+    margin-left: 24px;
+    margin-right: 24px;
+    // height: 'calc(100vh - 120px)';
+    // overflow: auto;
+    
+  }
+.pageHeader{
+    background: @component-background;
+    padding: 16px 32px 0 32px;
+    border-bottom: @border-width-base @border-style-base @border-color-split;
+    margin-bottom: 5px;
+    // height: 'calc(100vh - 67px)';
+    // overflow: auto;
+    .breadcrumb {
+        margin-bottom: 16px;
+    }
+}
+

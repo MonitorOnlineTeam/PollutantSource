@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Chart, Axis, Tooltip, Geom } from 'bizcharts';
-import moment from 'moment';
 import Debounce from 'lodash-decorators/debounce';
 import Bind from 'lodash-decorators/bind';
 import autoHeight from '../autoHeight';
@@ -13,12 +12,20 @@ class Bar extends Component {
   };
 
   componentDidMount() {
-    window.addEventListener('resize', this.resize);
+    window.addEventListener('resize', this.resize, { passive: true });
   }
 
   componentWillUnmount() {
     window.removeEventListener('resize', this.resize);
   }
+
+  handleRoot = n => {
+    this.root = n;
+  };
+
+  handleRef = n => {
+    this.node = n;
+  };
 
   @Bind()
   @Debounce(400)
@@ -47,20 +54,11 @@ class Bar extends Component {
     }
   }
 
-  handleRoot = (n) => {
-    this.root = n;
-  };
-
-  handleRef = (n) => {
-    this.node = n;
-  };
-
   render() {
     const {
       height,
       title,
       forceFit = true,
-      pollutant,
       data,
       color = 'rgba(24, 144, 255, 0.85)',
       padding,
@@ -71,37 +69,39 @@ class Bar extends Component {
     const scale = {
       x: {
         type: 'cat',
-        formatter: (value) => {
-          return moment(value).format('HH');
-        },
       },
       y: {
         min: 0,
       },
     };
 
-    const tooltip = ['x*y', (x, y) => {
-      return {
-        // 自定义 tooltip 上显示的 title 显示内容等。
-        time: `时间:${moment(x).format('DD 日 HH 时')}`,
-        value: `数值:${y}(${pollutant.Unit})`,
-      };
-    }];
+    const tooltip = [
+      'x*y',
+      (x, y) => ({
+        name: x,
+        value: y,
+      }),
+    ];
 
     return (
       <div className={styles.chart} style={{ height }} ref={this.handleRoot}>
         <div ref={this.handleRef}>
-          {title && <h4>{pollutant.PollutantName + title}</h4>}
+          {title && <h4 style={{ marginBottom: 20 }}>{title}</h4>}
           <Chart
             scale={scale}
             height={title ? height - 41 : height}
             forceFit={forceFit}
             data={data}
-            padding={{ top: 5, right: 5, bottom: 27, left: 25 }}
+            padding={padding || 'auto'}
           >
-            <Axis name="x" />
-            <Axis name="y" />
-            <Tooltip itemTpl="<div>{time}<br/> {value}</div>" showTitle={false} crosshairs={false} />
+            <Axis
+              name="x"
+              title={false}
+              label={autoHideXLabels ? false : {}}
+              tickLine={autoHideXLabels ? false : {}}
+            />
+            <Axis name="y" min={0} />
+            <Tooltip showTitle={false} crosshairs={false} />
             <Geom type="interval" position="x*y" color={color} tooltip={tooltip} />
           </Chart>
         </div>

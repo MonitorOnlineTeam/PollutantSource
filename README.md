@@ -1,70 +1,131 @@
-# 污染源智能分析平台
-## 系统说明
-污染源智能分析系统是针对大型企业，运维公司，监管部门三个客户群体个性化需求开发的分析系统，在对污染源设备管理的方面，不同客户针对自身的特点，会有不同的需求，比如企业更加关注设备稳定性，监控数据报警等；运维公司更加关注设备运维和故障解决的及时性；监管结构更加关注管理辖区内各个企业总体报警和排污量分析。不同客户对污染源智能分析系统有更加个性化，定制化的需求。  
-本系统提供了一种对污染源智能化设备和数据的智能化分析提供了一个很好的解决方案。通过智能数据监测模块可以对设备检测数据实时有效的监测管理，智能运维模块可以提供智能化的设备运维，智能分析能够为不同的客户提供个性化的分析和服务，真正实现对智能设备的有效管理和智能化运维。
-## 系统模块  
-系统模块共有5大类，分别为智能监控，智能运维，智能质控，智能分析,工作台。各分类模块组成和相关负责人如下：    
+English | [简体中文](./README.zh-CN.md) | [Русский](./README.ru-RU.md)
 
-1. 智能监控  
+<h1 align="center">Ant Design Pro</h1>
 
-|功能模块|功能描述|负责人|是否完成
-|:-|:-|:-|:-|
-|工艺流程图|显示一张动态工艺流图|无|未指定|
-|数据查询|状态数据、参数数据，分钟、小时，日数据|无|未指定|
-|报警记录|报警历史记录的查询，根据报警的不同类别，部分(设备参数、<br/>状态参数异常、数据缺失、离线）报警信息可触发应急任务|无|未指定|
-|视频监控|实时、历史视频，可以和数据、参数、报警等联动查看|无|未指定|
-|预警记录|可按各种条件查询预警信息并进行核实，核实记录、核实人记录在案。<br/>人工核实确定报警信息的，可手工触发报警。|无|未指定| 
-2. 智能运维  
-  
-|功能模块|功能描述|负责人|是否完成
-|:-|:-|:-|:-|
-|应急维护|紧急需要处理的运维任务信息|无|未指定|
-|运维计划|制定和审核定期和例行运维任务的周期等信息|无|未指定|
-|例行任务|管理和执行例行任务|无|未指定|
-|备品备件维护|管理备品备件的入库，库存和使用记录等信息|无|未指定|
-|停产管理|停产情况维护，需要上传附件。描述清楚是勒令停产还是企业减少<br/>产能。（自动打标）依据恢复生产动作|无|未指定|
-3. 智能质控  
+<div align="center">
 
-|功能模块|功能描述|负责人|是否完成
-|:-|:-|:-|:-|
-|远程维护|远程校标、远程校零、零点检查、跨度检查、设置时间、数据调取、<br/>远程复位，工作参数修改记录，运行状态变更记录|无|未指定|
-|质控过程跟踪|手工质控、自动质控、智能质控全过程自动记录日志<br/>,以时间线的形式详细记录质控人、质控时间、质控方式、质控结果。|无|未指定|
-4. 专题分析  
+An out-of-box UI solution for enterprise applications as a React boilerplate.
 
-|功能模块|功能描述|负责人|是否完成
-|:-|:-|:-|:-|
-|设备运行时间占比|企业内所有设备一段时间内正常运行、维护、故障<br/>时间占比。|无|未指定|
-|备品备件消耗情况|企业内所有设备一段时间备品备件消耗情况。|无|未指定|
-|成本分析|把企业一段时间内耗材和人力成本做一个分析。|无|未指定|
-|设备传输有效率统计|设备分开统计传输有效率。|无|未指定|
-|报警类别统计|分别统计各个设备的报警。|无|未指定|
-|报警时长统计|分别统计各个设备的累计报警时长和连续报警时长。|无|未指定|
-|报警因子统计|分别统计各个设备污染因子报警分布情况。|无|未指定|
-|报警时间范围分布情况|统计一段时间24个小时分布情况。|无|未指定|
-|报警原因|设备原因或数据原因占比。|无|未指定|
-|企业联动周边小型站、大气站、标准站报警分析|表形式展示。|无|未指定|
-|排污量的统计、排名|各个时间段各个排口排污量统计排名 。|无|未指定|
-|污染物排放时段分布情况|各个排口不同污染物污染排放时间分布统计。|无|未指定|
-|污染物排放量占比|各个排口不同污染物累计排放量占总排放量比重。|无|未指定|
-|环保税分析|针对企业统计超低排放奖励费、环保税、排污量。|无|未指定|
-|环保税、排污量对比分析|针对企业统计环保税、排污量的月度、年度统计分析。|无|未指定|
-|污染物排放量与污染物排放标准的相关性分析|各个排口不同污染物排放量与污染物排放标准<br/>的相关性分析。|无|未指定|
-|浓度、排放量与厂界的对比分析|针对各个排污口附近小型站的空气质量与污染因子<br/>浓度对比分析，结合风速、风向、温度、湿度、降雨量、大气稳定度、<br/>气压等进行分析。|无|未指定|
-|排污达标率|排污许可证和实际排污之间的比。|无|未指定|
+[![CircleCI Status](https://circleci.com/gh/ant-design/ant-design-pro.svg?style=svg)](https://circleci.com/gh/ant-design/ant-design-pro/)
+[![Build status](https://ci.appveyor.com/api/projects/status/67fxu2by3ibvqtat/branch/master?svg=true)](https://ci.appveyor.com/project/afc163/ant-design-pro/branch/master)
+[![Dependencies](https://img.shields.io/david/ant-design/ant-design-pro.svg)](https://david-dm.org/ant-design/ant-design-pro)
+[![DevDependencies](https://img.shields.io/david/dev/ant-design/ant-design-pro.svg)](https://david-dm.org/ant-design/ant-design-pro?type=dev)
+[![Gitter](https://img.shields.io/gitter/room/ant-design/pro-english.svg)](https://gitter.im/ant-design/pro-english?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)(🇺🇸)
+[![Gitter](https://img.shields.io/gitter/room/ant-design/ant-design-pro.svg?style=flat-square)](https://gitter.im/ant-design/ant-design-pro?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)(🇨🇳)
 
-5. 工作台  
 
-|功能模块|功能描述|负责人|是否完成
-|:-|:-|:-|:-|
-|预警|以列表的方式展示不同的预警来源（参数、机器学习），<br/>一段时间内不处理自动清空，人为可置预警为报警进行报警提醒。|无|未指定|
-|报警|超标报警。|无|未指定|
-|运维计划，例行运维提醒|跳转到例行任务。|无|未指定|
-|备品备件耗材库存不足提醒|备品备件不足时发送提醒。|无|未指定|
-|备品备件过期提醒|将要过期的备品备件（只有标气？）的提醒信息<br/>（生产日期，有效期，使用日期维护的基本信息里面）。|无|未指定|
-|审核消息提醒|跳转到待审核的页面。|无|未指定|
-|备品备件更换提醒|提醒将要更换的备品备件（更换时要有备品备件的使用日期，<br/>使用寿命）。|无|未指定|
-|运维逾期任务提醒<br/>（高时效）提醒运维领导与运维人员|提醒将要更换的备品备件（更换时要有备品备件的使用日期，<br/>使用寿命）。|无|未指定|
-|待办事项|显示系统待审核，待运维任务等信息。|无|未指定|
-## 目录结构
-## 开发说明
-## 配置说明 
+![](https://user-images.githubusercontent.com/8186664/44953195-581e3d80-aec4-11e8-8dcb-54b9db38ec11.png)
+
+</div>
+
+- Preview: http://preview.pro.ant.design
+- Home Page: http://pro.ant.design
+- Documentation: http://pro.ant.design/docs/getting-started
+- ChangeLog: http://pro.ant.design/docs/changelog
+- FAQ: http://pro.ant.design/docs/faq
+- Mirror Site in China: http://ant-design-pro.gitee.io
+
+## 2.0 Released Now! 🎉🎉🎉
+[Announcing Ant Design Pro 2.0.0](https://medium.com/ant-design/beautiful-and-powerful-ant-design-pro-2-0-release-51358da5af95)
+
+## Translation Recruitment :loudspeaker:
+
+We need your help: https://github.com/ant-design/ant-design-pro/issues/120
+
+## Features
+
+- :gem: **Neat Design**: Follow [Ant Design specification](http://ant.design/)
+- :triangular_ruler: **Common Templates**: Typical templates for enterprise applications
+- :rocket: **State of The Art Development**: Newest development stack of React/umi/dva/antd
+- :iphone: **Responsive**: Designed for variable screen sizes
+- :art: **Theming**: Customizable theme with simple config
+- :globe_with_meridians: **International**: Built-in i18n solution
+- :gear: **Best Practices**: Solid workflow to make your code healthy
+- :1234: **Mock development**: Easy to use mock development solution
+- :white_check_mark: **UI Test**: Fly safely with unit and e2e tests
+
+## Templates
+
+```
+- Dashboard
+  - Analytic
+  - Monitor
+  - Workspace
+- Form
+  - Basic Form
+  - Step Form
+  - Advanced From
+- List
+  - Standard Table
+  - Standard List
+  - Card List
+  - Search List (Project/Applications/Article)
+- Profile
+  - Simple Profile
+  - Advanced Profile
+- Account
+  - Account Center
+  - Account Settings
+- Result
+  - Success
+  - Failed
+- Exception
+  - 403
+  - 404
+  - 500
+- User
+  - Login
+  - Register
+  - Register Result
+```
+
+## Usage
+
+### Use bash
+
+```bash
+$ git clone https://github.com/ant-design/ant-design-pro.git --depth=1
+$ cd ant-design-pro
+$ npm install
+$ npm start         # visit http://localhost:8000
+```
+
+### Use by docker
+
+```bash
+# preview 
+$ docker pull chenshuai2144/ant-design-pro
+$ docker run -p 80:80 chenshuai2144/ant-design-pro
+# open http://localhost
+
+# dev 
+$ npm run docker:dev
+
+# build 
+$ npm run docker:build
+
+
+# production dev 
+$ npm run docker-prod:dev
+
+# production build 
+$ npm run docker-prod:build
+```
+
+More instructions at [documentation](http://pro.ant.design/docs/getting-started).
+
+## Browsers support
+
+Modern browsers and IE11.
+
+| [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/edge/edge_48x48.png" alt="IE / Edge" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)</br>IE / Edge | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/firefox/firefox_48x48.png" alt="Firefox" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)</br>Firefox | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/chrome/chrome_48x48.png" alt="Chrome" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)</br>Chrome | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/safari/safari_48x48.png" alt="Safari" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)</br>Safari | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/opera/opera_48x48.png" alt="Opera" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)</br>Opera |
+| --------- | --------- | --------- | --------- | --------- |
+| IE11, Edge| last 2 versions| last 2 versions| last 2 versions| last 2 versions
+
+## Contributing
+
+Any type of contribution is welcome, here are some examples of how you may contribute to this project:
+
+- Use Ant Design Pro in your daily work.
+- Submit [issues](http://github.com/ant-design/ant-design-pro/issues) to report bugs or ask questions.
+- Propose [pull requests](http://github.com/ant-design/ant-design-pro/pulls) to improve our code.
