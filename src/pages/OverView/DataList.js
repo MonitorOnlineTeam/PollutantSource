@@ -35,16 +35,19 @@ class dataList extends PureComponent {
     }
 
     pickerChange=(time, timeString) => {
-        this.setState({
-            nowdate: time
-        });
-        this.props.dispatch({
-            type: 'overview/querydatalist',
-            selectpoint: {},
-            payload: {
-                time: time.format('YYYY-MM-DD HH:00:00')
-            }
-        });
+        if(time)
+        {
+            this.setState({
+                nowdate: time
+            });
+            this.props.dispatch({
+                type: 'overview/querydatalist',
+                selectpoint: {},
+                payload: {
+                    time: time.format('YYYY-MM-DD HH:00:00')
+                }
+            });
+        }
     }
 
     onCancel=() => {
@@ -123,7 +126,8 @@ class dataList extends PureComponent {
                     props: {
                         className: ((value && value.split('%')[0] < 90)) ? styles.red : '',
                     },
-                    children: (value && value.split('%')[0] < 90) ? (<span className={styles.tscolor}> {value} </span>) : value})
+                    children: value || '-'
+                })
         }
         ];
         const coldata = this.props.columnsdata;
@@ -194,6 +198,7 @@ class dataList extends PureComponent {
             />
             <Card
               bordered={false}
+              className={styles.cardextra}
               bodyStyle={
                         {
                             padding: '0px 20px',
@@ -201,19 +206,19 @@ class dataList extends PureComponent {
                     }
               extra={
                 <div>
-                  <div style={{ width: 'calc(100vw - 220px)' }}>
-                    <TimePicker onChange={this.pickerChange} style={{width: 150, marginRight: 20}} defaultValue={this.state.nowdate} format="HH:00:00" />
+                <TimePicker onChange={this.pickerChange} style={{width: 150, marginRight: 20,float: 'left'}} defaultValue={this.state.nowdate} format="HH:00:00" />
+                <div style={{ width: 'calc(100vw - 220px)',marginLeft: 60 }}>
                     <Button style={{marginRight: 10}}><Icon type="user" style={{color: '#3B91FF'}} /> 运维中</Button>
                     <Button style={{marginRight: 20}}><span style={{fontSize: 16, color: '#ED6B68'}}>■</span> 传输有效率不达标</Button>
                     <Radio.Group>
-                      <Radio.Button value="normal"><img src="../../../gisnormal.png" /> 正常</Radio.Button>
-                      <Radio.Button value="over"><img src="../../../gisover.png" /> 超标</Radio.Button>
-                      <Radio.Button value="underline"><img src="../../../gisunline.png" /> 离线</Radio.Button>
-                      <Radio.Button value="exception"><img src="../../../gisexception.png" /> 异常</Radio.Button>
+                        <Radio.Button value="normal"><img src="../../../gisnormal.png" /> 正常</Radio.Button>
+                        <Radio.Button value="over"><img src="../../../gisover.png" /> 超标</Radio.Button>
+                        <Radio.Button value="underline"><img src="../../../gisunline.png" /> 离线</Radio.Button>
+                        <Radio.Button value="exception"><img src="../../../gisexception.png" /> 异常</Radio.Button>
                     </Radio.Group>
                     <AListRadio style={{float: 'right'}} dvalue="b" />
-                  </div>
                 </div>
+            </div>
                     }
             >
 

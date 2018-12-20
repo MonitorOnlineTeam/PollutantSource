@@ -36,7 +36,7 @@ export async function GetJzRecord(params) {
 // 获取校准记录
 export async function GetRecordType(params) {
     const body = {
-
+         DGIMN:params.DGIMN
     };
     const result = await post('/api/rest/PollutantSourceApi/PTaskForm/GetRecordType', body, null);
     return result === null ? { data: null } : result;
@@ -172,7 +172,6 @@ export async function GetHistoryRepairDetail(params) {
     const body = {
         pageIndex: params.pageIndex,
         pageSize: params.pageSize,
-        TypeID: params.TypeID,
         DGIMN: params.DGIMN,
         BeginTime: params.BeginTime,
         EndTime: params.EndTime,
@@ -196,6 +195,15 @@ export async function GetDeviceExceptionList(params) {
     return result === null ? {
         data: null
     } : result;
+}
+// 获取异常记录内容
+export async function GetDeviceExceptionDetail(params) {
+    const body = {
+        TaskID: params.TaskID,
+        TypeID: params.TypeID
+    };
+    const result = await post('/api/rest/PollutantSourceApi/PTaskForm/DeviceExceptionDetail', body, null);
+    return result === null ? { data: null } : result;
 }
 // 校验测试历史记录列表（历史记录表）
 export async function GetBdHistoryInfoList(params) {

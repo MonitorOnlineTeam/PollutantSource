@@ -82,7 +82,8 @@ export default class CounterControlCommandHistoryRecords extends Component {
             title: '校准人',
             width: '20%',
             dataIndex: 'CreateUserID',
-            key: 'CreateUserID'
+            key: 'CreateUserID',
+            align: 'center'
         }, {
             title: '易耗品（数量）',
             width: '45%',
@@ -137,10 +138,10 @@ export default class CounterControlCommandHistoryRecords extends Component {
                     <Table
                         loading={this.props.loading}
                         className={styles.tableCss}
-                        bordered={true}
                         columns={columns}
                         dataSource={dataSource}
                         size={'middle'}
+                        scroll={{ y: 'calc(100vh - 475px)' }}
                         pagination={{
                             showSizeChanger: true,
                             showQuickJumper: true,
