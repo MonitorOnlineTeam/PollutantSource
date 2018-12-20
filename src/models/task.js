@@ -239,7 +239,6 @@ export default Model.extend({
             update,
             select
         }) {
-            debugger;
             const result = yield call(GetPatrolRecordListPC, { TaskIds: TaskIds, TypeIDs: TypeIDs });
             if (result.requstresult === '1') {
                 yield update({
@@ -339,10 +338,8 @@ export default Model.extend({
         * GetRepairDetail({
             payload,
         }, { call, update }) {
-            debugger
             const DataInfo = yield call(GetRepairDetail, payload);
             if (DataInfo !== null && DataInfo.requstresult === '1') {
-                debugger
                 if (DataInfo.data !== null) {
                     yield update({ Repair: DataInfo.data });
                 }
@@ -364,7 +361,7 @@ export default Model.extend({
             update,
             select
         }) {
-            const result = yield call(GetHistoryRepairDetail, {pageIndex: pageIndex, pageSize: pageSize, TypeID: TypeID, DGIMN: DGIMN, BeginTime: BeginTime, EndTime: EndTime});
+            const result = yield call(GetHistoryRepairDetail, {pageIndex: pageIndex, pageSize: pageSize, DGIMN: DGIMN, BeginTime: BeginTime, EndTime: EndTime});
             if (result.requstresult === '1') {
                 yield update({
                     requstresult: result.requstresult,
@@ -387,7 +384,6 @@ export default Model.extend({
         * GetDeviceExceptionDetail({
             payload,
         }, { call, update }) {
-            debugger;
             const DataInfo = yield call(GetDeviceExceptionDetail, payload);
             if (DataInfo !== null && DataInfo.requstresult === '1') {
                 if (DataInfo.data !== null) {
