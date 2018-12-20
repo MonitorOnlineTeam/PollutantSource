@@ -589,7 +589,16 @@ export default Model.extend({
             payload
         }, {call, update}) {
             const res = yield call(querysinglepointinfo, {...payload});
-            yield update({ selectpoint: res });
+
+            if(res)
+            {
+                yield update({ selectpoint: res[0] });
+            }
+            else
+            {
+                yield update({ selectpoint: null });
+            }
+        
         }
     },
     subscriptions: {

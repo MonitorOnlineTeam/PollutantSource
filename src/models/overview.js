@@ -2,7 +2,6 @@ import { querypollutanttypecode, querydatalist, querylastestdatalist, queryhisto
 import React from 'react';
 import { Model } from '../dvapack';
 import moment from 'moment';
-import styles from '../routes/OverView/datalist.less';
 
 import { mainpollutantInfo, zspollutantInfo } from '../../src/config';
 import {

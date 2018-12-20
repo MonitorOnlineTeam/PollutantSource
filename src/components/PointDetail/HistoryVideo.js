@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import {Row, Col, Card, Divider, Button, DatePicker, Table} from 'antd';
-import img from '../../../public/video.png';
 import styles from './Video.less';
 import { connect } from 'dva';
 import moment from 'moment';

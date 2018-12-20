@@ -25,13 +25,12 @@ export async function changepwd(params) {
 export async function fakeAccountLogin(params) {
     // ;
     const body = {
-        User_Account: params.User_Account,
-        USer_Pwd: params.User_Pwd,
+        User_Account: params.userName,
+        USer_Pwd: params.password,
         UserPhone: params.mobile,
         MsgId: params.MsgId,
         Code: params.captcha
     };
-
     const result = await post(params.type === 'mobile' ? pageUrl.PhoneLogin : pageUrl.Login, body, null, 'notooken');
 
     // ;

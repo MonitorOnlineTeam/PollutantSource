@@ -20,6 +20,7 @@ export async function getList(params) {
 }
 // 删除视频信息
 export async function deleteVideoInfo(params) {
+    ;
     const body = {
         VedioCamera_ID: params.VedioCamera_ID,
         VedioDevice_ID: params.VedioDevice_ID,

@@ -1,14 +1,12 @@
-import { routerRedux } from 'dva/router';
 import Cookie from 'js-cookie';
-
+import router from 'umi/router';
+import { message } from 'antd';
 import { fakeAccountLogin, sendCaptcha } from '../services/user';
 import { Model } from '../dvapack';
-import { message } from 'antd';
-const delay = (timeout) => {
-    return new Promise(resolve => {
+
+const delay = (timeout) => new Promise(resolve => {
         setTimeout(resolve, timeout);
     });
-};
 export default Model.extend({
     namespace: 'login',
     state: {
@@ -19,10 +17,8 @@ export default Model.extend({
         MsgId: '111'
     },
     effects: {
-        * login({ payload }, { call, put, take, select }) {
-            // ;
-
-            let MsgId = yield select(state => state.login.MsgId);
+        * login({ payload }, { call, put, select }) {
+            const MsgId = yield select(state => state.login.MsgId);
             if (payload.type === 'mobile') {
                 if (!MsgId) {
                     message.info('验证码过期，请重新获取');
@@ -33,19 +29,16 @@ export default Model.extend({
                 type: 'changeSubmitting',
                 payload: true,
             });
-            const response = yield call(fakeAccountLogin, {...payload, MsgId: MsgId});
+            const response = yield call(fakeAccountLogin, {...payload, MsgId});
             yield put({
                 type: 'changeLoginStatus',
                 payload: { status: response.requstresult === '1' ? 'ok' : 'faild' },
             });
             // Login successfully
-            if (response.requstresult === '1') {
-                // ;
-                Cookie.set('token', response.data);
+            if (response.requstresult === '1') { 
+                Cookie.set('token', response.data); 
 
-                yield put({ type: 'global/fetchPolluantType', payload: { } });
-                yield take('global/fetchPolluantType/@@end');
-                yield put(routerRedux.push('/'));
+                router.push('/');
             }
         },
         * logout(_, { put }) {
@@ -56,9 +49,9 @@ export default Model.extend({
                 },
             });
             Cookie.remove('token');
-            yield put(routerRedux.push('/user/login'));
+             router.push('/user/login');
         },
-        * getCaptcha({ payload }, { call, put, take }) {
+        * getCaptcha({ payload }, { call, put }) {
             // ;
             yield put({
                 type: 'updateCaptchaInfo',

@@ -36,7 +36,7 @@ export async function GetJzRecord(params) {
 // 获取校准记录
 export async function GetRecordType(params) {
     const body = {
-        DGIMN: params.DGIMN
+
     };
     const result = await post('/api/rest/PollutantSourceApi/PTaskForm/GetRecordType', body, null);
     return result === null ? { data: null } : result;
@@ -106,7 +106,7 @@ export async function GetHistoryStandardGasRepalceRecordList(params) {
         data: null
     } : result;
 }
-// 根据任务id和类型id获取巡检记录表
+// 根据任务id和类型id获取巡检记录表（不通于手机端PC单独做接口)
 export async function GetPatrolRecordListPC(params) {
     const body = {
         TaskID: params.TaskIds,
@@ -118,7 +118,7 @@ export async function GetPatrolRecordListPC(params) {
     } : result;
 }
 // 获取CEMS日常巡检记录表（历史记录表）
-export async function GetHistoryInspectionHistoryRecord(params) {
+export async function GetHistoryInspectionHistoryRecords(params) {
     const body = {
         pageIndex: params.pageIndex,
         pageSize: params.pageSize,
@@ -164,8 +164,7 @@ export async function GetRepairDetail(params) {
         TaskID: params.TaskID,
         TypeID: params.TypeID
     };
-    debugger
-    const result = post('/api/rest/PollutantSourceApi/PTaskForm/RepairRecordDetail', body, null);
+    const result = await post('/api/rest/PollutantSourceApi/PTaskForm/RepairRecordDetail', body, null);
     return result === null ? { data: null } : result;
 }
 // 获取维修记录列表（历史记录表）
@@ -197,16 +196,6 @@ export async function GetDeviceExceptionList(params) {
     return result === null ? {
         data: null
     } : result;
-}
-
-// 获取异常记录表内容
-export async function GetDeviceExceptionDetail(params) {
-    const body = {
-        TaskID: params.TaskID,
-        TypeID: params.TypeID
-    };
-    const result = await post('/api/rest/PollutantSourceApi/PTaskForm/DeviceExceptionDetail', body, null);
-    return result === null ? { data: null } : result;
 }
 // 校验测试历史记录列表（历史记录表）
 export async function GetBdHistoryInfoList(params) {
