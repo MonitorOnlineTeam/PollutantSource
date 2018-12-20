@@ -27,8 +27,8 @@ export default class DataFilter extends Component {
         super(props);
         this.state = {
             userid: null,
-            selected: new Map(),
-            alldgimn: new Map(),
+            selected: (new Map(): Map < string, boolean >),
+            alldgimn: (new Map(): Map < string, boolean >),
             testkey: null,
         };
     }

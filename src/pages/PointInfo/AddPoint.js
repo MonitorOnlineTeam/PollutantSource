@@ -105,7 +105,6 @@ export default class AddPoint extends Component {
          this.child = ref;
      }
      GetData() {
-         debugger;
          this.setState({
              coordinate: this.child.props.form.getFieldValue('longitude') + ',' + this.child.props.form.getFieldValue('latitude'),
              address: this.child.props.form.getFieldValue('position'),
