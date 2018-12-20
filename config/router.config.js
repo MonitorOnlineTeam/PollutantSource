@@ -14,9 +14,8 @@ export default [
   {
     path: '/',
     component: '../layouts/BasicLayout',
-    Routes: ['src/pages/Authorized'],
-    authority: ['admin', 'user'],
     routes: [
+      { path: '/', redirect: '/homepage' },
       /* 主页 */
       {
         path:'/homepage',component: './HomePage',
