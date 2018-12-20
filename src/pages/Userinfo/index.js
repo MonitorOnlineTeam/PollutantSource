@@ -11,7 +11,6 @@ import {
 } from 'antd';
 import styles from './index.less';
 import MonitorContent from '../../components/MonitorContent/index';
-import NewDataFilter from '../Userinfo/DataFilterNew';
 import {routerRedux} from 'dva/router';
 import {connect} from 'dva';
 const Option = Select.Option;
