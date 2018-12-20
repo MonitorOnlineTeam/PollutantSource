@@ -1,5 +1,3 @@
-'use strict';
-
 import React, { Component } from 'react';
 import styles from '../EmergencyTodoList/JzRecordInfo.less';
 import {Spin, Button, Icon} from 'antd';
@@ -176,9 +174,9 @@ export default class JzRecordInfo extends Component {
         let CreateUserID = null;
         let SignContent = null;
         let SignTime = null;
-        if (JzRecord != null) {
+        if (JzRecord !== null) {
             Record = JzRecord.Record;
-            Code = JzRecord.code;
+            Code = JzRecord.Code;
             RecordList = Record.RecordList;
             EnterpriseName = Record.Content.EnterpriseName;
             PointPosition = Record.Content.PointPosition;

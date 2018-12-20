@@ -11,7 +11,7 @@ import {
     Table,
     Form,
     Modal,
-    message,
+    Badge,
     Tag,
     Divider,
     Menu,
@@ -24,6 +24,9 @@ import {
 import {
     connect
 } from 'dva';
+import MonitorContent from '../../components/MonitorContent/index';
+import styles from './index.less';
+import { Styles } from 'docx';
 const Search = Input.Search;
 const confirm = Modal.confirm;
 
@@ -59,8 +62,8 @@ export default class pointlist extends Component {
       this.props.dispatch({
           type: 'pointinfo/getpointlist',
           payload: {
-              pageIndex: pageIndex,
-              pageSize: pageSize,
+              pageIndex: pageIndex === undefined ? 1 : pageIndex,
+              pageSize: pageSize === undefined ? 20 : pageSize,
               DGIMNs: this.state.DGIMNs
           },
       });
@@ -69,8 +72,8 @@ export default class pointlist extends Component {
       this.props.dispatch({
           type: 'pointinfo/getpointlist',
           payload: {
-              pageIndex: pageIndex,
-              pageSize: pageSize,
+              pageIndex: pageIndex === undefined ? 1 : pageIndex,
+              pageSize: pageSize === undefined ? 20 : pageSize,
               DGIMNs: this.state.DGIMNs
           },
       });
@@ -142,6 +145,7 @@ export default class pointlist extends Component {
          dataIndex: 'pointName',
          key: 'pointName',
          width: '20%',
+         align: 'left',
          render: (text, record) => {
              return text;
          }
@@ -151,6 +155,7 @@ export default class pointlist extends Component {
          dataIndex: 'DGIMN',
          key: 'DGIMN',
          width: '10%',
+         align: 'left',
          render: (text, record) => {
              return text;
          }
@@ -160,8 +165,14 @@ export default class pointlist extends Component {
          dataIndex: 'OutputType',
          key: 'OutputType',
          width: '10%',
+         align: 'center',
          render: (text, record) => {
-             return text;
+             if (text === '出口') {
+                 return <span > <Badge status="error"
+                     text="出口" /> </span>;
+             }
+             return <span > <Badge status="warning"
+                 text="入口" /> </span>;
          }
      },
      {
@@ -169,6 +180,7 @@ export default class pointlist extends Component {
          dataIndex: 'pollutantTypeName',
          key: 'pollutantTypeName',
          width: '10%',
+         align: 'center',
          render: (text, record) => {
              return text;
          }
@@ -178,6 +190,7 @@ export default class pointlist extends Component {
          dataIndex: 'linkman',
          key: 'linkman',
          width: '10%',
+         align: 'center',
          render: (text, record) => {
              return text;
          }
@@ -187,6 +200,7 @@ export default class pointlist extends Component {
          dataIndex: 'mobilePhone',
          key: 'mobilePhone',
          width: '10%',
+         align: 'left',
          render: (text, record) => {
              return text;
          }
@@ -196,16 +210,18 @@ export default class pointlist extends Component {
          dataIndex: 'IsSj',
          key: 'IsSj',
          width: '10%',
+         align: 'center',
          render: (text, record) => {
              if (text === '1') {
-                 return <span > <Tag color="#f50" >烧结</Tag > </span>;
+                 return <span > <Badge status="success" text="是" /></span>;
              }
-             return <span > <Tag color="#2db7f5" >非烧结</Tag > </span>;
+             return <span > <Badge status="default" text="否" /></span>;
          }
      },
      {
          title: '操作',
          width: '20%',
+         align: 'left',
          render: (text, record) => (<Fragment >
              <a onClick={
                  () => this.props.dispatch(routerRedux.push(`/sysmanage/pointdetail/${record.key}`))
@@ -229,57 +245,73 @@ export default class pointlist extends Component {
      },
      ];
      return (
-         <Card bordered={false}>
-             <Card >
-                 <Form layout="inline" >
-                     <Row gutter={8} >
-                         <Col span={3} >
-                             <Search placeholder="排口名称/编号"
-                                 onSearch={(value) => {
-                                     this.setState({
-                                         DGIMNs: value
-                                     });
-                                     this.props.dispatch({
-                                         type: 'pointinfo/getpointlist',
-                                         payload: {
-                                             pageIndex: 1,
-                                             pageSize: 10,
+         <MonitorContent>
+             <div className={styles.cardTitle}>
+                 <Card bordered={false}>
+                     <Form layout="inline" style={{marginBottom: 10}}>
+                         <Row gutter={8} >
+                             <Col span={3} >
+                                 <Search placeholder="排口名称/编号"
+                                     onSearch={(value) => {
+                                         this.setState({
                                              DGIMNs: value
-                                         },
-                                     });
-                                 }
-                                 }
-                                 style={{width: 200}} />
-                         </Col >
-                         <Col span={1} >
-                             <Button type="primary"
-                                 onClick={
-                                     () => {
-                                         this.props.dispatch(routerRedux.push(`/sysmanage/PointDetail/null`));
+                                         });
+                                         this.props.dispatch({
+                                             type: 'pointinfo/getpointlist',
+                                             payload: {
+                                                 pageIndex: 1,
+                                                 pageSize: 10,
+                                                 DGIMNs: value
+                                             },
+                                         });
                                      }
-                                 } > 添加 </Button></Col >
-                     </Row>
-                 </Form>
-             </Card>
-             <Table loading={this.props.effects['pointinfo/getpointlist']}
-                 columns={
-                     columns
-                 }
-                 dataSource={
-                     this.props.requstresult === '1' ? this.props.list : null
-                 }
-                 pagination={
-                     {
-                         showSizeChanger: true,
-                         showQuickJumper: true,
-                         'total': this.props.total,
-                         'pageSize': this.props.pageSize,
-                         'current': this.props.pageIndex,
-                         onChange: this.onChange,
-                         onShowSizeChange: this.onShowSizeChange,
-                         pageSizeOptions: ['10', '20', '30', '40']
-                     }} />
-         </Card>
+                                     }
+                                     style={{width: 200}} />
+                             </Col >
+                             <Col span={1} >
+                                 <Button type="primary"
+                                     onClick={
+                                         () => {
+                                             this.props.dispatch(routerRedux.push(`/sysmanage/PointDetail/null`));
+                                         }
+                                     } > 添加 </Button></Col >
+                         </Row>
+                     </Form>
+                     <Table loading={this.props.effects['pointinfo/getpointlist']}
+                         columns={
+                             columns
+                         }
+                         dataSource={
+                             this.props.requstresult === '1' ? this.props.list : null
+                         }
+                         className={styles.dataTable}
+                         size="small"// small middle
+                         scroll={{ y: 'calc(100vh - 400px)' }}
+                         rowClassName={
+                             (record, index, indent) => {
+                                 if (index === 0) {
+                                     return;
+                                 }
+                                 if (index % 2 !== 0) {
+                                     return 'light';
+                                 }
+                             }
+                         }
+                         pagination={
+                             {
+                                 showSizeChanger: true,
+                                 showQuickJumper: true,
+                                 size: 'small',
+                                 'total': this.props.total,
+                                 'pageSize': this.props.pageSize,
+                                 'current': this.props.pageIndex,
+                                 onChange: this.onChange,
+                                 onShowSizeChange: this.onShowSizeChange,
+                                 pageSizeOptions: ['20', '30', '40', '50']
+                             }} />
+                 </Card>
+             </div>
+         </MonitorContent>
      );
  }
 }

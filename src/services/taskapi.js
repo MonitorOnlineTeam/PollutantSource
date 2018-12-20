@@ -212,3 +212,12 @@ export async function GetBdHistoryInfoList(params) {
         data: null
     } : result;
 }
+
+// 获取比对监测记录
+export async function GetBdTestRecord(params) {
+    const body = {
+        TaskID: params.TaskID
+    };
+    const result = await post('/api/rest/PollutantSourceApi/PTaskForm/GetBdRecord', body, null);
+    return result === null ? { data: null } : result;
+}

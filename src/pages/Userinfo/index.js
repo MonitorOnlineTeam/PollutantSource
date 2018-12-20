@@ -7,9 +7,11 @@ import {
     Col,
     Table,
     Form,
-    Select, Modal, message, Tag, Divider, Dropdown,Icon,Menu
+    Select, Modal, Tag, Divider, Dropdown,Icon,Menu
 } from 'antd';
-import DataFilter from '../Userinfo/DataFilter';
+import styles from './index.less';
+import MonitorContent from '../../components/MonitorContent/index';
+import NewDataFilter from '../Userinfo/DataFilterNew';
 import {routerRedux} from 'dva/router';
 import {connect} from 'dva';
 const Option = Select.Option;
@@ -105,7 +107,8 @@ export default class UserList extends Component {
                 DeleteMark: this.props.DeleteMark,
                 UserAccount: this.props.UserAccount,
                 UserId: record.User_ID,
-                Enalbe: type
+                Enalbe: type,
+
             },
         });
     };

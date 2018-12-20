@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {
-    Card, Icon, Divider, Table, message, Tag, Modal, Pagination, Carousel
+    Card, Icon, Divider, Table, message, Tag, Modal, Pagination, Badge
 } from 'antd';
 import {
     connect
@@ -130,6 +130,7 @@ export default class UseStandardLibrary extends Component {
                  dataIndex: 'PollutantCode',
                  key: 'PollutantCode',
                  width: '10%',
+                 align: 'left',
                  render: (text, record) => {
                      return text;
                  }
@@ -139,6 +140,7 @@ export default class UseStandardLibrary extends Component {
                  dataIndex: 'PollutantName',
                  key: 'PollutantName',
                  width: '40%',
+                 align: 'left',
                  render: (text, record) => {
                      return text;
                  }
@@ -150,7 +152,7 @@ export default class UseStandardLibrary extends Component {
                  width: '10%',
                  render: (text, record) => {
                      if (text === 0) {
-                         return <span style={{color: 'blue'}} >  区间报警  </span >;
+                         return <Badge status="warning" text="区间报警" />;
                      }
                      if (text === 1) {
                          return <span style={{color: 'red'}} >上限报警  </span >;
@@ -163,6 +165,7 @@ export default class UseStandardLibrary extends Component {
                  dataIndex: 'UpperLimit',
                  key: 'UpperLimit',
                  width: '10%',
+                 align: 'center',
                  render: (text, record) => {
                      return text;
                  }
@@ -172,6 +175,7 @@ export default class UseStandardLibrary extends Component {
                  dataIndex: 'LowerLimit',
                  key: 'LowerLimit',
                  width: '10%',
+                 align: 'center',
                  render: (text, record) => {
                      return text;
                  }
@@ -181,6 +185,7 @@ export default class UseStandardLibrary extends Component {
                  dataIndex: 'IsUse',
                  key: 'IsUse',
                  width: '10%',
+                 align: 'center',
                  render: (text, record) => {
                      if (text === '0') {
                          return <span > <Tag color="red" > <a title="单击设置为监测中" onClick={
@@ -196,6 +201,7 @@ export default class UseStandardLibrary extends Component {
              {
                  title: '操作',
                  width: '10%',
+                 align: 'center',
                  render: (text, record) => {
                      if (record.IsUse === '1') {
                          return <a onClick={

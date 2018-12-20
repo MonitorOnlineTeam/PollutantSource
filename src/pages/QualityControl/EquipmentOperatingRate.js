@@ -14,6 +14,7 @@ import {
 } from 'antd';
 import moment from 'moment';
 import {routerRedux} from 'dva/router';
+import MonitorContent from '../../components/MonitorContent/index';
 import styles from './index.less';
 import {connect} from 'dva';
 const { MonthPicker } = DatePicker;
@@ -115,7 +116,7 @@ export default class EquipmentOperatingRate extends Component {
                 title: (<span style={{fontWeight: 'bold'}}>生产时间</span>),
                 dataIndex: 'ProducesTime',
                 key: 'ProducesTime',
-                width: '20%',
+                width: '15%',
                 align: 'center',
                 render: (text, record) => {
                     return text;
@@ -125,7 +126,7 @@ export default class EquipmentOperatingRate extends Component {
                 title: (<span style={{fontWeight: 'bold'}}>停产时间</span>),
                 dataIndex: 'StopProductionTime',
                 key: 'StopProductionTime',
-                width: '18%',
+                width: '15%',
                 align: 'center',
                 render: (text, record) => {
                     return text;
@@ -135,12 +136,12 @@ export default class EquipmentOperatingRate extends Component {
                 title: (<span style={{fontWeight: 'bold'}}>运转率</span>),
                 dataIndex: 'RunningRate',
                 key: 'RunningRate',
-                width: '13%',
+                width: '20%',
                 align: 'left',
                 sorter: true,
                 render: (text, record) => {
                     // 红色：#f5222d 绿色：#52c41a
-                    const percent = (parseFloat(text) * 100 + 88).toFixed(2);
+                    const percent = (parseFloat(text) * 100).toFixed(2);
                     console.log(percent);
                     if (percent >= 90) {
                         return (<div style={{ width: 200 }}>
@@ -166,7 +167,7 @@ export default class EquipmentOperatingRate extends Component {
                 title: (<span style={{fontWeight: 'bold'}}>操作</span>),
                 dataIndex: 'opt',
                 key: 'opt',
-                width: '5%',
+                width: '10%',
                 align: 'center',
                 render: (text, record) => {
                     console.log(`/pointdetail/${record.DGIMN}/ywdsjlist/${this.props.beginTime}/${this.props.endTime}`);
@@ -179,10 +180,9 @@ export default class EquipmentOperatingRate extends Component {
             }
         ];
         return (
-            <div>
-                <Card className={styles.cardTitle} title="综合分析 / 设备运转率统计">
+            <MonitorContent>
+                <Row className={styles.cardTitle}>
                     <Card
-                        type="inner"
                         title="设备运转率列表"
                         extra={
                             <span style={{color: '#b3b3b3'}}>
@@ -190,11 +190,7 @@ export default class EquipmentOperatingRate extends Component {
                                 <MonthPicker defaultValue={this.state.beginTime} format={monthFormat} onChange={this.onDateChange} />
                             </span>
                         }
-                        style={{
-                            height: 'calc(100vh - 205px)'
-                        }}
                     >
-
                         <Row>
                             <Col span={24}>
                                 <div style={{textAlign: 'center', marginBottom: 20}}>
@@ -217,11 +213,6 @@ export default class EquipmentOperatingRate extends Component {
                                         marginLeft: 100,
                                         marginRight: 3
                                     }} /><span style={{cursor: 'pointer'}}> 排口设备运转率未达标</span>
-                                    {
-                                        // <Button style={{marginRight: 20}}><span style={{fontSize: 16, color: '#52c41a', marginRight: 3}}>■</span> 排口设备运转率达标</Button>
-                                    // <Button style={{marginRight: 20}}><span style={{fontSize: 16, color: '#f5222d', marginRight: 3}}>■</span> 排口设备运转率未达标</Button>
-                                    }
-
                                 </div>
                             </Col>
                         </Row>
@@ -232,8 +223,8 @@ export default class EquipmentOperatingRate extends Component {
                                 onChange={this.handleTableChange}
                                 size="small"// small middle
                                 dataSource={this.props.tableDatas}
+                                scroll={{ y: 'calc(100vh - 400px)' }}
                                 // scroll={{ y: 'calc(100vh - 255px)' }}
-                                scroll={{ y: 550 }}
                                 rowClassName={
                                     (record, index, indent) => {
                                         if (index === 0) {
@@ -259,8 +250,8 @@ export default class EquipmentOperatingRate extends Component {
                         </Row>
 
                     </Card>
-                </Card>
-            </div>
+                </Row>
+            </MonitorContent>
         );
     }
 }

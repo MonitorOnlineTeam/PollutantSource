@@ -18,6 +18,7 @@ import {
 import moment from 'moment';
 import styles from './index.less';
 import ReactEcharts from 'echarts-for-react';
+import MonitorContent from '../../components/MonitorContent/index';
 import {connect} from 'dva';
 // import { debug } from 'util';
 // const { MonthPicker } = DatePicker;
@@ -312,11 +313,13 @@ export default class PollutantEmissions extends Component {
         ];
 
         return (
-            <div>
-                <Card className={styles.cardTitle} title="智能分析 / 月度排放量分析">
-                    <Card
-                        type="inner"
-                        title="排放量统计">
+            <MonitorContent>
+                <div className={styles.cardTitle}
+                    style={{
+                        // height: 'calc(100vh - 348px)'
+                    }}
+                >
+                    <Card title="排放量统计" >
                         <Row>
                             <Col span={4}>
                                 <span>污染物：
@@ -360,18 +363,18 @@ export default class PollutantEmissions extends Component {
                         <Row style={styles.cardTitle.cardBg}>
 
                             <Card
-                                style={{ marginTop: 16 }}
+                                style={{  }}
                                 // type="inner"
                                 bordered={false}
                                 title={`${moment(this.props.clickDate).format('YYYY-MM')}月排放量排口统计`}
                             >
-                                <Table style={{ marginTop: 16 }} className={styles.dataTable}
+                                <Table style={{ }} className={styles.dataTable}
                                     loading={this.props.loadingTable}
                                     columns={columns}
                                     onChange={this.handleTableChange}
                                     size="small"// small middle
                                     dataSource={this.props.tableDatas}
-                                    scroll={{ y: 200 }}
+                                    scroll={{ y: 'calc(100vh - 400px)' }}
                                     pagination={{
                                         showSizeChanger: true,
                                         showQuickJumper: true,
@@ -399,7 +402,7 @@ export default class PollutantEmissions extends Component {
                                 onChange={this.handleTableChange}
                                 size="small"// small middle
                                 dataSource={this.props.pointDaysDatas}
-                                scroll={{ y: 500 }}
+                                scroll={{ y: 'calc(100vh - 400px)' }}
                                 pagination={{
                                     showSizeChanger: true,
                                     showQuickJumper: true,
@@ -412,8 +415,8 @@ export default class PollutantEmissions extends Component {
                             />
                         </Modal>
                     </Card>
-                </Card>
-            </div>
+                </div>
+            </MonitorContent>
         );
     }
 }

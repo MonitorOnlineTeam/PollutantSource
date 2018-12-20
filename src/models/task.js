@@ -27,6 +27,7 @@ export default Model.extend({
         HistoryStopCemsList: [],
         loading: false,
         ExceptionDetail: [],
+        BdRecord: []
     },
 
     effects: {
@@ -386,7 +387,7 @@ export default Model.extend({
         * GetDeviceExceptionDetail({
             payload,
         }, { call, update }) {
-            debugger
+            debugger;
             const DataInfo = yield call(GetDeviceExceptionDetail, payload);
             if (DataInfo !== null && DataInfo.requstresult === '1') {
                 if (DataInfo.data !== null) {
@@ -465,6 +466,17 @@ export default Model.extend({
                 });
             }
         },
+        // 运维校准记录
+        * GetBdTestRecord({
+            payload,
+        }, { call, update }) {
+            const DataInfo = yield call(GetBdTestRecord, payload);
+            if (DataInfo != null && DataInfo.requstresult == EnumRequstResult.Success) {
+                if (DataInfo.data != null) {
+                    yield update({ BdRecord: DataInfo.data });
+                }
+            }
+        }
     },
 
 });
