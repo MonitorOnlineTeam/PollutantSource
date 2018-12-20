@@ -96,7 +96,7 @@ export default class EmergencyDetailInfo extends Component {
                         break;
                     case EnumPsOperationForm.TestRecord:
                         rtnVal.push(<p style={{marginBottom: 0}}><Button style={{marginBottom: '5px'}} icon="check-circle-o" onClick={() => {
-                            this.props.dispatch(routerRedux.push(``));
+                            this.props.dispatch(routerRedux.push(`/pointdetail/:pointcode/BdTestRecord/${taskID}/${item.ID}`));
                         }}>{item.TypeName}</Button></p>);
                         break;
                     case EnumPsOperationForm.DataException:

@@ -184,6 +184,10 @@ export const getRouterData = (app) => {
             component: dynamicWrapper(app, ['task'], () =>
                 import('../routes/EmergencyTodoList/JzRecordInfo')),
         },
+        '/pointdetail/:pointcode/BdTestRecord/:TaskID/:TypeID': {
+            component: dynamicWrapper(app, ['task'], () =>
+                import('../routes/EmergencyTodoList/BdTestRecord')),
+        },
         '/pointdetail/:pointcode/qcontrollist/JzHistoryRecords/:TypeID': {
             component: dynamicWrapper(app, ['task'], () =>
                 import('../routes/EmergencyTodoList/JzHistoryRecords')),

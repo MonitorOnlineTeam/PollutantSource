@@ -186,8 +186,8 @@ export default class JzRecordInfo extends Component {
         let SignContent = null;
         let SignTime = null;
         if (JzRecord != null) {
-            Record = JzRecord.record;
-            Code = JzRecord.code;
+            Record = JzRecord.Record;
+            Code = JzRecord.Code;
             RecordList = Record.RecordList;
             EnterpriseName = Record.Content.EnterpriseName;
             PointPosition = Record.Content.PointPosition;
