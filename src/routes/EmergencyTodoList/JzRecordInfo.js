@@ -1,5 +1,3 @@
-'use strict';
-
 import React, { Component } from 'react';
 import styles from '../EmergencyTodoList/JzRecordInfo.less';
 import {Spin, Button, Icon} from 'antd';
@@ -44,12 +42,12 @@ export default class JzRecordInfo extends Component {
         });
     }
 
-    renderItem=(record, code) => {
+    renderItem=(Record, code) => {
         const rtnVal = [];
         if (code != null && code.length > 0) {
-            if (record != null && record.length > 0) {
+            if (Record != null && Record.length > 0) {
                 code.map((item) => {
-                    let rd = record.filter(function(item1) {
+                    let rd = Record.filter(function(item1) {
                         return item1.ItemID === item;
                     });
                     if (rd) {
@@ -185,7 +183,7 @@ export default class JzRecordInfo extends Component {
         let CreateUserID = null;
         let SignContent = null;
         let SignTime = null;
-        if (JzRecord != null) {
+        if (JzRecord !== null) {
             Record = JzRecord.Record;
             Code = JzRecord.Code;
             RecordList = Record.RecordList;

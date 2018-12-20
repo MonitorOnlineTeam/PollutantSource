@@ -24,6 +24,7 @@ export default class RepairRecordDetail extends Component {
     //     });
     // }
     componentDidMount() {
+        debugger
         this.props.dispatch({
             type: 'task/GetRepairDetail',
             payload: {
@@ -38,8 +39,6 @@ export default class RepairRecordDetail extends Component {
     }
 
     renderItem = (Repair) => {
-        console.log(Repair);
-        debugger;
         const rtnVal = [];
         if (Repair !== null) {
             if (Repair.Code !== null && Repair.Code.length > 0) {
@@ -75,8 +74,8 @@ export default class RepairRecordDetail extends Component {
     renderItemChildOne=(item,Repair) => {
         debugger;
         const rtnValChildOne = [];
-        if (Repair.record.RecordList !== null && Repair.record.RecordList.length > 0) {
-            Repair.record.RecordList.map((items,index) => {
+        if (Repair.Record.RecordList !== null && Repair.Record.RecordList.length > 0) {
+            Repair.Record.RecordList.map((items,index) => {
                 if (items.ItemID === item) {
                     rtnValChildOne.push(
                         <td style={{ width: '60%', height: '50px', textAlign: 'center' ,fontSize: '14px' }}>
@@ -96,8 +95,8 @@ export default class RepairRecordDetail extends Component {
     renderItemChildTwo=(item,Repair) => {
         debugger;
         const rtnValChildTwo = [];
-        if (Repair.record.RecordList !== null && Repair.record.RecordList.length > 0) {
-            Repair.record.RecordList.map((items,index) => {
+        if (Repair.Record.RecordList !== null && Repair.Record.RecordList.length > 0) {
+            Repair.Record.RecordList.map((items,index) => {
                 if (items.ItemID === item) {
                     rtnValChildTwo.push(
                         <td style={{ width: '60%', height: '50px', textAlign: 'center' ,fontSize: '14px' }}>
@@ -115,6 +114,7 @@ export default class RepairRecordDetail extends Component {
         return rtnValChildTwo;
     }
     render() {
+        debugger
         const SCREEN_HEIGHT = document.querySelector('body').offsetHeight - 250;
         const Repair = this.props.Repair;
         let EnterpriseName = null;
@@ -131,7 +131,7 @@ export default class RepairRecordDetail extends Component {
         let SignContent = null;
         let SignTime = null;
         if (Repair !== null) {
-            Record = Repair.record;
+            Record = Repair.Record;
             RecordList = Record.RecordList;
             EnterpriseName = Record.Content.EnterpriseName;
             PointPosition = Record.Content.PointPosition;

@@ -23,6 +23,18 @@ export default class files extends Component {
         this.state = {
         };
     }
+    componentWillMount() {
+        const OutputStopID = this.props.OutputStopID;
+        this.props.dispatch({
+            type: 'stopmanagement/getoutputstopfiles',
+            payload: {
+                OutputStopID: OutputStopID,
+                callback: () => {
+
+                }
+            },
+        });
+    }
    renderStandardList=() => {
        const rtnVal = [];
        const that = this;
@@ -32,7 +44,7 @@ export default class files extends Component {
                    <Icon type={item.FileType} style={{fontSize: 60}} />
                </Button>
                <br />
-               <a href={item.url} title={'点击下载文件-' + item.FileName}>{item.SubFileName}</a>
+               <a href={'../../../upload/' + item.FileName} title={'点击下载文件-' + item.FileName}>{item.SubFileName}</a>
            </Col>);
        });
        return rtnVal;
@@ -40,7 +52,9 @@ export default class files extends Component {
    render() {
        return (
            <div>
-               {this.renderStandardList()}
+               <Row gutter={16} justify="center" align="middle">
+                   {this.renderStandardList()}
+               </Row>
            </div>
        );
    }

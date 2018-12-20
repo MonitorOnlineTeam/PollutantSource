@@ -5,7 +5,7 @@ import {
     Col,
     Table,
     Form,
-    Spin
+    Tag
 } from 'antd';
 import { connect } from 'dva';
 import moment from 'moment';
@@ -91,7 +91,16 @@ export default class StopCemsListHistoryRecords extends Component {
             title: '停机时长(小时)',
             width: '45%',
             dataIndex: 'StopHour',
-            key: 'StopHour'
+            key: 'StopHour',
+            render: (text, record) => {
+                var resu = [];
+                if (text !== undefined) {
+                    resu.push(
+                        <Tag style={{marginBottom: 1.5,marginTop: 1.5}} color="#108ee9">{text}</Tag>
+                    );
+                }
+                return resu;
+            }
         }, {
             title: '记录创建时间',
             dataIndex: 'CreateTime',
@@ -125,6 +134,7 @@ export default class StopCemsListHistoryRecords extends Component {
                         </Form>
                     </Card>
                     <Table
+                        size={'middle'}
                         loading={this.props.loading}
                         className={styles.tableCss}
                         columns={columns}

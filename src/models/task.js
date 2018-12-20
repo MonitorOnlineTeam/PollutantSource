@@ -93,8 +93,8 @@ export default Model.extend({
             payload,
         }, { call, update }) {
             const DataInfo = yield call(GetRecordType, payload);
-            if (DataInfo != null && DataInfo.requstresult == EnumRequstResult.Success) {
-                if (DataInfo.data != null) {
+            if (DataInfo !== null && DataInfo.requstresult == EnumRequstResult.Success) {
+                if (DataInfo.data !== null) {
                     yield update({ RecordTypes: DataInfo.data });
                 }
             }
@@ -345,8 +345,10 @@ export default Model.extend({
         * GetRepairDetail({
             payload,
         }, { call, update }) {
+            debugger
             const DataInfo = yield call(GetRepairDetail, payload);
             if (DataInfo !== null && DataInfo.requstresult === '1') {
+                debugger
                 if (DataInfo.data !== null) {
                     yield update({ Repair: DataInfo.data });
                 }

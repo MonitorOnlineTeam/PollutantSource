@@ -46,7 +46,7 @@ export default class DeviceExceptionDetail extends Component {
         let CreateUserID = null;
         let CreateTime = null;
         if (Exception !== null && Exception.length !== 0) {
-            Record = Exception.record;
+            Record = Exception.Record;
             PointPosition = Record.Content.DGIMN; //站点名称
             SignContent = Record.SignContent === null ? null : `data:image/jpeg;base64,${Record.SignContent}`;
             SignTime = Record.SignTime;
