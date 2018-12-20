@@ -281,6 +281,7 @@ export default class Content extends Component {
                             className={styles.dataTable}
                             dataSource={this.props.requstresult === '1' ? this.props.list : null}
                             scroll={{ y: 'calc(100vh - 400px)' }}
+                            size = "small" // small middle
                             pagination={{
                                 showSizeChanger: true,
                                 showQuickJumper: true,

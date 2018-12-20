@@ -45,7 +45,6 @@ export default class EditPollutant extends Component {
               const that = this;
               if (this.state.PollutantCode !== null && this.state.DGIMN !== null) {
                   if (!err && flag === true) {
-                      debugger;
                       that.props.dispatch({
                           type: 'standardlibrary/editmonitorpointPollutant',
                           payload: {

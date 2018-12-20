@@ -9,7 +9,7 @@ import {
     connect
 } from 'dva';
 import DescriptionList from '../../components/DescriptionList';
-import PageHeader from '../../components/PageHeader';
+import MonitorContent from '../../components/MonitorContent/index';
 const {
     Description
 } = DescriptionList;
@@ -45,7 +45,7 @@ export default class pointview extends Component {
         };
     }
     componentWillMount() {
-        const DGIMN = this.props.match.params.ID;
+        const DGIMN = this.props.match.params.DGIMN;
         if (DGIMN !== 'null') {
             this.setState({
                 DGIMN: DGIMN,
@@ -82,16 +82,8 @@ export default class pointview extends Component {
             width: '100%',
         };
         return (
-            <div>
-                <PageHeader title={this.props.match.params.Name + '(' + this.props.match.params.ID + ')的排口详情信息'}
-                    breadcrumbList={
-                        [{
-                            title: '排口列表',
-                            href: '/sysmanage/PointInfo',
-                        }, {
-                            title: '排口详情',
-                        }]
-                    } />
+             < MonitorContent >
+            <div style={{}}>
                 <Card>
                     <Card.Grid style={gridStyle}>
                         <DescriptionList size="large" col="2">
@@ -117,6 +109,7 @@ export default class pointview extends Component {
                     <Card.Grid style={gridStyle}>放仪器表</Card.Grid>
                 </Card>
             </div>
+            </MonitorContent>
         );
     }
 }
