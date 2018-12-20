@@ -260,85 +260,96 @@ export default class UserList extends Component {
         ];
         return (
             <MonitorContent>
-                <Card bordered={false}>
+                <div className={styles.cardTitle}>
+                    <Card bordered={false} >
+                        <Form layout="inline" style={{marginBottom: 10}}>
+                            <Row gutter={8}>
+                                <Col span={3} >
+                                    <Search placeholder="用户名/登录名" onSearch={(value) => {
+                                        this.setState({
+                                            UserAccount: value
+                                        });
+                                        this.props.dispatch({
+                                            type: 'userinfo/fetchuserlist',
+                                            payload: {
+                                                pageIndex: 1,
+                                                pageSize: 10,
+                                                DeleteMark: this.state.DeleteMark,
+                                                UserAccount: value,
+                                            },
+                                        });
+                                    }}style={{ width: 200 }} /></Col>
+                                <Col span={2} >
+                                    <Select value={this.state.DeleteMark} style={{ width: 120 }} onChange={(value) => {
+                                        this.setState({
+                                            DeleteMark: value
+                                        });
+                                        this.props.dispatch({
+                                            type: 'userinfo/fetchuserlist',
+                                            payload: {
+                                                pageIndex: 1,
+                                                pageSize: 10,
+                                                DeleteMark: value,
+                                                UserAccount: this.state.UserAccount
+                                            },
+                                        });
+                                    }}>
+                                        <Option value="">状态</Option>
+                                        <Option value="1">启用</Option>
+                                        <Option value="2">禁用</Option>
+                                    </Select></Col>
+                                <Col span={1} ><Button type="primary"
+                                    onClick={() => {
+                                        this.props.dispatch(routerRedux.push(`/sysmanage/UserDetail/null`));
+                                    }}>添加</Button></Col>
+                            </Row>
+                        </Form>
 
-                    <Form layout="inline" style={{marginBottom: 10}}>
-                        <Row gutter={8}>
-                            <Col span={3} >
-                                <Search placeholder="姓名/登录名" onSearch={(value) => {
-                                    this.setState({
-                                        UserAccount: value
-                                    });
-                                    this.props.dispatch({
-                                        type: 'userinfo/fetchuserlist',
-                                        payload: {
-                                            pageIndex: 1,
-                                            pageSize: 10,
-                                            DeleteMark: this.state.DeleteMark,
-                                            UserAccount: value,
-                                        },
-                                    });
-                                }}style={{ width: 200 }} /></Col>
-                            <Col span={2} >
-                                <Select value={this.state.DeleteMark} style={{ width: 120 }} onChange={(value) => {
-                                    this.setState({
-                                        DeleteMark: value
-                                    });
-                                    this.props.dispatch({
-                                        type: 'userinfo/fetchuserlist',
-                                        payload: {
-                                            pageIndex: 1,
-                                            pageSize: 10,
-                                            DeleteMark: value,
-                                            UserAccount: this.state.UserAccount
-                                        },
-                                    });
-                                }}>
-                                    <Option value="">状态</Option>
-                                    <Option value="1">启用</Option>
-                                    <Option value="2">禁用</Option>
-                                </Select></Col>
-                            <Col span={1} ><Button type="primary"
-                                onClick={() => {
-                                    this.props.dispatch(routerRedux.push(`/sysmanage/UserDetail/null`));
-                                }}>添加</Button></Col>
-                        </Row>
-                    </Form>
-
-                    <Table
-                        loading={this.props.effects['userinfo/fetchuserlist']}
-                        columns={columns}
-                        className={styles.dataTable}
-                        size="small"// small middle
-                        dataSource={this.props.requstresult === '1' ? this.props.list : null}
-                        scroll={{ y: 'calc(100vh - 68px)' }}
-                        pagination={{
-                            showSizeChanger: true,
-                            showQuickJumper: true,
-                            'total': this.props.total,
-                            'pageSize': this.props.pageSize,
-                            'current': this.props.pageIndex,
-                            onChange: this.onChange,
-                            onShowSizeChange: this.onShowSizeChange,
-                            pageSizeOptions: ['5', '10', '20', '30', '40']
-                        }}
-                    />
-                    <Modal
-                        visible={this.state.DataFiltervisible}
-                        title={this.state.title}
-                        width={this.state.width}
-                        destroyOnClose={true}// 清除上次数据
-                        footer={false}
-                        onCancel={() => {
-                            this.setState({
-                                DataFiltervisible: false
-                            });
-                        }}>
-                        {
-                            <NewDataFilter pid={this.state.userId} />
-                        }
-                    </Modal>
-                </Card>
+                        <Table
+                            loading={this.props.effects['userinfo/fetchuserlist']}
+                            columns={columns}
+                            className={styles.dataTable}
+                            size="small"// small middle
+                            dataSource={this.props.requstresult === '1' ? this.props.list : null}
+                            scroll={{ y: 'calc(100vh - 400px)' }}
+                            rowClassName={
+                                (record, index, indent) => {
+                                    if (index === 0) {
+                                        return;
+                                    }
+                                    if (index % 2 !== 0) {
+                                        return 'light';
+                                    }
+                                }
+                            }
+                            pagination={{
+                                showSizeChanger: true,
+                                showQuickJumper: true,
+                                'total': this.props.total,
+                                'pageSize': this.props.pageSize,
+                                'current': this.props.pageIndex,
+                                onChange: this.onChange,
+                                onShowSizeChange: this.onShowSizeChange,
+                                pageSizeOptions: ['5', '10', '20', '30', '40']
+                            }}
+                        />
+                        <Modal
+                            visible={this.state.DataFiltervisible}
+                            title={this.state.title}
+                            width={this.state.width}
+                            destroyOnClose={true}// 清除上次数据
+                            footer={false}
+                            onCancel={() => {
+                                this.setState({
+                                    DataFiltervisible: false
+                                });
+                            }}>
+                            {
+                                <NewDataFilter pid={this.state.userId} />
+                            }
+                        </Modal>
+                    </Card>
+                </div>
             </MonitorContent>
         );
     }

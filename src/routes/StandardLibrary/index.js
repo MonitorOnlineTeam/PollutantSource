@@ -16,11 +16,13 @@ import {
     Tag,
     Icon,
     Radio,
-    Divider,
+    Divider, Badge
 } from 'antd';
 import {routerRedux} from 'dva/router';
 import {connect} from 'dva';
 import FilesList from '../StandardLibrary/FilesList';
+import styles from './index.less';
+import MonitorContent from '../../components/MonitorContent/index';
 const Search = Input.Search;
 @connect(({loading, standardlibrary}) => ({
     ...loading,
@@ -150,6 +152,7 @@ export default class StandardLibrary extends Component {
             return (
                 <Table
                     // loading={this.props.effects['standardlibrary/getpollutantListlist']}
+                    scroll={{ y: 'calc(100vh - 68px)' }}
                     columns={columns}
                     dataSource={arr.length > 1 ? arr : null}
                     pagination={false}
@@ -160,7 +163,7 @@ export default class StandardLibrary extends Component {
             title: '标准名称',
             dataIndex: 'Name',
             key: 'Name',
-            width: '350px',
+            align: 'left',
             render: (text, record) => {
                 return text;
             }
@@ -169,33 +172,35 @@ export default class StandardLibrary extends Component {
             title: '标准类型',
             dataIndex: 'Type',
             key: 'Type',
-            width: '100px',
-            sorter: (a, b) => a.Type - b.Type,
+            width: '10%',
+            align: 'center',
             render: (text, record) => {
                 if (text === 1) {
-                    return <span > <Tag color="lime" > 国标 </Tag > </span >;
+                    return <span > <Badge status="error" text="国标" /></span >;
                 }
                 if (text === 2) {
-                    return <span > <Tag color="green" > 地标 </Tag > </span >;
+                    return <span > <Badge status="success" text="地表" /> </span >;
                 }
-                return <span > <Tag color="cyan" > 行标 </Tag > </span >;
+                return <span > <Badge status="warning" text="行标" /></span >;
             }
         },
         {
             title: '文件',
             dataIndex: 'IsFiles',
             key: 'IsFiles',
-            width: '100px',
+            width: '10%',
+            align: 'center',
             render: (text, record) => {
-                return <a onClick={
-                    () => this.showFile(record)
-                } > <Icon type="copy" theme="twoTone" /></a>;
+                return <Button type="primary" shape="circle" icon="download" size={'small'} id={record.key} onClick={() => {
+                    this.showFile(record);
+                }} />;
             }
         },
         { title: '状态',
             dataIndex: 'IsUsed',
             key: 'IsUsed',
-            width: '80px',
+            width: '10%',
+            align: 'center',
             sorter: (a, b) => a.IsUsed - b.IsUsed,
             render: (text, record) => {
                 if (text === 0) {
@@ -210,7 +215,8 @@ export default class StandardLibrary extends Component {
         },
         {
             title: '操作',
-            width: '150px',
+            width: '20%',
+            align: 'center',
             render: (text, record) => (<Fragment >
                 <a onClick={
                     () => this.props.dispatch(routerRedux.push(`/sysmanage/UserDetail/${record.key}`))
@@ -226,89 +232,106 @@ export default class StandardLibrary extends Component {
         },
         ];
         return (
-            <Card bordered={false}>
-                <Card>
-                    <Form layout="inline">
-                        <Row gutter={8}>
-                            <Col span={3} >
-                                <Search placeholder="标准名称" onSearch={(value) => {
+            <MonitorContent >
+                <div className={
+                    styles.cardTitle
+                } >
+                    <Card bordered={false}>
+                        <Form layout="inline" style={{marginBottom: 10}}>
+                            <Row gutter={8}>
+                                <Col span={3} >
+                                    <Search placeholder="标准名称" onSearch={(value) => {
+                                        this.setState({
+                                            Name: value
+                                        });
+                                        this.props.dispatch({
+                                            type: 'standardlibrary/getlist',
+                                            payload: {
+                                                pageIndex: 1,
+                                                pageSize: 10,
+                                                Type: this.state.Type,
+                                                Name: value,
+                                            },
+                                        });
+                                    }}style={{ width: 200 }} /></Col>
+                                <Col span={1} ><Button type="primary"
+                                    onClick={() => {
+                                        this.props.dispatch(routerRedux.push(`/sysmanage/StandardLibraryDetail/null`));
+                                    }}>添加</Button></Col>
+                                <Col span={12} >
+                                    <Radio.Group defaultValue="0" buttonStyle="solid" onChange={(e) => {
+                                        console.log(e.target.value);
+                                        this.setState({
+                                            Type: e.target.value
+                                        });
+                                        this.props.dispatch({
+                                            type: 'standardlibrary/getlist',
+                                            payload: {
+                                                pageIndex: 1,
+                                                pageSize: 10,
+                                                Type: e.target.value,
+                                                Name: this.state.Name,
+                                            },
+                                        });
+                                    }}>
+                                        <Radio.Button value="0"><Badge status="default" text="全部" /></Radio.Button>
+                                        <Radio.Button value="1"><Badge status="error" text="国标" /></Radio.Button>
+                                        <Radio.Button value="2"><Badge status="success" text="地表" /></Radio.Button>
+                                        <Radio.Button value="3"><Badge status="warning" text="行标" /></Radio.Button>
+                                    </Radio.Group>
+                                </Col>
+                            </Row>
+                        </Form>
+                        <Table
+                            loading={this.props.effects['standardlibrary/getlist']}
+                            columns={columns}
+                            className={styles.dataTable}
+                            dataSource={this.props.requstresult === '1' ? this.props.list : null}
+                            expandedRowRender={expandedRowRender}
+                            size="small"
+                            scroll={{ y: 'calc(100vh - 400px)' }}
+                            rowClassName={
+                                (record, index, indent) => {
+                                    if (index === 0) {
+                                        return;
+                                    }
+                                    if (index % 2 !== 0) {
+                                        return 'light';
+                                    }
+                                }
+                            }
+                            pagination={{
+                                showSizeChanger: true,
+                                showQuickJumper: true,
+                                'total': this.props.total,
+                                'pageSize': this.props.pageSize,
+                                'current': this.props.pageIndex,
+                                onChange: this.onChange,
+                                onShowSizeChange: this.onShowSizeChange,
+                                pageSizeOptions: ['5', '10', '20', '30', '40']
+                            }}
+
+                        />
+                        <Modal
+                            visible={this.state.Fvisible}
+                            title={this.state.title}
+                            width={this.state.width}
+                            destroyOnClose={true}// 清除上次数据
+                            footer={false}
+                            onCancel={
+                                () => {
                                     this.setState({
-                                        Name: value
+                                        Fvisible: false
                                     });
-                                    this.props.dispatch({
-                                        type: 'standardlibrary/getlist',
-                                        payload: {
-                                            pageIndex: 1,
-                                            pageSize: 10,
-                                            Type: this.state.Type,
-                                            Name: value,
-                                        },
-                                    });
-                                }}style={{ width: 200 }} /></Col>
-                            <Col span={1} ><Button type="primary"
-                                onClick={() => {
-                                    this.props.dispatch(routerRedux.push(`/sysmanage/StandardLibraryDetail/null`));
-                                }}>添加</Button></Col>
-                            <Col span={12} >
-                                <Radio.Group defaultValue="0" buttonStyle="solid" onChange={(e) => {
-                                    console.log(e.target.value);
-                                    this.setState({
-                                        Type: e.target.value
-                                    });
-                                    this.props.dispatch({
-                                        type: 'standardlibrary/getlist',
-                                        payload: {
-                                            pageIndex: 1,
-                                            pageSize: 10,
-                                            Type: e.target.value,
-                                            Name: this.state.Name,
-                                        },
-                                    });
-                                }}>
-                                    <Radio.Button value="0">全部</Radio.Button>
-                                    <Radio.Button value="1">国标</Radio.Button>
-                                    <Radio.Button value="2">地标</Radio.Button>
-                                    <Radio.Button value="3">行标</Radio.Button>
-                                </Radio.Group>
-                            </Col>
-                        </Row>
-                    </Form>
-                </Card>
-                <Table
-                    loading={this.props.effects['standardlibrary/getlist']}
-                    columns={columns}
-                    dataSource={this.props.requstresult === '1' ? this.props.list : null}
-                    expandedRowRender={expandedRowRender}
-                    scroll={{ y: 'calc(100vh - 455px)' }}
-                    pagination={{
-                        showSizeChanger: true,
-                        showQuickJumper: true,
-                        'total': this.props.total,
-                        'pageSize': this.props.pageSize,
-                        'current': this.props.pageIndex,
-                        onChange: this.onChange,
-                        onShowSizeChange: this.onShowSizeChange,
-                        pageSizeOptions: ['5', '10', '20', '30', '40']
-                    }}
-                />
-                <Modal
-                    visible={this.state.Fvisible}
-                    title={this.state.title}
-                    width={this.state.width}
-                    destroyOnClose={true}// 清除上次数据
-                    footer={false}
-                    onCancel={
-                        () => {
-                            this.setState({
-                                Fvisible: false
-                            });
-                        }
-                    } >
-                    {
-                        <FilesList pid={this.state.StandardLibraryID} />
-                    }
-                </Modal>
-            </Card>
+                                }
+                            } >
+                            {
+                                <FilesList pid={this.state.StandardLibraryID} />
+                            }
+                        </Modal>
+                    </Card>
+                </div>
+            </MonitorContent>
         );
     }
 }
