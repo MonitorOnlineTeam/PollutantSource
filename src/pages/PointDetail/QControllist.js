@@ -58,7 +58,6 @@ export default class QControllist extends Component {
                 return true;
             }
         });
-        debugger;
         return (
             <div style={{ width: '100%', height: 'calc(100vh - 222px)' }}>
                 {<Layout style={{ padding: '24px 0', background: '#fff' }}>
@@ -68,7 +67,6 @@ export default class QControllist extends Component {
                             activeKey={activeKey}
                             onChange={(key) => {
                                 const { match } = this.props;
-                                debugger;
                                 router.push(`${match.url}/${key}`);
                                 // this.props.dispatch(routerRedux.push(`/pointdetail/${this.props.match.params.pointcode}/qcontrollist/${srcValue}`));
                             }}

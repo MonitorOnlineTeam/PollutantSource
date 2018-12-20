@@ -222,7 +222,6 @@ export default class DataFilterNew extends Component {
              return rtnVal;
          }
          render() {
-             debugger;
              return (
                  <Spin spinning={this.props.listloading&&this.props.addloading}>
                          <div>
