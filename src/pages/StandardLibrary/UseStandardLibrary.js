@@ -96,18 +96,21 @@ export default class UseStandardLibrary extends Component {
                      <div className={styles.child}>{that.renderPollutantItem(item.child)}</div>
                      <div className={styles.foot}>
                          <div className={styles.use}>
-                             <a className={styles.a} onClick={() => {
-                                 that.setState({
-                                     StandardLibraryID: item.key,
-                                     Pvisible: true,
-                                     title: item.Name + '中的污染物',
-                                     width: '90%',
-                                 });
-                             }}> <Icon type="search"style={{marginRight: 5}} />查看更多</a>
-                             <Divider type="vertical" />
-                             <a className={styles.a} onClick={() => {
-                                 that.UseALL(item.key);
-                             }}> <Icon type="appstore" style={{marginRight: 5}} />应用全部</a>
+                             <div style={{position: 'relative'}}>
+                                 <a className={styles.a} onClick={() => {
+                                     that.setState({
+                                         StandardLibraryID: item.key,
+                                         Pvisible: true,
+                                         title: item.Name + '中的污染物',
+                                         width: '90%',
+                                     });
+                                 }}>
+                                     <Icon type="search"style={{marginRight: 5}} />查看更多</a>
+                                 <Divider type="vertical" />
+                                 <a className={styles.a} onClick={() => {
+                                     that.UseALL(item.key);
+                                 }}> <Icon type="appstore" style={{marginRight: 5}} />应用全部</a>
+                             </div>
                          </div>
                      </div>
                  </div>);
@@ -155,9 +158,9 @@ export default class UseStandardLibrary extends Component {
                          return <Badge status="warning" text="区间报警" />;
                      }
                      if (text === 1) {
-                         return <span style={{color: 'red'}} >上限报警  </span >;
+                         return <Badge status="error" text="上线报警" />;
                      }
-                     return <span style={{color: 'green'}} >  下线报警 </span >;
+                     return <Badge status="default" text="下限报警" />;
                  }
              },
              {

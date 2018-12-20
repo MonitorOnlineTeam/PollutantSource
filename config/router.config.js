@@ -129,6 +129,8 @@ export default [
 /* 报警及时响应统计分析 */
 { path: '/analysis/alarmresponse', component: './Analysis/AlarmResponse' },      
 
+/* 报警排口分析 */
+{ path: '/analysis/overpointlist', component: './Analysis/OverPointList' },      
 
 
 

@@ -41,7 +41,6 @@ export default class view extends Component {
             payload: {
                 OutputStopID: OutputStopID,
                 callback: () => {
-                    debugger;
                     console.log(this.props.editlsit.Filelist);
                     console.log(11);
                     if (this.props.requstresult === '1') {
