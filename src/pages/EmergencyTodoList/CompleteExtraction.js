@@ -30,14 +30,12 @@ class CompleteExtraction extends Component {
         this.props.dispatch({
             type: 'task/GetPatrolRecordListPC',
             payload: {
-                TaskIds: this.props.match.params.CqfPatrolTaskIds,
-                TypeIDs: this.props.match.params.CqfPatrolTypeIDs
+                TaskIds: this.props.match.params.TaskID,
+                TypeIDs: this.props.match.params.TypeID
             },
         });
     }
     renderItem = (Repair) => {
-        debugger;
-        console.log(Repair);
         const rtnVal = [];
         const remark = [];
         var childIDarray = [];
@@ -69,9 +67,7 @@ class CompleteExtraction extends Component {
 
             const rtnValChild = [];
             if (Repair.Record[0].RecordList !== null && Repair.Record[0].RecordList.length > 0) {
-                debugger;
                 Repair.Record[0].RecordList.map((items,index) => {
-                    debugger;
                     if (items.count !== 0) {
                         rtnValChild.push(
                             <tr>
@@ -140,7 +136,6 @@ class CompleteExtraction extends Component {
         }
     }
     renderItemChild=(id,item) => {
-        debugger;
         var rtnValChildren = '';
         if (item !== null && item.length > 0) {
             item.map((items,index) => {

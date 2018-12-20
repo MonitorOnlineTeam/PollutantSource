@@ -49,7 +49,6 @@ export default class EmergencyDetailInfo extends Component {
     renderItem=(data, taskID) => {
         const rtnVal = [];
         data.map((item) => {
-            debugger;
             if (item.FormMainID !== null) {
                 switch (item.ID) {
                     case EnumPsOperationForm.Repair:
@@ -137,7 +136,6 @@ export default class EmergencyDetailInfo extends Component {
         let RecordTypeInfo = [];
         let CompleteTime = null;
         const taskInfo = this.props.taskInfo;
-        debugger;
         if (taskInfo.requstresult == EnumRequstResult.Success && taskInfo.data !== null) {
             data = taskInfo.data[0];
             TaskID = data.ID;

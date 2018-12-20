@@ -16,7 +16,6 @@ export default class DeviceExceptionDetail extends Component {
     }
 
     componentDidMount() {
-        debugger;
         this.props.dispatch({
             type: 'task/GetDeviceExceptionDetail',
             payload: {
@@ -30,10 +29,8 @@ export default class DeviceExceptionDetail extends Component {
         });
     }
     render() {
-        debugger;
         const SCREEN_HEIGHT = document.querySelector('body').offsetHeight - 250;
         const Exception = this.props.ExceptionDetail;
-        console.log(Exception);
         let PointPosition = null;
         let Record = null;
         let SignContent = null;
