@@ -65,17 +65,17 @@ export default [
                /* 运维大事记-标气更换历史记录 */
            { path: '/pointdetail/:pointcode/qcontrollist/StandardGasHistoryRecords/:TypeID', component: './EmergencyTodoList/StandardGasHistoryRecords' },
             /* 运维大事记-完全抽取法CEMS记录 */
-            { path: '/pointdetail/:pointcode/CompleteExtraction/:CqfPatrolTaskIds/:CqfPatrolTypeIDs', component: './EmergencyTodoList/CompleteExtraction' },
+            { path: '/pointdetail/:pointcode/CompleteExtraction/:TaskID/:TypeID', component: './EmergencyTodoList/CompleteExtraction' },
            /* 运维大事记-完全抽取法CEMS历史记录 */
            { path: '/pointdetail/:pointcode/qcontrollist/WQCQFInspectionHistoryRecords/:TypeID', component: './EmergencyTodoList/WQCQFInspectionHistoryRecords' },
-           /* 运维大事记-稀释采样法CEMS记录 */
+           /* 运维大事记-稀释采样法CEMS记录 */  
            { path: '/pointdetail/:pointcode/DilutionSampling/:CyfPatrolTaskIds/:CyfPatrolTypeIDs', component: './EmergencyTodoList/DilutionSampling' },
            /* 运维大事记-稀释采样法CEMS历史记录 */
-           { path: '/pointdetail/:pointcode/qcontrollist/WQCQFInspectionHistoryRecords/:TypeID', component: './EmergencyTodoList/WQCQFInspectionHistoryRecords' },
+           { path: '/pointdetail/:pointcode/qcontrollist/XSCYFInspectionHistoryRecords/:TypeID', component: './EmergencyTodoList/XSCYFInspectionHistoryRecords' },
            /* 运维大事记-直接测量法CEMS记录 */
            { path: '/pointdetail/:pointcode/DirectMeasurement/:ClfPatrolTaskIds/:ClfPatrolTypeIDs', component: './EmergencyTodoList/DirectMeasurement' },
            /* 运维大事记-直接测量法CEMS历史记录 */
-           { path: '/pointdetail/:pointcode/qcontrollist/WQCQFInspectionHistoryRecords/:TypeID', component: './EmergencyTodoList/WQCQFInspectionHistoryRecords' },
+           { path: '/pointdetail/:pointcode/qcontrollist/ZZCLFInspectionHistoryRecords/:TypeID', component: './EmergencyTodoList/ZZCLFInspectionHistoryRecords' },
            /* 运维大事记-校准记录 */
            { path: '/pointdetail/:pointcode/JzRecordInfo/:TaskID/:TypeID', component: './EmergencyTodoList/JzRecordInfo' },
            /* 运维大事记-校准历史记录 */

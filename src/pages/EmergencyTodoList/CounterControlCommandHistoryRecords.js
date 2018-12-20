@@ -138,11 +138,10 @@ export default class CounterControlCommandHistoryRecords extends Component {
                     <Table
                         loading={this.props.loading}
                         className={styles.tableCss}
-                        // bordered={true}
                         columns={columns}
                         dataSource={dataSource}
                         size={'middle'}
-                        scroll={{ y: 'calc(100vh - 190px)' }}
+                        scroll={{ y: 'calc(100vh - 475px)' }}
                         pagination={{
                             showSizeChanger: true,
                             showQuickJumper: true,

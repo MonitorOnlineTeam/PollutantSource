@@ -73,8 +73,7 @@ export default class ZZCLFInspectionHistoryRecords extends Component {
         }
 
         seeDetail=(record) => {
-            debugger;
-            this.props.dispatch(routerRedux.push(`/pointdetail/:pointcode/DirectMeasurement/${record.TaskID}/${this.state.typeID}`));
+            this.props.dispatch(routerRedux.push(`/pointdetail/:pointcode/DirectMeasurement/${record.TaskID}/${record.TypeID}`));
         }
 
         render() {
@@ -137,7 +136,7 @@ export default class ZZCLFInspectionHistoryRecords extends Component {
                         </Card>
                         <Table
                             size={'middle'}
-                            scroll={{ y: 'calc(100vh - 190px)' }}
+                            scroll={{ y: 'calc(100vh - 475px)' }}
                             loading={this.props.loading}
                             className={styles.tableCss}
                             columns={columns}

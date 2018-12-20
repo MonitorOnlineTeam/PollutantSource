@@ -44,7 +44,6 @@ export default class RepairHistoryRecords extends Component {
             payload: {
                 pageIndex: pageIndex,
                 pageSize: pageSize,
-                TypeID: TypeID,
                 DGIMN: DGIMN,
                 BeginTime: moment(BeginTime).format('YYYY-MM-DD 00:00:00'),
                 EndTime: moment(EndTime).format('YYYY-MM-DD 23:59:59'),
@@ -133,8 +132,9 @@ export default class RepairHistoryRecords extends Component {
                         </Form>
                     </Card>
                     <Table
+                        key={dataSource.ID}
                         size={'middle'}
-                        scroll={{ y: 'calc(100vh - 190px)' }}
+                        scroll={{ y: 'calc(100vh - 475px)' }}
                         loading={this.props.loading}
                         className={styles.tableCss}
                         columns={columns}

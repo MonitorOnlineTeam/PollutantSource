@@ -17,10 +17,6 @@ class DilutionSampling extends Component {
    
         };
     }
-
-    // componentWillMount() {
-    //     this.onChange();
-    // }
     componentDidMount() {
         this.onChange();
         const _this = this;
@@ -29,7 +25,6 @@ class DilutionSampling extends Component {
         });
     }
     onChange = () => {
-        debugger;
         this.props.dispatch({
             type: 'task/GetPatrolRecordListPC',
             payload: {
@@ -39,8 +34,6 @@ class DilutionSampling extends Component {
         });
     }
     renderItem = (Repair) => {
-        debugger;
-        console.log(Repair);
         const rtnVal = [];
         const remark = [];
         var childIDarray = [];
@@ -72,9 +65,7 @@ class DilutionSampling extends Component {
 
             const rtnValChild = [];
             if (Repair.Record[0].RecordList !== null && Repair.Record[0].RecordList.length > 0) {
-                debugger;
                 Repair.Record[0].RecordList.map((items,index) => {
-                    debugger;
                     if (items.count !== 0) {
                         rtnValChild.push(
                             <tr>
@@ -143,7 +134,6 @@ class DilutionSampling extends Component {
         }
     }
     renderItemChild=(id,item) => {
-        debugger;
         var rtnValChildren = '';
         if (item !== null && item.length > 0) {
             item.map((items,index) => {

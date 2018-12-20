@@ -76,7 +76,6 @@ export default class StopCemsListHistoryRecords extends Component {
     }
 
     seeDetail=(record) => {
-        debugger;
         this.props.dispatch(routerRedux.push(`/pointdetail/:pointcode/StopCemsInfo/${record.TaskID}/${this.state.TypeID}`));
     }
 
@@ -135,7 +134,7 @@ export default class StopCemsListHistoryRecords extends Component {
                     </Card>
                     <Table
                         size={'middle'}
-                        scroll={{ y: 'calc(100vh - 190px)' }}
+                        scroll={{ y: 'calc(100vh - 475px)' }}
                         loading={this.props.loading}
                         className={styles.tableCss}
                         columns={columns}
