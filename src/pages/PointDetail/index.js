@@ -76,6 +76,11 @@ class PointDetail extends Component {
             modalVisible: false,
         });
     }
+    clickCard = () => {
+        this.setState({
+            modalVisible: false,
+        });
+    }
     render() {
         const { match, routerData, location,children } = this.props;
         Cookie.set('seldgimn', match.params.pointcode);
@@ -159,7 +164,7 @@ class PointDetail extends Component {
                     <div style={{ background: '#ECECEC', padding: '30px',minHeight:'400px' }} className={styles.pointModal}>
                         <Row gutter={48}>
                             <Col xs={12} sm={12} md={6} lg={6} xl={6}>
-                                <Card  bordered={false} loading={this.state.loadingCard}>
+                                <Card style={{cursor:'pointer'}} onClick={this.clickCard}  bordered={false} loading={this.state.loadingCard}>
                                     <div className={styles.cardContent}>
                                         <p><Badge style={{ backgroundColor: 'rgb(255,198,0)' }} dot={true}/><span className={styles.pointName}>焦炉小号烟囱7</span></p>
                                         <p className={styles.TEF}>传输有效率<span>61%</span></p>
@@ -171,9 +176,9 @@ class PointDetail extends Component {
                                 </Card>
                             </Col>
                             <Col xs={12} sm={12} md={6} lg={6} xl={6}>
-                                <Card  bordered={false}>
+                                <Card style={{cursor:'pointer'}} onClick={this.clickCard}  bordered={false} loading={this.state.loadingCard}>
                                     <div className={styles.cardContent}>
-                                        <p><Badge dot={true}/><span className={styles.pointName}>焦炉小号烟囱7</span></p>
+                                        <p><Badge style={{ backgroundColor: 'rgb(255,198,0)' }} dot={true}/><span className={styles.pointName}>焦炉小号烟囱7</span></p>
                                         <p className={styles.TEF}>传输有效率<span>61%</span></p>
                                         <p className={styles.TEF}>类型：<span>废弃</span></p>
                                     </div>
@@ -183,9 +188,9 @@ class PointDetail extends Component {
                                 </Card>
                             </Col>
                             <Col xs={12} sm={12} md={6} lg={6} xl={6}>
-                                <Card  bordered={false}>
+                                <Card style={{cursor:'pointer'}} onClick={this.clickCard}  bordered={false} loading={this.state.loadingCard}>
                                     <div className={styles.cardContent}>
-                                        <p><Badge dot={true}/><span className={styles.pointName}>焦炉小号烟囱7</span></p>
+                                        <p><Badge style={{ backgroundColor: 'rgb(255,198,0)' }} dot={true}/><span className={styles.pointName}>焦炉小号烟囱7</span></p>
                                         <p className={styles.TEF}>传输有效率<span>61%</span></p>
                                         <p className={styles.TEF}>类型：<span>废弃</span></p>
                                     </div>
@@ -195,9 +200,21 @@ class PointDetail extends Component {
                                 </Card>
                             </Col>
                             <Col xs={12} sm={12} md={6} lg={6} xl={6}>
-                                <Card  bordered={false}>
+                                <Card style={{cursor:'pointer'}} onClick={this.clickCard}  bordered={false} loading={this.state.loadingCard}>
                                     <div className={styles.cardContent}>
-                                        <p><Badge dot={true}/><span className={styles.pointName}>焦炉小号烟囱7</span></p>
+                                        <p><Badge style={{ backgroundColor: 'rgb(255,198,0)' }} dot={true}/><span className={styles.pointName}>焦炉小号烟囱7</span></p>
+                                        <p className={styles.TEF}>传输有效率<span>61%</span></p>
+                                        <p className={styles.TEF}>类型：<span>废弃</span></p>
+                                    </div>
+                                    <div style={{position:"absolute",top:5,right:-25}}>
+                                        <Tag color="#2db7f5">故障</Tag>
+                                    </div>
+                                </Card>
+                            </Col>
+                            <Col xs={12} sm={12} md={6} lg={6} xl={6}>
+                                <Card style={{cursor:'pointer'}} onClick={this.clickCard}  bordered={false} loading={this.state.loadingCard}>
+                                    <div className={styles.cardContent}>
+                                        <p><Badge style={{ backgroundColor: 'rgb(255,198,0)' }} dot={true}/><span className={styles.pointName}>焦炉小号烟囱7</span></p>
                                         <p className={styles.TEF}>传输有效率<span>61%</span></p>
                                         <p className={styles.TEF}>类型：<span>废弃</span></p>
                                     </div>
