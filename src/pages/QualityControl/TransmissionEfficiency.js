@@ -182,8 +182,13 @@ export default class TransmissionEfficiency extends Component {
                 }
             },
         ];
+        debugger;
         return (
-            <MonitorContent>
+            <MonitorContent {...this.props} breadCrumbList={[
+                {Name:'首页',Url:'/'},
+                {Name:'智能质控',Url:''},
+                {Name:'传输有效率',Url:''}
+            ]}>
                 <Row className={styles.cardTitle}>
                     <Card
                         title="传输有效率列表"

@@ -91,8 +91,8 @@ export default class pointview extends Component {
          const rtnVal = [];
         rtnVal.push(<div style={{backgroundColor:'#1890FF',width:5,lineHeight:1}}>
         <span style={{marginLeft:10}}>气态污染物CEMS设备仪器</span>
-        <span style={{marginLeft:10}}><Icon type="edit" title='编辑' /></span>
-        <span style={{marginLeft:3}}><Icon type="plus" title='添加子设备' /></span>
+        <span style={{marginLeft:10,cursor:'pointer'}}><Icon type="edit" theme="twoTone"  title='编辑' /></span>
+        <span style={{marginLeft:10,cursor:'pointer'}}><Icon type="plus-circle" theme="twoTone"  title='添加子设备' /></span>
         </div>);
         return rtnVal;
     }
@@ -100,8 +100,8 @@ export default class pointview extends Component {
          const rtnVal = [];
         rtnVal.push(<div style={{backgroundColor:'#1890FF',width:5,lineHeight:1}}>
         <span style={{marginLeft:10}}>烟尘污染物CEMS设备仪器</span>
-        <span style={{marginLeft:10}}><Icon type="edit" title='编辑' /></span>
-        <span style={{marginLeft:3}}><Icon type="plus" title='添加子设备' /></span>
+       <span style={{marginLeft:10,cursor:'pointer'}}><Icon type="edit" theme="twoTone"  title='编辑' /></span>
+        <span style={{marginLeft:10,cursor:'pointer'}}><Icon type="plus-circle" theme="twoTone"  title='添加子设备' /></span>
         </div>);
         return rtnVal;
     }
@@ -109,8 +109,8 @@ export default class pointview extends Component {
          const rtnVal = [];
         rtnVal.push(<div style={{backgroundColor:'#1890FF',width:5,lineHeight:1}}>
         <span style={{marginLeft:10}}>颗粒污染物CEMS设备仪器</span>
-        <span style={{marginLeft:10}}><Icon type="edit" title='编辑' /></span>
-        <span style={{marginLeft:3}}><Icon type="plus" title='添加子设备' /></span>
+        <span style={{marginLeft:10,cursor:'pointer'}}><Icon type="edit" theme="twoTone"  title='编辑' /></span>
+        <span style={{marginLeft:10,cursor:'pointer'}}><Icon type="plus-circle" theme="twoTone"  title='添加子设备' /></span>
         </div>);
         return rtnVal;
     }
