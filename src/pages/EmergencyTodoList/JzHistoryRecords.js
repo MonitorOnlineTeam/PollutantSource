@@ -139,6 +139,7 @@ export default class JzHistoryRecords extends Component {
                 </Card>
                 <Table
                     size={'middle'}
+                    scroll={{ y: 'calc(100vh - 475px)' }}
                     className={styles.tableCss}
                     loading={this.props.isloading}
                     columns={columns}

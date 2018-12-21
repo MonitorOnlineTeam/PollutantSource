@@ -71,17 +71,15 @@ class PointDetail extends Component {
                             </Breadcrumb.Item>
                         </Breadcrumb>
                     </div> */}
-                    <div className={styles.pageHeader}>
-                        <img src='../../../point.png'  style={{width:37,position:"fixed",marginTop:-4}}/>
-                        <span style={{marginLeft:60,marginRight:10,color:'#ccc'}}>当前排口：</span>
-                        <Select defaultValue={pointInfo.pointName} style={{ width: 200 }}>
+                    <div className={styles.pageHeader} style={{}}>
+                        <img src='../../../point.png'  style={{width:37,marginTop:-1}}/>
+                        <span style={{color:'#ccc',marginLeft:10}}>当前排口：</span>
+                        <span style={{cursor:'pointer'}}>{pointInfo.pointName} <Icon type="down" style={{marginLeft:10,width:15}} /></span>
+                        {/* <Select defaultValue={pointInfo.pointName} style={{ width: 200 }}>
                             <Option value={pointInfo.pointcode}>{pointInfo.pointName}</Option>
-                            {/* <Option value="lucy">Lucy</Option>
-                            <Option value="disabled" disabled>Disabled</Option>
-                            <Option value="Yiminghe">yiminghe</Option> */}
-                        </Select>
-                        <Button style={{float:"right",marginRight:30}}><Link to="/overview/mapview">返回</Link></Button>
-                        <Button type="primary" ghost style={{float:"right",marginRight:30}}>派发</Button>
+                        </Select> */}
+                        <Button style={{float:"right",marginRight:30}}><Link to="/overview/mapview"><Icon type="left" />返回</Link></Button>
+                        <Button type="primary" ghost style={{float:"right",marginRight:30}}><Icon type="bell" />派单</Button>
                     </div>
                     <div style={{ backgroundColor: '#fff', margin: 10, padding: 10 }}>
                         <Tabs

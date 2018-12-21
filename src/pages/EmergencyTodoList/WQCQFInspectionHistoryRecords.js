@@ -33,21 +33,21 @@ export default class WQCQFInspectionHistoryRecords extends Component {
                 BeginTime: moment().subtract(11, 'month').format('YYYY-MM-DD 00:00:00'),
                 EndTime: moment().format('YYYY-MM-DD 23:59:59'),
                 DGIMN: this.props.match.params.pointcode,
-                typeID: this.props.match.params.TypeID,
+                TypeID: this.props.match.params.TypeID,
                 value: [],
             };
         }
         componentDidMount() {
-            this.GetHistoryRecord(this.props.pageIndex, this.props.pageSize, this.state.DGIMN, this.state.typeID, this.state.BeginTime, this.state.EndTime);
+            this.GetHistoryRecord(this.props.pageIndex, this.props.pageSize, this.state.DGIMN, this.state.TypeID, this.state.BeginTime, this.state.EndTime);
         }
 
-        GetHistoryRecord=(pageIndex, pageSize, DGIMN, typeID, BeginTime, EndTime) => {
+        GetHistoryRecord=(pageIndex, pageSize, DGIMN, TypeID, BeginTime, EndTime) => {
             this.props.dispatch({
                 type: 'task/GetHistoryInspectionHistoryRecords',
                 payload: {
                     pageIndex: pageIndex,
                     pageSize: pageSize,
-                    TypeID: typeID,
+                    TypeID: TypeID,
                     DGIMN: DGIMN,
                     BeginTime: moment(BeginTime).format('YYYY-MM-DD 00:00:00'),
                     EndTime: moment(EndTime).format('YYYY-MM-DD 23:59:59'),
@@ -63,19 +63,19 @@ export default class WQCQFInspectionHistoryRecords extends Component {
                     EndTime: dateString[1]
                 }
             );
-            this.GetHistoryRecord(this.props.pageIndex, this.props.pageSize, this.state.DGIMN, this.state.typeID, dateString[0], dateString[1]);
+            this.GetHistoryRecord(this.props.pageIndex, this.props.pageSize, this.state.DGIMN, this.state.TypeID, dateString[0], dateString[1]);
         };
 
         onShowSizeChange = (pageIndex, pageSize) => {
-            this.GetHistoryRecord(pageIndex, pageSize, this.state.DGIMN, this.state.typeID, this.state.BeginTime, this.state.EndTime);
+            this.GetHistoryRecord(pageIndex, pageSize, this.state.DGIMN, this.state.TypeID, this.state.BeginTime, this.state.EndTime);
         }
 
         onChange = (pageIndex, pageSize) => {
-            this.GetHistoryRecord(pageIndex, pageSize, this.state.DGIMN, this.state.typeID, this.state.BeginTime, this.state.EndTime);
+            this.GetHistoryRecord(pageIndex, pageSize, this.state.DGIMN, this.state.TypeID, this.state.BeginTime, this.state.EndTime);
         }
 
         seeDetail=(record) => {
-            this.props.dispatch(routerRedux.push(`/pointdetail/:pointcode/CompleteExtraction/${record.TaskID}/${this.state.typeID}`));
+            this.props.dispatch(routerRedux.push(`/pointdetail/:pointcode/CompleteExtraction/${record.TaskID}/${record.TypeID}`));
         }
 
         render() {
@@ -138,6 +138,7 @@ export default class WQCQFInspectionHistoryRecords extends Component {
                         </Card>
                         <Table
                             size={'middle'}
+                            scroll={{ y: 'calc(100vh - 475px)' }}
                             loading={this.props.loading}
                             className={styles.tableCss}
                             columns={columns}
