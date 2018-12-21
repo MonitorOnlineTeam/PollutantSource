@@ -223,7 +223,7 @@ export default class DataFilterNew extends Component {
          }
          render() {
              return (
-                 <Spin spinning={this.props.listloading&&this.props.addloading}>
+                 <Spin spinning={this.props.listloading}>
                          <div>
                              <Card>
                                  <Form layout="inline">

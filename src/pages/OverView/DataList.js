@@ -218,7 +218,7 @@ class dataList extends PureComponent {
                             <TimePicker onChange={this.pickerChange} style={{ width: 150, marginRight: 20,float: 'left' }} defaultValue={this.state.nowdate} format="HH:00:00" />
                             <div style={{ width: 'calc(100vw - 220px)',marginLeft: 60 }}>
                                 <Button style={{ marginRight: 10 }}><Icon type="user" style={{ color: '#3B91FF' }} /> 运维中</Button>
-                                <Button style={{ marginRight: 20 }}><span style={{ fontSize: 16, color: '#ED6B68' }}>■</span> 传输有效率不达标</Button>
+                                <Button style={{ marginRight: 20 }}><span style={{ fontSize: 16, color: '#ffca00' }}>■</span> 传输有效率不达标</Button>
                                 <Radio.Group>
                                     <Radio.Button value="normal"><img src="../../../gisnormal.png" /> 正常</Radio.Button>
                                     <Radio.Button value="over"><img src="../../../gisover.png" /> 超标</Radio.Button>
