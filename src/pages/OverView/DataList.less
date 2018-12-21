@@ -6,26 +6,37 @@
             overflow: hidden;
             height: 65px;
         }
-   
+        .light
+        {
+          background: #f8f8f8;
+        }
          .ant-table-body{
+
+            
+
             &::-webkit-scrollbar-track-piece{
                 -webkit-border-radius:0;
                }
+               &::-webkit-scrollbar-track{
+                -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+                border-radius: 10px;
+                background-color: #f5f5f5;
+            }
                &::-webkit-scrollbar{
-                width:8px;
-                height:8px;
+                width:13px;
+                height:13px;
                }
                &::-webkit-scrollbar-thumb{
                 height:50px;
-                background-color:#61A1D5;
-                -webkit-border-radius:4px;
+                background-color:#d1d1d1;
+                -webkit-border-radius:10px;
                 outline-offset:-2px;
-                border: 2px solid #61A1D5;
+                border: 8px solid #d1d1d1 ;
                }
                &::-webkit-scrollbar-thumb:hover{
                 height:50px;
-                background-color:#61A1D5;
-                -webkit-border-radius:4px;
+                background-color:#d7d7d7;
+                -webkit-border-radius:10px;
                }
           }
           .ant-table-thead > tr > th {
@@ -41,7 +52,7 @@
     }
 }
 .red {
-    background:#ED6B68;
+    background:#ffca00;
   }
 .cardextra{
     :global{

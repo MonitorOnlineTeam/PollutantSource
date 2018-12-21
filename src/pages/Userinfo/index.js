@@ -7,7 +7,7 @@ import {
     Col,
     Table,
     Form,
-    Select, Modal, Tag, Divider, Dropdown,Icon,Menu
+    Select, Modal, Tag, Divider, Dropdown, Icon, Menu, Popconfirm
 } from 'antd';
 import styles from './index.less';
 import MonitorContent from '../../components/MonitorContent/index';
@@ -86,18 +86,6 @@ export default class UserList extends Component {
             },
         });
     }
-    delete=(id) => {
-        confirm({
-            title: '确定要删除吗?',
-            okText: '是',
-            okType: 'danger',
-            cancelText: '否',
-            onOk: () => this.deleteuserbyid(id),
-            onCancel() {
-                console.log('Cancel');
-            },
-        });
-    };
     IsEnabled = (type, record) => {
         this.props.dispatch({
             type: 'userinfo/enableduser',
@@ -129,9 +117,6 @@ export default class UserList extends Component {
     onMenu = (key,id) => {
         switch (key) {
             case '1':
-                this.delete(id);
-                break;
-            case '2':
                 this.setState({
                     DataFiltervisible: true,
                     type: 'datafilter',
@@ -149,8 +134,7 @@ export default class UserList extends Component {
             <Menu onClick={(e) => {
                 this.onMenu.bind()(e.key,id);
             }}>
-                <Menu.Item key="1"><Icon type="delete" />删除</Menu.Item>
-                <Menu.Item key="2"><Icon type="setting" />数据过滤</Menu.Item>
+                <Menu.Item key="1"><Icon type="setting" />数据过滤</Menu.Item>
             </Menu>
         );
         const columns = [{
@@ -249,6 +233,10 @@ export default class UserList extends Component {
                     () => this.props.dispatch(routerRedux.push(`/sysmanage/UserDetail/${record.key}`))
                 } > 编辑 </a>
                 <Divider type="vertical" />
+                <Popconfirm placement="left" title="确定要删除此标准下所有数据吗？" onConfirm={() => this.deleteuserbyid(record.key)} okText="是" cancelText="否">
+                    <a href="#" > 删除 </a>
+                </Popconfirm>
+                <Divider type="vertical" />
                 <Dropdown overlay={menu(record.key)} >
                     <a>
                    更多 <Icon type="down" />
@@ -311,7 +299,7 @@ export default class UserList extends Component {
                             className={styles.dataTable}
                             size="small"// small middle
                             dataSource={this.props.requstresult === '1' ? this.props.list : null}
-                            scroll={{ y: 'calc(100vh - 400px)' }}
+                            scroll={{ y: 'calc(100vh - 330px)' }}
                             rowClassName={
                                 (record, index, indent) => {
                                     if (index === 0) {

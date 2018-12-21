@@ -3,33 +3,33 @@ import { Spin } from 'antd';
 
 export default class PromiseRender extends React.PureComponent {
   state = {
-    component: null,
+      component: null,
   };
 
   componentDidMount() {
-    this.setRenderComponent(this.props);
+      this.setRenderComponent(this.props);
   }
 
   componentDidUpdate(nextProps) {
-    // new Props enter
-    this.setRenderComponent(nextProps);
+      // new Props enter
+      this.setRenderComponent(nextProps);
   }
 
   // set render Component : ok or error
   setRenderComponent(props) {
-    const ok = this.checkIsInstantiation(props.ok);
-    const error = this.checkIsInstantiation(props.error);
-    props.promise
-      .then(() => {
-        this.setState({
-          component: ok,
-        });
-      })
-      .catch(() => {
-        this.setState({
-          component: error,
-        });
-      });
+      const ok = this.checkIsInstantiation(props.ok);
+      const error = this.checkIsInstantiation(props.error);
+      props.promise
+          .then(() => {
+              this.setState({
+                  component: ok,
+              });
+          })
+          .catch(() => {
+              this.setState({
+                  component: error,
+              });
+          });
   }
 
   // Determine whether the incoming component has been instantiated
@@ -37,29 +37,26 @@ export default class PromiseRender extends React.PureComponent {
   // Authorized  render is already instantiated, children is no instantiated
   // Secured is not instantiated
   checkIsInstantiation = target => {
-    if (!React.isValidElement(target)) {
-      return target;
-    }
-    return () => target;
+      if (!React.isValidElement(target)) {
+          return target;
+      }
+      return () => target;
   };
 
   render() {
-    const { component: Component } = this.state;
-    const { ok, error, promise, ...rest } = this.props;
-    return Component ? (
-      <Component {...rest} />
-    ) : (
-      <div
-        style={{
-          width: '100%',
-          height: '100%',
-          margin: 'auto',
-          paddingTop: 50,
-          textAlign: 'center',
-        }}
-      >
-        <Spin size="large" />
-      </div>
-    );
+      const { component: Component } = this.state;
+      const { ok, error, promise, ...rest } = this.props;
+      return Component ? (
+          <Component {...rest} />
+      ) : (
+          <Spin
+              style={{ width: '100%',
+                  height: 'calc(100vh/2)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center' }}
+              size="large"
+          />
+      );
   }
 }
