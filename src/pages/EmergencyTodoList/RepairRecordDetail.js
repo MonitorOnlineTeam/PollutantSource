@@ -14,17 +14,7 @@ export default class RepairRecordDetail extends Component {
         };
     }
 
-    // componentDidMount() {
-    //     this.props.dispatch({
-    //         type: 'task/GetRepairDetail',
-    //         payload: {
-    //             TaskID: this.props.match.params.TaskID,
-    //             TypeID: this.props.match.params.TypeID
-    //         }
-    //     });
-    // }
     componentDidMount() {
-        debugger
         this.props.dispatch({
             type: 'task/GetRepairDetail',
             payload: {
@@ -72,7 +62,6 @@ export default class RepairRecordDetail extends Component {
         return rtnVal;
     }
     renderItemChildOne=(item,Repair) => {
-        debugger;
         const rtnValChildOne = [];
         if (Repair.Record.RecordList !== null && Repair.Record.RecordList.length > 0) {
             Repair.Record.RecordList.map((items,index) => {
@@ -93,7 +82,6 @@ export default class RepairRecordDetail extends Component {
         return rtnValChildOne;
     }
     renderItemChildTwo=(item,Repair) => {
-        debugger;
         const rtnValChildTwo = [];
         if (Repair.Record.RecordList !== null && Repair.Record.RecordList.length > 0) {
             Repair.Record.RecordList.map((items,index) => {
@@ -114,7 +102,6 @@ export default class RepairRecordDetail extends Component {
         return rtnValChildTwo;
     }
     render() {
-        debugger
         const SCREEN_HEIGHT = document.querySelector('body').offsetHeight - 250;
         const Repair = this.props.Repair;
         let EnterpriseName = null;

@@ -449,6 +449,7 @@ export default Model.extend({
                     title: item.pollutantName + '(' + item.unit + ')',
                     dataIndex: item.pollutantCode,
                     key: item.pollutantCode,
+                    align:'center',
                     render: (value, record, index) => {
                         const additional = record[item.pollutantCode + '_params'];
                         if (additional) {
@@ -499,7 +500,8 @@ export default Model.extend({
             let columns = [{
                 title: '时间',
                 dataIndex: 'MonitorTime',
-                key: 'MonitorTime'
+                key: 'MonitorTime',
+                align:'center'
             }];
             columns = columns.concat(pollutantcols);
             if (polluntinfo.standardValue) {

@@ -126,8 +126,6 @@
     "not ie <= 10"
   ],
   "husky": {
-    "hooks": {
-      
-    }
+    "hooks": {}
   }
 }

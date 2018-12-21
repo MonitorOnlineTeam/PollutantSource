@@ -67,8 +67,8 @@ class ConsumablesReplaceRecord extends Component {
     render() {
         const SCREEN_HEIGHT = document.querySelector('body').offsetHeight - 250;
         var DataLength = this.props.ConsumablesReplaceRecordList.length;
-        var Data = DataLength === 0 ? null : this.props.ConsumablesReplaceRecordList[0];
-        var DataList = DataLength === 0 ? null : Data.Record.length === 0 ? null : Data.Record[0].RecordList;
+        var Data = DataLength === 0 ? null : this.props.ConsumablesReplaceRecordList;
+        var DataList = DataLength === 0 ? null : Data.Record.length === 0 ? null : Data.Record.RecordList;
         var EnterpriseName = null; //企业名称
         var SignContent = null; //签名
         var SignTime = null; // 签名时间
@@ -80,15 +80,15 @@ class ConsumablesReplaceRecord extends Component {
         var CreateUserID = null; //运行维护人员
         var CreateTime = null; //创建时间
         if (Data !== null) {
-            SignContent = `Data:image/jpeg;base64,${Data.Record[0].SignContent}`;
-            EnterpriseName = Data.Record.length === 0 ? Data.info[0].EnterpriseName : Data.Record[0].Content['EnterpriseName'];
-            Code = DataLength === 0 ? null : Data.Record[0].Content['Code'];
-            Equipment = DataLength === 0 ? null : Data.Record[0].Content['EquipmentCode'];
-            MaintenanceManagementUnit = DataLength === 0 ? null : Data.Record[0].Content['MaintenanceManagementUnit'];
-            PointPosition = DataLength === 0 ? null : Data.Record[0].Content['PointPosition'];
-            CreateUserID = DataLength === 0 ? null : Data.Record.length === 0 ? null : Data.Record[0].CreateUserID;
-            CreateTime = DataLength === 0 ? null : Data.Record.length === 0 ? null : Data.Record[0].CreateTime;
-            SignTime = DataLength === 0 ? null : Data.Record.length === 0 ? null : Data.Record[0].SignTime;
+            SignContent = `Data:image/jpeg;base64,${Data.Record.SignContent}`;
+            EnterpriseName = Data.Record.length === 0 ? Data.info[0].EnterpriseName : Data.Record.Content['EnterpriseName'];
+            Code = DataLength === 0 ? null : Data.Record.Content['Code'];
+            Equipment = DataLength === 0 ? null : Data.Record.Content['EquipmentCode'];
+            MaintenanceManagementUnit = DataLength === 0 ? null : Data.Record.Content['MaintenanceManagementUnit'];
+            PointPosition = DataLength === 0 ? null : Data.Record.Content['PointPosition'];
+            CreateUserID = DataLength === 0 ? null : Data.Record.length === 0 ? null : Data.Record.CreateUserID;
+            CreateTime = DataLength === 0 ? null : Data.Record.length === 0 ? null : Data.Record.CreateTime;
+            SignTime = DataLength === 0 ? null : Data.Record.length === 0 ? null : Data.Record.SignTime;
         }
         return (
             <Spin spinning={this.state.loading}>
@@ -183,7 +183,7 @@ class ConsumablesReplaceRecord extends Component {
                         <tbody>
                             <tr>
                                 <td style={{width: '87%', height: '50px', textAlign: 'right', border: '0', fontWeight: 'bold'}}>负责人签名：</td>
-                                <td style={{width: '13%', height: '50px', border: '0'}}>{DataLength === 0 ? null : Data.Record.length === 0 ? null : Data.Record[0].SignContent === null ? null : <img src={SignContent} />}</td>
+                                <td style={{width: '13%', height: '50px', border: '0'}}>{DataLength === 0 ? null : Data.Record.length === 0 ? null : Data.Record.SignContent === null ? null : <img src={SignContent} />}</td>
                             </tr>
                             <tr>
                                 <td style={{width: '87%', height: '50px', textAlign: 'right', border: '0', fontWeight: 'bold'}}>签名时间：</td>

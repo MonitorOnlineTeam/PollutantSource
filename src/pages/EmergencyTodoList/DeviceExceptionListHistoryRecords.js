@@ -98,7 +98,7 @@ export default class DeviceExceptionListHistoryRecords extends Component {
             dataIndex: 'DealingSituations',
             key: 'DealingSituations'
         }, {
-            title: '记录hj创建时间',
+            title: '记录创建时间',
             dataIndex: 'CreateTime',
             width: '20%',
             key: 'CreateTime',
@@ -131,6 +131,7 @@ export default class DeviceExceptionListHistoryRecords extends Component {
                     </Card>
                     <Table
                         size={'middle'}
+                        scroll={{ y: 'calc(100vh - 475px)' }}
                         loading={this.props.loading}
                         className={styles.tableCss}
                         columns={columns}
