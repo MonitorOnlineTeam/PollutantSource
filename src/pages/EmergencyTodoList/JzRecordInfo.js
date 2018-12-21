@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import styles from '../EmergencyTodoList/JzRecordInfo.less';
-import {Spin, Button, Icon} from 'antd';
+import {Spin, Button, Icon,Card} from 'antd';
 import { connect } from 'dva';
 
 import saveAs from 'file-saver';
-
+import MonitorContent from '../../components/MonitorContent/index';
 //import * as fstream from 'fstream';
 
 @connect(({ task, loading }) => ({
@@ -149,15 +149,8 @@ export default class JzRecordInfo extends Component {
     }
 
     render() {
-        const SCREEN_HEIGHT = document.querySelector('body').offsetHeight - 250;
+        const SCREEN_HEIGHT = document.querySelector('body').offsetHeight - 134;
         const JzRecord = this.props.JzRecord;
-        if (this.props.isloading) {
-            return (
-                <div className={styles.loadContent}>
-                    <Spin size="large" />
-                </div>
-            );
-        }
         let EnterpriseName = null;
         let PointPosition = null;
         let MaintenanceManagementUnit = null;
@@ -192,9 +185,23 @@ export default class JzRecordInfo extends Component {
             SignContent = Record.SignContent === null ? null : `data:image/jpeg;base64,${Record.SignContent}`;
             SignTime = Record.SignTime;
         }
-
+        if (this.props.isloading) {
+            return (<Spin
+                style={{ width: '100%',
+                    height: 'calc(100vh/2)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center' }}
+                size="large"
+            />);
+        }
         return (
+            <MonitorContent>
             <div className={styles.FormDiv} style={{height: SCREEN_HEIGHT}}>
+            <Card title={<span style={{fontWeight: '900'}}>运维记录单</span>} extra={
+            <Button style={{float:"right",marginRight:30}} onClick={() => {
+                        this.props.history.goBack(-1);
+                    }}><Icon type="left" />退回</Button>}>
                 <div className={styles.FormName}>CEMS零点量程漂移与校准记录表</div>
                 <div className={styles.HeadDiv} style={{fontWeight: 'bold'}}>企业名称：{EnterpriseName}</div>
                 <table className={styles.FormTable}>
@@ -281,16 +288,14 @@ export default class JzRecordInfo extends Component {
                     </tbody>
                 </table>
 
-                <div className={styles.Toexamine} >
-                    <Button size="large" icon="left" onClick={() => {
-                        this.props.history.goBack(-1);
-                    }}>退回</Button>
-                    <br />
+                {/* <div className={styles.Toexamine} >
                     <Button size="large" icon="export" onClick={this.onExport}>
                     导出
                     </Button>
-                </div>
+                </div> */}
+                </Card>
             </div>
+            </MonitorContent>
         );
     }
 }
