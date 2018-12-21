@@ -72,7 +72,7 @@ export default class BdHistoryInfoHistoryRecords extends Component {
     }
 
     seeDetail=(record) => {
-        this.props.dispatch(routerRedux.push(`/pointdetail/:pointcode/ConsumablesReplaceRecord/${record.TaskID}/${record.TypeID}`));
+        this.props.dispatch(routerRedux.push(`/pointdetail/${this.props.match.params.pointcode}/ConsumablesReplaceRecord/${record.TaskID}/${record.TypeID}`));
     }
 
     render() {

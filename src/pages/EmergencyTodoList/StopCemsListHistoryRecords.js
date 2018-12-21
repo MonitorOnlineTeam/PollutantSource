@@ -76,7 +76,7 @@ export default class StopCemsListHistoryRecords extends Component {
     }
 
     seeDetail=(record) => {
-        this.props.dispatch(routerRedux.push(`/pointdetail/:pointcode/StopCemsInfo/${record.TaskID}/${this.state.TypeID}`));
+        this.props.dispatch(routerRedux.push(`/pointdetail/${this.props.match.params.pointcode}/StopCemsInfo/${record.TaskID}/${this.state.TypeID}`));
     }
 
     render() {

@@ -73,7 +73,7 @@ export default class CounterControlCommandHistoryRecords extends Component {
     }
 
     seeDetail=(record) => {
-        this.props.dispatch(routerRedux.push(`/pointdetail/:pointcode/ConsumablesReplaceRecord/${record.TaskID}/${this.state.typeID}`));
+        this.props.dispatch(routerRedux.push(`/pointdetail/${this.props.match.params.pointcode}/ConsumablesReplaceRecord/${record.TaskID}/${this.state.typeID}`));
     }
 
     render() {
