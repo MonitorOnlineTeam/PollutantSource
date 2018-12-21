@@ -284,11 +284,11 @@ export default class StandardLibrary extends Component {
                         <Table
                             loading={this.props.effects['standardlibrary/getlist']}
                             columns={columns}
-                            // className={styles.dataTable}
+                            className={styles.dataTable}
                             dataSource={this.props.requstresult === '1' ? this.props.list : null}
-                            expandedRowRender={expandedRowRender}
+                            //expandedRowRender={expandedRowRender}
                             size="small"
-                            scroll={{ y: 'calc(100vh - 200px)' }}
+                            scroll={{ y: 'calc(100vh - 330px)' }}
                             rowClassName={
                                 (record, index, indent) => {
                                     if (index === 0) {
