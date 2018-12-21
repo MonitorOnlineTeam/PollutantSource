@@ -3,13 +3,14 @@ import React, {
     Fragment
 } from 'react';
 import {
-    Card,
+    Card, Icon, Button, Badge,Table
 } from 'antd';
 import {
     connect
 } from 'dva';
 import DescriptionList from '../../components/DescriptionList';
 import MonitorContent from '../../components/MonitorContent/index';
+import styles from './index.less';
 const {
     Description
 } = DescriptionList;
@@ -18,6 +19,7 @@ const {
     pointinfo
 }) => ({
     ...loading,
+    pointloading: loading.effects['pointinfo/getpoint'],
     reason: pointinfo.reason,
     requstresult: pointinfo.requstresult,
     editpoint: pointinfo.editpoint,
@@ -77,16 +79,168 @@ export default class pointview extends Component {
             });
         }
     };
+    pointinfo = () => {
+        const rtnVal = [];
+        rtnVal.push(<div style={{backgroundColor:'#1890FF',width:5,lineHeight:1}}>
+        <span style={{marginLeft:10}}>排口基本信息</span>
+        <span style={{marginLeft:10}} className='status'><Badge className={styles.pintview} status="success" text="正常" /></span>
+        </div>);
+        return rtnVal;
+    }
+    Gaseousinfo = () => {
+         const rtnVal = [];
+        rtnVal.push(<div style={{backgroundColor:'#1890FF',width:5,lineHeight:1}}>
+        <span style={{marginLeft:10}}>气态污染物CEMS设备仪器</span>
+        <span style={{marginLeft:10,cursor:'pointer'}}><Icon type="edit" theme="twoTone"  title='编辑' /></span>
+        <span style={{marginLeft:10,cursor:'pointer'}}><Icon type="plus-circle" theme="twoTone"  title='添加子设备' /></span>
+        </div>);
+        return rtnVal;
+    }
+    Smokeinfo = () => {
+         const rtnVal = [];
+        rtnVal.push(<div style={{backgroundColor:'#1890FF',width:5,lineHeight:1}}>
+        <span style={{marginLeft:10}}>烟尘污染物CEMS设备仪器</span>
+       <span style={{marginLeft:10,cursor:'pointer'}}><Icon type="edit" theme="twoTone"  title='编辑' /></span>
+        <span style={{marginLeft:10,cursor:'pointer'}}><Icon type="plus-circle" theme="twoTone"  title='添加子设备' /></span>
+        </div>);
+        return rtnVal;
+    }
+    PMinfo = () => {
+         const rtnVal = [];
+        rtnVal.push(<div style={{backgroundColor:'#1890FF',width:5,lineHeight:1}}>
+        <span style={{marginLeft:10}}>颗粒污染物CEMS设备仪器</span>
+        <span style={{marginLeft:10,cursor:'pointer'}}><Icon type="edit" theme="twoTone"  title='编辑' /></span>
+        <span style={{marginLeft:10,cursor:'pointer'}}><Icon type="plus-circle" theme="twoTone"  title='添加子设备' /></span>
+        </div>);
+        return rtnVal;
+    }
     render() {
         const gridStyle = {
             width: '100%',
         };
+        const columns = [{
+            title: '分析仪名称',
+            dataIndex: 'Name',
+            key: 'Name',
+            width: '15%',
+            align: 'left',
+            render: (text, record) => {
+              return text;
+            }
+        }, {
+            title: '型号',
+            dataIndex: 'DeviceModel',
+            key: 'DeviceModel',
+            width: '5%',
+            align: 'center',
+            render: (text, record) => {
+                return text;
+            }
+        }, {
+            title: '制造商',
+            dataIndex: 'Manufacturer',
+            key: 'Manufacturer',
+            width: '15%',
+            align: 'center',
+            render: (text, record) => {
+                return text;
+            }
+        }, {
+            title: '制造商简称',
+            dataIndex: 'ManufacturerAbbreviation',
+            key: 'ManufacturerAbbreviation',
+            align: 'center',
+            width: '10%',
+            render: (text, record) => {
+                return text;
+            }
+        }, {
+            title: '测试项目',
+            dataIndex: 'TestProjects',
+            key: 'TestProjects',
+            width: '10%',
+            align: 'center',
+            render: (text, record) => {
+                return text;
+            }
+        }, {
+            title: '分析仪原理',
+            dataIndex: 'AnalyzerPrinciple',
+            key: 'AnalyzerPrinciple',
+            width: '10%',
+            align: 'center',
+            render: (text, record) => {
+                return text;
+            }
+        },
+        , {
+          title: '量程(最大/最小)',
+          dataIndex: 'AnalyzerRange',
+          key: 'AnalyzerRange',
+          width: '10%',
+          align: 'center',
+          render: (text, record) => {
+            return text;
+          }
+        },
+        {
+          title: '计量单位',
+          dataIndex: 'MeasurementUnit',
+          key: 'MeasurementUnit',
+          width: '5%',
+          align: 'center',
+          render: (text, record) => {
+            return text;
+          }
+        },
+        {
+          title: '斜率',
+          dataIndex: 'Slope',
+          key: 'Slope',
+          width: '5%',
+          align: 'center',
+          render: (text, record) => {
+            return text;
+          }
+        },
+        {
+          title: '截距',
+          dataIndex: 'Intercept',
+          key: 'Intercept',
+          width: '5%',
+          align: 'center',
+          render: (text, record) => {
+            return text;
+          }
+        },
+        {
+            title: '操作',
+            width: '10%',
+            align: 'center',
+            render: (text, record) => (<Fragment >
+                <a onClick={
+                    () => this.setState({
+                        Vvisible: true,
+                        OutputStopID: record.key
+                    })
+                } > 查看 </a> <Divider type="vertical" />
+                <Popconfirm placement="left"
+                    title="确定要删除吗？"
+                    onConfirm={
+                        () => this.confirm(record.key)
+                    }
+                    okText="是"
+                    cancelText="否" >
+                    <a href="#" > 删除 </a> </Popconfirm> </Fragment >
+            ),
+        }
+        ];
         return (
-             < MonitorContent >
-            <div style={{}}>
-                <Card>
-                    <Card.Grid style={gridStyle}>
-                        <DescriptionList size="large" col="2">
+             <MonitorContent>
+               <div style={{marginTop:10,marginLeft:30,marginBottom:10,marginRight:30}}>
+                 <Card title={this.pointinfo()}  loading={this.props.pointloading}>
+                     <Card.Grid style={gridStyle}>
+                        <DescriptionList size="small" col="4" gutter="10" >
                             <Description term="排口编号">{this.state.DGIMN}</Description>
                             <Description term="排口名称" >{this.state.pointName}</Description>
                             <Description term="排放类型">{this.state.OutputType}</Description>
@@ -106,9 +260,82 @@ export default class pointview extends Component {
                             <Description term="排口地址" > {this.state.Address} </Description>
                         </DescriptionList>
                     </Card.Grid>
-                    <Card.Grid style={gridStyle}>放仪器表</Card.Grid>
+                  </Card>
+               <div style={{marginTop:15}} className={styles.cardTitle}>
+                  <Card title={this.Gaseousinfo()}> 
+                    <Table
+                            //loading={this.props.effects['stopmanagement/getlist']}
+                            columns={columns}
+                            className={styles.dataTable}
+                            dataSource={null}
+                            scroll={{ y: 'calc(100vh - 900px)' }}
+                            size = "small" // small middle
+                            pagination={false}
+                            rowClassName={
+                                (record, index, indent) => {
+                                    if (index === 0) {
+                                        return;
+                                    }
+                                    if (index % 2 !== 0) {
+                                        return 'light';
+                                    }
+                                }
+                            }
+                        />
+                  </Card>
+               </div>
+               <div style={{marginTop:15}} className={styles.cardTitle}>
+                  <Card title={this.PMinfo()}> 
+                    <Table
+                            //loading={this.props.effects['stopmanagement/getlist']}
+                            columns={columns}
+                            className={styles.dataTable}
+                            dataSource={null}
+                            scroll={{ y: 'calc(100vh - 900px)' }}
+                            size = "small" // small middle
+                            pagination={false}
+                            rowClassName={
+                                (record, index, indent) => {
+                                    if (index === 0) {
+                                        return;
+                                    }
+                                    if (index % 2 !== 0) {
+                                        return 'light';
+                                    }
+                                }
+                            }
+                        />
+                  </Card>
+               </div>
+               <div style={{marginTop:15}} className={styles.cardTitle}>
+                  <Card title={this.Smokeinfo()}> 
+                    <Table
+                            //loading={this.props.effects['stopmanagement/getlist']}
+                            columns={columns}
+                            className={styles.dataTable}
+                            dataSource={null}
+                            scroll={{ y: 'calc(100vh - 900px)' }}
+                            size = "small" // small middle
+                            pagination={false}
+                            rowClassName={
+                                (record, index, indent) => {
+                                    if (index === 0) {
+                                        return;
+                                    }
+                                    if (index % 2 !== 0) {
+                                        return 'light';
+                                    }
+                                }
+                            }
+                        />
+                  </Card>
+               </div>
+               <div style={{marginTop:5}}>
+                <Card> 
+                    <Button type="dashed" block>添加仪器</Button>
                 </Card>
-            </div>
+               </div>
+              </div>
             </MonitorContent>
         );
     }
