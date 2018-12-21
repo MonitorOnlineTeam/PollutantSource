@@ -311,7 +311,7 @@ export default class UserList extends Component {
                             className={styles.dataTable}
                             size="small"// small middle
                             dataSource={this.props.requstresult === '1' ? this.props.list : null}
-                            scroll={{ y: 'calc(100vh - 400px)' }}
+                            scroll={{ y: 'calc(100vh - 330px)' }}
                             rowClassName={
                                 (record, index, indent) => {
                                     if (index === 0) {
