@@ -8,7 +8,7 @@ import {
     Col,
     Table,
     Form,
-    Select, Modal, message, Tag, Radio, Checkbox,
+    Select, Modal, message, Tag, Radio, Checkbox,Spin
 } from 'antd';
 import { connect } from 'dva';
 import moment from 'moment';
@@ -74,7 +74,7 @@ export default class JzHistoryRecords extends Component {
     }
 
     seeDetail=(Record) => {
-        this.props.dispatch(routerRedux.push(`/pointdetail/:pointcode/JzRecordInfo/${Record.TaskID}/${Record.TypeID}`));
+        this.props.dispatch(routerRedux.push(`/OperationForm/JzRecordInfo/${Record.TaskID}/${Record.TypeID}`));
     }
 
     render() {
@@ -123,6 +123,16 @@ export default class JzHistoryRecords extends Component {
                 } > 详细 </a>;
             }
         }];
+        if (this.props.isloading) {
+            return (<Spin
+                style={{ width: '100%',
+                    height: 'calc(100vh/2)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center' }}
+                size="large"
+            />);
+        }
         return (
             <Card bordered={false}>
                 <Card>

@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
-import { Row, Col, Layout, Table, List, Button, Icon,Spin } from 'antd';
+import { Row, Col, Layout, Table, List, Button, Icon,Spin,Card } from 'antd';
 import styles from '../EmergencyTodoList/StandardGasRepalceRecord.less';
 import { connect } from 'dva';
+import MonitorContent from '../../components/MonitorContent/index';
 const {
     Header, Footer, Sider, Content,
 } = Layout;
 @connect(({ task, loading }) => ({
-    StandardGasRepalceRecordList: task.StandardGasRepalceRecordList
+    StandardGasRepalceRecordList: task.StandardGasRepalceRecordList,
+    isloading: loading.effects['task/StandardGasRepalceRecordList'],
 }))
 
 /*
@@ -76,7 +78,7 @@ class StandardGasRepalceRecord extends Component {
         return rtnVal;
     }
     render() {
-        const SCREEN_HEIGHT = document.querySelector('body').offsetHeight - 250;
+        const SCREEN_HEIGHT = document.querySelector('body').offsetHeight - 134;
         var DataLength = this.props.StandardGasRepalceRecordList.length;
         var Data = DataLength === 0 ? null : this.props.StandardGasRepalceRecordList;
         var DataList = DataLength === 0 ? null : Data.Record.length === 0 ? null : Data.Record.RecordList;
@@ -145,9 +147,23 @@ class StandardGasRepalceRecord extends Component {
             width: '17%',
             align: 'center',
         }];
+        if (this.props.isloading) {
+            return (<Spin
+                style={{ width: '100%',
+                    height: 'calc(100vh/2)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center' }}
+                size="large"
+            />);
+        }
         return (
-            <Spin spinning={this.state.loading}>
+            <MonitorContent>
                 <div className={styles.FormDiv} style={{ height: SCREEN_HEIGHT }}>
+                <Card title={<span style={{fontWeight: '900'}}>运维记录单</span>} extra={
+            <Button style={{float:"right",marginRight:30}} onClick={() => {
+                        this.props.history.goBack(-1);
+                    }}><Icon type="left" />退回</Button>}>
                     <div className={styles.FormName}>标准气体更换记录表</div>
                     <div className={styles.HeadDiv} style={{ fontWeight: 'bold' }}>企业名称：{EnterpriseName}</div>
                     <table className={styles.FormTable}>
@@ -228,13 +244,9 @@ class StandardGasRepalceRecord extends Component {
                             </tr>
                         </tbody>
                     </table>
-                    <div className={styles.Toexamine} >
-                        <Button size="large" onClick={() => {
-                            this.props.history.goBack(-1);
-                        }}><Icon type="left" />退回</Button>
-                    </div>
+                    </Card>
                 </div>
-            </Spin>
+            </MonitorContent>
         );
     }
 }

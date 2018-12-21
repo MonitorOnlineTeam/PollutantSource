@@ -15,7 +15,7 @@ import {routerRedux} from 'dva/router';
 import styles from './CounterControlCommandHistoryRecords.less';
 
 @connect(({ task, loading }) => ({
-    loading: loading.effects['task/GetHistoryConsumablesReplaceRecord'],
+    isloading: loading.effects['task/GetHistoryConsumablesReplaceRecord'],
     HistoryConsumablesReplaceRecord: task.HistoryConsumablesReplaceRecordList,
     HistoryConsumablesReplaceRecordCount: task.total,
     pageIndex: task.pageIndex,
@@ -33,7 +33,6 @@ export default class CounterControlCommandHistoryRecords extends Component {
             EndTime: moment().format('YYYY-MM-DD 23:59:59'),
             DGIMN: this.props.match.params.pointcode,
             typeID: this.props.match.params.TypeID,
-            loading: true,
         };
     }
     componentDidMount() {
@@ -73,7 +72,7 @@ export default class CounterControlCommandHistoryRecords extends Component {
     }
 
     seeDetail=(record) => {
-        this.props.dispatch(routerRedux.push(`/pointdetail/:pointcode/ConsumablesReplaceRecord/${record.TaskID}/${this.state.typeID}`));
+        this.props.dispatch(routerRedux.push(`/OperationForm/ConsumablesReplaceRecord/${record.TaskID}/${this.state.typeID}`));
     }
 
     render() {
@@ -120,6 +119,16 @@ export default class CounterControlCommandHistoryRecords extends Component {
                 } > 详细 </a>;
             }
         }];
+        if (this.props.isloading) {
+            return (<Spin
+                style={{ width: '100%',
+                    height: 'calc(100vh/2)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center' }}
+                size="large"
+            />);
+        }
         return (
             <div>
                 <Card bordered={false}>
@@ -136,7 +145,7 @@ export default class CounterControlCommandHistoryRecords extends Component {
                         </Form>
                     </Card>
                     <Table
-                        loading={this.props.loading}
+                        loading={this.props.isloading}
                         className={styles.tableCss}
                         columns={columns}
                         dataSource={dataSource}

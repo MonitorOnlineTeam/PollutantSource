@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import styles from '../EmergencyTodoList/StopCemsInfo.less';
-import { Spin, Button, Icon } from 'antd';
+import { Spin, Button, Icon,Card } from 'antd';
 import { connect } from 'dva';
+import MonitorContent from '../../components/MonitorContent/index';
 
 @connect(({ task, loading }) => ({
     isloading: loading.effects['task/GetStopCemsDetail'],
@@ -52,7 +53,7 @@ export default class StopCemsInfo extends Component {
         return rtnVal;
     }
     render() {
-        const SCREEN_HEIGHT = document.querySelector('body').offsetHeight - 250;
+        const SCREEN_HEIGHT = document.querySelector('body').offsetHeight - 134;
         const StopCems = this.props.StopCems;
         let EnterpriseName = null;
         let PointPosition = null;
@@ -74,10 +75,23 @@ export default class StopCemsInfo extends Component {
             SignContent = Record.SignContent === null ? null : `data:image/jpeg;base64,${Record.SignContent}`;
             SignTime = Record.SignTime;
         }
-
+        if (this.props.isloading) {
+            return (<Spin
+                style={{ width: '100%',
+                    height: 'calc(100vh/2)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center' }}
+                size="large"
+            />);
+        }
         return (
-            <Spin spinning={this.state.loading}>
+            <MonitorContent>
                 <div className={styles.FormDiv} style={{ height: SCREEN_HEIGHT }}>
+                <Card title={<span style={{fontWeight: '900'}}>运维记录单</span>} extra={
+            <Button style={{float:"right",marginRight:30}} onClick={() => {
+                        this.props.history.goBack(-1);
+                    }}><Icon type="left" />退回</Button>}>
                     <div className={styles.FormName}>CEMS 停机记录表</div>
                     <div className={styles.HeadDiv} style={{ fontWeight: 'bold' }}>企业名称：{EnterpriseName}</div>
                     <table className={styles.FormTable}>
@@ -143,13 +157,9 @@ export default class StopCemsInfo extends Component {
                             </tr>
                         </tbody>
                     </table>
-                    <div className={styles.Toexamine} >
-                        <Button size="large" onClick={() => {
-                            this.props.history.goBack(-1);
-                        }}><Icon type="left" />退回</Button>
-                    </div>
+                    </Card>
                 </div>
-            </Spin>
+            </MonitorContent>
         );
     }
 }

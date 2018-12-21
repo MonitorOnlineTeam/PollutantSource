@@ -14,7 +14,7 @@ import styles from '../EmergencyTodoList/StopCemsListHistoryRecords.less';
 import {routerRedux} from 'dva/router';
 
 @connect(({ task, loading }) => ({
-    loading: loading.effects['task/GetHistoryStopCemsList'],
+    isloading: loading.effects['task/GetHistoryStopCemsList'],
     HistoryStopCemsListHistoryRecords: task.HistoryStopCemsList,
     HistoryStopCemsListHistoryRecordsCount: task.total,
     pageIndex: task.pageIndex,
@@ -76,7 +76,7 @@ export default class StopCemsListHistoryRecords extends Component {
     }
 
     seeDetail=(record) => {
-        this.props.dispatch(routerRedux.push(`/pointdetail/:pointcode/StopCemsInfo/${record.TaskID}/${this.state.TypeID}`));
+        this.props.dispatch(routerRedux.push(`/OperationForm/StopCemsInfo/${record.TaskID}/${this.state.TypeID}`));
     }
 
     render() {
@@ -117,6 +117,16 @@ export default class StopCemsListHistoryRecords extends Component {
                 } > 详细 </a>;
             }
         }];
+        if (this.props.isloading) {
+            return (<Spin
+                style={{ width: '100%',
+                    height: 'calc(100vh/2)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center' }}
+                size="large"
+            />);
+        }
         return (
             <div>
                 <Card bordered={false}>
@@ -135,7 +145,7 @@ export default class StopCemsListHistoryRecords extends Component {
                     <Table
                         size={'middle'}
                         scroll={{ y: 'calc(100vh - 475px)' }}
-                        loading={this.props.loading}
+                        loading={this.props.isloading}
                         className={styles.tableCss}
                         columns={columns}
                         dataSource={dataSource}
