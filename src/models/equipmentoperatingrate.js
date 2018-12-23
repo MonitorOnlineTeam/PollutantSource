@@ -5,7 +5,7 @@
  */
 
 import { Model } from '../dvapack';
-import { getEquipmentOperatingRateForPoints } from '../services/EquipmentOperatingRateApi';
+import { getEquipmentOperatingRateForPoints } from '@/services/EquipmentOperatingRateApi';
 import moment from 'moment';
 
 export default Model.extend({

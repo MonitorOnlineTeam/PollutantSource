@@ -8,7 +8,7 @@ import { GetTaskDetails, GetYwdsj, GetJzRecord,
     GetRepairDetail,GetHistoryRepairDetail,GetHistoryStopCemsList,
     GetDeviceExceptionList,GetBdHistoryInfoList,GetDeviceExceptionDetail, 
     GetBdTestRecord
-} from '../services/taskapi';
+} from '@/services/taskapi';
 import { Model } from '../dvapack';
 import { EnumRequstResult } from '../utils/enum';
 

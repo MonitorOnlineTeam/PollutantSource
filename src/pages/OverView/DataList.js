@@ -205,6 +205,7 @@ class dataList extends PureComponent {
                     visible={this.state.pdvisible}
                     pointName={this.state.selectpoint ? this.state.selectpoint.pointName : ''}
                 />
+                
                 <Card
                     bordered={false}
                     className={styles.cardextra}
