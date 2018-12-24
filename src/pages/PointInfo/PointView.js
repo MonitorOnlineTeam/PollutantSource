@@ -88,12 +88,11 @@ export default class pointview extends Component {
         return rtnVal;
     }
     Gaseousinfo = () => {
-         const rtnVal = [];
+        const rtnVal = [];
         rtnVal.push(<div style={{backgroundColor:'#1890FF',width:5,lineHeight:1}}>
         <span style={{marginLeft:10}}>气态污染物CEMS设备仪器</span>
         <span style={{marginLeft:10,cursor:'pointer'}}><Icon type="edit" theme="twoTone"  title='编辑' /></span>
         <span style={{marginLeft:10,cursor:'pointer'}}><Icon type="plus-circle" theme="twoTone"  title='添加子设备' /></span>
-        <span style={{marginLeft:100,fontSize:'small'}}>供应商信息</span>
         </div>);
         return rtnVal;
     }
@@ -263,7 +262,7 @@ export default class pointview extends Component {
                     </Card.Grid>
                   </Card>
                <div style={{marginTop:15}} className={styles.cardTitle}>
-                  <Card title={this.Gaseousinfo()}> 
+                  <Card title={this.Gaseousinfo()} > 
                     <Table
                             //loading={this.props.effects['stopmanagement/getlist']}
                             columns={columns}
@@ -306,7 +305,7 @@ export default class pointview extends Component {
                                 }
                             }
                         />
-                  </Card>
+                 </Card>
                </div>
                <div style={{marginTop:15}} className={styles.cardTitle}>
                   <Card title={this.Smokeinfo()}> 
