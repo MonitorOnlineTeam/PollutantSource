@@ -152,7 +152,6 @@ export default class StandardLibrary extends Component {
             return (
                 <Table
                     // loading={this.props.effects['standardlibrary/getpollutantListlist']}
-                    scroll={{ y: 'calc(100vh - 68px)' }}
                     columns={columns}
                     dataSource={arr.length > 1 ? arr : null}
                     pagination={false}
@@ -287,9 +286,9 @@ export default class StandardLibrary extends Component {
                             columns={columns}
                             className={styles.dataTable}
                             dataSource={this.props.requstresult === '1' ? this.props.list : null}
-                            expandedRowRender={expandedRowRender}
+                            //expandedRowRender={expandedRowRender}
                             size="small"
-                            scroll={{ y: 'calc(100vh - 400px)' }}
+                            scroll={{ y: 'calc(100vh - 330px)' }}
                             rowClassName={
                                 (record, index, indent) => {
                                     if (index === 0) {

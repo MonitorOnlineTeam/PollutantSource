@@ -8,24 +8,32 @@
         }
    
          .ant-table-body{
+
+            
+
             &::-webkit-scrollbar-track-piece{
                 -webkit-border-radius:0;
                }
+               &::-webkit-scrollbar-track{
+              
+                border-radius: 10px;
+                background-color: #ececec;
+            }
                &::-webkit-scrollbar{
-                width:8px;
-                height:8px;
+                width:11px;
+                height:11px;
                }
                &::-webkit-scrollbar-thumb{
                 height:50px;
-                background-color:#61A1D5;
-                -webkit-border-radius:4px;
+                background-color:#d4d4d6;
+                -webkit-border-radius:10px;
                 outline-offset:-2px;
-                border: 2px solid #61A1D5;
+                border: 8px solid #d4d4d6 ;
                }
                &::-webkit-scrollbar-thumb:hover{
                 height:50px;
-                background-color:#61A1D5;
-                -webkit-border-radius:4px;
+                background-color:#d7d7d7;
+                -webkit-border-radius:10px;
                }
           }
           .ant-table-thead > tr > th {
@@ -41,5 +49,13 @@
     }
 }
 .red {
-    background:#ED6B68;
+    background:#ffca00;
   }
+.cardextra{
+    :global{
+        .ant-card-extra
+        {
+            margin-left: 20px;
+        }
+    }
+}

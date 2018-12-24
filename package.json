@@ -1,5 +1,5 @@
 {
-  "name": "ant-design-pro",
+  "name": "PollutantSource",
   "version": "2.1.1",
   "description": "An out-of-box UI solution for enterprise applications",
   "private": true,
@@ -126,8 +126,6 @@
     "not ie <= 10"
   ],
   "husky": {
-    "hooks": {
-      "pre-commit": "npm run lint-staged"
-    }
+    "hooks": {}
   }
 }

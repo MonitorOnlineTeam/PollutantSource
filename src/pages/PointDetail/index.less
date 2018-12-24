@@ -40,7 +40,8 @@
 
 .pageHeader {
   background: @component-background;
-  padding: 16px 32px 0 32px;
+  // padding: 16px 32px 0 32px;
+  padding: 8px 5px 4px 40px;
   border-bottom: @border-width-base @border-style-base @border-color-split;
 
   .detail {
@@ -126,8 +127,63 @@
   overflow-y: scroll; 
 }
 
-
-
+/*排口详情-排口弹窗样式Start*/
+.pointModal {
+    background: #ECECEC;
+    padding: 30px;
+    min-height:300px;
+    // height: 500px;
+    overflow:auto;
+      &::-webkit-scrollbar-track-piece{
+        -webkit-border-radius:0;
+      }
+      &::-webkit-scrollbar{
+      width:5px;
+      height:8px;
+      }
+      &::-webkit-scrollbar-thumb{
+      height:50px;
+      background-color:#9ca0a2;
+      -webkit-border-radius:4px;
+      outline-offset:-20px;
+      border: 2px solid #9ca0a2;
+      }
+      &::-webkit-scrollbar-thumb:hover{
+      height:50px;
+      background-color:#9ca0a2;
+      -webkit-border-radius:4px;
+      }
+  :global {
+    .ant-card {
+      margin-bottom: 10px;
+      border-radius: 5%;
+    }
+    
+    .ant-badge-dot{
+      width: 13px;
+      height: 13px;
+    }
+  }
+  .pointName{
+    margin-left: 12px;
+    color: #323742;
+    font-weight: bold;
+  }
+  .cardContent {
+    height: 65px;
+    line-height: 10px;
+  }
+  .TEF{
+    margin-left: 30px;
+    color: #61749b;
+  }
+  .TEF{
+    span{
+      margin-left: 10px;
+    }
+  }
+}
+/*排口详情-排口弹窗样式END*/
 
 
  
