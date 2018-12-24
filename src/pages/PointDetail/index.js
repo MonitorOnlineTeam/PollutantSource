@@ -1,8 +1,8 @@
 // import liraries
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import { Modal,Breadcrumb, Tabs, Icon, Select, Button,Card,Avatar,Row,Col,Badge,Tag,Input,Form } from 'antd';
-import { Link, Switch, Redirect } from 'dva/router';
+import { Modal,Breadcrumb, Tabs, Icon, Select, Button,Card,Avatar,Row,Col,Badge,Tag,Input,Form,Radio } from 'antd';
+import { Link, Switch, Redirect,routerRedux } from 'dva/router';
 import { getRoutes } from '../../utils/utils';
 import moment from 'moment';
 import styles from './index.less';
@@ -39,7 +39,12 @@ class PointDetail extends Component {
                 'JzHistoryRecords'
             ],
             modalVisible:false,
-            loadingCard:true
+            loadingCard:true,
+            pointList:this.props.pointList,
+            pointName:this.props.pointInfo.pointName,
+            DGIMN:this.props.match.params.pointcode,
+            status:'',
+            searchName:''
         };
     }
     componentDidMount() {
@@ -58,43 +63,114 @@ class PointDetail extends Component {
         });
     }
     openModal = (params) => {
-        console.log(this.props.pointList);
-        debugger;
+        //console.log(this.props.pointList);
+        console.log(this.props.pointInfo);
         this.setState({
             modalVisible: true,
-            loadingCard:false
-            // pointName: params.PointName
+            loadingCard:false,
+            pointList:this.props.pointList,
+            searchName:'',
+            status:''
         });
-        // this.updateState({
-        //     queryDGIMNs: params.DGIMNs,
-        //     // queryDate: this.props.clickDate,
-        //     pointDaysTableData: []
-
-        // });
-        // this.getPointDaysTableData(1);
     }
     handleModalOk = (e) => {
-        console.log(e);
         this.setState({
             modalVisible: false,
         });
     }
 
     handleModalCancel = (e) => {
-    // console.log(e);
         this.setState({
             modalVisible: false,
         });
     }
-    clickCard = () => {
+    clickCard = (DGIMN,pointName) => {
+        this.props.dispatch({
+            type: 'points/querysinglepointinfo',
+            payload: {
+                dgimn:DGIMN
+            }
+        });
         this.setState({
             modalVisible: false,
+            pointName:pointName
+        });
+        //重定向
+        let locationArray=this.props.location.pathname.split('/');
+        if(locationArray.length>1)
+        {
+            let newUrl=this.props.location.pathname.replace(locationArray[2],DGIMN);
+            this.props.dispatch(routerRedux.push(newUrl));
+        }
+        //TODO:如果地址不正确，需要跳转到错误页面吗？ 吴建伟
+    }
+    /**
+     * 渲染选择排口弹出层内容
+     */
+    renderPointList = () => {
+        const rtnVal = [];
+        
+        this.state.pointList.map((item, key) =>{
+            let status = <img src="../../../gisexception.png" />;
+            if (item.status === 0) {
+                status= <img src="../../../gisunline.png" />;
+            } if (item.status === 1) {
+                status=  <img src="../../../gisnormal.png" />;
+            } if (item.status === 2) {
+                status=  <img src="../../../gisover.png" />;
+            }
+            let optStatus='';//TODO:排口运维状态不确定 故障：#119f9d
+            if(item.existTask===1)
+            {
+                optStatus=<Tag color="#ff995b">运维中</Tag>;
+            }else
+            {
+                optStatus='';
+            }
+            rtnVal.push(<div key={item.DGIMN}>
+                <Col xs={12} sm={12} md={6} lg={6} xl={6}>
+                    <Card style={{cursor:'pointer'}} onClick={(e)=>{
+                        this.clickCard(item.DGIMN,item.pointName);
+                    }}  bordered={false} loading={this.state.loadingCard}>
+                        <div className={styles.cardContent}>
+                            {/* <p><Badge style={{ backgroundColor: 'rgb(255,198,0)' }} dot={true}/><span className={styles.pointName}>{item.pointName}</span></p> */}
+                            <p>{status}<span className={styles.pointName}>{item.pointName}</span></p>
+                            <p className={styles.TEF}>传输有效率<span>{item.transmissionEffectiveRate||'-'}</span></p>
+                            <p className={styles.TEF}>类型：<span>{item.pollutantType}</span></p>
+                        </div>
+                        <div style={{position:"absolute",top:5,right:-25}}>
+                            {optStatus}
+                        </div>
+                    </Card>
+                </Col>
+            </div>)
+        });
+            
+        return rtnVal;
+    }
+    /**
+     * 排口状态过滤事件
+     */
+    handleStatusChange = (e) =>{
+        //debugger
+        this.setState({
+            pointList: this.props.pointList.filter(todo=>todo.status===(+e.target.value)),
+            status:e.target.value
+        });
+    }
+     /**
+     * 清空条件，显示所有数据
+     */
+    showAllData = () =>{
+        this.setState({
+            pointList: this.props.pointList,
+            status:'',
+            searchName:''
         });
     }
     render() {
-        const { match, routerData, location,children } = this.props;
+        const { match, routerData, location,children,pointInfo } = this.props;
         Cookie.set('seldgimn', match.params.pointcode);
-        const pointInfo = this.props.pointInfo;
         let activeKey = 'qcontrollist';
         if (location.pathname.indexOf('qcontrollist') === -1) {
             activeKey = location.pathname.replace(`${match.url}/`, '');
@@ -105,25 +181,10 @@ class PointDetail extends Component {
                     height: 'calc(100vh - 67px)' }}
             >
                 {!this.props.isloading ? <div>
-                    {/* <div className={styles.pageHeader}>
-                        <Breadcrumb className={styles.breadcrumb} >
-                            <Breadcrumb.Item key="home">
-                                <Link to="/overview/mapview">监控总览</Link>
-                            </Breadcrumb.Item>
-                            <Breadcrumb.Item key="home">
-                                {
-                                    pointInfo ? pointInfo.pointName : ''
-                                }
-                            </Breadcrumb.Item>
-                        </Breadcrumb>
-                    </div> */}
                     <div className={styles.pageHeader} style={{}}>
                         <img src='../../../point.png'  style={{width:37,marginTop:-1}}/>
                         <span style={{color:'#ccc',marginLeft:10}}>当前排口：</span>
-                        <span style={{cursor:'pointer'}} onClick={this.openModal}>{pointInfo.pointName} <Icon type="down" style={{marginLeft:10,width:15}} /></span>
-                        {/* <Select defaultValue={pointInfo.pointName} style={{ width: 200 }}>
-                            <Option value={pointInfo.pointcode}>{pointInfo.pointName}</Option>
-                        </Select> */}
+                        <span style={{cursor:'pointer',color:'#1890FF'}} onClick={this.openModal}>{pointInfo.pointName}</span>
                         <Button style={{float:"right",marginRight:30}}><Link to="/overview/mapview"><Icon type="left" />返回</Link></Button>
                         <Button type="primary" ghost style={{float:"right",marginRight:30}}><Icon type="bell" />派单</Button>
                     </div>
@@ -141,118 +202,60 @@ class PointDetail extends Component {
                         {children}
                     </div>
                 </div> : ''}
-                <Modal
-                    visible={this.state.modalVisible}
-                    title={'当前排口: '+pointInfo.pointName}
-                    onOk={this.handleModalOk}
-                    onCancel={this.handleModalCancel}
-                    width='1200px'
-                    footer={[]}
-                    >
-                    <Form layout="inline" style={{marginBottom: 10}}>
-                            <Row gutter={8}>
-                                <Col span={3} >
-                                    <Search
-                                        placeholder="请输入排口关键字"
-                                        onSearch={(value) => {
-                                            this.setState({
-                                                UserAccount: value
-                                            });
-                                            this.props.dispatch({
-                                                type: 'userinfo/fetchuserlist',
-                                                payload: {
-                                                    pageIndex: 1,
-                                                    pageSize: 10,
-                                                    UserAccount: value,
-                                                },
-                                            });
-                                        }}
-                                        style={{ width: 200 }}
-                                    /></Col>
+                    <Modal
+                        visible={this.state.modalVisible}
+                        title={'当前排口: '+this.state.pointName}
+                        onOk={this.handleModalOk}
+                        onCancel={this.handleModalCancel}
+                        width='1200px'
+                        footer={[]}
+                        >
+                        <Form layout="inline" style={{marginBottom: 10}}>
+                                <Row gutter={8}>
+                                    <Col span={7} >
+                                        <Search
+                                            placeholder="请输入排口关键字"
+                                            defaultValue={this.state.searchName}
+                                            onSearch={(value) => {
+                                                if(value)
+                                                {
+                                                    this.setState({
+                                                        pointList: this.props.pointList.filter(todo=>todo.pointName.indexOf(value)>-1),
+                                                        status:'',
+                                                        searchName:value
+                                                    });
+                                                }else
+                                                {
+                                                    this.setState({
+                                                        pointList: this.props.pointList,
+                                                        status:'',
+                                                        searchName:value
+                                                    });
+                                                }
+                                                
+                                            }}
+                                            style={{ width: 200 }}
+                                        />
+                                       <Button type="primary" style={{marginLeft:10}} onClick={this.showAllData}>全部</Button>
+                                        </Col>
+                                        <Col span={7} offset={10}>
+                                            <Radio.Group value={this.state.status}  onChange={this.handleStatusChange}>
+                                                <Radio.Button value="1"><img src="../../../gisnormal.png" /> 正常</Radio.Button>
+                                                <Radio.Button value="2"><img src="../../../gisover.png" /> 超标</Radio.Button>
+                                                <Radio.Button value="0"><img src="../../../gisunline.png" /> 离线</Radio.Button>
+                                                <Radio.Button value="3"><img src="../../../gisexception.png" /> 异常</Radio.Button>
+                                            </Radio.Group>
+                                        </Col>
+                                </Row>
+                            </Form>
+                        <div style={{height:'calc(100vh - 340px)'}} className={styles.pointModal}>
+                            <Row gutter={48}>
+                            {
+                                this.renderPointList()
+                            } 
                             </Row>
-                        </Form>
-                    <div style={{ background: '#ECECEC', padding: '30px',minHeight:'400px' }} className={styles.pointModal}>
-                        <Row gutter={48}>
-                           {
-                            this.props.pointList.map((item, key) => (
-                                <Col xs={12} sm={12} md={6} lg={6} xl={6}>
-                                <Card style={{cursor:'pointer'}} onClick={this.clickCard}  bordered={false} loading={this.state.loadingCard}>
-                                    <div className={styles.cardContent}>
-                                        <p><Badge style={{ backgroundColor: 'rgb(255,198,0)' }} dot={true}/><span className={styles.pointName}>{item.pointName}</span></p>
-                                        <p className={styles.TEF}>传输有效率<span>{item.transmissionEffectiveRate||'-'}</span></p>
-                                        <p className={styles.TEF}>类型：<span>{item.pollutantType}</span></p>
-                                    </div>
-                                    <div style={{position:"absolute",top:5,right:-25}}>
-                                        <Tag color="#2db7f5">故障</Tag>
-                                    </div>
-                                </Card>
-                            </Col>))
-
-                           } 
-                        
-                            {/* <Col xs={12} sm={12} md={6} lg={6} xl={6}>
-                                <Card style={{cursor:'pointer'}} onClick={this.clickCard}  bordered={false} loading={this.state.loadingCard}>
-                                    <div className={styles.cardContent}>
-                                        <p><Badge style={{ backgroundColor: 'rgb(255,198,0)' }} dot={true}/><span className={styles.pointName}>焦炉小号烟囱7</span></p>
-                                        <p className={styles.TEF}>传输有效率<span>61%</span></p>
-                                        <p className={styles.TEF}>类型：<span>废弃</span></p>
-                                    </div>
-                                    <div style={{position:"absolute",top:5,right:-25}}>
-                                        <Tag color="#2db7f5">故障</Tag>
-                                    </div>
-                                </Card>
-                            </Col>
-                            <Col xs={12} sm={12} md={6} lg={6} xl={6}>
-                                <Card style={{cursor:'pointer'}} onClick={this.clickCard}  bordered={false} loading={this.state.loadingCard}>
-                                    <div className={styles.cardContent}>
-                                        <p><Badge style={{ backgroundColor: 'rgb(255,198,0)' }} dot={true}/><span className={styles.pointName}>焦炉小号烟囱7</span></p>
-                                        <p className={styles.TEF}>传输有效率<span>61%</span></p>
-                                        <p className={styles.TEF}>类型：<span>废弃</span></p>
-                                    </div>
-                                    <div style={{position:"absolute",top:5,right:-25}}>
-                                        <Tag color="#2db7f5">故障</Tag>
-                                    </div>
-                                </Card>
-                            </Col>
-                            <Col xs={12} sm={12} md={6} lg={6} xl={6}>
-                                <Card style={{cursor:'pointer'}} onClick={this.clickCard}  bordered={false} loading={this.state.loadingCard}>
-                                    <div className={styles.cardContent}>
-                                        <p><Badge style={{ backgroundColor: 'rgb(255,198,0)' }} dot={true}/><span className={styles.pointName}>焦炉小号烟囱7</span></p>
-                                        <p className={styles.TEF}>传输有效率<span>61%</span></p>
-                                        <p className={styles.TEF}>类型：<span>废弃</span></p>
-                                    </div>
-                                    <div style={{position:"absolute",top:5,right:-25}}>
-                                        <Tag color="#2db7f5">故障</Tag>
-                                    </div>
-                                </Card>
-                            </Col>
-                            <Col xs={12} sm={12} md={6} lg={6} xl={6}>
-                                <Card style={{cursor:'pointer'}} onClick={this.clickCard}  bordered={false} loading={this.state.loadingCard}>
-                                    <div className={styles.cardContent}>
-                                        <p><Badge style={{ backgroundColor: 'rgb(255,198,0)' }} dot={true}/><span className={styles.pointName}>焦炉小号烟囱7</span></p>
-                                        <p className={styles.TEF}>传输有效率<span>61%</span></p>
-                                        <p className={styles.TEF}>类型：<span>废弃</span></p>
-                                    </div>
-                                    <div style={{position:"absolute",top:5,right:-25}}>
-                                        <Tag color="#2db7f5">故障</Tag>
-                                    </div>
-                                </Card>
-                            </Col>
-                            <Col xs={12} sm={12} md={6} lg={6} xl={6}>
-                                <Card style={{cursor:'pointer'}} onClick={this.clickCard}  bordered={false} loading={this.state.loadingCard}>
-                                    <div className={styles.cardContent}>
-                                        <p><Badge style={{ backgroundColor: 'rgb(255,198,0)' }} dot={true}/><span className={styles.pointName}>焦炉小号烟囱7</span></p>
-                                        <p className={styles.TEF}>传输有效率<span>61%</span></p>
-                                        <p className={styles.TEF}>类型：<span>废弃</span></p>
-                                    </div>
-                                    <div style={{position:"absolute",top:5,right:-25}}>
-                                        <Tag color="#2db7f5">故障</Tag>
-                                    </div>
-                                </Card>
-                            </Col> */}
-                        </Row>
-                    </div>
-                </Modal>
+                        </div>
+                    </Modal>
             </div>
         );
     }
