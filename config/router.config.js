@@ -44,7 +44,7 @@ export default [
           /* 历史视频 */
           { path: '/pointdetail/:pointcode/hisvideo', component: './PointDetail/HisVideo' },
           /* 运维大事记 */
-          { path: '/pointdetail/:pointcode/ywdsjlist', component: './PointDetail/Ywdsjlist' },
+          { path: '/pointdetail/:pointcode/ywdsjlist', component: './PointDetail/ywdsjlist' },
           /* 运维大事记-详情 */
           { path: '/pointdetail/:pointcode/emergencydetailinfo/:TaskID', component: './EmergencyTodoList/EmergencyDetailInfo' },
 
