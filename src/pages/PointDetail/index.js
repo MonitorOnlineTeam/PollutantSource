@@ -4,6 +4,7 @@ import { connect } from 'dva';
 import { Modal,Breadcrumb, Tabs, Icon, Select, Button,Card,Avatar,Row,Col,Badge,Tag,Input,Form } from 'antd';
 import { Link, Switch, Redirect } from 'dva/router';
 import { getRoutes } from '../../utils/utils';
+import moment from 'moment';
 import styles from './index.less';
 import Cookie from 'js-cookie';
 const { TabPane } = Tabs;
@@ -12,10 +13,11 @@ const Search = Input.Search;
 const { Meta } = Card;
 import router from 'umi/router';
 
-@connect(({points, loading}) => ({
+@connect(({points, loading,overview}) => ({
     pointInfo: points.selectpoint,
     loadingModel: loading.effects['overview/querydatalist'],
-    isloading: loading.effects['points/querysinglepointinfo']
+    isloading: loading.effects['points/querysinglepointinfo'],
+    pointList:overview.data
 }))
 class PointDetail extends Component {
     constructor(props) {
@@ -47,8 +49,16 @@ class PointDetail extends Component {
                 dgimn: this.props.match.params.pointcode
             }
         });
+        this.props.dispatch({
+            type: 'overview/querydatalist',
+            selectpoint: {},
+            payload: {
+                time: moment(new Date()).add(-1, 'hour').format('YYYY-MM-DD HH:00:00')
+            }
+        });
     }
     openModal = (params) => {
+        console.log(this.props.pointList);
         debugger;
         this.setState({
             modalVisible: true,
@@ -163,7 +173,24 @@ class PointDetail extends Component {
                         </Form>
                     <div style={{ background: '#ECECEC', padding: '30px',minHeight:'400px' }} className={styles.pointModal}>
                         <Row gutter={48}>
-                            <Col xs={12} sm={12} md={6} lg={6} xl={6}>
+                           {
+                            this.props.pointList.map((item, key) => (
+                                <Col xs={12} sm={12} md={6} lg={6} xl={6}>
+                                <Card style={{cursor:'pointer'}} onClick={this.clickCard}  bordered={false} loading={this.state.loadingCard}>
+                                    <div className={styles.cardContent}>
+                                        <p><Badge style={{ backgroundColor: 'rgb(255,198,0)' }} dot={true}/><span className={styles.pointName}>{item.pointName}</span></p>
+                                        <p className={styles.TEF}>传输有效率<span>{item.transmissionEffectiveRate||'-'}</span></p>
+                                        <p className={styles.TEF}>类型：<span>{item.pollutantType}</span></p>
+                                    </div>
+                                    <div style={{position:"absolute",top:5,right:-25}}>
+                                        <Tag color="#2db7f5">故障</Tag>
+                                    </div>
+                                </Card>
+                            </Col>))
+
+                           } 
+                        
+                            {/* <Col xs={12} sm={12} md={6} lg={6} xl={6}>
                                 <Card style={{cursor:'pointer'}} onClick={this.clickCard}  bordered={false} loading={this.state.loadingCard}>
                                     <div className={styles.cardContent}>
                                         <p><Badge style={{ backgroundColor: 'rgb(255,198,0)' }} dot={true}/><span className={styles.pointName}>焦炉小号烟囱7</span></p>
@@ -222,7 +249,7 @@ class PointDetail extends Component {
                                         <Tag color="#2db7f5">故障</Tag>
                                     </div>
                                 </Card>
-                            </Col>
+                            </Col> */}
                         </Row>
                     </div>
                 </Modal>

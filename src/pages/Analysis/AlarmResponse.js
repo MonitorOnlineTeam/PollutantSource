@@ -158,7 +158,7 @@ export default class AlarmResponse extends Component {
         this.getPointsTableData(1);
     }
     showModal = (params) => {
-        debugger;
+        // debugger;
         this.setState({
             modalVisible: true,
             pointName: params.PointName
