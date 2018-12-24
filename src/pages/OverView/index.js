@@ -188,6 +188,7 @@ class OverViewMap extends PureComponent {
                    width: '100%',
                    height: 'calc(100vh - 67px)'
                }}
+               className={styles.detailInfo}
          >
            <Map
              events={this.mapEvents}
