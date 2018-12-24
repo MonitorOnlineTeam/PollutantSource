@@ -21,7 +21,7 @@ class AMapModule extends React.Component {
     }
     componentWillMount() {
         if (!window.AMap && !(window.google && window.google.maps)) {
-            axios.get(googleMapSdk, { timeout: 1000 }).then(res => {
+            axios.get(googleMapSdk, {timeout: 1000}).then(res => {
                 $script([googleMapSdk], function(a, b) {});
             }).catch(function(error) {
                 $script([gaodeMapSdk], function(a, b) {});
@@ -33,7 +33,7 @@ class AMapModule extends React.Component {
         function listenerStorage() {
             if (window.AMap || (window.google && window.google.maps)) {
                 if (window.AMap) {
-                    const { lat, lng, getMapAddress } = _this.props;
+                    const {lat, lng, getMapAddress} = _this.props;
                     const latlngxy = [(!lng || lng === 'undefined' || lng === '0') ? 116.397428 : lng, (!lat || lat === 'undefined' || lat === '0') ? 39.90923 : lat];// 默认北京天安门
                     map = new window.AMap.Map('allmap', {
                         resizeEnable: true,
@@ -72,10 +72,10 @@ class AMapModule extends React.Component {
                 }
 
                 if (window.google && window.google.maps) {
-                    const { lat, lng, getMapAddress } = _this.props;
+                    const {lat, lng, getMapAddress} = _this.props;
                     const latlngxy = [(!lng || lng === 'undefined' || lng === '0') ? 116.397428 : lng, (!lat || lat === 'undefined' || lat === '0') ? 39.90923 : lat];// 默认北京天安门
 
-                    var uluru = { lat: parseFloat(latlngxy[1]), lng: parseFloat(latlngxy[0]) }; // google need number
+                    var uluru = {lat: parseFloat(latlngxy[1]), lng: parseFloat(latlngxy[0])}; // google need number
 
                     initMap();
                     function initMap() {
@@ -95,7 +95,7 @@ class AMapModule extends React.Component {
                         let latlng = e.latLng;
                         marker.setPosition(latlng);
                         geocoder = new window.google.maps.Geocoder();
-                        geocoder.geocode({ 'location': latlng }, function(results, status) {
+                        geocoder.geocode({'location': latlng}, function(results, status) {
                             if (status === 'OK') {
                                 const address = results[0].formatted_address;
                                 getMapAddress && getMapAddress(address.substring(0, address.indexOf(' ')));
@@ -118,7 +118,7 @@ class AMapModule extends React.Component {
     }
 
   componentWillReceiveProps=(nextProps) => {
-      const { getMapPoint } = this.props;
+      const {getMapPoint} = this.props;
       if (window.AMap && nextProps.address && nextProps.address != this.props.address) {
           window.AMap.service('AMap.Geocoder', function() { // 回调函数
           // 实例化Geocoder
@@ -142,10 +142,10 @@ class AMapModule extends React.Component {
 
       if (window.google && window.google.maps && nextProps.address && nextProps.address != this.props.address) {
           geocoder = new window.google.maps.Geocoder();
-          geocoder.geocode({ 'address': nextProps.address }, function(results, status) {
+          geocoder.geocode({'address': nextProps.address}, function(results, status) {
               if (status === 'OK') {
                   let latlng = results[0].geometry.location;
-                  getMapPoint && getMapPoint({ lat: latlng.lat(), lng: latlng.lng() });
+                  getMapPoint && getMapPoint({lat: latlng.lat(), lng: latlng.lng()});
                   map.setCenter(latlng);
                   // 在新中心点添加 marker
                   marker.setPosition(latlng);
@@ -157,15 +157,13 @@ class AMapModule extends React.Component {
   }
 
   render() {
+      const { height } = this.props;
       return (
-          <Spin
-              style={{ width: '100%',
-                  height: 'calc(100vh/2)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center' }}
-              size="large"
-          />
+          <div style={{height: height || 300}}>
+              <Spin spinning={this.state.status == 0} tip="Loading...">
+                  <div id="allmap" style={{height: height || 300}} />
+              </Spin>
+          </div>
       );
   }
 }

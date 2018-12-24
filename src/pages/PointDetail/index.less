@@ -4,65 +4,8 @@
   width: '100%'; 
   height:'calc(100vh - 225px)';
   :global {
-    .ant-card-head-wrapper
-    {
-      display: block;
-      align-items: center;
-    }
     .ant-card-extra{
-      float: none;
       padding: 12.5px 0 !important;
-    }
-    .ant-table-fixed-header .ant-table-scroll .ant-table-header
-    {
-        overflow: auto;
-        height: 71px;
-    }
-    .ant-table-pagination.ant-pagination {
-      position: fixed;
-      right:50px;
-      bottom: 45px;
-    }
- 
-    .ant-table-tbody > tr > td{
-      padding: 13px 16px;
-      word-break: break-word;
-    }
-    .light
-    {
-      background: #f8f8f8;
-    }
-    .ant-table-thead > tr > th {
-      background: #fafafa;
-      -webkit-transition: background .3s ease;
-      -o-transition: background .3s ease;
-      transition: background .3s ease;
-      text-align: left;
-      color: rgba(0, 0, 0, 0.85);
-      border-bottom: 1px solid #e8e8e8;
-      font-weight: bold;
-  }
-    .ant-table-body{
-      overflow: auto;
-      &::-webkit-scrollbar-track-piece{
-          -webkit-border-radius:0;
-         }
-         &::-webkit-scrollbar{
-          width:8px;
-          height:8px;
-         }
-         &::-webkit-scrollbar-thumb{
-          height:50px;
-          background-color:#61A1D5;
-          -webkit-border-radius:4px;
-          outline-offset:-2px;
-          border: 2px solid #61A1D5;
-         }
-         &::-webkit-scrollbar-thumb:hover{
-          height:50px;
-          background-color:#61A1D5;
-          -webkit-border-radius:4px;
-         }
     }
   }
   .ant-advanced-search-form{
@@ -91,12 +34,7 @@
     }
   }
 }  
-
-.cardTitlewhere{
-  float: right;
-}
 /*数据查询样式*/
-
 
   
 
@@ -189,9 +127,32 @@
   overflow-y: scroll; 
 }
 
-/*数据查询样式*/
-
+/*排口详情-排口弹窗样式Start*/
 .pointModal {
+    background: #ECECEC;
+    padding: 30px;
+    min-height:300px;
+    // height: 500px;
+    overflow:auto;
+      &::-webkit-scrollbar-track-piece{
+        -webkit-border-radius:0;
+      }
+      &::-webkit-scrollbar{
+      width:5px;
+      height:8px;
+      }
+      &::-webkit-scrollbar-thumb{
+      height:50px;
+      background-color:#9ca0a2;
+      -webkit-border-radius:4px;
+      outline-offset:-20px;
+      border: 2px solid #9ca0a2;
+      }
+      &::-webkit-scrollbar-thumb:hover{
+      height:50px;
+      background-color:#9ca0a2;
+      -webkit-border-radius:4px;
+      }
   :global {
     .ant-card {
       margin-bottom: 10px;
@@ -204,7 +165,7 @@
     }
   }
   .pointName{
-    margin-left: 20px;
+    margin-left: 12px;
     color: #323742;
     font-weight: bold;
   }
@@ -222,6 +183,7 @@
     }
   }
 }
+/*排口详情-排口弹窗样式END*/
 
 
  

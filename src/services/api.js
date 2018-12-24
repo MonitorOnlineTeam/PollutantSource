@@ -453,3 +453,13 @@ export async function querysinglepointinfo(params) {
     const result = await post('/api/rest/PollutantSourceApi/PPointAndData/GetPoint', body, null);
     return result === null ? {data: null} : result.data;
 }
+// 获取企业超标排口汇总数据
+export async function queryalloverdatalist(params) {
+    const body = {
+        DGIMNs: params.dgimn,
+        beginTime:params.beginTime,
+        endTime:params.endTime,
+    };
+    const result = await post('/api/rest/PollutantSourceApi/OverData/GetAllPointOverDataList', body, null);
+    return result === null ? {data: null} : result.data;
+}

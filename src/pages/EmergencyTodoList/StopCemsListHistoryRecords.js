@@ -5,8 +5,7 @@ import {
     Col,
     Table,
     Form,
-    Tag,
-    Spin
+    Tag
 } from 'antd';
 import { connect } from 'dva';
 import moment from 'moment';
@@ -15,7 +14,7 @@ import styles from '../EmergencyTodoList/StopCemsListHistoryRecords.less';
 import {routerRedux} from 'dva/router';
 
 @connect(({ task, loading }) => ({
-    isloading: loading.effects['task/GetHistoryStopCemsList'],
+    loading: loading.effects['task/GetHistoryStopCemsList'],
     HistoryStopCemsListHistoryRecords: task.HistoryStopCemsList,
     HistoryStopCemsListHistoryRecordsCount: task.total,
     pageIndex: task.pageIndex,
@@ -77,7 +76,7 @@ export default class StopCemsListHistoryRecords extends Component {
     }
 
     seeDetail=(record) => {
-        this.props.dispatch(routerRedux.push(`/OperationForm/StopCemsInfo/${record.TaskID}/${this.state.TypeID}`));
+        this.props.dispatch(routerRedux.push(`/pointdetail/:pointcode/StopCemsInfo/${record.TaskID}/${this.state.TypeID}`));
     }
 
     render() {
@@ -118,16 +117,6 @@ export default class StopCemsListHistoryRecords extends Component {
                 } > 详细 </a>;
             }
         }];
-        if (this.props.isloading) {
-            return (<Spin
-                style={{ width: '100%',
-                    height: 'calc(100vh/2)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center' }}
-                size="large"
-            />);
-        }
         return (
             <div>
                 <Card bordered={false}>

@@ -10,7 +10,7 @@ import { Card,
     Spin,
     Form,
 } from 'antd';
-import styles from './index.less';
+
 import {connect} from 'dva';
 const FormItem = Form.Item;
 @connect(({points, loading}) => ({
@@ -76,101 +76,44 @@ class AlarmRecord extends Component {
               }
           });
       }
-      
-      loaddata=()=>{
-            //除去固定列，列的数量
-        const colcount=4;
-        let colwidth=(document.body.clientWidth-100-100-200)/colcount
-            if(colwidth<210)
-              colwidth=210
-        const hiswidth=200+colcount*colwidth; 
+      render() {
           const columns = [{
               title: '超标时间',
               dataIndex: 'time',
-              key: 'time',
-              align: 'center',
-              width:200
+              key: 'time'
           },
           { title: '超标污染物',
               dataIndex: 'pollutantName',
-              key: 'pollutantName',
-              align: 'center',
-              width:colwidth
+              key: 'pollutantName'
           }, {
               title: '超标值',
               dataIndex: 'overValue',
-              key: 'overValue',
-              align: 'center',
-              width:colwidth
+              key: 'overValue'
           }, {
               title: '标准值',
               dataIndex: 'standardValue',
-              key: 'standardValue',
-              align: 'center',
-              width:colwidth
+              key: 'standardValue'
           },
           {
               title: '超标倍数',
               dataIndex: 'overMul',
-              key: 'overMul',
-              align: 'center',
-              width:colwidth
+              key: 'overMul'
           }];
-        if(this.props.dataloading)
-        {
-          return (<Spin
-              style={{ width: '100%',
-                  height: 'calc(100vh/2)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center' }}
-              size="large"
-          />);
-        }
-        return (
-          <Table
-          columns={columns}
-          dataSource={this.props.data}
-          rowKey="key"
-          scroll={{ x: hiswidth, y: 'calc(100vh - 430px)' }}
-          pagination={{
-              'total': this.props.total,
-              'pageSize': this.state.pageSize,
-              'current': this.state.current,
-              onChange: this.pageIndexChange
-          }}
-          rowClassName={
-            (record, index, indent) => {
-                if (index === 0) {
-                    return;
-                }
-                if (index % 2 !== 0) {
-                        return 'light';
-                    }
-                }
-            }
-      />
-        )
-    }
-      render() {
-      
-      //数据初始化
-      if (this.props.isloading) {
-        return (<Spin
-            style={{ width: '100%',
-                height: 'calc(100vh/2)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center' }}
-            size="large"
-        />);
-    }
           return (
-            <div className={styles.cardTitle}>
-                  
-                      <Card extra={
-                        <div>
-                           <RangePicker_ style={{width: 250,marginRight:20}} format="YYYY-MM-DD" onChange={this._handleDateChange} dateValue={this.state.rangeDate} />
+              <div>
+                  {(this.props.isloading || this.props.dataloading) ? <Spin style={{width: '100%',
+                      height: 'calc(100vh - 260px)',
+                      marginTop: 260 }} size="large" /> :
+                      <Card>
+                      <Card>
+                              <Form layout="inline">
+                              <Row gutter={{ md: 8, lg: 8, xl: 8 }}>
+                                      <Col span={12}>
+                                          <FormItem label="超标时间">
+                                              <RangePicker_ style={{width: 250}} format="YYYY-MM-DD" onChange={this._handleDateChange} dateValue={this.state.rangeDate} />
+                                          </FormItem>
+                                      </Col>
+                                      <Col span={12}>
                                污染物因子：
                                           <PollutantSelect_
                                               optionDatas={this.props.pollutantlist}
@@ -178,14 +121,27 @@ class AlarmRecord extends Component {
                                               onChange={this._handlePollutantChange}
                                               placeholder="请选择污染物"
                                           />
-
-                            </div>
-                        } style={{ width: '100%', height: 'calc(100vh - 225px)' }}>
-                        {
-                            this.loaddata()
-                        }
-                    </Card>
-                   </div>
+                                      </Col>
+                                  </Row>
+                          </Form>
+                          </Card>
+                      <Row gutter={18} >
+                              <Col span={24}>
+                              <Table
+                                      columns={columns}
+                                      dataSource={this.props.data}
+                                      rowKey="key"
+                                      pagination={{
+                                          'total': this.props.total,
+                                          'pageSize': this.state.pageSize,
+                                          'current': this.state.current,
+                                          onChange: this.pageIndexChange
+                                      }}
+                                  />
+                          </Col>
+                          </Row>
+                  </Card>
+                  }</div>
           );
       }
 }

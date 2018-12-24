@@ -1,8 +1,15 @@
 import React, { Component } from 'react';
 import styles from './OverPointList.less';
 import moment from 'moment';
-import { DatePicker,Input } from 'antd';
+import { DatePicker,Input,Button,Radio,Row, Col,Spin } from 'antd';
+import { connect } from 'dva';
 const { RangePicker } = DatePicker;
+
+
+@connect(({ loading,  overdata }) => ({
+    overdatalist: overdata.overdatalist,
+    loading:loading.effects['overdata/queryalloverdatalist'],
+}))
 
 class OverPointList extends Component {
     constructor(props) {
@@ -12,19 +19,127 @@ class OverPointList extends Component {
             rangeDate: [moment(new Date()).add(-1, 'month'), moment(new Date())],
         };
     }
-    handlePanelChange = (value, mode) => {
-        this.setState({
-            rangeDate: value,
-            mode: [
-                mode[0] === 'date' ? 'month' : mode[0],
-                mode[1] === 'date' ? 'month' : mode[1],
-            ],
+    componentDidMount() {
+        this.props.dispatch({
+            type: 'overdata/queryalloverdatalist',
+            payload: {
+            }
         });
     }
+    handlePanelChange = (value, mode) => {
+        if(value)
+        {
+            this.setState({
+                rangeDate: value,
+                mode: [
+                    mode[0] === 'date' ? 'month' : mode[0],
+                    mode[1] === 'date' ? 'month' : mode[1],
+                ],
+            });
+            this.props.dispatch({
+                type: 'overdata/queryalloverdatalist',
+                payload: {
+                    beginTime:value[0],
+                    endTime:value[1],
+                }
+            });    
+        }
+       
+    }
+    //最小超标倍数
+    overDataMinChange=(e)=>{
+        this.setState({
+            overDataMinValue:e.target.value
+        })
+    }
+    //最大超标倍数
+    overDataMaxChange=(e)=>{
+        this.setState({
+            overDataMaxValue:e.target.value
+        })
+    }
+    //最小超标次数
+    overCountMinChange=(e)=>{
+        this.setState({
+            overCountMinValue:e.target.value
+        })
+    }
+    //最大超标次数
+    overCountMaxChange=(e)=>{
+        this.setState({
+            overCountMaxValue:e.target.value
+        })
+    }
+
+    // reloaddata=()=>{
+    //     const {overDataMinValue,overDataMaxValue,overCountMinValue,overCountMaxValue}=this.state;
+    //     this.props.dispatch({
+    //         type: 'overdata/queryalloverdatalist',
+    //         payload: {
+    //             minoverdata:overDataMinValue,
+    //             maxoverdata:overDataMaxValue,
+    //             minovercount:overCountMinValue,
+    //             maxovercount:overCountMaxValue
+    //         }
+    //     });    
+    // }
+
+   loaddata=()=>{
+       if(this.props.loading)
+       {
+        return (<Spin
+            style={{ width: '100%',
+                height: 'calc(100vh/2)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center' }}
+            size="large"
+        />);
+       }
+       else{
+       let res=[];
+       this.props.overdatalist?this.props.overdatalist.map((item) => {
+           res.push(<Col key={item.pointName} span={8} >
+            <div className={styles.cardcss}>
+                <div className={styles.cardtitle}> 
+                    <img style={{width: 20, marginRight: 10, marginBottom: 4}} src='../../../star.png' />  <span>{item.pointName}</span>
+                    <span  className={styles.timetitle} > <img style={{width: 15, marginRight: 10, marginBottom: 4}} src="../../../treetime.png" />
+                    <span> 最新超标时间：{item.lastTime} </span>
+                    </span>
+                </div>
+                    <div className={styles.factormain}>
+                    <div className={styles.factor}> 
+                        <span style={{width:105}} className={styles.spancontent}>烟尘 : {item.zs01?item.zs01.Count:'-'}次</span>
+                        <span style={{width:140}} className={styles.spancontent}>超标倍数 : {item.zs01?(item.zs01.MinMultiple+'-'+ item.zs01.MaxMultiple):'-'}</span>
+                        <span className={styles.spancontent}>最新浓度 : {item.zs01?(item.zs01.lastValue):'-'}</span>
+                        <div style={{clear:'both'}}></div>
+                    </div>
+                    <div className={styles.factor}> 
+                    <span style={{width:105}} className={styles.spancontent}>二氧化硫 : {item.zs02?item.zs02.Count:'-'}次</span>
+                        <span style={{width:140}} className={styles.spancontent}>超标倍数 : {item.zs02?(item.zs02.MinMultiple+'-'+ item.zs02.MaxMultiple):'-'}</span>
+                        <span className={styles.spancontent}>最新浓度:{item.zs02?(item.zs02.lastValue):'-'}</span>
+                        <div style={{clear:'both'}}></div>
+                    </div>
+                    <div className={styles.factorlast}> 
+                    <span style={{width:105}} className={styles.spancontent}>氮氧化物 : {item.zs03?item.zs03.Count:'-'}次</span>
+                        <span style={{width:140}} className={styles.spancontent}>超标倍数 : {item.zs03?(item.zs03.MinMultiple+'-'+ item.zs03.MaxMultiple):'-'}</span>
+                        <span className={styles.spancontent}>最新浓度 : {item.zs03?(item.zs03.lastValue):'-'}</span>
+                        <div style={{clear:'both'}}></div>
+                    </div></div>
+                    <div className={styles.detail}>
+                        <span>查看详情</span>
+                    </div>
+            </div>
+            </Col>)
+          }):'';
+        return res;
+    }
+   }
     render() {
         const { rangeDate, mode } = this.state;
         return (
             <div className={styles.maindiv} style={{height: 'calc(100vh - 80px)'}}>
+                <div>
                 <RangePicker
                     style={{width: 250}}
                     format="YYYY-MM"
@@ -32,9 +147,19 @@ class OverPointList extends Component {
                     mode={mode}
                     onPanelChange={this.handlePanelChange}
                 />
-                <span className={styles.overM}>超标倍数:
-                    <Input style={{width: 50}} />- <Input style={{width: 50}} />
+                {/* <span className={styles.overM}> <span className={styles.searchname}>超标次数</span>
+                    <Input onChange={this.overCountMinChange} style={{width: 50}} />- <Input onChange={this.overCountMaxChange} style={{width: 50}} />
                 </span>
+                <span className={styles.overM}><span className={styles.searchname}>超标倍数</span>
+                    <Input onChange={this.overDataMinChange } style={{width: 50}} />- <Input onChange={this.overDataMaxChange} style={{width: 50}} />
+                </span>
+                <Button onClick={this.reloaddata}  className={styles.searchbutton}>查询</Button>
+                   <Radio.Group className={styles.radiocss}  defaultValue="a" buttonStyle="solid">
+                    <Radio.Button value="a">严重程度</Radio.Button>
+                    <Radio.Button value="b">超标时间</Radio.Button>
+                   </Radio.Group> */}
+                   </div>
+                   <div>{this.loaddata()}</div>
             </div>
         );
     }

@@ -6,7 +6,6 @@ import {
     Table,
     Form,
     Tag,
-    Spin
 } from 'antd';
 import { connect } from 'dva';
 import moment from 'moment';
@@ -15,7 +14,7 @@ import styles from './BdHistoryInfoHistoryRecords.less';
 import {routerRedux} from 'dva/router';
 
 @connect(({ task, loading }) => ({
-    isloading: loading.effects['task/GetBdHistoryInfoList'],
+    loading: loading.effects['task/GetBdHistoryInfoList'],
     BdHistoryInfoList: task.List,
     BdHistoryInfoListCount: task.total,
     pageIndex: task.pageIndex,
@@ -73,7 +72,7 @@ export default class BdHistoryInfoHistoryRecords extends Component {
     }
 
     seeDetail=(record) => {
-        this.props.dispatch(routerRedux.push(`/OperationForm/BdTestRecord/${record.TaskID}/${record.TypeID}`));
+        this.props.dispatch(routerRedux.push(`/pointdetail/:pointcode/ConsumablesReplaceRecord/${record.TaskID}/${record.TypeID}`));
     }
 
     render() {
@@ -119,16 +118,6 @@ export default class BdHistoryInfoHistoryRecords extends Component {
                 } > 详细 </a>;
             }
         }];
-        if (this.props.isloading) {
-            return (<Spin
-                style={{ width: '100%',
-                    height: 'calc(100vh/2)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center' }}
-                size="large"
-            />);
-        }
         return (
             <div className={styles.cardTitle}>
                 <Card bordered={false}>

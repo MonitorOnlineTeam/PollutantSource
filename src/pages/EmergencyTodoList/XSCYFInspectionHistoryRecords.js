@@ -16,7 +16,7 @@ import styles from '../EmergencyTodoList/XSCYFInspectionHistoryRecords.less';
 import {routerRedux} from 'dva/router';
 
     @connect(({ task, loading }) => ({
-        isloading: loading.effects['task/GetHistoryInspectionHistoryRecords'],
+        loading: loading.effects['task/GetHistoryInspectionHistoryRecords'],
         HistoryInspectionHistoryRecordList: task.HistoryInspectionHistoryRecordList,
         HistoryInspectionHistoryRecordListCount: task.total,
         pageIndex: task.pageIndex,
@@ -73,7 +73,7 @@ export default class XSCYFInspectionHistoryRecords extends Component {
         }
 
         seeDetail=(record) => {
-            this.props.dispatch(routerRedux.push(`/OperationForm/DilutionSampling/${record.TaskID}/${record.TypeID}`));
+            this.props.dispatch(routerRedux.push(`/pointdetail/:pointcode/DilutionSampling/${record.TaskID}/${record.TypeID}`));
         }
 
         render() {
@@ -119,16 +119,6 @@ export default class XSCYFInspectionHistoryRecords extends Component {
                     } > 详细 </a>;
                 }
             }];
-            if (this.props.isloading) {
-                return (<Spin
-                    style={{ width: '100%',
-                        height: 'calc(100vh/2)',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center' }}
-                    size="large"
-                />);
-            }
             return (
                 <div>
                     <Card bordered={false}>
