@@ -13,7 +13,6 @@ export default [
   // app
   {
     path: '/',
-    name:'首页',
     component: '../layouts/BasicLayout',
     routes: [
       { path: '/', redirect: '/homepage' },
@@ -94,7 +93,7 @@ export default [
 
 
           /* 质控记录 */
-          { path: '/pointdetail/:pointcode/qcontrollist',component: './PointDetail/QControllist',routes:[
+          { path: '/pointdetail/:pointcode/qcontrollist', component: './PointDetail/QControllist',routes:[
              /* 默认 */
           { path: '/pointdetail/:pointcode/qcontrollist', redirect: '/pointdetail/:pointcode/qcontrollist/RepairHistoryRecords' },
              /* 维修记录 */
@@ -120,10 +119,9 @@ export default [
           
           ] },
       ] },
-        /* 智能质控 */
-{ path: '/qualitycontrol',name:'智能质控',redirect:'/qualitycontrol/transmissionefficiency' },
+        
 /* 传输有效率 */
-{ path: '/qualitycontrol/transmissionefficiency',name:'传输有效率', component: './QualityControl/TransmissionEfficiency' },
+{ path: '/qualitycontrol/transmissionefficiency', component: './QualityControl/TransmissionEfficiency' },
 /* 设备运转率 */
 { path: '/qualityControl/equipmentoperatingrate', component: './QualityControl/EquipmentOperatingRate' },
 /* 月度排放量分析 */

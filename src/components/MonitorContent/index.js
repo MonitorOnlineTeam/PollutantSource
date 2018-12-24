@@ -30,7 +30,7 @@ export default class MonitorContent extends Component {
                     rtnVal.push(<Breadcrumb.Item><a onClick={() => {
                         router.replace(item.Url);
                     }}>{item.Name}</a></Breadcrumb.Item>);
-                }
+                }else
                 rtnVal.push(<Breadcrumb.Item>{item.Name}</Breadcrumb.Item>);
             });
         }
