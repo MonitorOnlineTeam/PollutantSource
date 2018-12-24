@@ -16,8 +16,7 @@ import {
     Divider,
     Menu,
     Dropdown,
-    Icon,
-    Popconfirm
+    Icon
 } from 'antd';
 import {
     routerRedux
@@ -221,7 +220,7 @@ export default class pointlist extends Component {
      },
      {
          title: '操作',
-         width: '15%',
+         width: '20%',
          align: 'left',
          render: (text, record) => (<Fragment >
              <a onClick={
@@ -232,9 +231,9 @@ export default class pointlist extends Component {
                  () => this.props.dispatch(routerRedux.push(`/sysmanage/pointdetail/${record.key}/${record.pointName}`))
              } > 详情 </a>
              <Divider type="vertical" />
-               <Popconfirm placement="left" title="确定要删除此标准下所有数据吗？" onConfirm={() => this.deletepoint(record.key)} okText="是" cancelText="否">
-                    <a href="#" > 删除 </a>
-                </Popconfirm>
+             <a onClick={
+                 () => this.delete(record.key)
+             } > 删除 </a>
              <Divider type="vertical" />
              <Dropdown overlay={menu(record.key,record.pointName)} >
                  <a>

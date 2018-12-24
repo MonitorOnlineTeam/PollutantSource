@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import styles from '../EmergencyTodoList/RepairRecordDetail.less';
-import { Spin, Button, Icon,Card } from 'antd';
+import { Spin, Button, Icon } from 'antd';
 import { connect } from 'dva';
-import MonitorContent from '../../components/MonitorContent/index';
+
 @connect(({ task, loading }) => ({
     isloading: loading.effects['task/GetRepairDetail'],
     Repair: task.Repair
@@ -102,7 +102,7 @@ export default class RepairRecordDetail extends Component {
         return rtnValChildTwo;
     }
     render() {
-        const SCREEN_HEIGHT = document.querySelector('body').offsetHeight - 134;
+        const SCREEN_HEIGHT = document.querySelector('body').offsetHeight - 250;
         const Repair = this.props.Repair;
         let EnterpriseName = null;
         let PointPosition = null;
@@ -132,23 +132,10 @@ export default class RepairRecordDetail extends Component {
             SignContent = Record.SignContent === null ? null : `data:image/jpeg;base64,${Record.SignContent}`;
             SignTime = Record.SignTime;
         }
-        if (this.props.isloading) {
-            return (<Spin
-                style={{ width: '100%',
-                    height: 'calc(100vh/2)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center' }}
-                size="large"
-            />);
-        }
+
         return (
-            <MonitorContent>
+            <Spin spinning={this.state.loading}>
                 <div className={styles.FormDiv} style={{ height: SCREEN_HEIGHT }}>
-                <Card title={<span style={{fontWeight: '900'}}>运维记录单</span>} extra={
-            <Button style={{float:"right",marginRight:30}} onClick={() => {
-                        this.props.history.goBack(-1);
-                    }}><Icon type="left" />退回</Button>}>
                     <div className={styles.FormName}>CEMS 维修记录表</div>
                     <div className={styles.HeadDiv} style={{ fontWeight: 'bold' }}>企业名称：{EnterpriseName}</div>
                     <table className={styles.FormTable}>
@@ -212,9 +199,14 @@ export default class RepairRecordDetail extends Component {
                             </tr>
                         </tbody>
                     </table>
-                    </Card>
+
+                    <div className={styles.Toexamine} >
+                        <Button size="large" onClick={() => {
+                            this.props.history.goBack(-1);
+                        }}><Icon type="left" />退回</Button>
+                    </div>
                 </div>
-            </MonitorContent>
+            </Spin>
         );
     }
 }

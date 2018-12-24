@@ -242,16 +242,6 @@ class dataList extends PureComponent {
                         rowKey="DGIMN"
                         onRow={record => {
                         }}
-                        rowClassName={
-                            (record, index, indent) => {
-                                if (index === 0) {
-                                    return;
-                                }
-                                if (index % 2 !== 0) {
-                                        return 'light';
-                                    }
-                                }
-                            }
                     />
                 </Card>
             </div>
@@ -259,5 +249,3 @@ class dataList extends PureComponent {
     }
 }
 export default dataList;
-
-
