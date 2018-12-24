@@ -1,15 +1,13 @@
 import React, { Component } from 'react';
-import { Form, Card, Checkbox, Row, Col, Switch, Timeline, Icon, Spin, Button } from 'antd';
+import { Form, Card, Radio, Row, Col, Switch, Timeline, Icon, Spin, Button } from 'antd';
 import RangePicker_ from '../../components/PointDetail/RangePicker_';
 import { connect } from 'dva';
 import moment from 'moment';
 import Ywdsjlistss from './Ywdsjlist.less';
 import {EnumPatrolTaskType} from '../../utils/enum';
 import { routerRedux } from 'dva/router';
-const FormItem = Form.Item;
-const CheckboxGroup = Checkbox.Group;
-const plainOptions = ['应急任务', '例行任务'];
-const defaultCheckedList = ['应急任务', '例行任务'];
+const RadioButton = Radio.Button;
+const RadioGroup = Radio.Group;
 const pageIndex = 1;
 const pageSize = 10;
 @connect(({ task, loading }) => ({
@@ -30,8 +28,8 @@ export default class Ywdsjlist extends Component {
             beginTime: moment().subtract(3, 'month').format('YYYY-MM-DD 00:00:00'),
             endTime: moment().format('YYYY-MM-DD 23:59:59'),
             taskType: 0,
-            checkedList: defaultCheckedList,
-            iconLoading: false
+            iconLoading: false,
+            alarmStatus:true
         };
     }
 
@@ -67,27 +65,19 @@ export default class Ywdsjlist extends Component {
         this.GetYwdsj(pageIndex, this.state.taskType, this.state.IsAlarmTimeout, dateString[0], dateString[1], false);
     };
 
-    onChange=(checkedList) => {
-        this.setState({
-            checkedList: checkedList,
-            pageIndex: pageIndex
-        });
+    onChange=(e)=> {
         let taskType;
-        if (checkedList.length === 1 && checkedList[0] === '应急任务') {
-            taskType = EnumPatrolTaskType.ExceptionTask;
+        if (e.target.value == EnumPatrolTaskType.ExceptionTask) {
+            taskType=EnumPatrolTaskType.ExceptionTask;
             this.setState({
                 taskType: EnumPatrolTaskType.ExceptionTask
             });
-        }
-
-        if (checkedList.length === 1 && checkedList[0] === '例行任务') {
+        }else if (e.target.value == EnumPatrolTaskType.PatrolTask) {
             taskType = EnumPatrolTaskType.PatrolTask;
             this.setState({
                 taskType: EnumPatrolTaskType.PatrolTask
             });
-        }
-
-        if (checkedList.length === 2 || checkedList.length === 0) {
+        }else{
             taskType = 0;
             this.setState({
                 taskType: 0
@@ -95,12 +85,13 @@ export default class Ywdsjlist extends Component {
         }
 
         this.GetYwdsj(pageIndex, taskType, this.state.IsAlarmTimeout, this.state.beginTime, this.state.endTime, false);
-    };
+    }
 
     OpenonChange=(checked) => {
         this.setState({
             IsAlarmTimeout: checked,
-            pageIndex: pageIndex
+            pageIndex: pageIndex,
+            alarmStatus:checked
         });
 
         this.GetYwdsj(pageIndex, this.state.taskType, checked, this.state.beginTime, this.state.endTime, false);
@@ -112,30 +103,6 @@ export default class Ywdsjlist extends Component {
         this.setState({ pageIndex: pageIndex });
         this.GetYwdsj(pageIndex, this.state.taskType, this.state.IsAlarmTimeout, this.state.beginTime, this.state.endTime, true);
         this.setState({ iconLoading: false });
-    }
-
-    renderSimpleForm() {
-        return (
-            <Form layout="inline">
-                <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
-                    <Col md={7} sm={24}>
-                        <FormItem label="开始时间">
-                            <RangePicker_ style={{width: 350}} onChange={this._handleDateChange} dateValue={this.state.rangeDate} />
-                        </FormItem>
-                    </Col>
-                    <Col md={4} sm={24}>
-                        <FormItem label="任务状态">
-                            <CheckboxGroup options={plainOptions} value={this.state.checkedList} onChange={this.onChange} />
-                        </FormItem>
-                    </Col>
-                    <Col md={3} sm={24}>
-                        <FormItem label="报警响应超时">
-                            <Switch checkedChildren="开" unCheckedChildren="关" defaultChecked={true} onChange={this.OpenonChange} />
-                        </FormItem>
-                    </Col>
-                </Row>
-            </Form>
-        );
     }
 
     renderItem=(data) => {
@@ -191,13 +158,33 @@ export default class Ywdsjlist extends Component {
     }
 
     render() {
+        const extraContent = (
+            <div style={{height:'30px',lineHeight:'30px'}}>
+            <RadioGroup defaultValue={this.state.taskType} onChange={this.onChange}>
+            <RadioButton value={0}>全部</RadioButton>
+            <RadioButton value={EnumPatrolTaskType.ExceptionTask}>应急任务</RadioButton>
+            <RadioButton value={EnumPatrolTaskType.PatrolTask}>例行任务</RadioButton>
+            </RadioGroup>
+              <RangePicker_ style={{width: 350,textAlign:'left',marginLeft:'10px'}} onChange={this._handleDateChange} dateValue={this.state.rangeDate} />
+              <Switch style={{marginLeft:'10px',marginBottom:'6px'}} checkedChildren="报警响应超时" unCheckedChildren="报警响应未超时" defaultChecked={this.state.alarmStatus} onChange={this.OpenonChange} />
+            </div>
+          );
         let data = this.props.OperationInfo;
         const IsOver = this.props.IsOver;
+        if (this.props.isloading) {
+            return (<Spin
+                style={{ width: '100%',
+                    height: 'calc(100vh/2)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center' }}
+                size="large"
+            />);
+        }
         return (
             <div style={{ width: '100%', height: 'calc(100vh - 222px)' }}>
-                <Card >
-                    <div bordered="false" className={Ywdsjlistss.tableListForm}>{this.renderSimpleForm()}</div>
-                    { this.props.isloading ? <div className={Ywdsjlistss.divSpin}><Spin size="large" /></div> :
+                <Card extra={extraContent} bordered={false}>
+                    {
                     <div style={{height: 'calc(100vh - 400px)'}} className={Ywdsjlistss.divTimeLine}>
                             <Timeline mode="left">
                             {

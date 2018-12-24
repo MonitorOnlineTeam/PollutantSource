@@ -246,7 +246,11 @@ export default class EmergencyDetailInfo extends Component {
             />);
         }
         return (
-            <MonitorContent>
+            <MonitorContent  {...this.props} breadCrumbList={[
+                {Name:'首页',Url:'/'},
+                {Name:'智能质控',Url:''},
+                {Name:'传输有效率',Url:''}
+            ]}>
             <div style={{height: SCREEN_HEIGHT}} className={styles.ExceptionDetailDiv}>
             <Card title={<span style={{fontWeight: '900'}}>任务详情</span>} extra={
             <Button style={{float:"right",marginRight:30}} onClick={() => {
