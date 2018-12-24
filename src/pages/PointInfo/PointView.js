@@ -93,7 +93,7 @@ export default class pointview extends Component {
         <span style={{marginLeft:10}}>气态污染物CEMS设备仪器</span>
         <span style={{marginLeft:10,cursor:'pointer'}}><Icon type="edit" theme="twoTone"  title='编辑' /></span>
         <span style={{marginLeft:10,cursor:'pointer'}}><Icon type="plus-circle" theme="twoTone"  title='添加子设备' /></span>
-        
+        <span style={{marginLeft:100,fontSize:'small'}}>供应商信息</span>
         </div>);
         return rtnVal;
     }
