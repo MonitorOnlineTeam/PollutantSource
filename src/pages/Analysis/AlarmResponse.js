@@ -350,7 +350,11 @@ export default class AlarmResponse extends Component {
             }
         ];
         return (
-            <MonitorContent>
+            <MonitorContent {...this.props} breadCrumbList={[
+                {Name:'首页',Url:'/'},
+                {Name:'智能分析',Url:''},
+                {Name:'报警及时响应情况',Url:''}
+            ]}>
                 <div className={styles.cardTitle} >
                     <Card
                         // type="inner"
@@ -392,7 +396,7 @@ export default class AlarmResponse extends Component {
                                     onChange={this.handleTableChange}
                                     size="small"// small middle
                                     dataSource={this.props.pointsTableData}
-                                    scroll={{ y: 'calc(100vh - 760px)' }}
+                                    scroll={{ y: 'calc(100vh - 420px)' }}
                                     pagination={{
                                         showSizeChanger: true,
                                         showQuickJumper: true,

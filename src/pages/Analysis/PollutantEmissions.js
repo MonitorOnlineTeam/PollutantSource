@@ -313,42 +313,45 @@ export default class PollutantEmissions extends Component {
         ];
 
         return (
-            <MonitorContent>
+            <MonitorContent {...this.props} breadCrumbList={[
+                {Name:'首页',Url:'/'},
+                {Name:'智能分析',Url:''},
+                {Name:'月度排放量分析',Url:''}
+            ]}>
                 <div className={styles.cardTitle}
                     style={{
                         // height: 'calc(100vh - 348px)'
                     }}
                 >
-                    <Card title="排放量统计" >
-                        <Row>
-                            <Col span={4}>
-                                <span>污染物：
+                    <Card title="排放量统计" 
+                        bordered={false}
+                        extra={
+                            <div>
+                                <span style={{color: '#b3b3b3'}}>污染物
                                     <Select
                                         size="default"
                                         defaultValue={this.props.pollutantCodes[0]}
                                         onChange={this.handleChangePollutant}
-                                        style={{ width: 200 }}
+                                        style={{ width: 200,marginLeft:10,marginRight:20 }}
                                     >
                                         <Option key="01">实测烟尘</Option>
                                         <Option key="02">实测二氧化硫</Option>
                                         <Option key="03">实测氮氧化物</Option>
                                     </Select>
                                 </span>
-                            </Col>
-                            <Col span={4}>
-                                <span>时间：
+                                <span style={{color: '#b3b3b3'}}>时间
                                     <Select
                                         size="default"
                                         defaultValue={dateYear}
                                         onChange={this.handleChangeDate}
-                                        style={{ width: 200 }}
+                                        style={{ width: 200,marginLeft:10 }}
                                     >
                                         {dateChildren}
                                     </Select>
                                 </span>
-                            </Col>
-                        </Row>
-
+                            </div>
+                        }
+                    >
                         <Row loading={this.props.loadingChart}>
                             <ReactEcharts
                                 option={this.getOption()}
@@ -374,7 +377,7 @@ export default class PollutantEmissions extends Component {
                                     onChange={this.handleTableChange}
                                     size="small"// small middle
                                     dataSource={this.props.tableDatas}
-                                    scroll={{ y: 'calc(100vh - 380px)' }}
+                                    scroll={{ y: 'calc(100vh - 420px)' }}
                                     pagination={{
                                         showSizeChanger: true,
                                         showQuickJumper: true,
