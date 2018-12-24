@@ -1,6 +1,6 @@
 import Cookie from 'js-cookie';
 import { message } from 'antd';
-import { query as queryUsers, changepwd, getMenuData } from '../services/user';
+import { query as queryUsers, changepwd, getMenuData } from '@/services/user';
 import { isUrl } from '../utils/utils';
 
 

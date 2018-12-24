@@ -2,7 +2,7 @@ import moment from 'moment';
 import React from 'react';
 import { loadMonitorPoint, loadLastdata, queryentpointlist, loadMonitorDatalist
     , maploadMonitorDatalist, loadPointDetail, queryentinfolist, querypollutantlist,
-    queryhistorydatalist, queryoverdatalist, queryprocesschart, querysinglepointinfo } from '../services/api';
+    queryhistorydatalist, queryoverdatalist, queryprocesschart, querysinglepointinfo } from '@/services/api';
 import { Model } from '../dvapack';
 
 import {

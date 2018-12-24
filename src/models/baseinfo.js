@@ -12,7 +12,7 @@ import { querypolluntantentinfolist,
     queryeeplist,
     queryaddeep,
     querydelep
-} from '../services/api';
+} from '@/services/api';
 import React from 'react';
 import moment from 'moment';
 import { Model } from '../dvapack';

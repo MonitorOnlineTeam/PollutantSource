@@ -1,7 +1,7 @@
 import Cookie from 'js-cookie';
 import router from 'umi/router';
 import { message } from 'antd';
-import { fakeAccountLogin, sendCaptcha } from '../services/user';
+import { fakeAccountLogin, sendCaptcha } from '@/services/user';
 import { Model } from '../dvapack';
 
 const delay = (timeout) => new Promise(resolve => {

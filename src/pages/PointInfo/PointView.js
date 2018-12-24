@@ -93,6 +93,7 @@ export default class pointview extends Component {
         <span style={{marginLeft:10}}>气态污染物CEMS设备仪器</span>
         <span style={{marginLeft:10,cursor:'pointer'}}><Icon type="edit" theme="twoTone"  title='编辑' /></span>
         <span style={{marginLeft:10,cursor:'pointer'}}><Icon type="plus-circle" theme="twoTone"  title='添加子设备' /></span>
+        
         </div>);
         return rtnVal;
     }
@@ -187,7 +188,7 @@ export default class pointview extends Component {
           title: '计量单位',
           dataIndex: 'MeasurementUnit',
           key: 'MeasurementUnit',
-          width: '5%',
+          width: '8%',
           align: 'center',
           render: (text, record) => {
             return text;
@@ -254,9 +255,9 @@ export default class pointview extends Component {
                             <Description term="经度">{this.state.longitude}</Description>
                             <Description term="纬度">{this.state.latitude}</Description>
                             <Description term="运维人">{this.state.OperationerName}</Description>
-                        </DescriptionList>
-                        <DescriptionList size="large" style={{marginTop: 20}} col="1">
                             <Description term="排口排放类型" > {this.state.OutPutWhither} </Description>
+                        </DescriptionList>
+                        <DescriptionList size="small" style={{marginTop: 15}} col="1">
                             <Description term="排口地址" > {this.state.Address} </Description>
                         </DescriptionList>
                     </Card.Grid>

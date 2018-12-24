@@ -3,7 +3,7 @@ import {
 } from '../dvapack';
 import {
     getpointlist, addpoint, getoperationsuserList, getpoint, editpoint, deletepoint
-} from '../services/pointinfo';
+} from '@/services/pointinfo';
 export default Model.extend({
     namespace: 'pointinfo',
 

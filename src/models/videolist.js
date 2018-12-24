@@ -1,6 +1,6 @@
 import { Model } from '../dvapack';
-import { getList, deleteVideoInfo, gethistoryVideoList, updateVideoInfos, addVideoInfo, getAlarmHistory, updateAlarmHistory, userDgimnDataFilter } from '../services/videodata';
-import { queryprocesschart } from '../services/api';
+import { getList, deleteVideoInfo, gethistoryVideoList, updateVideoInfos, addVideoInfo, getAlarmHistory, updateAlarmHistory, userDgimnDataFilter } from '@/services/videodata';
+import { queryprocesschart } from '@/services/api';
 
 export default Model.extend({
     namespace: 'videolist',
