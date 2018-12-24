@@ -40,9 +40,10 @@
           height: calc(100vh - 28px);
           overflow: auto;
           // overflow-y: scroll;
-        &::-webkit-scrollbar-track-piece{
+          &::-webkit-scrollbar-track-piece{
             -webkit-border-radius:0;
            }
+<<<<<<< HEAD
         &::-webkit-scrollbar{
         width:5px;
         height:8px;
@@ -59,6 +60,24 @@
         background-color:#9ca0a2;
         -webkit-border-radius:4px;
         }
+=======
+           &::-webkit-scrollbar{
+            width:8px;
+            height:8px;
+           }
+           &::-webkit-scrollbar-thumb{
+            height:50px;
+            background-color:#d1d1d1;
+            -webkit-border-radius:4px;
+            outline-offset:-2px;
+            border: 2px solid #d1d1d1;
+           }
+           &::-webkit-scrollbar-thumb:hover{
+            height:50px;
+            background-color:#61A1D5;
+            -webkit-border-radius:4px;
+           }
+>>>>>>> ddaf4210f972331a010323f0523911f3187a340e
       }
       .ant-table-placeholder{
           position: absolute;

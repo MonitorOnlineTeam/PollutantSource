@@ -252,22 +252,12 @@ export default class UseStandardLibrary extends Component {
                  <Card>
                      <div className={styles.table}>
                          <Table
+                             bordered={false}
                              loading={this.props.effects['standardlibrary/getpollutantbydgimn']}
                              columns={columns}
                              size="small"
-                             scroll={{ y: 'calc(100vh - 720px)' }}
                              dataSource={this.props.requstresult === '1' ? this.props.PollutantListByDGIMN : null}
                              pagination={true}
-                              rowClassName={
-                                (record, index, indent) => {
-                                    if (index === 0) {
-                                        return;
-                                    }
-                                    if (index % 2 !== 0) {
-                                        return 'light';
-                                    }
-                                }
-                            }
                          />
                      </div>
                  </Card>

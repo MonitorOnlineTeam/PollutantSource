@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
-import { Button, Icon,Spin,Card } from 'antd';
+import { Button, Icon,Spin } from 'antd';
 import styles from '../EmergencyTodoList/DirectMeasurement.less';
 import { connect } from 'dva';
-import MonitorContent from '../../components/MonitorContent/index';
 @connect(({ task, loading }) => ({
-    PatrolRecordListPC: task.PatrolRecordListPC,
-    isloading: loading.effects['task/GetPatrolRecordListPC'],
+    PatrolRecordListPC: task.PatrolRecordListPC
 }))
 
 /*
@@ -161,7 +159,7 @@ class DirectMeasurement extends Component {
         return rtnValChildren;
     }
     render() {
-        const SCREEN_HEIGHT = document.querySelector('body').offsetHeight - 134;
+        const SCREEN_HEIGHT = document.querySelector('body').offsetHeight - 250;
         const DataLength = this.props.PatrolRecordListPC.length;
         const Repair = DataLength === 0 ? null : this.props.PatrolRecordListPC[0];
         let EnterpriseName = null;
@@ -190,23 +188,9 @@ class DirectMeasurement extends Component {
             KlwCemsCode = DataLength === 0 ? null : Repair.Record[0].Content.KlwCemsCode;
             KlwCemsEquipmentManufacturer = DataLength === 0 ? null : Repair.Record[0].Content.KlwCemsEquipmentManufacturer;
         }
-        if (this.props.isloading) {
-            return (<Spin
-                style={{ width: '100%',
-                    height: 'calc(100vh/2)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center' }}
-                size="large"
-            />);
-        }
         return (
-            <MonitorContent>
+            <Spin spinning={this.state.loading}>
                 <div className={styles.FormDiv} style={{ height: SCREEN_HEIGHT }}>
-                <Card title={<span style={{fontWeight: '900'}}>运维记录单</span>} extra={
-            <Button style={{float:"right",marginRight:30}} onClick={() => {
-                        this.props.history.goBack(-1);
-                    }}><Icon type="left" />退回</Button>}>
                     <div className={styles.FormName}>直接测量法CEMS日常巡检记录表</div>
                     <table className={styles.FormTable}>
                         <tr>
@@ -264,9 +248,14 @@ class DirectMeasurement extends Component {
                             </tr>
                         </tbody>
                     </table>
-                    </Card>
+
+                    <div className={styles.Toexamine} >
+                        <Button size="large" onClick={() => {
+                            this.props.history.goBack(-1);
+                        }}><Icon type="left" />退回</Button>
+                    </div>
                 </div>
-            </MonitorContent>
+            </Spin>
         );
     }
 }

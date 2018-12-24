@@ -2,9 +2,9 @@
 
 import React, { Component } from 'react';
 import styles from '../EmergencyTodoList/BdTestRecord.less';
-import {Spin, Button, Checkbox,Card,Icon} from 'antd';
+import {Spin, Button, Checkbox} from 'antd';
 import { connect } from 'dva';
-import MonitorContent from '../../components/MonitorContent/index';
+
 import saveAs from 'file-saver';
 
 //import * as fstream from 'fstream';
@@ -138,6 +138,7 @@ export default class BdTestRecord extends Component {
                 return item.ItemID === itemName;
             });
         }
+        debugger;
         let sltValue1 = result !== null && result.length > 0 && result[0].Formula === '相对准确度' ? 'true' : '';
         let sltValue2 = result !== null && result.length > 0 && result[0].Formula === '相对误差' ? 'true' : '';
         let sltValue3 = result !== null && result.length > 0 && result[0].Formula === '绝对误差' ? 'true' : '';
@@ -272,8 +273,16 @@ export default class BdTestRecord extends Component {
         }
 
         render() {
-            const SCREEN_HEIGHT = document.querySelector('body').offsetHeight - 134;
+            const SCREEN_HEIGHT = document.querySelector('body').offsetHeight - 250;
             const BdRecord = this.props.BdRecord;
+            if (this.props.isloading) {
+                return (
+                    <div className={styles.loadContent}>
+                        <Spin size="large" />
+                    </div>
+                );
+            }
+
             let EnterpriseName = null; //企业名称
             let CemsSupplier = null; //CEMS供应商
             let PointPosition = null;
@@ -313,23 +322,9 @@ export default class BdTestRecord extends Component {
                 SignContent = Record.SignContent === null ? null : `data:image/jpeg;base64,${Record.SignContent}`;
                 SignTime = Record.SignTime;
             }
-            if (this.props.isloading) {
-                return (<Spin
-                    style={{ width: '100%',
-                        height: 'calc(100vh/2)',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center' }}
-                    size="large"
-                />);
-            }
+
             return (
-                <MonitorContent>
                 <div className={styles.FormDiv} style={{height: SCREEN_HEIGHT}}>
-                <Card title={<span style={{fontWeight: '900'}}>运维记录单</span>} extra={
-            <Button style={{float:"right",marginRight:30}} onClick={() => {
-                        this.props.history.goBack(-1);
-                    }}><Icon type="left" />退回</Button>}>
                     <div className={styles.FormName}>CEMS校验测试记录</div>
                     <div className={styles.HeadDiv} style={{fontWeight: 'bold'}}>企业名称：{EnterpriseName}</div>
                     <table className={styles.FormTable}>
@@ -550,14 +545,16 @@ export default class BdTestRecord extends Component {
                         </tbody>
                     </table>
 
-                    {/* <div className={styles.Toexamine} >
+                    <div className={styles.Toexamine} >
+                        <Button size="large" icon="left" onClick={() => {
+                            this.props.history.goBack(-1);
+                        }}>退回</Button>
+                        <br />
                         <Button size="large" icon="export" onClick={this.onExport}>
                     导出
                         </Button>
-                    </div> */}
-                    </Card>
+                    </div>
                 </div>
-                </MonitorContent>
             );
         }
 }

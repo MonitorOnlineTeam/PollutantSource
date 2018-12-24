@@ -11,7 +11,6 @@ import {
     Progress,
     Row,
     Col,
-    Spin,
 } from 'antd';
 import moment from 'moment';
 import styles from './index.less';
@@ -183,14 +182,8 @@ export default class TransmissionEfficiency extends Component {
                 }
             },
         ];
-        debugger;
         return (
-            
-            <MonitorContent {...this.props} breadCrumbList={[
-                {Name:'首页',Url:'/'},
-                {Name:'智能质控',Url:''},
-                {Name:'传输有效率',Url:''}
-            ]}>
+            <MonitorContent>
                 <Row className={styles.cardTitle}>
                     <Card
                         title="传输有效率列表"

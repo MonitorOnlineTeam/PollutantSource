@@ -5,7 +5,7 @@ import {
     getlist, enableordisable, deletestandardlibrarybyid, addstandardlibrary, addstandardlibrarypollutant, uploadfiles, getStandardlibrarybyid, deletefiles
     , editstandardlibrary, getpollutantlist, getstandardlibrarypollutantlist, deletestandardlibrarypollutantbyid, editstandardlibrarypollutant, getStandardlibrarypollutantbyid
     , getstandardlibraryfiles, getuselist, getpollutantbydgimn, usepoint, isusepollutant, getmonitorpointpollutant, editmonitorpointPollutant
-} from '@/services/standardlibrary';
+} from '../services/standardlibrary';
 export default Model.extend({
     namespace: 'standardlibrary',
 

@@ -8,8 +8,6 @@ import {
     Breadcrumb
 } from 'antd';
 import styles from './index.less';
-import router from 'umi/router';
-
 /**
  * 页面主体内容组件
  */
@@ -21,32 +19,14 @@ export default class MonitorContent extends Component {
     }
     componentWillMount() {
     }
-    renderBreadCrumbList=() => {
-        const rtnVal = [];
-        const { breadCrumbList } = this.props;
-        if (breadCrumbList && breadCrumbList.length !== 0) {
-            breadCrumbList.map((item) => {
-                if (item.Url !== '') {
-                    rtnVal.push(<Breadcrumb.Item><a onClick={() => {
-                        router.replace(item.Url);
-                    }}>{item.Name}</a></Breadcrumb.Item>);
-                }else
-                rtnVal.push(<Breadcrumb.Item>{item.Name}</Breadcrumb.Item>);
-            });
-        }
-        return rtnVal;
-    }
     render() {
         return (
             <div>
                 <div className={styles.pageHeader}>
                     <Breadcrumb className={styles.breadcrumb} >
-                        {/* <Breadcrumb.Item><a href="/homepage">首页</a></Breadcrumb.Item>
+                        <Breadcrumb.Item><a href="/homepage">首页</a></Breadcrumb.Item>
                         <Breadcrumb.Item>智能质控</Breadcrumb.Item>
-                        <Breadcrumb.Item>传输有效率</Breadcrumb.Item> */}
-                        {
-                            this.renderBreadCrumbList()
-                        }
+                        <Breadcrumb.Item>传输有效率</Breadcrumb.Item>
                     </Breadcrumb>
                 </div>
                 <div style={{

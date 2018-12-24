@@ -222,7 +222,7 @@ export async function GetBdHistoryInfoList(params) {
 }
 
 // 获取比对监测记录
-export async function GetBdTestRecord(params) {debugger;
+export async function GetBdTestRecord(params) {
     const body = {
         TaskID: params.TaskID
     };

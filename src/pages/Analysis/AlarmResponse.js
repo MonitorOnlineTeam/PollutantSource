@@ -158,7 +158,7 @@ export default class AlarmResponse extends Component {
         this.getPointsTableData(1);
     }
     showModal = (params) => {
-        // debugger;
+        debugger;
         this.setState({
             modalVisible: true,
             pointName: params.PointName
@@ -350,11 +350,7 @@ export default class AlarmResponse extends Component {
             }
         ];
         return (
-            <MonitorContent {...this.props} breadCrumbList={[
-                {Name:'首页',Url:'/'},
-                {Name:'智能分析',Url:''},
-                {Name:'报警及时响应情况',Url:''}
-            ]}>
+            <MonitorContent>
                 <div className={styles.cardTitle} >
                     <Card
                         // type="inner"
@@ -396,7 +392,7 @@ export default class AlarmResponse extends Component {
                                     onChange={this.handleTableChange}
                                     size="small"// small middle
                                     dataSource={this.props.pointsTableData}
-                                    scroll={{ y: 'calc(100vh - 420px)' }}
+                                    scroll={{ y: 'calc(100vh - 760px)' }}
                                     pagination={{
                                         showSizeChanger: true,
                                         showQuickJumper: true,

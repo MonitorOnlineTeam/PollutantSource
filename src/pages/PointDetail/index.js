@@ -4,20 +4,15 @@ import { connect } from 'dva';
 import { Modal,Breadcrumb, Tabs, Icon, Select, Button,Card,Avatar,Row,Col,Badge,Tag,Input,Form,Radio } from 'antd';
 import { Link, Switch, Redirect,routerRedux } from 'dva/router';
 import { getRoutes } from '../../utils/utils';
-import moment from 'moment';
 import styles from './index.less';
 import Cookie from 'js-cookie';
 const { TabPane } = Tabs;
 const Option = Select.Option;
-const Search = Input.Search;
-const { Meta } = Card;
 import router from 'umi/router';
 
-@connect(({points, loading,overview}) => ({
+@connect(({points, loading}) => ({
     pointInfo: points.selectpoint,
-    loadingModel: loading.effects['overview/querydatalist'],
-    isloading: loading.effects['points/querysinglepointinfo'],
-    pointList:overview.data
+    isloading: loading.effects['points/querysinglepointinfo']
 }))
 class PointDetail extends Component {
     constructor(props) {
@@ -52,13 +47,6 @@ class PointDetail extends Component {
             type: 'points/querysinglepointinfo',
             payload: {
                 dgimn: this.props.match.params.pointcode
-            }
-        });
-        this.props.dispatch({
-            type: 'overview/querydatalist',
-            selectpoint: {},
-            payload: {
-                time: moment(new Date()).add(-1, 'hour').format('YYYY-MM-DD HH:00:00')
             }
         });
     }
@@ -175,6 +163,7 @@ class PointDetail extends Component {
         if (location.pathname.indexOf('qcontrollist') === -1) {
             activeKey = location.pathname.replace(`${match.url}/`, '');
         }
+
         return (
             <div
                 style={{ width: '100%',

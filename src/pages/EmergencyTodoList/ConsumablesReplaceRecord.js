@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
-import { Button, Icon,Spin,Tag, Card } from 'antd';
+import { Button, Icon,Spin,Tag } from 'antd';
 import styles from '../EmergencyTodoList/ConsumablesReplaceRecord.less';
 import { connect } from 'dva';
-import MonitorContent from '../../components/MonitorContent/index';
 @connect(({ task, loading }) => ({
-    ConsumablesReplaceRecordList: task.ConsumablesReplaceRecordList,
-    isloading: loading.effects['task/fetchuserlist'],
+    ConsumablesReplaceRecordList: task.ConsumablesReplaceRecordList
 }))
 /*
 页面：易耗品更换记录表
@@ -67,7 +65,7 @@ class ConsumablesReplaceRecord extends Component {
         return rtnVal;
     }
     render() {
-        const SCREEN_HEIGHT = document.querySelector('body').offsetHeight - 134;
+        const SCREEN_HEIGHT = document.querySelector('body').offsetHeight - 250;
         var DataLength = this.props.ConsumablesReplaceRecordList.length;
         var Data = DataLength === 0 ? null : this.props.ConsumablesReplaceRecordList;
         var DataList = DataLength === 0 ? null : Data.Record.length === 0 ? null : Data.Record.RecordList;
@@ -92,23 +90,9 @@ class ConsumablesReplaceRecord extends Component {
             CreateTime = DataLength === 0 ? null : Data.Record.length === 0 ? null : Data.Record.CreateTime;
             SignTime = DataLength === 0 ? null : Data.Record.length === 0 ? null : Data.Record.SignTime;
         }
-        if (this.props.isloading) {
-            return (<Spin
-                style={{ width: '100%',
-                    height: 'calc(100vh/2)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center' }}
-                size="large"
-            />);
-        }
         return (
-            <MonitorContent>
+            <Spin spinning={this.state.loading}>
                 <div className={styles.FormDiv} style={{ height: SCREEN_HEIGHT }}>
-                <Card title={<span style={{fontWeight: '900'}}>运维记录单</span>} extra={
-            <Button style={{float:"right",marginRight:30}} onClick={() => {
-                        this.props.history.goBack(-1);
-                    }}><Icon type="left" />退回</Button>}>
                     <div className={styles.FormName}>易耗品更换记录表</div>
                     <div className={styles.HeadDiv} style={{ fontWeight: 'bold' }}>企业名称：{EnterpriseName}</div>
                     <table
@@ -207,9 +191,13 @@ class ConsumablesReplaceRecord extends Component {
                             </tr>
                         </tbody>
                     </table>
-                    </Card>
+                    <div className={styles.Toexamine} >
+                        <Button size="large" onClick={() => {
+                            this.props.history.goBack(-1);
+                        }}><Icon type="left" />退回</Button>
+                    </div>
                 </div>
-            </MonitorContent>
+            </Spin>
         );
     }
 }

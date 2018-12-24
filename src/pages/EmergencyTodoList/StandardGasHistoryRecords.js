@@ -15,7 +15,7 @@ import styles from '../EmergencyTodoList/StandardGasHistoryRecords.less';
 import {routerRedux} from 'dva/router';
 
 @connect(({ task, loading }) => ({
-    isloading: loading.effects['task/GetHistoryStandardGasRepalceRecordList'],
+    loading: loading.effects['task/GetHistoryStandardGasRepalceRecordList'],
     HistoryStandardGasRepalceRecordList: task.HistoryStandardGasRepalceRecordList,
     HistoryStandardGasRepalceRecordListCount: task.total,
     pageIndex: task.pageIndex,
@@ -72,7 +72,7 @@ export default class StandardGasHistoryRecords extends Component {
     }
 
     seeDetail=(record) => {
-        this.props.dispatch(routerRedux.push(`/OperationForm/StandardGasRepalceRecord/${record.TaskID}/${this.state.typeID}`));
+        this.props.dispatch(routerRedux.push(`/pointdetail/:pointcode/StandardGasRepalceRecord/${record.TaskID}/${this.state.typeID}`));
     }
 
     render() {
@@ -118,16 +118,6 @@ export default class StandardGasHistoryRecords extends Component {
                 } > 详细 </a>;
             }
         }];
-        if (this.props.isloading) {
-            return (<Spin
-                style={{ width: '100%',
-                    height: 'calc(100vh/2)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center' }}
-                size="large"
-            />);
-        }
         return (
             <div>
                 <Card bordered={false}>
@@ -146,7 +136,7 @@ export default class StandardGasHistoryRecords extends Component {
                     <Table
                         size={'middle'}
                         scroll={{ y: 'calc(100vh - 475px)' }}
-                        loading={this.props.isloading}
+                        loading={this.props.loading}
                         className={styles.tableCss}
                         columns={columns}
                         dataSource={dataSource}

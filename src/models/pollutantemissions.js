@@ -5,7 +5,7 @@
  */
 
 import { Model } from '../dvapack';
-import { getAllMonthPollutantEmissions, getSingleMonthAllPointEmissions, getSinglePointDaysEmissions } from '@/services/PollutantEmissionsApi';
+import { getAllMonthPollutantEmissions, getSingleMonthAllPointEmissions, getSinglePointDaysEmissions } from '../services/PollutantEmissionsApi';
 import moment from 'moment';
 // import { message } from 'antd';
 

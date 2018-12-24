@@ -1,4 +1,4 @@
-import { querypollutanttypecode, querydatalist, querylastestdatalist, queryhistorydatalist, querypollutantlist } from '@/services/api';
+import { querypollutanttypecode, querydatalist, querylastestdatalist, queryhistorydatalist, querypollutantlist } from '../services/api';
 import React from 'react';
 import { Model } from '../dvapack';
 import moment from 'moment';

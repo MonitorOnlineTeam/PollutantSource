@@ -1,12 +1,12 @@
 import Cookie from 'js-cookie';
 import router from 'umi/router';
 import { message } from 'antd';
-import { fakeAccountLogin, sendCaptcha } from '@/services/user';
+import { fakeAccountLogin, sendCaptcha } from '../services/user';
 import { Model } from '../dvapack';
 
 const delay = (timeout) => new Promise(resolve => {
-    setTimeout(resolve, timeout);
-});
+        setTimeout(resolve, timeout);
+    });
 export default Model.extend({
     namespace: 'login',
     state: {
@@ -29,14 +29,14 @@ export default Model.extend({
                 type: 'changeSubmitting',
                 payload: true,
             });
-            const response = yield call(fakeAccountLogin, { ...payload, MsgId });
+            const response = yield call(fakeAccountLogin, {...payload, MsgId});
             yield put({
                 type: 'changeLoginStatus',
                 payload: { status: response.requstresult === '1' ? 'ok' : 'faild' },
             });
             // Login successfully
-            if (response.requstresult === '1') {
-                Cookie.set('token', response.data);
+            if (response.requstresult === '1') { 
+                Cookie.set('token', response.data); 
 
                 router.push('/');
             }
@@ -49,7 +49,7 @@ export default Model.extend({
                 },
             });
             Cookie.remove('token');
-            router.push('/user/login');
+             router.push('/user/login');
         },
         * getCaptcha({ payload }, { call, put }) {
             // ;

@@ -3,7 +3,7 @@ import {
 } from '../dvapack';
 import {
     getList, deleteuser, enableduser, isexistenceuser, adduser, getuser, edituser, userDgimnDataFilter
-} from '@/services/userlist';
+} from '../services/userlist';
 export default Model.extend({
     namespace: 'userinfo',
 

@@ -5,7 +5,7 @@
  */
 
 import { Model } from '../dvapack';
-import { getAlarmResponseAllMonthStatistics,getSingleMonthAllPointAlarmResponseStatistics,getSinglePointDaysAlarmResponseStatistics } from '@/services/AlarmResponseApi';
+import { getAlarmResponseAllMonthStatistics,getSingleMonthAllPointAlarmResponseStatistics,getSinglePointDaysAlarmResponseStatistics } from '../services/AlarmResponseApi';
 import moment from 'moment';
 
 export default Model.extend({

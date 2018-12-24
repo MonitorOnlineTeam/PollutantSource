@@ -3,7 +3,7 @@ import {
 } from '../dvapack';
 import {
     getlist, getlistbyid, deletebyid, addoutputstop, uploadfiles, deletefiles, outputstoptimechecked, getoutputstopfiles
-} from '@/services/stopmanagement';
+} from '../services/stopmanagement';
 export default Model.extend({
     namespace: 'stopmanagement',
 

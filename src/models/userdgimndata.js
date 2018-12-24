@@ -3,7 +3,7 @@ import {
 } from '../dvapack';
 import {
     userDgimnDataFilter, addAllDgimnDataFilter, addDgimnDataFilter
-} from '@/services/userDgimnData';
+} from '../services/userDgimnData';
 export default Model.extend({
     namespace: 'userdgimndata',
     state: {

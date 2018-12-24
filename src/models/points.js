@@ -2,7 +2,7 @@ import moment from 'moment';
 import React from 'react';
 import { loadMonitorPoint, loadLastdata, queryentpointlist, loadMonitorDatalist
     , maploadMonitorDatalist, loadPointDetail, queryentinfolist, querypollutantlist,
-    queryhistorydatalist, queryoverdatalist, queryprocesschart, querysinglepointinfo } from '@/services/api';
+    queryhistorydatalist, queryoverdatalist, queryprocesschart, querysinglepointinfo } from '../services/api';
 import { Model } from '../dvapack';
 
 import {
@@ -41,8 +41,7 @@ export default Model.extend({
         total: 0,
         overdata: [],
         overtotal: 0,
-        processchart: {},
-        hiswidth:0,
+        processchart: {}
     },
     effects: {
         * querypointdetail({
@@ -445,22 +444,11 @@ export default Model.extend({
                 return value.pollutantCode === payload.pollutantCode;
             });
             let pollutantcols = [];
-            const pcount=pollutantlist.length;
-            let colwidth=0;
-            if(pcount)
-            {   
-                colwidth=(document.body.clientWidth-100-100-200)/pcount
-                if(colwidth<210)
-                  colwidth=210
-            }
-           
-
             pollutantlist.map((item, key) => {
                 pollutantcols = pollutantcols.concat({
                     title: item.pollutantName + '(' + item.unit + ')',
                     dataIndex: item.pollutantCode,
                     key: item.pollutantCode,
-                    width:colwidth,
                     align:'center',
                     render: (value, record, index) => {
                         const additional = record[item.pollutantCode + '_params'];
@@ -513,12 +501,9 @@ export default Model.extend({
                 title: '时间',
                 dataIndex: 'MonitorTime',
                 key: 'MonitorTime',
-                align:'center',
-                width:200,
-                fixed: 'left',
+                align:'center'
             }];
             columns = columns.concat(pollutantcols);
-            const hiswidth=200+pcount*colwidth;
             if (polluntinfo.standardValue) {
                 markLine = {
                     symbol: 'none', // 去掉警戒线最后面的箭头
@@ -559,12 +544,6 @@ export default Model.extend({
                             formatter: '{value}'
                         },
                     },
-                    grid:{
-                         x:65,
-                        y:45,
-                         x2:65,
-                        y2:20,
-                    },
                     series: [{
                         type: 'line',
                         name: payload.pollutantName,
@@ -581,7 +560,8 @@ export default Model.extend({
                     }]
                 };
             }
-            yield update({hiswidth, datalist: result, chartdata: option, columns, datatable: result, total: resultlist.total });
+
+            yield update({ datalist: result, chartdata: option, columns, datatable: result, total: resultlist.total });
         },
         * queryoverdatalist({
             payload
