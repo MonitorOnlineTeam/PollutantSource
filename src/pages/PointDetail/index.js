@@ -204,7 +204,7 @@ class PointDetail extends Component {
                 </div> : ''}
                     <Modal
                         visible={this.state.modalVisible}
-                        title={'当前排口: '+this.state.pointName}
+                        title={'当前排口: '+pointInfo.pointName}
                         onOk={this.handleModalOk}
                         onCancel={this.handleModalCancel}
                         width='1200px'
