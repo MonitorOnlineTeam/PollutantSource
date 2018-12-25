@@ -10,7 +10,6 @@ import {
     Icon,
     Divider
 } from 'antd';
-import { Button } from 'antd/lib/radio';
 export default Model.extend({
     namespace: 'overview',
     state: {

@@ -78,13 +78,13 @@ export default class BdHistoryInfoHistoryRecords extends Component {
     render() {
         const dataSource = this.props.BdHistoryInfoList === null ? null : this.props.BdHistoryInfoList;
         const columns = [{
-            title: '校准人',
+            title: '操作人',
             width: '20%',
             dataIndex: 'CreateUserID',
             key: 'CreateUserID'
         }, {
             title: '评价结果',
-            width: '45%',
+            width: '49%',
             dataIndex: 'DealingSituations',
             key: 'DealingSituations',
             render: (text, record) => {
@@ -102,7 +102,7 @@ export default class BdHistoryInfoHistoryRecords extends Component {
                 return resu;
             }
         }, {
-            title: '记录创建时间',
+            title: '记录时间',
             dataIndex: 'CreateTime',
             width: '20%',
             key: 'CreateTime',
@@ -119,27 +119,36 @@ export default class BdHistoryInfoHistoryRecords extends Component {
             }
         }];
         return (
-            <div>
+            <div className={styles.cardTitle}>
                 <Card bordered={false}>
-                    <Card>
-                        <Form layout="inline">
+                <div className={styles.conditionDiv}>
                             <Row gutter={8}>
-                                <Col span={4} >
-                            记录创建时间：
+                                <Col span={3} >
+                            记录时间：
                                 </Col>
-                                <Col span={5} >
+                                <Col span={21} >
                                     <RangePicker_ style={{width: 350}} onChange={this._handleDateChange} format={'YYYY-MM-DD'} dateValue={this.state.rangeDate} />
                                 </Col>
+                               
                             </Row>
-                        </Form>
-                    </Card>
+                    </div>
                     <Table
-                        size={'middle'}
-                        scroll={{ y: 'calc(100vh - 475px)' }}
+                        size="middle"
+                        scroll={{ y: 'calc(100vh - 465px)' }}
                         loading={this.props.loading}
-                        className={styles.tableCss}
+                        className={styles.dataTable}
                         columns={columns}
                         dataSource={dataSource}
+                        rowClassName={
+                            (record, index, indent) => {
+                                if (index === 0) {
+                                    return;
+                                }
+                                if (index % 2 !== 0) {
+                                    return 'light';
+                                }
+                            }
+                        }
                         pagination={{
                             showSizeChanger: true,
                             showQuickJumper: true,

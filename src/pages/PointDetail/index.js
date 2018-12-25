@@ -1,7 +1,7 @@
 // import liraries
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import { Modal,Breadcrumb, Tabs, Icon, Select, Button,Card,Avatar,Row,Col,Badge,Tag,Input,Form,Radio } from 'antd';
+import { Modal,Breadcrumb, Tabs, Icon, Select, Button,Card,Avatar,Row,Col,Badge,Tag,Input,Form,Radio,Alert } from 'antd';
 import { Link, Switch, Redirect,routerRedux } from 'dva/router';
 import { getRoutes } from '../../utils/utils';
 import moment from 'moment';
@@ -145,8 +145,8 @@ class PointDetail extends Component {
                 </Col>
             </div>)
         });
-            
-        return rtnVal;
+        
+        return rtnVal.length>0?rtnVal:(<Alert message="暂无数据" type="warning" />);
     }
     /**
      * 排口状态过滤事件
@@ -204,7 +204,7 @@ class PointDetail extends Component {
                 </div> : ''}
                     <Modal
                         visible={this.state.modalVisible}
-                        title={'当前排口: '+this.state.pointName}
+                        title={'当前排口: '+pointInfo.pointName}
                         onOk={this.handleModalOk}
                         onCancel={this.handleModalCancel}
                         width='1200px'

@@ -102,7 +102,7 @@ export default class StandardGasHistoryRecords extends Component {
                 return resu;
             }
         }, {
-            title: '记录创建时间',
+            title: '记录时间',
             dataIndex: 'CreateTime',
             width: '20%',
             key: 'CreateTime',
@@ -121,25 +121,34 @@ export default class StandardGasHistoryRecords extends Component {
         return (
             <div>
                 <Card bordered={false}>
-                    <Card>
-                        <Form layout="inline">
+                <div className={styles.conditionDiv}>
                             <Row gutter={8}>
-                                <Col span={4} >
-                            记录创建时间：
+                                <Col span={3} >
+                            <label className={styles.conditionLabel}>记录时间：</label>
                                 </Col>
-                                <Col span={5} >
+                                <Col span={21} >
                                     <RangePicker_ style={{width: 350}} onChange={this._handleDateChange} format={'YYYY-MM-DD'} dateValue={this.state.rangeDate} />
                                 </Col>
+                               
                             </Row>
-                        </Form>
-                    </Card>
+                    </div>
                     <Table
-                        size={'middle'}
-                        scroll={{ y: 'calc(100vh - 475px)' }}
+                        size="middle"
+                        scroll={{ y: 'calc(100vh - 465px)' }}
                         loading={this.props.loading}
-                        className={styles.tableCss}
+                        className={styles.dataTable}
                         columns={columns}
                         dataSource={dataSource}
+                        rowClassName={
+                            (record, index, indent) => {
+                                if (index === 0) {
+                                    return;
+                                }
+                                if (index % 2 !== 0) {
+                                    return 'light';
+                                }
+                            }
+                        }
                         pagination={{
                             showSizeChanger: true,
                             showQuickJumper: true,
