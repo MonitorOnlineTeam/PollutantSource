@@ -173,15 +173,6 @@ export default class UserList extends Component {
             }
         },
         {
-            title: '性别',
-            dataIndex: 'User_Sex',
-            key: 'User_Sex',
-            width: '5%',
-            render: (text, record) => {
-                return text;
-            }
-        },
-        {
             title: '角色名称',
             dataIndex: 'Roles_Name',
             key: 'Roles_Name',
@@ -209,19 +200,10 @@ export default class UserList extends Component {
             }
         },
         {
-            title: '报警时间',
-            dataIndex: 'AlarmTime',
-            key: 'AlarmTime',
-            width: '10%',
-            render: (text, record) => {
-                return text;
-            }
-        },
-        {
             title: '推送类型',
             dataIndex: 'SendPush',
             key: 'SendPush',
-            width: '15%',
+            width: '20%',
             render: (text, record) => {
                 return text;
             }
@@ -259,12 +241,18 @@ export default class UserList extends Component {
         },
         ];
         return (
-            <MonitorContent>
+            <MonitorContent {...this.props} breadCrumbList={
+                [
+                    {Name:'首页',Url:'/'},
+                    {Name:'系统管理',Url:''},
+                    {Name:'用户管理',Url:''}
+                ]
+            }>
                 <div className={styles.cardTitle}>
                     <Card bordered={false} >
                         <Form layout="inline" style={{marginBottom: 10}}>
                             <Row gutter={8}>
-                                <Col span={3} >
+                                <Col span={24} >
                                     <Search placeholder="用户名/登录名" onSearch={(value) => {
                                         this.setState({
                                             UserAccount: value
@@ -278,9 +266,8 @@ export default class UserList extends Component {
                                                 UserAccount: value,
                                             },
                                         });
-                                    }}style={{ width: 200 }} /></Col>
-                                <Col span={2} >
-                                    <Select value={this.state.DeleteMark} style={{ width: 120 }} onChange={(value) => {
+                                    }}style={{ width: 200 }} />
+                                    <Select value={this.state.DeleteMark} style={{ width: 120,marginLeft:10 }} onChange={(value) => {
                                         this.setState({
                                             DeleteMark: value
                                         });
@@ -297,11 +284,12 @@ export default class UserList extends Component {
                                         <Option value="">状态</Option>
                                         <Option value="1">启用</Option>
                                         <Option value="2">禁用</Option>
-                                    </Select></Col>
-                                <Col span={1} ><Button type="primary"
+                                    </Select>
+                                    <Button type="primary" style={{marginLeft:10}}
                                     onClick={() => {
                                         this.props.dispatch(routerRedux.push(`/sysmanage/UserDetail/null`));
-                                    }}>添加</Button></Col>
+                                    }}>添加</Button>
+                                </Col>
                             </Row>
                         </Form>
 

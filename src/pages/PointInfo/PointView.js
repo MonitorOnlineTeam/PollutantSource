@@ -236,7 +236,13 @@ export default class pointview extends Component {
         }
         ];
         return (
-             <MonitorContent>
+              <MonitorContent {...this.props} breadCrumbList={
+                [
+                    {Name:'首页',Url:'/'},
+                    {Name:'排口管理',Url:'/sysmanage/pointinfo'},
+                    {Name:'排口详情',Url:''}
+                ]
+            }>
                <div style={{marginTop:10,marginLeft:30,marginBottom:10,marginRight:30}}>
                  <Card title={this.pointinfo()}  loading={this.props.pointloading}>
                      <Card.Grid style={gridStyle}>
