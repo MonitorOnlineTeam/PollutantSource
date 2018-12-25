@@ -3,10 +3,11 @@ import { routerRedux } from 'dva/router';
 import Add from '../../components/Video/addVideoInfo';
 import Update from '../../components/Video/updateVideoInfo';
 import InfoList from '../../components/Video/VideoInfoList';
-import { Table, Card, Button, Modal, message, Divider, Icon, Row, Col, Menu, Dropdown } from 'antd';
-import PageHeader from '../../components/PageHeader';
+import { Table, Card, Button, Modal, message, Divider, Icon, Row, Col, Menu, Dropdown,Form } from 'antd';
 import { connect } from 'dva';
+import styles from './index.less';
 import moment from 'moment';
+import MonitorContent from '../../components/MonitorContent/index';
 const confirm = Modal.confirm;
 @connect(({loading, videolist}) => ({
     ...loading,
@@ -170,81 +171,86 @@ export default class VideoList extends Component {
 
         ];
         return (
-            <div>
-                <div style={{position: 'absolute', right: 40, top: 98}} >
-                    <Button size="large" onClick={() => {
-                        this.props.history.goBack(-1);
-                    }}><Icon type="left" />退回</Button>
-                </div>
-                <PageHeader title="视频管理"
-                    breadcrumbList={
-                        [{
-                            title: '排口管理',
-                            href: '/sysmanage/PointInfo',
-                        }, {
-                            title: '视频管理',
-                        }]
-                    }
-                />
-                <Card bordered={false}>
-                    <Row>
-                        <Col span={24}>
-                            <Row>
-                                <Table
-                                    columns={columns}
-                                    dataSource={this.props.requstresult === '1' ? this.props.list : null}
-                                    pagination={false}
-                                    rowKey="VedioCamera_ID"
-                                    onRow={(record, index) => {
-                                        return {
-                                            onClick: (a, b, c) => {
-                                                this.setState({
-                                                    item: record,
-                                                    selectedRowKeys: record.VedioCamera_ID
-                                                });
-                                            }, // 点击行
-                                            onMouseEnter: () => {}, // 鼠标移入行
-                                        };
-                                    }}
-                                    loading={this.props.effects['videolist/fetchuserlist']}
-                                />
-                                <Modal
-                                    footer={this.state.footer}
-                                    destroyOnClose="true"
-                                    visible={this.state.visible}
-                                    title={this.state.title}
-                                    width={this.state.width}
-                                    onCancel={this.onCancel}>
-                                    {
-                                        this.state.type === 'add' ? <Add onCancels={this.onCancel} dgimn={this.state.DGIMN} name={this.state.pointName} onRef={this.onRef1} /> : this.state.type === 'update' ? <Update onCancels={this.onCancel} dgimn={this.state.DGIMN} item={this.state.data} onRef={this.onRef1} /> : <InfoList onCancels={this.onCancel} dgimn={this.state.DGIMN} item={this.state.data} onRef={this.onRef1} />
-                                    }
-
-                                </Modal>
-                            </Row>
-                            <Row>
-                                <Button type="dashed" onClick={() => {
+            <MonitorContent {...this.props} breadCrumbList={
+                [
+                    {Name:'首页',Url:'/'},
+                    {Name:'系统管理',Url:''},
+                    {Name:'排口管理',Url:'/sysmanage/pointinfo'},
+                    {Name:'视频管理',Url:''}
+                ]
+            }>
+            <div className={styles.cardTitle}>
+                <Card bordered={false} title={this.props.match.params.pointname} style={{width:'100%'}}>
+                <Form layout="inline" style={{marginBottom: 10}}>
+                 <Row gutter={8} >
+                    <Col span={24} >
+                            <Button type="primary"
+                            onClick={
+                                () => {
                                     this.setState({
-                                        visible: true,
-                                        type: 'add',
-                                        title: '添加视频信息',
-                                        width: 1130,
-                                        footer: <div>
-                                            <Button key="back" onClick={this.onCancel}>取消</Button>
-                                            <Button key="submit" type="primary" onClick={this.AddData}>
-                                  确定
-                                            </Button>
-                                        </div>
+                                visible: true,
+                                type: 'add',
+                                title: '添加视频信息',
+                                width: 1130,
+                                footer: <div>
+                                    <Button key="back" onClick={this.onCancel}>取消</Button>
+                                    <Button key="submit" type="primary" onClick={this.AddData}>
+                        确定
+                                    </Button>
+                                </div>
+                            });
+                                }
+                            } > 添加 </Button>
+                    </Col >
+                 </Row>
+                </Form>
+                    <Table
+                        columns={columns}
+                        dataSource={this.props.requstresult === '1' ? this.props.list : null}
+                        pagination={false}
+                        rowKey="VedioCamera_ID"
+                        onRow={(record, index) => {
+                            return {
+                                onClick: (a, b, c) => {
+                                    this.setState({
+                                        item: record,
+                                        selectedRowKeys: record.VedioCamera_ID
                                     });
-                                }} style={{ width: '100%' }}>
-                                    <Icon type="plus" /> 添加
-                                </Button>
-                            </Row>
-                        </Col>
-                    </Row>
+                                }, // 点击行
+                                onMouseEnter: () => {}, // 鼠标移入行
+                            };
+                        }}
+                        loading={this.props.effects['videolist/fetchuserlist']}
+                         className={styles.dataTable}
+                         size="small"// small middle
+                         scroll={{ y: 'calc(100vh - 330px)' }}
+                         rowClassName={
+                             (record, index, indent) => {
+                                 if (index === 0) {
+                                     return;
+                                 }
+                                 if (index % 2 !== 0) {
+                                     return 'light';
+                                 }
+                             }
+                         }
+                    />
+                    <Modal
+                        footer={this.state.footer}
+                        destroyOnClose="true"
+                        visible={this.state.visible}
+                        title={this.state.title}
+                        width={this.state.width}
+                        onCancel={this.onCancel}>
+                        {
+                            this.state.type === 'add' ? <Add onCancels={this.onCancel} dgimn={this.state.DGIMN} name={this.state.pointName} onRef={this.onRef1} /> : this.state.type === 'update' ? <Update onCancels={this.onCancel} dgimn={this.state.DGIMN} item={this.state.data} onRef={this.onRef1} /> : <InfoList onCancels={this.onCancel} dgimn={this.state.DGIMN} item={this.state.data} onRef={this.onRef1} />
+                        }
+
+                    </Modal>
 
                 </Card>
             </div>
-
+           </MonitorContent>
 
         );
     }

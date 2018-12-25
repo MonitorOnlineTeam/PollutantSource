@@ -13,7 +13,7 @@ import {
     Card,
     Divider,
 } from 'antd';
-import PageHeader from '../../components/PageHeader';
+import MonitorContent from '../../components/MonitorContent/index';
 import {
     connect
 } from 'dva';
@@ -226,19 +226,17 @@ export default class AddUser extends Component {
         // const UserId = this.props.match.params.UserId;
 
         return (
+            <MonitorContent {...this.props} breadCrumbList={
+                [
+                    {Name:'首页',Url:'/'},
+                    {Name:'系统管理',Url:''},
+                    {Name:'用户管理',Url:'/sysmanage/Userinfo'},
+                    {Name:'用户维护',Url:''}
+                ]
+            }>
             <div>
-                <PageHeader title="用户维护"
-                    breadcrumbList={
-                        [{
-                            title: '用户列表',
-                            href: '/sysmanage/userinfo',
-                        }, {
-                            title: '添加用户',
-                        }]
-                    }
-                />
                 <Form onSubmit={this.handleSubmit}>
-                    <Card>
+                    <Card style={{height:'calc(100vh - 140px)' } }>
                         <Row gutter={48}>
                             <Col span={12} >
                                 <FormItem
@@ -468,6 +466,7 @@ export default class AddUser extends Component {
                     </Card>
                 </Form>
             </div>
+            </MonitorContent>
         );
     }
 }

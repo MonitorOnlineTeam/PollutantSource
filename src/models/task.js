@@ -146,7 +146,7 @@ export default Model.extend({
             select
         }) {
             const result = yield call(GetHistoryConsumablesReplaceRecord, { pageIndex: pageIndex, pageSize: pageSize, TypeID: TypeID, DGIMN: DGIMN, BeginTime: BeginTime, EndTime: EndTime });
-
+debugger;
             if (result.requstresult === '1') {
                 yield update({
                     requstresult: result.requstresult,
