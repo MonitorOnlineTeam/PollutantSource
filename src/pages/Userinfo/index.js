@@ -7,7 +7,7 @@ import {
     Col,
     Table,
     Form,
-    Select, Modal, Tag, Divider, Dropdown,Icon,Menu
+    Select, Modal, Tag, Divider, Dropdown, Icon, Menu, Popconfirm, message
 } from 'antd';
 import styles from './index.less';
 import MonitorContent from '../../components/MonitorContent/index';
@@ -81,7 +81,7 @@ export default class UserList extends Component {
                 UserAccount: this.props.UserAccount,
                 UserId: id,
                 callback: () => {
-
+                    message.success('删除成功！')
                 }
             },
         });
@@ -129,9 +129,6 @@ export default class UserList extends Component {
     onMenu = (key,id) => {
         switch (key) {
             case '1':
-                this.delete(id);
-                break;
-            case '2':
                 this.setState({
                     DataFiltervisible: true,
                     type: 'datafilter',
@@ -149,8 +146,7 @@ export default class UserList extends Component {
             <Menu onClick={(e) => {
                 this.onMenu.bind()(e.key,id);
             }}>
-                <Menu.Item key="1"><Icon type="delete" />删除</Menu.Item>
-                <Menu.Item key="2"><Icon type="setting" />数据过滤</Menu.Item>
+                <Menu.Item key="1"><Icon type="setting" />数据过滤</Menu.Item>
             </Menu>
         );
         const columns = [{
@@ -158,6 +154,7 @@ export default class UserList extends Component {
             dataIndex: 'User_Account',
             key: 'User_Account',
             width: '10%',
+            align:'center',
             sorter: (a, b) => a.User_Account.length - b.User_Account.length,
             render: (text, record) => {
                 return text;
@@ -168,6 +165,7 @@ export default class UserList extends Component {
             dataIndex: 'User_Name',
             key: 'User_Name',
             width: '10%',
+            align: 'center',
             render: (text, record) => {
                 return text;
             }
@@ -177,6 +175,7 @@ export default class UserList extends Component {
             dataIndex: 'Roles_Name',
             key: 'Roles_Name',
             width: '10%',
+            align: 'center',
             render: (text, record) => {
                 return text;
             }
@@ -186,15 +185,7 @@ export default class UserList extends Component {
             dataIndex: 'Phone',
             key: 'Phone',
             width: '10%',
-            render: (text, record) => {
-                return text;
-            }
-        },
-        {
-            title: '报警类型',
-            dataIndex: 'AlarmType',
-            key: 'AlarmType',
-            width: '10%',
+            align: 'center',
             render: (text, record) => {
                 return text;
             }
@@ -204,6 +195,7 @@ export default class UserList extends Component {
             dataIndex: 'SendPush',
             key: 'SendPush',
             width: '20%',
+            align: 'center',
             render: (text, record) => {
                 return text;
             }
@@ -212,6 +204,7 @@ export default class UserList extends Component {
             dataIndex: 'DeleteMark',
             key: 'DeleteMark',
             width: '10%',
+            align: 'center',
             render: (text, record) => {
                 if (text === '禁用') {
                     return <span > <Tag color="red" > <a onClick={
@@ -225,11 +218,16 @@ export default class UserList extends Component {
         },
         {
             title: '操作',
-            width: '10%',
+            width: '30%',
+            align: 'center',
             render: (text, record) => (<Fragment >
                 <a onClick={
                     () => this.props.dispatch(routerRedux.push(`/sysmanage/UserDetail/${record.key}`))
                 } > 编辑 </a>
+                <Divider type="vertical" />
+                 <Popconfirm placement="left" title="确定要删除此用户吗？" onConfirm={() => this.deleteuserbyid(record.key)} okText="是" cancelText="否">
+                    <a href="#" > 删除 </a>
+                </Popconfirm>
                 <Divider type="vertical" />
                 <Dropdown overlay={menu(record.key)} >
                     <a>
