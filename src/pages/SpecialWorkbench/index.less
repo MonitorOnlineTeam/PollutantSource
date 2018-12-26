@@ -1,10 +1,5 @@
 
-.demo-infinite-container {
-  border: 1px solid #e8e8e8;
-  border-radius: 4px;
-  overflow: auto;
-  padding: 8px 24px;
-}
+
 .demo-loading-container {
   position: absolute;
   bottom: 40px;
@@ -12,25 +7,17 @@
   text-align: center;
 }
 
-.mapChart {
-  padding-top: 24px;
-  height: 452px;
-  text-align: center;
-  img {
-    display: inline-block;
-    max-width: 100%;
-    max-height: 437px;
-  }
-}
-
 .pieCard :global(.pie-stat) {
   font-size: 24px !important;
 }
-
+/**
+* 工作台样式
+*/
 .workBench{
   background: rgb(236, 236, 236);
   margin-left: 20px;
   margin-right: 20px;
+  
   .headerDiv{
     background: rgb(255, 255, 255);
     height: 60px;
@@ -47,6 +34,49 @@
       padding-left: 10px;
       margin-top: 20px;
       position: absolute;
+    }
+  }
+  .mapChart {
+    padding-top: 24px;
+    height: 518px;
+    text-align: center;
+    img {
+      display: inline-block;
+      max-width: 100%;
+      max-height: 437px;
+    }
+  }
+  .demoInfiniteContainer {
+    border: 1px solid #e8e8e8;
+    border-radius: 4px;
+    height: 200px;
+    overflow: hidden;
+    padding: 0px 24px;
+  }
+  .calendarDiv{
+    :global{
+      .events {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        margin-left: 25px;
+        margin-top: -50px;
+        cursor: pointer;
+      }
+      .events .ant-badge-status {
+        overflow: hidden;
+        white-space: nowrap;
+        width: 100%;
+        text-overflow: ellipsis;
+        font-size: 12px;
+      }
+      .notes-month {
+        text-align: center;
+        font-size: 28px;
+      }
+      .notes-month section {
+        font-size: 28px;
+      }
     }
   }
 }
