@@ -229,260 +229,268 @@ class SpecialWorkbench extends Component {
       }
     render() {
         return (
-          <div className={styles.workBench}>
-            {/* <Card style={{ }} bordered={false}>
-                <p>智能监控</p>
-            </Card> */}
-            <div className={styles.headerDiv}>
-                <p>智能监控</p>
-                <p style={{float:"right",marginRight:'5%'}}>
-                    <span style={{marginRight:20}}>排放口:<span style={{marginLeft:5,color:'rgb(72,145,255)'}}>12</span></span>
-                    <span style={{marginRight:20}}>运行:<span style={{marginLeft:5,color:'rgb(93,192,94)'}}>8</span></span>
-                    <span style={{marginRight:20}}>超标:<span style={{marginLeft:5,color:'rgb(244,5,4)'}}>3</span></span>
-                    <span style={{marginRight:20}}>关停:<span style={{marginLeft:5,color:'rgb(208,145,14)'}}>1</span></span>
-                </p>
-            </div>
-            <Row gutter={24}>
-                <Col xl={12} lg={24} md={24} sm={24} xs={24} style={{ marginBottom: 10 }}>
-                    <Card
-                        title='当前超标排口(0个)'
-                        bordered={false}
-                        >
-                        <div className={styles.mapChart}>
-                            <img
-                                src="https://gw.alipayobjects.com/zos/rmsportal/HBWnDEUXCnGnGrRfrpKa.png"
-                                alt="map"
-                            />
-                        </div>
-                    </Card>
-                </Col>
-                <Col xl={12} lg={24} md={24} sm={24} xs={24}>
-                    <Card
-                        title='10月超标汇总'
-                        style={{ marginBottom: 10 }}
-                        bordered={false}
-                        extra={<a href="#">更多>></a>}
-                        >
-                        <div className={styles.demoInfiniteContainer}>
-                            <InfiniteScroll
-                                initialLoad={false}
-                                pageStart={0}
-                                loadMore={this.handleInfiniteOnLoad}
-                                hasMore={!this.state.loading && this.state.hasMore}
-                                useWindow={false}
+            <div style={{
+                width: '100%',
+                height: 'calc(100vh - 65px)',
+                overflow: 'auto'
+            }} className={styles.contentDiv}
+            >
+                <div className={styles.workBench}>
+                    {/* <Card style={{ }} bordered={false}>
+                        <p>智能监控</p>
+                    </Card> */}
+                    <div className={styles.headerDiv}>
+                        <p>智能监控</p>
+                        <p style={{float:"right",marginRight:'5%'}}>
+                            <span style={{marginRight:20}}>排放口:<span style={{marginLeft:5,color:'rgb(72,145,255)'}}>12</span></span>
+                            <span style={{marginRight:20}}>运行:<span style={{marginLeft:5,color:'rgb(93,192,94)'}}>8</span></span>
+                            <span style={{marginRight:20}}>超标:<span style={{marginLeft:5,color:'rgb(244,5,4)'}}>3</span></span>
+                            <span style={{marginRight:20}}>关停:<span style={{marginLeft:5,color:'rgb(208,145,14)'}}>1</span></span>
+                        </p>
+                    </div>
+                    <Row gutter={24}>
+                        <Col xl={12} lg={24} md={24} sm={24} xs={24} style={{ marginBottom: 10 }}>
+                            <Card
+                                title='当前超标排口(0个)'
+                                bordered={false}
                                 >
-                                <List
-                                    dataSource={this.state.data}
-                                    size="small"
-                                    renderItem={item => (
-                                        <List.Item key={item.id}>
-                                            <List.Item.Meta
-                                            title={<a href="https://ant.design">{item.name.last}</a>}
-                                            description={item.email}
-                                            />
-                                            <div></div>
-                                        </List.Item>
-                                        )}
-                                    >
-                                    {this.state.loading && this.state.hasMore && (
-                                    <div className="demo-loading-container">
-                                        <Spin />
-                                    </div>
-                                    )}
-                                </List>
-                            </InfiniteScroll>
-                        </div>
-                    </Card>
-                    <Card
-                        title='当前小时预警消息'
-                        style={{ marginBottom: 10 }}
-                        // bodyStyle={{ textAlign: 'center' }}
-                        bordered={false}
-                        extra={<a href="#">更多>></a>}
-                        >
-                        <div className={styles.demoInfiniteContainer}>
-                            <InfiniteScroll
-                                initialLoad={false}
-                                pageStart={0}
-                                loadMore={this.handleInfiniteOnLoad}
-                                hasMore={!this.state.loading && this.state.hasMore}
-                                useWindow={false}
-                                >
-                                <List
-                                    dataSource={this.state.data}
-                                    size="small"
-                                    renderItem={item => (
-                                        <List.Item key={item.id}>
-                                            <List.Item.Meta
-                                            title={<a href="https://ant.design">{item.name.last}</a>}
-                                            description={item.email}
-                                            />
-                                            <div></div>
-                                        </List.Item>
-                                        )}
-                                    >
-                                    {this.state.loading && this.state.hasMore && (
-                                    <div className="demo-loading-container">
-                                        <Spin />
-                                    </div>
-                                    )}
-                                </List>
-                            </InfiniteScroll>
-                        </div>
-                    </Card>
-                </Col>
-            </Row>
-
-            <div className={styles.headerDiv}>
-                <p>智能质控</p>
-            </div>
-
-            <Row gutter={24}>
-                <Col xl={12} lg={24} md={24} sm={24} xs={24} style={{ marginBottom: 10 }}>
-                    <Row>
-                        <Col span={24}>
-                            <Card title='实时联网率' style={{}} extra={<a href="#">更多>></a>}>
-                                <Card.Grid style={gridStyle}>
-                                {/* 实时联网率 */}
-                                
-                                <ReactEcharts
-                                    option={this.getOption(1)}
-                                    style={{height: '150px', width: '100%'}}
-                                    className="echarts-for-echarts"
-                                    onEvents={{'click': this.onChartClick}}
-                                    theme="my_theme" />
-
-                                </Card.Grid>
-                                <Card.Grid style={gridStyle}>
-                                    <Table columns={columns} dataSource={data} size="small" pagination={false}/>
-                                </Card.Grid>
-                            </Card>
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col span={24}>
-                            <Card title='十月设备运转率' style={{marginTop:10}} extra={<a href="#">更多>></a>}>
-                                    <Card.Grid style={gridStyle}>
-                                    {/* 十月设备运转率 */}
-                                    
-                                    <ReactEcharts
-                                        option={this.getOption(2)}
-                                        style={{height: '150px', width: '100%'}}
-                                        className="echarts-for-echarts"
-                                        onEvents={{'click': this.onChartClick}}
-                                        theme="my_theme" />
-
-                                    </Card.Grid>
-                                    <Card.Grid style={gridStyle}>
-                                        <Table columns={columns} dataSource={data} size="small" pagination={false}/>
-                                    </Card.Grid>
-                            </Card>
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col span={24}>
-                            <Card title='十月传输有效率' style={{marginTop:10}} extra={<a href="#">更多>></a>}>
-                                <Card.Grid style={gridStyle}>
-                                {/* 十月传输有效率 */}
-                                
-                                <ReactEcharts
-                                    option={this.getOption(3)}
-                                    style={{height: '150px', width: '100%'}}
-                                    className="echarts-for-echarts"
-                                    onEvents={{'click': this.onChartClick}}
-                                    theme="my_theme" />
-
-                                </Card.Grid>
-                                <Card.Grid style={gridStyle}>
-                                    <Table columns={columns} dataSource={data} size="small" pagination={false}/>
-                                </Card.Grid>
-                            </Card>
-                        </Col>
-                    </Row>
-                </Col>
-                <Col xl={12} lg={24} md={24} sm={24} xs={24}>
-                    <Card
-                        title='异常报警'
-                        style={{ marginBottom: 10}}
-                        bordered={false}
-                        extra={<a href="#">更多>></a>}
-                        >
-                       <div className={styles.demoInfiniteContainer} style={{height:688}}>
-                            <InfiniteScroll
-                                initialLoad={false}
-                                pageStart={0}
-                                loadMore={this.handleInfiniteOnLoad}
-                                hasMore={!this.state.loading && this.state.hasMore}
-                                useWindow={false}
-                                >
-                                <List
-                                    dataSource={this.state.data}
-                                    size="small"
-                                    renderItem={item => (
-                                        <List.Item key={item.id}>
-                                            <List.Item.Meta
-                                            title={<a href="https://ant.design">{item.name.last}</a>}
-                                            description={item.email}
-                                            />
-                                            <div></div>
-                                        </List.Item>
-                                        )}
-                                    >
-                                    {this.state.loading && this.state.hasMore && (
-                                    <div className="demo-loading-container">
-                                        <Spin />
-                                    </div>
-                                    )}
-                                </List>
-                            </InfiniteScroll>
-                        </div>
-                    </Card>
-                </Col>
-            </Row>
-
-            <div className={styles.headerDiv}>
-                <p>智能运维</p>
-            </div>
-
-            <Row gutter={24}>
-                <Col xl={8} lg={24} md={24} sm={24} xs={24} style={{ marginBottom: 10 }}>
-                    <Card style={{}}>
-                        <div className={styles.calendarDiv}>
-                            {/* <Alert message={`You selected date: ${this.state.selectedValue && this.state.selectedValue.format('YYYY-MM-DD')}`} /> */}
-                            <div style={{textAlign: 'left', marginBottom: -35}}>
-                                    <div style={{
-                                        width: 6,
-                                        height: 6,
-                                        backgroundColor: '#faad14',
-                                        display: 'inline-block',
-                                        borderRadius: '100%',
-                                        cursor: 'pointer',
-                                        marginRight: 3
-                                    }} /> <span style={{cursor: 'pointer'}}> 异常任务</span>
-                                    <div style={{
-                                        width: 6,
-                                        height: 6,
-                                        backgroundColor: '#52c41a',
-                                        display: 'inline-block',
-                                        borderRadius: '100%',
-                                        cursor: 'pointer',
-                                        marginLeft: 20,
-                                        marginRight: 3
-                                    }} /><span style={{cursor: 'pointer'}}> 正常任务</span>
+                                <div className={styles.mapChart}>
+                                    <img
+                                        src="https://gw.alipayobjects.com/zos/rmsportal/HBWnDEUXCnGnGrRfrpKa.png"
+                                        alt="map"
+                                    />
                                 </div>
-                            <Calendar fullscreen={false} dateCellRender={dateCellRender} monthCellRender={monthCellRender} />
-                        </div>
-                    </Card>
-                </Col>
-                <Col xl={16} lg={24} md={24} sm={24} xs={24}>
-                    <Card title='运维记录' style={{ }} extra={<a href="#">更多>></a>}>
-                        <Card.Grid style={{width:'100%',height:296}} >
-                            <Table columns={columns} dataSource={data} size="small" pagination={false}/>
-                        </Card.Grid>
-                    </Card>
-                </Col>
-            </Row>
-          </div>
+                            </Card>
+                        </Col>
+                        <Col xl={12} lg={24} md={24} sm={24} xs={24}>
+                            <Card
+                                title='10月超标汇总'
+                                style={{ marginBottom: 10 }}
+                                bordered={false}
+                                extra={<a href="#">更多>></a>}
+                                >
+                                <div className={styles.demoInfiniteContainer}>
+                                    <InfiniteScroll
+                                        initialLoad={false}
+                                        pageStart={0}
+                                        loadMore={this.handleInfiniteOnLoad}
+                                        hasMore={!this.state.loading && this.state.hasMore}
+                                        useWindow={false}
+                                        >
+                                        <List
+                                            dataSource={this.state.data}
+                                            size="small"
+                                            renderItem={item => (
+                                                <List.Item key={item.id}>
+                                                    <List.Item.Meta
+                                                    title={<a href="https://ant.design">{item.name.last}</a>}
+                                                    description={item.email}
+                                                    />
+                                                    <div></div>
+                                                </List.Item>
+                                                )}
+                                            >
+                                            {this.state.loading && this.state.hasMore && (
+                                            <div className="demo-loading-container">
+                                                <Spin />
+                                            </div>
+                                            )}
+                                        </List>
+                                    </InfiniteScroll>
+                                </div>
+                            </Card>
+                            <Card
+                                title='当前小时预警消息'
+                                style={{ marginBottom: 10 }}
+                                // bodyStyle={{ textAlign: 'center' }}
+                                bordered={false}
+                                extra={<a href="#">更多>></a>}
+                                >
+                                <div className={styles.demoInfiniteContainer}>
+                                    <InfiniteScroll
+                                        initialLoad={false}
+                                        pageStart={0}
+                                        loadMore={this.handleInfiniteOnLoad}
+                                        hasMore={!this.state.loading && this.state.hasMore}
+                                        useWindow={false}
+                                        >
+                                        <List
+                                            dataSource={this.state.data}
+                                            size="small"
+                                            renderItem={item => (
+                                                <List.Item key={item.id}>
+                                                    <List.Item.Meta
+                                                    title={<a href="https://ant.design">{item.name.last}</a>}
+                                                    description={item.email}
+                                                    />
+                                                    <div></div>
+                                                </List.Item>
+                                                )}
+                                            >
+                                            {this.state.loading && this.state.hasMore && (
+                                            <div className="demo-loading-container">
+                                                <Spin />
+                                            </div>
+                                            )}
+                                        </List>
+                                    </InfiniteScroll>
+                                </div>
+                            </Card>
+                        </Col>
+                    </Row>
+
+                    <div className={styles.headerDiv}>
+                        <p>智能质控</p>
+                    </div>
+
+                    <Row gutter={24}>
+                        <Col xl={12} lg={24} md={24} sm={24} xs={24} style={{ marginBottom: 10 }}>
+                            <Row>
+                                <Col span={24}>
+                                    <Card title='实时联网率' style={{}} extra={<a href="#">更多>></a>}>
+                                        <Card.Grid style={gridStyle}>
+                                        {/* 实时联网率 */}
+                                        
+                                        <ReactEcharts
+                                            option={this.getOption(1)}
+                                            style={{height: '150px', width: '100%'}}
+                                            className="echarts-for-echarts"
+                                            onEvents={{'click': this.onChartClick}}
+                                            theme="my_theme" />
+
+                                        </Card.Grid>
+                                        <Card.Grid style={gridStyle}>
+                                            <Table columns={columns} dataSource={data} size="small" pagination={false}/>
+                                        </Card.Grid>
+                                    </Card>
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col span={24}>
+                                    <Card title='十月设备运转率' style={{marginTop:10}} extra={<a href="#">更多>></a>}>
+                                            <Card.Grid style={gridStyle}>
+                                            {/* 十月设备运转率 */}
+                                            
+                                            <ReactEcharts
+                                                option={this.getOption(2)}
+                                                style={{height: '150px', width: '100%'}}
+                                                className="echarts-for-echarts"
+                                                onEvents={{'click': this.onChartClick}}
+                                                theme="my_theme" />
+
+                                            </Card.Grid>
+                                            <Card.Grid style={gridStyle}>
+                                                <Table columns={columns} dataSource={data} size="small" pagination={false}/>
+                                            </Card.Grid>
+                                    </Card>
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col span={24}>
+                                    <Card title='十月传输有效率' style={{marginTop:10}} extra={<a href="#">更多>></a>}>
+                                        <Card.Grid style={gridStyle}>
+                                        {/* 十月传输有效率 */}
+                                        
+                                        <ReactEcharts
+                                            option={this.getOption(3)}
+                                            style={{height: '150px', width: '100%'}}
+                                            className="echarts-for-echarts"
+                                            onEvents={{'click': this.onChartClick}}
+                                            theme="my_theme" />
+
+                                        </Card.Grid>
+                                        <Card.Grid style={gridStyle}>
+                                            <Table columns={columns} dataSource={data} size="small" pagination={false}/>
+                                        </Card.Grid>
+                                    </Card>
+                                </Col>
+                            </Row>
+                        </Col>
+                        <Col xl={12} lg={24} md={24} sm={24} xs={24}>
+                            <Card
+                                title='异常报警'
+                                style={{ marginBottom: 10}}
+                                bordered={false}
+                                extra={<a href="#">更多>></a>}
+                                >
+                            <div className={styles.demoInfiniteContainer} style={{height:688}}>
+                                    <InfiniteScroll
+                                        initialLoad={false}
+                                        pageStart={0}
+                                        loadMore={this.handleInfiniteOnLoad}
+                                        hasMore={!this.state.loading && this.state.hasMore}
+                                        useWindow={false}
+                                        >
+                                        <List
+                                            dataSource={this.state.data}
+                                            size="small"
+                                            renderItem={item => (
+                                                <List.Item key={item.id}>
+                                                    <List.Item.Meta
+                                                    title={<a href="https://ant.design">{item.name.last}</a>}
+                                                    description={item.email}
+                                                    />
+                                                    <div></div>
+                                                </List.Item>
+                                                )}
+                                            >
+                                            {this.state.loading && this.state.hasMore && (
+                                            <div className="demo-loading-container">
+                                                <Spin />
+                                            </div>
+                                            )}
+                                        </List>
+                                    </InfiniteScroll>
+                                </div>
+                            </Card>
+                        </Col>
+                    </Row>
+
+                    <div className={styles.headerDiv}>
+                        <p>智能运维</p>
+                    </div>
+
+                    <Row gutter={24}>
+                        <Col xl={8} lg={24} md={24} sm={24} xs={24} style={{ marginBottom: 10 }}>
+                            <Card style={{}}>
+                                <div className={styles.calendarDiv}>
+                                    {/* <Alert message={`You selected date: ${this.state.selectedValue && this.state.selectedValue.format('YYYY-MM-DD')}`} /> */}
+                                    <div style={{textAlign: 'left', marginBottom: -35}}>
+                                            <div style={{
+                                                width: 6,
+                                                height: 6,
+                                                backgroundColor: '#faad14',
+                                                display: 'inline-block',
+                                                borderRadius: '100%',
+                                                cursor: 'pointer',
+                                                marginRight: 3
+                                            }} /> <span style={{cursor: 'pointer'}}> 异常任务</span>
+                                            <div style={{
+                                                width: 6,
+                                                height: 6,
+                                                backgroundColor: '#52c41a',
+                                                display: 'inline-block',
+                                                borderRadius: '100%',
+                                                cursor: 'pointer',
+                                                marginLeft: 20,
+                                                marginRight: 3
+                                            }} /><span style={{cursor: 'pointer'}}> 正常任务</span>
+                                        </div>
+                                    <Calendar fullscreen={false} dateCellRender={dateCellRender} monthCellRender={monthCellRender} />
+                                </div>
+                            </Card>
+                        </Col>
+                        <Col xl={16} lg={24} md={24} sm={24} xs={24}>
+                            <Card title='运维记录' style={{ }} extra={<a href="#">更多>></a>}>
+                                <Card.Grid style={{width:'100%',height:296}} >
+                                    <Table columns={columns} dataSource={data} size="small" pagination={false}/>
+                                </Card.Grid>
+                            </Card>
+                        </Col>
+                    </Row>
+                </div>
+            </div>
+          
         );
     }
 }
