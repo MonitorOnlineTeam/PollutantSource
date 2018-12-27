@@ -229,7 +229,7 @@ export default class EquipmentOperatingRate extends Component {
                                 onChange={this.handleTableChange}
                                 size="small"// small middle
                                 dataSource={this.props.tableDatas}
-                                scroll={{ y: 'calc(100vh - 380px)' }}
+                                scroll={{ y: 'calc(100vh - 390px)' }}
                                 // scroll={{ y: 'calc(100vh - 255px)' }}
                                 rowClassName={
                                     (record, index, indent) => {
