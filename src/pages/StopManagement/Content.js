@@ -280,7 +280,7 @@ export default class Content extends Component {
                             columns={columns}
                             className={styles.dataTable}
                             dataSource={this.props.requstresult === '1' ? this.props.list : null}
-                            scroll={{ y: 'calc(100vh - 435px)' }}
+                            scroll={{ y: 'calc(100vh - 390px)' }}
                             size = "small" // small middle
                             pagination={{
                                 showSizeChanger: true,

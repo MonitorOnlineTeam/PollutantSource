@@ -2,7 +2,8 @@ import {
     Model
 } from '../dvapack';
 import {
-    getpointlist, addpoint, getoperationsuserList, getpoint, editpoint, deletepoint
+    getpointlist, addpoint, getoperationsuserList, getpoint, editpoint, deletepoint, getanalyzersys, addalyzersys, getanalyzersysmnmodel, editalyzersys, deletealyzersys
+    , getcomponent, addalyzerchild, getanalyzerchild
 } from '../services/pointinfo';
 export default Model.extend({
     namespace: 'pointinfo',
@@ -17,6 +18,18 @@ export default Model.extend({
         pageSize: 10,
         pageIndex: 1,
         reason: null,
+        AnalyzerSys: [],
+        editAnalyzerSys:null,
+        getanalyzersys_requstresult:null,
+        addalyzersys_requstresult:null,
+        getanalyzersysmnmodel_requstresult:null,
+        editalyzersys_requstresult:null,
+        deletealyzersys_requstresult:null,
+        component:[],
+        getcomponent_requstresult:null,
+        addalyzerchild_requstresult:null,
+        analyzerchild:[],
+        getanalyzerchild_requstresult:null,
     },
     subscriptions: {
         setup({
@@ -252,6 +265,203 @@ export default Model.extend({
             });
             callback();
         },
+        * getanalyzersys({
+            payload: {
+                DGIMN,
+                callback
+            }
+        }, {
+            call,
+            put,
+            update,
+            select
+        }) {
+            const result = yield call(getanalyzersys, {
+                DGIMN: DGIMN
+            });
+            yield update({
+                getanalyzersys_requstresult: result.requstresult,
+                AnalyzerSys: result.data,
+                total: result.total,
+            });
+            callback();
+        },
+         * addalyzersys({
+           payload: {
+                DGIMN,
+                Manufacturer,
+                ManufacturerCode,
+                Type,
+                callback
+           }
+         }, {
+           call,
+           put,
+           update,
+           select
+         }) {
+           const result = yield call(addalyzersys, {
+             DGIMN: DGIMN,
+             Manufacturer: Manufacturer,
+             ManufacturerCode: ManufacturerCode,
+             Type: Type,
+           });
+           yield update({
+             addalyzersys_requstresult: result.requstresult,
+             reason: result.reason,
+           });
+           callback();
+         },
+         * getanalyzersysmnmodel({
+           payload: {
+             ID,
+             callback
+           }
+         }, {
+           call,
+           put,
+           update,
+           select
+         }) {
+           const result = yield call(getanalyzersysmnmodel, {
+             ID: ID
+           });
+           yield update({
+             getanalyzersysmnmodel_requstresult: result.requstresult,
+             editAnalyzerSys: result.data[0],
+           });
+           callback();
+         },
+         * editalyzersys({
+           payload: {
+             ID,
+             Manufacturer,
+             ManufacturerCode,
+             callback
+           }
+         }, {
+           call,
+           put,
+           update,
+           select
+         }) {
+           const result = yield call(editalyzersys, {
+             ID: ID,
+             Manufacturer: Manufacturer,
+             ManufacturerCode: ManufacturerCode,
+           });
+           yield update({
+             editalyzersys_requstresult: result.requstresult,
+             reason: result.reason,
+           });
+           callback();
+         },
+         * deletealyzersys({
+           payload: {
+             ID,
+             callback
+           }
+         }, {
+           call,
+           put,
+           update,
+           select
+         }) {
+           const result = yield call(deletealyzersys, {
+             ID: ID,
+           });
+           yield update({
+             deletealyzersys_requstresult: result.requstresult,
+             reason: result.reason,
+           });
+           callback();
+         },
+         * getcomponent({
+           payload: {
+             callback
+           }
+         }, {
+           call,
+           put,
+           update,
+           select
+         }) {
+           const result = yield call(getcomponent, {
+           });
+           yield update({
+             
+             getcomponent_requstresult: result.requstresult,
+             reason: result.reason,
+             component: result.data,
+           });
+           callback();
+         },
+          * addalyzerchild({
+           payload: {
+             DGIMN,
+             Name,
+             DeviceModel,
+             Manufacturer,
+             ManufacturerAbbreviation,
+             TestComponent,
+             AnalyzerPrinciple,
+             AnalyzerRangeMin,
+             MeasurementUnit,
+             Slope,
+             Intercept,
+             AnalyzerSys_Id,
+             AnalyzerRangeMax,
+             callback
+           }
+         }, {
+           call,
+           put,
+           update,
+           select
+         }) {
+           const result = yield call(addalyzerchild, {
+                DGIMN: DGIMN,
+                Name: Name,
+                DeviceModel: DeviceModel,
+                Manufacturer: Manufacturer,
+                ManufacturerAbbreviation: ManufacturerAbbreviation,
+                TestComponent: TestComponent,
+                AnalyzerPrinciple: AnalyzerPrinciple,
+                AnalyzerRangeMin: AnalyzerRangeMin,
+                MeasurementUnit: MeasurementUnit,
+                Slope: Slope,
+                Intercept: Intercept,
+                AnalyzerSys_Id: AnalyzerSys_Id,
+                AnalyzerRangeMax: AnalyzerRangeMax,
+           });
+           yield update({
+             addalyzerchild_requstresult: result.requstresult,
+             reason: result.reason,
+           });
+           callback();
+         },
+          * getanalyzerchild({
+            payload: {
+              ID: ID,
+              callback
+            }
+          }, {
+            call,
+            put,
+            update,
+            select
+          }) {
+            const result = yield call(getanalyzerchild, {
+                ID: ID,
+            });
+            yield update({
+
+              getanalyzerchild_requstresult: result.requstresult,
+              reason: result.reason,
+              analyzerchild: result.data,
+            });
+            callback();
+          },
     },
     reducers: {
         save(state, action) {
