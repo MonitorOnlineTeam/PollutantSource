@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Table, Button, Icon, Layout,Spin } from 'antd';
 import styles from '../EmergencyTodoList/DilutionSampling.less';
 import { connect } from 'dva';
+import MonitorContent from '../../components/MonitorContent/index';
 @connect(({ task, loading }) => ({
     PatrolRecordListPC: task.PatrolRecordListPC
 }))

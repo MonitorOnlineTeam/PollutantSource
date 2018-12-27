@@ -29,6 +29,10 @@ const Option = Select.Option;
     reason: pointinfo.reason,
     component: pointinfo.component,
     getcomponent_requstresult: pointinfo.getcomponent_requstresult,
+    addalyzerchild_requstresult: pointinfo.addalyzerchild_requstresult,
+    editalyzersyschild: pointinfo.editalyzersyschild,
+    getanalyzerchildmodel_requstresult: pointinfo.getanalyzerchildmodel_requstresult,
+    editalyzerchild_requstresult: pointinfo.editalyzerchild_requstresult,
 }))
 @Form.create()
 export default class AddAnalyzerChild extends Component {
@@ -37,8 +41,8 @@ export default class AddAnalyzerChild extends Component {
         this.state = {
             DGIMN: null,
             ID: null,
-            Disabled:false,
             AnalyzerSys_Id:null,
+            component: [],
         };
     }
     componentWillMount() {
@@ -49,31 +53,35 @@ export default class AddAnalyzerChild extends Component {
           AnalyzerSys_Id: this.props.AnalyzerSys_Id,
         })
         const ID = this.props.ID;
-        console.log(ID);
-        if (ID !=='null') {
+        this.getOperationer();
+        if (ID !==null) {
             this.setState({
                 ID: ID,
-                Disabled:true,
-                component:[],
             });
             this.props.dispatch({
-                type: 'pointinfo/getanalyzersysmnmodel',
+                type: 'pointinfo/getanalyzerchildmodel',
                 payload: {
                     ID: ID,
                     callback: () => {
-                        if (this.props.getanalyzersysmnmodel_requstresult === '1') {
-                            console.log(this.props.editAnalyzerSys);
+                        if (this.props.getanalyzerchildmodel_requstresult === '1') {
                             this.props.form.setFieldsValue({
-                                Type: this.props.editAnalyzerSys.Type,
-                                Manufacturer: this.props.editAnalyzerSys.Manufacturer,
-                                ManufacturerCode: this.props.editAnalyzerSys.ManufacturerCode
+                                Name: this.props.editalyzersyschild.Name,
+                                DeviceModel: this.props.editalyzersyschild.DeviceModel,
+                                Manufacturer: this.props.editalyzersyschild.Manufacturer,
+                                ManufacturerAbbreviation: this.props.editalyzersyschild.ManufacturerAbbreviation,
+                                AnalyzerPrinciple: this.props.editalyzersyschild.AnalyzerPrinciple,
+                                MeasurementUnit: this.props.editalyzersyschild.MeasurementUnit,
+                                Slope: this.props.editalyzersyschild.Slope,
+                                Intercept: this.props.editalyzersyschild.Intercept,
+                                AnalyzerRangeMin: this.props.editalyzersyschild.AnalyzerRangeMin,
+                                AnalyzerRangeMax: this.props.editalyzersyschild.AnalyzerRangeMax,
+                                TestComponent: this.props.editalyzersyschild.TestComponent,
                             });
                         }
                     }
                 },
             });
         }
-        this.getOperationer();
     }
     getOperationer=(e) => {
         this.props.dispatch({
@@ -99,7 +107,7 @@ export default class AddAnalyzerChild extends Component {
             if (that.state.ID === null) {
                 if (!err && flag === true) {
                     that.props.dispatch({
-                        type: 'pointinfo/addalyzersys',
+                        type: 'pointinfo/addalyzerchild',
                         payload: {
                             DGIMN: this.state.DGIMN,
                             AnalyzerSys_Id: this.state.AnalyzerSys_Id,
@@ -116,8 +124,9 @@ export default class AddAnalyzerChild extends Component {
                             Slope: values.Slope,
                             Intercept: values.Intercept,
                             callback: () => {
-                                if (this.props.addalyzersys_requstresult === '1') {
-                                    message.success('添加成功！').then(() => this.props.ChildVisitable());
+                                if (this.props.addalyzerchild_requstresult === '1') {
+                                    debugger;
+                                    message.success('添加成功！').then(() => this.props.ChildCVisitable());
                                 } else {
                                     message.error(this.props.reason);
                                 }
@@ -127,15 +136,26 @@ export default class AddAnalyzerChild extends Component {
                 } 
             } else {
                 if (!err && flag === true) {
+                    debugger;
                     that.props.dispatch({
-                      type: 'pointinfo/editalyzersys',
+                      type: 'pointinfo/editalyzerchild',
                       payload: {
                         ID:this.state.ID,
+                        Name: values.Name,
+                        DeviceModel: values.DeviceModel,
                         Manufacturer: values.Manufacturer,
-                        ManufacturerCode: values.ManufacturerCode,
+                        ManufacturerAbbreviation: values.ManufacturerAbbreviation,
+                        TestComponent: values.TestComponent,
+                        AnalyzerPrinciple: values.AnalyzerPrinciple,
+                        AnalyzerRange: values.AnalyzerRange,
+                        AnalyzerRangeMin: values.AnalyzerRangeMin,
+                        AnalyzerRangeMax: values.AnalyzerRangeMax,
+                        MeasurementUnit: values.MeasurementUnit,
+                        Slope: values.Slope,
+                        Intercept: values.Intercept,
                         callback: () => {
-                          if (this.props.editalyzersys_requstresult === '1') {
-                            message.success('编辑成功！').then(() => this.props.ChildVisitable());
+                          if (this.props.editalyzerchild_requstresult === '1') {
+                            message.success('编辑成功！').then(() => this.props.ChildCVisitable());
                           } else {
                             message.error(this.props.reason);
                           }

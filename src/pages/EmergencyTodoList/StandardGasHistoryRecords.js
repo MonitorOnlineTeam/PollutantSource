@@ -15,7 +15,7 @@ import styles from '../EmergencyTodoList/StandardGasHistoryRecords.less';
 import {routerRedux} from 'dva/router';
 
 @connect(({ task, loading }) => ({
-    loading: loading.effects['task/GetHistoryStandardGasRepalceRecordList'],
+    isloading: loading.effects['task/GetHistoryStandardGasRepalceRecordList'],
     HistoryStandardGasRepalceRecordList: task.HistoryStandardGasRepalceRecordList,
     HistoryStandardGasRepalceRecordListCount: task.total,
     pageIndex: task.pageIndex,
@@ -72,7 +72,7 @@ export default class StandardGasHistoryRecords extends Component {
     }
 
     seeDetail=(record) => {
-        this.props.dispatch(routerRedux.push(`/pointdetail/${this.props.match.params.pointcode}/StandardGasRepalceRecord/${record.TaskID}/${this.state.typeID}`));
+        this.props.dispatch(routerRedux.push(`/PatrolForm/StandardGasRepalceRecord/${record.TaskID}`));
     }
 
     render() {
@@ -118,8 +118,18 @@ export default class StandardGasHistoryRecords extends Component {
                 } > 详细 </a>;
             }
         }];
+        if (this.props.isloading) {
+            return (<Spin
+                style={{ width: '100%',
+                    height: 'calc(100vh/2)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center' }}
+                size="large"
+            />);
+        }
         return (
-            <div>
+            <div className={styles.cardTitle}>
                 <Card bordered={false}>
                 <div className={styles.conditionDiv}>
                             <Row gutter={8}>

@@ -15,7 +15,7 @@ import {routerRedux} from 'dva/router';
 import styles from './CounterControlCommandHistoryRecords.less';
 
 @connect(({ task, loading }) => ({
-    loading: loading.effects['task/GetHistoryConsumablesReplaceRecord'],
+    isloading: loading.effects['task/GetHistoryConsumablesReplaceRecord'],
     HistoryConsumablesReplaceRecord: task.HistoryConsumablesReplaceRecordList,
     HistoryConsumablesReplaceRecordCount: task.total,
     pageIndex: task.pageIndex,
@@ -73,7 +73,7 @@ export default class CounterControlCommandHistoryRecords extends Component {
     }
 
     seeDetail=(record) => {
-        this.props.dispatch(routerRedux.push(`/pointdetail/${this.props.match.params.pointcode}/ConsumablesReplaceRecord/${record.TaskID}/${this.state.typeID}`));
+        this.props.dispatch(routerRedux.push(`/PatrolForm/ConsumablesReplaceRecord/${record.TaskID}`));
     }
 
     render() {
@@ -120,8 +120,18 @@ export default class CounterControlCommandHistoryRecords extends Component {
                 } > 详细 </a>;
             }
         }];
+        if (this.props.isloading) {
+            return (<Spin
+                style={{ width: '100%',
+                    height: 'calc(100vh/2)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center' }}
+                size="large"
+            />);
+        }
         return (
-            <div>
+            <div className={styles.cardTitle}>
                 <Card bordered={false}>
                 <div className={styles.conditionDiv}>
                             <Row gutter={8}>
@@ -137,7 +147,7 @@ export default class CounterControlCommandHistoryRecords extends Component {
                     <Table
                         size="middle"
                         scroll={{ y: 'calc(100vh - 465px)' }}
-                        loading={this.props.loading}
+                        loading={this.props.isloading}
                         className={styles.dataTable}
                         columns={columns}
                         dataSource={dataSource}
