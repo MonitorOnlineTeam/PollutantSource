@@ -1,18 +1,19 @@
 import React, { PureComponent } from 'react';
-import { Form, Icon, Input, Button, Row, Col, Spin, Modal, TreeSelect, Select, Carousel } from 'antd';
+import { Form, Icon, Input, Button, Row, Col, Spin, Modal, TreeSelect, Select, Carousel, Layout,Divider ,Popconfirm} from 'antd';
 import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
 import { Map, Polygon } from 'react-amap';
 import Dischargepermit from './dischargepermit.js';
 import ImgInfo from './imgInfo.js';
-
+import MonitorContent from '../../components/MonitorContent/index';
 import ImageInfo from './imageInfo.js';
 import styles from './index.less';
 import config from '../../config';
-import {imgaddress} from '../../config.js';
+import { imgaddress } from '../../config.js';
 const FormItem = Form.Item;
+const { Header, Content, Footer } = Layout
 
-const {amapKey} = config;
+const { amapKey } = config;
 const Option = Select.Option;
 const plugins = [
     'MapType',
@@ -26,7 +27,7 @@ const plugins = [
         }
     }
 ];
-@connect(({baseinfo, loading}) => ({
+@connect(({ baseinfo, loading }) => ({
     ...loading,
     baseinfo: baseinfo.entbaseinfo,
     regionlist: baseinfo.regionlist,
@@ -56,13 +57,15 @@ class index extends PureComponent {
             concern: this.props.baseinfo ? '' : this.props.baseinfo[0].attentionCode,
             industry: this.props.baseinfo ? '' : this.props.baseinfo[0].industryTypeCode,
             area: this.props.baseinfo ? '' : this.props.baseinfo[0].regionCode,
+            className:styles.editInput
         };
         const _this = this;
         this.startedit = () => {
             if (_this.state.isedit) {
                 this.setState({
                     isedit: false,
-                    buttontext: '保存'
+                    buttontext: '保存',
+                    className:styles.Input
                 });
             } else {
                 const allvalue = this.props.form.getFieldsValue();
@@ -78,18 +81,21 @@ class index extends PureComponent {
                         concern: this.state.concern,
                         industry: _this.state.industry,
                         area: _this.state.area,
+                        className:styles.Input
                     },
                 });
                 this.setState({
                     isedit: true,
-                    buttontext: '编辑'
+                    buttontext: '编辑',
+                    className:styles.editInput
                 });
             }
         };
         this.endedit = () => {
             this.setState({
                 isedit: true,
-                buttontext: '编辑'
+                buttontext: '编辑',
+                className:styles.editInput
             });
         };
 
@@ -114,15 +120,15 @@ class index extends PureComponent {
 
         this.path = [
             [
-                {longitude: 110, latitude: 30},
-                {longitude: 115, latitude: 30},
-                {longitude: 120, latitude: 20},
-                {longitude: 110, latitude: 20},
+                { longitude: 110, latitude: 30 },
+                { longitude: 115, latitude: 30 },
+                { longitude: 120, latitude: 20 },
+                { longitude: 110, latitude: 20 },
 
             ], [
-                {longitude: 113, latitude: 28},
-                {longitude: 118, latitude: 22},
-                {longitude: 112, latitude: 22}
+                { longitude: 113, latitude: 28 },
+                { longitude: 118, latitude: 22 },
+                { longitude: 112, latitude: 22 }
             ]
         ];
         this.subjection = (value) => {
@@ -173,59 +179,149 @@ class index extends PureComponent {
             allcoo = eval(coordinateSet);
             mapCenter = { longitude: baseinfo.longitude, latitude: baseinfo.latitude };
         }
+        const formItemLayout = {
+            labelCol: {
+              xs: { span: 8 },
+              sm: { span: 8 },
+            },
+            wrapperCol: {
+              xs: { span: 8 },
+              sm: { span: 8 },
+            },
+          };
         return (
-            <div>
-                {effects['baseinfo/queryentdetail'] ? <Spin style={{width: '100%',
+
+            <MonitorContent {...this.props} breadCrumbList={
+                [
+                    { Name: '首页', Url: '/' },
+                    { Name: '系统管理', Url: '' },
+                    { Name: '企业管理', Url: '' }
+                ]
+            }>
+                {effects['baseinfo/queryentdetail'] ? <Spin style={{
+                    width: '100%',
                     height: 'calc(100vh - 260px)',
-                    marginTop: 260 }} size="large" />
-                    : <div style={{background: '#fff'}}>
-                        <Button style={{marginTop: 20, marginLeft: 50}} onClick={this.startedit} type="primary">{this.state.buttontext}</Button>
-                        {!this.state.isedit ? <Button onClick={this.endedit} className={styles.button}>取消</Button> : <span />}
-                        <Button className={styles.button} onClick={this.showModal}>查看排污许可证</Button>
-                        <Form layout="inline" onSubmit={this.handleSubmit} style={{marginTop: 20}}>
-                            <Row style={{marginTop: 20}}>
-                                <Col span={10} offset={1}>
-                                    <FormItem label="企业名称" labelCol={{span: 4}} wrapperCol={{span: 10}} >
+                    marginTop: 260
+                }} size="large" />
+                    :
+                    
+                    // 主体内容模块
+                    <Content style={{ padding: 30, background: "#FFFFFF",marginBottom:10 }}  className={styles.imgcss}>
+                        {/* 顶部 */}
+                        <Row type="flex" justify="center">
+                            <Col xs={{ span: 9, offset: 1 }} >
+                                <div className={styles.PhotoMapTitle}>照片</div>
+                                <div className={styles.antCss} >
+                                    <Carousel autoplay={true} >
+                                        {
+                                            baseinfo ? baseinfo.imgNamelist.map(item => {
+                                                // return (<img key={item.imgname} style={{ width: 550 }} src={imgaddress + item.imgname} />);
+                                                return (<img key={item.imgname} style={{ width: 363, height: 285, borderradius: 12 }} src="https://timgsa.baidu.com/timg?image&quality=80&size=b10000_10000&sec=1545898494&di=a3db233138df9b81db138ccecf963537&src=http://img.pconline.com.cn/images/upload/upc/tx/photoblog/1606/18/c10/23006869_1466217538615_mthumb.jpg" />);
+
+                                            }) : ''
+                                        }
+                                    </Carousel>
+                                    <Button onClick={this.imgshowModal} className={styles.PhotoDetails} >图片管理</Button>
+                                    <Modal
+                                        title="照片管理"
+                                        visible={this.state.imgvisible}
+                                        onCancel={this.imghideModal}
+                                        footer={null}
+                                        width={1000}
+                                    >
+                                        <ImgInfo imagelist={baseinfo ? baseinfo.imgNamelist : ''} uuid={baseinfo ? baseinfo.Photo : ''} />
+                                    </Modal>
+
+                                </div></Col>
+                            <Col xs={{ span: 9, offset: 0 }} style={{}}>
+                                <div className={styles.PhotoMapTitle}>地图</div>
+                                <div style={{
+                                    width: " 402px", float: "left",
+                                    height: "285px",
+                                    borderRadius: "12px"
+                                }}>
+                                    <Map resizeEnable={true}
+                                        zoom={11} loading={<Spin />} amapkey={amapKey} plugins={plugins} center={mapCenter} >
+                                        {
+                                            allcoo ? allcoo.map((item, key) => {
+                                                return (
+                                                    <Polygon
+                                                        key={baseinfo ? baseinfo.code : ''}
+                                                        style={{
+                                                            strokeColor: '#FF33FF',
+                                                            strokeOpacity: 0.2,
+                                                            strokeWeight: 3,
+                                                            fillColor: '#1791fc',
+                                                            fillOpacity: 0.35,
+                                                        }}
+                                                        path={item[key]}
+                                                    />);
+                                            }) : <Polygon style={{
+                                                strokeColor: '#FF33FF',
+                                                strokeOpacity: 0.2,
+                                                strokeWeight: 3,
+                                                fillColor: '#1791fc',
+                                                fillOpacity: 0.35,
+                                            }} path={this.path} />
+                                        }
+                                    </Map></div>
+
+                            </Col>
+                        </Row>
+
+                         {/* 表单 */}
+
+                         <Divider orientation="right">
+  
+                         <Button onClick={this.startedit}  type="primary" className={styles.button} ><Icon type="edit" />{this.state.buttontext}</Button>
+                         {!this.state.isedit ?
+                             <Popconfirm placement="topRight" title={"不保存取消？"} onConfirm={this.endedit} okText="是" cancelText="否">
+                             <Button className={styles.button}><Icon type="close" />取消</Button>
+                             </Popconfirm>
+                          : <span />}
+                        
+                         {!this.state.isedit ?<Popconfirm placement="topRight" title={"您现在正编辑信息不保存离开？"} onConfirm={this.showModal} okText="是" cancelText="否">
+                         <Button className={styles.button} ><Icon type="schedule" />排污许可</Button>
+                         </Popconfirm>: <Button className={styles.button} onClick={this.showModal} ><Icon type="schedule" />排污许可</Button>}
+                
+                         </Divider>
+                        <Form layout="inline" onSubmit={this.handleSubmit} className={this.state.className} style={{ display:'flex',flexDirection:'row',flexWrap:'wrap',alignItems:'center',justifyContent:'space-between'}}>
+                        <FormItem style={{width:'400px'}}   {...formItemLayout} label="企业名称"  >
                                         {getFieldDecorator('entallname', {
-                                            initialValue: baseinfo?baseinfo.name:'',
+                                            initialValue: baseinfo ? baseinfo.name : '',
                                             rules: [{
-                                                required: true, message: '请输入企业名称!',
+                                                required: true, message: '  ',
                                             }],
                                         })(
                                             <Input
-                                                style={{width: 400}}
+                                                style={{ width:300 }}
                                                 disabled={this.state.isedit} />
+            
                                         )}
                                     </FormItem>
-                                </Col>
-                                <Col span={6} pull={3}>
-                                    <FormItem label="企业简称" labelCol={{span: 6}} wrapperCol={{span: 10}}>
+                                    <FormItem style={{width:'400px'}} {...formItemLayout} label="企业简称" >
                                         {getFieldDecorator('enteasyname', {
-                                            initialValue: baseinfo?baseinfo.abbreviation:'',
+                                            initialValue: baseinfo ? baseinfo.abbreviation : '',
                                             rules: [{
-                                                required: true, message: '请输入企业简称!',
+                                                required: true, 
                                             }],
                                         })(
-                                            <Input style={{width: 300}}
+                                            <Input style={{ width: 300 }}
 
                                                 disabled={this.state.isedit} />
                                         )}
                                     </FormItem>
-                                </Col>
-                            </Row>
-                            <Row style={{marginTop: 20}}>
-                                <Col span={10} offset={1}>
-                                    <FormItem label="行政区" labelCol={{span: 4}} wrapperCol={{span: 10}}>
+                                    <FormItem style={{width:'400px'}} {...formItemLayout} label="行政区" >
 
                                         {getFieldDecorator('area', {
-                                            initialValue: baseinfo?baseinfo.regionCode:'',
+                                            initialValue: baseinfo ? baseinfo.regionCode : '',
                                             rules: [{
                                                 required: true,
-                                                message: '请输入行政区!',
+                                         
                                             }],
                                         })(
                                             <TreeSelect
-                                                style={{ width: 400 }}
+                                                style={{ width: 300}}
                                                 dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
                                                 treeData={this.props.regionlist}
                                                 treeDefaultExpandAll={true}
@@ -234,14 +330,13 @@ class index extends PureComponent {
                                             />
                                         )}
                                     </FormItem>
-                                </Col>
-                                <Col span={6} pull={3}>
-                                    <FormItem label="所属行业" labelCol={{span: 6}} wrapperCol={{span: 10}}>
+                                    <Divider dashed style={{border:'1px dashed #FFFFFF'}} />
+                                    <FormItem style={{width:'400px'}} {...formItemLayout} label="所属行业" >
                                         {getFieldDecorator('industry', {
-                                            initialValue: baseinfo?baseinfo.industryTypeName:'',
+                                            initialValue: baseinfo ? baseinfo.industryTypeName : '',
                                             rules: [{
                                                 required: true,
-                                                message: '请输入所属行业!',
+                                             
 
                                             }],
                                         })(
@@ -253,33 +348,27 @@ class index extends PureComponent {
                                             </Select>
                                         )}
                                     </FormItem>
-                                </Col>
-                            </Row>
-                            <Row style={{marginTop: 20}}>
-                                <Col span={10} offset={1}>
-                                    <FormItem label="地址" labelCol={{span: 4}} wrapperCol={{span: 10}}>
+                                    <FormItem style={{width:'400px'}} {...formItemLayout} label="地址" >
                                         {getFieldDecorator('adress', {
-                                            initialValue: baseinfo?baseinfo.address:'',
+                                            initialValue: baseinfo ? baseinfo.address : '',
                                             rules: [{
                                                 required: true,
-                                                message: '请输地址!',
+                                    
 
                                             }],
                                         })(
                                             <Input
-                                                style={{width: 400}}
+                                                style={{ width: 300, }}
 
                                                 disabled={this.state.isedit} />
                                         )}
                                     </FormItem>
-                                </Col>
-                                <Col span={6} pull={3}>
-                                    <FormItem label="关注程度" labelCol={{span: 6}} wrapperCol={{span: 10}}>
+                                    <FormItem style={{width:'400px'}} {...formItemLayout} label="关注程度" >
                                         {getFieldDecorator('concern', {
-                                            initialValue: baseinfo?baseinfo.attentionName:'',
+                                            initialValue: baseinfo ? baseinfo.attentionName : '',
                                             rules: [{
                                                 required: true,
-                                                message: '请输入关注程度!',
+                                        
 
                                             }],
                                         })(
@@ -291,56 +380,47 @@ class index extends PureComponent {
                                             </Select>
                                         )}
                                     </FormItem>
-                                </Col>
-                            </Row>
-                            <Row style={{marginTop: 20}}>
-                                <Col span={10} offset={1}>
-                                    <FormItem label="法人编号" labelCol={{span: 4}} wrapperCol={{span: 10}}>
+                                    <Divider dashed />
+                                    <FormItem style={{width:'400px'}} {...formItemLayout} label="法人编号" >
                                         {getFieldDecorator('personnum', {
-                                            initialValue: baseinfo?baseinfo.corporationCode:'',
+                                            initialValue: baseinfo ? baseinfo.corporationCode : '',
                                             rules: [{
                                                 required: true,
-                                                message: '请输入法人编号!',
+                                         
 
                                             }],
                                         })(
                                             <Input
-                                                style={{width: 400}}
+                                                style={{ width: 300 }}
 
                                                 disabled={this.state.isedit} />
                                         )}
                                     </FormItem>
-                                </Col>
-                                <Col span={6} pull={3} >
-                                    <FormItem label="法人" labelCol={{span: 6}} wrapperCol={{span: 10}}>
+                                    <FormItem style={{width:'400px'}} {...formItemLayout} label="法人" >
                                         {getFieldDecorator('personname', {
-                                            initialValue: baseinfo?baseinfo.corporationName:'',
+                                            initialValue: baseinfo ? baseinfo.corporationName : '',
                                             rules: [{
                                                 required: true,
-                                                message: '请输入法人名称!',
+                                         
 
                                             }],
                                         })(
                                             <Input
-                                                style={{width: 300}}
+                                                style={{ width: 300 }}
 
                                                 disabled={this.state.isedit} />
                                         )}
                                     </FormItem>
-                                </Col>
-                            </Row>
-                            <Row style={{marginTop: 20}}>
-                                <Col span={10} offset={1}>
-                                    <FormItem label="单位类型" labelCol={{span: 4}} wrapperCol={{span: 10}}>
+                                    <FormItem style={{width:'400px'}} {...formItemLayout} label="单位类型" >
                                         {getFieldDecorator('unit', {
-                                            initialValue: baseinfo?baseinfo.UnitTypeName:'',
+                                            initialValue: baseinfo ? baseinfo.UnitTypeName : '',
                                             rules: [{
                                                 required: true,
-                                                message: '请输入单位类型!',
+                                              
 
                                             }],
                                         })(
-                                            <Select style={{ width: 400 }} disabled={this.state.isedit} onChange={this.unit} >
+                                            <Select style={{ width: 300 }} disabled={this.state.isedit} onChange={this.unit} >
                                                 {this.props.unitTypelist.map((item, key) => {
                                                     return (<Option key={item.UnitTypeCode}>{item.UnitTypeName}</Option>);
                                                 })
@@ -348,37 +428,32 @@ class index extends PureComponent {
                                             </Select>
                                         )}
                                     </FormItem>
-                                </Col>
-                                <Col span={6} pull={3}>
-                                    <FormItem label="排口数量" labelCol={{span: 6}} wrapperCol={{span: 10}}>
+                                    <Divider dashed style={{border:'1px dashed #FFFFFF'}} />
+                                    <FormItem style={{width:'400px'}} {...formItemLayout} label="排口数量" >
                                         {getFieldDecorator('outputnum', {
                                             initialValue: 30,
                                             rules: [{
                                                 required: true,
-                                                message: '请输入排口数量!',
+                                         
 
                                             }],
                                         })(
                                             <Input
-                                                style={{width: 300}}
+                                                style={{ width: 300 }}
 
                                                 disabled={this.state.isedit} />
                                         )}
                                     </FormItem>
-                                </Col>
-                            </Row>
-                            <Row style={{marginTop: 20}}>
-                                <Col span={10} offset={1}>
-                                    <FormItem label="污染源规模" labelCol={{span: 4}} wrapperCol={{span: 10}}>
+                                    <FormItem style={{width:'400px'}} {...formItemLayout} label="污染源规模" >
                                         {getFieldDecorator('pollutionsources', {
-                                            initialValue: baseinfo?baseinfo.PSScaleName:'',
+                                            initialValue: baseinfo ? baseinfo.PSScaleName : '',
                                             rules: [{
                                                 required: true,
-                                                message: '请输入污染源规模!',
+                                             
 
                                             }],
                                         })(
-                                            <Select style={{ width: 400 }} disabled={this.state.isedit} onChange={this.pollutionsources} >
+                                            <Select style={{ width: 300 }} disabled={this.state.isedit} onChange={this.pollutionsources} >
                                                 {this.props.pSScalelist.map((item, key) => {
                                                     return (<Option key={item.PSScaleCode}>{item.PSScaleName}</Option>);
                                                 })
@@ -386,49 +461,43 @@ class index extends PureComponent {
                                             </Select>
                                         )}
                                     </FormItem>
-                                </Col>
-                                <Col span={6} pull={3}>
-                                    <FormItem label="经纬度" labelCol={{span: 6}} wrapperCol={{span: 10}}>
+                                 
+                                    <FormItem style={{width:'400px'}} {...formItemLayout} label="经纬度" >
                                         {getFieldDecorator('latlon', {
-                                            initialValue: baseinfo?baseinfo.longitude:'' + ',' + (baseinfo?baseinfo.latitude:''),
+                                            initialValue: baseinfo ? baseinfo.longitude : '' + ',' + (baseinfo ? baseinfo.latitude : ''),
                                             rules: [{
                                                 required: true,
-                                                message: '请输入经纬度!',
+                                     
 
                                             }],
                                         })(
                                             <Input
-                                                style={{width: 300}}
+                                                style={{ width: 300 }}
 
                                                 disabled={this.state.isedit} />
                                         )}
                                     </FormItem>
-                                </Col>
-                            </Row>
-                            <Row style={{marginTop: 20}}>
-                                <Col span={10} offset={1}>
-                                    <FormItem label="主要污染物" labelCol={{span: 4}} wrapperCol={{span: 10}}>
+                                    <Divider dashed />
+                                    <FormItem style={{width:'400px'}} {...formItemLayout} label="主要污染物" >
                                         {getFieldDecorator('contaminants', {
                                             rules: [{
                                                 required: true,
-                                                message: '请输入主要污染物!',
+                                    
 
                                             }],
                                         })(
                                             <Input
-                                                style={{width: 400}}
+                                                style={{ width: 300 }}
 
                                                 disabled={this.state.isedit} />
                                         )}
                                     </FormItem>
-                                </Col>
-                                <Col span={6} pull={3}>
-                                    <FormItem label="注册类型" labelCol={{span: 6}} wrapperCol={{span: 10}}>
+                                    <FormItem style={{width:'400px'}} {...formItemLayout} label="注册类型" >
                                         {getFieldDecorator('registration', {
-                                            initialValue: baseinfo?baseinfo.registTypeName:'',
+                                            initialValue: baseinfo ? baseinfo.registTypeName : '',
                                             rules: [{
                                                 required: true,
-                                                message: '请输入注册类型!',
+                                        
 
                                             }],
                                         })(
@@ -440,65 +509,54 @@ class index extends PureComponent {
                                             </Select>
                                         )}
                                     </FormItem>
-                                </Col>
-                            </Row>
-                            <Row style={{marginTop: 20}}>
-                                <Col span={10} offset={1}>
-                                    <FormItem label="窑炉数量" labelCol={{span: 4}} wrapperCol={{span: 10}}>
+                                    <FormItem style={{width:'400px'}} {...formItemLayout} label="窑炉数量" >
                                         {getFieldDecorator('kilnnum', {
                                             rules: [{
                                                 required: true,
-                                                message: '请输入窑炉数量!',
+                                       
 
                                             }],
                                         })(
                                             <Input
-                                                style={{width: 400}}
+                                                style={{ width: 300 }}
 
                                                 disabled={this.state.isedit} />
                                         )}
                                     </FormItem>
-                                </Col>
-                                <Col span={6} pull={3}>
-                                    <FormItem label="环保负责人" labelCol={{span: 6}} wrapperCol={{span: 10}}>
+                                    <Divider dashed style={{border:'1px dashed #FFFFFF'}} />
+                                    <FormItem style={{width:'400px'}} {...formItemLayout} label="环保负责人" >
                                         {getFieldDecorator('chargeman', {
-                                            initialValue: baseinfo?baseinfo.environmentPrincipal:'',
+                                            initialValue: baseinfo ? baseinfo.environmentPrincipal : '',
                                             rules: [{
                                                 required: true,
-                                                message: '请输入环保负责人!',
+                                             
 
                                             }],
                                         })(
                                             <Input
-                                                style={{width: 300}}
+                                                style={{ width: 300 }}
 
                                                 disabled={this.state.isedit} />
                                         )}
                                     </FormItem>
-                                </Col>
-                            </Row>
-                            <Row style={{marginTop: 20}}>
-                                <Col span={10} offset={1}>
-                                    <FormItem label="办公电话" labelCol={{span: 4}} wrapperCol={{span: 10}}>
+                                    <FormItem style={{width:'400px'}} {...formItemLayout} label="办公电话" >
                                         {getFieldDecorator('phone', {
-                                            initialValue: baseinfo?baseinfo.officePhone:'',
+                                            initialValue: baseinfo ? baseinfo.officePhone : '',
                                             rules: [{
                                                 required: true,
-                                                message: '请输入办公电话!',
+                                              
 
                                             }],
                                         })(
                                             <Input
-                                                style={{width: 400}}
+                                                style={{ width: 300 }}
 
                                                 disabled={this.state.isedit} />
                                         )}
                                     </FormItem>
-                                </Col>
-                                <Col span={6} pull={3}>
-                                    <FormItem label="隶属关系" labelCol={{span: 6}} wrapperCol={{span: 10}}>
+                                    <FormItem style={{width:'400px'}} {...formItemLayout} label="隶属关系">
                                         {getFieldDecorator('subjection', {
-                                            initialValue: baseinfo?baseinfo.subjectionRelationName:'',
+                                            initialValue: baseinfo ? baseinfo.subjectionRelationName : '',
                                             rules: [{
                                                 required: true,
                                                 message: '请输入隶属关系!',
@@ -512,59 +570,21 @@ class index extends PureComponent {
                                             </Select>
                                         )}
                                     </FormItem>
-                                </Col>
-                            </Row>
-                            <div className={styles.img}>
-                                <Map resizeEnable={true}
-                                    zoom={11} loading={<Spin />} amapkey={amapKey} plugins={plugins} center={mapCenter} >
-                                    {
-                                        allcoo ? allcoo.map((item, key) => {
-                                            return (
-                                                <Polygon
-                                                    key={baseinfo?baseinfo.code:''}
-                                                    style={{
-                                                        strokeColor: '#FF33FF',
-                                                        strokeOpacity: 0.2,
-                                                        strokeWeight: 3,
-                                                        fillColor: '#1791fc',
-                                                        fillOpacity: 0.35,
-                                                    }}
-                                                    path={item[key]}
-                                                />);
-                                        }) : <Polygon style={{
-                                            strokeColor: '#FF33FF',
-                                            strokeOpacity: 0.2,
-                                            strokeWeight: 3,
-                                            fillColor: '#1791fc',
-                                            fillOpacity: 0.35,
-                                        }} path={this.path} />
-                                    }
-                                </Map>
-                                <div style={{marginTop: 20}}>
-                                    <Carousel autoplay={true} >
-                                        {
-                                          baseinfo?baseinfo.imgNamelist.map(item => {
-                                                return (<img key={item.imgname} style={{width: 550}} src={imgaddress + item.imgname} />);
-                                            }):''
-                                        }
-                                    </Carousel>
-                                    <Button onClick={this.imgshowModal} style={{marginLeft: 450, marginTop: 10}}>图片管理</Button>
-                                    <Modal
-                                        title="照片管理"
-                                        visible={this.state.imgvisible}
-                                        onCancel={this.imghideModal}
-                                        footer={null}
-                                        width={1000}
-                                    >
-                                        <ImgInfo imagelist={baseinfo?baseinfo.imgNamelist:''} uuid={baseinfo?baseinfo.Photo:''} />
-                                    </Modal>
-                                </div>
-                            </div>
+                             
                         </Form>
+                        <Divider dashed />
 
-                    </div>
+                        <div style={{ textAlign: "center" }}>
+                          
+                           
+
+                        </div>
+
+
+
+                    </Content>
                 }
-            </div>
+            </MonitorContent>
 
         );
     }
