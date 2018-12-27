@@ -332,11 +332,7 @@ class SpecialWorkbench extends Component {
      * 日历表时间选择事件
      */
     onCalendarSelect = (value) => {
-        //debugger;
-        // console.log("this:",value.format("YYYY-MM"))
-        // console.log("dateNow:",moment(this.props.operation.beginTime).format("YYYY-MM"));
         let selectValue = value.format('YYYY-MM-DD 00:00:00');
-        
         this.setState({
           // value,
             selectedValue: value,
@@ -344,7 +340,6 @@ class SpecialWorkbench extends Component {
                 tableDatas:this.props.operation.tableDatas.filter(m=>moment(m.CreateTime).format('YYYY-MM-DD')===value.format("YYYY-MM-DD")).slice(0,6)
         }
         });
-        //console.log(value.format('YYYY-MM-DD HH:mm:ss'))
         if(value.format("YYYY-MM")===this.state.selectedValue.format("YYYY-MM"))
         {
             return false;
@@ -352,10 +347,6 @@ class SpecialWorkbench extends Component {
         
         if(value.format("YYYY-MM")!==moment(this.props.operation.beginTime).format("YYYY-MM"))
         {
-            console.log('beginTime:',moment(selectValue).add(-1,'months').format('YYYY-MM-01 00:00:00'));
-        console.log('endTime:',moment(selectValue).add(2,'months').format('YYYY-MM-01 00:00:00'));
-            // console.log('beginTime:',value.add(-1,'months').format('YYYY-MM-01 00:00:00'));
-            // console.log('endTime:',value.add(2,'months').format('YYYY-MM-01 00:00:00'));
             this.updateState({
                 operation:{
                     ...this.props.operation,
@@ -367,17 +358,6 @@ class SpecialWorkbench extends Component {
             });
             this.getOperationData(1);
         }
-
-        // this.updateState({
-        //     operation:{
-        //         ...this.props.operation,
-        //         ...{
-        //             beginTime: value.format('YYYY-MM-DD HH:mm:ss'),
-        //             endTime: value.format('YYYY-MM-DD HH:mm:ss'),
-        //         }
-        //     }
-        // });
-        // this.getOperationData(1);
     }
     /**
      * 日历表插件渲染
@@ -416,7 +396,7 @@ class SpecialWorkbench extends Component {
     }
 
     render() {
-        console.log(this.props.operation);
+        //console.log(this.props.operation);
         const {operation} = this.props;
         return (
             <div style={{
