@@ -398,7 +398,7 @@ export default class AlarmResponse extends Component {
                                     onChange={this.handleTableChange}
                                     size="small"// small middle
                                     dataSource={this.props.pointsTableData}
-                                    scroll={{ y: 'calc(100vh - 420px)' }}
+                                    scroll={{ y: 'calc(100vh - 390px)' }}
                                     pagination={{
                                         showSizeChanger: true,
                                         showQuickJumper: true,

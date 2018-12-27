@@ -240,8 +240,17 @@ export default class EmergencyDetailInfo extends Component {
             fileList: [...fileList]
         };
         return (
-            <div style={{height: 'calc(100vh - 220px)'}} className={styles.ExceptionDetailDiv}>
-                <Card title={<span style={{fontWeight: '900'}}>任务信息</span>}>
+            <MonitorContent  {...this.props} breadCrumbList={[
+                {Name:'首页',Url:'/'},
+                {Name:'智能质控',Url:''},
+                {Name:'传输有效率',Url:''}
+            ]}>
+            <div style={{height: SCREEN_HEIGHT}} className={styles.ExceptionDetailDiv}>
+            <Card title={<span style={{fontWeight: '900'}}>任务详情</span>} extra={
+            <Button style={{float:"right",marginRight:30}} onClick={() => {
+                        this.props.history.goBack(-1);
+                    }}><Icon type="left" />退回</Button>}>
+                <Card title={<span style={{fontWeight: '600'}}>基本信息</span>}>
                     <DescriptionList className={styles.headerList} size="large" col="3">
                         <Description term="任务单号">{TaskCode}</Description>
                         <Description term="排口" >{PointName}</Description>
@@ -308,15 +317,12 @@ export default class EmergencyDetailInfo extends Component {
                         pagination={false}
                     />
                 </Card>
-                <div className={styles.Toexamine} >
-                    <Button size="large" onClick={() => {
-                        this.props.history.goBack(-1);
-                    }}><Icon type="left" />退回</Button>
-                </div>
+                </Card>
                 <Modal width="65%" visible={this.state.previewVisible} footer={null} onCancel={this.handleCancel}>
                     <img alt="example" style={{ width: '100%',marginTop: '20px' }} src={this.state.previewImage} />
                 </Modal>
             </div>
+            </MonitorContent>
         );
     }
 }

@@ -48,3 +48,28 @@
     height: 0;
   }
 }
+/**
+* body全局滚动调样式
+* 创建人:wjw
+*/
+div{
+  &::-webkit-scrollbar-track-piece{
+    -webkit-border-radius:0;
+   }
+   &::-webkit-scrollbar{
+    width:5px;
+    height:8px;
+   }
+   &::-webkit-scrollbar-thumb{
+    height:50px;
+    background-color:#9ca0a2;
+    -webkit-border-radius:4px;
+    outline-offset:-20px;
+    border: 2px solid #9ca0a2;
+   }
+   &::-webkit-scrollbar-thumb:hover{
+    height:50px;
+    background-color:#9ca0a2;
+    -webkit-border-radius:4px;
+   }
+}

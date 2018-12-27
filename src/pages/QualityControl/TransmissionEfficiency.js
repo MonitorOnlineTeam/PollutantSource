@@ -234,7 +234,7 @@ export default class TransmissionEfficiency extends Component {
                                 onChange={this.handleTableChange}
                                 size="small"// small middle
                                 dataSource={this.props.tableDatas}
-                                scroll={{ y: 'calc(100vh - 380px)' }}
+                                scroll={{ y: 'calc(100vh - 390px)' }}
                                 // scroll={{ y: 550 }}
                                 rowClassName={
                                     (record, index, indent) => {

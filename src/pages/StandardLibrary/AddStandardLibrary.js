@@ -17,7 +17,7 @@ import {
     Icon,
     Modal,
 } from 'antd';
-import PageHeader from '../../components/PageHeader';
+import MonitorContent from '../../components/MonitorContent/index';
 import AddPollutant from '../StandardLibrary/AddStandardLibraryPollutant';
 import {
     connect
@@ -263,7 +263,8 @@ export default class AddStandardLibrary extends Component {
           title: '污染物编号',
           dataIndex: 'PollutantCode',
           key: 'PollutantCode',
-          width: '100px',
+          width: '10%',
+          align: 'center',
           render: (text, record) => {
               return text;
           }
@@ -272,7 +273,8 @@ export default class AddStandardLibrary extends Component {
           title: '污染物名称',
           dataIndex: 'PollutantName',
           key: 'PollutantName',
-          width: '100px',
+          width: '20%',
+          align: 'center',
           render: (text, record) => {
               return text;
           }
@@ -281,7 +283,8 @@ export default class AddStandardLibrary extends Component {
           title: '污染物类型',
           dataIndex: 'Type',
           key: 'Type',
-          width: '100px',
+          width: '10%',
+          align: 'center',
           render: (text, record) => {
               return '废气';
           }
@@ -290,7 +293,8 @@ export default class AddStandardLibrary extends Component {
           title: '上限',
           dataIndex: 'UpperLimit',
           key: 'UpperLimit',
-          width: '100px',
+          width: '10%',
+          align: 'center',
           render: (text, record) => {
               return text;
           }
@@ -299,7 +303,8 @@ export default class AddStandardLibrary extends Component {
           title: '下限',
           dataIndex: 'LowerLimit',
           key: 'LowerLimit',
-          width: '100px',
+          width: '10%',
+          align: 'center',
           render: (text, record) => {
               return text;
           }
@@ -308,7 +313,8 @@ export default class AddStandardLibrary extends Component {
           title: '报警类型',
           dataIndex: 'AlarmType',
           key: 'AlarmType',
-          width: '100px',
+          width: '10%',
+          align: 'center',
           render: (text, record) => {
               if (text === 0) {
                   return <span > <Tag color="lime" > 区间报警 </Tag > </span >;
@@ -322,7 +328,8 @@ export default class AddStandardLibrary extends Component {
       },
       {
           title: '操作',
-          width: '150px',
+          width: '10%',
+          align: 'center',
           render: (text, record) => (<Fragment >
               <a onClick={
                   () => this.setState({
@@ -341,17 +348,15 @@ export default class AddStandardLibrary extends Component {
       ];
       const { getFieldDecorator } = this.props.form;
       return (
+          <MonitorContent {...this.props} breadCrumbList={
+                [
+                    {Name:'首页',Url:'/'},
+                    {Name:'系统管理',Url:''},
+                    {Name:'标准库管理',Url:'/sysmanage/StandardLibraryDetail/'},
+                     {Name:'标准库维护',Url:''}
+                ]
+            }>
           <div>
-              <PageHeader title="标准库维护"
-                  breadcrumbList={
-                      [{
-                          title: '标准库列表',
-                          href: '/monitor/sysmanage/StandardLibrary',
-                      }, {
-                          title: '添加标准库',
-                      }]
-                  }
-              />
               <Card bordered={false}>
                   <Form onSubmit={this.handleSubmit}>
                       <Card bordered={false}>
@@ -443,7 +448,7 @@ export default class AddStandardLibrary extends Component {
                           </Row>
                       </Card>
                   </Form>
-                  <Card bordered={false} style={{marginTop: 10}}>
+                  <Card bordered={false} style={{marginTop: 10,height:'calc(100vh - 495px)'}}>
                       <Form layout="inline" style={{marginBottom: 20}}>
                           <Row gutter={8}>
                               <Col span={1} ><Button type="primary"
@@ -464,7 +469,9 @@ export default class AddStandardLibrary extends Component {
                           loading={this.props.effects['standardlibrary/getstandardlibrarypollutantlist']}
                           columns={columns}
                           dataSource={this.state.StandardLibraryID !== null ? this.props.standardlibrarypollutant : null}
-                          pagination={false}
+                          pagination={true}
+                          size='small'
+                          scroll={{ y: 'calc(100vh - 80px)' }}
                       />
                   </Card>
                   <Modal
@@ -486,6 +493,7 @@ export default class AddStandardLibrary extends Component {
                   </Modal>
               </Card>
           </div>
+          </MonitorContent>
       );
   }
 }

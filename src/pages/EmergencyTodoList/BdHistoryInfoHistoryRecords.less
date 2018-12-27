@@ -1,29 +1,69 @@
-.tableCss {
+@import "~antd/lib/style/themes/default.less";
+@import "../../utils/utils.less";
+
+.cardTitle{
+  
     :global {
-        .ant-table-fixed-header .ant-table-scroll .ant-table-header
+      // height: 998px;
+      // overflow: hidden;
+      .ant-card-body{
+        // height: 800px;
+        // overflow: auto;
+      }
+      .ant-card-extra{
+        padding: 6.5px 0 !important;
+      }
+      .light{
+        background-color:#f0f2f5
+      }
+      table .ant-table-thead > tr > th{
+        background-color:#fafafa !important;
+      }
+
+      table .ant-table-middle > .ant-table-content > .ant-table-body > table{
+        padding: 0% !important;
+      }
+
+      .ant-table-middle {
+        border: 1px solid #e8e8e8;
+        border-radius: 4px;
+      }
+    }  
+}
+
+.dataTable {
+    :global {
+      .ant-table-fixed-header .ant-table-scroll .ant-table-header
         {
             overflow: hidden;
-            height: 55px;
-            width: 99.5%
+            height: 60px;
+            width: 99.7%;
         }
-        .ant-table-body {
-            height: calc(100vh - 48px);
-            overflow: hidden;
-            overflow-y: scroll;
-            &::-webkit-scrollbar{
-                width:8px;
-                height:8px;
-               }
-               &::-webkit-scrollbar-thumb{
-                height:50px;
-                background-color:#61A1D5;
-                outline-offset:-2px;
-                border: 2px solid #61A1D5;
-               }
-               &::-webkit-scrollbar-thumb:hover{
-                height:50px;
-                background-color:#61A1D5;
-               }
+  
+        .ant-table-body{
+          // min-height: calc(100vh - 25px);
+            height: calc(100vh - 31px);
+            overflow: auto;
+            // overflow-y: scroll;
+          &::-webkit-scrollbar-track-piece{
+              -webkit-border-radius:0;
+             }
+             &::-webkit-scrollbar{
+              width:5px;
+              height:8px;
+             }
+             &::-webkit-scrollbar-thumb{
+              height:50px;
+              background-color:#9ca0a2;
+              -webkit-border-radius:4px;
+              outline-offset:-20px;
+              border: 2px solid #9ca0a2;
+             }
+             &::-webkit-scrollbar-thumb:hover{
+              height:50px;
+              background-color:#9ca0a2;
+              -webkit-border-radius:4px;
+             }
         }
         .ant-table-placeholder{
             position: absolute;
@@ -31,4 +71,11 @@
             width:100%;
         }
       }
-}
+  }
+
+  .conditionDiv{
+    height: 35px;
+    line-height: 35px;
+    margin-bottom: 20px;
+  }
+
