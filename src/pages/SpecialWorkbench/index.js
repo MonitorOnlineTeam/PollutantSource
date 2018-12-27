@@ -1,6 +1,6 @@
 
 import React, { Component } from 'react';
-import { Row, Col,Card,List, message, Avatar, Spin,Table,Calendar, Badge,Alert  } from 'antd';
+import { Row, Col,Card,List, message, Avatar, Spin,Table,Calendar, Badge,Alert,Tag  } from 'antd';
 import styles from './index.less';
 import reqwest from 'reqwest';
 import InfiniteScroll from 'react-infinite-scroller';
@@ -8,6 +8,7 @@ import ReactEcharts from 'echarts-for-react';
 import moment from 'moment';
 import {connect} from 'dva';
 import {routerRedux} from 'dva/router';
+import { relative } from 'path';
 /*
 页面：工作台
 add by cg 18.6.8
@@ -160,6 +161,15 @@ class SpecialWorkbench extends Component {
             {
                 title: '排口名称',
                 dataIndex: 'PointName',
+                render: (text, record) => {
+                    // debugger;
+                    if(record.TaskType===2)
+                        return <div style={{position:'relative'}}>{text}<Tag style={{position:'absolute',top:-10}} color="#faad14">应急</Tag></div>;
+                    else
+                    {
+                        return text;
+                    }
+                }
             }, 
             {
                 title: '运维人',
@@ -168,6 +178,23 @@ class SpecialWorkbench extends Component {
             {
                 title: '状态',
                 dataIndex: 'ExceptionTypeText',
+                render: (text, record) => {
+                    // debugger;
+                    if(!text)
+                        return <Tag color="rgb(76,205,122)">正常</Tag>;
+                    else
+                    {
+                        return (
+                            <div>
+                                {
+                                    text.split(',').map(item => (
+                                        <Tag color="rgb(244,6,94)">{item}</Tag>
+                                    ))
+                                }
+                            </div>
+                            );
+                    }
+                }
             }, {
                 title: '操作',
                 dataIndex: 'opt',
@@ -375,7 +402,7 @@ class SpecialWorkbench extends Component {
             }
         }
         
-        return (
+    return (
             <ul className="events">
                 {
                     listData.map(item => (
@@ -648,7 +675,7 @@ class SpecialWorkbench extends Component {
                         </Col>
                         <Col xl={16} lg={24} md={24} sm={24} xs={24}>
                             <Card title='运维记录' style={{ }} extra={<a href="#">更多>></a>}>
-                                <Card.Grid style={{width:'100%',height:296,padding: 15}} >
+                                <Card.Grid style={{width:'100%',height:298,padding: 15}} >
                                 {
                                     this.renderOperationTable()
                                 }
