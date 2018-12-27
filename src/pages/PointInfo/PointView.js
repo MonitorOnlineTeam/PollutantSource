@@ -3,7 +3,7 @@ import React, {
     Fragment
 } from 'react';
 import {
-    Card, Icon, Button, Badge, Table, Modal, Popconfirm, message, Spin
+    Card, Icon, Button, Badge, Table, Modal, Popconfirm, message, Spin, Divider
 } from 'antd';
 import {
     connect
@@ -12,6 +12,7 @@ import DescriptionList from '../../components/DescriptionList';
 import MonitorContent from '../../components/MonitorContent/index';
 import AddAnalyzerSys from '../PointInfo/AddAnalyzerSys';
 import AddAnalyzerChild from '../PointInfo/AddAnalyzerChild';
+import ViewAnalyzerChild from '../PointInfo/ViewAnalyzerChild';
 import styles from './index.less';
 const {
     Description
@@ -32,6 +33,7 @@ const {
     deletealyzersys_requstresult: pointinfo.deletealyzersys_requstresult,
     analyzerchild: pointinfo.analyzerchild,
     getanalyzerchild_requstresult: pointinfo.getanalyzerchild_requstresult,
+    deletealyzerchild_requstresult: pointinfo.deletealyzerchild_requstresult,
 }))
 export default class pointview extends Component {
     constructor(props) {
@@ -61,6 +63,7 @@ export default class pointview extends Component {
             AddVisitable:true,
             MSVisitable:false,
             MSCVisitable:false,
+            MSCVVisitable:false,
             title: '',
             width: '50%',
             ID:null,
@@ -157,6 +160,7 @@ export default class pointview extends Component {
                                           ID: aa.ID,
                                           callback: () => {
                                             if (this.props.getanalyzerchild_requstresult === '1') {
+                                                console.log(this.props.analyzerchild.length);
                                               this.setState({
                                                 SmokeList: this.props.analyzerchild,
                                               })
@@ -164,6 +168,7 @@ export default class pointview extends Component {
                                           }
                                         },
                                       });
+                                      
                                   }
                                   if (aa.Type === 3) {
                                      this.setState({
@@ -251,6 +256,7 @@ export default class pointview extends Component {
       if (type === 1) {
         this.setState({
           title:'添加分析仪',
+          width:'60%',
           MSCVisitable: true,
           ID: this.state.Gaseous.ID
         })
@@ -258,6 +264,7 @@ export default class pointview extends Component {
       if (type === 2) {
         this.setState({
           title:'添加分析仪',
+          width: '60%',
           MSCVisitable: true,
           ID: this.state.Smoke.ID
         })
@@ -265,6 +272,7 @@ export default class pointview extends Component {
       if (type === 3) {
         this.setState({
           title: '添加分析仪',
+          width: '60%',
           MSCVisitable: true,
           ID: this.state.PM.ID
         })
@@ -297,6 +305,23 @@ export default class pointview extends Component {
              }
            },
          });
+    }
+    DeleteAnalyzerChild=(code)=>{
+        this.props.dispatch({
+          type: 'pointinfo/deletealyzerchild',
+          payload: {
+            ID: code,
+            callback: () => {
+              if (this.props.deletealyzerchild_requstresult === '1') {
+                message.success('删除成功！').then(() => {
+                  this.LoadAnalyzer(this.state.DGIMN);
+                });
+              } else {
+                message.success(this.props.reason);
+              }
+            }
+          },
+        });
     }
     pointinfo = () => {
         const rtnVal = [];
@@ -365,52 +390,16 @@ export default class pointview extends Component {
             title: '分析仪名称',
             dataIndex: 'Name',
             key: 'Name',
-            width: '15%',
+            width: '20%',
             align: 'left',
             render: (text, record) => {
               return text;
             }
         }, {
-            title: '型号',
-            dataIndex: 'DeviceModel',
-            key: 'DeviceModel',
-            width: '5%',
-            align: 'center',
-            render: (text, record) => {
-                return text;
-            }
-        }, {
-            title: '制造商',
-            dataIndex: 'Manufacturer',
-            key: 'Manufacturer',
-            width: '15%',
-            align: 'center',
-            render: (text, record) => {
-                return text;
-            }
-        }, {
-            title: '制造商简称',
-            dataIndex: 'ManufacturerAbbreviation',
-            key: 'ManufacturerAbbreviation',
-            align: 'center',
-            width: '10%',
-            render: (text, record) => {
-                return text;
-            }
-        }, {
             title: '测试项目',
-            dataIndex: 'TestProjects',
-            key: 'TestProjects',
-            width: '10%',
-            align: 'center',
-            render: (text, record) => {
-                return text;
-            }
-        }, {
-            title: '分析仪原理',
-            dataIndex: 'AnalyzerPrinciple',
-            key: 'AnalyzerPrinciple',
-            width: '10%',
+            dataIndex: 'TestComponent',
+            key: 'TestComponent',
+            width: '20%',
             align: 'center',
             render: (text, record) => {
                 return text;
@@ -430,7 +419,7 @@ export default class pointview extends Component {
           title: '计量单位',
           dataIndex: 'MeasurementUnit',
           key: 'MeasurementUnit',
-          width: '5%',
+          width: '10%',
           align: 'center',
           render: (text, record) => {
             return text;
@@ -440,7 +429,7 @@ export default class pointview extends Component {
           title: '斜率',
           dataIndex: 'Slope',
           key: 'Slope',
-          width: '5%',
+          width: '10%',
           align: 'center',
           render: (text, record) => {
             return text;
@@ -450,7 +439,7 @@ export default class pointview extends Component {
           title: '截距',
           dataIndex: 'Intercept',
           key: 'Intercept',
-          width: '5%',
+          width: '10%',
           align: 'center',
           render: (text, record) => {
             return text;
@@ -458,19 +447,21 @@ export default class pointview extends Component {
         },
         {
             title: '操作',
-            width: '10%',
+            width: '20%',
             align: 'center',
             render: (text, record) => (<Fragment >
-                <a onClick={
+                 <a onClick={
                     () => this.setState({
-                        Vvisible: true,
-                        OutputStopID: record.key
+                        MSCVisitable: true,
+                        width:'60%',
+                        title:'编辑',
+                        ChildId: record.ID
                     })
-                } > 查看 </a> <Divider type="vertical" />
+                } > 编辑 </a>  <Divider type="vertical" />
                 <Popconfirm placement="left"
                     title="确定要删除吗？"
                     onConfirm={
-                        () => this.confirm(record.key)
+                        () => this.DeleteAnalyzerChild(record.ID)
                     }
                     okText="是"
                     cancelText="否" >
@@ -489,7 +480,7 @@ export default class pointview extends Component {
                <div style={{marginTop:10,marginLeft:30,marginBottom:10,marginRight:30}}>
                  <Card title={this.pointinfo()}  loading={this.props.pointloading}>
                      <Card.Grid style={gridStyle}>
-                        <DescriptionList size="small" col="4" gutter="10" >
+                        <DescriptionList size="small" col="4" gutter="10" style={{marginLeft:10}} >
                             <Description term="排口编号">{this.state.DGIMN}</Description>
                             <Description term="排口名称" >{this.state.pointName}</Description>
                             <Description term="排放类型">{this.state.OutputType}</Description>
@@ -504,7 +495,8 @@ export default class pointview extends Component {
                             <Description term="纬度">{this.state.latitude}</Description>
                             <Description term="运维人">{this.state.OperationerName}</Description>
                         </DescriptionList>
-                        <DescriptionList size="large" style={{marginTop: 10}} col="1">
+                        <Divider />
+                        <DescriptionList size="large"  col="1" style={{marginLeft:10}}>
                             <Description term="排口排放类型" > {this.state.OutPutWhither} </Description>
                             <Description term="排口地址" > {this.state.Address} </Description>
                         </DescriptionList>
@@ -517,8 +509,8 @@ export default class pointview extends Component {
                             //loading={this.props.effects['stopmanagement/getlist']}
                             columns={columns}
                             className={styles.dataTable}
-                            dataSource={null}
-                            scroll={{ y: 'calc(100vh - 800px)' }}
+                            dataSource={this.state.GaseousList.length>0?this.state.GaseousList:null}
+                            scroll={{ x: 1500, y: 200 }} 
                             size = "small" // small middle
                             pagination={false}
                             rowClassName={
@@ -540,8 +532,8 @@ export default class pointview extends Component {
                             //loading={this.props.effects['stopmanagement/getlist']}
                             columns={columns}
                             className={styles.dataTable}
-                            dataSource={null}
-                            scroll={{ y: 'calc(100vh - 800px)' }}
+                            dataSource={this.state.PMList.length>0?this.state.PMList:null}
+                            scroll={{ x: 1500, y: 200 }} 
                             size = "small" // small middle
                             pagination={false}
                             rowClassName={
@@ -563,8 +555,8 @@ export default class pointview extends Component {
                             //loading={this.props.effects['stopmanagement/getlist']}
                             columns={columns}
                             className={styles.dataTable}
-                            dataSource={null}
-                            scroll={{ y: 'calc(100vh - 800px)' }}
+                            dataSource={this.state.SmokeList.length>0?this.state.SmokeList:null}
+                            scroll={{ x: 1500, y: 200 }} 
                             size = "small" // small middle
                             pagination={false}
                             rowClassName={
@@ -626,6 +618,23 @@ export default class pointview extends Component {
                         } >
                         {
                             <AddAnalyzerChild DGIMN={this.state.DGIMN} ChildCVisitable={this.ChildCVisitable} AnalyzerSys_Id={this.state.ID} ID={this.state.ChildId}/>
+                        }
+                </Modal>
+                  <Modal
+                        visible={this.state.MSCVVisitable}
+                        title={this.state.title}
+                        width={this.state.width}
+                        destroyOnClose={true}// 清除上次数据
+                        footer={false}
+                        onCancel={
+                            () => {
+                                this.setState({
+                                    MSCVVisitable: false
+                                });
+                            }
+                        } >
+                        {
+                            <ViewAnalyzerChild ID={this.state.ChildId}/>
                         }
                 </Modal>
             </MonitorContent>

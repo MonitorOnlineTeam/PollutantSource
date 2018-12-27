@@ -186,7 +186,48 @@ export async function getanalyzerchild(params) {
   const body = {
       ID:params.ID,
   };
-  const result = post('/api/rest/PollutantSourceApi/Analyzer/getanalyzerchild', body, null);
+  const result = post('/api/rest/PollutantSourceApi/Analyzer/GetAnalyzer', body, null);
+  return result === null ? {
+    data: null
+  } : result;
+}
+// 获取分析仪实体
+export async function getanalyzerchildmodel(params) {
+  const body = {
+    ID: params.ID,
+  };
+  const result = post('/api/rest/PollutantSourceApi/Analyzer/GetAnalyzerChildModel', body, null);
+  return result === null ? {
+    data: null
+  } : result;
+}
+// 删除分析仪
+export async function deletealyzerchild(params) {
+  const body = {
+    ID: params.ID,
+  };
+  const result = post('/api/rest/PollutantSourceApi/Analyzer/DeleteAnalyzerChild', body, null);
+  return result === null ? {
+    data: null
+  } : result;
+}
+// 编辑分析仪
+export async function editalyzerchild(params) {
+  const body = {
+    ID:params.ID,
+    Name: params.Name,
+    DeviceModel: params.DeviceModel,
+    Manufacturer: params.Manufacturer,
+    ManufacturerAbbreviation: params.ManufacturerAbbreviation,
+    TestComponent: params.TestComponent,
+    AnalyzerPrinciple: params.AnalyzerPrinciple,
+    AnalyzerRangeMin: params.AnalyzerRangeMin,
+    MeasurementUnit: params.MeasurementUnit,
+    Slope: params.Slope,
+    Intercept: params.Intercept,
+    AnalyzerRangeMax: params.AnalyzerRangeMax,
+  };
+  const result = post('/api/rest/PollutantSourceApi/Analyzer/EditAlyzerChild', body, null);
   return result === null ? {
     data: null
   } : result;
