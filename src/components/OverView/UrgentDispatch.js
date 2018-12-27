@@ -1,10 +1,35 @@
 import React, { Component } from 'react';
-import { Modal, Button, Input,Form,Icon } from 'antd';
+import {connect} from 'dva';
+import { Modal, Button, Input,Form,Icon,message } from 'antd';
 const FormItem = Form.Item;
 @Form.create()
+@connect(({overview}) => ({
+    complete:overview
+}))
 ///紧急派单
 class UrgentDispatch extends Component {
+
+    onSubmit=()=>{
+        const selectpoint=this.props.selectpoint;
+        if(selectpoint)
+        {
+            this.props.dispatch({
+                type:'overview/addtaskinfo',
+                payload:{
+                    dgimn: selectpoint.DGIMN,
+                    personId:selectpoint.operationUserID,
+                    remark:this.props.form.getFieldValue('remark')
+                }
+            })
+            this.props.onCancel();
+        }
+        else{
+            message.error('派单失败');
+            this.props.onCancel();
+        }
+    }
     render() {
+        console.log(this.props.selectpoint);
         const { getFieldDecorator } = this.props.form;
         const formItemLayout = {
             labelCol: {
@@ -17,21 +42,21 @@ class UrgentDispatch extends Component {
         return (
             <div>
                 <Modal
-                    title={this.props.pointName}
+                    title={ this.props.selectpoint? this.props.selectpoint.pointName:''}
                     visible={this.props.visible}
-                    onOk={this.props.handleOk}
+                    onOk={this.onSubmit}
                     onCancel={this.props.onCancel}
                 >
-                    <Form onSubmit={this.handleSubmit} className="login-form">
+                    <Form className="login-form">
                         <FormItem
                             {...formItemLayout}
                             label="运维人员"
                         >
                             {getFieldDecorator('operationName', {
-                                initialValue: '王娇娇',//暂时不知道运维人员从哪来
+                                initialValue:  this.props.selectpoint? this.props.selectpoint.operationUserName:'',
                                 rules: [{ required: true, message: '请输入运维人名称' }],
                             })(
-                                <Input prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder="Username" />
+                                <Input disabled={true} prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder="Username" />
                             )}
                         </FormItem>
                         <FormItem
@@ -40,10 +65,10 @@ class UrgentDispatch extends Component {
                         >
                             {getFieldDecorator('phone', {
 
-                                initialValue: '15712856395',//暂时不知道运维人员从哪来
+                                initialValue:  this.props.selectpoint?this.props.selectpoint.operationtel:'',
                                 rules: [{ required: true, message: '请输入电话号码' }],
                             })(
-                                <Input prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />} type="phone" />
+                                <Input disabled={true} prefix={<Icon type="phone" style={{ color: 'rgba(0,0,0,.25)' }} />} type="phone" />
                             )}
                         </FormItem>
                         <FormItem
@@ -52,7 +77,7 @@ class UrgentDispatch extends Component {
                         >
                             {getFieldDecorator('remark', {
                             })(
-                                <Input prefix={<Icon type="file-text" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder="备注" />
+                                <Input.TextArea rows='3' prefix={<Icon type="file-text" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder="备注" />
                             )}
                         </FormItem>
                     </Form>
