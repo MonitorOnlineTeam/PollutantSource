@@ -6,27 +6,40 @@ import reqwest from 'reqwest';
 import InfiniteScroll from 'react-infinite-scroller';
 import ReactEcharts from 'echarts-for-react';
 import moment from 'moment';
+import {connect} from 'dva';
+import {routerRedux} from 'dva/router';
 /*
 页面：工作台
 add by cg 18.6.8
 modify by wjw 18.12.24
 */
 
-const gridStyle = {
+  const gridStyle = {
     width: '50%',
     textAlign: 'center',
     height: '200px'
   };
-  const columns = [{
-    title: '排口名称',
-    dataIndex: 'name',
-  }, {
-    title: '状态',
-    dataIndex: 'age',
-  }, {
-    title: '操作',
-    dataIndex: 'address',
-  }];
+  const columns = [
+        {
+            title: '排口名称',
+            dataIndex: 'PointName',
+        }, 
+        {
+            title: '运维人',
+            dataIndex: 'OperationName',
+        }, 
+        {
+            title: '状态',
+            dataIndex: 'ExceptionTypeText',
+        }, {
+            title: '操作',
+            dataIndex: 'opt',
+            render: (text, record) => {
+                return (
+                    <a > 查看运维 </a>
+                );
+            }
+        }];
   const data = [{
     key: '1',
     name: '脱硫出口1',
@@ -45,13 +58,14 @@ const gridStyle = {
   }];
 const fakeDataUrl = 'https://randomuser.me/api/?results=5&inc=name,gender,email,nat&noinfo';
 function getListData(value) {
+    debugger;
     let listData;
     switch (value.date()) {
       case 10:
         listData = [
           { type: 'warning', content: '' }
         ]; break;
-      case 11:
+      case 30:
         listData = [
           { type: 'success', content: '' }
         ]; break;
@@ -89,6 +103,17 @@ function getListData(value) {
       </div>
     ) : null;
   }
+const pageUrl = {
+    updateState: 'workbenchmodel/updateState',
+    getOperationData: 'workbenchmodel/getOperationData'
+};
+@connect(({
+    loading,
+    workbenchmodel
+}) => ({
+    loading: loading.effects[pageUrl.getOperationData],
+    operation: workbenchmodel.operation
+}))
 class SpecialWorkbench extends Component {
     constructor(props) {
         super(props);
@@ -99,10 +124,65 @@ class SpecialWorkbench extends Component {
             data: [],
             loading: false,
             hasMore: true,
-            value: moment('2017-01-25'),
-            selectedValue: moment('2017-01-25'),
+            value: moment(),
+            selectedValue: moment(),
+            operation:{
+                tableDatas:this.props.operation.tableDatas.filter(m=>moment(m.CreateTime).format('YYYY-MM-DD')===moment().format("YYYY-MM-DD")).slice(0,6)
+            }
         };
     }
+    componentWillMount() {
+        this.getOperationData(1);
+    }
+    /**
+     * 更新model中的state
+     */
+    updateState = (payload) => {
+        this.props.dispatch({
+            type: pageUrl.updateState,
+            payload: payload,
+        });
+    }
+    /**
+     * 更新运维数据
+     */
+    getOperationData = (pageIndex) =>{
+        this.props.dispatch({
+            type: pageUrl.getOperationData,
+            payload: {},
+        });
+    }
+    /**
+     * 渲染运维历史记录表格
+     */
+    renderOperationTable = ()=>{
+        const columns = [
+            {
+                title: '排口名称',
+                dataIndex: 'PointName',
+            }, 
+            {
+                title: '运维人',
+                dataIndex: 'OperationName',
+            }, 
+            {
+                title: '状态',
+                dataIndex: 'ExceptionTypeText',
+            }, {
+                title: '操作',
+                dataIndex: 'opt',
+                render: (text, record) => {
+                    return (
+                        <a onClick={
+                            () => this.props.dispatch(routerRedux.push(`/pointdetail/${record.DGIMN}/emergencydetailinfo/${record.TaskID}`))
+                        } > 详情 </a>
+                    );
+                }
+            }];
+        
+        return <Table columns={columns} dataSource={this.state.operation.tableDatas} size="small" pagination={false}/>
+    }
+
     componentDidMount() {
         this.fetchData((res) => {
             this.setState({
@@ -221,13 +301,96 @@ class SpecialWorkbench extends Component {
     onPanelChange = (value, mode)=>{
         console.log(value, mode);
     }
-    onSelect = (value) => {
+    /**
+     * 日历表时间选择事件
+     */
+    onCalendarSelect = (value) => {
+        //debugger;
+        // console.log("this:",value.format("YYYY-MM"))
+        // console.log("dateNow:",moment(this.props.operation.beginTime).format("YYYY-MM"));
+        let selectValue = value.format('YYYY-MM-DD 00:00:00');
+        
         this.setState({
-          value,
-          selectedValue: value,
+          // value,
+            selectedValue: value,
+            operation:{
+                tableDatas:this.props.operation.tableDatas.filter(m=>moment(m.CreateTime).format('YYYY-MM-DD')===value.format("YYYY-MM-DD")).slice(0,6)
+        }
         });
-      }
+        //console.log(value.format('YYYY-MM-DD HH:mm:ss'))
+        if(value.format("YYYY-MM")===this.state.selectedValue.format("YYYY-MM"))
+        {
+            return false;
+        }
+        
+        if(value.format("YYYY-MM")!==moment(this.props.operation.beginTime).format("YYYY-MM"))
+        {
+            console.log('beginTime:',moment(selectValue).add(-1,'months').format('YYYY-MM-01 00:00:00'));
+        console.log('endTime:',moment(selectValue).add(2,'months').format('YYYY-MM-01 00:00:00'));
+            // console.log('beginTime:',value.add(-1,'months').format('YYYY-MM-01 00:00:00'));
+            // console.log('endTime:',value.add(2,'months').format('YYYY-MM-01 00:00:00'));
+            this.updateState({
+                operation:{
+                    ...this.props.operation,
+                    ...{
+                        beginTime: moment(selectValue).add(-1,'months').format('YYYY-MM-01 00:00:00'),
+                        endTime: moment(selectValue).add(2,'months').format('YYYY-MM-01 00:00:00'),
+                    }
+                }
+            });
+            this.getOperationData(1);
+        }
+
+        // this.updateState({
+        //     operation:{
+        //         ...this.props.operation,
+        //         ...{
+        //             beginTime: value.format('YYYY-MM-DD HH:mm:ss'),
+        //             endTime: value.format('YYYY-MM-DD HH:mm:ss'),
+        //         }
+        //     }
+        // });
+        // this.getOperationData(1);
+    }
+    /**
+     * 日历表插件渲染
+     */
+    renderCalendar = () =>{
+
+        return <Calendar fullscreen={false} onSelect={this.onCalendarSelect} dateCellRender={this.dateCellRender} monthCellRender={monthCellRender} />;
+    }
+
+    dateCellRender = (value) =>{
+        let listData=[];
+        let thisData=this.props.operation.tableDatas.filter(m=>moment(m.CreateTime).format('YYYY-MM-DD')===value.format("YYYY-MM-DD"));
+        if(thisData&&thisData.length>0)
+        {
+            let ExceptionTypeText=thisData.filter(m=>m.ExceptionTypeText!=="");
+            if(ExceptionTypeText&&ExceptionTypeText.length>0)
+            {
+                listData = [{ type: 'warning', content: '' }];
+            }else
+            {
+                listData = [{ type: 'success', content: '' }];
+            }
+        }
+        
+        return (
+            <ul className="events">
+                {
+                    listData.map(item => (
+                        <li key={item.content}>
+                        <Badge status={item.type} text={item.content} />
+                        </li>
+                    ))
+                }
+            </ul>
+            );
+    }
+
     render() {
+        console.log(this.props.operation);
+        const {operation} = this.props;
         return (
             <div style={{
                 width: '100%',
@@ -476,14 +639,19 @@ class SpecialWorkbench extends Component {
                                                 marginRight: 3
                                             }} /><span style={{cursor: 'pointer'}}> 正常任务</span>
                                         </div>
-                                    <Calendar fullscreen={false} dateCellRender={dateCellRender} monthCellRender={monthCellRender} />
+                                        {
+                                            this.renderCalendar()
+                                        }
+                                    {/* <Calendar fullscreen={false} onSelect={this.onCalendarSelect} dateCellRender={dateCellRender} monthCellRender={monthCellRender} /> */}
                                 </div>
                             </Card>
                         </Col>
                         <Col xl={16} lg={24} md={24} sm={24} xs={24}>
                             <Card title='运维记录' style={{ }} extra={<a href="#">更多>></a>}>
-                                <Card.Grid style={{width:'100%',height:296}} >
-                                    <Table columns={columns} dataSource={data} size="small" pagination={false}/>
+                                <Card.Grid style={{width:'100%',height:296,padding: 15}} >
+                                {
+                                    this.renderOperationTable()
+                                }
                                 </Card.Grid>
                             </Card>
                         </Col>
