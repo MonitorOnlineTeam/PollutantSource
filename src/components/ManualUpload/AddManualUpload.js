@@ -30,32 +30,25 @@ export default class AddManualUpload extends Component {
     componentWillMount() {
         this.props.onRef(this);
         this.GetAllPollutantTypes();
+        this.SelectHandleChange();
     }
     GetAllPollutantTypes = () => {
         this.props.dispatch({
             type: 'manualupload/GetAllPollutantTypes',
             payload: {
+                DGIMN: this.props.dgimn,
             },
         });
     }
     //污染物类型改变事件
-    SelectHandleChange = (value) => {
+    SelectHandleChange = () => {
         //获取绑定下拉污染物
         this.props.dispatch({
             type: 'manualupload/addGetPollutantByPoint',
             payload: {
                 DGIMN: this.props.dgimn,
-                PollutantType: value
             }
         });
-    }
-    //污染物种类数据
-    SelectOptions = () => {
-        const rtnVal = [];
-        this.props.PollutantTypesList.map((item) => {
-            rtnVal.push(<Option key={item.PollutantTypeCode}>{item.PollutantTypeName}</Option>);
-        });
-        return rtnVal;
     }
     //根据污染物编号获取单位
     pollutantChange = (value) => {
@@ -89,7 +82,7 @@ export default class AddManualUpload extends Component {
         });
     }
     render() {
-        console.log(this.props.unit)
+        console.log(this.props.PollutantTypesList)
         debugger
         const { getFieldDecorator } = this.props.form;
         const formItemLayout = {
@@ -111,79 +104,80 @@ export default class AddManualUpload extends Component {
                                 {...formItemLayout}
                                 label={'污染物种类'}>
                                 {getFieldDecorator('pollutantType', {
+                                  initialValue: 1,
                                 })(
                                     <Select
-                                        placeholder="请选择污染物种类"
-                                        onChange={this.SelectHandleChange}
-                                    >
-                                        {this.SelectOptions()}
+                                        value={2}
+                                   placeholder="请选择污染物种类"
+                                >
+                                      {this.props.PollutantTypesList.length !== 0 ? this.props.PollutantTypesList.map(item => <Option key={item.PollutantTypeCode}>{item.PollutantTypeName}</Option>) : null}
                                     </Select>
-                                )}
+                            )}
                             </FormItem>
                         </Col>
-                        <Col xs={2} sm={6} md={12} lg={12} xl={12} xxl={12}>
-                            <FormItem
-                                {...formItemLayout}
-                                label={'污染物名称'}>
-                                {getFieldDecorator('pollutantCode', {
-                                })(
-                                    <Select
-                                        placeholder="请选择污染物种类"
-                                        onChange={this.pollutantChange}
-                                    >
-                                        {this.props.addselectdata !== null ? this.props.addselectdata.map(item => <Option key={item.PollutantCode}>{item.PollutantName}</Option>) : null}
-                                    </Select>
-                                )}
-                            </FormItem>
-                        </Col>
+                    <Col xs={2} sm={6} md={12} lg={12} xl={12} xxl={12}>
+                        <FormItem
+                            {...formItemLayout}
+                            label={'污染物名称'}>
+                            {getFieldDecorator('pollutantCode', {
+                            })(
+                                <Select
+                                    placeholder="请选择污染物名称"
+                                    onChange={this.pollutantChange}
+                                >
+                                    {this.props.addselectdata !== null ? this.props.addselectdata.map(item => <Option key={item.PollutantCode}>{item.PollutantName}</Option>) : null}
+                                </Select>
+                            )}
+                        </FormItem>
+                    </Col>
                     </Row>
-                    <Row gutter={24}>
-                        <Col xs={2} sm={6} md={12} lg={12} xl={12} xxl={12}>
-                            <FormItem
-                                {...formItemLayout}
-                                label={'检测时间'}>
-                                {getFieldDecorator('monitorTime', {
-                                })(
-                                    <DatePicker showTime format="YYYY-MM-DD HH:mm:ss" />
-                                )}
-                            </FormItem>
-                        </Col>
-                        <Col xs={2} sm={6} md={12} lg={12} xl={12} xxl={12}>
-                            <FormItem
-                                {...formItemLayout}
-                                label={'浓度'}>
-                                {getFieldDecorator('avgValue', {
-                                    rules: [{
-                                        required: true,
-                                        message: '浓度',
-                                    }],
-                                })(
+                <Row gutter={24}>
+                    <Col xs={2} sm={6} md={12} lg={12} xl={12} xxl={12}>
+                        <FormItem
+                            {...formItemLayout}
+                            label={'检测时间'}>
+                            {getFieldDecorator('monitorTime', {
+                            })(
+                                <DatePicker showTime format="YYYY-MM-DD HH:mm:ss" />
+                            )}
+                        </FormItem>
+                    </Col>
+                    <Col xs={2} sm={6} md={12} lg={12} xl={12} xxl={12}>
+                        <FormItem
+                            {...formItemLayout}
+                            label={'浓度'}>
+                            {getFieldDecorator('avgValue', {
+                                rules: [{
+                                    required: true,
+                                    message: '浓度',
+                                }],
+                            })(
 
-                                    <Input placeholder="请输入浓度" onkeyup="value=value.replace(/[^\-?\d.]/g,'')" addonAfter={this.props.unit} />
+                                <Input placeholder="请输入浓度" onkeyup="value=value.replace(/[^\-?\d.]/g,'')" addonAfter={this.props.unit} />
 
 
-                                )}
-                            </FormItem>
-                        </Col>
-                    </Row>
-                    <Row gutter={16} style={{ marginTop: 8 }}>
-                    </Row>
-                    <Row gutter={16} style={{ marginTop: 8 }}>
-                        <Col xs={2} sm={6} md={12} lg={12} xl={12} xxl={12} style={{ display: 'none' }}>
-                            <FormItem
-                                {...formItemLayout}
-                                label={'点编号'}>
-                                {getFieldDecorator('DGIMN', {
-                                    initialValue: this.props.dgimn,
+                            )}
+                        </FormItem>
+                    </Col>
+                </Row>
+                <Row gutter={16} style={{ marginTop: 8 }}>
+                </Row>
+                <Row gutter={16} style={{ marginTop: 8 }}>
+                    <Col xs={2} sm={6} md={12} lg={12} xl={12} xxl={12} style={{ display: 'none' }}>
+                        <FormItem
+                            {...formItemLayout}
+                            label={'点编号'}>
+                            {getFieldDecorator('DGIMN', {
+                                initialValue: this.props.dgimn,
 
-                                })(
-                                    <Input placeholder="" value={1} />
-                                )}
-                            </FormItem>
-                        </Col>
-                    </Row>
+                            })(
+                                <Input placeholder="" value={1} />
+                            )}
+                        </FormItem>
+                    </Col>
+                </Row>
                 </Form>
-            </div>
+            </div >
         );
     }
 }

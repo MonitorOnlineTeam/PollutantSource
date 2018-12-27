@@ -1,6 +1,6 @@
 import { Model } from '../dvapack';
 import { } from '../services/videodata';
-import { uploadfiles, GetPollutantByPoint, GetManualSupplementList, UploadTemplate, getUploadTemplate, GetAllPollutantTypes, addGetPollutantByPoint, AddUploadFiles,GetUnitByPollutant} from '../services/manualuploadapi';
+import { uploadfiles, GetPollutantByPoint, GetManualSupplementList, UploadTemplate, getUploadTemplate, GetAllPollutantTypes, addGetPollutantByPoint, AddUploadFiles, GetUnitByPollutant } from '../services/manualuploadapi';
 
 export default Model.extend({
     namespace: 'manualupload',
@@ -17,7 +17,9 @@ export default Model.extend({
         templateurl: null,
         PollutantTypesList: [],
         addselectdata: [],
-        unit:null,
+        unit: null,
+        DGIMN: null,
+        pointName:null,
     },
     effects: {
         //上传附件
@@ -55,6 +57,7 @@ export default Model.extend({
             update,
             select
         }) {
+            debugger
             const result = yield call(GetPollutantByPoint, payload);
             debugger
             if (result.data.length !== 0) {
@@ -103,17 +106,27 @@ export default Model.extend({
             update,
             select
         }) {
-            debugger
             const result = yield call(GetManualSupplementList, payload);
             debugger
             if (result.data != null) {
                 if (result.data.length !== 0) {
+                    debugger
+                    if (payload.DGIMN) {
+                        yield put({
+                            type: 'GetPollutantByPoint',
+                            payload: {
+                                DGIMN: payload.DGIMN
+                            }
+                        })
+                    }
                     yield update({
                         uploaddatalist: result.data,
                         reason: result.reason,
                         pageIndex: payload.pageIndex,
                         pageSize: payload.pageSize,
-                        total: result.total
+                        total: result.total,
+                        DGIMN: payload.DGIMN,
+                        pointName:payload.pointName
                     });
                 }
                 else {
@@ -122,7 +135,9 @@ export default Model.extend({
                         reason: result.reason,
                         pageIndex: payload.pageIndex,
                         pageSize: payload.pageSize,
-                        total: result.total
+                        total: result.total,
+                        DGIMN: payload.DGIMN,
+                        pointName:payload.pointName
                     });
                 }
             }
@@ -132,7 +147,9 @@ export default Model.extend({
                     reason: result.reason,
                     pageIndex: payload.pageIndex,
                     pageSize: payload.pageSize,
-                    total: result.total
+                    total: result.total,
+                    DGIMN: payload.DGIMN,
+                    pointName:payload.pointName
                 });
             }
         },
@@ -173,7 +190,7 @@ export default Model.extend({
         }) {
             const result = yield call(GetAllPollutantTypes, payload);
 
-            if (result.data.length !== 0) {
+            if (result.data !== null) {
                 yield update({
                     PollutantTypesList: result.data,
                     reason: result.reason
@@ -196,6 +213,7 @@ export default Model.extend({
             update,
             select
         }) {
+            debugger
             const result = yield call(AddUploadFiles, payload);
             if (result.requstresult === 1) {
                 yield update({
@@ -211,7 +229,7 @@ export default Model.extend({
             }
         },
 
-        //添加手工上传数据
+        //根据污染物获取单位
         * GetUnitByPollutant({
             payload
         }, {

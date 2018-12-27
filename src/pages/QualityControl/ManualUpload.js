@@ -21,7 +21,9 @@ const Option = Select.Option;
     pageIndex: manualupload.pageIndex,
     pageSize: manualupload.pageSize,
     reason: manualupload.reason,
-    total: manualupload.total
+    total: manualupload.total,
+    DGIMN: manualupload.DGIMN,
+    pointName: manualupload.pointName,
 }))
 @Form.create()
 export default class ManualUpload extends Component {
@@ -31,18 +33,17 @@ export default class ManualUpload extends Component {
         this.state = {
             fileList: [],
             rangeDate: [moment(moment(new Date()).subtract(3, 'month').format('YYYY-MM-DD 00:00:00')), moment(moment(new Date()).format('YYYY-MM-DD 23:59:59'))], // 最近七天
-            DGIMN: null,
+            PollutantType: null,
             SelectHandleChange: [],
             visible: false,
             footer: <div>
                 <Button key="back" onClick={this.handleCancel}>Return</Button>,
-            <Button key="submit" type="primary" onClick={this.handleOk}>
+                <Button key="submit" type="primary" onClick={this.handleOk}>
                     Submit
             </Button>
             </div>
 
         };
-
         const SCREEN_HEIGHT = document.querySelector('body').offsetHeight;
         const SCREEN_WIDTH = document.querySelector('body').offsetWidth;
         const thata = this;
@@ -59,19 +60,17 @@ export default class ManualUpload extends Component {
             return uuid;
         };
         _this.addimg = ({ file }) => {
-
             const isJPG = file.type === 'application/vnd.ms-excel';
             if (!isJPG) {
                 message.error('只能上传Excel格式文件！');
             }
             else {
-                const mn = this.state.DGIMN
+                const mn = this.props.DGIMN
                 const SelectHandleChange = this.state.SelectHandleChange
                 const rangeDateone = this.state.rangeDate[0]
                 const rangeDatetwo = this.state.rangeDate[1]
                 const pageIndex = this.props.pageIndex
                 const pageSize = this.props.pageSize
-                debugger
                 let reader = new FileReader();
                 reader.readAsDataURL(file);
                 reader.onloadend = function () {
@@ -84,20 +83,16 @@ export default class ManualUpload extends Component {
                             fileName: file.name,
                             DGIMN: mn,
                             callback: () => {
-                                debugger
                                 if (_this.props.requstresult === '1') {
                                     _this.GetManualSupplementList(mn, SelectHandleChange, rangeDateone, rangeDatetwo, pageIndex, pageSize);
                                     message.success(_this.props.reason)
                                 } else {
-                                    console.log(_this.props.reason)
-                                    debugger
                                     message.error(_this.props.reason);
                                 }
                             }
                         }
                     });
                 };
-
             }
         };
     }
@@ -106,18 +101,9 @@ export default class ManualUpload extends Component {
         //点位列表
         this.props.dispatch({
             type: 'overview/querydatalist',
-            payload: { map: true }
-        });
-        console.log(this.state.DGIMN)
-        console.log(this.props.pageIndex)
-        debugger
-        //数据列表
-        this.props.dispatch({
-            type: 'manualupload/GetManualSupplementList',
             payload: {
-                DGIMN: this.state.DGIMN,
-                pageIndex: this.props.pageIndex,
-                pageSize: this.props.pageSize,
+                map: true, manualUpload: true,
+                pageIndex: this.props.pageIndex, pageSize: this.props.pageSize,
             }
         });
         //获取模板地址
@@ -137,9 +123,8 @@ export default class ManualUpload extends Component {
         return <img src="../../../gisexception.png" />;
     }
     treeCilck = (row) => {
-        this.setState({ DGIMN: row.DGIMN });
+        this.setState({ PollutantType: row.pollutantTypeCode });
         const { dispatch } = this.props;
-        debugger
         //获取绑定下拉污染物
         dispatch({
             type: 'manualupload/GetPollutantByPoint',
@@ -148,24 +133,19 @@ export default class ManualUpload extends Component {
                 PollutantType: row.pollutantTypeCode
             }
         });
-        debugger
-        this.GetManualSupplementList(row.DGIMN, this.state.SelectHandleChange, this.state.rangeDate[0], this.state.rangeDate[1], this.props.pageIndex, this.props.pageSize)
+        this.GetManualSupplementList(row.DGIMN, this.state.SelectHandleChange, this.state.rangeDate[0], this.state.rangeDate[1], this.props.pageIndex, this.props.pageSize, row.pointName)
     };
     _handleDateChange = (date, dateString) => {
         this.setState({ rangeDate: date });
-        this.GetManualSupplementList(this.state.DGIMN, this.state.SelectHandleChange, date[0], date[1], this.props.pageIndex, this.props.pageSize)
+        this.GetManualSupplementList(this.props.DGIMN, this.state.SelectHandleChange, date[0], date[1], this.props.pageIndex, this.props.pageSize)
     };
     SelectHandleChange = (value) => {
         this.setState({ SelectHandleChange: value })
-        console.log(this.props.pageIndex)
-        debugger
-        this.GetManualSupplementList(this.state.DGIMN, value, this.state.rangeDate[0], this.state.rangeDate[1], this.props.pageIndex, this.props.pageSize)
+        this.GetManualSupplementList(this.props.DGIMN, value, this.state.rangeDate[0], this.state.rangeDate[1], this.props.pageIndex, this.props.pageSize)
     }
     SelectOptions = () => {
-        debugger
         const rtnVal = [];
-        if(this.props.selectdata.length!==0)
-        {
+        if (this.props.selectdata.length !== 0) {
             this.props.selectdata.map((item) => {
                 rtnVal.push(<Option key={item.PollutantCode}>{item.PollutantName}</Option>);
             });
@@ -179,15 +159,12 @@ export default class ManualUpload extends Component {
         }
     }
     onChange = (pageIndex, pageSize) => {
-        debugger
-        this.GetManualSupplementList(this.state.DGIMN, this.state.SelectHandleChange, this.state.rangeDate[0], this.state.rangeDate[1], pageIndex, pageSize);
+        this.GetManualSupplementList(this.props.DGIMN, this.state.SelectHandleChange, this.state.rangeDate[0], this.state.rangeDate[1], pageIndex, pageSize);
     }
     onShowSizeChange = (pageIndex, pageSize) => {
-        debugger
-        this.GetManualSupplementList(this.state.DGIMN, this.state.SelectHandleChange, this.state.rangeDate[0], this.state.rangeDate[1], pageIndex, pageSize);
+        this.GetManualSupplementList(this.props.DGIMN, this.state.SelectHandleChange, this.state.rangeDate[0], this.state.rangeDate[1], pageIndex, pageSize);
     }
-    GetManualSupplementList = (DGIMN, pollutantCode, BeginTime, EndTime, pageIndex, pageSize) => {
-        debugger
+    GetManualSupplementList = (DGIMN, pollutantCode, BeginTime, EndTime, pageIndex, pageSize, pointName) => {
         this.props.dispatch({
             type: 'manualupload/GetManualSupplementList',
             payload: {
@@ -197,6 +174,7 @@ export default class ManualUpload extends Component {
                 EndTime: EndTime,
                 pageIndex: pageIndex,
                 pageSize: pageSize,
+                pointName: pointName
             }
         });
     }
@@ -207,6 +185,10 @@ export default class ManualUpload extends Component {
     }
     onRef1 = (ref) => {
         this.child = ref;
+    }
+    // 添加数据
+    AddData = () => {
+        this.child.handleSubmit();
     }
     render() {
         const uploaddata = this.props.uploaddatalist === null ? null : this.props.uploaddatalist;
@@ -287,7 +269,6 @@ export default class ManualUpload extends Component {
             }
         ];
         return (
-
             <div className={styles.cardTitle}>
                 <Row >
                     <Col>
@@ -349,7 +330,7 @@ export default class ManualUpload extends Component {
                                                     this.setState({
                                                         visible: true,
                                                         type: 'add',
-                                                        title: '添加数据',
+                                                        title: '添加数据' + '-' + this.props.pointName,
                                                         width: 1000,
                                                         footer: <div>
                                                             <Button key="back" onClick={this.onCancel}>取消</Button>
@@ -405,7 +386,7 @@ export default class ManualUpload extends Component {
                                 width={this.state.width}
                                 onCancel={this.onCancel}>
                                 {
-                                    this.state.type === 'add' ? <Add onCancels={this.onCancel} dgimn={this.state.DGIMN} onRef={this.onRef1} /> : this.state.type === 'update' ? <Update onCancels={this.onCancel} dgimn={this.state.DGIMN} item={this.state.data} onRef={this.onRef1} /> : null
+                                    this.state.type === 'add' ? <Add onCancels={this.onCancel} dgimn={this.props.DGIMN} onRef={this.onRef1} /> : this.state.type === 'update' ? <Update dgimn={this.props.DGIMN} item={this.state.data} onRef={this.onRef1} /> : null
                                 }
                             </Modal>
                         </Card>

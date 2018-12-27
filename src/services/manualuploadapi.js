@@ -22,9 +22,8 @@ export async function uploadfiles(params) {
 export async function GetPollutantByPoint(params) {
     const body = {
         DGIMN: params.DGIMN,
-        PollutantType: params.PollutantType
     };
-    const result = upload('/api/rest/PollutantSourceApi/ManualSupplement/GetPollutantByPoint', body, null);
+    const result = upload('/api/rest/PollutantSourceApi/ManualSupplement/GetPollutantByDGIMN', body, null);
     return result === null ? {
         data: null
     } : result;
@@ -33,9 +32,8 @@ export async function GetPollutantByPoint(params) {
 export async function addGetPollutantByPoint(params) {
     const body = {
         DGIMN: params.DGIMN,
-        PollutantType: params.PollutantType
     };
-    const result = upload('/api/rest/PollutantSourceApi/ManualSupplement/GetPollutantByPoint', body, null);
+    const result = upload('/api/rest/PollutantSourceApi/ManualSupplement/GetPollutantByDGIMN', body, null);
     return result === null ? {
         data: null
     } : result;
@@ -68,6 +66,7 @@ export async function getUploadTemplate(params) {
 // 获取污染物类型列表
 export async function GetAllPollutantTypes(params) {
     const body = {
+        DGIMN:params.DGIMN
     };
     const result = upload('/api/rest/PollutantSourceApi/ManualSupplement/GetAllPollutantTypes', body, null);
     return result === null ? {
@@ -77,6 +76,10 @@ export async function GetAllPollutantTypes(params) {
 // 添加手工数据
 export async function AddUploadFiles(params) {
     const body = {
+        pollutantCode: params.pollutantCode,
+        monitorTime: params.monitorTime,
+        avgValue: params.avgValue,
+        DGIMN: params.DGIMN,
     };
     const result = upload('/api/rest/PollutantSourceApi/ManualSupplement/AddUploadFiles', body, null);
     return result === null ? {
