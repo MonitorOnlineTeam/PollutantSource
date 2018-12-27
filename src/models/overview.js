@@ -1,7 +1,8 @@
-import { querypollutanttypecode, querydatalist, querylastestdatalist, queryhistorydatalist, querypollutantlist } from '../services/api';
+import { querypollutanttypecode, querydatalist, querylastestdatalist, queryhistorydatalist, querypollutantlist,addtaskinfo,queryurge } from '../services/api';
 import React from 'react';
 import { Model } from '../dvapack';
 import moment from 'moment';
+import { message } from 'antd';
 
 import { mainpollutantInfo, zspollutantInfo } from '../../src/config';
 import {
@@ -25,7 +26,8 @@ export default Model.extend({
         gheight: 0,
         selectdata: [],
         pollutantName: [],
-        detailtime: null
+        detailtime: null,
+        addtaskstatus:false
     },
     effects: {
         * querypollutanttypecode({
@@ -102,18 +104,6 @@ export default Model.extend({
                                     <li style={{listStyle: 'none', marginBottom: 10}}>
                                         <Badge status="error" text={`超标倍数：${additionalInfo[3]}`} />
                                     </li>
-                                    <li style={{borderBottom: '1px solid #e8e8e8', listStyle: 'none', marginBottom: 5}} />
-
-                                    <li style={{listStyle: 'none'}}>
-                                        <Icon type="laptop" style={{ fontSize: 14, color: '#08c' }} />
-                                        <Divider type="vertical" />
-                                        <a style={{fontSize: 12, cursor: 'pointer', color: '#575757'}} onClick={() => this._openModal(true, 2)}>查看仪器状态参数</a>
-                                    </li>
-                                    <li style={{listStyle: 'none'}}>
-                                        <Icon type="table" style={{ fontSize: 14, color: '#08c' }} />
-                                        <Divider type="vertical" />
-                                        <a style={{fontSize: 12, cursor: 'pointer', color: '#575757'}} onClick={() => this._openModal(true, 1)}>查看各参数数据</a>
-                                    </li>
                                 </div>);
                                 return (<Popover content={content}><span style={{ color: '#ff0000', cursor: 'pointer' }}>{value || (value === 0 ? 0 : '-')}</span></Popover>);
                             }
@@ -125,7 +115,6 @@ export default Model.extend({
                                 <li style={{listStyle: 'none', marginBottom: 10}}>
                                     <Badge status="warning" text={`异常原因：${additionalInfo[2]}`} />
                                 </li>
-                                <li style={{borderBottom: '1px solid #e8e8e8', listStyle: 'none', marginBottom: 5}} />
                             </div>);
                             return (<Popover content={content}><span style={{ color: '#F3AC00', cursor: 'pointer' }}>{value || (value === 0 ? 0 : '-')}</span></Popover>);
                         }
@@ -384,6 +373,28 @@ export default Model.extend({
                 existdata,
                 pollutantName: payload.pollutantName,
             });
+        },
+        //紧急派单
+        * addtaskinfo({
+            payload,
+        }, { call, update }) {
+            const res = yield call(addtaskinfo, payload);
+            if (res==1) {
+                message.success('派单成功!');
+            } else {
+                message.error('派单失败!');
+            }
+        },
+        //催办
+        * queryurge({
+           payload
+        },{call, update}){
+            const res = yield call(queryurge, payload);
+            if (res==1) {
+                message.success('催办成功!');
+            } else {
+                message.error('催办失败!');
+            }
         }
     }
 });

@@ -131,8 +131,8 @@ export default [
 
 /* 报警排口分析 */
 { path: '/analysis/overpointlist', component: './Analysis/OverPointList' },      
-
-
+/* 自行监测报告 */
+{ path: '/analysis/selfmonitorreport', component: './Analysis/MonitoringReport' },  
 
 
 /* 基本信息管理 */

@@ -75,7 +75,7 @@ class OverViewMap extends PureComponent {
     };
 
      stationClick = () => {
-         this.props.dispatch(routerRedux.push(`/pointdetail/${  this.state.selectpoint.DGIMN}`));
+         this.props.dispatch(routerRedux.push(`/pointdetail/${this.state.selectpoint.DGIMN}`));
      };
 
     markersEvents = {
@@ -167,15 +167,25 @@ class OverViewMap extends PureComponent {
        });
    }
 
+   urge=()=>{
+    this.props.dispatch({
+        type: 'overview/queryoptionDataOnClick',
+        payload: {
+            personId:this.state.selectpoint.operationUserID,
+            DGIMN: this.state.selectpoint.DGIMN
+        }
+    });
+   }
+
    getStatusImg=(value) => {
     if (value === 0) {
-        return <img src="../../../gisunline.png" />;
+        return <img style={{width:15}} src="../../../gisunline.png" />;
     } if (value === 1) {
-        return <img src="../../../gisnormal.png" />;
+        return <img style={{width:15}} src="../../../gisnormal.png" />;
     } if (value === 2) {
-        return <img src="../../../gisover.png" />;
+        return <img style={{width:15}} src="../../../gisover.png" />;
     }
-    return <img src="../../../gisexception.png" />;
+    return <img style={{width:15}} src="../../../gisexception.png" />;
 }
 
    render() {
@@ -206,7 +216,7 @@ class OverViewMap extends PureComponent {
              <UrgentDispatch
                onCancel={this.onCancel}
                visible={this.state.pdvisible}
-               pointName={this.state.selectpoint ? this.state.selectpoint.pointName : ''}
+               selectpoint={this.state.selectpoint}
              />
              <div style={{ width: 450,
                        height: 'calc(100vh - 90px)',
@@ -233,7 +243,7 @@ class OverViewMap extends PureComponent {
                            /> :
                            <div style={{ marginLeft: 10, marginTop: 10 }}>
                              <div>
-                               <TreeDetailStatus pointInfo={this.state.selectpoint} statusImg={this.state.statusImg} pdShow={this.pdShow} detailtime={this.props.detailtime} stationClick={this.stationClick} backTreeList={this.backTreeList} pointName={this.state.pointName} detailed={this.state.detailed} />
+                               <TreeDetailStatus urge={this.urge} pointInfo={this.state.selectpoint} statusImg={this.state.statusImg} pdShow={this.pdShow} detailtime={this.props.detailtime} stationClick={this.stationClick} backTreeList={this.backTreeList} pointName={this.state.pointName} detailed={this.state.detailed} />
                              </div>
                              <div style={{ height: 'calc(100vh - 215px)' }} className={styles.detailInfo}>
                              <div style={{marginTop: 15}}>
@@ -278,13 +288,13 @@ class OverViewMap extends PureComponent {
                events={this.markersEvents}
                render={(extData) => {
                            if (extData.status === 0) {
-                               return <img src="../../../gisunline.png" />;
+                               return <img style={{width:15}} src="../../../gisunline.png" />;
                            } if (extData.status === 1) {
-                               return <img src="../../../gisnormal.png" />;
+                               return <img style={{width:15}} src="../../../gisnormal.png" />;
                            } if (extData.status === 2) {
-                               return <img src="../../../gisover.png" />;
+                               return <img style={{width:15}} src="../../../gisover.png" />;
                            }
-                           return <img src="../../../gisexception.png" />;
+                           return <img style={{width:15}} src="../../../gisexception.png" />;
                        }}
              />
              <InfoWindow
