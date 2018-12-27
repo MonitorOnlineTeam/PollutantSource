@@ -29,7 +29,7 @@ class MonitoringReport extends Component {
             rangeDate: [moment(new Date()).add(-1, 'year'), moment(new Date())],
             radiovalue:'year',
             format:'YYYY',
-            reportname:'test1.pdf'
+            reportname:null
         };
     }
     componentDidMount() {
@@ -78,16 +78,15 @@ class MonitoringReport extends Component {
     }
     
     showPdf=(reportname)=>{
+       debugger;
         this.setState({
             reportname
         });
-        this.props.dispatch(routerRedux.push(`/analysis/selfmonitorreport/:${reportname}/pdfshow`));
+        this.props.dispatch(routerRedux.push(`/analysis/selfmonitorreport/${reportname}`));
     }
     getshowpdf=()=>{
-
         if(this.state.reportname)
         {
-           // const pdfurl = require(imgaddress+this.state.reportname);
             return(  
             <div className={styles.pdfdiv} >
                  <PDF
@@ -138,7 +137,7 @@ class MonitoringReport extends Component {
     render() {
         const pdfurl = require('./test1.pdf');
         const { rangeDate, mode,radiovalue,format } = this.state;
-        const {loading,childen}=this.props;
+        const {loading,children}=this.props;
         if(this.props.loading)
         {
          return (<Spin
@@ -183,7 +182,7 @@ class MonitoringReport extends Component {
 
              <div>
                  {
-                     childen
+                     children
                  }
             </div>
             </Card>

@@ -133,7 +133,8 @@ export default [
 { path: '/analysis/overpointlist', component: './Analysis/OverPointList' },      
 /* 自行监测报告 */
 { path: '/analysis/selfmonitorreport', component: './Analysis/MonitoringReport',routes:[
-  {path:'/analysis/selfmonitorreport/:pdfname/pdfshow',component:'./Analysis/PdfShow'}
+  /* 监测报告 */
+  {path:'/analysis/selfmonitorreport/:pdfname',component:'./Analysis/PdfShow'}
 ] },  
 
 
