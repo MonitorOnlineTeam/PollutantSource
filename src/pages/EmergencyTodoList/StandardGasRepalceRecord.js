@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { Row, Col, Layout, Table, List, Button, Icon,Spin } from 'antd';
+import { Row, Col, Layout, Table, List, Button, Icon,Spin,Card } from 'antd';
 import styles from '../EmergencyTodoList/StandardGasRepalceRecord.less';
 import { connect } from 'dva';
+import MonitorContent from '../../components/MonitorContent/index';
 const {
     Header, Footer, Sider, Content,
 } = Layout;
@@ -145,8 +146,26 @@ class StandardGasRepalceRecord extends Component {
             width: '17%',
             align: 'center',
         }];
+        if (this.props.isloading) {
+            return (<Spin
+                style={{ width: '100%',
+                    height: 'calc(100vh/2)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center' }}
+                size="large"
+            />);
+        }
         return (
-            <Spin spinning={this.state.loading}>
+            <MonitorContent  {...this.props} breadCrumbList={[
+                {Name:'首页',Url:'/'},
+                {Name:'智能质控',Url:''},
+                {Name:'传输有效率',Url:''}
+            ]}>
+            <Card title={<span style={{fontWeight: '900'}}>任务详情</span>} extra={
+            <Button style={{float:"right",marginRight:30}} onClick={() => {
+                        this.props.history.goBack(-1);
+                    }}><Icon type="left" />退回</Button>}>
                 <div className={styles.FormDiv} style={{ height: SCREEN_HEIGHT }}>
                     <div className={styles.FormName}>标准气体更换记录表</div>
                     <div className={styles.HeadDiv} style={{ fontWeight: 'bold' }}>企业名称：{EnterpriseName}</div>
@@ -228,13 +247,9 @@ class StandardGasRepalceRecord extends Component {
                             </tr>
                         </tbody>
                     </table>
-                    <div className={styles.Toexamine} >
-                        <Button size="large" onClick={() => {
-                            this.props.history.goBack(-1);
-                        }}><Icon type="left" />退回</Button>
-                    </div>
                 </div>
-            </Spin>
+                </Card>
+            </MonitorContent>
         );
     }
 }

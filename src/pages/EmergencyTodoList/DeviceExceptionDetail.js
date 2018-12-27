@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import styles from '../EmergencyTodoList/DeviceExceptionDetail.less';
-import { Spin, Button, Icon } from 'antd';
+import { Spin, Button, Icon,Card } from 'antd';
 import { connect } from 'dva';
+import MonitorContent from '../../components/MonitorContent/index';
 
 @connect(({ task, loading }) => ({
     isloading: loading.effects['task/GetRepairDetail'],

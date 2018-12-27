@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import { Button, Icon,Spin } from 'antd';
+import { Button, Icon,Spin,Card } from 'antd';
 import styles from '../EmergencyTodoList/CompleteExtraction.less';
 import { connect } from 'dva';
+import MonitorContent from '../../components/MonitorContent/index';
 @connect(({ task, loading }) => ({
-    ...loading,
+    isloading: loading.effects['task/GetPatrolRecordListPC'],
     PatrolRecordListPC: task.PatrolRecordListPC
 }))
 
@@ -162,7 +163,7 @@ class CompleteExtraction extends Component {
         return rtnValChildren;
     }
     render() {
-        const SCREEN_HEIGHT = document.querySelector('body').offsetHeight - 230;
+        const SCREEN_HEIGHT = document.querySelector('body').offsetHeight - 250;
         const DataLength = this.props.PatrolRecordListPC.length;
         const Repair = DataLength === 0 ? null : this.props.PatrolRecordListPC[0];
         let EnterpriseName = null;
@@ -191,16 +192,27 @@ class CompleteExtraction extends Component {
             KlwCemsCode = DataLength === 0 ? null : Repair.Record[0].Content.KlwCemsCode;
             KlwCemsEquipmentManufacturer = DataLength === 0 ? null : Repair.Record[0].Content.KlwCemsEquipmentManufacturer;
         }
+        if (this.props.isloading) {
+            return (<Spin
+                style={{ width: '100%',
+                    height: 'calc(100vh/2)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center' }}
+                size="large"
+            />);
+        }
         return (
-
-            <Spin spinning={this.state.loading}>
-                <div className={styles.Toexamine} >
-                    <Button size="large" onClick={() => {
+<MonitorContent  {...this.props} breadCrumbList={[
+                {Name:'首页',Url:'/'},
+                {Name:'智能质控',Url:''},
+                {Name:'传输有效率',Url:''}
+            ]}>
+            <Card title={<span style={{fontWeight: '900'}}>任务详情</span>} extra={
+            <Button style={{float:"right",marginRight:30}} onClick={() => {
                         this.props.history.goBack(-1);
-                    }}><Icon type="left" />退回</Button>
-                </div>
+                    }}><Icon type="left" />退回</Button>}>
                 <div className={styles.FormDiv} style={{ height: SCREEN_HEIGHT }}>
-
                     <div className={styles.FormName}>完全抽取法CEMS日常巡检记录表</div>
                     <table className={styles.FormTable}>
                         <tr>
@@ -261,11 +273,9 @@ class CompleteExtraction extends Component {
                             </tr>
                         </tbody>
                     </table>
-
-
                 </div>
-            </Spin>
-
+                            </Card>
+                            </MonitorContent>
         );
     }
 }
