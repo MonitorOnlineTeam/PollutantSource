@@ -232,7 +232,7 @@ class OverViewMap extends PureComponent {
                    <TreeStatus datalist={this.props.datalist} />
                  </div>
                  <div style={{ marginTop: 15 }}>
-                   <TreeCard getStatusImg={this.getStatusImg} isloading={this.props.treedataloading} treeCilck={this.treeCilck} treedatalist={this.props.datalist} />
+                   <TreeCard getHeight={'calc(100vh - 210px)'} getStatusImg={this.getStatusImg} isloading={this.props.treedataloading} treeCilck={this.treeCilck} treedatalist={this.props.datalist} />
                  </div>
                </div> :
                            detailloading ? <Spin
