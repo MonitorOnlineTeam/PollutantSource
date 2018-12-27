@@ -16,7 +16,7 @@ import {
     Modal,
     Divider,
 } from 'antd';
-import PageHeader from '../../components/PageHeader';
+import MonitorContent from '../../components/MonitorContent/index';
 import {
     connect
 } from 'dva';
@@ -215,18 +215,18 @@ export default class AddPoint extends Component {
          const {getFieldDecorator} = this.props.form;
          // const UserId = this.props.match.params.UserId;
 
-         return (<div >
-             <PageHeader title="排口维护"
-                 breadcrumbList={
-                     [{
-                         title: '排口列表',
-                         href: '/sysmanage/PointInfo',
-                     }, {
-                         title: '添加排口',
-                     }]
-                 }
-             /> <Form onSubmit={this.handleSubmit} >
-                 <Card >
+         return (
+           <MonitorContent {...this.props} breadCrumbList={
+                [
+                    {Name:'首页',Url:'/'},
+                    {Name:'系统管理',Url:''},
+                    {Name:'排口管理',Url:'/sysmanage/pointinfo'},
+                    {Name:'排口维护',Url:''}
+                ]
+            }>
+            <div>
+             <Form onSubmit={this.handleSubmit} >
+                  <Card style={{height:'calc(100vh - 140px)' } }>
                      <Row gutter={48} >
                          <Col span={12} >
                              <FormItem labelCol={{span: 8}}
@@ -501,6 +501,7 @@ export default class AddPoint extends Component {
                  }
              </Modal>
          </div>
+         </MonitorContent>
          );
      }
 }

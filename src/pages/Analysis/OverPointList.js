@@ -1,14 +1,16 @@
 import React, { Component } from 'react';
 import styles from './OverPointList.less';
 import moment from 'moment';
-import { DatePicker,Input,Button,Radio,Row, Col,Spin } from 'antd';
+import { DatePicker,Input,Button,Radio,Row, Col,Spin,Card } from 'antd';
+import MonitorContent from '../../components/MonitorContent/index';
+import {routerRedux} from 'dva/router';
 import { connect } from 'dva';
 const { RangePicker } = DatePicker;
 
 
-@connect(({ loading,  overdata }) => ({
-    overdatalist: overdata.overdatalist,
-    loading:loading.effects['overdata/queryalloverdatalist'],
+@connect(({ loading,  analysisdata }) => ({
+    overdatalist: analysisdata.overdatalist,
+    loading:loading.effects['analysisdata/queryalloverdatalist'],
 }))
 
 class OverPointList extends Component {
@@ -21,7 +23,7 @@ class OverPointList extends Component {
     }
     componentDidMount() {
         this.props.dispatch({
-            type: 'overdata/queryalloverdatalist',
+            type: 'analysisdata/queryalloverdatalist',
             payload: {
             }
         });
@@ -37,7 +39,7 @@ class OverPointList extends Component {
                 ],
             });
             this.props.dispatch({
-                type: 'overdata/queryalloverdatalist',
+                type: 'analysisdata/queryalloverdatalist',
                 payload: {
                     beginTime:value[0],
                     endTime:value[1],
@@ -74,7 +76,7 @@ class OverPointList extends Component {
     // reloaddata=()=>{
     //     const {overDataMinValue,overDataMaxValue,overCountMinValue,overCountMaxValue}=this.state;
     //     this.props.dispatch({
-    //         type: 'overdata/queryalloverdatalist',
+    //         type: 'analysisdata/queryalloverdatalist',
     //         payload: {
     //             minoverdata:overDataMinValue,
     //             maxoverdata:overDataMaxValue,
@@ -83,6 +85,9 @@ class OverPointList extends Component {
     //         }
     //     });    
     // }
+   onDetail=(dgimn)=>{
+    this.props.dispatch(routerRedux.push(`/pointdetail/${dgimn}/alarmrecord`));
+   }
 
    loaddata=()=>{
        if(this.props.loading)
@@ -126,7 +131,7 @@ class OverPointList extends Component {
                         <span className={styles.spancontent}>最新浓度 : {item.zs03?(item.zs03.lastValue):'-'}</span>
                         <div style={{clear:'both'}}></div>
                     </div></div>
-                    <div className={styles.detail}>
+                    <div onClick={()=>this.onDetail(item.DGIMN)} className={styles.detail}>
                         <span>查看详情</span>
                     </div>
             </div>
@@ -138,29 +143,43 @@ class OverPointList extends Component {
     render() {
         const { rangeDate, mode } = this.state;
         return (
-            <div className={styles.maindiv} style={{height: 'calc(100vh - 80px)'}}>
-                <div>
-                <RangePicker
-                    style={{width: 250}}
-                    format="YYYY-MM"
-                    value={rangeDate}
-                    mode={mode}
-                    onPanelChange={this.handlePanelChange}
-                />
-                {/* <span className={styles.overM}> <span className={styles.searchname}>超标次数</span>
-                    <Input onChange={this.overCountMinChange} style={{width: 50}} />- <Input onChange={this.overCountMaxChange} style={{width: 50}} />
-                </span>
-                <span className={styles.overM}><span className={styles.searchname}>超标倍数</span>
-                    <Input onChange={this.overDataMinChange } style={{width: 50}} />- <Input onChange={this.overDataMaxChange} style={{width: 50}} />
-                </span>
-                <Button onClick={this.reloaddata}  className={styles.searchbutton}>查询</Button>
-                   <Radio.Group className={styles.radiocss}  defaultValue="a" buttonStyle="solid">
-                    <Radio.Button value="a">严重程度</Radio.Button>
-                    <Radio.Button value="b">超标时间</Radio.Button>
-                   </Radio.Group> */}
-                   </div>
-                   <div>{this.loaddata()}</div>
-            </div>
+            <MonitorContent {...this.props} breadCrumbList={
+                [
+                    {Name:'首页',Url:'/'},  
+                    {Name:'智能分析',Url:''},
+                    {Name:'超标排口分析',Url:''}  
+                ]
+            }>
+
+             <Card
+                title="超标排口分析"
+                extra={
+                    <div>
+                
+                  <RangePicker
+                     style={{width: 250,marginLeft:40}}
+                     format="YYYY-MM"
+                     value={rangeDate}
+                     mode={mode}
+                     onPanelChange={this.handlePanelChange}
+                 />
+                         {/* <span className={styles.overM}> <span className={styles.searchname}>超标次数</span>
+                            <Input onChange={this.overCountMinChange} style={{width: 50}} />- <Input onChange={this.overCountMaxChange} style={{width: 50}} />
+                        </span>
+                        <span className={styles.overM}><span className={styles.searchname}>超标倍数</span>
+                            <Input onChange={this.overDataMinChange } style={{width: 50}} />- <Input onChange={this.overDataMaxChange} style={{width: 50}} />
+                        </span>
+                        <Button onClick={this.reloaddata}  className={styles.searchbutton}>查询</Button>
+                        <Radio.Group className={styles.radiocss}  defaultValue="a" buttonStyle="solid">
+                            <Radio.Button value="a">严重程度</Radio.Button>
+                            <Radio.Button value="b">超标时间</Radio.Button>
+                        </Radio.Group> */}
+                        </div>
+                }
+            > 
+             <div>{this.loaddata()}</div>
+            </Card>
+            </MonitorContent>
         );
     }
 }

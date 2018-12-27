@@ -3,13 +3,15 @@ import React, {
     Fragment
 } from 'react';
 import {
-    Card, Icon, Button, Badge,Table
+    Card, Icon, Button, Badge, Table, Modal, Popconfirm, message, Spin
 } from 'antd';
 import {
     connect
 } from 'dva';
 import DescriptionList from '../../components/DescriptionList';
 import MonitorContent from '../../components/MonitorContent/index';
+import AddAnalyzerSys from '../PointInfo/AddAnalyzerSys';
+import AddAnalyzerChild from '../PointInfo/AddAnalyzerChild';
 import styles from './index.less';
 const {
     Description
@@ -20,9 +22,16 @@ const {
 }) => ({
     ...loading,
     pointloading: loading.effects['pointinfo/getpoint'],
+    analyzerloading: loading.effects['pointinfo/getanalyzersys'],
     reason: pointinfo.reason,
     requstresult: pointinfo.requstresult,
     editpoint: pointinfo.editpoint,
+    total: pointinfo.total,
+    AnalyzerSys: pointinfo.AnalyzerSys,
+    getanalyzersys_requstresult: pointinfo.getanalyzersys_requstresult,
+    deletealyzersys_requstresult: pointinfo.deletealyzersys_requstresult,
+    analyzerchild: pointinfo.analyzerchild,
+    getanalyzerchild_requstresult: pointinfo.getanalyzerchild_requstresult,
 }))
 export default class pointview extends Component {
     constructor(props) {
@@ -43,7 +52,22 @@ export default class pointview extends Component {
             OutPutWhither: null,
             PointType: null,
             OperationerName: null,
-
+            Gaseous:[],
+            Smoke:[],
+            PM:[],
+            GVisitable:false,
+            SVisitable: false,
+            PVisitable: false,
+            AddVisitable:true,
+            MSVisitable:false,
+            MSCVisitable:false,
+            title: '',
+            width: '50%',
+            ID:null,
+            ChildId:null,
+            GaseousList:[],
+            SmokeList:[],
+            PMList:[],
         };
     }
     componentWillMount() {
@@ -77,8 +101,203 @@ export default class pointview extends Component {
                     }
                 },
             });
+            this.LoadAnalyzer(DGIMN);
         }
     };
+    LoadAnalyzer(DGIMN) {
+        this.props.dispatch({
+                type: 'pointinfo/getanalyzersys',
+                payload: {
+                    DGIMN: DGIMN,
+                    callback: () => {
+                        if (this.props.getanalyzersys_requstresult === '1')
+                        {
+                            if(this.props.total>0)
+                            {
+                                 this.setState({
+                                   Gaseous: [],
+                                   GVisitable: false,
+                                   moke: [],
+                                   SVisitable: false,
+                                   PM: [],
+                                   PVisitable: false,
+                                   AddVisitable: true,
+                                 })
+                                for (let i = 0; i < this.props.AnalyzerSys.length; i++) {
+                                  let aa=this.props.AnalyzerSys[i];
+                                  if(aa.Type===1)
+                                  {
+                                     this.setState({
+                                         Gaseous:aa,
+                                         GVisitable:true,
+                                     })
+                                      this.props.dispatch({
+                                        type: 'pointinfo/getanalyzerchild',
+                                        payload: {
+                                          ID: aa.ID,
+                                          callback: () => {
+                                              if (this.props.getanalyzerchild_requstresult==='1')
+                                              {
+                                                  this.setState({
+                                                      GaseousList:this.props.analyzerchild,
+                                                  })
+                                              }
+                                          }
+                                        },
+                                      });
+                                  }
+                                  if (aa.Type === 2) {
+                                     this.setState({
+                                       Smoke: aa,
+                                       SVisitable: true,
+                                     })
+                                      this.props.dispatch({
+                                        type: 'pointinfo/getanalyzerchild',
+                                        payload: {
+                                          ID: aa.ID,
+                                          callback: () => {
+                                            if (this.props.getanalyzerchild_requstresult === '1') {
+                                              this.setState({
+                                                SmokeList: this.props.analyzerchild,
+                                              })
+                                            }
+                                          }
+                                        },
+                                      });
+                                  }
+                                  if (aa.Type === 3) {
+                                     this.setState({
+                                       PM: aa,
+                                       PVisitable: true,
+                                     })
+                                      this.props.dispatch({
+                                        type: 'pointinfo/getanalyzerchild',
+                                        payload: {
+                                          ID: aa.ID,
+                                          callback: () => {
+                                            if (this.props.getanalyzerchild_requstresult === '1') {
+                                              this.setState({
+                                                PMList: this.props.analyzerchild,
+                                              })
+                                            }
+                                          }
+                                        },
+                                      });
+                                  }
+                                }
+                                if(this.props.total===3)
+                                {
+                                    this.setState({
+                                      AddVisitable: false,
+                                    })
+                                }
+                            }
+                        }
+                        else
+                        {
+                            this.setState({
+                              Gaseous: [],
+                              GVisitable: false,
+                              moke: [],
+                              SVisitable: false,
+                              PM: [],
+                              PVisitable: false,
+                              AddVisitable: true,
+                            })
+                        }
+                    }
+                },
+            });
+    }
+    ChildVisitable = () =>{
+        this.setState({
+            MSVisitable:false,
+        },()=>{
+            this.LoadAnalyzer(this.state.DGIMN);
+        })
+    }
+    ChildCVisitable = () => {
+      this.setState({
+        MSCVisitable: false,
+      }, () => {
+        this.LoadAnalyzer(this.state.DGIMN);
+      })
+    }
+    EditAnalyzerSys=(type)=>{
+         if (type === 1) {
+           this.setState({
+                 title: '编辑',
+             MSVisitable: true,
+             ID: this.state.Gaseous.ID
+           })
+         }
+         if (type === 2) {
+           this.setState({
+                 title: '编辑',
+             MSVisitable: true,
+             ID: this.state.Smoke.ID
+           })
+         }
+         if (type === 3) {
+           this.setState({
+             title: '编辑',
+             MSVisitable: true,
+             ID: this.state.PM.ID
+           })
+         }
+      
+    }
+    AddAnalyzerChild= (type) => {
+      if (type === 1) {
+        this.setState({
+          title:'添加分析仪',
+          MSCVisitable: true,
+          ID: this.state.Gaseous.ID
+        })
+      }
+      if (type === 2) {
+        this.setState({
+          title:'添加分析仪',
+          MSCVisitable: true,
+          ID: this.state.Smoke.ID
+        })
+      }
+      if (type === 3) {
+        this.setState({
+          title: '添加分析仪',
+          MSCVisitable: true,
+          ID: this.state.PM.ID
+        })
+      }
+
+    }
+    DeleteAnalyzerSys=(type)=>{
+         let code = null;
+         if (type === 1) {
+           code = this.state.Gaseous.ID;
+         }
+         if (type === 2) {
+           code = this.state.Smoke.ID;
+         }
+         if (type === 3) {
+           code = this.state.PM.ID;
+         }
+         this.props.dispatch({
+           type: 'pointinfo/deletealyzersys',
+           payload: {
+             ID: code,
+             callback: () => {
+               if (this.props.deletealyzersys_requstresult === '1') {
+                 message.success('删除成功！').then(()=>{
+                     this.LoadAnalyzer(this.state.DGIMN);
+                 });
+               } else {
+                 message.success(this.props.reason);
+               }
+             }
+           },
+         });
+    }
     pointinfo = () => {
         const rtnVal = [];
         rtnVal.push(<div style={{backgroundColor:'#1890FF',width:5,lineHeight:1}}>
@@ -88,12 +307,19 @@ export default class pointview extends Component {
         return rtnVal;
     }
     Gaseousinfo = () => {
-         const rtnVal = [];
+        const rtnVal = [];
         rtnVal.push(<div style={{backgroundColor:'#1890FF',width:5,lineHeight:1}}>
         <span style={{marginLeft:10}}>气态污染物CEMS设备仪器</span>
-        <span style={{marginLeft:10,cursor:'pointer'}}><Icon type="edit" theme="twoTone"  title='编辑' /></span>
-        <span style={{marginLeft:10,cursor:'pointer'}}><Icon type="plus-circle" theme="twoTone"  title='添加子设备' /></span>
-        <span style={{marginLeft:100,fontSize:'small'}}>供应商信息</span>
+        <span style={{marginLeft:10,cursor:'pointer'}}><Popconfirm placement="top" title='确定要删除此设备吗？' onConfirm={()=>{
+            this.DeleteAnalyzerSys(1);
+        }}  okText="是" cancelText="否">
+        <Icon type="delete" theme="twoTone"  title='删除设备' /></Popconfirm></span>
+        <span style={{marginLeft:10,cursor:'pointer'}}><Icon type="edit" theme="twoTone"  title='编辑' onClick={()=>{
+            this.EditAnalyzerSys(1);
+        }} /></span>
+        <span style={{marginLeft:10,cursor:'pointer'}}><Icon type="plus-circle" theme="twoTone"  title='添加子设备' onClick={()=>{
+            this.AddAnalyzerChild(1);
+        }}/></span>
         </div>);
         return rtnVal;
     }
@@ -101,8 +327,16 @@ export default class pointview extends Component {
          const rtnVal = [];
         rtnVal.push(<div style={{backgroundColor:'#1890FF',width:5,lineHeight:1}}>
         <span style={{marginLeft:10}}>烟尘污染物CEMS设备仪器</span>
-        <span style={{marginLeft:10}}><Icon type="edit" title='编辑' /></span>
-        <span style={{marginLeft:3}}><Icon type="plus" title='添加子设备' /></span>
+          <span style={{marginLeft:10,cursor:'pointer'}}><Popconfirm placement="top" title='确定要删除此设备吗？' onConfirm={()=>{
+            this.DeleteAnalyzerSys(2);
+        }}  okText="是" cancelText="否">
+        <Icon type="delete" theme="twoTone"  title='删除设备' /></Popconfirm></span>
+        <span style={{marginLeft:10,cursor:'pointer'}}><Icon type="edit" theme="twoTone"  title='编辑'onClick={()=>{
+            this.EditAnalyzerSys(2);
+        }}  /></span>
+        <span style={{marginLeft:10,cursor:'pointer'}}><Icon type="plus-circle" theme="twoTone"  title='添加子设备' onClick={()=>{
+            this.AddAnalyzerChild(2);
+        }}/></span>
         </div>);
         return rtnVal;
     }
@@ -110,8 +344,16 @@ export default class pointview extends Component {
          const rtnVal = [];
         rtnVal.push(<div style={{backgroundColor:'#1890FF',width:5,lineHeight:1}}>
         <span style={{marginLeft:10}}>颗粒污染物CEMS设备仪器</span>
-        <span style={{marginLeft:10}}><Icon type="edit" title='编辑' /></span>
-        <span style={{marginLeft:3}}><Icon type="plus" title='添加子设备' /></span>
+         <span style={{marginLeft:10,cursor:'pointer'}}><Popconfirm placement="top" title='确定要删除此设备吗？' onConfirm={()=>{
+            this.DeleteAnalyzerSys(3);
+        }}  okText="是" cancelText="否">
+        <Icon type="delete" theme="twoTone"  title='删除设备' /></Popconfirm></span>
+        <span style={{marginLeft:10,cursor:'pointer'}}><Icon type="edit" theme="twoTone"  title='编辑' onClick={()=>{
+            this.EditAnalyzerSys(3);
+        }} /></span>
+        <span style={{marginLeft:10,cursor:'pointer'}}><Icon type="plus-circle" theme="twoTone"  title='添加子设备' onClick={()=>{
+            this.AddAnalyzerChild(3);
+        }}/></span>
         </div>);
         return rtnVal;
     }
@@ -237,7 +479,13 @@ export default class pointview extends Component {
         }
         ];
         return (
-             <MonitorContent>
+              <MonitorContent {...this.props} breadCrumbList={
+                [
+                    {Name:'首页',Url:'/'},
+                    {Name:'排口管理',Url:'/sysmanage/pointinfo'},
+                    {Name:'排口详情',Url:''}
+                ]
+            }>
                <div style={{marginTop:10,marginLeft:30,marginBottom:10,marginRight:30}}>
                  <Card title={this.pointinfo()}  loading={this.props.pointloading}>
                      <Card.Grid style={gridStyle}>
@@ -256,20 +504,21 @@ export default class pointview extends Component {
                             <Description term="纬度">{this.state.latitude}</Description>
                             <Description term="运维人">{this.state.OperationerName}</Description>
                         </DescriptionList>
-                        <DescriptionList size="large" style={{marginTop: 20}} col="1">
+                        <DescriptionList size="large" style={{marginTop: 10}} col="1">
                             <Description term="排口排放类型" > {this.state.OutPutWhither} </Description>
                             <Description term="排口地址" > {this.state.Address} </Description>
                         </DescriptionList>
                     </Card.Grid>
                   </Card>
-               <div style={{marginTop:15}} className={styles.cardTitle}>
-                  <Card title={this.Gaseousinfo()}> 
+                  <Spin spinning={this.props.analyzerloading}> 
+               <div className={this.state.GVisitable?styles.show:styles.hide}>
+                  <Card style={{height:350}} title={this.Gaseousinfo()}  extra={'厂商/编号：'+this.state.Gaseous.Manufacturer+'/'+this.state.Gaseous.ManufacturerCode}> 
                     <Table
                             //loading={this.props.effects['stopmanagement/getlist']}
                             columns={columns}
                             className={styles.dataTable}
                             dataSource={null}
-                            scroll={{ y: 'calc(100vh - 900px)' }}
+                            scroll={{ y: 'calc(100vh - 800px)' }}
                             size = "small" // small middle
                             pagination={false}
                             rowClassName={
@@ -285,14 +534,37 @@ export default class pointview extends Component {
                         />
                   </Card>
                </div>
-               <div style={{marginTop:15}} className={styles.cardTitle}>
-                  <Card title={this.PMinfo()}> 
+               <div className={this.state.PVisitable?styles.show:styles.hide}>
+                  <Card style={{height:350}} title={this.PMinfo()} extra={'厂商/编号：'+this.state.PM.Manufacturer+'/'+this.state.PM.ManufacturerCode}> 
                     <Table
                             //loading={this.props.effects['stopmanagement/getlist']}
                             columns={columns}
                             className={styles.dataTable}
                             dataSource={null}
-                            scroll={{ y: 'calc(100vh - 900px)' }}
+                            scroll={{ y: 'calc(100vh - 800px)' }}
+                            size = "small" // small middle
+                            pagination={false}
+                            rowClassName={
+                                (record, index, indent) => {
+                                    if (index === 0) {
+                                        return;
+                                    }
+                                    if (index % 2 !== 0) {
+                                        return 'light';
+                                    }
+                                }
+                            }
+                        />
+                 </Card>
+               </div>
+               <div className={this.state.SVisitable?styles.show:styles.hide}>
+                  <Card style={{height:350}}  title={this.Smokeinfo()} extra={'厂商/编号：'+this.state.Smoke.Manufacturer+'/'+this.state.Smoke.ManufacturerCode}> 
+                    <Table
+                            //loading={this.props.effects['stopmanagement/getlist']}
+                            columns={columns}
+                            className={styles.dataTable}
+                            dataSource={null}
+                            scroll={{ y: 'calc(100vh - 800px)' }}
                             size = "small" // small middle
                             pagination={false}
                             rowClassName={
@@ -308,35 +580,54 @@ export default class pointview extends Component {
                         />
                   </Card>
                </div>
-               <div style={{marginTop:15}} className={styles.cardTitle}>
-                  <Card title={this.Smokeinfo()}> 
-                    <Table
-                            //loading={this.props.effects['stopmanagement/getlist']}
-                            columns={columns}
-                            className={styles.dataTable}
-                            dataSource={null}
-                            scroll={{ y: 'calc(100vh - 900px)' }}
-                            size = "small" // small middle
-                            pagination={false}
-                            rowClassName={
-                                (record, index, indent) => {
-                                    if (index === 0) {
-                                        return;
-                                    }
-                                    if (index % 2 !== 0) {
-                                        return 'light';
-                                    }
-                                }
-                            }
-                        />
-                  </Card>
-               </div>
-               <div style={{marginTop:5}}>
+               <div className={this.state.AddVisitable?styles.show:styles.hide}>
                 <Card> 
-                    <Button type="dashed" block>添加仪器</Button>
+                    <Button type="dashed" block onClick={()=>{
+                        this.setState({
+                            MSVisitable:true,
+                            title: '添加设备系统',
+                            width:'40%',
+                            ID:'null',
+                        })
+                    }}>添加仪器</Button>
                 </Card>
                </div>
+               </Spin>
               </div>
+               <Modal
+                        visible={this.state.MSVisitable}
+                        title={this.state.title}
+                        width={this.state.width}
+                        destroyOnClose={true}// 清除上次数据
+                        footer={false}
+                        onCancel={
+                            () => {
+                                this.setState({
+                                    MSVisitable: false
+                                });
+                            }
+                        } >
+                        {
+                            <AddAnalyzerSys DGIMN={this.state.DGIMN} ChildVisitable={this.ChildVisitable} ID={this.state.ID}/>
+                        }
+                </Modal>
+                <Modal
+                        visible={this.state.MSCVisitable}
+                        title={this.state.title}
+                        width={this.state.width}
+                        destroyOnClose={true}// 清除上次数据
+                        footer={false}
+                        onCancel={
+                            () => {
+                                this.setState({
+                                    MSCVisitable: false
+                                });
+                            }
+                        } >
+                        {
+                            <AddAnalyzerChild DGIMN={this.state.DGIMN} ChildCVisitable={this.ChildCVisitable} AnalyzerSys_Id={this.state.ID} ID={this.state.ChildId}/>
+                        }
+                </Modal>
             </MonitorContent>
         );
     }

@@ -71,7 +71,7 @@ export default class RepairHistoryRecords extends Component {
     }
 
     seeDetail=(record) => {
-        this.props.dispatch(routerRedux.push(`/pointdetail/:pointcode/RepairRecordDetail/${record.TaskID}/${this.state.TypeID}`));
+        this.props.dispatch(routerRedux.push(`/pointdetail/${this.props.match.params.pointcode}/RepairRecordDetail/${record.TaskID}/${this.state.TypeID}`));
     }
 
     render() {

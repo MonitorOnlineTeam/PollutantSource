@@ -35,7 +35,7 @@ class DataQuery extends Component {
         super(props);
         // 默认值
         const defaultValue = {
-            formats: 'YYYY-MM-DD HH:mm',
+            formats: 'YYYY-MM-DD HH:mm:ss',
             dataType: 'realtime',
             current: 1,
             pageSize: 10,
@@ -163,7 +163,7 @@ class DataQuery extends Component {
                             style={{width: 150}}
                             onChange={this._handlePollutantChange}
                             /> : ''}
-                            <RangePicker_ style={{width: 350}} dateValue={this.state.rangeDate} format={this.state.formats} onChange={this._handleDateChange} />
+                            <RangePicker_ style={{width: 350,textAlign:'left'}} dateValue={this.state.rangeDate} format={this.state.formats} onChange={this._handleDateChange} />
                             <ButtonGroup_ style={{marginRight: 20}} checked="realtime" onChange={this._handleDateTypeChange} />
                             <Switch checkedChildren="图表" unCheckedChildren="数据" onChange={this.displayChange} defaultChecked={true} />
                         </div>

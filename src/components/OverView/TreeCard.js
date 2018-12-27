@@ -6,7 +6,7 @@ import {
 class TreeCard extends Component {
     render() {
         return (
-            <div style={{ height: 'calc(100vh - 200px)' }} className={styles.treelist}>
+            <div style={{ height: this.props.getHeight }} className={styles.treelist}>
                 {
                     this.props.isloading ? <Spin style={{width: '100%',
                         height: 'calc(100vh - 260px)',

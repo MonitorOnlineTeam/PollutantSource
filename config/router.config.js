@@ -124,6 +124,8 @@ export default [
 { path: '/qualitycontrol/transmissionefficiency', component: './QualityControl/TransmissionEfficiency' },
 /* 设备运转率 */
 { path: '/qualityControl/equipmentoperatingrate', component: './QualityControl/EquipmentOperatingRate' },
+/* 手工数据上传 */
+{ path: '/qualityControl/ManualUpload', component: './QualityControl/ManualUpload' },
 /* 月度排放量分析 */
 { path: '/analysis/pollutantemissions', component: './Analysis/PollutantEmissions' },
 /* 报警及时响应统计分析 */
@@ -131,8 +133,11 @@ export default [
 
 /* 报警排口分析 */
 { path: '/analysis/overpointlist', component: './Analysis/OverPointList' },      
-
-
+/* 自行监测报告 */
+{ path: '/analysis/selfmonitorreport', component: './Analysis/MonitoringReport',routes:[
+  /* 监测报告 */
+  {path:'/analysis/selfmonitorreport/:pdfname',component:'./Analysis/PdfShow'}
+] },  
 
 
 /* 基本信息管理 */
@@ -164,7 +169,7 @@ export default [
      { path: '/sysmanage/standardlibrary', component: './StandardLibrary' },
 
   /* 标准库管理-维护 */
-  { path: '/sysmanage/standardlibrarydetail/:StandardLibraryID', component: './StandardLibrary/AddStandardLibrary' },
+  { path: '/sysmanage/standardlibrarydetail/:StandardLibraryID', component: './StandardLibrary/AddStandardLibrary'},
 
    
       {

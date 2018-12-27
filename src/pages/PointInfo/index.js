@@ -16,7 +16,8 @@ import {
     Divider,
     Menu,
     Dropdown,
-    Icon
+    Icon,
+    Popconfirm
 } from 'antd';
 import {
     routerRedux
@@ -94,18 +95,6 @@ export default class pointlist extends Component {
           },
       });
   }
-  delete = (dgimn) => {
-      confirm({
-          title: '确定要删除吗?',
-          okText: '是',
-          okType: 'danger',
-          cancelText: '否',
-          onOk: () => this.deletepoint(dgimn),
-          onCancel() {
-              console.log('Cancel');
-          },
-      });
-  };
   onRef1 = (ref) => {
       this.child = ref;
   }
@@ -154,7 +143,7 @@ export default class pointlist extends Component {
          title: '排口编号',
          dataIndex: 'DGIMN',
          key: 'DGIMN',
-         width: '10%',
+         width: '15%',
          align: 'left',
          render: (text, record) => {
              return text;
@@ -189,7 +178,7 @@ export default class pointlist extends Component {
          title: '责任人',
          dataIndex: 'linkman',
          key: 'linkman',
-         width: '10%',
+         width: '8%',
          align: 'center',
          render: (text, record) => {
              return text;
@@ -199,29 +188,16 @@ export default class pointlist extends Component {
          title: '电话号',
          dataIndex: 'mobilePhone',
          key: 'mobilePhone',
-         width: '10%',
-         align: 'left',
+         width: '12%',
+         align: 'center',
          render: (text, record) => {
              return text;
          }
      },
      {
-         title: '是否烧结',
-         dataIndex: 'IsSj',
-         key: 'IsSj',
-         width: '10%',
-         align: 'center',
-         render: (text, record) => {
-             if (text === '1') {
-                 return <span > <Badge status="success" text="是" /></span>;
-             }
-             return <span > <Badge status="default" text="否" /></span>;
-         }
-     },
-     {
          title: '操作',
-         width: '20%',
-         align: 'left',
+         width: '25%',
+         align: 'center',
          render: (text, record) => (<Fragment >
              <a onClick={
                  () => this.props.dispatch(routerRedux.push(`/sysmanage/pointdetail/${record.key}`))
@@ -231,9 +207,9 @@ export default class pointlist extends Component {
                  () => this.props.dispatch(routerRedux.push(`/sysmanage/pointdetail/${record.key}/${record.pointName}`))
              } > 详情 </a>
              <Divider type="vertical" />
-             <a onClick={
-                 () => this.delete(record.key)
-             } > 删除 </a>
+             <Popconfirm placement="left" title="确定要删除此排口吗？" onConfirm={() => this.deletepoint(record.key)} okText="是" cancelText="否">
+                    <a href="#" > 删除 </a>
+                </Popconfirm>
              <Divider type="vertical" />
              <Dropdown overlay={menu(record.key,record.pointName)} >
                  <a>
@@ -245,12 +221,18 @@ export default class pointlist extends Component {
      },
      ];
      return (
-         <MonitorContent>
+         <MonitorContent {...this.props} breadCrumbList={
+                [
+                    {Name:'首页',Url:'/'},
+                    {Name:'系统管理',Url:''},
+                    {Name:'排口管理',Url:''}
+                ]
+            }>
              <div className={styles.cardTitle}>
                  <Card bordered={false}>
                      <Form layout="inline" style={{marginBottom: 10}}>
                          <Row gutter={8} >
-                             <Col span={3} >
+                             <Col span={24} >
                                  <Search placeholder="排口名称/编号"
                                      onSearch={(value) => {
                                          this.setState({
@@ -267,14 +249,14 @@ export default class pointlist extends Component {
                                      }
                                      }
                                      style={{width: 200}} />
-                             </Col >
-                             <Col span={1} >
-                                 <Button type="primary"
+                                     <Button type="primary" style={{marginLeft:10}}
                                      onClick={
                                          () => {
                                              this.props.dispatch(routerRedux.push(`/sysmanage/PointDetail/null`));
                                          }
-                                     } > 添加 </Button></Col >
+                                     } > 添加 </Button>
+                             </Col >
+                           
                          </Row>
                      </Form>
                      <Table loading={this.props.effects['pointinfo/getpointlist']}
