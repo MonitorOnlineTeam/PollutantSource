@@ -15,7 +15,7 @@ import styles from '../EmergencyTodoList/RepairHistoryRecords.less';
 import {routerRedux} from 'dva/router';
 
 @connect(({ task, loading }) => ({
-    loading: loading.effects['task/GetHistoryRepairDetail'],
+    isloading: loading.effects['task/GetHistoryRepairDetail'],
     HistoryRepairHistoryRecods: task.List,
     HistoryRepairHistoryRecodsCount: task.total,
     pageIndex: task.pageIndex,
@@ -71,7 +71,7 @@ export default class RepairHistoryRecords extends Component {
     }
 
     seeDetail=(record) => {
-        this.props.dispatch(routerRedux.push(`/pointdetail/${this.props.match.params.pointcode}/RepairRecordDetail/${record.TaskID}/${this.state.TypeID}`));
+        this.props.dispatch(routerRedux.push(`/PatrolForm/RepairRecordDetail/${record.TaskID}`));
     }
 
     render() {
@@ -116,8 +116,18 @@ export default class RepairHistoryRecords extends Component {
                 } > 详细 </a>;
             }
         }];
+        if (this.props.isloading) {
+            return (<Spin
+                style={{ width: '100%',
+                    height: 'calc(100vh/2)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center' }}
+                size="large"
+            />);
+        }
         return (
-            <div>
+            <div className={styles.cardTitle}>
                 <Card bordered={false}>
                 <div className={styles.conditionDiv}>
                             <Row gutter={8}>
@@ -133,7 +143,7 @@ export default class RepairHistoryRecords extends Component {
                     <Table
                         size="middle"
                         scroll={{ y: 'calc(100vh - 465px)' }}
-                        loading={this.props.loading}
+                        loading={this.props.isloading}
                         className={styles.dataTable}
                         columns={columns}
                         dataSource={dataSource}

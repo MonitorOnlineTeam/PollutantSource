@@ -1,4 +1,10 @@
-import { GetTaskDetails, GetYwdsj, GetJzRecord, GetRecordType, GetJzHistoryRecord, GetConsumablesReplaceRecordList, GetStandardGasRepalceRecordList, GetPatrolRecordListPC, GetHistoryConsumablesReplaceRecord,GetHistoryStandardGasRepalceRecordList, GetHistoryInspectionHistoryRecords, GetStopCemsDetail, GetRepairDetail,GetHistoryRepairDetail,GetHistoryStopCemsList,GetDeviceExceptionList,GetBdHistoryInfoList,GetDeviceExceptionDetail } from '../services/taskapi';
+import { GetTaskDetails, GetYwdsj, GetJzRecord, 
+    GetRecordType, GetJzHistoryRecord, GetConsumablesReplaceRecordList, 
+    GetStandardGasRepalceRecordList, GetPatrolRecordListPC, 
+    GetHistoryConsumablesReplaceRecord,GetHistoryStandardGasRepalceRecordList, 
+    GetHistoryInspectionHistoryRecords, GetStopCemsDetail, GetRepairDetail,
+    GetHistoryRepairDetail,GetHistoryStopCemsList,GetDeviceExceptionList,
+    GetBdHistoryInfoList,GetDeviceExceptionDetail,GetBdTestRecord } from '../services/taskapi';
 import { Model } from '../dvapack';
 import { EnumRequstResult } from '../utils/enum';
 
@@ -465,7 +471,7 @@ debugger;
         // 运维校准记录
         * GetBdTestRecord({
             payload,
-        }, { call, update }) {
+        }, { call, update }) {debugger;
             const DataInfo = yield call(GetBdTestRecord, payload);
             if (DataInfo != null && DataInfo.requstresult == EnumRequstResult.Success) {
                 if (DataInfo.data != null) {
