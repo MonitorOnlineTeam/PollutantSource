@@ -466,18 +466,6 @@ export default Model.extend({
                                     <li style={{listStyle: 'none', marginBottom: 10}}>
                                         <Badge status="error" text={`超标倍数：${additionalInfo[3]}`} />
                                     </li>
-                                    <li style={{borderBottom: '1px solid #e8e8e8', listStyle: 'none', marginBottom: 5}} />
-
-                                    <li style={{listStyle: 'none'}}>
-                                        <Icon type="laptop" style={{ fontSize: 14, color: '#08c' }} />
-                                        <Divider type="vertical" />
-                                        <a style={{fontSize: 12, cursor: 'pointer', color: '#575757'}} onClick={() => this._openModal(true, 2)}>查看仪器状态参数</a>
-                                    </li>
-                                    <li style={{listStyle: 'none'}}>
-                                        <Icon type="table" style={{ fontSize: 14, color: '#08c' }} />
-                                        <Divider type="vertical" />
-                                        <a style={{fontSize: 12, cursor: 'pointer', color: '#575757'}} onClick={() => this._openModal(true, 1)}>查看各参数数据</a>
-                                    </li>
                                 </div>);
                                 return (<Popover content={content}><span style={{ color: '#ff0000', cursor: 'pointer' }}>{ value || (value === 0 ? 0 : '-') }</span></Popover>);
                             }
@@ -489,7 +477,6 @@ export default Model.extend({
                                 <li style={{listStyle: 'none', marginBottom: 10}}>
                                     <Badge status="warning" text={`异常原因：${additionalInfo[2]}`} />
                                 </li>
-                                <li style={{borderBottom: '1px solid #e8e8e8', listStyle: 'none', marginBottom: 5}} />
                             </div>);
                             return (<Popover content={content}><span style={{ color: '#F3AC00', cursor: 'pointer' }}>{value || (value === 0 ? 0 : '-')}</span></Popover>);
                         }

@@ -74,9 +74,9 @@ class OverViewMap extends PureComponent {
         }
     };
 
-    stationClick = () => {
-        this.props.dispatch(routerRedux.push(`/pointdetail/${this.state.selectpoint.DGIMN}`));
-    };
+     stationClick = () => {
+         this.props.dispatch(routerRedux.push(`/pointdetail/${this.state.selectpoint.DGIMN}`));
+     };
 
     markersEvents = {
         click: (MapsOption, marker) => {
@@ -167,141 +167,147 @@ class OverViewMap extends PureComponent {
         });
     }
 
-    getStatusImg = (value) => {
-        if (value === 0) {
-            return <img src="../../../gisunline.png" />;
-        } if (value === 1) {
-            return <img src="../../../gisnormal.png" />;
-        } if (value === 2) {
-            return <img src="../../../gisover.png" />;
+   urge=()=>{
+    this.props.dispatch({
+        type: 'overview/queryoptionDataOnClick',
+        payload: {
+            personId:this.state.selectpoint.operationUserID,
+            DGIMN: this.state.selectpoint.DGIMN
         }
-        return <img src="../../../gisexception.png" />;
-    }
+    });
+   }
 
-    render() {
-        const entInfo = this.props.entInfoModel ? this.props.entInfoModel[0] : '';
-        const allcoo = entInfo ? eval(entInfo.coordinateSet) : '';
-        const { chartloading, detailloading } = this.props;
-        return (
-            <div
-                style={{
-                    width: '100%',
-                    height: 'calc(100vh - 67px)'
-                }}
-            >
-                <Map
-                    events={this.mapEvents}
-                    resizeEnable
-                    zoom={13}
-                    loading={<Spin
-                        style={{
-                            width: '100%',
-                            height: 'calc(100vh - 260px)',
-                            marginTop: 260
-                        }}
-                        size="large"
-                    />}
-                    amapkey={amapKey}
-                    plugins={plugins}
-                >
-                    <UrgentDispatch
-                        onCancel={this.onCancel}
-                        visible={this.state.pdvisible}
-                        pointName={this.state.selectpoint ? this.state.selectpoint.pointName : ''}
-                    />
-                    <div style={{
-                        width: 450,
-                        height: 'calc(100vh - 90px)',
-                        position: 'absolute',
-                        top: 10,
-                        left: 5,
-                        background: 'rgba(255, 255, 255, 0.5)',
-                        borderRadius: 10
-                    }}
-                    >
-                        {!this.state.detailed ? <div style={{ marginLeft: 10, marginTop: 10 }}>
-                            <div>
-                                <TreeStatus datalist={this.props.datalist} />
-                            </div>
-                            <div style={{ marginTop: 15 }}>
-                                <TreeCard getHeight={'calc(100vh - 200px)'} getStatusImg={this.getStatusImg} isloading={this.props.treedataloading} treeCilck={this.treeCilck} treedatalist={this.props.datalist} />
-                            </div>
-                        </div> :
-                            detailloading ? <Spin
-                                style={{
-                                    width: '100%',
-                                    height: 'calc(100vh - 260px)',
-                                    marginTop: 260
-                                }}
-                                size="large"
-                            /> :
-                                <div style={{ marginLeft: 10, marginTop: 10 }}>
-                                    <div>
-                                        <TreeDetailStatus pointInfo={this.state.selectpoint} statusImg={this.state.statusImg} pdShow={this.pdShow} detailtime={this.props.detailtime} stationClick={this.stationClick} backTreeList={this.backTreeList} pointName={this.state.pointName} detailed={this.state.detailed} />
-                                    </div>
-                                    <div style={{ height: 'calc(100vh - 215px)' }} className={styles.detailInfo}>
-                                        <div style={{ marginTop: 15 }}>
-                                            <TransmissionEfficiency selectdata={this.props.selectdata} />
-                                        </div>
-                                        <div style={{ marginTop: 15 }}>
-                                            <MapPollutantDetail detialTreeClick={this.detialTreeClick} detailpcol={this.props.detailpcol} detaildata={this.props.detaildata} />
-                                        </div>
-                                        <div style={{ marginTop: 15 }}>
-                                            <ChartData pollutantName={this.props.pollutantName} isloading={chartloading} chartdata={this.props.chartdata} existdata={this.props.existdata} />
-                                        </div>
-                                    </div>
-                                </div>
-                        }
-                    </div>
-                    <div
-                        style={{
-                            position: 'absolute',
-                            top: 10,
-                            right: 100
-                        }}
-                    >
-                        <AListRadio dvalue="a" />
-                    </div>
-                    {
-                        allcoo ? allcoo.map((item, key) => (
-                            <Polygon
-                                key={item.EntCode}
-                                style={{
-                                    strokeColor: '#FF33FF',
-                                    strokeOpacity: 0.2,
-                                    strokeWeight: 3,
-                                    fillColor: '#1791fc',
-                                    fillOpacity: 0.35,
-                                }}
-                                path={item[0]}
-                            />)) : ''
-                    }
-                    <Markers
-                        markers={this.props.datalist}
-                        className={this.state.special}
-                        events={this.markersEvents}
-                        render={(extData) => {
-                            if (extData.status === 0) {
-                                return <img src="../../../gisunline.png" />;
-                            } if (extData.status === 1) {
-                                return <img src="../../../gisnormal.png" />;
-                            } if (extData.status === 2) {
-                                return <img src="../../../gisover.png" />;
-                            }
-                            return <img src="../../../gisexception.png" />;
-                        }}
-                    />
-                    <InfoWindow
-                        position={this.state.position}
-                        visible={this.state.visible}
-                        isCustom
-                        offset={[0, -20]}
-                    >
-                        {this.state.selectpoint.pointName}
-                    </InfoWindow>
-                    <UrgentDispatch />
-                </Map>
-            </div>
+   getStatusImg=(value) => {
+    if (value === 0) {
+        return <img style={{width:15}} src="../../../gisunline.png" />;
+    } if (value === 1) {
+        return <img style={{width:15}} src="../../../gisnormal.png" />;
+    } if (value === 2) {
+        return <img style={{width:15}} src="../../../gisover.png" />;
+    }
+    return <img style={{width:15}} src="../../../gisexception.png" />;
+}
+
+   render() {
+       const entInfo = this.props.entInfoModel ? this.props.entInfoModel[0] : '';
+       const allcoo = entInfo ? eval(entInfo.coordinateSet) : '';
+       const {chartloading, detailloading} = this.props;
+       return (
+         <div
+           style={{
+                   width: '100%',
+                   height: 'calc(100vh - 67px)'
+               }}
+               className={styles.detailInfo}
+         >
+           <Map
+             events={this.mapEvents}
+             resizeEnable
+             zoom={13}
+             loading={<Spin
+               style={{width: '100%',
+                       height: 'calc(100vh - 260px)',
+                       marginTop: 260 }}
+               size="large"
+             />}
+             amapkey={amapKey}
+             plugins={plugins}
+           >
+             <UrgentDispatch
+               onCancel={this.onCancel}
+               visible={this.state.pdvisible}
+               selectpoint={this.state.selectpoint}
+             />
+             <div style={{ width: 450,
+                       height: 'calc(100vh - 90px)',
+                       position: 'absolute',
+                       top: 10,
+                       left: 5,
+                       background: 'rgba(255, 255, 255, 0.5)',
+                       borderRadius: 10
+                   }}
+             >
+               {!this.state.detailed ? <div style={{ marginLeft: 10, marginTop: 10 }}>
+                 <div>
+                   <TreeStatus datalist={this.props.datalist} />
+                 </div>
+                 <div style={{ marginTop: 15 }}>
+                   <TreeCard getStatusImg={this.getStatusImg} isloading={this.props.treedataloading} treeCilck={this.treeCilck} treedatalist={this.props.datalist} />
+                 </div>
+               </div> :
+                           detailloading ? <Spin
+                             style={{width: '100%',
+                               height: 'calc(100vh - 260px)',
+                               marginTop: 260 }}
+                             size="large"
+                           /> :
+                           <div style={{ marginLeft: 10, marginTop: 10 }}>
+                             <div>
+                               <TreeDetailStatus urge={this.urge} pointInfo={this.state.selectpoint} statusImg={this.state.statusImg} pdShow={this.pdShow} detailtime={this.props.detailtime} stationClick={this.stationClick} backTreeList={this.backTreeList} pointName={this.state.pointName} detailed={this.state.detailed} />
+                             </div>
+                             <div style={{ height: 'calc(100vh - 215px)' }} className={styles.detailInfo}>
+                             <div style={{marginTop: 15}}>
+                               <TransmissionEfficiency selectdata={this.props.selectdata} />
+                             </div>
+                             <div style={{marginTop: 15}}>
+                               <MapPollutantDetail detialTreeClick={this.detialTreeClick} detailpcol={this.props.detailpcol} detaildata={this.props.detaildata} />
+                             </div>
+                             <div style={{marginTop: 15}}>
+                               <ChartData pollutantName={this.props.pollutantName} isloading={chartloading} chartdata={this.props.chartdata} existdata={this.props.existdata} />
+                             </div>
+                           </div>
+                           </div>
+                       }
+             </div>
+             <div
+               style={{
+                           position: 'absolute',
+                           top: 10,
+                           right: 100
+                       }}
+             >
+               <AListRadio dvalue="a" />
+             </div>
+             {
+                       allcoo ? allcoo.map((item, key) => (
+                         <Polygon
+                           key={item.EntCode}
+                           style={{
+                                       strokeColor: '#FF33FF',
+                                       strokeOpacity: 0.2,
+                                       strokeWeight: 3,
+                                       fillColor: '#1791fc',
+                                       fillOpacity: 0.35,
+                                   }}
+                           path={item[0]}
+                         />)) : ''
+                   }
+             <Markers
+               markers={this.props.datalist}
+               className={this.state.special}
+               events={this.markersEvents}
+               render={(extData) => {
+                           if (extData.status === 0) {
+                               return <img style={{width:15}} src="../../../gisunline.png" />;
+                           } if (extData.status === 1) {
+                               return <img style={{width:15}} src="../../../gisnormal.png" />;
+                           } if (extData.status === 2) {
+                               return <img style={{width:15}} src="../../../gisover.png" />;
+                           }
+                           return <img style={{width:15}} src="../../../gisexception.png" />;
+                       }}
+             />
+             <InfoWindow
+               position={this.state.position}
+               visible={this.state.visible}
+               isCustom
+               offset={[0, -20]}
+             >
+               {this.state.selectpoint.pointName}
+             </InfoWindow>
+             <UrgentDispatch />
+           </Map>
+         </div>
 
         );
     }

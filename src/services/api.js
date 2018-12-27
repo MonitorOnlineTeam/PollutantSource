@@ -453,3 +453,47 @@ export async function querysinglepointinfo(params) {
     const result = await post('/api/rest/PollutantSourceApi/PPointAndData/GetPoint', body, null);
     return result === null ? {data: null} : result.data;
 }
+// 获取企业超标排口汇总数据
+export async function queryalloverdatalist(params) {
+    const body = {
+        DGIMNs: params.dgimn,
+        beginTime:params.beginTime,
+        endTime:params.endTime,
+    };
+    const result = await post('/api/rest/PollutantSourceApi/OverData/GetAllPointOverDataList', body, null);
+    return result === null ? {data: null} : result.data;
+}
+//专工派单
+export async function addtaskinfo(params) {
+    const body = {
+        DGIMNs: params.dgimn,
+        taskType:2,
+        taskFrom: 3,
+        operationsUserId:params.personId,
+        remark:params.remark
+    };
+    const result = await post('/api/rest/PollutantSourceApi/PTaskProcessing/AddTask', body, null);
+    return result === null ? {data: null} : result.requstresult;
+}
+//催办
+export async function queryurge(params) {
+    const body = {
+        NoticeTitle:'通知',
+        ToUserId:params.personId,
+        //1是督办
+        NoticeType:1,
+        DGIMN:params.dgimn
+    };
+    const result = await post('/api/rest/PollutantSourceApi/PTaskProcessing/PostTaskSupervise', body, null);
+    return result === null ? {data: null} : result.requstresult;
+}
+//获取监测报告列表   
+export async function queryreportlist(params) {
+    const body = {
+        beginTime:params.beginTime,
+        endTime:params.endTime,
+    };
+    const result = await post('/api/rest/PollutantSourceApi/DataList/GetYearDataList', body, null);
+    return result === null ? {data: null} : result.data;
+}
+

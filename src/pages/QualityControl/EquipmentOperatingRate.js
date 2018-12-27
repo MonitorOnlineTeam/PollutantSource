@@ -180,7 +180,13 @@ export default class EquipmentOperatingRate extends Component {
             }
         ];
         return (
-            <MonitorContent>
+            <MonitorContent {...this.props} breadCrumbList={
+                [
+                    {Name:'首页',Url:'/'},
+                    {Name:'智能质控',Url:''},
+                    {Name:'设备运转率',Url:''}
+                ]
+            }>
                 <Row className={styles.cardTitle}>
                     <Card
                         title="设备运转率列表"
@@ -223,7 +229,7 @@ export default class EquipmentOperatingRate extends Component {
                                 onChange={this.handleTableChange}
                                 size="small"// small middle
                                 dataSource={this.props.tableDatas}
-                                scroll={{ y: 'calc(100vh - 380px)' }}
+                                scroll={{ y: 'calc(100vh - 390px)' }}
                                 // scroll={{ y: 'calc(100vh - 255px)' }}
                                 rowClassName={
                                     (record, index, indent) => {

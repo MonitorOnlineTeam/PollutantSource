@@ -183,7 +183,13 @@ export default class TransmissionEfficiency extends Component {
             },
         ];
         return (
-            <MonitorContent>
+            <MonitorContent {...this.props} breadCrumbList={
+                [
+                    {Name:'首页',Url:'/'},
+                    {Name:'智能质控',Url:''},
+                    {Name:'传输有效率',Url:''}
+                ]
+            }>
                 <Row className={styles.cardTitle}>
                     <Card
                         title="传输有效率列表"
@@ -228,7 +234,7 @@ export default class TransmissionEfficiency extends Component {
                                 onChange={this.handleTableChange}
                                 size="small"// small middle
                                 dataSource={this.props.tableDatas}
-                                scroll={{ y: 'calc(100vh - 380px)' }}
+                                scroll={{ y: 'calc(100vh - 390px)' }}
                                 // scroll={{ y: 550 }}
                                 rowClassName={
                                     (record, index, indent) => {

@@ -43,7 +43,7 @@ export default [
           /* 历史视频 */
           { path: '/pointdetail/:pointcode/hisvideo', component: './PointDetail/HisVideo' },
           /* 运维大事记 */
-          { path: '/pointdetail/:pointcode/ywdsjlist', component: './PointDetail/Ywdsjlist' },
+          { path: '/pointdetail/:pointcode/ywdsjlist', component: './PointDetail/ywdsjlist' },
           /* 运维大事记-详情 */
           { path: '/pointdetail/:pointcode/emergencydetailinfo/:TaskID', component: './EmergencyTodoList/EmergencyDetailInfo' },
 
@@ -133,8 +133,11 @@ export default [
 
 /* 报警排口分析 */
 { path: '/analysis/overpointlist', component: './Analysis/OverPointList' },      
-
-
+/* 自行监测报告 */
+{ path: '/analysis/selfmonitorreport', component: './Analysis/MonitoringReport',routes:[
+  /* 监测报告 */
+  {path:'/analysis/selfmonitorreport/:pdfname',component:'./Analysis/PdfShow'}
+] },  
 
 
 /* 基本信息管理 */
@@ -166,7 +169,7 @@ export default [
      { path: '/sysmanage/standardlibrary', component: './StandardLibrary' },
 
   /* 标准库管理-维护 */
-  { path: '/sysmanage/standardlibrarydetail/:StandardLibraryID', component: './StandardLibrary/AddStandardLibrary' },
+  { path: '/sysmanage/standardlibrarydetail/:StandardLibraryID', component: './StandardLibrary/AddStandardLibrary'},
 
    
       {

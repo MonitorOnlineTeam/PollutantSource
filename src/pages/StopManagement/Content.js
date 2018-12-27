@@ -151,7 +151,7 @@ export default class Content extends Component {
             title: '停产开始至结束时间',
             dataIndex: 'RealStopStartTime',
             key: 'RealStopStartTime',
-            width: '15%',
+            width: '25%',
             align: 'left',
             render: (text, record) => `${record.BeginTimeF}~${record.EndTimeF}`
         }, {
@@ -173,14 +173,6 @@ export default class Content extends Component {
                 return text;
             }
         }, {
-            title: '描述',
-            dataIndex: 'StopDescription',
-            key: 'StopDescription',
-            align: 'left',
-            render: (text, record) => {
-                return text;
-            }
-        }, {
             title: '档案',
             dataIndex: 'attachment',
             key: 'attachment',
@@ -195,7 +187,7 @@ export default class Content extends Component {
             title: '进度',
             dataIndex: 'progress',
             key: 'progress',
-            width: '10%',
+            width: '20%',
             align: 'center',
             render: (text, record) => {
                 if (text < 0) {
@@ -241,18 +233,25 @@ export default class Content extends Component {
         }
         ];
         return (
-            <MonitorContent>
+              <MonitorContent {...this.props} breadCrumbList={
+                [
+                    {Name:'首页',Url:'/'},
+                    {Name:'系统管理',Url:''},
+                    {Name:'排口管理',Url:'/sysmanage/pointinfo'},
+                    {Name:'停产管理',Url:''}
+                ]
+            }>
                 <div className={styles.cardTitle}>
-                    <Card bordered={false}>
+                <Card bordered={false} title={this.props.match.params.PointName} style={{width:'100%'}}>
                         <Form layout="inline" style={{marginBottom: 10}}>
                             <Row gutter={{ md: 8, lg: 8, xl: 8 }}>
-                                <Col md={6} sm={6}>
+                                <Col md={8} sm={24}>
                                     <RangePicker_ style={{width: 350}} showTime={{format: 'HH'}} format="YYYY-MM-DD HH:mm:ss" onChange={this._handleDateChange}
                                         onOk={() => this.onChange()} dateValue={this.state.Datestring} />
                                 </Col>
-                                <Col md={3} sm={12}>
+                                <Col md={8} sm={24}>
                                     <Search
-                                        width={200}
+                                        style={{width:150}}
                                         placeholder="报备人"
                                         onSearch={value =>
                                             this.setState({
@@ -262,9 +261,7 @@ export default class Content extends Component {
                                             })
                                         }
                                     />
-                                </Col>
-                                <Col md={2} sm={2}>
-                                    <Button type="primary" onClick={() => {
+                                     <Button type="primary" style={{marginLeft:5}} onClick={() => {
                                         this.setState({
                                             visible: true,
                                             type: 'add',
@@ -273,6 +270,9 @@ export default class Content extends Component {
                                         });
                                     }}> 增加 </Button>
                                 </Col>
+                                <Col md={2} sm={2}>
+                                   
+                                </Col>
                             </Row>
                         </Form>
                         <Table
@@ -280,7 +280,7 @@ export default class Content extends Component {
                             columns={columns}
                             className={styles.dataTable}
                             dataSource={this.props.requstresult === '1' ? this.props.list : null}
-                            scroll={{ y: 'calc(100vh - 400px)' }}
+                            scroll={{ y: 'calc(100vh - 390px)' }}
                             size = "small" // small middle
                             pagination={{
                                 showSizeChanger: true,

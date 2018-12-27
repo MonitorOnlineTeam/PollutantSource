@@ -231,14 +231,20 @@ export default class StandardLibrary extends Component {
         },
         ];
         return (
-            <MonitorContent >
+            <MonitorContent {...this.props} breadCrumbList={
+                [
+                    {Name:'首页',Url:'/'},
+                    {Name:'系统管理',Url:''},
+                    {Name:'标准库管理',Url:''}
+                ]
+            }>
                 <div className={
                     styles.cardTitle
                 } >
                     <Card bordered={false}>
                         <Form layout="inline" style={{marginBottom: 10}}>
                             <Row gutter={8}>
-                                <Col span={3} >
+                                <Col span={24} >
                                     <Search placeholder="标准名称" onSearch={(value) => {
                                         this.setState({
                                             Name: value
@@ -252,13 +258,12 @@ export default class StandardLibrary extends Component {
                                                 Name: value,
                                             },
                                         });
-                                    }}style={{ width: 200 }} /></Col>
-                                <Col span={1} ><Button type="primary"
+                                    }}style={{ width: 200 }} />
+                                    <Button type="primary" style={{marginLeft:5}}
                                     onClick={() => {
                                         this.props.dispatch(routerRedux.push(`/sysmanage/StandardLibraryDetail/null`));
-                                    }}>添加</Button></Col>
-                                <Col span={12} >
-                                    <Radio.Group defaultValue="0" buttonStyle="solid" onChange={(e) => {
+                                    }}>添加</Button>
+                                     <Radio.Group defaultValue="0" buttonStyle="solid" style={{marginLeft:5}} onChange={(e) => {
                                         console.log(e.target.value);
                                         this.setState({
                                             Type: e.target.value
@@ -278,17 +283,17 @@ export default class StandardLibrary extends Component {
                                         <Radio.Button value="2"><Badge status="success" text="地表" /></Radio.Button>
                                         <Radio.Button value="3"><Badge status="warning" text="行标" /></Radio.Button>
                                     </Radio.Group>
-                                </Col>
+                                    </Col>
                             </Row>
                         </Form>
                         <Table
                             loading={this.props.effects['standardlibrary/getlist']}
                             columns={columns}
-                            // className={styles.dataTable}
+                            className={styles.dataTable}
                             dataSource={this.props.requstresult === '1' ? this.props.list : null}
-                            expandedRowRender={expandedRowRender}
+                            //expandedRowRender={expandedRowRender}
                             size="small"
-                            scroll={{ y: 'calc(100vh - 200px)' }}
+                            scroll={{ y: 'calc(100vh - 330px)' }}
                             rowClassName={
                                 (record, index, indent) => {
                                     if (index === 0) {
