@@ -8,6 +8,7 @@ import {
     Spin
 } from 'antd';
 import moment from 'moment';
+import {routerRedux} from 'dva/router';
 import MonitorContent from '../../components/MonitorContent/index';
 import { connect } from 'dva';
 import RangePicker_ from '../../components/PointDetail/RangePicker_';
@@ -28,6 +29,7 @@ class MonitoringReport extends Component {
             rangeDate: [moment(new Date()).add(-1, 'year'), moment(new Date())],
             radiovalue:'year',
             format:'YYYY',
+            reportname:'test1.pdf'
         };
     }
     componentDidMount() {
@@ -74,15 +76,17 @@ class MonitoringReport extends Component {
             }
         )
     }
+    
     showPdf=(reportname)=>{
         this.setState({
             reportname
-        })
+        });
+        this.props.dispatch(routerRedux.push(`/analysis/selfmonitorreport/:${reportname}/pdfshow`));
     }
     getshowpdf=()=>{
+
         if(this.state.reportname)
         {
-            debugger;
            // const pdfurl = require(imgaddress+this.state.reportname);
             return(  
             <div className={styles.pdfdiv} >
@@ -91,7 +95,6 @@ class MonitoringReport extends Component {
                  />
             </div>);
         }
-        
     }
 
     getreportlist=()=>{
@@ -135,7 +138,7 @@ class MonitoringReport extends Component {
     render() {
         const pdfurl = require('./test1.pdf');
         const { rangeDate, mode,radiovalue,format } = this.state;
-        const {loading}=this.props;
+        const {loading,childen}=this.props;
         if(this.props.loading)
         {
          return (<Spin
@@ -178,7 +181,11 @@ class MonitoringReport extends Component {
             > 
              <div style={{marginLeft:10}}>{this.getreportlist()}</div> 
 
-             <div>{this.getshowpdf()}</div>
+             <div>
+                 {
+                     childen
+                 }
+            </div>
             </Card>
         </div>
         </MonitorContent>

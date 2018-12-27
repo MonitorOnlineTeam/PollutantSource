@@ -132,7 +132,9 @@ export default [
 /* 报警排口分析 */
 { path: '/analysis/overpointlist', component: './Analysis/OverPointList' },      
 /* 自行监测报告 */
-{ path: '/analysis/selfmonitorreport', component: './Analysis/MonitoringReport' },  
+{ path: '/analysis/selfmonitorreport', component: './Analysis/MonitoringReport',routes:[
+  {path:'/analysis/selfmonitorreport/:pdfname/pdfshow',component:'./Analysis/PdfShow'}
+] },  
 
 
 /* 基本信息管理 */
@@ -164,7 +166,7 @@ export default [
      { path: '/sysmanage/standardlibrary', component: './StandardLibrary' },
 
   /* 标准库管理-维护 */
-  { path: '/sysmanage/standardlibrarydetail/:StandardLibraryID', component: './StandardLibrary/AddStandardLibrary' },
+  { path: '/sysmanage/standardlibrarydetail/:StandardLibraryID', component: './StandardLibrary/AddStandardLibrary'},
 
    
       {
