@@ -75,7 +75,7 @@ export default class WQCQFInspectionHistoryRecords extends Component {
         }
 
         seeDetail=(record) => {
-            this.props.dispatch(routerRedux.push(`/pointdetail/:pointcode/CompleteExtraction/${record.TaskID}/${record.TypeID}`));
+            this.props.dispatch(routerRedux.push(`/pointdetail/${this.props.match.params.pointcode}/CompleteExtraction/${record.TaskID}/${record.TypeID}`));
         }
 
         render() {

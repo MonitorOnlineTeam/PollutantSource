@@ -2,6 +2,26 @@ import React, { Component } from 'react';
 import styles from './OverView.less';
 import { Button } from 'antd';
 class TreeDetailStatus extends Component {
+
+
+    getbutton=()=>{
+        if(this.props.pointInfo)
+        {
+            if(this.props.pointInfo.existTask==1)
+            {
+                return (
+                <span onClick={this.props.urge} style={{cursor: 'pointer'}}>
+                   <img style={{width: 15, marginRight: 6, marginBottom: 4}}
+                    src="../../../alarm.png" />紧急催办</span>)
+            }
+            else
+            {
+                return (<span onClick={this.props.pdShow} style={{cursor: 'pointer'}}>
+                       <img style={{width: 15, marginRight: 6, marginBottom: 4}}
+                        src="../../../alarm.png" />紧急派单</span>)
+            }
+        }
+    }
     render() {
         return (
             <div style={{
@@ -21,7 +41,7 @@ class TreeDetailStatus extends Component {
                     <img style={{width: 15, marginRight: 10, marginBottom: 4}} src="../../../treetime.png" />{this.props.detailtime}
                     <span style={{float: 'right',marginRight: 10}}>
                         <span onClick={this.props.stationClick} style={{marginRight: 15, cursor: 'pointer'}}><img style={{width: 15, marginRight: 6, marginBottom: 4}} src="../../../home.png" />进入站房</span>
-                        <span onClick={this.props.pdShow} style={{cursor: 'pointer'}}><img style={{width: 15, marginRight: 6, marginBottom: 4}} src="../../../alarm.png" />紧急派单</span>
+                         {this.getbutton()}
                     </span>
                 </div>
             </div>

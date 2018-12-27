@@ -110,7 +110,7 @@ class AlarmRecord extends Component {
                               <Row gutter={{ md: 8, lg: 8, xl: 8 }}>
                                       <Col span={12}>
                                           <FormItem label="超标时间">
-                                              <RangePicker_ style={{width: 250}} format="YYYY-MM-DD" onChange={this._handleDateChange} dateValue={this.state.rangeDate} />
+                                              <RangePicker_ style={{width: 350}} format="YYYY-MM-DD" onChange={this._handleDateChange} dateValue={this.state.rangeDate} />
                                           </FormItem>
                                       </Col>
                                       <Col span={12}>

@@ -73,7 +73,7 @@ export default class ZZCLFInspectionHistoryRecords extends Component {
         }
 
         seeDetail=(record) => {
-            this.props.dispatch(routerRedux.push(`/pointdetail/:pointcode/DirectMeasurement/${record.TaskID}/${record.TypeID}`));
+            this.props.dispatch(routerRedux.push(`/pointdetail/${this.props.match.params.pointcode}/DirectMeasurement/${record.TaskID}/${record.TypeID}`));
         }
 
         render() {

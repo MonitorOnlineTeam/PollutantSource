@@ -1,0 +1,67 @@
+.cardTitle{
+    // margin-left: 24px;
+    // margin-right: 24px;
+    // min-height: 500;
+      :global {
+        // height: 998px;
+        // overflow: hidden;
+        .ant-card-body{
+          // height: 800px;
+          // overflow: auto;
+        }
+        .ant-card-extra{
+          padding: 6.5px 0 !important;
+        }
+        .light{
+          background-color:#f0f2f5
+        }
+        table .ant-table-thead > tr > th{
+          background-color:#fafafa !important;
+        }
+        table .ant-table-small > .ant-table-content > .ant-table-body > table{
+          padding: 0% !important;
+        }
+      }
+     
+        
+  }
+.tableCss {
+    :global {
+        .ant-table-fixed-header .ant-table-scroll .ant-table-header
+        {
+            overflow: hidden;
+            height: 62px;
+            width: 99.5%
+        }
+        .ant-table-body {
+            height: calc(100vh - 40px);
+            overflow: hidden;
+            overflow-y: scroll;
+            &::-webkit-scrollbar-track-piece{
+                -webkit-border-radius:0;
+               }
+               &::-webkit-scrollbar{
+                width:6px;
+                height:6px;
+               }
+               &::-webkit-scrollbar-thumb{
+                height:50px;
+                background-color:#61A1D5;
+                -webkit-border-radius:4px;
+                outline-offset:-2px;
+                border: 2px solid #61A1D5;
+               }
+               &::-webkit-scrollbar-thumb:hover{
+                height:50px;
+                background-color:#61A1D5;
+                -webkit-border-radius:4px;
+               }
+        }
+        .ant-table-placeholder{
+            position: absolute;
+            top:50px;
+            width:100%;
+        }
+      }
+}
+

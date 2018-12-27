@@ -72,7 +72,7 @@ export default class DeviceExceptionListHistoryRecords extends Component {
     }
 
     seeDetail=(record) => {
-        this.props.dispatch(routerRedux.push(`/pointdetail/:pointcode/DeviceExceptionDetail/${record.TaskID}/${record.TypeID}`));
+        this.props.dispatch(routerRedux.push(`/pointdetail/${this.props.match.params.pointcode}/DeviceExceptionDetail/${record.TaskID}/${record.TypeID}`));
     }
 
     render() {

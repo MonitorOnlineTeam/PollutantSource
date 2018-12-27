@@ -315,7 +315,7 @@ export default class PollutantEmissions extends Component {
         return (
             <MonitorContent {...this.props} breadCrumbList={
                 [
-                    {Name:'首页',Url:'/'},
+                    {Name:'首页',Url:'/'},  
                     {Name:'智能分析',Url:''},
                     {Name:'月度排放量分析',Url:''}
                 ]
