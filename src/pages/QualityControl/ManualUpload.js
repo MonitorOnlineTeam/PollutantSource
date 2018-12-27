@@ -112,15 +112,15 @@ export default class ManualUpload extends Component {
             payload: {}
         });
     }
-    getStatusImg = (value) => {
+    getStatusImg=(value) => {
         if (value === 0) {
-            return <img src="../../../gisunline.png" />;
+            return <img style={{width:15}} src="../../../gisunline.png" />;
         } if (value === 1) {
-            return <img src="../../../gisnormal.png" />;
+            return <img style={{width:15}} src="../../../gisnormal.png" />;
         } if (value === 2) {
-            return <img src="../../../gisover.png" />;
+            return <img style={{width:15}} src="../../../gisover.png" />;
         }
-        return <img src="../../../gisexception.png" />;
+        return <img style={{width:15}} src="../../../gisexception.png" />;
     }
     treeCilck = (row) => {
         this.setState({ PollutantType: row.pollutantTypeCode });
@@ -189,6 +189,7 @@ export default class ManualUpload extends Component {
     // 添加数据
     AddData = () => {
         this.child.handleSubmit();
+        this.GetManualSupplementList(this.props.DGIMN, this.state.SelectHandleChange, this.state.rangeDate[0], this.state.rangeDate[1], this.props.pageIndex, this.props.pageSize);
     }
     render() {
         const uploaddata = this.props.uploaddatalist === null ? null : this.props.uploaddatalist;
