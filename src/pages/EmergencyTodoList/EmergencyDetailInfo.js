@@ -7,6 +7,7 @@ import {EnumRequstResult, EnumPatrolTaskType, EnumPsOperationForm} from '../../u
 import { routerRedux } from 'dva/router';
 import {imgaddress} from '../../config.js';
 import { CALL_HISTORY_METHOD } from 'react-router-redux';
+import MonitorContent from '../../components/MonitorContent/index';
 const { Description } = DescriptionList;
 const { TextArea } = Input;
 
@@ -48,59 +49,58 @@ export default class EmergencyDetailInfo extends Component {
 
     renderItem=(data, taskID) => {
         const rtnVal = [];
-        data.map((item) => {
+        data.map((item) => {debugger;
             if (item.FormMainID !== null) {
                 switch (item.ID) {
                     case EnumPsOperationForm.Repair:
                         rtnVal.push(<p style={{marginBottom: 0}}><Button style={{marginBottom: '5px'}} icon="check-circle-o" onClick={() => {
-                            this.props.dispatch(routerRedux.push(`/pointdetail/:pointcode/RepairRecordDetail/${taskID}/${item.ID}`));
-                        }}>{item.CNNAME}</Button></p>);
+                            this.props.dispatch(routerRedux.push(`/PatrolForm/RepairRecordDetail/${taskID}`));
+                        }}>{item.CnName}</Button></p>);
                         break;
                     case EnumPsOperationForm.StopMachine:
                         rtnVal.push(<p style={{marginBottom: 0}}><Button style={{marginBottom: '5px'}} icon="check-circle-o" onClick={() => {
-                            //this.props.dispatch(routerRedux.push(`/pointdetail/:pointcode/StopCemsInfo/${this.state.TaskIds}/${this.state.TypeIDs}`));
-                            this.props.dispatch(routerRedux.push(`/pointdetail/:pointcode/StopCemsInfo/${taskID}/${item.ID}`));
-                        }}>{item.CNNAME}</Button></p>);
+                            this.props.dispatch(routerRedux.push(`/PatrolForm/StopCemsInfo/${taskID}`));
+                        }}>{item.CnName}</Button></p>);
                         break;
                     case EnumPsOperationForm.YhpReplace:
                         rtnVal.push(<p style={{marginBottom: 0}}><Button style={{marginBottom: '5px'}} icon="check-circle-o" onClick={() => {
-                            this.props.dispatch(routerRedux.push(`/pointdetail/:pointcode/ConsumablesReplaceRecord/${taskID}/${item.ID}`));
-                        }}>{item.CNNAME}</Button></p>);
+                            this.props.dispatch(routerRedux.push(`/PatrolForm/ConsumablesReplaceRecord/${taskID}`));
+                        }}>{item.CnName}</Button></p>);
                         break;
                     case EnumPsOperationForm.StandardGasReplace:
                         rtnVal.push(<p style={{marginBottom: 0}}><Button style={{marginBottom: '5px'}} icon="check-circle-o" onClick={() => {
-                            this.props.dispatch(routerRedux.push(`/pointdetail/:pointcode/StandardGasRepalceRecord/${taskID}/${item.ID}`));
-                        }}>{item.CNNAME}</Button></p>);
+                            this.props.dispatch(routerRedux.push(`/PatrolForm/StandardGasRepalceRecord/${taskID}`));
+                        }}>{item.CnName}</Button></p>);
                         break;
                     case EnumPsOperationForm.CqfPatrol:
                         rtnVal.push(<p style={{marginBottom: 0}}><Button style={{marginBottom: '5px'}} icon="check-circle-o" onClick={() => {
-                            this.props.dispatch(routerRedux.push(`/pointdetail/:pointcode/CompleteExtraction/${taskID}/${item.ID}`));
-                        }}>{item.CNNAME}</Button></p>);
+                            this.props.dispatch(routerRedux.push(`/PatrolForm/CompleteExtraction/${taskID}`));
+                        }}>{item.CnName}</Button></p>);
                         break;
                     case EnumPsOperationForm.CyfPatrol:
                         rtnVal.push(<p style={{marginBottom: 0}}><Button style={{marginBottom: '5px'}} icon="check-circle-o" onClick={() => {
-                            this.props.dispatch(routerRedux.push(`/pointdetail/:pointcode/DilutionSampling/${taskID}/${item.ID}`));
-                        }}>{item.CNNAME}</Button></p>);
+                            this.props.dispatch(routerRedux.push(`/PatrolForm/DilutionSampling/${taskID}`));
+                        }}>{item.CnName}</Button></p>);
                         break;
                     case EnumPsOperationForm.ClfPatrol:
                         rtnVal.push(<p style={{marginBottom: 0}}><Button style={{marginBottom: '5px'}} icon="check-circle-o" onClick={() => {
-                            this.props.dispatch(routerRedux.push(`/pointdetail/:pointcode/DirectMeasurement/${taskID}/${item.ID}`));
-                        }}>{item.CNNAME}</Button></p>);
+                            this.props.dispatch(routerRedux.push(`/PatrolForm/DirectMeasurement/${taskID}`));
+                        }}>{item.CnName}</Button></p>);
                         break;
                     case EnumPsOperationForm.CheckRecord:
                         rtnVal.push(<p style={{marginBottom: 0}}><Button style={{marginBottom: '5px'}} icon="check-circle-o" onClick={() => {
-                            this.props.dispatch(routerRedux.push(`/pointdetail/:pointcode/JzRecordInfo/${taskID}/${item.ID}`));
-                        }}>{item.CNNAME}</Button></p>);
+                            this.props.dispatch(routerRedux.push(`/PatrolForm/JzRecordInfo/${taskID}`));
+                        }}>{item.CnName}</Button></p>);
                         break;
                     case EnumPsOperationForm.TestRecord:
                         rtnVal.push(<p style={{marginBottom: 0}}><Button style={{marginBottom: '5px'}} icon="check-circle-o" onClick={() => {
-                            this.props.dispatch(routerRedux.push(``));
-                        }}>{item.CNNAME}</Button></p>);
+                            this.props.dispatch(routerRedux.push(`/PatrolForm/BdTestRecord/${taskID}`));
+                        }}>{item.CnName}</Button></p>);
                         break;
                     case EnumPsOperationForm.DataException:
                         rtnVal.push(<p style={{marginBottom: 0}}><Button style={{marginBottom: '5px'}} icon="check-circle-o" onClick={() => {
-                            this.props.dispatch(routerRedux.push(`/pointdetail/:pointcode/DeviceExceptionDetail/${taskID}/${item.ID}`));
-                        }}>{item.CNNAME}</Button></p>);
+                            this.props.dispatch(routerRedux.push(`/PatrolForm/DeviceExceptionDetail/${taskID}`));
+                        }}>{item.CnName}</Button></p>);
                         break;
                     default:
                         break;
@@ -111,7 +111,7 @@ export default class EmergencyDetailInfo extends Component {
     }
 
     render() {
-        const SCREEN_WIDTH = document.querySelector('body').offsetWidth;
+        const SCREEN_HEIGHT = document.querySelector('body').offsetHeight - 140;
         if (this.props.taskInfo === null) {
             return (
                 <div />
@@ -226,19 +226,22 @@ export default class EmergencyDetailInfo extends Component {
                 dataIndex: 'TaskStatusText',
                 align: 'center'
             }];
-        if (this.props.isloading) {
-            return (
-                <div className={styles.loadContent}>
-                    <Spin size="large" />
-                </div>
-            );
-        }
 
         const upload = {
             showUploadList: {showPreviewIcon: true, showRemoveIcon: false },
             listType: 'picture-card',
             fileList: [...fileList]
         };
+        if (this.props.isloading) {
+            return (<Spin
+                style={{ width: '100%',
+                    height: 'calc(100vh/2)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center' }}
+                size="large"
+            />);
+        }
         return (
             <MonitorContent  {...this.props} breadCrumbList={[
                 {Name:'首页',Url:'/'},
@@ -322,7 +325,7 @@ export default class EmergencyDetailInfo extends Component {
                     <img alt="example" style={{ width: '100%',marginTop: '20px' }} src={this.state.previewImage} />
                 </Modal>
             </div>
-            </MonitorContent>
+         </MonitorContent>
         );
     }
 }

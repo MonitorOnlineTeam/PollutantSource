@@ -54,7 +54,15 @@ class dataList extends PureComponent {
             pdvisible: false,
         });
     }
-
+    urge=()=>{
+        this.props.dispatch({
+            type: 'overview/queryoptionDataOnClick',
+            payload: {
+                personId:this.state.selectpoint.operationUserID,
+                DGIMN: this.state.selectpoint.DGIMN
+            }
+        });
+       }
     gerpointButton=(record) => (<div>
         <li style={{ listStyle: 'none', marginBottom: 5 }}>
             <Button onClick={() => {
@@ -66,7 +74,7 @@ class dataList extends PureComponent {
         {
             record.existTask === 1 ?
                 <li style={{ listStyle: 'none' }}>
-                    <Button><Icon type="phone" style={{ color: '#3C9FDA', marginRight: 5 }} theme="filled" />紧急催办</Button>
+                    <Button onClick={this.urge}><Icon type="phone" style={{ color: '#3C9FDA', marginRight: 5 }} theme="filled" />紧急催办</Button>
                 </li> : <li style={{ listStyle: 'none' }}>
                     <Button
                         onClick={() => {
@@ -92,13 +100,13 @@ class dataList extends PureComponent {
             fixed: 'left',
             render: (value, record, index) => {
                 if (value === 0) {
-                    return <img src="../../../gisunline.png" />;
+                    return <img style={{width:15}} src="../../../gisunline.png" />;
                 } if (value === 1) {
-                    return <img src="../../../gisnormal.png" />;
+                    return <img style={{width:15}} src="../../../gisnormal.png" />;
                 } if (value === 2) {
-                    return <img src="../../../gisover.png" />;
+                    return <img style={{width:15}} src="../../../gisover.png" />;
                 }
-                return <img src="../../../gisexception.png" />;
+                return <img style={{width:15}} src="../../../gisexception.png" />;
             },
         }, {
             title: '排口',
@@ -153,18 +161,6 @@ class dataList extends PureComponent {
                                 <li style={{ listStyle: 'none', marginBottom: 10 }}>
                                     <Badge status="error" text={`超标倍数：${additionalInfo[3]}`} />
                                 </li>
-                                <li style={{ borderBottom: '1px solid #e8e8e8', listStyle: 'none', marginBottom: 5 }} />
-
-                                <li style={{ listStyle: 'none' }}>
-                                    <Icon type="laptop" style={{ fontSize: 14, color: '#08c' }} />
-                                    <Divider type="vertical" />
-                                    <a style={{ fontSize: 12, cursor: 'pointer', color: '#575757' }} onClick={() => this._openModal(true, 2)}>查看仪器状态参数</a>
-                                </li>
-                                <li style={{ listStyle: 'none' }}>
-                                    <Icon type="table" style={{ fontSize: 14, color: '#08c' }} />
-                                    <Divider type="vertical" />
-                                    <a style={{ fontSize: 12, cursor: 'pointer', color: '#575757' }} onClick={() => this._openModal(true, 1)}>查看各参数数据</a>
-                                </li>
                             </div>);
                             return (<Popover content={content}><span style={{ color: '#ff0000', cursor: 'pointer' }}>{ value || (value === 0 ? 0 : '-') }</span></Popover>);
                         }
@@ -176,7 +172,6 @@ class dataList extends PureComponent {
                             <li style={{ listStyle: 'none', marginBottom: 10 }}>
                                 <Badge status="warning" text={`异常原因：${additionalInfo[2]}`} />
                             </li>
-                            <li style={{ borderBottom: '1px solid #e8e8e8', listStyle: 'none', marginBottom: 5 }} />
                         </div>);
                         return (<Popover content={content}><span style={{ color: '#F3AC00', cursor: 'pointer' }}>{value || (value === 0 ? 0 : '-')}</span></Popover>);
                     }
@@ -203,7 +198,7 @@ class dataList extends PureComponent {
                 <UrgentDispatch
                     onCancel={this.onCancel}
                     visible={this.state.pdvisible}
-                    pointName={this.state.selectpoint ? this.state.selectpoint.pointName : ''}
+                    selectpoint={this.state.selectpoint}
                 />
                 <Card
                     bordered={false}
@@ -220,10 +215,10 @@ class dataList extends PureComponent {
                                 <Button style={{ marginRight: 10 }}><Icon type="user" style={{ color: '#3B91FF' }} /> 运维中</Button>
                                 <Button style={{ marginRight: 20 }}><span style={{ fontSize: 16, color: '#ffca00' }}>■</span> 传输有效率不达标</Button>
                                 <Radio.Group>
-                                    <Radio.Button value="normal"><img src="../../../gisnormal.png" /> 正常</Radio.Button>
-                                    <Radio.Button value="over"><img src="../../../gisover.png" /> 超标</Radio.Button>
-                                    <Radio.Button value="underline"><img src="../../../gisunline.png" /> 离线</Radio.Button>
-                                    <Radio.Button value="exception"><img src="../../../gisexception.png" /> 异常</Radio.Button>
+                                    <Radio.Button value="normal"><img style={{width:15}} src="../../../gisnormal.png" /> 正常</Radio.Button>
+                                    <Radio.Button value="over"><img style={{width:15}} src="../../../gisover.png" /> 超标</Radio.Button>
+                                    <Radio.Button value="underline"><img style={{width:15}} src="../../../gisunline.png" /> 离线</Radio.Button>
+                                    <Radio.Button value="exception"><img style={{width:15}} src="../../../gisexception.png" /> 异常</Radio.Button>
                                 </Radio.Group>
                                 <AListRadio style={{ float: 'right' }} dvalue="b" />
                             </div>

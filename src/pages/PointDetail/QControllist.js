@@ -60,7 +60,7 @@ export default class QControllist extends Component {
         });
         return (
             <div style={{ width: '100%', height: 'calc(100vh - 222px)' }}>
-                {<Layout style={{ padding: '24px 0', background: '#fff' }}>
+                {<Layout style={{ padding: '14px 0', background: '#fff' }}>
                     <Sider width={270} style={{ background: '#fff' }} >
                         <Tabs tabPosition="left"
                             size="default"
