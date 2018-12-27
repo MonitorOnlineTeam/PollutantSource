@@ -65,7 +65,7 @@ export default Model.extend({
             }
             else {
                 yield update({
-                    selectdata: null,
+                    selectdata: [],
                     reason: result.reason
                 });
             }

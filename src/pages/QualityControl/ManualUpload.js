@@ -162,10 +162,14 @@ export default class ManualUpload extends Component {
         this.GetManualSupplementList(this.state.DGIMN, value, this.state.rangeDate[0], this.state.rangeDate[1], this.props.pageIndex, this.props.pageSize)
     }
     SelectOptions = () => {
+        debugger
         const rtnVal = [];
-        this.props.selectdata.map((item) => {
-            rtnVal.push(<Option key={item.PollutantCode}>{item.PollutantName}</Option>);
-        });
+        if(this.props.selectdata.length!==0)
+        {
+            this.props.selectdata.map((item) => {
+                rtnVal.push(<Option key={item.PollutantCode}>{item.PollutantName}</Option>);
+            });
+        }
         return rtnVal;
     }
     Template = () => {
