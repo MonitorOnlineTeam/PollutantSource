@@ -29,6 +29,7 @@ modify by
     datatable: points.datatable,
     total: points.total,
     dataloading: loading.effects['points/queryhistorydatalist'],
+    tablewidth:points.tablewidth
 }))
 class DataQuery extends Component {
     constructor(props) {
@@ -38,7 +39,7 @@ class DataQuery extends Component {
             formats: 'YYYY-MM-DD HH:mm:ss',
             dataType: 'realtime',
             current: 1,
-            pageSize: 10,
+            pageSize: 15,
             rangeDate: [moment(new Date()).add(-60, 'minutes'), moment(new Date())],
         };
         this.state = {
@@ -58,8 +59,8 @@ class DataQuery extends Component {
 
     _handleDateChange=(date, dateString) => {
         this.setState({rangeDate: date, current: 1});
-        const pollutantCode = this.state.pollutantCode ? this.state.pollutantCode : this.props.pollutantlist[0].pollutantCode;
-        const pollutantName = this.state.pollutantName ? this.state.pollutantName : this.props.pollutantlist[0].pollutantName;
+        const pollutantCode = this.state.pollutantCode ? this.state.pollutantCode : this.getpropspollutantcode();
+        const pollutantName = this.state.pollutantName ? this.state.pollutantName : this.getpropspollutantname();
         this.reloaddatalist(pollutantCode, this.state.dataType, this.state.current, this.state.pageSize, date[0], date[1], pollutantName);
     };
 
@@ -105,8 +106,8 @@ class DataQuery extends Component {
             rangeDate: [beginTime, endTime],
             current: 1
         });
-        const pollutantCode = this.state.pollutantCode ? this.state.pollutantCode : this.props.pollutantlist[0].pollutantCode;
-        const pollutantName = this.state.pollutantName ? this.state.pollutantName : this.props.pollutantlist[0].pollutantName;
+        const pollutantCode = this.state.pollutantCode ? this.state.pollutantCode : this.getpropspollutantcode();
+        const pollutantName = this.state.pollutantName ? this.state.pollutantName : this.getpropspollutantname();
         this.reloaddatalist(pollutantCode, e.target.value, this.state.current, this.state.pageSize, beginTime, endTime, pollutantName);
     }
 
@@ -123,10 +124,27 @@ class DataQuery extends Component {
         this.setState({
             current: page,
         });
-        const pollutantCode = this.state.pollutantCode ? this.state.pollutantCode : this.props.pollutantlist[0].pollutantCode;
-        const pollutantName = this.state.pollutantName ? this.state.pollutantName : this.props.pollutantlist[0].pollutantName;
+        const pollutantCode = this.state.pollutantCode ? this.state.pollutantCode : this.getpropspollutantcode();
+        const pollutantName = this.state.pollutantName ? this.state.pollutantName : this.getpropspollutantname();
         this.reloaddatalist(pollutantCode, this.state.dataType, page, pageSize, this.state.rangeDate[0], this.state.rangeDate[1], pollutantName);
     }
+    
+    ///获取
+    getpropspollutantcode=()=>{
+        if(this.props.pollutantlist[0])
+        {
+            return this.props.pollutantlist[0].pollutantCode;
+        }
+        return null;
+    }
+    getpropspollutantname=()=>{
+        if(this.props.pollutantlist[0])
+        {
+            return this.props.pollutantlist[0].pollutantName;
+        }
+        return null;
+    }
+    //后台请求数据
     reloaddatalist=(pollutantCode, datatype, pageIndex, pageSize, beginTime, endTime, pollutantName) => {
         if (this.state.displayType === 'chart' || this.state.displayType === 'table') {
             pageSize = 0;
@@ -146,44 +164,99 @@ class DataQuery extends Component {
             }
         });
     }
+    //渲染数据
+    loaddata=()=>{
+        if(this.props.dataloading)
+        {
+            return (<Spin
+                style={{ width: '100%',
+                    height: 'calc(100vh/2)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center' }}
+                size="large"
+            />);
+        }
+        else
+        {
+            if(this.state.displayType === 'chart')
+            {
+
+                if(this.props.option)
+                {
+                    return (<ReactEcharts option={this.props.option} lazyUpdate={true}
+                        notMerge={true} id="rightLine" style={{ width: '100%', height: 'calc(100vh - 380px)' }} />)
+                }
+                else
+                {
+                    return (<div style={{textAlign: 'center'}}>暂无数据</div>);
+                }
+            }
+            else
+            {
+                return ( <Table rowKey="MonitorTime" dataSource={this.props.datatable} columns={this.props.columns}
+                scroll={{ y: 'calc(100vh - 420px)',x:this.props.tablewidth }}
+                rowClassName={
+                    (record, index, indent) => {
+                        if (index === 0) {
+                            return;
+                        }
+                        if (index % 2 !== 0) {
+                            return 'light';
+                        }
+                    }
+                }
+                pagination={{
+                        'total': this.props.total,
+                        'pageSize': this.state.pageSize,
+                        'current': this.state.current,
+                        onChange: this.pageIndexChange
+                    }} />);
+            }
+
+        }
+    }
+    //如果是数据列表则没有选择污染物，而是展示全部污染物
+    getpollutantSelect=()=>{
+        if(this.state.displayType === 'chart')
+        {
+            return( <PollutantSelect_
+                optionDatas={this.props.pollutantlist}
+                defaultValue={this.getpropspollutantcode()}
+                style={{width: 150,marginRight:10}}
+                onChange={this._handlePollutantChange}
+                /> );
+        }
+        return '';
+    }
 
     render() {
-        const option = this.props.option;
-        console.log(option);
+        //初始化等待
+        if(this.props.isloading )
+        {
+            return (<Spin
+                style={{ width: '100%',
+                    height: 'calc(100vh/2)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center' }}
+                size="large"
+            />);
+        }
         return (
             <div className={styles.cardTitle}>
-                { this.props.isloading ? <Spin style={{width: '100%',
-                    height: 'calc(100vh - 260px)',
-                    marginTop: 260 }} size="large" /> :
-                    <Card title="监测趋势图" extra={
+               
+                    <Card   extra={
                     <div>
-                            { this.state.displayType === 'chart' ? <PollutantSelect_
-                            optionDatas={this.props.pollutantlist}
-                            defaultValue={this.props.pollutantlist[0] ? this.props.pollutantlist[0].pollutantCode : ''}
-                            style={{width: 150}}
-                            onChange={this._handlePollutantChange}
-                            /> : ''}
-                            <RangePicker_ style={{width: 350,textAlign:'left'}} dateValue={this.state.rangeDate} format={this.state.formats} onChange={this._handleDateChange} />
+                             {this.getpollutantSelect()}
+                            <RangePicker_ style={{width: 350,textAlign:'left',marginRight:10}} dateValue={this.state.rangeDate} format={this.state.formats} onChange={this._handleDateChange} />
                             <ButtonGroup_ style={{marginRight: 20}} checked="realtime" onChange={this._handleDateTypeChange} />
                             <Switch checkedChildren="图表" unCheckedChildren="数据" onChange={this.displayChange} defaultChecked={true} />
                         </div>
-                    } style={{ width: '100%', height: 'calc(100vh - 225px)' }}>
-                    {
-                            this.props.dataloading ? <Spin style={{width: '100%',
-                                height: 'calc(100vh - 260px)',
-                                marginTop: 260 }} size="large" /> :
-                                (this.state.displayType === 'chart' ? (!option ? <div style={{textAlign: 'center'}}>暂无数据</div> : <ReactEcharts option={this.props.option} lazyUpdate={true}
-                                    notMerge={true} id="rightLine" style={{ width: '100%', height: 'calc(100vh - 380px)' }} />) :
-                                    <Table rowKey="MonitorTime" dataSource={this.props.datatable} columns={this.props.columns}
-                                    pagination={{
-                                            'total': this.props.total,
-                                            'pageSize': this.state.pageSize,
-                                            'current': this.state.current,
-                                            onChange: this.pageIndexChange
-                                        }} />)
-                        }
+                    } style={{ width: '100%', height: 'calc(100vh - 213px)' }}>
+                    { this.loaddata() }
                 </Card>
-                }</div>
+                </div>
         );
     }
 }

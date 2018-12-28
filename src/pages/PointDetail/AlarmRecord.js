@@ -12,6 +12,7 @@ import { Card,
 } from 'antd';
 
 import {connect} from 'dva';
+import styles from './index.less';
 const FormItem = Form.Item;
 @connect(({points, loading}) => ({
     pollutantlist: points.pollutantlist,
@@ -28,7 +29,7 @@ class AlarmRecord extends Component {
         this.state = {
             rangeDate: [moment(new Date()).add(-1, 'month'), moment(new Date())],
             current: 1,
-            pageSize: 10
+            pageSize: 15
         };
     }
     componentWillMount() {
@@ -77,26 +78,44 @@ class AlarmRecord extends Component {
           });
       }
       render() {
+          
+        let tablewidth=0;
+        const colcount=5;
+        let width= (window.screen.availWidth - 120)/colcount;
+        if(width<200)
+        {
+            width=200;
+        }
+        tablewidth=  width*colcount;
+
+
           const columns = [{
               title: '超标时间',
               dataIndex: 'time',
+              fixed:'left',
+              width:width,
               key: 'time'
           },
-          { title: '超标污染物',
+          {  
+              title: '超标污染物',
               dataIndex: 'pollutantName',
+              width:width,
               key: 'pollutantName'
           }, {
               title: '超标值',
               dataIndex: 'overValue',
+              width:width,
               key: 'overValue'
           }, {
               title: '标准值',
               dataIndex: 'standardValue',
+              width:width,
               key: 'standardValue'
           },
           {
               title: '超标倍数',
               dataIndex: 'overMul',
+              width:width,
               key: 'overMul'
           }];
           return (
@@ -104,33 +123,34 @@ class AlarmRecord extends Component {
                   {(this.props.isloading || this.props.dataloading) ? <Spin style={{width: '100%',
                       height: 'calc(100vh - 260px)',
                       marginTop: 260 }} size="large" /> :
-                      <Card>
-                      <Card>
-                              <Form layout="inline">
-                              <Row gutter={{ md: 8, lg: 8, xl: 8 }}>
-                                      <Col span={12}>
-                                          <FormItem label="超标时间">
-                                              <RangePicker_ style={{width: 350}} format="YYYY-MM-DD" onChange={this._handleDateChange} dateValue={this.state.rangeDate} />
-                                          </FormItem>
-                                      </Col>
-                                      <Col span={12}>
-                               污染物因子：
+                      <div className={styles.cardTitle}>
+                      <Card  extra={
+                        <div>
+                            <span>超标时间</span> <RangePicker_ style={{width: 350,textAlign:'left',marginRight:10}} format="YYYY-MM-DD" onChange={this._handleDateChange} dateValue={this.state.rangeDate} />
+                            <span>污染物因子</span>
                                           <PollutantSelect_
                                               optionDatas={this.props.pollutantlist}
-                                              style={{width: 200}}
+                                              style={{width: 200,marginRight:10}}
                                               onChange={this._handlePollutantChange}
                                               placeholder="请选择污染物"
                                           />
-                                      </Col>
-                                  </Row>
-                          </Form>
-                          </Card>
-                      <Row gutter={18} >
-                              <Col span={24}>
-                              <Table
+                        </div>
+                        } style={{ width: '100%', height: 'calc(100vh - 213px)' }}>
+                        <Table
                                       columns={columns}
                                       dataSource={this.props.data}
                                       rowKey="key"
+                                      scroll={{ y: 'calc(100vh - 420px)',x:tablewidth }}
+                                      rowClassName={
+                                        (record, index, indent) => {
+                                            if (index === 0) {
+                                                return;
+                                            }
+                                            if (index % 2 !== 0) {
+                                                return 'light';
+                                            }
+                                        }
+                                    }
                                       pagination={{
                                           'total': this.props.total,
                                           'pageSize': this.state.pageSize,
@@ -138,9 +158,8 @@ class AlarmRecord extends Component {
                                           onChange: this.pageIndexChange
                                       }}
                                   />
-                          </Col>
-                          </Row>
-                  </Card>
+                    </Card>
+                    </div>
                   }</div>
           );
       }

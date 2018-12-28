@@ -29,7 +29,9 @@ class MonitoringReport extends Component {
             rangeDate: [moment(new Date()).add(-1, 'year'), moment(new Date())],
             radiovalue:'year',
             format:'YYYY',
-            reportname:null
+            reportname:null,
+            numPages: null,
+            pageNumber: 1,
         };
     }
     componentDidMount() {
@@ -76,29 +78,35 @@ class MonitoringReport extends Component {
             }
         )
     }
-    
+ 
     showPdf=(reportname)=>{
-       debugger;
         this.setState({
             reportname
         });
-        this.props.dispatch(routerRedux.push(`/analysis/selfmonitorreport/${reportname}`));
+       // this.props.dispatch(routerRedux.push(`/analysis/selfmonitorreport/${reportname}`));
+    //    <div style={{overflow:'scroll',height:600}}>
+    //    <PDFReader url={imgaddress+this.state.reportname}/>
+    //   </div>
     }
     getshowpdf=()=>{
         if(this.state.reportname)
         {
-            return(  
+         
+            const pdfurl = require('./test1.pdf');
+            return (
+                <iframe style={{border:0,width:"100%",height:630,}} src={imgaddress+this.state.reportname}/>
+            )
+            {/* return(  
             <div className={styles.pdfdiv} >
                  <PDF
                  file={imgaddress+this.state.reportname}
                  />
-            </div>);
+            </div>); */}
         }
     }
 
     getreportlist=()=>{
         const list=this.props.reportlist;
-        console.log(list);
         const type=this.state.radiovalue;
         let res=[];
         if(list)
@@ -135,7 +143,7 @@ class MonitoringReport extends Component {
     }
 
     render() {
-        const pdfurl = require('./test1.pdf');
+     
         const { rangeDate, mode,radiovalue,format } = this.state;
         const {loading,children}=this.props;
         if(this.props.loading)
@@ -182,7 +190,8 @@ class MonitoringReport extends Component {
 
              <div>
                  {
-                     children
+                     this.getshowpdf()
+                    // children
                  }
             </div>
             </Card>
