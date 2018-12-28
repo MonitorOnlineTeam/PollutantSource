@@ -216,7 +216,7 @@ export default class UseStandardLibrary extends Component {
                              })
                          } > 编辑 </a>;
                      }
-                     return <a style={{color: 'gray'}} > 编辑 </a>;
+                     return <a style={{color: '#D1D1D1'}} > 编辑 </a>;
                  }
              },
          ];
