@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import RangePicker_ from '../../components/PointDetail/RangePicker_';
 import moment from 'moment';
-import PollutantSelect_ from '../../components/PointDetail/PollutantSelect_';
+import PollutantSelect from '../../components/PointDetail/PollutantSelect';
 import { Card,
     Row,
     Col,
@@ -36,10 +36,15 @@ class AlarmRecord extends Component {
         this.props.dispatch({
             type: 'points/querypollutantlist',
             payload: {
-                dgimn: this.props.selectpoint.DGIMN
+                dgimn: this.props.selectpoint.DGIMN,
+                beginTime: this.state.rangeDate[0],
+                endTime: this.state.rangeDate[1],
+                pageIndex: this.state.current,
+                pageSize: this.state.pageSize,
+                overdata:true
             }
         });
-        this.reloaddatalist(this.state.pollutantCode, this.state.current, this.state.pageSize, this.state.rangeDate[0], this.state.rangeDate[1]);
+       // this.reloaddatalist(this.state.pollutantCode, this.state.current, this.state.pageSize, this.state.rangeDate[0], this.state.rangeDate[1]);
     }
     _handleDateChange=(date, dateString) => {
         this.setState({
@@ -118,25 +123,34 @@ class AlarmRecord extends Component {
               width:width,
               key: 'overMul'
           }];
+
+          if(this.props.isloading) {
+            return (<Spin
+                style={{ width: '100%',
+                    height: 'calc(100vh/2)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center' }}
+                size="large"
+            />);
+        }
           return (
               <div>
-                  {(this.props.isloading || this.props.dataloading) ? <Spin style={{width: '100%',
-                      height: 'calc(100vh - 260px)',
-                      marginTop: 260 }} size="large" /> :
                       <div className={styles.cardTitle}>
                       <Card  extra={
                         <div>
                             <span>超标时间</span> <RangePicker_ style={{width: 350,textAlign:'left',marginRight:10}} format="YYYY-MM-DD" onChange={this._handleDateChange} dateValue={this.state.rangeDate} />
                             <span>污染物因子</span>
-                                          <PollutantSelect_
+                                          <PollutantSelect
                                               optionDatas={this.props.pollutantlist}
-                                              style={{width: 200,marginRight:10}}
+                                              style={{width: 200,marginRight:10,marginLeft:10}}
                                               onChange={this._handlePollutantChange}
                                               placeholder="请选择污染物"
                                           />
                         </div>
                         } style={{ width: '100%', height: 'calc(100vh - 213px)' }}>
-                        <Table
+                         <Table
+                         loading={this.props.dataloading}
                                       columns={columns}
                                       dataSource={this.props.data}
                                       rowKey="key"
@@ -160,7 +174,7 @@ class AlarmRecord extends Component {
                                   />
                     </Card>
                     </div>
-                  }</div>
+                  </div>
           );
       }
 }

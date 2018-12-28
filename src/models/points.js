@@ -407,15 +407,28 @@ export default Model.extend({
                     pollutantCode: result[0].pollutantCode,
                     datatype: 'realtime',
                     dgimn: payload.dgimn,
-                    //  pageIndex: 1,
                     pollutantName: result[0].pollutantName,
                     pollutantInfo: result[0]
                 };
-                yield put({
-                    type: 'queryhistorydatalist',
-                    payload: params
-                });
-                yield take('queryhistorydatalist/@@end');
+                
+                 //如果请求的是超标数据
+                 if(payload.overdata)
+                 {
+                    yield put({
+                        type: 'queryoverdatalist',
+                        payload: payload
+                    });
+                    yield take('queryoverdatalist/@@end');
+                 }
+                 else
+                 {
+                    yield put({
+                        type: 'queryhistorydatalist',
+                        payload: params
+                    });
+                    yield take('queryhistorydatalist/@@end');
+                 }
+
             } else {
                 yield update({ pollutantlist: [],datalist: null, chartdata: null, columns: null, datatable: null, total: 0 });
             }
