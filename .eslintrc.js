@@ -1,19 +1,39 @@
 module.exports = {
-  "parserOptions": {
-      "ecmaVersion": 6,
-          "sourceType": "module",
-          "ecmaFeatures": {
-              "impliedStrict": true,
-              "jsx": true
-          }
-  },
-  "env": {
-      "es6": true,
-      "node": true
-  },
-  "parser": "babel-eslint",
-  "plugins": ["react"],
-  "rules": {
+    parser: 'babel-eslint',
+    extends: ['airbnb', 'prettier', 'plugin:compat/recommended'],
+    env: {
+      browser: true,
+      node: true,
+      es6: true,
+      mocha: true,
+      jest: true,
+      jasmine: true,
+    },
+    globals: {
+      APP_TYPE: true,
+      page: true,
+    },
+    rules: {
+      'react/jsx-filename-extension': [1, { extensions: ['.js'] }],
+      'react/jsx-wrap-multilines': 0,
+      'react/prop-types': 0,
+      'react/forbid-prop-types': 0,
+      'react/jsx-one-expression-per-line': 0,
+      'import/no-unresolved': [2, { ignore: ['^@/', '^umi/'] }],
+      'import/no-extraneous-dependencies': [
+        2,
+        {
+          optionalDependencies: true,
+          devDependencies: ['**/tests/**.js', '/mock/**.js', '**/**.test.js'],
+        },
+      ],
+      'jsx-a11y/no-noninteractive-element-interactions': 0,
+      'jsx-a11y/click-events-have-key-events': 0,
+      'jsx-a11y/no-static-element-interactions': 0,
+      'jsx-a11y/anchor-is-valid': 0,
+      'linebreak-style': 0,
+     
+      
       "semi": [2, "always"],//语句强制分号结尾
       "no-extra-semi": 2,//禁止多余的冒号
       "new-cap": [0],//函数名首行大写必须使用new方式调用，首行小写必须用不带new方式调用
@@ -60,7 +80,9 @@ module.exports = {
       "react/prop-types": [0],
       "jsx-quotes": [2, "prefer-double"],
       "react/jsx-no-bind":0
-      
-  },
-  "extends": ["standard", "standard-react"]
-};
+    },
+    settings: {
+      polyfills: ['fetch', 'promises', 'url'],
+    },
+  };
+  
