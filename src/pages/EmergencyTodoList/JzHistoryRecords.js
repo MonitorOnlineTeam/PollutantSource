@@ -9,6 +9,7 @@ import {
     Table,
     Form,
     Select, Modal, message, Tag, Radio, Checkbox,
+    Spin
 } from 'antd';
 import { connect } from 'dva';
 import moment from 'moment';
@@ -74,7 +75,7 @@ export default class JzHistoryRecords extends Component {
     }
 
     seeDetail=(Record) => {
-        this.props.dispatch(routerRedux.push(`/pointdetail/:pointcode/JzRecordInfo/${Record.TaskID}/${Record.TypeID}`));
+        this.props.dispatch(routerRedux.push(`/PatrolForm/JzRecordInfo/${Record.TaskID}`));
     }
 
     render() {
@@ -123,7 +124,18 @@ export default class JzHistoryRecords extends Component {
                 } > 详细 </a>;
             }
         }];
+        if (this.props.isloading) {
+            return (<Spin
+                style={{ width: '100%',
+                    height: 'calc(100vh/2)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center' }}
+                size="large"
+            />);
+        }
         return (
+            <div className={styles.cardTitle}>
             <Card bordered={false}>
                 <div className={styles.conditionDiv}>
                             <Row gutter={8}>
@@ -139,7 +151,7 @@ export default class JzHistoryRecords extends Component {
                 <Table
                    size="middle"
                    scroll={{ y: 'calc(100vh - 465px)' }}
-                   loading={this.props.loading}
+                   loading={this.props.isloading}
                    className={styles.dataTable}
                    columns={columns}
                    dataSource={dataSource}
@@ -165,6 +177,7 @@ export default class JzHistoryRecords extends Component {
                     }}
                 />
             </Card>
+            </div>
         );
     }
 }

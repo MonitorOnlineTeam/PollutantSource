@@ -3,7 +3,7 @@ import {
 } from '../dvapack';
 import {
     getpointlist, addpoint, getoperationsuserList, getpoint, editpoint, deletepoint, getanalyzersys, addalyzersys, getanalyzersysmnmodel, editalyzersys, deletealyzersys
-    , getcomponent, addalyzerchild, getanalyzerchild
+    , getcomponent, addalyzerchild, getanalyzerchild, getanalyzerchildmodel, deletealyzerchild, editalyzerchild
 } from '../services/pointinfo';
 export default Model.extend({
     namespace: 'pointinfo',
@@ -30,6 +30,9 @@ export default Model.extend({
         addalyzerchild_requstresult:null,
         analyzerchild:[],
         getanalyzerchild_requstresult:null,
+        editalyzersyschild:null,
+        getanalyzerchildmodel_requstresult:null,
+        deletealyzerchild_requstresult:null,
     },
     subscriptions: {
         setup({
@@ -462,6 +465,89 @@ export default Model.extend({
             });
             callback();
           },
+           * getanalyzerchildmodel({
+             payload: {
+               ID: ID,
+               callback
+             }
+           }, {
+             call,
+             put,
+             update,
+             select
+           }) {
+             const result = yield call(getanalyzerchildmodel, {
+               ID: ID,
+             });
+             yield update({
+               getanalyzerchildmodel_requstresult: result.requstresult,
+               reason: result.reason,
+               editalyzersyschild: result.data[0],
+             });
+             callback();
+           },
+           * deletealyzerchild({
+           payload: {
+             ID,
+             callback
+           }
+         }, {
+           call,
+           put,
+           update,
+           select
+         }) {
+           const result = yield call(deletealyzerchild, {
+             ID: ID,
+           });
+           yield update({
+             deletealyzerchild_requstresult: result.requstresult,
+             reason: result.reason,
+           });
+           callback();
+         },
+         * editalyzerchild({
+           payload: {
+            ID,
+            Name: Name,
+            DeviceModel: DeviceModel,
+            Manufacturer: Manufacturer,
+            ManufacturerAbbreviation: ManufacturerAbbreviation,
+            TestComponent: TestComponent,
+            AnalyzerPrinciple: AnalyzerPrinciple,
+            AnalyzerRangeMin: AnalyzerRangeMin,
+            MeasurementUnit: MeasurementUnit,
+            Slope: Slope,
+            Intercept: Intercept,
+            AnalyzerRangeMax: AnalyzerRangeMax,
+            callback
+           }
+         }, {
+           call,
+           put,
+           update,
+           select
+         }) {
+           const result = yield call(editalyzerchild, {
+            ID,
+            Name: Name,
+            DeviceModel: DeviceModel,
+            Manufacturer: Manufacturer,
+            ManufacturerAbbreviation: ManufacturerAbbreviation,
+            TestComponent: TestComponent,
+            AnalyzerPrinciple: AnalyzerPrinciple,
+            AnalyzerRangeMin: AnalyzerRangeMin,
+            MeasurementUnit: MeasurementUnit,
+            Slope: Slope,
+            Intercept: Intercept,
+            AnalyzerRangeMax: AnalyzerRangeMax,
+           });
+           yield update({
+             editalyzerchild_requstresult: result.requstresult,
+             reason: result.reason,
+           });
+           callback();
+         },
     },
     reducers: {
         save(state, action) {

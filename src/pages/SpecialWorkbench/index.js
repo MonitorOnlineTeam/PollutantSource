@@ -1,6 +1,6 @@
 
 import React, { Component } from 'react';
-import { Row, Col,Card,List, message, Avatar, Spin,Table,Calendar, Badge,Alert,Tag  } from 'antd';
+import { Row, Col,Card,List, message, Avatar, Spin,Table,Calendar, Badge,Alert,Tag,Link,Icon,Button } from 'antd';
 import styles from './index.less';
 import reqwest from 'reqwest';
 import InfiniteScroll from 'react-infinite-scroller';
@@ -14,33 +14,61 @@ import { relative } from 'path';
 add by cg 18.6.8
 modify by wjw 18.12.24
 */
+const listData = [];
+for (let i = 0; i < 4; i++) {
+  listData.push({
+    href: 'http://ant.design',
+    title: `废气排口 ${i}`,
+    avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
+    description: (<div>
+        <div>
+            <Tag color="magenta">参数异常</Tag>
+            <Tag color="red">连续值异常</Tag>
+            <Tag color="volcano">超限异常</Tag>
+            <Tag color="orange">逻辑异常</Tag>
+        </div>
+        <div style={{marginTop:10}}>
+            <div>烟气分析仪故障烟气分析仪故障烟气分析仪故障烟气分析仪故障</div>
+            <div>首次报警时间：2018-12-27</div>
+            <div>报警总次数：<span style={{fontWeight:'bold'}}>98</span></div>
+        </div>
+      </div>),
+    content: '',
+  });
+}
 
-  const gridStyle = {
-    width: '50%',
-    textAlign: 'center',
-    height: '200px'
-  };
-  const columns = [
-        {
-            title: '排口名称',
-            dataIndex: 'PointName',
-        }, 
-        {
-            title: '运维人',
-            dataIndex: 'OperationName',
-        }, 
-        {
-            title: '状态',
-            dataIndex: 'ExceptionTypeText',
-        }, {
-            title: '操作',
-            dataIndex: 'opt',
-            render: (text, record) => {
-                return (
-                    <a > 查看运维 </a>
-                );
-            }
-        }];
+const IconText = ({ type, text }) => (
+  <span>
+    <Icon type={type} style={{ marginRight: 8 }} />
+    {text}
+  </span>
+);
+const gridStyle = {
+width: '50%',
+textAlign: 'center',
+height: '200px'
+};
+const columns = [
+    {
+        title: '排口名称',
+        dataIndex: 'PointName',
+    }, 
+    {
+        title: '运维人',
+        dataIndex: 'OperationName',
+    }, 
+    {
+        title: '状态',
+        dataIndex: 'ExceptionTypeText',
+    }, {
+        title: '操作',
+        dataIndex: 'opt',
+        render: (text, record) => {
+            return (
+                <a > 查看运维 </a>
+            );
+        }
+    }];
   const data = [{
     key: '1',
     name: '脱硫出口1',
@@ -58,67 +86,41 @@ modify by wjw 18.12.24
     address: '派单',
   }];
 const fakeDataUrl = 'https://randomuser.me/api/?results=5&inc=name,gender,email,nat&noinfo';
-function getListData(value) {
-    debugger;
-    let listData;
-    switch (value.date()) {
-      case 10:
-        listData = [
-          { type: 'warning', content: '' }
-        ]; break;
-      case 30:
-        listData = [
-          { type: 'success', content: '' }
-        ]; break;
-    }
-    return listData || [];
-  }
   
-  function dateCellRender(value) {
-    const listData = getListData(value);
-    return (
-      <ul className="events">
-        {
-          listData.map(item => (
-            <li key={item.content}>
-              <Badge status={item.type} text={item.content} />
-            </li>
-          ))
-        }
-      </ul>
-    );
-  }
-  
-  function getMonthData(value) {
-    // if (value.month() === 8) {
-    //   return 1394;
-    // }
-  }
-  
-  function monthCellRender(value) {
+function getMonthData(value) {
+// if (value.month() === 8) {
+//   return 1394;
+// }
+}
+
+function monthCellRender(value) {
     const num = getMonthData(value);
     return num ? (
-      <div className="notes-month">
+        <div className="notes-month">
         <section>{num}</section>
         <span>Backlog number</span>
-      </div>
+        </div>
     ) : null;
-  }
+}
 const pageUrl = {
     updateState: 'workbenchmodel/updateState',
-    getOperationData: 'workbenchmodel/getOperationData'
+    getOperationData: 'workbenchmodel/getOperationData',
+    getExceptionAlarmData: 'workbenchmodel/getExceptionAlarmData'
 };
 @connect(({
     loading,
     workbenchmodel
 }) => ({
     loading: loading.effects[pageUrl.getOperationData],
-    operation: workbenchmodel.operation
+    operation: workbenchmodel.operation,
+    exceptionAlarm: workbenchmodel.exceptionAlarm
 }))
 class SpecialWorkbench extends Component {
     constructor(props) {
         super(props);
-
+        // console.log('this.props.operation',this.props.operation.tableDatas);
+        // console.log('moment().format("YYYY-MM-DD")',moment().format("YYYY-MM-DD"));
+        // console.log(this.props.operation.tableDatas.filter(m=>moment(m.CreateTime).format('YYYY-MM-DD')===moment().format("YYYY-MM-DD")));
         this.state = {
             key: 'tab1',
             noTitleKey: 'app',
@@ -126,14 +128,13 @@ class SpecialWorkbench extends Component {
             loading: false,
             hasMore: true,
             value: moment(),
-            selectedValue: moment(),
-            operation:{
-                tableDatas:this.props.operation.tableDatas.filter(m=>moment(m.CreateTime).format('YYYY-MM-DD')===moment().format("YYYY-MM-DD")).slice(0,6)
-            }
+            selectedValue: moment()
         };
     }
     componentWillMount() {
         this.getOperationData(1);
+        this.getExceptionAlarmData(1);
+        //this.onCalendarSelect(moment());
     }
     /**
      * 更新model中的state
@@ -144,8 +145,113 @@ class SpecialWorkbench extends Component {
             payload: payload,
         });
     }
+
     /**
-     * 更新运维数据
+     * 异常报警_更新数据
+     */
+    getExceptionAlarmData = (pageIndex) =>{
+        this.props.dispatch({
+            type: pageUrl.getExceptionAlarmData,
+            payload: {},
+        });
+    }
+    /**
+     * 渲染异常报警数据列表
+     */
+    renderExceptionAlarmList = ()=>{
+        console.log('exceptionAlarm:',this.props.exceptionAlarm);
+        const listData = [];
+        const colorArray={
+            "数据异常":"magenta",
+            "参数异常":"red",
+            "逻辑异常":"volcano",
+            "状态异常":"orange"
+        };
+        this.props.exceptionAlarm.tableDatas.map((item)=>{
+            //判断报警是否超过4小时
+            let seconds=moment().diff(moment(item.FirstAlarmTime), 'minutes');
+            let hour=Math.floor(seconds/60);
+            let minutes=Math.floor(seconds%60);
+            let color = hour>= 4 ? 'red':'rgb(129,203,237)';
+            let minutesLable=minutes>0?`${minutes}分钟`:'';
+            
+            let labelDiv=<div style={{color:`${color}`}}>已发生{hour}小时{minutesLable}</div>;
+            let btnDiv=hour>= 4 ?(<div style={{marginTop:43}}>
+                                        <Button style={{width:100,border:'none',backgroundColor:'rgb(74,210,187)'}} type="primary">督办</Button>
+                                </div>):'';
+            listData.push({
+                href: 'http://ant.design',
+                title: `${item.PointName}`,
+                avatar: (<Icon type="alert" theme="twoTone" />),
+                description: (<div>
+                    <div>
+                        {
+                            item.ExceptionTypes.split(',').map(item => (
+                                <Tag color={`${colorArray[item]}`}>{item}</Tag>
+                            ))
+                        }
+                    </div>
+                    <div style={{marginTop:10}}>
+                        <div>{item.LastAlarmMsg}</div>
+                        {/* <div>首次报警时间：2018-12-27</div>
+                        <div>报警总次数：<span style={{fontWeight:'bold'}}>98</span></div> */}
+                    </div>
+                </div>),
+                content: '',
+                extra:(
+                    <div style={{marginTop:30,marginRight:70,textAlign:'center'}}>
+                        {labelDiv}
+                        {btnDiv}
+                    </div>
+                )
+            });
+        });
+
+        // for (let i = 0; i < 4; i++) {
+        //     listData.push({
+        //         href: 'http://ant.design',
+        //         title: `废气排口 ${i}`,
+        //         avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
+        //         description: (<div>
+        //             <div>
+        //                 <Tag color="magenta">参数异常</Tag>
+        //                 <Tag color="red">连续值异常</Tag>
+        //                 <Tag color="volcano">超限异常</Tag>
+        //                 <Tag color="orange">逻辑异常</Tag>
+        //             </div>
+        //             <div style={{marginTop:10}}>
+        //                 <div>烟气分析仪故障烟气分析仪故障烟气分析仪故障烟气分析仪故障</div>
+        //                 <div>首次报警时间：2018-12-27</div>
+        //                 <div>报警总次数：<span style={{fontWeight:'bold'}}>98</span></div>
+        //             </div>
+        //         </div>),
+        //         content: '',
+        //     });
+        // }
+
+        return (<List
+                    itemLayout="vertical"
+                    // size="large"
+                    dataSource={listData}
+                    renderItem={item => (
+                    <List.Item
+                        key={item.title}
+                        actions={[]}
+                        extra={item.extra}
+                    >
+                        <List.Item.Meta
+                        // avatar={<div>{item.avatar}</div>}
+                        title={<a href={item.href}>{item.title}</a>}
+                        description={item.description}
+                        />
+                        {item.content}
+                    </List.Item>
+                    )}
+                />);
+    }
+
+    /**
+     * 智能运维_更新运维数据
      */
     getOperationData = (pageIndex) =>{
         this.props.dispatch({
@@ -154,7 +260,7 @@ class SpecialWorkbench extends Component {
         });
     }
     /**
-     * 渲染运维历史记录表格
+     * 智能运维_渲染运维历史记录表格
      */
     renderOperationTable = ()=>{
         const columns = [
@@ -207,15 +313,81 @@ class SpecialWorkbench extends Component {
                 }
             }];
         
-        return <Table columns={columns} dataSource={this.state.operation.tableDatas} size="small" pagination={false}/>
+        return <Table columns={columns} dataSource={this.props.operation.tempTableDatas.filter(m=>moment(m.CreateTime).format('YYYY-MM-DD')===this.state.selectedValue.format("YYYY-MM-DD")).slice(0,6)} size="small" pagination={false}/>
     }
+    /**
+     * 智能运维_日历表时间选择事件
+     */
+    onCalendarSelect = (value) => {
+        // debugger;
+        let selectValue = value.format('YYYY-MM-DD 00:00:00');
+        this.setState({
+          // value,
+            selectedValue: value
+        });
+        if(value.format("YYYY-MM")===this.state.selectedValue.format("YYYY-MM"))
+        {
+            return null;
+        }
+        
+        if(value.format("YYYY-MM")!==moment(this.props.operation.beginTime).format("YYYY-MM"))
+        {
+            this.updateState({
+                operation:{
+                    ...this.props.operation,
+                    ...{
+                        beginTime: moment(selectValue).add(-1,'months').format('YYYY-MM-01 00:00:00'),
+                        endTime: moment(selectValue).add(2,'months').format('YYYY-MM-01 00:00:00'),
+                    }
+                }
+            });
+            this.getOperationData(1);
+        }
+    }
+    /**
+     * 智能运维_日历表插件基础渲染
+     */
+    renderCalendar = () =>{
 
+        return <Calendar fullscreen={false} onSelect={this.onCalendarSelect} dateCellRender={this.dateCellRender} monthCellRender={monthCellRender} />;
+    }
+    /**
+     * 智能运维_日历表插件渲染任务数据
+     */
+    dateCellRender = (value) =>{
+        let listData=[]; 
+        let thisData=this.props.operation.tempTableDatas.filter(m=>moment(m.CreateTime).format('YYYY-MM-DD')===value.format("YYYY-MM-DD"));
+        if(thisData&&thisData.length>0)
+        {
+            let ExceptionTypeText=thisData.filter(m=>m.ExceptionTypeText!=="");
+            if(ExceptionTypeText&&ExceptionTypeText.length>0)
+            {
+                listData = [{ type: 'warning', content: '' }];
+            }else
+            {
+                listData = [{ type: 'success', content: '' }];
+            }
+        }
+        
+    return (
+            <ul className="events">
+                {
+                    listData.map(item => (
+                        <li key={item.content}>
+                        <Badge status={item.type} text={item.content} />
+                        </li>
+                    ))
+                }
+            </ul>
+            );
+    }
     componentDidMount() {
         this.fetchData((res) => {
             this.setState({
             data: res.results,
             });
         });
+        // this.onCalendarSelect(moment());
     }
     fetchData = (callback) => {
         reqwest({
@@ -248,10 +420,6 @@ class SpecialWorkbench extends Component {
             loading: false,
           });
         });
-    }
-    onTabChange = (key, type) => {
-        console.log(key, type);
-        this.setState({ [type]: key });
     }
 
     getOption = (type) => {
@@ -328,72 +496,7 @@ class SpecialWorkbench extends Component {
     onPanelChange = (value, mode)=>{
         console.log(value, mode);
     }
-    /**
-     * 日历表时间选择事件
-     */
-    onCalendarSelect = (value) => {
-        let selectValue = value.format('YYYY-MM-DD 00:00:00');
-        this.setState({
-          // value,
-            selectedValue: value,
-            operation:{
-                tableDatas:this.props.operation.tableDatas.filter(m=>moment(m.CreateTime).format('YYYY-MM-DD')===value.format("YYYY-MM-DD")).slice(0,6)
-        }
-        });
-        if(value.format("YYYY-MM")===this.state.selectedValue.format("YYYY-MM"))
-        {
-            return false;
-        }
-        
-        if(value.format("YYYY-MM")!==moment(this.props.operation.beginTime).format("YYYY-MM"))
-        {
-            this.updateState({
-                operation:{
-                    ...this.props.operation,
-                    ...{
-                        beginTime: moment(selectValue).add(-1,'months').format('YYYY-MM-01 00:00:00'),
-                        endTime: moment(selectValue).add(2,'months').format('YYYY-MM-01 00:00:00'),
-                    }
-                }
-            });
-            this.getOperationData(1);
-        }
-    }
-    /**
-     * 日历表插件渲染
-     */
-    renderCalendar = () =>{
-
-        return <Calendar fullscreen={false} onSelect={this.onCalendarSelect} dateCellRender={this.dateCellRender} monthCellRender={monthCellRender} />;
-    }
-
-    dateCellRender = (value) =>{
-        let listData=[];
-        let thisData=this.props.operation.tableDatas.filter(m=>moment(m.CreateTime).format('YYYY-MM-DD')===value.format("YYYY-MM-DD"));
-        if(thisData&&thisData.length>0)
-        {
-            let ExceptionTypeText=thisData.filter(m=>m.ExceptionTypeText!=="");
-            if(ExceptionTypeText&&ExceptionTypeText.length>0)
-            {
-                listData = [{ type: 'warning', content: '' }];
-            }else
-            {
-                listData = [{ type: 'success', content: '' }];
-            }
-        }
-        
-    return (
-            <ul className="events">
-                {
-                    listData.map(item => (
-                        <li key={item.content}>
-                        <Badge status={item.type} text={item.content} />
-                        </li>
-                    ))
-                }
-            </ul>
-            );
-    }
+    
 
     render() {
         //console.log(this.props.operation);
@@ -411,12 +514,12 @@ class SpecialWorkbench extends Component {
                     </Card> */}
                     <div className={styles.headerDiv}>
                         <p>智能监控</p>
-                        <p style={{float:"right",marginRight:'5%'}}>
+                        <span style={{float:"right",marginRight:'5%'}}>
                             <span style={{marginRight:20}}>排放口:<span style={{marginLeft:5,color:'rgb(72,145,255)'}}>12</span></span>
                             <span style={{marginRight:20}}>运行:<span style={{marginLeft:5,color:'rgb(93,192,94)'}}>8</span></span>
                             <span style={{marginRight:20}}>超标:<span style={{marginLeft:5,color:'rgb(244,5,4)'}}>3</span></span>
                             <span style={{marginRight:20}}>关停:<span style={{marginLeft:5,color:'rgb(208,145,14)'}}>1</span></span>
-                        </p>
+                        </span>
                     </div>
                     <Row gutter={24}>
                         <Col xl={12} lg={24} md={24} sm={24} xs={24} style={{ marginBottom: 10 }}>
@@ -582,36 +685,11 @@ class SpecialWorkbench extends Component {
                                 style={{ marginBottom: 10}}
                                 bordered={false}
                                 extra={<a href="#">更多>></a>}
+                                className={styles.exceptionAlarm}
                                 >
-                            <div className={styles.demoInfiniteContainer} style={{height:688}}>
-                                    <InfiniteScroll
-                                        initialLoad={false}
-                                        pageStart={0}
-                                        loadMore={this.handleInfiniteOnLoad}
-                                        hasMore={!this.state.loading && this.state.hasMore}
-                                        useWindow={false}
-                                        >
-                                        <List
-                                            dataSource={this.state.data}
-                                            size="small"
-                                            renderItem={item => (
-                                                <List.Item key={item.id}>
-                                                    <List.Item.Meta
-                                                    title={<a href="https://ant.design">{item.name.last}</a>}
-                                                    description={item.email}
-                                                    />
-                                                    <div></div>
-                                                </List.Item>
-                                                )}
-                                            >
-                                            {this.state.loading && this.state.hasMore && (
-                                            <div className="demo-loading-container">
-                                                <Spin />
-                                            </div>
-                                            )}
-                                        </List>
-                                    </InfiniteScroll>
-                                </div>
+                                <Card.Grid style={{width:'100%',height:736}} key='1'>
+                                    {this.renderExceptionAlarmList()}
+                                </Card.Grid>
                             </Card>
                         </Col>
                     </Row>
@@ -623,39 +701,39 @@ class SpecialWorkbench extends Component {
                     <Row gutter={24}>
                         <Col xl={8} lg={24} md={24} sm={24} xs={24} style={{ marginBottom: 10 }}>
                             <Card style={{}}>
-                                <div className={styles.calendarDiv}>
-                                    {/* <Alert message={`You selected date: ${this.state.selectedValue && this.state.selectedValue.format('YYYY-MM-DD')}`} /> */}
-                                    <div style={{textAlign: 'left', marginBottom: -35}}>
-                                            <div style={{
-                                                width: 6,
-                                                height: 6,
-                                                backgroundColor: '#faad14',
-                                                display: 'inline-block',
-                                                borderRadius: '100%',
-                                                cursor: 'pointer',
-                                                marginRight: 3
-                                            }} /> <span style={{cursor: 'pointer'}}> 异常任务</span>
-                                            <div style={{
-                                                width: 6,
-                                                height: 6,
-                                                backgroundColor: '#52c41a',
-                                                display: 'inline-block',
-                                                borderRadius: '100%',
-                                                cursor: 'pointer',
-                                                marginLeft: 20,
-                                                marginRight: 3
-                                            }} /><span style={{cursor: 'pointer'}}> 正常任务</span>
-                                        </div>
-                                        {
-                                            this.renderCalendar()
-                                        }
-                                    {/* <Calendar fullscreen={false} onSelect={this.onCalendarSelect} dateCellRender={dateCellRender} monthCellRender={monthCellRender} /> */}
-                                </div>
+                                <Card.Grid style={{width:'100%'}} >
+                                    <div className={styles.calendarDiv}>
+                                        <div style={{textAlign: 'left', marginBottom: -35}}>
+                                                <div style={{
+                                                    width: 6,
+                                                    height: 6,
+                                                    backgroundColor: '#faad14',
+                                                    display: 'inline-block',
+                                                    borderRadius: '100%',
+                                                    cursor: 'pointer',
+                                                    marginRight: 3
+                                                }} /> <span style={{cursor: 'pointer'}}> 异常任务</span>
+                                                <div style={{
+                                                    width: 6,
+                                                    height: 6,
+                                                    backgroundColor: '#52c41a',
+                                                    display: 'inline-block',
+                                                    borderRadius: '100%',
+                                                    cursor: 'pointer',
+                                                    marginLeft: 20,
+                                                    marginRight: 3
+                                                }} /><span style={{cursor: 'pointer'}}> 正常任务</span>
+                                            </div>
+                                            {
+                                                this.renderCalendar()
+                                            }
+                                    </div>
+                                </Card.Grid>
                             </Card>
                         </Col>
                         <Col xl={16} lg={24} md={24} sm={24} xs={24}>
                             <Card title='运维记录' style={{ }} extra={<a href="#">更多>></a>}>
-                                <Card.Grid style={{width:'100%',height:298,padding: 15}} >
+                                <Card.Grid style={{width:'100%',height:297,padding: 15}} >
                                 {
                                     this.renderOperationTable()
                                 }

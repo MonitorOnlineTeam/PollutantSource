@@ -47,7 +47,8 @@ export default Model.extend({
         },
         * querydatalist({
             payload,
-        }, { call, update }) {
+        }, { call, update,put,take }) {
+            debugger;
             const data = yield call(querydatalist, payload);
             if (payload.map && data) {
                 data.map((item) => {
@@ -58,6 +59,20 @@ export default Model.extend({
                     item.key = item.DGIMN;
                 });
             }
+            if(payload.manualUpload)
+            {
+                if(data && data[0])
+                yield put ({
+                    type:'manualupload/GetManualSupplementList',
+                    payload: {
+                                ...payload,
+                                DGIMN:data[0].DGIMN,
+                                pointName:data[0].pointName
+
+                       }
+                })
+            }
+
             yield update({ data });
         },
         * querylastestdatalist({

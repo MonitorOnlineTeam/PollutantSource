@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
-import { Button, Icon,Spin,Tag } from 'antd';
+import { Button, Icon,Spin,Tag,Card } from 'antd';
 import styles from '../EmergencyTodoList/ConsumablesReplaceRecord.less';
 import { connect } from 'dva';
+import MonitorContent from '../../components/MonitorContent/index';
 @connect(({ task, loading }) => ({
+    isloading: loading.effects['task/fetchuserlist'],
     ConsumablesReplaceRecordList: task.ConsumablesReplaceRecordList
 }))
 /*
@@ -90,8 +92,26 @@ class ConsumablesReplaceRecord extends Component {
             CreateTime = DataLength === 0 ? null : Data.Record.length === 0 ? null : Data.Record.CreateTime;
             SignTime = DataLength === 0 ? null : Data.Record.length === 0 ? null : Data.Record.SignTime;
         }
+        if (this.props.isloading) {
+            return (<Spin
+                style={{ width: '100%',
+                    height: 'calc(100vh/2)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center' }}
+                size="large"
+            />);
+        }
         return (
-            <Spin spinning={this.state.loading}>
+            <MonitorContent  {...this.props} breadCrumbList={[
+                {Name:'首页',Url:'/'},
+                {Name:'智能质控',Url:''},
+                {Name:'传输有效率',Url:''}
+            ]}>
+            <Card title={<span style={{fontWeight: '900'}}>任务详情</span>} extra={
+            <Button style={{float:"right",marginRight:30}} onClick={() => {
+                        this.props.history.goBack(-1);
+                    }}><Icon type="left" />退回</Button>}>
                 <div className={styles.FormDiv} style={{ height: SCREEN_HEIGHT }}>
                     <div className={styles.FormName}>易耗品更换记录表</div>
                     <div className={styles.HeadDiv} style={{ fontWeight: 'bold' }}>企业名称：{EnterpriseName}</div>
@@ -191,13 +211,9 @@ class ConsumablesReplaceRecord extends Component {
                             </tr>
                         </tbody>
                     </table>
-                    <div className={styles.Toexamine} >
-                        <Button size="large" onClick={() => {
-                            this.props.history.goBack(-1);
-                        }}><Icon type="left" />退回</Button>
-                    </div>
                 </div>
-            </Spin>
+                </Card>
+            </MonitorContent>
         );
     }
 }

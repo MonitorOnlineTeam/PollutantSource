@@ -38,7 +38,6 @@ export default class VideoList extends Component {
                   Submit
                 </Button>
             </div>
-
         };
     }
 
@@ -110,25 +109,11 @@ export default class VideoList extends Component {
         const columns = [
             { title: '设备名称', dataIndex: 'VedioDevice_Name', key: 'VedioDevice_Name' },
             { title: '相机名称', dataIndex: 'VedioCamera_Name', key: 'VedioCamera_Name' },
-            // { title: '设备编号', width: 150, dataIndex: 'VedioDevice_No', key: 'VedioDevice_No' },
-            // { title: '设备位置', width: 150, dataIndex: 'VedioDevice_Position', key: 'VedioDevice_Position' },
             { title: 'IP', dataIndex: 'IP', key: 'IP' },
             { title: '端口', dataIndex: 'Device_Port', key: 'Device_Port' },
             { title: '用户名', dataIndex: 'User_Name', key: 'User_Name' },
             { title: '密码', dataIndex: 'User_Pwd', key: 'User_Pwd' },
             { title: '通道号', dataIndex: 'VedioCamera_No', key: 'VedioCamera_No' },
-            // { title: '相机位置', width: 250, dataIndex: 'VedioCamera_Position', key: 'VedioCamera_Position' },
-            // { title: '生产日期', width: 250, dataIndex: 'ProduceDate', key: 'ProduceDate' },
-            // { title: '相机编号', width: 150, dataIndex: 'VedioCamera_Version', key: 'VedioCamera_Version' },
-            // { title: '经度', width: 150, dataIndex: 'Longitude', key: 'Longitude' },
-            // { title: '纬度', width: 150, dataIndex: 'Latitude', key: 'Latitude' },
-            // {
-            //     title: 'Action',
-            //     key: 'operation',
-            //     fixed: 'right',
-            //     width: 100,
-            //     render: () => <a href="javascript:;">action</a>,
-            // },
             {
                 title: '操作',
                 key: 'action',

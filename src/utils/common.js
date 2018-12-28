@@ -11,7 +11,8 @@ export const pageUrl = {
     SendCaptcha: '/api/rest/PollutantSourceApi/PUserLogin/SendCode',
     Menu: '/api/rest/PollutantSourceApi/SysMenu/GetSysMenuByUserId',
     workbench:{
-        operationHistoryRecord:'/api/rest/PollutantSourceApi/PTaskProcessing/GetOperationHistoryRecordPageList'
+        operationHistoryRecord:'/api/rest/PollutantSourceApi/PTaskProcessing/GetOperationHistoryRecordPageList',
+        dataExceptionAlarm:'/api/rest/PollutantSourceApi/PWorkbench/GetDataExceptionAlarmPageList'
     }
 };
 
