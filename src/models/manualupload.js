@@ -1,6 +1,6 @@
 import { Model } from '../dvapack';
 import { } from '../services/videodata';
-import { uploadfiles, GetPollutantByPoint, GetManualSupplementList, UploadTemplate, getUploadTemplate, GetAllPollutantTypes, addGetPollutantByPoint, AddUploadFiles, GetUnitByPollutant } from '../services/manualuploadapi';
+import { uploadfiles, GetPollutantByPoint, GetManualSupplementList, UploadTemplate, getUploadTemplate, GetAllPollutantTypes, addGetPollutantByPoint, AddUploadFiles, GetUnitByPollutant, DeleteUploadFiles, UpdateManualSupplementData } from '../services/manualuploadapi';
 
 export default Model.extend({
     namespace: 'manualupload',
@@ -19,7 +19,7 @@ export default Model.extend({
         addselectdata: [],
         unit: null,
         DGIMN: null,
-        pointName:null,
+        pointName: null,
     },
     effects: {
         //上传附件
@@ -41,7 +41,6 @@ export default Model.extend({
                 fileName: fileName,
                 DGIMN: DGIMN,
             });
-            debugger
             yield update({
                 requstresult: result.requstresult,
                 reason: result.reason
@@ -57,9 +56,7 @@ export default Model.extend({
             update,
             select
         }) {
-            debugger
             const result = yield call(GetPollutantByPoint, payload);
-            debugger
             if (result.data.length !== 0) {
                 yield update({
                     selectdata: result.data,
@@ -83,7 +80,6 @@ export default Model.extend({
             select
         }) {
             const result = yield call(addGetPollutantByPoint, payload);
-            debugger
             if (result.data.length !== 0) {
                 yield update({
                     addselectdata: result.data,
@@ -107,10 +103,9 @@ export default Model.extend({
             select
         }) {
             const result = yield call(GetManualSupplementList, payload);
-            debugger
             if (result.data != null) {
                 if (result.data.length !== 0) {
-                    debugger
+
                     if (payload.DGIMN) {
                         yield put({
                             type: 'GetPollutantByPoint',
@@ -126,7 +121,7 @@ export default Model.extend({
                         pageSize: payload.pageSize,
                         total: result.total,
                         DGIMN: payload.DGIMN,
-                        pointName:payload.pointName
+                        pointName: payload.pointName
                     });
                 }
                 else {
@@ -137,7 +132,7 @@ export default Model.extend({
                         pageSize: payload.pageSize,
                         total: result.total,
                         DGIMN: payload.DGIMN,
-                        pointName:payload.pointName
+                        pointName: payload.pointName
                     });
                 }
             }
@@ -149,7 +144,7 @@ export default Model.extend({
                     pageSize: payload.pageSize,
                     total: result.total,
                     DGIMN: payload.DGIMN,
-                    pointName:payload.pointName
+                    pointName: payload.pointName
                 });
             }
         },
@@ -189,7 +184,6 @@ export default Model.extend({
             select
         }) {
             const result = yield call(GetAllPollutantTypes, payload);
-
             if (result.data !== null) {
                 yield update({
                     PollutantTypesList: result.data,
@@ -206,27 +200,26 @@ export default Model.extend({
 
         //添加手工上传数据
         * AddUploadFiles({
-            payload
+            payload,
+
         }, {
             call,
             put,
             update,
             select
         }) {
-            debugger
             const result = yield call(AddUploadFiles, payload);
-            if (result.requstresult === 1) {
+            if (result.requstresult === "1") {
                 yield update({
                     requstresult: result.requstresult,
-                    reason: result.reason
                 });
             }
             else {
                 yield update({
                     requstresult: result.requstresult,
-                    reason: result.reason
                 });
             }
+            payload.callback(result.reason);
         },
 
         //根据污染物获取单位
@@ -239,9 +232,7 @@ export default Model.extend({
             select
         }) {
             const result = yield call(GetUnitByPollutant, payload);
-            debugger
             if (result.requstresult === "1") {
-                debugger
                 yield update({
                     unit: result.data,
                     reason: result.reason
@@ -253,6 +244,56 @@ export default Model.extend({
                     reason: result.reason
                 });
             }
+        },
+
+        //根据MN号码 污染物编号 时间删除数据
+        * DeleteUploadFiles({
+            payload
+        }, {
+            call,
+            put,
+            update,
+            select
+        }) {
+            const result = yield call(DeleteUploadFiles, payload);
+            if (result.requstresult === "1") {
+                yield update({
+                    requstresult: result.requstresult,
+                    reason: result.reason
+                });
+            }
+            else {
+                yield update({
+                    requstresult: result.requstresult,
+                    reason: result.reason
+                });
+            }
+            payload.callback(result.reason);
+        },
+
+        //修改数据，值修改监测值
+        * UpdateManualSupplementData({
+            payload
+        }, {
+            call,
+            put,
+            update,
+            select
+        }) {
+            const result = yield call(UpdateManualSupplementData, payload);
+            if (result.requstresult === "1") {
+                yield update({
+                    requstresult: result.requstresult,
+                    reason: result.reason
+                });
+            }
+            else {
+                yield update({
+                    requstresult: result.requstresult,
+                    reason: result.reason
+                });
+            }
+            payload.callback(result.reason);
         },
     },
 });

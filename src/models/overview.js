@@ -62,6 +62,7 @@ export default Model.extend({
             if(payload.manualUpload)
             {
                 if(data && data[0])
+                debugger
                 yield put ({
                     type:'manualupload/GetManualSupplementList',
                     payload: {

@@ -9,6 +9,7 @@ import Add from '../../components/ManualUpload/AddManualUpload';
 import Update from '../../components/ManualUpload/UpdateManualUpload';
 import { routerRedux } from 'dva/router';
 import styles from './ManualUpload.less';
+const confirm = Modal.confirm;
 const Option = Select.Option;
 @connect(({ manualupload, overview, loading }) => ({
     loading: loading.effects['manualupload/GetManualSupplementList'],
@@ -103,7 +104,11 @@ export default class ManualUpload extends Component {
             type: 'overview/querydatalist',
             payload: {
                 map: true, manualUpload: true,
-                pageIndex: this.props.pageIndex, pageSize: this.props.pageSize,
+                pageIndex: this.props.pageIndex,
+                pageSize: this.props.pageSize,
+                BeginTime: this.state.rangeDate[0].format('YYYY-MM-DD 00:00:00'),
+                EndTime: this.state.rangeDate[1].format('YYYY-MM-DD 23:59:59'),
+                pollutantCode: this.state.SelectHandleChange
             }
         });
         //获取模板地址
@@ -112,15 +117,15 @@ export default class ManualUpload extends Component {
             payload: {}
         });
     }
-    getStatusImg=(value) => {
+    getStatusImg = (value) => {
         if (value === 0) {
-            return <img style={{width:15}} src="../../../gisunline.png" />;
+            return <img style={{ width: 15 }} src="../../../gisunline.png" />;
         } if (value === 1) {
-            return <img style={{width:15}} src="../../../gisnormal.png" />;
+            return <img style={{ width: 15 }} src="../../../gisnormal.png" />;
         } if (value === 2) {
-            return <img style={{width:15}} src="../../../gisover.png" />;
+            return <img style={{ width: 15 }} src="../../../gisover.png" />;
         }
-        return <img style={{width:15}} src="../../../gisexception.png" />;
+        return <img style={{ width: 15 }} src="../../../gisexception.png" />;
     }
     treeCilck = (row) => {
         this.setState({ PollutantType: row.pollutantTypeCode });
@@ -133,15 +138,15 @@ export default class ManualUpload extends Component {
                 PollutantType: row.pollutantTypeCode
             }
         });
-        this.GetManualSupplementList(row.DGIMN, this.state.SelectHandleChange, this.state.rangeDate[0], this.state.rangeDate[1], this.props.pageIndex, this.props.pageSize, row.pointName)
+        this.GetManualSupplementList(row.DGIMN, this.state.SelectHandleChange, this.state.rangeDate[0].format('YYYY-MM-DD 00:00:00'), this.state.rangeDate[1].format('YYYY-MM-DD 23:59:59'), this.props.pageIndex, this.props.pageSize, row.pointName)
     };
     _handleDateChange = (date, dateString) => {
-        this.setState({ rangeDate: date });
-        this.GetManualSupplementList(this.props.DGIMN, this.state.SelectHandleChange, date[0], date[1], this.props.pageIndex, this.props.pageSize)
+        this.setState({rangeDate:date})
+        this.GetManualSupplementList(this.props.DGIMN, this.state.SelectHandleChange, date[0].format('YYYY-MM-DD 00:00:00'), date[1].format('YYYY-MM-DD 23:59:59'), this.props.pageIndex, this.props.pageSize)
     };
     SelectHandleChange = (value) => {
         this.setState({ SelectHandleChange: value })
-        this.GetManualSupplementList(this.props.DGIMN, value, this.state.rangeDate[0], this.state.rangeDate[1], this.props.pageIndex, this.props.pageSize)
+        this.GetManualSupplementList(this.props.DGIMN, value, this.state.rangeDate[0].format('YYYY-MM-DD 00:00:00'), this.state.rangeDate[1].format('YYYY-MM-DD 23:59:59'), this.props.pageIndex, this.props.pageSize)
     }
     SelectOptions = () => {
         const rtnVal = [];
@@ -159,10 +164,10 @@ export default class ManualUpload extends Component {
         }
     }
     onChange = (pageIndex, pageSize) => {
-        this.GetManualSupplementList(this.props.DGIMN, this.state.SelectHandleChange, this.state.rangeDate[0], this.state.rangeDate[1], pageIndex, pageSize);
+        this.GetManualSupplementList(this.props.DGIMN, this.state.SelectHandleChange, this.state.rangeDate[0].format('YYYY-MM-DD 00:00:00'), this.state.rangeDate[1].format('YYYY-MM-DD 23:59:59'), pageIndex, pageSize);
     }
     onShowSizeChange = (pageIndex, pageSize) => {
-        this.GetManualSupplementList(this.props.DGIMN, this.state.SelectHandleChange, this.state.rangeDate[0], this.state.rangeDate[1], pageIndex, pageSize);
+        this.GetManualSupplementList(this.props.DGIMN, this.state.SelectHandleChange, this.state.rangeDate[0].format('YYYY-MM-DD 00:00:00'), this.state.rangeDate[1].format('YYYY-MM-DD 23:59:59'), pageIndex, pageSize);
     }
     GetManualSupplementList = (DGIMN, pollutantCode, BeginTime, EndTime, pageIndex, pageSize, pointName) => {
         this.props.dispatch({
@@ -189,7 +194,41 @@ export default class ManualUpload extends Component {
     // 添加数据
     AddData = () => {
         this.child.handleSubmit();
-        this.GetManualSupplementList(this.props.DGIMN, this.state.SelectHandleChange, this.state.rangeDate[0], this.state.rangeDate[1], this.props.pageIndex, this.props.pageSize);
+        this.GetManualSupplementList(this.props.DGIMN, this.state.SelectHandleChange, this.state.rangeDate[0].format('YYYY-MM-DD 00:00:00'), this.state.rangeDate[1].format('YYYY-MM-DD 23:59:59'), this.props.pageIndex, this.props.pageSize);
+    }
+    //删除
+    deleteVideoInfo = (record) => {
+        confirm({
+            title: '确定要删除吗?',
+            okText: '是',
+            okType: 'primary',
+            cancelText: '否',
+            onOk: () => this.delete(record),
+            onCancel() {
+                console.log('取消');
+            },
+        });
+    };
+    delete = (record) => {
+        debugger
+        this.props.dispatch({
+            type: 'manualupload/DeleteUploadFiles',
+            payload: {
+                DGIMN: record.DGIMN,
+                pollutantCode: record.PollutantCode,
+                monitorTime: (moment(record.MonitorTime)).format('YYYY-MM-DD HH:mm:ss'),
+                callback: (reason) => {
+                    message.success(reason)
+                }   
+            },
+        });
+        this.GetManualSupplementList(this.props.DGIMN, this.state.SelectHandleChange, this.state.rangeDate[0].format('YYYY-MM-DD 00:00:00'), this.state.rangeDate[1].format('YYYY-MM-DD 23:59:59'), this.props.pageIndex, this.props.pageSize);
+
+    }
+    // 修改
+    updateData = () => {
+        this.child.handleSubmitupdate();
+        this.GetManualSupplementList(this.props.DGIMN, this.state.SelectHandleChange, this.state.rangeDate[0].format('YYYY-MM-DD 00:00:00'), this.state.rangeDate[1].format('YYYY-MM-DD 23:59:59'), this.props.pageIndex, this.props.pageSize);
     }
     render() {
         const uploaddata = this.props.uploaddatalist === null ? null : this.props.uploaddatalist;
@@ -246,7 +285,6 @@ export default class ManualUpload extends Component {
                 render: (text, record, index) => (
                     <span>
                         <a onClick={() => {
-                            console.log(record);
                             this.setState({
                                 visible: true,
                                 type: 'update',
@@ -387,7 +425,7 @@ export default class ManualUpload extends Component {
                                 width={this.state.width}
                                 onCancel={this.onCancel}>
                                 {
-                                    this.state.type === 'add' ? <Add onCancels={this.onCancel} dgimn={this.props.DGIMN} onRef={this.onRef1} /> : this.state.type === 'update' ? <Update dgimn={this.props.DGIMN} item={this.state.data} onRef={this.onRef1} /> : null
+                                    this.state.type === 'add' ? <Add onCancels={this.onCancel} dgimn={this.props.DGIMN} onRef={this.onRef1} /> : this.state.type === 'update' ? <Update onCancels={this.onCancel} item={this.state.data} onRef={this.onRef1} /> : null
                                 }
                             </Modal>
                         </Card>

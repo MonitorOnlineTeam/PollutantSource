@@ -41,14 +41,16 @@ export async function addGetPollutantByPoint(params) {
 
 // 获取列表数据
 export async function GetManualSupplementList(params) {
+    console.log(params);
     const body = {
         DGIMN: params.DGIMN,
         pollutantCode: params.pollutantCode,
         beginTime: params.BeginTime,
         endTime: params.EndTime,
         pageIndex: params.pageIndex,
-        pageSize: params.pageSize
+        pageSize: params.pageSize,
     };
+    debugger
     const result = upload('/api/rest/PollutantSourceApi/ManualSupplement/GetManualSupplementList', body, null);
     return result === null ? {
         data: null
@@ -93,6 +95,35 @@ export async function GetUnitByPollutant(params) {
         pollutantCode:params.pollutantCode
     };
     const result = upload('/api/rest/PollutantSourceApi/ManualSupplement/GetUnitByPollutant', body, null);
+    return result === null ? {
+        data: null
+    } : result;
+}
+
+//删除数据
+export async function DeleteUploadFiles(params) {
+    const body = {
+        DGIMN:params.DGIMN,
+        pollutantCode:params.pollutantCode,
+        monitorTime:params.monitorTime,
+    };
+    debugger
+    const result = upload('/api/rest/PollutantSourceApi/ManualSupplement/DeleteUploadFiles', body, null);
+    return result === null ? {
+        data: null
+    } : result;
+}
+
+//修改数据
+export async function UpdateManualSupplementData(params) {
+    const body = {
+        DGIMN:params.DGIMN,
+        pollutantCode:params.pollutantCode,
+        monitorTime:params.monitorTime,
+        avgValue: params.avgValue,
+    };
+    debugger
+    const result = upload('/api/rest/PollutantSourceApi/ManualSupplement/UpdateHourData', body, null);
     return result === null ? {
         data: null
     } : result;
