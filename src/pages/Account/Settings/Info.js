@@ -1,125 +1,78 @@
 import React, { Component } from 'react';
-import { connect } from 'dva';
+import {
+  Tabs,
+  Layout,
+  Menu
+} from 'antd';
 import router from 'umi/router';
-import { FormattedMessage } from 'umi/locale';
-import { Menu } from 'antd';
-import GridContent from '@/components/PageHeaderWrapper/GridContent';
-import styles from './Info.less';
+import {EnumPsOperationForm} from '../../../utils/enum';
+import { Switch, Redirect } from 'dva/router';
+import MonitorContent from '../../../components/MonitorContent/index';
+import { Styles } from 'docx';
+const {
+    Header, Content, Footer, Sider,
+} = Layout;
+const {
+  Item
+} = Menu;
 
-const { Item } = Menu;
-
-@connect(({ user }) => ({
-  currentUser: user.currentUser,
-}))
-class Info extends Component {
-  constructor(props) {
-    super(props);
-    const { match, location } = props;
-    const menuMap = {
-      base: <FormattedMessage id="app.settings.menuMap.basic" defaultMessage="Basic Settings" />,
-      security: (
-        <FormattedMessage id="app.settings.menuMap.security" defaultMessage="Security Settings" />
-      ),
-      binding: (
-        <FormattedMessage id="app.settings.menuMap.binding" defaultMessage="Account Binding" />
-      ),
-      notification: (
-        <FormattedMessage
-          id="app.settings.menuMap.notification"
-          defaultMessage="New Message Notification"
-        />
-      ),
-    };
-    const key = location.pathname.replace(`${match.path}/`, '');
-    this.state = {
-      mode: 'inline',
-      menuMap,
-      selectKey: menuMap[key] ? key : 'base',
-    };
-  }
-
-  static getDerivedStateFromProps(props, state) {
-    const { match, location } = props;
-    let selectKey = location.pathname.replace(`${match.path}/`, '');
-    selectKey = state.menuMap[selectKey] ? selectKey : 'base';
-    if (selectKey !== state.selectKey) {
-      return { selectKey };
+export default class Info extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            selectKey:'base'
+        };
     }
-    return null;
-  }
 
-  componentDidMount() {
-    window.addEventListener('resize', this.resize);
-    this.resize();
-  }
+    render() {
+        const { match, routerData,children } = this.props;
+        const activeKey = location.pathname.replace(`${match.url}/`, '');
+        const tablist = [{
+            key: 'base',
+            tab: '基本设置'
+          },
+          {
+            key: 'security',
+            tab: '安全设置'
+          },
+          {
+            key: 'notification',
+            tab: '消息通知'
+          },
+        ];
+        return (
+           <MonitorContent {...this.props} breadCrumbList={
+                [
+                    {Name:'首页',Url:'/'},
+                    {Name:'个人设置',Url:''},
+                ]
+            }>
+            <div className={Styles.menu} style={{ width: '100%', height: 'calc(100vh - 500px)' }}>
+                {<Layout style={{ padding: '14px 0', background: '#fff' }}>
+                    <Sider width={270} style={{ background: '#fff' }} >
+                        <Menu mode={'inline'} selectedKeys={this.state.selectKey} onClick={({ key })=>{
+                          const {match}=this.props;
+                           router.push(`${match.url}/${key}`);
+                           this.setState({
+                             selectKey: key,
+                           });
+                        }}> 
+                           {
+                             tablist.map(item => <Item key={item.key}>{item.tab}</Item>)
+                           }
+                        </Menu>
+                         
+                    </Sider>
+                    <Content style={{ padding: '0 10px' }}>
+                        {
+                            children
+                        }
+                    </Content>
+                </Layout>
+                }
 
-  componentWillUnmount() {
-    window.removeEventListener('resize', this.resize);
-  }
-
-  getmenu = () => {
-    const { menuMap } = this.state;
-    return Object.keys(menuMap).map(item => <Item key={item}>{menuMap[item]}</Item>);
-  };
-
-  getRightTitle = () => {
-    const { selectKey, menuMap } = this.state;
-    return menuMap[selectKey];
-  };
-
-  selectKey = ({ key }) => {
-    router.push(`/account/settings/${key}`);
-    this.setState({
-      selectKey: key,
-    });
-  };
-
-  resize = () => {
-    if (!this.main) {
-      return;
+            </div>
+            </MonitorContent>
+        );
     }
-    requestAnimationFrame(() => {
-      let mode = 'inline';
-      const { offsetWidth } = this.main;
-      if (this.main.offsetWidth < 641 && offsetWidth > 400) {
-        mode = 'horizontal';
-      }
-      if (window.innerWidth < 768 && offsetWidth > 400) {
-        mode = 'horizontal';
-      }
-      this.setState({
-        mode,
-      });
-    });
-  };
-
-  render() {
-    const { children, currentUser } = this.props;
-    if (!currentUser.userid) {
-      return '';
-    }
-    const { mode, selectKey } = this.state;
-    return (
-      <GridContent>
-        <div
-          className={styles.main}
-          ref={ref => {
-            this.main = ref;
-          }}
-        >
-          <div className={styles.leftmenu}>
-            <Menu mode={mode} selectedKeys={[selectKey]} onClick={this.selectKey}>
-              {this.getmenu()}
-            </Menu>
-          </div>
-          <div className={styles.right}>
-            <div className={styles.title}>{this.getRightTitle()}</div>
-            {children}
-          </div>
-        </div>
-      </GridContent>
-    );
-  }
 }
-
-export default Info;

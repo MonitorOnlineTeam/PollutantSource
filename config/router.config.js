@@ -145,7 +145,34 @@ export default [
 
   /* 标准库管理-维护 */
   { path: '/sysmanage/standardlibrarydetail/:StandardLibraryID', component: './StandardLibrary/AddStandardLibrary'},
-
+ /* 个人设置-维护 */
+  {
+    path: '/account/settings',
+    name: 'settings',
+    component: './Account/Settings/Info',
+    routes: [
+      {
+        path: '/account/settings',
+        redirect: '/account/settings/base',
+      },
+      {
+        path: '/account/settings/base',
+        component: './Account/Settings/BaseView',
+      },
+      {
+        path: '/account/settings/security',
+        component: './Account/Settings/SecurityView',
+      },
+      {
+        path: '/account/settings/binding',
+        component: './Account/Settings/BindingView',
+      },
+      {
+        path: '/account/settings/notification',
+        component: './Account/Settings/NotificationView',
+      },
+    ],
+  },
    
       {
         component: '404',
