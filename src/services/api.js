@@ -401,6 +401,7 @@ export async function queryhistorydatalist(params) {
 }
 // 获取单排口超标数据
 export async function queryoverdatalist(params) {
+    console.log(params);
     const body = {
         DGIMN: params.dgimn,
         pollutantCode: params.pollutantCode,
@@ -496,4 +497,5 @@ export async function queryreportlist(params) {
     const result = await post('/api/rest/PollutantSourceApi/DataList/GetYearDataList', body, null);
     return result === null ? {data: null} : result.data;
 }
+
 

@@ -109,10 +109,11 @@ export default [
 /* 报警排口分析 */
 { path: '/analysis/overpointlist', component: './Analysis/OverPointList' },      
 /* 自行监测报告 */
-{ path: '/analysis/selfmonitorreport', component: './Analysis/MonitoringReport',routes:[
+{ path: '/analysis/selfmonitorreport', component: './Analysis/MonitoringReport'
+//,routes:[
   /* 监测报告 */
-  {path:'/analysis/selfmonitorreport/:pdfname',component:'./Analysis/PdfShow'}
-] },  
+  // {path:'/analysis/selfmonitorreport/:pdfname',component:'./Analysis/PdfShow'}] 
+},  
 
 
 /* 基本信息管理 */
@@ -131,7 +132,17 @@ export default [
 
  /* 用户基本信息管理-用户基本管理 */
  { path: '/sysmanage/userdetail/:UserId', component: './Userinfo/AddUser' },
-   
+ 
+ /* 用户基本信息管理-备品备件管理 */
+ { path: '/sysmanage/spareparts', component: './Administration/SparePart' },
+
+  /* 用户基本信息管理-标气管理 */
+  { path: '/sysmanage/standardgas', component: './Administration/StandardGas' },
+
+   /* 用户基本信息管理-手持设备管理 */
+ { path: '/sysmanage/cbfftestequipment', component: './Administration/CbFfTestEquipment' },
+
+
 
  /* 用户基本信息管理-标准库管理 */
  { path: '/sysmanage/usestandardlibrary/:DGIMN/:PointName', component: './StandardLibrary/UseStandardLibrary' },
@@ -145,7 +156,34 @@ export default [
 
   /* 标准库管理-维护 */
   { path: '/sysmanage/standardlibrarydetail/:StandardLibraryID', component: './StandardLibrary/AddStandardLibrary'},
-
+ /* 个人设置-维护 */
+  {
+    path: '/account/settings',
+    name: 'settings',
+    component: './Account/Settings/Info',
+    routes: [
+      {
+        path: '/account/settings',
+        redirect: '/account/settings/base',
+      },
+      {
+        path: '/account/settings/base',
+        component: './Account/Settings/BaseView',
+      },
+      {
+        path: '/account/settings/security',
+        component: './Account/Settings/SecurityView',
+      },
+      {
+        path: '/account/settings/binding',
+        component: './Account/Settings/BindingView',
+      },
+      {
+        path: '/account/settings/notification',
+        component: './Account/Settings/NotificationView',
+      },
+    ],
+  },
    
       {
         component: '404',

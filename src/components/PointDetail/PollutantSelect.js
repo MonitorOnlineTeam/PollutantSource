@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 import { Select } from 'antd';
 
 const Option = Select.Option;
-export default class PollutantSelect_ extends Component {
+export default class PollutantSelect extends Component {
     render() {
         return (
             <Select

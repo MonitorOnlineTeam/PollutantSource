@@ -104,19 +104,23 @@ function monthCellRender(value) {
 }
 const pageUrl = {
     updateState: 'workbenchmodel/updateState',
-    getOperationData: 'workbenchmodel/getOperationData'
+    getOperationData: 'workbenchmodel/getOperationData',
+    getExceptionAlarmData: 'workbenchmodel/getExceptionAlarmData'
 };
 @connect(({
     loading,
     workbenchmodel
 }) => ({
     loading: loading.effects[pageUrl.getOperationData],
-    operation: workbenchmodel.operation
+    operation: workbenchmodel.operation,
+    exceptionAlarm: workbenchmodel.exceptionAlarm
 }))
 class SpecialWorkbench extends Component {
     constructor(props) {
         super(props);
-
+        // console.log('this.props.operation',this.props.operation.tableDatas);
+        // console.log('moment().format("YYYY-MM-DD")',moment().format("YYYY-MM-DD"));
+        // console.log(this.props.operation.tableDatas.filter(m=>moment(m.CreateTime).format('YYYY-MM-DD')===moment().format("YYYY-MM-DD")));
         this.state = {
             key: 'tab1',
             noTitleKey: 'app',
@@ -124,14 +128,13 @@ class SpecialWorkbench extends Component {
             loading: false,
             hasMore: true,
             value: moment(),
-            selectedValue: moment(),
-            operation:{
-                tableDatas:this.props.operation.tableDatas.filter(m=>moment(m.CreateTime).format('YYYY-MM-DD')===moment().format("YYYY-MM-DD")).slice(0,6)
-            }
+            selectedValue: moment()
         };
     }
     componentWillMount() {
         this.getOperationData(1);
+        this.getExceptionAlarmData(1);
+        //this.onCalendarSelect(moment());
     }
     /**
      * 更新model中的state
@@ -142,6 +145,111 @@ class SpecialWorkbench extends Component {
             payload: payload,
         });
     }
+
+    /**
+     * 异常报警_更新数据
+     */
+    getExceptionAlarmData = (pageIndex) =>{
+        this.props.dispatch({
+            type: pageUrl.getExceptionAlarmData,
+            payload: {},
+        });
+    }
+    /**
+     * 渲染异常报警数据列表
+     */
+    renderExceptionAlarmList = ()=>{
+        console.log('exceptionAlarm:',this.props.exceptionAlarm);
+        const listData = [];
+        const colorArray={
+            "数据异常":"magenta",
+            "参数异常":"red",
+            "逻辑异常":"volcano",
+            "状态异常":"orange"
+        };
+        this.props.exceptionAlarm.tableDatas.map((item)=>{
+            //判断报警是否超过4小时
+            let seconds=moment().diff(moment(item.FirstAlarmTime), 'minutes');
+            let hour=Math.floor(seconds/60);
+            let minutes=Math.floor(seconds%60);
+            let color = hour>= 4 ? 'red':'rgb(129,203,237)';
+            let minutesLable=minutes>0?`${minutes}分钟`:'';
+            
+            let labelDiv=<div style={{color:`${color}`}}>已发生{hour}小时{minutesLable}</div>;
+            let btnDiv=hour>= 4 ?(<div style={{marginTop:43}}>
+                                        <Button style={{width:100,border:'none',backgroundColor:'rgb(74,210,187)'}} type="primary">督办</Button>
+                                </div>):'';
+            listData.push({
+                href: 'http://ant.design',
+                title: `${item.PointName}`,
+                avatar: (<Icon type="alert" theme="twoTone" />),
+                description: (<div>
+                    <div>
+                        {
+                            item.ExceptionTypes.split(',').map(item => (
+                                <Tag color={`${colorArray[item]}`}>{item}</Tag>
+                            ))
+                        }
+                    </div>
+                    <div style={{marginTop:10}}>
+                        <div>{item.LastAlarmMsg}</div>
+                        {/* <div>首次报警时间：2018-12-27</div>
+                        <div>报警总次数：<span style={{fontWeight:'bold'}}>98</span></div> */}
+                    </div>
+                </div>),
+                content: '',
+                extra:(
+                    <div style={{marginTop:30,marginRight:70,textAlign:'center'}}>
+                        {labelDiv}
+                        {btnDiv}
+                    </div>
+                )
+            });
+        });
+
+        // for (let i = 0; i < 4; i++) {
+        //     listData.push({
+        //         href: 'http://ant.design',
+        //         title: `废气排口 ${i}`,
+        //         avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
+        //         description: (<div>
+        //             <div>
+        //                 <Tag color="magenta">参数异常</Tag>
+        //                 <Tag color="red">连续值异常</Tag>
+        //                 <Tag color="volcano">超限异常</Tag>
+        //                 <Tag color="orange">逻辑异常</Tag>
+        //             </div>
+        //             <div style={{marginTop:10}}>
+        //                 <div>烟气分析仪故障烟气分析仪故障烟气分析仪故障烟气分析仪故障</div>
+        //                 <div>首次报警时间：2018-12-27</div>
+        //                 <div>报警总次数：<span style={{fontWeight:'bold'}}>98</span></div>
+        //             </div>
+        //         </div>),
+        //         content: '',
+        //     });
+        // }
+
+        return (<List
+                    itemLayout="vertical"
+                    // size="large"
+                    dataSource={listData}
+                    renderItem={item => (
+                    <List.Item
+                        key={item.title}
+                        actions={[]}
+                        extra={item.extra}
+                    >
+                        <List.Item.Meta
+                        // avatar={<div>{item.avatar}</div>}
+                        title={<a href={item.href}>{item.title}</a>}
+                        description={item.description}
+                        />
+                        {item.content}
+                    </List.Item>
+                    )}
+                />);
+    }
+
     /**
      * 智能运维_更新运维数据
      */
@@ -205,23 +313,21 @@ class SpecialWorkbench extends Component {
                 }
             }];
         
-        return <Table columns={columns} dataSource={this.state.operation.tableDatas} size="small" pagination={false}/>
+        return <Table columns={columns} dataSource={this.props.operation.tempTableDatas.filter(m=>moment(m.CreateTime).format('YYYY-MM-DD')===this.state.selectedValue.format("YYYY-MM-DD")).slice(0,6)} size="small" pagination={false}/>
     }
     /**
      * 智能运维_日历表时间选择事件
      */
     onCalendarSelect = (value) => {
+        // debugger;
         let selectValue = value.format('YYYY-MM-DD 00:00:00');
         this.setState({
           // value,
-            selectedValue: value,
-            operation:{
-                tableDatas:this.props.operation.tableDatas.filter(m=>moment(m.CreateTime).format('YYYY-MM-DD')===value.format("YYYY-MM-DD")).slice(0,6)
-        }
+            selectedValue: value
         });
         if(value.format("YYYY-MM")===this.state.selectedValue.format("YYYY-MM"))
         {
-            return false;
+            return null;
         }
         
         if(value.format("YYYY-MM")!==moment(this.props.operation.beginTime).format("YYYY-MM"))
@@ -249,8 +355,8 @@ class SpecialWorkbench extends Component {
      * 智能运维_日历表插件渲染任务数据
      */
     dateCellRender = (value) =>{
-        let listData=[];
-        let thisData=this.props.operation.tableDatas.filter(m=>moment(m.CreateTime).format('YYYY-MM-DD')===value.format("YYYY-MM-DD"));
+        let listData=[]; 
+        let thisData=this.props.operation.tempTableDatas.filter(m=>moment(m.CreateTime).format('YYYY-MM-DD')===value.format("YYYY-MM-DD"));
         if(thisData&&thisData.length>0)
         {
             let ExceptionTypeText=thisData.filter(m=>m.ExceptionTypeText!=="");
@@ -281,6 +387,7 @@ class SpecialWorkbench extends Component {
             data: res.results,
             });
         });
+        // this.onCalendarSelect(moment());
     }
     fetchData = (callback) => {
         reqwest({
@@ -313,10 +420,6 @@ class SpecialWorkbench extends Component {
             loading: false,
           });
         });
-    }
-    onTabChange = (key, type) => {
-        console.log(key, type);
-        this.setState({ [type]: key });
     }
 
     getOption = (type) => {
@@ -585,25 +688,7 @@ class SpecialWorkbench extends Component {
                                 className={styles.exceptionAlarm}
                                 >
                                 <Card.Grid style={{width:'100%',height:736}} key='1'>
-                                    <List
-                                        itemLayout="vertical"
-                                        // size="large"
-                                        dataSource={listData}
-                                        renderItem={item => (
-                                        <List.Item
-                                            key={item.title}
-                                            actions={[]}
-                                            extra={<div style={{marginTop:30,marginRight:70,textAlign:'center'}}><div style={{color:'red'}}>已发生4小时</div><div style={{marginTop:43}}><Button style={{width:100,border:'none',backgroundColor:'rgb(74,210,187)'}} type="primary">督办</Button></div> </div>}
-                                        >
-                                            <List.Item.Meta
-                                            avatar={<Avatar src={item.avatar} />}
-                                            title={<a href={item.href}>{item.title}</a>}
-                                            description={item.description}
-                                            />
-                                            {item.content}
-                                        </List.Item>
-                                        )}
-                                    />
+                                    {this.renderExceptionAlarmList()}
                                 </Card.Grid>
                             </Card>
                         </Col>
