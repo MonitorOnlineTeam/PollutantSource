@@ -14,11 +14,19 @@
 }
 
 
+
 /**
 * 工作台样式
 */
 .contentDiv{
-  
+  :global{
+    .amap-logo{
+      display: none !important;
+    }
+    .amap-copyright{
+      display: none !important;
+    }
+  }
   .workBench{
     background: rgb(236, 236, 236);
     margin-left: 20px;
