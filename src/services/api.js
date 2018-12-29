@@ -153,7 +153,7 @@ export async function loadPointDetail(params) {
 export async function loadCountryPointView(params) {
     let groupstr = '';
     params.GroupID.map(item => {
-        groupstr += item + ',';
+        groupstr += `${item  },`;
     });
     const body = {
         GroupIDs: groupstr,
@@ -488,7 +488,7 @@ export async function queryurge(params) {
     const result = await post('/api/rest/PollutantSourceApi/PTaskProcessing/PostTaskSupervise', body, null);
     return result === null ? {data: null} : result.requstresult;
 }
-//获取监测报告列表   
+//获取监测报告列表
 export async function queryreportlist(params) {
     const body = {
         beginTime:params.beginTime,

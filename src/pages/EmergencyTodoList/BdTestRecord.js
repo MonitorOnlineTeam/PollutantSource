@@ -6,7 +6,7 @@ import {Spin, Button, Checkbox,Card,Icon} from 'antd';
 import { connect } from 'dva';
 import saveAs from 'file-saver';
 import MonitorContent from '../../components/MonitorContent/index';
-
+ 
 //import * as fstream from 'fstream';
 
 @connect(({ task, loading }) => ({
@@ -38,16 +38,7 @@ export default class BdTestRecord extends Component {
 
 
     onExport=() => {
-        var docx = require('docx');
-        const doc = new docx.Document();
-        const table = doc.createTable(4, 4);
-        table.getCell(2, 2).addContent(new docx.TextRun('dfsdf'));
-        table.getCell(1, 1).addContent('asdasdasd');
-        const packer = new docx.Packer();
-        packer.toBlob(doc).then((blob) => {
-            // saveAs from FileSaver will download the file
-            saveAs(blob, 'example.docx');
-        });
+         
     }
 
     renderCemsMainInstrument=(record) => {

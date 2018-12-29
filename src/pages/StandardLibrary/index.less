@@ -1,3 +1,21 @@
+.antCss{
+
+  :global {
+    .ant-card-bordered{
+   border: 1px solid #FFF; 
+
+    }
+    .ant-card-wider-padding .ant-card-body{
+
+      padding:0px;
+    }
+    .ant-card-body{
+      padding: 0px;
+    }
+  }
+  
+}
+
 .cardTitle{
   // margin-left: 24px;
   // margin-right: 24px;
@@ -13,6 +31,9 @@
         // height: 800px;
         // overflow: auto;
       }
+       .light{
+      background: #f0f2f5;
+    }
       .ant-card-extra{
         padding: 6.5px 0 !important;
       }
@@ -31,7 +52,7 @@
 }
 .dataTable {
   :global {
-    
+ 
     .ant-table-fixed-header .ant-table-scroll .ant-table-header
       {
           overflow: hidden;
@@ -43,30 +64,7 @@
           height: calc(100vh - 25px);
           overflow: auto;
           // overflow-y: scroll;
-          &::-webkit-scrollbar-track-piece{
-            -webkit-border-radius:0;
-           }
-           &::-webkit-scrollbar{
-            width:8px;
-            height:8px;
-           }
-           &::-webkit-scrollbar-track{
-                  
-            border-radius: 10px;
-            background-color: #ececec;
-        }
-           &::-webkit-scrollbar-thumb{
-            height:50px;
-            background-color:#d4d4d6;
-            -webkit-border-radius:4px;
-            outline-offset:-2px;
-            border: 2px solid #d4d4d6;
-           }
-           &::-webkit-scrollbar-thumb:hover{
-            height:50px;
-            background-color:#d4d4d6;
-            -webkit-border-radius:4px;
-           }
+      
       }
       .ant-table-placeholder{
           position: absolute;
@@ -79,6 +77,15 @@
 
 .item
 {
+  :global {
+    .ant-divider-horizontal{
+
+      margin: 2px 0;
+
+    }
+
+
+  }
 position: relative;
 margin: 20px 20px 20px 20px;
 background:#ffffff;
@@ -89,6 +96,7 @@ border-radius:15px;
 display: inline-block;
 font-size: 14px;
 vertical-align: top;
+border: #f0f2f5 solid 1px;
 }
 .card{
 
@@ -99,13 +107,13 @@ text-align:center;
 }
 .standardlibrary{
     padding:10px 20px; 
-height:20%;
+height:25%;
 font-size:small;
-font-weight: bold;
-color: #a1a1a1;    
+
+color: #000;    
 }
 .child{
-    padding:10px 20px; 
+    padding:10px 59px 0px 62px;
     height:60%;
 }
 .pollutant{
@@ -116,39 +124,72 @@ color: #a1a1a1;
 
 }
 .foot{
-padding:0px 0px 0px 0px;
+
 width: 100%;
 height:20%;
-border-radius:35px 0px 15px 0px; 
+border-radius:0px 0px 8px 8px;
 -moz-border-radius:35px; 
 display: inline-block;
 background-color: rgb(61, 182, 208);
+line-height:37px;
+
 
 font-size: smaller;
 }
 .a{
+  font-size: 13px;
 color: #ffffff;
 }
+.a:hover{
+  font-size: 13px;
+  color: #ffffff;
+
+}
 .use{
-    margin: 20px 0px 20px 150px;
+
 }
 .pageHeader {
-  background: #fff;
-  padding:30px 30px 14px 30px;
-  border-bottom: 1px solid #FFF;
-  font-weight: 800;
+  // background: #f9f9f9;
+  // padding: 16px 19px 8px 30px;
+  // border-bottom: 1px solid #FFF;
+  // font-weight: 800;
 }
 .table{
 // background-color: #fff;
-padding: 15px 110px 0 110px;
+// padding: 15px 110px 0 110px;
 margin-right: auto;
 margin-left: auto;
 text-align:center;
 font-size: 0;
+
 // z-index: 9999;
+:global {
+  
+  .ant-table-small{
+    border: 1px solid #FFF;
+    border-radius:0;
+  }
+  .ant-table-small > .ant-table-content > .ant-table-header > table > .ant-table-thead > tr > th, .ant-table-small > .ant-table-content > .ant-table-body > table > .ant-table-thead > tr > th, .ant-table-small > .ant-table-content > .ant-table-scroll > .ant-table-header > table > .ant-table-thead > tr > th, .ant-table-small > .ant-table-content > .ant-table-scroll > .ant-table-body > table > .ant-table-thead > tr > th, .ant-table-small > .ant-table-content > .ant-table-fixed-left > .ant-table-header > table > .ant-table-thead > tr > th, .ant-table-small > .ant-table-content > .ant-table-fixed-right > .ant-table-header > table > .ant-table-thead > tr > th, .ant-table-small > .ant-table-content > .ant-table-fixed-left > .ant-table-body-outer > .ant-table-body-inner > table > .ant-table-thead > tr > th, .ant-table-small > .ant-table-content > .ant-table-fixed-right > .ant-table-body-outer > .ant-table-body-inner > table > .ant-table-thead > tr > th, .ant-table-small > .ant-table-content > .ant-table-header > table > .ant-table-tbody > tr > td, .ant-table-small > .ant-table-content > .ant-table-body > table > .ant-table-tbody > tr > td, .ant-table-small > .ant-table-content > .ant-table-scroll > .ant-table-header > table > .ant-table-tbody > tr > td, .ant-table-small > .ant-table-content > .ant-table-scroll > .ant-table-body > table > .ant-table-tbody > tr > td, .ant-table-small > .ant-table-content > .ant-table-fixed-left > .ant-table-header > table > .ant-table-tbody > tr > td, .ant-table-small > .ant-table-content > .ant-table-fixed-right > .ant-table-header > table > .ant-table-tbody > tr > td, .ant-table-small > .ant-table-content > .ant-table-fixed-left > .ant-table-body-outer > .ant-table-body-inner > table > .ant-table-tbody > tr > td, .ant-table-small > .ant-table-content > .ant-table-fixed-right > .ant-table-body-outer > .ant-table-body-inner > table > .ant-table-tbody > tr > td
+  {
+    padding: 16px;
+  }
+  .ant-table-small > .ant-table-content > .ant-table-body{
+    
+    margin:0;
+text-align: center;
+  }
+  .light{
+    background: #f0f2f5;
+  }  
+}
+
 }
 .Pagination{
     text-align:right;
   
     
+}
+.pollutantName{
+  text-align: center;
+  color: rgb(92, 92, 92);
 }
