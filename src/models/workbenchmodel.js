@@ -16,6 +16,7 @@ import {
     getDataOverWarningPageList,
     getAllPointOverDataList,
     getOverPoints,
+    getStatisticsPointStatus
 } from '../services/workbenchapi';
 
 export default Model.extend({
@@ -88,6 +89,10 @@ export default Model.extend({
             tableDatas:[],
             total:0,
         },
+        statisticsPointStatus:{
+            model:{},
+            total:0
+        }
     },
     subscriptions: {
     },
@@ -277,6 +282,27 @@ export default Model.extend({
                     ...overPointList,
                     ...{
                         tableDatas:response.data,
+                        total:response.total
+                    }
+                }
+            });
+        },
+        /**
+         * 获取排口状态
+         * @param {传递参数} 传递参数
+         * @param {操作} 操作项
+         */
+        * getStatisticsPointStatus({payload}, { call, put, update, select }) {
+            const {statisticsPointStatus} = yield select(state => state.workbenchmodel);
+            //debugger;
+            let body = {};
+            const response = yield call(getStatisticsPointStatus, body);
+            //debugger;
+            yield update({
+                statisticsPointStatus:{
+                    ...statisticsPointStatus,
+                    ...{
+                        model:response.data,
                         total:response.total
                     }
                 }

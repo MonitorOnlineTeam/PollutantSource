@@ -72,6 +72,7 @@ const pageUrl = {
     getDataOverWarningData:'workbenchmodel/getDataOverWarningData',
     getAllPointOverDataList:'workbenchmodel/getAllPointOverDataList',
     getOverPointList:'workbenchmodel/getOverPointList',
+    getStatisticsPointStatus:'workbenchmodel/getStatisticsPointStatus',
 };
 @connect(({
     loading,
@@ -97,6 +98,7 @@ const pageUrl = {
     hourDataOverWarningList:workbenchmodel.hourDataOverWarningList,
     allPointOverDataList:workbenchmodel.allPointOverDataList,
     overPointList:workbenchmodel.overPointList,
+    statisticsPointStatus:workbenchmodel.statisticsPointStatus,
 }))
 class SpecialWorkbench extends Component {
     constructor(props) {
@@ -125,6 +127,7 @@ class SpecialWorkbench extends Component {
         this.getDataOverWarningData();
         //this.getAllPointOverDataList();
         this.getOverPointList();
+        this.getStatisticsPointStatus();
 
     }
 
@@ -141,6 +144,16 @@ class SpecialWorkbench extends Component {
         this.props.dispatch({
             type: pageUrl.updateState,
             payload: payload,
+        });
+    }
+
+    /**
+     * 智能监控_排口的所有状态_更新数据
+     */
+    getStatisticsPointStatus = () =>{
+        this.props.dispatch({
+            type: pageUrl.getStatisticsPointStatus,
+            payload: {},
         });
     }
 
@@ -741,6 +754,9 @@ class SpecialWorkbench extends Component {
         );
     }
 
+    /**
+     * 智能监控_地图点位渲染
+     */
     getMarkers =()=>{
         let markers=[];
         this.props.overPointList.tableDatas.map((item)=>{
@@ -756,10 +772,16 @@ class SpecialWorkbench extends Component {
         return markers;
     }
 
+    /**
+     * 智能监控_地图点位渲染样式
+     */
     renderMarkerLayout(extData){
         return <div style={{position:'absolute'}}><div style={MarkerLayoutStyle}>{extData.position.PointName}</div><img style={{width:15}} src="../../../gisover.png" /></div>;
     }
 
+    /**
+     * 智能监控_地图默认显示的位置
+     */
     mapCenter =()=>{
 
         if(this.props.overPointList.tableDatas.length>0) {
@@ -771,6 +793,21 @@ class SpecialWorkbench extends Component {
 
             return position;
         }
+    }
+
+    /**
+     * 智能监控_渲染排口所有状态
+     */
+    renderStatisticsPointStatus = () =>{
+        const {model}=this.props.statisticsPointStatus;
+
+        return <span style={{float:"right",marginRight:'5%'}}>
+            <span style={{marginRight:20}}>排放口:<span style={{marginLeft:5,color:'rgb(72,145,255)'}}>{model.PointTotal}</span></span>
+            <span style={{marginRight:20}}>运行:<span style={{marginLeft:5,color:'rgb(93,192,94)'}}>{model.RuningNum}</span></span>
+            <span style={{marginRight:20}}>离线:<span style={{marginLeft:5,color:'rgb(244,5,4)'}}>{model.OffLine}</span></span>
+            <span style={{marginRight:20}}>异常:<span style={{marginLeft:5,color:'orange'}}>{model.ExceptionNum}</span></span>
+            <span style={{marginRight:20}}>关停:<span style={{marginLeft:5,color:'rgb(208,145,14)'}}>{model.StopNum}</span></span>
+               </span>;
     }
 
     render() {
@@ -791,12 +828,8 @@ class SpecialWorkbench extends Component {
                     </Card> */}
                     <div className={styles.headerDiv}>
                         <p>智能监控</p>
-                        <span style={{float:"right",marginRight:'5%'}}>
-                            <span style={{marginRight:20}}>排放口:<span style={{marginLeft:5,color:'rgb(72,145,255)'}}>12</span></span>
-                            <span style={{marginRight:20}}>运行:<span style={{marginLeft:5,color:'rgb(93,192,94)'}}>8</span></span>
-                            <span style={{marginRight:20}}>超标:<span style={{marginLeft:5,color:'rgb(244,5,4)'}}>3</span></span>
-                            <span style={{marginRight:20}}>关停:<span style={{marginLeft:5,color:'rgb(208,145,14)'}}>1</span></span>
-                        </span>
+                        {this.renderStatisticsPointStatus()}
+
                     </div>
                     <Row gutter={24}>
                         <Col xl={12} lg={24} md={24} sm={24} xs={24} style={{ marginBottom: 10 }}>
@@ -808,8 +841,8 @@ class SpecialWorkbench extends Component {
                                 <div id="app" style={{height:400}}>
                                     <Map amapkey={amapKey} center={this.mapCenter()} zoom={13}>
                                         <Markers
-                                                                                        markers={this.getMarkers()}
-                                                                                        render={(item)=>this.renderMarkerLayout(item)}
+                                            markers={this.getMarkers()}
+                                            render={(item)=>this.renderMarkerLayout(item)}
                                         />
                                     </Map>
                                 </div>
@@ -836,34 +869,6 @@ class SpecialWorkbench extends Component {
                                     </Tabs>
                                 </Card.Grid>
                             </Card>
-
-                            {/* <Card
-                                title='10月超标汇总'
-                                style={{ marginBottom: 10 }}
-                                bordered={false}
-                                extra={<a href="#">更多>></a>}
-                                >
-                                <Card.Grid style={{width:'100%',height:250,paddingTop:15}} >
-                                    {
-                                        this.renderAllPointOverDataList()
-                                    }
-                                </Card.Grid>
-                            </Card>
-                            <Card
-                                title='当前小时预警消息'
-                                style={{ marginBottom: 10 }}
-                                // bodyStyle={{ textAlign: 'center' }}
-                                bordered={false}
-                                loading={this.props.loadingDataOverWarning}
-                                extra={<a href="#">更多>></a>}
-                                >
-                                <Card.Grid style={{width:'100%',height:250,paddingTop:15}} >
-                                    {
-                                        this.renderHourDataOverWarningList()
-                                    }
-                                </Card.Grid>
-
-                            </Card> */}
                         </Col>
                     </Row>
 
@@ -899,7 +904,14 @@ class SpecialWorkbench extends Component {
                             </Row>
                             <Row>
                                 <Col span={24}>
-                                    <Card title="十月设备运转率" style={{marginTop:10}} extra={<a href="#">更多>></a>}>
+                                    <Card
+                                        title="十月设备运转率"
+                                        style={{marginTop:10}}
+                                        extra={<a
+                                            href="/qualitycontrol/equipmentoperatingrate"
+                                        >更多>>
+                                               </a>}
+                                    >
                                         <Card.Grid style={gridStyle}>
                                             {/* 十月设备运转率 */}
 
@@ -923,7 +935,14 @@ class SpecialWorkbench extends Component {
                             </Row>
                             <Row>
                                 <Col span={24}>
-                                    <Card title="十月传输有效率" style={{marginTop:10}} extra={<a href="#">更多>></a>}>
+                                    <Card
+                                        title="十月传输有效率"
+                                        style={{marginTop:10}}
+                                        extra={<a
+                                            href="/qualitycontrol/transmissionefficiency"
+                                        >更多>>
+                                        </a>}
+                                    >
                                         <Card.Grid style={gridStyle} loading={this.props.loadingRateStatistics}>
                                             {/* 十月传输有效率 */}
 

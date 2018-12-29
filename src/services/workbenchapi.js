@@ -105,3 +105,14 @@ export async function getOverPoints(params) {
         data: null
     } : result;
 }
+
+/**
+ * 【统计排口状态】统计排口状态
+ * @params {}
+ */
+export async function getStatisticsPointStatus(params) {
+    const result = post(pageUrl.workbench.statisticsPointStatus, params||{}, null);
+    return result === null ? {
+        data: null
+    } : result;
+}

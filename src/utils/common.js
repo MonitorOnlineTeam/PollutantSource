@@ -28,7 +28,9 @@ export const pageUrl = {
         /**所有排口超标汇总 */
         allPointOverDataList:'/api/rest/PollutantSourceApi/PWorkbench/GetAllPointOverDataList',
         /**获取当前超标排口 */
-        overPoints:'/api/rest/PollutantSourceApi/PWorkbench/GetOverPoints'
+        overPoints:'/api/rest/PollutantSourceApi/PWorkbench/GetOverPoints',
+        /**统计排口状态 */
+        statisticsPointStatus:'/api/rest/PollutantSourceApi/PWorkbench/GetStatisticsPointStatus',
     }
 };
 
