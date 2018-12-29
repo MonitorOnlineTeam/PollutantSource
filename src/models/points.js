@@ -41,7 +41,8 @@ export default Model.extend({
         total: 0,
         overdata: [],
         overtotal: 0,
-        processchart: {}
+        processchart: {},
+        tablewidth:0
     },
     effects: {
         * querypointdetail({
@@ -406,15 +407,28 @@ export default Model.extend({
                     pollutantCode: result[0].pollutantCode,
                     datatype: 'realtime',
                     dgimn: payload.dgimn,
-                    //  pageIndex: 1,
                     pollutantName: result[0].pollutantName,
                     pollutantInfo: result[0]
                 };
-                yield put({
-                    type: 'queryhistorydatalist',
-                    payload: params
-                });
-                yield take('queryhistorydatalist/@@end');
+                
+                 //如果请求的是超标数据
+                 if(payload.overdata)
+                 {
+                    yield put({
+                        type: 'queryoverdatalist',
+                        payload: payload
+                    });
+                    yield take('queryoverdatalist/@@end');
+                 }
+                 else
+                 {
+                    yield put({
+                        type: 'queryhistorydatalist',
+                        payload: params
+                    });
+                    yield take('queryhistorydatalist/@@end');
+                 }
+
             } else {
                 yield update({ pollutantlist: [],datalist: null, chartdata: null, columns: null, datatable: null, total: 0 });
             }
@@ -422,6 +436,12 @@ export default Model.extend({
         * queryhistorydatalist({ payload
         }, {select, call, update}) {
             const { pollutantlist } = yield select(_ => _.points);
+
+            if(!pollutantlist[0])
+            {
+                yield update({ datalist: null, chartdata: null, columns: null, datatable: null, total: 0 });
+                return;
+            }
             const resultlist = yield call(queryhistorydatalist, {...payload});
             const result = resultlist.data;
             if (!result) {
@@ -444,12 +464,23 @@ export default Model.extend({
                 return value.pollutantCode === payload.pollutantCode;
             });
             let pollutantcols = [];
+            let tablewidth=0;
+            let width= (window.screen.availWidth - 200 - 120)/pollutantlist.length;
+            if(width<200)
+            {
+                width=200;
+            }
+               
+
+             tablewidth=  width*pollutantlist.length+200;
+        
             pollutantlist.map((item, key) => {
                 pollutantcols = pollutantcols.concat({
                     title: item.pollutantName + '(' + item.unit + ')',
                     dataIndex: item.pollutantCode,
                     key: item.pollutantCode,
                     align:'center',
+                    width: width,
                     render: (value, record, index) => {
                         const additional = record[item.pollutantCode + '_params'];
                         if (additional) {
@@ -488,6 +519,8 @@ export default Model.extend({
                 title: '时间',
                 dataIndex: 'MonitorTime',
                 key: 'MonitorTime',
+                width:200,
+                fixed:'left',
                 align:'center'
             }];
             columns = columns.concat(pollutantcols);
@@ -531,6 +564,12 @@ export default Model.extend({
                             formatter: '{value}'
                         },
                     },
+                     grid:{
+                              x:60,
+                              y:45,
+                              x2:45,
+                              y2:20,
+                          },
                     series: [{
                         type: 'line',
                         name: payload.pollutantName,
@@ -548,7 +587,7 @@ export default Model.extend({
                 };
             }
 
-            yield update({ datalist: result, chartdata: option, columns, datatable: result, total: resultlist.total });
+            yield update({ tablewidth,datalist: result, chartdata: option, columns, datatable: result, total: resultlist.total });
         },
         * queryoverdatalist({
             payload
