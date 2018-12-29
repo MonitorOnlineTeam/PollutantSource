@@ -5,7 +5,16 @@
  */
 
 import { Model } from '../dvapack';
-import { getOperationHistoryRecordPageList,getDataExceptionAlarmPageList } from '../services/workbenchapi';
+import { 
+getOperationHistoryRecordPageList,
+getDataExceptionAlarmPageList,
+getRateStatistics,
+getRealTimeNetWorkingRateForPointsPageList,
+getEquipmentOperatingRateForPoints,
+getTransmissionEfficiencyForPoints,
+getDataOverWarningPageList,
+getAllPointOverDataList 
+} from '../services/workbenchapi';
 import moment from 'moment';
 
 export default Model.extend({
@@ -30,6 +39,48 @@ export default Model.extend({
             tableDatas:[],
             pageIndex: 1,
             pageSize: 4,
+            total:0,
+        },
+        rateStatistics:{
+            beginTime: moment().format("YYYY-MM-01 00:00:00"),
+            endTime: moment().format('YYYY-MM-DD HH:mm:ss'),
+            model:{}
+        },
+        networkeRateList:{
+            tableDatas:[],
+            pageIndex: 1,
+            pageSize: 3,
+            total:0,
+            NetSort:''
+        },
+        runningRateList:{
+            beginTime: moment().format("YYYY-MM-01 00:00:00"),
+            endTime: moment().format('YYYY-MM-DD HH:mm:ss'),
+            tableDatas:[],
+            pageIndex: 1,
+            pageSize: 3,
+            total:0,
+        },
+        transmissionEffectiveRateList:{
+            beginTime: moment().format("YYYY-MM-01 00:00:00"),
+            endTime: moment().format('YYYY-MM-DD HH:mm:ss'),
+            tableDatas:[],
+            pageIndex: 1,
+            pageSize: 3,
+            total:0,
+        },
+        hourDataOverWarningList:{
+            beginTime:'2018-12-28 20:00:00', //moment().format("YYYY-MM-DD HH:00:00"),
+            endTime: '2018-12-28 21:00:00',//moment().add(1,'hour').format('YYYY-MM-DD 00:00:00'),
+            tableDatas:[],
+            pageIndex: 1,
+            pageSize: 3,
+            total:0,
+        },
+        allPointOverDataList:{
+            tableDatas:[],
+            pageIndex: 1,
+            pageSize: 3,
             total:0,
         }
     },
@@ -65,8 +116,6 @@ export default Model.extend({
                     }
                 }
             });
-            // const tableDatasNew = yield select(state => state.workbenchmodel.operation);
-            // console.log('new', tableDatasNew);
         },
         /**
          * 获取异常报警列表
@@ -97,8 +146,115 @@ export default Model.extend({
                     }
                 }
             });
-            const tableDatasNew = yield select(state => state.workbenchmodel.exceptionAlarm);
-            console.log('new', tableDatasNew);
+            // const tableDatasNew = yield select(state => state.workbenchmodel.exceptionAlarm);
+            // console.log('new', tableDatasNew);
+        },
+        /**
+         * 获取率的统计
+         * @param {传递参数} 传递参数
+         * @param {操作} 操作项
+         */
+        * getRateStatisticsData({payload}, { call, put, update, select }) {
+            const {rateStatistics} = yield select(state => state.workbenchmodel);
+            //debugger;
+            let body = {
+                beginTime: rateStatistics.beginTime,
+                endTime: rateStatistics.endTime
+            };
+            const response = yield call(getRateStatistics, body);
+            //debugger;
+            yield update({
+                rateStatistics:{
+                    ...rateStatistics,
+                    ...{
+                        model:response.data,
+                        pageIndex:payload.pageIndex || 1,
+                        total:response.total
+                    }
+                }
+            });
+        },
+        /**
+         * 获取排口的联网率数据列表
+         * @param {传递参数} 传递参数
+         * @param {操作} 操作项
+         */
+        * getNetworkeRateData({payload}, { call, put, update, select }) {
+            const {networkeRateList} = yield select(state => state.workbenchmodel);
+            //debugger;
+            let body = {
+                beginTime: networkeRateList.beginTime,
+                endTime: networkeRateList.endTime,
+                NetSort:networkeRateList.NetSort
+
+            };
+            const response = yield call(getRealTimeNetWorkingRateForPointsPageList, body);
+            //debugger;
+            yield update({
+                networkeRateList:{
+                    ...networkeRateList,
+                    ...{
+                        tableDatas:response.data,
+                        pageIndex:payload.pageIndex || 1,
+                        total:response.total,
+                        NetSort:networkeRateList.NetSort
+                    }
+                }
+            });
+        },
+        /**
+         * 获取小时监测预警消息
+         * @param {传递参数} 传递参数
+         * @param {操作} 操作项
+         */
+        * getDataOverWarningData({payload}, { call, put, update, select }) {
+            const {hourDataOverWarningList} = yield select(state => state.workbenchmodel);
+            //debugger;
+            let body = {
+                beginTime: hourDataOverWarningList.beginTime,
+                endTime: hourDataOverWarningList.endTime,
+                pageSize: hourDataOverWarningList.pageSize,
+                pageIndex: hourDataOverWarningList.pageIndex,
+
+            };
+            const response = yield call(getDataOverWarningPageList, body);
+            //debugger;
+            yield update({
+                hourDataOverWarningList:{
+                    ...hourDataOverWarningList,
+                    ...{
+                        tableDatas:response.data,
+                        pageIndex:hourDataOverWarningList.pageIndex || 1,
+                        total:response.total
+                    }
+                }
+            });
+        },
+        /**
+         * 获取所有排口超标数据
+         * @param {传递参数} 传递参数
+         * @param {操作} 操作项
+         */
+        * getAllPointOverDataList({payload}, { call, put, update, select }) {
+            const {allPointOverDataList} = yield select(state => state.workbenchmodel);
+            //debugger;
+            let body = {
+                pageSize: allPointOverDataList.pageSize,
+                pageIndex: allPointOverDataList.pageIndex,
+
+            };
+            const response = yield call(getAllPointOverDataList, body);
+            //debugger;
+            yield update({
+                allPointOverDataList:{
+                    ...allPointOverDataList,
+                    ...{
+                        tableDatas:response.data,
+                        pageIndex:allPointOverDataList.pageIndex || 1,
+                        total:response.total
+                    }
+                }
+            });
         },
     },
 });

@@ -1,6 +1,6 @@
 
 import React, { Component } from 'react';
-import { Row, Col,Card,List, message, Avatar, Spin,Table,Calendar, Badge,Alert,Tag,Link,Icon,Button } from 'antd';
+import { Row, Col,Card,List, message, Avatar, Spin,Table,Calendar, Badge,Alert,Tag,Link,Icon,Button,Tabs } from 'antd';
 import styles from './index.less';
 import reqwest from 'reqwest';
 import InfiniteScroll from 'react-infinite-scroller';
@@ -9,82 +9,27 @@ import moment from 'moment';
 import {connect} from 'dva';
 import {routerRedux} from 'dva/router';
 import { relative } from 'path';
+const TabPane = Tabs.TabPane;
+const operations = <Button>Extra Action</Button>;
 /*
 页面：工作台
 add by cg 18.6.8
 modify by wjw 18.12.24
 */
-const listData = [];
-for (let i = 0; i < 4; i++) {
-  listData.push({
-    href: 'http://ant.design',
-    title: `废气排口 ${i}`,
-    avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-    description: (<div>
-        <div>
-            <Tag color="magenta">参数异常</Tag>
-            <Tag color="red">连续值异常</Tag>
-            <Tag color="volcano">超限异常</Tag>
-            <Tag color="orange">逻辑异常</Tag>
-        </div>
-        <div style={{marginTop:10}}>
-            <div>烟气分析仪故障烟气分析仪故障烟气分析仪故障烟气分析仪故障</div>
-            <div>首次报警时间：2018-12-27</div>
-            <div>报警总次数：<span style={{fontWeight:'bold'}}>98</span></div>
-        </div>
-      </div>),
-    content: '',
-  });
-}
 
-const IconText = ({ type, text }) => (
-  <span>
-    <Icon type={type} style={{ marginRight: 8 }} />
-    {text}
-  </span>
-);
 const gridStyle = {
 width: '50%',
 textAlign: 'center',
 height: '200px'
 };
-const columns = [
-    {
-        title: '排口名称',
-        dataIndex: 'PointName',
-    }, 
-    {
-        title: '运维人',
-        dataIndex: 'OperationName',
-    }, 
-    {
-        title: '状态',
-        dataIndex: 'ExceptionTypeText',
-    }, {
-        title: '操作',
-        dataIndex: 'opt',
-        render: (text, record) => {
-            return (
-                <a > 查看运维 </a>
-            );
-        }
-    }];
-  const data = [{
-    key: '1',
-    name: '脱硫出口1',
-    age: '离线',
-    address: '派单',
-  }, {
-    key: '2',
-    name: '脱硫出口1',
-    age: '离线',
-    address: '派单',
-  }, {
-    key: '3',
-    name: '脱硫出口1',
-    age: '离线',
-    address: '派单',
-  }];
+
+const data = [
+    'Racing car sprays burning fuel into crowd.',
+    'Japanese princess to wed commoner.',
+    'Australian walks 100km after outback crash.',
+    'Man charged over missing wedding girl.',
+    'Los Angeles battles huge wildfires.',
+    ];
 const fakeDataUrl = 'https://randomuser.me/api/?results=5&inc=name,gender,email,nat&noinfo';
   
 function getMonthData(value) {
@@ -105,22 +50,40 @@ function monthCellRender(value) {
 const pageUrl = {
     updateState: 'workbenchmodel/updateState',
     getOperationData: 'workbenchmodel/getOperationData',
-    getExceptionAlarmData: 'workbenchmodel/getExceptionAlarmData'
+    getExceptionAlarmData: 'workbenchmodel/getExceptionAlarmData',
+    getRateStatisticsData: 'workbenchmodel/getRateStatisticsData',
+    getNetworkeRateData: 'workbenchmodel/getNetworkeRateData',
+    getEquipmentoperatingRateData: 'equipmentoperatingrate/getData',
+    getTransmissionefficiencyRateData:'transmissionefficiency/getData',
+    getDataOverWarningData:'workbenchmodel/getDataOverWarningData',
+    getAllPointOverDataList:'workbenchmodel/getAllPointOverDataList',
 };
 @connect(({
     loading,
-    workbenchmodel
+    workbenchmodel,
+    transmissionefficiency,
+    equipmentoperatingrate
 }) => ({
-    loading: loading.effects[pageUrl.getOperationData],
+    loadingOperationData: loading.effects[pageUrl.getOperationData],
+    loadingExceptionAlarm:loading.effects[pageUrl.getExceptionAlarmData],
+    loadingRateStatistics:loading.effects[pageUrl.getRateStatisticsData],
+    loadingNetworkeRate:loading.effects[pageUrl.getNetworkeRateData],
+    loadingEquipmentoperatingRate:loading.effects[pageUrl.getEquipmentoperatingRateData],
+    loadingTransmissionefficiencyRate:loading.effects[pageUrl.getTransmissionefficiencyRateData],
+    loadingDataOverWarning:loading.effects[pageUrl.getDataOverWarningData],
+    loadingAllPointOverDataList:loading.effects[pageUrl.getAllPointOverDataList],
     operation: workbenchmodel.operation,
-    exceptionAlarm: workbenchmodel.exceptionAlarm
+    exceptionAlarm: workbenchmodel.exceptionAlarm,
+    rateStatistics: workbenchmodel.rateStatistics,
+    networkeRateList: workbenchmodel.networkeRateList,
+    equipmentoperatingRateTableDatas: equipmentoperatingrate.tableDatas,
+    transmissionefficiencyRateTableDatas:transmissionefficiency.tableDatas,
+    hourDataOverWarningList:workbenchmodel.hourDataOverWarningList,
+    allPointOverDataList:workbenchmodel.allPointOverDataList,
 }))
 class SpecialWorkbench extends Component {
     constructor(props) {
         super(props);
-        // console.log('this.props.operation',this.props.operation.tableDatas);
-        // console.log('moment().format("YYYY-MM-DD")',moment().format("YYYY-MM-DD"));
-        // console.log(this.props.operation.tableDatas.filter(m=>moment(m.CreateTime).format('YYYY-MM-DD')===moment().format("YYYY-MM-DD")));
         this.state = {
             key: 'tab1',
             noTitleKey: 'app',
@@ -134,7 +97,12 @@ class SpecialWorkbench extends Component {
     componentWillMount() {
         this.getOperationData(1);
         this.getExceptionAlarmData(1);
-        //this.onCalendarSelect(moment());
+        this.getRateStatisticsData();
+        this.getNetworkeRateData();
+        this.getEquipmentoperatingRateData();
+        this.getTransmissionefficiencyRateData();
+        //this.getDataOverWarningData();
+
     }
     /**
      * 更新model中的state
@@ -147,7 +115,66 @@ class SpecialWorkbench extends Component {
     }
 
     /**
-     * 异常报警_更新数据
+     * 智能监控_排口超标汇总_更新数据
+     */
+    getAllPointOverDataList = () =>{
+        this.props.dispatch({
+            type: pageUrl.getAllPointOverDataList,
+            payload: {},
+        });
+    }
+    /**
+     * 智能监控_当小时预警消息_更新数据
+     */
+    getDataOverWarningData = () =>{
+        this.props.dispatch({
+            type: pageUrl.getDataOverWarningData,
+            payload: {},
+        });
+    }
+
+    /**
+     * 智能质控_率的统计_更新数据
+     */
+    getRateStatisticsData = () =>{
+        this.props.dispatch({
+            type: pageUrl.getRateStatisticsData,
+            payload: {},
+        });
+    }
+    /**
+     * 智能质控_排口联网率_更新数据
+     */
+    getNetworkeRateData = () =>{
+        this.props.dispatch({
+            type: pageUrl.getNetworkeRateData,
+            payload: {},
+        });
+    }
+    /**
+     * 智能质控_排口设备运转率_更新数据
+     */
+    getEquipmentoperatingRateData = (pageIndex) =>{
+        this.props.dispatch({
+            type: pageUrl.getEquipmentoperatingRateData,
+            payload: {
+                pageIndex: pageIndex||1,
+            }
+        });
+    }
+    /**
+     * 智能质控_排口传输有效率_更新数据
+     */
+    getTransmissionefficiencyRateData = (pageIndex) =>{
+        this.props.dispatch({
+            type: pageUrl.getTransmissionefficiencyRateData,
+            payload: {
+                pageIndex: pageIndex||1,
+            }
+        });
+    }
+    /**
+     * 智能质控_异常报警_更新数据
      */
     getExceptionAlarmData = (pageIndex) =>{
         this.props.dispatch({
@@ -156,7 +183,7 @@ class SpecialWorkbench extends Component {
         });
     }
     /**
-     * 渲染异常报警数据列表
+     * 智能质控_渲染异常报警数据列表
      */
     renderExceptionAlarmList = ()=>{
         console.log('exceptionAlarm:',this.props.exceptionAlarm);
@@ -169,14 +196,14 @@ class SpecialWorkbench extends Component {
         };
         this.props.exceptionAlarm.tableDatas.map((item)=>{
             //判断报警是否超过4小时
-            let seconds=moment().diff(moment(item.FirstAlarmTime), 'minutes');
-            let hour=Math.floor(seconds/60);
-            let minutes=Math.floor(seconds%60);
-            let color = hour>= 4 ? 'red':'rgb(129,203,237)';
-            let minutesLable=minutes>0?`${minutes}分钟`:'';
+            const seconds=moment().diff(moment(item.FirstAlarmTime), 'minutes');
+            const hour=Math.floor(seconds/60);
+            const minutes=Math.floor(seconds%60);
+            const color = hour>= 4 ? 'red':'rgb(129,203,237)';
+            const minutesLable=minutes>0?`${minutes}分钟`:'';
             
-            let labelDiv=<div style={{color:`${color}`}}>已发生{hour}小时{minutesLable}</div>;
-            let btnDiv=hour>= 4 ?(<div style={{marginTop:43}}>
+            const labelDiv=<div style={{color:`${color}`}}>已发生{hour}小时{minutesLable}</div>;
+            const btnDiv=hour>= 4 ?(<div style={{marginTop:43}}>
                                         <Button style={{width:100,border:'none',backgroundColor:'rgb(74,210,187)'}} type="primary">督办</Button>
                                 </div>):'';
             listData.push({
@@ -206,29 +233,6 @@ class SpecialWorkbench extends Component {
                 )
             });
         });
-
-        // for (let i = 0; i < 4; i++) {
-        //     listData.push({
-        //         href: 'http://ant.design',
-        //         title: `废气排口 ${i}`,
-        //         avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-        //         description: (<div>
-        //             <div>
-        //                 <Tag color="magenta">参数异常</Tag>
-        //                 <Tag color="red">连续值异常</Tag>
-        //                 <Tag color="volcano">超限异常</Tag>
-        //                 <Tag color="orange">逻辑异常</Tag>
-        //             </div>
-        //             <div style={{marginTop:10}}>
-        //                 <div>烟气分析仪故障烟气分析仪故障烟气分析仪故障烟气分析仪故障</div>
-        //                 <div>首次报警时间：2018-12-27</div>
-        //                 <div>报警总次数：<span style={{fontWeight:'bold'}}>98</span></div>
-        //             </div>
-        //         </div>),
-        //         content: '',
-        //     });
-        // }
-
         return (<List
                     itemLayout="vertical"
                     // size="large"
@@ -423,6 +427,10 @@ class SpecialWorkbench extends Component {
     }
 
     getOption = (type) => {
+        const {model}=this.props.rateStatistics;
+        let networkeRate=(parseFloat(model.NetworkeRate) * 100).toFixed(2);
+        let runningRate=(parseFloat(model.RunningRate) * 100).toFixed(2);
+        let transmissionEffectiveRate=(parseFloat(model.TransmissionEffectiveRate) * 100).toFixed(2);
 
         let legendData=[];
         let color=[];
@@ -433,9 +441,9 @@ class SpecialWorkbench extends Component {
             legendData=['正常','离线'];
             color=['rgb(245,68,66)','rgb(160,6,1)'];
             seriesName='实时联网率';
-            seriesData=[
-                {value:90, name:'正常'},
-                {value:10, name:'离线'}
+            seriesData=[//(parseFloat(model.NetworkeRate) * 100).toFixed(2)
+                {value:networkeRate, name:'正常'},
+                {value:100-networkeRate, name:'离线'}
             ];
         }else if(type===2)
         {
@@ -443,8 +451,8 @@ class SpecialWorkbench extends Component {
             color=['rgb(73,226,124)','rgb(48,155,86)'];
             seriesName='设备运转率';
             seriesData=[
-                {value:90, name:'达标'},
-                {value:10, name:'未达标'}
+                {value:runningRate, name:'达标'},
+                {value:100-runningRate, name:'未达标'}
             ];
         }else
         {
@@ -452,8 +460,8 @@ class SpecialWorkbench extends Component {
             color=['rgb(245,68,66)','rgb(160,6,1)'];
             seriesName='传输有效率';
             seriesData=[
-                {value:90, name:'达标'},
-                {value:10, name:'未达标'}
+                {value:transmissionEffectiveRate, name:'达标'},
+                {value:100-transmissionEffectiveRate, name:'未达标'}
             ];
         }
         let option = {
@@ -496,8 +504,158 @@ class SpecialWorkbench extends Component {
     onPanelChange = (value, mode)=>{
         console.log(value, mode);
     }
-    
-
+    /**
+     * 智能质控_渲染排口联网率表格
+     */
+    renderNetWorkingRateTable = () =>{
+        const columns = [
+            {
+                title: '排口名称',
+                dataIndex: 'PointName'
+            }, 
+            {
+                title: '联网率',
+                dataIndex: 'RateValue',
+                render: (text, record) => {
+                    if(text===100)
+                        return (parseFloat(text) * 100).toFixed(2) + '%';
+                    else
+                        return <Tag color="rgb(244,6,94)">离线</Tag>;
+                }
+            }];
+        
+        return <Table loading={this.props.loadingNetworkeRate} columns={columns} dataSource={this.props.networkeRateList.tableDatas.slice(0,3)} size="small" pagination={false}/>
+    }
+    /**
+     * 智能质控_渲染排口设备运转率表格
+     */
+    renderEquipmentoperatingRateTable = () =>{
+        const columns = [
+            {
+                title: '排口名称',
+                dataIndex: 'PointName'
+            }, 
+            {
+                title: '设备运转率',
+                dataIndex: 'RunningRate',
+                render: (text, record) => {
+                    return (parseFloat(text) * 100).toFixed(2) + '%';
+                }
+            }];
+        
+        return <Table loading={this.props.loadingEquipmentoperatingRate} columns={columns} dataSource={this.props.equipmentoperatingRateTableDatas.slice(0,3)} size="small" pagination={false}/>
+    }
+    /**
+     * 智能质控_渲染排口传输有效率表格
+     */
+    renderTransmissionefficiencyRateTable = () =>{
+        const columns = [
+            {
+                title: '排口名称',
+                dataIndex: 'PointName'
+            }, 
+            {
+                title: '传输有效率',
+                dataIndex: 'TransmissionEffectiveRate',
+                render: (text, record) => {
+                    return (parseFloat(text) * 100).toFixed(2) + '%';
+                }
+            }];
+        
+        return <Table loading={this.props.loadingTransmissionefficiencyRate} columns={columns} dataSource={this.props.transmissionefficiencyRateTableDatas.slice(0,3)} size="small" pagination={false}/>
+    }
+    /**
+     * 智能监控_渲染当小时预警数据列表
+     */
+    renderHourDataOverWarningList = ()=>{
+        console.log('hourDataOverWarningList:',this.props.hourDataOverWarningList);
+        const listData = [];
+        
+        this.props.hourDataOverWarningList.tableDatas.map((item)=>{
+            //判断报警是否超过4小时
+            listData.push({
+                title:`${item.PointName}`,
+                description:(
+                    <div>
+                        {
+                            item.OverWarnings.map(item => (
+                                <div>
+                                    {
+                                        `在${item.AlarmOverTime} ${item.PollutantName} 超标预警值为${item.AlarmValue}ug/m3 建议浓度为${item.SuggestValue}ug/m3`
+                                    }
+                                </div>
+                            ))
+                        }
+                    </div>
+                )
+            });
+            
+        });
+        return (<List
+            // size="middle"
+            // bordered={false}
+            itemLayout="vertical"
+            dataSource={listData}
+            renderItem={item => (
+                <List.Item
+                key={item.title}
+                actions={[]}
+            >
+                <List.Item.Meta
+                title={<a href={item.href}>{item.title}</a>}
+                description={item.description}
+                />
+            </List.Item>
+            )}
+            />
+        );
+    }
+        /**
+     * 智能监控_渲染当小时预警数据列表
+     */
+    renderAllPointOverDataList = ()=>{
+        console.log('allPointOverDataList:',this.props.allPointOverDataList);
+        const listData = [];
+        
+        this.props.allPointOverDataList.tableDatas.map((item)=>{
+            //判断报警是否超过4小时
+            listData.push({
+                title:`${item.pointName}`,
+                description:(
+                    <div>
+                        {/* {
+                            item.OverWarnings.map(item => (
+                                <div>
+                                    {
+                                        `在${item.AlarmOverTime} ${item.PollutantName} 超标预警值为${item.AlarmValue}ug/m3 建议浓度为${item.SuggestValue}ug/m3`
+                                    }
+                                </div>
+                            ))
+                        } */}
+                    </div>
+                )
+            });
+            
+        });
+        return (<List
+                    // size="middle"
+                    // bordered={false}
+                    itemLayout="vertical"
+                    dataSource={listData}
+                    renderItem={item => (
+                        <List.Item
+                        key={item.title}
+                        actions={[]}
+                    >
+                        <List.Item.Meta
+                        title={<a href={item.href}>{item.title}</a>}
+                        description={item.description}
+                        />
+                    </List.Item>
+                    )}
+                    />
+                );
+    }
     render() {
         //console.log(this.props.operation);
         const {operation} = this.props;
@@ -536,79 +694,38 @@ class SpecialWorkbench extends Component {
                             </Card>
                         </Col>
                         <Col xl={12} lg={24} md={24} sm={24} xs={24}>
-                            <Card
+                        <Tabs tabBarExtraContent={operations}>
+                            <TabPane tab="Tab 1" key="1">Content of tab 1</TabPane>
+                            <TabPane tab="Tab 2" key="2">Content of tab 2</TabPane>
+                            <TabPane tab="Tab 3" key="3">Content of tab 3</TabPane>
+                        </Tabs>
+                            {/* <Card
                                 title='10月超标汇总'
                                 style={{ marginBottom: 10 }}
                                 bordered={false}
                                 extra={<a href="#">更多>></a>}
                                 >
-                                <div className={styles.demoInfiniteContainer}>
-                                    <InfiniteScroll
-                                        initialLoad={false}
-                                        pageStart={0}
-                                        loadMore={this.handleInfiniteOnLoad}
-                                        hasMore={!this.state.loading && this.state.hasMore}
-                                        useWindow={false}
-                                        >
-                                        <List
-                                            dataSource={this.state.data}
-                                            size="small"
-                                            renderItem={item => (
-                                                <List.Item key={item.id}>
-                                                    <List.Item.Meta
-                                                    title={<a href="https://ant.design">{item.name.last}</a>}
-                                                    description={item.email}
-                                                    />
-                                                    <div></div>
-                                                </List.Item>
-                                                )}
-                                            >
-                                            {this.state.loading && this.state.hasMore && (
-                                            <div className="demo-loading-container">
-                                                <Spin />
-                                            </div>
-                                            )}
-                                        </List>
-                                    </InfiniteScroll>
-                                </div>
+                                <Card.Grid style={{width:'100%',height:250,paddingTop:15}} >
+                                    {
+                                        this.renderAllPointOverDataList()
+                                    }
+                                </Card.Grid>
                             </Card>
                             <Card
                                 title='当前小时预警消息'
                                 style={{ marginBottom: 10 }}
                                 // bodyStyle={{ textAlign: 'center' }}
                                 bordered={false}
+                                loading={this.props.loadingDataOverWarning}
                                 extra={<a href="#">更多>></a>}
                                 >
-                                <div className={styles.demoInfiniteContainer}>
-                                    <InfiniteScroll
-                                        initialLoad={false}
-                                        pageStart={0}
-                                        loadMore={this.handleInfiniteOnLoad}
-                                        hasMore={!this.state.loading && this.state.hasMore}
-                                        useWindow={false}
-                                        >
-                                        <List
-                                            dataSource={this.state.data}
-                                            size="small"
-                                            renderItem={item => (
-                                                <List.Item key={item.id}>
-                                                    <List.Item.Meta
-                                                    title={<a href="https://ant.design">{item.name.last}</a>}
-                                                    description={item.email}
-                                                    />
-                                                    <div></div>
-                                                </List.Item>
-                                                )}
-                                            >
-                                            {this.state.loading && this.state.hasMore && (
-                                            <div className="demo-loading-container">
-                                                <Spin />
-                                            </div>
-                                            )}
-                                        </List>
-                                    </InfiniteScroll>
-                                </div>
-                            </Card>
+                                <Card.Grid style={{width:'100%',height:250,paddingTop:15}} >
+                                    {
+                                        this.renderHourDataOverWarningList()
+                                    }
+                                </Card.Grid>
+                               
+                            </Card> */}
                         </Col>
                     </Row>
 
@@ -625,6 +742,7 @@ class SpecialWorkbench extends Component {
                                         {/* 实时联网率 */}
                                         
                                         <ReactEcharts
+                                            loadingOption={this.props.loadingRateStatistics}
                                             option={this.getOption(1)}
                                             style={{height: '150px', width: '100%'}}
                                             className="echarts-for-echarts"
@@ -633,7 +751,9 @@ class SpecialWorkbench extends Component {
 
                                         </Card.Grid>
                                         <Card.Grid style={gridStyle}>
-                                            <Table columns={columns} dataSource={data} size="small" pagination={false}/>
+                                            {
+                                                this.renderNetWorkingRateTable()
+                                            }
                                         </Card.Grid>
                                     </Card>
                                 </Col>
@@ -644,16 +764,19 @@ class SpecialWorkbench extends Component {
                                             <Card.Grid style={gridStyle}>
                                             {/* 十月设备运转率 */}
                                             
-                                            <ReactEcharts
-                                                option={this.getOption(2)}
-                                                style={{height: '150px', width: '100%'}}
-                                                className="echarts-for-echarts"
-                                                onEvents={{'click': this.onChartClick}}
-                                                theme="my_theme" />
+                                                <ReactEcharts
+                                                    loadingOption={this.props.loadingRateStatistics}
+                                                    option={this.getOption(2)}
+                                                    style={{height: '150px', width: '100%'}}
+                                                    className="echarts-for-echarts"
+                                                    onEvents={{'click': this.onChartClick}}
+                                                    theme="my_theme" />
 
                                             </Card.Grid>
                                             <Card.Grid style={gridStyle}>
-                                                <Table columns={columns} dataSource={data} size="small" pagination={false}/>
+                                            {
+                                                this.renderEquipmentoperatingRateTable()
+                                            }
                                             </Card.Grid>
                                     </Card>
                                 </Col>
@@ -661,7 +784,7 @@ class SpecialWorkbench extends Component {
                             <Row>
                                 <Col span={24}>
                                     <Card title='十月传输有效率' style={{marginTop:10}} extra={<a href="#">更多>></a>}>
-                                        <Card.Grid style={gridStyle}>
+                                        <Card.Grid style={gridStyle} loading={this.props.loadingRateStatistics}>
                                         {/* 十月传输有效率 */}
                                         
                                         <ReactEcharts
@@ -673,7 +796,9 @@ class SpecialWorkbench extends Component {
 
                                         </Card.Grid>
                                         <Card.Grid style={gridStyle}>
-                                            <Table columns={columns} dataSource={data} size="small" pagination={false}/>
+                                            {
+                                                this.renderTransmissionefficiencyRateTable()
+                                            }
                                         </Card.Grid>
                                     </Card>
                                 </Col>
@@ -684,8 +809,9 @@ class SpecialWorkbench extends Component {
                                 title='异常报警'
                                 style={{ marginBottom: 10}}
                                 bordered={false}
-                                extra={<a href="#">更多>></a>}
+                                // extra={<a href="#">更多>></a>}
                                 className={styles.exceptionAlarm}
+                                loading={this.props.loadingExceptionAlarm}
                                 >
                                 <Card.Grid style={{width:'100%',height:736}} key='1'>
                                     {this.renderExceptionAlarmList()}
@@ -700,7 +826,7 @@ class SpecialWorkbench extends Component {
 
                     <Row gutter={24}>
                         <Col xl={8} lg={24} md={24} sm={24} xs={24} style={{ marginBottom: 10 }}>
-                            <Card style={{}}>
+                            <Card loading={this.props.loadingOperationData} style={{}}>
                                 <Card.Grid style={{width:'100%'}} >
                                     <div className={styles.calendarDiv}>
                                         <div style={{textAlign: 'left', marginBottom: -35}}>
@@ -732,7 +858,7 @@ class SpecialWorkbench extends Component {
                             </Card>
                         </Col>
                         <Col xl={16} lg={24} md={24} sm={24} xs={24}>
-                            <Card title='运维记录' style={{ }} extra={<a href="#">更多>></a>}>
+                            <Card loading={this.props.loadingOperationData} title={`运维记录 - ${this.state.selectedValue.format('YYYY-MM-DD')} `} style={{ }} extra={<a href="#">更多>></a>}>
                                 <Card.Grid style={{width:'100%',height:297,padding: 15}} >
                                 {
                                     this.renderOperationTable()

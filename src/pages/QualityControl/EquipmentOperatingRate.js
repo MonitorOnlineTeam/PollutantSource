@@ -78,11 +78,12 @@ export default class EquipmentOperatingRate extends Component {
         this.getTableData(pagination.current);
     }
     onDateChange = (value, dateString) => {
-        let endTime = moment(dateString).add(1, 'months').add(-1, 'days').format('YYYY-MM-DD HH:mm:ss');
+        // debugger
+        let endTime = moment(dateString).add(1, 'months').format('YYYY-MM-01 00:00:00');
 
-        if (moment(dateString).add(1, 'months').add(-1, 'days') > moment()) {
-            endTime = moment().format('YYYY-MM-DD HH:mm:ss');
-        }
+        // if (moment(dateString).format('YYYY-MM-DD HH:mm:ss') > moment().format('YYYY-MM-DD HH:mm:ss')) {
+        //     endTime = moment().format('YYYY-MM-DD HH:mm:ss');
+        // }
         this.updateState({
             beginTime: moment(dateString).format('YYYY-MM-01 HH:mm:ss'),
             endTime: endTime
