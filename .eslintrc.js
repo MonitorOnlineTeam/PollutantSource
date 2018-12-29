@@ -57,6 +57,7 @@ module.exports = {
       "no-irregular-whitespace": 2,//不能有不规则的空格
       "linebreak-style": [0, "windows"],//换行风格
       "no-multi-spaces": 1,//不能用多余的空格
+      "no-plusplus": 0, //启用++ --
       "no-multiple-empty-lines": [1, {"max": 2}],//空行最多不能超过2行
       "no-trailing-spaces": 1,//一行结束后面不要有空格
       "no-this-before-super": 0,//在调用super()之前不能使用this或super
