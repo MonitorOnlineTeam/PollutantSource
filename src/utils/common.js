@@ -1,5 +1,5 @@
-const IsServer = false;
-const _Host = `${IsServer ? 'http://172.16.12.152:8011' : 'http://localhost:51047'}/rest/PollutantSourceApi`;
+// const IsServer = false;
+// const _Host = `${IsServer ? 'http://172.16.12.152:8011' : 'http://localhost:51047'}/rest/PollutantSourceApi`;
 /**
  * 全局获取API接口地址统一入口.
  * 创建人：吴建伟
@@ -26,7 +26,9 @@ export const pageUrl = {
         /**小时监测预警 */
         hourDataOverWarningPageList:'/api/rest/PollutantSourceApi/PWorkbench/GetDataOverWarningPageList',
         /**所有排口超标汇总 */
-        allPointOverDataList:'/api/rest/PollutantSourceApi/PWorkbench/GetAllPointOverDataList'
+        allPointOverDataList:'/api/rest/PollutantSourceApi/PWorkbench/GetAllPointOverDataList',
+        /**获取当前超标排口 */
+        overPoints:'/api/rest/PollutantSourceApi/PWorkbench/GetOverPoints'
     }
 };
 

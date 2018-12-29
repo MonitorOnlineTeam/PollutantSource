@@ -4,18 +4,19 @@
  * 创建时间：2018.12.26
  */
 
-import { Model } from '../dvapack';
-import { 
-getOperationHistoryRecordPageList,
-getDataExceptionAlarmPageList,
-getRateStatistics,
-getRealTimeNetWorkingRateForPointsPageList,
-getEquipmentOperatingRateForPoints,
-getTransmissionEfficiencyForPoints,
-getDataOverWarningPageList,
-getAllPointOverDataList 
-} from '../services/workbenchapi';
 import moment from 'moment';
+import { Model } from '../dvapack';
+import {
+    getOperationHistoryRecordPageList,
+    getDataExceptionAlarmPageList,
+    getRateStatistics,
+    getRealTimeNetWorkingRateForPointsPageList,
+    // getEquipmentOperatingRateForPoints,
+    // getTransmissionEfficiencyForPoints,
+    getDataOverWarningPageList,
+    getAllPointOverDataList,
+    getOverPoints,
+} from '../services/workbenchapi';
 
 export default Model.extend({
     namespace: 'workbenchmodel',
@@ -82,7 +83,11 @@ export default Model.extend({
             pageIndex: 1,
             pageSize: 3,
             total:0,
-        }
+        },
+        overPointList:{
+            tableDatas:[],
+            total:0,
+        },
     },
     subscriptions: {
     },
@@ -251,6 +256,27 @@ export default Model.extend({
                     ...{
                         tableDatas:response.data,
                         pageIndex:allPointOverDataList.pageIndex || 1,
+                        total:response.total
+                    }
+                }
+            });
+        },
+        /**
+         * 获取所有超标排口
+         * @param {传递参数} 传递参数
+         * @param {操作} 操作项
+         */
+        * getOverPointList({payload}, { call, put, update, select }) {
+            const {overPointList} = yield select(state => state.workbenchmodel);
+            //debugger;
+            let body = {};
+            const response = yield call(getOverPoints, body);
+            //debugger;
+            yield update({
+                overPointList:{
+                    ...overPointList,
+                    ...{
+                        tableDatas:response.data,
                         total:response.total
                     }
                 }
