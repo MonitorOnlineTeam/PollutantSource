@@ -1,0 +1,33 @@
+@import '~antd/lib/style/themes/default.less';
+@import '~@/utils/utils.less';
+.listCard {
+      :global {
+        .ant-card-head-title {
+          overflow: visible;
+        }
+      }
+    }
+    .listContent {
+      margin-left: 0;
+      & > div {
+        margin-left: 0;
+      }
+    }
+      .listContent {
+    font-size: 0;
+    .listContentItem {
+      color: @text-color-secondary;
+      display: inline-block;
+      vertical-align: middle;
+      font-size: @font-size-base;
+      margin-left: 40px;
+      > span {
+        line-height: 20px;
+      }
+      > p {
+        margin-top: 4px;
+        margin-bottom: 0;
+        line-height: 22px;
+      }
+    }
+  }
