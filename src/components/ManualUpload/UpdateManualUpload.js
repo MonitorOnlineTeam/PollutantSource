@@ -54,7 +54,6 @@ export default class UpdateManualUpload extends Component {
     }
     //根据污染物编号获取单位
     pollutantChange = (value) => {
-        debugger
         //获取绑定下拉污染物
         this.props.dispatch({
             type: 'manualupload/GetUnitByPollutant',
@@ -66,7 +65,6 @@ export default class UpdateManualUpload extends Component {
     handleSubmitupdate = (e) => {
         let flag = true;
         this.props.form.validateFieldsAndScroll((err, values) => {
-            debugger
             if (!err && flag === true) {
                 this.props.dispatch({
                     type: 'manualupload/UpdateManualSupplementData',

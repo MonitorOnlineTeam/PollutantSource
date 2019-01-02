@@ -54,7 +54,6 @@ export default class AddManualUpload extends Component {
     }
     //根据污染物编号获取单位
     pollutantChange = (value) => {
-        debugger
         //获取绑定下拉污染物
         this.props.dispatch({
             type: 'manualupload/GetUnitByPollutant',
@@ -64,7 +63,6 @@ export default class AddManualUpload extends Component {
         });
     }
     handleSubmit = (e) => {
-        debugger
         let flag = true;
         this.props.form.validateFieldsAndScroll((err, values) => {
             if (!err && flag === true) {
@@ -86,8 +84,6 @@ export default class AddManualUpload extends Component {
         });
     }
     render() {
-        console.log(this.props.PollutantTypesList)
-        debugger
         const { getFieldDecorator } = this.props.form;
         const formItemLayout = {
             labelCol: {

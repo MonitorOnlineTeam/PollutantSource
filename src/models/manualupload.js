@@ -1,6 +1,6 @@
 import { Model } from '../dvapack';
 import { } from '../services/videodata';
-import { uploadfiles, GetPollutantByPoint, GetManualSupplementList, UploadTemplate, getUploadTemplate, GetAllPollutantTypes, addGetPollutantByPoint, AddUploadFiles, GetUnitByPollutant, DeleteUploadFiles, UpdateManualSupplementData,getPollutantTypeList } from '../services/manualuploadapi';
+import { uploadfiles, GetPollutantByPoint, GetManualSupplementList, UploadTemplate, getUploadTemplate, GetAllPollutantTypes, addGetPollutantByPoint, AddUploadFiles, GetUnitByPollutant, DeleteUploadFiles, UpdateManualSupplementData, getPollutantTypeList } from '../services/manualuploadapi';
 
 export default Model.extend({
     namespace: 'manualupload',
@@ -19,7 +19,7 @@ export default Model.extend({
         unit: null,
         DGIMN: null,
         pointName: null,
-        polltuantTypeList:[],
+        polltuantTypeList: [],
     },
     effects: {
         //上传附件
@@ -27,12 +27,9 @@ export default Model.extend({
             payload
         }, {
             call,
-            put,
             update,
-            select
         }) {
             const result = yield call(uploadfiles, payload);
-            debugger
             yield update({
                 requstresult: result.requstresult,
             });
@@ -43,9 +40,7 @@ export default Model.extend({
             payload
         }, {
             call,
-            put,
             update,
-            select
         }) {
             const result = yield call(GetPollutantByPoint, payload);
             if (result.data.length !== 0) {
@@ -66,9 +61,7 @@ export default Model.extend({
             payload
         }, {
             call,
-            put,
             update,
-            select
         }) {
             const result = yield call(addGetPollutantByPoint, payload);
             if (result.data.length !== 0) {
@@ -91,10 +84,9 @@ export default Model.extend({
             call,
             put,
             update,
-            select
         }) {
             const result = yield call(GetManualSupplementList, payload);
-            if (result.data != null) {
+            if (result.data !== null) {
                 if (result.data.length !== 0) {
 
                     if (payload.DGIMN) {
@@ -103,7 +95,7 @@ export default Model.extend({
                             payload: {
                                 DGIMN: payload.DGIMN
                             }
-                        })
+                        });
                     }
                     yield update({
                         uploaddatalist: result.data,
@@ -144,12 +136,10 @@ export default Model.extend({
             payload
         }, {
             call,
-            put,
             update,
-            select
         }) {
             const result = yield call(getUploadTemplate, payload);
-            if (result.data != null) {
+            if (result.data !== null) {
                 if (result.data.length !== 0) {
                     yield update({
                         reason: result.reason,
@@ -164,9 +154,7 @@ export default Model.extend({
             payload
         }, {
             call,
-            put,
             update,
-            select
         }) {
             const result = yield call(GetAllPollutantTypes, payload);
             if (result.data !== null) {
@@ -189,9 +177,7 @@ export default Model.extend({
 
         }, {
             call,
-            put,
             update,
-            select
         }) {
             const result = yield call(AddUploadFiles, payload);
             if (result.requstresult === "1") {
@@ -212,9 +198,7 @@ export default Model.extend({
             payload
         }, {
             call,
-            put,
             update,
-            select
         }) {
             const result = yield call(GetUnitByPollutant, payload);
             if (result.requstresult === "1") {
@@ -236,9 +220,7 @@ export default Model.extend({
             payload
         }, {
             call,
-            put,
             update,
-            select
         }) {
             const result = yield call(DeleteUploadFiles, payload);
             if (result.requstresult === "1") {
@@ -261,9 +243,7 @@ export default Model.extend({
             payload
         }, {
             call,
-            put,
             update,
-            select
         }) {
             const result = yield call(UpdateManualSupplementData, payload);
             if (result.requstresult === "1") {
@@ -286,14 +266,10 @@ export default Model.extend({
             payload
         }, {
             call,
-            put,
             update,
-            select
         }) {
             const result = yield call(getPollutantTypeList, payload);
-            debugger
             if (result.requstresult === "1") {
-                debugger
                 yield update({
                     polltuantTypeList: result.data,
                     reason: result.reason,
