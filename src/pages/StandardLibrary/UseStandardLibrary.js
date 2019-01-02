@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {
-    Card, Icon, Divider, Table, message, Tag, Modal, Pagination, Badge
+    Card, Icon, Divider, Table, message, Tag, Modal, Pagination, Badge,Button,Row, Col 
 } from 'antd';
 import {
     connect
@@ -9,6 +9,7 @@ import PageHeader from '../../components/PageHeader';
 import EditPollutant from '../StandardLibrary/EditPollutant';
 import PollutantView from '../StandardLibrary/PollutantView';
 import styles from './index.less';
+import MonitorContent from '../../components/MonitorContent/index';
 @connect(({loading, standardlibrary}) => ({
     ...loading,
     list: standardlibrary.uselist,
@@ -93,23 +94,35 @@ export default class UseStandardLibrary extends Component {
              rtnVal.push(
                  <div className={styles.item}>
                      <div className={styles.standardlibrary}>{item.Name}</div>
+                     <Divider dashed />
                      <div className={styles.child}>{that.renderPollutantItem(item.child)}</div>
                      <div className={styles.foot}>
                          <div className={styles.use}>
                              <div style={{position: 'relative'}}>
+                             <Row  justify="center" type="flex">
+                             <Col span={9} >
+
                                  <a className={styles.a} onClick={() => {
                                      that.setState({
                                          StandardLibraryID: item.key,
                                          Pvisible: true,
                                          title: item.Name + '中的污染物',
-                                         width: '90%',
+                                       
                                      });
                                  }}>
-                                     <Icon type="search"style={{marginRight: 5}} />查看更多</a>
-                                 <Divider type="vertical" />
+                              
+                                     <Icon type="search"/> 查看更多</a>
+                                     </Col>
+                                     <Col span={3} >  <Divider type="vertical" />
+                                     </Col>
+                                     <Col span={9} > 
+                           
+                            
                                  <a className={styles.a} onClick={() => {
                                      that.UseALL(item.key);
-                                 }}> <Icon type="appstore" style={{marginRight: 5}} />应用全部</a>
+                                 }}> <Icon type="appstore"  /> 应用全部</a>
+                                 </Col>
+                                 </Row>
                              </div>
                          </div>
                      </div>
@@ -120,9 +133,10 @@ export default class UseStandardLibrary extends Component {
      renderPollutantItem=(pollutantList) => {
          const rtnVal = [];
          pollutantList.map((item) => {
-             rtnVal.push(<div className={styles.pollutant}> {
-                 item.PollutantName
-             }：{item.UpperLimit}-{item.LowerLimit} </div>);
+             rtnVal.push(<div className={styles.pollutant}> 
+                {
+                   <Col span={12} ><span  className={styles.pollutantName} >{item.PollutantName}:</span></Col>
+             }   <Col span={12} ><span  className={styles.UpperLimit}>{item.UpperLimit}-{item.LowerLimit}</span></Col> </div>);
          });
          return rtnVal;
      }
@@ -191,14 +205,14 @@ export default class UseStandardLibrary extends Component {
                  align: 'center',
                  render: (text, record) => {
                      if (text === '0') {
-                         return <span > <Tag color="red" > <a title="单击设置为监测中" onClick={
+                         return <span > <Button type="dashed" > <a title="单击设置为监测中" style={{color: '#D1D1D1'}} onClick={
                              () => this.IsEnabled(1, record)
-                         } ><Icon type="play-circle" />  未监测 </a></Tag > </span>;
+                         } ><Icon type="exclamation-circle" />  未监测 </a></Button > </span>;
                      }
-                     return <span > <Tag color="blue" > <a title="单击从监测中移除"
+                     return <span > <Button color="blue" > <a title="单击从监测中移除"
                          onClick={
                              () => this.IsEnabled(0, record)
-                         } ><Icon type="play-circle" spin={true} /> 监测中 </a></Tag > </span>;
+                         } ><Icon type="setting"  spin={true} /> 监测中 </a></Button > </span>;
                  }
              },
              {
@@ -221,22 +235,21 @@ export default class UseStandardLibrary extends Component {
              },
          ];
          return (
-             <div >
-                 <PageHeader title={this.props.match.params.PointName}
-                     breadcrumbList={
-                         [{
-                             title: '排口列表',
-                             href: '/sysmanage/PointInfo',
-                         }, {
-                             title: '设置标准',
-                         }]
-                     }
-                 />
-                 <div className={styles.card}>
+  <MonitorContent {...this.props} breadCrumbList={
+                [
+                    {Name:'首页',Url:'/'},
+                    {Name:'系统管理',Url:''},
+                    {Name:'排口列表',Url:'/sysmanage/pointinfo'},
+                    {Name:'设置标准',Url:''}
+                ]
+            }  className={styles.antCss}>
+             <Card bordered={false} title={this.props.match.params.PointName} style={{width:'100%'}}>
+             <div className={styles.card}>
                      {
                          this.renderStandardList()
                      }
                  </div>
+                  
                  <div className={styles.Pagination}>
                      <Pagination
                          defaultCurrent={1}
@@ -249,7 +262,7 @@ export default class UseStandardLibrary extends Component {
                  <div className={styles.pageHeader}>
                      <h3>污染物标准选择</h3>
                  </div>
-                 <Card>
+                 <Card className={styles.antCss}>
                      <div className={styles.table}>
                          <Table
                              bordered={false}
@@ -258,9 +271,22 @@ export default class UseStandardLibrary extends Component {
                              size="small"
                              dataSource={this.props.requstresult === '1' ? this.props.PollutantListByDGIMN : null}
                              pagination={true}
+                             rowClassName={
+                               (record,index,indent)=>{
+
+                                if(index===0){
+                                    return;
+                                }
+                                if(index%2!==0)
+                                {
+                                    return'light';
+                                }
+                               }
+                             }
                          />
                      </div>
                  </Card>
+                 
                  <Modal
                      visible={this.state.Fvisible}
                      title={this.state.title}
@@ -295,7 +321,9 @@ export default class UseStandardLibrary extends Component {
                          <PollutantView StandardLibraryID={this.state.StandardLibraryID} />
                      }
                  </Modal>
-             </div>
+             </Card>
+                
+                 </MonitorContent>
          );
      }
 }

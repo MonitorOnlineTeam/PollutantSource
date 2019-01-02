@@ -75,15 +75,24 @@ export default class TransmissionEfficiency extends Component {
         this.getTableData(pagination.current);
     }
     onDateChange = (value, dateString) => {
-        let endTime = moment(dateString).add(1, 'months').add(-1, 'days').format('YYYY-MM-DD HH:mm:ss');
+        let endTime = moment(dateString).add(1, 'months').format('YYYY-MM-01 00:00:00');
 
-        if (moment(dateString).add(1, 'months').add(-1, 'days') > moment()) {
-            endTime = moment().format('YYYY-MM-DD HH:mm:ss');
-        }
+        // if (moment(dateString).format('YYYY-MM-DD HH:mm:ss') > moment().format('YYYY-MM-DD HH:mm:ss')) {
+        //     endTime = moment().format('YYYY-MM-DD HH:mm:ss');
+        // }
         this.updateState({
             beginTime: moment(dateString).format('YYYY-MM-01 HH:mm:ss'),
             endTime: endTime
         });
+        // let endTime = moment(dateString).add(1, 'months').add(-1, 'days').format('YYYY-MM-DD HH:mm:ss');
+
+        // if (moment(dateString).add(1, 'months').add(-1, 'days') > moment()) {
+        //     endTime = moment().format('YYYY-MM-DD HH:mm:ss');
+        // }
+        // this.updateState({
+        //     beginTime: moment(dateString).format('YYYY-MM-01 HH:mm:ss'),
+        //     endTime: endTime
+        // });
         this.getTableData(this.props.pageIndex);
     }
     render() {
@@ -159,7 +168,7 @@ export default class TransmissionEfficiency extends Component {
                 sorter: true,
                 render: (text, record) => {
                     // 红色：#f5222d 绿色：#52c41a
-                    const percent = (parseFloat(text) * 100 + 88).toFixed(2);
+                    const percent = (parseFloat(text) * 100).toFixed(2);
                     console.log(percent);
                     if (percent >= 90) {
                         return (<div style={{ width: 200 }}>

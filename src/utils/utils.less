@@ -1,3 +1,10 @@
+/*滚动条轨道颜色*/
+@scrollbar-track-color:#ececec;
+/*滚动条颜色*/
+@scrollbar-thumb-color:#d5d6d4;
+/*滚动条大小*/
+@scrollbar-width:9px;
+
 .textOverflow() {
   overflow: hidden;
   text-overflow: ellipsis;
@@ -57,19 +64,24 @@ div{
     -webkit-border-radius:0;
    }
    &::-webkit-scrollbar{
-    width:5px;
-    height:8px;
+    width:@scrollbar-width;
+    height:@scrollbar-width;
    }
-   &::-webkit-scrollbar-thumb{
-    height:50px;
-    background-color:#9ca0a2;
-    -webkit-border-radius:4px;
-    outline-offset:-20px;
-    border: 2px solid #9ca0a2;
-   }
-   &::-webkit-scrollbar-thumb:hover{
-    height:50px;
-    background-color:#9ca0a2;
-    -webkit-border-radius:4px;
-   }
+   &::-webkit-scrollbar-track{
+            
+    border-radius: 10px;
+    background-color:@scrollbar-track-color;
+}
+&::-webkit-scrollbar-thumb{
+  height:50px;
+  background-color:@scrollbar-thumb-color;
+  -webkit-border-radius:4px;
+  outline-offset:-2px;
+  border: 2px solid @scrollbar-thumb-color;
+ }
+ &::-webkit-scrollbar-thumb:hover{
+  height:50px;
+  background-color:@scrollbar-thumb-color;
+  -webkit-border-radius:4px;
+ }
 }

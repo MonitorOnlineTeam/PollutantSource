@@ -2,8 +2,9 @@ import {
     Model
 } from '../dvapack';
 import {
-    getList, deleteuser, enableduser, isexistenceuser, adduser, getuser, edituser, userDgimnDataFilter
+    getList, deleteuser, enableduser, isexistenceuser, adduser, getuser, edituser, userDgimnDataFilter, editpersonaluser
 } from '../services/userlist';
+
 export default Model.extend({
     namespace: 'userinfo',
 
@@ -257,6 +258,40 @@ export default Model.extend({
                 UserRemark: UserRemark,
                 DeleteMark: DeleteMark,
                 RolesId: RolesId
+            });
+            yield update({
+                requstresult: result.requstresult,
+                reason: result.reason
+            });
+            callback();
+        },
+        * editpersonaluser({
+            payload: {
+                UserId,
+                UserName,
+                UserSex,
+                Email,
+                Phone,
+                SendPush,
+                AlarmType,
+                AlarmTime,
+                callback
+            }
+        }, {
+            call,
+            put,
+            update,
+            select
+        }) {
+            const result = yield call(editpersonaluser, {
+                UserId: UserId,
+                UserName: UserName,
+                UserSex: UserSex,
+                Email: Email,
+                Phone: Phone,
+                SendPush: SendPush,
+                AlarmType: AlarmType,
+                AlarmTime: AlarmTime,
             });
             yield update({
                 requstresult: result.requstresult,
