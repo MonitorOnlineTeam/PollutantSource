@@ -1,6 +1,6 @@
 import { Model } from '../dvapack';
 import { } from '../services/videodata';
-import { uploadfiles, GetPollutantByPoint, GetManualSupplementList, UploadTemplate, getUploadTemplate, GetAllPollutantTypes, addGetPollutantByPoint, AddUploadFiles, GetUnitByPollutant, DeleteUploadFiles, UpdateManualSupplementData } from '../services/manualuploadapi';
+import { uploadfiles, GetPollutantByPoint, GetManualSupplementList, UploadTemplate, getUploadTemplate, GetAllPollutantTypes, addGetPollutantByPoint, AddUploadFiles, GetUnitByPollutant, DeleteUploadFiles, UpdateManualSupplementData,getPollutantTypeList } from '../services/manualuploadapi';
 
 export default Model.extend({
     namespace: 'manualupload',
@@ -14,38 +14,29 @@ export default Model.extend({
         selectdata: [],
         uploaddatalist: [],
         templatedata: [],
-        templateurl: null,
         PollutantTypesList: [],
         addselectdata: [],
         unit: null,
         DGIMN: null,
         pointName: null,
+        polltuantTypeList:[],
     },
     effects: {
         //上传附件
         * uploadfiles({
-            payload: {
-                file,
-                fileName,
-                DGIMN,
-                callback,
-            }
+            payload
         }, {
             call,
             put,
             update,
             select
         }) {
-            const result = yield call(uploadfiles, {
-                file: file,
-                fileName: fileName,
-                DGIMN: DGIMN,
-            });
+            const result = yield call(uploadfiles, payload);
+            debugger
             yield update({
                 requstresult: result.requstresult,
-                reason: result.reason
             });
-            callback();
+            payload.callback(result.requstresult, result.reason);
         },
         //根据排口获取污染物
         * GetPollutantByPoint({
@@ -161,17 +152,11 @@ export default Model.extend({
             if (result.data != null) {
                 if (result.data.length !== 0) {
                     yield update({
-                        templateurl: result.data,
-                        reason: result.reason
+                        reason: result.reason,
                     });
                 }
             }
-            else {
-                yield update({
-                    templateurl: null,
-                    reason: result.reason
-                });
-            }
+            payload.callback(result.data);
         },
 
         //获取污染物类型列表
@@ -294,6 +279,33 @@ export default Model.extend({
                 });
             }
             payload.callback(result.reason);
+        },
+
+        //获取污染物类型方法
+        * getPollutantTypeList({
+            payload
+        }, {
+            call,
+            put,
+            update,
+            select
+        }) {
+            const result = yield call(getPollutantTypeList, payload);
+            debugger
+            if (result.requstresult === "1") {
+                debugger
+                yield update({
+                    polltuantTypeList: result.data,
+                    reason: result.reason,
+                });
+            }
+            else {
+                yield update({
+                    polltuantTypeList: null,
+                    reason: result.reason
+                });
+            }
+            payload.callback(result.data[0].PollutantTypeCode);
         },
     },
 });

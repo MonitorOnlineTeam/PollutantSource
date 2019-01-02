@@ -41,7 +41,6 @@ export async function addGetPollutantByPoint(params) {
 
 // 获取列表数据
 export async function GetManualSupplementList(params) {
-    console.log(params);
     const body = {
         DGIMN: params.DGIMN,
         pollutantCode: params.pollutantCode,
@@ -124,6 +123,17 @@ export async function UpdateManualSupplementData(params) {
     };
     debugger
     const result = upload('/api/rest/PollutantSourceApi/ManualSupplement/UpdateHourData', body, null);
+    return result === null ? {
+        data: null
+    } : result;
+}
+
+//获取污染物类型列表
+export async function getPollutantTypeList(params) {
+    const body = {
+    };
+    debugger
+    const result = upload('/api/rest/PollutantSourceApi/ManualSupplement/getPollutantTypeList', body, null);
     return result === null ? {
         data: null
     } : result;

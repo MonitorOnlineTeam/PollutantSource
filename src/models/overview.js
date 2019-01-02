@@ -61,17 +61,30 @@ export default Model.extend({
             }
             if(payload.manualUpload)
             {
-                if(data && data[0])
                 debugger
-                yield put ({
-                    type:'manualupload/GetManualSupplementList',
-                    payload: {
-                                ...payload,
-                                DGIMN:data[0].DGIMN,
-                                pointName:data[0].pointName
-
-                       }
-                })
+                if(data && data[0])
+                {
+                    yield put ({
+                        type:'manualupload/GetManualSupplementList',
+                        payload: {
+                                    ...payload,
+                                    DGIMN:data[0].DGIMN,
+                                    pointName:data[0].pointName
+    
+                           }
+                    })
+                }
+                else
+                {
+                    //知道有问题但是手机端调用这个接口是不传参数返回所有的值，
+                    //所以，在这里将MN号码给了一个不可能查询到的值，让返回列表为空，因为点表为空
+                    yield put ({
+                        type:'manualupload/GetManualSupplementList',
+                        payload: {
+                            DGIMN:"1"
+                           }
+                    })
+                }
             }
 
             yield update({ data });
