@@ -147,6 +147,37 @@ export default class JzRecordInfo extends Component {
         return rtnVal;
     }
 
+    //生成面包屑
+    renderBreadCrumb=()=>{
+        const rtnVal = [];
+        let listUrl=this.props.match.params.viewtype;
+        let taskID=this.props.match.params.TaskID;
+        let DGIMN=this.props.match.params.pointcode;
+        let taskfrom=this.props.match.params.taskfrom;
+        let histroyrecordtype=this.props.match.params.histroyrecordtype;
+        rtnVal.push({Name:'首页',Url:'/'},);
+        switch(listUrl){
+case 'datalistview':    //数据一栏
+rtnVal.push({Name:'数据一览',Url:`/overview/${listUrl}`},);
+break;
+case 'mapview':         //地图一栏
+rtnVal.push({Name:'地图一栏',Url:`/overview/${listUrl}`},);
+break;
+case '':                //工作台
+break;
+default:
+break;
+        }
+        if(taskfrom==='ywdsjlist'){
+            rtnVal.push({Name:'运维大事记',Url:`/pointdetail/${DGIMN}/${listUrl}/${taskfrom}`},);
+            rtnVal.push({Name:'任务详情',Url:`/TaskDetail/emergencydetailinfo/${listUrl}/${taskfrom}/${taskID}`},);
+        }else if(taskfrom==='qcontrollist'){
+            rtnVal.push({Name:'质控记录',Url:`/pointdetail/${DGIMN}/${listUrl}/${taskfrom}/${histroyrecordtype}`},);
+        }
+        rtnVal.push({Name:'CEMS零点量程漂移与校准记录表',Url:''});
+        return rtnVal;
+    }
+    
     render() {
         const SCREEN_HEIGHT = document.querySelector('body').offsetHeight - 250;
         const JzRecord = this.props.JzRecord;
@@ -166,6 +197,7 @@ export default class JzRecordInfo extends Component {
         let CreateUserID = null;
         let SignContent = null;
         let SignTime = null;
+        let DGIMN=null;
         if (JzRecord !== null) {
             Record = JzRecord.Record;
             Code = JzRecord.Code;
@@ -194,13 +226,10 @@ export default class JzRecordInfo extends Component {
                 size="large"
             />);
         }
+
         return (
-            <MonitorContent  {...this.props} breadCrumbList={[
-                {Name:'首页',Url:'/'},
-                {Name:'智能质控',Url:''},
-                {Name:'传输有效率',Url:''}
-            ]}>
-            <Card title={<span style={{fontWeight: '900'}}>任务详情</span>} extra={
+            <MonitorContent  {...this.props} breadCrumbList={this.renderBreadCrumb()}>
+            <Card title={<span style={{fontWeight: '900'}}>运维表单</span>} extra={
             <Button style={{float:"right",marginRight:30}} onClick={() => {
                         this.props.history.goBack(-1);
                     }}><Icon type="left" />退回</Button>}>

@@ -29,6 +29,36 @@ export default class DeviceExceptionDetail extends Component {
             loading: false
         });
     }
+                //生成面包屑
+                renderBreadCrumb=()=>{
+                    const rtnVal = [];
+                    let listUrl=this.props.match.params.viewtype;
+                    let taskID=this.props.match.params.TaskID;
+                    let DGIMN=this.props.match.params.pointcode;
+                    let taskfrom=this.props.match.params.taskfrom;
+                    let histroyrecordtype=this.props.match.params.histroyrecordtype;
+                    rtnVal.push({Name:'首页',Url:'/'},);
+                    switch(listUrl){
+            case 'datalistview':    //数据一栏
+            rtnVal.push({Name:'数据一览',Url:`/overview/${listUrl}`},);
+            break;
+            case 'mapview':         //地图一栏
+            rtnVal.push({Name:'地图一栏',Url:`/overview/${listUrl}`},);
+            break;
+            case '':                //工作台
+            break;
+            default:
+            break;
+                    }
+                    if(taskfrom==='ywdsjlist'){
+                        rtnVal.push({Name:'运维大事记',Url:`/pointdetail/${DGIMN}/${listUrl}/${taskfrom}`},);
+                        rtnVal.push({Name:'任务详情',Url:`/TaskDetail/emergencydetailinfo/${listUrl}/${taskfrom}/${taskID}`},);
+                    }else if(taskfrom==='qcontrollist'){
+                        rtnVal.push({Name:'质控记录',Url:`/pointdetail/${DGIMN}/${listUrl}/${taskfrom}/${histroyrecordtype}`},);
+                    }
+                    rtnVal.push({Name:'CEMS设备数据异常记录表',Url:''});
+                    return rtnVal;
+                }
     render() {
         const SCREEN_HEIGHT = document.querySelector('body').offsetHeight - 250;
         const Exception = this.props.ExceptionDetail;
@@ -56,9 +86,22 @@ export default class DeviceExceptionDetail extends Component {
             CreateUserID = Record.CreateUserID; //运行维护人
             CreateTime = Record.CreateTime; //运行维护人
         }
-
+        if (this.props.isloading) {
+            return (<Spin
+                style={{ width: '100%',
+                    height: 'calc(100vh/2)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center' }}
+                size="large"
+            />);
+        }
         return (
-            <Spin spinning={this.state.loading}>
+            <MonitorContent  {...this.props} breadCrumbList={this.renderBreadCrumb()}>
+            <Card title={<span style={{fontWeight: '900'}}>运维表单</span>} extra={
+            <Button style={{float:"right",marginRight:30}} onClick={() => {
+                        this.props.history.goBack(-1);
+                    }}><Icon type="left" />退回</Button>}>
                 <div className={styles.FormDiv} style={{ height: SCREEN_HEIGHT }}>
                     <div className={styles.FormName}>CEMS设备数据异常记录表</div>
                     <table className={styles.FormTable}>
@@ -140,14 +183,9 @@ export default class DeviceExceptionDetail extends Component {
                             </tr>
                         </tbody>
                     </table>
-
-                    <div className={styles.Toexamine} >
-                        <Button size="large" onClick={() => {
-                            this.props.history.goBack(-1);
-                        }}><Icon type="left" />退回</Button>
-                    </div>
                 </div>
-            </Spin>
+                </Card>
+            </MonitorContent>
         );
     }
 }

@@ -73,7 +73,7 @@ export default class BdHistoryInfoHistoryRecords extends Component {
     }
 
     seeDetail=(record) => {
-        this.props.dispatch(routerRedux.push(`/PatrolForm/BdTestRecord/${record.TaskID}`));
+        this.props.dispatch(routerRedux.push(`/PatrolForm/BdTestRecord/${this.state.DGIMN}/${this.props.match.params.viewtype}/qcontrollist/BdHistoryInfoHistoryRecords/${record.TaskID}`));
     }
 
     render() {

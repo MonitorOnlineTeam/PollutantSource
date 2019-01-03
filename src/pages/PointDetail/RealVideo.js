@@ -37,20 +37,22 @@ export default class RealVideo extends Component {
    render() {
        return (
            <div style={{ height: 'calc(100vh - 225px)',width: '100%' }}>
-               <Row gutter={24} style={{ height: '50%' }}>
+               <Row gutter={24} style={{ height: '65%' }}>
                    <Col span={24} style={{ marginBottom: 10, height: '100%' }}>
                        <iframe frameBorder="0" src="http://localhost:36999//Video/MonitorLinkCamera/RealtimeCameraReact?ip=172.16.23.147&port=80&userName=admin&userPwd=abc123456&cameraNo=1" width="100%" height="100%" />
                    </Col>
                </Row>
-               <Row gutter={24} style={{ height: '50%' }}>
-                   <Col xl={12} lg={24} sm={24} xs={24}>
+               <Row gutter={24} style={{ height: '20%' }}>
+                   <Col span={24}>
                        <RealVideoData {...this.props} />
                    </Col>
-                   <Col xl={12} lg={24} sm={24} xs={24}>
+                   {
+                       /* <Col xl={12} lg={24} sm={24} xs={24}>
                        <Card title="设备参数实时信息" >
-                           {/*  <Table size="small" borderd={true} columns={columns} dataSource={StateData} pagination={false} />  */}
+                           {  <Table size="small" borderd={true} columns={columns} dataSource={StateData} pagination={false} />  }
                        </Card>
-                   </Col>
+                   </Col>*/
+                   }
                </Row>
            </div>
        );

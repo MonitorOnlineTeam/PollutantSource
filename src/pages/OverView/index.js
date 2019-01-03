@@ -75,7 +75,8 @@ class OverViewMap extends PureComponent {
     };
 
      stationClick = () => {
-         this.props.dispatch(routerRedux.push(`/pointdetail/${this.state.selectpoint.DGIMN}`));
+        let viewtype='mapview';
+         this.props.dispatch(routerRedux.push(`/pointdetail/${this.state.selectpoint.DGIMN}/${viewtype}`));
      };
 
     markersEvents = {

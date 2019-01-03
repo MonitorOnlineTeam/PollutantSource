@@ -120,7 +120,7 @@ export default class Ywdsjlist extends Component {
                             <Timeline.Item dot={<img style={{width: '38px', height: '38px'}} src="../../../patrol.png" />}>
                                 <p className={Ywdsjlistss.taskDetail}><span style={{color: '#40B0F5', marginRight: '10px'}}>{valueName}</span>{value}</p>
                                 <div className={Ywdsjlistss.seeDetail} onClick={() => {
-                                    this.props.dispatch(routerRedux.push(`/TaskDetail/emergencydetailinfo/${item1.ID}`));
+                                    this.props.dispatch(routerRedux.push(`/TaskDetail/emergencydetailinfo/${this.props.match.params.viewtype}/ywdsjlist/${item1.ID}`));
                                 }}>
                                 查看详情
                                 </div>
@@ -133,7 +133,7 @@ export default class Ywdsjlist extends Component {
                             <Timeline.Item dot={<img style={{width: '38px', height: '38px'}} src="../../../emergeny.png" />}>
                                 <p className={Ywdsjlistss.taskDetail}><span style={{color: '#40B0F5', marginRight: '10px'}}>{valueName1}</span>{value1}</p>
                                 <div className={Ywdsjlistss.seeDetail} onClick={() => {
-                                    this.props.dispatch(routerRedux.push(`/TaskDetail/emergencydetailinfo/${item1.ID}`));
+                                    this.props.dispatch(routerRedux.push(`/TaskDetail/emergencydetailinfo/${this.props.match.params.viewtype}/ywdsjlist/${item1.ID}`));
                                 }}>
                                 查看详情
                                 </div>
@@ -158,6 +158,8 @@ export default class Ywdsjlist extends Component {
     }
 
     render() {
+        const { match, routerData,children } = this.props;
+        debugger;
         const extraContent = (
             <div style={{height:'30px',lineHeight:'30px'}}>
             <RadioGroup defaultValue={this.state.taskType} onChange={this.onChange}>
