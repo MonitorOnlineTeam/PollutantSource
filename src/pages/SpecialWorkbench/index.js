@@ -1,15 +1,12 @@
 
 import React, { Component } from 'react';
-import { Map, Markers, Polygon, InfoWindow } from 'react-amap';
-import { Row, Col,Card,List, message, Avatar, Spin,Table,Calendar, Badge,Alert,Tag,Link,Icon,Button,Tabs,Popover,Pagination,Divider } from 'antd';
-import reqwest from 'reqwest';
-import InfiniteScroll from 'react-infinite-scroller';
+import { Map, Markers } from 'react-amap';
+import { Row, Col,Card,List, Spin,Table,Calendar, Badge,Tag,Icon,Button,Tabs,Divider } from 'antd';
 import ReactEcharts from 'echarts-for-react';
 import moment from 'moment';
 import {connect} from 'dva';
 import {routerRedux} from 'dva/router';
-import { relative } from 'path';
-import { amapKey, centerlongitude, centerlatitude } from '../../config';
+import { amapKey } from '../../config';
 import styles from './index.less';
 
 const TabPane = Tabs.TabPane;
@@ -41,15 +38,8 @@ function monthCellRender(value) {
         </div>
     ) : null;
 }
-const randomPosition = () => ({
-    longitude: 100 + Math.random() * 20,
-    latitude: 30 + Math.random() * 20
-});
-const randomMarker = (len) =>
-    Array(len).fill(true).map((e, idx) => ({
-        position: randomPosition()
-    }))
-  ;
+
+
 const MarkerLayoutStyle={
     minWidth:150,
     position:'absolute',
@@ -104,7 +94,6 @@ class SpecialWorkbench extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            data: [],
             defaultDateValue:moment(),
             selectedValue: moment()
         };
@@ -432,28 +421,9 @@ class SpecialWorkbench extends Component {
         );
     }
 
-    handleInfiniteOnLoad = () => {
-        let data = this.state.data;
-        this.setState({
-            loading: true,
-        });
-        if (data.length > 14) {
-            message.warning('Infinite List loaded all');
-            this.setState({
-                hasMore: false,
-                loading: false,
-            });
-            return;
-        }
-        this.fetchData((res) => {
-            data = data.concat(res.results);
-            this.setState({
-                data,
-                loading: false,
-            });
-        });
-    }
-
+    /**
+     * 智能质控_渲染图表
+     */
     getOption = (type) => {
         const {model}=this.props.rateStatistics;
         let networkeRate=(parseFloat(model.NetworkeRate) * 100).toFixed(2);
@@ -478,7 +448,7 @@ class SpecialWorkbench extends Component {
             seriesName='设备运转率';
             seriesData=[
                 {value:runningRate, name:'达标'},
-                {value:100-runningRate, name:'未达标'}
+                {value:(100-runningRate).toFixed(2), name:'未达标'}
             ];
         }else {
             legendData=['达标','未达标'];
@@ -486,7 +456,7 @@ class SpecialWorkbench extends Component {
             seriesName='传输有效率';
             seriesData=[
                 {value:transmissionEffectiveRate, name:'达标'},
-                {value:100-transmissionEffectiveRate, name:'未达标'}
+                {value:(100-transmissionEffectiveRate).toFixed(2), name:'未达标'}
             ];
         }
         let option = {
@@ -527,6 +497,9 @@ class SpecialWorkbench extends Component {
         return option;
     }
 
+    /**
+     * 智能运维_日期面板改变事件(TODO:后续)
+     */
     onPanelChange = (value, mode)=>{
         //console.log(value, mode);
     }
@@ -721,12 +694,12 @@ class SpecialWorkbench extends Component {
     /**
      * 智能监控_地图默认显示的位置
      */
-    mapCenter =()=>{
-        return {
+    mapCenter =()=>
+        ({
             longitude:112.45,
             latitude:36.28,
             PointName:'-'
-        };
+        })
         // if(this.props.overPointList.tableDatas.length>0) {
         //     let position = {
         //         longitude:this.props.overPointList.tableDatas[0].Longitude,
@@ -734,9 +707,9 @@ class SpecialWorkbench extends Component {
         //         PointName:this.props.overPointList.tableDatas[0].PointName
         //     };
 
-        //     return position;
-        // }
-    }
+    //     return position;
+    // }
+
 
     /**
      * 智能监控_渲染排口所有状态
@@ -754,8 +727,6 @@ class SpecialWorkbench extends Component {
     }
 
     render() {
-        //console.log(this.props.operation);
-        const {operation} = this.props;
         return (
             <div
                 style={{
@@ -766,9 +737,6 @@ class SpecialWorkbench extends Component {
                 className={styles.contentDiv}
             >
                 <div className={styles.workBench}>
-                    {/* <Card style={{ }} bordered={false}>
-                        <p>智能监控</p>
-                    </Card> */}
                     <div className={styles.headerDiv}>
                         <p>智能监控</p>
                         {this.renderStatisticsPointStatus()}
