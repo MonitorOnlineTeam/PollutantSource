@@ -75,7 +75,8 @@ class OverViewMap extends PureComponent {
     };
 
      stationClick = () => {
-         this.props.dispatch(routerRedux.push(`/pointdetail/${this.state.selectpoint.DGIMN}`));
+        let viewtype='mapview';
+         this.props.dispatch(routerRedux.push(`/pointdetail/${this.state.selectpoint.DGIMN}/${viewtype}`));
      };
 
     markersEvents = {
@@ -232,7 +233,8 @@ class OverViewMap extends PureComponent {
                    <TreeStatus datalist={this.props.datalist} />
                  </div>
                  <div style={{ marginTop: 15 }}>
-                   <TreeCard getHeight={'calc(100vh - 210px)'} getStatusImg={this.getStatusImg} isloading={this.props.treedataloading} treeCilck={this.treeCilck} treedatalist={this.props.datalist} />
+                 {/* 添加PollutantType 污染物类型（再调试，为不报错加的2）和为getHeight 自定义高度参数 */}
+                   <TreeCard getHeight={'calc(100vh - 210px)'} getStatusImg={this.getStatusImg} isloading={this.props.treedataloading} treeCilck={this.treeCilck} treedatalist={this.props.datalist} PollutantType={2} />
                  </div>
                </div> :
                            detailloading ? <Spin

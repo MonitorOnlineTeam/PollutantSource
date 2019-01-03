@@ -1,6 +1,7 @@
+import { Icon, Popover, Badge, Divider} from 'antd';
 import { Model } from '../dvapack';
 import { getList, deleteVideoInfo, gethistoryVideoList, updateVideoInfos, addVideoInfo, getAlarmHistory, updateAlarmHistory, userDgimnDataFilter } from '../services/videodata';
-import { queryprocesschart } from '../services/api';
+import { querypollutantlist,queryhistorydatalist } from '../services/api';
 
 export default Model.extend({
     namespace: 'videolist',
@@ -16,11 +17,12 @@ export default Model.extend({
         pageSize: 10,
         pageIndex: 1,
         reason: null,
-        realdata: []
+        columns: [],
+        realdata: [],
     },
     effects: {
-        * fetchuserlist({payload}, { call, put, update, select }) {
-            const result = yield call(getList, {DGIMN: payload.DGIMN});
+        * fetchuserlist({ payload }, { call, update }) {
+            const result = yield call(getList, { DGIMN: payload.DGIMN });
             if (result.requstresult === '1') {
                 yield update({
                     requstresult: result.requstresult,
@@ -33,8 +35,8 @@ export default Model.extend({
                 });
             }
         },
-        * updateVideoInfos({payload}, { call, put, update, select }) {
-            const result = yield call(updateVideoInfos, {...payload});
+        * updateVideoInfos({ payload }, { call, put, update }) {
+            const result = yield call(updateVideoInfos, { ...payload });
             yield update({
                 requstresult: result.requstresult,
                 reason: result.reason
@@ -44,8 +46,8 @@ export default Model.extend({
                 payload: payload.DGIMN,
             });
         },
-        * addVideoInfos({payload}, { call, put, update, select }) {
-            const result = yield call(addVideoInfo, {...payload});
+        * addVideoInfos({ payload }, { call, put, update }) {
+            const result = yield call(addVideoInfo, { ...payload });
             yield update({
                 requstresult: result.requstresult,
                 reason: result.reason
@@ -55,8 +57,8 @@ export default Model.extend({
                 payload: payload.DGIMN,
             });
         },
-        * deleteVideoInfo({ payload }, { call, put, update, select }) {
-            const result = yield call(deleteVideoInfo, {...payload});
+        * deleteVideoInfo({ payload }, { call, put, update }) {
+            const result = yield call(deleteVideoInfo, { ...payload });
             yield update({
                 requstresult: result.requstresult,
                 editUser: result.data[0]
@@ -66,8 +68,8 @@ export default Model.extend({
                 payload: payload.DGIMN,
             });
         },
-        * gethistoryVideoList({payload}, { call, put, update, select }) {
-            const result = yield call(gethistoryVideoList, {...payload});
+        * gethistoryVideoList({ payload }, { call, update }) {
+            const result = yield call(gethistoryVideoList, { ...payload });
             if (result.requstresult === '1') {
                 yield update({
                     requstresult: result.requstresult,
@@ -81,8 +83,8 @@ export default Model.extend({
             }
         },
         * getAlarmHistory({
-            payload}, { call, put, update, select }) {
-            const result = yield call(getAlarmHistory, {...payload});
+            payload }, { call, update }) {
+            const result = yield call(getAlarmHistory, { ...payload });
             if (result.requstresult === '1') {
                 yield update({
                     requstresult: result.requstresult,
@@ -95,7 +97,7 @@ export default Model.extend({
                 });
             }
         },
-        * updateAlarmHistory({payload}, { call, put, update, select }) {
+        * updateAlarmHistory({ payload }, { call, put, update }) {
             const result = yield call(updateAlarmHistory, {
                 ...payload
             });
@@ -112,13 +114,64 @@ export default Model.extend({
             }
             yield put({
                 type: 'getAlarmHistory',
-                payload: {...payload},
+                payload: { ...payload },
             });
         },
-        * queryprocesschart({payload}, {call, update}) {
-            debugger;
-            const res = yield call(queryprocesschart, {...payload});
-            yield update({ realdata: res });
+        * querypollutantlist({payload}, {call, update}) {
+            const res = yield call(querypollutantlist, {...payload});
+            let pollutants=[];
+            pollutants.push({title:"时间",dataIndex:"MonitorTime",key:"MonitorTime",align:'center',width:'200px'});
+            if(res.length>0){
+                res.map((item, key) => {
+                    pollutants = pollutants.concat({
+                        title: `${item.pollutantName}(${item.unit})`,
+                        dataIndex: item.pollutantCode,
+                        key: item.pollutantCode,
+                        align:'center',
+                        render: (value, record, index) => {
+                            const additional = record[`${item.pollutantCode}_params`];
+                            if (additional) {
+                                const additionalInfo = additional.split('§');
+                                if (additionalInfo[0] === 'IsOver') {
+                                    const content = (<div>
+                                        <div style={{marginBottom: 10}}>
+                                            <Icon style={{ color: '#ff0000', fontSize: 25, marginRight: 10 }} type="warning" />
+                                            <span style={{fontWeight: 'Bold', fontSize: 16}}>数据超标</span>
+                                        </div>
+                                        <li style={{listStyle: 'none', marginBottom: 10}}>
+                                            <Badge status="success" text={`标准值：${additionalInfo[2]}`} />
+                                        </li>
+                                        <li style={{listStyle: 'none', marginBottom: 10}}>
+                                            <Badge status="error" text={`超标倍数：${additionalInfo[3]}`} />
+                                        </li>
+                                    </div>);
+                                    return (<Popover content={content}><span style={{ color: '#ff0000', cursor: 'pointer' }}>{ value || (value === 0 ? 0 : '-') }</span></Popover>);
+                                }
+                                const content = (<div>
+                                    <div style={{marginBottom: 10}}>
+                                        <Icon style={{ color: '#ff0000', fontSize: 25, marginRight: 10 }} type="close-circle" />
+                                        <span style={{fontWeight: 'Bold', fontSize: 16}}>数据异常</span>
+                                    </div>
+                                    <li style={{listStyle: 'none', marginBottom: 10}}>
+                                        <Badge status="warning" text={`异常原因：${additionalInfo[2]}`} />
+                                    </li>
+                                </div>);
+                                return (<Popover content={content}><span style={{ color: '#F3AC00', cursor: 'pointer' }}>{value || (value === 0 ? 0 : '-')}</span></Popover>);
+                            }
+                            return value || (value === 0 ? 0 : '-');
+                        }
+                    });
+                });
+            }
+            yield update({ columns: pollutants });
+        },
+        * queryhistorydatalist({payload}, {select, call, update}) {
+            const res = yield call(queryhistorydatalist, {...payload});
+            let realdata=[];
+            if(res.data.length>0){
+                realdata.push({key:"1",...res.data[res.data.length-1]});
+            }
+            yield update({ realdata: realdata });
         }
     },
     reducers: {

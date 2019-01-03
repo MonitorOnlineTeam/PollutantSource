@@ -118,7 +118,6 @@ export async function userDgimnDataFilter(params) {
     } : result;
 }
 //  个人设置编辑用户
-// 编辑用户
 export async function editpersonaluser(params) {
     const body = {
         User_ID: params.UserId,
@@ -132,6 +131,32 @@ export async function editpersonaluser(params) {
         Roles_Id: params.RolesId
     };
     const result = post('/api/rest/PollutantSourceApi/PUserInfo/EditUser', body, null);
+    return result === null ? {
+        data: null
+    } : result;
+}
+// 获取我的派单
+export async function getmypielist(params) {
+    const body = {
+        pageIndex: params.pageIndex,
+        pageSize: params.pageSize,
+        beginTime: params.beginTime,
+        endTime: params.endTime
+    };
+    const result = post('/api/rest/PollutantSourceApi/PUserInfo/GetMyPieList', body, null);
+    return result === null ? {
+        data: null
+    } : result;
+}
+// 获取我的通知
+export async function mymessagelist(params) {
+    const body = {
+        pageIndex: params.pageIndex,
+        pageSize: params.pageSize,
+        beginTime: params.beginTime,
+        endTime: params.endTime
+    };
+    const result = post('/api/rest/PollutantSourceApi/PUserInfo/GetMyMessageList', body, null);
     return result === null ? {
         data: null
     } : result;

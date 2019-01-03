@@ -41,7 +41,7 @@ export default class PollutantView extends Component {
                 title: '污染物编号',
                 dataIndex: 'PollutantCode',
                 key: 'PollutantCode',
-                width: '10%',
+                width: '15%',
                 render: (text, record) => {
                     return text;
                 }

@@ -98,7 +98,8 @@ class dataList extends PureComponent {
     gerpointButton=(record) => (<div>
         <li style={{ listStyle: 'none', marginBottom: 5 }}>
             <Button onClick={() => {
-                this.props.dispatch(routerRedux.push(`/pointdetail/${record.DGIMN}`));
+                let viewtype='datalistview';
+                this.props.dispatch(routerRedux.push(`/pointdetail/${record.DGIMN}/${viewtype}`));
             }}
             ><Icon type="book" style={{ color: '#3C9FDA', marginRight: 5 }} theme="filled" /> 进入站房
             </Button>
@@ -117,9 +118,9 @@ class dataList extends PureComponent {
                         }}
                     ><Icon type="phone" style={{ color: '#3C9FDA', marginRight: 5 }} theme="filled" />紧急派单
                     </Button>
-                </li>
+                        </li>
         }
-    </div>)
+                                </div>)
 
     render() {
         const radioval=this.state;
@@ -164,7 +165,7 @@ class dataList extends PureComponent {
             align: 'center',
             render: (value, record, index) => ({
                 props: {
-                    className: ((value && value.split('%')[0] < 90)) ? styles.red : '',
+                    className: (value && value.split('%')[0] < 90) ? styles.red : '',
                 },
                 children: value || '-'
             })
@@ -194,7 +195,7 @@ class dataList extends PureComponent {
                                 <li style={{ listStyle: 'none', marginBottom: 10 }}>
                                     <Badge status="error" text={`超标倍数：${additionalInfo[3]}`} />
                                 </li>
-                            </div>);
+                                             </div>);
                             return (<Popover content={content}><span style={{ color: '#ff0000', cursor: 'pointer' }}>{ value || (value === 0 ? 0 : '-') }</span></Popover>);
                         }
                         const content = (<div>
@@ -205,7 +206,7 @@ class dataList extends PureComponent {
                             <li style={{ listStyle: 'none', marginBottom: 10 }}>
                                 <Badge status="warning" text={`异常原因：${additionalInfo[2]}`} />
                             </li>
-                        </div>);
+                                         </div>);
                         return (<Popover content={content}><span style={{ color: '#F3AC00', cursor: 'pointer' }}>{value || (value === 0 ? 0 : '-')}</span></Popover>);
                     }
                     return value || (value === 0 ? 0 : '-');

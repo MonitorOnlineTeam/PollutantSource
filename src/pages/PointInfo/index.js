@@ -113,6 +113,7 @@ export default class pointlist extends Component {
              this.props.dispatch(routerRedux.push(`/sysmanage/videolists/${id}/${name}`));
              break;
          case '4':
+             this.props.dispatch(routerRedux.push(`/pointdetail/${id}`));
              break;
          default:
              break;
@@ -225,7 +226,7 @@ export default class pointlist extends Component {
                 [
                     {Name:'首页',Url:'/'},
                     {Name:'系统管理',Url:''},
-                    {Name:'备品备件管理',Url:''}
+                    {Name:'排口管理',Url:''}
                 ]
             }>
              <div className={styles.cardTitle}>

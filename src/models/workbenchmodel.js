@@ -4,18 +4,20 @@
  * 创建时间：2018.12.26
  */
 
-import { Model } from '../dvapack';
-import { 
-getOperationHistoryRecordPageList,
-getDataExceptionAlarmPageList,
-getRateStatistics,
-getRealTimeNetWorkingRateForPointsPageList,
-getEquipmentOperatingRateForPoints,
-getTransmissionEfficiencyForPoints,
-getDataOverWarningPageList,
-getAllPointOverDataList 
-} from '../services/workbenchapi';
 import moment from 'moment';
+import { Model } from '../dvapack';
+import {
+    getOperationHistoryRecordPageList,
+    getDataExceptionAlarmPageList,
+    getRateStatistics,
+    getRealTimeNetWorkingRateForPointsPageList,
+    // getEquipmentOperatingRateForPoints,
+    // getTransmissionEfficiencyForPoints,
+    getDataOverWarningPageList,
+    getAllPointOverDataList,
+    getOverPoints,
+    getStatisticsPointStatus
+} from '../services/workbenchapi';
 
 export default Model.extend({
     namespace: 'workbenchmodel',
@@ -79,9 +81,17 @@ export default Model.extend({
         },
         allPointOverDataList:{
             tableDatas:[],
-            pageIndex: 1,
-            pageSize: 3,
+            // pageIndex: 1,
+            // pageSize: 3,
             total:0,
+        },
+        overPointList:{
+            tableDatas:[],
+            total:0,
+        },
+        statisticsPointStatus:{
+            model:{},
+            total:0
         }
     },
     subscriptions: {
@@ -238,11 +248,7 @@ export default Model.extend({
         * getAllPointOverDataList({payload}, { call, put, update, select }) {
             const {allPointOverDataList} = yield select(state => state.workbenchmodel);
             //debugger;
-            let body = {
-                pageSize: allPointOverDataList.pageSize,
-                pageIndex: allPointOverDataList.pageIndex,
-
-            };
+            let body = {};
             const response = yield call(getAllPointOverDataList, body);
             //debugger;
             yield update({
@@ -250,7 +256,49 @@ export default Model.extend({
                     ...allPointOverDataList,
                     ...{
                         tableDatas:response.data,
-                        pageIndex:allPointOverDataList.pageIndex || 1,
+                        // pageIndex:allPointOverDataList.pageIndex || 1,
+                        total:response.total
+                    }
+                }
+            });
+        },
+        /**
+         * 获取所有超标排口
+         * @param {传递参数} 传递参数
+         * @param {操作} 操作项
+         */
+        * getOverPointList({payload}, { call, put, update, select }) {
+            const {overPointList} = yield select(state => state.workbenchmodel);
+            //debugger;
+            let body = {};
+            const response = yield call(getOverPoints, body);
+            //debugger;
+            yield update({
+                overPointList:{
+                    ...overPointList,
+                    ...{
+                        tableDatas:response.data,
+                        total:response.total
+                    }
+                }
+            });
+        },
+        /**
+         * 获取排口状态
+         * @param {传递参数} 传递参数
+         * @param {操作} 操作项
+         */
+        * getStatisticsPointStatus({payload}, { call, put, update, select }) {
+            const {statisticsPointStatus} = yield select(state => state.workbenchmodel);
+            //debugger;
+            let body = {};
+            const response = yield call(getStatisticsPointStatus, body);
+            //debugger;
+            yield update({
+                statisticsPointStatus:{
+                    ...statisticsPointStatus,
+                    ...{
+                        model:response.data,
                         total:response.total
                     }
                 }
