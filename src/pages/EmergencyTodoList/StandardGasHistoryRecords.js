@@ -72,7 +72,7 @@ export default class StandardGasHistoryRecords extends Component {
     }
 
     seeDetail=(record) => {
-        this.props.dispatch(routerRedux.push(`/PatrolForm/StandardGasRepalceRecord/${record.TaskID}`));
+        this.props.dispatch(routerRedux.push(`/PatrolForm/StandardGasRepalceRecord/${this.state.DGIMN}/${this.props.match.params.viewtype}/qcontrollist/StandardGasHistoryRecords/${record.TaskID}`));
     }
 
     render() {
