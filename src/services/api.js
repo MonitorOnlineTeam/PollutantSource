@@ -300,11 +300,13 @@ export async function querysubjectionrelationlist() {
 }
 // 编辑企业信息
 export async function queryentedit(params) {
+    console.log(params.latlon);
+    debugger;
     const body = {
         name: params.entallname,
         code: params.parentID,
-        longitude: params.latlon.split(',')[0],
-        latitude: params.latlon.split(',')[1],
+        longitude: (params.latlon && params.latlon.split)?params.latlon.split(',')[0]:'',
+        latitude: (params.latlon && params.latlon.split)? params.latlon.split(',')[1]:'',
         // photo:
         pSScaleCode: params.pollutionsources,
         abbreviation: params.enteasyname,
@@ -351,7 +353,7 @@ export async function queryeeplist() {
     const body = {
     };
     const result = await post('/api/rest/PollutantSourceApi/PEmissionPermits/GetPDPermitList', body, null);
-    return result === null ? { data: null } : result.data;
+    return result === null ? { data: null } : result;
 }
 // 添加、修改排污许可证
 export async function queryaddeep(params) {
@@ -372,7 +374,7 @@ export async function querydelep(params) {
         code: params.code
     };
     const result = await post('/api/rest/PollutantSourceApi/PEmissionPermits/DeletePDPermit', body, null);
-    return result === null ? { data: null } : result.data;
+    return result === null ? { data: null } : result.requstresult;
 }
 
 // 获取排口下的污染物
@@ -460,6 +462,7 @@ export async function queryalloverdatalist(params) {
         DGIMNs: params.dgimn,
         beginTime:params.beginTime,
         endTime:params.endTime,
+        pollutantCodeList: params.summaryPolluntantCode
     };
     const result = await post('/api/rest/PollutantSourceApi/OverData/GetAllPointOverDataList', body, null);
     return result === null ? {data: null} : result.data;

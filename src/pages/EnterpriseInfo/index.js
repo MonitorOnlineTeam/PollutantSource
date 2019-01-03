@@ -6,13 +6,16 @@ import { Map, Polygon } from 'react-amap';
 import Dischargepermit from './dischargepermit.js';
 import ImgInfo from './imgInfo.js';
 import MonitorContent from '../../components/MonitorContent/index';
+import ImgCommon from '../../components/Img/ImgCommon'; 
 import ImageInfo from './imageInfo.js';
 import styles from './index.less';
 import config from '../../config';
 import { imgaddress } from '../../config.js';
+import ModalMap from '../PointInfo/ModalMap';
+
 const FormItem = Form.Item;
 const { Header, Content, Footer } = Layout
-
+let _thismap;
 const { amapKey } = config;
 const Option = Select.Option;
 const plugins = [
@@ -22,7 +25,6 @@ const plugins = [
         options: {
             visible: true, // 不设置该属性默认就是 true
             onCreated(ins) {
-                console.log(ins);
             }
         }
     }
@@ -57,8 +59,23 @@ class index extends PureComponent {
             concern: this.props.baseinfo ? '' : this.props.baseinfo[0].attentionCode,
             industry: this.props.baseinfo ? '' : this.props.baseinfo[0].industryTypeCode,
             area: this.props.baseinfo ? '' : this.props.baseinfo[0].regionCode,
-            className:styles.editInput
+            className:styles.editInput,
+            Mapvisible:false
         };
+
+        this.mapEvents = {
+            created(m) {
+                _thismap = m;
+            },
+            zoomchange: (value) => {
+    
+            },
+            complete: () => {
+                console.log(_thismap);
+                //_thismap.setZoomAndCenter(13, [centerlongitude, centerlatitude]);
+            }
+        };
+
         const _this = this;
         this.startedit = () => {
             if (_this.state.isedit) {
@@ -168,6 +185,15 @@ class index extends PureComponent {
             });
         };
     }
+    onRef1 = (ref) => {
+        this.child = ref;
+    }
+    showEditCoordinate=()=>{
+            this.setState({
+                Mapvisible:true
+            })
+    }
+
     render() {
         const { getFieldDecorator } = this.props.form;
         const { effects } = this.props;
@@ -190,7 +216,9 @@ class index extends PureComponent {
             },
           };
         return (
+    
 
+     
             <MonitorContent {...this.props} breadCrumbList={
                 [
                     { Name: '首页', Url: '/' },
@@ -198,6 +226,8 @@ class index extends PureComponent {
                     { Name: '企业管理', Url: '' }
                 ]
             }>
+
+             
                 {effects['baseinfo/queryentdetail'] ? <Spin style={{
                     width: '100%',
                     height: 'calc(100vh - 260px)',
@@ -215,9 +245,7 @@ class index extends PureComponent {
                                     <Carousel autoplay={true} >
                                         {
                                             baseinfo ? baseinfo.imgNamelist.map(item => {
-                                                // return (<img key={item.imgname} style={{ width: 550 }} src={imgaddress + item.imgname} />);
-                                                return (<img key={item.imgname} style={{ width: 363, height: 285, borderradius: 12 }} src="https://timgsa.baidu.com/timg?image&quality=80&size=b10000_10000&sec=1545898494&di=a3db233138df9b81db138ccecf963537&src=http://img.pconline.com.cn/images/upload/upc/tx/photoblog/1606/18/c10/23006869_1466217538615_mthumb.jpg" />);
-
+                                                return (<ImgCommon key={item.imgname} style={{ width: 363, height: 285, borderradius: 12 }}  imageUrl={imgaddress + item.imgname} />);
                                             }) : ''
                                         }
                                     </Carousel>
@@ -240,7 +268,10 @@ class index extends PureComponent {
                                     height: "285px",
                                     borderRadius: "12px"
                                 }}>
+
+                                <Button onClick={this.showEditCoordinate}>编辑厂界</Button>
                                     <Map resizeEnable={true}
+                                        events={this.mapEvents}
                                         zoom={11} loading={<Spin />} amapkey={amapKey} plugins={plugins} center={mapCenter} >
                                         {
                                             allcoo ? allcoo.map((item, key) => {
@@ -317,7 +348,6 @@ class index extends PureComponent {
                                             initialValue: baseinfo ? baseinfo.regionCode : '',
                                             rules: [{
                                                 required: true,
-                                         
                                             }],
                                         })(
                                             <TreeSelect
@@ -334,11 +364,6 @@ class index extends PureComponent {
                                     <FormItem style={{width:'400px'}} {...formItemLayout} label="所属行业" >
                                         {getFieldDecorator('industry', {
                                             initialValue: baseinfo ? baseinfo.industryTypeName : '',
-                                            rules: [{
-                                                required: true,
-                                             
-
-                                            }],
                                         })(
                                             <Select style={{ width: 300 }} disabled={this.state.isedit} onChange={this.industry}>
                                                 {this.props.industryTypelist.map((item, key) => {
@@ -351,11 +376,6 @@ class index extends PureComponent {
                                     <FormItem style={{width:'400px'}} {...formItemLayout} label="地址" >
                                         {getFieldDecorator('adress', {
                                             initialValue: baseinfo ? baseinfo.address : '',
-                                            rules: [{
-                                                required: true,
-                                    
-
-                                            }],
                                         })(
                                             <Input
                                                 style={{ width: 300, }}
@@ -366,11 +386,6 @@ class index extends PureComponent {
                                     <FormItem style={{width:'400px'}} {...formItemLayout} label="关注程度" >
                                         {getFieldDecorator('concern', {
                                             initialValue: baseinfo ? baseinfo.attentionName : '',
-                                            rules: [{
-                                                required: true,
-                                        
-
-                                            }],
                                         })(
                                             <Select style={{ width: 300 }} disabled={this.state.isedit} onChange={this.concern}>
                                                 {this.props.attentionDegreelist.map((item, key) => {
@@ -384,11 +399,6 @@ class index extends PureComponent {
                                     <FormItem style={{width:'400px'}} {...formItemLayout} label="法人编号" >
                                         {getFieldDecorator('personnum', {
                                             initialValue: baseinfo ? baseinfo.corporationCode : '',
-                                            rules: [{
-                                                required: true,
-                                         
-
-                                            }],
                                         })(
                                             <Input
                                                 style={{ width: 300 }}
@@ -399,11 +409,6 @@ class index extends PureComponent {
                                     <FormItem style={{width:'400px'}} {...formItemLayout} label="法人" >
                                         {getFieldDecorator('personname', {
                                             initialValue: baseinfo ? baseinfo.corporationName : '',
-                                            rules: [{
-                                                required: true,
-                                         
-
-                                            }],
                                         })(
                                             <Input
                                                 style={{ width: 300 }}
@@ -414,11 +419,6 @@ class index extends PureComponent {
                                     <FormItem style={{width:'400px'}} {...formItemLayout} label="单位类型" >
                                         {getFieldDecorator('unit', {
                                             initialValue: baseinfo ? baseinfo.UnitTypeName : '',
-                                            rules: [{
-                                                required: true,
-                                              
-
-                                            }],
                                         })(
                                             <Select style={{ width: 300 }} disabled={this.state.isedit} onChange={this.unit} >
                                                 {this.props.unitTypelist.map((item, key) => {
@@ -432,11 +432,6 @@ class index extends PureComponent {
                                     <FormItem style={{width:'400px'}} {...formItemLayout} label="排口数量" >
                                         {getFieldDecorator('outputnum', {
                                             initialValue: 30,
-                                            rules: [{
-                                                required: true,
-                                         
-
-                                            }],
                                         })(
                                             <Input
                                                 style={{ width: 300 }}
@@ -447,11 +442,6 @@ class index extends PureComponent {
                                     <FormItem style={{width:'400px'}} {...formItemLayout} label="污染源规模" >
                                         {getFieldDecorator('pollutionsources', {
                                             initialValue: baseinfo ? baseinfo.PSScaleName : '',
-                                            rules: [{
-                                                required: true,
-                                             
-
-                                            }],
                                         })(
                                             <Select style={{ width: 300 }} disabled={this.state.isedit} onChange={this.pollutionsources} >
                                                 {this.props.pSScalelist.map((item, key) => {
@@ -464,11 +454,9 @@ class index extends PureComponent {
                                  
                                     <FormItem style={{width:'400px'}} {...formItemLayout} label="经纬度" >
                                         {getFieldDecorator('latlon', {
-                                            initialValue: baseinfo ? baseinfo.longitude : '' + ',' + (baseinfo ? baseinfo.latitude : ''),
+                                            initialValue: (baseinfo ? baseinfo.longitude : '') + ' , ' + (baseinfo ? baseinfo.latitude : ''),
                                             rules: [{
                                                 required: true,
-                                     
-
                                             }],
                                         })(
                                             <Input
@@ -480,11 +468,6 @@ class index extends PureComponent {
                                     <Divider dashed />
                                     <FormItem style={{width:'400px'}} {...formItemLayout} label="主要污染物" >
                                         {getFieldDecorator('contaminants', {
-                                            rules: [{
-                                                required: true,
-                                    
-
-                                            }],
                                         })(
                                             <Input
                                                 style={{ width: 300 }}
@@ -495,11 +478,6 @@ class index extends PureComponent {
                                     <FormItem style={{width:'400px'}} {...formItemLayout} label="注册类型" >
                                         {getFieldDecorator('registration', {
                                             initialValue: baseinfo ? baseinfo.registTypeName : '',
-                                            rules: [{
-                                                required: true,
-                                        
-
-                                            }],
                                         })(
                                             <Select style={{ width: 300 }} disabled={this.state.isedit} onChange={this.registration}>
                                                 {this.props.registTypelist.map((item, key) => {
@@ -511,11 +489,6 @@ class index extends PureComponent {
                                     </FormItem>
                                     <FormItem style={{width:'400px'}} {...formItemLayout} label="窑炉数量" >
                                         {getFieldDecorator('kilnnum', {
-                                            rules: [{
-                                                required: true,
-                                       
-
-                                            }],
                                         })(
                                             <Input
                                                 style={{ width: 300 }}
@@ -527,11 +500,6 @@ class index extends PureComponent {
                                     <FormItem style={{width:'400px'}} {...formItemLayout} label="环保负责人" >
                                         {getFieldDecorator('chargeman', {
                                             initialValue: baseinfo ? baseinfo.environmentPrincipal : '',
-                                            rules: [{
-                                                required: true,
-                                             
-
-                                            }],
                                         })(
                                             <Input
                                                 style={{ width: 300 }}
@@ -542,11 +510,6 @@ class index extends PureComponent {
                                     <FormItem style={{width:'400px'}} {...formItemLayout} label="办公电话" >
                                         {getFieldDecorator('phone', {
                                             initialValue: baseinfo ? baseinfo.officePhone : '',
-                                            rules: [{
-                                                required: true,
-                                              
-
-                                            }],
                                         })(
                                             <Input
                                                 style={{ width: 300 }}
@@ -557,10 +520,6 @@ class index extends PureComponent {
                                     <FormItem style={{width:'400px'}} {...formItemLayout} label="隶属关系">
                                         {getFieldDecorator('subjection', {
                                             initialValue: baseinfo ? baseinfo.subjectionRelationName : '',
-                                            rules: [{
-                                                required: true,
-                                                message: '请输入隶属关系!',
-                                            }],
                                         })(
                                             <Select style={{ width: 300 }} disabled={this.state.isedit} onChange={this.subjection}>
                                                 {this.props.subjectionRelationlist.map((item, key) => {
@@ -572,7 +531,25 @@ class index extends PureComponent {
                                     </FormItem>
                              
                         </Form>
-                        <Divider dashed />
+                        <Modal
+                 visible={this.state.Mapvisible}
+                 title={this.state.title}
+                 width={this.state.width}
+                 destroyOnClose={true}// 清除上次数据
+                 onOk={() => {
+                  //   this.GetData();
+                 }
+                 }
+                 onCancel={() => {
+                     this.setState({
+                         Mapvisible: false
+                     });
+                 }}>
+                 {
+                     <ModalMap   />
+                 }
+                  </Modal>
+                          <Divider dashed />
 
                         <div style={{ textAlign: "center" }}>
                           

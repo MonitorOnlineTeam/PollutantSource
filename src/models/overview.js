@@ -283,6 +283,14 @@ export default Model.extend({
                     type: 'line',
                     name: '折算' + payload.pollutantName,
                     data: zsseriesdata,
+                    itemStyle: {
+                        normal: {
+                            color: '#FF00FF',
+                            lineStyle: {
+                                color: '#FF00FF'
+                            }
+                        }
+                    },
                 }
                 ]
             };
@@ -379,6 +387,14 @@ export default Model.extend({
                     type: 'line',
                     name: '折算' + payload.pollutantName,
                     data: zsseriesdata,
+                    itemStyle: {
+                        normal: {
+                            color: '#FF00FF',
+                            lineStyle: {
+                                color: '#FF00FF'
+                            }
+                        }
+                    },
                 }
                 ]
             };

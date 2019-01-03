@@ -107,7 +107,7 @@ export default class StandardGas extends Component {
         let title ="添加备品信息";
         if(row)
         {
-            title="修改备品信息-"+row.GasName
+            title="修改备品信息-"+row.StandardGasName
         }
         this.setState({
             visible: true,
