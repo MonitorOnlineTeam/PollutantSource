@@ -153,7 +153,7 @@ export async function loadPointDetail(params) {
 export async function loadCountryPointView(params) {
     let groupstr = '';
     params.GroupID.map(item => {
-        groupstr += item + ',';
+        groupstr += `${item  },`;
     });
     const body = {
         GroupIDs: groupstr,
@@ -432,7 +432,10 @@ export async function querypollutanttypecode(params) {
 // 获取数据一览数据
 export async function querydatalist(params) {
     const body = {
-        time: params.time
+        time: params.time,
+        pointType:params.pointType,
+        pollutantTypes:params.pollutantTypes,
+        pointName:params.pointName
     };
     const result = await post('/api/rest/PollutantSourceApi/DataList/SummaryList', body, null);
     return result === null ? { data: null } : result.data;
@@ -488,7 +491,7 @@ export async function queryurge(params) {
     const result = await post('/api/rest/PollutantSourceApi/PTaskProcessing/PostTaskSupervise', body, null);
     return result === null ? {data: null} : result.requstresult;
 }
-//获取监测报告列表   
+//获取监测报告列表
 export async function queryreportlist(params) {
     const body = {
         beginTime:params.beginTime,

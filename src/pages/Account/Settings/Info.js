@@ -1,19 +1,17 @@
 import React, { Component } from 'react';
 import {
-  Tabs,
-  Layout,
-  Menu
+    Tabs,
+    Layout,
+    Menu
 } from 'antd';
 import router from 'umi/router';
-import {EnumPsOperationForm} from '../../../utils/enum';
-import { Switch, Redirect } from 'dva/router';
 import MonitorContent from '../../../components/MonitorContent/index';
-import { Styles } from 'docx';
+
 const {
-    Header, Content, Footer, Sider,
+    Content, Sider,
 } = Layout;
 const {
-  Item
+    Item
 } = Menu;
 
 export default class Info extends Component {
@@ -30,48 +28,60 @@ export default class Info extends Component {
         const tablist = [{
             key: 'base',
             tab: '基本设置'
-          },
-          {
+        },
+        {
             key: 'security',
             tab: '安全设置'
-          },
-          {
-            key: 'notification',
-            tab: '消息通知'
-          },
+        },
+        {
+            key: 'mypielist',
+            tab: '我的派单'
+        },
+        {
+            key: 'mymessagelist',
+            tab: '我的通知'
+        },
         ];
         return (
-           <MonitorContent {...this.props} breadCrumbList={
-                [
-                    {Name:'首页',Url:'/'},
-                    {Name:'个人设置',Url:''},
-                ]
-            }>
-            <div className={Styles.menu} style={{ width: '100%', height: 'calc(100vh - 500px)' }}>
-                {<Layout style={{ padding: '14px 0', background: '#fff' }}>
-                    <Sider width={270} style={{ background: '#fff' }} >
-                        <Menu mode={'inline'} selectedKeys={this.state.selectKey} onClick={({ key })=>{
-                          const {match}=this.props;
-                           router.push(`${match.url}/${key}`);
-                           this.setState({
-                             selectKey: key,
-                           });
-                        }}> 
-                           {
-                             tablist.map(item => <Item key={item.key}>{item.tab}</Item>)
-                           }
-                        </Menu>
-                         
-                    </Sider>
-                    <Content style={{ padding: '0 10px' }}>
-                        {
-                            children
-                        }
-                    </Content>
-                </Layout>
+            <MonitorContent
+                {...this.props}
+                breadCrumbList={
+                    [
+                        {Name:'首页',Url:'/'},
+                        {Name:'个人设置',Url:''},
+                    ]
                 }
+            >
+                <div className={Styles.menu} style={{ width: '100%', height: 'calc(100vh - 500px)' }}>
+                    {
+                        <Layout style={{ padding: '14px 0', background: '#fff' }}>
+                            <Sider width={270} style={{ background: '#fff' }}>
+                                <Menu
+                                    mode="inline"
+                                    selectedKeys={activeKey}
+                                    onClick={({ key })=>{
+                                        const {match}=this.props;
+                                        router.push(`${match.url}/${key}`);
+                                        this.setState({
+                                            selectKey: key,
+                                        });
+                                    }}
+                                >
+                                    {
+                                        tablist.map(item => <Item key={item.key}>{item.tab}</Item>)
+                                    }
+                                </Menu>
 
-            </div>
+                            </Sider>
+                            <Content style={{ padding: '0 10px' }}>
+                                {
+                                    children
+                                }
+                            </Content>
+                        </Layout>
+                    }
+
+                </div>
             </MonitorContent>
         );
     }

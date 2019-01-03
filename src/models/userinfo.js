@@ -2,8 +2,9 @@ import {
     Model
 } from '../dvapack';
 import {
-    getList, deleteuser, enableduser, isexistenceuser, adduser, getuser, edituser, userDgimnDataFilter
+    getList, deleteuser, enableduser, isexistenceuser, adduser, getuser, edituser, userDgimnDataFilter, editpersonaluser, getmypielist,mymessagelist
 } from '../services/userlist';
+
 export default Model.extend({
     namespace: 'userinfo',
 
@@ -17,6 +18,8 @@ export default Model.extend({
         pageSize: 10,
         pageIndex: 1,
         reason: null,
+        mypielist:[],
+        mymessagelist:[],
     },
     subscriptions: {
         setup({
@@ -264,6 +267,40 @@ export default Model.extend({
             });
             callback();
         },
+        * editpersonaluser({
+            payload: {
+                UserId,
+                UserName,
+                UserSex,
+                Email,
+                Phone,
+                SendPush,
+                AlarmType,
+                AlarmTime,
+                callback
+            }
+        }, {
+            call,
+            put,
+            update,
+            select
+        }) {
+            const result = yield call(editpersonaluser, {
+                UserId: UserId,
+                UserName: UserName,
+                UserSex: UserSex,
+                Email: Email,
+                Phone: Phone,
+                SendPush: SendPush,
+                AlarmType: AlarmType,
+                AlarmTime: AlarmTime,
+            });
+            yield update({
+                requstresult: result.requstresult,
+                reason: result.reason
+            });
+            callback();
+        },
         * userDgimnDataFilter({
             payload: {
                 UserId,
@@ -296,6 +333,82 @@ export default Model.extend({
                 yield update({
                     requstresult: result.requstresult,
                     list: [],
+                    total: 0,
+                    pageIndex: null,
+                    pageSize: null
+                });
+            }
+        },
+        * getmypielist({
+            payload: {
+                pageIndex,
+                pageSize,
+                beginTime,
+                endTime
+            }
+        }, {
+            call,
+            put,
+            update,
+            select
+        }) {
+            const result = yield call(getmypielist, {
+                pageIndex: pageIndex,
+                pageSize: pageSize,
+                beginTime: beginTime,
+                endTime: endTime
+            });
+
+            if (result.requstresult === '1') {
+                yield update({
+                    requstresult: result.requstresult,
+                    mypielist: result.data,
+                    total: result.total,
+                    pageIndex: pageIndex,
+                    pageSize: pageSize
+                });
+            } else {
+                yield update({
+                    requstresult: result.requstresult,
+                    mypielist: [],
+                    total: 0,
+                    pageIndex: null,
+                    pageSize: null
+                });
+            }
+        },
+        * mymessagelist({
+            payload: {
+                pageIndex,
+                pageSize,
+                beginTime,
+                endTime
+            }
+        }, {
+            call,
+            put,
+            update,
+            select
+        }) {
+            const result = yield call(mymessagelist, {
+                pageIndex: pageIndex,
+                pageSize: pageSize,
+                beginTime: beginTime,
+                endTime: endTime
+            });
+
+            if (result.requstresult === '1') {
+                yield update({
+                    requstresult: result.requstresult,
+                    mymessagelist: result.data,
+                    total: result.total,
+                    pageIndex: pageIndex,
+                    pageSize: pageSize
+                });
+            } else {
+                yield update({
+                    requstresult: result.requstresult,
+                    mymessagelist: [],
                     total: 0,
                     pageIndex: null,
                     pageSize: null

@@ -6,6 +6,7 @@ import {
     , editstandardlibrary, getpollutantlist, getstandardlibrarypollutantlist, deletestandardlibrarypollutantbyid, editstandardlibrarypollutant, getStandardlibrarypollutantbyid
     , getstandardlibraryfiles, getuselist, getpollutantbydgimn, usepoint, isusepollutant, getmonitorpointpollutant, editmonitorpointPollutant
 } from '../services/standardlibrary';
+
 export default Model.extend({
     namespace: 'standardlibrary',
 
@@ -166,7 +167,6 @@ export default Model.extend({
                 yield update({
                     requstresult: result.requstresult,
                     standardlibrarypollutant: result.data,
-                    total: result.total,
                 });
             } else {
                 yield update({

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Table, Select, Card, Form, Row, Col, Icon, Upload, message, Modal, Divider } from 'antd';
+import { Button, Table, Select, Card, Form, Row, Col, Icon, Upload, message, Modal, Divider, Tabs, Input  } from 'antd';
 import moment from 'moment';
 import { connect } from 'dva';
 import RangePicker_ from '../../components/PointDetail/RangePicker_';
@@ -9,7 +9,11 @@ import Add from '../../components/ManualUpload/AddManualUpload';
 import Update from '../../components/ManualUpload/UpdateManualUpload';
 import { routerRedux } from 'dva/router';
 import styles from './ManualUpload.less';
+
+const confirm = Modal.confirm;
 const Option = Select.Option;
+const TabPane = Tabs.TabPane;
+const Search = Input.Search;
 @connect(({ manualupload, overview, loading }) => ({
     loading: loading.effects['manualupload/GetManualSupplementList'],
     requstresult: manualupload.requstresult,
@@ -17,13 +21,13 @@ const Option = Select.Option;
     datalist: overview.data,
     selectdata: manualupload.selectdata,
     uploaddatalist: manualupload.uploaddatalist,
-    templateurl: manualupload.templateurl,
     pageIndex: manualupload.pageIndex,
     pageSize: manualupload.pageSize,
     reason: manualupload.reason,
     total: manualupload.total,
     DGIMN: manualupload.DGIMN,
     pointName: manualupload.pointName,
+    polltuantTypeList: manualupload.polltuantTypeList,
 }))
 @Form.create()
 export default class ManualUpload extends Component {
@@ -36,13 +40,15 @@ export default class ManualUpload extends Component {
             PollutantType: null,
             SelectHandleChange: [],
             visible: false,
+            TabsOnchange: null,//树选项卡key
+            TabsSelect: null,  //树下拉key
+            pointName: null,
             footer: <div>
                 <Button key="back" onClick={this.handleCancel}>Return</Button>,
                 <Button key="submit" type="primary" onClick={this.handleOk}>
                     Submit
             </Button>
             </div>
-
         };
         const SCREEN_HEIGHT = document.querySelector('body').offsetHeight;
         const SCREEN_WIDTH = document.querySelector('body').offsetWidth;
@@ -62,7 +68,7 @@ export default class ManualUpload extends Component {
         _this.addimg = ({ file }) => {
             const isJPG = file.type === 'application/vnd.ms-excel';
             if (!isJPG) {
-                message.error('只能上传Excel格式文件！');
+                message.error('只能导入模板文件！');
             }
             else {
                 const mn = this.props.DGIMN
@@ -82,12 +88,12 @@ export default class ManualUpload extends Component {
                             file: base64.split(',')[1],
                             fileName: file.name,
                             DGIMN: mn,
-                            callback: () => {
-                                if (_this.props.requstresult === '1') {
+                            callback: (flag, data) => {
+                                if (flag === '1') {
                                     _this.GetManualSupplementList(mn, SelectHandleChange, rangeDateone, rangeDatetwo, pageIndex, pageSize);
-                                    message.success(_this.props.reason)
+                                    message.success(data)
                                 } else {
-                                    message.error(_this.props.reason);
+                                    message.error(data);
                                 }
                             }
                         }
@@ -96,31 +102,48 @@ export default class ManualUpload extends Component {
             }
         };
     }
-
     componentDidMount() {
-        //点位列表
+        //获取污染物类型
         this.props.dispatch({
-            type: 'overview/querydatalist',
+            type: 'manualupload/getPollutantTypeList',
             payload: {
-                map: true, manualUpload: true,
-                pageIndex: this.props.pageIndex, pageSize: this.props.pageSize,
+                callback: (data) => {
+                    this.setState({ TabsOnchange: data })
+                    //点位列表
+                    this.props.dispatch({
+                        type: 'overview/querydatalist',
+                        payload: {
+                            pollutantTypes: this.state.TabsOnchange,
+                            map: true, manualUpload: true,
+                            pageIndex: this.props.pageIndex,
+                            pageSize: this.props.pageSize,
+                            BeginTime: this.state.rangeDate[0].format('YYYY-MM-DD 00:00:00'),
+                            EndTime: this.state.rangeDate[1].format('YYYY-MM-DD 23:59:59'),
+                            pollutantCode: this.state.SelectHandleChange
+                        }
+                    });
+                }
             }
         });
-        //获取模板地址
-        this.props.dispatch({
-            type: 'manualupload/getUploadTemplate',
-            payload: {}
-        });
     }
-    getStatusImg=(value) => {
+    getStatusImg = (value) => {
         if (value === 0) {
-            return <img style={{width:15}} src="../../../gisunline.png" />;
+            return <img style={{ width: 15 }} src="../../../gisunline.png" />;
         } if (value === 1) {
-            return <img style={{width:15}} src="../../../gisnormal.png" />;
+            return <img style={{ width: 15 }} src="../../../gisnormal.png" />;
         } if (value === 2) {
-            return <img style={{width:15}} src="../../../gisover.png" />;
+            return <img style={{ width: 15 }} src="../../../gisover.png" />;
         }
-        return <img style={{width:15}} src="../../../gisexception.png" />;
+        return <img style={{ width: 15 }} src="../../../gisexception.png" />;
+    }
+    getIcon = (key, value) => {
+
+        if (key === 1) {
+            return <span ><img style={{ width: 20, marginBottom: 5 }} src="../../../water.png"></img><span style={{marginLeft:2}}>{value}</span></span>
+        }
+        else {
+            return <span><img style={{ width: 20, marginBottom: 5 }} src="../../../gas.png"></img> {value}</span>
+        }
     }
     treeCilck = (row) => {
         this.setState({ PollutantType: row.pollutantTypeCode });
@@ -133,15 +156,15 @@ export default class ManualUpload extends Component {
                 PollutantType: row.pollutantTypeCode
             }
         });
-        this.GetManualSupplementList(row.DGIMN, this.state.SelectHandleChange, this.state.rangeDate[0], this.state.rangeDate[1], this.props.pageIndex, this.props.pageSize, row.pointName)
+        this.GetManualSupplementList(row.DGIMN, this.state.SelectHandleChange, this.state.rangeDate[0].format('YYYY-MM-DD 00:00:00'), this.state.rangeDate[1].format('YYYY-MM-DD 23:59:59'), this.props.pageIndex, this.props.pageSize, row.pointName)
     };
     _handleDateChange = (date, dateString) => {
-        this.setState({ rangeDate: date });
-        this.GetManualSupplementList(this.props.DGIMN, this.state.SelectHandleChange, date[0], date[1], this.props.pageIndex, this.props.pageSize)
+        this.setState({ rangeDate: date })
+        this.GetManualSupplementList(this.props.DGIMN, this.state.SelectHandleChange, date[0].format('YYYY-MM-DD 00:00:00'), date[1].format('YYYY-MM-DD 23:59:59'), this.props.pageIndex, this.props.pageSize)
     };
     SelectHandleChange = (value) => {
         this.setState({ SelectHandleChange: value })
-        this.GetManualSupplementList(this.props.DGIMN, value, this.state.rangeDate[0], this.state.rangeDate[1], this.props.pageIndex, this.props.pageSize)
+        this.GetManualSupplementList(this.props.DGIMN, value, this.state.rangeDate[0].format('YYYY-MM-DD 00:00:00'), this.state.rangeDate[1].format('YYYY-MM-DD 23:59:59'), this.props.pageIndex, this.props.pageSize)
     }
     SelectOptions = () => {
         const rtnVal = [];
@@ -153,16 +176,21 @@ export default class ManualUpload extends Component {
         return rtnVal;
     }
     Template = () => {
-        // 勿删    return <a href={(() => { this.Template() })} target='_blank'>模板下载</a>
-        if (this.props.templateurl !== null) {
-            window.location.href = this.props.templateurl
-        }
+        //获取模板地址
+        this.props.dispatch({
+            type: 'manualupload/getUploadTemplate',
+            payload: {
+                callback: (data) => {
+                    window.location.href = data
+                }
+            }
+        });
     }
     onChange = (pageIndex, pageSize) => {
-        this.GetManualSupplementList(this.props.DGIMN, this.state.SelectHandleChange, this.state.rangeDate[0], this.state.rangeDate[1], pageIndex, pageSize);
+        this.GetManualSupplementList(this.props.DGIMN, this.state.SelectHandleChange, this.state.rangeDate[0].format('YYYY-MM-DD 00:00:00'), this.state.rangeDate[1].format('YYYY-MM-DD 23:59:59'), pageIndex, pageSize);
     }
     onShowSizeChange = (pageIndex, pageSize) => {
-        this.GetManualSupplementList(this.props.DGIMN, this.state.SelectHandleChange, this.state.rangeDate[0], this.state.rangeDate[1], pageIndex, pageSize);
+        this.GetManualSupplementList(this.props.DGIMN, this.state.SelectHandleChange, this.state.rangeDate[0].format('YYYY-MM-DD 00:00:00'), this.state.rangeDate[1].format('YYYY-MM-DD 23:59:59'), pageIndex, pageSize);
     }
     GetManualSupplementList = (DGIMN, pollutantCode, BeginTime, EndTime, pageIndex, pageSize, pointName) => {
         this.props.dispatch({
@@ -189,7 +217,112 @@ export default class ManualUpload extends Component {
     // 添加数据
     AddData = () => {
         this.child.handleSubmit();
-        this.GetManualSupplementList(this.props.DGIMN, this.state.SelectHandleChange, this.state.rangeDate[0], this.state.rangeDate[1], this.props.pageIndex, this.props.pageSize);
+        this.GetManualSupplementList(this.props.DGIMN, this.state.SelectHandleChange, this.state.rangeDate[0].format('YYYY-MM-DD 00:00:00'), this.state.rangeDate[1].format('YYYY-MM-DD 23:59:59'), this.props.pageIndex, this.props.pageSize);
+    }
+    //删除
+    deleteVideoInfo = (record) => {
+        confirm({
+            title: '确定要删除吗?',
+            okText: '是',
+            okType: 'primary',
+            cancelText: '否',
+            onOk: () => this.delete(record),
+            onCancel() {
+                console.log('取消');
+            },
+        });
+    };
+    delete = (record) => {
+        this.props.dispatch({
+            type: 'manualupload/DeleteUploadFiles',
+            payload: {
+                DGIMN: record.DGIMN,
+                pollutantCode: record.PollutantCode,
+                monitorTime: (moment(record.MonitorTime)).format('YYYY-MM-DD HH:mm:ss'),
+                callback: (reason) => {
+                    message.success(reason)
+                }
+            },
+        });
+        this.GetManualSupplementList(this.props.DGIMN, this.state.SelectHandleChange, this.state.rangeDate[0].format('YYYY-MM-DD 00:00:00'), this.state.rangeDate[1].format('YYYY-MM-DD 23:59:59'), this.props.pageIndex, this.props.pageSize);
+
+    }
+    // 修改
+    updateData = () => {
+        this.child.handleSubmitupdate();
+        this.GetManualSupplementList(this.props.DGIMN, this.state.SelectHandleChange, this.state.rangeDate[0].format('YYYY-MM-DD 00:00:00'), this.state.rangeDate[1].format('YYYY-MM-DD 23:59:59'), this.props.pageIndex, this.props.pageSize);
+    }
+    //选项卡列表
+    tabList = () => {
+        const rtnVal = [];
+        if (this.props.polltuantTypeList.length !== 0) {
+            this.props.polltuantTypeList.map((item) => {
+                rtnVal.push(<TabPane tab={this.getIcon(item.PollutantTypeCode, item.PollutantTypeName)} className={styles.TabPane} key={item.PollutantTypeCode}>
+                    <div style={{ marginTop: 15 }}>
+                        <TreeCard getHeight={'calc(100vh - 220px)'} getStatusImg={this.getStatusImg} isloading={this.props.treedataloading} treeCilck={this.treeCilck} treedatalist={this.props.datalist} PollutantType={item.PollutantTypeCode} />
+                    </div>
+                </TabPane>);
+            });
+        }
+        return rtnVal;
+    }
+    TabsOnChange = (key) => {
+        debugger
+        this.setState({ TabsOnchange: key })
+        //点位列表
+        this.props.dispatch({
+            type: 'overview/querydatalist',
+            payload: {
+                pointName: this.state.pointName,
+                pointType: this.state.TabsSelect,
+                pollutantTypes: key,
+                map: true, manualUpload: true,
+                pageIndex: this.props.pageIndex,
+                pageSize: this.props.pageSize,
+                BeginTime: this.state.rangeDate[0].format('YYYY-MM-DD 00:00:00'),
+                EndTime: this.state.rangeDate[1].format('YYYY-MM-DD 23:59:59'),
+                pollutantCode: this.state.SelectHandleChange
+            }
+        });
+    }
+    changeTabList = (value) => {
+        debugger
+        this.setState({ TabsSelect: value })
+        //点位列表
+        this.props.dispatch({
+            type: 'overview/querydatalist',
+            payload: {
+                pointName: this.state.pointName,
+                pointType: value,
+                pollutantTypes: this.state.TabsOnchange,
+                map: true, manualUpload: true,
+                pageIndex: this.props.pageIndex,
+                pageSize: this.props.pageSize,
+                BeginTime: this.state.rangeDate[0].format('YYYY-MM-DD 00:00:00'),
+                EndTime: this.state.rangeDate[1].format('YYYY-MM-DD 23:59:59'),
+                pollutantCode: this.state.SelectHandleChange
+            }
+        });
+    }
+    searchPointbyPointName = (value) => {
+        this.setState({
+            pointName: value
+        });
+        //点位列表
+        this.props.dispatch({
+            type: 'overview/querydatalist',
+            payload: {
+                pointType: this.state.TabsSelect,
+                pollutantTypes: this.state.TabsOnchange,
+                pointName: value,
+                map: true, manualUpload: true,
+                pageIndex: this.props.pageIndex,
+                pageSize: this.props.pageSize,
+                BeginTime: this.state.rangeDate[0].format('YYYY-MM-DD 00:00:00'),
+                EndTime: this.state.rangeDate[1].format('YYYY-MM-DD 23:59:59'),
+                pollutantCode: this.state.SelectHandleChange
+            }
+        });
     }
     render() {
         const uploaddata = this.props.uploaddatalist === null ? null : this.props.uploaddatalist;
@@ -246,7 +379,6 @@ export default class ManualUpload extends Component {
                 render: (text, record, index) => (
                     <span>
                         <a onClick={() => {
-                            console.log(record);
                             this.setState({
                                 visible: true,
                                 type: 'update',
@@ -283,8 +415,26 @@ export default class ManualUpload extends Component {
                             borderRadius: 10
                         }}
                         >
-                            <div style={{ marginTop: 15 }}>
-                                <TreeCard getHeight={'calc(100vh - 120px)'} getStatusImg={this.getStatusImg} isloading={this.props.treedataloading} treeCilck={this.treeCilck} treedatalist={this.props.datalist} />
+                            <div style={{ marginBottom: 16 }}>
+                                <Select
+                                    placeholder="监测点类型"
+                                    style={{ width: 200 }}
+                                    onChange={this.changeTabList}
+                                >
+                                    <Option value="2">手动</Option>
+                                    <Option value="1">自动</Option>
+                                </Select>
+                                <Divider type="vertical" />
+                                <Search placeholder="排口名称"
+                                    onSearch={
+                                        this.searchPointbyPointName
+                                    }
+                                    style={{ width: 200 }} />
+                            </div>
+                            <div>
+                                <Tabs type="card" size="large" tabBarStyle={{ width: '100%' }} onChange={this.TabsOnChange}>
+                                    {this.tabList()}
+                                </Tabs>
                             </div>
                         </div>
                     </Col>
@@ -307,14 +457,14 @@ export default class ManualUpload extends Component {
                                             </Select>
                                         </Col>
                                         <Col span={4} style={{ textAlign: 'center' }} >
-                                            <Button type="primary" onClick={this.Template}>
+                                            <Button onClick={this.Template}>
                                                 <Icon type="download" />模板下载
                                             </Button>
                                         </Col>
                                         <Col span={4} style={{ textAlign: 'center' }} >
                                             <Upload
+
                                                 action='.doc,.docx'
-                                                //   onChange={this.handleChange}
                                                 customRequest={this.addimg}
                                                 fileList={this.state.fileList}
                                                 showUploadList={false}
@@ -326,7 +476,6 @@ export default class ManualUpload extends Component {
                                         </Col>
                                         <Col span={2} style={{ textAlign: 'center' }} >
                                             <Button
-                                                type="primary"
                                                 onClick={() => {
                                                     this.setState({
                                                         visible: true,
@@ -387,7 +536,7 @@ export default class ManualUpload extends Component {
                                 width={this.state.width}
                                 onCancel={this.onCancel}>
                                 {
-                                    this.state.type === 'add' ? <Add onCancels={this.onCancel} dgimn={this.props.DGIMN} onRef={this.onRef1} /> : this.state.type === 'update' ? <Update dgimn={this.props.DGIMN} item={this.state.data} onRef={this.onRef1} /> : null
+                                    this.state.type === 'add' ? <Add onCancels={this.onCancel} dgimn={this.props.DGIMN} onRef={this.onRef1} /> : this.state.type === 'update' ? <Update onCancels={this.onCancel} item={this.state.data} onRef={this.onRef1} /> : null
                                 }
                             </Modal>
                         </Card>
