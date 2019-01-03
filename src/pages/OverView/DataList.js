@@ -18,10 +18,12 @@ class dataList extends PureComponent {
         super(props);
         this.state = {
             pdvisible: false,
+            radioval:null,
             nowdate: moment(new Date()).add(-1, 'hour'),
         };
     }
 
+    //页面初始化
     componentDidMount() {
         this.props.dispatch({
             type: 'overview/querypollutanttypecode',
@@ -34,6 +36,7 @@ class dataList extends PureComponent {
         });
     }
 
+    //时间更改
     pickerChange=(time, timeString) => {
         if (time) {
             this.setState({
@@ -49,15 +52,40 @@ class dataList extends PureComponent {
         }
     }
 
+
+    //派单窗口关闭
     onCancel=() => {
         this.setState({
             pdvisible: false,
         });
     }
 
+    //状态搜索
+    radioChange=(value)=>{
+        const radioval=value.target.value;
+        //   alert(radioval);
+        // this.setState({
+        //           radioval
+        //        })
+
+        if(radioval==this.state.radioval) {
+            alert(1);
+            this.setState({
+                radioval:null
+            });
+        } else {
+            alert(2);
+            this.setState({
+                radioval
+            });
+        }
+
+    }
+
+    //催办
     urge=()=>{
         this.props.dispatch({
-            type: 'overview/queryoptionDataOnClick',
+            type: 'overview/queryurge',
             payload: {
                 personId:this.state.selectpoint.operationUserID,
                 DGIMN: this.state.selectpoint.DGIMN
@@ -65,6 +93,7 @@ class dataList extends PureComponent {
         });
     }
 
+    //获取详情按钮
     gerpointButton=(record) => (<div>
         <li style={{ listStyle: 'none', marginBottom: 5 }}>
             <Button onClick={() => {
@@ -93,7 +122,8 @@ class dataList extends PureComponent {
                                 </div>)
 
     render() {
-        console.log(this.props.data);
+        const radioval=this.state;
+
         let columns = [{
             title: '状态',
             dataIndex: 'status',
@@ -134,7 +164,7 @@ class dataList extends PureComponent {
             align: 'center',
             render: (value, record, index) => ({
                 props: {
-                    className: (value && value.split('%')[0] < 90) ? styles.red : '',
+                    className: value && value.split('%')[0] < 90 ? styles.red : '',
                 },
                 children: value || '-'
             })

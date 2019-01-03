@@ -5,6 +5,7 @@ import { DatePicker,Input,Button,Radio,Row, Col,Spin,Card } from 'antd';
 import MonitorContent from '../../components/MonitorContent/index';
 import {routerRedux} from 'dva/router';
 import { connect } from 'dva';
+import {summaryPolluntantCode} from '../../config';
 const { RangePicker } = DatePicker;
 
 
@@ -25,6 +26,7 @@ class OverPointList extends Component {
         this.props.dispatch({
             type: 'analysisdata/queryalloverdatalist',
             payload: {
+                summaryPolluntantCode:summaryPolluntantCode
             }
         });
     }
@@ -43,6 +45,7 @@ class OverPointList extends Component {
                 payload: {
                     beginTime:value[0],
                     endTime:value[1],
+                    summaryPolluntantCode:summaryPolluntantCode
                 }
             });    
         }
@@ -157,7 +160,7 @@ class OverPointList extends Component {
                     <div>
                 
                   <RangePicker
-                     style={{width: 250,marginLeft:40}}
+                     style={{width: 250,marginLeft:40,textAlgin:'left'}}
                      format="YYYY-MM"
                      value={rangeDate}
                      mode={mode}

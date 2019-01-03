@@ -167,10 +167,10 @@ class OverViewMap extends PureComponent {
             visible: false
         });
     }
-
+   //催办
    urge=()=>{
     this.props.dispatch({
-        type: 'overview/queryoptionDataOnClick',
+        type: 'overview/queryurge',
         payload: {
             personId:this.state.selectpoint.operationUserID,
             DGIMN: this.state.selectpoint.DGIMN
