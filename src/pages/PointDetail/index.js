@@ -116,13 +116,13 @@ class PointDetail extends Component {
         const rtnVal = [];
 
         this.state.pointList.map((item, key) =>{
-            let status = <img src="/gisexception.png" width="15" />;
+            let status = <img src="../../../gisexception.png" width="15" />;
             if (item.status === 0) {
-                status= <img src="/gisunline.png" width="15" />;
+                status= <img src="../../../gisunline.png" width="15" />;
             } if (item.status === 1) {
-                status= <img src="/gisnormal.png" width="15" />;
+                status= <img src="../../../gisnormal.png" width="15" />;
             } if (item.status === 2) {
-                status= <img src="/gisover.png" width="15" />;
+                status= <img src="../../../gisover.png" width="15" />;
             }
             let optStatus='';//TODO:排口运维状态不确定 故障：#119f9d
             if(item.existTask===1) {
@@ -250,10 +250,10 @@ class PointDetail extends Component {
                             </Col>
                             <Col span={7} offset={10}>
                                 <Radio.Group value={this.state.status} onChange={this.handleStatusChange}>
-                                    <Radio.Button value="1"><img src="/gisnormal.png" width="15" /> 正常</Radio.Button>
-                                    <Radio.Button value="2"><img src="/gisover.png" width="15" /> 超标</Radio.Button>
-                                    <Radio.Button value="0"><img src="/gisunline.png" width="15" /> 离线</Radio.Button>
-                                    <Radio.Button value="3"><img src="/gisexception.png" width="15" /> 异常</Radio.Button>
+                                    <Radio.Button value="1"><img src="../../../gisnormal.png" width="15" /> 正常</Radio.Button>
+                                    <Radio.Button value="2"><img src="../../../gisover.png" width="15" /> 超标</Radio.Button>
+                                    <Radio.Button value="0"><img src="../../../gisunline.png" width="15" /> 离线</Radio.Button>
+                                    <Radio.Button value="3"><img src="../../../gisexception.png" width="15" /> 异常</Radio.Button>
                                 </Radio.Group>
                             </Col>
                         </Row>
