@@ -224,9 +224,9 @@ export default class AddPoint extends Component {
                     {Name:'排口维护',Url:''}
                 ]
             }>
-            <div>
-             <Form onSubmit={this.handleSubmit} >
-                  <Card style={{height:'calc(100vh - 140px)' } }>
+            <div style={{ padding: 30, background: "#FFFFFF",marginBottom:10 }} >
+             <Form onSubmit={this.handleSubmit} style={{ display:'flex',flexDirection:'row',flexWrap:'wrap',alignItems:'center',justifyContent:'space-between'}} >
+        
                      <Row gutter={48} >
                          <Col span={12} >
                              <FormItem labelCol={{span: 8}}
@@ -480,7 +480,7 @@ export default class AddPoint extends Component {
                              </Button>
                          </Col>
                      </Row>
-                 </Card>
+            
              </Form>
              <Modal
                  visible={this.state.Mapvisible}
