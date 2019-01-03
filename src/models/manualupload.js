@@ -30,10 +30,12 @@ export default Model.extend({
             update,
         }) {
             const result = yield call(uploadfiles, payload);
-            yield update({
-                requstresult: result.requstresult,
-            });
-            payload.callback(result.requstresult, result.reason);
+            if (result !== null) {
+                yield update({
+                    requstresult: result.requstresult,
+                });
+                payload.callback(result.requstresult, result.reason);
+            }
         },
         //根据排口获取污染物
         * GetPollutantByPoint({
