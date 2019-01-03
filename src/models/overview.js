@@ -48,7 +48,6 @@ export default Model.extend({
         * querydatalist({
             payload,
         }, { call, update,put,take }) {
-            debugger;
             const data = yield call(querydatalist, payload);
             if (payload.map && data) {
                 data.map((item) => {
