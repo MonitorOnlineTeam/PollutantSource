@@ -174,12 +174,12 @@ export default [
                         component: './Account/Settings/SecurityView',
                     },
                     {
-                        path: '/account/settings/binding',
-                        component: './Account/Settings/BindingView',
+                        path: '/account/settings/mymessagelist',
+                        component: './Account/Settings/MyMessageList',
                     },
                     {
-                        path: '/account/settings/notification',
-                        component: './Account/Settings/NotificationView',
+                        path: '/account/settings/mypielist',
+                        component: './Account/Settings/MyPieList',
                     },
                 ],
             },

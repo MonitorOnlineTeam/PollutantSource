@@ -5,7 +5,6 @@ import {
     Menu
 } from 'antd';
 import router from 'umi/router';
-import { Styles } from 'docx';
 import MonitorContent from '../../../components/MonitorContent/index';
 
 const {
@@ -35,8 +34,12 @@ export default class Info extends Component {
             tab: '安全设置'
         },
         {
-            key: 'notification',
-            tab: '消息通知'
+            key: 'mypielist',
+            tab: '我的派单'
+        },
+        {
+            key: 'mymessagelist',
+            tab: '我的通知'
         },
         ];
         return (
@@ -49,32 +52,33 @@ export default class Info extends Component {
                     ]
                 }
             >
-                <div className={Styles.menu} style={{ width: '100%', height: 'calc(100vh - 500px)' }}>
-                    {<Layout style={{ padding: '14px 0', background: '#fff' }}>
-                        <Sider width={270} style={{ background: '#fff' }}>
-                            <Menu
-                                mode="inline"
-                                selectedKeys={this.state.selectKey}
-                                onClick={({ key })=>{
-                                    const {match}=this.props;
-                                    router.push(`${match.url}/${key}`);
-                                    this.setState({
-                                        selectKey: key,
-                                    });
-                                }}
-                            >
-                                {
-                                    tablist.map(item => <Item key={item.key}>{item.tab}</Item>)
-                                }
-                            </Menu>
+                <div style={{ width: '100%', height: 'calc(100vh - 500px)' }}>
+                    {
+                        <Layout style={{ padding: '14px 0', background: '#fff' }}>
+                            <Sider width={270} style={{ background: '#fff' }}>
+                                <Menu
+                                    mode="inline"
+                                    selectedKeys={activeKey}
+                                    onClick={({ key })=>{
+                                        const {match}=this.props;
+                                        router.push(`${match.url}/${key}`);
+                                        this.setState({
+                                            selectKey: key,
+                                        });
+                                    }}
+                                >
+                                    {
+                                        tablist.map(item => <Item key={item.key}>{item.tab}</Item>)
+                                    }
+                                </Menu>
 
-                        </Sider>
-                        <Content style={{ padding: '0 10px' }}>
-                            {
-                                children
-                            }
-                        </Content>
-                     </Layout>
+                            </Sider>
+                            <Content style={{ padding: '0 10px' }}>
+                                {
+                                    children
+                                }
+                            </Content>
+                        </Layout>
                     }
 
                 </div>
