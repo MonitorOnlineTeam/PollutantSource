@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
-import {List, Card} from 'antd';
+import {Table, Card} from 'antd';
 import { connect } from 'dva';
+import moment from 'moment';
 
 
-@connect(({loading, videolist}) => ({
-    ...loading,
-    realdata: []
+@connect(({videolist}) => ({
+    realdata: videolist.realdata,
+    columns:videolist.columns
 }))
-export default class RealVideoData extends Component {
+class RealVideoData extends Component {
     constructor(props) {
         super(props);
 
@@ -17,34 +18,40 @@ export default class RealVideoData extends Component {
     }
 
     componentWillMount = () => {
+        this.getPollutantTitle();
         this.getRealTime();
     }
-    getRealTime = () => {
-        this.props.dispatch({
-            type: 'videolist/queryprocesschart',
-            payload: {
-                DGIMN: this.props.match.params.pointcode,
-            },
+
+    getPollutantTitle=()=>{
+        const {match,dispatch}=this.props;
+        dispatch({
+            type:'videolist/querypollutantlist',
+            payload:{ dgimn: match.params.pointcode }
         });
     }
+
+    getRealTime = () => {
+        let rangeDate=[moment(new Date()).add(-10, 'm').format('YYYY-MM-DD HH:mm:ss'), moment(new Date()).format('YYYY-MM-DD HH:mm:ss')];
+        const {match,dispatch}=this.props;
+        dispatch({
+            type:'videolist/queryhistorydatalist',
+            payload:{ dgimn: match.params.pointcode,
+                datatype: 'realtime',
+                pageIndex: 1,
+                pageSize: 20,
+                beginTime: rangeDate[0],
+                endTime: rangeDate[1] }
+        });
+    }
+
     render() {
-        debugger;
-        const MonitorData = this.props.realdata;
+        const {realdata,columns} = this.props;
+        console.log(1);
         return (
             <Card title="实时数据">
-                <List
-                    bordered={true}
-                    size="small"
-                    itemLayout="horizontal"
-                    dataSource={MonitorData}
-                    renderItem={item => (
-                        <List.Item>
-                            <List.Item.Meta title={item.MonitorItem} />
-                            <List.Item.Meta title={item.MonitorValue} />
-                        </List.Item>
-                    )}
-                />
+                <Table dataSource={realdata} columns={columns} pagination={false} />
             </Card>
         );
     }
 }
+export default RealVideoData;

@@ -5,7 +5,6 @@ import {
     Menu
 } from 'antd';
 import router from 'umi/router';
-import { Styles } from 'docx';
 import MonitorContent from '../../../components/MonitorContent/index';
 
 const {
