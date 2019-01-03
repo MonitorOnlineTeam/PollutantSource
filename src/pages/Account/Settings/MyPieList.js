@@ -123,8 +123,8 @@ class MyPieList extends Component {
    }
 
    render() {
-       const ListContent = ({ data: { OperationUserName, CreateTime, TaskStatus, TaskStatusText } }) => (
-           <div className={styles.listContent}>
+       const ListContent = ({ data: { OperationUserName, CreateTime, TaskStatus, TaskStatusText,TaskID } }) => (
+           <div className={styles.listContent} key={TaskID}>
                <div className={styles.listContentItem}>
                    <span>执行人</span>
                    <p>{OperationUserName}</p>
