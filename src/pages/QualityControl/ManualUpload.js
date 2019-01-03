@@ -259,7 +259,7 @@ export default class ManualUpload extends Component {
         const rtnVal = [];
         if (this.props.polltuantTypeList.length !== 0) {
             this.props.polltuantTypeList.map((item) => {
-                rtnVal.push(<TabPane tab={this.getIcon(item.PollutantTypeCode, item.PollutantTypeName)} className={styles.TabPane} key={item.PollutantTypeCode}>
+                rtnVal.push(<TabPane tab={this.getIcon(item.PollutantTypeCode, item.PollutantTypeName)}  key={item.PollutantTypeCode}>
                     <div style={{ marginTop: 15 }}>
                         <TreeCard getHeight={'calc(100vh - 220px)'} getStatusImg={this.getStatusImg} isloading={this.props.treedataloading} treeCilck={this.treeCilck} treedatalist={this.props.datalist} PollutantType={item.PollutantTypeCode} />
                     </div>
@@ -432,7 +432,7 @@ export default class ManualUpload extends Component {
                                     style={{ width: 200 }} />
                             </div>
                             <div>
-                                <Tabs type="card" size="large" tabBarStyle={{ width: '100%' }} onChange={this.TabsOnChange}>
+                                <Tabs type="card"  tabBarStyle={{ width: '100%' }} onChange={this.TabsOnChange}>
                                     {this.tabList()}
                                 </Tabs>
                             </div>

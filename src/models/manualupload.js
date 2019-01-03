@@ -1,6 +1,6 @@
 import { Model } from '../dvapack';
 import { } from '../services/videodata';
-import { uploadfiles, GetPollutantByPoint, GetManualSupplementList, UploadTemplate, getUploadTemplate, GetAllPollutantTypes, addGetPollutantByPoint, AddUploadFiles, GetUnitByPollutant, DeleteUploadFiles, UpdateManualSupplementData, getPollutantTypeList } from '../services/manualuploadapi';
+import { uploadfiles, GetPollutantByPoint, GetManualSupplementList, getUploadTemplate, GetAllPollutantTypes, addGetPollutantByPoint, AddUploadFiles, GetUnitByPollutant, DeleteUploadFiles, UpdateManualSupplementData, getPollutantTypeList } from '../services/manualuploadapi';
 
 export default Model.extend({
     namespace: 'manualupload',
