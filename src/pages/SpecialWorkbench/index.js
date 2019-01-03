@@ -240,7 +240,7 @@ class SpecialWorkbench extends Component {
             const labelDiv=<div style={{color:`${color}`}}>已发生{hour}小时{minutesLable}</div>;
             const btnDiv=hour>= 4 ?(<div style={{marginTop:43}}>
                 <Button style={{width:100,border:'none',backgroundColor:'rgb(74,210,187)'}} type="primary">督办</Button>
-                                    </div>):'';
+            </div>):'';
             listData.push({
                 href: 'http://ant.design',
                 title: `${item.PointName}`,
@@ -258,7 +258,7 @@ class SpecialWorkbench extends Component {
                         {/* <div>首次报警时间：2018-12-27</div>
                         <div>报警总次数：<span style={{fontWeight:'bold'}}>98</span></div> */}
                     </div>
-                </div>),
+                              </div>),
                 content: '',
                 extra:(
                     <div style={{marginTop:30,marginRight:70,textAlign:'center'}}>
@@ -344,7 +344,7 @@ class SpecialWorkbench extends Component {
                 dataIndex: 'opt',
                 render: (text, record) => (
                     <a onClick={
-                        () => this.props.dispatch(routerRedux.push(`/TaskDetail/EmergencyDetailInfo/${record.TaskID}`))
+                        () => this.props.dispatch(routerRedux.push(`/TaskDetail/EmergencyDetailInfo/workbench/nop/${record.TaskID}`))
                     }
                     > 详情
                     </a>
@@ -425,6 +425,7 @@ class SpecialWorkbench extends Component {
      * 智能质控_渲染图表
      */
     getOption = (type) => {
+        console.log('rateStatistics',this.props.rateStatistics);
         const {model}=this.props.rateStatistics;
         let networkeRate=(parseFloat(model.NetworkeRate) * 100).toFixed(2);
         let runningRate=(parseFloat(model.RunningRate) * 100).toFixed(2);
@@ -723,7 +724,7 @@ class SpecialWorkbench extends Component {
             <span style={{marginRight:20}}>离线:<span style={{marginLeft:5,color:'rgb(244,5,4)'}}>{model.OffLine}</span></span>
             <span style={{marginRight:20}}>异常:<span style={{marginLeft:5,color:'gold'}}>{model.ExceptionNum}</span></span>
             <span style={{marginRight:20}}>关停:<span style={{marginLeft:5,color:'rgb(208,145,14)'}}>{model.StopNum}</span></span>
-               </span>;
+        </span>;
     }
 
     render() {
@@ -827,7 +828,7 @@ class SpecialWorkbench extends Component {
                                         extra={<a
                                             href="/qualitycontrol/equipmentoperatingrate"
                                         >更多>>
-                                               </a>}
+                                        </a>}
                                     >
                                         <Card.Grid style={gridStyle}>
                                             {/* 十月设备运转率 */}
@@ -858,7 +859,7 @@ class SpecialWorkbench extends Component {
                                         extra={<a
                                             href="/qualitycontrol/transmissionefficiency"
                                         >更多>>
-                                        </a>}
+                                               </a>}
                                     >
                                         <Card.Grid style={gridStyle} loading={this.props.loadingRateStatistics}>
                                             {/* 十月传输有效率 */}
