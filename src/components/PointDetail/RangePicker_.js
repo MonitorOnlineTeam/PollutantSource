@@ -44,14 +44,15 @@ class RangePicker_ extends Component {
             To: dateStrings[1]
         });
     }
-    
+
     render() {
-        
+
         return (
             <RangePicker
                 showTime={this.state.showTime}
                 value={this.props.dateValue}
                 onChange={this.props.onChange}
+                onOk={this.props.onOk}
                 ranges={this.state.ranges}
                 format={this.state.dateFormat}
                 disabled={this.props.disabled}
