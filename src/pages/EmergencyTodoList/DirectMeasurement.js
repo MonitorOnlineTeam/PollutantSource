@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import { Button, Icon,Spin } from 'antd';
+import { Button, Icon,Spin,Card } from 'antd';
 import styles from '../EmergencyTodoList/DirectMeasurement.less';
 import { connect } from 'dva';
 import MonitorContent from '../../components/MonitorContent/index';
 @connect(({ task, loading }) => ({
+    isloading: loading.effects['task/GetPatrolRecordListPC'],
     PatrolRecordListPC: task.PatrolRecordListPC
 }))
 
@@ -15,6 +16,7 @@ class DirectMeasurement extends Component {
     constructor(props) {
         super(props);
         this.state = {
+
         };
     }
     componentDidMount() {
@@ -159,6 +161,36 @@ class DirectMeasurement extends Component {
         }
         return rtnValChildren;
     }
+                //生成面包屑
+                renderBreadCrumb=()=>{
+                    const rtnVal = [];
+                    let listUrl=this.props.match.params.viewtype;
+                    let taskID=this.props.match.params.TaskID;
+                    let DGIMN=this.props.match.params.pointcode;
+                    let taskfrom=this.props.match.params.taskfrom;
+                    let histroyrecordtype=this.props.match.params.histroyrecordtype;
+                    rtnVal.push({Name:'首页',Url:'/'},);
+                    switch(listUrl){
+            case 'datalistview':    //数据一栏
+            rtnVal.push({Name:'数据一览',Url:`/overview/${listUrl}`},);
+            break;
+            case 'mapview':         //地图一栏
+            rtnVal.push({Name:'地图一栏',Url:`/overview/${listUrl}`},);
+            break;
+            case '':                //工作台
+            break;
+            default:
+            break;
+                    }
+                    if(taskfrom==='ywdsjlist'){
+                        rtnVal.push({Name:'运维大事记',Url:`/pointdetail/${DGIMN}/${listUrl}/${taskfrom}`},);
+                        rtnVal.push({Name:'任务详情',Url:`/TaskDetail/emergencydetailinfo/${listUrl}/${taskfrom}/${taskID}`},);
+                    }else if(taskfrom==='qcontrollist'){
+                        rtnVal.push({Name:'质控记录',Url:`/pointdetail/${DGIMN}/${listUrl}/${taskfrom}/${histroyrecordtype}`},);
+                    }
+                    rtnVal.push({Name:'CEMS日常巡检记录表',Url:''});
+                    return rtnVal;
+                }
     render() {
         const SCREEN_HEIGHT = document.querySelector('body').offsetHeight - 250;
         const DataLength = this.props.PatrolRecordListPC.length;
@@ -190,7 +222,21 @@ class DirectMeasurement extends Component {
             KlwCemsEquipmentManufacturer = DataLength === 0 ? null : Repair.Record[0].Content.KlwCemsEquipmentManufacturer;
         }
         return (
-            <Spin spinning={this.state.loading}>
+            <MonitorContent
+                {...this.props}
+                breadCrumbList={this.renderBreadCrumb()}
+            >
+                <Card
+                    title={<span style={{fontWeight: '900'}}>运维表单</span>}
+                    extra={
+                        <Button
+                            style={{float:"right",marginRight:30}}
+                            onClick={() => {
+                                this.props.history.goBack(-1);
+                            }}
+                        ><Icon type="left" />退回
+                        </Button>}
+                >
                 <div className={styles.FormDiv} style={{ height: SCREEN_HEIGHT }}>
                     <div className={styles.FormName}>直接测量法CEMS日常巡检记录表</div>
                     <table className={styles.FormTable}>
@@ -256,7 +302,8 @@ class DirectMeasurement extends Component {
                         }}><Icon type="left" />退回</Button>
                     </div>
                 </div>
-            </Spin>
+                </Card>
+            </MonitorContent>
         );
     }
 }
