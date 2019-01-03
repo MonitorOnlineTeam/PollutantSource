@@ -97,7 +97,11 @@ class StandardGasRepalceRecord extends Component {
                         case 'mapview': //地图一栏
                             rtnVal.push({Name:'地图一栏',Url:`/overview/${listUrl}`},);
                             break;
-                        case '': //工作台
+                        case 'pielist': //我的派单
+                            rtnVal.push({Name:'我的派单',Url:`/account/settings/mypielist`},);
+                            break;
+                        case 'workbench': //工作台
+                            rtnVal.push({Name:'工作台',Url:`/${listUrl}`},);
                             break;
                         default:
                             break;
@@ -198,11 +202,11 @@ class StandardGasRepalceRecord extends Component {
                                 title={<span style={{fontWeight: '900'}}>运维表单</span>}
                                 extra={
                                     <Button
-                                                style={{float:"right",marginRight:30}}
-                                                onClick={() => {
+                                        style={{float:"right",marginRight:30}}
+                                        onClick={() => {
                                             this.props.history.goBack(-1);
                                         }}
-    ><Icon type="left" />退回
+                                    ><Icon type="left" />退回
                                     </Button>}
                             >
                                 <div className={styles.FormDiv} style={{ height: SCREEN_HEIGHT }}>

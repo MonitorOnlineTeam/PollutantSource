@@ -115,7 +115,7 @@ class MonitoringReport extends Component {
             {
                 list.yearlist.map((item,key)=>{
                     res.push( <div key={key} onClick={()=>this.showPdf(item)} className={styles.reportdiv}>
-                        <li><img className={styles.reportimg} src='../../../report.png' /></li>
+                        <li><img className={styles.reportimg} src='/report.png' /></li>
                         <li className={styles.reportcontent}>{item}</li>
                     </div>)
                 })
@@ -124,7 +124,7 @@ class MonitoringReport extends Component {
             {
                 list.seasonlist.map(item=>{
                     res.push( <div key={key} onClick={()=>this.showPdf(item)} className={styles.reportdiv}>
-                        <li><img className={styles.reportimg} src='../../../report.png' /></li>
+                        <li><img className={styles.reportimg} src='/report.png' /></li>
                         <li className={styles.reportcontent}>{item}</li>
                     </div>)
                 })
@@ -133,7 +133,7 @@ class MonitoringReport extends Component {
             {
                 list.monthlist.map(item=>{
                     res.push( <div key={key} onClick={()=>this.showPdf(item)} className={styles.reportdiv}>
-                        <li><img className={styles.reportimg} src='../../../report.png' /></li>
+                        <li><img className={styles.reportimg} src='/report.png' /></li>
                         <li className={styles.reportcontent}>{item}</li>
                     </div>)
                 })

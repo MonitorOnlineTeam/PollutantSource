@@ -44,7 +44,7 @@ export default class files extends Component {
                    <Icon type={item.FileType} style={{fontSize: 60}} />
                </Button>
                <br />
-               <a href={'../../../upload/' + item.FileName} title={'点击下载文件-' + item.FileName}>{item.SubFileName}</a>
+               <a href={'/upload/' + item.FileName} title={'点击下载文件-' + item.FileName}>{item.SubFileName}</a>
            </Col>);
        });
        return rtnVal;

@@ -180,13 +180,13 @@ class OverViewMap extends PureComponent {
 
    getStatusImg=(value) => {
     if (value === 0) {
-        return <img style={{width:15}} src="../../../gisunline.png" />;
+        return <img style={{width:15}} src="/gisunline.png" />;
     } if (value === 1) {
-        return <img style={{width:15}} src="../../../gisnormal.png" />;
+        return <img style={{width:15}} src="/gisnormal.png" />;
     } if (value === 2) {
-        return <img style={{width:15}} src="../../../gisover.png" />;
+        return <img style={{width:15}} src="/gisover.png" />;
     }
-    return <img style={{width:15}} src="../../../gisexception.png" />;
+    return <img style={{width:15}} src="/gisexception.png" />;
 }
 
    render() {
@@ -290,13 +290,13 @@ class OverViewMap extends PureComponent {
                events={this.markersEvents}
                render={(extData) => {
                            if (extData.status === 0) {
-                               return <img style={{width:15}} src="../../../gisunline.png" />;
+                               return <img style={{width:15}} src="/gisunline.png" />;
                            } if (extData.status === 1) {
-                               return <img style={{width:15}} src="../../../gisnormal.png" />;
+                               return <img style={{width:15}} src="/gisnormal.png" />;
                            } if (extData.status === 2) {
-                               return <img style={{width:15}} src="../../../gisover.png" />;
+                               return <img style={{width:15}} src="/gisover.png" />;
                            }
-                           return <img style={{width:15}} src="../../../gisexception.png" />;
+                           return <img style={{width:15}} src="/gisexception.png" />;
                        }}
              />
              <InfoWindow

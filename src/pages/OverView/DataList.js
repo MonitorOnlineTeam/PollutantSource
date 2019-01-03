@@ -103,13 +103,13 @@ class dataList extends PureComponent {
             fixed: 'left',
             render: (value, record, index) => {
                 if (value === 0) {
-                    return <img style={{width:15}} src="../../../gisunline.png" />;
+                    return <img style={{width:15}} src="/gisunline.png" />;
                 } if (value === 1) {
-                    return <img style={{width:15}} src="../../../gisnormal.png" />;
+                    return <img style={{width:15}} src="/gisnormal.png" />;
                 } if (value === 2) {
-                    return <img style={{width:15}} src="../../../gisover.png" />;
+                    return <img style={{width:15}} src="/gisover.png" />;
                 }
-                return <img style={{width:15}} src="../../../gisexception.png" />;
+                return <img style={{width:15}} src="/gisexception.png" />;
             },
         }, {
             title: '排口',
@@ -218,10 +218,10 @@ class dataList extends PureComponent {
                                 <Button style={{ marginRight: 10 }}><Icon type="user" style={{ color: '#3B91FF' }} /> 运维中</Button>
                                 <Button style={{ marginRight: 20 }}><span style={{ fontSize: 16, color: '#ffca00' }}>■</span> 传输有效率不达标</Button>
                                 <Radio.Group>
-                                    <Radio.Button value="normal"><img style={{width:15}} src="../../../gisnormal.png" /> 正常</Radio.Button>
-                                    <Radio.Button value="over"><img style={{width:15}} src="../../../gisover.png" /> 超标</Radio.Button>
-                                    <Radio.Button value="underline"><img style={{width:15}} src="../../../gisunline.png" /> 离线</Radio.Button>
-                                    <Radio.Button value="exception"><img style={{width:15}} src="../../../gisexception.png" /> 异常</Radio.Button>
+                                    <Radio.Button value="normal"><img style={{width:15}} src="/gisnormal.png" /> 正常</Radio.Button>
+                                    <Radio.Button value="over"><img style={{width:15}} src="/gisover.png" /> 超标</Radio.Button>
+                                    <Radio.Button value="underline"><img style={{width:15}} src="/gisunline.png" /> 离线</Radio.Button>
+                                    <Radio.Button value="exception"><img style={{width:15}} src="/gisexception.png" /> 异常</Radio.Button>
                                 </Radio.Group>
                                 <AListRadio style={{ float: 'right' }} dvalue="b" />
                             </div>

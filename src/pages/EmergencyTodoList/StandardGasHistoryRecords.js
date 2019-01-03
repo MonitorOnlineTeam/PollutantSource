@@ -145,7 +145,7 @@ export default class StandardGasHistoryRecords extends Component {
                     <Table
                         size="middle"
                         scroll={{ y: 'calc(100vh - 465px)' }}
-                        loading={this.props.loading}
+                        loading={this.props.isloading}
                         className={styles.dataTable}
                         columns={columns}
                         dataSource={dataSource}

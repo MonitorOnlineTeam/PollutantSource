@@ -715,7 +715,7 @@ class SpecialWorkbench extends Component {
      * 智能监控_地图点位渲染样式
      */
     renderMarkerLayout(extData){
-        return <div style={{position:'absolute'}}><div style={MarkerLayoutStyle}>{extData.position.PointName}</div><img style={{width:15}} src="../../../gisover.png" /></div>;
+        return <div style={{position:'absolute'}}><div style={MarkerLayoutStyle}>{extData.position.PointName}</div><img style={{width:15}} src="/gisover.png" /></div>;
     }
 
     /**

@@ -177,16 +177,20 @@ class DilutionSampling extends Component {
                     let histroyrecordtype=this.props.match.params.histroyrecordtype;
                     rtnVal.push({Name:'首页',Url:'/'},);
                     switch(listUrl){
-            case 'datalistview':    //数据一栏
-            rtnVal.push({Name:'数据一览',Url:`/overview/${listUrl}`},);
-            break;
-            case 'mapview':         //地图一栏
-            rtnVal.push({Name:'地图一栏',Url:`/overview/${listUrl}`},);
-            break;
-            case '':                //工作台
-            break;
-            default:
-            break;
+                        case 'datalistview': //数据一栏
+                            rtnVal.push({Name:'数据一览',Url:`/overview/${listUrl}`},);
+                            break;
+                        case 'mapview': //地图一栏
+                            rtnVal.push({Name:'地图一栏',Url:`/overview/${listUrl}`},);
+                            break;
+                        case 'pielist': //我的派单
+                            rtnVal.push({Name:'我的派单',Url:`/account/settings/mypielist`},);
+                            break;
+                        case 'workbench': //工作台
+                            rtnVal.push({Name:'工作台',Url:`/${listUrl}`},);
+                            break;
+                        default:
+                            break;
                     }
                     if(taskfrom==='ywdsjlist'){
                         rtnVal.push({Name:'运维大事记',Url:`/pointdetail/${DGIMN}/${listUrl}/${taskfrom}`},);
@@ -198,125 +202,125 @@ class DilutionSampling extends Component {
                     return rtnVal;
                 }
 
-    render() {
-        const SCREEN_HEIGHT = document.querySelector('body').offsetHeight - 250;
-        const DataLength = this.props.PatrolRecordListPC.length;
-        const Repair = DataLength === 0 ? null : this.props.PatrolRecordListPC[0];
-        let EnterpriseName = null;
-        let PointPosition = null;
-        let Record = null;
-        let SignContent = null;
-        let SignTime = null;
-        let PatrolDate = null; //巡检日期
-        let GasCemsEquipmentManufacturer = null;
-        let KlwCemsEquipmentManufacturer = null;
-        let KlwCemsCode = null;
-        let GasCemsCode = null;
-        let MaintenanceManagementUnit = null;
-        let ExceptionHandling = null;
-        if (Repair !== null) {
-            Record = Repair.Record[0];
-            EnterpriseName = DataLength === 0 ? null : Repair.Record[0].Content.EnterpriseName;
-            SignContent = Record.SignContent === null ? null : `data:image/jpeg;base64,${Record.SignContent}`;
-            SignTime = Record.SignTime;
-            PatrolDate = DataLength === 0 ? null : Repair.Record.length === 0 ? null : Repair.Record[0].Content.PatrolDate;
-            GasCemsEquipmentManufacturer = DataLength === 0 ? null : Repair.Record[0].Content.GasCemsEquipmentManufacturer;
-            GasCemsCode = DataLength === 0 ? null : Repair.Record[0].Content.GasCemsCode;
-            PointPosition = DataLength === 0 ? null : Repair.Record[0].Content.PointPosition;
-            MaintenanceManagementUnit = DataLength === 0 ? null : Repair.Record[0].Content.MaintenanceManagementUnit;
-            ExceptionHandling = DataLength === 0 ? null : Repair.Record[0].Content.ExceptionHandling;
-            KlwCemsCode = DataLength === 0 ? null : Repair.Record[0].Content.KlwCemsCode;
-            KlwCemsEquipmentManufacturer = DataLength === 0 ? null : Repair.Record[0].Content.KlwCemsEquipmentManufacturer;
-        }
-        if (this.props.isloading) {
-            return (<Spin
-                style={{ width: '100%',
-                    height: 'calc(100vh/2)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center' }}
-                size="large"
-            />);
-        }
-        return (
-            <MonitorContent
-                {...this.props}
-                breadCrumbList={this.renderBreadCrumb()}
-            >
-                <Card
-                    title={<span style={{fontWeight: '900'}}>运维表单</span>}
-                    extra={
-                        <Button
-                            style={{float:"right",marginRight:30}}
-                            onClick={() => {
-                                this.props.history.goBack(-1);
-                            }}
-                        ><Icon type="left" />退回
-                        </Button>}
-                >
-                    <div className={styles.FormDiv} style={{ height: SCREEN_HEIGHT }}>
-                        <div className={styles.FormName}>稀释采样法CEMS日常巡检记录表</div>
-                        <table className={styles.FormTable}>
-                            <tr>
-                                <td style={{ width: '50%', height: '50px', textAlign: 'left' ,fontSize: '14px',fontWeight: 'bold' }}>企业名称：{EnterpriseName}</td>
-                                <td style={{ width: '50%', height: '50px', textAlign: 'left' ,fontSize: '14px',fontWeight: 'bold' }}> 巡检日期：{PatrolDate}</td>
-                            </tr>
+                render() {
+                    const SCREEN_HEIGHT = document.querySelector('body').offsetHeight - 250;
+                    const DataLength = this.props.PatrolRecordListPC.length;
+                    const Repair = DataLength === 0 ? null : this.props.PatrolRecordListPC[0];
+                    let EnterpriseName = null;
+                    let PointPosition = null;
+                    let Record = null;
+                    let SignContent = null;
+                    let SignTime = null;
+                    let PatrolDate = null; //巡检日期
+                    let GasCemsEquipmentManufacturer = null;
+                    let KlwCemsEquipmentManufacturer = null;
+                    let KlwCemsCode = null;
+                    let GasCemsCode = null;
+                    let MaintenanceManagementUnit = null;
+                    let ExceptionHandling = null;
+                    if (Repair !== null) {
+                        Record = Repair.Record[0];
+                        EnterpriseName = DataLength === 0 ? null : Repair.Record[0].Content.EnterpriseName;
+                        SignContent = Record.SignContent === null ? null : `data:image/jpeg;base64,${Record.SignContent}`;
+                        SignTime = Record.SignTime;
+                        PatrolDate = DataLength === 0 ? null : Repair.Record.length === 0 ? null : Repair.Record[0].Content.PatrolDate;
+                        GasCemsEquipmentManufacturer = DataLength === 0 ? null : Repair.Record[0].Content.GasCemsEquipmentManufacturer;
+                        GasCemsCode = DataLength === 0 ? null : Repair.Record[0].Content.GasCemsCode;
+                        PointPosition = DataLength === 0 ? null : Repair.Record[0].Content.PointPosition;
+                        MaintenanceManagementUnit = DataLength === 0 ? null : Repair.Record[0].Content.MaintenanceManagementUnit;
+                        ExceptionHandling = DataLength === 0 ? null : Repair.Record[0].Content.ExceptionHandling;
+                        KlwCemsCode = DataLength === 0 ? null : Repair.Record[0].Content.KlwCemsCode;
+                        KlwCemsEquipmentManufacturer = DataLength === 0 ? null : Repair.Record[0].Content.KlwCemsEquipmentManufacturer;
+                    }
+                    if (this.props.isloading) {
+                        return (<Spin
+                            style={{ width: '100%',
+                                height: 'calc(100vh/2)',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center' }}
+                            size="large"
+                        />);
+                    }
+                    return (
+                        <MonitorContent
+                            {...this.props}
+                            breadCrumbList={this.renderBreadCrumb()}
+                        >
+                            <Card
+                                title={<span style={{fontWeight: '900'}}>运维表单</span>}
+                                extra={
+                                    <Button
+                                        style={{float:"right",marginRight:30}}
+                                        onClick={() => {
+                                            this.props.history.goBack(-1);
+                                        }}
+                                    ><Icon type="left" />退回
+                                    </Button>}
+                            >
+                                <div className={styles.FormDiv} style={{ height: SCREEN_HEIGHT }}>
+                                    <div className={styles.FormName}>稀释采样法CEMS日常巡检记录表</div>
+                                    <table className={styles.FormTable}>
+                                        <tr>
+                                            <td style={{ width: '50%', height: '50px', textAlign: 'left' ,fontSize: '14px',fontWeight: 'bold' }}>企业名称：{EnterpriseName}</td>
+                                            <td style={{ width: '50%', height: '50px', textAlign: 'left' ,fontSize: '14px',fontWeight: 'bold' }}> 巡检日期：{PatrolDate}</td>
+                                        </tr>
 
-                        </table>
-                        <table className={styles.FormTable}>
-                            <tbody>
-                                <tr>
-                                    <td style={{ width: '50%', height: '50px', textAlign: 'left' ,fontSize: '14px' }}>{GasCemsEquipmentManufacturer}</td>
-                                    <td style={{ width: '50%', height: '50px', textAlign: 'left' ,fontSize: '14px' }}>{GasCemsCode}</td>
-                                </tr>
-                                <tr>
-                                    <td style={{ width: '50%', height: '50px', textAlign: 'left' ,fontSize: '14px' }}>{KlwCemsEquipmentManufacturer}</td>
-                                    <td style={{ width: '50%', height: '50px', textAlign: 'left' ,fontSize: '14px' }}>{KlwCemsCode}</td>
-                                </tr>
-                                <tr>
-                                    <td style={{ width: '50%', height: '50px', textAlign: 'left' ,fontSize: '14px' }}>{PointPosition}</td>
-                                    <td style={{ width: '50%', height: '50px', textAlign: 'left' ,fontSize: '14px' }}>{MaintenanceManagementUnit}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <div className={styles.HeadDiv} style={{ fontWeight: 'bold' }}>运行维护内容及处理说明：</div>
-                        <table className={styles.FormTable}>
-                            <tbody>
-                                <tr>
-                                    <td style={{ width: '20%', height: '50px', textAlign: 'center' ,fontSize: '14px' }}>项目</td>
-                                    <td style={{ width: '40%', height: '50px', textAlign: 'center' ,fontSize: '14px' }}>内容</td>
-                                    <td style={{ width: '20%', height: '50px', textAlign: 'center' ,fontSize: '14px' }}>维护情况</td>
-                                    <td style={{ width: '20%', height: '50px', textAlign: 'center' ,fontSize: '14px' }}>备注</td>
-                                </tr>
-                                {
-                                    this.renderItem(Repair)
-                                }
-                                <tr>
-                                    <td style={{ width: '18%', height: '50px', textAlign: 'center',fontSize: '14px' }}>
+                                    </table>
+                                    <table className={styles.FormTable}>
+                                        <tbody>
+                                            <tr>
+                                                <td style={{ width: '50%', height: '50px', textAlign: 'left' ,fontSize: '14px' }}>{GasCemsEquipmentManufacturer}</td>
+                                                <td style={{ width: '50%', height: '50px', textAlign: 'left' ,fontSize: '14px' }}>{GasCemsCode}</td>
+                                            </tr>
+                                            <tr>
+                                                <td style={{ width: '50%', height: '50px', textAlign: 'left' ,fontSize: '14px' }}>{KlwCemsEquipmentManufacturer}</td>
+                                                <td style={{ width: '50%', height: '50px', textAlign: 'left' ,fontSize: '14px' }}>{KlwCemsCode}</td>
+                                            </tr>
+                                            <tr>
+                                                <td style={{ width: '50%', height: '50px', textAlign: 'left' ,fontSize: '14px' }}>{PointPosition}</td>
+                                                <td style={{ width: '50%', height: '50px', textAlign: 'left' ,fontSize: '14px' }}>{MaintenanceManagementUnit}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <div className={styles.HeadDiv} style={{ fontWeight: 'bold' }}>运行维护内容及处理说明：</div>
+                                    <table className={styles.FormTable}>
+                                        <tbody>
+                                            <tr>
+                                                <td style={{ width: '20%', height: '50px', textAlign: 'center' ,fontSize: '14px' }}>项目</td>
+                                                <td style={{ width: '40%', height: '50px', textAlign: 'center' ,fontSize: '14px' }}>内容</td>
+                                                <td style={{ width: '20%', height: '50px', textAlign: 'center' ,fontSize: '14px' }}>维护情况</td>
+                                                <td style={{ width: '20%', height: '50px', textAlign: 'center' ,fontSize: '14px' }}>备注</td>
+                                            </tr>
+                                            {
+                                                this.renderItem(Repair)
+                                            }
+                                            <tr>
+                                                <td style={{ width: '18%', height: '50px', textAlign: 'center',fontSize: '14px' }}>
                                 异常情况处理
-                                    </td>
-                                    <td colSpan="3" style={{textAlign: 'center',fontSize: '14px'}}>
-                                        {ExceptionHandling}
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <table className={styles.FormTable}>
-                            <tbody>
-                                <tr>
-                                    <td style={{ width: '87%', height: '50px', textAlign: 'right', border: '0', fontWeight: 'bold' }}>负责人签名：</td>
-                                    <td style={{ width: '13%', height: '50px', border: '0' }}><img src={SignContent} /></td>
-                                </tr>
-                                <tr>
-                                    <td style={{ width: '87%', height: '50px', textAlign: 'right', border: '0', fontWeight: 'bold' }}>签名时间：</td>
-                                    <td style={{ width: '13%', height: '50px', border: '0' }}>{SignTime}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </Card>
-            </MonitorContent>
-        );
-    }
+                                                </td>
+                                                <td colSpan="3" style={{textAlign: 'center',fontSize: '14px'}}>
+                                                    {ExceptionHandling}
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <table className={styles.FormTable}>
+                                        <tbody>
+                                            <tr>
+                                                <td style={{ width: '87%', height: '50px', textAlign: 'right', border: '0', fontWeight: 'bold' }}>负责人签名：</td>
+                                                <td style={{ width: '13%', height: '50px', border: '0' }}><img src={SignContent} /></td>
+                                            </tr>
+                                            <tr>
+                                                <td style={{ width: '87%', height: '50px', textAlign: 'right', border: '0', fontWeight: 'bold' }}>签名时间：</td>
+                                                <td style={{ width: '13%', height: '50px', border: '0' }}>{SignTime}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </Card>
+                        </MonitorContent>
+                    );
+                }
 }
 export default DilutionSampling;

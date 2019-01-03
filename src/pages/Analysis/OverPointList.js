@@ -107,8 +107,8 @@ class OverPointList extends Component {
            res.push(<Col key={item.pointName} span={8} >
             <div className={styles.cardcss}>
                 <div className={styles.cardtitle}> 
-                    <img style={{width: 20, marginRight: 10, marginBottom: 4}} src='../../../star.png' />  <span>{item.pointName}</span>
-                    <span  className={styles.timetitle} > <img style={{width: 15, marginRight: 10, marginBottom: 4}} src="../../../treetime.png" />
+                    <img style={{width: 20, marginRight: 10, marginBottom: 4}} src='/star.png' />  <span>{item.pointName}</span>
+                    <span  className={styles.timetitle} > <img style={{width: 15, marginRight: 10, marginBottom: 4}} src="/treetime.png" />
                     <span> 最新超标时间：{item.lastTime} </span>
                     </span>
                 </div>
