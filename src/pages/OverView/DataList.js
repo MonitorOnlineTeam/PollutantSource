@@ -18,10 +18,11 @@ class dataList extends PureComponent {
         super(props);
         this.state = {
             pdvisible: false,
+            radioval:null,
             nowdate: moment(new Date()).add(-1, 'hour'),
         };
     }
-
+    //页面初始化
     componentDidMount() {
         this.props.dispatch({
             type: 'overview/querypollutanttypecode',
@@ -33,7 +34,8 @@ class dataList extends PureComponent {
             }
         });
     }
-
+    
+    //时间更改
     pickerChange=(time, timeString) => {
         if (time) {
             this.setState({
@@ -48,23 +50,51 @@ class dataList extends PureComponent {
             });
         }
     }
+    
 
+    //派单窗口关闭
     onCancel=() => {
         this.setState({
             pdvisible: false,
         });
     }
+    
+    //状态搜索
+    radioChange=(value)=>{
+        const radioval=value.target.value;
+     //   alert(radioval);
+        // this.setState({
+        //           radioval
+        //        })
+       
+        if(radioval==this.state.radioval)
+        {
+            alert(1)
+            this.setState({
+                radioval:null
+            })
+        }
+        else
+        {
+            alert(2)
+            this.setState({
+                radioval
+            })
+        }
 
+    }
+
+    //催办
     urge=()=>{
         this.props.dispatch({
-            type: 'overview/queryoptionDataOnClick',
+            type: 'overview/queryurge',
             payload: {
                 personId:this.state.selectpoint.operationUserID,
                 DGIMN: this.state.selectpoint.DGIMN
             }
         });
-    }
-
+       }
+    //获取详情按钮
     gerpointButton=(record) => (<div>
         <li style={{ listStyle: 'none', marginBottom: 5 }}>
             <Button onClick={() => {
@@ -93,7 +123,8 @@ class dataList extends PureComponent {
                                 </div>)
 
     render() {
-        console.log(this.props.data);
+        const radioval=this.state;
+
         let columns = [{
             title: '状态',
             dataIndex: 'status',
@@ -217,7 +248,7 @@ class dataList extends PureComponent {
                             <div style={{ width: 'calc(100vw - 220px)',marginLeft: 60 }}>
                                 <Button style={{ marginRight: 10 }}><Icon type="user" style={{ color: '#3B91FF' }} /> 运维中</Button>
                                 <Button style={{ marginRight: 20 }}><span style={{ fontSize: 16, color: '#ffca00' }}>■</span> 传输有效率不达标</Button>
-                                <Radio.Group>
+                                <Radio.Group onClick={this.radioChange}   value={this.state.radioval}>
                                     <Radio.Button value="normal"><img style={{width:15}} src="../../../gisnormal.png" /> 正常</Radio.Button>
                                     <Radio.Button value="over"><img style={{width:15}} src="../../../gisover.png" /> 超标</Radio.Button>
                                     <Radio.Button value="underline"><img style={{width:15}} src="../../../gisunline.png" /> 离线</Radio.Button>

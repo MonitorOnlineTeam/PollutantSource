@@ -15,28 +15,29 @@ class addepinfo extends PureComponent {
         super(props);
         const _this = this;
         this.state = {
-            rangeDate: this.props.defaultvalue ? [moment(this.props.defaultvalue.effectivetime.split(' - ')[0]),
-                moment(this.props.defaultvalue.effectivetime.split(' - ')[1])] : [],
+            rangeDate: this.props.row ? [moment(this.props.row.BeginTime),
+                moment(this.props.row.EndTime)] : [],
             img: ''
         };
-        this._handleDateChange = (date, dateString) => {
-            this.setState({
-                rangeDate: date,
-            });
-        };
-        this.uploadimg = (e) => {
-            console.log(e);
-        };
-        this.addbutton = () => {
-            const allvalue = this.props.form.getFieldsValue();
-            console.log(allvalue);
-            _this.props.dispatch({
-                type: 'baseinfo/queryaddeep',
-                payload: {...allvalue, ...this.props.defaultvalue}
-            });
-            _this.props.hideModal();
-        };
     }
+    _handleDateChange = (date, dateString) => {
+        this.setState({
+            rangeDate: date,
+        });
+    };
+    uploadimg = (e) => {
+        console.log(e);
+    };
+    addbutton = () => {
+        const allvalue = this.props.form.getFieldsValue();
+         
+        this.props.dispatch({
+            type: 'baseinfo/queryaddeep',
+            payload: {...allvalue,closemodal:this.props.closemodal()}
+        });
+       // this.props.hideModal();
+    };
+
     render() {
         const formItemLayout = {
             labelCol: {
