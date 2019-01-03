@@ -81,8 +81,8 @@ export default Model.extend({
         },
         allPointOverDataList:{
             tableDatas:[],
-            pageIndex: 1,
-            pageSize: 3,
+            // pageIndex: 1,
+            // pageSize: 3,
             total:0,
         },
         overPointList:{
@@ -248,11 +248,7 @@ export default Model.extend({
         * getAllPointOverDataList({payload}, { call, put, update, select }) {
             const {allPointOverDataList} = yield select(state => state.workbenchmodel);
             //debugger;
-            let body = {
-                pageSize: allPointOverDataList.pageSize,
-                pageIndex: allPointOverDataList.pageIndex,
-
-            };
+            let body = {};
             const response = yield call(getAllPointOverDataList, body);
             //debugger;
             yield update({
@@ -260,7 +256,7 @@ export default Model.extend({
                     ...allPointOverDataList,
                     ...{
                         tableDatas:response.data,
-                        pageIndex:allPointOverDataList.pageIndex || 1,
+                        // pageIndex:allPointOverDataList.pageIndex || 1,
                         total:response.total
                     }
                 }
