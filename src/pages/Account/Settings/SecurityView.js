@@ -32,19 +32,6 @@ class SecurityView extends Component {
               </a>,
           ],
       },
-      {
-          title:'帐号密码',
-          description: (
-              <Fragment>
-                  <span>当前密码强度：<Rate allowHalf={true} disabled={true} defaultValue={2.5} />一般</span>
-              </Fragment>
-          ),
-          actions: [
-              <a>
-                  修改
-              </a>,
-          ],
-      },
   ];
 
 onRef = (ref) => {
