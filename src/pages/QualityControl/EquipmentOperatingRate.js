@@ -174,7 +174,7 @@ export default class EquipmentOperatingRate extends Component {
                     console.log(`/pointdetail/${record.DGIMN}/ywdsjlist/${this.props.beginTime}/${this.props.endTime}`);
                     return (
                         <a onClick={
-                            () => this.props.dispatch(routerRedux.push(`/pointdetail/${record.DGIMN}/ywdsjlist/${this.props.beginTime}/${this.props.endTime}`))
+                            () => this.props.dispatch(routerRedux.push(`/pointdetail/${record.DGIMN}/equipmentoperatingrate/ywdsjlist`))
                         } > 查看运维 </a>
                     );
                 }

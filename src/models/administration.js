@@ -30,7 +30,9 @@ export default Model.extend({
             {
                 yield update({
                     spareparts:result.data,
-                    total:result.total
+                    total:result.total,
+                    pageIndex:payload.pageIndex,
+                    pageSize:payload.pageSize,
                 })
             }
             else
@@ -89,7 +91,9 @@ export default Model.extend({
        {
            yield update({
                standardgas:result.data,
-               total:result.total
+               total:result.total,
+               pageIndex:payload.pageIndex,
+               pageSize:payload.pageSize,
            })
        }
        else
@@ -148,7 +152,9 @@ export default Model.extend({
            {
                yield update({
                    CbFfTestEquipment:result.data,
-                   total:result.total
+                   total:result.total,
+                   pageIndex:payload.pageIndex,
+                   pageSize:payload.pageSize,
                })
            }
            else

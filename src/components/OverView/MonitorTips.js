@@ -6,7 +6,7 @@ import {
     Icon
 } from 'antd';
 import ReactEcharts from 'echarts-for-react';
-import img from '../../../public/timg.jpg';
+import img from '/public/timg.jpg';
 // import markerspoint from '../../mockdata/OverView/markersInfo.json';
 import AlarmTips from '../../components/OverView/AlarmTips';
 import AlarmButtom from '../../components/OverView/AlarmButtom';

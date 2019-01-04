@@ -52,6 +52,40 @@ export default class StopCemsInfo extends Component {
         }
         return rtnVal;
     }
+                //生成面包屑
+                renderBreadCrumb=()=>{
+                    const rtnVal = [];
+                    let listUrl=this.props.match.params.viewtype;
+                    let taskID=this.props.match.params.TaskID;
+                    let DGIMN=this.props.match.params.pointcode;
+                    let taskfrom=this.props.match.params.taskfrom;
+                    let histroyrecordtype=this.props.match.params.histroyrecordtype;
+                    rtnVal.push({Name:'首页',Url:'/'},);
+                    switch(listUrl){
+            case 'datalistview':    //数据一栏
+            rtnVal.push({Name:'数据一览',Url:`/overview/${listUrl}`},);
+            break;
+            case 'mapview':         //地图一栏
+            rtnVal.push({Name:'地图一栏',Url:`/overview/${listUrl}`},);
+            break;
+            case 'pielist': //我的派单
+            rtnVal.push({Name:'我的派单',Url:`/account/settings/mypielist`},);
+            break;
+            case 'workbench':    //工作台
+            rtnVal.push({Name:'工作台',Url:`/${listUrl}`},);
+            break;
+            default:
+            break;
+                    }
+                    if(taskfrom==='ywdsjlist'){
+                        rtnVal.push({Name:'运维大事记',Url:`/pointdetail/${DGIMN}/${listUrl}/${taskfrom}`},);
+                        rtnVal.push({Name:'任务详情',Url:`/TaskDetail/emergencydetailinfo/${listUrl}/${taskfrom}/${taskID}`},);
+                    }else if(taskfrom==='qcontrollist'){
+                        rtnVal.push({Name:'质控记录',Url:`/pointdetail/${DGIMN}/${listUrl}/${taskfrom}/${histroyrecordtype}`},);
+                    }
+                    rtnVal.push({Name:'CEMS停机记录表',Url:''});
+                    return rtnVal;
+                }
     render() {
         const SCREEN_HEIGHT = document.querySelector('body').offsetHeight - 250;
         const StopCems = this.props.StopCems;
@@ -86,17 +120,13 @@ export default class StopCemsInfo extends Component {
             />);
         }
         return (
-            <MonitorContent  {...this.props} breadCrumbList={[
-                {Name:'首页',Url:'/'},
-                {Name:'智能质控',Url:''},
-                {Name:'传输有效率',Url:''}
-            ]}>
+            <MonitorContent  {...this.props} breadCrumbList={this.renderBreadCrumb()}>
             <Card title={<span style={{fontWeight: '900'}}>任务详情</span>} extra={
             <Button style={{float:"right",marginRight:30}} onClick={() => {
                         this.props.history.goBack(-1);
                     }}><Icon type="left" />退回</Button>}>
                 <div className={styles.FormDiv} style={{ height: SCREEN_HEIGHT }}>
-                    <div className={styles.FormName}>CEMS 停机记录表</div>
+                    <div className={styles.FormName}>CEMS停机记录表</div>
                     <div className={styles.HeadDiv} style={{ fontWeight: 'bold' }}>企业名称：{EnterpriseName}</div>
                     <table className={styles.FormTable}>
                         <tbody>

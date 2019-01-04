@@ -11,7 +11,7 @@ import { connect } from 'dva';
 import {
     routerRedux
 } from 'dva/router';
-import RangePicker_ from '../../../components/PointDetail/RangePicker_';
+import RangePicker_ from '@/components/PointDetail/RangePicker_';
 import styles from './MyPieList.less';
 
 @connect(({
