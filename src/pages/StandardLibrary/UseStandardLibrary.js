@@ -107,7 +107,7 @@ export default class UseStandardLibrary extends Component {
                                          StandardLibraryID: item.key,
                                          Pvisible: true,
                                          title: item.Name + '中的污染物',
-                                       
+                                          width:'50%'
                                      });
                                  }}>
                               
@@ -257,6 +257,7 @@ export default class UseStandardLibrary extends Component {
                          total={this.props.total}
                          current={this.props.pageIndex}
                          onChange={this.onChange}
+                         size = "small"
                      />
                  </div>
                  <div className={styles.pageHeader}>

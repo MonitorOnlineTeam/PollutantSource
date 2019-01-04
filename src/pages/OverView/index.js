@@ -75,7 +75,8 @@ class OverViewMap extends PureComponent {
     };
 
      stationClick = () => {
-         this.props.dispatch(routerRedux.push(`/pointdetail/${this.state.selectpoint.DGIMN}`));
+        let viewtype='mapview';
+         this.props.dispatch(routerRedux.push(`/pointdetail/${this.state.selectpoint.DGIMN}/${viewtype}`));
      };
 
     markersEvents = {
@@ -166,10 +167,10 @@ class OverViewMap extends PureComponent {
             visible: false
         });
     }
-
+   //催办
    urge=()=>{
     this.props.dispatch({
-        type: 'overview/queryoptionDataOnClick',
+        type: 'overview/queryurge',
         payload: {
             personId:this.state.selectpoint.operationUserID,
             DGIMN: this.state.selectpoint.DGIMN
@@ -179,13 +180,13 @@ class OverViewMap extends PureComponent {
 
    getStatusImg=(value) => {
     if (value === 0) {
-        return <img style={{width:15}} src="../../../gisunline.png" />;
+        return <img style={{width:15}} src="/gisunline.png" />;
     } if (value === 1) {
-        return <img style={{width:15}} src="../../../gisnormal.png" />;
+        return <img style={{width:15}} src="/gisnormal.png" />;
     } if (value === 2) {
-        return <img style={{width:15}} src="../../../gisover.png" />;
+        return <img style={{width:15}} src="/gisover.png" />;
     }
-    return <img style={{width:15}} src="../../../gisexception.png" />;
+    return <img style={{width:15}} src="/gisexception.png" />;
 }
 
    render() {
@@ -289,13 +290,13 @@ class OverViewMap extends PureComponent {
                events={this.markersEvents}
                render={(extData) => {
                            if (extData.status === 0) {
-                               return <img style={{width:15}} src="../../../gisunline.png" />;
+                               return <img style={{width:15}} src="/gisunline.png" />;
                            } if (extData.status === 1) {
-                               return <img style={{width:15}} src="../../../gisnormal.png" />;
+                               return <img style={{width:15}} src="/gisnormal.png" />;
                            } if (extData.status === 2) {
-                               return <img style={{width:15}} src="../../../gisover.png" />;
+                               return <img style={{width:15}} src="/gisover.png" />;
                            }
-                           return <img style={{width:15}} src="../../../gisexception.png" />;
+                           return <img style={{width:15}} src="/gisexception.png" />;
                        }}
              />
              <InfoWindow

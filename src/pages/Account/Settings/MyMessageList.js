@@ -9,7 +9,7 @@ import {
 import Cookie from 'js-cookie';
 import moment from 'moment';
 import { connect } from 'dva';
-import RangePicker_ from '../../../components/PointDetail/RangePicker_';
+import RangePicker_ from '@/components/PointDetail/RangePicker_';
 import styles from './MyPieList.less';
 
 @connect(({
@@ -117,11 +117,11 @@ class MyMessageList extends Component {
             <div className={styles.listContent}>
                 <div className={styles.listContentItem}>
                     <span>发送人</span>
-                    <p>{PushUserName}</p>
+                    <span>{PushUserName}</span>
                 </div>
                 <div className={styles.listContentItem}>
                     <span>发送时间</span>
-                    <p>{moment(PushTime).format('YYYY-MM-DD HH:mm')}</p>
+                    <span>{moment(PushTime).format('YYYY-MM-DD HH:mm')}</span>
                 </div>
             </div>
         );

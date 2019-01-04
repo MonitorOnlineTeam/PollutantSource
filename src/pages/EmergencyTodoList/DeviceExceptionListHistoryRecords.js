@@ -73,7 +73,7 @@ export default class DeviceExceptionListHistoryRecords extends Component {
     }
 
     seeDetail=(record) => {
-        this.props.dispatch(routerRedux.push(`/PatrolForm/DeviceExceptionDetail/${record.TaskID}`));
+        this.props.dispatch(routerRedux.push(`/PatrolForm/DeviceExceptionDetail/${this.state.DGIMN}/${this.props.match.params.viewtype}/qcontrollist/DeviceExceptionListHistoryRecords/${record.TaskID}`));
     }
 
     render() {

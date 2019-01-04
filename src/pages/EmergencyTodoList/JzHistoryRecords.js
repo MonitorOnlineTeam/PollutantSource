@@ -32,13 +32,13 @@ export default class JzHistoryRecords extends Component {
             pageSize: pageSize,
             beginTime: moment().subtract(3, 'month').format('YYYY-MM-DD 00:00:00'),
             endTime: moment().format('YYYY-MM-DD 23:59:59'),
-            dgimn: this.props.match.params.pointcode,
+            DGIMN: this.props.match.params.pointcode,
             typeID: this.props.match.params.TypeID,
         };
     }
 
     componentDidMount() {
-        this.GetHistoryRecord(pageIndex, pageSize, this.state.dgimn, this.state.typeID, this.state.beginTime, this.state.endTime);
+        this.GetHistoryRecord(pageIndex, pageSize, this.state.DGIMN, this.state.typeID, this.state.beginTime, this.state.endTime);
     }
 
     GetHistoryRecord=(pageIndex, pageSize, dgimn, typeID, beginTime, endTime) => {
@@ -63,19 +63,19 @@ export default class JzHistoryRecords extends Component {
                 endTime: dateString[1]
             }
         );
-        this.GetHistoryRecord(pageIndex, pageSize, this.state.dgimn, this.state.typeID, dateString[0], dateString[1]);
+        this.GetHistoryRecord(pageIndex, pageSize, this.state.DGIMN, this.state.typeID, dateString[0], dateString[1]);
     };
 
     onShowSizeChange = (pageIndex, pageSize) => {
-        this.GetHistoryRecord(pageIndex, pageSize, this.state.dgimn, this.state.typeID, this.state.BeginTime, this.state.EndTime);
+        this.GetHistoryRecord(pageIndex, pageSize, this.state.DGIMN, this.state.typeID, this.state.BeginTime, this.state.EndTime);
     }
 
     onChange = (pageIndex, pageSize) => {
-        this.GetHistoryRecord(pageIndex, pageSize, this.state.dgimn, this.state.typeID, this.state.BeginTime, this.state.EndTime);
+        this.GetHistoryRecord(pageIndex, pageSize, this.state.DGIMN, this.state.typeID, this.state.BeginTime, this.state.EndTime);
     }
 
     seeDetail=(Record) => {
-        this.props.dispatch(routerRedux.push(`/PatrolForm/JzRecordInfo/${Record.TaskID}`));
+        this.props.dispatch(routerRedux.push(`/PatrolForm/JzRecordInfo/${this.state.DGIMN}/${this.props.match.params.viewtype}/qcontrollist/JzHistoryRecords/${Record.TaskID}`));
     }
 
     render() {

@@ -11,7 +11,7 @@ import { connect } from 'dva';
 import {
     routerRedux
 } from 'dva/router';
-import RangePicker_ from '../../../components/PointDetail/RangePicker_';
+import RangePicker_ from '@/components/PointDetail/RangePicker_';
 import styles from './MyPieList.less';
 
 @connect(({
@@ -123,8 +123,8 @@ class MyPieList extends Component {
    }
 
    render() {
-       const ListContent = ({ data: { OperationUserName, CreateTime, TaskStatus, TaskStatusText } }) => (
-           <div className={styles.listContent}>
+       const ListContent = ({ data: { OperationUserName, CreateTime, TaskStatus, TaskStatusText,TaskID } }) => (
+           <div className={styles.listContent} key={TaskID}>
                <div className={styles.listContentItem}>
                    <span>执行人</span>
                    <p>{OperationUserName}</p>
@@ -178,7 +178,7 @@ class MyPieList extends Component {
                        <List.Item
                            actions={[
                                <a onClick={()=>{
-                                   this.props.dispatch(routerRedux.push(`/TaskDetail/EmergencyDetailInfo/pielist/${item.TaskID}`));
+                                   this.props.dispatch(routerRedux.push(`/TaskDetail/EmergencyDetailInfo/pielist/nop/${item.TaskID}`));
                                }}
                                >
                       查看

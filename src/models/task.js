@@ -1,10 +1,12 @@
-import { GetTaskDetails, GetYwdsj, GetJzRecord, 
-    GetRecordType, GetJzHistoryRecord, GetConsumablesReplaceRecordList, 
-    GetStandardGasRepalceRecordList, GetPatrolRecordListPC, 
-    GetHistoryConsumablesReplaceRecord,GetHistoryStandardGasRepalceRecordList, 
+import {
+    GetTaskDetails, GetYwdsj, GetJzRecord,
+    GetRecordType, GetJzHistoryRecord, GetConsumablesReplaceRecordList,
+    GetStandardGasRepalceRecordList, GetPatrolRecordListPC,
+    GetHistoryConsumablesReplaceRecord, GetHistoryStandardGasRepalceRecordList,
     GetHistoryInspectionHistoryRecords, GetStopCemsDetail, GetRepairDetail,
-    GetHistoryRepairDetail,GetHistoryStopCemsList,GetDeviceExceptionList,
-    GetBdHistoryInfoList,GetDeviceExceptionDetail,GetBdTestRecord } from '../services/taskapi';
+    GetHistoryRepairDetail, GetHistoryStopCemsList, GetDeviceExceptionList,
+    GetBdHistoryInfoList, GetDeviceExceptionDetail, GetBdTestRecord
+} from '../services/taskapi';
 import { Model } from '../dvapack';
 import { EnumRequstResult } from '../utils/enum';
 
@@ -118,9 +120,7 @@ export default Model.extend({
             }
         }, {
             call,
-            put,
             update,
-            select
         }) {
             const result = yield call(GetConsumablesReplaceRecordList, { TaskIds: TaskIds, TypeIDs: TypeIDs });
             if (result.requstresult === '1') {
@@ -137,53 +137,38 @@ export default Model.extend({
         },
         // 获取易耗品历史记录方法
         * GetHistoryConsumablesReplaceRecord({
-            payload: {
-                pageIndex,
-                pageSize,
-                TypeID,
-                DGIMN,
-                BeginTime,
-                EndTime,
-            }
+            payload
         }, {
             call,
-            put,
             update,
-            select
         }) {
-            const result = yield call(GetHistoryConsumablesReplaceRecord, { pageIndex: pageIndex, pageSize: pageSize, TypeID: TypeID, DGIMN: DGIMN, BeginTime: BeginTime, EndTime: EndTime });
-debugger;
+            const result = yield call(GetHistoryConsumablesReplaceRecord, payload);
             if (result.requstresult === '1') {
                 yield update({
                     requstresult: result.requstresult,
                     HistoryConsumablesReplaceRecordList: result.data,
                     total: result.total,
-                    pageIndex: pageIndex,
-                    pageSize: pageSize
+                    pageIndex: payload.pageIndex,
+                    pageSize: payload.pageSize
                 });
             } else {
                 yield update({
                     requstresult: result.requstresult,
                     HistoryConsumablesReplaceRecordList: [],
                     total: result.total,
-                    pageIndex: pageIndex,
-                    pageSize: pageSize
+                    pageIndex: payload.pageIndex,
+                    pageSize: payload.pageSize
                 });
             }
         },
         // 根据任务id和类型id获取标气列表
         * StandardGasRepalceRecordList({
-            payload: {
-                TaskIds,
-                TypeIDs
-            }
+            payload
         }, {
             call,
-            put,
             update,
-            select
         }) {
-            const result = yield call(GetStandardGasRepalceRecordList, { TaskIds: TaskIds, TypeIDs: TypeIDs });
+            const result = yield call(GetStandardGasRepalceRecordList, payload);
 
             if (result.requstresult === '1') {
                 yield update({
@@ -199,53 +184,39 @@ debugger;
         },
         // 获取标气历史记录方法
         * GetHistoryStandardGasRepalceRecordList({
-            payload: {
-                pageIndex,
-                pageSize,
-                TypeID,
-                DGIMN,
-                BeginTime,
-                EndTime,
-            }
+            payload
         }, {
             call,
-            put,
             update,
-            select
         }) {
-            const result = yield call(GetHistoryStandardGasRepalceRecordList, { pageIndex: pageIndex, pageSize: pageSize, TypeID: TypeID, DGIMN: DGIMN, BeginTime: BeginTime, EndTime: EndTime });
+            const result = yield call(GetHistoryStandardGasRepalceRecordList, payload);
 
             if (result.requstresult === '1') {
                 yield update({
                     requstresult: result.requstresult,
                     HistoryStandardGasRepalceRecordList: result.data,
                     total: result.total,
-                    pageIndex: pageIndex,
-                    pageSize: pageSize
+                    pageIndex: payload.pageIndex,
+                    pageSize: payload.pageSize
                 });
             } else {
                 yield update({
                     requstresult: result.requstresult,
                     HistoryStandardGasRepalceRecordList: [],
                     total: result.total,
-                    pageIndex: pageIndex,
-                    pageSize: pageSize
+                    pageIndex: payload.pageIndex,
+                    pageSize: payload.pageSize
                 });
             }
         },
         // 根据任务id和类型id获取巡检记录表(PC单独接口与手机端不一致)
         * GetPatrolRecordListPC({
-            payload: {
-                TaskIds,
-                TypeIDs
-            }
+            payload
         }, {
             call,
-            put,
             update,
-            select
         }) {
-            const result = yield call(GetPatrolRecordListPC, { TaskIds: TaskIds, TypeIDs: TypeIDs });
+            const result = yield call(GetPatrolRecordListPC, payload);
             if (result.requstresult === '1') {
                 yield update({
                     requstresult: result.requstresult,
@@ -260,36 +231,27 @@ debugger;
         },
         // 获取完全抽取法CEMS日常巡检记录表（历史记录表）
         * GetHistoryInspectionHistoryRecords({
-            payload: {
-                pageIndex,
-                pageSize,
-                TypeID,
-                DGIMN,
-                BeginTime,
-                EndTime,
-            }
+            payload
         }, {
             call,
-            put,
             update,
-            select
         }) {
-            const result = yield call(GetHistoryInspectionHistoryRecords, {pageIndex: pageIndex, pageSize: pageSize, TypeID: TypeID, DGIMN: DGIMN, BeginTime: BeginTime, EndTime: EndTime});
+            const result = yield call(GetHistoryInspectionHistoryRecords, payload);
             if (result.requstresult === '1') {
                 yield update({
                     requstresult: result.requstresult,
                     HistoryInspectionHistoryRecordList: result.data,
                     total: result.total,
-                    pageIndex: pageIndex,
-                    pageSize: pageSize
+                    pageIndex: payload.pageIndex,
+                    pageSize: payload.pageSize
                 });
             } else {
                 yield update({
                     requstresult: result.requstresult,
                     HistoryInspectionHistoryRecordList: [],
                     total: result.total,
-                    pageIndex: pageIndex,
-                    pageSize: pageSize
+                    pageIndex: payload.pageIndex,
+                    pageSize: payload.pageSize
                 });
             }
         },
@@ -298,45 +260,35 @@ debugger;
             payload,
         }, { call, update }) {
             const DataInfo = yield call(GetStopCemsDetail, payload);
-            if (DataInfo != null && DataInfo.requstresult == EnumRequstResult.Success) {
-                if (DataInfo.data != null) {
+            if (DataInfo !== null && DataInfo.requstresult == EnumRequstResult.Success) {
+                if (DataInfo.data !== null) {
                     yield update({ StopCems: DataInfo.data });
                 }
             }
         },
         //获取停机记录历史
         * GetHistoryStopCemsList({
-            // 获取完全抽取法CEMS日常巡检记录表（历史记录表）
-            payload: {
-                pageIndex,
-                pageSize,
-                TypeID,
-                DGIMN,
-                BeginTime,
-                EndTime,
-            }
+            payload,
         }, {
             call,
-            put,
             update,
-            select
         }) {
-            const result = yield call(GetHistoryStopCemsList, {pageIndex: pageIndex, pageSize: pageSize, TypeID: TypeID, DGIMN: DGIMN, BeginTime: BeginTime, EndTime: EndTime});
+            const result = yield call(GetHistoryStopCemsList, payload);
             if (result.requstresult === '1') {
                 yield update({
                     requstresult: result.requstresult,
                     HistoryStopCemsList: result.data,
                     total: result.total,
-                    pageIndex: pageIndex,
-                    pageSize: pageSize
+                    pageIndex: payload.pageIndex,
+                    pageSize: payload.pageSize
                 });
             } else {
                 yield update({
                     requstresult: result.requstresult,
                     HistoryStopCemsList: [],
                     total: result.total,
-                    pageIndex: pageIndex,
-                    pageSize: pageSize
+                    pageIndex: payload.pageIndex,
+                    pageSize: payload.pageSize
                 });
             }
         },
@@ -353,36 +305,27 @@ debugger;
         },
         //获取维修记录历史
         * GetHistoryRepairDetail({
-            payload: {
-                pageIndex,
-                pageSize,
-                TypeID,
-                DGIMN,
-                BeginTime,
-                EndTime,
-            }
+            payload
         }, {
             call,
-            put,
             update,
-            select
         }) {
-            const result = yield call(GetHistoryRepairDetail, {pageIndex: pageIndex, pageSize: pageSize, DGIMN: DGIMN, BeginTime: BeginTime, EndTime: EndTime});
+            const result = yield call(GetHistoryRepairDetail, payload);
             if (result.requstresult === '1') {
                 yield update({
                     requstresult: result.requstresult,
                     List: result.data,
                     total: result.total,
-                    pageIndex: pageIndex,
-                    pageSize: pageSize
+                    pageIndex: payload.pageIndex,
+                    pageSize: payload.pageSize
                 });
             } else {
                 yield update({
                     requstresult: result.requstresult,
                     List: [],
                     total: result.total,
-                    pageIndex: pageIndex,
-                    pageSize: pageSize
+                    pageIndex: payload.pageIndex,
+                    pageSize: payload.pageSize
                 });
             }
         },
@@ -399,79 +342,61 @@ debugger;
         },
         //异常记录历史
         * GetDeviceExceptionList({
-            payload: {
-                pageIndex,
-                pageSize,
-                TypeID,
-                DGIMN,
-                BeginTime,
-                EndTime,
-            }
+            payload
         }, {
             call,
-            put,
             update,
-            select
         }) {
-            const result = yield call(GetDeviceExceptionList, {pageIndex: pageIndex, pageSize: pageSize, TypeID: TypeID, DGIMN: DGIMN, BeginTime: BeginTime, EndTime: EndTime});
+            const result = yield call(GetDeviceExceptionList, payload);
 
             if (result.requstresult === '1') {
                 yield update({
                     requstresult: result.requstresult,
                     List: result.data,
                     total: result.total,
-                    pageIndex: pageIndex,
-                    pageSize: pageSize
+                    pageIndex: payload.pageIndex,
+                    pageSize: payload.pageSize
                 });
             } else {
                 yield update({
                     requstresult: result.requstresult,
                     List: [],
                     total: result.total,
-                    pageIndex: pageIndex,
-                    pageSize: pageSize
+                    pageIndex: payload.pageIndex,
+                    pageSize: payload.pageSize
                 });
             }
         },
         //校验测试记录历史
         * GetBdHistoryInfoList({
-            payload: {
-                pageIndex,
-                pageSize,
-                TypeID,
-                DGIMN,
-                BeginTime,
-                EndTime,
-            }
+            payload
         }, {
             call,
-            put,
             update,
-            select
         }) {
-            const result = yield call(GetBdHistoryInfoList, {pageIndex: pageIndex, pageSize: pageSize, TypeID: TypeID, DGIMN: DGIMN, BeginTime: BeginTime, EndTime: EndTime});
+            const result = yield call(GetBdHistoryInfoList, payload);
             if (result.requstresult === '1') {
                 yield update({
                     requstresult: result.requstresult,
                     List: result.data,
                     total: result.total,
-                    pageIndex: pageIndex,
-                    pageSize: pageSize
+                    pageIndex: payload.pageIndex,
+                    pageSize: payload.pageSize
                 });
             } else {
                 yield update({
                     requstresult: result.requstresult,
                     List: [],
                     total: result.total,
-                    pageIndex: pageIndex,
-                    pageSize: pageSize
+                    pageIndex: payload.pageIndex,
+                    pageSize: payload.pageSize
                 });
             }
         },
         // 运维校准记录
         * GetBdTestRecord({
             payload,
-        }, { call, update }) {debugger;
+        }, { call, update }) {
             const DataInfo = yield call(GetBdTestRecord, payload);
             if (DataInfo != null && DataInfo.requstresult == EnumRequstResult.Success) {
                 if (DataInfo.data != null) {

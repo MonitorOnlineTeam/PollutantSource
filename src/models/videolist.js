@@ -23,8 +23,8 @@ export default Model.extend({
         hisrealdata: [],
     },
     effects: {
-        * fetchuserlist({payload}, { call, put, update, select }) {
-            const result = yield call(getList, {DGIMN: payload.DGIMN});
+        * fetchuserlist({ payload }, { call, update }) {
+            const result = yield call(getList, { DGIMN: payload.DGIMN });
             if (result.requstresult === '1') {
                 yield update({
                     requstresult: result.requstresult,
@@ -37,8 +37,8 @@ export default Model.extend({
                 });
             }
         },
-        * updateVideoInfos({payload}, { call, put, update, select }) {
-            const result = yield call(updateVideoInfos, {...payload});
+        * updateVideoInfos({ payload }, { call, put, update }) {
+            const result = yield call(updateVideoInfos, { ...payload });
             yield update({
                 requstresult: result.requstresult,
                 reason: result.reason
@@ -48,8 +48,8 @@ export default Model.extend({
                 payload: payload.DGIMN,
             });
         },
-        * addVideoInfos({payload}, { call, put, update, select }) {
-            const result = yield call(addVideoInfo, {...payload});
+        * addVideoInfos({ payload }, { call, put, update }) {
+            const result = yield call(addVideoInfo, { ...payload });
             yield update({
                 requstresult: result.requstresult,
                 reason: result.reason
@@ -59,8 +59,8 @@ export default Model.extend({
                 payload: payload.DGIMN,
             });
         },
-        * deleteVideoInfo({ payload }, { call, put, update, select }) {
-            const result = yield call(deleteVideoInfo, {...payload});
+        * deleteVideoInfo({ payload }, { call, put, update }) {
+            const result = yield call(deleteVideoInfo, { ...payload });
             yield update({
                 requstresult: result.requstresult,
                 editUser: result.data[0]
@@ -70,8 +70,8 @@ export default Model.extend({
                 payload: payload.DGIMN,
             });
         },
-        * gethistoryVideoList({payload}, { call, put, update, select }) {
-            const result = yield call(gethistoryVideoList, {...payload});
+        * gethistoryVideoList({ payload }, { call, update }) {
+            const result = yield call(gethistoryVideoList, { ...payload });
             if (result.requstresult === '1') {
                 yield update({
                     requstresult: result.requstresult,
@@ -85,8 +85,8 @@ export default Model.extend({
             }
         },
         * getAlarmHistory({
-            payload}, { call, put, update, select }) {
-            const result = yield call(getAlarmHistory, {...payload});
+            payload }, { call, update }) {
+            const result = yield call(getAlarmHistory, { ...payload });
             if (result.requstresult === '1') {
                 yield update({
                     requstresult: result.requstresult,
@@ -99,7 +99,7 @@ export default Model.extend({
                 });
             }
         },
-        * updateAlarmHistory({payload}, { call, put, update, select }) {
+        * updateAlarmHistory({ payload }, { call, put, update }) {
             const result = yield call(updateAlarmHistory, {
                 ...payload
             });
@@ -116,7 +116,7 @@ export default Model.extend({
             }
             yield put({
                 type: 'getAlarmHistory',
-                payload: {...payload},
+                payload: { ...payload },
             });
         },
         * querypollutantlist({payload}, {call, update}) {

@@ -4,7 +4,11 @@
 .cardTitle{
   
     :global {
+      // height: 998px;
+      // overflow: hidden;
       .ant-card-body{
+        // height: 800px;
+        // overflow: auto;
       }
       .ant-card-extra{
         padding: 6.5px 0 !important;
@@ -15,18 +19,13 @@
       table .ant-table-thead > tr > th{
         background-color:#fafafa !important;
       }
-
-      table .ant-table-middle > .ant-table-content > .ant-table-body > table{
+      table .ant-table-small > .ant-table-content > .ant-table-body > table{
         padding: 0% !important;
       }
-
-      .ant-table-middle {
-        border: 1px solid #e8e8e8;
-        border-radius: 4px;
-      }
-    }  
+    }
+   
+      
 }
-
 .dataTable {
     :global {
       .ant-table-fixed-header .ant-table-scroll .ant-table-header
@@ -37,11 +36,11 @@
         }
   
         .ant-table-body{
-          // min-height: calc(100vh - 25px);
-            height: calc(100vh - 31px);
+          // min-height: calc(100vh - 58px);
+            height: calc(100vh - 25px);
             overflow: auto;
             // overflow-y: scroll;
-        
+      
         }
         .ant-table-placeholder{
             position: absolute;
@@ -50,9 +49,18 @@
         }
       }
   }
-
-  .conditionDiv{
-    height: 35px;
-    line-height: 35px;
-    margin-bottom: 20px;
+  .pintview{
+    :global{
+      .ant-badge-status-text{
+        font-size:10px;
+        height:20px;
+      }
+    }
+  }
+  .hide{
+    margin-top: 15px;
+    display: none,
+  }
+  .show{
+      margin-top: 15px;
   }

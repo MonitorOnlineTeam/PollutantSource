@@ -63,7 +63,7 @@ export default class FilesList extends Component {
                             return (<List.Item >
                                 <Card
                                     style={{ width: 150, height: 200 }}
-                                    cover={<img alt="example" src={'../../../' + item.FileType} style={{width: 80,height: 80,textAlign: 'center'}} />}
+                                    cover={<img alt="example" src={'/' + item.FileType} style={{width: 80,height: 80,textAlign: 'center'}} />}
                                     // actions={[<a href="../upload/新建XLS 工作表.xls"><Icon type="down-circle" theme="twoTone" /></a>]}
                                 >
                                     <Meta

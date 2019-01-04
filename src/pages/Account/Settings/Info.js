@@ -5,7 +5,7 @@ import {
     Menu
 } from 'antd';
 import router from 'umi/router';
-import MonitorContent from '../../../components/MonitorContent/index';
+import MonitorContent from '@/components/MonitorContent/index';
 
 const {
     Content, Sider,
@@ -52,7 +52,7 @@ export default class Info extends Component {
                     ]
                 }
             >
-                <div className={Styles.menu} style={{ width: '100%', height: 'calc(100vh - 500px)' }}>
+                <div style={{ width: '100%', height: 'calc(100vh - 500px)' }}>
                     {
                         <Layout style={{ padding: '14px 0', background: '#fff' }}>
                             <Sider width={270} style={{ background: '#fff' }}>

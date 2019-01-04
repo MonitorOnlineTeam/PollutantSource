@@ -117,10 +117,10 @@ export default class Ywdsjlist extends Component {
                         var value = `于${item1.CompleteTime}完成例行任务`;
                         var valueName = `${item1.OperationsUserName}`;
                         rtnVal.push(
-                            <Timeline.Item dot={<img style={{width: '38px', height: '38px'}} src="../../../patrol.png" />}>
+                            <Timeline.Item dot={<img style={{width: '38px', height: '38px'}} src="/patrol.png" />}>
                                 <p className={Ywdsjlistss.taskDetail}><span style={{color: '#40B0F5', marginRight: '10px'}}>{valueName}</span>{value}</p>
                                 <div className={Ywdsjlistss.seeDetail} onClick={() => {
-                                    this.props.dispatch(routerRedux.push(`/TaskDetail/emergencydetailinfo/${item1.ID}`));
+                                    this.props.dispatch(routerRedux.push(`/TaskDetail/emergencydetailinfo/${this.props.match.params.viewtype}/ywdsjlist/${item1.ID}`));
                                 }}>
                                 查看详情
                                 </div>
@@ -130,10 +130,10 @@ export default class Ywdsjlist extends Component {
                         var value1 = `于${item1.CompleteTime === null ? '' : item1.CompleteTime}完成应急任务`;
                         var valueName1 = `${item1.OperationsUserName}`;
                         rtnVal.push(
-                            <Timeline.Item dot={<img style={{width: '38px', height: '38px'}} src="../../../emergeny.png" />}>
+                            <Timeline.Item dot={<img style={{width: '38px', height: '38px'}} src="/emergeny.png" />}>
                                 <p className={Ywdsjlistss.taskDetail}><span style={{color: '#40B0F5', marginRight: '10px'}}>{valueName1}</span>{value1}</p>
                                 <div className={Ywdsjlistss.seeDetail} onClick={() => {
-                                    this.props.dispatch(routerRedux.push(`/TaskDetail/emergencydetailinfo/${item1.ID}`));
+                                    this.props.dispatch(routerRedux.push(`/TaskDetail/emergencydetailinfo/${this.props.match.params.viewtype}/ywdsjlist/${item1.ID}`));
                                 }}>
                                 查看详情
                                 </div>
@@ -144,7 +144,7 @@ export default class Ywdsjlist extends Component {
                         var valueName2 = `${item1.OperationsUserName}`;
                         var value3 = `${item1.Remark === null ? '' : item1.Remark}`;
                         rtnVal.push(
-                            <Timeline.Item dot={<img style={{width: '38px', height: '38px'}} src="../../../alarmpic.png" />}>
+                            <Timeline.Item dot={<img style={{width: '38px', height: '38px'}} src="/alarmpic.png" />}>
                                 <p className={Ywdsjlistss.taskDetail}><span style={{color: '#40B0F5', marginRight: '10px'}}>{valueName2}</span>{value2}</p>
                                 <p className={Ywdsjlistss.pLoad}>{value3}</p>
                             </Timeline.Item>
@@ -158,6 +158,7 @@ export default class Ywdsjlist extends Component {
     }
 
     render() {
+        const { match, routerData,children } = this.props;
         const extraContent = (
             <div style={{height:'30px',lineHeight:'30px'}}>
             <RadioGroup defaultValue={this.state.taskType} onChange={this.onChange}>

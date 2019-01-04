@@ -24,54 +24,54 @@ class NavigationTree extends Component {
                     if (this.props.special === 'monitor') {
                         if (record.DGIMN === 'bjldgn01' || record.DGIMN === 'dtgjhh11102' || record.DGIMN === 'dtgrjx110') {
                             return (
-                                <img className={styles.imgradius_shinered} src="../../../gisover.png" />
+                                <img className={styles.imgradius_shinered} src="/gisover.png" />
                             );
                         } else if (record.DGIMN === 'dtgrjx103' || record.DGIMN === 'lywjfd03') {
                             return (
-                                <img className={styles.imgradius_shinered} src="../../../gisexception.png" />
+                                <img className={styles.imgradius_shinered} src="/gisexception.png" />
                             );
                         } else {
                             return (
-                                <img src="../../../gisnormal.png" />
+                                <img src="/gisnormal.png" />
                             );
                         }
                     } else if (this.props.special === 'operation') {
                         if (record.DGIMN === 'bjldgn01' || record.DGIMN === 'dtgjhh11102' || record.DGIMN === 'dtgrjx110') {
                             return (
-                                <img className={styles.imgradius_shinered} src="../../../gisfault.png" />
+                                <img className={styles.imgradius_shinered} src="/gisfault.png" />
                             );
                         } else if (record.DGIMN === 'dtgrjx103' || record.DGIMN === 'lywjfd03') {
                             return (
-                                <img className={styles.imgradius_shinered} src="../../../gisstop.png" />
+                                <img className={styles.imgradius_shinered} src="/gisstop.png" />
                             );
                         } else {
                             return (
-                                <img src="../../../gisnormal.png" />
+                                <img src="/gisnormal.png" />
                             );
                         }
                     } else if (this.props.special === 'sewage') {
                         if (record.DGIMN === 'bjldgn01' || record.DGIMN === 'dtgjhh11102' || record.DGIMN === 'dtgrjx110') {
                             return (
-                                <img className={styles.imgradius_shinered} src="../../../gisover.png" />
+                                <img className={styles.imgradius_shinered} src="/gisover.png" />
                             );
                         } else if (record.DGIMN === 'dtgrjx103' || record.DGIMN === 'lywjfd03') {
                             return (
-                                <img className={styles.imgradius_shinered} src="../../../gisexception.png" />
+                                <img className={styles.imgradius_shinered} src="/gisexception.png" />
                             );
                         } else {
                             return (
-                                <img src="../../../gisnormal.png" />
+                                <img src="/gisnormal.png" />
                             );
                         }
                     } else {
                         if (record.DGIMN === 'bjldgn01' || record.DGIMN === 'dtgjhh11102' || record.DGIMN === 'dtgrjx110'
                         || record.DGIMN === 'dtgrjx103' || record.DGIMN === 'lywjfd03') {
                             return (
-                                <img className={styles.imgradius_shinered} src="../../../gisquality.png" />
+                                <img className={styles.imgradius_shinered} src="/gisquality.png" />
                             );
                         } else {
                             return (
-                                <img src="../../../gisnormal.png" />
+                                <img src="/gisnormal.png" />
                             );
                         }
                     }
