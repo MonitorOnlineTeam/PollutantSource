@@ -94,7 +94,7 @@ class MonitoringReport extends Component {
          
             const pdfurl = require('./test1.pdf');
             return (
-                <iframe style={{border:0,width:"100%",height:630,}} src={imgaddress+this.state.reportname}/>
+                <iframe className={styles.if} style={{border:0,width:"100%",height:630,}} src={imgaddress+this.state.reportname}/>
             )
             {/* return(  
             <div className={styles.pdfdiv} >
