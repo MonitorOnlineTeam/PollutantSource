@@ -184,7 +184,11 @@ class CompleteExtraction extends Component {
                         case 'mapview': //地图一栏
                             rtnVal.push({Name:'地图一栏',Url:`/overview/${listUrl}`},);
                             break;
-                        case '': //工作台
+                        case 'pielist': //我的派单
+                            rtnVal.push({Name:'我的派单',Url:`/account/settings/mypielist`},);
+                            break;
+                        case 'workbench': //工作台
+                            rtnVal.push({Name:'工作台',Url:`/${listUrl}`},);
                             break;
                         default:
                             break;
@@ -258,14 +262,14 @@ class CompleteExtraction extends Component {
                                 <div className={styles.FormDiv} style={{ height: SCREEN_HEIGHT }}>
                                     <div className={styles.FormName}>完全抽取法CEMS日常巡检记录表</div>
                                     <table className={styles.FormTable}>
-                            <tr>
+                                        <tr>
                                             <td style={{ width: '50%', height: '50px', textAlign: 'left' ,fontSize: '14px',fontWeight: 'bold' }}>企业名称：{EnterpriseName}</td>
                                             <td style={{ width: '50%', height: '50px', textAlign: 'left' ,fontSize: '14px',fontWeight: 'bold' }}> 巡检日期：{PatrolDate}</td>
                                         </tr>
 
-                        </table>
+                                    </table>
                                     <table className={styles.FormTable}>
-                            <tbody>
+                                        <tbody>
                                             <tr>
                                                 <td style={{ width: '50%', height: '50px', textAlign: 'left' ,fontSize: '14px' }}>{GasCemsEquipmentManufacturer}</td>
                                                 <td style={{ width: '50%', height: '50px', textAlign: 'left' ,fontSize: '14px' }}>{GasCemsCode}</td>
@@ -279,13 +283,13 @@ class CompleteExtraction extends Component {
                                                 <td style={{ width: '50%', height: '50px', textAlign: 'left' ,fontSize: '14px' }}>{MaintenanceManagementUnit}</td>
                                             </tr>
                                         </tbody>
-                        </table>
+                                    </table>
                                     <div className={styles.HeadDiv} style={{ fontWeight: 'bold' }}>运行维护内容及处理说明：</div>
                                     <table
 
-                            className={styles.FormTable}
-                        >
-                            <tbody>
+                                        className={styles.FormTable}
+                                    >
+                                        <tbody>
                                             <tr>
                                                 <td style={{ width: '20%', height: '50px', textAlign: 'center' ,fontSize: '14px' }}>项目</td>
                                                 <td style={{ width: '40%', height: '50px', textAlign: 'center' ,fontSize: '14px' }}>内容</td>
@@ -304,9 +308,9 @@ class CompleteExtraction extends Component {
                                                 </td>
                                             </tr>
                                         </tbody>
-                        </table>
+                                    </table>
                                     <table className={styles.FormTable}>
-                            <tbody>
+                                        <tbody>
                                             <tr>
                                                 <td style={{ width: '87%', height: '50px', textAlign: 'right', border: '0', fontWeight: 'bold' }}>负责人签名：</td>
                                                 <td style={{ width: '13%', height: '50px', border: '0' }}><img src={SignContent} /></td>
@@ -316,7 +320,7 @@ class CompleteExtraction extends Component {
                                                 <td style={{ width: '13%', height: '50px', border: '0' }}>{SignTime}</td>
                                             </tr>
                                         </tbody>
-                        </table>
+                                    </table>
                                 </div>
                             </Card>
                         </MonitorContent>

@@ -87,7 +87,11 @@ class ConsumablesReplaceRecord extends Component {
                     case 'mapview': //地图一栏
                         rtnVal.push({Name:'地图一栏',Url:`/overview/${listUrl}`},);
                         break;
-                    case '': //工作台
+                    case 'pielist': //我的派单
+                        rtnVal.push({Name:'我的派单',Url:`/account/settings/mypielist`},);
+                        break;
+                    case 'workbench': //工作台
+                        rtnVal.push({Name:'工作台',Url:`/${listUrl}`},);
                         break;
                     default:
                         break;

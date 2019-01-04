@@ -30,7 +30,9 @@ export default Model.extend({
         registTypelist: [],
         subjectionRelationlist: [],
         pdlist: [],
-        epres: false
+        total: 0,
+        pageIndex:1,
+        pageSize:20,
     },
     effects: {
         * queryentdetail({
@@ -88,49 +90,46 @@ export default Model.extend({
         },
         * queryeeplist({payload}, {call, update}) {
             const pdlist = yield call(queryeeplist);
-            let pdcol = [];
-            console.log(pdlist);
-            pdlist.map((item, key) => {
-                pdcol = pdcol.concat({
-                    key: key,
-                    name: item.EPName,
-                    num: item.EPNum,
-                    status: item.Status ? '正在使用' : '已过期',
-                    describe: item.Describe,
-                    effectivetime: moment(item.BeginTime).format('YYYY-MM-DD') + ' - ' + moment(item.EndTime).format('YYYY-MM-DD'),
-                    enclosure: item.File ? <Icon style={{cursor: 'pointer'}} type="file-text" /> : '暂未上传附件',
-                    fileid: item.File,
-                    code: item.EPID
+            if(pdlist && pdlist.data)
+            {
+                yield update({ 
+                    pdlist:pdlist.data,
+                    total:pdlist.total,
+                    pageIndex:1,
+                    pageSize:20
                 });
-            });
-            console.log(pdcol);
-            yield update({ pdlist: pdcol });
+            }
+            
         },
         * queryaddeep({payload}, {call, put, update}) {
             const requstresult = yield call(queryaddeep, {...payload});
             if (requstresult) {
                 message.info('操作成功');
             } else {
-                message.info('操作失败');
+                message.error('操作失败');
             }
-            yield update({ epres: requstresult });
             yield put({
                 type: 'queryeeplist',
-                payload: {},
+                payload: {
+                    pageIndex:1,
+                    pageSize:20
+                },
             });
         },
         * querydelep({payload}, {call, put, update}) {
             const requstresult = yield call(querydelep, {...payload});
-            yield update({ epres: requstresult });
             if (requstresult) {
                 message.info('操作成功');
+                payload.closemodal();
             } else {
-                message.info('操作失败');
+                message.error('操作失败');
             }
-            yield update({ epres: requstresult });
             yield put({
                 type: 'queryeeplist',
-                payload: {},
+                payload: {
+                    pageIndex:1,
+                    pageSize:20
+                },
             });
         }
     },
@@ -143,15 +142,6 @@ export default Model.extend({
                     });
                 }
             });
-        },
-        setupep({ dispatch, history }) {
-            return history.listen(({ pathname, payload }) => {
-                if (pathname === '/monitor/emissionpermits') {
-                    dispatch({ type: 'queryeeplist',
-                        payload: {},
-                    });
-                }
-            });
-        },
+        }
     },
 });

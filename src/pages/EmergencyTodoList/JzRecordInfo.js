@@ -157,16 +157,20 @@ export default class JzRecordInfo extends Component {
         let histroyrecordtype=this.props.match.params.histroyrecordtype;
         rtnVal.push({Name:'首页',Url:'/'},);
         switch(listUrl){
-case 'datalistview':    //数据一栏
-rtnVal.push({Name:'数据一览',Url:`/overview/${listUrl}`},);
-break;
-case 'mapview':         //地图一栏
-rtnVal.push({Name:'地图一栏',Url:`/overview/${listUrl}`},);
-break;
-case '':                //工作台
-break;
-default:
-break;
+           case 'datalistview':    //数据一栏
+           rtnVal.push({Name:'数据一览',Url:`/overview/${listUrl}`},);
+           break;
+           case 'mapview':         //地图一栏
+           rtnVal.push({Name:'地图一栏',Url:`/overview/${listUrl}`},);
+           break;
+           case 'pielist': //我的派单
+            rtnVal.push({Name:'我的派单',Url:`/account/settings/mypielist`},);
+            break;
+            case 'workbench':    //工作台
+            rtnVal.push({Name:'工作台',Url:`/${listUrl}`},);
+            break;
+           default:
+           break;
         }
         if(taskfrom==='ywdsjlist'){
             rtnVal.push({Name:'运维大事记',Url:`/pointdetail/${DGIMN}/${listUrl}/${taskfrom}`},);

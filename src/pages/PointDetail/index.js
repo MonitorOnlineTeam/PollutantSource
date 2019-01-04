@@ -1,7 +1,7 @@
 // import liraries
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import { Modal,Breadcrumb, Tabs, Icon, Select, Button,Card,Avatar,Row,Col,Badge,Tag,Input,Form,Radio,Alert } from 'antd';
+import { Modal,Breadcrumb, Tabs, Icon, Select, Button,Card,Spin,Row,Col,Badge,Tag,Input,Form,Radio,Alert } from 'antd';
 import { Link, Switch, Redirect,routerRedux } from 'dva/router';
 import moment from 'moment';
 import Cookie from 'js-cookie';
@@ -116,13 +116,13 @@ class PointDetail extends Component {
         const rtnVal = [];
 
         this.state.pointList.map((item, key) =>{
-            let status = <img src="../../../gisexception.png" width="15" />;
+            let status = <img src="/gisexception.png" width="15" />;
             if (item.status === 0) {
-                status= <img src="../../../gisunline.png" width="15" />;
+                status= <img src="/gisunline.png" width="15" />;
             } if (item.status === 1) {
-                status= <img src="../../../gisnormal.png" width="15" />;
+                status= <img src="/gisnormal.png" width="15" />;
             } if (item.status === 2) {
-                status= <img src="../../../gisover.png" width="15" />;
+                status= <img src="/gisover.png" width="15" />;
             }
             let optStatus='';//TODO:排口运维状态不确定 故障：#119f9d
             if(item.existTask===1) {
@@ -186,34 +186,42 @@ class PointDetail extends Component {
         if (location.pathname.indexOf('qcontrollist') === -1) {
             activeKey = location.pathname.replace(`${match.url}/`, '');
         }
-
+        if (this.props.isloading) {
+            return (<Spin
+                style={{ width: '100%',
+                    height: 'calc(100vh/2)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center' }}
+                size="large"
+            />);
+        }
         return (
             <div
                 style={{ width: '100%',
                     height: 'calc(100vh - 67px)' }}
             >
-                {!this.props.isloading ? <div>
-                    <div className={styles.pageHeader} style={{}}>
-                        <img src="../../../point.png" style={{width:37,marginTop:-1}} />
-                        <span style={{color:'#ccc',marginLeft:10}}>当前排口：</span>
-                        <span style={{cursor:'pointer',color:'#1890FF'}} onClick={this.openModal}>{pointInfo.pointName}</span>
-                        <Button style={{float:"right",marginRight:30}}><Link to="/overview/mapview"><Icon type="left" />返回</Link></Button>
-                        <Button type="primary" ghost={true} style={{float:"right",marginRight:30}}><Icon type="bell" />派单</Button>
-                    </div>
-                    <div style={{ backgroundColor: '#fff', margin: 10, padding: 10 }}>
-                        <Tabs
-                            className={styles.tabs}
-                            activeKey={activeKey}
-                            onChange={(key) => {
-                                const { match } = this.props;
-                                router.push(`${match.url}/${key}`);
-                            }}
-                        >
-                            {this.state.tablist.map(item => <TabPane dgimn={match.params.pointcode} pointInfo={pointInfo} tab={item.tab} key={item.key} />)}
-                        </Tabs>
-                        {children}
-                    </div>
-                </div> : ''}
+
+                <div className={styles.pageHeader} style={{}}>
+                    <img src="/point.png" style={{width:37,marginTop:-1}} />
+                    <span style={{color:'#ccc',marginLeft:10}}>当前排口：</span>
+                    <span style={{cursor:'pointer',color:'#1890FF'}} onClick={this.openModal}>{pointInfo.pointName}</span>
+                    <Button style={{float:"right",marginRight:30}}><Link to="/overview/mapview"><Icon type="left" />返回</Link></Button>
+                    <Button type="primary" ghost={true} style={{float:"right",marginRight:30}}><Icon type="bell" />派单</Button>
+                </div>
+                <div style={{ backgroundColor: '#fff', margin: 10, padding: 10 }}>
+                    <Tabs
+                        className={styles.tabs}
+                        activeKey={activeKey}
+                        onChange={(key) => {
+                            const { match } = this.props;
+                            router.push(`${match.url}/${key}`);
+                        }}
+                    >
+                        {this.state.tablist.map(item => <TabPane dgimn={match.params.pointcode} pointInfo={pointInfo} tab={item.tab} key={item.key} />)}
+                    </Tabs>
+                    {children}
+                </div>
                 <Modal
                     visible={this.state.modalVisible}
                     title={`当前排口: ${pointInfo.pointName}`}

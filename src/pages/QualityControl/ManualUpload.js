@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Table, Select, Card, Form, Row, Col, Icon, Upload, message, Modal, Divider, Tabs, Input  } from 'antd';
+import { Button, Table, Select, Card, Form, Row, Col, Icon, Upload, message, Modal, Divider, Tabs, Input } from 'antd';
 import moment from 'moment';
 import { connect } from 'dva';
 import RangePicker_ from '../../components/PointDetail/RangePicker_';
@@ -92,7 +92,9 @@ export default class ManualUpload extends Component {
                                 if (flag === '1') {
                                     _this.GetManualSupplementList(mn, SelectHandleChange, rangeDateone, rangeDatetwo, pageIndex, pageSize);
                                     message.success(data)
-                                } else {
+                                }
+                                else {
+                                    _this.GetManualSupplementList(mn, SelectHandleChange, rangeDateone, rangeDatetwo, pageIndex, pageSize);
                                     message.error(data);
                                 }
                             }
@@ -128,21 +130,21 @@ export default class ManualUpload extends Component {
     }
     getStatusImg = (value) => {
         if (value === 0) {
-            return <img style={{ width: 15 }} src="../../../gisunline.png" />;
+            return <img style={{ width: 15 }} src="/gisunline.png" />;
         } if (value === 1) {
-            return <img style={{ width: 15 }} src="../../../gisnormal.png" />;
+            return <img style={{ width: 15 }} src="/gisnormal.png" />;
         } if (value === 2) {
-            return <img style={{ width: 15 }} src="../../../gisover.png" />;
+            return <img style={{ width: 15 }} src="/gisover.png" />;
         }
-        return <img style={{ width: 15 }} src="../../../gisexception.png" />;
+        return <img style={{ width: 15 }} src="/gisexception.png" />;
     }
     getIcon = (key, value) => {
 
         if (key === 1) {
-            return <span ><img style={{ width: 20, marginBottom: 5 }} src="../../../water.png"></img><span style={{marginLeft:2}}>{value}</span></span>
+            return <span ><img style={{ width: 20, marginBottom: 5 }} src="/water.png"></img><span style={{marginLeft:2}}>{value}</span></span>
         }
         else {
-            return <span><img style={{ width: 20, marginBottom: 5 }} src="../../../gas.png"></img> {value}</span>
+            return <span><img style={{ width: 20, marginBottom: 5 }} src="/gas.png"></img> {value}</span>
         }
     }
     treeCilck = (row) => {
@@ -257,7 +259,7 @@ export default class ManualUpload extends Component {
         const rtnVal = [];
         if (this.props.polltuantTypeList.length !== 0) {
             this.props.polltuantTypeList.map((item) => {
-                rtnVal.push(<TabPane tab={this.getIcon(item.PollutantTypeCode, item.PollutantTypeName)} className={styles.TabPane} key={item.PollutantTypeCode}>
+                rtnVal.push(<TabPane tab={this.getIcon(item.PollutantTypeCode, item.PollutantTypeName)}  key={item.PollutantTypeCode}>
                     <div style={{ marginTop: 15 }}>
                         <TreeCard getHeight={'calc(100vh - 220px)'} getStatusImg={this.getStatusImg} isloading={this.props.treedataloading} treeCilck={this.treeCilck} treedatalist={this.props.datalist} PollutantType={item.PollutantTypeCode} />
                     </div>
@@ -267,7 +269,6 @@ export default class ManualUpload extends Component {
         return rtnVal;
     }
     TabsOnChange = (key) => {
-        debugger
         this.setState({ TabsOnchange: key })
         //点位列表
         this.props.dispatch({
@@ -286,7 +287,6 @@ export default class ManualUpload extends Component {
         });
     }
     changeTabList = (value) => {
-        debugger
         this.setState({ TabsSelect: value })
         //点位列表
         this.props.dispatch({
@@ -432,7 +432,7 @@ export default class ManualUpload extends Component {
                                     style={{ width: 200 }} />
                             </div>
                             <div>
-                                <Tabs type="card" size="large" tabBarStyle={{ width: '100%' }} onChange={this.TabsOnChange}>
+                                <Tabs type="card"  tabBarStyle={{ width: '100%' }} onChange={this.TabsOnChange}>
                                     {this.tabList()}
                                 </Tabs>
                             </div>
