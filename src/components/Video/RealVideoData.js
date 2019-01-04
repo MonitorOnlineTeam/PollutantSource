@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Table, Card} from 'antd';
+import {Table} from 'antd';
 import { connect } from 'dva';
 import moment from 'moment';
 
@@ -35,22 +35,21 @@ class RealVideoData extends Component {
         const {match,dispatch}=this.props;
         dispatch({
             type:'videolist/queryhistorydatalist',
-            payload:{ dgimn: match.params.pointcode,
+            payload:{
+                dgimn: match.params.pointcode,
                 datatype: 'realtime',
                 pageIndex: 1,
                 pageSize: 20,
                 beginTime: rangeDate[0],
-                endTime: rangeDate[1] }
+                endTime: rangeDate[1]
+            }
         });
     }
 
     render() {
         const {realdata,columns} = this.props;
-        console.log(1);
         return (
-            <Card title="实时数据">
-                <Table dataSource={realdata} columns={columns} pagination={false} />
-            </Card>
+            <Table dataSource={realdata} columns={columns} pagination={false} bordered={true} />
         );
     }
 }

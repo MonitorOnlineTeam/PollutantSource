@@ -19,6 +19,8 @@ export default Model.extend({
         reason: null,
         columns: [],
         realdata: [],
+        hiscolumns: [],
+        hisrealdata: [],
     },
     effects: {
         * fetchuserlist({payload}, { call, put, update, select }) {
@@ -120,7 +122,7 @@ export default Model.extend({
         * querypollutantlist({payload}, {call, update}) {
             const res = yield call(querypollutantlist, {...payload});
             let pollutants=[];
-            pollutants.push({title:"时间",dataIndex:"MonitorTime",key:"MonitorTime",align:'center',width:'200px'});
+            pollutants.push({title:"监测时间",dataIndex:"MonitorTime",key:"MonitorTime",align:'center',width:'200px'});
             if(res.length>0){
                 res.map((item, key) => {
                     pollutants = pollutants.concat({
@@ -144,7 +146,7 @@ export default Model.extend({
                                         <li style={{listStyle: 'none', marginBottom: 10}}>
                                             <Badge status="error" text={`超标倍数：${additionalInfo[3]}`} />
                                         </li>
-                                    </div>);
+                                                     </div>);
                                     return (<Popover content={content}><span style={{ color: '#ff0000', cursor: 'pointer' }}>{ value || (value === 0 ? 0 : '-') }</span></Popover>);
                                 }
                                 const content = (<div>
@@ -155,7 +157,7 @@ export default Model.extend({
                                     <li style={{listStyle: 'none', marginBottom: 10}}>
                                         <Badge status="warning" text={`异常原因：${additionalInfo[2]}`} />
                                     </li>
-                                </div>);
+                                                 </div>);
                                 return (<Popover content={content}><span style={{ color: '#F3AC00', cursor: 'pointer' }}>{value || (value === 0 ? 0 : '-')}</span></Popover>);
                             }
                             return value || (value === 0 ? 0 : '-');
@@ -172,6 +174,68 @@ export default Model.extend({
                 realdata.push({key:"1",...res.data[res.data.length-1]});
             }
             yield update({ realdata: realdata });
+        },
+        * querypollutantlisthis({payload}, {call, update}) {
+            const res = yield call(querypollutantlist, {...payload});
+            let pollutants=[];
+            pollutants.push({title:"监测时间",dataIndex:"MonitorTime",key:"MonitorTime",align:'center',width:'200px'});
+            if(res.length>0){
+                res.map((item, key) => {
+                    pollutants = pollutants.concat({
+                        title: `${item.pollutantName}(${item.unit})`,
+                        dataIndex: item.pollutantCode,
+                        key: item.pollutantCode,
+                        align:'center',
+                        render: (value, record, index) => {
+                            const additional = record[`${item.pollutantCode}_params`];
+                            if (additional) {
+                                const additionalInfo = additional.split('§');
+                                if (additionalInfo[0] === 'IsOver') {
+                                    const content = (<div>
+                                        <div style={{marginBottom: 10}}>
+                                            <Icon style={{ color: '#ff0000', fontSize: 25, marginRight: 10 }} type="warning" />
+                                            <span style={{fontWeight: 'Bold', fontSize: 16}}>数据超标</span>
+                                        </div>
+                                        <li style={{listStyle: 'none', marginBottom: 10}}>
+                                            <Badge status="success" text={`标准值：${additionalInfo[2]}`} />
+                                        </li>
+                                        <li style={{listStyle: 'none', marginBottom: 10}}>
+                                            <Badge status="error" text={`超标倍数：${additionalInfo[3]}`} />
+                                        </li>
+                                                     </div>);
+                                    return (<Popover content={content}><span style={{ color: '#ff0000', cursor: 'pointer' }}>{ value || (value === 0 ? 0 : '-') }</span></Popover>);
+                                }
+                                const content = (<div>
+                                    <div style={{marginBottom: 10}}>
+                                        <Icon style={{ color: '#ff0000', fontSize: 25, marginRight: 10 }} type="close-circle" />
+                                        <span style={{fontWeight: 'Bold', fontSize: 16}}>数据异常</span>
+                                    </div>
+                                    <li style={{listStyle: 'none', marginBottom: 10}}>
+                                        <Badge status="warning" text={`异常原因：${additionalInfo[2]}`} />
+                                    </li>
+                                                 </div>);
+                                return (<Popover content={content}><span style={{ color: '#F3AC00', cursor: 'pointer' }}>{value || (value === 0 ? 0 : '-')}</span></Popover>);
+                            }
+                            return value || (value === 0 ? 0 : '-');
+                        }
+                    });
+                });
+            }
+            yield update({ hiscolumns: pollutants });
+        },
+        * queryhistorydatalisthis({payload}, {call, update}) {
+            debugger;
+            const res = yield call(queryhistorydatalist, {...payload});
+            let realdata=[];
+            if(res.data.length>0){
+                const datas=res.data;
+                for (let i = 0; i < datas.length; i++) {
+                    const element = datas[i];
+                    if(realdata.length < 5)
+                        realdata.push({key:i.toString(),...element});
+                }
+            }
+            yield update({ hisrealdata: realdata });
         }
     },
     reducers: {
