@@ -218,12 +218,22 @@ export default class EmergencyDetailInfo extends Component {
         const pics = Attachments !== '' ? Attachments.ThumbimgList : [];
         const fileList = [];
         pics.map((item) => {
-            fileList.push({
-                uid: item,
-                name: item.replace('_thumbnail',''),
-                status: 'done',
-                url: `${imgaddress}${item}`,
-            });
+            if(item==='no'){
+                fileList.push({
+                    uid: item,
+                    name: item,
+                    status: 'done',
+                    url: `/NoPic.png`,
+                });
+            }else{
+                fileList.push({
+                    uid: item,
+                    name: item.replace('_thumbnail',''),
+                    status: 'done',
+                    url: `${imgaddress}${item}`,
+                });
+            }
+            
         });
         const columns = [{
             title: '开始报警时间',
