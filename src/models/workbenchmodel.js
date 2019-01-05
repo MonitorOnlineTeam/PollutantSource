@@ -19,6 +19,8 @@ import {
     getStatisticsPointStatus
 } from '../services/workbenchapi';
 
+import {queryhistorydatalist} from '../services/api';
+
 export default Model.extend({
     namespace: 'workbenchmodel',
     state: {
@@ -92,6 +94,16 @@ export default Model.extend({
         statisticsPointStatus:{
             model:{},
             total:0
+        },
+        warningDetailsDatas:{
+            chartDatas:[],
+            DGIMNs:'',
+            selectedPollutantName:'',
+            selectedPollutantCode:'',
+            pageIndex: 1,
+            pageSize: 2000,
+            beginTime:'2018-12-28 20:00:00',
+            endTime: '2018-12-28 21:00:00',
         }
     },
     subscriptions: {
@@ -300,6 +312,34 @@ export default Model.extend({
                     ...{
                         model:response.data,
                         total:response.total
+                    }
+                }
+            });
+        },
+        /**
+         * 获取预警实时数据
+         * @param {传递参数} 传递参数
+         * @param {操作} 操作项
+         */
+        * getRealTimeWarningDatas({payload}, { call, put, update, select }) {
+            const {warningDetailsDatas} = yield select(state => state.workbenchmodel);
+            debugger;
+            let body = {
+                dgimn: warningDetailsDatas.DGIMNs,
+                // pollutantCodes: params.pollutantCode,
+                datatype: 'realtime',//minute
+                pageIndex: warningDetailsDatas.pageIndex,
+                pageSize: warningDetailsDatas.pageSize,
+                beginTime: warningDetailsDatas.beginTime,
+                endTime: warningDetailsDatas.endTime
+            };
+            const response = yield call(queryhistorydatalist, {...body});
+            debugger;
+            yield update({
+                warningDetailsDatas:{
+                    ...warningDetailsDatas,
+                    ...{
+                        chartDatas:response.data
                     }
                 }
             });

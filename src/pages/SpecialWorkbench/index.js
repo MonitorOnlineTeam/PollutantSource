@@ -1,12 +1,13 @@
 
 import React, { Component } from 'react';
 import { Map, Markers } from 'react-amap';
-import { Row, Col,Card,List, Spin,Table,Calendar, Badge,Tag,Icon,Button,Tabs,Divider } from 'antd';
+import { Row, Col,Card,List, Spin,Table,Calendar, Badge,Tag,Icon,Button,Tabs,Divider,Modal } from 'antd';
 import ReactEcharts from 'echarts-for-react';
 import moment from 'moment';
 import {connect} from 'dva';
 import {routerRedux} from 'dva/router';
 import { amapKey } from '../../config';
+import PollutantSelect from '../../components/PointDetail/PollutantSelect';
 import styles from './index.less';
 
 const TabPane = Tabs.TabPane;
@@ -63,12 +64,15 @@ const pageUrl = {
     getAllPointOverDataList:'workbenchmodel/getAllPointOverDataList',
     getOverPointList:'workbenchmodel/getOverPointList',
     getStatisticsPointStatus:'workbenchmodel/getStatisticsPointStatus',
+    getRealTimeWarningDatas:'workbenchmodel/getRealTimeWarningDatas',
+    getPollutantList:'points/querypollutantlist'
 };
 @connect(({
     loading,
     workbenchmodel,
     transmissionefficiency,
-    equipmentoperatingrate
+    equipmentoperatingrate,
+    points
 }) => ({
     loadingOperationData: loading.effects[pageUrl.getOperationData],
     loadingExceptionAlarm:loading.effects[pageUrl.getExceptionAlarmData],
@@ -89,13 +93,17 @@ const pageUrl = {
     allPointOverDataList:workbenchmodel.allPointOverDataList,
     overPointList:workbenchmodel.overPointList,
     statisticsPointStatus:workbenchmodel.statisticsPointStatus,
+    pollutantList: points.pollutantlist,
+    warningDetailsDatas: workbenchmodel.warningDetailsDatas
 }))
 class SpecialWorkbench extends Component {
     constructor(props) {
         super(props);
         this.state = {
             defaultDateValue:moment(),
-            selectedValue: moment()
+            selectedValue: moment(),
+            visibleModal:false,
+            clickThisPointName:''
         };
     }
 
@@ -111,6 +119,7 @@ class SpecialWorkbench extends Component {
         this.getOverPointList();
         this.getStatisticsPointStatus();
 
+
     }
 
     /**
@@ -120,6 +129,28 @@ class SpecialWorkbench extends Component {
         this.props.dispatch({
             type: pageUrl.updateState,
             payload: payload,
+        });
+    }
+
+    /**
+     * 根据排口获取污染物
+     */
+    getPollutantList = (mn) => {
+        this.props.dispatch({
+            type: pageUrl.getPollutantList,
+            payload: {
+                dgimn: mn
+            }
+        });
+    }
+
+    /**
+     * 智能监控_实时预警详情
+     */
+    getRealTimeWarningDatas = () =>{
+        this.props.dispatch({
+            type: pageUrl.getRealTimeWarningDatas,
+            payload: {},
         });
     }
 
@@ -425,7 +456,7 @@ class SpecialWorkbench extends Component {
      * 智能质控_渲染图表
      */
     getOption = (type) => {
-        console.log('rateStatistics',this.props.rateStatistics);
+        //console.log('rateStatistics',this.props.rateStatistics);
         const {model}=this.props.rateStatistics;
         let networkeRate=(parseFloat(model.NetworkeRate) * 100).toFixed(2);
         let runningRate=(parseFloat(model.RunningRate) * 100).toFixed(2);
@@ -568,19 +599,19 @@ class SpecialWorkbench extends Component {
      * 智能监控_渲染当小时预警数据列表
      */
     renderHourDataOverWarningList = ()=>{
-        //console.log('hourDataOverWarningList:',this.props.hourDataOverWarningList);
+        console.log('hourDataOverWarningList:',this.props.hourDataOverWarningList);
         const listData = [];
 
-        this.props.hourDataOverWarningList.tableDatas.map((item)=>{
+        this.props.hourDataOverWarningList.tableDatas.map((items)=>{
             //判断报警是否超过4小时
             listData.push({
-                title:`${item.PointName}`,
+                title:`${items.PointName}`,
                 description:(
                     <div>
                         {
-                            item.OverWarnings.map(item => (
+                            items.OverWarnings.map(item => (
                                 <div>
-                                    <div style={{backgroundColor:'rgb(249,249,249)',padding:10,marginBottom:5}}>
+                                    <div className={styles.warningsData} onClick={(e)=>this.showModal(items.PointName,items.DGIMNs,item.PollutantCode,item.PollutantName)}>
                                         {item.PollutantName}
                                         <Divider type="vertical" style={{backgroundColor:'#b3b3b3'}} />
                                     超标预警值为{item.AlarmValue}ug/m3
@@ -695,7 +726,7 @@ class SpecialWorkbench extends Component {
     /**
      * 智能监控_地图默认显示的位置
      */
-    mapCenter =()=>
+    mapCenter = ()=>
         ({
             longitude:112.45,
             latitude:36.28,
@@ -725,6 +756,143 @@ class SpecialWorkbench extends Component {
             <span style={{marginRight:20}}>异常:<span style={{marginLeft:5,color:'gold'}}>{model.ExceptionNum}</span></span>
             <span style={{marginRight:20}}>关停:<span style={{marginLeft:5,color:'rgb(208,145,14)'}}>{model.StopNum}</span></span>
         </span>;
+    }
+
+    //如果是数据列表则没有选择污染物，而是展示全部污染物
+    getPollutantSelect =()=>(<PollutantSelect
+        optionDatas={this.props.pollutantList}
+        defaultValue={this.props.warningDetailsDatas.selectedPollutantCode}
+        style={{width: 150,marginRight:10}}
+        onChange={this.handlePollutantChange}
+    /> )
+
+    // 污染物
+    handlePollutantChange=(value, selectedOptions) => {
+        //debugger;
+        this.updateState({
+            warningDetailsDatas:{
+                ...this.props.warningDetailsDatas,
+                ...{
+                    selectedPollutantCode:value,
+                    selectedPollutantName:selectedOptions.props.children
+                }
+            }
+        });
+    };
+
+    /**
+     * 智能监控_渲染预警详情图表数据
+     */
+    getWarningChartOption =() =>{
+        console.log('pollutantList',this.props.pollutantList);
+        console.log('warningDetailsDatas',this.props.warningDetailsDatas);
+        let {chartDatas,selectedPollutantCode,selectedPollutantName}=this.props.warningDetailsDatas;
+
+        let xAxis=[];
+        let seriesData=[];
+
+        chartDatas.map((item) => {
+            xAxis.push(item.MonitorTime);
+            seriesData.push(item[selectedPollutantCode]);
+        });
+
+        let option = {
+            tooltip: {
+                trigger: 'axis'
+            },
+            legend: {
+                data:[selectedPollutantName]
+            },
+            xAxis:  {
+                type: 'category',
+                boundaryGap: false,
+                data: xAxis
+            },
+            yAxis: {
+                type: 'value',
+                name: 'ug/m³',
+                axisLabel: {
+                    formatter: '{value}'
+                }
+            },
+            series: [
+                {
+                    name:selectedPollutantName,
+                    type:'line',
+                    data:seriesData,
+                }
+            ]
+        };
+        return option;
+
+    }
+
+    /**
+     * 智能监控_渲染预警详情表格数据
+     */
+    renderWarningDetailsTable = ()=>{
+        let { selectedPollutantCode,selectedPollutantName,chartDatas } = this.props.warningDetailsDatas;
+
+        const columns = [
+            {
+                title: '监测时间',
+                dataIndex: 'MonitorTime'
+            },
+            {
+                title: '污染物',
+                dataIndex: 'none',
+                render: (text, record) => `${selectedPollutantName }`
+            },
+            {
+                title: '监测值',
+                dataIndex: selectedPollutantCode
+            },
+            {
+                title: '标准值',
+                dataIndex: `${selectedPollutantCode}_StandardValue`
+            },
+            {
+                title: '建议浓度',
+                dataIndex: `${selectedPollutantCode}_SuggestValue`
+            }
+        ];
+
+        return <Table
+            columns={columns}
+            dataSource={chartDatas}
+            size="small"
+            pagination={{ pageSize: 15 }}
+        />;
+    }
+
+    /**
+     * 智能监控_显示预警详情弹窗口
+     */
+    showModal = (name,mn,pollutantCode,pollutantName)=>{
+        this.getRealTimeWarningDatas();
+        this.getPollutantList(mn);
+        this.updateState({
+            warningDetailsDatas:{
+                ...this.props.warningDetailsDatas,
+                ...{
+                    DGIMNs: mn,
+                    selectedPollutantCode:pollutantCode,
+                    selectedPollutantName:pollutantName
+                }
+            }
+        });
+
+
+        this.setState({
+            visibleModal: true,
+            clickThisPointName:name
+        });
+    }
+
+    handleCancel =()=>{
+        this.setState({
+            visibleModal: false,
+        });
     }
 
     render() {
@@ -904,7 +1072,7 @@ class SpecialWorkbench extends Component {
 
                     <Row gutter={24}>
                         <Col xl={8} lg={24} md={24} sm={24} xs={24} style={{ marginBottom: 10 }}>
-                            <Card loading={this.props.loadingOperationData} style={{}}>
+                            <Card style={{}}>
                                 <Card.Grid style={{width:'100%'}}>
                                     <div className={styles.calendarDiv}>
                                         <div style={{textAlign: 'left', marginBottom: -35}}>
@@ -954,6 +1122,52 @@ class SpecialWorkbench extends Component {
                         </Col>
                     </Row>
                 </div>
+                <Modal
+                    title={
+                        <Row>
+                            <Col span={10}>{this.state.clickThisPointName}</Col>
+                        </Row>
+                    }
+                    visible={this.state.visibleModal}
+                    onOk={this.handleOk}
+                    onCancel={this.handleCancel}
+                    width="70%"
+                    footer={[]}
+                >
+                    <Tabs
+                        defaultActiveKey="1"
+                        tabPosition="left"
+                        style={{height: 'calc(100vh - 400px)'}}
+                    >
+                        <TabPane tab="图表分析" key="1">
+                            <Row>
+                                <Col span={3}>{this.getPollutantSelect()}</Col>
+                            </Row>
+                            <Row>
+                                <Col>
+                                    <ReactEcharts
+                                        option={this.getWarningChartOption()}
+                                        style={{height: 'calc(100vh - 400px)', width: '100%'}}
+                                        className="echarts-for-echarts"
+                                        theme="my_theme"
+                                    />
+                                </Col>
+                            </Row>
+                        </TabPane>
+                        <TabPane tab="数据分析" key="2">
+                            {/* <Row style={{marginBottom:10}}>
+                                <Col span={3}>{this.getPollutantSelect()}</Col>
+                            </Row> */}
+                            <Row>
+                                <Col>
+                                    {
+                                        this.renderWarningDetailsTable()
+                                    }
+                                </Col>
+                            </Row>
+                        </TabPane>
+                    </Tabs>
+                </Modal>
             </div>
 
         );
