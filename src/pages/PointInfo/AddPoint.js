@@ -17,6 +17,8 @@ import {
     Divider,
 } from 'antd';
 import MonitorContent from '../../components/MonitorContent/index';
+import Division from '../../components/Layout/Division';
+
 import {
     connect
 } from 'dva';
@@ -211,7 +213,18 @@ export default class AddPoint extends Component {
              message.success('新增成功', 3).then(() => index);
          }
      };
+     
      render() {
+        const formItemLayout = {
+            labelCol: {
+              xs: { span: 8 },
+              sm: { span: 8 },
+            },
+            wrapperCol: {
+              xs: { span: 8 },
+              sm: { span: 8 },
+            },
+          };
          const {getFieldDecorator} = this.props.form;
          // const UserId = this.props.match.params.UserId;
 
@@ -224,13 +237,15 @@ export default class AddPoint extends Component {
                     {Name:'排口维护',Url:''}
                 ]
             }>
-            <div style={{ padding: 30, background: "#FFFFFF",marginBottom:10 }} >
-             <Form onSubmit={this.handleSubmit} style={{ display:'flex',flexDirection:'row',flexWrap:'wrap',alignItems:'center',justifyContent:'space-between'}} >
-        
-                     <Row gutter={48} >
-                         <Col span={12} >
-                             <FormItem labelCol={{span: 8}}
-                                 wrapperCol={{span: 12}}
+            <div style={{ padding: 50, background: "#FFFFFF",marginBottom:10 }} >
+
+             <Form onSubmit={this.handleSubmit}  >
+             
+                        <Row gutter={8}>
+
+                        <Col span={8} >
+                                <FormItem   style={{textAlign:"left"}}  {...formItemLayout}  
+                                  
                                  label="排口名称" > {
                                      getFieldDecorator('PointName', {
                                          rules: [{
@@ -238,85 +253,92 @@ export default class AddPoint extends Component {
                                              message: '请输入排口名称!'
                                          } ]
 
-                                     })(<Input placeholder="排口名称" />)
+                                     })(<Input    style={{ width:200 }}placeholder="排口名称" />)
                                  } </FormItem>
+                         
                          </Col>
-                         <Col span={12} >
-                             <FormItem labelCol={{span: 8}}
-                                 wrapperCol={{span: 12}}
+                          <Col span={8} >
+                                <FormItem    {...formItemLayout}  
+                                  
                                  label="排口编号" > {
                                      getFieldDecorator('DGIMN', {
                                          rules: [{
                                              required: true,
                                              message: '请输入排口编号!'
                                          }]
-                                     })(<Input placeholder="排口编号"
+                                     })(<Input    style={{ width:200 }}placeholder="排口编号"
                                          disabled={
                                              this.state.DGIMNdisabled
                                          }
                                      />
                                      )
                                  } </FormItem>
+                         
+                      
                          </Col>
-                     </Row>
-                     <Row gutter={48} >
-                         <Col span={12} >
-                             <FormItem labelCol={{span: 8}}
-                                 wrapperCol={{span: 12}}
+                         <Col span={8} >
+                                <FormItem    {...formItemLayout}  
+                                  
                                  label="负责人" > {
                                      getFieldDecorator('Linkman'
-                                     )(<Input placeholder="负责人" />
+                                     )(<Input    style={{ width:200 }}placeholder="负责人" />
                                      )}
                              </FormItem>
-                         </Col>
-                         <Col span={12} >
-                             <FormItem labelCol={{span: 8}}
-                                 wrapperCol={{span: 12}}
+                             </Col>
+                             </Row>
+                             <Row gutter={8}>
+                             <Col span={8} >
+                                  <FormItem    {...formItemLayout}  
+                                  
                                  label="负责人电话" > {
                                      getFieldDecorator('MobilePhone', {
                                          rules: [{
                                              pattern: /^1\d{10}$/,
                                              message: '请输入正确的手机号!'
                                          }]
-                                     })(<Input placeholder="负责人电话" />)}
+                                     })(<Input    style={{ width:200 }}placeholder="负责人电话" />)}
                              </FormItem>
-                         </Col>
-                     </Row>
-                     <Row gutter={48}>
-                         <Col span={12} >
-                             <FormItem labelCol={{span: 8}}
-                                 wrapperCol={{span: 12}}
+                             </Col>
+                      
+                     
+                             <Col span={8} >
+                                <FormItem    {...formItemLayout}  
+                                  
                                  label="排口类型" > {
                                      getFieldDecorator('PointType',
                                          {
                                              initialValue: undefined,
                                          }
-                                     )(<Select placeholder="请选择" >
+                                     )(<Select placeholder="请选择"  style={{ width:200 }} >
                                          <Option value="1" > 工艺废气排放口 </Option>
                                          <Option value="2" > 燃烧废气排放口 </Option>
                                      </Select>)
                                  } </FormItem>
+                         
                          </Col>
-                         <Col span={12} >
-                             <FormItem labelCol={{span: 8}}
-                                 wrapperCol={{span: 12}}
+                         <Col span={8} >
+                                <FormItem    {...formItemLayout}  
+                                  
                                  label="污染物类型" > {
                                      getFieldDecorator('PollutantType',
                                          {
                                              initialValue: undefined,
                                          }
                                      )(
-                                         <Select placeholder="请选择" >
+                                         <Select placeholder="请选择"  style={{ width:200 }} >
                                              <Option value="2" > 废气 </Option>
                                              <Option value="4" > 固体废物 </Option>
                                          </Select>)
                                  } </FormItem>
-                         </Col>
-                     </Row>
-                     <Row gutter={48}>
-                         <Col span={12} >
-                             <FormItem labelCol={{span: 8}}
-                                 wrapperCol={{span: 12}}
+                                 </Col>
+                          </Row>
+                          
+                         <Divider dashed   />
+                     
+                         <Row gutter={8}>
+                         <Col span={8} >
+                                <FormItem    {...formItemLayout}  
+                                  
                                  label="排放类型" > {
                                      getFieldDecorator('OutputType',
                                          {
@@ -328,10 +350,10 @@ export default class AddPoint extends Component {
                                              unCheckedChildren="入口"
                                          />)
                                  } </FormItem>
-                         </Col>
-                         <Col span={12} >
-                             <FormItem labelCol={{span: 8}}
-                                 wrapperCol={{span: 12}}
+                          </Col>
+                          <Col span={8} >
+                                <FormItem    {...formItemLayout}  
+                                  
                                  label="是否烧结" > {
                                      getFieldDecorator('IsSj',
                                          {
@@ -343,32 +365,35 @@ export default class AddPoint extends Component {
                                              unCheckedChildren="非烧结"
                                          />)
                                  } </FormItem>
+                         
+                      
                          </Col>
-                     </Row>
-                     <Row gutter={48}>
-                         <Col span={12} >
-                             <FormItem labelCol={{span: 8}}
-                                 wrapperCol={{span: 12}}
+                         <Col span={8} >
+                                <FormItem    {...formItemLayout}  
+                                  
                                  label="排口直径" > {
                                      getFieldDecorator('OutputDiameter',
                                      )(
                                          <InputNumber min={0} max={10000} />)
                                  } </FormItem>
-                         </Col>
-                         <Col span={12} >
-                             <FormItem labelCol={{span: 8}}
-                                 wrapperCol={{span: 12}}
+                                  </Col>
+                         </Row>
+                         <Division></Division>
+                         <Row gutter={8}>
+                         <Col span={8} >
+                                <FormItem    {...formItemLayout}  
+                                  
                                  label="排口高度" > {
                                      getFieldDecorator('OutputHigh',
                                      )(
                                          <InputNumber min={0} max={10000} />)
                                  } </FormItem>
+                         
+                      
                          </Col>
-                     </Row>
-                     <Row gutter={48}>
-                         <Col span={12} >
-                             <FormItem labelCol={{span: 8}}
-                                 wrapperCol={{span: 12}}
+                         <Col span={8} >
+                                <FormItem    {...formItemLayout}  
+                                  
                                  label="排放去向" > {
                                      getFieldDecorator('OutPutWhitherCode',
                                          {
@@ -387,21 +412,24 @@ export default class AddPoint extends Component {
                                              <Option value="I" > 其他 </Option>
                                          </Select>)
                                  } </FormItem>
+                         
                          </Col>
-                         <Col span={12} >
-                             <FormItem labelCol={{span: 8}}
-                                 wrapperCol={{span: 12}}
+                         <Col span={8} >
+                                <FormItem    {...formItemLayout}  
+                                  
                                  label="排序" > {
                                      getFieldDecorator('Sort'
                                      )(
                                          <InputNumber min={0} max={10000} />)
                                  } </FormItem>
-                         </Col>
-                     </Row>
-                     <Row gutter={48}>
-                         <Col span={12}>
-                             <FormItem labelCol={{span: 8}}
-                                 wrapperCol={{span: 12}}
+                                   </Col>
+                          </Row>
+                         <Divider dashed  />
+                     
+                         <Row gutter={8}>
+                         <Col span={8} >
+                                <FormItem    {...formItemLayout}  
+                                  
                                  label="排口地址" > {
                                      getFieldDecorator('Address', {
                                          rules: [{
@@ -410,13 +438,14 @@ export default class AddPoint extends Component {
                                          } ]
 
                                      })(
-                                         <Input placeholder="排口地址" />)
+                                         <Input    style={{ width:200 }}placeholder="排口地址" />)
                                  }
                              </FormItem>
-                         </Col>
-                         <Col span={12} >
-                             <FormItem labelCol={{span: 8}}
-                                 wrapperCol={{span: 12}}
+                             </Col>
+                             <Col span={8} >
+                                <FormItem    {...formItemLayout}  
+                                   labelCol={{ span: 8 }}
+                                   wrapperCol={{ span: 12 }}
                                  label="排口坐标" > {
                                      getFieldDecorator('Coordinate', {
                                          rules: [{
@@ -425,7 +454,7 @@ export default class AddPoint extends Component {
                                          } ]
 
                                      })(<Search placeholder="排口坐标"
-                                         enterButton="Search"
+                                         enterButton="查看坐标"
                                          onSearch={(value) => {
                                              this.setState({
                                                  Coordinate: value,
@@ -437,12 +466,12 @@ export default class AddPoint extends Component {
                                      />)
                                  } </FormItem>
                          </Col>
-                     </Row>
-                     <Row gutter={48} >
-                         <Col span={12} >
-                             <FormItem
+                      
+                        
+                         <Col span={8} >
+                                <FormItem    {...formItemLayout}
                                  labelCol={{ span: 8 }}
-                                 wrapperCol={{ span: 12 }}
+                                 wrapperCol={{ span: 8 }}
                                  label="运维人">
                                  {getFieldDecorator('OperationerId', {
                                      initialValue: undefined,
@@ -462,26 +491,31 @@ export default class AddPoint extends Component {
                                      </Select>
                                  )}
                              </FormItem>
-                         </Col>
-                         <Col span={12} />
-                     </Row>
-                     <Row gutter={48}>
-                         <Col span={24} style={{textAlign: 'center'}}>
-                             <Button type="primary"
-                                 htmlType="submit">
-                          保存
-                             </Button>
-                             <Divider type="vertical" />
-                             <Button type="dashed"
-                                 onClick={
-                                     () => this.props.dispatch(routerRedux.push(`/sysmanage/PointInfo`))
-                                 } >
-                          返回
-                             </Button>
-                         </Col>
-                     </Row>
+                             </Col>
+                             <Division></Division>
+                             </Row>
+                     
+          
+                         
+                      
             
              </Form>
+                  
+            <Divider orientation="right"  style={{border:'1px dashed #FFFFFF'}}>
+  
+  <Button type="primary"
+                       htmlType="submit">
+                保存
+                   </Button>
+                   <Divider type="vertical" />
+                   <Button type="dashed"
+                       onClick={
+                           () => this.props.dispatch(routerRedux.push(`/sysmanage/PointInfo`))
+                       } >
+                返回
+                   </Button>
+
+</Divider>
              <Modal
                  visible={this.state.Mapvisible}
                  title={this.state.title}
