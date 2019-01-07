@@ -122,6 +122,7 @@ class PointDetail extends Component {
 
         // debugger;
         this.props.dataTemp.map((item, key) =>{
+            debugger
             let status = <img src="/gisexception.png" width="15" />;
             if (item.status === 0) {
                 status= <img src="/gisunline.png" width="15" />;
@@ -139,6 +140,9 @@ class PointDetail extends Component {
 
             if(key===0) {
                 item=this.props.dataTemp.filter(todo=>todo.DGIMN===this.props.pointInfo.DGIMN)[0];
+                if(!item){
+                    return false;
+                }
             }else if(item.DGIMN===this.props.pointInfo.DGIMN)
                 return false;
 
