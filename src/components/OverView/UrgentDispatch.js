@@ -10,9 +10,6 @@ const FormItem = Form.Item;
 class UrgentDispatch extends Component {
 
     onSubmit=()=>{
-        const selectpoint=this.props.selectpoint;
-        if(selectpoint)
-        {
             this.props.dispatch({
                 type:'overview/addtaskinfo',
                 payload:{
@@ -21,15 +18,15 @@ class UrgentDispatch extends Component {
                     remark:this.props.form.getFieldValue('remark')
                 }
             })
+            if(this.props.reloadData)
+            {
+                //刷新方法
+                this.props.reloadData();
+            }
             this.props.onCancel();
-        }
-        else{
-            message.error('派单失败');
-            this.props.onCancel();
-        }
     }
     render() {
-        console.log(this.props.selectpoint);
+        const {pointName,operationUserName,operationtel}=this.props;
         const { getFieldDecorator } = this.props.form;
         const formItemLayout = {
             labelCol: {
@@ -42,9 +39,10 @@ class UrgentDispatch extends Component {
         return (
             <div>
                 <Modal
-                    title={ this.props.selectpoint? this.props.selectpoint.pointName:''}
+                    title={ pointName }
                     visible={this.props.visible}
                     onOk={this.onSubmit}
+                    destroyOnClose={true}
                     onCancel={this.props.onCancel}
                 >
                     <Form className="login-form">
@@ -53,7 +51,7 @@ class UrgentDispatch extends Component {
                             label="运维人员"
                         >
                             {getFieldDecorator('operationName', {
-                                initialValue:  this.props.selectpoint? this.props.selectpoint.operationUserName:'',
+                                initialValue:operationUserName,
                                 rules: [{ required: true, message: '请输入运维人名称' }],
                             })(
                                 <Input disabled={true} prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder="Username" />
@@ -65,7 +63,7 @@ class UrgentDispatch extends Component {
                         >
                             {getFieldDecorator('phone', {
 
-                                initialValue:  this.props.selectpoint?this.props.selectpoint.operationtel:'',
+                                initialValue:operationtel,
                                 rules: [{ required: true, message: '请输入电话号码' }],
                             })(
                                 <Input disabled={true} prefix={<Icon type="phone" style={{ color: 'rgba(0,0,0,.25)' }} />} type="phone" />
@@ -76,6 +74,7 @@ class UrgentDispatch extends Component {
                             {...formItemLayout}
                         >
                             {getFieldDecorator('remark', {
+                                  initialValue:null,
                             })(
                                 <Input.TextArea rows='3' prefix={<Icon type="file-text" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder="备注" />
                             )}
