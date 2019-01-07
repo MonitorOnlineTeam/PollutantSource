@@ -122,7 +122,7 @@ class PointDetail extends Component {
 
         // debugger;
         this.props.dataTemp.map((item, key) =>{
-            debugger
+            //debugger
             let status = <img src="/gisexception.png" width="15" />;
             if (item.status === 0) {
                 status= <img src="/gisunline.png" width="15" />;
@@ -213,7 +213,7 @@ class PointDetail extends Component {
 
     //获取派单还是督办按钮
     getPDDBButton=()=>{
-        debugger;
+        //debugger;
         const {pointInfo}=this.props;
         if(pointInfo) {
             if(pointInfo.existTask) {
@@ -236,7 +236,7 @@ class PointDetail extends Component {
         if(pointInfo.length===0)
             return null;
         let {status,pollutantType,DGIMN,existTask} = pointInfo[0];
-        debugger;
+        //debugger;
         console.log('pointInfo',pointInfo);
         let statusText = <span><img src="/gisexception.png" width="11" style={{marginBottom:3,marginRight:5}} /><span>异常</span></span>;
         if (status === 0) {
