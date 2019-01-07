@@ -869,8 +869,7 @@ class SpecialWorkbench extends Component {
      * 智能监控_显示预警详情弹窗口
      */
     showModal = (name,mn,pollutantCode,pollutantName)=>{
-        this.getRealTimeWarningDatas();
-        this.getPollutantList(mn);
+        
         this.updateState({
             warningDetailsDatas:{
                 ...this.props.warningDetailsDatas,
@@ -881,7 +880,8 @@ class SpecialWorkbench extends Component {
                 }
             }
         });
-
+        this.getRealTimeWarningDatas();
+        this.getPollutantList(mn);
 
         this.setState({
             visibleModal: true,
