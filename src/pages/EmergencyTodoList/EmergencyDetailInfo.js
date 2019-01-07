@@ -53,6 +53,9 @@ export default class EmergencyDetailInfo extends Component {
     renderItem=(data, taskID) => {
         const rtnVal = [];
         let taskfrom=this.props.match.params.taskfrom;
+        if(taskfrom.indexOf("qcontrollist")>-1){
+            taskfrom=taskfrom.split('-')[0];
+        }
         data.map((item) => {
             if (item.FormMainID !== null) {
                 switch (item.ID) {
@@ -120,6 +123,7 @@ export default class EmergencyDetailInfo extends Component {
             let listUrl=this.props.match.params.viewtype;
             let taskID=this.props.match.params.TaskID;
             let taskfrom=this.props.match.params.taskfrom;
+            let histroyrecordtype=null;
             rtnVal.push({Name:'首页',Url:'/'},);
             switch(listUrl){
     case 'datalistview':    //数据一栏
@@ -132,13 +136,18 @@ export default class EmergencyDetailInfo extends Component {
     rtnVal.push({Name:'我的派单',Url:`/account/settings/mypielist`},);
     break;
     case 'workbench':
-    rtnVal.push({Name:'我的派单',Url:`/${listUrl}`},);
+    rtnVal.push({Name:'工作台',Url:`/${listUrl}`},);
     default:
     break;
             }
-            if(taskfrom==='ywdsjlist'){
+            if(taskfrom==='ywdsjlist'){     //大事记
                 rtnVal.push({Name:'运维大事记',Url:`/pointdetail/${this.state.DGIMN}/${listUrl}/${taskfrom}`},);
+            }else if(taskfrom.indexOf('qcontrollist')>-1){    //质控记录（从表单进来时）
+                taskfrom=taskfrom.split('-')[0]
+                histroyrecordtype=taskfrom.split('-')[1];
+                rtnVal.push({Name:'质控记录',Url:`/pointdetail/${this.state.DGIMN}/${listUrl}/${taskfrom}/${histroyrecordtype}`},);
             }
+
             rtnVal.push({Name:'任务详情',Url:''})
             return rtnVal;
         }
@@ -209,12 +218,22 @@ export default class EmergencyDetailInfo extends Component {
         const pics = Attachments !== '' ? Attachments.ThumbimgList : [];
         const fileList = [];
         pics.map((item) => {
-            fileList.push({
-                uid: item,
-                name: item.replace('_thumbnail',''),
-                status: 'done',
-                url: `${imgaddress}${item}`,
-            });
+            if(item==='no'){
+                fileList.push({
+                    uid: item,
+                    name: item,
+                    status: 'done',
+                    url: `/NoPic.png`,
+                });
+            }else{
+                fileList.push({
+                    uid: item,
+                    name: item.replace('_thumbnail',''),
+                    status: 'done',
+                    url: `${imgaddress}${item}`,
+                });
+            }
+            
         });
         const columns = [{
             title: '开始报警时间',
@@ -287,6 +306,7 @@ export default class EmergencyDetailInfo extends Component {
             <Button style={{float:"right",marginRight:30}} onClick={() => {
                         this.props.history.goBack(-1);
                     }}><Icon type="left" />退回</Button>}>
+                    
                 <div style={{height: SCREEN_HEIGHT}} className={styles.ExceptionDetailDiv}>
                 <Card title={<span style={{fontWeight: '600'}}>基本信息</span>}>
                     <DescriptionList className={styles.headerList} size="large" col="3">

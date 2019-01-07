@@ -387,6 +387,7 @@ export async function querypollutantlist(params) {
 }
 // 获取历史数据
 export async function queryhistorydatalist(params) {
+    debugger;
     console.log(params.beginTime);
     console.log(params.endTime);
     const body = {
@@ -435,7 +436,7 @@ export async function querypollutanttypecode(params) {
 export async function querydatalist(params) {
     const body = {
         time: params.time,
-        pointType:params.pointType,
+        RunState:params.RunState,
         pollutantTypes:params.pollutantTypes,
         pointName:params.pointName
     };
