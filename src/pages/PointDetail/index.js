@@ -116,6 +116,10 @@ class PointDetail extends Component {
      */
     renderPointList = () => {
         const rtnVal = [];
+
+        //rtnVal.push(this.props.dataTemp.filter(todo=>todo.DGIMN===this.props.pointInfo.DGIMN)[0]);
+        //let selectedPoint=this.props.dataTemp.filter(todo=>todo.DGIMN===this.props.pointInfo.DGIMN)[0];
+
         // debugger;
         this.props.dataTemp.map((item, key) =>{
             let status = <img src="/gisexception.png" width="15" />;
@@ -132,11 +136,17 @@ class PointDetail extends Component {
             }else {
                 optStatus='';
             }
+
+            if(key===0) {
+                item=this.props.dataTemp.filter(todo=>todo.DGIMN===this.props.pointInfo.DGIMN)[0];
+            }else if(item.DGIMN===this.props.pointInfo.DGIMN)
+                return false;
+
             rtnVal.push(
                 <div key={item.DGIMN}>
                     <Col xs={12} sm={12} md={6} lg={6} xl={6}>
                         <Card
-                            style={{cursor:'pointer'}}
+                            style={{cursor:'pointer',border:`${item.DGIMN===this.props.pointInfo.DGIMN?'1px solid #81c2ff':'1px solid #fff'}`}}
                             onClick={()=>{
 
                                 this.clickCard(item);
