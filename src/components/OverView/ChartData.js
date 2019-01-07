@@ -18,7 +18,7 @@ class ChartData extends Component {
                         option={this.props.chartdata}
                         notMerge={true}
                         lazyUpdate={true} /> :
-                    <img style={{width: 150, marginLeft: 120, marginTop: 70}} src="../../../nodata.png" />)}
+                    <img style={{width: 150, marginLeft: 120, marginTop: 70}} src="/nodata.png" />)}
             </div>
         );
     }

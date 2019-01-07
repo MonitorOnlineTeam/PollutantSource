@@ -9,7 +9,7 @@ import {
 import Cookie from 'js-cookie';
 import moment from 'moment';
 import { connect } from 'dva';
-import RangePicker_ from '../../../components/PointDetail/RangePicker_';
+import RangePicker_ from '@/components/PointDetail/RangePicker_';
 import styles from './MyPieList.less';
 
 @connect(({

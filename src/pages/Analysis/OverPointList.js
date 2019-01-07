@@ -5,6 +5,7 @@ import { DatePicker,Input,Button,Radio,Row, Col,Spin,Card } from 'antd';
 import MonitorContent from '../../components/MonitorContent/index';
 import {routerRedux} from 'dva/router';
 import { connect } from 'dva';
+import {summaryPolluntantCode} from '../../config';
 const { RangePicker } = DatePicker;
 
 
@@ -25,6 +26,7 @@ class OverPointList extends Component {
         this.props.dispatch({
             type: 'analysisdata/queryalloverdatalist',
             payload: {
+                summaryPolluntantCode:summaryPolluntantCode
             }
         });
     }
@@ -43,6 +45,7 @@ class OverPointList extends Component {
                 payload: {
                     beginTime:value[0],
                     endTime:value[1],
+                    summaryPolluntantCode:summaryPolluntantCode
                 }
             });    
         }
@@ -107,8 +110,8 @@ class OverPointList extends Component {
            res.push(<Col key={item.pointName} span={8} >
             <div className={styles.cardcss}>
                 <div className={styles.cardtitle}> 
-                    <img style={{width: 20, marginRight: 10, marginBottom: 4}} src='../../../star.png' />  <span>{item.pointName}</span>
-                    <span  className={styles.timetitle} > <img style={{width: 15, marginRight: 10, marginBottom: 4}} src="../../../treetime.png" />
+                    <img style={{width: 20, marginRight: 10, marginBottom: 4}} src='/star.png' />  <span>{item.pointName}</span>
+                    <span  className={styles.timetitle} > <img style={{width: 15, marginRight: 10, marginBottom: 4}} src="/treetime.png" />
                     <span> 最新超标时间：{item.lastTime} </span>
                     </span>
                 </div>
@@ -157,7 +160,7 @@ class OverPointList extends Component {
                     <div>
                 
                   <RangePicker
-                     style={{width: 250,marginLeft:40}}
+                     style={{width: 250,marginLeft:40,textAlgin:'left'}}
                      format="YYYY-MM"
                      value={rangeDate}
                      mode={mode}

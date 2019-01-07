@@ -39,7 +39,7 @@ export default class StationBuilding extends Component {
                                   <p><Icon style={{marginRight: '2px'}} type="desktop" />运行状态：正常</p>
                                   <p><Icon style={{marginRight: '2px'}} type="compass" />质控状态：正常</p>
                               </div>
-                              <img className={styles.stationimg} src="../../../timg.jpg" />
+                              <img className={styles.stationimg} src="/timg.jpg" />
                           </div>
                       </Card>
                   </Col>
@@ -54,7 +54,7 @@ export default class StationBuilding extends Component {
                                   <p><Icon style={{marginRight: '2px'}} type="desktop" />运行状态：正常</p>
                                   <p><Icon style={{marginRight: '2px'}} type="compass" />质控状态：正常</p>
                               </div>
-                              <img className={styles.stationimg} src="../../../timg.jpg" />
+                              <img className={styles.stationimg} src="/timg.jpg" />
                           </div>
                       </Card>
                   </Col>
@@ -69,7 +69,7 @@ export default class StationBuilding extends Component {
                                   <p><Icon style={{marginRight: '2px'}} type="wallet" />数量：2</p>
                                   <p><Icon style={{marginRight: '2px'}} type="calendar" />保质日期：2019-2-19</p>
                               </div>
-                              <img className={styles.stationimg} src="../../../timg.jpg" />
+                              <img className={styles.stationimg} src="/timg.jpg" />
                           </div>
                       </Card>
                   </Col>
@@ -84,7 +84,7 @@ export default class StationBuilding extends Component {
                                   <p><Icon style={{marginRight: '2px'}} type="wallet" />数量：1</p>
                                   <p><Icon style={{marginRight: '2px'}} type="calendar" />保质日期：2020-11-2</p>
                               </div>
-                              <img className={styles.stationimg} src="../../../timg.jpg" />
+                              <img className={styles.stationimg} src="/timg.jpg" />
                           </div>
                       </Card>
                   </Col>

@@ -1,7 +1,7 @@
 // import liraries
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import { Modal,Breadcrumb, Tabs, Icon, Select, Button,Card,Spin,Row,Col,Badge,Tag,Input,Form,Radio,Alert } from 'antd';
+import { Modal,Breadcrumb, Tabs, Icon, Select, Button,Card,Spin,Row,Col,Divider,Tag,Input,Form,Radio,Alert } from 'antd';
 import { Link, Switch, Redirect,routerRedux } from 'dva/router';
 import moment from 'moment';
 import Cookie from 'js-cookie';
@@ -49,7 +49,7 @@ class PointDetail extends Component {
         };
     }
 
-    componentWillMount() {
+    componentDidMount() {
         this.props.dispatch({
             type: 'points/querysinglepointinfo',
             payload: {
@@ -89,24 +89,25 @@ class PointDetail extends Component {
         });
     }
 
-    clickCard = (DGIMN,pointName) => {
+    clickCard = (obj) => {
         this.props.dispatch({
             type: 'points/querysinglepointinfo',
             payload: {
-                dgimn:DGIMN
+                dgimn:obj.DGIMN
             }
         });
         this.setState({
             modalVisible: false,
-            pointName:pointName
+            pointName:obj.pointName
         });
 
         let locationArray=this.props.location.pathname.split('/');
         if(locationArray.length>1) {
-            let newUrl=this.props.location.pathname.replace(locationArray[2],DGIMN);
+            let newUrl=this.props.location.pathname.replace(locationArray[2],obj.DGIMN);
             this.props.dispatch(routerRedux.push(newUrl));
         }
         //TODO:如果地址不正确，需要跳转到错误页面吗？ 吴建伟
+
     }
 
     /**
@@ -116,13 +117,13 @@ class PointDetail extends Component {
         const rtnVal = [];
 
         this.state.pointList.map((item, key) =>{
-            let status = <img src="../../../gisexception.png" width="15" />;
+            let status = <img src="/gisexception.png" width="15" />;
             if (item.status === 0) {
-                status= <img src="../../../gisunline.png" width="15" />;
+                status= <img src="/gisunline.png" width="15" />;
             } if (item.status === 1) {
-                status= <img src="../../../gisnormal.png" width="15" />;
+                status= <img src="/gisnormal.png" width="15" />;
             } if (item.status === 2) {
-                status= <img src="../../../gisover.png" width="15" />;
+                status= <img src="/gisover.png" width="15" />;
             }
             let optStatus='';//TODO:排口运维状态不确定 故障：#119f9d
             if(item.existTask===1) {
@@ -135,7 +136,8 @@ class PointDetail extends Component {
                     <Card
                         style={{cursor:'pointer'}}
                         onClick={(e)=>{
-                            this.clickCard(item.DGIMN,item.pointName);
+
+                            this.clickCard(item);
                         }}
                         bordered={false}
                         loading={this.state.loadingCard}
@@ -151,7 +153,7 @@ class PointDetail extends Component {
                         </div>
                     </Card>
                 </Col>
-            </div>);
+                        </div>);
         });
 
         return rtnVal.length>0?rtnVal:(<Alert message="暂无数据" type="warning" />);
@@ -179,6 +181,42 @@ class PointDetail extends Component {
         });
     }
 
+    /**
+     * 渲染排口状态
+     */
+    renderPointStatus =() =>{
+        //console.log("pointInfo",this.props.pointInfo);
+
+        let {status,pollutantType} = this.props.pointInfo;
+
+        let statusText = <span><img src="/gisexception.png" width="11" style={{marginBottom:3,marginRight:5}} /><span>异常</span></span>;
+        if (status === 0) {
+            statusText= <span><img src="/gisunline.png" width="11" style={{marginBottom:3,marginRight:5}} /><span>离线</span></span>;
+        } if (status === 1) {
+            statusText= <span><img src="/gisnormal.png" width="11" style={{marginBottom:3,marginRight:5}} /><span>正常</span></span>;
+        } if (status === 2) {
+            statusText= <span><img src="/gisover.png" width="11" style={{marginBottom:3,marginRight:5}} /><span>超标</span></span>;
+        }
+        let pollutantTypeText=<span><Icon type="fire" style={{ color: 'rgb(238,162,15)',marginBottom:3,marginRight:5 }} /><span>废气</span></span>;
+        if(pollutantType==="1") {
+            pollutantTypeText=<span><Icon type="fire" style={{ color: 'rgb(238,162,15)',marginBottom:3,marginRight:5 }} /><span>废水</span></span>;
+        }
+        
+        return (
+            <span style={{marginLeft:20,fontSize:12}}>
+                {statusText}
+
+                <Divider type="vertical" />
+                {pollutantTypeText}
+                <Divider type="vertical" />
+                <span><Icon type="user" style={{ color: '#3B91FF',marginBottom:3,marginRight:5 }} /><span>运维中</span></span>
+                <Divider type="vertical" />
+                <span><Icon type="bell" style={{ color: 'red',marginBottom:3,marginRight:5 }} /><span>预警</span></span>
+                <Divider type="vertical" />
+                <span><Icon type="tool" style={{ color: 'rgb(212,197,123)',marginBottom:3,marginRight:5 }} /><span>故障</span></span>
+            </span>);
+    }
+
     render() {
         const { match, routerData, location,children,pointInfo } = this.props;
         Cookie.set('seldgimn', match.params.pointcode);
@@ -202,12 +240,22 @@ class PointDetail extends Component {
                     height: 'calc(100vh - 67px)' }}
             >
 
-                <div className={styles.pageHeader} style={{}}>
-                    <img src="../../../point.png" style={{width:37,marginTop:-1}} />
+                {/* <div className={styles.pageHeader} style={{}}>
+                    <img src="/point.png" style={{width:37,marginTop:-1}} />
                     <span style={{color:'#ccc',marginLeft:10}}>当前排口：</span>
                     <span style={{cursor:'pointer',color:'#1890FF'}} onClick={this.openModal}>{pointInfo.pointName}</span>
                     <Button style={{float:"right",marginRight:30}}><Link to="/overview/mapview"><Icon type="left" />返回</Link></Button>
                     <Button type="primary" ghost={true} style={{float:"right",marginRight:30}}><Icon type="bell" />派单</Button>
+                </div> */}
+
+                <div className={styles.pageHeader} style={{}}>
+                    <span style={{cursor:'pointer'}} onClick={this.openModal}>{pointInfo.pointName}  <Icon type="down" /></span>
+                    {
+                        this.renderPointStatus()
+                    }
+
+                    <Button style={{float:"right",marginRight:30,top:-5}}><Link to="/overview/mapview"><Icon type="left" />返回</Link></Button>
+                    <Button type="primary" ghost={true} style={{float:"right",marginRight:30,top:-5}}><Icon type="bell" />派单</Button>
                 </div>
                 <div style={{ backgroundColor: '#fff', margin: 10, padding: 10 }}>
                     <Tabs
@@ -222,7 +270,6 @@ class PointDetail extends Component {
                     </Tabs>
                     {children}
                 </div>
-
                 <Modal
                     visible={this.state.modalVisible}
                     title={`当前排口: ${pointInfo.pointName}`}
