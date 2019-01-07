@@ -83,6 +83,7 @@ const pageUrl = {
     loadingDataOverWarning:loading.effects[pageUrl.getDataOverWarningData],
     loadingAllPointOverDataList:loading.effects[pageUrl.getAllPointOverDataList],
     loadingOverPointList:loading.effects[pageUrl.getOverPointList],
+    loadingRealTimeWarningDatas:loading.effects[pageUrl.getRealTimeWarningDatas],
     operation: workbenchmodel.operation,
     exceptionAlarm: workbenchmodel.exceptionAlarm,
     rateStatistics: workbenchmodel.rateStatistics,
@@ -786,6 +787,7 @@ class SpecialWorkbench extends Component {
     getWarningChartOption =() =>{
         console.log('pollutantList',this.props.pollutantList);
         console.log('warningDetailsDatas',this.props.warningDetailsDatas);
+
         let {chartDatas,selectedPollutantCode,selectedPollutantName}=this.props.warningDetailsDatas;
 
         let xAxis=[];
@@ -797,11 +799,12 @@ class SpecialWorkbench extends Component {
         });
 
         let option = {
+            color:['#1890FF','red'],
             tooltip: {
                 trigger: 'axis'
             },
             legend: {
-                data:[selectedPollutantName]
+                data:[selectedPollutantName,'建议浓度']
             },
             xAxis:  {
                 type: 'category',
@@ -820,11 +823,51 @@ class SpecialWorkbench extends Component {
                     name:selectedPollutantName,
                     type:'line',
                     data:seriesData,
+                },
+                {
+                    name:'建议浓度',
+                    type:'line',
+                    data:[],
+                    markLine : {
+                        data : [
+                            {
+                                yAxis: 5,
+                                symbol: 'none',
+                                label: {
+                                    normal: {
+                                        position: 'end',
+                                        formatter: '100'
+                                    }
+                                }}
+                        ]
+                    }
                 }
             ]
         };
-        return option;
 
+
+        return <ReactEcharts
+            loadingOption={this.props.loadingRealTimeWarningDatas}
+            option={option}
+            style={{height: 'calc(100vh - 400px)', width: '100%'}}
+            className="echarts-for-echarts"
+            theme="my_theme"
+        />;
+
+    }
+
+    renderWarningDetailsCharts = ()=>{
+        if (this.props.loadingRealTimeWarningDatas) {
+            return (<Spin
+                style={{ width: '100%',
+                    height: 'calc(100vh/2)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center' }}
+                size="large"
+            />);
+        }
+        return this.getWarningChartOption();
     }
 
     /**
@@ -836,24 +879,32 @@ class SpecialWorkbench extends Component {
         const columns = [
             {
                 title: '监测时间',
-                dataIndex: 'MonitorTime'
+                dataIndex: 'MonitorTime',
+                width:'20%'
             },
             {
                 title: '污染物',
                 dataIndex: 'none',
-                render: (text, record) => `${selectedPollutantName }`
+                render: (text, record) => `${selectedPollutantName }`,
+                width:'20%'
             },
             {
                 title: '监测值',
-                dataIndex: selectedPollutantCode
+                dataIndex: selectedPollutantCode,
+                width:'20%',
+                align: 'center'
             },
             {
                 title: '标准值',
-                dataIndex: `${selectedPollutantCode}_StandardValue`
+                dataIndex: `${selectedPollutantCode}_StandardValue`,
+                width:'20%',
+                align: 'center'
             },
             {
                 title: '建议浓度',
-                dataIndex: `${selectedPollutantCode}_SuggestValue`
+                dataIndex: `${selectedPollutantCode}_SuggestValue`,
+                width:'20%',
+                align: 'center'
             }
         ];
 
@@ -862,6 +913,18 @@ class SpecialWorkbench extends Component {
             dataSource={chartDatas}
             size="small"
             pagination={{ pageSize: 15 }}
+            loading={this.props.loadingRealTimeWarningDatas}
+            scroll={{ y: 'calc(100vh - 490px)' }}
+            rowClassName={
+                (record, index, indent) => {
+                    if (index === 0) {
+                        return;
+                    }
+                    if (index % 2 !== 0) {
+                        return 'light';
+                    }
+                }
+            }
         />;
     }
 
@@ -869,7 +932,7 @@ class SpecialWorkbench extends Component {
      * 智能监控_显示预警详情弹窗口
      */
     showModal = (name,mn,pollutantCode,pollutantName)=>{
-        
+
         this.updateState({
             warningDetailsDatas:{
                 ...this.props.warningDetailsDatas,
@@ -1138,6 +1201,7 @@ class SpecialWorkbench extends Component {
                         defaultActiveKey="1"
                         tabPosition="left"
                         style={{height: 'calc(100vh - 400px)'}}
+                        className={styles.warningDetailsModal}
                     >
                         <TabPane tab="图表分析" key="1">
                             <Row>
@@ -1145,12 +1209,11 @@ class SpecialWorkbench extends Component {
                             </Row>
                             <Row>
                                 <Col>
-                                    <ReactEcharts
-                                        option={this.getWarningChartOption()}
-                                        style={{height: 'calc(100vh - 400px)', width: '100%'}}
-                                        className="echarts-for-echarts"
-                                        theme="my_theme"
-                                    />
+
+                                    {
+                                        this.renderWarningDetailsCharts()
+                                    }
+
                                 </Col>
                             </Row>
                         </TabPane>
