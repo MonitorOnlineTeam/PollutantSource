@@ -5,7 +5,7 @@ import {
     Menu
 } from 'antd';
 import router from 'umi/router';
-import MonitorContent from '../../../components/MonitorContent/index';
+import MonitorContent from '@/components/MonitorContent/index';
 
 const {
     Content, Sider,

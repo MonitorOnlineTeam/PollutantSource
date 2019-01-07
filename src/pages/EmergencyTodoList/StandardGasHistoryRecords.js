@@ -29,7 +29,7 @@ export default class StandardGasHistoryRecords extends Component {
         super(props);
         this.state = {
             rangeDate: [moment(moment(new Date()).subtract(3, 'month').format('YYYY-MM-DD 00:00:00')), moment(moment(new Date()).format('YYYY-MM-DD 23:59:59'))], // 最近七天
-            BeginTime: moment().subtract(11, 'month').format('YYYY-MM-DD 00:00:00'),
+            BeginTime: moment().subtract(3, 'month').format('YYYY-MM-DD 00:00:00'),
             EndTime: moment().format('YYYY-MM-DD 23:59:59'),
             DGIMN: this.props.match.params.pointcode,
             typeID: this.props.match.params.TypeID,
@@ -145,7 +145,7 @@ export default class StandardGasHistoryRecords extends Component {
                     <Table
                         size="middle"
                         scroll={{ y: 'calc(100vh - 465px)' }}
-                        loading={this.props.loading}
+                        loading={this.props.isloading}
                         className={styles.dataTable}
                         columns={columns}
                         dataSource={dataSource}

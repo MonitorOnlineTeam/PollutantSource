@@ -130,21 +130,21 @@ export default class ManualUpload extends Component {
     }
     getStatusImg = (value) => {
         if (value === 0) {
-            return <img style={{ width: 15 }} src="../../../gisunline.png" />;
+            return <img style={{ width: 15 }} src="/gisunline.png" />;
         } if (value === 1) {
-            return <img style={{ width: 15 }} src="../../../gisnormal.png" />;
+            return <img style={{ width: 15 }} src="/gisnormal.png" />;
         } if (value === 2) {
-            return <img style={{ width: 15 }} src="../../../gisover.png" />;
+            return <img style={{ width: 15 }} src="/gisover.png" />;
         }
-        return <img style={{ width: 15 }} src="../../../gisexception.png" />;
+        return <img style={{ width: 15 }} src="/gisexception.png" />;
     }
     getIcon = (key, value) => {
 
         if (key === 1) {
-            return <span ><img style={{ width: 20, marginBottom: 5 }} src="../../../water.png"></img><span style={{ marginLeft: 2 }}>{value}</span></span>
+            return <span ><img style={{ width: 20, marginBottom: 5 }} src="/water.png"></img><span style={{marginLeft:2}}>{value}</span></span>
         }
         else {
-            return <span><img style={{ width: 20, marginBottom: 5 }} src="../../../gas.png"></img> {value}</span>
+            return <span><img style={{ width: 20, marginBottom: 5 }} src="/gas.png"></img> {value}</span>
         }
     }
     treeCilck = (row) => {
@@ -293,7 +293,7 @@ export default class ManualUpload extends Component {
             type: 'overview/querydatalist',
             payload: {
                 pointName: this.state.pointName,
-                pointType: value,
+                RunState: value,
                 pollutantTypes: this.state.TabsOnchange,
                 map: true, manualUpload: true,
                 pageIndex: this.props.pageIndex,

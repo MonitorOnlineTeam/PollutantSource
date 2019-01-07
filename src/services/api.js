@@ -388,6 +388,7 @@ export async function querypollutantlist(params) {
 }
 // 获取历史数据
 export async function queryhistorydatalist(params) {
+    debugger;
     console.log(params.beginTime);
     console.log(params.endTime);
     const body = {
@@ -442,7 +443,8 @@ export async function querydatalist(params) {
         status:params.status,
         operationStatus:params.operationStatus,
         terate:params.terate,
-        warning:params.warning
+        warning:params.warning,
+        RunState:params.RunState,
     };
     const result = await post('/api/rest/PollutantSourceApi/DataList/SummaryList', body, null);
     return result === null ? { data: null } : result.data;

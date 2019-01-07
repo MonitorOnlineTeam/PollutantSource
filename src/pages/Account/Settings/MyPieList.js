@@ -11,7 +11,7 @@ import { connect } from 'dva';
 import {
     routerRedux
 } from 'dva/router';
-import RangePicker_ from '../../../components/PointDetail/RangePicker_';
+import RangePicker_ from '@/components/PointDetail/RangePicker_';
 import styles from './MyPieList.less';
 
 @connect(({
@@ -178,7 +178,7 @@ class MyPieList extends Component {
                        <List.Item
                            actions={[
                                <a onClick={()=>{
-                                   this.props.dispatch(routerRedux.push(`/TaskDetail/EmergencyDetailInfo/pielist/${item.TaskID}`));
+                                   this.props.dispatch(routerRedux.push(`/TaskDetail/EmergencyDetailInfo/pielist/nop/${item.TaskID}`));
                                }}
                                >
                       查看

@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
-import Switch, { Table, Radio, Card, TimePicker, Icon, Button, Spin, Popover, Badge, Divider } from 'antd';
+import { Table, Radio, Card, TimePicker, Icon, Button, Spin, Popover, Badge, Divider } from 'antd';
 import moment from 'moment';
 import { routerRedux } from 'dva/router';
 import styles from './DataList.less';
@@ -35,6 +35,7 @@ class dataList extends PureComponent {
             
         };
     }
+
     //页面初始化
     componentDidMount() {
         this.props.dispatch({
@@ -82,7 +83,7 @@ class dataList extends PureComponent {
         this.reloadData=(time,status,operationStatus,terate,warning)
         }
     }
-    
+
 
  
     
@@ -291,7 +292,8 @@ class dataList extends PureComponent {
                 DGIMN: record.DGIMN
             }
         });
-       }
+    }
+
     //获取详情按钮
     gerpointButton=(record) => (<div>
         <li style={{ listStyle: 'none', marginBottom: 5 }}>
@@ -337,13 +339,13 @@ class dataList extends PureComponent {
             fixed: fixed,
             render: (value, record, index) => {
                 if (value === 0) {
-                    return <img style={{width:15}} src="../../../gisunline.png" />;
+                    return <img style={{width:15}} src="/gisunline.png" />;
                 } if (value === 1) {
-                    return <img style={{width:15}} src="../../../gisnormal.png" />;
+                    return <img style={{width:15}} src="/gisnormal.png" />;
                 } if (value === 2) {
-                    return <img style={{width:15}} src="../../../gisover.png" />;
+                    return <img style={{width:15}} src="/gisover.png" />;
                 }
-                return <img style={{width:15}} src="../../../gisexception.png" />;
+                return <img style={{width:15}} src="/gisexception.png" />;
             },
         }, {
             title: '排口',
@@ -368,7 +370,7 @@ class dataList extends PureComponent {
             align: 'center',
             render: (value, record, index) => ({
                 props: {
-                    className: (value && value.split('%')[0] < 90) ? styles.red : '',
+                    className: value && value.split('%')[0] < 90 ? styles.red : '',
                 },
                 children: value || '-'
             })

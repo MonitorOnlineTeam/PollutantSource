@@ -4,6 +4,7 @@ import {Spin, Button, Icon,Card} from 'antd';
 import { connect } from 'dva';
 import MonitorContent from '../../components/MonitorContent/index';
 import saveAs from 'file-saver';
+import { routerRedux } from 'dva/router';
 //import * as fstream from 'fstream';
 
 @connect(({ task, loading }) => ({
@@ -14,7 +15,11 @@ export default class JzRecordInfo extends Component {
     constructor(props) {
         super(props);
         this.state = {
-
+            listUrl:this.props.match.params.viewtype,
+            taskfrom:this.props.match.params.taskfrom,
+            taskID:this.props.match.params.TaskID,
+            histroyrecordtype:this.props.match.params.histroyrecordtype,
+            DGIMN:this.props.match.params.pointcode
         };
     }
 
@@ -27,9 +32,14 @@ export default class JzRecordInfo extends Component {
         });
     }
 
-
-    onExport=() => {
-         
+    enterTaskDetail = () => {
+        if(this.state.taskfrom==='ywdsjlist'){    //运维大事记
+            this.props.dispatch(routerRedux.push(`/TaskDetail/emergencydetailinfo/${this.state.listUrl}/${this.state.taskfrom}/${this.state.taskID}`));
+        }else if(this.state.taskfrom==='qcontrollist'){    //质控记录
+            this.props.dispatch(routerRedux.push(`/TaskDetail/emergencydetailinfo/${this.state.listUrl}/${this.state.taskfrom}-${this.state.histroyrecordtype}/${this.state.taskID}`));
+        }else{    //其他
+            this.props.dispatch(routerRedux.push(`/TaskDetail/emergencydetailinfo/${this.state.listUrl}/nop/${this.state.taskID}`));
+        }
     }
 
     renderItem=(Record, code) => {
@@ -150,29 +160,35 @@ export default class JzRecordInfo extends Component {
     //生成面包屑
     renderBreadCrumb=()=>{
         const rtnVal = [];
-        let listUrl=this.props.match.params.viewtype;
-        let taskID=this.props.match.params.TaskID;
-        let DGIMN=this.props.match.params.pointcode;
-        let taskfrom=this.props.match.params.taskfrom;
-        let histroyrecordtype=this.props.match.params.histroyrecordtype;
+        let listUrl=this.state.listUrl;
+        let taskID=this.state.taskID;
+        let DGIMN=this.state.DGIMN;
+        let taskfrom=this.state.taskfrom;
+        let histroyrecordtype=this.state.histroyrecordtype;
         rtnVal.push({Name:'首页',Url:'/'},);
         switch(listUrl){
-case 'datalistview':    //数据一栏
-rtnVal.push({Name:'数据一览',Url:`/overview/${listUrl}`},);
-break;
-case 'mapview':         //地图一栏
-rtnVal.push({Name:'地图一栏',Url:`/overview/${listUrl}`},);
-break;
-case '':                //工作台
-break;
-default:
-break;
+           case 'datalistview':    //数据一栏
+           rtnVal.push({Name:'数据一览',Url:`/overview/${listUrl}`},);
+           break;
+           case 'mapview':         //地图一栏
+           rtnVal.push({Name:'地图一栏',Url:`/overview/${listUrl}`},);
+           break;
+           case 'pielist': //我的派单
+            rtnVal.push({Name:'我的派单',Url:`/account/settings/mypielist`},);
+            break;
+            case 'workbench':    //工作台
+            rtnVal.push({Name:'工作台',Url:`/${listUrl}`},);
+            break;
+           default:
+           break;
         }
-        if(taskfrom==='ywdsjlist'){
+        if(taskfrom==='ywdsjlist'){    //运维大事记
             rtnVal.push({Name:'运维大事记',Url:`/pointdetail/${DGIMN}/${listUrl}/${taskfrom}`},);
             rtnVal.push({Name:'任务详情',Url:`/TaskDetail/emergencydetailinfo/${listUrl}/${taskfrom}/${taskID}`},);
-        }else if(taskfrom==='qcontrollist'){
+        }else if(taskfrom==='qcontrollist'){    //质控记录
             rtnVal.push({Name:'质控记录',Url:`/pointdetail/${DGIMN}/${listUrl}/${taskfrom}/${histroyrecordtype}`},);
+        }else{    //其他
+            rtnVal.push({Name:'任务详情',Url:`/TaskDetail/emergencydetailinfo/${listUrl}/nop/${taskID}`},);
         }
         rtnVal.push({Name:'CEMS零点量程漂移与校准记录表',Url:''});
         return rtnVal;
@@ -230,9 +246,12 @@ break;
         return (
             <MonitorContent  {...this.props} breadCrumbList={this.renderBreadCrumb()}>
             <Card title={<span style={{fontWeight: '900'}}>运维表单</span>} extra={
+            <p>
+            <Button type="primary" ghost={true} style={{float:"left",marginRight:20}} onClick={this.enterTaskDetail}>
+            <Icon type="file-text" />任务单</Button>
             <Button style={{float:"right",marginRight:30}} onClick={() => {
                         this.props.history.goBack(-1);
-                    }}><Icon type="left" />退回</Button>}>
+                    }}><Icon type="left" />退回</Button></p>}>
                     <div className={styles.FormDiv} style={{height: SCREEN_HEIGHT}}>
                 <div className={styles.FormName}>CEMS零点量程漂移与校准记录表</div>
                 <div className={styles.HeadDiv} style={{fontWeight: 'bold'}}>企业名称：{EnterpriseName}</div>

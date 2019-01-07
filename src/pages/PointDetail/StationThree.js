@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import * as THREE from 'three';
-import { CSS3DObject, CSS3DRenderer } from '../../../ThreeJS/css3drenderer';
+import { CSS3DObject, CSS3DRenderer } from '/ThreeJS/css3drenderer';
 
 class StationThree extends Component {
     constructor(props) {
@@ -184,22 +184,22 @@ class StationThree extends Component {
           return (
               <div ref="threep" style={{ position: 'absolute', top: '211px' }}>
                   <div ref="surface_0" >
-                      <img src="../../../CSS3DRenderer/posx.jpg" alt="" />
+                      <img src="/CSS3DRenderer/posx.jpg" alt="" />
                   </div>
                   <div ref="surface_1" >
-                      <img src="../../../CSS3DRenderer/negx.jpg" alt="" />
+                      <img src="/CSS3DRenderer/negx.jpg" alt="" />
                   </div>
                   <div ref="surface_2" >
-                      <img src="../../../CSS3DRenderer/posy.jpg" alt="" />
+                      <img src="/CSS3DRenderer/posy.jpg" alt="" />
                   </div>
                   <div ref="surface_3" >
-                      <img src="../../../CSS3DRenderer/negy.jpg" alt="" />
+                      <img src="/CSS3DRenderer/negy.jpg" alt="" />
                   </div>
                   <div ref="surface_4" >
-                      <img src="../../../CSS3DRenderer/posz.jpg" alt="" />
+                      <img src="/CSS3DRenderer/posz.jpg" alt="" />
                   </div>
                   <div ref="surface_5" >
-                      <img src="../../../CSS3DRenderer/negz.jpg" alt="" />
+                      <img src="/CSS3DRenderer/negz.jpg" alt="" />
                   </div>
               </div>
           );

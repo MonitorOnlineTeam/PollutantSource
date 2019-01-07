@@ -3,8 +3,9 @@ import {
 } from '../dvapack';
 import {
     getpointlist, addpoint, getoperationsuserList, getpoint, editpoint, deletepoint, getanalyzersys, addalyzersys, getanalyzersysmnmodel, editalyzersys, deletealyzersys
-    , getcomponent, addalyzerchild, getanalyzerchild, getanalyzerchildmodel, deletealyzerchild, editalyzerchild
+    , getcomponent, addalyzerchild, getanalyzerchild, getanalyzerchildmodel, deletealyzerchild, editalyzerchild, getpollutanttypelist, getgasoutputtypelist
 } from '../services/pointinfo';
+
 export default Model.extend({
     namespace: 'pointinfo',
 
@@ -33,6 +34,10 @@ export default Model.extend({
         editalyzersyschild:null,
         getanalyzerchildmodel_requstresult:null,
         deletealyzerchild_requstresult:null,
+        gasoutputtypelist:[],
+        pollutanttypelist:[],
+        gasoutputtypelist_requstresult: null,
+        pollutanttypelist_requstresult:null
     },
     subscriptions: {
         setup({
@@ -96,6 +101,7 @@ export default Model.extend({
                 PointType,
                 PollutantType,
                 IsSj,
+                RunState,
                 Coordinate,
                 OutPutWhitherCode,
                 Linkman,
@@ -121,6 +127,7 @@ export default Model.extend({
                 PointType: PointType,
                 PollutantType: PollutantType,
                 IsSj: IsSj,
+                RunState: RunState,
                 Coordinate: Coordinate,
                 OutPutWhitherCode: OutPutWhitherCode,
                 Linkman: Linkman,
@@ -155,13 +162,61 @@ export default Model.extend({
                 yield update({
                     requstresult: result.requstresult,
                     userlist: result.data,
-                    total: result.total,
                 });
             } else {
                 yield update({
                     requstresult: result.requstresult,
                     userlist: [],
-                    total: 0,
+                });
+            }
+            callback();
+        },
+        * getpollutanttypelist({
+            payload: {
+                callback
+            }
+        }, {
+            call,
+            put,
+            update,
+            select
+        }) {
+            const result = yield call(getpollutanttypelist, {
+            });
+            if (result.requstresult === '1') {
+                yield update({
+                    pollutanttypelist_requstresult: result.requstresult,
+                    pollutanttypelist: result.data,
+                });
+            } else {
+                yield update({
+                    pollutanttypelist_requstresult: result.requstresult,
+                    pollutanttypelist: [],
+                });
+            }
+            callback();
+        },
+        * getgasoutputtypelist({
+            payload: {
+                callback
+            }
+        }, {
+            call,
+            put,
+            update,
+            select
+        }) {
+            const result = yield call(getgasoutputtypelist, {
+            });
+            if (result.requstresult === '1') {
+                yield update({
+                    gasoutputtypelist_requstresult: result.requstresult,
+                    gasoutputtypelist: result.data,
+                });
+            } else {
+                yield update({
+                    gasoutputtypelist_requstresult: result.requstresult,
+                    gasoutputtypelist: [],
                 });
             }
             callback();
@@ -177,7 +232,7 @@ export default Model.extend({
             update,
             select
         }) {
-            
+
             const result = yield call(getpoint, {
                 DGIMN: DGIMN
             });
@@ -194,6 +249,7 @@ export default Model.extend({
                 PointType,
                 PollutantType,
                 IsSj,
+                RunState,
                 Coordinate,
                 OutPutWhitherCode,
                 Linkman,
@@ -219,6 +275,7 @@ export default Model.extend({
                 PointType: PointType,
                 PollutantType: PollutantType,
                 IsSj: IsSj,
+                RunState: RunState,
                 Coordinate: Coordinate,
                 OutPutWhitherCode: OutPutWhitherCode,
                 Linkman: Linkman,
@@ -289,140 +346,140 @@ export default Model.extend({
             });
             callback();
         },
-         * addalyzersys({
-           payload: {
+        * addalyzersys({
+            payload: {
                 DGIMN,
                 Manufacturer,
                 ManufacturerCode,
                 Type,
                 callback
-           }
-         }, {
-           call,
-           put,
-           update,
-           select
-         }) {
-           const result = yield call(addalyzersys, {
-             DGIMN: DGIMN,
-             Manufacturer: Manufacturer,
-             ManufacturerCode: ManufacturerCode,
-             Type: Type,
-           });
-           yield update({
-             addalyzersys_requstresult: result.requstresult,
-             reason: result.reason,
-           });
-           callback();
-         },
-         * getanalyzersysmnmodel({
-           payload: {
-             ID,
-             callback
-           }
-         }, {
-           call,
-           put,
-           update,
-           select
-         }) {
-           const result = yield call(getanalyzersysmnmodel, {
-             ID: ID
-           });
-           yield update({
-             getanalyzersysmnmodel_requstresult: result.requstresult,
-             editAnalyzerSys: result.data[0],
-           });
-           callback();
-         },
-         * editalyzersys({
-           payload: {
-             ID,
-             Manufacturer,
-             ManufacturerCode,
-             callback
-           }
-         }, {
-           call,
-           put,
-           update,
-           select
-         }) {
-           const result = yield call(editalyzersys, {
-             ID: ID,
-             Manufacturer: Manufacturer,
-             ManufacturerCode: ManufacturerCode,
-           });
-           yield update({
-             editalyzersys_requstresult: result.requstresult,
-             reason: result.reason,
-           });
-           callback();
-         },
-         * deletealyzersys({
-           payload: {
-             ID,
-             callback
-           }
-         }, {
-           call,
-           put,
-           update,
-           select
-         }) {
-           const result = yield call(deletealyzersys, {
-             ID: ID,
-           });
-           yield update({
-             deletealyzersys_requstresult: result.requstresult,
-             reason: result.reason,
-           });
-           callback();
-         },
-         * getcomponent({
-           payload: {
-             callback
-           }
-         }, {
-           call,
-           put,
-           update,
-           select
-         }) {
-           const result = yield call(getcomponent, {
-           });
-           yield update({
-             
-             getcomponent_requstresult: result.requstresult,
-             reason: result.reason,
-             component: result.data,
-           });
-           callback();
-         },
-          * addalyzerchild({
-           payload: {
-             DGIMN,
-             Name,
-             DeviceModel,
-             Manufacturer,
-             ManufacturerAbbreviation,
-             TestComponent,
-             AnalyzerPrinciple,
-             AnalyzerRangeMin,
-             MeasurementUnit,
-             Slope,
-             Intercept,
-             AnalyzerSys_Id,
-             AnalyzerRangeMax,
-             callback
-           }
-         }, {
-           call,
-           put,
-           update,
-           select
-         }) {
-           const result = yield call(addalyzerchild, {
+            }
+        }, {
+            call,
+            put,
+            update,
+            select
+        }) {
+            const result = yield call(addalyzersys, {
+                DGIMN: DGIMN,
+                Manufacturer: Manufacturer,
+                ManufacturerCode: ManufacturerCode,
+                Type: Type,
+            });
+            yield update({
+                addalyzersys_requstresult: result.requstresult,
+                reason: result.reason,
+            });
+            callback();
+        },
+        * getanalyzersysmnmodel({
+            payload: {
+                ID,
+                callback
+            }
+        }, {
+            call,
+            put,
+            update,
+            select
+        }) {
+            const result = yield call(getanalyzersysmnmodel, {
+                ID: ID
+            });
+            yield update({
+                getanalyzersysmnmodel_requstresult: result.requstresult,
+                editAnalyzerSys: result.data[0],
+            });
+            callback();
+        },
+        * editalyzersys({
+            payload: {
+                ID,
+                Manufacturer,
+                ManufacturerCode,
+                callback
+            }
+        }, {
+            call,
+            put,
+            update,
+            select
+        }) {
+            const result = yield call(editalyzersys, {
+                ID: ID,
+                Manufacturer: Manufacturer,
+                ManufacturerCode: ManufacturerCode,
+            });
+            yield update({
+                editalyzersys_requstresult: result.requstresult,
+                reason: result.reason,
+            });
+            callback();
+        },
+        * deletealyzersys({
+            payload: {
+                ID,
+                callback
+            }
+        }, {
+            call,
+            put,
+            update,
+            select
+        }) {
+            const result = yield call(deletealyzersys, {
+                ID: ID,
+            });
+            yield update({
+                deletealyzersys_requstresult: result.requstresult,
+                reason: result.reason,
+            });
+            callback();
+        },
+        * getcomponent({
+            payload: {
+                callback
+            }
+        }, {
+            call,
+            put,
+            update,
+            select
+        }) {
+            const result = yield call(getcomponent, {
+            });
+            yield update({
+
+                getcomponent_requstresult: result.requstresult,
+                reason: result.reason,
+                component: result.data,
+            });
+            callback();
+        },
+        * addalyzerchild({
+            payload: {
+                DGIMN,
+                Name,
+                DeviceModel,
+                Manufacturer,
+                ManufacturerAbbreviation,
+                TestComponent,
+                AnalyzerPrinciple,
+                AnalyzerRangeMin,
+                MeasurementUnit,
+                Slope,
+                Intercept,
+                AnalyzerSys_Id,
+                AnalyzerRangeMax,
+                callback
+            }
+        }, {
+            call,
+            put,
+            update,
+            select
+        }) {
+            const result = yield call(addalyzerchild, {
                 DGIMN: DGIMN,
                 Name: Name,
                 DeviceModel: DeviceModel,
@@ -436,118 +493,118 @@ export default Model.extend({
                 Intercept: Intercept,
                 AnalyzerSys_Id: AnalyzerSys_Id,
                 AnalyzerRangeMax: AnalyzerRangeMax,
-           });
-           yield update({
-             addalyzerchild_requstresult: result.requstresult,
-             reason: result.reason,
-           });
-           callback();
-         },
-          * getanalyzerchild({
+            });
+            yield update({
+                addalyzerchild_requstresult: result.requstresult,
+                reason: result.reason,
+            });
+            callback();
+        },
+        * getanalyzerchild({
             payload: {
-              ID: ID,
-              callback
+                ID,
+                callback
             }
-          }, {
+        }, {
             call,
             put,
             update,
             select
-          }) {
+        }) {
             const result = yield call(getanalyzerchild, {
                 ID: ID,
             });
             yield update({
 
-              getanalyzerchild_requstresult: result.requstresult,
-              reason: result.reason,
-              analyzerchild: result.data,
+                getanalyzerchild_requstresult: result.requstresult,
+                reason: result.reason,
+                analyzerchild: result.data,
             });
             callback();
-          },
-           * getanalyzerchildmodel({
-             payload: {
-               ID: ID,
-               callback
-             }
-           }, {
-             call,
-             put,
-             update,
-             select
-           }) {
-             const result = yield call(getanalyzerchildmodel, {
-               ID: ID,
-             });
-             yield update({
-               getanalyzerchildmodel_requstresult: result.requstresult,
-               reason: result.reason,
-               editalyzersyschild: result.data[0],
-             });
-             callback();
-           },
-           * deletealyzerchild({
-           payload: {
-             ID,
-             callback
-           }
-         }, {
-           call,
-           put,
-           update,
-           select
-         }) {
-           const result = yield call(deletealyzerchild, {
-             ID: ID,
-           });
-           yield update({
-             deletealyzerchild_requstresult: result.requstresult,
-             reason: result.reason,
-           });
-           callback();
-         },
-         * editalyzerchild({
-           payload: {
-            ID,
-            Name: Name,
-            DeviceModel: DeviceModel,
-            Manufacturer: Manufacturer,
-            ManufacturerAbbreviation: ManufacturerAbbreviation,
-            TestComponent: TestComponent,
-            AnalyzerPrinciple: AnalyzerPrinciple,
-            AnalyzerRangeMin: AnalyzerRangeMin,
-            MeasurementUnit: MeasurementUnit,
-            Slope: Slope,
-            Intercept: Intercept,
-            AnalyzerRangeMax: AnalyzerRangeMax,
-            callback
-           }
-         }, {
-           call,
-           put,
-           update,
-           select
-         }) {
-           const result = yield call(editalyzerchild, {
-            ID,
-            Name: Name,
-            DeviceModel: DeviceModel,
-            Manufacturer: Manufacturer,
-            ManufacturerAbbreviation: ManufacturerAbbreviation,
-            TestComponent: TestComponent,
-            AnalyzerPrinciple: AnalyzerPrinciple,
-            AnalyzerRangeMin: AnalyzerRangeMin,
-            MeasurementUnit: MeasurementUnit,
-            Slope: Slope,
-            Intercept: Intercept,
-            AnalyzerRangeMax: AnalyzerRangeMax,
-           });
-           yield update({
-             editalyzerchild_requstresult: result.requstresult,
-             reason: result.reason,
-           });
-           callback();
-         },
+        },
+        * getanalyzerchildmodel({
+            payload: {
+                ID,
+                callback
+            }
+        }, {
+            call,
+            put,
+            update,
+            select
+        }) {
+            const result = yield call(getanalyzerchildmodel, {
+                ID: ID,
+            });
+            yield update({
+                getanalyzerchildmodel_requstresult: result.requstresult,
+                reason: result.reason,
+                editalyzersyschild: result.data[0],
+            });
+            callback();
+        },
+        * deletealyzerchild({
+            payload: {
+                ID,
+                callback
+            }
+        }, {
+            call,
+            put,
+            update,
+            select
+        }) {
+            const result = yield call(deletealyzerchild, {
+                ID: ID,
+            });
+            yield update({
+                deletealyzerchild_requstresult: result.requstresult,
+                reason: result.reason,
+            });
+            callback();
+        },
+        * editalyzerchild({
+            payload: {
+                ID,
+                Name,
+                DeviceModel,
+                Manufacturer,
+                ManufacturerAbbreviation,
+                TestComponent,
+                AnalyzerPrinciple,
+                AnalyzerRangeMin,
+                MeasurementUnit,
+                Slope,
+                Intercept,
+                AnalyzerRangeMax,
+                callback
+            }
+        }, {
+            call,
+            put,
+            update,
+            select
+        }) {
+            const result = yield call(editalyzerchild, {
+                ID,
+                Name: Name,
+                DeviceModel: DeviceModel,
+                Manufacturer: Manufacturer,
+                ManufacturerAbbreviation: ManufacturerAbbreviation,
+                TestComponent: TestComponent,
+                AnalyzerPrinciple: AnalyzerPrinciple,
+                AnalyzerRangeMin: AnalyzerRangeMin,
+                MeasurementUnit: MeasurementUnit,
+                Slope: Slope,
+                Intercept: Intercept,
+                AnalyzerRangeMax: AnalyzerRangeMax,
+            });
+            yield update({
+                editalyzerchild_requstresult: result.requstresult,
+                reason: result.reason,
+            });
+            callback();
+        },
     },
     reducers: {
         save(state, action) {

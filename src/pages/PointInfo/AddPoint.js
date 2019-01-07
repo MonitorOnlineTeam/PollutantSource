@@ -16,15 +16,18 @@ import {
     Modal,
     Divider,
 } from 'antd';
-import MonitorContent from '../../components/MonitorContent/index';
 import {
     connect
 } from 'dva';
 import {
     routerRedux
 } from 'dva/router';
-import ModalMap from '../PointInfo/ModalMap';
 import { isNullOrUndefined } from 'util';
+import MonitorContent from '../../components/MonitorContent/index';
+import Division from '../../components/Layout/Division';
+
+import ModalMap from "./ModalMap";
+
 const FormItem = Form.Item;
 const Option = Select.Option;
 const Search = Input.Search;
@@ -33,18 +36,27 @@ const Search = Input.Search;
     pointinfo
 }) => ({
     ...loading,
+    isloading: loading.effects['pointinfo/getpoint'],
+    pisloading: loading.effects['pointinfo/getpollutanttypelist'],
+    gsloading: loading.effects['pointinfo/getgasoutputtypelist'],
+    osloading: loading.effects['pointinfo/getoperationsuserList'],
     reason: pointinfo.reason,
     requstresult: pointinfo.requstresult,
+    gasoutputtypelist_requstresult: pointinfo.gasoutputtypelist_requstresult,
+    pollutanttypelist_requstresult: pointinfo.pollutanttypelist_requstresult,
     editpoint: pointinfo.editpoint,
     userlist: pointinfo.userlist,
+    gasoutputtypelist: pointinfo.gasoutputtypelist,
+    pollutanttypelist: pointinfo.pollutanttypelist,
 }))
 @Form.create()
-export default class AddPoint extends Component {
+class AddPoint extends Component {
     constructor(props) {
         super(props);
         this.state = {
             OutputType: true,
             IsSj: true,
+            RunState:true,
             Operationer: [],
             Mapvisible: false,
             Coordinate: null,
@@ -52,8 +64,11 @@ export default class AddPoint extends Component {
             coordinate: null,
             DGIMN: null,
             DGIMNdisabled: false,
+            PollutantTypes: [],
+            GasOutputType: [],
         };
     }
+
     componentWillMount() {
         const DGIMN = this.props.match.params.DGIMN;
         if (DGIMN !== 'null') {
@@ -67,18 +82,18 @@ export default class AddPoint extends Component {
                     DGIMN: DGIMN,
                     callback: () => {
                         if (this.props.requstresult === '1') {
-                            console.log(this.props.editpoint);
-                            console.log(this.props.editpoint);
                             this.setState({
                                 OutputType: this.props.editpoint.OutputTypeId === '1',
                                 IsSj: this.props.editpoint.IsSj === '1',
+                                RunState: this.props.editpoint.RunState === 1,
                                 address: this.props.editpoint.Address,
-                                coordinate: this.props.editpoint.longitude + ',' + this.props.editpoint.latitude
+                                coordinate: `${this.props.editpoint.longitude },${ this.props.editpoint.latitude}`
                             }, () => {
                                 this.props.form.setFieldsValue({
                                     PointName: this.props.editpoint.pointName,
                                     DGIMN: this.props.editpoint.DGIMN,
                                     OutputType: this.state.OutputType,
+                                    RunState: this.state.RunState,
                                     MobilePhone: this.props.editpoint.mobilePhone,
                                     Linkman: this.props.editpoint.linkman === isNullOrUndefined ? '' : this.props.editpoint.linkman,
                                     PointType: this.props.editpoint.PointTypeId === '' ? undefined : this.props.editpoint.PointTypeId,
@@ -100,13 +115,17 @@ export default class AddPoint extends Component {
         }
 
         this.getOperationer();
+        this.getpollutanttype();
+        this.getgasoutputtype();
     }
+
      onRef1 = (ref) => {
          this.child = ref;
      }
-     GetData() {
+
+     GetData=()=> {
          this.setState({
-             coordinate: this.child.props.form.getFieldValue('longitude') + ',' + this.child.props.form.getFieldValue('latitude'),
+             coordinate: `${this.child.props.form.getFieldValue('longitude') },${ this.child.props.form.getFieldValue('latitude')}`,
              address: this.child.props.form.getFieldValue('position'),
              Mapvisible: false,
          },() => {
@@ -116,14 +135,15 @@ export default class AddPoint extends Component {
              });
          });
      }
-    getOperationer=(e) => {
+
+    getOperationer=() => {
         this.props.dispatch({
             type: 'pointinfo/getoperationsuserList',
             payload: {
                 callback: () => {
                     if (this.props.requstresult === '1') {
                         this.props.userlist.map(user =>
-                            this.state.Operationer.push(<Option key={user.User_ID} value={user.User_ID}> {user.User_Name + '(' + user.User_Account + ')'} </Option>)
+                            this.state.Operationer.push(<Option key={user.User_ID} value={user.User_ID}> {`${user.User_Name }(${ user.User_Account })`} </Option>)
                         );
                     } else {
                         message.error('请添加运维人员');
@@ -132,6 +152,41 @@ export default class AddPoint extends Component {
             },
         });
     }
+
+       getpollutanttype = () => {
+           this.props.dispatch({
+               type: 'pointinfo/getpollutanttypelist',
+               payload: {
+                   callback: () => {
+                       if (this.props.pollutanttypelist_requstresult === '1') {
+                           this.props.pollutanttypelist.map(p =>
+                               this.state.PollutantTypes.push(<Option key={p.PollutantTypeCode} value={p.PollutantTypeCode}> {p.PollutantTypeName} </Option>)
+                           );
+                       } else {
+                           message.error('请添加污染物类型');
+                       }
+                   }
+               },
+           });
+       }
+
+       getgasoutputtype = () => {
+           this.props.dispatch({
+               type: 'pointinfo/getgasoutputtypelist',
+               payload: {
+                   callback: () => {
+                       if (this.props.gasoutputtypelist_requstresult === '1') {
+                           this.props.gasoutputtypelist.map(p =>
+                               this.state.GasOutputType.push(<Option key={p.GasOutputTypeCode} value={p.GasOutputTypeCode}> {p.GasOutputTypeName} </Option>)
+                           );
+                       } else {
+                           message.error('请添加气排口类型');
+                       }
+                   }
+               },
+           });
+       }
+
     handleSubmit = (e) => {
         e.preventDefault();
         let flag = true;
@@ -147,6 +202,7 @@ export default class AddPoint extends Component {
                             PointType: values.PointType === undefined ? '' : values.PointType,
                             PollutantType: values.PollutantType === undefined ? '' : values.PollutantType,
                             IsSj: values.IsSj === true ? '1' : '0',
+                            RunState: values.RunState === true ? 1 : 2,
                             Coordinate: values.Coordinate === undefined ? '' : values.Coordinate,
                             OutPutWhitherCode: values.OutPutWhitherCode === undefined ? '' : values.OutPutWhitherCode,
                             Sort: values.Sort === undefined ? '' : values.Sort,
@@ -166,43 +222,40 @@ export default class AddPoint extends Component {
                             }
                         },
                     });
-                } else {
                 }
-            } else {
-                if (!err && flag === true) {
-                    that.props.dispatch({
-                        type: 'pointinfo/editpoint',
-                        payload: {
-                            DGIMN: values.DGIMN,
-                            PointName: values.PointName,
-                            PointType: values.PointType === undefined ? '' : values.PointType,
-                            PollutantType: values.PollutantType === undefined ? '' : values.PollutantType,
-                            IsSj: values.IsSj === true ? '1' : '0',
-                            Coordinate: values.Coordinate === undefined ? '' : values.Coordinate,
-                            OutPutWhitherCode: values.OutPutWhitherCode === undefined ? '' : values.OutPutWhitherCode,
-                            Sort: values.Sort === undefined ? '' : values.Sort,
-                            Linkman: values.Linkman === undefined ? '' : values.Linkman,
-                            OutputDiameter: values.OutputDiameter === undefined ? '' : values.OutputDiameter,
-                            OutputHigh: values.OutputHigh === undefined ? '' : values.OutputHigh,
-                            OutputType: values.OutputType === true ? '1' : '0',
-                            Address: values.Address,
-                            MobilePhone: values.MobilePhone === undefined ? '' : values.MobilePhone,
-                            OperationerId: values.OperationerId,
-                            callback: () => {
-                                if (this.props.requstresult === '1') {
-                                    this.success();
-                                } else {
-                                    message.error(this.props.reason);
-                                }
+            } else if (!err && flag === true) {
+                that.props.dispatch({
+                    type: 'pointinfo/editpoint',
+                    payload: {
+                        DGIMN: values.DGIMN,
+                        PointName: values.PointName,
+                        PointType: values.PointType === undefined ? '' : values.PointType,
+                        PollutantType: values.PollutantType === undefined ? '' : values.PollutantType,
+                        IsSj: values.IsSj === true ? '1' : '0',
+                        RunState: values.RunState === true ? 1 : 2,
+                        Coordinate: values.Coordinate === undefined ? '' : values.Coordinate,
+                        OutPutWhitherCode: values.OutPutWhitherCode === undefined ? '' : values.OutPutWhitherCode,
+                        Sort: values.Sort === undefined ? '' : values.Sort,
+                        Linkman: values.Linkman === undefined ? '' : values.Linkman,
+                        OutputDiameter: values.OutputDiameter === undefined ? '' : values.OutputDiameter,
+                        OutputHigh: values.OutputHigh === undefined ? '' : values.OutputHigh,
+                        OutputType: values.OutputType === true ? '1' : '0',
+                        Address: values.Address,
+                        MobilePhone: values.MobilePhone === undefined ? '' : values.MobilePhone,
+                        OperationerId: values.OperationerId,
+                        callback: () => {
+                            if (this.props.requstresult === '1') {
+                                this.success();
+                            } else {
+                                message.error(this.props.reason);
                             }
-                        },
-                    });
-                } else {
-
-                }
+                        }
+                    },
+                });
             }
         });
     };
+
      success = () => {
          let index = this.props.dispatch(routerRedux.push(`/sysmanage/PointInfo`));
          if (this.state.DGIMN !== null) {
@@ -211,297 +264,403 @@ export default class AddPoint extends Component {
              message.success('新增成功', 3).then(() => index);
          }
      };
+
      render() {
+         const formItemLayout = {
+             labelCol: {
+                 xs: { span: 8 },
+                 sm: { span: 8 },
+             },
+             wrapperCol: {
+                 xs: { span: 8 },
+                 sm: { span: 8 },
+             },
+         };
          const {getFieldDecorator} = this.props.form;
          // const UserId = this.props.match.params.UserId;
 
          return (
-           <MonitorContent {...this.props} breadCrumbList={
-                [
-                    {Name:'首页',Url:'/'},
-                    {Name:'系统管理',Url:''},
-                    {Name:'排口管理',Url:'/sysmanage/pointinfo'},
-                    {Name:'排口维护',Url:''}
-                ]
-            }>
-            <div style={{ padding: 30, background: "#FFFFFF",marginBottom:10 }} >
-             <Form onSubmit={this.handleSubmit} style={{ display:'flex',flexDirection:'row',flexWrap:'wrap',alignItems:'center',justifyContent:'space-between'}} >
-        
-                     <Row gutter={48} >
-                         <Col span={12} >
-                             <FormItem labelCol={{span: 8}}
-                                 wrapperCol={{span: 12}}
-                                 label="排口名称" > {
-                                     getFieldDecorator('PointName', {
-                                         rules: [{
-                                             required: true,
-                                             message: '请输入排口名称!'
-                                         } ]
+             <MonitorContent
+                 {...this.props}
+                 breadCrumbList={
+                     [
+                         {Name:'首页',Url:'/'},
+                         {Name:'系统管理',Url:''},
+                         {Name:'排口管理',Url:'/sysmanage/pointinfo'},
+                         {Name:'排口维护',Url:''}
+                     ]
+                 }
+             >
+                 <Card
+                     title="排口维护"
+                     loading={this.props.isloading}
+                     style={
+                         {
+                             height: 'calc(100vh - 140px)'
+                         }
+                     }
+                 >
+                     <Form onSubmit={this.handleSubmit}>
+                         <Row gutter={8}>
 
-                                     })(<Input placeholder="排口名称" />)
-                                 } </FormItem>
-                         </Col>
-                         <Col span={12} >
-                             <FormItem labelCol={{span: 8}}
-                                 wrapperCol={{span: 12}}
-                                 label="排口编号" > {
-                                     getFieldDecorator('DGIMN', {
+                             <Col span={8}>
+                                 <FormItem
+                                     style={{textAlign:"left"}}
+                                     {...formItemLayout}
+
+                                     label="排口名称"
+                                 > {
+                                         getFieldDecorator('PointName', {
+                                             rules: [{
+                                                 required: true,
+                                                 message: '请输入排口名称!'
+                                             } ]
+
+                                         })(<Input style={{ width:200 }} placeholder="排口名称" />)
+                                     }
+                                 </FormItem>
+
+                             </Col>
+                             <Col span={8}>
+                                 <FormItem
+                                     {...formItemLayout}
+
+                                     label="排口编号"
+                                 > {
+                                         getFieldDecorator('DGIMN', {
+                                             rules: [{
+                                                 required: true,
+                                                 message: '请输入排口编号!'
+                                             }]
+                                         })(<Input
+                                             style={{ width:200 }}
+                                             placeholder="排口编号"
+                                             disabled={
+                                                 this.state.DGIMNdisabled
+                                             }
+                                         />
+                                         )
+                                     }
+                                 </FormItem>
+                             </Col>
+                             <Col span={8}>
+                                 <FormItem
+                                     {...formItemLayout}
+
+                                     label="负责人"
+                                 > {
+                                         getFieldDecorator('Linkman'
+                                         )(<Input style={{ width:200 }} placeholder="负责人" />
+                                         )}
+                                 </FormItem>
+                             </Col>
+                         </Row>
+                         <Row gutter={8}>
+                             <Col span={8}>
+                                 <FormItem
+                                     {...formItemLayout}
+
+                                     label="负责人电话"
+                                 > {
+                                         getFieldDecorator('MobilePhone', {
+                                             rules: [{
+                                                 pattern: /^1\d{10}$/,
+                                                 message: '请输入正确的手机号!'
+                                             }]
+                                         })(<Input style={{ width:200 }} placeholder="负责人电话" />)}
+                                 </FormItem>
+                             </Col>
+                             <Col span={8}>
+                                 <FormItem
+                                     {...formItemLayout}
+
+                                     label="排口类型"
+                                 > {
+                                         getFieldDecorator('PointType',
+                                             {
+                                                 initialValue: undefined,
+                                             }
+                                         )(
+                                             (
+                                                 <Select
+                                                     loading={this.props.gsloading}
+                                                     optionFilterProp="children"
+                                                     showSearch={true}
+                                                     style={{ width:200 }}
+                                                     placeholder="请选择"
+                                                 >
+                                                     {this.state.GasOutputType}
+                                                 </Select>
+                                             )
+                                         )
+                                     }
+                                 </FormItem>
+                             </Col>
+                             <Col span={8}>
+                                 <FormItem
+                                     {...formItemLayout}
+
+                                     label="污染物类型"
+                                 > {
+                                         getFieldDecorator('PollutantType',
+                                             {
+                                                 initialValue: undefined,
+                                             }
+                                         )(
+                                             <Select
+                                                 loading={this.props.pisloading}
+                                                 optionFilterProp="children"
+                                                 showSearch={true}
+                                                 style={{ width:200 }}
+                                                 placeholder="请选择"
+                                             >
+                                                 {this.state.PollutantTypes}
+                                             </Select>
+                                         )
+                                     }
+                                 </FormItem>
+                             </Col>
+                         </Row>
+                         <Row gutter={8}>
+                             <Col span={8}>
+                                 <FormItem
+                                     {...formItemLayout}
+
+                                     label="上传数据类型"
+                                 > {
+                                         getFieldDecorator('RunState',
+                                             {
+                                                 initialValue: true,
+                                                 valuePropName: 'checked',
+                                             }
+                                         )(
+                                             <Switch
+                                                 checkedChildren="自动"
+                                                 unCheckedChildren="手动"
+                                             />)
+                                     }
+                                 </FormItem>
+                             </Col>
+                             <Col span={8}>
+                                 <FormItem
+                                     {...formItemLayout}
+                                     labelCol={{ span: 8 }}
+                                     wrapperCol={{ span: 8 }}
+                                     label="运维人"
+                                 >
+                                     {getFieldDecorator('OperationerId', {
+                                         initialValue: undefined,
                                          rules: [{
                                              required: true,
-                                             message: '请输入排口编号!'
-                                         }]
-                                     })(<Input placeholder="排口编号"
-                                         disabled={
-                                             this.state.DGIMNdisabled
-                                         }
-                                     />
-                                     )
-                                 } </FormItem>
-                         </Col>
-                     </Row>
-                     <Row gutter={48} >
-                         <Col span={12} >
-                             <FormItem labelCol={{span: 8}}
-                                 wrapperCol={{span: 12}}
-                                 label="负责人" > {
-                                     getFieldDecorator('Linkman'
-                                     )(<Input placeholder="负责人" />
-                                     )}
-                             </FormItem>
-                         </Col>
-                         <Col span={12} >
-                             <FormItem labelCol={{span: 8}}
-                                 wrapperCol={{span: 12}}
-                                 label="负责人电话" > {
-                                     getFieldDecorator('MobilePhone', {
-                                         rules: [{
-                                             pattern: /^1\d{10}$/,
-                                             message: '请输入正确的手机号!'
-                                         }]
-                                     })(<Input placeholder="负责人电话" />)}
-                             </FormItem>
-                         </Col>
-                     </Row>
-                     <Row gutter={48}>
-                         <Col span={12} >
-                             <FormItem labelCol={{span: 8}}
-                                 wrapperCol={{span: 12}}
-                                 label="排口类型" > {
-                                     getFieldDecorator('PointType',
-                                         {
-                                             initialValue: undefined,
-                                         }
-                                     )(<Select placeholder="请选择" >
-                                         <Option value="1" > 工艺废气排放口 </Option>
-                                         <Option value="2" > 燃烧废气排放口 </Option>
-                                     </Select>)
-                                 } </FormItem>
-                         </Col>
-                         <Col span={12} >
-                             <FormItem labelCol={{span: 8}}
-                                 wrapperCol={{span: 12}}
-                                 label="污染物类型" > {
-                                     getFieldDecorator('PollutantType',
-                                         {
-                                             initialValue: undefined,
-                                         }
-                                     )(
-                                         <Select placeholder="请选择" >
-                                             <Option value="2" > 废气 </Option>
-                                             <Option value="4" > 固体废物 </Option>
-                                         </Select>)
-                                 } </FormItem>
-                         </Col>
-                     </Row>
-                     <Row gutter={48}>
-                         <Col span={12} >
-                             <FormItem labelCol={{span: 8}}
-                                 wrapperCol={{span: 12}}
-                                 label="排放类型" > {
-                                     getFieldDecorator('OutputType',
-                                         {
-                                             initialValue: undefined,
-                                             valuePropName: 'checked',
-                                         }
-                                     )(
-                                         <Switch checkedChildren="出口"
-                                             unCheckedChildren="入口"
-                                         />)
-                                 } </FormItem>
-                         </Col>
-                         <Col span={12} >
-                             <FormItem labelCol={{span: 8}}
-                                 wrapperCol={{span: 12}}
-                                 label="是否烧结" > {
-                                     getFieldDecorator('IsSj',
-                                         {
-                                             initialValue: undefined,
-                                             valuePropName: 'checked',
-                                         }
-                                     )(
-                                         <Switch checkedChildren="烧结"
-                                             unCheckedChildren="非烧结"
-                                         />)
-                                 } </FormItem>
-                         </Col>
-                     </Row>
-                     <Row gutter={48}>
-                         <Col span={12} >
-                             <FormItem labelCol={{span: 8}}
-                                 wrapperCol={{span: 12}}
-                                 label="排口直径" > {
-                                     getFieldDecorator('OutputDiameter',
-                                     )(
-                                         <InputNumber min={0} max={10000} />)
-                                 } </FormItem>
-                         </Col>
-                         <Col span={12} >
-                             <FormItem labelCol={{span: 8}}
-                                 wrapperCol={{span: 12}}
-                                 label="排口高度" > {
-                                     getFieldDecorator('OutputHigh',
-                                     )(
-                                         <InputNumber min={0} max={10000} />)
-                                 } </FormItem>
-                         </Col>
-                     </Row>
-                     <Row gutter={48}>
-                         <Col span={12} >
-                             <FormItem labelCol={{span: 8}}
-                                 wrapperCol={{span: 12}}
-                                 label="排放去向" > {
-                                     getFieldDecorator('OutPutWhitherCode',
-                                         {
-                                             initialValue: undefined,
-                                         }
-                                     )(
-                                         <Select placeholder="请选择" >
-                                             <Option value="A" > 直接进入海域 </Option>
-                                             <Option value="B" > 直接进入江河湖、库等水环境 </Option>
-                                             <Option value="C" > 进入城市下水道（再入江河、湖、库） </Option>
-                                             <Option value="D" > 进入城市下水道（ 再入江河、 湖、 库） </Option>
-                                             <Option value="E" > 进入城市污水处理厂或工业废水集中处理厂 </Option>
-                                             <Option value="F" > 直接污灌农田 </Option>
-                                             <Option value="G" > 进入地渗或蒸发地 </Option>
-                                             <Option value="H" > 进入其他单位） </Option>
-                                             <Option value="I" > 其他 </Option>
-                                         </Select>)
-                                 } </FormItem>
-                         </Col>
-                         <Col span={12} >
-                             <FormItem labelCol={{span: 8}}
-                                 wrapperCol={{span: 12}}
-                                 label="排序" > {
-                                     getFieldDecorator('Sort'
-                                     )(
-                                         <InputNumber min={0} max={10000} />)
-                                 } </FormItem>
-                         </Col>
-                     </Row>
-                     <Row gutter={48}>
-                         <Col span={12}>
-                             <FormItem labelCol={{span: 8}}
-                                 wrapperCol={{span: 12}}
-                                 label="排口地址" > {
-                                     getFieldDecorator('Address', {
-                                         rules: [{
-                                             required: true,
-                                             message: '请输入排口地址!'
+                                             message: '请选择运维人!'
                                          } ]
 
                                      })(
-                                         <Input placeholder="排口地址" />)
-                                 }
-                             </FormItem>
-                         </Col>
-                         <Col span={12} >
-                             <FormItem labelCol={{span: 8}}
-                                 wrapperCol={{span: 12}}
-                                 label="排口坐标" > {
-                                     getFieldDecorator('Coordinate', {
-                                         rules: [{
-                                             required: true,
-                                             message: '请输入排口坐标!'
-                                         } ]
+                                         <Select
+                                             loading={this.props.osloading}
+                                             optionFilterProp="children"
+                                             showSearch={true}
+                                             style={{ width:200 }}
+                                             placeholder="请选择运维人"
+                                         >
+                                             {this.state.Operationer}
+                                         </Select>
+                                     )}
+                                 </FormItem>
+                             </Col>
+                         </Row>
+                         <Divider dashed={true} />
+                         <Row gutter={8}>
+                             <Col span={8}>
+                                 <FormItem
+                                     {...formItemLayout}
 
-                                     })(<Search placeholder="排口坐标"
-                                         enterButton="Search"
-                                         onSearch={(value) => {
-                                             this.setState({
-                                                 Coordinate: value,
-                                                 Mapvisible: true,
-                                                 title: '选择坐标',
-                                                 width: 1130
-                                             });
-                                         }}
-                                     />)
-                                 } </FormItem>
-                         </Col>
-                     </Row>
-                     <Row gutter={48} >
-                         <Col span={12} >
-                             <FormItem
-                                 labelCol={{ span: 8 }}
-                                 wrapperCol={{ span: 12 }}
-                                 label="运维人">
-                                 {getFieldDecorator('OperationerId', {
-                                     initialValue: undefined,
-                                     rules: [{
-                                         required: true,
-                                         message: '请选择运维人!'
-                                     } ]
+                                     label="排放类型"
+                                 > {
+                                         getFieldDecorator('OutputType',
+                                             {
+                                                 initialValue: undefined,
+                                                 valuePropName: 'checked',
+                                             }
+                                         )(
+                                             <Switch
+                                                 checkedChildren="出口"
+                                                 unCheckedChildren="入口"
+                                             />)
+                                     }
+                                 </FormItem>
+                             </Col>
+                             <Col span={8}>
+                                 <FormItem
+                                     {...formItemLayout}
 
-                                 })(
-                                     <Select
-                                         optionFilterProp="children"
-                                         showSearch={true}
-                                         style={{ width: '100%' }}
-                                         placeholder="请选择运维人"
-                                     >
-                                         {this.state.Operationer}
-                                     </Select>
-                                 )}
-                             </FormItem>
-                         </Col>
-                         <Col span={12} />
-                     </Row>
-                     <Row gutter={48}>
-                         <Col span={24} style={{textAlign: 'center'}}>
-                             <Button type="primary"
-                                 htmlType="submit">
-                          保存
+                                     label="是否烧结"
+                                 > {
+                                         getFieldDecorator('IsSj',
+                                             {
+                                                 initialValue: undefined,
+                                                 valuePropName: 'checked',
+                                             }
+                                         )(
+                                             <Switch
+                                                 checkedChildren="烧结"
+                                                 unCheckedChildren="非烧结"
+                                             />)
+                                     }
+                                 </FormItem>
+                             </Col>
+                             <Col span={8}>
+                                 <FormItem
+                                     {...formItemLayout}
+
+                                     label="排序"
+                                 > {
+                                         getFieldDecorator('Sort'
+                                         )(
+                                             <InputNumber min={0} max={10000} />)
+                                     }
+                                 </FormItem>
+                             </Col>
+                         </Row>
+                         <Division />
+                         <Row gutter={8}>
+                             <Col span={8}>
+                                 <FormItem
+                                     {...formItemLayout}
+
+                                     label="排口高度"
+                                 > {
+                                         getFieldDecorator('OutputHigh',
+                                         )(
+                                             <InputNumber min={0} max={10000} />)
+                                     }
+                                 </FormItem>
+                             </Col>
+                             <Col span={8}>
+                                 <FormItem
+                                     {...formItemLayout}
+
+                                     label="排口直径"
+                                 > {
+                                         getFieldDecorator('OutputDiameter',
+                                         )(
+                                             <InputNumber min={0} max={10000} />)
+                                     }
+                                 </FormItem>
+                             </Col>
+
+                         </Row>
+                         <Divider dashed={true} />
+                         <Row gutter={8}>
+                             <Col span={8}>
+                                 <FormItem
+                                     {...formItemLayout}
+
+                                     label="排放去向"
+                                 > {
+                                         getFieldDecorator('OutPutWhitherCode',
+                                             {
+                                                 initialValue: undefined,
+                                             }
+                                         )(
+                                             <Select placeholder="请选择" style={{ width:300 }}>
+                                                 <Option value="A"> 直接进入海域 </Option>
+                                                 <Option value="B"> 直接进入江河湖、库等水环境 </Option>
+                                                 <Option value="C"> 进入城市下水道（再入江河、湖、库） </Option>
+                                                 <Option value="D"> 进入城市下水道（ 再入江河、 湖、 库） </Option>
+                                                 <Option value="E"> 进入城市污水处理厂或工业废水集中处理厂 </Option>
+                                                 <Option value="F"> 直接污灌农田 </Option>
+                                                 <Option value="G"> 进入地渗或蒸发地 </Option>
+                                                 <Option value="H"> 进入其他单位） </Option>
+                                                 <Option value="I"> 其他 </Option>
+                                             </Select>)
+                                     }
+                                 </FormItem>
+                             </Col>
+                             <Col span={8}>
+                                 <FormItem
+                                     {...formItemLayout}
+
+                                     label="排口地址"
+                                 > {
+                                         getFieldDecorator('Address', {
+                                             rules: [{
+                                                 required: true,
+                                                 message: '请输入排口地址!'
+                                             } ]
+
+                                         })(
+                                             <Input style={{ width:300 }} placeholder="排口地址" />)
+                                     }
+                                 </FormItem>
+                             </Col>
+                             <Col span={8}>
+                                 <FormItem
+                                     {...formItemLayout}
+                                     label="排口坐标"
+                                 > {
+                                         getFieldDecorator('Coordinate', {
+                                             rules: [{
+                                                 required: true,
+                                                 message: '请输入排口坐标!'
+                                             } ]
+
+                                         })(<Search
+                                             placeholder="排口坐标"
+                                             enterButton="查看坐标"
+                                             style={{ width:300 }}
+                                             onSearch={(value) => {
+                                                 this.setState({
+                                                     Coordinate: value,
+                                                     Mapvisible: true,
+                                                     title: '选择坐标',
+                                                     width: 1130
+                                                 });
+                                             }}
+                                         />)
+                                     }
+                                 </FormItem>
+                             </Col>
+
+                             <Division />
+                         </Row>
+                         <Divider orientation="right" style={{border:'1px dashed #FFFFFF'}}>
+                             <Button type="primary" htmlType="submit">
+                        保存
                              </Button>
                              <Divider type="vertical" />
-                             <Button type="dashed"
+                             <Button
+                                 type="dashed"
                                  onClick={
                                      () => this.props.dispatch(routerRedux.push(`/sysmanage/PointInfo`))
-                                 } >
-                          返回
+                                 }
+                             >
+                        返回
                              </Button>
-                         </Col>
-                     </Row>
-            
-             </Form>
-             <Modal
-                 visible={this.state.Mapvisible}
-                 title={this.state.title}
-                 width={this.state.width}
-                 destroyOnClose={true}// 清除上次数据
-                 onOk={() => {
-                     this.GetData();
-                 }
-                 }
-                 onCancel={() => {
-                     this.setState({
-                         Mapvisible: false
-                     });
-                 }}>
-                 {
-                     <ModalMap address={this.props.form.getFieldValue('Address')} coordinate={this.props.form.getFieldValue('Coordinate')} onRef={this.onRef1} complant={this.AddCompletion} />
-                 }
-             </Modal>
-         </div>
-         </MonitorContent>
+                         </Divider>
+                     </Form>
+                     <Modal
+                         visible={this.state.Mapvisible}
+                         title={this.state.title}
+                         width={this.state.width}
+                         destroyOnClose={true}// 清除上次数据
+                         onOk={() => {
+                             this.GetData();
+                         }
+                         }
+                         onCancel={() => {
+                             this.setState({
+                                 Mapvisible: false
+                             });
+                         }}
+                     >
+                         {
+                             <ModalMap address={this.props.form.getFieldValue('Address')} coordinate={this.props.form.getFieldValue('Coordinate')} onRef={this.onRef1} complant={this.AddCompletion} />
+                         }
+                     </Modal>
+                 </Card>
+             </MonitorContent>
          );
      }
 }
+export default AddPoint;
