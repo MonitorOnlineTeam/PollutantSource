@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
-import {Row, Col, Card, Divider,DatePicker, Button} from 'antd';
+import {Row, Col, Card, Divider,DatePicker, Button,Spin} from 'antd';
 import moment from 'moment';
+import { connect } from 'dva';
 import HistoryVideo from '../../components/PointDetail/HistoryVideo';
 import styles from './index.less';
+import config from '../../config';
 
+const {RangePicker} = DatePicker;
 
 /*
 页面：5、历史视频
@@ -11,7 +14,9 @@ import styles from './index.less';
 add by myt 18.7.9
 */
 
-const {RangePicker} = DatePicker;
+@connect(({videolist}) => ({
+    hisvideofullurl:videolist.hisvideofullurl,
+}))
 class HisVideo extends Component {
     constructor(props) {
         super(props);
@@ -22,6 +27,17 @@ class HisVideo extends Component {
         };
     }
 
+    componentWillMount = () => {
+        this.getVideoIp();
+    }
+
+    getVideoIp=()=>{
+        const {match,dispatch}=this.props;
+        dispatch({
+            type:'videolist/fetchuserlist',
+            payload:{ DGIMN: match.params.pointcode }
+        });
+    }
 
     rangepickerOnChange=(date, dateString) => {
         this.setState({beginDate: date[0], endDate: date[1]});
@@ -31,14 +47,14 @@ class HisVideo extends Component {
         if(opt===7){
             this.child.startPlay();
         }
-        if(opt===8){            
+        if(opt===8){
             this.child.endPlay();
         }
         let obj={"opt":opt};
         let {beginDate,endDate}=this.state;
         obj={"opt":opt,"beginDate":beginDate.format('YYYY-MM-DD HH:mm:ss'),"endDate":endDate.format('YYYY-MM-DD HH:mm:ss')};
         let frame = document.getElementById('ifm').contentWindow;
-        frame.postMessage(obj,'http://localhost:36999');
+        frame.postMessage(obj,config.hisvideourl);
     }
 
     HistoryVideoCompant = (ref) => {
@@ -47,11 +63,35 @@ class HisVideo extends Component {
 
     render() {
         const {beginDate,endDate}=this.state;
+        const {hisvideofullurl}=this.props;
+        if(!hisvideofullurl){
+            return (<Spin
+                style={{ width: '100%',
+                    height: 'calc(100vh - 225px)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center' }}
+                size="large"
+            />);
+        }
+        if(hisvideofullurl==="nodata"){
+            return (
+                <table align="center" style={{ height: 'calc(100vh - 225px)',width: '100%' }}>
+                    <tbody>
+                        <tr>
+                            <td align="center">
+                             暂无视频配置
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            );
+        }
         return (
             <div style={{height: 'calc(100vh - 225px)'}}>
                 <Row gutter={24} style={{ height: '55%' }}>
                     <Col xl={18} lg={24} md={24} sm={24} xs={24} style={{ marginBottom: 10, height: '100%' }}>
-                        <iframe title="历史视频" id="ifm" frameBorder="0" src="http://localhost:36999/Video/MonitorLinkCamera/HistoryCameraReact?ip=115.149.151.108&port=9000&userName=admin&userPwd=abc12345&cameraNo=2" width="100%" height="100%" />
+                        <iframe title="历史视频" id="ifm" frameBorder="0" src={hisvideofullurl} width="100%" height="100%" />
                     </Col>
                     <Col xl={6} lg={24} md={24} sm={24} xs={24} style={{ marginBottom: 10, height: '100%' }}>
                         <Card className={styles.hisYunStyle}>
@@ -93,7 +133,7 @@ class HisVideo extends Component {
                     </Col>
                 </Row>
                 <Row style={{ height: '20%' }}>
-                    <HistoryVideo onRef={this.HistoryVideoCompant}  {...this.props} beginDate={beginDate.format('YYYY-MM-DD HH:mm:ss')} endDate={endDate.format('YYYY-MM-DD HH:mm:ss')} />
+                    <HistoryVideo onRef={this.HistoryVideoCompant} {...this.props} beginDate={beginDate.format('YYYY-MM-DD HH:mm:ss')} endDate={endDate.format('YYYY-MM-DD HH:mm:ss')} />
                 </Row>
             </div>
         );

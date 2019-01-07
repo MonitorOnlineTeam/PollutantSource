@@ -1,7 +1,8 @@
-import { Icon, Popover, Badge, Divider} from 'antd';
+import { Icon, Popover, Badge} from 'antd';
 import { Model } from '../dvapack';
-import { getList, deleteVideoInfo, gethistoryVideoList, updateVideoInfos, addVideoInfo, getAlarmHistory, updateAlarmHistory, userDgimnDataFilter } from '../services/videodata';
+import { getList, deleteVideoInfo, gethistoryVideoList, updateVideoInfos, addVideoInfo, getAlarmHistory, updateAlarmHistory } from '../services/videodata';
 import { querypollutantlist,queryhistorydatalist } from '../services/api';
+import config from '../config';
 
 export default Model.extend({
     namespace: 'videolist',
@@ -21,19 +22,32 @@ export default Model.extend({
         realdata: [],
         hiscolumns: [],
         hisrealdata: [],
+        realtimevideofullurl:null,
+        hisvideofullurl:null
     },
     effects: {
         * fetchuserlist({ payload }, { call, update }) {
             const result = yield call(getList, { DGIMN: payload.DGIMN });
+            let temprealurl="nodata";
+            let temphisurl="nodata";
             if (result.requstresult === '1') {
+                let obj=result.data[0];
+                if(obj&&obj.IP){
+                    temprealurl=`${config.realtimevideourl}?ip=${obj.IP}&port=${obj.Device_Port}&userName=${obj.User_Name}&userPwd=${obj.User_Pwd}&cameraNo=${obj.VedioCamera_No}`;
+                    temphisurl=`${config.hisvideourl}?ip=${obj.IP}&port=${obj.Device_Port}&userName=${obj.User_Name}&userPwd=${obj.User_Pwd}&cameraNo=${obj.VedioCamera_No}`;
+                }
                 yield update({
                     requstresult: result.requstresult,
-                    list: result.data
+                    list: result.data,
+                    realtimevideofullurl:temprealurl,
+                    hisvideofullurl:temphisurl
                 });
             } else {
                 yield update({
                     requstresult: result.requstresult,
-                    list: []
+                    list: [],
+                    realtimevideofullurl:temprealurl,
+                    hisvideofullurl:temphisurl
                 });
             }
         },
@@ -165,6 +179,8 @@ export default Model.extend({
                     });
                 });
             }
+            if(pollutants.length===1)
+                pollutants=[];
             yield update({ columns: pollutants });
         },
         * queryhistorydatalist({payload}, {select, call, update}) {
@@ -191,19 +207,24 @@ export default Model.extend({
                             if (additional) {
                                 const additionalInfo = additional.split('§');
                                 if (additionalInfo[0] === 'IsOver') {
-                                    const content = (<div>
-                                        <div style={{marginBottom: 10}}>
-                                            <Icon style={{ color: '#ff0000', fontSize: 25, marginRight: 10 }} type="warning" />
-                                            <span style={{fontWeight: 'Bold', fontSize: 16}}>数据超标</span>
+                                    const content =
+                                    (
+                                        <div>
+                                            <div style={{marginBottom: 10}}>
+                                                <Icon style={{ color: '#ff0000', fontSize: 25, marginRight: 10 }} type="warning" />
+                                                <span style={{fontWeight: 'Bold', fontSize: 16}}>数据超标</span>
+                                            </div>
+                                            <li style={{listStyle: 'none', marginBottom: 10}}>
+                                                <Badge status="success" text={`标准值：${additionalInfo[2]}`} />
+                                            </li>
+                                            <li style={{listStyle: 'none', marginBottom: 10}}>
+                                                <Badge status="error" text={`超标倍数：${additionalInfo[3]}`} />
+                                            </li>
                                         </div>
-                                        <li style={{listStyle: 'none', marginBottom: 10}}>
-                                            <Badge status="success" text={`标准值：${additionalInfo[2]}`} />
-                                        </li>
-                                        <li style={{listStyle: 'none', marginBottom: 10}}>
-                                            <Badge status="error" text={`超标倍数：${additionalInfo[3]}`} />
-                                        </li>
-                                                     </div>);
-                                    return (<Popover content={content}><span style={{ color: '#ff0000', cursor: 'pointer' }}>{ value || (value === 0 ? 0 : '-') }</span></Popover>);
+                                    );
+                                    return (
+                                        <Popover content={content}><span style={{ color: '#ff0000', cursor: 'pointer' }}>{ value || (value === 0 ? 0 : '-') }</span></Popover>
+                                    );
                                 }
                                 const content = (<div>
                                     <div style={{marginBottom: 10}}>
@@ -221,10 +242,11 @@ export default Model.extend({
                     });
                 });
             }
+            if(pollutants.length===1)
+                pollutants=[];
             yield update({ hiscolumns: pollutants });
         },
         * queryhistorydatalisthis({payload}, {call, update}) {
-            debugger;
             const res = yield call(queryhistorydatalist, {...payload});
             let realdata=[];
             if(res.data.length>0){
