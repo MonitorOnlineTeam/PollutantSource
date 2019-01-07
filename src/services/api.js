@@ -433,7 +433,7 @@ export async function querypollutanttypecode(params) {
 export async function querydatalist(params) {
     const body = {
         time: params.time,
-        pointType:params.pointType,
+        RunState:params.RunState,
         pollutantTypes:params.pollutantTypes,
         pointName:params.pointName
     };

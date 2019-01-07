@@ -30,7 +30,7 @@ export default class XSCYFInspectionHistoryRecords extends Component {
             super(props);
             this.state = {
                 rangeDate: [moment(moment().subtract(3, 'month').format('YYYY-MM-01')), moment(moment().format('YYYY-MM-DD'))], // 最近七天
-                BeginTime: moment().subtract(11, 'month').format('YYYY-MM-DD 00:00:00'),
+                BeginTime: moment().subtract(3, 'month').format('YYYY-MM-DD 00:00:00'),
                 EndTime: moment().format('YYYY-MM-DD 23:59:59'),
                 DGIMN: this.props.match.params.pointcode,
                 typeID: this.props.match.params.TypeID,
