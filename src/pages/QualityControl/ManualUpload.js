@@ -432,7 +432,7 @@ export default class ManualUpload extends Component {
                                     style={{ width: 200 }} />
                             </div>
                             <div>
-                                <Tabs type="card"  tabBarStyle={{ width: '100%' }} onChange={this.TabsOnChange}>
+                                <Tabs type="card"  onChange={this.TabsOnChange}>
                                     {this.tabList()}
                                 </Tabs>
                             </div>
