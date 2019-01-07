@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import {Row, Col, Button, Card, Divider,Spin} from 'antd';
 import { connect } from 'dva';
-import moment from 'moment';
 import styles from './video.less';
 import RealVideoData from '../../components/Video/RealVideoData';
 import config from '../../config';
@@ -105,19 +104,19 @@ class RealVideo extends Component {
                            <Row>
                                <Col span={24}>
                                    <Row>
-                                       <Col className={styles.gutterleft} span={8}><Button onMouseDown={this.btnClick.bind(this,11)} onMouseUp={this.btnClick.bind(this,12)}>&nbsp;&nbsp;+&nbsp;&nbsp;</Button></Col>
+                                       <Col className={styles.gutterleft} span={8}><Button onClick={this.btnClick.bind(this,11)}>&nbsp;&nbsp;+&nbsp;&nbsp;</Button></Col>
                                        <Col className={styles.gutterleft} span={8}>变倍</Col>
-                                       <Col className={styles.gutterleft} span={8}><Button onMouseDown={this.btnClick.bind(this,13)} onMouseUp={this.btnClick.bind(this,12)}>&nbsp;&nbsp;-&nbsp;&nbsp;</Button></Col>
+                                       <Col className={styles.gutterleft} span={8}><Button onClick={this.btnClick.bind(this,12)}>&nbsp;&nbsp;-&nbsp;&nbsp;</Button></Col>
                                    </Row>
                                    <Row style={{marginTop:'10px'}}>
-                                       <Col className={styles.gutterleft} span={8}><Button onMouseDown={this.btnClick.bind(this,15)} onMouseUp={this.btnClick.bind(this,16)}>&nbsp;&nbsp;+&nbsp;&nbsp;</Button></Col>
+                                       <Col className={styles.gutterleft} span={8}><Button onClick={this.btnClick.bind(this,15)}>&nbsp;&nbsp;+&nbsp;&nbsp;</Button></Col>
                                        <Col className={styles.gutterleft} span={8}>变焦</Col>
-                                       <Col className={styles.gutterleft} span={8}><Button onMouseDown={this.btnClick.bind(this,17)} onMouseUp={this.btnClick.bind(this,16)}>&nbsp;&nbsp;-&nbsp;&nbsp;</Button></Col>
+                                       <Col className={styles.gutterleft} span={8}><Button onClick={this.btnClick.bind(this,16)}>&nbsp;&nbsp;-&nbsp;&nbsp;</Button></Col>
                                    </Row>
                                    <Row style={{marginTop:'10px'}}>
-                                       <Col className={styles.gutterleft} span={8}><Button onMouseDown={this.btnClick.bind(this,18)} onMouseUp={this.btnClick.bind(this,19)}>&nbsp;&nbsp;+&nbsp;&nbsp;</Button></Col>
+                                       <Col className={styles.gutterleft} span={8}><Button onClick={this.btnClick.bind(this,19)}>&nbsp;&nbsp;+&nbsp;&nbsp;</Button></Col>
                                        <Col className={styles.gutterleft} span={8}>光圈</Col>
-                                       <Col className={styles.gutterleft} span={8}><Button onMouseDown={this.btnClick.bind(this,20)} onMouseUp={this.btnClick.bind(this,19)}>&nbsp;&nbsp;-&nbsp;&nbsp;</Button></Col>
+                                       <Col className={styles.gutterleft} span={8}><Button onClick={this.btnClick.bind(this,20)}>&nbsp;&nbsp;-&nbsp;&nbsp;</Button></Col>
                                    </Row>
                                </Col>
                            </Row>
