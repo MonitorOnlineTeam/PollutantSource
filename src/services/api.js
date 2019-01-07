@@ -320,7 +320,8 @@ export async function queryentedit(params) {
         regionCode: params.area,
         registTypeCode: params.registration,
         subjectionRelationCode: params.subjection,
-        unitTypeCode: params.unit
+        unitTypeCode: params.unit,
+        polygon:params.polygon
     };
     const result = await post('/api/rest/PollutantSourceApi/PPointAndData/EditEnt', body, null);
     return result === null ? { data: null } : result.requstresult;
@@ -426,7 +427,7 @@ export async function queryprocesschart(params) {
 // 获取数据一览表头
 export async function querypollutanttypecode(params) {
     const body = {
-        pollutantTypes: params.code,
+        pollutantTypes: params.pollutantCode,
     };
     const result = await post('/api/rest/PollutantSourceApi/DataList/GetPollutantTypeCode', body, null);
     return result === null ? { data: null } : result.data;
@@ -436,8 +437,13 @@ export async function querydatalist(params) {
     const body = {
         time: params.time,
         pointType:params.pointType,
-        pollutantTypes:params.pollutantTypes,
-        pointName:params.pointName
+        pollutantTypes:params.pollutantCode,
+        pointName:params.pointName,
+        status:params.status,
+        operationStatus:params.operationStatus,
+        terate:params.terate,
+        warning:params.warning,
+        RunState:params.RunState,
     };
     const result = await post('/api/rest/PollutantSourceApi/DataList/SummaryList', body, null);
     return result === null ? { data: null } : result.data;
@@ -503,5 +509,15 @@ export async function queryreportlist(params) {
     const result = await post('/api/rest/PollutantSourceApi/DataList/GetYearDataList', body, null);
     return result === null ? {data: null} : result.data;
 }
+
+
+//获取系统污染物类型
+export async function getPollutantTypeList(params) {
+    const body = {
+    };
+    const result = await post('/api/rest/PollutantSourceApi/DataList/GetPollutantTypeList', body, null);
+    return result === null ? {data: null} : result.data;
+}
+
 
 

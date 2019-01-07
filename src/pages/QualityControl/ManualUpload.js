@@ -293,7 +293,7 @@ export default class ManualUpload extends Component {
             type: 'overview/querydatalist',
             payload: {
                 pointName: this.state.pointName,
-                pointType: value,
+                RunState: value,
                 pollutantTypes: this.state.TabsOnchange,
                 map: true, manualUpload: true,
                 pageIndex: this.props.pageIndex,
