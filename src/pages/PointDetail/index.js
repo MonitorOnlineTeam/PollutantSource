@@ -116,7 +116,7 @@ class PointDetail extends Component {
     renderPointList = () => {
         const rtnVal = [];
 
-        this.state.pointList.map((item, key) =>{
+        this.props.pointList.map((item, key) =>{
             let status = <img src="/gisexception.png" width="15" />;
             if (item.status === 0) {
                 status= <img src="/gisunline.png" width="15" />;
