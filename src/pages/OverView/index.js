@@ -177,6 +177,13 @@ class OverViewMap extends PureComponent {
         }
     });
    }
+      //直接刷新（带数据）
+      Refresh=()=>{
+        dispatch({
+            type: 'overview/querydatalist',
+            payload: { map: true }
+        });
+    }
 
    getStatusImg=(value) => {
     if (value === 0) {
@@ -192,7 +199,7 @@ class OverViewMap extends PureComponent {
    render() {
        const entInfo = this.props.entInfoModel ? this.props.entInfoModel[0] : '';
        const allcoo = entInfo ? eval(entInfo.coordinateSet) : '';
-       const {chartloading, detailloading} = this.props;
+       const {chartloading, detailloading,selectpoint} = this.props;
        return (
          <div
            style={{
@@ -214,11 +221,14 @@ class OverViewMap extends PureComponent {
              amapkey={amapKey}
              plugins={plugins}
            >
-             <UrgentDispatch
-               onCancel={this.onCancel}
-               visible={this.state.pdvisible}
-               selectpoint={this.state.selectpoint}
-             />
+               <UrgentDispatch
+                    onCancel={this.onCancel}
+                    visible={this.state.pdvisible}
+                    pointName={selectpoint?selectpoint.pointName:null}
+                    operationUserName={selectpoint?selectpoint.operationUserName:null}
+                    operationtel={selectpoint?selectpoint.operationtel:null}
+                    reloadData={()=>this.Refresh()}
+                />
              <div style={{ width: 450,
                        height: 'calc(100vh - 90px)',
                        position: 'absolute',
@@ -307,7 +317,9 @@ class OverViewMap extends PureComponent {
              >
                {this.state.selectpoint.pointName}
              </InfoWindow>
-             <UrgentDispatch />
+           
+
+              
            </Map>
          </div>
 

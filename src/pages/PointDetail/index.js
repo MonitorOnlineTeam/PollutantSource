@@ -41,9 +41,9 @@ class PointDetail extends Component {
             ],
             modalVisible:false,
             loadingCard:true,
-            pointList:this.props.pointList,
-            pointName:this.props.pointInfo.pointName,
-            DGIMN:this.props.match.params.pointcode,
+            pointList:null,
+            pointName:null,
+            DGIMN:null,
             status:'',
             searchName:''
         };
@@ -115,7 +115,7 @@ class PointDetail extends Component {
     renderPointList = () => {
         const rtnVal = [];
 
-        this.state.pointList.map((item, key) =>{
+        this.props.pointList.map((item, key) =>{
             let status = <img src="../../../gisexception.png" width="15" />;
             if (item.status === 0) {
                 status= <img src="../../../gisunline.png" width="15" />;
@@ -177,6 +177,21 @@ class PointDetail extends Component {
             status:'',
             searchName:''
         });
+    }
+    //获取派单还是督办按钮
+    getPDDBButton=()=>{
+       const {pointInfo}=this.props;
+       if(pointInfo)
+       {
+           if(pointInfo.existTask)
+           {
+               return (<Button type="primary" ghost={true} style={{float:"right",marginRight:30}}><Icon type="bell" />派单</Button>)
+           }
+           else
+           {
+               return (<Button type="primary" ghost={true} style={{float:"right",marginRight:30}}><Icon type="bell" />派单</Button>)
+           }
+       }
     }
 
     render() {

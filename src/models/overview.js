@@ -1,4 +1,5 @@
-import { querypollutanttypecode, querydatalist, querylastestdatalist, queryhistorydatalist, querypollutantlist,addtaskinfo,queryurge } from '../services/api';
+import { querypollutanttypecode, querydatalist, querylastestdatalist, 
+    queryhistorydatalist, querypollutantlist,addtaskinfo,queryurge,getPollutantTypeList } from '../services/api';
 import React from 'react';
 import { Model } from '../dvapack';
 import moment from 'moment';
@@ -27,7 +28,8 @@ export default Model.extend({
         selectdata: [],
         pollutantName: [],
         detailtime: null,
-        addtaskstatus:false
+        addtaskstatus:false,
+        pollutantTypelist:null
     },
     effects: {
         * querypollutanttypecode({
@@ -439,6 +441,24 @@ export default Model.extend({
             } else {
                 message.error('催办失败!');
             }
-        }
+        },
+          //获取系统污染物类型
+          * getPollutantTypeList({
+             payload
+          },{call, update}){
+           const res = yield call(getPollutantTypeList, payload);
+           if(res)
+           {
+               yield update({
+                  pollutantTypelist: res  
+               });
+           }
+           else
+           {
+                yield update({
+                    pollutantTypelist: null  
+                });
+           }
+       },
     }
 });
