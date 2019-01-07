@@ -31,6 +31,7 @@
     cursor: pointer;
     color: rgb(95, 183, 224);
   }
+  
   .workBench{
     background: rgb(236, 236, 236);
     margin-left: 20px;
@@ -96,6 +97,39 @@
           font-size: 28px;
         }
       }
+    }
+  }
+}
+
+.warningDetailsModal{
+  :global{
+    .light{
+      background-color:#f0f2f5;
+    }
+    table .ant-table-thead > tr > th{
+      background-color:#fafafa !important;
+    }
+    table .ant-table-small > .ant-table-content > .ant-table-body > table{
+      padding: 0% !important;
+    }
+    .ant-table-fixed-header .ant-table-scroll .ant-table-header{
+        overflow: hidden;
+        height: 60px;
+        width: 99.7%;
+    }
+
+    .ant-table-body{
+        height: calc(100vh - 48px);
+        overflow: auto;
+        // overflow-y: scroll;
+    }
+    .ant-table-placeholder{
+        position: absolute;
+        top:50px;
+        width:100%;
+    }
+    .ant-table-pagination.ant-pagination{
+      margin: 12px 0;
     }
   }
 }
