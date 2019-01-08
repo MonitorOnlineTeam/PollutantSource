@@ -3,13 +3,13 @@ import { routerRedux } from 'dva/router';
 import Add from '../../components/Video/addVideoInfo';
 import Update from '../../components/Video/updateVideoInfo';
 import InfoList from '../../components/Video/VideoInfoList';
-import { Table, Card, Button, Modal, message, Divider, Icon, Row, Col, Menu, Dropdown,Form } from 'antd';
+import { Table, Card, Button, Modal, message, Divider, Icon, Row, Col, Menu, Dropdown, Form } from 'antd';
 import { connect } from 'dva';
 import styles from './index.less';
 import moment from 'moment';
 import MonitorContent from '../../components/MonitorContent/index';
 const confirm = Modal.confirm;
-@connect(({loading, videolist}) => ({
+@connect(({ loading, videolist }) => ({
     ...loading,
     list: videolist.list,
     total: videolist.total,
@@ -35,7 +35,7 @@ export default class VideoList extends Component {
             footer: <div>
                 <Button key="back" onClick={this.handleCancel}>Return</Button>,
                 <Button key="submit" type="primary" onClick={this.handleOk}>
-                  Submit
+                    Submit
                 </Button>
             </div>
         };
@@ -51,25 +51,25 @@ export default class VideoList extends Component {
                 DGIMN: this.state.DGIMN,
             },
         });
-     
+
     }
     onRef1 = (ref) => {
         this.child = ref;
     }
-    onCancel=() => {
+    onCancel = () => {
         this.setState({
             visible: false
         });
     }
     // 添加
-    AddData=() => {
+    AddData = () => {
         this.child.handleSubmit();
     }
     // 修改
-    updateData=() => {
+    updateData = () => {
         this.child.handleSubmitupdate();
     }
-    deleteVideoInfo=(record) => {
+    deleteVideoInfo = (record) => {
         confirm({
             title: '确定要删除吗?',
             okText: '是',
@@ -81,7 +81,7 @@ export default class VideoList extends Component {
             },
         });
     };
-    deleteVideoInfobyIndex=(record) => {
+    deleteVideoInfobyIndex = (record) => {
         this.props.dispatch({
             type: 'videolist/deleteVideoInfo',
             payload: {
@@ -101,22 +101,23 @@ export default class VideoList extends Component {
                     <p>some messages...some messages...</p>
                 </div>
             ),
-            onOk() {},
+            onOk() { },
         });
     }
     render() {
         console.log(this.props.match.params.pointcode === null ? null : this.props.match.params.pointcode);
         const columns = [
-            { title: '设备名称', dataIndex: 'VedioDevice_Name', key: 'VedioDevice_Name' },
-            { title: '相机名称', dataIndex: 'VedioCamera_Name', key: 'VedioCamera_Name' },
-            { title: 'IP', dataIndex: 'IP', key: 'IP' },
-            { title: '端口', dataIndex: 'Device_Port', key: 'Device_Port' },
-            { title: '用户名', dataIndex: 'User_Name', key: 'User_Name' },
-            { title: '密码', dataIndex: 'User_Pwd', key: 'User_Pwd' },
-            { title: '通道号', dataIndex: 'VedioCamera_No', key: 'VedioCamera_No' },
+            { title: '设备名称', dataIndex: 'VedioDevice_Name', key: 'VedioDevice_Name', width: '10%' },
+            { title: '相机名称', dataIndex: 'VedioCamera_Name', key: 'VedioCamera_Name', width: '10%' },
+            { title: 'IP', dataIndex: 'IP', key: 'IP', width: '14%' },
+            { title: '端口', dataIndex: 'Device_Port', key: 'Device_Port', width: '14%' },
+            { title: '用户名', dataIndex: 'User_Name', key: 'User_Name', width: '14%' },
+            { title: '密码', dataIndex: 'User_Pwd', key: 'User_Pwd', width: '14%' },
+            { title: '通道号', dataIndex: 'VedioCamera_No', key: 'VedioCamera_No', width: '10%' },
             {
                 title: '操作',
                 key: 'action',
+                width: '14%',
                 render: (text, record, index) => (
                     <span>
                         <a onClick={() => {
@@ -141,7 +142,7 @@ export default class VideoList extends Component {
                                 footer: <div>
                                     <Button key="back" onClick={this.onCancel}>取消</Button>
                                     <Button key="submit" type="primary" onClick={this.updateData}>
-                                  确定
+                                        确定
                                     </Button>
                                 </div>
                             });
@@ -158,84 +159,84 @@ export default class VideoList extends Component {
         return (
             <MonitorContent {...this.props} breadCrumbList={
                 [
-                    {Name:'首页',Url:'/'},
-                    {Name:'系统管理',Url:''},
-                    {Name:'排口管理',Url:'/sysmanage/pointinfo'},
-                    {Name:'视频管理',Url:''}
+                    { Name: '首页', Url: '/' },
+                    { Name: '系统管理', Url: '' },
+                    { Name: '排口管理', Url: '/sysmanage/pointinfo' },
+                    { Name: '视频管理', Url: '' }
                 ]
             }>
-            <div className={styles.cardTitle}>
-                <Card bordered={false} title={this.props.match.params.pointname} style={{width:'100%'}}>
-                <Form layout="inline" style={{marginBottom: 10}}>
-                 <Row gutter={8} >
-                    <Col span={24} >
-                            <Button type="primary"
-                            onClick={
-                                () => {
-                                    this.setState({
-                                visible: true,
-                                type: 'add',
-                                title: '添加视频信息',
-                                width: 1130,
-                                footer: <div>
-                                    <Button key="back" onClick={this.onCancel}>取消</Button>
-                                    <Button key="submit" type="primary" onClick={this.AddData}>
-                        确定
+                <div className={styles.cardTitle}>
+                    <Card bordered={false} title={this.props.match.params.pointname} style={{ width: '100%' }}>
+                        <Form layout="inline" style={{ marginBottom: 10 }}>
+                            <Row gutter={8} >
+                                <Col span={24} >
+                                    <Button type="primary"
+                                        onClick={
+                                            () => {
+                                                this.setState({
+                                                    visible: true,
+                                                    type: 'add',
+                                                    title: '添加视频信息',
+                                                    width: 1130,
+                                                    footer: <div>
+                                                        <Button key="back" onClick={this.onCancel}>取消</Button>
+                                                        <Button key="submit" type="primary" onClick={this.AddData}>
+                                                            确定
                                     </Button>
-                                </div>
-                            });
+                                                    </div>
+                                                });
+                                            }
+                                        } > 添加 </Button>
+                                </Col >
+                            </Row>
+                        </Form>
+                        <Table
+                            columns={columns}
+                            dataSource={this.props.requstresult === '1' ? this.props.list : null}
+                            pagination={false}
+                            rowKey="VedioCamera_ID"
+                            onRow={(record, index) => {
+                                return {
+                                    onClick: (a, b, c) => {
+                                        this.setState({
+                                            item: record,
+                                            selectedRowKeys: record.VedioCamera_ID
+                                        });
+                                    }, // 点击行
+                                    onMouseEnter: () => { }, // 鼠标移入行
+                                };
+                            }}
+                            loading={this.props.effects['videolist/fetchuserlist']}
+                            className={styles.dataTable}
+                            size="small"// small middle
+                            scroll={{ y: 'calc(100vh - 330px)' }}
+                            rowClassName={
+                                (record, index, indent) => {
+                                    if (index === 0) {
+                                        return;
+                                    }
+                                    if (index % 2 !== 0) {
+                                        return 'light';
+                                    }
                                 }
-                            } > 添加 </Button>
-                    </Col >
-                 </Row>
-                </Form>
-                    <Table
-                        columns={columns}
-                        dataSource={this.props.requstresult === '1' ? this.props.list : null}
-                        pagination={false}
-                        rowKey="VedioCamera_ID"
-                        onRow={(record, index) => {
-                            return {
-                                onClick: (a, b, c) => {
-                                    this.setState({
-                                        item: record,
-                                        selectedRowKeys: record.VedioCamera_ID
-                                    });
-                                }, // 点击行
-                                onMouseEnter: () => {}, // 鼠标移入行
-                            };
-                        }}
-                        loading={this.props.effects['videolist/fetchuserlist']}
-                         className={styles.dataTable}
-                         size="small"// small middle
-                         scroll={{ y: 'calc(100vh - 330px)' }}
-                         rowClassName={
-                             (record, index, indent) => {
-                                 if (index === 0) {
-                                     return;
-                                 }
-                                 if (index % 2 !== 0) {
-                                     return 'light';
-                                 }
-                             }
-                         }
-                    />
-                    <Modal
-                        footer={this.state.footer}
-                        destroyOnClose="true"
-                        visible={this.state.visible}
-                        title={this.state.title}
-                        width={this.state.width}
-                        onCancel={this.onCancel}>
-                        {
-                            this.state.type === 'add' ? <Add onCancels={this.onCancel} dgimn={this.state.DGIMN} name={this.state.pointName} onRef={this.onRef1} /> : this.state.type === 'update' ? <Update onCancels={this.onCancel} dgimn={this.state.DGIMN} item={this.state.data} onRef={this.onRef1} /> : <InfoList onCancels={this.onCancel} dgimn={this.state.DGIMN} item={this.state.data} onRef={this.onRef1} />
-                        }
+                            }
+                        />
+                        <Modal
+                            footer={this.state.footer}
+                            destroyOnClose="true"
+                            visible={this.state.visible}
+                            title={this.state.title}
+                            width={this.state.width}
+                            onCancel={this.onCancel}>
+                            {
+                                this.state.type === 'add' ? <Add onCancels={this.onCancel} dgimn={this.state.DGIMN} name={this.state.pointName} onRef={this.onRef1} /> : this.state.type === 'update' ? <Update onCancels={this.onCancel} dgimn={this.state.DGIMN} item={this.state.data} onRef={this.onRef1} /> : <InfoList onCancels={this.onCancel} dgimn={this.state.DGIMN} item={this.state.data} onRef={this.onRef1} />
+                            }
 
-                    </Modal>
+                        </Modal>
 
-                </Card>
-            </div>
-           </MonitorContent>
+                    </Card>
+                </div>
+            </MonitorContent>
 
         );
     }

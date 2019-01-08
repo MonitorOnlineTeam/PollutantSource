@@ -16,6 +16,10 @@ module.exports = {
     apiPrefix: '/mock',
     webSocketPushURL: '172.16.4.200:40001',
     imgaddress: 'http://localhost:52199/upload/',
+    //实时视频地址
+    realtimevideourl:'http://localhost:36999/Video/MonitorLinkCamera/RealtimeCameraReact',
+    //历史视频地址
+    hisvideourl:'http://localhost:36999/Video/MonitorLinkCamera/HistoryCameraReact',
     mainpollutantInfo: [{
         pollutantCode: '01',
         pollutantName: '烟尘',

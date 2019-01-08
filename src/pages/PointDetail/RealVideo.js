@@ -1,28 +1,21 @@
 import React, { Component } from 'react';
-import {Row, Col, Button, List, Table, Card, Select, Divider, Message} from 'antd';
-import styles from './video.less';
+import {Row, Col, Button, Card, Divider,Spin} from 'antd';
 import { connect } from 'dva';
 import moment from 'moment';
+import styles from './video.less';
 import RealVideoData from '../../components/Video/RealVideoData';
+import config from '../../config';
 
-
-const Option = Select.Option;
-
-@connect(({loading, videolist}) => ({
-    ...loading,
-    list: videolist.list,
-    total: videolist.total,
-    pageSize: videolist.pageSize,
-    pageIndex: videolist.pageIndex,
-    requstresult: videolist.requstresult,
-}))
 /*
 页面：4、实时视频
 描述：可以和数据、参数、报警等联动查看
 add by cg 18.12.17
 */
 
-export default class RealVideo extends Component {
+@connect(({videolist}) => ({
+    realtimevideofullurl:videolist.realtimevideofullurl,
+}))
+class RealVideo extends Component {
     constructor(props) {
         super(props);
 
@@ -31,76 +24,108 @@ export default class RealVideo extends Component {
         };
     }
 
-   componentWillMount = () => { }
+   componentWillMount = () => {
+       this.getVideoIp();
+   }
+
+   getVideoIp=()=>{
+       const {match,dispatch}=this.props;
+       dispatch({
+           type:'videolist/fetchuserlist',
+           payload:{ DGIMN: match.params.pointcode }
+       });
+   }
 
    btnClick=(opt)=>{
-        let obj={"opt":opt};
-        obj={"opt":opt};
-        let frame = document.getElementById('ifm').contentWindow;
-        frame.postMessage(obj,'http://localhost:36999');
-    }
+       let obj={"opt":opt};
+       obj={"opt":opt};
+       let frame = document.getElementById('ifm').contentWindow;
+       frame.postMessage(obj,config.realtimevideourl);
+   }
 
    render() {
+       const {realtimevideofullurl}=this.props;
+       if(!realtimevideofullurl){
+           return (<Spin
+               style={{ width: '100%',
+                   height: 'calc(100vh - 225px)',
+                   display: 'flex',
+                   alignItems: 'center',
+                   justifyContent: 'center' }}
+               size="large"
+           />);
+       }
+       if(realtimevideofullurl==="nodata"){
+           return (
+               <table align="center" style={{ height: 'calc(100vh - 225px)',width: '100%' }}>
+                   <tbody>
+                       <tr>
+                           <td align="center">
+                            暂无视频配置
+                           </td>
+                       </tr>
+                   </tbody>
+               </table>
+           );
+       }
        return (
            <div style={{ height: 'calc(100vh - 225px)',width: '100%' }}>
                <Row gutter={24} style={{ height: '65%' }}>
                    <Col xl={18} lg={24} md={24} sm={24} xs={24} style={{ marginBottom: 10, height: '100%' }}>
-                        <iframe id="ifm" frameBorder="0" src="http://localhost:36999//Video/MonitorLinkCamera/RealtimeCameraReact?ip=172.16.23.147&port=80&userName=admin&userPwd=abc123456&cameraNo=1" width="100%" height="100%" />
-                    </Col>
-                    <Col xl={6} lg={24} md={24} sm={24} xs={24} style={{ marginBottom: 10, height: '100%' }}>
-                        <Card className={styles.hisYunStyle}>
-                            <Row>
-                                <Col span={24}>
-                                    <Button icon="caret-right" onClick={this.btnClick.bind(this,10)}>抓图</Button>
-                                </Col>
-                            </Row>
-                            <Divider type="horizontal" />
-                            <Row>
-                                <Col span={24}>
-                                    <Row>
-                                        <Col className={styles.gutterleft} span={8}><Button icon="caret-right" onClick={this.btnClick.bind(this,5)}>左上</Button></Col>
-                                        <Col className={styles.gutterleft} span={8}><Button icon="up-square-o" onClick={this.btnClick.bind(this,1)}>上</Button></Col>
-                                        <Col className={styles.gutterleft} span={8}><Button icon="caret-right" onClick={this.btnClick.bind(this,7)}>右上</Button></Col>
-                                    </Row>
-                                    <Row style={{marginTop:'10px'}}>
-                                        <Col className={styles.gutterleft} span={8}><Button icon="caret-right" onClick={this.btnClick.bind(this,3)}>左</Button></Col>
-                                        <Col className={styles.gutterleft} span={8}><Button icon="up-square-o" onClick={this.btnClick.bind(this,9)}>自动</Button></Col>
-                                        <Col className={styles.gutterleft} span={8}><Button icon="caret-right" onClick={this.btnClick.bind(this,4)}>右</Button></Col>
-                                    </Row>
-                                    <Row style={{marginTop:'10px'}}>
-                                        <Col className={styles.gutterleft} span={8}><Button icon="caret-right" onClick={this.btnClick.bind(this,6)}>左下</Button></Col>
-                                        <Col className={styles.gutterleft} span={8}><Button icon="up-square-o" onClick={this.btnClick.bind(this,2)}>下</Button></Col>
-                                        <Col className={styles.gutterleft} span={8}><Button icon="caret-right" onClick={this.btnClick.bind(this,8)}>右下</Button></Col>
-                                    </Row>
-                                </Col>
-                            </Row>
-                            <Divider type="horizontal" />
-                            <Row>
-                                <Col span={24}>
-                                    <Row>
-                                        <Col className={styles.gutterleft} span={8}><Button icon="fast-backward" onMouseDown={this.btnClick.bind(this,11)} onMouseUp={this.btnClick.bind(this,12)}> + </Button></Col>
-                                        <Col className={styles.gutterleft} span={8}>变倍</Col>
-                                        <Col className={styles.gutterleft} span={8}><Button icon="caret-right"  onMouseDown={this.btnClick.bind(this,13)} onMouseUp={this.btnClick.bind(this,12)}> + </Button></Col>
-                                    </Row>
-                                    <Row style={{marginTop:'10px'}}>
-                                        <Col className={styles.gutterleft} span={8}><Button icon="fast-backward" onMouseDown={this.btnClick.bind(this,15)} onMouseUp={this.btnClick.bind(this,16)}> + </Button></Col>
-                                        <Col className={styles.gutterleft} span={8}>变焦</Col>
-                                        <Col className={styles.gutterleft} span={8}><Button icon="caret-right"  onMouseDown={this.btnClick.bind(this,17)} onMouseUp={this.btnClick.bind(this,16)}> + </Button></Col>
-                                    </Row>
-                                    <Row style={{marginTop:'10px'}}>
-                                        <Col className={styles.gutterleft} span={8}><Button icon="fast-backward" onMouseDown={this.btnClick.bind(this,18)} onMouseUp={this.btnClick.bind(this,19)}> + </Button></Col>
-                                        <Col className={styles.gutterleft} span={8}>光圈</Col>
-                                        <Col className={styles.gutterleft} span={8}><Button icon="caret-right"  onMouseDown={this.btnClick.bind(this,20)} onMouseUp={this.btnClick.bind(this,19)}> + </Button></Col>
-                                    </Row>
-                                </Col>
-                            </Row>
-                        </Card>
-                    </Col>
+                       <iframe title="实时视频" id="ifm" src={realtimevideofullurl} frameBorder="0" width="100%" height="100%" />
+                   </Col>
+                   <Col xl={6} lg={24} md={24} sm={24} xs={24} style={{ marginBottom: 10, height: '100%' }}>
+                       <Card className={styles.hisYunStyle}>
+                           <Row>
+                               <Col span={24}>
+                                   <Button onClick={this.btnClick.bind(this,10)}>抓图</Button>
+                               </Col>
+                           </Row>
+                           <Divider type="horizontal" />
+                           <Row>
+                               <Col span={24}>
+                                   <Row>
+                                       <Col className={styles.gutterleft} span={8}><Button onClick={this.btnClick.bind(this,5)}>左上</Button></Col>
+                                       <Col className={styles.gutterleft} span={8}><Button onClick={this.btnClick.bind(this,1)}>&nbsp;&nbsp;上&nbsp;&nbsp;</Button></Col>
+                                       <Col className={styles.gutterleft} span={8}><Button onClick={this.btnClick.bind(this,7)}>右上</Button></Col>
+                                   </Row>
+                                   <Row style={{marginTop:'10px'}}>
+                                       <Col className={styles.gutterleft} span={8}><Button onClick={this.btnClick.bind(this,3)}>&nbsp;&nbsp;左&nbsp;&nbsp;</Button></Col>
+                                       <Col className={styles.gutterleft} span={8}><Button onClick={this.btnClick.bind(this,9)}>自动</Button></Col>
+                                       <Col className={styles.gutterleft} span={8}><Button onClick={this.btnClick.bind(this,4)}>&nbsp;&nbsp;右&nbsp;&nbsp;</Button></Col>
+                                   </Row>
+                                   <Row style={{marginTop:'10px'}}>
+                                       <Col className={styles.gutterleft} span={8}><Button onClick={this.btnClick.bind(this,6)}>左下</Button></Col>
+                                       <Col className={styles.gutterleft} span={8}><Button onClick={this.btnClick.bind(this,2)}>&nbsp;&nbsp;下&nbsp;&nbsp;</Button></Col>
+                                       <Col className={styles.gutterleft} span={8}><Button onClick={this.btnClick.bind(this,8)}>右下</Button></Col>
+                                   </Row>
+                               </Col>
+                           </Row>
+                           <Divider type="horizontal" />
+                           <Row>
+                               <Col span={24}>
+                                   <Row>
+                                       <Col className={styles.gutterleft} span={8}><Button onMouseDown={this.btnClick.bind(this,11)} onMouseUp={this.btnClick.bind(this,12)}>&nbsp;&nbsp;+&nbsp;&nbsp;</Button></Col>
+                                       <Col className={styles.gutterleft} span={8}>变倍</Col>
+                                       <Col className={styles.gutterleft} span={8}><Button onMouseDown={this.btnClick.bind(this,13)} onMouseUp={this.btnClick.bind(this,12)}>&nbsp;&nbsp;-&nbsp;&nbsp;</Button></Col>
+                                   </Row>
+                                   <Row style={{marginTop:'10px'}}>
+                                       <Col className={styles.gutterleft} span={8}><Button onMouseDown={this.btnClick.bind(this,15)} onMouseUp={this.btnClick.bind(this,16)}>&nbsp;&nbsp;+&nbsp;&nbsp;</Button></Col>
+                                       <Col className={styles.gutterleft} span={8}>变焦</Col>
+                                       <Col className={styles.gutterleft} span={8}><Button onMouseDown={this.btnClick.bind(this,17)} onMouseUp={this.btnClick.bind(this,16)}>&nbsp;&nbsp;-&nbsp;&nbsp;</Button></Col>
+                                   </Row>
+                                   <Row style={{marginTop:'10px'}}>
+                                       <Col className={styles.gutterleft} span={8}><Button onMouseDown={this.btnClick.bind(this,18)} onMouseUp={this.btnClick.bind(this,19)}>&nbsp;&nbsp;+&nbsp;&nbsp;</Button></Col>
+                                       <Col className={styles.gutterleft} span={8}>光圈</Col>
+                                       <Col className={styles.gutterleft} span={8}><Button onMouseDown={this.btnClick.bind(this,20)} onMouseUp={this.btnClick.bind(this,19)}>&nbsp;&nbsp;-&nbsp;&nbsp;</Button></Col>
+                                   </Row>
+                               </Col>
+                           </Row>
+                       </Card>
+                   </Col>
                </Row>
                <Row gutter={24} style={{ height: '20%' }}>
-                   <Col span={24}>
-                       <RealVideoData {...this.props} />
-                   </Col>
+                   <RealVideoData {...this.props} />
                    {
                        /* <Col xl={12} lg={24} sm={24} xs={24}>
                        <Card title="设备参数实时信息" >
@@ -113,3 +138,4 @@ export default class RealVideo extends Component {
        );
    }
 }
+export default RealVideo;

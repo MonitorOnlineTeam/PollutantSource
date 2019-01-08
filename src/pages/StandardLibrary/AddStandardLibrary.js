@@ -417,11 +417,12 @@ export default class AddStandardLibrary extends Component {
                                           fileList={this.state.fileList}
                                       >
                                           <Button>
-                                              <Icon type="upload" /> Upload
+                                              <Icon type="upload" /> 上传
                                           </Button>
                                       </Upload>
                                   </FormItem>
                               </Col>
+
                               <Col span={12} >
                                   <FormItem
                                       labelCol={{ span: 8 }}
@@ -435,24 +436,11 @@ export default class AddStandardLibrary extends Component {
                                   </FormItem>
                               </Col>
                           </Row>
-                          <Row gutter={48}>
-                              <Col span={24} style={{textAlign: 'center'}}>
-                                  <Button type="primary"
-                                      htmlType="submit">
-                          保存
-                                  </Button>
-                                  <Divider type="vertical" />
-                                  <Button type="dashed"
-                                      onClick={
-                                          () => this.props.dispatch(routerRedux.push(`/sysmanage/StandardLibrary`))
-                                      } >
-                          返回
-                                  </Button>
-                              </Col>
-                          </Row>
+               
                       </Card>
                   </Form>
-                  <Card bordered={false} style={{marginTop: 10,height:'calc(100vh - 495px)'}}>
+                  <Divider dashed  />
+                  <Card bordered={false} style={{marginTop: 10,}}>
                       <Form layout="inline" style={{marginBottom: 20}}>
                           <Row gutter={8}>
                               <Col span={1} ><Button type="primary"
@@ -496,6 +484,23 @@ export default class AddStandardLibrary extends Component {
                           <AddPollutant pid={this.state.StandardLibraryID} onRef={this.onRef1} getlist={this.ChildGetList} Id={this.state.Id} />
                       }
                   </Modal>
+                  <Row gutter={48}>
+                  <Divider orientation="right"  style={{border:'1px dashed #FFFFFF'}}>
+                              <Col span={24} style={{textAlign: 'center'}}>
+                                  <Button type="primary"
+                                      htmlType="submit">
+                          保存
+                                  </Button>
+                                  <Divider type="vertical" />
+                                  <Button type="dashed"
+                                      onClick={
+                                          () => this.props.dispatch(routerRedux.push(`/sysmanage/StandardLibrary`))
+                                      } >
+                          返回
+                                  </Button>
+                              </Col>
+                              </Divider>
+                          </Row>
               </Card>
           </div>
           </MonitorContent>

@@ -11,7 +11,7 @@ import ImageInfo from './imageInfo.js';
 import styles from './index.less';
 import config from '../../config';
 import { imgaddress } from '../../config.js';
-import ModalMap from '../PointInfo/ModalMap';
+import ModalMap from '../../components/Map/MadMouseTool'; 
 
 const FormItem = Form.Item;
 const { Header, Content, Footer } = Layout
@@ -60,7 +60,8 @@ class index extends PureComponent {
             industry: this.props.baseinfo ? '' : this.props.baseinfo[0].industryTypeCode,
             area: this.props.baseinfo ? '' : this.props.baseinfo[0].regionCode,
             className:styles.editInput,
-            Mapvisible:false
+            Mapvisible:false,
+            polygon:null
         };
 
         this.mapEvents = {
@@ -98,7 +99,8 @@ class index extends PureComponent {
                         concern: this.state.concern,
                         industry: _this.state.industry,
                         area: _this.state.area,
-                        className:styles.Input
+                        className:styles.Input,
+                        polygon:this.state.polygon
                     },
                 });
                 this.setState({
@@ -193,15 +195,27 @@ class index extends PureComponent {
                 Mapvisible:true
             })
     }
+    mapitem=(polygon)=>{
+        this.setState({
+            polygon
+        })                       
+    }
+
+    GetData() {
+        this.setState({
+            polygon:this.child.props.form.getFieldValue('position')
+        })
+    }
 
     render() {
         const { getFieldDecorator } = this.props.form;
+        const {polygon}=this.state;
         const { effects } = this.props;
         const baseinfo = this.props.baseinfo[0];
         let allcoo;
         let mapCenter;
         if (baseinfo) {
-            const coordinateSet = baseinfo.coordinateSet;
+            const coordinateSet = polygon?polygon:baseinfo.coordinateSet;
             allcoo = eval(coordinateSet);
             mapCenter = { longitude: baseinfo.longitude, latitude: baseinfo.latitude };
         }
@@ -269,7 +283,7 @@ class index extends PureComponent {
                                     borderRadius: "12px"
                                 }}>
 
-                                <Button onClick={this.showEditCoordinate}>编辑厂界</Button>
+                              
                                     <Map resizeEnable={true}
                                         events={this.mapEvents}
                                         zoom={11} loading={<Spin />} amapkey={amapKey} plugins={plugins} center={mapCenter} >
@@ -305,16 +319,24 @@ class index extends PureComponent {
                          <Divider orientation="right">
   
                          <Button onClick={this.startedit}  type="primary" className={styles.button} ><Icon type="edit" />{this.state.buttontext}</Button>
+                         {
+                              this.state.isedit?'':<Button style={{marginLeft:10}} className={styles.button} onClick={this.showEditCoordinate}><Icon type="schedule" />编辑厂界</Button>
+                         }
+
                          {!this.state.isedit ?
                              <Popconfirm placement="topRight" title={"不保存取消？"} onConfirm={this.endedit} okText="是" cancelText="否">
                              <Button className={styles.button}><Icon type="close" />取消</Button>
                              </Popconfirm>
                           : <span />}
                         
-                         {!this.state.isedit ?<Popconfirm placement="topRight" title={"您现在正编辑信息不保存离开？"} onConfirm={this.showModal} okText="是" cancelText="否">
+                         {!this.state.isedit ?
+                         <Popconfirm placement="topRight" title={"您现在正编辑信息不保存离开？"} onConfirm={this.showModal} okText="是" cancelText="否">
                          <Button className={styles.button} ><Icon type="schedule" />排污许可</Button>
-                         </Popconfirm>: <Button className={styles.button} onClick={this.showModal} ><Icon type="schedule" />排污许可</Button>}
-                
+                       
+                         </Popconfirm>:
+                          <Button className={styles.button} onClick={this.showModal} ><Icon type="schedule" />排污许可</Button>}
+
+
                          </Divider>
                         <Form layout="inline" onSubmit={this.handleSubmit} className={this.state.className} style={{ display:'flex',flexDirection:'row',flexWrap:'wrap',alignItems:'center',justifyContent:'space-between'}}>
                         <FormItem style={{width:'400px'}}   {...formItemLayout} label="企业名称"  >
@@ -532,21 +554,24 @@ class index extends PureComponent {
                              
                         </Form>
                         <Modal
-                 visible={this.state.Mapvisible}
-                 title={this.state.title}
-                 width={this.state.width}
-                 destroyOnClose={true}// 清除上次数据
-                 onOk={() => {
-                  //   this.GetData();
-                 }
-                 }
-                 onCancel={() => {
-                     this.setState({
-                         Mapvisible: false
-                     });
-                 }}>
+                            visible={this.state.Mapvisible}
+                            title='编辑位置信息'
+                            width='55%'
+                            destroyOnClose={true}// 清除上次数据
+                            onOk={() => {
+                                this.GetData();
+                                this.setState({
+                                    Mapvisible: false
+                                });
+                            }
+                            }
+                            onCancel={() => {
+                                this.setState({
+                                    Mapvisible: false
+                                });
+                           }}>
                  {
-                     <ModalMap   />
+                     <ModalMap onRef={this.onRef1}  polygon={baseinfo.coordinateSet}  center={mapCenter}/>
                  }
                   </Modal>
                           <Divider dashed />
