@@ -16,6 +16,8 @@ import TransmissionEfficiency from '../../components/OverView/TransmissionEffici
 import UrgentDispatch from '../../components/OverView/UrgentDispatch';
 import TreeDetailStatus from '../../components/OverView/TreeDetailStatus';
 import TreeCard from '../../components/OverView/TreeCard';
+import SearchInput from '../../components/OverView/SearchInput';
+import TreeCardContent from '../../components/OverView/TreeCardContent';
 import styles from './index.less';
 const plugins = [
     'MapType',
@@ -43,7 +45,9 @@ const plugins = [
     pollutantName: overview.pollutantName,
     treedataloading: loading.effects['overview/querydatalist'],
     detailloading: loading.effects['overview/queryoptionData'],
-    detailtime: overview.detailtime
+    pollutantTypeloading:loading.effects['overview/getPollutantTypeList'],
+    detailtime: overview.detailtime,
+    pollutantTypelist:overview.pollutantTypelist
 }))
 
 class OverViewMap extends PureComponent {
@@ -59,6 +63,9 @@ class OverViewMap extends PureComponent {
             position: [
                 0, 0
             ],
+            pollutantTypeCode:"2",
+            pointName:null,
+            searchName:null
         };
     }
 
@@ -98,6 +105,11 @@ class OverViewMap extends PureComponent {
         dispatch({
             type: 'baseinfo/queryentdetail',
             payload: {}
+        });
+        dispatch({
+            type: 'overview/getPollutantTypeList',
+            payload: {
+            }
         });
     }
 
@@ -149,18 +161,17 @@ class OverViewMap extends PureComponent {
         });
     }
 
-    onCancel = () => {
-        this.setState({
-            pdvisible: false,
-        });
-    }
-
     pdShow = () => {
         this.setState({
             pdvisible: true,
         });
     }
-
+    //派单窗口关闭
+    onCancel=() => {
+        this.setState({
+            pdvisible: false,
+        });
+    }
     backTreeList = () => {
         this.setState({
             detailed: false,
@@ -178,10 +189,20 @@ class OverViewMap extends PureComponent {
     });
    }
       //直接刷新（带数据）
-      Refresh=()=>{
-        dispatch({
+    Refresh=()=>{
+        const {pollutantTypeCode,searchName}=this.state;
+       this.reloadData(pollutantTypeCode,searchName);
+    }
+
+    //重新加载
+    reloadData=(pollutantTypeCode,searchName)=>{
+        this.props.dispatch({
             type: 'overview/querydatalist',
-            payload: { map: true }
+            payload: {
+                 map: true,
+                 pollutantCode:pollutantTypeCode,
+                 pointName:searchName
+            },
         });
     }
 
@@ -194,12 +215,103 @@ class OverViewMap extends PureComponent {
         return <img style={{width:15}} src="/gisover.png" />;
     }
     return <img style={{width:15}} src="/gisexception.png" />;
-}
+  }
+
+  //当前选中的污染物类型
+  getNowPollutantType=(key)=>{
+      debugger;
+     this.setState({
+         pollutantTypeCode:key
+     })
+     const {searchName}=this.state;
+     this.reloadData(key,searchName);
+  }
+
+  //查询
+  onSerach=(value)=>{
+      this.setState({
+        searchName:value
+      })
+    const {pollutantTypeCode}=this.state;
+    this.reloadData(pollutantTypeCode,value);
+  }
+
+  getdetailed=()=>{
+    const { pollutantTypelist,detailloading,detailpcol,detaildata,selectdata,chartdata,pollutantName,
+        existdata,treedataloading,datalist,chartloading,pollutantTypeloading}  = this.props;
+    const {detailed,statusImg,selectpoint,pointName}=this.state;
+    if(!detailed)
+    {
+      return( 
+      <div style={{ marginLeft: 10, marginTop: 10 }}>
+        <div><SearchInput
+        onSerach={this.onSerach}
+        style={{marginTop:5,marginBottom:5,width:400}} searchName="排口名称" /></div>
+          <div>
+            <TreeStatus datalist={datalist} />
+          </div>
+          <div style={{ marginTop: 5 }}>
+            <TreeCard
+            style={{
+                width: '400px',
+                marginTop: 5,
+                background:'#fff'
+            }}
+            pollutantTypeloading={pollutantTypeloading}
+            getHeight={'calc(100vh - 260px)'} getStatusImg={this.getStatusImg} isloading={treedataloading} 
+            getNowPollutantType={this.getNowPollutantType}
+            treeCilck={this.treeCilck} treedatalist={datalist} PollutantType={2} 
+            pollutantTypelist={pollutantTypelist}
+            tabkey={this.state.pollutantTypeCode}
+            />
+            <TreeCardContent style={{overflow:'auto',width:400,background:'#fff'}}
+             getHeight='calc(100vh - 290px)'
+             getStatusImg={this.getStatusImg} isloading={treedataloading} 
+            treeCilck={this.treeCilck} treedatalist={datalist} PollutantType={2} />
+          </div>
+        </div>);
+    }else
+    {
+         if(detailloading)
+         {
+             return(<Spin
+                style={{width: '100%',
+                  height: 'calc(100vh - 260px)',
+                  marginTop: 260 }}
+                size="large"
+              /> )
+         }
+         return(
+            <div style={{ marginLeft: 10, marginTop: 10,overflow:'auto' }}>
+              <div>
+                <TreeDetailStatus urge={this.urge} pointInfo={selectpoint} statusImg={statusImg} pdShow={this.pdShow} 
+                detailtime={this.props.detailtime} stationClick={this.stationClick} backTreeList={this.backTreeList} 
+                pointName={pointName} detailed={detailed}
+               
+                />
+              </div>
+              <div style={{ height: 'calc(100vh - 215px)' }} className={styles.detailInfo}>
+              <div style={{marginTop: 15}}>
+                <TransmissionEfficiency selectdata={selectdata} />
+              </div>
+              <div style={{marginTop: 15}}>
+                <MapPollutantDetail detialTreeClick={this.detialTreeClick} detailpcol={detailpcol} 
+                detaildata={detaildata} />
+              </div>
+              <div style={{marginTop: 15}}>
+                <ChartData pollutantName={pollutantName} isloading={chartloading}
+                 chartdata={chartdata} existdata={existdata} />
+              </div>
+            </div>
+            </div>)
+    }
+  }
 
    render() {
        const entInfo = this.props.entInfoModel ? this.props.entInfoModel[0] : '';
        const allcoo = entInfo ? eval(entInfo.coordinateSet) : '';
-       const {chartloading, detailloading,selectpoint} = this.props;
+       const {chartloading, detailloading} = this.props;
+       const {selectpoint}=this.state;
        return (
          <div
            style={{
@@ -224,6 +336,8 @@ class OverViewMap extends PureComponent {
                <UrgentDispatch
                     onCancel={this.onCancel}
                     visible={this.state.pdvisible}
+                    operationUserID={selectpoint?selectpoint.operationUserID:null}
+                    DGIMN={selectpoint?selectpoint.DGIMN:null}
                     pointName={selectpoint?selectpoint.pointName:null}
                     operationUserName={selectpoint?selectpoint.operationUserName:null}
                     operationtel={selectpoint?selectpoint.operationtel:null}
@@ -234,42 +348,13 @@ class OverViewMap extends PureComponent {
                        position: 'absolute',
                        top: 10,
                        left: 5,
-                       background: 'rgba(255, 255, 255, 0.5)',
+                     //  background: 'rgba(255, 255, 255, 0.5)',
                        borderRadius: 10
                    }}
              >
-               {!this.state.detailed ? <div style={{ marginLeft: 10, marginTop: 10 }}>
-                 <div>
-                   <TreeStatus datalist={this.props.datalist} />
-                 </div>
-                 <div style={{ marginTop: 15 }}>
-                 {/* 添加PollutantType 污染物类型（再调试，为不报错加的2）和为getHeight 自定义高度参数 */}
-                   <TreeCard getHeight={'calc(100vh - 210px)'} getStatusImg={this.getStatusImg} isloading={this.props.treedataloading} treeCilck={this.treeCilck} treedatalist={this.props.datalist} PollutantType={2} />
-                 </div>
-               </div> :
-                           detailloading ? <Spin
-                             style={{width: '100%',
-                               height: 'calc(100vh - 260px)',
-                               marginTop: 260 }}
-                             size="large"
-                           /> :
-                           <div style={{ marginLeft: 10, marginTop: 10 }}>
-                             <div>
-                               <TreeDetailStatus urge={this.urge} pointInfo={this.state.selectpoint} statusImg={this.state.statusImg} pdShow={this.pdShow} detailtime={this.props.detailtime} stationClick={this.stationClick} backTreeList={this.backTreeList} pointName={this.state.pointName} detailed={this.state.detailed} />
-                             </div>
-                             <div style={{ height: 'calc(100vh - 215px)' }} className={styles.detailInfo}>
-                             <div style={{marginTop: 15}}>
-                               <TransmissionEfficiency selectdata={this.props.selectdata} />
-                             </div>
-                             <div style={{marginTop: 15}}>
-                               <MapPollutantDetail detialTreeClick={this.detialTreeClick} detailpcol={this.props.detailpcol} detaildata={this.props.detaildata} />
-                             </div>
-                             <div style={{marginTop: 15}}>
-                               <ChartData pollutantName={this.props.pollutantName} isloading={chartloading} chartdata={this.props.chartdata} existdata={this.props.existdata} />
-                             </div>
-                           </div>
-                           </div>
-                       }
+               
+            {this.getdetailed()}
+
              </div>
              <div
                style={{

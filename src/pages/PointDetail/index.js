@@ -8,6 +8,7 @@ import Cookie from 'js-cookie';
 import router from 'umi/router';
 import styles from './index.less';
 import { getRoutes } from '../../utils/utils';
+import UrgentDispatch from '../../components/OverView/UrgentDispatch';
 
 const { TabPane } = Tabs;
 const Option = Select.Option;
@@ -40,6 +41,7 @@ class PointDetail extends Component {
                 'RepairHistoryRecods',
                 'JzHistoryRecords'
             ],
+            pdvisible:false,
             modalVisible:false,
             loadingCard:true,
             pointList:null,
@@ -59,13 +61,17 @@ class PointDetail extends Component {
         });
         this.props.dispatch({
             type: 'overview/querydatalist',
-            selectpoint: {},
             payload: {
                 time: moment(new Date()).add(-1, 'hour').format('YYYY-MM-DD HH:00:00')
             }
         });
     }
 
+    pdShow = () => {
+        this.setState({
+            pdvisible: true,
+        });
+    }
     openModal = (params) => {
         // console.log(this.props.pointList);
         // console.log(this.props.pointList);
@@ -210,19 +216,43 @@ class PointDetail extends Component {
             searchName:''
         });
     }
+   //催办
+   urge=()=>{
+    this.props.dispatch({
+        type: 'overview/queryurge',
+        payload: {
+            personId:this.props.pointInfo.operationUserID,
+            DGIMN: this.props.pointInfo.DGIMN
+        }
+    });
+   }
+    //派单窗口关闭
+    onCancel=() => {
+        this.setState({
+            pdvisible: false,
+        });
+    }
+
 
     //获取派单还是督办按钮
     getPDDBButton=()=>{
-        //debugger;
-        const {pointInfo}=this.props;
-        if(pointInfo) {
-            if(pointInfo.existTask) {
-                return (<Button type="primary" ghost={true} style={{float:"right",marginRight:30}}><Icon type="bell" />派单</Button>);
-            }
-
-            return (<Button type="primary" ghost={true} style={{float:"right",marginRight:30}}><Icon type="bell" />派单</Button>);
-
-        }
+       const {pointInfo}=this.props;
+       if(pointInfo)
+       {
+           if(pointInfo.existTask)
+           {
+               return (<Button onClick={()=>this.urge()} type="primary" ghost={true} style={{float:"right",marginRight:30,top:-5}}><Icon type="bell" />督办</Button>)
+           }
+           else
+           {
+               return (<Button
+                onClick={() => {
+                    this.setState({
+                        pdvisible: true,
+                    });
+                }} type="primary" ghost={true} style={{float:"right",marginRight:30,top:-5}}><Icon type="bell" />派单</Button>)
+           }
+       }
     }
 
     /**
@@ -272,9 +302,18 @@ class PointDetail extends Component {
 
             </span>);
     }
+          //直接刷新（带数据）
+          Refresh=()=>{
+            this.props.dispatch({
+             type: 'points/querysinglepointinfo',
+             payload: {
+                 dgimn: this.props.match.params.pointcode
+             }
+         });
+        }
 
     render() {
-        const { match, routerData, location,children,pointInfo } = this.props;
+        const { match, routerData, location,children,pointInfo,selectpoint } = this.props;
         Cookie.set('seldgimn', match.params.pointcode);
         let activeKey = 'qcontrollist';
         if (location.pathname.indexOf('qcontrollist') === -1) {
@@ -296,22 +335,29 @@ class PointDetail extends Component {
                     height: 'calc(100vh - 67px)' }}
             >
 
-                {/* <div className={styles.pageHeader} style={{}}>
-                    <img src="/point.png" style={{width:37,marginTop:-1}} />
-                    <span style={{color:'#ccc',marginLeft:10}}>当前排口：</span>
-                    <span style={{cursor:'pointer',color:'#1890FF'}} onClick={this.openModal}>{pointInfo.pointName}</span>
-                    <Button style={{float:"right",marginRight:30}}><Link to="/overview/mapview"><Icon type="left" />返回</Link></Button>
-                    <Button type="primary" ghost={true} style={{float:"right",marginRight:30}}><Icon type="bell" />派单</Button>
-                </div> */}
-
+    
+                 <UrgentDispatch
+                    onCancel={this.onCancel}
+                    visible={this.state.pdvisible}
+                    operationUserID={selectpoint?selectpoint.operationUserID:null}
+                    DGIMN={pointInfo?pointInfo.DGIMN:null}
+                    pointName={pointInfo?pointInfo.pointName:null}
+                    operationUserName={pointInfo?pointInfo.operationUserName:null}
+                    operationtel={pointInfo?pointInfo.operationtel:null}
+                    reloadData={()=>this.Refresh()}
+                />
                 <div className={styles.pageHeader} style={{}}>
                     <span style={{cursor:'pointer'}} onClick={this.openModal}>{pointInfo.pointName}  <Icon type="down" /></span>
                     {
                         this.renderPointStatus()
                     }
+                
 
                     <Button style={{float:"right",marginRight:30,top:-5}}><Link to="/overview/mapview"><Icon type="left" />返回</Link></Button>
-                    <Button type="primary" ghost={true} style={{float:"right",marginRight:30,top:-5}}><Icon type="bell" />派单</Button>
+                    {
+                        this.getPDDBButton()
+                    }
+                    {/* <Button type="primary" ghost={true} style={{float:"right",marginRight:30,top:-5}}><Icon type="bell" />派单</Button> */}
                 </div>
                 <div style={{ backgroundColor: '#fff', margin: 10, padding: 10 }}>
                     <Tabs

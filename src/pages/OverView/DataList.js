@@ -75,12 +75,14 @@ class dataList extends PureComponent {
 
     //时间更改
     pickerChange=(time, timeString) => {
+     
         if (time) {
+            alert();
             this.setState({
                  time
             });
         const {status,operationStatus,terate,warning}=this.state;
-        this.reloadData=(time,status,operationStatus,terate,warning)
+        this.reloadData(time,status,operationStatus,terate,warning)
         }
     }
 
@@ -282,7 +284,7 @@ class dataList extends PureComponent {
     this.setState({
         pdvisible: false,
     });
-}
+   }
     //催办
     urge=(record)=>{
         this.props.dispatch({
@@ -431,7 +433,6 @@ class dataList extends PureComponent {
         }
 
         const {normal,over,underline,exception,terate,operationStatus,pollutantCode}=this.state;
-        console.log(columns);
         return (
             <div
                 style={{ width: '100%', height: 'calc(100vh - 65px)' }}
@@ -440,7 +441,8 @@ class dataList extends PureComponent {
                 <UrgentDispatch
                     onCancel={this.onCancel}
                     visible={this.state.pdvisible}
-                    selectpoint={this.state.selectpoint}
+                    operationUserID={selectpoint?selectpoint.operationUserID:null}
+                    DGIMN={selectpoint?selectpoint.DGIMN:null}
                     pointName={selectpoint?selectpoint.pointName:null}
                     operationUserName={selectpoint?selectpoint.operationUserName:null}
                     operationtel={selectpoint?selectpoint.operationtel:null}

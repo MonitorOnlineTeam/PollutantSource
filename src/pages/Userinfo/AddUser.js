@@ -236,7 +236,7 @@ export default class AddUser extends Component {
             }>
             <div>
                 <Form onSubmit={this.handleSubmit}>
-                    <Card style={{height:'calc(100vh - 140px)' } }>
+                    <Card style={{} }    title="用户维护">
                         <Row gutter={48}>
                             <Col span={12} >
                                 <FormItem
@@ -304,6 +304,7 @@ export default class AddUser extends Component {
                                 </FormItem>
                             </Col>
                         </Row>
+                        <Divider dashed  />
                         <Row gutter={48}>
                             <Col span={12} >
                                 <FormItem
@@ -358,6 +359,7 @@ export default class AddUser extends Component {
                                 </FormItem>
                             </Col>
                         </Row>
+                        <Divider dashed  />
                         <Row gutter={48}>
                             <Col span={12} >
                                 <FormItem
@@ -393,6 +395,7 @@ export default class AddUser extends Component {
                                 </FormItem>
                             </Col>
                         </Row>
+                     
                         <Row gutter={48}>
                             <Col span={12} >
                                 <FormItem
@@ -435,6 +438,7 @@ export default class AddUser extends Component {
 
                             </Col>
                         </Row>
+                        <Divider dashed  />
                         <Row gutter={48}>
                             <Col span={12} >
                                 <FormItem
@@ -449,7 +453,7 @@ export default class AddUser extends Component {
                             </Col>
                             <Col span={12} />
                         </Row>
-                        <Row gutter={48}>
+                        <Divider orientation="right"  style={{border:'1px dashed #FFFFFF'}}>
                             <Col span={24} style={{textAlign: 'center'}}>
                                 <Button type="primary"
                                     htmlType="submit"
@@ -462,7 +466,7 @@ export default class AddUser extends Component {
                           返回
                                 </Button>
                             </Col>
-                        </Row>
+                        </Divider>
                     </Card>
                 </Form>
             </div>

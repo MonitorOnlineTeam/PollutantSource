@@ -19,6 +19,7 @@ import {
 } from 'antd';
 import MonitorContent from '../../components/MonitorContent/index';
 import AddPollutant from '../StandardLibrary/AddStandardLibraryPollutant';
+import styles from './AddStandardLibrary.less';
 import {
     connect
 } from 'dva';
@@ -32,6 +33,7 @@ const Option = Select.Option;
     standardlibrary
 }) => ({
     ...loading,
+    isloading:loading.effects['standardlibrary/getStandardlibrarybyid'],
     reason: standardlibrary.reason,
     requstresult: standardlibrary.requstresult,
     editstandardlibrary: standardlibrary.editstandardlibrary,
@@ -360,8 +362,8 @@ export default class AddStandardLibrary extends Component {
                      {Name:'标准库维护',Url:''}
                 ]
             }>
-          <div>
-              <Card bordered={false}>
+          <div className={styles.upload}>
+              <Card bordered={false}  loading={this.props.isloading}       title="标准库维护">
                   <Form onSubmit={this.handleSubmit}>
                       <Card bordered={false}>
                           <Row gutter={48}>
@@ -486,7 +488,23 @@ export default class AddStandardLibrary extends Component {
                   </Modal>
                   <Row gutter={48}>
                   <Divider orientation="right"  style={{border:'1px dashed #FFFFFF'}}>
+                 
+                     
+                
                               <Col span={24} style={{textAlign: 'center'}}>
+                              <Button type="primary"
+                                  onClick={() => {
+                                      if (this.state.StandardLibraryID === null) {
+                                          message.error('请先添加标准库！');
+                                      } else {
+                                          this.setState({
+                                              Mvisible: true,
+                                              title: '添加污染物',
+                                              width: 800
+                                          });
+                                      }
+                                  }}>添加污染物</Button>
+                                     <Divider type="vertical" />
                                   <Button type="primary"
                                       htmlType="submit">
                           保存
