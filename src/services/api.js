@@ -388,9 +388,9 @@ export async function querypollutantlist(params) {
 }
 // 获取历史数据
 export async function queryhistorydatalist(params) {
-    debugger;
-    console.log(params.beginTime);
-    console.log(params.endTime);
+    // debugger;
+    // console.log(params.beginTime);
+    // console.log(params.endTime);
     const body = {
         DGIMNs: params.dgimn,
         // pollutantCodes: params.pollutantCode,

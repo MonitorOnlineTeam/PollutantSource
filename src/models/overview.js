@@ -17,6 +17,7 @@ export default Model.extend({
     state: {
         columns: [],
         data: [],
+        dataTemp:[],
         lastestdata: [],
         mainpcol: [],
         detailpcol: [],
@@ -89,6 +90,7 @@ export default Model.extend({
             }
 
             yield update({ data });
+            yield update({ dataTemp:data });
         },
         * querylastestdatalist({
             payload,

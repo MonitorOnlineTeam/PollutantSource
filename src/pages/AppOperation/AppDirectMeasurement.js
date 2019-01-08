@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import { Button, Icon, Spin, Card } from 'antd';
+import { Button, Icon,Spin,Card } from 'antd';
 import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
-import styles from "./CompleteExtraction.less";
-import MonitorContent from '../../components/MonitorContent/index';
+import { MapInteractionCSS } from 'react-map-interaction';
+import styles from "./AppDirectMeasurement.less";
 
 @connect(({ task, loading }) => ({
     isloading: loading.effects['task/GetPatrolRecordListPC'],
@@ -11,18 +11,13 @@ import MonitorContent from '../../components/MonitorContent/index';
 }))
 
 /*
-页面：完全抽取法CEMS日常巡检记录表
+页面：直接测量法CEMS日常巡检记录表
 */
 
-class CompleteExtraction extends Component {
+class AppDirectMeasurement extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            listUrl: this.props.match.params.viewtype,
-            taskfrom: this.props.match.params.taskfrom,
-            taskID: this.props.match.params.TaskID,
-            histroyrecordtype: this.props.match.params.histroyrecordtype,
-            DGIMN: this.props.match.params.pointcode
         };
     }
 
@@ -38,24 +33,13 @@ class CompleteExtraction extends Component {
         this.props.dispatch({
             type: 'task/GetPatrolRecordListPC',
             payload: {
-                TaskIds: this.props.match.params.TaskID,
-                TypeIDs: this.props.match.params.TypeID
+                TaskIds: this.props.match.params.ClfPatrolTaskIds,
+                TypeIDs: this.props.match.params.ClfPatrolTypeIDs
             },
         });
     }
 
-    enterTaskDetail = () => {
-        if (this.state.taskfrom === 'ywdsjlist') { //运维大事记
-            this.props.dispatch(routerRedux.push(`/TaskDetail/emergencydetailinfo/${this.state.listUrl}/${this.state.taskfrom}/${this.state.taskID}`));
-        } else if (this.state.taskfrom === 'qcontrollist') { //质控记录
-            this.props.dispatch(routerRedux.push(`/TaskDetail/emergencydetailinfo/${this.state.listUrl}/${this.state.taskfrom}-${this.state.histroyrecordtype}/${this.state.taskID}`));
-        } else { //其他
-            this.props.dispatch(routerRedux.push(`/TaskDetail/emergencydetailinfo/${this.state.listUrl}/nop/${this.state.taskID}`));
-        }
-    }
-
     renderItem = (Repair) => {
-        const rtnVal = [];
         const remark = [];
         let childIDarray = [];
         let flag = 0;
@@ -86,30 +70,30 @@ class CompleteExtraction extends Component {
 
             const rtnValChild = [];
             if (Repair.Record[0].RecordList !== null && Repair.Record[0].RecordList.length > 0) {
-                Repair.Record[0].RecordList.map((items, index) => {
+                Repair.Record[0].RecordList.map((items,index) => {
                     if (items.count !== 0) {
                         rtnValChild.push(
                             <tr>
-                                <td rowSpan={items.count} style={{ height: '50px', textAlign: 'center', fontSize: '14px' }}>
+                                <td rowSpan={items.count} style={{ height: '50px', textAlign: 'center',fontSize: '14px' }}>
                                     {items.parentName}
                                 </td>
-                                <td style={{ height: '50px', textAlign: 'center', fontSize: '14px' }}>
+                                <td style={{ height: '50px', textAlign: 'center' ,fontSize: '14px' }}>
                                     {items.childName}
                                 </td>
-                                <td style={{ height: '50px', textAlign: 'center', fontSize: '14px' }}>
+                                <td style={{ height: '50px', textAlign: 'center' ,fontSize: '14px' }}>
                                     {items.MintenanceDescription}
                                 </td>
-                                <td rowSpan={items.count} style={{ height: '50px', textAlign: 'center', fontSize: '14px' }}>
+                                <td rowSpan={items.count} style={{ height: '50px', textAlign: 'center' ,fontSize: '14px' }}>
                                     {remark[index]}
                                 </td>
                             </tr>
                         );
                     } else {
-                        Repair.Record[0].RecordList.map((itemss, index) => {
+                        Repair.Record[0].RecordList.map((itemss,index) => {
                             if (itemss.parentId === items.parentId) {
                                 if (itemss.count === 0) {
                                     if (childIDarray !== null) {
-                                        childIDarray.map((itemsss, index) => {
+                                        childIDarray.map((itemsss,index) => {
                                             if (itemss.childID === itemsss) {
                                                 flag = 1;
                                             }
@@ -117,10 +101,10 @@ class CompleteExtraction extends Component {
                                         if (flag === 0) {
                                             rtnValChild.push(
                                                 <tr>
-                                                    <td style={{ height: '50px', textAlign: 'center', fontSize: '14px' }}>
+                                                    <td style={{ height: '50px', textAlign: 'center' ,fontSize: '14px' }}>
                                                         {itemss.childName}
                                                     </td>
-                                                    <td style={{ height: '50px', textAlign: 'center', fontSize: '14px' }}>
+                                                    <td style={{ height: '50px', textAlign: 'center' ,fontSize: '14px' }}>
                                                         {itemss.MintenanceDescription}
                                                     </td>
                                                 </tr>
@@ -129,10 +113,10 @@ class CompleteExtraction extends Component {
                                     } else {
                                         rtnValChild.push(
                                             <tr>
-                                                <td style={{ height: '50px', textAlign: 'center', fontSize: '14px' }}>
+                                                <td style={{ height: '50px', textAlign: 'center' ,fontSize: '14px' }}>
                                                     {itemss.childName}
                                                 </td>
-                                                <td style={{ height: '50px', textAlign: 'center', fontSize: '14px' }}>
+                                                <td style={{ height: '50px', textAlign: 'center' ,fontSize: '14px' }}>
                                                     {itemss.MintenanceDescription}
                                                 </td>
                                             </tr>
@@ -148,22 +132,22 @@ class CompleteExtraction extends Component {
             }
             if (rtnValChild.length === 0) {
                 rtnValChild.push(
-                    <td style={{ height: '50px', textAlign: 'center', fontSize: '14px' }} />
+                    <td style={{ height: '50px', textAlign: 'center',fontSize: '14px' }} />
                 );
             }
             return rtnValChild;
         }
     }
 
-    renderItemChild = (id, item) => {
+    renderItemChild=(id,item) => {
         let rtnValChildren = '';
         if (item !== null && item.length > 0) {
-            item.map((items, index) => {
+            item.map((items,index) => {
                 if (items.parentId === id) {
                     if (items.count === 0) {
                         rtnValChildren.push(
                             <tr>
-                                <td style={{ height: '50px', textAlign: 'center', fontSize: '14px' }}>
+                                <td style={{ height: '50px', textAlign: 'center' ,fontSize: '14px' }}>
                                     {item.childName}
                                 </td>
                             </tr>
@@ -175,48 +159,11 @@ class CompleteExtraction extends Component {
         if (rtnValChildren.length === 0) {
             rtnValChildren.push(
                 <tr>
-                    <td style={{ height: '50px', textAlign: 'center', fontSize: '14px' }} />
+                    <td style={{ height: '50px', textAlign: 'center',fontSize: '14px' }} />
                 </tr>
             );
         }
         return rtnValChildren;
-    }
-
-    //生成面包屑
-    renderBreadCrumb = () => {
-        const rtnVal = [];
-        let listUrl = this.state.listUrl;
-        let taskID = this.state.taskID;
-        let DGIMN = this.state.DGIMN;
-        let taskfrom = this.state.taskfrom;
-        let histroyrecordtype = this.state.histroyrecordtype;
-        rtnVal.push({ Name: '首页', Url: '/' });
-        switch (listUrl) {
-            case 'datalistview': //数据一栏
-                rtnVal.push({ Name: '数据一览', Url: `/overview/${listUrl}` });
-                break;
-            case 'mapview': //地图一栏
-                rtnVal.push({ Name: '地图一栏', Url: `/overview/${listUrl}` });
-                break;
-            case 'pielist': //我的派单
-                rtnVal.push({ Name: '我的派单', Url: `/account/settings/mypielist` });
-                break;
-            case 'workbench': //工作台
-                rtnVal.push({ Name: '工作台', Url: `/${listUrl}` });
-                break;
-            default:
-                break;
-        }
-        if (taskfrom === 'ywdsjlist') { //运维大事记
-            rtnVal.push({ Name: '运维大事记', Url: `/pointdetail/${DGIMN}/${listUrl}/${taskfrom}` });
-            rtnVal.push({ Name: '任务详情', Url: `/TaskDetail/emergencydetailinfo/${listUrl}/${taskfrom}/${taskID}` });
-        } else if (taskfrom === 'qcontrollist') { //质控记录
-            rtnVal.push({ Name: '质控记录', Url: `/pointdetail/${DGIMN}/${listUrl}/${taskfrom}/${histroyrecordtype}` });
-        } else { //其他
-            rtnVal.push({ Name: '任务详情', Url: `/TaskDetail/emergencydetailinfo/${listUrl}/nop/${taskID}` });
-        }
-        rtnVal.push({ Name: '完全抽取法CEMS日常巡检记录表', Url: '' });
-        return rtnVal;
     }
 
     render() {
@@ -249,84 +196,50 @@ class CompleteExtraction extends Component {
             KlwCemsCode = DataLength === 0 ? null : Repair.Record[0].Content.KlwCemsCode;
             KlwCemsEquipmentManufacturer = DataLength === 0 ? null : Repair.Record[0].Content.KlwCemsEquipmentManufacturer;
         }
-        if (this.props.isloading) {
-            return (<Spin
-                style={{
-                    width: '100%',
-                    height: 'calc(100vh/2)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center'
-                }}
-                size="large"
-            />);
-        }
         return (
-            <MonitorContent
-                {...this.props}
-                breadCrumbList={this.renderBreadCrumb()}
-            >
-                <Card
-                    title={<span style={{ fontWeight: '900' }}>运维表单</span>}
-                    extra={
-                        <p>
-                            <Button type="primary" ghost={true} style={{ float: "left", marginRight: 20 }} onClick={this.enterTaskDetail}>
-                                <Icon type="file-text" />任务单
-                            </Button>
-                            <Button
-                                style={{ float: "right", marginRight: 30 }}
-                                onClick={() => {
-                                    this.props.history.goBack(-1);
-                                }}
-                            ><Icon type="left" />退回
-                            </Button>
-                        </p>}
-                >
+            <MapInteractionCSS>
+                <Card>
                     <div className={styles.FormDiv} style={{ height: SCREEN_HEIGHT }}>
-                        <div className={styles.FormName}>完全抽取法CEMS日常巡检记录表</div>
+                        <div className={styles.FormName}>直接测量法CEMS日常巡检记录表</div>
                         <table className={styles.FormTable}>
                             <tr>
-                                <td style={{ width: '50%', height: '50px', textAlign: 'left', fontSize: '14px', fontWeight: 'bold' }}>企业名称：{EnterpriseName}</td>
-                                <td style={{ width: '50%', height: '50px', textAlign: 'left', fontSize: '14px', fontWeight: 'bold' }}> 巡检日期：{PatrolDate}</td>
+                                <td style={{ width: '50%', height: '50px', textAlign: 'left' ,fontSize: '14px',fontWeight: 'bold' }}>企业名称：{EnterpriseName}</td>
+                                <td style={{ width: '50%', height: '50px', textAlign: 'left' ,fontSize: '14px',fontWeight: 'bold' }}> 巡检日期：{PatrolDate}</td>
                             </tr>
-
                         </table>
                         <table className={styles.FormTable}>
                             <tbody>
                                 <tr>
-                                    <td style={{ width: '50%', height: '50px', textAlign: 'left', fontSize: '14px' }}>{GasCemsEquipmentManufacturer}</td>
-                                    <td style={{ width: '50%', height: '50px', textAlign: 'left', fontSize: '14px' }}>{GasCemsCode}</td>
+                                    <td style={{ width: '50%', height: '50px', textAlign: 'left' ,fontSize: '14px' }}>{GasCemsEquipmentManufacturer}</td>
+                                    <td style={{ width: '50%', height: '50px', textAlign: 'left' ,fontSize: '14px' }}>{GasCemsCode}</td>
                                 </tr>
                                 <tr>
-                                    <td style={{ width: '50%', height: '50px', textAlign: 'left', fontSize: '14px' }}>{KlwCemsEquipmentManufacturer}</td>
-                                    <td style={{ width: '50%', height: '50px', textAlign: 'left', fontSize: '14px' }}>{KlwCemsCode}</td>
+                                    <td style={{ width: '50%', height: '50px', textAlign: 'left' ,fontSize: '14px' }}>{KlwCemsEquipmentManufacturer}</td>
+                                    <td style={{ width: '50%', height: '50px', textAlign: 'left' ,fontSize: '14px' }}>{KlwCemsCode}</td>
                                 </tr>
                                 <tr>
-                                    <td style={{ width: '50%', height: '50px', textAlign: 'left', fontSize: '14px' }}>{PointPosition}</td>
-                                    <td style={{ width: '50%', height: '50px', textAlign: 'left', fontSize: '14px' }}>{MaintenanceManagementUnit}</td>
+                                    <td style={{ width: '50%', height: '50px', textAlign: 'left' ,fontSize: '14px' }}>{PointPosition}</td>
+                                    <td style={{ width: '50%', height: '50px', textAlign: 'left' ,fontSize: '14px' }}>{MaintenanceManagementUnit}</td>
                                 </tr>
                             </tbody>
                         </table>
                         <div className={styles.HeadDiv} style={{ fontWeight: 'bold' }}>运行维护内容及处理说明：</div>
-                        <table
-
-                            className={styles.FormTable}
-                        >
+                        <table className={styles.FormTable}>
                             <tbody>
                                 <tr>
-                                    <td style={{ width: '20%', height: '50px', textAlign: 'center', fontSize: '14px' }}>项目</td>
-                                    <td style={{ width: '40%', height: '50px', textAlign: 'center', fontSize: '14px' }}>内容</td>
-                                    <td style={{ width: '20%', height: '50px', textAlign: 'center', fontSize: '14px' }}>维护情况</td>
-                                    <td style={{ width: '20%', height: '50px', textAlign: 'center', fontSize: '14px' }}>备注</td>
+                                    <td style={{ width: '20%', height: '50px', textAlign: 'center' ,fontSize: '14px' }}>项目</td>
+                                    <td style={{ width: '40%', height: '50px', textAlign: 'center' ,fontSize: '14px' }}>内容</td>
+                                    <td style={{ width: '20%', height: '50px', textAlign: 'center' ,fontSize: '14px' }}>维护情况</td>
+                                    <td style={{ width: '20%', height: '50px', textAlign: 'center' ,fontSize: '14px' }}>备注</td>
                                 </tr>
                                 {
                                     this.renderItem(Repair)
                                 }
                                 <tr>
-                                    <td style={{ width: '18%', height: '50px', textAlign: 'center', fontSize: '14px' }}>
-                                        异常情况处理
+                                    <td style={{ width: '18%', height: '50px', textAlign: 'center',fontSize: '14px' }}>
+                                异常情况处理
                                     </td>
-                                    <td colSpan="3" style={{ textAlign: 'center', fontSize: '14px' }}>
+                                    <td colSpan="3" style={{textAlign: 'center',fontSize: '14px'}}>
                                         {ExceptionHandling}
                                     </td>
                                 </tr>
@@ -344,10 +257,20 @@ class CompleteExtraction extends Component {
                                 </tr>
                             </tbody>
                         </table>
+
+                        <div className={styles.Toexamine}>
+                            <Button
+                                size="large"
+                                onClick={() => {
+                                    this.props.history.goBack(-1);
+                                }}
+                            ><Icon type="left" />退回
+                            </Button>
+                        </div>
                     </div>
                 </Card>
-            </MonitorContent>
+            </MapInteractionCSS>
         );
     }
 }
-export default CompleteExtraction;
+export default AppDirectMeasurement;

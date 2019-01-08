@@ -617,7 +617,7 @@ export default Model.extend({
             payload
         }, {call, update}) {
             const res = yield call(querysinglepointinfo, {...payload});
-
+            // debugger;
             if(res)
             {
                 yield update({ selectpoint: res[0] });

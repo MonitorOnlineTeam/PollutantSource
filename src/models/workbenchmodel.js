@@ -323,7 +323,7 @@ export default Model.extend({
          */
         * getRealTimeWarningDatas({payload}, { call, put, update, select }) {
             const {warningDetailsDatas} = yield select(state => state.workbenchmodel);
-            debugger;
+            // debugger;
             let body = {
                 dgimn: warningDetailsDatas.DGIMNs,
                 // pollutantCodes: params.pollutantCode,
@@ -334,7 +334,7 @@ export default Model.extend({
                 endTime: warningDetailsDatas.endTime
             };
             const response = yield call(queryhistorydatalist, {...body});
-            debugger;
+            // debugger;
             yield update({
                 warningDetailsDatas:{
                     ...warningDetailsDatas,

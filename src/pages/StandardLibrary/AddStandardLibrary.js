@@ -19,6 +19,7 @@ import {
 } from 'antd';
 import MonitorContent from '../../components/MonitorContent/index';
 import AddPollutant from '../StandardLibrary/AddStandardLibraryPollutant';
+import styles from './AddStandardLibrary.less';
 import {
     connect
 } from 'dva';
@@ -317,12 +318,16 @@ export default class AddStandardLibrary extends Component {
           align: 'center',
           render: (text, record) => {
               if (text === 0) {
-                  return <span > <Tag color="lime" > 区间报警 </Tag > </span >;
+                  return <span > <Tag color="magenta" > 无报警 </Tag > </span >;
               }
               if (text === 1) {
                   return <span > <Tag color="green" > 上限报警 </Tag > </span >;
-              } else {
+              }
+              if(text===2){
                   return <span > <Tag color="cyan" > 下线报警 </Tag > </span >;
+              }
+              if(text===3){
+                  return <span > <Tag color="lime" > 区间报警 </Tag > </span >;
               }
           }
       },
@@ -356,8 +361,8 @@ export default class AddStandardLibrary extends Component {
                      {Name:'标准库维护',Url:''}
                 ]
             }>
-          <div>
-              <Card bordered={false}>
+          <div className={styles.upload}>
+              <Card bordered={false}       title="标准库维护">
                   <Form onSubmit={this.handleSubmit}>
                       <Card bordered={false}>
                           <Row gutter={48}>
@@ -413,11 +418,12 @@ export default class AddStandardLibrary extends Component {
                                           fileList={this.state.fileList}
                                       >
                                           <Button>
-                                              <Icon type="upload" /> Upload
+                                              <Icon type="upload" /> 上传
                                           </Button>
                                       </Upload>
                                   </FormItem>
                               </Col>
+
                               <Col span={12} >
                                   <FormItem
                                       labelCol={{ span: 8 }}
@@ -431,24 +437,11 @@ export default class AddStandardLibrary extends Component {
                                   </FormItem>
                               </Col>
                           </Row>
-                          <Row gutter={48}>
-                              <Col span={24} style={{textAlign: 'center'}}>
-                                  <Button type="primary"
-                                      htmlType="submit">
-                          保存
-                                  </Button>
-                                  <Divider type="vertical" />
-                                  <Button type="dashed"
-                                      onClick={
-                                          () => this.props.dispatch(routerRedux.push(`/sysmanage/StandardLibrary`))
-                                      } >
-                          返回
-                                  </Button>
-                              </Col>
-                          </Row>
+               
                       </Card>
                   </Form>
-                  <Card bordered={false} style={{marginTop: 10,height:'calc(100vh - 495px)'}}>
+                  <Divider dashed  />
+                  <Card bordered={false} style={{marginTop: 10,}}>
                       <Form layout="inline" style={{marginBottom: 20}}>
                           <Row gutter={8}>
                               <Col span={1} ><Button type="primary"
@@ -459,7 +452,8 @@ export default class AddStandardLibrary extends Component {
                                           this.setState({
                                               Mvisible: true,
                                               title: '添加污染物',
-                                              width: 800
+                                              width: 800,
+                                              Id:null,
                                           });
                                       }
                                   }}>添加污染物</Button></Col>
@@ -491,6 +485,39 @@ export default class AddStandardLibrary extends Component {
                           <AddPollutant pid={this.state.StandardLibraryID} onRef={this.onRef1} getlist={this.ChildGetList} Id={this.state.Id} />
                       }
                   </Modal>
+                  <Row gutter={48}>
+                  <Divider orientation="right"  style={{border:'1px dashed #FFFFFF'}}>
+                 
+                     
+                
+                              <Col span={24} style={{textAlign: 'center'}}>
+                              <Button type="primary"
+                                  onClick={() => {
+                                      if (this.state.StandardLibraryID === null) {
+                                          message.error('请先添加标准库！');
+                                      } else {
+                                          this.setState({
+                                              Mvisible: true,
+                                              title: '添加污染物',
+                                              width: 800
+                                          });
+                                      }
+                                  }}>添加污染物</Button>
+                                     <Divider type="vertical" />
+                                  <Button type="primary"
+                                      htmlType="submit">
+                          保存
+                                  </Button>
+                                  <Divider type="vertical" />
+                                  <Button type="dashed"
+                                      onClick={
+                                          () => this.props.dispatch(routerRedux.push(`/sysmanage/StandardLibrary`))
+                                      } >
+                          返回
+                                  </Button>
+                              </Col>
+                              </Divider>
+                          </Row>
               </Card>
           </div>
           </MonitorContent>
