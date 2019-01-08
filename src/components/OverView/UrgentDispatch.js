@@ -10,11 +10,12 @@ const FormItem = Form.Item;
 class UrgentDispatch extends Component {
 
     onSubmit=()=>{
+        const {DGIMN,operationUserID}=this.props;
             this.props.dispatch({
                 type:'overview/addtaskinfo',
                 payload:{
-                    dgimn: selectpoint.DGIMN,
-                    personId:selectpoint.operationUserID,
+                    dgimn: DGIMN,
+                    personId:operationUserID,
                     remark:this.props.form.getFieldValue('remark')
                 }
             })
