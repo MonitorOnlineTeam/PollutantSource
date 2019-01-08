@@ -1,41 +1,50 @@
 import React, { Component } from 'react';
 import styles from './Tree.less';
+import TreeCardContent from './TreeCardContent';
 import {
-    Spin,
+    Spin,Tabs
 } from 'antd';
+const TabPane = Tabs.TabPane;
 class TreeCard extends Component {
-    render() {
-        return (
-            <div style={{ height: this.props.getHeight }} className={styles.treelist}>
-                {
-                    this.props.isloading ? <Spin style={{
-                        width: '100%',
-                        height: 'calc(100vh - 260px)',
-                        marginTop: 260
-                    }} size="large" /> : (this.props.treedatalist ? this.props.treedatalist.map(item => {
-                        if (item.pollutantTypeCode === this.props.PollutantType) {
-                            return (<div onClick={() => {
-                                this.props.treeCilck(item);
-                            }} className={styles.cardDiv}>
-                                <div className={styles.cardtopspan}>
-                                    <span className={styles.statusimg}>
-                                        {this.props.getStatusImg(item.status)}
-                                    </span>
-                                    <span className={styles.pointName}>
-                                        {item.pointName}
-                                    </span><span className={styles.pollutantType}>
-                                        类型：{item.pollutantType ? item.pollutantType : '废气'}</span>
-                                </div>
-                                <div className={styles.cardbottomspan}><span className={styles.tsdiv}>
-                                    传输有效率 {item.transmissionEffectiveRate}</span>{
-                                        item.existTask ? <span className={styles.operation}>运维中</span> : ''
-                                    }
-                                </div>
-                            </div>);
-                        }
+    constructor(props)
+    {
+        super(props);
+        this.state={
+            
+        }
+    }
+    getNowPollutantType=(key)=>{
+       this.props.getNowPollutantType(key);
+    }
+        //填充污染物类型
+        getPollutantDoc=()=>{
+            const {pollutantTypelist}=this.props;
+            var res=[];
+            if(pollutantTypelist)
+            { 
+                pollutantTypelist.map(item=>{
+                    res.push(<TabPane   tab={item.pollutantTypeName}  key={item.pollutantTypeCode}>
+                    </TabPane>);
+                })
+            }
+            return res;
+        }
 
-                    }) : '')
-                }
+    render() {
+        const {tabkey,pollutantTypeloading}=this.props;
+        if(pollutantTypeloading)
+        {
+            return(
+                <Spin style={
+                this.props.style
+                } size="large" /> 
+            )
+        }
+        return (
+            <div className={styles.treelist} style={{...this.props.style}}>
+                    <Tabs className={styles.tab} defaultActiveKey={tabkey}  onChange={this.getNowPollutantType}>
+                         {this.getPollutantDoc()}
+                   </Tabs>
             </div>
         );
     }
