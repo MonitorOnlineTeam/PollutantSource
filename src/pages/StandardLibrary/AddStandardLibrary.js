@@ -317,12 +317,16 @@ export default class AddStandardLibrary extends Component {
           align: 'center',
           render: (text, record) => {
               if (text === 0) {
-                  return <span > <Tag color="lime" > 区间报警 </Tag > </span >;
+                  return <span > <Tag color="magenta" > 无报警 </Tag > </span >;
               }
               if (text === 1) {
                   return <span > <Tag color="green" > 上限报警 </Tag > </span >;
-              } else {
+              }
+              if(text===2){
                   return <span > <Tag color="cyan" > 下线报警 </Tag > </span >;
+              }
+              if(text===3){
+                  return <span > <Tag color="lime" > 区间报警 </Tag > </span >;
               }
           }
       },
@@ -459,7 +463,8 @@ export default class AddStandardLibrary extends Component {
                                           this.setState({
                                               Mvisible: true,
                                               title: '添加污染物',
-                                              width: 800
+                                              width: 800,
+                                              Id:null,
                                           });
                                       }
                                   }}>添加污染物</Button></Col>

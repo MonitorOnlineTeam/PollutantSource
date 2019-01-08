@@ -125,11 +125,13 @@ export default class AddStandardLibraryPollutant extends Component {
  };
 
  componentWillMount() {
+     debugger;
      this.setState({
          StandardLibraryID: this.props.pid
      });
      this.props.onRef(this);
      const Id = this.props.Id;
+     console.log(Id);
      if (Id !== null) {
          this.setState({
              Id: Id,
@@ -140,6 +142,12 @@ export default class AddStandardLibraryPollutant extends Component {
              payload: {
                  Guid: Id,
                  callback: () => {
+                     this.props.form.setFieldsValue({
+                         PollutantCode:this.props.editstandardlibrarypollutant.PollutantCode,
+                         AlarmType:this.props.editstandardlibrarypollutant.AlarmType,
+                         UpperLimit:this.props.editstandardlibrarypollutant.UpperLimit,
+                         LowerLimit:this.props.editstandardlibrarypollutant.LowerLimit
+                     })
                  }
              },
          });
@@ -193,7 +201,7 @@ export default class AddStandardLibraryPollutant extends Component {
                                   wrapperCol={{ span: 12 }}
                                   label="污染物">
                                   {getFieldDecorator('PollutantCode', {
-                                      initialValue: this.props.editstandardlibrarypollutant !== null ? this.props.editstandardlibrarypollutant.PollutantCode : undefined,
+                                      initialValue:undefined,
                                       rules: [{
                                           required: true,
                                           message: '请选择污染物!'
@@ -219,7 +227,7 @@ export default class AddStandardLibraryPollutant extends Component {
                                   label="报警类型">
                                   {getFieldDecorator('AlarmType'
                                       , {
-                                          initialValue: this.props.editstandardlibrarypollutant !== null ? this.props.editstandardlibrarypollutant.AlarmType : undefined,
+                                          initialValue:undefined,
                                           rules: [{
                                               required: true,
                                               message: '请选择报警类型!'
@@ -228,9 +236,10 @@ export default class AddStandardLibraryPollutant extends Component {
                                       }
                                   )(
                                       <Select placeholder="请选择报警类型" >
-                                          <Option value="0">区间报警</Option>
+                                          <Option value="0">无间报警</Option>
                                           <Option value="1">上限报警</Option>
                                           <Option value="2">下限报警</Option>
+                                          <Option value="2">区间报警</Option>
                                       </Select>
                                   )}
                               </FormItem>
@@ -244,7 +253,7 @@ export default class AddStandardLibraryPollutant extends Component {
                                   label="上限">
                                   {getFieldDecorator('UpperLimit',
                                       {
-                                          initialValue: this.props.editstandardlibrarypollutant !== null ? this.props.editstandardlibrarypollutant.UpperLimit : 0,
+                                          initialValue:0,
                                           rules: [{
                                               required: true,
                                               message: '请输入上限!'
@@ -261,7 +270,7 @@ export default class AddStandardLibraryPollutant extends Component {
                                   label="下限">
                                   {getFieldDecorator('LowerLimit',
                                       {
-                                          initialValue: this.props.editstandardlibrarypollutant !== null ? this.props.editstandardlibrarypollutant.LowerLimit : 0,
+                                          initialValue: 0,
                                           rules: [{
                                               required: true,
                                               message: '请输入下限!'
