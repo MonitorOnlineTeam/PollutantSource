@@ -318,12 +318,16 @@ export default class AddStandardLibrary extends Component {
           align: 'center',
           render: (text, record) => {
               if (text === 0) {
-                  return <span > <Tag color="lime" > 区间报警 </Tag > </span >;
+                  return <span > <Tag color="magenta" > 无报警 </Tag > </span >;
               }
               if (text === 1) {
                   return <span > <Tag color="green" > 上限报警 </Tag > </span >;
-              } else {
+              }
+              if(text===2){
                   return <span > <Tag color="cyan" > 下线报警 </Tag > </span >;
+              }
+              if(text===3){
+                  return <span > <Tag color="lime" > 区间报警 </Tag > </span >;
               }
           }
       },
@@ -438,7 +442,23 @@ export default class AddStandardLibrary extends Component {
                   </Form>
                   <Divider dashed  />
                   <Card bordered={false} style={{marginTop: 10,}}>
-  
+                      <Form layout="inline" style={{marginBottom: 20}}>
+                          <Row gutter={8}>
+                              <Col span={1} ><Button type="primary"
+                                  onClick={() => {
+                                      if (this.state.StandardLibraryID === null) {
+                                          message.error('请先添加标准库！');
+                                      } else {
+                                          this.setState({
+                                              Mvisible: true,
+                                              title: '添加污染物',
+                                              width: 800,
+                                              Id:null,
+                                          });
+                                      }
+                                  }}>添加污染物</Button></Col>
+                          </Row>
+                      </Form>
                       <Table
                           loading={this.props.effects['standardlibrary/getstandardlibrarypollutantlist']}
                           columns={columns}
