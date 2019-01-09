@@ -129,8 +129,6 @@ export default [
             { path: '/qualitycontrol/transmissionefficiency', component: './QualityControl/TransmissionEfficiency' },
             /* 设备运转率 */
             { path: '/qualitycontrol/equipmentoperatingrate', component: './QualityControl/EquipmentOperatingRate' },
-            /* 手工数据上传 */
-            { path: '/selfmonitor/manualupload', component: './QualityControl/ManualUpload' },
             /* 月度排放量分析 */
             { path: '/analysis/pollutantemissions', component: './Analysis/PollutantEmissions' },
             /* 报警及时响应统计分析 */
