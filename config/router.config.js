@@ -172,7 +172,8 @@ export default [
 
             /* 用户基本信息管理-手持设备管理 */
             { path: '/sysmanage/cbfftestequipment', component: './Administration/CbFfTestEquipment' },
-
+            /* 系统管理-知识库管理 */
+            { path: '/sysmanage/KBM', component: './Administration/KBM' },
 
             /* 用户基本信息管理-标准库管理 */
             { path: '/sysmanage/usestandardlibrary/:DGIMN/:PointName', component: './StandardLibrary/UseStandardLibrary' },
