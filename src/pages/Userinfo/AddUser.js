@@ -11,7 +11,7 @@ import {
     Select,
     Button,
     Card,
-    Divider,
+    Divider,Spin
 } from 'antd';
 import {
     connect
@@ -23,69 +23,52 @@ import MonitorContent from '../../components/MonitorContent/index';
 
 const FormItem = Form.Item;
 const RadioGroup = Radio.Group;
-const Option = Select.Option;
+const {Option} = Select;
+
 const { TextArea } = Input;
 const children = [];
 for (let i = 0; i < 21; i++) {
-    children.push(<Option key={
-        i
-    }
-    > {
-            i
-        }
-                  </Option>);
+    children.push(<Option key={i}> {i}</Option>);
 }
 @connect(({
     loading,
     userinfo
 }) => ({
-    ...loading,
+    isloading:loading.effects['userinfo/getuser'],
     reason: userinfo.reason,
     requstresult: userinfo.requstresult,
     editUser: userinfo.editUser
 }))
 @Form.create()
 class AddUser extends Component {
-    constructor(props) {
-        super(props);
 
-        this.state = {
-            UserId: null,
-            sex: 1,
-            orderby: 1,
-            DeleteMark: true,
-            AlarmTime: undefined,
-            SendPush: undefined,
-            UserStatus: false,
-        };
-    }
 
     componentWillMount() {
-        const UserId = this.props.match.params.UserId;
-
+        const {dispatch,match:{params:{UserId}}}=this.props;
         if (UserId !== 'null') {
-            this.props.dispatch({
+            dispatch({
                 type: 'userinfo/getuser',
                 payload: {
                     UserId: UserId,
                     callback: () => {
-                        if (this.props.requstresult === '1') {
-                            this.props.form.setFieldsValue({
-                                User_Name: this.props.editUser.User_Name,
-                                User_Account: this.props.editUser.User_Account,
-                                User_Sex: this.props.editUser.User_Sex,
-                                DeleteMark: this.props.editUser.DeleteMark,
-                                Email: this.props.editUser.Email,
-                                Phone: this.props.editUser.Phone,
-                                Title: this.props.editUser.Title,
-                                orderby: this.props.editUser.orderby,
-                                AlarmType: this.props.editUser.AlarmType === '' ? undefined : this.props.editUser.AlarmType,
-                                SendPush: this.props.editUser.SendPush === '' ? undefined : this.props.editUser.SendPush.split(','),
-                                AlarmTime: this.props.editUser.AlarmTime === '' ? undefined : this.props.editUser.AlarmTime.split(','),
-                                Roles_Name: this.props.editUser.Roles_Name,
-                                User_Remark: this.props.editUser.User_Remark,
-                            });
-                        }
+                        // if (this.props.requstresult === '1') {
+                        //     debugger;
+                        //     this.props.form.setFieldsValue({
+                        //     User_Name: this.props.editUser.User_Name,
+                        //     User_Account: this.props.editUser.User_Account,
+                        //     User_Sex: this.props.editUser.User_Sex,
+                        //     DeleteMark: this.props.editUser.DeleteMark,
+                        //     Email: this.props.editUser.Email,
+                        //     Phone: this.props.editUser.Phone,
+                        //     Title: this.props.editUser.Title,
+                        //     orderby: this.props.editUser.orderby,
+                        //     AlarmType: this.props.editUser.AlarmType === '' ? undefined : this.props.editUser.AlarmType,
+                        //     SendPush: this.props.editUser.SendPush === '' ? undefined : this.props.editUser.SendPush.split(','),
+                        //     AlarmTime: this.props.editUser.AlarmTime === '' ? undefined : this.props.editUser.AlarmTime.split(','),
+                        //     Roles_Name: this.props.editUser.Roles_Name,
+                        //     User_Remark: this.props.editUser.User_Remark,
+                        //     });
+                        // }
                     }
                 },
             });
@@ -95,21 +78,22 @@ class AddUser extends Component {
  handleSubmit = (e) => {
      e.preventDefault();
      let flag = true;
-     this.props.form.validateFieldsAndScroll((err, values) => {
-         let User_Account = values.User_Account;
+     const {dispatch,form,match:{params:{UserId}},requstresult}=this.props;
+     form.validateFieldsAndScroll((err, values) => {
+         let {User_Account:UserAccount} = values;
          const that = this;
-         const UserId = this.props.match.params.UserId;
          if (UserId === 'null') {
-             this.props.dispatch({
+             dispatch({
                  type: 'userinfo/isexistenceuser',
                  payload: {
-                     UserAccount: values.User_Account,
+                     UserAccount,
                      callback: () => {
+                         debugger;
                          if (that.props.reason === '1') {
                              flag = false;
                              that.props.form.setFields({ // 设置验证返回错误
                                  User_Account: {
-                                     value: User_Account,
+                                     value: UserAccount,
                                      errors: [new Error('登录名已存在，请重新填写')],
                                  },
                              });
@@ -117,7 +101,7 @@ class AddUser extends Component {
                              flag = true;
                              that.props.form.setFields({ // 设置验证返回错误
                                  User_Account: {
-                                     value: User_Account,
+                                     value: UserAccount,
                                      errors: null,
                                  },
                              });
@@ -133,14 +117,14 @@ class AddUser extends Component {
                                      Phone: values.Phone === undefined ? '' : values.Phone,
                                      Title: values.Title === undefined ? '' : values.Title,
                                      UserOrderby: values.User_Orderby,
-                                     SendPush: values.SendPush === undefined ? '' : values.SendPush.join(','),
+                                     SendPush:  values.SendPush === undefined ? '': values.SendPush.join(','),
                                      AlarmType: values.AlarmType === undefined ? '' : values.AlarmType,
                                      AlarmTime: values.AlarmTime === undefined ? '' : values.AlarmTime.join(','),
                                      UserRemark: values.User_Remark === undefined ? '' : values.User_Remark,
                                      DeleteMark: values.DeleteMark === true ? 1 : 2,
                                      RolesId: values.Roles_Name,
                                      callback: () => {
-                                         if (this.props.requstresult === '1') {
+                                         if (requstresult === '1') {
                                              this.success();
                                          } else {
                                              message.error('错误');
@@ -172,7 +156,7 @@ class AddUser extends Component {
                      DeleteMark: values.DeleteMark === true ? 1 : 2,
                      RolesId: values.Roles_Name,
                      callback: () => {
-                         if (this.props.requstresult === '1') {
+                         if (requstresult === '1') {
                              this.success();
                          } else {
                              message.error('错误');
@@ -185,8 +169,8 @@ class AddUser extends Component {
  }
 
  success = () => {
-     let index = this.props.dispatch(routerRedux.push(`/sysmanage/Userinfo`));
-     const UserId = this.props.match.params.UserId;
+     const {dispatch,match:{params:{UserId}}}=this.props;
+     let index = dispatch(routerRedux.push(`/sysmanage/Userinfo`));
      if (UserId !== 'null') {
          message.success('修改成功', 3).then(() => index);
      } else {
@@ -195,14 +179,15 @@ class AddUser extends Component {
  };
 
     IsExistence = (rule, value, callback) => {
-        this.props.dispatch({
+        const {dispatch,requstresult,reason}=this.props;
+        dispatch({
             type: 'userinfo/isexistenceuser',
             payload: {
                 UserAccount: value,
             },
         });
-        if (this.props.requstresult === '1') {
-            if (this.props.reason === '1') {
+        if (requstresult === '1') {
+            if (reason === '1') {
                 message.error('This is a message of error');
             } else {
                 callback(); // 校验通过
@@ -214,9 +199,36 @@ class AddUser extends Component {
     }
 
     render() {
-        const { getFieldDecorator } = this.props.form;
+        const {dispatch,form,match,isloading,editUser}=this.props;
+        const { getFieldDecorator } = form;
+        const {UserId}=match.params;
         // const UserId = this.props.match.params.UserId;
+        if(isloading) {
+            return (<Spin
+                style={{ width: '100%',
+                    height: 'calc(100vh/2)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center' }}
+                size="large"
+            />);
+        }
 
+        const {
+            User_Name:UserName=null,
+            User_Account:UserAccount,
+            User_Sex:UserSex,
+            DeleteMark,
+            Email,
+            Phone,
+            Title,
+            User_Orderby:UserOrderby,
+            AlarmType,
+            SendPush,
+            AlarmTime,
+            Roles_Name:RolesName,
+            User_Remark:UserRemark
+        } = editUser === null || UserId==="null" ? {} : editUser;
         return (
             <MonitorContent
                 {...this.props}
@@ -241,6 +253,7 @@ class AddUser extends Component {
                                     >
                                         {getFieldDecorator('User_Name'
                                             , {
+                                                initialValue: UserName,
                                                 rules: [{
                                                     required: true,
                                                     message: '请输入用户名称!'
@@ -259,12 +272,13 @@ class AddUser extends Component {
                                     >
                                         {getFieldDecorator('User_Account'
                                             , {
+                                                initialValue: UserAccount,
                                                 rules: [{
                                                     required: true,
                                                     message: '请输入登录名称!'
                                                 }
                                                 ]
-                                            })(<Input placeholder="登录名称" disabled={this.props.match.params.UserId!=='null'} />
+                                            })(<Input placeholder="登录名称" disabled={UserId!=='null'} />
                                         )}
                                     </FormItem>
                                 </Col>
@@ -278,7 +292,7 @@ class AddUser extends Component {
                                     >
                                         {getFieldDecorator('User_Sex'
                                             , {
-                                                initialValue: 1,
+                                                initialValue: UserSex || 1,
                                             }
                                         )(
                                             <RadioGroup onChange={this.onChange}>
@@ -296,7 +310,7 @@ class AddUser extends Component {
                                     >
                                         {getFieldDecorator('DeleteMark',
                                             {
-                                                initialValue: this.state.DeleteMark,
+                                                initialValue: DeleteMark,
                                                 valuePropName: 'checked',
                                             })(<Switch checkedChildren="启用" unCheckedChildren="禁用" />
                                         )}
@@ -313,6 +327,8 @@ class AddUser extends Component {
                                     >
                                         {getFieldDecorator('Email'
                                             , {
+
+                                                initialValue: Email,
                                                 rules: [{ type: 'email', message: '请输入正确的邮箱!' }]
                                             })(<Input placeholder="E-mail" />
                                         )}
@@ -326,6 +342,7 @@ class AddUser extends Component {
                                     >
                                         {getFieldDecorator('Phone'
                                             , {
+                                                initialValue: Phone,
                                                 rules: [{ pattern: /^1\d{10}$/, message: '请输入正确的手机号!' }]
                                             })(<Input placeholder="手机号" />
                                         )}
@@ -341,6 +358,7 @@ class AddUser extends Component {
                                     >
                                         {
                                             getFieldDecorator('Title', {
+                                                initialValue: Title,
                                             })(
                                                 <Input placeholder="用户职称" />
                                             )}
@@ -354,7 +372,7 @@ class AddUser extends Component {
                                     >
                                         {getFieldDecorator('User_Orderby',
                                             {
-                                                initialValue: this.state.orderby
+                                                initialValue: UserOrderby
                                             }
                                         )(
                                             <InputNumber min={1} max={1000} />
@@ -371,7 +389,7 @@ class AddUser extends Component {
                                         label="报警类型"
                                     >
                                         {getFieldDecorator('AlarmType', {
-                                            initialValue: undefined
+                                            initialValue: AlarmType || undefined
                                         })(
                                             <Select placeholder="请选择">
                                                 <Option value="1">实时报警</Option>
@@ -387,7 +405,7 @@ class AddUser extends Component {
                                         label="报警时间"
                                     >
                                         {getFieldDecorator('AlarmTime', {
-                                            initialValue: undefined
+                                            initialValue: AlarmTime ? AlarmTime.split(',') : undefined
                                         })(
                                             <Select
                                                 mode="multiple"
@@ -409,7 +427,7 @@ class AddUser extends Component {
                                         label="推送类型"
                                     >
                                         {getFieldDecorator('SendPush', {
-                                            initialValue: undefined,
+                                            initialValue: SendPush ? SendPush.split(',') : undefined,
                                         })(
                                             <Select
                                                 mode="multiple"
@@ -429,7 +447,7 @@ class AddUser extends Component {
                                         label="角色名称"
                                     > {
                                             getFieldDecorator('Roles_Name', {
-                                                initialValue: undefined,
+                                                initialValue: RolesName,
                                                 rules: [{
                                                     required: true,
                                                     message: '请选择角色!'
@@ -455,6 +473,7 @@ class AddUser extends Component {
                                         label="备注"
                                     >
                                         {getFieldDecorator('User_Remark', {
+                                            initialValue: UserRemark,
                                         })(
                                             <TextArea rows={4} style={{width: '100%'}} />
                                         )}
@@ -474,7 +493,7 @@ class AddUser extends Component {
                                     <Button
                                         type="dashed"
                                         onClick={
-                                            () => this.props.dispatch(routerRedux.push(`/sysmanage/userinfo`))
+                                            () => dispatch(routerRedux.push(`/sysmanage/userinfo`))
                                         }
                                     >
                           返回
