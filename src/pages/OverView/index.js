@@ -266,6 +266,7 @@ class OverViewMap extends PureComponent {
             />
             <TreeCardContent style={{overflow:'auto',width:400,background:'#fff'}}
              getHeight='calc(100vh - 290px)'
+             pollutantTypeloading={pollutantTypeloading}
              getStatusImg={this.getStatusImg} isloading={treedataloading} 
             treeCilck={this.treeCilck} treedatalist={datalist} PollutantType={2} />
           </div>
