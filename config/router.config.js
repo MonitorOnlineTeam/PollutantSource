@@ -130,7 +130,7 @@ export default [
             /* 设备运转率 */
             { path: '/qualitycontrol/equipmentoperatingrate', component: './QualityControl/EquipmentOperatingRate' },
             /* 手工数据上传 */
-            { path: '/qualitycontrol/manualupload', component: './QualityControl/ManualUpload' },
+            { path: '/selfmonitor/manualupload', component: './QualityControl/ManualUpload' },
             /* 月度排放量分析 */
             { path: '/analysis/pollutantemissions', component: './Analysis/PollutantEmissions' },
             /* 报警及时响应统计分析 */
@@ -140,7 +140,7 @@ export default [
             { path: '/analysis/overpointlist', component: './Analysis/OverPointList' },
             /* 自行监测报告 */
             {
-                path: '/analysis/selfmonitorreport', component: './Analysis/MonitoringReport'
+                path: '/selfmonitor/selfmonitorreport', component: './Analysis/MonitoringReport'
                 //,routes:[
                 /* 监测报告 */
                 // {path:'/analysis/selfmonitorreport/:pdfname',component:'./Analysis/PdfShow'}]
