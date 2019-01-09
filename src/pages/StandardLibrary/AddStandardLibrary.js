@@ -33,6 +33,7 @@ const Option = Select.Option;
     standardlibrary
 }) => ({
     ...loading,
+    isloading:loading.effects['standardlibrary/getStandardlibrarybyid'],
     reason: standardlibrary.reason,
     requstresult: standardlibrary.requstresult,
     editstandardlibrary: standardlibrary.editstandardlibrary,
@@ -362,7 +363,7 @@ export default class AddStandardLibrary extends Component {
                 ]
             }>
           <div className={styles.upload}>
-              <Card bordered={false}       title="标准库维护">
+              <Card bordered={false}  loading={this.props.isloading}       title="标准库维护">
                   <Form onSubmit={this.handleSubmit}>
                       <Card bordered={false}>
                           <Row gutter={48}>
