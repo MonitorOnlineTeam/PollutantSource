@@ -23,6 +23,7 @@ class TreeDetailStatus extends Component {
         }
     }
     render() {
+        const {pointInfo}=this.props;
         return (
             <div style={{
                 width: 420,
@@ -33,7 +34,11 @@ class TreeDetailStatus extends Component {
             }}>
                 <div style={{fontSize: 16, marginLeft: 15, paddingTop: 15}}>
                     <span style={{position: 'relative',top: -2,marginRight: 2}}>{this.props.statusImg}</span>
-                    {this.props.pointName}  { this.props.pointInfo.existTask ? <span className={styles.operation}>运维中</span> : ''}
+                    {this.props.pointName} 
+                       {pointInfo.scene ? <span className={styles.operation}>运维中</span> : ''}
+                       {pointInfo.warning ? <span className={styles.warning}>预警中</span> : ''}
+                       {pointInfo.fault ? <span className={styles.fault}>故障中</span>: ''}
+                       {pointInfo.status==4 ?  <span className={styles.stop}>停产中</span>: ''}
                     <Button onClick={this.props.backTreeList} className={styles.backButton}>返回</Button>
                 </div>
                 <div style={{borderBottom: '1px solid #EBEBEB',marginTop: 6}} />

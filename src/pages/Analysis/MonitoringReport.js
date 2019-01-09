@@ -32,6 +32,7 @@ class MonitoringReport extends Component {
             reportname:null,
             numPages: null,
             pageNumber: 1,
+            isfirst:true
         };
     }
     componentDidMount() {
@@ -74,35 +75,61 @@ class MonitoringReport extends Component {
             {
                 radiovalue,
                 format,
-                mode
+                mode,
+                isfirst:true
             }
         )
     }
  
     showPdf=(reportname)=>{
         this.setState({
-            reportname
+            reportname,
+            isfirst:false
         });
-       // this.props.dispatch(routerRedux.push(`/analysis/selfmonitorreport/${reportname}`));
-    //    <div style={{overflow:'scroll',height:600}}>
-    //    <PDFReader url={imgaddress+this.state.reportname}/>
-    //   </div>
     }
     getshowpdf=()=>{
-        if(this.state.reportname)
+        let {isfirst,reportname,radiovalue}=this.state;
+        const {reportlist}=this.props;
+        if(isfirst)
         {
-         
-            const pdfurl = require('./test1.pdf');
-            return (
-                <iframe className={styles.if} style={{border:0,width:"100%",height:630,}} src={imgaddress+this.state.reportname}/>
-            )
-            {/* return(  
-            <div className={styles.pdfdiv} >
-                 <PDF
-                 file={imgaddress+this.state.reportname}
-                 />
-            </div>); */}
+            if(reportlist)
+            {
+                switch(radiovalue){
+                    case 'year':
+                    if(reportlist.yearlist)
+                    reportname=reportlist.yearlist[0];
+                    break;
+                    case 'season':
+                    if(reportlist.seasonlist)
+                    reportname=reportlist.seasonlist[0];
+                    break;
+                    case 'month':
+                    if(reportlist.monthlist)
+                    reportname=reportlist.monthlist[0];
+                    break;
+                    default:
+                    reportname=null;
+                    break;
+                }
+            }
+        } 
+
+       
+        let address=imgaddress+reportname;
+        let height='calc(100vh - 300px)'
+        if(!reportname)
+        {
+              address=null;
+              height=70;
         }
+      
+            return (
+                <div>
+                <iframe className={styles.if} style={{border:0,width:"100%",height:height}} src={address}/>
+               { address?<div></div>:<div style={{textAlign:'center'}}>暂无数据</div>}
+                </div>
+            )
+      
     }
 
     getreportlist=()=>{
@@ -113,6 +140,7 @@ class MonitoringReport extends Component {
         {  
             if(type=="year" && list.yearlist)
             {
+               
                 list.yearlist.map((item,key)=>{
                     res.push( <div key={key} onClick={()=>this.showPdf(item)} className={styles.reportdiv}>
                         <li><img className={styles.reportimg} src='/report.png' /></li>
