@@ -11,7 +11,7 @@ import {
     Select,
     Button,
     Card,
-    Divider,
+    Divider,Spin
 } from 'antd';
 import {
     connect
@@ -40,6 +40,7 @@ for (let i = 0; i < 21; i++) {
     userinfo
 }) => ({
     ...loading,
+    isloading:loading.effects['userinfo/getuser'],
     reason: userinfo.reason,
     requstresult: userinfo.requstresult,
     editUser: userinfo.editUser
@@ -216,7 +217,17 @@ class AddUser extends Component {
     render() {
         const { getFieldDecorator } = this.props.form;
         // const UserId = this.props.match.params.UserId;
-
+        if(this.props.isloading)
+        {
+          return (<Spin
+              style={{ width: '100%',
+                  height: 'calc(100vh/2)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center' }}
+              size="large"
+          />);
+        }
         return (
             <MonitorContent
                 {...this.props}
