@@ -6,7 +6,7 @@ import {
     List,
     Spin,
     Table,
-    Calendar,
+    Progress,
     Badge,
     Tag,
     Icon,
@@ -219,7 +219,7 @@ class HomePage extends Component {
                         <Row gutter={24}>
                             <Col xl={24} lg={24} md={24} sm={24} xs={24}>
                                 <div className={styles.divsecond}>
-                                    <div className={styles.divson1}>十月质控只能预警<h2>18</h2>次</div>
+                                    <div className={styles.divson1}>十月质控智能预警<h2>18</h2>次</div>
                                     <div className={styles.divson2}>
                                         <div>同比<p className={styles.padd} />3次</div>
                                         <div>环比<p className={styles.pdeduct} />3次</div>
@@ -228,7 +228,26 @@ class HomePage extends Component {
                             </Col>
                         </Row>
                         <Row gutter={24}>
-                            <Col />
+                            <Col xl={24} lg={24} md={24} sm={24} xs={24}>
+                                <div className={styles.divfirt}>
+                                    <p>智能运维</p>
+                                </div>
+                            </Col>
+                        </Row>
+                        <Row gutter={24}>
+                            <Col xl={24} lg={24} md={24} sm={24} xs={24}>
+                                <div>
+                                    <div>
+                                        <Progress
+                                            percent={100}
+                                            successPercent={60}
+                                            strokeColor="red"
+                                            showInfo={false}
+                                            strokeWidth={10}
+                                        />
+                                    </div>
+                                </div>
+                            </Col>
                         </Row>
                     </Col>
                     <Col xl={10} lg={24} md={24} sm={24} xs={24}>
