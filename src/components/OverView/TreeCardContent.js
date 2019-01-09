@@ -4,7 +4,6 @@ import {
 } from 'antd';
 import styles from './Tree.less';
 class TreeCardContent extends Component {
-
     getTreeDatalist=()=>{
         const {isloading,treedatalist,PollutantType}=this.props;
         if(isloading)
@@ -35,7 +34,7 @@ class TreeCardContent extends Component {
                         <div className={styles.cardbottomspan}><span className={styles.tsdiv}>
                             传输有效率 {item.transmissionEffectiveRate}</span>
                             {
-                                 item.existTask ? <span className={styles.operation}>运维中</span> : ''
+                                 item.scene ? <span className={styles.operation}>运维中</span> : ''
                             }
                             {
                                  item.warning ? <span className={styles.warning}>预警中</span> : ''
@@ -58,6 +57,13 @@ class TreeCardContent extends Component {
         return res;
     }
     render() {
+        const {pollutantTypeloading}=this.props;
+        if(pollutantTypeloading)
+        {
+            return(
+               <div></div>
+            )
+        }
         let {getHeight,treedatalist}=this.props;
         if(!treedatalist || !treedatalist[0])
         {

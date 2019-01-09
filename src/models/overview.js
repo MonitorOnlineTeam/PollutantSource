@@ -36,7 +36,7 @@ export default Model.extend({
         * querypollutanttypecode({
             payload,
         }, { call, update, put, take }) {
-            let gwidth = 150 + 140 + 70;
+            let gwidth = 300 + 140 + 70;
             const data = yield call(querypollutanttypecode, payload);
             yield put({
                 type: 'querydatalist',
