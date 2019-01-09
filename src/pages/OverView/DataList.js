@@ -75,12 +75,14 @@ class dataList extends PureComponent {
 
     //时间更改
     pickerChange=(time, timeString) => {
+     
         if (time) {
+            alert();
             this.setState({
                  time
             });
         const {status,operationStatus,terate,warning}=this.state;
-        this.reloadData=(time,status,operationStatus,terate,warning)
+        this.reloadData(time,status,operationStatus,terate,warning)
         }
     }
 
@@ -282,7 +284,7 @@ class dataList extends PureComponent {
     this.setState({
         pdvisible: false,
     });
-}
+   }
     //催办
     urge=(record)=>{
         this.props.dispatch({
@@ -323,6 +325,7 @@ class dataList extends PureComponent {
             </div>)
 
     render() {
+        const {normal,over,underline,exception,terate,operationStatus,pollutantCode}=this.state;
         const coldata = this.props.columnsdata;
         const {selectpoint}=this.props;
         let fixed=false;
@@ -351,31 +354,56 @@ class dataList extends PureComponent {
             title: '排口',
             dataIndex: 'pointName',
             key: 'pointName',
-            width: 150,
+            width: 300,
             fixed: fixed,
             render: (value, record, index) => {
                 const content = this.gerpointButton(record);
-                if (record.scene === 1) {
-                    return <Popover trigger="click" content={content}><span style={{ cursor: 'pointer' }}><Icon type="user" style={{ color: '#3B91FF' }} />{value}</span></Popover>;
+                let lable=[];
+                if(record.fault)
+                {
+                    lable.push(<span className={styles.fault}>故障中</span>)
                 }
-                return (<Popover trigger="click" content={content}><span style={{ cursor: 'pointer' }}>{value}</span></Popover>);
+                if(record.warning)
+                {
+                    lable.push(<span className={styles.warning}>预警中</span>)
+                }
+                if(record.scene)
+                {
+                    lable.push(<span className={styles.operation}>运维中</span>)
+                }
+                if(record.status==4)
+                {
+                    lable.push(<span className={styles.stop}>停产中</span>)
+                }
+
+            
+                return (<Popover trigger="click" content={content}>
+                <span style={{ cursor: 'pointer' }}>{value} 
+                 { lable}
+                </span></Popover>);
             },
         },
+       
+        ];
+
+        if(pollutantCode==2)
         {
-            title: '传输有效率',
-            dataIndex: 'transmissionEffectiveRate',
-            key: 'transmissionEffectiveRate',
-            width: 140,
-             fixed: fixed,
-            align: 'center',
-            render: (value, record, index) => ({
-                props: {
-                    className: value && value.split('%')[0] < 90 ? styles.red : '',
-                },
-                children: value || '-'
+            columns= columns.concat(
+            {
+                title: '传输有效率',
+                dataIndex: 'transmissionEffectiveRate',
+                key: 'transmissionEffectiveRate',
+                width: 140,
+                fixed: fixed,
+                align: 'center',
+                render: (value, record, index) => ({
+                    props: {
+                        className: value && value.split('%')[0] < 90 ? styles.red : '',
+                    },
+                    children: value || '-'
+                })
             })
         }
-        ];
     
         const res = coldata[0] ? coldata.map((item, key) => {
             columns = columns.concat({
@@ -429,9 +457,6 @@ class dataList extends PureComponent {
                 size="large"
             />);
         }
-
-        const {normal,over,underline,exception,terate,operationStatus,pollutantCode}=this.state;
-        console.log(columns);
         return (
             <div
                 style={{ width: '100%', height: 'calc(100vh - 65px)' }}
@@ -440,7 +465,8 @@ class dataList extends PureComponent {
                 <UrgentDispatch
                     onCancel={this.onCancel}
                     visible={this.state.pdvisible}
-                    selectpoint={this.state.selectpoint}
+                    operationUserID={selectpoint?selectpoint.operationUserID:null}
+                    DGIMN={selectpoint?selectpoint.DGIMN:null}
                     pointName={selectpoint?selectpoint.pointName:null}
                     operationUserName={selectpoint?selectpoint.operationUserName:null}
                     operationtel={selectpoint?selectpoint.operationtel:null}
@@ -465,7 +491,8 @@ class dataList extends PureComponent {
                             <div style={{ width: 'calc(100vw - 220px)',marginLeft: 60 }}>
                             <AListRadio style={{ float: 'right' }} dvalue="b" />
                             <div  style={{ float: 'right',marginTop:3 }}>
-                                <span onClick={this.operationSearch} className={operationStatus?styles.selectStatus:styles.statusButton} style={{ marginRight: 10 }}><Icon type="user" style={{ color: '#3B91FF' }} /> 运维中</span>
+                                {/* <span onClick={this.operationSearch} className={operationStatus?styles.selectStatus:styles.statusButton} style={{ marginRight: 10 }}>
+                                <Icon type="user" style={{ color: '#3B91FF' }} /> 运维中</span> */}
                                 <span onClick={this.terateSearch} className={terate?styles.selectStatus:styles.statusButton} style={{ marginRight: 20 }}><span style={{ fontSize: 16, color: '#ffca00' }}>■</span> 传输有效率不达标</span>
 
                                 <span onClick={()=>this.statusChange('normal')} className={normal?styles.selectStatus:styles.statusButton}><img className={styles.statusButtonImg} src="../../../gisnormal.png" />正常</span>
@@ -484,7 +511,6 @@ class dataList extends PureComponent {
                         size="middle"
                         dataSource={this.props.data}
                         pagination={false}
-                      
                         loading={this.props.isloading}
                         scroll={{ x: this.props.gwidth, y: 'calc(100vh - 190px)' }}
                         bordered={true}

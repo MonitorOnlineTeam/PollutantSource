@@ -20,6 +20,8 @@ export default Model.extend({
         reason: null,
         mypielist:[],
         mymessagelist:[],
+        UserAccount:'',
+        DeleteMark:''
     },
     subscriptions: {
         setup({
@@ -45,7 +47,7 @@ export default Model.extend({
                 pageIndex,
                 pageSize,
                 UserAccount,
-                DeleteMark
+                DeleteMark,
             }
         }, {
             call,
@@ -86,7 +88,6 @@ export default Model.extend({
             call,
             put,
             update,
-            select
         }) {
             const result = yield call(deleteuser, {
                 UserId: UserId,
@@ -96,12 +97,12 @@ export default Model.extend({
             });
             yield put({
                 type: 'fetchuserlist',
-                payload: {
+                payload:{
                     pageIndex,
                     pageSize,
                     UserAccount,
-                    DeleteMark
-                },
+                    DeleteMark,
+                }
             });
             callback();
         },

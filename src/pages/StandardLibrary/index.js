@@ -264,7 +264,7 @@ export default class StandardLibrary extends Component {
                                     onClick={() => {
                                         this.props.dispatch(routerRedux.push(`/sysmanage/StandardLibraryDetail/null`));
                                     }}>添加</Button>
-                                     <Radio.Group defaultValue="0" buttonStyle="solid" style={{marginLeft:5}} onChange={(e) => {
+                                     <Radio.Group defaultValue="0"  style={{marginLeft:5}} onChange={(e) => {
                                         console.log(e.target.value);
                                         this.setState({
                                             Type: e.target.value
