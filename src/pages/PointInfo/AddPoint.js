@@ -249,8 +249,7 @@ class AddPoint extends Component {
          };
          const {editpoint,isloading}=this.props;
          const {getFieldDecorator} = this.props.form;
-         console.log("------------------------------")    
-  console.log(editpoint)
+
          if(isloading) {
             return (<Spin
                 style={{ width: '100%',
