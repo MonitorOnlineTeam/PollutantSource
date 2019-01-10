@@ -123,13 +123,3 @@ export async function UpdateManualSupplementData(params) {
         data: null
     } : result;
 }
-
-//获取污染物类型列表
-export async function getPollutantTypeList() {
-    const body = {
-    };
-    const result = post('/api/rest/PollutantSourceApi/ManualSupplement/getPollutantTypeList', body, null);
-    return result === null ? {
-        data: null
-    } : result;
-}

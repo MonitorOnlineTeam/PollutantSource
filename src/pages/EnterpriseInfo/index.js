@@ -30,11 +30,10 @@ const plugins = [
     }
 ];
 @connect(({ baseinfo, loading }) => ({
-    ...loading,
     baseinfo: baseinfo.entbaseinfo,
     regionlist: baseinfo.regionlist,
     industryTypelist: baseinfo.industryTypelist,
-
+    isloading:loading.effects['baseinfo/queryentdetail'],
     attentionDegreelist: baseinfo.attentionDegreelist,
     unitTypelist: baseinfo.unitTypelist,
     pSScalelist: baseinfo.pSScalelist,
@@ -229,10 +228,18 @@ class index extends PureComponent {
               sm: { span: 8 },
             },
           };
+          if(this.props.isloading)
+          {
+            return (<Spin
+                style={{ width: '100%',
+                    height: 'calc(100vh/2)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center' }}
+                size="large"
+            />);
+          }
         return (
-    
-
-     
             <MonitorContent {...this.props} breadCrumbList={
                 [
                     { Name: '首页', Url: '/' },
@@ -240,17 +247,9 @@ class index extends PureComponent {
                     { Name: '企业管理', Url: '' }
                 ]
             }>
-
-             
-                {effects['baseinfo/queryentdetail'] ? <Spin style={{
-                    width: '100%',
-                    height: 'calc(100vh - 260px)',
-                    marginTop: 260
-                }} size="large" />
-                    :
-                    
-                    // 主体内容模块
+                    {/* // 主体内容模块 */}
                     <Content style={{ padding: 30, background: "#FFFFFF",marginBottom:10 }}  className={styles.imgcss}>
+                    
                         {/* 顶部 */}
                         <Row type="flex" justify="center">
                             <Col xs={{ span: 9, offset: 1 }} >
@@ -585,7 +584,6 @@ class index extends PureComponent {
 
 
                     </Content>
-                }
             </MonitorContent>
 
         );

@@ -262,28 +262,5 @@ export default Model.extend({
             }
             payload.callback(result.reason);
         },
-
-        //获取污染物类型方法
-        * getPollutantTypeList({
-            payload
-        }, {
-            call,
-            update,
-        }) {
-            const result = yield call(getPollutantTypeList, payload);
-            if (result.requstresult === "1") {
-                yield update({
-                    polltuantTypeList: result.data,
-                    reason: result.reason,
-                });
-            }
-            else {
-                yield update({
-                    polltuantTypeList: null,
-                    reason: result.reason
-                });
-            }
-            payload.callback(result.data[0].PollutantTypeCode);
-        },
     },
 });

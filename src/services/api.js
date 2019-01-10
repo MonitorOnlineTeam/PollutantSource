@@ -435,10 +435,11 @@ export async function querypollutanttypecode(params) {
 }
 // 获取数据一览数据
 export async function querydatalist(params) {
+    console.log()
     const body = {
         time: params.time,
         pointType:params.pointType,
-        pollutantTypes:params.pollutantCode,
+        pollutantTypes:params.pollutantTypes,
         pointName:params.pointName,
         status:params.status,
         operationStatus:params.operationStatus,

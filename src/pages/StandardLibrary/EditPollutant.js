@@ -138,6 +138,7 @@ export default class EditPollutant extends Component {
                              </FormItem>
                          </Col>
                      </Row>
+                 
                      <Row gutter={48}>
                          <Col span={12}>
                              <FormItem
@@ -164,6 +165,7 @@ export default class EditPollutant extends Component {
                              </FormItem>
                          </Col>
                      </Row>
+                     <Divider dashed  />
                      <Row gutter={48}>
                          <Col span={12}>
                              <FormItem
@@ -207,9 +209,10 @@ export default class EditPollutant extends Component {
                                      }
                                  )(
                                      <Select placeholder="请选择报警类型" >
-                                         <Option value="0">区间报警</Option>
+                                         <Option value="0">无报警</Option>
                                          <Option value="1">上限报警</Option>
                                          <Option value="2">下限报警</Option>
+                                         <Option value="3">区间报警</Option>
                                      </Select>
                                  )}
                              </FormItem>
@@ -225,8 +228,8 @@ export default class EditPollutant extends Component {
                              </FormItem>
                          </Col>
                      </Row>
-                     <Row gutter={48}>
-                         <Col span={24} style={{textAlign: 'center'}}>
+           
+                     <Divider orientation="right"  style={{border:'1px dashed #FFFFFF'}}>
                              <Button type="primary"
                                  htmlType="submit">
                           保存
@@ -238,8 +241,8 @@ export default class EditPollutant extends Component {
                                  } >
                           返回
                              </Button>
-                         </Col>
-                     </Row>
+                      
+                             </Divider>
                  </Card>
              </Form>
          </Card>

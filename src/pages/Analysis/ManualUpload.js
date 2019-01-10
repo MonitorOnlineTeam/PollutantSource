@@ -9,6 +9,7 @@ import Add from '../../components/ManualUpload/AddManualUpload';
 import Update from '../../components/ManualUpload/UpdateManualUpload';
 import { routerRedux } from 'dva/router';
 import styles from './ManualUpload.less';
+import TreeCardContent from '../../components/OverView/TreeCardContent';
 
 const confirm = Modal.confirm;
 const Option = Select.Option;
@@ -27,7 +28,8 @@ const Search = Input.Search;
     total: manualupload.total,
     DGIMN: manualupload.DGIMN,
     pointName: manualupload.pointName,
-    polltuantTypeList: manualupload.polltuantTypeList,
+    pollutantTypeloading: loading.effects['overview/getPollutantTypeList'],
+    pollutantTypelist: overview.pollutantTypelist
 }))
 @Form.create()
 export default class ManualUpload extends Component {
@@ -40,9 +42,9 @@ export default class ManualUpload extends Component {
             PollutantType: null,
             SelectHandleChange: [],
             visible: false,
-            TabsOnchange: null,//树选项卡key
             TabsSelect: null,  //树下拉key
             pointName: null,
+            pollutantTypeCode: "2",
             footer: <div>
                 <Button key="back" onClick={this.handleCancel}>Return</Button>,
                 <Button key="submit" type="primary" onClick={this.handleOk}>
@@ -107,26 +109,24 @@ export default class ManualUpload extends Component {
     componentDidMount() {
         //获取污染物类型
         this.props.dispatch({
-            type: 'manualupload/getPollutantTypeList',
+            type: 'overview/getPollutantTypeList',
             payload: {
-                callback: (data) => {
-                    this.setState({ TabsOnchange: data })
-                    //点位列表
-                    this.props.dispatch({
-                        type: 'overview/querydatalist',
-                        payload: {
-                            pollutantTypes: this.state.TabsOnchange,
-                            map: true, manualUpload: true,
-                            pageIndex: this.props.pageIndex,
-                            pageSize: this.props.pageSize,
-                            BeginTime: this.state.rangeDate[0].format('YYYY-MM-DD 00:00:00'),
-                            EndTime: this.state.rangeDate[1].format('YYYY-MM-DD 23:59:59'),
-                            pollutantCode: this.state.SelectHandleChange
-                        }
-                    });
-                }
             }
         });
+        //点位列表
+        this.props.dispatch({
+            type: 'overview/querydatalist',
+            payload: {
+                pollutantTypes: this.state.pollutantTypeCode,
+                map: true, manualUpload: true,
+                pageIndex: this.props.pageIndex,
+                pageSize: this.props.pageSize,
+                BeginTime: this.state.rangeDate[0].format('YYYY-MM-DD 00:00:00'),
+                EndTime: this.state.rangeDate[1].format('YYYY-MM-DD 23:59:59'),
+                pollutantCode: this.state.SelectHandleChange
+            }
+        });
+
     }
     getStatusImg = (value) => {
         if (value === 0) {
@@ -141,7 +141,7 @@ export default class ManualUpload extends Component {
     getIcon = (key, value) => {
 
         if (key === 1) {
-            return <span ><img style={{ width: 20, marginBottom: 5 }} src="/water.png"></img><span style={{marginLeft:2}}>{value}</span></span>
+            return <span ><img style={{ width: 20, marginBottom: 5 }} src="/water.png"></img><span style={{ marginLeft: 2 }}>{value}</span></span>
         }
         else {
             return <span><img style={{ width: 20, marginBottom: 5 }} src="/gas.png"></img> {value}</span>
@@ -259,7 +259,7 @@ export default class ManualUpload extends Component {
         const rtnVal = [];
         if (this.props.polltuantTypeList.length !== 0) {
             this.props.polltuantTypeList.map((item) => {
-                rtnVal.push(<TabPane tab={this.getIcon(item.PollutantTypeCode, item.PollutantTypeName)}  key={item.PollutantTypeCode}>
+                rtnVal.push(<TabPane tab={this.getIcon(item.PollutantTypeCode, item.PollutantTypeName)} key={item.PollutantTypeCode}>
                     <div style={{ marginTop: 15 }}>
                         <TreeCard getHeight={'calc(100vh - 220px)'} getStatusImg={this.getStatusImg} isloading={this.props.treedataloading} treeCilck={this.treeCilck} treedatalist={this.props.datalist} PollutantType={item.PollutantTypeCode} />
                     </div>
@@ -268,25 +268,35 @@ export default class ManualUpload extends Component {
         }
         return rtnVal;
     }
-    TabsOnChange = (key) => {
-        this.setState({ TabsOnchange: key })
-        //点位列表
+    //当前选中的污染物类型
+    getNowPollutantType = (key) => {
+        debugger;
+        this.setState({
+            pollutantTypeCode: key
+        })
+        const { pointName } = this.state;
+        this.reloadData(key, pointName);
+    }
+    //重新加载
+    reloadData = (pollutantTypeCode, pointName) => {
         this.props.dispatch({
             type: 'overview/querydatalist',
             payload: {
-                pointName: this.state.pointName,
-                pointType: this.state.TabsSelect,
-                pollutantTypes: key,
+                map: true,
+                pollutantTypes: pollutantTypeCode,
+                pointName: pointName,
+                RunState: this.state.TabsSelect,
                 map: true, manualUpload: true,
                 pageIndex: this.props.pageIndex,
                 pageSize: this.props.pageSize,
                 BeginTime: this.state.rangeDate[0].format('YYYY-MM-DD 00:00:00'),
                 EndTime: this.state.rangeDate[1].format('YYYY-MM-DD 23:59:59'),
                 pollutantCode: this.state.SelectHandleChange
-            }
+            },
         });
     }
     changeTabList = (value) => {
+        debugger
         this.setState({ TabsSelect: value })
         //点位列表
         this.props.dispatch({
@@ -294,7 +304,7 @@ export default class ManualUpload extends Component {
             payload: {
                 pointName: this.state.pointName,
                 RunState: value,
-                pollutantTypes: this.state.TabsOnchange,
+                pollutantTypes: this.state.pollutantTypeCode,
                 map: true, manualUpload: true,
                 pageIndex: this.props.pageIndex,
                 pageSize: this.props.pageSize,
@@ -313,7 +323,7 @@ export default class ManualUpload extends Component {
             type: 'overview/querydatalist',
             payload: {
                 pointType: this.state.TabsSelect,
-                pollutantTypes: this.state.TabsOnchange,
+                pollutantTypes: this.state.pollutantTypeCode,
                 pointName: value,
                 map: true, manualUpload: true,
                 pageIndex: this.props.pageIndex,
@@ -325,6 +335,7 @@ export default class ManualUpload extends Component {
         });
     }
     render() {
+        console.log(this.props.datalist)
         const uploaddata = this.props.uploaddatalist === null ? null : this.props.uploaddatalist;
         const columns = [
             {
@@ -406,7 +417,7 @@ export default class ManualUpload extends Component {
                 <Row >
                     <Col>
                         <div style={{
-                            width: 450,
+                            width: 400,
                             height: 'calc(100vh - 90px)',
                             position: 'absolute',
                             top: 10,
@@ -418,7 +429,7 @@ export default class ManualUpload extends Component {
                             <div style={{ marginBottom: 16 }}>
                                 <Select
                                     placeholder="监测点类型"
-                                    style={{ width: 200 }}
+                                    style={{ width: 190 }}
                                     onChange={this.changeTabList}
                                 >
                                     <Option value="2">手动</Option>
@@ -429,16 +440,33 @@ export default class ManualUpload extends Component {
                                     onSearch={
                                         this.searchPointbyPointName
                                     }
-                                    style={{ width: 200 }} />
+                                    style={{ width: 190 }} />
                             </div>
                             <div>
-                                <Tabs type="card"  onChange={this.TabsOnChange}>
-                                    {this.tabList()}
-                                </Tabs>
+                                <div style={{ marginTop: 5 }}>
+                                    <TreeCard
+                                        style={{
+                                            width: '400px',
+                                            marginTop: 5,
+                                            background: '#fff'
+                                        }}
+                                        pollutantTypeloading={this.props.pollutantTypeloading}
+                                        getHeight={'calc(100vh - 200px)'} getStatusImg={this.getStatusImg} isloading={this.props.treedataloading}
+                                        getNowPollutantType={this.getNowPollutantType}
+                                        treeCilck={this.treeCilck} treedatalist={this.props.datalist} PollutantType={2}
+                                        pollutantTypelist={this.props.pollutantTypelist}
+                                        tabkey={this.state.pollutantTypeCode}
+                                    />
+                                    <TreeCardContent style={{ overflow: 'auto', width: 400, background: '#fff' }}
+                                        getHeight='calc(100vh - 200px)'
+                                        pollutantTypeloading={this.props.pollutantTypeloading}
+                                        getStatusImg={this.getStatusImg} isloading={this.props.treedataloading}
+                                        treeCilck={this.treeCilck} treedatalist={this.props.datalist} PollutantType={2} />
+                                </div>
                             </div>
                         </div>
                     </Col>
-                    <Col style={{ width: document.body.clientWidth - 460, height: 'calc(100vh - 90px)', float: 'right' }}>
+                    <Col style={{ width: document.body.clientWidth - 420, height: 'calc(100vh - 90px)', float: 'right' }}>
                         <Card style={{ top: 10, height: 'calc(100vh - 90px)' }} bordered={false}>
                             <Card style={{ height: '120px' }}>
                                 <Form style={{ marginTop: '17px' }} layout="inline">

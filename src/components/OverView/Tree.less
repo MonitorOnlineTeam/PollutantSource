@@ -1,26 +1,33 @@
 
 //.scrollBar;
 .treelist{
-    padding-left: 10px;   
-    overflow: auto;
-   
+  //  padding-left: 10px;   
+  //  overflow-y: auto;
+    background:#fff;
+ //   overflow-x: hidden;
+ overflow: hidden;
 }
 
+.treeoverflow{
+    overflow: auto;
+}
 .cardDiv{
     cursor: pointer;
-    width: 400px;
-    border-radius: 5px;
-    margin-bottom: 6px;
+    //width: 400px;
+ //  border-radius: 5px;
+ //  margin-bottom: 6px;
     background:#fff;
-    box-shadow:rgba(136, 136, 136, 0.41) 4px 3px 9px;   
+    border:1px solid #f0f2f5;
+   // box-shadow:rgba(136, 136, 136, 0.41) 4px 3px 9px;   
 }
 .cardDiv:hover{
     cursor: pointer;
-    width: 400px;
-    border-radius: 5px;
-    margin-bottom: 6px;
+   // width: 400px;
+ //   border-radius: 5px;
+  //  margin-bottom: 6px;
     background:#f7f7f7;
-    box-shadow:rgba(136, 136, 136, 0.41) 4px 3px 9px;   
+    border:1px solid #f0f2f5;
+  // box-shadow:rgba(136, 136, 136, 0.41) 4px 3px 9px;   
 }
 .cardtopspan{
     padding:20px 20px 10px 20px;
@@ -47,12 +54,51 @@
 .tsdiv{
     font-size: 14px;
 }
+
+
+.tab :global{
+    .ant-tabs-tab {
+        padding: 12px 76px;
+    }
+}
+//运维中
 .operation{
+   padding: 3px 7px 3px 7px;
+   background: #ff995b;
+   color: #fff;
+   float: right;
+   border-radius: 4px;
+   margin-right: 10px;
+   font-size: 12px;
+}
+
+//停产中
+.stop{
     padding: 3px 7px 3px 7px;
-    background: #FF995B;
+    background: #b5b5b5;
     color: #fff;
     float: right;
     border-radius: 4px;
-    margin-right: 25px;
+    margin-right: 10px;
     font-size: 12px;
-}
+ }
+ //故障中
+ .fault{
+    padding: 3px 7px 3px 7px;
+    background: #119f9d;
+    color: #fff;
+    float: right;
+    border-radius: 4px;
+    margin-right: 10px;
+    font-size: 12px;
+ }
+ //预警中  
+ .warning{
+    padding: 3px 7px 3px 7px;
+    background: #ff6565;
+    color: #fff;
+    float: right;
+    border-radius: 4px;
+    margin-right: 10px;
+    font-size: 12px;
+ }

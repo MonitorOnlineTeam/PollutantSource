@@ -272,7 +272,7 @@ class SpecialWorkbench extends Component {
             const labelDiv=<div style={{color:`${color}`}}>已发生{hour}小时{minutesLable}</div>;
             const btnDiv=hour>= 4 ?(<div style={{marginTop:43}}>
                 <Button style={{width:100,border:'none',backgroundColor:'rgb(74,210,187)'}} type="primary">督办</Button>
-            </div>):'';
+                                    </div>):'';
             listData.push({
                 href: 'http://ant.design',
                 title: `${item.PointName}`,
@@ -290,7 +290,7 @@ class SpecialWorkbench extends Component {
                         {/* <div>首次报警时间：2018-12-27</div>
                         <div>报警总次数：<span style={{fontWeight:'bold'}}>98</span></div> */}
                     </div>
-                              </div>),
+                </div>),
                 content: '',
                 extra:(
                     <div style={{marginTop:30,marginRight:70,textAlign:'center'}}>
@@ -756,7 +756,7 @@ class SpecialWorkbench extends Component {
             <span style={{marginRight:20}}>离线:<span style={{marginLeft:5,color:'rgb(244,5,4)'}}>{model.OffLine}</span></span>
             <span style={{marginRight:20}}>异常:<span style={{marginLeft:5,color:'gold'}}>{model.ExceptionNum}</span></span>
             <span style={{marginRight:20}}>关停:<span style={{marginLeft:5,color:'rgb(208,145,14)'}}>{model.StopNum}</span></span>
-        </span>;
+               </span>;
     }
 
     //如果是数据列表则没有选择污染物，而是展示全部污染物
@@ -794,7 +794,7 @@ class SpecialWorkbench extends Component {
         let seriesData=[];
 
         chartDatas.map((item) => {
-            xAxis.push(item.MonitorTime);
+            xAxis.push(`${moment(item.MonitorTime).format('HH:mm:ss')}`);
             seriesData.push(item[selectedPollutantCode]);
         });
 
@@ -809,7 +809,8 @@ class SpecialWorkbench extends Component {
             xAxis:  {
                 type: 'category',
                 boundaryGap: false,
-                data: xAxis
+                data: xAxis,
+                name:'监测时间'
             },
             yAxis: {
                 type: 'value',
@@ -817,6 +818,10 @@ class SpecialWorkbench extends Component {
                 axisLabel: {
                     formatter: '{value}'
                 }
+            },
+            grid:{
+                left:'5%',
+                right:'8%'
             },
             series: [
                 {
@@ -880,7 +885,8 @@ class SpecialWorkbench extends Component {
             {
                 title: '监测时间',
                 dataIndex: 'MonitorTime',
-                width:'20%'
+                width:'20%',
+                render: (text, record) => `${moment(text).format('HH:mm:ss') }`,
             },
             {
                 title: '污染物',
@@ -1059,7 +1065,7 @@ class SpecialWorkbench extends Component {
                                         extra={<a
                                             href="/qualitycontrol/equipmentoperatingrate"
                                         >更多>>
-                                        </a>}
+                                               </a>}
                                     >
                                         <Card.Grid style={gridStyle}>
                                             {/* 十月设备运转率 */}
@@ -1090,7 +1096,7 @@ class SpecialWorkbench extends Component {
                                         extra={<a
                                             href="/qualitycontrol/transmissionefficiency"
                                         >更多>>
-                                               </a>}
+                                        </a>}
                                     >
                                         <Card.Grid style={gridStyle} loading={this.props.loadingRateStatistics}>
                                             {/* 十月传输有效率 */}

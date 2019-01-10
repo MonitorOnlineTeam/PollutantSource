@@ -43,7 +43,7 @@ export default class UserList extends Component {
         };
     }
     componentWillMount() {
-        this.onChange();
+        this.onChange(this.props.pageIndex,this.props.pageSize);
     }
     selectRow = (record) => {
         this.setState({
@@ -77,8 +77,8 @@ export default class UserList extends Component {
             payload: {
                 pageIndex: this.props.pageIndex,
                 pageSize: this.props.pageSize,
-                DeleteMark: this.props.DeleteMark,
-                UserAccount: this.props.UserAccount,
+                DeleteMark: this.state.DeleteMark,
+                UserAccount: this.state.UserAccount,
                 UserId: id,
                 callback: () => {
                     message.success('删除成功！')
@@ -259,7 +259,7 @@ export default class UserList extends Component {
                                             type: 'userinfo/fetchuserlist',
                                             payload: {
                                                 pageIndex: 1,
-                                                pageSize: 10,
+                                                pageSize: this.props.props.pageSize,
                                                 DeleteMark: this.state.DeleteMark,
                                                 UserAccount: value,
                                             },
@@ -273,7 +273,7 @@ export default class UserList extends Component {
                                             type: 'userinfo/fetchuserlist',
                                             payload: {
                                                 pageIndex: 1,
-                                                pageSize: 10,
+                                                pageSize: this.props.props.pageSize,
                                                 DeleteMark: value,
                                                 UserAccount: this.state.UserAccount
                                             },

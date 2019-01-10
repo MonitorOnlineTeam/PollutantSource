@@ -296,7 +296,7 @@ class AddPoint extends Component {
                      loading={this.props.isloading}
                      style={
                          {
-                             height: 'calc(100vh - 140px)'
+                         
                          }
                      }
                  >
@@ -421,55 +421,13 @@ class AddPoint extends Component {
                                  </FormItem>
                              </Col>
                          </Row>
-                         <Row gutter={8}>
-                             <Col span={8}>
-                                 <FormItem
-                                     {...formItemLayout}
-
-                                     label="上传数据类型"
-                                 > {
-                                         getFieldDecorator('RunState',
-                                             {
-                                                 initialValue: true,
-                                                 valuePropName: 'checked',
-                                             }
-                                         )(
-                                             <Switch
-                                                 checkedChildren="自动"
-                                                 unCheckedChildren="手动"
-                                             />)
-                                     }
-                                 </FormItem>
-                             </Col>
-                             <Col span={8}>
-                                 <FormItem
-                                     {...formItemLayout}
-                                     labelCol={{ span: 8 }}
-                                     wrapperCol={{ span: 8 }}
-                                     label="运维人"
-                                 >
-                                     {getFieldDecorator('OperationerId', {
-                                         initialValue: undefined,
-                                         rules: [{
-                                             required: true,
-                                             message: '请选择运维人!'
-                                         } ]
-
-                                     })(
-                                         <Select
-                                             loading={this.props.osloading}
-                                             optionFilterProp="children"
-                                             showSearch={true}
-                                             style={{ width:200 }}
-                                             placeholder="请选择运维人"
-                                         >
-                                             {this.state.Operationer}
-                                         </Select>
-                                     )}
-                                 </FormItem>
-                             </Col>
-                         </Row>
                          <Divider dashed={true} />
+                         <Row gutter={8}>
+                             
+                   
+                             
+                         </Row>
+                     
                          <Row gutter={8}>
                              <Col span={8}>
                                  <FormItem
@@ -513,11 +471,18 @@ class AddPoint extends Component {
                                  <FormItem
                                      {...formItemLayout}
 
-                                     label="排序"
+                                     label="上传数据类型"
                                  > {
-                                         getFieldDecorator('Sort'
+                                         getFieldDecorator('RunState',
+                                             {
+                                                 initialValue: true,
+                                                 valuePropName: 'checked',
+                                             }
                                          )(
-                                             <InputNumber min={0} max={10000} />)
+                                             <Switch
+                                                 checkedChildren="自动"
+                                                 unCheckedChildren="手动"
+                                             />)
                                      }
                                  </FormItem>
                              </Col>
@@ -549,6 +514,18 @@ class AddPoint extends Component {
                                  </FormItem>
                              </Col>
 
+                             <Col span={8}>
+                                 <FormItem
+                                     {...formItemLayout}
+
+                                     label="排序"
+                                 > {
+                                         getFieldDecorator('Sort'
+                                         )(
+                                             <InputNumber min={0} max={10000} />)
+                                     }
+                                 </FormItem>
+                             </Col>
                          </Row>
                          <Divider dashed={true} />
                          <Row gutter={8}>
@@ -620,8 +597,35 @@ class AddPoint extends Component {
                                          />)
                                      }
                                  </FormItem>
+                                 
                              </Col>
+                             <Col span={8}>
+                                 <FormItem
+                                     {...formItemLayout}
+                                     labelCol={{ span: 8 }}
+                                     wrapperCol={{ span: 8 }}
+                                     label="运维人"
+                                 >
+                                     {getFieldDecorator('OperationerId', {
+                                         initialValue: undefined,
+                                         rules: [{
+                                             required: true,
+                                             message: '请选择运维人!'
+                                         } ]
 
+                                     })(
+                                         <Select
+                                             loading={this.props.osloading}
+                                             optionFilterProp="children"
+                                             showSearch={true}
+                                             style={{ width:200 }}
+                                             placeholder="请选择运维人"
+                                         >
+                                             {this.state.Operationer}
+                                         </Select>
+                                     )}
+                                 </FormItem>
+                             </Col>
                              <Division />
                          </Row>
                          <Divider orientation="right" style={{border:'1px dashed #FFFFFF'}}>
