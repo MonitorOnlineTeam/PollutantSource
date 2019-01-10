@@ -1,8 +1,8 @@
 // import liraries
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import { Modal,Breadcrumb, Tabs, Icon, Select, Button,Card,Spin,Row,Col,Divider,Tag,Input,Form,Radio,Alert } from 'antd';
-import { Link, Switch, Redirect,routerRedux } from 'dva/router';
+import { Modal, Breadcrumb, Tabs, Icon, Select, Button, Card, Spin, Row, Col, Divider, Tag, Input, Form, Radio, Alert } from 'antd';
+import { Link, Switch, Redirect, routerRedux } from 'dva/router';
 import moment from 'moment';
 import Cookie from 'js-cookie';
 import router from 'umi/router';
@@ -15,12 +15,12 @@ const Option = Select.Option;
 const Search = Input.Search;
 const { Meta } = Card;
 
-@connect(({points, loading,overview}) => ({
+@connect(({ points, loading, overview }) => ({
     pointInfo: points.selectpoint,
     loadingModel: loading.effects['overview/querydatalist'],
     isloading: loading.effects['points/querysinglepointinfo'],
-    pointList:overview.data,
-    dataTemp:overview.dataTemp
+    pointList: overview.data,
+    dataTemp: overview.dataTemp
 }))
 class PointDetail extends Component {
     constructor(props) {
@@ -35,20 +35,21 @@ class PointDetail extends Component {
                 { key: 'realvideo', tab: '实时视频' },
                 { key: 'hisvideo', tab: '历史视频' },
                 { key: 'ywdsjlist', tab: '运维大事记' },
-                { key: 'qcontrollist', tab: '质控记录' }
+                { key: 'qcontrollist', tab: '质控记录' },
+                { key: 'operationlist', tab: '运维记录' },
             ],
             recordType: [
                 'RepairHistoryRecods',
                 'JzHistoryRecords'
             ],
-            pdvisible:false,
-            modalVisible:false,
-            loadingCard:true,
-            pointList:null,
-            pointName:null,
-            DGIMN:null,
-            status:'',
-            searchName:''
+            pdvisible: false,
+            modalVisible: false,
+            loadingCard: true,
+            pointList: null,
+            pointName: null,
+            DGIMN: null,
+            status: '',
+            searchName: ''
         };
     }
 
@@ -77,10 +78,10 @@ class PointDetail extends Component {
         // console.log(this.props.pointList);
         this.setState({
             modalVisible: true,
-            loadingCard:false,
-            pointList : this.props.pointList,
-            searchName:'',
-            status:''
+            loadingCard: false,
+            pointList: this.props.pointList,
+            searchName: '',
+            status: ''
         });
     }
 
@@ -100,17 +101,17 @@ class PointDetail extends Component {
         this.props.dispatch({
             type: 'points/querysinglepointinfo',
             payload: {
-                dgimn:obj.DGIMN
+                dgimn: obj.DGIMN
             }
         });
         this.setState({
             modalVisible: false,
-            pointName:obj.pointName
+            pointName: obj.pointName
         });
 
-        let locationArray=this.props.location.pathname.split('/');
-        if(locationArray.length>1) {
-            let newUrl=this.props.location.pathname.replace(locationArray[2],obj.DGIMN);
+        let locationArray = this.props.location.pathname.split('/');
+        if (locationArray.length > 1) {
+            let newUrl = this.props.location.pathname.replace(locationArray[2], obj.DGIMN);
             this.props.dispatch(routerRedux.push(newUrl));
         }
         //TODO:如果地址不正确，需要跳转到错误页面吗？ 吴建伟
@@ -127,37 +128,37 @@ class PointDetail extends Component {
         //let selectedPoint=this.props.dataTemp.filter(todo=>todo.DGIMN===this.props.pointInfo.DGIMN)[0];
 
         // debugger;
-        this.props.dataTemp.map((item, key) =>{
+        this.props.dataTemp.map((item, key) => {
             //debugger
             let status = <img src="/gisexception.png" width="15" />;
             if (item.status === 0) {
-                status= <img src="/gisunline.png" width="15" />;
+                status = <img src="/gisunline.png" width="15" />;
             } if (item.status === 1) {
-                status= <img src="/gisnormal.png" width="15" />;
+                status = <img src="/gisnormal.png" width="15" />;
             } if (item.status === 2) {
-                status= <img src="/gisover.png" width="15" />;
+                status = <img src="/gisover.png" width="15" />;
             }
-            let optStatus='';//TODO:排口运维状态不确定 故障：#119f9d
-            if(item.existTask===1) {
-                optStatus=<Tag color="#ff995b">运维中</Tag>;
-            }else {
-                optStatus='';
+            let optStatus = '';//TODO:排口运维状态不确定 故障：#119f9d
+            if (item.existTask === 1) {
+                optStatus = <Tag color="#ff995b">运维中</Tag>;
+            } else {
+                optStatus = '';
             }
 
-            if(key===0) {
-                item=this.props.dataTemp.filter(todo=>todo.DGIMN===this.props.pointInfo.DGIMN)[0];
-                if(!item){
+            if (key === 0) {
+                item = this.props.dataTemp.filter(todo => todo.DGIMN === this.props.pointInfo.DGIMN)[0];
+                if (!item) {
                     return false;
                 }
-            }else if(item.DGIMN===this.props.pointInfo.DGIMN)
+            } else if (item.DGIMN === this.props.pointInfo.DGIMN)
                 return false;
 
             rtnVal.push(
                 <div key={item.DGIMN}>
                     <Col xs={12} sm={12} md={6} lg={6} xl={6}>
                         <Card
-                            style={{cursor:'pointer',border:`${item.DGIMN===this.props.pointInfo.DGIMN?'1px solid #81c2ff':'1px solid #fff'}`}}
-                            onClick={()=>{
+                            style={{ cursor: 'pointer', border: `${item.DGIMN === this.props.pointInfo.DGIMN ? '1px solid #81c2ff' : '1px solid #fff'}` }}
+                            onClick={() => {
 
                                 this.clickCard(item);
                             }}
@@ -167,10 +168,10 @@ class PointDetail extends Component {
                             <div className={styles.cardContent}>
                                 {/* <p><Badge style={{ backgroundColor: 'rgb(255,198,0)' }} dot={true}/><span className={styles.pointName}>{item.pointName}</span></p> */}
                                 <p>{status}<span className={styles.pointName}>{item.pointName}</span></p>
-                                <p className={styles.TEF}>传输有效率<span>{item.transmissionEffectiveRate||'-'}</span></p>
+                                <p className={styles.TEF}>传输有效率<span>{item.transmissionEffectiveRate || '-'}</span></p>
                                 <p className={styles.TEF}>类型：<span>{item.pollutantType}</span></p>
                             </div>
-                            <div style={{position:"absolute",top:5,right:-25}}>
+                            <div style={{ position: "absolute", top: 5, right: -25 }}>
                                 {optStatus}
                             </div>
                         </Card>
@@ -178,56 +179,56 @@ class PointDetail extends Component {
                 </div>);
         });
 
-        return rtnVal.length>0?rtnVal:(<Alert message="暂无数据" type="warning" />);
+        return rtnVal.length > 0 ? rtnVal : (<Alert message="暂无数据" type="warning" />);
     }
 
     /**
      * 排口状态过滤事件
      */
-    handleStatusChange = (e) =>{
+    handleStatusChange = (e) => {
         //debugger
 
         this.props.dispatch({
             type: 'overview/updateState',
             payload: {
-                dataTemp:this.props.pointList.filter(todo=>todo.status===+e.target.value)
+                dataTemp: this.props.pointList.filter(todo => todo.status === +e.target.value)
             },
         });
 
         this.setState({
             // pointList: this.props.pointList.filter(todo=>todo.status===+e.target.value),
-            status:e.target.value
+            status: e.target.value
         });
     }
 
     /**
      * 清空条件，显示所有数据
      */
-    showAllData = () =>{
+    showAllData = () => {
         this.props.dispatch({
             type: 'overview/updateState',
             payload: {
-                dataTemp:this.props.pointList
+                dataTemp: this.props.pointList
             },
         });
         this.setState({
             // pointList: this.props.pointList,
-            status:'',
-            searchName:''
+            status: '',
+            searchName: ''
         });
     }
-   //催办
-   urge=()=>{
-    this.props.dispatch({
-        type: 'overview/queryurge',
-        payload: {
-            personId:this.props.pointInfo.operationUserID,
-            DGIMN: this.props.pointInfo.DGIMN
-        }
-    });
-   }
+    //催办
+    urge = () => {
+        this.props.dispatch({
+            type: 'overview/queryurge',
+            payload: {
+                personId: this.props.pointInfo.operationUserID,
+                DGIMN: this.props.pointInfo.DGIMN
+            }
+        });
+    }
     //派单窗口关闭
-    onCancel=() => {
+    onCancel = () => {
         this.setState({
             pdvisible: false,
         });
@@ -235,55 +236,52 @@ class PointDetail extends Component {
 
 
     //获取派单还是督办按钮
-    getPDDBButton=()=>{
-       const {pointInfo}=this.props;
-       if(pointInfo)
-       {
-           if(pointInfo.existTask)
-           {
-               return (<Button onClick={()=>this.urge()} type="primary" ghost={true} style={{float:"right",marginRight:30,top:-5}}><Icon type="bell" />督办</Button>)
-           }
-           else
-           {
-               return (<Button
-                onClick={() => {
-                    this.setState({
-                        pdvisible: true,
-                    });
-                }} type="primary" ghost={true} style={{float:"right",marginRight:30,top:-5}}><Icon type="bell" />派单</Button>)
-           }
-       }
+    getPDDBButton = () => {
+        const { pointInfo } = this.props;
+        if (pointInfo) {
+            if (pointInfo.existTask) {
+                return (<Button onClick={() => this.urge()} type="primary" ghost={true} style={{ float: "right", marginRight: 30, top: -5 }}><Icon type="bell" />督办</Button>)
+            }
+            else {
+                return (<Button
+                    onClick={() => {
+                        this.setState({
+                            pdvisible: true,
+                        });
+                    }} type="primary" ghost={true} style={{ float: "right", marginRight: 30, top: -5 }}><Icon type="bell" />派单</Button>)
+            }
+        }
     }
 
     /**
      * 渲染排口状态
      */
-    renderPointStatus =() =>{
+    renderPointStatus = () => {
         //console.log("pointInfo",this.props.pointInfo);
 
 
-        let pointInfo=this.props.pointList.filter(todo=>todo.DGIMN===this.props.pointInfo.DGIMN);
-        if(pointInfo.length===0)
+        let pointInfo = this.props.pointList.filter(todo => todo.DGIMN === this.props.pointInfo.DGIMN);
+        if (pointInfo.length === 0)
             return null;
-        let {status,pollutantType,DGIMN,existTask} = pointInfo[0];
+        let { status, pollutantType, DGIMN, existTask } = pointInfo[0];
         //debugger;
-        console.log('pointInfo',pointInfo);
-        let statusText = <span><img src="/gisexception.png" width="11" style={{marginBottom:3,marginRight:5}} /><span>异常</span></span>;
+        console.log('pointInfo', pointInfo);
+        let statusText = <span><img src="/gisexception.png" width="11" style={{ marginBottom: 3, marginRight: 5 }} /><span>异常</span></span>;
         if (status === 0) {
-            statusText= <span><img src="/gisunline.png" width="11" style={{marginBottom:3,marginRight:5}} /><span>离线</span></span>;
+            statusText = <span><img src="/gisunline.png" width="11" style={{ marginBottom: 3, marginRight: 5 }} /><span>离线</span></span>;
         } if (status === 1) {
-            statusText= <span><img src="/gisnormal.png" width="11" style={{marginBottom:3,marginRight:5}} /><span>正常</span></span>;
+            statusText = <span><img src="/gisnormal.png" width="11" style={{ marginBottom: 3, marginRight: 5 }} /><span>正常</span></span>;
         } if (status === 2) {
-            statusText= <span><img src="/gisover.png" width="11" style={{marginBottom:3,marginRight:5}} /><span>超标</span></span>;
+            statusText = <span><img src="/gisover.png" width="11" style={{ marginBottom: 3, marginRight: 5 }} /><span>超标</span></span>;
         }
-        let pollutantTypeText=<span><Icon type="fire" style={{ color: 'rgb(238,162,15)',marginBottom:3,marginRight:5 }} /><span>废气</span></span>;
-        if(pollutantType==="1") {
-            pollutantTypeText=<span><Icon type="fire" style={{ color: 'rgb(238,162,15)',marginBottom:3,marginRight:5 }} /><span>废水</span></span>;
+        let pollutantTypeText = <span><Icon type="fire" style={{ color: 'rgb(238,162,15)', marginBottom: 3, marginRight: 5 }} /><span>废气</span></span>;
+        if (pollutantType === "1") {
+            pollutantTypeText = <span><Icon type="fire" style={{ color: 'rgb(238,162,15)', marginBottom: 3, marginRight: 5 }} /><span>废水</span></span>;
         }
-        let existTaskText='';
-        if(existTask===1) {
-            existTaskText=<span><Divider type="vertical" /><span><Icon type="user" style={{ color: '#3B91FF',marginBottom:3,marginRight:5 }} /><span>运维中</span></span></span>;
-        }else {
+        let existTaskText = '';
+        if (existTask === 1) {
+            existTaskText = <span><Divider type="vertical" /><span><Icon type="user" style={{ color: '#3B91FF', marginBottom: 3, marginRight: 5 }} /><span>运维中</span></span></span>;
+        } else {
             //TODO:预警状态、故障状态待定
             // <Divider type="vertical" />
             //     <span><Icon type="bell" style={{ color: 'red',marginBottom:3,marginRight:5 }} /><span>预警</span></span>
@@ -292,7 +290,7 @@ class PointDetail extends Component {
         }
 
         return (
-            <span style={{marginLeft:20,fontSize:12}}>
+            <span style={{ marginLeft: 20, fontSize: 12 }}>
                 {statusText}
 
                 <Divider type="vertical" />
@@ -302,18 +300,18 @@ class PointDetail extends Component {
 
             </span>);
     }
-          //直接刷新（带数据）
-          Refresh=()=>{
-            this.props.dispatch({
-             type: 'points/querysinglepointinfo',
-             payload: {
-                 dgimn: this.props.match.params.pointcode
-             }
-         });
-        }
+    //直接刷新（带数据）
+    Refresh = () => {
+        this.props.dispatch({
+            type: 'points/querysinglepointinfo',
+            payload: {
+                dgimn: this.props.match.params.pointcode
+            }
+        });
+    }
 
     render() {
-        const { match, routerData, location,children,pointInfo,selectpoint } = this.props;
+        const { match, routerData, location, children, pointInfo, selectpoint } = this.props;
         Cookie.set('seldgimn', match.params.pointcode);
         let activeKey = 'qcontrollist';
         if (location.pathname.indexOf('qcontrollist') === -1) {
@@ -321,39 +319,43 @@ class PointDetail extends Component {
         }
         if (this.props.isloading) {
             return (<Spin
-                style={{ width: '100%',
+                style={{
+                    width: '100%',
                     height: 'calc(100vh/2)',
                     display: 'flex',
                     alignItems: 'center',
-                    justifyContent: 'center' }}
+                    justifyContent: 'center'
+                }}
                 size="large"
             />);
         }
         return (
             <div
-                style={{ width: '100%',
-                    height: 'calc(100vh - 67px)' }}
+                style={{
+                    width: '100%',
+                    height: 'calc(100vh - 67px)'
+                }}
             >
 
-    
-                 <UrgentDispatch
+
+                <UrgentDispatch
                     onCancel={this.onCancel}
                     visible={this.state.pdvisible}
-                    operationUserID={selectpoint?selectpoint.operationUserID:null}
-                    DGIMN={pointInfo?pointInfo.DGIMN:null}
-                    pointName={pointInfo?pointInfo.pointName:null}
-                    operationUserName={pointInfo?pointInfo.operationUserName:null}
-                    operationtel={pointInfo?pointInfo.operationtel:null}
-                    reloadData={()=>this.Refresh()}
+                    operationUserID={selectpoint ? selectpoint.operationUserID : null}
+                    DGIMN={pointInfo ? pointInfo.DGIMN : null}
+                    pointName={pointInfo ? pointInfo.pointName : null}
+                    operationUserName={pointInfo ? pointInfo.operationUserName : null}
+                    operationtel={pointInfo ? pointInfo.operationtel : null}
+                    reloadData={() => this.Refresh()}
                 />
                 <div className={styles.pageHeader} style={{}}>
-                    <span style={{cursor:'pointer'}} onClick={this.openModal}>{pointInfo.pointName}  <Icon type="down" /></span>
+                    <span style={{ cursor: 'pointer' }} onClick={this.openModal}>{pointInfo.pointName}  <Icon type="down" /></span>
                     {
                         this.renderPointStatus()
                     }
-                
 
-                    <Button style={{float:"right",marginRight:30,top:-5}}><Link to="/overview/mapview"><Icon type="left" />返回</Link></Button>
+
+                    <Button style={{ float: "right", marginRight: 30, top: -5 }}><Link to="/overview/mapview"><Icon type="left" />返回</Link></Button>
                     {
                         this.getPDDBButton()
                     }
@@ -380,43 +382,43 @@ class PointDetail extends Component {
                     width="1200px"
                     footer={[]}
                 >
-                    <Form layout="inline" style={{marginBottom: 10}}>
+                    <Form layout="inline" style={{ marginBottom: 10 }}>
                         <Row gutter={8}>
                             <Col span={7}>
                                 <Search
                                     placeholder="请输入排口关键字"
                                     defaultValue={this.state.searchName}
                                     onSearch={(value) => {
-                                        if(value) {
+                                        if (value) {
                                             this.props.dispatch({
                                                 type: 'overview/updateState',
                                                 payload: {
-                                                    dataTemp:this.props.pointList.filter(todo=>todo.pointName.indexOf(value)>-1)
+                                                    dataTemp: this.props.pointList.filter(todo => todo.pointName.indexOf(value) > -1)
                                                 },
                                             });
                                             this.setState({
                                                 // pointList: this.props.pointList.filter(todo=>todo.pointName.indexOf(value)>-1),
-                                                status:'',
-                                                searchName:value
+                                                status: '',
+                                                searchName: value
                                             });
-                                        }else {
+                                        } else {
                                             this.props.dispatch({
                                                 type: 'overview/updateState',
                                                 payload: {
-                                                    dataTemp:this.props.pointList
+                                                    dataTemp: this.props.pointList
                                                 },
                                             });
                                             this.setState({
                                                 pointList: this.props.pointList,
-                                                status:'',
-                                                searchName:value
+                                                status: '',
+                                                searchName: value
                                             });
                                         }
 
                                     }}
                                     style={{ width: 200 }}
                                 />
-                                <Button type="primary" style={{marginLeft:10}} onClick={this.showAllData}>显示全部</Button>
+                                <Button type="primary" style={{ marginLeft: 10 }} onClick={this.showAllData}>显示全部</Button>
                             </Col>
                             <Col span={7} offset={10}>
                                 <Radio.Group value={this.state.status} onChange={this.handleStatusChange}>
@@ -428,7 +430,7 @@ class PointDetail extends Component {
                             </Col>
                         </Row>
                     </Form>
-                    <div style={{height:'calc(100vh - 340px)'}} className={styles.pointModal}>
+                    <div style={{ height: 'calc(100vh - 340px)' }} className={styles.pointModal}>
                         <Row gutter={48}>
                             {
                                 this.renderPointList()

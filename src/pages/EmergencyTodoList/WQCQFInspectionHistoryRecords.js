@@ -12,7 +12,7 @@ import {
 import { connect } from 'dva';
 import moment from 'moment';
 import RangePicker_ from '../../components/PointDetail/RangePicker_';
-import styles from '../EmergencyTodoList/WQCQFInspectionHistoryRecords.less';
+import styles from './WQCQFInspectionHistoryRecords.less';
 import {routerRedux} from 'dva/router';
 
     @connect(({ task, loading }) => ({

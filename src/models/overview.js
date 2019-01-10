@@ -1,5 +1,7 @@
-import { querypollutanttypecode, querydatalist, querylastestdatalist, 
-    queryhistorydatalist, querypollutantlist,addtaskinfo,queryurge,getPollutantTypeList } from '../services/api';
+import {
+    querypollutanttypecode, querydatalist, querylastestdatalist,
+    queryhistorydatalist, querypollutantlist, addtaskinfo, queryurge, getPollutantTypeList
+} from '../services/api';
 import React from 'react';
 import { Model } from '../dvapack';
 import moment from 'moment';
@@ -17,7 +19,7 @@ export default Model.extend({
     state: {
         columns: [],
         data: [],
-        dataTemp:[],
+        dataTemp: [],
         lastestdata: [],
         mainpcol: [],
         detailpcol: [],
@@ -29,8 +31,8 @@ export default Model.extend({
         selectdata: [],
         pollutantName: [],
         detailtime: null,
-        addtaskstatus:false,
-        pollutantTypelist:null
+        addtaskstatus: false,
+        pollutantTypelist: null
     },
     effects: {
         * querypollutanttypecode({
@@ -50,7 +52,7 @@ export default Model.extend({
         },
         * querydatalist({
             payload,
-        }, { call, update,put,take }) {
+        }, { call, update, put, take }) {
             const data = yield call(querydatalist, payload);
             if (payload.map && data) {
                 data.map((item) => {
@@ -61,36 +63,133 @@ export default Model.extend({
                     item.key = item.DGIMN;
                 });
             }
-            if(payload.manualUpload)
-            {
+            if (payload.manualUpload) {
                 debugger
-                if(data && data[0])
-                {
-                    yield put ({
-                        type:'manualupload/GetManualSupplementList',
+                if (data && data[0]) {
+                    yield put({
+                        type: 'manualupload/GetManualSupplementList',
                         payload: {
-                                    ...payload,
-                                    DGIMN:data[0].DGIMN,
-                                    pointName:data[0].pointName
-    
-                           }
-                    })
+                            ...payload,
+                            DGIMN: data[0].DGIMN,
+                            pointName: data[0].pointName
+
+                        }
+                    });
                 }
-                else
-                {
+                else {
                     //知道有问题但是手机端调用这个接口是不传参数返回所有的值，
                     //所以，在这里将MN号码给了一个不可能查询到的值，让返回列表为空，因为点表为空
-                    yield put ({
-                        type:'manualupload/GetManualSupplementList',
+                    yield put({
+                        type: 'manualupload/GetManualSupplementList',
                         payload: {
-                            DGIMN:"1"
-                           }
-                    })
+                            DGIMN: "1"
+                        }
+                    });
+                }
+            }
+            //维修
+            if (payload.RepairHistoryRecords) {
+                debugger
+                if (data && data[0]) {
+                    yield put({
+                        type: 'task/GetHistoryRepairDetail',
+                        payload: {
+                            ...payload,
+                            DGIMN: data[0].DGIMN,
+                        }
+                    });
+                }
+
+            }
+            //停机
+            if (payload.StopCemsListHistoryRecords) {
+                if (data && data[0]) {
+                    yield put({
+                        type: 'task/GetHistoryStopCemsList',
+                        payload: {
+                            ...payload,
+                            DGIMN: data[0].DGIMN,
+                        }
+                    });
+                }
+            }
+            //易耗品
+            if (payload.CounterControlCommandHistoryRecords) {
+                if (data && data[0]) {
+                    yield put({
+                        type: 'task/GetHistoryConsumablesReplaceRecord',
+                        payload: {
+                            ...payload,
+                            DGIMN: data[0].DGIMN,
+                        }
+                    });
+                }
+            }
+            //标气
+            if (payload.StandardGasHistoryRecords) {
+                if (data && data[0]) {
+                    yield put({
+                        type: 'task/GetHistoryStandardGasRepalceRecordList',
+                        payload: {
+                            ...payload,
+                            DGIMN: data[0].DGIMN,
+                        }
+                    });
                 }
             }
 
+            //标气
+            if (payload.InspectionHistoryRecords) {
+                if (data && data[0]) {
+                    yield put({
+                        type: 'task/GetHistoryInspectionHistoryRecords',
+                        payload: {
+                            ...payload,
+                            DGIMN: data[0].DGIMN,
+                        }
+                    });
+                }
+            }
+            //校准记录
+            if (payload.JzHistoryRecords) {
+                debugger
+                if (data && data[0]) {
+                    yield put({
+                        type: 'task/GetJzHistoryRecord',
+                        payload: {
+                            ...payload,
+                            DGIMN: data[0].DGIMN,
+                        }
+                    });
+                }
+            }
+            //检验测试记录
+            if (payload.BdHistoryInfoHistoryRecords) {
+                if (data && data[0]) {
+                    yield put({
+                        type: 'task/GetBdHistoryInfoList',
+                        payload: {
+                            ...payload,
+                            DGIMN: data[0].DGIMN,
+                        }
+                    });
+                }
+            }
+
+            //异常记录
+            if (payload.DeviceExceptionListHistoryRecords) {
+                if (data && data[0]) {
+                    yield put({
+                        type: 'task/GetDeviceExceptionList',
+                        payload: {
+                            ...payload,
+                            DGIMN: data[0].DGIMN,
+                        }
+                    });
+                }
+            }
             yield update({ data });
-            yield update({ dataTemp:data });
+            yield update({ dataTemp: data });
         },
         * querylastestdatalist({
             payload,
@@ -116,7 +215,7 @@ export default Model.extend({
             mainpollutantInfo.map((item, key) => {
                 col = col.concat({
                     title: item.pollutantName +
-                    '(' + item.unit + ')',
+                        '(' + item.unit + ')',
                     dataIndex: item.pollutantCode,
                     key: item.pollutantCode,
                     align: 'center',
@@ -126,25 +225,25 @@ export default Model.extend({
                             const additionalInfo = additional.split('§');
                             if (additionalInfo[0] === 'IsOver') {
                                 const content = (<div>
-                                    <div style={{marginBottom: 10}}>
+                                    <div style={{ marginBottom: 10 }}>
                                         <Icon style={{ color: '#ff0000', fontSize: 25, marginRight: 10 }} type="warning" />
-                                        <span style={{fontWeight: 'Bold', fontSize: 16}}>数据超标</span>
+                                        <span style={{ fontWeight: 'Bold', fontSize: 16 }}>数据超标</span>
                                     </div>
-                                    <li style={{listStyle: 'none', marginBottom: 10}}>
+                                    <li style={{ listStyle: 'none', marginBottom: 10 }}>
                                         <Badge status="success" text={`标准值：${additionalInfo[2]}`} />
                                     </li>
-                                    <li style={{listStyle: 'none', marginBottom: 10}}>
+                                    <li style={{ listStyle: 'none', marginBottom: 10 }}>
                                         <Badge status="error" text={`超标倍数：${additionalInfo[3]}`} />
                                     </li>
                                 </div>);
                                 return (<Popover content={content}><span style={{ color: '#ff0000', cursor: 'pointer' }}>{value || (value === 0 ? 0 : '-')}</span></Popover>);
                             }
                             const content = (<div>
-                                <div style={{marginBottom: 10}}>
+                                <div style={{ marginBottom: 10 }}>
                                     <Icon style={{ color: '#ff0000', fontSize: 25, marginRight: 10 }} type="close-circle" />
-                                    <span style={{fontWeight: 'Bold', fontSize: 16}}>数据异常</span>
+                                    <span style={{ fontWeight: 'Bold', fontSize: 16 }}>数据异常</span>
                                 </div>
-                                <li style={{listStyle: 'none', marginBottom: 10}}>
+                                <li style={{ listStyle: 'none', marginBottom: 10 }}>
                                     <Badge status="warning" text={`异常原因：${additionalInfo[2]}`} />
                                 </li>
                             </div>);
@@ -175,7 +274,7 @@ export default Model.extend({
                 dataIndex: 'zspollutantCode',
                 key: 'zspollutantCode',
                 align: 'center'
-            } ];
+            }];
             let detaildata = [];
             let detailtime = null;
             const res = yield call(querylastestdatalist, payload);
@@ -214,11 +313,11 @@ export default Model.extend({
                 selectdata
             });
         },
-        * queryoptionData({payload}, {
+        * queryoptionData({ payload }, {
             call, update
         }) {
-            const resultlist = yield call(queryhistorydatalist, {...payload});
-            const pollutantlist = yield call(querypollutantlist, {...payload});
+            const resultlist = yield call(queryhistorydatalist, { ...payload });
+            const pollutantlist = yield call(querypollutantlist, { ...payload });
             let seriesdata = [];
             let zsseriesdata = [];
             let xData = [];
@@ -318,11 +417,11 @@ export default Model.extend({
                 pollutantName: payload.pollutantName,
             });
         },
-        * queryoptionDataOnClick({payload}, {
+        * queryoptionDataOnClick({ payload }, {
             call, update
         }) {
-            const resultlist = yield call(queryhistorydatalist, {...payload});
-            const pollutantlist = yield call(querypollutantlist, {...payload});
+            const resultlist = yield call(queryhistorydatalist, { ...payload });
+            const pollutantlist = yield call(querypollutantlist, { ...payload });
             let seriesdata = [];
             let zsseriesdata = [];
             let xData = [];
@@ -427,7 +526,7 @@ export default Model.extend({
             payload,
         }, { call, update }) {
             const res = yield call(addtaskinfo, payload);
-            if (res==1) {
+            if (res == 1) {
                 message.success('派单成功!');
             } else {
                 message.error('派单失败!');
@@ -435,32 +534,31 @@ export default Model.extend({
         },
         //催办
         * queryurge({
-           payload
-        },{call, update}){
+            payload
+        }, { call, update }) {
             const res = yield call(queryurge, payload);
-            if (res==1) {
+            if (res == 1) {
                 message.success('催办成功!');
             } else {
                 message.error('催办失败!');
             }
         },
-          //获取系统污染物类型
-          * getPollutantTypeList({
-             payload
-          },{call, update}){
-           const res = yield call(getPollutantTypeList, payload);
-           if(res)
-           {
-               yield update({
-                  pollutantTypelist: res  
-               });
-           }
-           else
-           {
+        //获取系统污染物类型
+        * getPollutantTypeList({
+            payload
+        }, { call, update }) {
+            debugger
+            const res = yield call(getPollutantTypeList, payload);
+            if (res) {
                 yield update({
-                    pollutantTypelist: null  
+                    pollutantTypelist: res
                 });
-           }
-       },
+            }
+            else {
+                yield update({
+                    pollutantTypelist: null
+                });
+            }
+        },
     }
 });
