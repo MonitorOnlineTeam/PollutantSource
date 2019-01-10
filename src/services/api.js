@@ -439,7 +439,7 @@ export async function querydatalist(params) {
     const body = {
         time: params.time,
         pointType:params.pointType,
-        pollutantTypes:params.pollutantCode,
+        pollutantTypes:params.pollutantTypes,
         pointName:params.pointName,
         status:params.status,
         operationStatus:params.operationStatus,

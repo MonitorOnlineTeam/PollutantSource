@@ -276,11 +276,13 @@ class OverViewMap extends PureComponent {
          if(detailloading)
          {
              return(<Spin
-                style={{width: '100%',
-                  height: 'calc(100vh - 260px)',
-                  marginTop: 260 }}
+                style={{ width: '100%',
+                    height: 'calc(100vh/2)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center' }}
                 size="large"
-              /> )
+            />)
          }
          return(
             <div style={{ marginLeft: 10, marginTop: 10,overflow:'auto' }}>
