@@ -15,6 +15,7 @@ import {
     Card,
     Modal,
     Divider,
+    Spin 
 } from 'antd';
 import {
     connect
@@ -72,43 +73,13 @@ class AddPoint extends Component {
     componentWillMount() {
         const DGIMN = this.props.match.params.DGIMN;
         if (DGIMN !== 'null') {
-            this.setState({
-                DGIMN: DGIMN,
-                DGIMNdisabled: true,
-            });
+       
             this.props.dispatch({
                 type: 'pointinfo/getpoint',
                 payload: {
                     DGIMN: DGIMN,
                     callback: () => {
-                        if (this.props.requstresult === '1') {
-                            this.setState({
-                                OutputType: this.props.editpoint.OutputTypeId === '1',
-                                IsSj: this.props.editpoint.IsSj === '1',
-                                RunState: this.props.editpoint.RunState === 1,
-                                address: this.props.editpoint.Address,
-                                coordinate: `${this.props.editpoint.longitude },${ this.props.editpoint.latitude}`
-                            }, () => {
-                                this.props.form.setFieldsValue({
-                                    PointName: this.props.editpoint.pointName,
-                                    DGIMN: this.props.editpoint.DGIMN,
-                                    OutputType: this.state.OutputType,
-                                    RunState: this.state.RunState,
-                                    MobilePhone: this.props.editpoint.mobilePhone,
-                                    Linkman: this.props.editpoint.linkman === isNullOrUndefined ? '' : this.props.editpoint.linkman,
-                                    PointType: this.props.editpoint.PointTypeId === '' ? undefined : this.props.editpoint.PointTypeId,
-                                    PollutantType: this.props.editpoint.pollutantType === '' ? undefined : this.props.editpoint.pollutantType,
-                                    IsSj: this.state.IsSj,
-                                    OutputDiameter: this.props.editpoint.OutputDiameter,
-                                    OutputHigh: this.props.editpoint.OutputHigh,
-                                    OutPutWhitherCode: this.props.editpoint.OutPutWhitherCode === '' ? undefined : this.props.editpoint.OutPutWhitherCode,
-                                    Sort: this.props.editpoint.Sort === isNullOrUndefined ? 1 : this.props.editpoint.Sort,
-                                    OperationerId: this.props.editpoint.OperationerId === '' ? undefined : this.props.editpoint.OperationerId,
-                                    Address: this.state.address,
-                                    Coordinate: this.state.coordinate
-                                });
-                            });
-                        }
+                
                     }
                 },
             });
@@ -160,7 +131,7 @@ class AddPoint extends Component {
                    callback: () => {
                        if (this.props.pollutanttypelist_requstresult === '1') {
                            this.props.pollutanttypelist.map(p =>
-                               this.state.PollutantTypes.push(<Option key={p.PollutantTypeCode} value={p.PollutantTypeCode}> {p.PollutantTypeName} </Option>)
+                               this.state.PollutantTypes.push(<Option key={p.pollutantTypeCode} value={p.pollutantTypeCode}> {p.pollutantTypeName} </Option>)
                            );
                        } else {
                            message.error('请添加污染物类型');
@@ -192,7 +163,7 @@ class AddPoint extends Component {
         let flag = true;
         this.props.form.validateFieldsAndScroll((err, values) => {
             const that = this;
-            if (this.state.DGIMN === null) {
+            if (this.props.match.params.DGIMN === null) {
                 if (!err && flag === true) {
                     that.props.dispatch({
                         type: 'pointinfo/addpoint',
@@ -258,7 +229,7 @@ class AddPoint extends Component {
 
      success = () => {
          let index = this.props.dispatch(routerRedux.push(`/sysmanage/PointInfo`));
-         if (this.state.DGIMN !== null) {
+         if (this.props.match.params.DGIMN  !== null) {
              message.success('修改成功', 3).then(() => index);
          } else {
              message.success('新增成功', 3).then(() => index);
@@ -276,9 +247,40 @@ class AddPoint extends Component {
                  sm: { span: 8 },
              },
          };
+         const {editpoint,isloading}=this.props;
          const {getFieldDecorator} = this.props.form;
+         console.log("------------------------------")    
+  console.log(editpoint)
+         if(isloading) {
+            return (<Spin
+                style={{ width: '100%',
+                    height: 'calc(100vh/2)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center' }}
+                size="large"
+            />);
+        }
          // const UserId = this.props.match.params.UserId;
-
+         const {
+            pointName           ,
+            DGIMN               ,
+            OutputType          ,
+            RunState            ,
+            mobilePhone         ,
+            linkman             ,
+            PointType           ,
+            pollutantType       ,
+            IsSj                ,
+            OutputDiameter      ,
+            OutputHigh          ,
+            OutPutWhitherCode   ,
+            Sort                ,
+            OperationerId       ,
+            Address             ,
+            longitude           ,
+            latitude            ,
+        } = editpoint === null || this.props.match.params.DGIMN ==="null" ? {} : editpoint;
          return (
              <MonitorContent
                  {...this.props}
@@ -291,9 +293,11 @@ class AddPoint extends Component {
                      ]
                  }
              >
+
+             
                  <Card
                      title="排口维护"
-                     loading={this.props.isloading}
+                
                      style={
                          {
                          
@@ -311,6 +315,7 @@ class AddPoint extends Component {
                                      label="排口名称"
                                  > {
                                          getFieldDecorator('PointName', {
+                                            initialValue: pointName,
                                              rules: [{
                                                  required: true,
                                                  message: '请输入排口名称!'
@@ -328,6 +333,7 @@ class AddPoint extends Component {
                                      label="排口编号"
                                  > {
                                          getFieldDecorator('DGIMN', {
+                                            initialValue: DGIMN,
                                              rules: [{
                                                  required: true,
                                                  message: '请输入排口编号!'
@@ -349,7 +355,11 @@ class AddPoint extends Component {
 
                                      label="负责人"
                                  > {
-                                         getFieldDecorator('Linkman'
+                                         getFieldDecorator('Linkman',{
+                                            initialValue: linkman,
+
+                                         }
+                                         
                                          )(<Input style={{ width:200 }} placeholder="负责人" />
                                          )}
                                  </FormItem>
@@ -363,6 +373,7 @@ class AddPoint extends Component {
                                      label="负责人电话"
                                  > {
                                          getFieldDecorator('MobilePhone', {
+                                            initialValue: mobilePhone,
                                              rules: [{
                                                  pattern: /^1\d{10}$/,
                                                  message: '请输入正确的手机号!'
@@ -378,7 +389,7 @@ class AddPoint extends Component {
                                  > {
                                          getFieldDecorator('PointType',
                                              {
-                                                 initialValue: undefined,
+                                                 initialValue: PointType===''?undefined:PointType,
                                              }
                                          )(
                                              (
@@ -404,7 +415,7 @@ class AddPoint extends Component {
                                  > {
                                          getFieldDecorator('PollutantType',
                                              {
-                                                 initialValue: undefined,
+                                                 initialValue: pollutantType===''?undefined:pollutantType,
                                              }
                                          )(
                                              <Select
@@ -437,7 +448,7 @@ class AddPoint extends Component {
                                  > {
                                          getFieldDecorator('OutputType',
                                              {
-                                                 initialValue: undefined,
+                                                 initialValue: OutputType==='出口'?true:false,
                                                  valuePropName: 'checked',
                                              }
                                          )(
@@ -456,7 +467,7 @@ class AddPoint extends Component {
                                  > {
                                          getFieldDecorator('IsSj',
                                              {
-                                                 initialValue: undefined,
+                                                 initialValue: IsSj===0?true:false,
                                                  valuePropName: 'checked',
                                              }
                                          )(
@@ -475,7 +486,7 @@ class AddPoint extends Component {
                                  > {
                                          getFieldDecorator('RunState',
                                              {
-                                                 initialValue: true,
+                                                 initialValue: RunState===1?true:false,
                                                  valuePropName: 'checked',
                                              }
                                          )(
@@ -495,7 +506,12 @@ class AddPoint extends Component {
 
                                      label="排口高度"
                                  > {
-                                         getFieldDecorator('OutputHigh',
+                                         getFieldDecorator('OutputHigh',{
+
+                                            initialValue: OutputHigh,
+
+                                         }
+                                         
                                          )(
                                              <InputNumber min={0} max={10000} />)
                                      }
@@ -507,7 +523,10 @@ class AddPoint extends Component {
 
                                      label="排口直径"
                                  > {
-                                         getFieldDecorator('OutputDiameter',
+                                         getFieldDecorator('OutputDiameter',{
+
+                                            initialValue: OutputDiameter,
+                                         }
                                          )(
                                              <InputNumber min={0} max={10000} />)
                                      }
@@ -520,7 +539,9 @@ class AddPoint extends Component {
 
                                      label="排序"
                                  > {
-                                         getFieldDecorator('Sort'
+                                         getFieldDecorator('Sort',{
+                                            initialValue: Sort,
+                                         }
                                          )(
                                              <InputNumber min={0} max={10000} />)
                                      }
@@ -537,7 +558,7 @@ class AddPoint extends Component {
                                  > {
                                          getFieldDecorator('OutPutWhitherCode',
                                              {
-                                                 initialValue: undefined,
+                                                 initialValue: OutPutWhitherCode===''?undefined:OutPutWhitherCode,
                                              }
                                          )(
                                              <Select placeholder="请选择" style={{ width:300 }}>
@@ -561,6 +582,7 @@ class AddPoint extends Component {
                                      label="排口地址"
                                  > {
                                          getFieldDecorator('Address', {
+                                            initialValue: Address,
                                              rules: [{
                                                  required: true,
                                                  message: '请输入排口地址!'
@@ -577,6 +599,7 @@ class AddPoint extends Component {
                                      label="排口坐标"
                                  > {
                                          getFieldDecorator('Coordinate', {
+                                            initialValue:longitude+','+latitude,
                                              rules: [{
                                                  required: true,
                                                  message: '请输入排口坐标!'
@@ -588,7 +611,7 @@ class AddPoint extends Component {
                                              style={{ width:300 }}
                                              onSearch={(value) => {
                                                  this.setState({
-                                                     Coordinate: value,
+                                                    coordinate: value,
                                                      Mapvisible: true,
                                                      title: '选择坐标',
                                                      width: 1130
@@ -607,7 +630,7 @@ class AddPoint extends Component {
                                      label="运维人"
                                  >
                                      {getFieldDecorator('OperationerId', {
-                                         initialValue: undefined,
+                                         initialValue: OperationerId,
                                          rules: [{
                                              required: true,
                                              message: '请选择运维人!'

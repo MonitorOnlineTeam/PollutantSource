@@ -238,7 +238,7 @@ export async function editalyzerchild(params) {
 export async function getpollutanttypelist(params) {
     const body = {
     };
-    const result = post('/api/rest/PollutantSourceApi/ManualSupplement/GetPollutantTypeList', body, null);
+    const result = post('/api/rest/PollutantSourceApi/DataList/GetPollutantTypeList', body, null);
     return result === null ? {
         data: null
     } : result;
