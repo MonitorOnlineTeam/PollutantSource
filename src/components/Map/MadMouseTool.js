@@ -118,34 +118,7 @@ mapEvents = {
       what: text
     });
   }
-  
-  drawCircle(){
-    if(this.tool){
-      this.tool.circle();
-      this.setState({
-        what: '准备绘制圆形'
-      });
-    }
-  }
-  
-  drawRectangle(){
-    if(this.tool){
-      this.tool.rectangle();
-      this.setState({
-        what: '准备绘制多边形（矩形）'
-      });
-    }
-  }
-  
-  drawMarker(){
-    if (this.tool){
-        console.log(this.tool);
-      this.tool.marker();
-      this.setState({
-        what: '准备绘制坐标点'
-      });
-    }
-  }
+   
 
   drawPolygon() {
     if (this.tool) {
@@ -153,43 +126,7 @@ mapEvents = {
     }
   }
   
-  json2string=(jsonObj)=>{
-    let type = Object.prototype.toString.call(jsonObj).slice(8, -1), rs;
-    //liz 2013-7-23 注释，不知具体作用。解决js对象中有null值无法转换的问题。
-    //如果是html节点(不完全判断,可伪造)
-    //        if (obj.nodeType != null) {
-    //            return "HTMLNODE"
-    //        }
 
-    switch (type) {
-        case "Undefined":
-        case "Null":
-        case "Number":
-        case "Boolean":
-        case "Date":
-        case "Function":
-        case "Error":
-        case "RegExp": rs = jsonObj; break;
-
-        case "String": rs = '"' + jsonObj + '"'; break;
-        case "Array":
-            rs = "";
-            for (let i = 0, len = jsonObj.length; i < len; i++) {
-                rs += this.json2string(jsonObj[i]) + ",";
-            }
-            rs = "[" + rs.slice(0, -1) + "]";
-            break;
-
-        case "Object":
-            rs = [];
-            for (let k in jsonObj) {
-                rs.push('"' + k.toString() + '":' + this.json2string(jsonObj[k]));
-            }
-            rs = "{" + rs.join(",") + "}";
-            break;
-    }
-    return rs;
-  }
 
   close(){
     this.setMap(null);
@@ -200,8 +137,6 @@ mapEvents = {
       what: '关闭了鼠标工具'
     });
   }
-
-  
   render(){
     const {getFieldDecorator} = this.props.form;
     const {polygon}=this.state;

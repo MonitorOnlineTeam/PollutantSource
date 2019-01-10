@@ -307,6 +307,29 @@ class OverViewMap extends PureComponent {
             </div>)
     }
   }
+  //获取坐标集合
+  getpolygon=(polygonChange)=>{
+    let res=[];
+    if(polygonChange)
+    {
+        let arr = polygonChange;
+        for (let i = 0; i < arr.length; i++) {
+            res.push(<Polygon
+                       key={i}
+                        style={{
+                        strokeColor: '#FF33FF',
+                        strokeOpacity: 0.2,
+                        strokeWeight: 3,
+                        fillColor: '#1791fc',
+                        fillOpacity: 0.35,
+                        }}
+                        path={arr[i]}
+              />)
+        }
+    }
+    return res;
+}
+
 
    render() {
        const entInfo = this.props.entInfoModel ? this.props.entInfoModel[0] : '';
@@ -367,18 +390,19 @@ class OverViewMap extends PureComponent {
                <AListRadio dvalue="a" />
              </div>
              {
-                       allcoo ? allcoo.map((item, key) => (
-                         <Polygon
-                           key={item.EntCode}
-                           style={{
-                                       strokeColor: '#FF33FF',
-                                       strokeOpacity: 0.2,
-                                       strokeWeight: 3,
-                                       fillColor: '#1791fc',
-                                       fillOpacity: 0.35,
-                                   }}
-                           path={item[0]}
-                         />)) : ''
+                    //    allcoo ? allcoo.map((item, key) => (
+                    //      <Polygon
+                    //        key={item.EntCode}
+                    //        style={{
+                    //                    strokeColor: '#FF33FF',
+                    //                    strokeOpacity: 0.2,
+                    //                    strokeWeight: 3,
+                    //                    fillColor: '#1791fc',
+                    //                    fillOpacity: 0.35,
+                    //                }}
+                    //        path={item[0]}
+                    //      />)) : ''
+                    this.getpolygon(allcoo)
                    }
              <Markers
                markers={this.props.datalist}
