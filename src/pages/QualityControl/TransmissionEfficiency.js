@@ -10,7 +10,9 @@ import {
     DatePicker,
     Progress,
     Row,
+    Popover,
     Col,
+    Icon
 } from 'antd';
 import moment from 'moment';
 import styles from './index.less';
@@ -96,6 +98,8 @@ export default class TransmissionEfficiency extends Component {
         this.getTableData(this.props.pageIndex);
     }
     render() {
+
+        console.log(this.props.tableDatas);
         const columns = [
             {
                 title: (<span style={{fontWeight: 'bold'}}>排口名称</span>),
@@ -114,7 +118,14 @@ export default class TransmissionEfficiency extends Component {
                 width: '10%',
                 align: 'center',
                 render: (text, record) => {
-                    return text;
+                    if(record.AvgShouldNumber<=text)
+                    {
+                        return text;
+                    }
+                   const content=(<span><Icon type="warning" style={{color:'#EEC900'}}  />平均值{record.AvgShouldNumber}</span>)
+                   return (<Popover content={content} trigger="hover">
+                        <span className={styles.avgtext}>{text}
+                        </span> </Popover>);
                 }
             },
             {
@@ -124,7 +135,14 @@ export default class TransmissionEfficiency extends Component {
                 width: '10%',
                 align: 'center',
                 render: (text, record) => {
-                    return text;
+                    if(record.AvgTransmissionNumber<=text)
+                    {
+                        return text;
+                    }
+                   const content=(<span><Icon type="warning" style={{color:'#EEC900'}}  />平均值{record.AvgTransmissionNumber}</span>)
+                   return (<Popover content={content} trigger="hover">
+                        <span className={styles.avgtext}>{text}
+                        </span> </Popover>);
                 }
             },
             {
@@ -134,7 +152,14 @@ export default class TransmissionEfficiency extends Component {
                 width: '13.3%',
                 align: 'center',
                 render: (text, record) => {
-                    return text;
+                    if(record.AvgEffectiveNumber<=text)
+                    {
+                        return text;
+                    }
+                   const content=(<span><Icon type="warning" style={{color:'#EEC900'}}  />平均值{record.AvgEffectiveNumber}</span>)
+                   return (<Popover content={content} trigger="hover">
+                        <span className={styles.avgtext}>{text}
+                        </span> </Popover>);
                 }
             },
             {
@@ -144,7 +169,14 @@ export default class TransmissionEfficiency extends Component {
                 width: '13.3%',
                 align: 'center',
                 render: (text, record) => {
-                    return (parseFloat(text) * 100).toFixed(2) + '%';
+                    if(record.AvgTransmissionRate<=text)
+                    {
+                        return (parseFloat(text) * 100).toFixed(2) + '%';
+                    }
+                   const content=(<span><Icon type="warning" style={{color:'#EEC900'}}  />平均值{(parseFloat(record.AvgTransmissionRate) * 100).toFixed(2) + '%'}</span>)
+                   return (<Popover content={content} trigger="hover">
+                        <span className={styles.avgtext}>{(parseFloat(text) * 100).toFixed(2) + '%'}
+                        </span> </Popover>);
                 }
             },
             {
@@ -155,7 +187,14 @@ export default class TransmissionEfficiency extends Component {
                 align: 'center',
                 sorter: (a, b) => a.EffectiveRate - b.EffectiveRate,
                 render: (text, record) => {
-                    return (parseFloat(text) * 100).toFixed(2) + '%';
+                    if(record.AvgEffectiveRate<=text)
+                    {
+                        return (parseFloat(text) * 100).toFixed(2) + '%';
+                    }
+                   const content=(<span><Icon type="warning" style={{color:'#EEC900'}}  />平均值{(parseFloat(record.AvgEffectiveRate) * 100).toFixed(2) + '%'}</span>)
+                   return (<Popover content={content} trigger="hover">
+                        <span className={styles.avgtext}>{(parseFloat(text) * 100).toFixed(2) + '%'}
+                        </span> </Popover>);
                 }
             },
             {
