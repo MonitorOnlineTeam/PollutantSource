@@ -12,6 +12,8 @@ import styles from './index.less';
 import config from '../../config';
 import { imgaddress } from '../../config.js';
 import ModalMap from '../../components/Map/MadMouseTool'; 
+import MapPage from '../../components/Map/MapPage'; 
+
 
 const FormItem = Form.Item;
 const { Header, Content, Footer } = Layout
@@ -71,7 +73,6 @@ class index extends PureComponent {
     
             },
             complete: () => {
-                console.log(_thismap);
                 //_thismap.setZoomAndCenter(13, [centerlongitude, centerlatitude]);
             }
         };
@@ -170,7 +171,6 @@ class index extends PureComponent {
             });
         };
         this.concern = (value) => {
-            console.log(value);
             this.setState({
                 concern: value
             });
@@ -186,9 +186,6 @@ class index extends PureComponent {
             });
         };
     }
-    onRef1 = (ref) => {
-        this.child = ref;
-    }
     showEditCoordinate=()=>{
             this.setState({
                 Mapvisible:true
@@ -200,24 +197,69 @@ class index extends PureComponent {
         })                       
     }
 
+    //回调
     GetData() {
+        debugger;
+        console.log(this.child.props.form);
         this.setState({
-            polygon:this.child.props.form.getFieldValue('position')
+            polygon:this.child.props.form.getFieldValue('polygon'),
+            longitude:this.child.props.form.getFieldValue('longitude'),
+            latitude:this.child.props.form.getFieldValue('latitude')
         })
+    }
+
+    getpolygon=(polygonChange)=>{
+        let res=[];
+        if(polygonChange)
+        {
+            let arr = eval(polygonChange);
+            for (let i = 0; i < arr.length; i++) {
+                res.push(<Polygon
+                           key={i}
+                            style={{
+                            strokeColor: '#FF33FF',
+                            strokeOpacity: 0.2,
+                            strokeWeight: 3,
+                            fillColor: '#1791fc',
+                            fillOpacity: 0.35,
+                            }}
+                            path={arr[i]}
+                  />)
+            }
+        }
+        return res;
     }
 
     render() {
         const { getFieldDecorator } = this.props.form;
-        const {polygon}=this.state;
+        const {polygon,longitude,latitude}=this.state;
         const { effects } = this.props;
         const baseinfo = this.props.baseinfo[0];
         let allcoo;
+        let polygonChange;
+        let log;
+        let lat;
         let mapCenter;
         if (baseinfo) {
-            const coordinateSet = polygon?polygon:baseinfo.coordinateSet;
+            const coordinateSet = baseinfo.coordinateSet;
+            polygonChange=coordinateSet;
             allcoo = eval(coordinateSet);
+            log=baseinfo.longitude;
+            lat=baseinfo.latitude;
             mapCenter = { longitude: baseinfo.longitude, latitude: baseinfo.latitude };
         }
+        if(polygon)
+        {
+            polygonChange=polygon;
+            allcoo=eval(polygon);
+        }
+        if(longitude && latitude)
+        {
+            mapCenter = { longitude: longitude , latitude: latitude };
+            lat=latitude;
+            log=longitude
+        }
+        console.log(allcoo);
         const formItemLayout = {
             labelCol: {
               xs: { span: 8 },
@@ -287,26 +329,21 @@ class index extends PureComponent {
                                         events={this.mapEvents}
                                         zoom={11} loading={<Spin />} amapkey={amapKey} plugins={plugins} center={mapCenter} >
                                         {
-                                            allcoo ? allcoo.map((item, key) => {
-                                                return (
-                                                    <Polygon
-                                                        key={baseinfo ? baseinfo.code : ''}
-                                                        style={{
-                                                            strokeColor: '#FF33FF',
-                                                            strokeOpacity: 0.2,
-                                                            strokeWeight: 3,
-                                                            fillColor: '#1791fc',
-                                                            fillOpacity: 0.35,
-                                                        }}
-                                                        path={item[key]}
-                                                    />);
-                                            }) : <Polygon style={{
-                                                strokeColor: '#FF33FF',
-                                                strokeOpacity: 0.2,
-                                                strokeWeight: 3,
-                                                fillColor: '#1791fc',
-                                                fillOpacity: 0.35,
-                                            }} path={this.path} />
+                                            // allcoo ? allcoo.map((item, key) => {
+                                            //     return (
+                                            //         <Polygon
+                                            //             key={key}
+                                            //             style={{
+                                            //                 strokeColor: '#FF33FF',
+                                            //                 strokeOpacity: 0.2,
+                                            //                 strokeWeight: 3,
+                                            //                 fillColor: '#1791fc',
+                                            //                 fillOpacity: 0.35,
+                                            //             }}
+                                            //             path={item[key]}
+                                            //         />);
+                                            // }) : ''
+                                            this.getpolygon(polygonChange)
                                         }
                                     </Map></div>
 
@@ -475,7 +512,7 @@ class index extends PureComponent {
                                  
                                     <FormItem style={{width:'400px'}} {...formItemLayout} label="经纬度" >
                                         {getFieldDecorator('latlon', {
-                                            initialValue: (baseinfo ? baseinfo.longitude : '') + ' , ' + (baseinfo ? baseinfo.latitude : ''),
+                                            initialValue: (log) + ' , ' + (lat),
                                             rules: [{
                                                 required: true,
                                             }],
@@ -534,7 +571,6 @@ class index extends PureComponent {
                                         })(
                                             <Input
                                                 style={{ width: 300 }}
-
                                                 disabled={this.state.isedit} />
                                         )}
                                     </FormItem>
@@ -555,34 +591,33 @@ class index extends PureComponent {
                         <Modal
                             visible={this.state.Mapvisible}
                             title='编辑位置信息'
-                            width='55%'
+                            width='100%'
                             destroyOnClose={true}// 清除上次数据
                             onOk={() => {
                                 this.GetData();
                                 this.setState({
                                     Mapvisible: false
                                 });
-                            }
-                            }
+                            }}
                             onCancel={() => {
                                 this.setState({
                                     Mapvisible: false
                                 });
                            }}>
-                 {
-                     <ModalMap onRef={this.onRef1}  polygon={baseinfo.coordinateSet}  center={mapCenter}/>
-                 }
+                        <MapPage
+                            polygon={polygonChange} 
+                            longitude={log}
+                            latitude={lat}
+                            getheight='calc(100vh - 290px)'
+                            mapheight='calc(100vh - 500px)'
+                            onRef={(ref)=>{
+                                this.child = ref;
+                            }}
+                        />
                   </Modal>
                           <Divider dashed />
-
                         <div style={{ textAlign: "center" }}>
-                          
-                           
-
                         </div>
-
-
-
                     </Content>
             </MonitorContent>
 
