@@ -12,13 +12,17 @@ const {
     isloading: loading.effects['task/GetYwdsj'],
     RecordTypes: task.RecordTypes
 }))
-export default class QControllist extends Component {
+export default class Operationlist extends Component {
     constructor(props) {
         super(props);
         const tablist = [
-            { key: 'JzHistoryRecords',tab: 'CEMS零点量程漂移与校准记录表' },
-            { key: 'BdHistoryInfoHistoryRecords',tab: 'CEMS校验测试记录' },
-            { key: 'DeviceExceptionListHistoryRecords',tab: 'CEMS设备数据异常记录表' }
+            { key: 'RepairHistoryRecords',tab: '维修记录表' },
+            { key: 'StopCemsListHistoryRecords',tab: '停机记录表' },
+            { key: 'CounterControlCommandHistoryRecords',tab: '易耗品更换记录表' },
+            { key: 'StandardGasHistoryRecords',tab: '标准气体更换记录表' },
+            { key: 'WQCQFInspectionHistoryRecords',tab: '日常巡检记录表' },
+            { key: 'XSCYFInspectionHistoryRecords',tab: '日常巡检记录表' },
+            { key: 'ZZCLFInspectionHistoryRecords',tab: '日常巡检记录表' },
         ];
        
         this.state = {

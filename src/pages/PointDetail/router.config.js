@@ -10,7 +10,7 @@ export default [
             { path: '/user/register-result', component: './User/RegisterResult' },
         ],
     },
-    // appoperation
+    // appoperation(手机端详情)
     {
         path: '/appoperation',
         component: '../layouts/BlankLayout',
@@ -35,15 +35,7 @@ export default [
             { path: '/appoperation/appbdtestrecord/:pointcode/:TaskIds', component: './AppOperation/AppBdTestRecord' },
             /* CEMS设备异常记录表 */
             { path: '/appoperation/appdeviceexceptiondetail/:pointcode/:TaskIds', component: './AppOperation/AppDeviceExceptionDetail' },
-            {
-                path: '/homepage',
-                component: './HomePage',
-            },
         ],
-    },
-    {
-        path: '/homepage',
-        component: './HomePage',
     },
     // app
     {
@@ -91,32 +83,45 @@ export default [
                             { path: '/pointdetail/:pointcode/:viewtype/qcontrollist/bdhistoryinfohistoryrecords', component: './EmergencyTodoList/BdHistoryInfoHistoryRecords' },
                             /* 数据异常记录 */
                             { path: '/pointdetail/:pointcode/:viewtype/qcontrollist/deviceexceptionlisthistoryrecords', component: './EmergencyTodoList/DeviceExceptionListHistoryRecords' },
+
                         ]
                     },
                     /* 运维记录 */
                     {
                         path: '/pointdetail/:pointcode/:viewtype/operationlist', component: './PointDetail/Operationlist', routes: [
                             /* 默认 */
-                            { path: '/pointdetail/:pointcode/:viewtype/operationlist', redirect: '/pointdetail/:pointcode/:viewtype/Operationlist/RepairHistoryRecords' },
+                            { path: '/pointdetail/:pointcode/:viewtype/operationlist', redirect: '/pointdetail/:pointcode/:viewtype/qcontrollist/RepairHistoryRecords' },
                             /* 维修记录 */
-                            { path: '/pointdetail/:pointcode/:viewtype/operationlist/repairhistoryrecords', component: './EmergencyTodoList/RepairHistoryRecords' },
+                            { path: '/pointdetail/:pointcode/:viewtype/qcontrollist/repairhistoryrecords', component: './EmergencyTodoList/RepairHistoryRecords' },
                             /* 停机记录 */
-                            { path: '/pointdetail/:pointcode/:viewtype/operationlist/stopcemslisthistoryrecords', component: './EmergencyTodoList/StopCemsListHistoryRecords' },
+                            { path: '/pointdetail/:pointcode/:viewtype/qcontrollist/stopcemslisthistoryrecords', component: './EmergencyTodoList/StopCemsListHistoryRecords' },
                             /* 易耗品记录 */
-                            { path: '/pointdetail/:pointcode/:viewtype/operationlist/countercontrolcommandhistoryrecords', component: './EmergencyTodoList/CounterControlCommandHistoryRecords' },
+                            { path: '/pointdetail/:pointcode/:viewtype/qcontrollist/countercontrolcommandhistoryrecords', component: './EmergencyTodoList/CounterControlCommandHistoryRecords' },
                             /* 标气记录 */
-                            { path: '/pointdetail/:pointcode/:viewtype/operationlist/standardgashistoryrecords', component: './EmergencyTodoList/StandardGasHistoryRecords' },
+                            { path: '/pointdetail/:pointcode/:viewtype/qcontrollist/standardgashistoryrecords', component: './EmergencyTodoList/StandardGasHistoryRecords' },
                             /* 完全抽取法巡检记录 */
-                            { path: '/pointdetail/:pointcode/:viewtype/operationlist/wqcqfinspectionhistoryrecords', component: './EmergencyTodoList/WQCQFInspectionHistoryRecords' },
+                            { path: '/pointdetail/:pointcode/:viewtype/qcontrollist/wqcqfinspectionhistoryrecords', component: './EmergencyTodoList/WQCQFInspectionHistoryRecords' },
                             /* 稀释采样巡检记录 */
-                            { path: '/pointdetail/:pointcode/:viewtype/operationlist/xscyfinspectionhistoryrecords', component: './EmergencyTodoList/XSCYFInspectionHistoryRecords' },
+                            { path: '/pointdetail/:pointcode/:viewtype/qcontrollist/xscyfinspectionhistoryrecords', component: './EmergencyTodoList/XSCYFInspectionHistoryRecords' },
                             /* 直接采样法巡检记录 */
-                            { path: '/pointdetail/:pointcode/:viewtype/operationlist/zzclfinspectionhistoryrecords', component: './EmergencyTodoList/ZZCLFInspectionHistoryRecords' },
-
+                            { path: '/pointdetail/:pointcode/:viewtype/qcontrollist/zzclfinspectionhistoryrecords', component: './EmergencyTodoList/ZZCLFInspectionHistoryRecords' },
                         ]
                     },
                 ]
             },
+
+            //一级菜单-智能运维
+
+            /* 智能运维-停机记录 */
+            { path: '/operation/StopCemsListHistoryRecords', component: './EmergencyTodoList/StopCemsListHistoryRecords' },
+            /* 智能运维-易耗品记录 */
+            { path: '/operation/CounterControlCommandHistoryRecords', component: './EmergencyTodoList/CounterControlCommandHistoryRecords' },
+            /* 智能运维-标气记录 */
+            { path: '/operation/StandardGasHistoryRecords', component: './EmergencyTodoList/StandardGasHistoryRecords' },
+            /* 智能运维-维修记录 */
+            { path: '/operation/RepairHistoryRecords', component: './EmergencyTodoList/RepairHistoryRecords' },
+
+
 
             /* 任务详情 */
             { path: '/taskdetail/emergencydetailinfo/:viewtype/:taskfrom/:TaskID', component: './EmergencyTodoList/EmergencyDetailInfo' },
@@ -140,26 +145,6 @@ export default [
             { path: '/patrolform/bdTestrecord/:pointcode/:viewtype/:taskfrom/:histroyrecordtype/:TaskID', component: './EmergencyTodoList/BdTestRecord' },
             /* 异常记录 */
             { path: '/patrolform/deviceexceptiondetail/:pointcode/:viewtype/:taskfrom/:histroyrecordtype/:TaskID', component: './EmergencyTodoList/DeviceExceptionDetail' },
-
-            //一级菜单
-            /* 智能运维-维修记录 */
-            { path: '/operation/RepairHistoryRecords', component: './Operation/RepairHistoryRecords' },
-            /* 智能运维-停机记录 */
-            { path: '/operation/StopCemsListHistoryRecords', component: './Operation/StopCemsListHistoryRecords' },
-            /* 智能运维-易耗品记录 */
-            { path: '/operation/CounterControlCommandHistoryRecords', component: './Operation/CounterControlCommandHistoryRecords' },
-            /* 智能运维-标气记录 */
-            { path: '/operation/StandardGasHistoryRecords', component: './Operation/StandardGasHistoryRecords' },
-            /* 智能运维-巡检记录 */
-            { path: '/operation/InspectionHistoryRecords', component: './Operation/InspectionHistoryRecords' },
-            /* 校准记录 */
-            { path: '/qualitycontrol/jzhistoryrecords', component: './Operation/JzHistoryRecords' },
-            /* 比对监测记录 */
-            { path: '/qualitycontrol/BdHistoryInfoHistoryRecords', component: './Operation/BdHistoryInfoHistoryRecords' },
-            /* 数据异常记录 */
-            { path: '/qualitycontrol/deviceexceptionlisthistoryrecords', component: './Operation/DeviceExceptionListHistoryRecords' },
-
-
             /* 传输有效率 */
             { path: '/qualitycontrol/transmissionefficiency', component: './QualityControl/TransmissionEfficiency' },
             /* 设备运转率 */

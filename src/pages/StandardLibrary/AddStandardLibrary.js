@@ -16,6 +16,7 @@ import {
     Upload,
     Icon,
     Modal,
+    Spin
 } from 'antd';
 import MonitorContent from '../../components/MonitorContent/index';
 import AddPollutant from '../StandardLibrary/AddStandardLibraryPollutant';
@@ -353,6 +354,17 @@ export default class AddStandardLibrary extends Component {
       },
       ];
       const { getFieldDecorator } = this.props.form;
+      const{isloading}=this.props;
+      if(isloading) {
+        return (<Spin
+            style={{ width: '100%',
+                height: 'calc(100vh/2)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center' }}
+            size="large"
+        />);
+    }
       return (
           <MonitorContent {...this.props} breadCrumbList={
                 [
@@ -363,7 +375,7 @@ export default class AddStandardLibrary extends Component {
                 ]
             }>
           <div className={styles.upload}>
-              <Card bordered={false}  loading={this.props.isloading}       title="标准库维护">
+              <Card bordered={false}        title="标准库维护">
                   <Form onSubmit={this.handleSubmit}>
                       <Card bordered={false}>
                           <Row gutter={48}>
@@ -443,23 +455,7 @@ export default class AddStandardLibrary extends Component {
                   </Form>
                   <Divider dashed  />
                   <Card bordered={false} style={{marginTop: 10,}}>
-                      <Form layout="inline" style={{marginBottom: 20}}>
-                          <Row gutter={8}>
-                              <Col span={1} ><Button type="primary"
-                                  onClick={() => {
-                                      if (this.state.StandardLibraryID === null) {
-                                          message.error('请先添加标准库！');
-                                      } else {
-                                          this.setState({
-                                              Mvisible: true,
-                                              title: '添加污染物',
-                                              width: 800,
-                                              Id:null,
-                                          });
-                                      }
-                                  }}>添加污染物</Button></Col>
-                          </Row>
-                      </Form>
+             
                       <Table
                           loading={this.props.effects['standardlibrary/getstandardlibrarypollutantlist']}
                           columns={columns}
