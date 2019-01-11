@@ -496,7 +496,7 @@ export async function queryurge(params) {
         ToUserId:params.personId,
         //1是督办
         NoticeType:1,
-        DGIMN:params.dgimn
+        DGIMN:params.DGIMN
     };
     const result = await post('/api/rest/PollutantSourceApi/PTaskProcessing/PostTaskSupervise', body, null);
     return result === null ? {data: null} : result.requstresult;

@@ -10,7 +10,9 @@ import {
     DatePicker,
     Progress,
     Row,
-    Col
+    Col,
+    Popover,
+    Icon
 } from 'antd';
 import moment from 'moment';
 import {routerRedux} from 'dva/router';
@@ -34,6 +36,12 @@ const pageUrl = {
     pageSize: equipmentoperatingrate.pageSize,
     pageIndex: equipmentoperatingrate.pageIndex,
     tableDatas: equipmentoperatingrate.tableDatas,
+    // //平均停产时间
+    // avgstoptime:equipmentoperatingrate.avgstoptime,
+    // //平均正常运转时间
+    // avgnormaltime:equipmentoperatingrate.avgnormaltime,
+    // //平均生产
+    // avgworktime:equipmentoperatingrate.avgworktime,
 }))
 export default class EquipmentOperatingRate extends Component {
     constructor(props) {
@@ -91,6 +99,7 @@ export default class EquipmentOperatingRate extends Component {
         this.getTableData(this.props.pageIndex);
     }
     render() {
+        const {avgstoptime,avgnormaltime,avgworktime}=this.props;
         const columns = [
             {
                 title: (<span style={{fontWeight: 'bold'}}>排口名称</span>),
@@ -110,7 +119,14 @@ export default class EquipmentOperatingRate extends Component {
                 width: '20%',
                 align: 'center',
                 render: (text, record) => {
-                    return text;
+                    if(record.AvgNormalRunTime<=text)
+                    {
+                        return text;
+                    }
+                   const content=(<span><Icon type="warning" style={{color:'#EEC900'}}  />平均值{record.AvgNormalRunTime}</span>)
+                   return (<Popover content={content} trigger="hover">
+                        <span className={styles.avgtext}>{text}
+                        </span> </Popover>);
                 }
             },
             {
@@ -120,7 +136,14 @@ export default class EquipmentOperatingRate extends Component {
                 width: '15%',
                 align: 'center',
                 render: (text, record) => {
-                    return text;
+                    if(record.AvgProducesTime<=text)
+                    {
+                        return text;
+                    }
+                    const content=(<span><Icon type="warning" style={{color:'#EEC900'}}  />平均值{record.AvgProducesTime}</span>)
+                    return (<Popover content={content} trigger="hover">
+                         <span className={styles.avgtext}>{text}
+                         </span> </Popover>);
                 }
             },
             {
@@ -130,7 +153,14 @@ export default class EquipmentOperatingRate extends Component {
                 width: '15%',
                 align: 'center',
                 render: (text, record) => {
-                    return text;
+                    if(record.AvgStopProductionTime<=text)
+                    {
+                        return text;
+                    }
+                    const content=(<span><Icon type="warning" style={{color:'#EEC900'}}  />平均值{record.AvgStopProductionTime}</span>)
+                    return (<Popover content={content} trigger="hover">
+                         <span className={styles.avgtext}>{text}
+                         </span> </Popover>);
                 }
             },
             {

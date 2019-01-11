@@ -139,12 +139,22 @@ class PointDetail extends Component {
             } if (item.status === 2) {
                 status = <img src="/gisover.png" width="15" />;
             }
-            let optStatus = '';//TODO:排口运维状态不确定 故障：#119f9d
-            if (item.existTask === 1) {
-                optStatus = <Tag color="#ff995b">运维中</Tag>;
-            } else {
-                optStatus = '';
-            }
+            let optStatus=[];//TODO:排口运维状态不确定 故障：#119f9d
+            if(item.scene) {
+                optStatus.push(<li><Tag className={styles.operation} >运维中</Tag></li>);
+            } 
+             if(item.warning)
+             {
+                optStatus.push(<li><Tag className={styles.warning} >预警中</Tag></li>);
+             }
+             if(item.fault)
+             {
+                optStatus.push(<li><Tag className={styles.fault} >故障中</Tag></li>);
+             }
+             if(status===4)
+             {
+                optStatus.push(<li><Tag className={styles.stop} >停产中</Tag></li>);
+             }
 
             if (key === 0) {
                 item = this.props.dataTemp.filter(todo => todo.DGIMN === this.props.pointInfo.DGIMN)[0];
@@ -172,7 +182,7 @@ class PointDetail extends Component {
                                 <p className={styles.TEF}>传输有效率<span>{item.transmissionEffectiveRate || '-'}</span></p>
                                 <p className={styles.TEF}>类型：<span>{item.pollutantType}</span></p>
                             </div>
-                            <div style={{ position: "absolute", top: 5, right: -25 }}>
+                            <div className={styles.statusli} style={{position:"absolute",top:5,right:-25}}>
                                 {optStatus}
                             </div>
                         </Card>
@@ -271,7 +281,7 @@ class PointDetail extends Component {
         let pointInfo = this.props.pointList.filter(todo => todo.DGIMN === this.props.pointInfo.DGIMN);
         if (pointInfo.length === 0)
             return null;
-        let { status, pollutantType, DGIMN, existTask } = pointInfo[0];
+        let {status,pollutantType,DGIMN,existTask,scene,warning,fault} = pointInfo[0];
         //debugger;
         console.log('pointInfo', pointInfo);
         let statusText = <span><img src="/gisexception.png" width="11" style={{ marginBottom: 3, marginRight: 5 }} /><span>异常</span></span>;
@@ -286,16 +296,22 @@ class PointDetail extends Component {
         if (pollutantType === "1") {
             pollutantTypeText = <span><Icon type="fire" style={{ color: 'rgb(238,162,15)', marginBottom: 3, marginRight: 5 }} /><span>废水</span></span>;
         }
-        let existTaskText = '';
-        if (existTask === 1) {
-            existTaskText = <span><Divider type="vertical" /><span><Icon type="user" style={{ color: '#3B91FF', marginBottom: 3, marginRight: 5 }} /><span>运维中</span></span></span>;
-        } else {
-            //TODO:预警状态、故障状态待定
-            // <Divider type="vertical" />
-            //     <span><Icon type="bell" style={{ color: 'red',marginBottom:3,marginRight:5 }} /><span>预警</span></span>
-            //     <Divider type="vertical" />
-            //     <span><Icon type="tool" style={{ color: 'rgb(212,197,123)',marginBottom:3,marginRight:5 }} /><span>故障</span></span>
+        let existTaskText=[];
+        if(scene) {
+            existTaskText.push(<span><Divider type="vertical" /><span><Icon type="user" className={styles.operationcolor} style={{marginBottom:3,marginRight:5 }} /><span>运维中</span></span></span>);
         }
+         if(warning)
+         {
+            existTaskText.push(<span><Divider type="vertical" /><Icon type="bell" className={styles.warningcolor} style={{ color: 'red',marginBottom:3,marginRight:5 }} /><span>预警</span></span>)
+         }
+         if(fault)
+         {
+            existTaskText.push(<span><Divider type="vertical" /><Icon type="tool" className={styles.faultcolor} style={{ color: 'rgb(212,197,123)',marginBottom:3,marginRight:5 }} /><span>故障</span></span>);
+         }
+         if(status===4)
+         {
+            existTaskText.push (<span><Divider type="vertical" /><Icon type="tool" className={styles.stopcolor} style={{ color: 'rgb(212,197,123)',marginBottom:3,marginRight:5 }} /><span>停产</span></span>);
+         }
 
         return (
             <span style={{ marginLeft: 20, fontSize: 12 }}>
