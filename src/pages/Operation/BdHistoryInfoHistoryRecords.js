@@ -28,7 +28,7 @@ import TreeCardContent from '../../components/OverView/TreeCardContent';
     pollutantTypeloading: loading.effects['overview/getPollutantTypeList'],
     treedataloading: loading.effects['overview/querydatalist'],
     pollutantTypelist: overview.pollutantTypelist,
-    DGIMN:task.DGIMN,
+    DGIMN: task.DGIMN,
 }))
 /*
 页面：校验测试历史记录
@@ -45,6 +45,10 @@ export default class BdHistoryInfoHistoryRecords extends Component {
     }
     componentDidMount() {
         const { dispatch } = this.props;
+        var getDGIMN = localStorage.getItem('DGIMN')
+        if (getDGIMN === null) {
+            getDGIMN = '[object Object]';
+        }
         dispatch({
             type: 'overview/querydatalist',
             payload: {
@@ -55,6 +59,7 @@ export default class BdHistoryInfoHistoryRecords extends Component {
                 pageSize: this.props.pageSize,
                 BeginTime: this.state.rangeDate[0].format('YYYY-MM-DD 00:00:00'),
                 EndTime: this.state.rangeDate[1].format('YYYY-MM-DD 23:59:59'),
+                DGIMN: getDGIMN,
             }
         });
         dispatch({
@@ -97,6 +102,7 @@ export default class BdHistoryInfoHistoryRecords extends Component {
     }
 
     seeDetail = (record) => {
+        localStorage.setItem('DGIMN', this.props.DGIMN);
         this.props.dispatch(routerRedux.push(`/PatrolForm/BdTestRecord/${this.props.DGIMN}/${this.props.match.params.viewtype}/qcontrollist/BdHistoryInfoHistoryRecords/${record.TaskID}`));
     }
     //查询
@@ -105,7 +111,7 @@ export default class BdHistoryInfoHistoryRecords extends Component {
             searchName: value
         })
         const { pollutantTypeCode } = this.state;
-        this.reloadData(pollutantTypeCode, value);
+        this.searchData(pollutantTypeCode, value);
     }
     getStatusImg = (value) => {
         if (value === 0) {
@@ -125,18 +131,69 @@ export default class BdHistoryInfoHistoryRecords extends Component {
         const { searchName } = this.state;
         this.reloadData(key, searchName);
     }
+        //重新加载
+        searchData = (pollutantTypeCode, searchName) => {
+            var getDGIMN = localStorage.getItem('DGIMN')
+            if (getDGIMN === null) {
+                getDGIMN = '[object Object]';
+            }
+            this.props.dispatch({
+                type: 'overview/querydatalist',
+                payload: {
+                    map: true,
+                    pollutantTypes: pollutantTypeCode,
+                    pointName: searchName,
+                    BdHistoryInfoHistoryRecords: true,
+                    pageIndex: this.props.pageIndex,
+                    pageSize: this.props.pageSize,
+                    BeginTime: this.state.rangeDate[0].format('YYYY-MM-DD 00:00:00'),
+                    EndTime: this.state.rangeDate[1].format('YYYY-MM-DD 23:59:59'),
+                    DGIMN: getDGIMN,
+                    callback: (data) => {
+                        const existdata = data.find((value, index, arr) => {
+                            return value.DGIMN == getDGIMN
+                        });
+                        if(existdata==undefined)
+                        {
+                            this.props.dispatch({
+                                type: 'task/GetBdHistoryInfoList',
+                                payload: {
+                                    pageIndex: this.props.pageIndex,
+                                    pageSize: this.props.pageSize,
+                                    DGIMN: null,
+                                    BeginTime: this.state.BeginTime,
+                                    EndTime: this.state.EndTime,
+                                }
+                            });
+                        }
+                    }
+                },
+            });
+        }
     //重新加载
     reloadData = (pollutantTypeCode, searchName) => {
+        var getDGIMN = localStorage.getItem('DGIMN')
+        if (getDGIMN === null) {
+            getDGIMN = '[object Object]';
+        }
         this.props.dispatch({
             type: 'overview/querydatalist',
             payload: {
                 map: true,
-                pollutantCode: pollutantTypeCode,
-                pointName: searchName
+                pollutantTypes: pollutantTypeCode,
+                pointName: searchName,
+                BdHistoryInfoHistoryRecords: true,
+                pageIndex: this.props.pageIndex,
+                pageSize: this.props.pageSize,
+                BeginTime: this.state.rangeDate[0].format('YYYY-MM-DD 00:00:00'),
+                EndTime: this.state.rangeDate[1].format('YYYY-MM-DD 23:59:59'),
+                DGIMN: getDGIMN,
+                IfTabs: true, //切换选项卡事件
             },
         });
     }
     treeCilck = (row) => {
+        localStorage.setItem('DGIMN', row.DGIMN);
         this.GetHistoryRecord(this.props.pageIndex, this.props.pageSize, row.DGIMN, this.state.BeginTime, this.state.EndTime);
     };
     render() {
@@ -219,9 +276,9 @@ export default class BdHistoryInfoHistoryRecords extends Component {
                                             background: '#fff'
                                         }}
                                         pollutantTypeloading={pollutantTypeloading}
-                                        getHeight={'calc(100vh - 220px)'} getStatusImg={this.getStatusImg} isloading={treedataloading}
+                                        getHeight={'calc(100vh - 220px)'} getStatusImg={this.getStatusImg}
                                         getNowPollutantType={this.getNowPollutantType}
-                                        treeCilck={this.treeCilck} treedatalist={datalist} PollutantType={2}
+                                        PollutantType={2}
                                         pollutantTypelist={pollutantTypelist}
                                         tabkey={this.state.pollutantTypeCode}
                                     />
@@ -229,7 +286,7 @@ export default class BdHistoryInfoHistoryRecords extends Component {
                                         getHeight='calc(100vh - 220px)'
                                         pollutantTypeloading={pollutantTypeloading}
                                         getStatusImg={this.getStatusImg} isloading={treedataloading}
-                                        treeCilck={this.treeCilck} treedatalist={datalist} PollutantType={2} />
+                                        treeCilck={this.treeCilck} treedatalist={datalist} PollutantType={2} ifSelect={true} />
                                 </div>
                             </div>
                         </div>

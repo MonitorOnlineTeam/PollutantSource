@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'dva';
 import { Tabs, Layout } from 'antd';
 import router from 'umi/router';
-import {EnumPsOperationForm} from '../../utils/enum';
+import { EnumPsOperationForm } from '../../utils/enum';
 import { Switch, Redirect } from 'dva/router';
 const { TabPane } = Tabs;
 const {
@@ -16,15 +16,15 @@ export default class Operationlist extends Component {
     constructor(props) {
         super(props);
         const tablist = [
-            { key: 'RepairHistoryRecords',tab: '维修记录表' },
-            { key: 'StopCemsListHistoryRecords',tab: '停机记录表' },
-            { key: 'CounterControlCommandHistoryRecords',tab: '易耗品更换记录表' },
-            { key: 'StandardGasHistoryRecords',tab: '标准气体更换记录表' },
-            { key: 'WQCQFInspectionHistoryRecords',tab: '日常巡检记录表' },
-            { key: 'XSCYFInspectionHistoryRecords',tab: '日常巡检记录表' },
-            { key: 'ZZCLFInspectionHistoryRecords',tab: '日常巡检记录表' },
+            { key: 'RepairHistoryRecords', tab: '维修记录表' },
+            { key: 'StopCemsListHistoryRecords', tab: '停机记录表' },
+            { key: 'CounterControlCommandHistoryRecords', tab: '易耗品更换记录表' },
+            { key: 'StandardGasHistoryRecords', tab: '标准气体更换记录表' },
+            { key: 'WQCQFInspectionHistoryRecords', tab: '日常巡检记录表' },
+            { key: 'XSCYFInspectionHistoryRecords', tab: '日常巡检记录表' },
+            { key: 'ZZCLFInspectionHistoryRecords', tab: '日常巡检记录表' },
         ];
-       
+
         this.state = {
             iconLoading: false,
             tablist: tablist,
@@ -42,16 +42,15 @@ export default class Operationlist extends Component {
 
     render() {
         const rType = this.props.RecordTypes;
-        const { match, routerData,children } = this.props;
+        const { match, routerData, children } = this.props;
         const activeKey = location.pathname.replace(`${match.url}/`, '');
-        const newtablist=this.state.tablist.filter((item)=>{
-            const index=this.props.RecordTypes.findIndex((itm)=>{
-                return itm.TypeName==item.key;
+        const newtablist = this.state.tablist.filter((item) => {
+            const index = this.props.RecordTypes.findIndex((itm) => {
+                return itm.TypeName == item.key;
             })
-            if(index===-1)
-            {
+            if (index === -1) {
                 return false;
-            }else{
+            } else {
                 return true;
             }
         });
@@ -60,6 +59,7 @@ export default class Operationlist extends Component {
                 {<Layout style={{ padding: '14px 0', background: '#fff' }}>
                     <Sider width={270} style={{ background: '#fff' }} >
                         <Tabs tabPosition="left"
+                            style={{ float: 'right',paddingRight:1 }}
                             size="default"
                             activeKey={activeKey}
                             onChange={(key) => {

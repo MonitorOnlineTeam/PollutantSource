@@ -32,7 +32,8 @@ export default Model.extend({
         pollutantName: [],
         detailtime: null,
         addtaskstatus: false,
-        pollutantTypelist: null
+        pollutantTypelist: null,
+
     },
     effects: {
         * querypollutanttypecode({
@@ -64,7 +65,6 @@ export default Model.extend({
                 });
             }
             if (payload.manualUpload) {
-                debugger
                 if (data && data[0]) {
                     yield put({
                         type: 'manualupload/GetManualSupplementList',
@@ -89,26 +89,46 @@ export default Model.extend({
             }
             //维修
             if (payload.RepairHistoryRecords) {
-                debugger
                 if (data && data[0]) {
                     yield put({
                         type: 'task/GetHistoryRepairDetail',
                         payload: {
                             ...payload,
-                            DGIMN: data[0].DGIMN,
+                            DGIMN: payload.DGIMN === '[object Object]' ? data[0].DGIMN : payload.DGIMN,
+                            data: data
+                        }
+                    });
+
+                }
+                else {
+                    yield put({
+                        type: 'task/GetHistoryRepairDetail',
+                        payload: {
+                            ...payload,
+                            DGIMN: null
                         }
                     });
                 }
-
             }
             //停机
             if (payload.StopCemsListHistoryRecords) {
+                debugger
                 if (data && data[0]) {
                     yield put({
                         type: 'task/GetHistoryStopCemsList',
                         payload: {
                             ...payload,
-                            DGIMN: data[0].DGIMN,
+                            DGIMN: payload.DGIMN === '[object Object]' ? data[0].DGIMN : payload.DGIMN,
+                            data: data
+                        }
+                    });
+                }
+                else {
+                    yield put({
+                        type: 'task/GetHistoryStopCemsList',
+                        payload: {
+                            ...payload,
+                            DGIMN: null
                         }
                     });
                 }
@@ -120,7 +140,17 @@ export default Model.extend({
                         type: 'task/GetHistoryConsumablesReplaceRecord',
                         payload: {
                             ...payload,
-                            DGIMN: data[0].DGIMN,
+                            DGIMN: payload.DGIMN === '[object Object]' ? data[0].DGIMN : payload.DGIMN,
+                            data: data
+                        }
+                    });
+                }
+                else {
+                    yield put({
+                        type: 'task/GetHistoryConsumablesReplaceRecord',
+                        payload: {
+                            ...payload,
+                            DGIMN: null
                         }
                     });
                 }
@@ -132,33 +162,62 @@ export default Model.extend({
                         type: 'task/GetHistoryStandardGasRepalceRecordList',
                         payload: {
                             ...payload,
-                            DGIMN: data[0].DGIMN,
+                            DGIMN: payload.DGIMN === '[object Object]' ? data[0].DGIMN : payload.DGIMN,
+                            data: data
+                        }
+                    });
+                }
+                else {
+                    yield put({
+                        type: 'task/GetHistoryStandardGasRepalceRecordList',
+                        payload: {
+                            ...payload,
+                            DGIMN: null
                         }
                     });
                 }
             }
 
-            //标气
+            //巡检记录
             if (payload.InspectionHistoryRecords) {
                 if (data && data[0]) {
                     yield put({
                         type: 'task/GetHistoryInspectionHistoryRecords',
                         payload: {
                             ...payload,
-                            DGIMN: data[0].DGIMN,
+                            DGIMN: payload.DGIMN === '[object Object]' ? data[0].DGIMN : payload.DGIMN,
+                            data: data
+                        }
+                    });
+                }
+                else {
+                    yield put({
+                        type: 'task/GetHistoryInspectionHistoryRecords',
+                        payload: {
+                            ...payload,
+                            DGIMN: null
                         }
                     });
                 }
             }
             //校准记录
             if (payload.JzHistoryRecords) {
-                debugger
                 if (data && data[0]) {
                     yield put({
                         type: 'task/GetJzHistoryRecord',
                         payload: {
                             ...payload,
-                            DGIMN: data[0].DGIMN,
+                            DGIMN: payload.DGIMN === '[object Object]' ? data[0].DGIMN : payload.DGIMN,
+                            data: data
+                        }
+                    });
+                }
+                else {
+                    yield put({
+                        type: 'task/GetJzHistoryRecord',
+                        payload: {
+                            ...payload,
+                            DGIMN: null
                         }
                     });
                 }
@@ -170,7 +229,17 @@ export default Model.extend({
                         type: 'task/GetBdHistoryInfoList',
                         payload: {
                             ...payload,
-                            DGIMN: data[0].DGIMN,
+                            DGIMN: payload.DGIMN === '[object Object]' ? data[0].DGIMN : payload.DGIMN,
+                            data: data
+                        }
+                    });
+                }
+                else {
+                    yield put({
+                        type: 'task/GetBdHistoryInfoList',
+                        payload: {
+                            ...payload,
+                            DGIMN: null
                         }
                     });
                 }
@@ -183,13 +252,28 @@ export default Model.extend({
                         type: 'task/GetDeviceExceptionList',
                         payload: {
                             ...payload,
-                            DGIMN: data[0].DGIMN,
+                            DGIMN: payload.DGIMN === '[object Object]' ? data[0].DGIMN : payload.DGIMN,
+                            data: data
+                        }
+                    });
+                }
+                else {
+                    yield put({
+                        type: 'task/GetDeviceExceptionList',
+                        payload: {
+                            ...payload,
+                            DGIMN: null
                         }
                     });
                 }
             }
             yield update({ data });
             yield update({ dataTemp: data });
+            if (payload.callback === undefined) {
+            }
+            else {
+                payload.callback(data);
+            }
         },
         * querylastestdatalist({
             payload,
@@ -547,7 +631,6 @@ export default Model.extend({
         * getPollutantTypeList({
             payload
         }, { call, update }) {
-            debugger
             const res = yield call(getPollutantTypeList, payload);
             if (res) {
                 yield update({

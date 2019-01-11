@@ -29,7 +29,7 @@ import TreeCardContent from '../../components/OverView/TreeCardContent';
     pollutantTypeloading: loading.effects['overview/getPollutantTypeList'],
     treedataloading: loading.effects['overview/querydatalist'],
     pollutantTypelist: overview.pollutantTypelist,
-    DGIMN:task.DGIMN,
+    DGIMN: task.DGIMN,
 }))
 /*
 页面：维修历史记录
@@ -46,6 +46,10 @@ export default class RepairHistoryRecords extends Component {
     }
     componentDidMount() {
         const { dispatch } = this.props;
+        var getDGIMN = localStorage.getItem('DGIMN')
+        if (getDGIMN === null) {
+            getDGIMN = '[object Object]';
+        }
         dispatch({
             type: 'overview/querydatalist',
             payload: {
@@ -56,6 +60,7 @@ export default class RepairHistoryRecords extends Component {
                 pageSize: this.props.pageSize,
                 BeginTime: this.state.rangeDate[0].format('YYYY-MM-DD 00:00:00'),
                 EndTime: this.state.rangeDate[1].format('YYYY-MM-DD 23:59:59'),
+                DGIMN: getDGIMN,
             }
         });
         dispatch({
@@ -78,7 +83,6 @@ export default class RepairHistoryRecords extends Component {
     };
 
     _handleDateChange = (date, dateString) => {
-        debugger
         this.setState(
             {
                 rangeDate: date,
@@ -97,7 +101,8 @@ export default class RepairHistoryRecords extends Component {
         this.GetHistoryRecord(pageIndex, pageSize, this.props.DGIMN, this.state.BeginTime, this.state.EndTime);
     }
 
-    seeDetail = (record) => {
+    seeDetail = (text, record) => {
+        localStorage.setItem('DGIMN', this.props.DGIMN);
         this.props.dispatch(routerRedux.push(`/PatrolForm/RepairRecordDetail/${this.props.DGIMN}/${this.props.match.params.viewtype}/qcontrollist/RepairHistoryRecords/${record.TaskID}`));
     }
     //查询
@@ -106,7 +111,7 @@ export default class RepairHistoryRecords extends Component {
             searchName: value
         })
         const { pollutantTypeCode } = this.state;
-        this.reloadData(pollutantTypeCode, value);
+        this.searchData(pollutantTypeCode, value);
     }
     getStatusImg = (value) => {
         if (value === 0) {
@@ -127,17 +132,67 @@ export default class RepairHistoryRecords extends Component {
         this.reloadData(key, searchName);
     }
     //重新加载
-    reloadData = (pollutantTypeCode, searchName) => {
+    searchData = (pollutantTypeCode, searchName) => {
+        var getDGIMN = localStorage.getItem('DGIMN')
+        if (getDGIMN === null) {
+            getDGIMN = '[object Object]';
+        }
         this.props.dispatch({
             type: 'overview/querydatalist',
             payload: {
                 map: true,
-                pollutantCode: pollutantTypeCode,
-                pointName: searchName
+                pollutantTypes: pollutantTypeCode,
+                pointName: searchName,
+                RepairHistoryRecords: true,
+                pageIndex: this.props.pageIndex,
+                pageSize: this.props.pageSize,
+                BeginTime: this.state.rangeDate[0].format('YYYY-MM-DD 00:00:00'),
+                EndTime: this.state.rangeDate[1].format('YYYY-MM-DD 23:59:59'),
+                DGIMN: getDGIMN,
+                callback: (data) => {
+                    const existdata = data.find((value, index, arr) => {
+                        return value.DGIMN == getDGIMN
+                    });
+                    if(existdata==undefined)
+                    {
+                        this.props.dispatch({
+                            type: 'task/GetHistoryRepairDetail',
+                            payload: {
+                                pageIndex: this.props.pageIndex,
+                                pageSize: this.props.pageSize,
+                                DGIMN: null,
+                                BeginTime: this.state.BeginTime,
+                                EndTime: this.state.EndTime,
+                            }
+                        });
+                    }
+                }
             },
         });
     }
-    treeCilck = (row) => {
+        //重新加载
+        reloadData = (pollutantTypeCode, searchName) => {
+            var getDGIMN = localStorage.getItem('DGIMN')
+            if (getDGIMN === null) {
+                getDGIMN = '[object Object]';
+            }
+            this.props.dispatch({
+                type: 'overview/querydatalist',
+                payload: {
+                    map: true,
+                    pollutantTypes: pollutantTypeCode,
+                    pointName: searchName,
+                    RepairHistoryRecords: true,
+                    pageIndex: this.props.pageIndex,
+                    pageSize: this.props.pageSize,
+                    BeginTime: this.state.rangeDate[0].format('YYYY-MM-DD 00:00:00'),
+                    EndTime: this.state.rangeDate[1].format('YYYY-MM-DD 23:59:59'),
+                    DGIMN: getDGIMN,
+                },
+            });
+        }
+    treeCilck = (row, key) => {
+        localStorage.setItem('DGIMN', row.DGIMN);
         this.GetHistoryRecord(this.props.pageIndex, this.props.pageSize, row.DGIMN, this.state.BeginTime, this.state.EndTime);
     };
     render() {
@@ -164,7 +219,6 @@ export default class RepairHistoryRecords extends Component {
                         );
                     });
                 }
-
                 return resu;
             }
         }, {
@@ -180,7 +234,7 @@ export default class RepairHistoryRecords extends Component {
             key: 'TaskID',
             render: (text, record) => {
                 return <a onClick={
-                    () => this.seeDetail(record)
+                    () => this.seeDetail(text, record)
                 } > 详细 </a>;
             }
         }];
@@ -220,9 +274,9 @@ export default class RepairHistoryRecords extends Component {
                                             background: '#fff'
                                         }}
                                         pollutantTypeloading={pollutantTypeloading}
-                                        getHeight={'calc(100vh - 220px)'} getStatusImg={this.getStatusImg} isloading={treedataloading}
+                                        getHeight={'calc(100vh - 220px)'} getStatusImg={this.getStatusImg}
                                         getNowPollutantType={this.getNowPollutantType}
-                                        treeCilck={this.treeCilck} treedatalist={datalist} PollutantType={2}
+                                        PollutantType={2} treedatalist={datalist}
                                         pollutantTypelist={pollutantTypelist}
                                         tabkey={this.state.pollutantTypeCode}
                                     />
@@ -230,14 +284,14 @@ export default class RepairHistoryRecords extends Component {
                                         getHeight='calc(100vh - 220px)'
                                         pollutantTypeloading={pollutantTypeloading}
                                         getStatusImg={this.getStatusImg} isloading={treedataloading}
-                                        treeCilck={this.treeCilck} treedatalist={datalist} PollutantType={2} />
+                                        treeCilck={this.treeCilck} treedatalist={datalist} PollutantType={2} ifSelect={true} />
                                 </div>
                             </div>
                         </div>
                     </Col>
                     <Col style={{ width: document.body.clientWidth - 430, height: 'calc(100vh - 90px)', float: 'right' }}>
                         <div style={{ marginRight: 10, marginTop: 25 }}>
-                            <Card bordered={false} style={{height:'calc(100vh - 110px)'}}>
+                            <Card bordered={false} style={{ height: 'calc(100vh - 110px)' }}>
                                 <div className={styles.conditionDiv}>
                                     <Row gutter={8}>
                                         <Col span={3} >

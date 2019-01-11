@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'dva';
 import { Tabs, Layout } from 'antd';
 import router from 'umi/router';
-import {EnumPsOperationForm} from '../../utils/enum';
+import { EnumPsOperationForm } from '../../utils/enum';
 import { Switch, Redirect } from 'dva/router';
 const { TabPane } = Tabs;
 const {
@@ -16,11 +16,11 @@ export default class QControllist extends Component {
     constructor(props) {
         super(props);
         const tablist = [
-            { key: 'JzHistoryRecords',tab: 'CEMS零点量程漂移与校准记录表' },
-            { key: 'BdHistoryInfoHistoryRecords',tab: 'CEMS校验测试记录' },
-            { key: 'DeviceExceptionListHistoryRecords',tab: 'CEMS设备数据异常记录表' }
+            { key: 'JzHistoryRecords', tab: 'CEMS零点量程漂移与校准记录表' },
+            { key: 'BdHistoryInfoHistoryRecords', tab: 'CEMS校验测试记录' },
+            { key: 'DeviceExceptionListHistoryRecords', tab: 'CEMS设备数据异常记录表' }
         ];
-       
+
         this.state = {
             iconLoading: false,
             tablist: tablist,
@@ -38,16 +38,17 @@ export default class QControllist extends Component {
 
     render() {
         const rType = this.props.RecordTypes;
-        const { match, routerData,children } = this.props;
+        const { match, routerData, children } = this.props;
         const activeKey = location.pathname.replace(`${match.url}/`, '');
-        const newtablist=this.state.tablist.filter((item)=>{
-            const index=this.props.RecordTypes.findIndex((itm)=>{
-                return itm.TypeName==item.key;
+        console.log(activeKey);
+        debugger
+        const newtablist = this.state.tablist.filter((item) => {
+            const index = this.props.RecordTypes.findIndex((itm) => {
+                return itm.TypeName == item.key;
             })
-            if(index===-1)
-            {
+            if (index === -1) {
                 return false;
-            }else{
+            } else {
                 return true;
             }
         });
@@ -56,12 +57,12 @@ export default class QControllist extends Component {
                 {<Layout style={{ padding: '14px 0', background: '#fff' }}>
                     <Sider width={270} style={{ background: '#fff' }} >
                         <Tabs tabPosition="left"
+                            style={{ float: 'right',paddingRight:1 }}
                             size="default"
                             activeKey={activeKey}
                             onChange={(key) => {
                                 const { match } = this.props;
                                 router.push(`${match.url}/${key}`);
-                                // this.props.dispatch(routerRedux.push(`/pointdetail/${this.props.match.params.pointcode}/qcontrollist/${srcValue}`));
                             }}
                         >
                             {newtablist.map(item => <TabPane tab={item.tab} key={item.key} />)}

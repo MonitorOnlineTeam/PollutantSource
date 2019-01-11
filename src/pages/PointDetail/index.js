@@ -73,6 +73,7 @@ class PointDetail extends Component {
             pdvisible: true,
         });
     }
+
     openModal = (params) => {
         // console.log(this.props.pointList);
         // console.log(this.props.pointList);
@@ -217,6 +218,7 @@ class PointDetail extends Component {
             searchName: ''
         });
     }
+
     //催办
     urge = () => {
         this.props.dispatch({
@@ -227,6 +229,7 @@ class PointDetail extends Component {
             }
         });
     }
+
     //派单窗口关闭
     onCancel = () => {
         this.setState({
@@ -240,16 +243,21 @@ class PointDetail extends Component {
         const { pointInfo } = this.props;
         if (pointInfo) {
             if (pointInfo.existTask) {
-                return (<Button onClick={() => this.urge()} type="primary" ghost={true} style={{ float: "right", marginRight: 30, top: -5 }}><Icon type="bell" />督办</Button>)
+                return (<Button onClick={() => this.urge()} type="primary" ghost={true} style={{ float: "right", marginRight: 30, top: -5 }}><Icon type="bell" />督办</Button>);
             }
-            else {
-                return (<Button
-                    onClick={() => {
-                        this.setState({
-                            pdvisible: true,
-                        });
-                    }} type="primary" ghost={true} style={{ float: "right", marginRight: 30, top: -5 }}><Icon type="bell" />派单</Button>)
-            }
+
+            return (<Button
+                onClick={() => {
+                    this.setState({
+                        pdvisible: true,
+                    });
+                }}
+                type="primary"
+                ghost={true}
+                style={{ float: "right", marginRight: 30, top: -5 }}
+            ><Icon type="bell" />派单
+            </Button>);
+
         }
     }
 
@@ -300,6 +308,7 @@ class PointDetail extends Component {
 
             </span>);
     }
+
     //直接刷新（带数据）
     Refresh = () => {
         this.props.dispatch({
@@ -313,9 +322,13 @@ class PointDetail extends Component {
     render() {
         const { match, routerData, location, children, pointInfo, selectpoint } = this.props;
         Cookie.set('seldgimn', match.params.pointcode);
-        let activeKey = 'qcontrollist';
-        if (location.pathname.indexOf('qcontrollist') === -1) {
+        let activeKey = '';
+        if (location.pathname.indexOf('qcontrollist') === -1 && location.pathname.indexOf('operationlist') === -1) {
             activeKey = location.pathname.replace(`${match.url}/`, '');
+        } else {
+            const matchurl=location.pathname.match(/mapview\/(\S*)\//);
+            if(matchurl!==null)
+                activeKey = matchurl[1];
         }
         if (this.props.isloading) {
             return (<Spin
