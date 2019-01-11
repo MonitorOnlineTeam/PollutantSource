@@ -10,7 +10,8 @@ import {
     Radio,
     Avatar,
     Select,
-    message
+    message,
+    Divider
 } from 'antd';
 import { connect } from 'dva';
 import styles from './BaseView.less';
@@ -118,6 +119,9 @@ class BaseView extends Component {
            <div>
                <Card bordered={false} title="基本设置" style={{height:'calc(100vh - 160px)' }} loading={this.props.userinfoloading}>
                    <Form onSubmit={this.handleSubmit}>
+                   <Row gutter={48}>
+                   
+                   </Row>
                        <Row gutter={48}>
                            <Col span={8}>
                                <FormItem
@@ -141,8 +145,7 @@ class BaseView extends Component {
                        <Row gutter={48}>
                            <Col span={8}>
                                <FormItem
-                                   label="性别"
-                               > {
+                                   label="性别" > {
                                        getFieldDecorator('User_Sex',
                                            {
                                                initialValue: 1,
@@ -238,15 +241,16 @@ class BaseView extends Component {
                                </FormItem>
                            </Col>
                        </Row>
-                       <Row gutter={48}>
-                           <Col span={8}>
+                   
+                   
+                           <Divider orientation="right"  style={{border:'1px dashed #FFFFFF'}}>
                                <Button
                                    type="primary"
                                    htmlType="submit"
                                >更新个人设置
                                </Button>
-                           </Col>
-                       </Row>
+                               </Divider>
+                   
                    </Form>
 
                </Card>

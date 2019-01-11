@@ -11,8 +11,8 @@ import {
 import { connect } from 'dva';
 import moment from 'moment';
 import RangePicker_ from '../../components/PointDetail/RangePicker_';
-import styles from '../EmergencyTodoList/RepairHistoryRecords.less';
-import {routerRedux} from 'dva/router';
+import styles from './RepairHistoryRecords.less';
+import { routerRedux } from 'dva/router';
 
 @connect(({ task, loading }) => ({
     isloading: loading.effects['task/GetHistoryRepairDetail'],
@@ -32,13 +32,12 @@ export default class RepairHistoryRecords extends Component {
             BeginTime: moment().subtract(3, 'month').format('YYYY-MM-DD 00:00:00'),
             EndTime: moment().format('YYYY-MM-DD 23:59:59'),
             DGIMN: this.props.match.params.pointcode,
-            TypeID: this.props.match.params.TypeID,
         };
     }
     componentDidMount() {
-        this.GetHistoryRecord(this.props.pageIndex, this.props.pageSize, this.state.DGIMN, this.state.TypeID, this.state.BeginTime, this.state.EndTime);
+        this.GetHistoryRecord(this.props.pageIndex, this.props.pageSize, this.state.DGIMN, this.state.BeginTime, this.state.EndTime);
     }
-    GetHistoryRecord=(pageIndex, pageSize, DGIMN, TypeID, BeginTime, EndTime) => {
+    GetHistoryRecord = (pageIndex, pageSize, DGIMN, BeginTime, EndTime) => {
         this.props.dispatch({
             type: 'task/GetHistoryRepairDetail',
             payload: {
@@ -51,7 +50,7 @@ export default class RepairHistoryRecords extends Component {
         });
     };
 
-    _handleDateChange=(date, dateString) => {
+    _handleDateChange = (date, dateString) => {
         this.setState(
             {
                 rangeDate: date,
@@ -59,18 +58,18 @@ export default class RepairHistoryRecords extends Component {
                 EndTime: dateString[1]
             }
         );
-        this.GetHistoryRecord(this.props.pageIndex, this.props.pageSize, this.state.DGIMN, this.state.TypeID, dateString[0], dateString[1]);
+        this.GetHistoryRecord(this.props.pageIndex, this.props.pageSize, this.state.DGIMN, dateString[0], dateString[1]);
     };
 
     onShowSizeChange = (pageIndex, pageSize) => {
-        this.GetHistoryRecord(pageIndex, pageSize, this.state.DGIMN, this.state.TypeID, this.state.BeginTime, this.state.EndTime);
+        this.GetHistoryRecord(pageIndex, pageSize, this.state.DGIMN, this.state.BeginTime, this.state.EndTime);
     }
 
     onChange = (pageIndex, pageSize) => {
-        this.GetHistoryRecord(pageIndex, pageSize, this.state.DGIMN, this.state.TypeID, this.state.BeginTime, this.state.EndTime);
+        this.GetHistoryRecord(pageIndex, pageSize, this.state.DGIMN, this.state.BeginTime, this.state.EndTime);
     }
 
-    seeDetail=(record) => {
+    seeDetail = (record) => {
         this.props.dispatch(routerRedux.push(`/PatrolForm/RepairRecordDetail/${this.state.DGIMN}/${this.props.match.params.viewtype}/qcontrollist/RepairHistoryRecords/${record.TaskID}`));
     }
 
@@ -90,9 +89,9 @@ export default class RepairHistoryRecords extends Component {
                 if (text !== undefined) {
                     var content = text.split(',');
                     var resu = [];
-                    content.map((item,key) => {
+                    content.map((item, key) => {
                         resu.push(
-                            <Tag style={{marginBottom: 1.5,marginTop: 1.5}} color="#108ee9">{item}</Tag>
+                            <Tag style={{ marginBottom: 1.5, marginTop: 1.5 }} color="#108ee9">{item}</Tag>
                         );
                     });
                 }
@@ -118,27 +117,29 @@ export default class RepairHistoryRecords extends Component {
         }];
         if (this.props.isloading) {
             return (<Spin
-                style={{ width: '100%',
+                style={{
+                    width: '100%',
                     height: 'calc(100vh/2)',
                     display: 'flex',
                     alignItems: 'center',
-                    justifyContent: 'center' }}
+                    justifyContent: 'center'
+                }}
                 size="large"
             />);
         }
         return (
             <div className={styles.cardTitle}>
                 <Card bordered={false}>
-                <div className={styles.conditionDiv}>
-                            <Row gutter={8}>
-                                <Col span={3} >
-                            <label className={styles.conditionLabel}>记录时间：</label>
-                                </Col>
-                                <Col span={21} >
-                                    <RangePicker_ style={{width: 350}} onChange={this._handleDateChange} format={'YYYY-MM-DD'} dateValue={this.state.rangeDate} />
-                                </Col>
-                               
-                            </Row>
+                    <div className={styles.conditionDiv}>
+                        <Row gutter={8}>
+                            <Col span={3} >
+                                <label className={styles.conditionLabel}>记录时间：</label>
+                            </Col>
+                            <Col span={21} >
+                                <RangePicker_ style={{ width: 350 }} onChange={this._handleDateChange} format={'YYYY-MM-DD'} dateValue={this.state.rangeDate} />
+                            </Col>
+
+                        </Row>
                     </div>
                     <Table
                         size="middle"

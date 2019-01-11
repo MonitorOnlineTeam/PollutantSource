@@ -35,7 +35,8 @@ export default Model.extend({
         HistoryStopCemsList: [],
         loading: false,
         ExceptionDetail: [],
-        BdRecord: []
+        BdRecord: [],
+        DGIMN: null,
     },
 
     effects: {
@@ -105,10 +106,11 @@ export default Model.extend({
         * GetJzHistoryRecord({
             payload,
         }, { call, update }) {
+            debugger
             const DataInfo = yield call(GetJzHistoryRecord, payload);
             if (DataInfo != null && DataInfo.requstresult == EnumRequstResult.Success) {
                 if (DataInfo.data != null) {
-                    yield update({ JzHistoryRecord: DataInfo.data, RecordCount: DataInfo.total });
+                    yield update({ JzHistoryRecord: DataInfo.data, RecordCount: DataInfo.total,DGIMN:payload.DGIMN });
                 }
             }
         },
@@ -149,7 +151,8 @@ export default Model.extend({
                     HistoryConsumablesReplaceRecordList: result.data,
                     total: result.total,
                     pageIndex: payload.pageIndex,
-                    pageSize: payload.pageSize
+                    pageSize: payload.pageSize,
+                    DGIMN: payload.DGIMN,
                 });
             } else {
                 yield update({
@@ -157,7 +160,8 @@ export default Model.extend({
                     HistoryConsumablesReplaceRecordList: [],
                     total: result.total,
                     pageIndex: payload.pageIndex,
-                    pageSize: payload.pageSize
+                    pageSize: payload.pageSize,
+                    DGIMN: payload.DGIMN,
                 });
             }
         },
@@ -197,7 +201,8 @@ export default Model.extend({
                     HistoryStandardGasRepalceRecordList: result.data,
                     total: result.total,
                     pageIndex: payload.pageIndex,
-                    pageSize: payload.pageSize
+                    pageSize: payload.pageSize,
+                    DGIMN: payload.DGIMN,
                 });
             } else {
                 yield update({
@@ -205,7 +210,8 @@ export default Model.extend({
                     HistoryStandardGasRepalceRecordList: [],
                     total: result.total,
                     pageIndex: payload.pageIndex,
-                    pageSize: payload.pageSize
+                    pageSize: payload.pageSize,
+                    DGIMN: payload.DGIMN,
                 });
             }
         },
@@ -280,7 +286,8 @@ export default Model.extend({
                     HistoryStopCemsList: result.data,
                     total: result.total,
                     pageIndex: payload.pageIndex,
-                    pageSize: payload.pageSize
+                    pageSize: payload.pageSize,
+                    DGIMN: payload.DGIMN,
                 });
             } else {
                 yield update({
@@ -288,7 +295,8 @@ export default Model.extend({
                     HistoryStopCemsList: [],
                     total: result.total,
                     pageIndex: payload.pageIndex,
-                    pageSize: payload.pageSize
+                    pageSize: payload.pageSize,
+                    DGIMN: payload.DGIMN,
                 });
             }
         },
@@ -310,6 +318,7 @@ export default Model.extend({
             call,
             update,
         }) {
+            debugger
             const result = yield call(GetHistoryRepairDetail, payload);
             if (result.requstresult === '1') {
                 yield update({
@@ -317,7 +326,8 @@ export default Model.extend({
                     List: result.data,
                     total: result.total,
                     pageIndex: payload.pageIndex,
-                    pageSize: payload.pageSize
+                    pageSize: payload.pageSize,
+                    DGIMN: payload.DGIMN,
                 });
             } else {
                 yield update({
@@ -325,7 +335,8 @@ export default Model.extend({
                     List: [],
                     total: result.total,
                     pageIndex: payload.pageIndex,
-                    pageSize: payload.pageSize
+                    pageSize: payload.pageSize,
+                    DGIMN: payload.DGIMN,
                 });
             }
         },
@@ -348,14 +359,14 @@ export default Model.extend({
             update,
         }) {
             const result = yield call(GetDeviceExceptionList, payload);
-
             if (result.requstresult === '1') {
                 yield update({
                     requstresult: result.requstresult,
                     List: result.data,
                     total: result.total,
                     pageIndex: payload.pageIndex,
-                    pageSize: payload.pageSize
+                    pageSize: payload.pageSize,
+                    DGIMN:payload.DGIMN,
                 });
             } else {
                 yield update({
@@ -363,7 +374,8 @@ export default Model.extend({
                     List: [],
                     total: result.total,
                     pageIndex: payload.pageIndex,
-                    pageSize: payload.pageSize
+                    pageSize: payload.pageSize,
+                    DGIMN:payload.DGIMN,
                 });
             }
         },
@@ -381,7 +393,8 @@ export default Model.extend({
                     List: result.data,
                     total: result.total,
                     pageIndex: payload.pageIndex,
-                    pageSize: payload.pageSize
+                    pageSize: payload.pageSize,
+                    DGIMN:payload.DGIMN,
                 });
             } else {
                 yield update({
@@ -389,7 +402,8 @@ export default Model.extend({
                     List: [],
                     total: result.total,
                     pageIndex: payload.pageIndex,
-                    pageSize: payload.pageSize
+                    pageSize: payload.pageSize,
+                    DGIMN:payload.DGIMN,
                 });
             }
         },
