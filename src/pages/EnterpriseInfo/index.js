@@ -326,6 +326,7 @@ class index extends PureComponent {
 
                               
                                     <Map resizeEnable={true}
+                                    mapStyle={'fresh'}
                                         events={this.mapEvents}
                                         zoom={11} loading={<Spin />} amapkey={amapKey} plugins={plugins} center={mapCenter} >
                                         {

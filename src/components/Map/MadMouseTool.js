@@ -165,6 +165,7 @@ mapEvents = {
           events={this.mapEvents}
           center={this.state.center}
           zoom={11}  
+          mapStyle={'fresh'}
         >
                       {
                                             allcoo ? allcoo.map((item, key) => {
