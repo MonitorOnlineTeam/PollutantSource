@@ -435,7 +435,6 @@ export async function querypollutanttypecode(params) {
 }
 // 获取数据一览数据
 export async function querydatalist(params) {
-    console.log()
     const body = {
         time: params.time,
         pointType:params.pointType,
@@ -497,7 +496,7 @@ export async function queryurge(params) {
         ToUserId:params.personId,
         //1是督办
         NoticeType:1,
-        DGIMN:params.dgimn
+        DGIMN:params.DGIMN
     };
     const result = await post('/api/rest/PollutantSourceApi/PTaskProcessing/PostTaskSupervise', body, null);
     return result === null ? {data: null} : result.requstresult;
