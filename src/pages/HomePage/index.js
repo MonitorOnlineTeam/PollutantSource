@@ -2,23 +2,15 @@ import React, { Component } from 'react';
 import {
     Row,
     Col,
-    Card,
-    List,
     Spin,
-    Table,
     Progress,
-    Badge,
-    Tag,
-    Icon,
-    Button,
-    Tabs,
-    Divider,
-    Modal
+    Layout,
 } from 'antd';
 import ReactEcharts from 'echarts-for-react';
 import {
     connect
 } from 'dva';
+import { Map, Polygon,GroundImage,Markers } from 'react-amap';
 import config from '../../config';
 import styles from './index.less';
 /*
@@ -28,13 +20,24 @@ modify by
 */
 const pageUrl = {
     getRateStatisticsData: 'workbenchmodel/getRateStatisticsData',
+    getbaseinfo: 'baseinfo/queryentdetail',
+    getdatalist: 'overview/querydatalist',
 };
+const { amapKey } = config;
+const {enterpriceid}=config;
+let _thismap;
+
 @connect(({
     loading,
     workbenchmodel,
+    baseinfo,
+    overview,
 }) => ({
     loadingRateStatistics: loading.effects[pageUrl.getRateStatisticsData],
+    loadingbaseinfo: loading.effects[pageUrl.getbaseinfo],
     rateStatistics: workbenchmodel.rateStatistics,
+    baseinfo: baseinfo.entbaseinfo,
+    datalist: overview.data,
 }))
 class HomePage extends Component {
     constructor(props) {
@@ -43,19 +46,64 @@ class HomePage extends Component {
         this.state = {
 
         };
+        this.mapEvents = {
+            created(m) {
+                _thismap = m;
+            },
+            zoomchange: (value) => {
+
+            },
+            complete: () => {
+                //_thismap.setZoomAndCenter(13, [centerlongitude, centerlatitude]);
+            }
+        };
     }
 
     componentWillMount() {
         this.getRateStatisticsData();
+        this.getbaseinfo();
+        this.getpointdatalist();
     }
+
+    /**
+     *  企业基本信息
+     */
+     getbaseinfo = () => {
+         const {dispatch} = this.props;
+         dispatch({
+             type: pageUrl.getbaseinfo,
+             payload: {
+                 parentID: enterpriceid,
+             },
+         });
+     }
+
+     /**
+      * 点位信息
+      */
+     getpointdatalist = () => {
+         const {
+             dispatch
+         } = this.props;
+         dispatch({
+             type: pageUrl.getdatalist,
+             payload: {
+                 map: true,
+
+             },
+         });
+     }
 
     /**
      * 智能质控_率的统计_更新数据
      */
     getRateStatisticsData = () => {
-        this.props.dispatch({
+        const {dispatch} = this.props;
+        dispatch({
             type: pageUrl.getRateStatisticsData,
-            payload: {},
+            payload: {
+
+            },
         });
     }
 
@@ -268,8 +316,61 @@ class HomePage extends Component {
          return option;
      }
 
+     /**地图 */
+     getpolygon = (polygonChange) => {
+         let res = [];
+         if (polygonChange) {
+             let arr = eval(polygonChange);
+             for (let i = 0; i < arr.length; i++) {
+                 res.push( <Polygon
+                     key={
+                         i
+                     }
+                     style={
+                         {
+                             strokeColor: '#FF33FF',
+                             strokeOpacity: 0.2,
+                             strokeWeight: 3,
+                             fillColor: '#1791fc',
+                             fillOpacity: 0.1,
+                         }
+                     }
+                     path={
+                         arr[i]
+                     }
+                 />);
+             }
+         }
+         return res;
+     }
+
      render() {
+         const baseinfo = this.props.baseinfo[0];
+         let polygonChange;
+         let mapCenter;
+         let bounds;
+         if (baseinfo) {
+             const coordinateSet = baseinfo.coordinateSet;
+             polygonChange = coordinateSet;
+             mapCenter = {
+                 longitude: baseinfo.longitude,
+                 latitude: baseinfo.latitude
+             };
+         }
+         if (mapCenter!==undefined) {
+             bounds = {
+                 sw: {
+                     longitude: mapCenter.longitude-1,
+                     latitude: mapCenter.latitude-1,
+                 },
+                 ne: {
+                     longitude: mapCenter.longitude + 1,
+                     latitude: mapCenter.latitude + 1,
+                 }
+             };
+         }
          return (
+
              <div
                  style={{
                      width: '100%',
@@ -278,7 +379,6 @@ class HomePage extends Component {
                  }}
                  className={styles.divcontent}
              >
-
 
                  <Row gutter={24}>
                      <Col span={24}>
@@ -413,10 +513,72 @@ class HomePage extends Component {
                              </Col>
                          </Row>
                          <Row gutter={24}>
-                             <Col />
+                             <Col xl={24} lg={24} md={24} sm={24} xs={24}>
+                                 <div style={{
+                                     width: "100%",
+                                     height: "400px",
+                                 }}
+                                 >
+                                     <Map
+                                         resizeEnable={true}
+                                         events={this.mapEvents}
+                                         zoom={12}
+                                         mapStyle="blue_night"
+                                         amapkey={amapKey}
+                                         center={mapCenter}
+                                         loading={<Spin
+                                             style={{width: '100%',
+                                                 height: 'calc(100vh - 260px)',
+                                                 marginTop: 260 }}
+                                             size="large"
+                                         />}
+                                     >
+                                         <Markers
+                                             markers={this.props.datalist}
+                                             className={this.state.special}
+                                             render={(extData) => {
+                                                 if (extData.status === 0) {
+                                                     return <img style={{width:15}} src="/gisunline.png" />;
+                                                 } if (extData.status === 1) {
+                                                     return <img style={{width:15}} src="/gisnormal.png" />;
+                                                 } if (extData.status === 2) {
+                                                     return <img style={{width:15}} src="/gisover.png" />;
+                                                 }
+                                                 return <img style={{width:15}} src="/gisexception.png" />;
+                                             }}
+                                         />
+                                         {
+                                             this.getpolygon(polygonChange)
+                                         }
+                                     </Map>
+                                 </div>
+                             </Col>
                          </Row>
                          <Row gutter={24}>
-                             <Col />
+                             <Col xl={24} lg={24} md={24} sm={24} xs={24}>
+                                 <div className={styles.divtable}>
+                                     <table border="0" cellPadding="0" cellSpacing="20" border-collapse="inherit">
+                                         <tr color="#fff">
+                                             <th> 污染物</th>
+                                             <th> 超标次数 </th>
+                                             <th> 超标倍数</th>
+                                             <th> 最新浓度</th>
+                                         </tr>
+                                         <tr>
+                                             <td>100</td>
+                                             <td>200</td>
+                                             <td>300</td>
+                                             <td>300</td>
+                                         </tr>
+                                         <tr>
+                                             <td>400</td>
+                                             <td>500</td>
+                                             <td>600</td>
+                                             <td>300</td>
+                                         </tr>
+                                     </table>
+                                 </div>
+                             </Col>
                          </Row>
                          <Row gutter={24}>
                              <Col />
