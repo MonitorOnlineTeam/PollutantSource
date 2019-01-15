@@ -106,12 +106,19 @@ export default Model.extend({
         * GetJzHistoryRecord({
             payload,
         }, { call, update }) {
-            debugger
             const DataInfo = yield call(GetJzHistoryRecord, payload);
             if (DataInfo != null && DataInfo.requstresult == EnumRequstResult.Success) {
                 if (DataInfo.data != null) {
                     yield update({ JzHistoryRecord: DataInfo.data, RecordCount: DataInfo.total,DGIMN:payload.DGIMN });
                 }
+            }
+            else
+            {
+                yield update({ 
+                    JzHistoryRecord: null, 
+                    RecordCount: 0,
+                    DGIMN:payload.DGIMN 
+                });  
             }
         },
         // 根据任务id和类型id获取易耗品列表
@@ -318,7 +325,6 @@ export default Model.extend({
             call,
             update,
         }) {
-            debugger
             const result = yield call(GetHistoryRepairDetail, payload);
             if (result.requstresult === '1') {
                 yield update({
@@ -338,7 +344,7 @@ export default Model.extend({
                     pageSize: payload.pageSize,
                     DGIMN: payload.DGIMN,
                 });
-            }
+            }  
         },
         //获取异常记录表单明细
         * GetDeviceExceptionDetail({

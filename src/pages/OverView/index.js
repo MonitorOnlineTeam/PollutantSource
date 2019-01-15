@@ -322,7 +322,7 @@ class OverViewMap extends PureComponent {
                         strokeColor: '#FF33FF',
                         strokeOpacity: 0.2,
                         strokeWeight: 3,
-                        fillColor: '#1791fc',
+                        fillColor: '#595959',
                         fillOpacity: 0.35,
                         }}
                         path={arr[i]}
@@ -356,6 +356,7 @@ class OverViewMap extends PureComponent {
                        marginTop: 260 }}
                size="large"
              />}
+             mapStyle={'fresh'}
              amapkey={amapKey}
              plugins={plugins}
            >

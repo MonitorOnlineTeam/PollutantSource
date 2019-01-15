@@ -97,7 +97,7 @@ export default [
                     {
                         path: '/pointdetail/:pointcode/:viewtype/operationlist', component: './PointDetail/Operationlist', routes: [
                             /* 默认 */
-                            { path: '/pointdetail/:pointcode/:viewtype/operationlist', redirect: '/pointdetail/:pointcode/:viewtype/Operationlist/RepairHistoryRecords' },
+                            { path: '/pointdetail/:pointcode/:viewtype/operationlist', redirect: '/pointdetail/:pointcode/:viewtype/operationlist/RepairHistoryRecords' },
                             /* 维修记录 */
                             { path: '/pointdetail/:pointcode/:viewtype/operationlist/repairhistoryrecords', component: './EmergencyTodoList/RepairHistoryRecords' },
                             /* 停机记录 */

@@ -49,8 +49,8 @@ export default class JzHistoryRecords extends Component {
                 pageSize: pageSize,
                 TypeID: typeID,
                 DGIMN: dgimn,
-                BeginTime: beginTime,
-                EndTime: endTime,
+                BeginTime: moment(beginTime).format('YYYY-MM-DD 00:00:00'),
+                EndTime: moment(endTime).format('YYYY-MM-DD 23:59:59'),
             }
         });
     };
@@ -58,7 +58,7 @@ export default class JzHistoryRecords extends Component {
     _handleDateChange=(date, dateString) => {
         this.setState(
             {
-                rangeDate: [moment(moment(dateString[0]).format('YYYY-MM-DD 00:00:00')), moment(moment(dateString[1]).format('YYYY-MM-DD 23:59:59'))],
+                rangeDate: date,
                 beginTime: dateString[0],
                 endTime: dateString[1]
             }

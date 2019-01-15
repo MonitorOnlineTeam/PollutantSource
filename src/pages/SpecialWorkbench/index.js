@@ -1,6 +1,6 @@
 
 import React, { Component } from 'react';
-import { Map, Markers } from 'react-amap';
+import { Map, Markers,Polygon } from 'react-amap';
 import { Row, Col,Card,List, Spin,Table,Calendar, Badge,Tag,Icon,Button,Tabs,Divider,Modal } from 'antd';
 import ReactEcharts from 'echarts-for-react';
 import moment from 'moment';
@@ -65,13 +65,17 @@ const pageUrl = {
     getOverPointList:'workbenchmodel/getOverPointList',
     getStatisticsPointStatus:'workbenchmodel/getStatisticsPointStatus',
     getRealTimeWarningDatas:'workbenchmodel/getRealTimeWarningDatas',
-    getPollutantList:'points/querypollutantlist'
+    getPollutantList:'points/querypollutantlist',
+    //加载企业信息
+    getEntInfo:'baseinfo/queryentdetail'
 };
+let _thismap;
 @connect(({
     loading,
     workbenchmodel,
     transmissionefficiency,
     equipmentoperatingrate,
+    baseinfo,
     points
 }) => ({
     loadingOperationData: loading.effects[pageUrl.getOperationData],
@@ -84,6 +88,7 @@ const pageUrl = {
     loadingAllPointOverDataList:loading.effects[pageUrl.getAllPointOverDataList],
     loadingOverPointList:loading.effects[pageUrl.getOverPointList],
     loadingRealTimeWarningDatas:loading.effects[pageUrl.getRealTimeWarningDatas],
+    loadingMap:loading.effects[pageUrl.getEntInfo],
     operation: workbenchmodel.operation,
     exceptionAlarm: workbenchmodel.exceptionAlarm,
     rateStatistics: workbenchmodel.rateStatistics,
@@ -94,9 +99,12 @@ const pageUrl = {
     allPointOverDataList:workbenchmodel.allPointOverDataList,
     overPointList:workbenchmodel.overPointList,
     statisticsPointStatus:workbenchmodel.statisticsPointStatus,
+    //污染物值
     pollutantList: points.pollutantlist,
-    warningDetailsDatas: workbenchmodel.warningDetailsDatas
+    warningDetailsDatas: workbenchmodel.warningDetailsDatas,
+    entInfo: baseinfo.entbaseinfo,
 }))
+
 class SpecialWorkbench extends Component {
     constructor(props) {
         super(props);
@@ -119,9 +127,108 @@ class SpecialWorkbench extends Component {
         this.getAllPointOverDataList();
         this.getOverPointList();
         this.getStatisticsPointStatus();
-
+        this.getEntInfo();
 
     }
+
+
+    getMap=()=>{
+        const {loadingMap}=this.props;
+      if(loadingMap)
+      {
+            return (<Spin
+                style={{ width: '100%',
+                    height: 'calc(100vh/2)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center' }}
+                size="large"
+            />);
+      }
+      const entInfo = this.props.entInfo ? this.props.entInfo[0] : '';
+      let mapCenter;
+      if(entInfo)
+      {
+          mapCenter = { longitude: entInfo.longitude, latitude: entInfo.latitude };
+      }
+      return (
+        <Map  events={this.mapEvents} 
+        mapStyle={'fresh'}
+                                        amapkey={amapKey} center={mapCenter} zoom={12}>
+                                        <Markers
+                                            markers={this.getMarkers()}
+                                            render={(item)=>this.renderMarkerLayout(item)}
+                                        />
+                                        {
+                                            this.getpolygon()
+                                        }
+                                    </Map>
+      )
+    }
+
+      /**
+     * 坐标集合
+     */
+      getpolygon=()=>{
+        let res=[];
+        const {entInfo}=this.props;
+        const entModel = entInfo ? entInfo[0] : '';
+        if(entModel && entModel.coordinateSet)
+        {
+            let arr = eval(entModel.coordinateSet);
+            for (let i = 0; i < arr.length; i++) {
+                res.push(<Polygon
+                           key={i}
+                            style={{
+                            strokeColor: '#FF33FF',
+                            strokeOpacity: 0.2,
+                            strokeWeight: 3,
+                            fillColor: '#1791fc',
+                            fillOpacity: 0.35,
+                            }}
+                            path={arr[i]}
+                  />)
+            }
+        }
+        return res;
+    }
+
+    /**
+     * 地图事件
+     */
+    mapEvents = {
+        created(m) {
+            _thismap = m;
+        },
+        zoomchange: (value) => {
+
+        },
+        complete: () => {
+        }
+    };
+
+  /**
+     * 催办
+     */
+   urge=(DGIMN)=>{
+    this.props.dispatch({
+        type: 'overview/queryurge',
+        payload: {
+            DGIMN:DGIMN
+        }
+    });
+   }
+
+    /**
+     * 获取企业信息
+     */
+    getEntInfo = () => {
+        this.props.dispatch({
+            type: pageUrl.getEntInfo,
+            payload: {}
+        });
+    }
+
 
     /**
      * 更新model中的state
@@ -253,7 +360,6 @@ class SpecialWorkbench extends Component {
      * 智能质控_渲染异常报警数据列表
      */
     renderExceptionAlarmList = ()=>{
-        //console.log('exceptionAlarm:',this.props.exceptionAlarm);
         const listData = [];
         const colorArray={
             "数据异常":"magenta",
@@ -271,7 +377,9 @@ class SpecialWorkbench extends Component {
 
             const labelDiv=<div style={{color:`${color}`}}>已发生{hour}小时{minutesLable}</div>;
             const btnDiv=hour>= 4 ?(<div style={{marginTop:43}}>
-                <Button style={{width:100,border:'none',backgroundColor:'rgb(74,210,187)'}} type="primary">督办</Button>
+                <Button onClick={()=>{
+                    this.urge(item.DGIMNs)
+                }}  style={{width:100,border:'none',backgroundColor:'rgb(74,210,187)'}} type="primary">督办</Button>
                                     </div>):'';
             listData.push({
                 href: 'http://ant.design',
@@ -340,10 +448,8 @@ class SpecialWorkbench extends Component {
                 title: '排口名称',
                 dataIndex: 'PointName',
                 render: (text, record) => {
-                    // debugger;
                     if(record.TaskType===2)
                         return <div style={{position:'relative'}}>{text}<Tag style={{position:'absolute',top:-10}} color="#faad14">应急</Tag></div>;
-
                     return text;
 
                 }
@@ -352,7 +458,6 @@ class SpecialWorkbench extends Component {
                 title: '运维状态',
                 dataIndex: 'ExceptionTypeText',
                 render: (text, record) => {
-                    // debugger;
                     if(!text)
                         return <Tag color="rgb(76,205,122)">正常</Tag>;
 
@@ -395,7 +500,6 @@ class SpecialWorkbench extends Component {
      * 智能运维_日历表时间选择事件
      */
     onCalendarSelect = (value) => {
-        // debugger;
         let selectValue = value.format('YYYY-MM-DD 00:00:00');
         this.setState({
             // value,
@@ -457,7 +561,6 @@ class SpecialWorkbench extends Component {
      * 智能质控_渲染图表
      */
     getOption = (type) => {
-        //console.log('rateStatistics',this.props.rateStatistics);
         const {model}=this.props.rateStatistics;
         let networkeRate=(parseFloat(model.NetworkeRate) * 100).toFixed(2);
         let runningRate=(parseFloat(model.RunningRate) * 100).toFixed(2);
@@ -534,7 +637,6 @@ class SpecialWorkbench extends Component {
      * 智能运维_日期面板改变事件(TODO:后续)
      */
     onPanelChange = (value, mode)=>{
-        //console.log(value, mode);
     }
 
     /**
@@ -600,7 +702,6 @@ class SpecialWorkbench extends Component {
      * 智能监控_渲染当小时预警数据列表
      */
     renderHourDataOverWarningList = ()=>{
-        console.log('hourDataOverWarningList:',this.props.hourDataOverWarningList);
         const listData = [];
 
         this.props.hourDataOverWarningList.tableDatas.map((items)=>{
@@ -653,7 +754,6 @@ class SpecialWorkbench extends Component {
      * 智能监控_渲染数据超标数据列表
      */
     renderAllPointOverDataList = ()=>{
-        //console.log('allPointOverDataList:',this.props.allPointOverDataList);
         const listData = [];
         this.props.allPointOverDataList.tableDatas.map((item)=>{
             //判断报警是否超过4小时
@@ -713,7 +813,6 @@ class SpecialWorkbench extends Component {
             markers.push({position});
 
         });
-        //console.log(markers);
         return markers;
     }
 
@@ -724,15 +823,8 @@ class SpecialWorkbench extends Component {
         return <div style={{position:'absolute'}}><div style={MarkerLayoutStyle}>{extData.position.PointName}</div><img style={{width:15}} src="/gisover.png" /></div>;
     }
 
-    /**
-     * 智能监控_地图默认显示的位置
-     */
-    mapCenter = ()=>
-        ({
-            longitude:112.45,
-            latitude:36.28,
-            PointName:'-'
-        })
+ 
+         
         // if(this.props.overPointList.tableDatas.length>0) {
         //     let position = {
         //         longitude:this.props.overPointList.tableDatas[0].Longitude,
@@ -769,7 +861,6 @@ class SpecialWorkbench extends Component {
 
     // 污染物
     handlePollutantChange=(value, selectedOptions) => {
-        //debugger;
         this.updateState({
             warningDetailsDatas:{
                 ...this.props.warningDetailsDatas,
@@ -785,26 +876,113 @@ class SpecialWorkbench extends Component {
      * 智能监控_渲染预警详情图表数据
      */
     getWarningChartOption =() =>{
-        console.log('pollutantList',this.props.pollutantList);
-        console.log('warningDetailsDatas',this.props.warningDetailsDatas);
-
         let {chartDatas,selectedPollutantCode,selectedPollutantName}=this.props.warningDetailsDatas;
-
+        const  {pollutantList}=this.props;
         let xAxis=[];
         let seriesData=[];
-
+       
         chartDatas.map((item) => {
             xAxis.push(`${moment(item.MonitorTime).format('HH:mm:ss')}`);
             seriesData.push(item[selectedPollutantCode]);
         });
+        let suugestValue=null;
+        
+        if(chartDatas.length>0)
+        {
+            suugestValue=chartDatas[0][selectedPollutantCode+'_SuggestValue'];
+        }
+        //当前选中的污染物的信息
+        const selectPllutantInfo=pollutantList.find((value, index, arr) => {
+            return value.pollutantCode == selectedPollutantCode;
+           })
+        let legenddata=[];
+        let pollutantData=[];
+        legenddata.push(selectedPollutantName);
+        if(selectPllutantInfo && selectPllutantInfo.alarmType)
+        {
+            legenddata.push('标准值')
+             switch (selectPllutantInfo.alarmType)
+             {
+                 //上限报警
+                case 1:
+                pollutantData= [
+                    {
+                        yAxis: selectPllutantInfo.upperValue,
+                        symbol: 'none',
+                        label: {
+                            normal: {
+                                position: 'end',
+                                formatter: selectPllutantInfo.upperValue
+                            }
+                        }}
+                ]
+                break;
+                      //下限报警
+                      case 2:
+                      pollutantData= [
+                          {
+                              yAxis: selectPllutantInfo.lowerValue,
+                              symbol: 'none',
+                              label: {
+                                  normal: {
+                                      position: 'end',
+                                      formatter: selectPllutantInfo.lowerValue
+                                  }
+                              }}
+                      ]
+                      break;
+                              //区间报警
+                              case 3:
+                              pollutantData= [
+                                  {
+                                      yAxis: selectPllutantInfo.upperValue,
+                                      symbol: 'none',
+                                      label: {
+                                          normal: {
+                                              position: 'end',
+                                              formatter: selectPllutantInfo.upperValue
+                                          }
+                                      }},
+                                      {
+                                        yAxis: selectPllutantInfo.lowerValue,
+                                        symbol: 'none',
+                                        label: {
+                                            normal: {
+                                                position: 'end',
+                                                formatter: selectPllutantInfo.lowerValue
+                                            }
+                                        }}
+                              ]
+                              break;
+            }
+        }
 
+        let suggestData=null;
+      
+        
+        if(suugestValue && suugestValue!="-")
+        {
+          
+            legenddata.push('建议浓度')
+            suggestData= [
+                {
+                    yAxis: suugestValue,
+                    symbol: 'none',
+                    label: {
+                        normal: {
+                            position: 'end',
+                            formatter: suugestValue
+                        }
+                    }}
+            ]
+        }
         let option = {
             color:['#1890FF','red'],
             tooltip: {
                 trigger: 'axis'
             },
             legend: {
-                data:[selectedPollutantName,'建议浓度']
+                data: legenddata
             },
             xAxis:  {
                 type: 'category',
@@ -830,21 +1008,19 @@ class SpecialWorkbench extends Component {
                     data:seriesData,
                 },
                 {
+                    name:'标准值',
+                    type:'line',
+                    data:[],
+                    markLine : {
+                        data : pollutantData
+                    }
+                },
+                {
                     name:'建议浓度',
                     type:'line',
                     data:[],
                     markLine : {
-                        data : [
-                            {
-                                yAxis: 5,
-                                symbol: 'none',
-                                label: {
-                                    normal: {
-                                        position: 'end',
-                                        formatter: '100'
-                                    }
-                                }}
-                        ]
+                        data : suggestData
                     }
                 }
             ]
@@ -964,7 +1140,11 @@ class SpecialWorkbench extends Component {
         });
     }
 
+
+
     render() {
+   
+      
         return (
             <div
                 style={{
@@ -988,12 +1168,7 @@ class SpecialWorkbench extends Component {
                                 extra={<a href="#">更多>></a>}
                             >
                                 <div id="app" style={{height:400}}>
-                                    <Map amapkey={amapKey} center={this.mapCenter()} zoom={1}>
-                                        <Markers
-                                            markers={this.getMarkers()}
-                                            render={(item)=>this.renderMarkerLayout(item)}
-                                        />
-                                    </Map>
+                               {this.getMap()}
                                 </div>
                             </Card>
                         </Col>

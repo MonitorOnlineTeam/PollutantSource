@@ -16,7 +16,10 @@ export default Model.extend({
         tableDatas: [],
         beginTime: moment().format('YYYY-MM-01 HH:mm:ss'),
         endTime: moment().format('YYYY-MM-DD HH:mm:ss'),
-        EORSort: 'ascend'
+        EORSort: 'ascend',
+        //   avgstoptime:0,
+        //   avgnormaltime:0,
+        //   avgworktime:0
     },
     subscriptions: {
     },
@@ -34,7 +37,25 @@ export default Model.extend({
                 pageIndex: payload.pageIndex,
             };
             const response = yield call(getEquipmentOperatingRateForPoints, body);
+            // let avgstoptime=0;
+            // let avgnormaltime=0;
+            // let avgworktime=0;
+            // if(response && response.data && response.total)
+            // {
+             
+            //     response.data.map(item=>{
+            //         avgworktime+= item.ProducesTime;
+            //         avgnormaltime+=item.NormalRunTime;
+            //         avgstoptime+=item.StopProductionTime;
+            //     })
+            //     avgstoptime=avgstoptime/response.total;
+            //     avgnormaltime=avgnormaltime/response.total;
+            //     avgstoptime=avgstoptime/response.total
+            // }
             yield update({
+                // avgstoptime,
+                // avgnormaltime,
+                // avgworktime,
                 tableDatas: response.data,
                 total: response.total,
                 pageIndex: payload.pageIndex || 1,
