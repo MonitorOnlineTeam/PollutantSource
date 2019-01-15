@@ -19,7 +19,7 @@ import {
     getStatisticsPointStatus
 } from '../services/workbenchapi';
 
-import {queryhistorydatalist} from '../services/api';
+import { queryhistorydatalist } from '../services/api';
 
 export default Model.extend({
     namespace: 'workbenchmodel',
@@ -28,83 +28,84 @@ export default Model.extend({
         pageIndex: 1,
         beginTime: '2018-12-01 00:00:00',//moment().format('YYYY-MM-DD HH:mm:ss'),
         endTime: '2019-01-01 00:00:00',//moment().format('YYYY-MM-DD HH:mm:ss'),
-        operation:{
-            beginTime: moment().add(-3,'months').format("YYYY-MM-01 00:00:00"),//'2018-12-01 00:00:00',//moment().format('YYYY-MM-DD HH:mm:ss'),
+        tableDatas:[],
+        operation: {
+            beginTime: moment().add(-3, 'months').format("YYYY-MM-01 00:00:00"),//'2018-12-01 00:00:00',//moment().format('YYYY-MM-DD HH:mm:ss'),
             endTime: moment().format('YYYY-MM-DD HH:mm:ss'),//'2019-01-01 00:00:00',//moment().format('YYYY-MM-DD HH:mm:ss'),
-            tableDatas:[],
-            tempTableDatas:[],
+            tableDatas: [],
+            tempTableDatas: [],
             pageIndex: 1,
             pageSize: 6,
-            total:0,
+            total: 0,
         },
-        exceptionAlarm:{
-            beginTime:'2018-11-01 00:00:00', //moment().format("YYYY-MM-01 00:00:00"),
+        exceptionAlarm: {
+            beginTime: '2018-11-01 00:00:00', //moment().format("YYYY-MM-01 00:00:00"),
             endTime: moment().add(1, 'seconds').format('YYYY-MM-DD HH:mm:ss'),
-            tableDatas:[],
+            tableDatas: [],
             pageIndex: 1,
             pageSize: 4,
-            total:0,
+            total: 0,
         },
-        rateStatistics:{
+        rateStatistics: {
             beginTime: moment().format("YYYY-MM-01 00:00:00"),
             endTime: moment().format('YYYY-MM-DD HH:mm:ss'),
-            model:{}
+            model: {}
         },
-        networkeRateList:{
-            tableDatas:[],
+        networkeRateList: {
+            tableDatas: [],
             pageIndex: 1,
             pageSize: 3,
-            total:0,
-            NetSort:''
+            total: 0,
+            NetSort: ''
         },
-        runningRateList:{
+        runningRateList: {
             beginTime: moment().format("YYYY-MM-01 00:00:00"),
             endTime: moment().format('YYYY-MM-DD HH:mm:ss'),
-            tableDatas:[],
+            tableDatas: [],
             pageIndex: 1,
             pageSize: 3,
-            total:0,
+            total: 0,
         },
-        transmissionEffectiveRateList:{
+        transmissionEffectiveRateList: {
             beginTime: moment().format("YYYY-MM-01 00:00:00"),
             endTime: moment().format('YYYY-MM-DD HH:mm:ss'),
-            tableDatas:[],
+            tableDatas: [],
             pageIndex: 1,
             pageSize: 3,
-            total:0,
+            total: 0,
         },
-        hourDataOverWarningList:{
-            beginTime:'2018-12-28 20:00:00', //moment().format("YYYY-MM-DD HH:00:00"),
+        hourDataOverWarningList: {
+            beginTime: '2018-12-28 20:00:00', //moment().format("YYYY-MM-DD HH:00:00"),
             endTime: '2018-12-28 21:00:00',//moment().add(1,'hour').format('YYYY-MM-DD 00:00:00'),
-            tableDatas:[],
+            tableDatas: [],
             pageIndex: 1,
             pageSize: 3,
-            total:0,
+            total: 0,
         },
-        allPointOverDataList:{
-            tableDatas:[],
+        allPointOverDataList: {
+            tableDatas: [],
             // pageIndex: 1,
             // pageSize: 3,
-            total:0,
+            total: 0,
         },
-        overPointList:{
-            tableDatas:[],
-            total:0,
+        overPointList: {
+            tableDatas: [],
+            total: 0,
         },
-        statisticsPointStatus:{
-            model:{},
-            total:0
+        statisticsPointStatus: {
+            model: {},
+            total: 0
         },
-        warningDetailsDatas:{
-            chartDatas:[],
-            DGIMNs:'',
-            selectedPollutantName:'',
-            selectedPollutantCode:'',
+        warningDetailsDatas: {
+            chartDatas: [],
+            DGIMNs: '',
+            selectedPollutantName: '',
+            selectedPollutantCode: '',
             pageIndex: 1,
             pageSize: 2000,
-            beginTime:'2018-12-28 20:00:00',
+            beginTime: '2018-12-28 20:00:00',
             endTime: '2018-12-28 21:00:00',
-        }
+        },
     },
     subscriptions: {
     },
@@ -114,27 +115,27 @@ export default Model.extend({
          * @param {传递参数} 传递参数
          * @param {操作} 操作项
          */
-        * getOperationData({payload}, { call, put, update, select }) {
-            const {operation} = yield select(state => state.workbenchmodel);
+        * getOperationData({ payload }, { call, put, update, select }) {
+            const { operation } = yield select(state => state.workbenchmodel);
             // debugger;
             let body = {
                 beginTime: operation.beginTime,
                 endTime: operation.endTime,
                 pageSize: operation.pageSize,
                 pageIndex: operation.pageIndex,
-                IsQueryAllUser:true,
-                IsPaging:false
+                IsQueryAllUser: true,
+                IsPaging: false
                 //operationUserId:'766f911d-5e41-4bbf-b705-add427a16e77'
             };
             const response = yield call(getOperationHistoryRecordPageList, body);
             yield update({
-                operation:{
+                operation: {
                     ...operation,
                     ...{
-                        tableDatas:response.data,
-                        tempTableDatas:response.data,
-                        pageIndex:payload.pageIndex || 1,
-                        total:response.total
+                        tableDatas: response.data,
+                        tempTableDatas: response.data,
+                        pageIndex: payload.pageIndex || 1,
+                        total: response.total
                     }
                 }
             });
@@ -144,8 +145,8 @@ export default Model.extend({
          * @param {传递参数} 传递参数
          * @param {操作} 操作项
          */
-        * getExceptionAlarmData({payload}, { call, put, update, select }) {
-            const {exceptionAlarm} = yield select(state => state.workbenchmodel);
+        * getExceptionAlarmData({ payload }, { call, put, update, select }) {
+            const { exceptionAlarm } = yield select(state => state.workbenchmodel);
             //debugger;
             let body = {
                 beginTime: exceptionAlarm.beginTime,
@@ -159,12 +160,12 @@ export default Model.extend({
             const response = yield call(getDataExceptionAlarmPageList, body);
             //debugger;
             yield update({
-                exceptionAlarm:{
+                exceptionAlarm: {
                     ...exceptionAlarm,
                     ...{
-                        tableDatas:response.data,
-                        pageIndex:payload.pageIndex || 1,
-                        total:response.total
+                        tableDatas: response.data,
+                        pageIndex: payload.pageIndex || 1,
+                        total: response.total
                     }
                 }
             });
@@ -176,8 +177,8 @@ export default Model.extend({
          * @param {传递参数} 传递参数
          * @param {操作} 操作项
          */
-        * getRateStatisticsData({payload}, { call, put, update, select }) {
-            const {rateStatistics} = yield select(state => state.workbenchmodel);
+        * getRateStatisticsData({ payload }, { call, put, update, select }) {
+            const { rateStatistics } = yield select(state => state.workbenchmodel);
             //debugger;
             let body = {
                 beginTime: rateStatistics.beginTime,
@@ -186,12 +187,12 @@ export default Model.extend({
             const response = yield call(getRateStatistics, body);
             //debugger;
             yield update({
-                rateStatistics:{
+                rateStatistics: {
                     ...rateStatistics,
                     ...{
-                        model:response.data,
-                        pageIndex:payload.pageIndex || 1,
-                        total:response.total
+                        model: response.data,
+                        pageIndex: payload.pageIndex || 1,
+                        total: response.total
                     }
                 }
             });
@@ -201,25 +202,25 @@ export default Model.extend({
          * @param {传递参数} 传递参数
          * @param {操作} 操作项
          */
-        * getNetworkeRateData({payload}, { call, put, update, select }) {
-            const {networkeRateList} = yield select(state => state.workbenchmodel);
+        * getNetworkeRateData({ payload }, { call, put, update, select }) {
+            const { networkeRateList } = yield select(state => state.workbenchmodel);
             //debugger;
             let body = {
                 beginTime: networkeRateList.beginTime,
                 endTime: networkeRateList.endTime,
-                NetSort:networkeRateList.NetSort
+                NetSort: networkeRateList.NetSort
 
             };
             const response = yield call(getRealTimeNetWorkingRateForPointsPageList, body);
             //debugger;
             yield update({
-                networkeRateList:{
+                networkeRateList: {
                     ...networkeRateList,
                     ...{
-                        tableDatas:response.data,
-                        pageIndex:payload.pageIndex || 1,
-                        total:response.total,
-                        NetSort:networkeRateList.NetSort
+                        tableDatas: response.data,
+                        pageIndex: payload.pageIndex || 1,
+                        total: response.total,
+                        NetSort: networkeRateList.NetSort
                     }
                 }
             });
@@ -229,8 +230,8 @@ export default Model.extend({
          * @param {传递参数} 传递参数
          * @param {操作} 操作项
          */
-        * getDataOverWarningData({payload}, { call, put, update, select }) {
-            const {hourDataOverWarningList} = yield select(state => state.workbenchmodel);
+        * getDataOverWarningData({ payload }, { call, put, update, select }) {
+            const { hourDataOverWarningList } = yield select(state => state.workbenchmodel);
             //debugger;
             let body = {
                 beginTime: hourDataOverWarningList.beginTime,
@@ -242,12 +243,12 @@ export default Model.extend({
             const response = yield call(getDataOverWarningPageList, body);
             //debugger;
             yield update({
-                hourDataOverWarningList:{
+                hourDataOverWarningList: {
                     ...hourDataOverWarningList,
                     ...{
-                        tableDatas:response.data,
-                        pageIndex:hourDataOverWarningList.pageIndex || 1,
-                        total:response.total
+                        tableDatas: response.data,
+                        pageIndex: hourDataOverWarningList.pageIndex || 1,
+                        total: response.total
                     }
                 }
             });
@@ -257,19 +258,19 @@ export default Model.extend({
          * @param {传递参数} 传递参数
          * @param {操作} 操作项
          */
-        * getAllPointOverDataList({payload}, { call, put, update, select }) {
-            const {allPointOverDataList} = yield select(state => state.workbenchmodel);
+        * getAllPointOverDataList({ payload }, { call, put, update, select }) {
+            const { allPointOverDataList } = yield select(state => state.workbenchmodel);
             //debugger;
             let body = {};
             const response = yield call(getAllPointOverDataList, body);
             //debugger;
             yield update({
-                allPointOverDataList:{
+                allPointOverDataList: {
                     ...allPointOverDataList,
                     ...{
-                        tableDatas:response.data,
+                        tableDatas: response.data,
                         // pageIndex:allPointOverDataList.pageIndex || 1,
-                        total:response.total
+                        total: response.total
                     }
                 }
             });
@@ -279,18 +280,18 @@ export default Model.extend({
          * @param {传递参数} 传递参数
          * @param {操作} 操作项
          */
-        * getOverPointList({payload}, { call, put, update, select }) {
-            const {overPointList} = yield select(state => state.workbenchmodel);
+        * getOverPointList({ payload }, { call, put, update, select }) {
+            const { overPointList } = yield select(state => state.workbenchmodel);
             //debugger;
             let body = {};
             const response = yield call(getOverPoints, body);
             //debugger;
             yield update({
-                overPointList:{
+                overPointList: {
                     ...overPointList,
                     ...{
-                        tableDatas:response.data,
-                        total:response.total
+                        tableDatas: response.data,
+                        total: response.total
                     }
                 }
             });
@@ -300,18 +301,18 @@ export default Model.extend({
          * @param {传递参数} 传递参数
          * @param {操作} 操作项
          */
-        * getStatisticsPointStatus({payload}, { call, put, update, select }) {
-            const {statisticsPointStatus} = yield select(state => state.workbenchmodel);
+        * getStatisticsPointStatus({ payload }, { call, put, update, select }) {
+            const { statisticsPointStatus } = yield select(state => state.workbenchmodel);
             //debugger;
             let body = {};
             const response = yield call(getStatisticsPointStatus, body);
             //debugger;
             yield update({
-                statisticsPointStatus:{
+                statisticsPointStatus: {
                     ...statisticsPointStatus,
                     ...{
-                        model:response.data,
-                        total:response.total
+                        model: response.data,
+                        total: response.total
                     }
                 }
             });
@@ -321,8 +322,8 @@ export default Model.extend({
          * @param {传递参数} 传递参数
          * @param {操作} 操作项
          */
-        * getRealTimeWarningDatas({payload}, { call, put, update, select }) {
-            const {warningDetailsDatas} = yield select(state => state.workbenchmodel);
+        * getRealTimeWarningDatas({ payload }, { call, put, update, select }) {
+            const { warningDetailsDatas } = yield select(state => state.workbenchmodel);
             // debugger;
             let body = {
                 dgimn: warningDetailsDatas.DGIMNs,
@@ -333,16 +334,47 @@ export default Model.extend({
                 beginTime: warningDetailsDatas.beginTime,
                 endTime: warningDetailsDatas.endTime
             };
-            const response = yield call(queryhistorydatalist, {...body});
-            // debugger;
+            const response = yield call(queryhistorydatalist, { ...body });
             yield update({
-                warningDetailsDatas:{
+                warningDetailsDatas: {
                     ...warningDetailsDatas,
                     ...{
-                        chartDatas:response.data
+                        chartDatas: response.data
                     }
                 }
             });
+        },
+        //菜单-运维日历
+        * getOperationCalendarData({ payload }, { call, put, update, select }) {
+            const { operation } = yield select(state => state.workbenchmodel);
+            const response = yield call(getOperationHistoryRecordPageList, payload);
+            if (response.data !== null) {
+                yield update({
+                    operation: {
+                        ...operation,
+                        ...{
+                            tableDatas: response.data,
+                            tempTableDatas: response.data,
+                            pageIndex: payload.pageIndex || 1,
+                            total: response.total
+                        }
+                    }
+                });
+            }
+            else {
+                yield update({
+                    operation: {
+                        ...operation,
+                        ...{
+                            tableDatas: null,
+                            tempTableDatas: null,
+                            pageIndex: payload.pageIndex || 1,
+                            total: response.total
+                        }
+                    }
+                });
+            }
+
         },
     },
 });
