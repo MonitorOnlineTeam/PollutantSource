@@ -10,10 +10,11 @@ class TreeCardContent extends Component {
     getTreeDatalist = () => {
         const { isloading, treedatalist, PollutantType } = this.props;
         let res = [];
+        var pollutantType=this.props.PollutantType;
         if (treedatalist) {
             this.props.treedatalist.map((item, key) => {
                 let treecardcss = styles.cardDiv;
-                if (item.pollutantTypeCode === this.props.PollutantType) {
+                if (item.pollutantTypeCode === parseInt(PollutantType)) {
                     if (this.props.ifSelect) {
                         if (item.DGIMN === localStorage.getItem('DGIMN')) {
                             treecardcss = styles.cardDivClick;
@@ -56,8 +57,8 @@ class TreeCardContent extends Component {
         return res;
     }
     render() {
-        const { pollutantTypeloading } = this.props;
-        if (pollutantTypeloading) {
+        if(!this.props.pollutantTypeloading)
+        {
             if (this.props.isloading) {
                 return (
                     <div style={{
@@ -76,10 +77,10 @@ class TreeCardContent extends Component {
                             size="large"
                         />
                     </div>
-
                 );
             }
         }
+ 
 
         let { getHeight, treedatalist } = this.props;
         // if (!treedatalist || !treedatalist[0]) {

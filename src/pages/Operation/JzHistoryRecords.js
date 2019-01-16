@@ -46,6 +46,7 @@ export default class JzHistoryRecords extends Component {
     }
 
     componentDidMount() {
+        localStorage.setItem('pollutantType', 2);
         const { dispatch } = this.props;
         dispatch({
             type: 'overview/getPollutantTypeList',
@@ -128,6 +129,7 @@ export default class JzHistoryRecords extends Component {
     }
     //当前选中的污染物类型
     getNowPollutantType = (key) => {
+        localStorage.setItem('pollutantType', key);
         this.setState({
             pollutantTypeCode: key
         })
@@ -152,32 +154,45 @@ export default class JzHistoryRecords extends Component {
                 BeginTime: this.state.rangeDate[0].format('YYYY-MM-DD 00:00:00'),
                 EndTime: this.state.rangeDate[1].format('YYYY-MM-DD 23:59:59'),
                 DGIMN: getDGIMN,
+                search: true,
                 callback: (data) => {
-                    const existdata = data.find((value, index, arr) => {
-                        return value.DGIMN == getDGIMN
-                    });
-                    if (existdata == undefined) {
-                        this.props.dispatch({
-                            type: 'task/GetJzHistoryRecord',
-                            payload: {
-                                pageIndex: this.props.pageIndex,
-                                pageSize: this.props.pageSize,
-                                DGIMN: null,
-                                BeginTime: this.state.BeginTime,
-                                EndTime: this.state.EndTime,
-                            }
+                    if (data !== null) {
+                        const existdata = data.find((value, index, arr) => {
+                            return value.DGIMN == getDGIMN
                         });
+                        if (existdata == undefined) {
+                            this.props.dispatch({
+                                type: 'task/GetJzHistoryRecord',
+                                payload: {
+                                    pageIndex: this.props.pageIndex,
+                                    pageSize: this.props.pageSize,
+                                    DGIMN: null,
+                                    BeginTime: this.state.BeginTime,
+                                    EndTime: this.state.EndTime,
+                                }
+                            });
+                        }
+                        else {
+                            this.props.dispatch({
+                                type: 'task/GetJzHistoryRecord',
+                                payload: {
+                                    pageIndex: this.props.pageIndex,
+                                    pageSize: this.props.pageSize,
+                                    DGIMN: getDGIMN,
+                                    BeginTime: this.state.BeginTime,
+                                    EndTime: this.state.EndTime,
+                                }
+                            });
+                        }
                     }
+
                 }
             },
         });
     }
     //重新加载
     reloadData = (pollutantTypeCode, searchName) => {
-        var getDGIMN = localStorage.getItem('DGIMN')
-        if (getDGIMN === null) {
-            getDGIMN = '[object Object]';
-        }
+        var getDGIMN = '[object Object]'
         this.props.dispatch({
             type: 'overview/querydatalist',
             payload: {
@@ -203,10 +218,11 @@ export default class JzHistoryRecords extends Component {
         const SCREEN_HEIGHT = document.querySelector('body').offsetHeight - 150;
         var dataSource = [];
         var spining = true;
-        if (!this.props.treedataloading && !this.props.pollutantTypeloading) {
+        if (!this.props.treedataloading && !this.props.pollutantTypeloading && !this.props.loading) {
             spining = this.props.loading;
             dataSource = this.props.JzHistoryRecord;
         }
+        var pollutantType = localStorage.getItem('pollutantType')
         const columns = [{
             title: '校准人',
             width: '20%',
@@ -283,12 +299,12 @@ export default class JzHistoryRecords extends Component {
                                         style={{
                                             width: '400px',
                                             marginTop: 5,
-                                            background: '#fff'
+                                            background: '#fff',
                                         }}
                                         pollutantTypeloading={pollutantTypeloading}
                                         getHeight={'calc(100vh - 220px)'} getStatusImg={this.getStatusImg}
                                         getNowPollutantType={this.getNowPollutantType}
-                                        PollutantType={2}
+                                        PollutantType={2} treedatalist={datalist}
                                         pollutantTypelist={pollutantTypelist}
                                         tabkey={this.state.pollutantTypeCode}
                                     />
@@ -296,7 +312,7 @@ export default class JzHistoryRecords extends Component {
                                         getHeight='calc(100vh - 220px)'
                                         pollutantTypeloading={pollutantTypeloading}
                                         getStatusImg={this.getStatusImg} isloading={treedataloading}
-                                        treeCilck={this.treeCilck} treedatalist={datalist} PollutantType={2} ifSelect={true} />
+                                        treeCilck={this.treeCilck} treedatalist={datalist} PollutantType={pollutantType} ifSelect={true} />
                                 </div>
                             </div>
                         </div>

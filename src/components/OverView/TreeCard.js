@@ -34,13 +34,12 @@ class TreeCard extends Component {
         //     return (
         //         <Spin
         //             style={{
-        //                 // width: '100%',
-        //                 height: 'calc(100vh/2)',
+        //                 width: '100%',
+        //                 height: '100',
         //                 display: 'flex',
         //                 alignItems: 'center',
         //                 justifyContent: 'center'
         //             }}
-        //             size="large"
         //         />
         //     );
         // }

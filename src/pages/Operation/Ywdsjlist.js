@@ -41,6 +41,7 @@ export default class Ywdsjlist extends Component {
     }
 
     componentDidMount() {
+        localStorage.setItem('pollutantType', 2);
         const { dispatch } = this.props;
         dispatch({
             type: 'overview/getPollutantTypeList',
@@ -154,6 +155,7 @@ export default class Ywdsjlist extends Component {
     }
     //当前选中的污染物类型
     getNowPollutantType = (key) => {
+        localStorage.setItem('pollutantType', key);
         this.setState({
             pollutantTypeCode: key
         })
@@ -178,32 +180,51 @@ export default class Ywdsjlist extends Component {
                 BeginTime: this.state.rangeDate[0].format('YYYY-MM-DD 00:00:00'),
                 EndTime: this.state.rangeDate[1].format('YYYY-MM-DD 23:59:59'),
                 DGIMN: getDGIMN,
+                search: true,
                 callback: (data) => {
-                    const existdata = data.find((value, index, arr) => {
-                        return value.DGIMN == getDGIMN
-                    });
-                    if (existdata == undefined) {
-                        this.props.dispatch({
-                            type: 'task/GetHistoryRepairDetail',
-                            payload: {
-                                pageIndex: this.props.pageIndex,
-                                pageSize: this.props.pageSize,
-                                DGIMN: null,
-                                BeginTime: this.state.BeginTime,
-                                EndTime: this.state.EndTime,
-                            }
+                    if (data !== null) {
+                        const existdata = data.find((value, index, arr) => {
+                            return value.DGIMN == getDGIMN
                         });
+                        if (existdata == undefined) {
+                            this.props.dispatch({
+                                type: 'task/GetYwdsj',
+                                payload: {
+                                    pageIndex: this.props.pageIndex,
+                                    pageSize: this.props.pageSize,
+                                    taskType: this.state.taskType,
+                                    DGIMNs: '1',
+                                    IsAlarmTimeout: this.state.IsAlarmTimeout,
+                                    beginTime: this.state.rangeDate[0].format('YYYY-MM-DD 00:00:00'),
+                                    endTime: this.state.rangeDate[1].format('YYYY-MM-DD 23:59:59'),
+                                    isLoadMoreOpt: this.state.iconLoading,
+                                }
+                            });
+                        }
+                        else {
+                            this.props.dispatch({
+                                type: 'task/GetYwdsj',
+                                payload: {
+                                    pageIndex: this.props.pageIndex,
+                                    pageSize: this.props.pageSize,
+                                    taskType: this.state.taskType,
+                                    DGIMNs: getDGIMN,
+                                    IsAlarmTimeout: this.state.IsAlarmTimeout,
+                                    beginTime: this.state.rangeDate[0].format('YYYY-MM-DD 00:00:00'),
+                                    endTime: this.state.rangeDate[1].format('YYYY-MM-DD 23:59:59'),
+                                    isLoadMoreOpt: this.state.iconLoading,
+                                }
+                            });
+                        }
                     }
+
                 }
             },
         });
     }
     //重新加载
     reloadData = (pollutantTypeCode, searchName) => {
-        var getDGIMN = localStorage.getItem('DGIMN')
-        if (getDGIMN === null) {
-            getDGIMN = '[object Object]';
-        }
+        var getDGIMN = '[object Object]'
         this.props.dispatch({
             type: 'overview/querydatalist',
             payload: {
@@ -291,8 +312,15 @@ export default class Ywdsjlist extends Component {
                 <Switch style={{ marginLeft: '10px', marginBottom: '6px' }} checkedChildren="报警响应超时" unCheckedChildren="报警响应未超时" defaultChecked={this.state.alarmStatus} onChange={this.OpenonChange} />
             </div>
         );
-        let data = this.props.OperationInfo;
+        var data = [];
+        var spining = true;
+        if (!this.props.treedataloading && !this.props.pollutantTypeloading && !this.props.loading) {
+            spining = this.props.loading;
+            data = this.props.OperationInfo;
+        }
+
         const IsOver = this.props.IsOver;
+        var pollutantType = localStorage.getItem('pollutantType')
         return (
             <div className={Ywdsjlistss.cardTitle}>
                 <Row>
@@ -314,7 +342,7 @@ export default class Ywdsjlist extends Component {
                                         style={{
                                             width: '400px',
                                             marginTop: 5,
-                                            background: '#fff'
+                                            background: '#fff',
                                         }}
                                         pollutantTypeloading={pollutantTypeloading}
                                         getHeight={'calc(100vh - 220px)'} getStatusImg={this.getStatusImg}
@@ -327,7 +355,7 @@ export default class Ywdsjlist extends Component {
                                         getHeight='calc(100vh - 220px)'
                                         pollutantTypeloading={pollutantTypeloading}
                                         getStatusImg={this.getStatusImg} isloading={treedataloading}
-                                        treeCilck={this.treeCilck} treedatalist={datalist} PollutantType={2} ifSelect={true} />
+                                        treeCilck={this.treeCilck} treedatalist={datalist} PollutantType={pollutantType} ifSelect={true} />
                                 </div>
                             </div>
                         </div>
@@ -337,7 +365,7 @@ export default class Ywdsjlist extends Component {
                         <div style={{ marginRight: 10, marginTop: 25 }}>
                             <Spin style={{
                                 marginTop: '20%',
-                            }} spinning={this.props.loading}>
+                            }} spinning={spining}>
                                 <Card extra={extraContent} bordered={false}>
                                     {
                                         <div style={{ height: 'calc(100vh - 205px)' }} className={Ywdsjlistss.divTimeLine}>

@@ -347,7 +347,9 @@ export default Model.extend({
         //菜单-运维日历
         * getOperationCalendarData({ payload }, { call, put, update, select }) {
             const { operation } = yield select(state => state.workbenchmodel);
+            debugger
             const response = yield call(getOperationHistoryRecordPageList, payload);
+            debugger
             if (response.data !== null) {
                 yield update({
                     operation: {

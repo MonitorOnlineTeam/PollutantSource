@@ -57,7 +57,6 @@ export default Model.extend({
         },
         * getPointsData({ payload }, { call, put, update, select }) {
             const { clickDate, pageIndex, pageSize, sort2, sort8 } = yield select(state => state.alarmresponse);
-            debugger
             let body = {
                 monthTime: clickDate,
                 pageIndex: pageIndex,

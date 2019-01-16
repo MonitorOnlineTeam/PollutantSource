@@ -32,6 +32,7 @@ export default class ProcessFlowDiagram extends Component {
         };
     }
     componentDidMount() {
+        localStorage.setItem('pollutantType', 2);
         const { dispatch } = this.props;
         dispatch({
             type: 'overview/getPollutantTypeList',
@@ -73,6 +74,7 @@ export default class ProcessFlowDiagram extends Component {
     }
     //当前选中的污染物类型
     getNowPollutantType = (key) => {
+        localStorage.setItem('pollutantType', key);
         this.setState({
             pollutantTypeCode: key
         })
@@ -93,28 +95,37 @@ export default class ProcessFlowDiagram extends Component {
                 ProcessFlowDiagram: true,
                 pointName: searchName,
                 DGIMN: getDGIMN,
+                search: true,
                 callback: (data) => {
-                    const existdata = data.find((value, index, arr) => {
-                        return value.DGIMN == getDGIMN
-                    });
-                    if (existdata == undefined) {
-                        this.props.dispatch({
-                            type: 'points/queryprocesschart',
-                            payload: {
-                                dgimn: null // this.props.pointInfo.DGIMN
-                            }
+                    if (data !== null) {
+                        const existdata = data.find((value, index, arr) => {
+                            return value.DGIMN == getDGIMN
                         });
+                        if (existdata == undefined) {
+                            this.props.dispatch({
+                                type: 'points/queryprocesschart',
+                                payload: {
+                                    dgimn: null // this.props.pointInfo.DGIMN
+                                }
+                            });
+                        }
+                        else {
+                            this.props.dispatch({
+                                type: 'points/queryprocesschart',
+                                payload: {
+                                    dgimn: getDGIMN // this.props.pointInfo.DGIMN
+                                }
+                            });
+                        }
                     }
+
                 }
             },
         });
     }
     //重新加载
     reloadData = (pollutantTypeCode, searchName) => {
-        var getDGIMN = localStorage.getItem('DGIMN')
-        if (getDGIMN === null) {
-            getDGIMN = '[object Object]';
-        }
+        var getDGIMN = '[object Object]'
         this.props.dispatch({
             type: 'overview/querydatalist',
             payload: {
@@ -146,6 +157,7 @@ export default class ProcessFlowDiagram extends Component {
         } else {
             status = '0';
         }
+        var pollutantType = localStorage.getItem('pollutantType')
         return (
             <div className={styles.cardTitle}>
                 <Row>
@@ -167,7 +179,7 @@ export default class ProcessFlowDiagram extends Component {
                                         style={{
                                             width: '400px',
                                             marginTop: 5,
-                                            background: '#fff'
+                                            background: '#fff',
                                         }}
                                         pollutantTypeloading={pollutantTypeloading}
                                         getHeight={'calc(100vh - 220px)'} getStatusImg={this.getStatusImg}
@@ -180,14 +192,14 @@ export default class ProcessFlowDiagram extends Component {
                                         getHeight='calc(100vh - 220px)'
                                         pollutantTypeloading={pollutantTypeloading}
                                         getStatusImg={this.getStatusImg} isloading={treedataloading}
-                                        treeCilck={this.treeCilck} treedatalist={datalist} PollutantType={2} ifSelect={true} />
+                                        treeCilck={this.treeCilck} treedatalist={datalist} PollutantType={pollutantType} ifSelect={true} />
                                 </div>
                             </div>
                         </div>
                     </Col>
                     <Col style={{ width: document.body.clientWidth - 430, height: 'calc(100vh - 90px)', float: 'right' }}>
                         <div style={{ marginRight: 10, marginTop: 25 }}>
-                            <Card bordered={false} style={{ height: 'calc(100vh - 110px)',overflow:'auto' }}>
+                            <Card bordered={false} style={{ height: 'calc(100vh - 110px)', overflow: 'auto' }}>
                                 <GyPic DGIMN={this.state.DGIMN} status={status} />
                             </Card>
                         </div>
