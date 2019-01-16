@@ -241,11 +241,15 @@ export default class OperationCalendar extends Component {
         );
     }
     dateSelect = (date) => {
-        this.setState({
-            visible: true,
-            dateValue: date,
-        });
-
+        //过滤，没有数据不弹出对话框
+        const data = this.state.dateType === 'month' ? this.props.operation.tempTableDatas.filter(m => moment(m.CreateTime).format('YYYY-MM-DD') === date.format("YYYY-MM-DD")) : this.props.operation.tempTableDatas.filter(m => moment(m.CreateTime).format('YYYY-MM') === date.format("YYYY-MM"))
+        if(data.length!=0)
+        {
+            this.setState({
+                visible: true,
+                dateValue: date,
+            });
+        }
     }
     onPanelChange = (date, datestring) => {
         this.setState({ dateType: datestring })

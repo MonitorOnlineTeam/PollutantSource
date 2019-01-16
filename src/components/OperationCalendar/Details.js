@@ -33,8 +33,6 @@ export default class Details extends Component {
     componentWillMount() {
     }
     render() {
-        console.log(this.props.data);
-        debugger
         const columns = [
             {
                 title: '排口名称',
