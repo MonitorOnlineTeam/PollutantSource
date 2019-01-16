@@ -153,7 +153,7 @@ export async function loadPointDetail(params) {
 export async function loadCountryPointView(params) {
     let groupstr = '';
     params.GroupID.map(item => {
-        groupstr += `${item  },`;
+        groupstr += `${item },`;
     });
     const body = {
         GroupIDs: groupstr,
@@ -176,13 +176,12 @@ export async function loadCountryPointView(params) {
     return result.data;
 }
 
-export async function getAllPointAlarmInfo(params) {
+export async function GetAlarmNotices(params) {
     const body = {
-        time: params.time,
+        beginTime: params.beginTime,
+        endTime: params.endTime
     };
-    // const result = await get('/api/rest/AlarmDealInfoApi/GetAllPointExceptionInfo', body, null);
-    const result = await get('/api/rest/AtmosphereApi/AlarmData/GetAlarmToVerifyList', body, null);
-
+    const result = await get('/api/rest/PollutantSourceApi/PAlarmData/GetAlarmNotices', body, null);
     return result === null ? { data: null } : result;
 }
 
@@ -305,8 +304,8 @@ export async function queryentedit(params) {
     const body = {
         name: params.entallname,
         code: params.parentID,
-        longitude: (params.latlon && params.latlon.split)?params.latlon.split(',')[0]:'',
-        latitude: (params.latlon && params.latlon.split)? params.latlon.split(',')[1]:'',
+        longitude: params.latlon && params.latlon.split?params.latlon.split(',')[0]:'',
+        latitude: params.latlon && params.latlon.split? params.latlon.split(',')[1]:'',
         // photo:
         pSScaleCode: params.pollutionsources,
         abbreviation: params.enteasyname,
@@ -519,6 +518,5 @@ export async function getPollutantTypeList(params) {
     const result = await post('/api/rest/PollutantSourceApi/DataList/GetPollutantTypeList', body, null);
     return result === null ? {data: null} : result.data;
 }
-
 
 
