@@ -19,7 +19,8 @@ import {
     getStatisticsPointStatus
 } from '../services/workbenchapi';
 
-import { queryhistorydatalist } from '../services/api';
+import {queryhistorydatalist} from '../services/api';
+import { debug } from 'util';
 
 export default Model.extend({
     namespace: 'workbenchmodel',
@@ -74,10 +75,10 @@ export default Model.extend({
             pageSize: 3,
             total: 0,
         },
-        hourDataOverWarningList: {
-            beginTime: '2018-12-28 20:00:00', //moment().format("YYYY-MM-DD HH:00:00"),
-            endTime: '2018-12-28 21:00:00',//moment().add(1,'hour').format('YYYY-MM-DD 00:00:00'),
-            tableDatas: [],
+        hourDataOverWarningList:{
+            beginTime:moment().add(-1,'hour').format("YYYY-MM-DD HH:00:00"),
+            endTime: moment().format('YYYY-MM-DD HH:00:00'),
+            tableDatas:[],
             pageIndex: 1,
             pageSize: 3,
             total: 0,
@@ -103,9 +104,11 @@ export default Model.extend({
             selectedPollutantCode: '',
             pageIndex: 1,
             pageSize: 2000,
-            beginTime: '2018-12-28 20:00:00',
-            endTime: '2018-12-28 21:00:00',
-        },
+            beginTime:moment().add(-1,'hour').format("YYYY-MM-DD HH:00:00"),
+            endTime: moment().format('YYYY-MM-DD HH:00:00'),
+            // beginTime:'2018-12-28 20:00:00',
+            // endTime: '2018-12-28 21:00:00',
+        }
     },
     subscriptions: {
     },
@@ -344,6 +347,38 @@ export default Model.extend({
                 }
             });
         },
+        //
+        *updateRealTimeData({payload}
+            ,{update,select}){
+                if(payload && payload.array)
+                {
+                    let  { warningDetailsDatas } = yield select(_ => _.workbenchmodel);
+                    if(warningDetailsDatas.DGIMNs)
+                    {
+                        let pushdata={};
+                        payload.array.map(item=>{
+                                if(item.DGIMN==warningDetailsDatas.DGIMNs)
+                                {
+                                    debugger;
+                                    pushdata[item.PollutantCode]=item.MonitorValue;
+                                    pushdata['MonitorTime']=item.MonitorTime;
+                                    pushdata['DataGatherCode']=warningDetailsDatas.DGIMNs;
+                                }
+                        })
+                        debugger;
+                        if(pushdata && pushdata['DataGatherCode'])
+                        {
+                            debugger;
+                            let array=[];
+                            array.push(pushdata);
+                            warningDetailsDatas.chartDatas= array.concat(warningDetailsDatas.chartDatas);
+                            yield update({warningDetailsDatas});
+                        }
+                        
+                    } 
+                }
+        },
+
         //菜单-运维日历
         * getOperationCalendarData({ payload }, { call, put, update, select }) {
             const { operation } = yield select(state => state.workbenchmodel);

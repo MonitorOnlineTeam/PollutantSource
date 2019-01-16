@@ -5,7 +5,8 @@ import {
     GetHistoryConsumablesReplaceRecord, GetHistoryStandardGasRepalceRecordList,
     GetHistoryInspectionHistoryRecords, GetStopCemsDetail, GetRepairDetail,
     GetHistoryRepairDetail, GetHistoryStopCemsList, GetDeviceExceptionList,
-    GetBdHistoryInfoList, GetDeviceExceptionDetail, GetBdTestRecord, GetPatrolTypeIdbyTaskId
+    GetBdHistoryInfoList, GetDeviceExceptionDetail, GetBdTestRecord,
+    GetPostRevokeTask, GetPatrolTypeIdbyTaskId
 } from '../services/taskapi';
 import { Model } from '../dvapack';
 import { EnumRequstResult } from '../utils/enum';
@@ -426,6 +427,17 @@ export default Model.extend({
                 }
             }
         },
+        // 撤单
+         * GetPostRevokeTask({
+            payload,
+           }, { call }) {
+                const DataInfo = yield call(GetPostRevokeTask, payload);
+                if (DataInfo && DataInfo.requstresult ) {
+                    message.success('撤单成功!');
+                } else {
+                    message.error('撤单失败!');
+                }
+            },
 
         // 根据任务id判断出巡检记录表详情
         * GetPatrolTypeIdbyTaskId({

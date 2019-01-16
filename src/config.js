@@ -35,18 +35,19 @@ module.exports = {
     }
     ],
     zspollutantInfo: [{
-        pollutantCode: '01',
+        pollutantCode: 'zs01',
         pollutantName: '烟尘',
         unit: 'mg/m³'
     }, {
-        pollutantCode: '02',
+        pollutantCode: 'zs02',
         pollutantName: 'SO2',
         unit: 'mg/m³'
     }, {
-        pollutantCode: '03',
+        pollutantCode: 'zs03',
         pollutantName: 'NOx',
         unit: 'mg/m³'
     }
     ],
-    summaryPolluntantCode:'zs01,zs02,zs03'
+    summaryPolluntantCode:'zs01,zs02,zs03',
+
 };
