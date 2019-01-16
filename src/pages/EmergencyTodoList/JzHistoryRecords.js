@@ -19,7 +19,7 @@ import {routerRedux} from 'dva/router';
 const pageIndex = 1;
 const pageSize = 10;
 @connect(({ task, loading }) => ({
-    isloading: loading.effects['task/GetJzHistoryRecord'],
+    loading: loading.effects['task/GetJzHistoryRecord'],
     JzHistoryRecord: task.JzHistoryRecord,
     RecordCount: task.RecordCount
 }))
@@ -151,7 +151,7 @@ export default class JzHistoryRecords extends Component {
                 <Table
                    size="middle"
                    scroll={{ y: 'calc(100vh - 465px)' }}
-                   loading={this.props.isloading}
+                   loading={this.props.loading}
                    className={styles.dataTable}
                    columns={columns}
                    dataSource={dataSource}

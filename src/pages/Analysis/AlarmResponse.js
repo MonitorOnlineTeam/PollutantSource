@@ -94,7 +94,6 @@ export default class AlarmResponse extends Component {
         });
     }
     handleTableChange =(pagination, filters, sorter) => {
-        debugger;
         if (sorter.order) {
             this.updateState({
                 sort2: sorter.field === 'LessThan2Hour' ? sorter.order : '',
@@ -131,7 +130,6 @@ export default class AlarmResponse extends Component {
     }
     // 年份选择改变事件
     handleChangeDate = (value) => {
-        debugger;
         let Year = moment().get('year');
         let Month = moment().get('month') + 1;
         const beginTime = moment(`${value}-01-01 00:00:00`).format('YYYY-01-01 HH:mm:ss');
@@ -158,7 +156,6 @@ export default class AlarmResponse extends Component {
         this.getPointsTableData(1);
     }
     showModal = (params) => {
-        debugger;
         this.setState({
             modalVisible: true,
             pointName: params.PointName

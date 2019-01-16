@@ -46,6 +46,11 @@ export default class OperationCalendar extends Component {
     }
     componentDidMount() {
         const { dispatch } = this.props;
+        dispatch({
+            type: 'overview/getPollutantTypeList',
+            payload: {
+            }
+        });
         var getDGIMN = localStorage.getItem('DGIMN')
         if (getDGIMN === null) {
             getDGIMN = '[object Object]';
@@ -59,13 +64,10 @@ export default class OperationCalendar extends Component {
                 DGIMN: getDGIMN,
             }
         });
-        dispatch({
-            type: 'overview/getPollutantTypeList',
-            payload: {
-            }
-        });
+
     }
     GetData = (DGIMN) => {
+        debugger
         this.props.dispatch({
             type: 'workbenchmodel/getOperationCalendarData',
             payload: {
@@ -262,7 +264,12 @@ export default class OperationCalendar extends Component {
     render() {
         const { pollutantTypelist, treedataloading, datalist, pollutantTypeloading } = this.props;
         const { detailed, statusImg, selectpoint, pointName } = this.state;
-        const dataSource = this.props.HistoryRepairHistoryRecods === null ? null : this.props.HistoryRepairHistoryRecods;
+        var dataSource = [];
+        var spining = true;
+        if (!this.props.treedataloading && !this.props.pollutantTypeloading) {
+            spining = this.props.loading;
+            dataSource = this.props.HistoryRepairHistoryRecods === null ? null : this.props.HistoryRepairHistoryRecods;
+        }
         const columns = [{
             title: '校准人',
             width: '20%',
@@ -357,8 +364,8 @@ export default class OperationCalendar extends Component {
                         <div style={{ marginRight: 10, marginTop: 25 }}>
                             <Spin style={{
                                 marginTop: '20%',
-                            }} spinning={this.props.loading}>
-                                <Card bordered={false} style={{ height: 'calc(100vh - 110px)',overflow:'auto' }}>
+                            }} spinning={spining}>
+                                <Card bordered={false} style={{ height: 'calc(100vh - 110px)', overflow: 'auto' }}>
                                     <div>
                                         {/* <div style={{ textAlign: 'left', marginBottom: -35 }}>
                                             <div style={{

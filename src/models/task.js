@@ -257,7 +257,8 @@ export default Model.extend({
                     HistoryInspectionHistoryRecordList: result.data,
                     total: result.total,
                     pageIndex: payload.pageIndex,
-                    pageSize: payload.pageSize
+                    pageSize: payload.pageSize,
+                    DGIMN: payload.DGIMN,
                 });
             } else {
                 yield update({
@@ -265,7 +266,8 @@ export default Model.extend({
                     HistoryInspectionHistoryRecordList: [],
                     total: result.total,
                     pageIndex: payload.pageIndex,
-                    pageSize: payload.pageSize
+                    pageSize: payload.pageSize,
+                    DGIMN: payload.DGIMN,
                 });
             }
         },

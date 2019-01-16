@@ -68,6 +68,10 @@ export default Model.extend({
             //手工上传
             if (payload.manualUpload) {
                 if (data && data[0]) {
+                    if(payload.DGIMN==='[object Object]')
+                    {
+                        localStorage.setItem('DGIMN', data[0].DGIMN);
+                    }
                     yield put({
                         type: 'manualupload/GetManualSupplementList',
                         payload: {
@@ -91,6 +95,10 @@ export default Model.extend({
             //菜单-维修
             if (payload.RepairHistoryRecords) {
                 if (data && data[0]) {
+                    if(payload.DGIMN==='[object Object]')
+                    {
+                        localStorage.setItem('DGIMN', data[0].DGIMN);
+                    }
                     yield put({
                         type: 'task/GetHistoryRepairDetail',
                         payload: {
@@ -113,6 +121,10 @@ export default Model.extend({
             //菜单-停机
             if (payload.StopCemsListHistoryRecords) {
                 if (data && data[0]) {
+                    if(payload.DGIMN==='[object Object]')
+                    {
+                        localStorage.setItem('DGIMN', data[0].DGIMN);
+                    }
                     yield put({
                         type: 'task/GetHistoryStopCemsList',
                         payload: {
@@ -135,6 +147,10 @@ export default Model.extend({
             //菜单-易耗品
             if (payload.CounterControlCommandHistoryRecords) {
                 if (data && data[0]) {
+                    if(payload.DGIMN==='[object Object]')
+                    {
+                        localStorage.setItem('DGIMN', data[0].DGIMN);
+                    }
                     yield put({
                         type: 'task/GetHistoryConsumablesReplaceRecord',
                         payload: {
@@ -157,6 +173,10 @@ export default Model.extend({
             //菜单-标气
             if (payload.StandardGasHistoryRecords) {
                 if (data && data[0]) {
+                    if(payload.DGIMN==='[object Object]')
+                    {
+                        localStorage.setItem('DGIMN', data[0].DGIMN);
+                    }
                     yield put({
                         type: 'task/GetHistoryStandardGasRepalceRecordList',
                         payload: {
@@ -180,6 +200,10 @@ export default Model.extend({
             //菜单-巡检记录
             if (payload.InspectionHistoryRecords) {
                 if (data && data[0]) {
+                    if(payload.DGIMN==='[object Object]')
+                    {
+                        localStorage.setItem('DGIMN', data[0].DGIMN);
+                    }
                     yield put({
                         type: 'task/GetHistoryInspectionHistoryRecords',
                         payload: {
@@ -202,6 +226,10 @@ export default Model.extend({
             //菜单-校准记录
             if (payload.JzHistoryRecords) {
                 if (data && data[0]) {
+                    if(payload.DGIMN==='[object Object]')
+                    {
+                        localStorage.setItem('DGIMN', data[0].DGIMN);
+                    }
                     yield put({
                         type: 'task/GetJzHistoryRecord',
                         payload: {
@@ -224,6 +252,10 @@ export default Model.extend({
             //菜单-检验测试记录
             if (payload.BdHistoryInfoHistoryRecords) {
                 if (data && data[0]) {
+                    if(payload.DGIMN==='[object Object]')
+                    {
+                        localStorage.setItem('DGIMN', data[0].DGIMN);
+                    }
                     yield put({
                         type: 'task/GetBdHistoryInfoList',
                         payload: {
@@ -247,6 +279,10 @@ export default Model.extend({
             //菜单-异常记录
             if (payload.DeviceExceptionListHistoryRecords) {
                 if (data && data[0]) {
+                    if(payload.DGIMN==='[object Object]')
+                    {
+                        localStorage.setItem('DGIMN', data[0].DGIMN);
+                    }
                     yield put({
                         type: 'task/GetDeviceExceptionList',
                         payload: {
@@ -270,6 +306,10 @@ export default Model.extend({
             //菜单-运维大事记
             if (payload.Ywdsjlist) {
                 if (data && data[0]) {
+                    if(payload.DGIMN==='[object Object]')
+                    {
+                        localStorage.setItem('DGIMN', data[0].DGIMN);
+                    }
                     yield put({
                         type: 'task/GetYwdsj',
                         payload: {
@@ -293,6 +333,10 @@ export default Model.extend({
             //菜单-工艺流程图
             if (payload.ProcessFlowDiagram) {
                 if (data && data[0]) {
+                    if(payload.DGIMN==='[object Object]')
+                    {
+                        localStorage.setItem('DGIMN', data[0].DGIMN);
+                    }
                     yield put({
                         type: 'points/queryprocesschart',
                         payload: {
@@ -312,7 +356,12 @@ export default Model.extend({
 
             //菜单-运维日历
             if (payload.OperationCalendar) {
+                debugger
                 if (data && data[0]) {
+                    if(payload.DGIMN==='[object Object]')
+                    {
+                        localStorage.setItem('DGIMN', data[0].DGIMN);
+                    }
                     yield put({
                         type: 'workbenchmodel/getOperationCalendarData',
                         payload: {
@@ -324,6 +373,7 @@ export default Model.extend({
                     });
                 }
                 else {
+                    debugger
                     yield put({
                         type: 'workbenchmodel/getOperationCalendarData',
                         payload: {

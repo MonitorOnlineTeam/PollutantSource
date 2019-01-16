@@ -15,7 +15,7 @@ import {routerRedux} from 'dva/router';
 
 
 @connect(({ task, loading }) => ({
-    isloading: loading.effects['task/GetDeviceExceptionList'],
+    loading: loading.effects['task/GetDeviceExceptionList'],
     HistoryDeviceExceptionList: task.List,
     HistoryDeviceExceptionListCount: task.total,
     pageIndex: task.pageIndex,
@@ -142,7 +142,7 @@ export default class DeviceExceptionListHistoryRecords extends Component {
                     <Table
                         size="middle"
                         scroll={{ y: 'calc(100vh - 465px)' }}
-                        loading={this.props.isloading}
+                        loading={this.props.loading}
                         className={styles.dataTable}
                         columns={columns}
                         dataSource={dataSource}

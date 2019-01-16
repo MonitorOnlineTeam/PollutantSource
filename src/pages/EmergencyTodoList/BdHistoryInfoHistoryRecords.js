@@ -15,7 +15,7 @@ import styles from './BdHistoryInfoHistoryRecords.less';
 import {routerRedux} from 'dva/router';
 
 @connect(({ task, loading }) => ({
-    isloading: loading.effects['task/GetBdHistoryInfoList'],
+    loading: loading.effects['task/GetBdHistoryInfoList'],
     BdHistoryInfoList: task.List,
     BdHistoryInfoListCount: task.total,
     pageIndex: task.pageIndex,
@@ -146,7 +146,7 @@ export default class BdHistoryInfoHistoryRecords extends Component {
                     <Table
                         size="middle"
                         scroll={{ y: 'calc(100vh - 465px)' }}
-                        loading={this.props.isloading}
+                        loading={this.props.loading}
                         className={styles.dataTable}
                         columns={columns}
                         dataSource={dataSource}

@@ -33,6 +33,11 @@ export default class ProcessFlowDiagram extends Component {
     }
     componentDidMount() {
         const { dispatch } = this.props;
+        dispatch({
+            type: 'overview/getPollutantTypeList',
+            payload: {
+            }
+        });
         var getDGIMN = localStorage.getItem('DGIMN')
         if (getDGIMN === null) {
             getDGIMN = '[object Object]';
@@ -46,11 +51,7 @@ export default class ProcessFlowDiagram extends Component {
                 DGIMN: getDGIMN,
             }
         });
-        dispatch({
-            type: 'overview/getPollutantTypeList',
-            payload: {
-            }
-        });
+
     }
     getStatusImg = (value) => {
         if (value === 0) {

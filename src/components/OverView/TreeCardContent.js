@@ -6,9 +6,6 @@ import styles from './Tree.less';
 class TreeCardContent extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            DGIMN: localStorage.getItem('DGIMN')
-        }
     }
     getTreeDatalist = () => {
         const { isloading, treedatalist, PollutantType } = this.props;
@@ -18,14 +15,11 @@ class TreeCardContent extends Component {
                 let treecardcss = styles.cardDiv;
                 if (item.pollutantTypeCode === this.props.PollutantType) {
                     if (this.props.ifSelect) {
-                        if (item.DGIMN === this.state.DGIMN) {
+                        if (item.DGIMN === localStorage.getItem('DGIMN')) {
                             treecardcss = styles.cardDivClick;
                         }
                     }
                     res.push(<div onClick={() => {
-                        this.setState({
-                            DGIMN:item.DGIMN
-                        })
                         this.props.treeCilck(item, key);
                     }} className={treecardcss}>
                         <div className={styles.cardtopspan}>
