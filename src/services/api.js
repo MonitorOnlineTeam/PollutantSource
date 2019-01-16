@@ -387,9 +387,6 @@ export async function querypollutantlist(params) {
 }
 // 获取历史数据
 export async function queryhistorydatalist(params) {
-    // debugger;
-    // console.log(params.beginTime);
-    // console.log(params.endTime);
     const body = {
         DGIMNs: params.dgimn,
         // pollutantCodes: params.pollutantCode,
@@ -517,6 +514,15 @@ export async function getPollutantTypeList(params) {
     };
     const result = await post('/api/rest/PollutantSourceApi/DataList/GetPollutantTypeList', body, null);
     return result === null ? {data: null} : result.data;
+}
+
+// 获取工艺流程图信息
+export async function queryrealparam(params) {
+    const body = {
+        DGIMN: params.dgimn,
+    };
+    const result = await post('/api/rest/PollutantSourceApi/DataList/GetProcessFlowChartStatus', body, null);
+    return result === null ? { data: null } : result.data;
 }
 
 

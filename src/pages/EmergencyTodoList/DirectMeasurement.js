@@ -328,16 +328,6 @@ class DirectMeasurement extends Component {
                                  </tr>
                              </tbody>
                          </table>
-
-                         <div className={styles.Toexamine}>
-                             <Button
-                                 size="large"
-                                 onClick={() => {
-                                     this.props.history.goBack(-1);
-                                 }}
-                             ><Icon type="left" />退回
-                             </Button>
-                         </div>
                      </div>
                  </Card>
              </MonitorContent>

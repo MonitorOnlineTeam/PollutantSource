@@ -1,0 +1,158 @@
+
+@import '~antd/lib/style/themes/default.less';
+@import '~@/utils/utils.less';
+// @import "../../utils/utils.less";
+.demo-loading-container {
+  position: absolute;
+  bottom: 40px;
+  width: 100%;
+  text-align: center;
+}
+
+.pieCard :global(.pie-stat) {
+  font-size: 24px !important;
+}
+
+
+
+.cardTitle{
+  
+  :global {
+    // height: 998px;
+    // overflow: hidden;
+    .ant-card-body{
+      // height: 800px;
+      // overflow: auto;
+    }
+    .ant-card-extra{
+      padding: 6.5px 0 !important;
+    }
+    .light{
+      background-color:#f0f2f5
+    }
+    table .ant-table-thead > tr > th{
+      background-color:#fafafa !important;
+    }
+
+    table .ant-table-middle > .ant-table-content > .ant-table-body > table{
+      padding: 0% !important;
+    }
+
+    .ant-table-middle {
+      border: 1px solid #e8e8e8;
+      border-radius: 4px;
+    }
+  }  
+}
+.contentDiv{
+  .warningsData{
+    background-color:rgb(249,249,249);
+    padding: 10px;
+    margin-bottom:5px;
+  }
+  .warningsDataModal{
+    width: 80%;
+  }
+  .warningsData:hover{
+    cursor: pointer;
+    color: rgb(95, 183, 224);
+  }
+  
+  .workBench{
+    background: rgb(236, 236, 236);
+    margin-left: 20px;
+    margin-right: 20px;
+    
+    .headerDiv{
+      background: rgb(255, 255, 255);
+      height: 60px;
+      margin-bottom: 10px;
+      line-height: 60px;
+      padding-left: 20px;
+      position: relative;
+      p:first-child{
+        height: 20px;
+        line-height: 20px;
+        font-size: 20px;
+        font-weight: bold;
+        border-left: 5px solid red;
+        padding-left: 10px;
+        margin-top: 20px;
+        position: absolute;
+      }
+    }
+    .mapChart {
+      padding-top: 24px;
+      height: 318px;
+      text-align: center;
+      img {
+        display: inline-block;
+        max-width: 100%;
+        max-height: 280px;
+      }
+    }
+    .demoInfiniteContainer {
+      border: 1px solid #e8e8e8;
+      border-radius: 4px;
+      height: 200px;
+      overflow: hidden;
+      padding: 0px 24px;
+    }
+  }
+}
+
+.warningDetailsModal{
+  :global{
+    .light{
+      background-color:#f0f2f5;
+    }
+    table .ant-table-thead > tr > th{
+      background-color:#fafafa !important;
+    }
+    table .ant-table-small > .ant-table-content > .ant-table-body > table{
+      padding: 0% !important;
+    }
+    .ant-table-fixed-header .ant-table-scroll .ant-table-header{
+        overflow: hidden;
+        height: 60px;
+        width: 99.7%;
+    }
+
+    .ant-table-body{
+        height: calc(100vh - 48px);
+        overflow: auto;
+        // overflow-y: scroll;
+    }
+    .ant-table-placeholder{
+        position: absolute;
+        top:50px;
+        width:100%;
+    }
+    .ant-table-pagination.ant-pagination{
+      margin: 12px 0;
+    }
+  }
+}
+.day{
+  overflow: hidden;
+  white-space: nowrap;
+  width: 100%;
+  text-overflow: ellipsis;
+  font-size: 12px;
+  margin: 0;
+  padding: 0;
+  text-align: center
+}
+.month{
+  text-align: center;
+  margin-top: 4%;
+  margin-left: -12%
+}
+:global{
+  .ant-fullcalendar-table{
+    width: calc(100vh - 360px);
+    overflow: hidden;
+  }
+}
+
+

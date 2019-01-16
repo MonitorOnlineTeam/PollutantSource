@@ -15,7 +15,7 @@ import styles from './StandardGasHistoryRecords.less';
 import {routerRedux} from 'dva/router';
 
 @connect(({ task, loading }) => ({
-    isloading: loading.effects['task/GetHistoryStandardGasRepalceRecordList'],
+    loading: loading.effects['task/GetHistoryStandardGasRepalceRecordList'],
     HistoryStandardGasRepalceRecordList: task.HistoryStandardGasRepalceRecordList,
     HistoryStandardGasRepalceRecordListCount: task.total,
     pageIndex: task.pageIndex,
@@ -145,7 +145,7 @@ export default class StandardGasHistoryRecords extends Component {
                     <Table
                         size="middle"
                         scroll={{ y: 'calc(100vh - 465px)' }}
-                        loading={this.props.isloading}
+                        loading={this.props.loading}
                         className={styles.dataTable}
                         columns={columns}
                         dataSource={dataSource}

@@ -46,6 +46,7 @@ const plugins = [
     treedataloading: loading.effects['overview/querydatalist'],
     detailloading: loading.effects['overview/queryoptionData'],
     pollutantTypeloading:loading.effects['overview/getPollutantTypeList'],
+    detailpollutantloading:loading.effects['overview/querydetailpollutant'],
     detailtime: overview.detailtime,
     pollutantTypelist:overview.pollutantTypelist
 }))
@@ -239,7 +240,7 @@ class OverViewMap extends PureComponent {
   getdetailed=()=>{
     const { pollutantTypelist,detailloading,detailpcol,detaildata,selectdata,chartdata,pollutantName,
         existdata,treedataloading,datalist,chartloading,pollutantTypeloading}  = this.props;
-    const {detailed,statusImg,selectpoint,pointName}=this.state;
+    const {detailed,statusImg,selectpoint,pointName,detailpollutantloading}=this.state;
     if(!detailed)
     {
       return( 
@@ -298,7 +299,9 @@ class OverViewMap extends PureComponent {
                 <TransmissionEfficiency selectdata={selectdata} />
               </div>
               <div style={{marginTop: 15}}>
-                <MapPollutantDetail detialTreeClick={this.detialTreeClick} detailpcol={detailpcol} 
+                <MapPollutantDetail
+                 isloading={detailpollutantloading}
+                detialTreeClick={this.detialTreeClick} detailpcol={detailpcol} 
                 detaildata={detaildata} />
               </div>
               <div style={{marginTop: 15}}>
@@ -322,7 +325,7 @@ class OverViewMap extends PureComponent {
                         strokeColor: '#FF33FF',
                         strokeOpacity: 0.2,
                         strokeWeight: 3,
-                        fillColor: '#1791fc',
+                        fillColor: '#595959',
                         fillOpacity: 0.35,
                         }}
                         path={arr[i]}
@@ -356,6 +359,7 @@ class OverViewMap extends PureComponent {
                        marginTop: 260 }}
                size="large"
              />}
+             mapStyle={'fresh'}
              amapkey={amapKey}
              plugins={plugins}
            >

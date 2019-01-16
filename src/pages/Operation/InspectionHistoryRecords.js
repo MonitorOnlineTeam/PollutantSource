@@ -29,6 +29,7 @@ import TreeCardContent from '../../components/OverView/TreeCardContent';
     pollutantTypeloading: loading.effects['overview/getPollutantTypeList'],
     treedataloading: loading.effects['overview/querydatalist'],
     pollutantTypelist: overview.pollutantTypelist,
+    DGIMN: task.DGIMN,
 }))
 /*
 页面：CEMS日常巡检记录表(历史记录)
@@ -40,18 +41,21 @@ export default class InspectionHistoryRecords extends Component {
             rangeDate: [moment(moment(new Date()).subtract(3, 'month').format('YYYY-MM-DD 00:00:00')), moment(moment(new Date()).format('YYYY-MM-DD 23:59:59'))], // 最近七天
             BeginTime: moment().subtract(3, 'month').format('YYYY-MM-DD 00:00:00'),
             EndTime: moment().format('YYYY-MM-DD 23:59:59'),
-            DGIMN: this.props.DGIMN,
             pollutantTypeCode: "2",
             value: [],
         };
     }
     componentDidMount() {
         const { dispatch } = this.props;
+        dispatch({
+            type: 'overview/getPollutantTypeList',
+            payload: {
+            }
+        });
         var getDGIMN = localStorage.getItem('DGIMN')
-        if (getDGIMN === null)
-        {
+        if (getDGIMN === null) {
             getDGIMN = '[object Object]';
-        }  
+        }
         dispatch({
             type: 'overview/querydatalist',
             payload: {
@@ -62,14 +66,10 @@ export default class InspectionHistoryRecords extends Component {
                 pageSize: this.props.pageSize,
                 BeginTime: this.state.rangeDate[0].format('YYYY-MM-DD 00:00:00'),
                 EndTime: this.state.rangeDate[1].format('YYYY-MM-DD 23:59:59'),
-                DGIMN:getDGIMN,
+                DGIMN: getDGIMN,
             }
         });
-        dispatch({
-            type: 'overview/getPollutantTypeList',
-            payload: {
-            }
-        });
+
     }
 
     GetHistoryRecord = (pageIndex, pageSize, DGIMN, BeginTime, EndTime) => {
@@ -86,6 +86,8 @@ export default class InspectionHistoryRecords extends Component {
     };
 
     _handleDateChange = (date, dateString) => {
+        console.log(this.props.DGIMN)
+        debugger
         this.setState(
             {
                 rangeDate: date,
@@ -93,20 +95,37 @@ export default class InspectionHistoryRecords extends Component {
                 EndTime: dateString[1]
             }
         );
-        this.GetHistoryRecord(this.props.pageIndex, this.props.pageSize, this.state.DGIMN, dateString[0], dateString[1]);
+        this.GetHistoryRecord(this.props.pageIndex, this.props.pageSize, this.props.DGIMN, dateString[0], dateString[1]);
     };
 
     onShowSizeChange = (pageIndex, pageSize) => {
-        this.GetHistoryRecord(pageIndex, pageSize, this.state.DGIMN, this.state.BeginTime, this.state.EndTime);
+        this.GetHistoryRecord(pageIndex, pageSize, this.props.DGIMN, this.state.BeginTime, this.state.EndTime);
     }
 
     onChange = (pageIndex, pageSize) => {
-        this.GetHistoryRecord(pageIndex, pageSize, this.state.DGIMN, this.state.BeginTime, this.state.EndTime);
+        this.GetHistoryRecord(pageIndex, pageSize, this.props.DGIMN, this.state.BeginTime, this.state.EndTime);
     }
 
     seeDetail = (record) => {
-        localStorage.setItem('DGIMN',this.props.DGIMN);
-        this.props.dispatch(routerRedux.push(`/PatrolForm/CompleteExtraction/${this.state.DGIMN}/${this.props.match.params.viewtype}/qcontrollist/WQCQFInspectionHistoryRecords/${record.TaskID}`));
+        localStorage.setItem('DGIMN', this.props.DGIMN);
+        this.props.dispatch({
+            type: 'task/GetPatrolTypeIdbyTaskId',
+            payload: {
+                TaskID: record.TaskID,
+                callback: (typeId) => {
+                    if (typeId === 5) {
+                        this.props.dispatch(routerRedux.push(`/PatrolForm/completeextraction/${this.props.DGIMN}/${this.props.match.params.viewtype}/qcontrollist/wqcqfinspectionhistoryrecords/${record.TaskID}`));
+                    }
+                    else if(typeId===6) {
+                        this.props.dispatch(routerRedux.push(`/PatrolForm/dilutionsampling/${this.props.DGIMN}/${this.props.match.params.viewtype}/qcontrollist/xscyfinspectionhistoryrecords/${record.TaskID}`));
+                    }
+                    else
+                    {
+                        this.props.dispatch(routerRedux.push(`/PatrolForm/directmeasurement/${this.props.DGIMN}/${this.props.match.params.viewtype}/qcontrollist/zzclfinspectionhistoryrecords/${record.TaskID}`));
+                    }
+                }
+            }
+        });
     }
     //查询
     onSerach = (value) => {
@@ -134,52 +153,12 @@ export default class InspectionHistoryRecords extends Component {
         const { searchName } = this.state;
         this.reloadData(key, searchName);
     }
-        //重新加载
-        searchData = (pollutantTypeCode, searchName) => {
-            var getDGIMN = localStorage.getItem('DGIMN')
-            if (getDGIMN === null) {
-                getDGIMN = '[object Object]';
-            }
-            this.props.dispatch({
-                type: 'overview/querydatalist',
-                payload: {
-                    map: true,
-                    pollutantTypes: pollutantTypeCode,
-                    pointName: searchName,
-                    InspectionHistoryRecords: true,
-                    pageIndex: this.props.pageIndex,
-                    pageSize: this.props.pageSize,
-                    BeginTime: this.state.rangeDate[0].format('YYYY-MM-DD 00:00:00'),
-                    EndTime: this.state.rangeDate[1].format('YYYY-MM-DD 23:59:59'),
-                    DGIMN: getDGIMN,
-                    callback: (data) => {
-                        const existdata = data.find((value, index, arr) => {
-                            return value.DGIMN == getDGIMN
-                        });
-                        if(existdata==undefined)
-                        {
-                            this.props.dispatch({
-                                type: 'task/GetHistoryInspectionHistoryRecords',
-                                payload: {
-                                    pageIndex: this.props.pageIndex,
-                                    pageSize: this.props.pageSize,
-                                    DGIMN: null,
-                                    BeginTime: this.state.BeginTime,
-                                    EndTime: this.state.EndTime,
-                                }
-                            });
-                        }
-                    }
-                },
-            });
-        }
     //重新加载
-    reloadData = (pollutantTypeCode, searchName) => {
+    searchData = (pollutantTypeCode, searchName) => {
         var getDGIMN = localStorage.getItem('DGIMN')
-        if (getDGIMN === null)
-        {
+        if (getDGIMN === null) {
             getDGIMN = '[object Object]';
-        }  
+        }
         this.props.dispatch({
             type: 'overview/querydatalist',
             payload: {
@@ -191,8 +170,46 @@ export default class InspectionHistoryRecords extends Component {
                 pageSize: this.props.pageSize,
                 BeginTime: this.state.rangeDate[0].format('YYYY-MM-DD 00:00:00'),
                 EndTime: this.state.rangeDate[1].format('YYYY-MM-DD 23:59:59'),
-                DGIMN:getDGIMN,
-                IfTabs:true, //切换选项卡事件
+                DGIMN: getDGIMN,
+                callback: (data) => {
+                    const existdata = data.find((value, index, arr) => {
+                        return value.DGIMN == getDGIMN
+                    });
+                    if (existdata == undefined) {
+                        this.props.dispatch({
+                            type: 'task/GetHistoryInspectionHistoryRecords',
+                            payload: {
+                                pageIndex: this.props.pageIndex,
+                                pageSize: this.props.pageSize,
+                                DGIMN: null,
+                                BeginTime: this.state.BeginTime,
+                                EndTime: this.state.EndTime,
+                            }
+                        });
+                    }
+                }
+            },
+        });
+    }
+    //重新加载
+    reloadData = (pollutantTypeCode, searchName) => {
+        var getDGIMN = localStorage.getItem('DGIMN')
+        if (getDGIMN === null) {
+            getDGIMN = '[object Object]';
+        }
+        this.props.dispatch({
+            type: 'overview/querydatalist',
+            payload: {
+                map: true,
+                pollutantTypes: pollutantTypeCode,
+                pointName: searchName,
+                InspectionHistoryRecords: true,
+                pageIndex: this.props.pageIndex,
+                pageSize: this.props.pageSize,
+                BeginTime: this.state.rangeDate[0].format('YYYY-MM-DD 00:00:00'),
+                EndTime: this.state.rangeDate[1].format('YYYY-MM-DD 23:59:59'),
+                DGIMN: getDGIMN,
+                IfTabs: true, //切换选项卡事件
             },
         });
     }
@@ -202,14 +219,19 @@ export default class InspectionHistoryRecords extends Component {
     };
     render() {
         const { pollutantTypelist, treedataloading, datalist, pollutantTypeloading } = this.props;
-        const dataSource = this.props.HistoryInspectionHistoryRecordList === null ? null : this.props.HistoryInspectionHistoryRecordList;
+        var dataSource = [];
+        var spining = true;
+        if (!this.props.treedataloading && !this.props.pollutantTypeloading) {
+            spining = this.props.loading;
+            dataSource = this.props.HistoryInspectionHistoryRecordList === null ? null : this.props.HistoryInspectionHistoryRecordList;
+        }
         const columns = [{
             title: '校准人',
             width: '20%',
             dataIndex: 'CreateUserID',
             key: 'CreateUserID'
         }, {
-            title: '维护情况',
+            title: '异常情况处理',
             width: '45%',
             dataIndex: 'Content',
             key: 'Content',
@@ -220,9 +242,12 @@ export default class InspectionHistoryRecords extends Component {
                     content.map((item, key) => {
                         item = item.replace('(', '  ');
                         item = item.replace(')', '');
-                        resu.push(
-                            <Tag style={{ marginBottom: 1.5, marginTop: 1.5 }} color="#108ee9">{item}</Tag>
-                        );
+                        if (item !== '') {
+                            resu.push(
+                                <Tag style={{ marginBottom: 1.5, marginTop: 1.5 }} color="#108ee9">{item}</Tag>
+                            );
+                        }
+
                     });
                 }
                 return resu;
@@ -273,7 +298,7 @@ export default class InspectionHistoryRecords extends Component {
                                     onSerach={this.onSerach}
                                     style={{ marginTop: 5, marginBottom: 5, width: 400 }} searchName="排口名称" /></div>
                                 <div style={{ marginTop: 5 }}>
-                                <TreeCard
+                                    <TreeCard
                                         style={{
                                             width: '400px',
                                             marginTop: 5,
@@ -312,7 +337,7 @@ export default class InspectionHistoryRecords extends Component {
                                 <Table
                                     size="middle"
                                     scroll={{ y: 'calc(100vh - 350px)' }}
-                                    loading={this.props.loading}
+                                    loading={spining}
                                     className={styles.dataTable}
                                     columns={columns}
                                     dataSource={dataSource}

@@ -217,10 +217,19 @@ export default Model.extend({
                 switch (obj.MessageType) {
                     case 'RealTimeData':
                         // 跳转到对应的effect，把实体带过去更新state达到页面刷新的目的
-                        // dispatch({
-                        //     type: 'overview/welcome',
-                        //     payload: obj.Message
-                        // });
+                        dispatch({
+                            type: 'points/updateRealTimeData',
+                            payload: {
+                                array:obj.Message
+                            },
+                        });
+                        dispatch({
+                            type: 'workbenchmodel/updateRealTimeData',
+                            payload: {
+                                array:obj.Message
+                            },
+                        });
+
                         break;
                     case 'MinuteData':
                         // dispatch({
@@ -233,8 +242,22 @@ export default Model.extend({
                         // });
                         break;
                     case 'DynamicControlParam':
+                    // debugger;
+                    // console.log(obj);
+                        dispatch({
+                            type: 'points/updateDynamicControlParam',
+                            payload: {
+                                array:obj.Message
+                            },
+                        });
                         break;
                     case 'DynamicControlState':
+                        dispatch({
+                            type: 'points/updateDynamicControlState',
+                            payload: {
+                                array:obj.Message
+                            },
+                        });
                         break;
                     case 'Alarm':
                         dispatch({

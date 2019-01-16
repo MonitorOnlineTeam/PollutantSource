@@ -153,6 +153,7 @@ class SpecialWorkbench extends Component {
       }
       return (
         <Map  events={this.mapEvents} 
+        mapStyle={'fresh'}
                                         amapkey={amapKey} center={mapCenter} zoom={12}>
                                         <Markers
                                             markers={this.getMarkers()}
