@@ -6,8 +6,7 @@ import {
     GetHistoryInspectionHistoryRecords, GetStopCemsDetail, GetRepairDetail,
     GetHistoryRepairDetail, GetHistoryStopCemsList, GetDeviceExceptionList,
     GetBdHistoryInfoList, GetDeviceExceptionDetail, GetBdTestRecord,
-    GetPostRevokeTask
-    GetBdHistoryInfoList, GetDeviceExceptionDetail, GetBdTestRecord, GetPatrolTypeIdbyTaskId
+    GetPostRevokeTask, GetPatrolTypeIdbyTaskId
 } from '../services/taskapi';
 import { Model } from '../dvapack';
 import { EnumRequstResult } from '../utils/enum';
