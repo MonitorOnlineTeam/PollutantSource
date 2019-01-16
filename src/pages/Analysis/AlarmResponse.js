@@ -130,8 +130,12 @@ export default class AlarmResponse extends Component {
     }
     // 年份选择改变事件
     handleChangeDate = (value) => {
+        debugger
         let Year = moment().get('year');
         let Month = moment().get('month') + 1;
+        if (Month < 10) {
+            Month = '0' + Month
+        }
         const beginTime = moment(`${value}-01-01 00:00:00`).format('YYYY-01-01 HH:mm:ss');
         const endTime = moment(`${value}-01-01 00:00:00`).add(1,'years').format('YYYY-01-01 HH:mm:ss');
         // 本年份
@@ -148,7 +152,7 @@ export default class AlarmResponse extends Component {
                 beginTime: beginTime,
                 endTime: endTime,
                 selectedDate: `${value}-01-01 00:00:00`,
-                clickDate: `${Year}-01-01 00:00:00`,
+                clickDate: `${value}-01-01 00:00:00`,
                 pointsTableData: []
             });
         }
@@ -162,7 +166,6 @@ export default class AlarmResponse extends Component {
         });
         this.updateState({
             queryDGIMNs: params.DGIMNs,
-            // queryDate: this.props.clickDate,
             pointDaysTableData: []
 
         });
@@ -176,17 +179,17 @@ export default class AlarmResponse extends Component {
     }
 
     handleModalCancel = (e) => {
-    // console.log(e);
         this.setState({
             modalVisible: false,
         });
     }
     onChartClick = (opt) => {
-        // debugger;
         let { selectedDate } = this.props;
-        console.log(selectedDate);
-        let clickDate = moment(selectedDate).format(`YYYY-${opt.dataIndex + 1}-01 00:00:00`);
-
+        var dateindex = opt.dataIndex;
+        if (dateindex < 9) {
+            dateindex = '0' + (dateindex + 1);
+        }
+        let clickDate = moment(selectedDate).format(`YYYY-${dateindex}-01 00:00:00`);
         this.updateState({
             clickDate: clickDate
         });
@@ -201,7 +204,6 @@ export default class AlarmResponse extends Component {
                     type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
                 },
                 formatter: (params) => {
-                    // debugger;
                     var tar = params[0];
                     var tar1 = params[1];
                     return tar.name + '<br/>' + tar.seriesName + ' : ' + tar.value + ' 个<br/>' + tar1.seriesName + ' : ' + tar1.value + ' 个';
