@@ -15,7 +15,7 @@ import styles from './RepairHistoryRecords.less';
 import { routerRedux } from 'dva/router';
 
 @connect(({ task, loading }) => ({
-    isloading: loading.effects['task/GetHistoryRepairDetail'],
+    loading: loading.effects['task/GetHistoryRepairDetail'],
     HistoryRepairHistoryRecods: task.List,
     HistoryRepairHistoryRecodsCount: task.total,
     pageIndex: task.pageIndex,
@@ -144,7 +144,7 @@ export default class RepairHistoryRecords extends Component {
                     <Table
                         size="middle"
                         scroll={{ y: 'calc(100vh - 465px)' }}
-                        loading={this.props.isloading}
+                        loading={this.props.loading}
                         className={styles.dataTable}
                         columns={columns}
                         dataSource={dataSource}

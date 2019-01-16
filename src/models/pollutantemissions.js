@@ -21,7 +21,7 @@ export default Model.extend({
         selectedDate: moment().format('YYYY-MM-01 00:00:00'),
         clickDate: moment().format('YYYY-MM-01 00:00:00'),
         beginTime: moment().format('YYYY-01-01 00:00:00'),
-        endTime: moment().add(1,'years').format('YYYY-01-01 00:00:00'),
+        endTime: moment().add(1, 'years').format('YYYY-01-01 00:00:00'),
         monthTime: moment().format('YYYY-MM-01 00:00:00'),
         emissionsSort: '',
         xAxisData: [],
@@ -32,8 +32,8 @@ export default Model.extend({
     subscriptions: {
     },
     effects: {
-        * getChartData({payload}, { call, put, update, select }) {
-            const {beginTime, endTime, pageSize, pollutantCodes} = yield select(state => state.pollutantemissions);
+        * getChartData({ payload }, { call, put, update, select }) {
+            const { beginTime, endTime, pageSize, pollutantCodes } = yield select(state => state.pollutantemissions);
             // debugger
             let body = {
                 beginTime: beginTime,
@@ -42,9 +42,7 @@ export default Model.extend({
                 pollutantCodes: pollutantCodes,
             };
             const response = yield call(getAllMonthPollutantEmissions, body);
-
-            if (response.data)
-            {
+            if (response.data) {
                 let XAxisData = [];
                 let SeriesData = [];
                 response.data.map((ele) => {
@@ -60,8 +58,8 @@ export default Model.extend({
             // const xAxisData = yield select(state => state.pollutantemissions.xAxisData);
             // console.log('new', xAxisData);
         },
-        * getPointsData({payload}, { call, put, update, select }) {
-            const {clickDate, pageIndex, pageSize, pollutantCodes, emissionsSort} = yield select(state => state.pollutantemissions);
+        * getPointsData({ payload }, { call, put, update, select }) {
+            const { clickDate, pageIndex, pageSize, pollutantCodes, emissionsSort } = yield select(state => state.pollutantemissions);
             // debugger
             let body = {
                 monthTime: clickDate,
@@ -71,9 +69,7 @@ export default Model.extend({
                 pollutantCodes: pollutantCodes,
             };
             const response = yield call(getSingleMonthAllPointEmissions, body);
-
-            if (response.data)
-            {
+            if (response.data) {
                 yield update({
                     tableDatas: response.data,
                     total: response.total,
@@ -82,8 +78,8 @@ export default Model.extend({
             // const tableDatasNew = yield select(state => state.pollutantemissions.tableDatas);
             // console.log('new', tableDatasNew);
         },
-        * getPointDaysData({payload}, { call, put, update, select }) {
-            const {clickDate, pageIndex, pageSize, pollutantCodes, emissionsSort,queryDGIMNs} = yield select(state => state.pollutantemissions);
+        * getPointDaysData({ payload }, { call, put, update, select }) {
+            const { clickDate, pageIndex, pageSize, pollutantCodes, emissionsSort, queryDGIMNs } = yield select(state => state.pollutantemissions);
             // debugger
             let body = {
                 monthTime: clickDate,
@@ -95,8 +91,7 @@ export default Model.extend({
             };
             const response = yield call(getSinglePointDaysEmissions, body);
 
-            if (response.data)
-            {
+            if (response.data) {
                 yield update({
                     pointDaysDatas: response.data,
                     total: response.total,

@@ -46,6 +46,11 @@ export default class RepairHistoryRecords extends Component {
     }
     componentDidMount() {
         const { dispatch } = this.props;
+        dispatch({
+            type: 'overview/getPollutantTypeList',
+            payload: {
+            }
+        });
         var getDGIMN = localStorage.getItem('DGIMN')
         if (getDGIMN === null) {
             getDGIMN = '[object Object]';
@@ -63,11 +68,7 @@ export default class RepairHistoryRecords extends Component {
                 DGIMN: getDGIMN,
             }
         });
-        dispatch({
-            type: 'overview/getPollutantTypeList',
-            payload: {
-            }
-        });
+
     }
     GetHistoryRecord = (pageIndex, pageSize, DGIMN, BeginTime, EndTime) => {
         this.props.dispatch({
@@ -153,8 +154,7 @@ export default class RepairHistoryRecords extends Component {
                     const existdata = data.find((value, index, arr) => {
                         return value.DGIMN == getDGIMN
                     });
-                    if(existdata==undefined)
-                    {
+                    if (existdata == undefined) {
                         this.props.dispatch({
                             type: 'task/GetHistoryRepairDetail',
                             payload: {
@@ -170,27 +170,27 @@ export default class RepairHistoryRecords extends Component {
             },
         });
     }
-        //重新加载
-        reloadData = (pollutantTypeCode, searchName) => {
-            var getDGIMN = localStorage.getItem('DGIMN')
-            if (getDGIMN === null) {
-                getDGIMN = '[object Object]';
-            }
-            this.props.dispatch({
-                type: 'overview/querydatalist',
-                payload: {
-                    map: true,
-                    pollutantTypes: pollutantTypeCode,
-                    pointName: searchName,
-                    RepairHistoryRecords: true,
-                    pageIndex: this.props.pageIndex,
-                    pageSize: this.props.pageSize,
-                    BeginTime: this.state.rangeDate[0].format('YYYY-MM-DD 00:00:00'),
-                    EndTime: this.state.rangeDate[1].format('YYYY-MM-DD 23:59:59'),
-                    DGIMN: getDGIMN,
-                },
-            });
+    //重新加载
+    reloadData = (pollutantTypeCode, searchName) => {
+        var getDGIMN = localStorage.getItem('DGIMN')
+        if (getDGIMN === null) {
+            getDGIMN = '[object Object]';
         }
+        this.props.dispatch({
+            type: 'overview/querydatalist',
+            payload: {
+                map: true,
+                pollutantTypes: pollutantTypeCode,
+                pointName: searchName,
+                RepairHistoryRecords: true,
+                pageIndex: this.props.pageIndex,
+                pageSize: this.props.pageSize,
+                BeginTime: this.state.rangeDate[0].format('YYYY-MM-DD 00:00:00'),
+                EndTime: this.state.rangeDate[1].format('YYYY-MM-DD 23:59:59'),
+                DGIMN: getDGIMN,
+            },
+        });
+    }
     treeCilck = (row, key) => {
         localStorage.setItem('DGIMN', row.DGIMN);
         this.GetHistoryRecord(this.props.pageIndex, this.props.pageSize, row.DGIMN, this.state.BeginTime, this.state.EndTime);
@@ -198,7 +198,15 @@ export default class RepairHistoryRecords extends Component {
     render() {
         const { pollutantTypelist, treedataloading, datalist, pollutantTypeloading } = this.props;
         const { detailed, statusImg, selectpoint, pointName } = this.state;
-        const dataSource = this.props.HistoryRepairHistoryRecods === null ? null : this.props.HistoryRepairHistoryRecods;
+        debugger
+        var dataSource = [];
+        var spining = true;
+        if (!this.props.treedataloading && !this.props.pollutantTypeloading) {
+            spining=this.props.loading;
+            dataSource = this.props.HistoryRepairHistoryRecods.length === 0 ? [] : this.props.HistoryRepairHistoryRecods;
+            
+        }
+
         const columns = [{
             title: '校准人',
             width: '20%',
@@ -305,7 +313,7 @@ export default class RepairHistoryRecords extends Component {
                                 <Table
                                     size="middle"
                                     scroll={{ y: 'calc(100vh - 350px)' }}
-                                    loading={this.props.loading}
+                                    loading={spining}
                                     className={styles.dataTable}
                                     columns={columns}
                                     dataSource={dataSource}
