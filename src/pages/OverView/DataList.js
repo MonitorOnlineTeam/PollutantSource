@@ -77,7 +77,6 @@ class dataList extends PureComponent {
     pickerChange=(time, timeString) => {
      
         if (time) {
-            alert();
             this.setState({
                  time
             });

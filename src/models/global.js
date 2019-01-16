@@ -113,13 +113,23 @@ export default Model.extend({
             return service.listen(data => {
                 // 实时数据："{"MessageType":"RealTimeData","Message":[{"DGIMN":"201809071401","PollutantCode":"s01","MonitorTime":"2018-11-21 01:22:41","MonitorValue":36.630,"MinStrength":null,"MaxStrength":null,"CouStrength":null,"IsOver":-1,"IsException":0,"Flag":"","ExceptionType":"","AlarmLevel":"身份验证失败","AlarmType":"无报警","Upperpollutant":"0","Lowerpollutant":"0","PollutantResult":"","AlarmTypeCode":0,"StandardColor":"red","StandardValue":"-","OverStandValue":"","DecimalReserved":3}]}"
                 let obj = JSON.parse(data); 
+              
                 switch (obj.MessageType) {
                     case 'RealTimeData':
                         // 跳转到对应的effect，把实体带过去更新state达到页面刷新的目的
-                        // dispatch({
-                        //     type: 'overview/welcome',
-                        //     payload: obj.Message
-                        // });
+                        dispatch({
+                            type: 'points/updateRealTimeData',
+                            payload: {
+                                array:obj.Message
+                            },
+                        });
+                        dispatch({
+                            type: 'workbenchmodel/updateRealTimeData',
+                            payload: {
+                                array:obj.Message
+                            },
+                        });
+
                         break;
                     case 'MinuteData':
                         // dispatch({
@@ -132,8 +142,22 @@ export default Model.extend({
                         // });
                         break;
                     case 'DynamicControlParam':
+                    // debugger;
+                    // console.log(obj);
+                        dispatch({
+                            type: 'points/updateDynamicControlParam',
+                            payload: {
+                                array:obj.Message
+                            },
+                         });
                         break;
                     case 'DynamicControlState':
+                    dispatch({
+                        type: 'points/updateDynamicControlState',
+                        payload: {
+                            array:obj.Message
+                        },
+                     });
                         break;
                     default:
                         break;

@@ -230,3 +230,15 @@ export async function GetBdTestRecord(params) {
     const result = await post('/api/rest/PollutantSourceApi/PTaskForm/GetBdRecord', body, null);
     return result === null ? { data: null } : result;
 }
+// 撤单
+export async function GetPostRevokeTask(params) {
+    const body = {
+        taskID: params.taskID,
+        revokeReason:params.revokeReason,
+        rejectFlag:1,
+        revokeUserId:params.userID
+    };
+    const result = await post('/api/rest/PollutantSourceApi/PTaskProcessing/PostRevokeTask', body, null);
+    return result === null ? { data: null } : result;
+}
+

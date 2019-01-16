@@ -7,7 +7,7 @@ import { Model } from '../dvapack';
 import moment from 'moment';
 import { message } from 'antd';
 
-import { mainpollutantInfo, zspollutantInfo } from '../../src/config';
+import { mainpollutantInfo } from '../../src/config';
 import {
     Popover,
     Badge,

@@ -5,7 +5,8 @@ import {
     GetHistoryConsumablesReplaceRecord, GetHistoryStandardGasRepalceRecordList,
     GetHistoryInspectionHistoryRecords, GetStopCemsDetail, GetRepairDetail,
     GetHistoryRepairDetail, GetHistoryStopCemsList, GetDeviceExceptionList,
-    GetBdHistoryInfoList, GetDeviceExceptionDetail, GetBdTestRecord
+    GetBdHistoryInfoList, GetDeviceExceptionDetail, GetBdTestRecord,
+    GetPostRevokeTask
 } from '../services/taskapi';
 import { Model } from '../dvapack';
 import { EnumRequstResult } from '../utils/enum';
@@ -423,7 +424,18 @@ export default Model.extend({
                     yield update({ BdRecord: DataInfo.data });
                 }
             }
-        }
+        },
+        // 撤单
+         * GetPostRevokeTask({
+            payload,
+           }, { call }) {
+                const DataInfo = yield call(GetPostRevokeTask, payload);
+                if (DataInfo && DataInfo.requstresult ) {
+                    message.success('撤单成功!');
+                } else {
+                    message.error('撤单失败!');
+                }
+            },
     },
 
 });
