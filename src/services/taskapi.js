@@ -1,4 +1,4 @@
-import { post} from '../dvapack/request';
+import { post } from '../dvapack/request';
 // 污染源运维的相关接口
 export async function GetTaskDetails(params) {
     const body = {
@@ -36,7 +36,7 @@ export async function GetJzRecord(params) {
 // 获取校准记录
 export async function GetRecordType(params) {
     const body = {
-         DGIMN:params.DGIMN
+        DGIMN: params.DGIMN
     };
     const result = await post('/api/rest/PollutantSourceApi/PTaskForm/GetRecordType', body, null);
     return result === null ? { data: null } : result;
@@ -229,4 +229,12 @@ export async function GetBdTestRecord(params) {
     };
     const result = await post('/api/rest/PollutantSourceApi/PTaskForm/GetBdRecord', body, null);
     return result === null ? { data: null } : result;
+}
+// 根据任务id判断出巡检记录表详情
+export async function GetPatrolTypeIdbyTaskId(params) {
+    const body = {
+        TaskID: params.TaskID
+    };
+    const result = await post('/api/rest/PollutantSourceApi/PTaskForm/GetPatrolTypeIdbyTaskId', body, null);
+    return result;
 }

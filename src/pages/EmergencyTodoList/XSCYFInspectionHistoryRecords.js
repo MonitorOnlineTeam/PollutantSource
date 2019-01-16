@@ -84,7 +84,7 @@ export default class XSCYFInspectionHistoryRecords extends Component {
             dataIndex: 'CreateUserID',
             key: 'CreateUserID'
         }, {
-            title: '维护情况',
+            title: '异常情况处理',
             width: '45%',
             dataIndex: 'Content',
             key: 'Content',

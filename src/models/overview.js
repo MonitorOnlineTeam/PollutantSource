@@ -76,7 +76,7 @@ export default Model.extend({
                         type: 'manualupload/GetManualSupplementList',
                         payload: {
                             ...payload,
-                            DGIMN: data[0].DGIMN,
+                            DGIMN: payload.DGIMN === '[object Object]' ? data[0].DGIMN : payload.DGIMN,
                             pointName: data[0].pointName
                         }
                     });

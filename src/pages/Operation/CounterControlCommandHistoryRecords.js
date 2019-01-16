@@ -209,7 +209,6 @@ export default class CounterControlCommandHistoryRecords extends Component {
             width: '20%',
             dataIndex: 'CreateUserID',
             key: 'CreateUserID',
-            align: 'center'
         }, {
             title: '易耗品（数量）',
             width: '45%',

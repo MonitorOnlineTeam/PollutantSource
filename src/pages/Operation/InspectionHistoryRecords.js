@@ -108,7 +108,24 @@ export default class InspectionHistoryRecords extends Component {
 
     seeDetail = (record) => {
         localStorage.setItem('DGIMN', this.props.DGIMN);
-        this.props.dispatch(routerRedux.push(`/PatrolForm/CompleteExtraction/${this.props.DGIMN}/${this.props.match.params.viewtype}/qcontrollist/WQCQFInspectionHistoryRecords/${record.TaskID}`));
+        this.props.dispatch({
+            type: 'task/GetPatrolTypeIdbyTaskId',
+            payload: {
+                TaskID: record.TaskID,
+                callback: (typeId) => {
+                    if (typeId === 5) {
+                        this.props.dispatch(routerRedux.push(`/PatrolForm/completeextraction/${this.props.DGIMN}/${this.props.match.params.viewtype}/qcontrollist/wqcqfinspectionhistoryrecords/${record.TaskID}`));
+                    }
+                    else if(typeId===6) {
+                        this.props.dispatch(routerRedux.push(`/PatrolForm/dilutionsampling/${this.props.DGIMN}/${this.props.match.params.viewtype}/qcontrollist/xscyfinspectionhistoryrecords/${record.TaskID}`));
+                    }
+                    else
+                    {
+                        this.props.dispatch(routerRedux.push(`/PatrolForm/directmeasurement/${this.props.DGIMN}/${this.props.match.params.viewtype}/qcontrollist/zzclfinspectionhistoryrecords/${record.TaskID}`));
+                    }
+                }
+            }
+        });
     }
     //查询
     onSerach = (value) => {
@@ -214,7 +231,7 @@ export default class InspectionHistoryRecords extends Component {
             dataIndex: 'CreateUserID',
             key: 'CreateUserID'
         }, {
-            title: '维护情况',
+            title: '异常情况处理',
             width: '45%',
             dataIndex: 'Content',
             key: 'Content',

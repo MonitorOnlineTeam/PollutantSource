@@ -113,6 +113,10 @@ export default class ManualUpload extends Component {
             payload: {
             }
         });
+        var getDGIMN = localStorage.getItem('DGIMN')
+        if (getDGIMN === null) {
+            getDGIMN = '[object Object]';
+        }
         //点位列表
         this.props.dispatch({
             type: 'overview/querydatalist',
@@ -123,7 +127,8 @@ export default class ManualUpload extends Component {
                 pageSize: this.props.pageSize,
                 BeginTime: this.state.rangeDate[0].format('YYYY-MM-DD 00:00:00'),
                 EndTime: this.state.rangeDate[1].format('YYYY-MM-DD 23:59:59'),
-                pollutantCode: this.state.SelectHandleChange
+                pollutantCode: this.state.SelectHandleChange,
+                DGIMN: getDGIMN,
             }
         });
 
@@ -149,6 +154,7 @@ export default class ManualUpload extends Component {
     }
     treeCilck = (row) => {
         this.setState({ PollutantType: row.pollutantTypeCode });
+        localStorage.setItem('DGIMN', row.DGIMN);
         const { dispatch } = this.props;
         //获取绑定下拉污染物
         dispatch({
@@ -318,6 +324,10 @@ export default class ManualUpload extends Component {
         this.setState({
             pointName: value
         });
+        var getDGIMN = localStorage.getItem('DGIMN')
+        if (getDGIMN === null) {
+            getDGIMN = '[object Object]';
+        }
         //点位列表
         this.props.dispatch({
             type: 'overview/querydatalist',
@@ -330,7 +340,16 @@ export default class ManualUpload extends Component {
                 pageSize: this.props.pageSize,
                 BeginTime: this.state.rangeDate[0].format('YYYY-MM-DD 00:00:00'),
                 EndTime: this.state.rangeDate[1].format('YYYY-MM-DD 23:59:59'),
-                pollutantCode: this.state.SelectHandleChange
+                pollutantCode: this.state.SelectHandleChange,
+                DGIMN: getDGIMN,
+                callback: (data) => {
+                    const existdata = data.find((value, index, arr) => {
+                        return value.DGIMN == getDGIMN
+                    });
+                    if (existdata == undefined) {
+                        this.GetManualSupplementList(null, this.state.SelectHandleChange, this.state.rangeDate[0].format('YYYY-MM-DD 00:00:00'), this.state.rangeDate[1].format('YYYY-MM-DD 23:59:59'), this.props.pageIndex, this.props.pageSize);
+                    }
+                }
             }
         });
     }
@@ -451,9 +470,9 @@ export default class ManualUpload extends Component {
                                             background: '#fff'
                                         }}
                                         pollutantTypeloading={this.props.pollutantTypeloading}
-                                        getHeight={'calc(100vh - 200px)'} getStatusImg={this.getStatusImg} isloading={this.props.treedataloading}
+                                        getHeight={'calc(100vh - 200px)'} getStatusImg={this.getStatusImg} 
                                         getNowPollutantType={this.getNowPollutantType}
-                                        treeCilck={this.treeCilck} treedatalist={this.props.datalist} PollutantType={2}
+                                        PollutantType={2}
                                         pollutantTypelist={this.props.pollutantTypelist}
                                         tabkey={this.state.pollutantTypeCode}
                                     />
@@ -461,7 +480,7 @@ export default class ManualUpload extends Component {
                                         getHeight='calc(100vh - 200px)'
                                         pollutantTypeloading={this.props.pollutantTypeloading}
                                         getStatusImg={this.getStatusImg} isloading={this.props.treedataloading}
-                                        treeCilck={this.treeCilck} treedatalist={this.props.datalist} PollutantType={2} />
+                                        treeCilck={this.treeCilck} treedatalist={this.props.datalist} PollutantType={2} ifSelect={true} />
                                 </div>
                             </div>
                         </div>
