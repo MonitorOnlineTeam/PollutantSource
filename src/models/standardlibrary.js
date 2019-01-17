@@ -130,7 +130,6 @@ export default Model.extend({
                 Name: Name,
                 Type: Type
             });
-            debugger;
             if (result.requstresult === '1') {
                 yield update({
                     requstresult: result.requstresult,

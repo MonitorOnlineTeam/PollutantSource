@@ -43,7 +43,6 @@ export default class DeviceExceptionListHistoryRecords extends Component {
         };
     }
     componentDidMount() {
-        localStorage.setItem('pollutantType', 2);
         const { dispatch } = this.props;
         dispatch({
             type: 'overview/getPollutantTypeList',
@@ -127,7 +126,6 @@ export default class DeviceExceptionListHistoryRecords extends Component {
     }
     //当前选中的污染物类型
     getNowPollutantType = (key) => {
-        localStorage.setItem('pollutantType', key);
         this.setState({
             pollutantTypeCode: key
         })
@@ -219,7 +217,6 @@ export default class DeviceExceptionListHistoryRecords extends Component {
             spining = this.props.loading;
             dataSource = this.props.HistoryDeviceExceptionList === null ? null : this.props.HistoryDeviceExceptionList;
         }
-        var pollutantType = localStorage.getItem('pollutantType')
         const columns = [{
             title: '校准人',
             width: '13%',
@@ -303,7 +300,7 @@ export default class DeviceExceptionListHistoryRecords extends Component {
                                         getHeight='calc(100vh - 220px)'
                                         pollutantTypeloading={pollutantTypeloading}
                                         getStatusImg={this.getStatusImg} isloading={treedataloading}
-                                        treeCilck={this.treeCilck} treedatalist={datalist} PollutantType={pollutantType} ifSelect={true} />
+                                        treeCilck={this.treeCilck} treedatalist={datalist} PollutantType={this.state.pollutantTypeCode} ifSelect={true} />
                                 </div>
                             </div>
                         </div>

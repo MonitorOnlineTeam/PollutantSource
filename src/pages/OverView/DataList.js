@@ -54,7 +54,6 @@ class dataList extends PureComponent {
     
     //加载数据
     reloadData=(time,status,operationStatus,terate,warning)=>{
-        debugger;
         this.props.dispatch({
             type: 'overview/querydatalist',
             payload: {
@@ -326,7 +325,7 @@ class dataList extends PureComponent {
     render() {
         const {normal,over,underline,exception,terate,operationStatus,pollutantCode}=this.state;
         const coldata = this.props.columnsdata;
-        const {selectpoint}=this.props;
+        const {selectpoint}=this.state;
         let fixed=false;
         if(coldata[0])
         {

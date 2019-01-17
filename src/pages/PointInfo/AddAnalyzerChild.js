@@ -125,7 +125,6 @@ export default class AddAnalyzerChild extends Component {
                             Intercept: values.Intercept,
                             callback: () => {
                                 if (this.props.addalyzerchild_requstresult === '1') {
-                                    debugger;
                                     message.success('添加成功！').then(() => this.props.ChildCVisitable());
                                 } else {
                                     message.error(this.props.reason);
@@ -136,7 +135,6 @@ export default class AddAnalyzerChild extends Component {
                 } 
             } else {
                 if (!err && flag === true) {
-                    debugger;
                     that.props.dispatch({
                       type: 'pointinfo/editalyzerchild',
                       payload: {
