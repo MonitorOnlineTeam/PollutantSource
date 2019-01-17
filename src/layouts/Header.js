@@ -79,9 +79,6 @@ class HeaderView extends PureComponent {
       if (visible) {
           const { dispatch } = this.props;
           dispatch({
-              type: 'global/fetchAdvises',
-          });
-          dispatch({
               type: 'global/fetchNotices',
           });
       }
@@ -158,7 +155,5 @@ export default connect(({ user, global, setting, loading }) => ({
     collapsed: global.collapsed,
     fetchingNotices: loading.effects['global/fetchNotices'],
     notices: global.notices,
-    fetchAdvises:loading.effects['global/fetchAdvises'],
-    advises:global.advises,
     setting,
 }))(HeaderView);

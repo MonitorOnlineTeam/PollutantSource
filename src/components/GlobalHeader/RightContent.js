@@ -17,9 +17,6 @@ export default class GlobalHeaderRight extends PureComponent {
         }
         const newNotices = notices.map(notice => {
             const newNotice = { ...notice };
-            if (newNotice.id) {
-                newNotice.key = newNotice.id;
-            }
             if (newNotice.exceptiontypes) {
                 let exceptiontypes=newNotice.exceptiontypes.split(",");
                 const color = {
@@ -29,37 +26,22 @@ export default class GlobalHeaderRight extends PureComponent {
                 }[newNotice.sontype];
                 newNotice.extra=exceptiontypes.map(item=><Tag key={`${newNotice.key}${item}`} color={color} style={{ marginRight: 0 }}>{item}</Tag>);
             }
+            if(!newNotice.avatar){
+                if(newNotice.type==="alarm") {
+                    if (newNotice.sontype==="over") {
+                        newNotice.avatar=(<Avatar style={{ backgroundColor: "red", verticalAlign: 'middle' }} size="large">超</Avatar>);
+                    }else if(newNotice.sontype==="warn") {
+                        newNotice.avatar=(<Avatar style={{ backgroundColor: "blue", verticalAlign: 'middle' }} size="large">预</Avatar>);
+                    }else if(newNotice.sontype==="exception") {
+                        newNotice.avatar=(<Avatar style={{ backgroundColor: "gold", verticalAlign: 'middle' }} size="large">异</Avatar>);
+                    }
+                }else if(newNotice.type==="advise"){
+                    newNotice.avatar=newNotice.isview===true?<Avatar style={{ backgroundColor: "red", verticalAlign: 'middle' }} size="large">通</Avatar>:<Avatar style={{ backgroundColor: "gray", verticalAlign: 'middle' }} size="large">通</Avatar>;
+                }
+            }
             return newNotice;
         });
         return groupBy(newNotices, 'type');
-    }
-
-    getUnreadAlarmData = noticesData => {
-        const unreadMsg = {};
-        Object.entries(noticesData).forEach(([key, value]) => {
-            if (!unreadMsg[key]) {
-                unreadMsg[key] = 0;
-            }
-            if (Array.isArray(value)) {
-                unreadMsg[key] = value.length;
-            }
-        });
-        return unreadMsg;
-    };
-
-    getAdviseData() {
-        const { advises = [] } = this.props;
-        if (advises.length === 0) {
-            return {};
-        }
-        const newAdvises = advises.map(advise => {
-            const newAdvise = { ...advise };
-            if (newAdvise.id) {
-                newAdvise.key = newAdvise.id;
-            }
-            return newAdvise;
-        });
-        return groupBy(newAdvises, 'type');
     }
 
   getUnreadData = advisesData => {
@@ -69,7 +51,19 @@ export default class GlobalHeaderRight extends PureComponent {
               unreadMsg[key] = 0;
           }
           if (Array.isArray(value)) {
-              unreadMsg[key] = value.filter(item => item.isview).length;
+              if(key==="advise")
+                  unreadMsg[key] = value.filter(item => item.isview).length;
+              else{
+                  const arr=value;
+                  let result=0;
+                  arr.forEach(element => {
+                      if(element.alarmcount)
+                          result+=element.alarmcount;
+                      else
+                          result+=1;
+                  });
+                  unreadMsg[key] = result;
+              }
           }
       });
       return unreadMsg;
@@ -88,7 +82,6 @@ export default class GlobalHeaderRight extends PureComponent {
       const {
           currentUser,
           fetchingNotices,
-          fetchAdvises,
           onNoticeVisibleChange,
           onMenuClick,
           onNoticeClear,
@@ -112,10 +105,7 @@ export default class GlobalHeaderRight extends PureComponent {
           </Menu>
       );
       const noticeData = this.getNoticeData();
-      const adviseData = this.getAdviseData();
-      const unreadMsg = this.getUnreadData(adviseData);
-      const unreadAlarmMsg = this.getUnreadAlarmData(noticeData);
-      debugger;
+      const unreadMsg = this.getUnreadData(noticeData);
       let className = styles.right;
       if (theme === 'dark') {
           className = `${styles.right}  ${styles.dark}`;
@@ -160,12 +150,12 @@ export default class GlobalHeaderRight extends PureComponent {
                   }}
                   onClear={onNoticeClear}
                   onPopupVisibleChange={onNoticeVisibleChange}
-                  loading={fetchingNotices&&fetchAdvises}
+                  loading={fetchingNotices}
                   clearClose={false}
                   showClear={false}
               >
                   <NoticeIcon.Tab
-                      count={unreadAlarmMsg.alarm?unreadAlarmMsg.alarm.length:unreadAlarmMsg.alarm}
+                      count={unreadMsg.alarm}
                       list={noticeData.alarm}
                       title={formatMessage({ id: 'component.globalHeader.notification' })}
                       name="alarm"
@@ -173,8 +163,8 @@ export default class GlobalHeaderRight extends PureComponent {
                       emptyImage="https://gw.alipayobjects.com/zos/rmsportal/wAhyIChODzsoKIOBHcBk.svg"
                   />
                   <NoticeIcon.Tab
-                      count={unreadMsg.advise?unreadMsg.advise.length:unreadMsg.advise}
-                      list={adviseData.advise}
+                      count={unreadMsg.advise}
+                      list={noticeData.advise}
                       title={formatMessage({ id: 'component.globalHeader.message' })}
                       name="advise"
                       emptyText={formatMessage({ id: 'component.globalHeader.message.empty' })}

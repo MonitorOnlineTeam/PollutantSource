@@ -116,6 +116,7 @@ export default {
                 currentUser: {
                     ...state.currentUser,
                     notifyCount: action.payload,
+                    unreadCount: action.payload,
                 },
             };
         },
