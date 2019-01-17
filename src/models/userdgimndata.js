@@ -2,8 +2,9 @@ import {
     Model
 } from '../dvapack';
 import {
-    userDgimnDataFilter, addAllDgimnDataFilter, addDgimnDataFilter
+    userDgimnDataFilter, addAllDgimnDataFilter, addDgimnDataFilter,addalarmlinkmandgimncode
 } from '../services/userDgimnData';
+
 export default Model.extend({
     namespace: 'userdgimndata',
     state: {
@@ -16,6 +17,9 @@ export default Model.extend({
         reason: null,
         ischecked: [],
         alldgimn: [],
+        yichangDgimn: [],
+        chaobiaoDgimn:[],
+        yujingDgimn:[],
     },
     subscriptions: {
         setup({
@@ -65,6 +69,9 @@ export default Model.extend({
                     pageSize: pageSize === undefined ? 10 : pageSize,
                     ischecked: result.data[0].IsCheck.split(','),
                     alldgimn: result.data[0].AllDgimn.split(','),
+                    yichangDgimn: result.data[0].yCheck.split(','),
+                    chaobiaoDgimn: result.data[0].bCheck.split(','),
+                    yujingDgimn: result.data[0].jCheck.split(','),
                 });
             } else {
                 yield update({
@@ -81,6 +88,9 @@ export default Model.extend({
             payload: {
                 UserId,
                 DGIMNS,
+                cbyj,
+                sjcb,
+                sjyc,
                 callback
             }
         }, {
@@ -92,6 +102,9 @@ export default Model.extend({
             const result = yield call(addAllDgimnDataFilter, {
                 UserId: UserId,
                 DGIMNS: DGIMNS,
+                cbyj: cbyj,
+                sjcb: sjcb,
+                sjyc: sjyc,
             });
             yield update({
                 requstresult: result.requstresult,
@@ -113,6 +126,33 @@ export default Model.extend({
             const result = yield call(addDgimnDataFilter, {
                 UserId: UserId,
                 DGIMNS: DGIMNS,
+            });
+            yield update({
+                requstresult: result.requstresult,
+            });
+            callback();
+        },
+        * addalarmlinkmandgimncode({
+            payload: {
+                UserId,
+                DGIMNS,
+                cbyj,
+                sjcb,
+                sjyc,
+                callback
+            }
+        }, {
+            call,
+            put,
+            update,
+            select
+        }) {
+            const result = yield call(addalarmlinkmandgimncode, {
+                UserId: UserId,
+                DGIMNS: DGIMNS,
+                cbyj:cbyj,
+                sjcb:sjcb,
+                sjyc:sjyc,
             });
             yield update({
                 requstresult: result.requstresult,

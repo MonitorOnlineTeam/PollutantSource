@@ -15,7 +15,7 @@ import {
     Card,
     Modal,
     Divider,
-    Spin 
+    Spin
 } from 'antd';
 import {
     connect
@@ -78,13 +78,13 @@ class AddPoint extends Component {
        
 
         if (DGIMN !== 'null') {
-       
+
             this.props.dispatch({
                 type: 'pointinfo/getpoint',
                 payload: {
                     DGIMN: DGIMN,
                     callback: () => {
-                
+
                     }
                 },
             });
@@ -170,7 +170,7 @@ class AddPoint extends Component {
         let flag = true;
         this.props.form.validateFieldsAndScroll((err, values) => {
             const that = this;
-            if (this.props.match.params.DGIMN === null) {
+            if (this.props.match.params.DGIMN === 'null') {
                 if (!err && flag === true) {
                     that.props.dispatch({
                         type: 'pointinfo/addpoint',
@@ -236,7 +236,7 @@ class AddPoint extends Component {
 
      success = () => {
          let index = this.props.dispatch(routerRedux.push(`/sysmanage/PointInfo`));
-         if (this.props.match.params.DGIMN  !== null) {
+         if (this.props.match.params.DGIMN !== 'null') {
              message.success('修改成功', 3).then(() => index);
          } else {
              message.success('新增成功', 3).then(() => index);
@@ -260,15 +260,15 @@ class AddPoint extends Component {
      
          
          if(isloading) {
-            return (<Spin
-                style={{ width: '100%',
-                    height: 'calc(100vh/2)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center' }}
-                size="large"
-            />);
-        }
+             return (<Spin
+                 style={{ width: '100%',
+                     height: 'calc(100vh/2)',
+                     display: 'flex',
+                     alignItems: 'center',
+                     justifyContent: 'center' }}
+                 size="large"
+             />);
+         }
          // const UserId = this.props.match.params.UserId;
          const {
             pointName           ,
@@ -306,10 +306,10 @@ class AddPoint extends Component {
              >
                  <Card
                      title="排口维护"
-                
+
                      style={
                          {
-                         
+
                          }
                      }
                  >
@@ -324,7 +324,7 @@ class AddPoint extends Component {
                                      label="排口名称"
                                  > {
                                          getFieldDecorator('PointName', {
-                                            initialValue: pointName,
+                                             initialValue: pointName,
                                              rules: [{
                                                  required: true,
                                                  message: '请输入排口名称!'
@@ -342,7 +342,7 @@ class AddPoint extends Component {
                                      label="排口编号"
                                  > {
                                          getFieldDecorator('DGIMN', {
-                                            initialValue: DGIMN,
+                                             initialValue: DGIMN,
                                              rules: [{
                                                  required: true,
                                                  message: '请输入排口编号!'
@@ -404,7 +404,7 @@ class AddPoint extends Component {
                                      label="负责人电话"
                                  > {
                                          getFieldDecorator('MobilePhone', {
-                                            initialValue: mobilePhone,
+                                             initialValue: mobilePhone,
                                              rules: [{
                                                  pattern: /^1\d{10}$/,
                                                  message: '请输入正确的手机号!'
@@ -456,12 +456,8 @@ class AddPoint extends Component {
                      
                          </Row>
                          <Divider dashed={true} />
-                         <Row gutter={8}>
-                             
-                   
-                             
-                         </Row>
-                     
+                         <Row gutter={8} />
+
                          <Row gutter={8}>
                              <Col span={8}>
                                  <FormItem
@@ -471,7 +467,7 @@ class AddPoint extends Component {
                                  > {
                                          getFieldDecorator('OutputType',
                                              {
-                                                 initialValue: OutputType==='出口'?true:false,
+                                                 initialValue: OutputType==='出口',
                                                  valuePropName: 'checked',
                                              }
                                          )(
@@ -491,7 +487,7 @@ class AddPoint extends Component {
                                  > {
                                          getFieldDecorator('RunState',
                                              {
-                                                 initialValue: RunState===1?true:false,
+                                                 initialValue: RunState===1,
                                                  valuePropName: 'checked',
                                              }
                                          )(
@@ -549,7 +545,7 @@ class AddPoint extends Component {
                                  > {
                                          getFieldDecorator('OutputDiameter',{
 
-                                            initialValue: OutputDiameter,
+                                             initialValue: OutputDiameter,
                                          }
                                          )(
                                              <InputNumber min={0} max={10000} />)
@@ -611,7 +607,7 @@ class AddPoint extends Component {
                                      label="排口地址"
                                  > {
                                          getFieldDecorator('Address', {
-                                            initialValue: Address,
+                                             initialValue: Address,
                                              rules: [{
                                                  required: true,
                                                  message: '请输入排口地址!'
@@ -642,7 +638,7 @@ class AddPoint extends Component {
                                                  
                                       
                                                  this.setState({
-                                                    coordinate: value,
+                                                     coordinate: value,
                                                      Mapvisible: true,
                                                      title: '选择坐标',
                                                      width: 1130
@@ -651,7 +647,7 @@ class AddPoint extends Component {
                                          />)
                                      }
                                  </FormItem>
-                                 
+
                              </Col>
                              <Col span={8}>
                                  <FormItem

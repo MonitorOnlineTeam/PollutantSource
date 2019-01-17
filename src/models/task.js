@@ -56,7 +56,6 @@ export default Model.extend({
         * GetYwdsj({
             payload,
         }, { call, update, select }) {
-            debugger
             const DataInfo = yield call(GetYwdsj, payload);
             if (DataInfo != null && DataInfo.requstresult == EnumRequstResult.Success) {
                 const isLoadMoreOpt = payload.isLoadMoreOpt; // 是否是加载更多操作

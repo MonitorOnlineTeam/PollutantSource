@@ -17,7 +17,6 @@ export default class AppRepairRecordDetail extends Component {
     }
 
     componentDidMount() {
-        debugger
         this.props.dispatch({
             type: 'task/GetRepairDetail',
             payload: {

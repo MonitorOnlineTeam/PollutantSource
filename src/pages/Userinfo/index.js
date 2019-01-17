@@ -133,7 +133,7 @@ export default class UserList extends Component {
                     DataFiltervisible: true,
                     type: 'datafilter',
                     title: '数据过滤',
-                    width: 1130,
+                    width: '80%',
                     userId: id,
                 });
                 break;

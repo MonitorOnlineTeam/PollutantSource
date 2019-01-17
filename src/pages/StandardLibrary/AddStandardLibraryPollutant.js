@@ -125,7 +125,6 @@ export default class AddStandardLibraryPollutant extends Component {
  };
 
  componentWillMount() {
-     debugger;
      this.setState({
          StandardLibraryID: this.props.pid
      });

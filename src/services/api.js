@@ -300,7 +300,6 @@ export async function querysubjectionrelationlist() {
 // 编辑企业信息
 export async function queryentedit(params) {
     console.log(params.latlon);
-    debugger;
     const body = {
         name: params.entallname,
         code: params.parentID,

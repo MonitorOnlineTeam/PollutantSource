@@ -202,7 +202,6 @@ export default class ManualUpload extends Component {
         this.GetManualSupplementList(this.props.DGIMN, this.state.SelectHandleChange, this.state.rangeDate[0].format('YYYY-MM-DD 00:00:00'), this.state.rangeDate[1].format('YYYY-MM-DD 23:59:59'), pageIndex, pageSize);
     }
     GetManualSupplementList = (DGIMN, pollutantCode, BeginTime, EndTime, pageIndex, pageSize, pointName) => {
-        debugger
         this.props.dispatch({
             type: 'manualupload/GetManualSupplementList',
             payload: {
@@ -385,7 +384,6 @@ export default class ManualUpload extends Component {
         const { pollutantTypelist, treedataloading, datalist, pollutantTypeloading } = this.props;
         var uploaddata = [];
         var spining = true;
-        debugger
         if (!this.props.treedataloading && !this.props.pollutantTypeloading && !this.props.loading) {
             spining = this.props.loading;
             uploaddata = this.props.uploaddatalist === null ? null : this.props.uploaddatalist;

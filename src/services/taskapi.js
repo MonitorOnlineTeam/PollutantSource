@@ -20,7 +20,6 @@ export async function GetYwdsj(params) {
         beginTime: params.beginTime,
         endTime: params.endTime
     };
-    debugger
     const result = await post('/api/rest/PollutantSourceApi/PTaskProcessing/GetOperationPageList', body, null);
     return result === null ? { data: null } : result;
 }
@@ -52,7 +51,6 @@ export async function GetJzHistoryRecord(params) {
         BeginTime: params.BeginTime,
         EndTime: params.EndTime
     };
-    debugger
     const result = await post('/api/rest/PollutantSourceApi/PTaskForm/GetJzHistoryInfo', body, null);
     return result === null ? { data: null } : result;
 }
