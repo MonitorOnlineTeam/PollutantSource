@@ -122,11 +122,11 @@ export default class EquipmentOperatingRate extends Component {
                 render: (text, record) => {
                     if(record.AvgNormalRunTime<=text)
                     {
-                        return <span style={{paddingLeft:19}}>{text}</span> ;
+                        return <span className={styles.normaldata}>{text}</span> ;
                     }
                    const content=(<span><Icon type="warning" style={{color:'#EEC900'}}  />平均值{record.AvgNormalRunTime}</span>)
                    return (<Popover content={content} trigger="hover">
-                       <span className={styles.avgtext}>   <Badge status="warning"/>{text}
+                       <span className={styles.avgtext}>   <Badge className={styles.warningdata} status="warning"/>{text}
                         </span> </Popover>);
                 }
             },
@@ -139,11 +139,11 @@ export default class EquipmentOperatingRate extends Component {
                 render: (text, record) => {
                     if(record.AvgProducesTime<=text)
                     {
-                        return <span style={{paddingLeft:19}}>{text}</span> ;
+                        return <span className={styles.normaldata}>{text}</span> ;
                     }
                     const content=(<span><Icon type="warning" style={{color:'#EEC900'}}  />平均值{record.AvgProducesTime}</span>)
                     return (<Popover content={content} trigger="hover">
-                         <span className={styles.avgtext}><Badge status="warning"/> {text}
+                         <span className={styles.avgtext}><Badge className={styles.warningdata}  status="warning"/> {text}
                          </span> </Popover>);
                 }
             },
@@ -156,11 +156,11 @@ export default class EquipmentOperatingRate extends Component {
                 render: (text, record) => {
                     if(record.AvgStopProductionTime<=text)
                     {
-                        return <span style={{paddingLeft:19}}>{text}</span> ;
+                        return <span className={styles.normaldata}>{text}</span> ;
                     }
                     const content=(<span><Icon type="warning" style={{color:'#EEC900'}}  />平均值{record.AvgStopProductionTime}</span>)
                     return (<Popover content={content} trigger="hover">
-                         <span className={styles.avgtext}><Badge status="warning"/> {text}
+                         <span className={styles.avgtext}><Badge className={styles.warningdata} status="warning"/> {text}
                          </span> </Popover>);
                 }
             },
@@ -251,6 +251,7 @@ export default class EquipmentOperatingRate extends Component {
                                         marginLeft: 100,
                                         marginRight: 3
                                     }} /><span style={{cursor: 'pointer'}}> 排口设备运转率未达标</span>
+                                       <Badge style={{marginLeft:100,marginBottom:4}} status="warning"/><span style={{cursor: 'pointer'}}> 未达到平均值</span>
                                 </div>
                             </Col>
                         </Row>

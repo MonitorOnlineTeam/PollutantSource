@@ -326,6 +326,7 @@ class dataList extends PureComponent {
         const {normal,over,underline,exception,terate,operationStatus,pollutantCode}=this.state;
         const coldata = this.props.columnsdata;
         const {selectpoint}=this.state;
+        let {gwidth}=this.props;
         let fixed=false;
         if(coldata[0])
         {
@@ -383,9 +384,11 @@ class dataList extends PureComponent {
         },
        
         ];
-
+     
+        let csyxl=0;
         if(pollutantCode==2)
         {
+            csyxl=140;
             columns= columns.concat(
             {
                 title: '传输有效率',
@@ -402,6 +405,14 @@ class dataList extends PureComponent {
                 })
             })
         }
+
+        let colwidth=200;
+        const scroll=document.body.scrollWidth-40;
+        if(gwidth<scroll && coldata[0])
+        {
+            gwidth=scroll;
+            colwidth= (scroll-(300 + csyxl + 70))/coldata.length;
+        }
     
         const res = coldata[0] ? coldata.map((item, key) => {
             columns = columns.concat({
@@ -409,7 +420,7 @@ class dataList extends PureComponent {
                 dataIndex: item.field,
                 key: item.field,
                 align: 'center',
-                width: 200,
+                width: colwidth,
                 render: (value, record, index) => {
                     const additional = record[`${item.field}_params`];
                     if (additional) {
@@ -455,6 +466,7 @@ class dataList extends PureComponent {
                 size="large"
             />);
         }
+        console.log(columns);
         return (
             <div
                 style={{ width: '100%', height: 'calc(100vh - 65px)' }}
@@ -510,7 +522,7 @@ class dataList extends PureComponent {
                         dataSource={this.props.data}
                         pagination={false}
                         loading={this.props.isloading}
-                        scroll={{ x: this.props.gwidth, y: 'calc(100vh - 190px)' }}
+                        scroll={{ x: gwidth, y: 'calc(100vh - 190px)' }}
                         bordered={true}
                         rowKey="DGIMN"
                         onRow={record => {

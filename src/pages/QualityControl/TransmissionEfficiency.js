@@ -121,11 +121,11 @@ export default class TransmissionEfficiency extends Component {
                 render: (text, record) => {
                     if(record.AvgShouldNumber<=text)
                     {
-                        return <span style={{paddingLeft:19}}>{text}</span> ;
+                        return <span className={styles.normaldata}>{text}</span> ;
                     }
                    const content=(<span><Icon type="warning" style={{color:'#EEC900'}}  />平均值{record.AvgShouldNumber}</span>)
                    return (<Popover content={content} trigger="hover">
-                        <span className={styles.avgtext}> <Badge status="warning"/>{text}
+                        <span className={styles.avgtext}> <Badge className={styles.warningdata} status="warning"/>{text}
                         </span> </Popover>);
                 }
             },
@@ -138,11 +138,11 @@ export default class TransmissionEfficiency extends Component {
                 render: (text, record) => {
                     if(record.AvgTransmissionNumber<=text)
                     {
-                        return <span style={{paddingLeft:19}}>{text}</span> ;
+                        return <span className={styles.normaldata}>{text}</span> ;
                     }
                    const content=(<span><Icon type="warning" style={{color:'#EEC900'}}  />平均值{record.AvgTransmissionNumber}</span>)
                    return (<Popover content={content} trigger="hover">
-                        <span className={styles.avgtext}> <Badge status="warning"/>{text}
+                        <span className={styles.avgtext}> <Badge className={styles.warningdata} status="warning"/>{text}
                         </span> </Popover>);
                 }
             },
@@ -155,11 +155,11 @@ export default class TransmissionEfficiency extends Component {
                 render: (text, record) => {
                     if(record.AvgEffectiveNumber<=text)
                     {
-                        return <span style={{paddingLeft:19}}>{text}</span> ;
+                        return <span className={styles.normaldata}>{text}</span> ;
                     }
                    const content=(<span><Icon type="warning" style={{color:'#EEC900'}}  />平均值{record.AvgEffectiveNumber}</span>)
                    return (<Popover content={content} trigger="hover">
-                        <span className={styles.avgtext}><Badge status="warning"/>{text}
+                        <span className={styles.avgtext}><Badge className={styles.warningdata} status="warning"/>{text}
                         </span> </Popover>);
                 }
             },
@@ -172,11 +172,11 @@ export default class TransmissionEfficiency extends Component {
                 render: (text, record) => {
                     if(record.AvgTransmissionRate<=text)
                     {
-                        return <span style={{paddingLeft:19}}>{(parseFloat(text) * 100).toFixed(2) + '%'}</span>;
+                        return <span className={styles.normaldata}>{(parseFloat(text) * 100).toFixed(2) + '%'}</span>;
                     }
                    const content=(<span><Icon type="warning" style={{color:'#EEC900'}}  />平均值{(parseFloat(record.AvgTransmissionRate) * 100).toFixed(2) + '%'}</span>)
                    return (<Popover content={content} trigger="hover">
-                        <span className={styles.avgtext}><Badge status="warning"/>{(parseFloat(text) * 100).toFixed(2) + '%'}
+                        <span className={styles.avgtext}><Badge className={styles.warningdata} status="warning"/>{(parseFloat(text) * 100).toFixed(2) + '%'}
                         </span> </Popover>);
                 }
             },
@@ -190,11 +190,11 @@ export default class TransmissionEfficiency extends Component {
                 render: (text, record) => {
                     if(record.AvgEffectiveRate<=text)
                     {
-                        return <span style={{paddingLeft:19}}>{(parseFloat(text) * 100).toFixed(2) + '%'}</span>;
+                        return <span className={styles.normaldata}>{(parseFloat(text) * 100).toFixed(2) + '%'}</span>;
                     }
                    const content=(<span><Icon type="warning" style={{color:'#EEC900'}}  />平均值{(parseFloat(record.AvgEffectiveRate) * 100).toFixed(2) + '%'}</span>)
                    return (<Popover content={content} trigger="hover">
-                        <span className={styles.avgtext}><Badge status="warning"/>{(parseFloat(text) * 100).toFixed(2) + '%'}
+                        <span className={styles.avgtext}><Badge className={styles.warningdata} status="warning"/>{(parseFloat(text) * 100).toFixed(2) + '%'}
                         </span> </Popover>);
                 }
             },
