@@ -57,8 +57,8 @@ class TreeCardContent extends Component {
         return res;
     }
     render() {
-        if(!this.props.pollutantTypeloading)
-        {
+        // if(!this.props.pollutantTypeloading)
+        // {
             if (this.props.isloading) {
                 return (
                     <div style={{
@@ -79,7 +79,7 @@ class TreeCardContent extends Component {
                     </div>
                 );
             }
-        }
+        // }
  
 
         let { getHeight, treedatalist } = this.props;

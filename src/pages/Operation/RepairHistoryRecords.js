@@ -127,7 +127,7 @@ export default class RepairHistoryRecords extends Component {
     }
     //当前选中的污染物类型
     getNowPollutantType = (key) => {
-        localStorage.setItem('pollutantType', key);
+        // localStorage.setItem('pollutantType', key);
         this.setState({
             pollutantTypeCode: key,
         })
@@ -305,7 +305,7 @@ export default class RepairHistoryRecords extends Component {
                                         getHeight='calc(100vh - 220px)'
                                         pollutantTypeloading={pollutantTypeloading}
                                         getStatusImg={this.getStatusImg} isloading={treedataloading}
-                                        treeCilck={this.treeCilck} treedatalist={datalist} PollutantType={pollutantType} ifSelect={true} />
+                                        treeCilck={this.treeCilck} treedatalist={datalist} PollutantType={this.state.pollutantTypeCode} ifSelect={true} />
                                 </div>
                             </div>
                         </div>
