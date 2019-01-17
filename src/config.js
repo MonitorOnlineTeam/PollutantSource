@@ -15,7 +15,7 @@ module.exports = {
     enterpriceid:'51216eae-8f11-4578-ad63-5127f78f6cca',
     apiPrefix: '/mock',
     webSocketPushURL: '172.16.4.200:40001',
-    imgaddress: 'http://localhost:52199/upload/',
+    imgaddress: 'http://172.16.12.152:8011/api/upload/',
     //实时视频地址
     realtimevideourl:'http://localhost:36999/Video/MonitorLinkCamera/RealtimeCameraReact',
     //历史视频地址
