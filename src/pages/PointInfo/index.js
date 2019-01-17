@@ -201,11 +201,11 @@ export default class pointlist extends Component {
          align: 'center',
          render: (text, record) => (<Fragment >
              <a onClick={
-                 () => this.props.dispatch(routerRedux.push(`/sysmanage/pointdetail/${record.key}`))
+                 () =>{  this.props.dispatch(routerRedux.push(`/sysmanage/pointdetail/${record.key}/${record.pollutantType}/${1}`))}
              } > 编辑 </a>
              <Divider type="vertical" />
              <a onClick={
-                 () => this.props.dispatch(routerRedux.push(`/sysmanage/pointdetail/${record.key}/${record.pointName}`))
+                 () => this.props.dispatch(routerRedux.push(`/sysmanage/pointdetail/${record.key}/${record.pointName}/${record.pollutantType}/${1}`))
              } > 详情 </a>
              <Divider type="vertical" />
              <Popconfirm placement="left" title="确定要删除此排口吗？" onConfirm={() => this.deletepoint(record.key)} okText="是" cancelText="否">
@@ -218,7 +218,9 @@ export default class pointlist extends Component {
                  </a>
              </Dropdown>
          </Fragment >
+         
          ),
+         
      },
      ];
      return (
@@ -253,7 +255,7 @@ export default class pointlist extends Component {
                                      <Button type="primary" style={{marginLeft:10}}
                                      onClick={
                                          () => {
-                                             this.props.dispatch(routerRedux.push(`/sysmanage/PointDetail/null`));
+                                             this.props.dispatch(routerRedux.push(`/sysmanage/PointDetail/null/null/null`));
                                          }
                                      } > 添加 </Button>
                              </Col >

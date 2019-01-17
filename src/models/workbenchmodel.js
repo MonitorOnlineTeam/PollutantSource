@@ -108,7 +108,16 @@ export default Model.extend({
             endTime: moment().format('YYYY-MM-DD HH:00:00'),
             // beginTime:'2018-12-28 20:00:00',
             // endTime: '2018-12-28 21:00:00',
-        }
+        },
+        OperationCalendar: {
+            beginTime: moment().add(-3, 'months').format("YYYY-MM-01 00:00:00"),//'2018-12-01 00:00:00',//moment().format('YYYY-MM-DD HH:mm:ss'),
+            endTime: moment().format('YYYY-MM-DD HH:mm:ss'),//'2019-01-01 00:00:00',//moment().format('YYYY-MM-DD HH:mm:ss'),
+            tableDatas: [],
+            tempTableDatas: [],
+            pageIndex: 1,
+            pageSize: 6,
+            total: 0,
+        },
     },
     subscriptions: {
     },
@@ -131,6 +140,7 @@ export default Model.extend({
                 //operationUserId:'766f911d-5e41-4bbf-b705-add427a16e77'
             };
             const response = yield call(getOperationHistoryRecordPageList, body);
+            debugger
             yield update({
                 operation: {
                     ...operation,
@@ -373,13 +383,12 @@ export default Model.extend({
 
         //菜单-运维日历
         * getOperationCalendarData({ payload }, { call, put, update, select }) {
-            const { operation } = yield select(state => state.workbenchmodel);
-
+            const { OperationCalendar } = yield select(state => state.workbenchmodel);
             const response = yield call(getOperationHistoryRecordPageList, payload);
             if (response.data !== null) {
                 yield update({
-                    operation: {
-                        ...operation,
+                    OperationCalendar: {
+                        ...OperationCalendar,
                         ...{
                             tableDatas: response.data,
                             tempTableDatas: response.data,
@@ -390,8 +399,8 @@ export default Model.extend({
                 });
             } else {
                 yield update({
-                    operation: {
-                        ...operation,
+                    OperationCalendar: {
+                        ...OperationCalendar,
                         ...{
                             tableDatas: null,
                             tempTableDatas: null,

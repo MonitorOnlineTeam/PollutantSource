@@ -7,7 +7,7 @@ import { Model } from '../dvapack';
 import moment from 'moment';
 import { message } from 'antd';
 
-import { mainpollutantInfo } from '../../src/config';
+import { mainpollutantInfo,mainpoll } from '../../src/config';
 import {
     Popover,
     Badge,
@@ -43,7 +43,10 @@ export default Model.extend({
             const data = yield call(querypollutanttypecode, payload);
             yield put({
                 type: 'querydatalist',
-                payload: payload,
+                payload: {
+                    ...payload,
+                    pollutantTypes:payload.pollutantCode
+                },
             });
             yield take('querydatalist/@@end');
             if (data) {
@@ -392,7 +395,7 @@ export default Model.extend({
                             }
                         });
                     }
-
+                    
                 }
                 else {
                     yield put({
@@ -479,52 +482,73 @@ export default Model.extend({
         * querydetailpollutant({
             payload,
         }, { call, update }) {
+
+            const pollutantInfoList=mainpoll.find(value=>{
+                return value.pollutantCode==payload.pollutantTypeCode;
+            })
             // 地图详细表格列头
-            const detailpcol = [{
+             let detailpcol = [{
                 title: '因子',
                 dataIndex: 'pollutantName',
                 key: 'pollutantName',
                 align: 'center',
             }, {
-                title: '实测(mg/m³)',
+                title: '浓度('+pollutantInfoList.unit+')',
                 dataIndex: 'pollutantCode',
                 key: 'pollutantCode',
                 align: 'center'
-            }, {
-                title: '折算(mg/m³)',
-                dataIndex: 'zspollutantCode',
-                key: 'zspollutantCode',
-                align: 'center'
-            }];
+            }
+           ];
+            if(pollutantInfoList.zspollutant)
+            {
+                detailpcol=detailpcol.concat({
+                    title: '折算('+pollutantInfoList.unit+')',
+                    dataIndex: 'zspollutantCode',
+                    key: 'zspollutantCode',
+                    align: 'center'
+                })
+            }
+
             let detaildata = [];
             let detailtime = null;
             const res = yield call(querylastestdatalist, payload);
-
             if (res.data && res.data[0]) {
                 detailtime = res.data[0].MonitorTime;
-                detaildata = [
-                    {
-                        pollutantName: '烟尘',
-                        pollutantCode: res.data[0]['01'] ? res.data[0]['01'] : '-',
-                        zspollutantCode: res.data[0]['zs01'] ? res.data[0]['zs01'] : '-',
-                        dgimn: payload.dgimn,
-                        pcode: '01',
-                    },
-                    {
-                        pollutantName: '二氧化硫',
-                        pollutantCode: res.data[0]['02'] ? res.data[0]['02'] : '-',
-                        zspollutantCode: res.data[0]['zs02'] ? res.data[0]['zs02'] : '-',
-                        dgimn: payload.dgimn,
-                        pcode: '02',
-                    },
-                    {
-                        pollutantName: '氮氧化物',
-                        pollutantCode: res.data[0]['03'] ? res.data[0]['03'] : '-',
-                        zspollutantCode: res.data[0]['zs03'] ? res.data[0]['zs03'] : '-',
-                        dgimn: payload.dgimn,
-                        pcode: '03',
-                    }
-                ];
+                pollutantInfoList.pollutantInfo.map(item=>{
+                    detaildata.push(
+                        {
+                            pollutantName: item.pollutantName,
+                            pollutantCode: res.data[0][item.pollutantCode] ? res.data[0][item.pollutantCode] : '-',
+                            zspollutantCode: pollutantInfoList.zspollutant ? (res.data[0][item.zspollutantCode] ?
+                                 res.data[0][item.zspollutantCode] : '-'):'-',
+                            dgimn: payload.dgimn,
+                            pcode: item.pollutantCode,
+                        },
+                    )
+                })
+                // detaildata = [
+                //     {
+                //         pollutantName: '烟尘',
+                //         pollutantCode: res.data[0]['01'] ? res.data[0]['01'] : '-',
+                //         zspollutantCode: res.data[0]['zs01'] ? res.data[0]['zs01'] : '-',
+                //         dgimn: payload.dgimn,
+                //         pcode: '01',
+                //     },
+                //     {
+                //         pollutantName: '二氧化硫',
+                //         pollutantCode: res.data[0]['02'] ? res.data[0]['02'] : '-',
+                //         zspollutantCode: res.data[0]['zs02'] ? res.data[0]['zs02'] : '-',
+                //         dgimn: payload.dgimn,
+                //         pcode: '02',
+                //     },
+                //     {
+                //         pollutantName: '氮氧化物',
+                //         pollutantCode: res.data[0]['03'] ? res.data[0]['03'] : '-',
+                //         zspollutantCode: res.data[0]['zs03'] ? res.data[0]['zs03'] : '-',
+                //         dgimn: payload.dgimn,
+                //         pcode: '03',
+                //     }
+                // ];
             }
             const selectdata = res.data ? res.data[0] : '';
             yield update({
@@ -573,12 +597,17 @@ export default Model.extend({
             if (!seriesdata[0] && !zsseriesdata[0]) {
                 existdata = false;
             }
+            const pollutantInfoList=mainpoll.find(value=>{
+                return value.pollutantCode==payload.pollutantTypeCode;
+            })
+            let legend=[payload.pollutantName];
+            if(pollutantInfoList.zspollutant)
+            {
+                legend.push('折算' + payload.pollutantName);
+            }
             const option = {
                 legend: {
-                    data: [
-                        payload.pollutantName,
-                        '折算' + payload.pollutantName,
-                    ]
+                    data: legend
                 },
                 tooltip: {
                     trigger: 'axis'
@@ -676,13 +705,17 @@ export default Model.extend({
             let existdata = true;
             if (!seriesdata[0] && !zsseriesdata[0]) {
                 existdata = false;
+            }   const pollutantInfoList=mainpoll.find(value=>{
+                return value.pollutantCode==payload.pollutantTypeCode;
+            })
+            let legend=[payload.pollutantName];
+            if(pollutantInfoList.zspollutant)
+            {
+                legend.push('折算' + payload.pollutantName);
             }
             const option = {
                 legend: {
-                    data: [
-                        payload.pollutantName,
-                        '折算' + payload.pollutantName,
-                    ]
+                    data: legend
                 },
                 tooltip: {
                     trigger: 'axis'

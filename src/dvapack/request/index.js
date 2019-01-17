@@ -158,6 +158,16 @@ export async function post(url, data, options, tooken) {
         ...options,
     });
 }
+export async function authorpost(url, data, options) {
+    return request(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+        ...options,
+    });
+}
 export async function posturl(url, params, options, tooken) {
     if (params) {
         const paramsArray = [];

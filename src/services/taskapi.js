@@ -1,4 +1,4 @@
-import { post } from '../dvapack/request';
+import { post,authorpost } from '../dvapack/request';
 // 污染源运维的相关接口
 export async function GetTaskDetails(params) {
     const body = {
@@ -29,7 +29,7 @@ export async function GetJzRecord(params) {
     const body = {
         TaskID: params.TaskID
     };
-    const result = await post('/api/rest/PollutantSourceApi/PTaskForm/GetJzRecord', body, null);
+    const result = await authorpost('/api/rest/PollutantSourceApi/PTaskForm/GetJzRecord?authorCode=48f3889c-af8d-401f-ada2-c383031af92d', body, null);
     return result === null ? { data: null } : result;
 }
 
@@ -38,7 +38,7 @@ export async function GetRecordType(params) {
     const body = {
         DGIMN: params.DGIMN
     };
-    const result = await post('/api/rest/PollutantSourceApi/PTaskForm/GetRecordType', body, null);
+    const result = await authorpost('/api/rest/PollutantSourceApi/PTaskForm/GetRecordType?authorCode=48f3889c-af8d-401f-ada2-c383031af92d', body, null);
     return result === null ? { data: null } : result;
 }
 
@@ -60,7 +60,7 @@ export async function GetConsumablesReplaceRecordList(params) {
         TaskID: params.TaskIds,
         TypeID: params.TypeIDs
     };
-    const result = post('/api/rest/PollutantSourceApi/PTaskForm/GetConsumablesReplaceRecordList', body, null);
+    const result =await authorpost('/api/rest/PollutantSourceApi/PTaskForm/GetConsumablesReplaceRecordList?authorCode=48f3889c-af8d-401f-ada2-c383031af92d', body, null);
     return result === null ? {
         data: null
     } : result;
@@ -86,7 +86,7 @@ export async function GetStandardGasRepalceRecordList(params) {
         TaskID: params.TaskIds,
         TypeID: params.TypeIDs
     };
-    const result = post('/api/rest/PollutantSourceApi/PTaskForm/GetStandardGasRepalceRecordList', body, null);
+    const result = await authorpost('/api/rest/PollutantSourceApi/PTaskForm/GetStandardGasRepalceRecordList?authorCode=48f3889c-af8d-401f-ada2-c383031af92d', body, null);
     return result === null ? {
         data: null
     } : result;
@@ -112,7 +112,8 @@ export async function GetPatrolRecordListPC(params) {
         TaskID: params.TaskIds,
         TypeID: params.TypeIDs
     };
-    const result = post('/api/rest/PollutantSourceApi/PTaskForm/GetPatrolRecordListPC', body, null);
+    debugger
+    const result = authorpost('/api/rest/PollutantSourceApi/PTaskForm/GetPatrolRecordListPC?authorCode=48f3889c-af8d-401f-ada2-c383031af92d', body, null);
     return result === null ? {
         data: null
     } : result;
@@ -140,7 +141,7 @@ export async function GetStopCemsDetail(params) {
         TaskID: params.TaskID,
         TypeID: params.TypeID
     };
-    const result = await post('/api/rest/PollutantSourceApi/PTaskForm/PostStopCemsDetail', body, null);
+    const result = await authorpost('/api/rest/PollutantSourceApi/PTaskForm/PostStopCemsDetail?authorCode=48f3889c-af8d-401f-ada2-c383031af92d', body, null);
     return result === null ? { data: null } : result;
 }
 // 获取停机记录列表（历史记录表）
@@ -164,8 +165,14 @@ export async function GetRepairDetail(params) {
         TaskID: params.TaskID,
         TypeID: params.TypeID
     };
-    const result = await post('/api/rest/PollutantSourceApi/PTaskForm/RepairRecordDetail', body, null);
-    return result === null ? { data: null } : result;
+    const result = await authorpost('/api/rest/PollutantSourceApi/PTaskForm/RepairRecordDetail?authorCode=48f3889c-af8d-401f-ada2-c383031af92d', body, null);
+    if (result === null || result === undefined) {
+        return { data: null };
+    }
+
+    return result;
+
+    // return result === null ? { data: null } : result === undefined ? { data: null } : result;
 }
 // 获取维修记录列表（历史记录表）
 export async function GetHistoryRepairDetail(params) {
@@ -202,7 +209,7 @@ export async function GetDeviceExceptionDetail(params) {
         TaskID: params.TaskID,
         TypeID: params.TypeID
     };
-    const result = await post('/api/rest/PollutantSourceApi/PTaskForm/DeviceExceptionDetail', body, null);
+    const result = await authorpost('/api/rest/PollutantSourceApi/PTaskForm/DeviceExceptionDetail?authorCode=48f3889c-af8d-401f-ada2-c383031af92d', body, null);
     return result === null ? { data: null } : result;
 }
 // 校验测试历史记录列表（历史记录表）
@@ -226,16 +233,16 @@ export async function GetBdTestRecord(params) {
     const body = {
         TaskID: params.TaskID
     };
-    const result = await post('/api/rest/PollutantSourceApi/PTaskForm/GetBdRecord', body, null);
+    const result = await authorpost('/api/rest/PollutantSourceApi/PTaskForm/GetBdRecord?authorCode=48f3889c-af8d-401f-ada2-c383031af92d', body, null);
     return result === null ? { data: null } : result;
 }
 // 撤单
 export async function GetPostRevokeTask(params) {
     const body = {
         taskID: params.taskID,
-        revokeReason:params.revokeReason,
-        rejectFlag:1,
-        revokeUserId:params.userID
+        revokeReason: params.revokeReason,
+        rejectFlag: 1,
+        revokeUserId: params.userID
     };
     const result = await post('/api/rest/PollutantSourceApi/PTaskProcessing/PostRevokeTask', body, null);
     return result === null ? { data: null } : result;

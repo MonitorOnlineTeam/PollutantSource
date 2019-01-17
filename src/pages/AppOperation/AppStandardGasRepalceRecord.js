@@ -40,8 +40,8 @@ class AppStandardGasRepalceRecord extends Component {
         this.props.dispatch({
             type: 'task/StandardGasRepalceRecordList',
             payload: {
-                TaskIds: this.props.match.params.StandardGasTaskIds,
-                TypeIDs: this.props.match.params.StandardGasTypeIDs
+                TaskIds: this.props.match.params.TaskID,
+                TypeIDs: this.props.match.params.TypeID,
             },
         });
     }
@@ -86,7 +86,7 @@ class AppStandardGasRepalceRecord extends Component {
     }
 
     render() {
-        const SCREEN_HEIGHT = document.querySelector('body').offsetHeight - 250;
+        const SCREEN_HEIGHT = document.querySelector('body').offsetHeight - 150;
         let DataLength = this.props.StandardGasRepalceRecordList.length;
         let Data = DataLength === 0 ? null : this.props.StandardGasRepalceRecordList;
         let DataList = DataLength === 0 ? null : Data.Record.length === 0 ? null : Data.Record.RecordList;
