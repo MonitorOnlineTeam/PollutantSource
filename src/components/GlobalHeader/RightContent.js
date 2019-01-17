@@ -105,13 +105,7 @@ export default class GlobalHeaderRight extends PureComponent {
           </Menu>
       );
       const noticeData = this.getNoticeData();
-<<<<<<< HEAD
       const unreadMsg = this.getUnreadData(noticeData);
-=======
-      const adviseData = this.getAdviseData();
-      const unreadMsg = this.getUnreadData(adviseData);
-      const unreadAlarmMsg = this.getUnreadAlarmData(noticeData);
->>>>>>> 7f961b58ee12ea5eabcb136295428fd54c9aa274
       let className = styles.right;
       if (theme === 'dark') {
           className = `${styles.right}  ${styles.dark}`;
@@ -164,6 +158,7 @@ export default class GlobalHeaderRight extends PureComponent {
                       count={unreadMsg.alarm}
                       list={noticeData.alarm}
                       title={formatMessage({ id: 'component.globalHeader.notification' })}
+                      
                       name="alarm"
                       emptyText={formatMessage({ id: 'component.globalHeader.notification.empty' })}
                       emptyImage="https://gw.alipayobjects.com/zos/rmsportal/wAhyIChODzsoKIOBHcBk.svg"
