@@ -76,7 +76,7 @@ export default Model.extend({
             total: 0,
         },
         hourDataOverWarningList:{
-            beginTime:moment().add(-1,'hour').format("YYYY-MM-DD HH:00:00"),
+            beginTime:moment().add(-2,'hour').format("YYYY-MM-DD HH:00:00"),
             endTime: moment().format('YYYY-MM-DD HH:00:00'),
             tableDatas:[],
             pageIndex: 1,
@@ -104,7 +104,7 @@ export default Model.extend({
             selectedPollutantCode: '',
             pageIndex: 1,
             pageSize: 2000,
-            beginTime:moment().add(-1,'hour').format("YYYY-MM-DD HH:00:00"),
+            beginTime:moment().add(-2,'hour').format("YYYY-MM-DD HH:00:00"),
             endTime: moment().format('YYYY-MM-DD HH:00:00'),
             // beginTime:'2018-12-28 20:00:00',
             // endTime: '2018-12-28 21:00:00',

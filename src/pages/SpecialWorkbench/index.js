@@ -112,7 +112,8 @@ class SpecialWorkbench extends Component {
             defaultDateValue:moment(),
             selectedValue: moment(),
             visibleModal:false,
-            clickThisPointName:''
+            clickThisPointName:'',
+            SuggestValue:null,
         };
     }
 
@@ -713,7 +714,7 @@ class SpecialWorkbench extends Component {
                         {
                             items.OverWarnings.map(item => (
                                 <div>
-                                    <div className={styles.warningsData} onClick={(e)=>this.showModal(items.PointName,items.DGIMNs,item.PollutantCode,item.PollutantName)}>
+                                    <div className={styles.warningsData} onClick={(e)=>this.showModal(items.PointName,items.DGIMNs,item.PollutantCode,item.PollutantName,item.SuggestValue)}>
                                         {item.PollutantName}
                                         <Divider type="vertical" style={{backgroundColor:'#b3b3b3'}} />
                                     超标预警值为{item.AlarmValue}ug/m3
@@ -885,12 +886,13 @@ class SpecialWorkbench extends Component {
             xAxis.push(`${moment(item.MonitorTime).format('HH:mm:ss')}`);
             seriesData.push(item[selectedPollutantCode]);
         });
-        let suugestValue=null;
+        let suugestValue=this.state.SuggestValue;
+        debugger;
         
-        if(chartDatas.length>0)
-        {
-            suugestValue=chartDatas[0][selectedPollutantCode+'_SuggestValue'];
-        }
+        // if(chartDatas.length>0)
+        // {
+        //     suugestValue=chartDatas[0][selectedPollutantCode+'_SuggestValue'];
+        // }
         //当前选中的污染物的信息
         const selectPllutantInfo=pollutantList.find((value, index, arr) => {
             return value.pollutantCode == selectedPollutantCode;
@@ -977,7 +979,7 @@ class SpecialWorkbench extends Component {
             ]
         }
         let option = {
-            color:['#1890FF','red'],
+            color:['#37b5e4','#ff9d45','#4fde48'],
             tooltip: {
                 trigger: 'axis'
             },
@@ -1020,7 +1022,15 @@ class SpecialWorkbench extends Component {
                     type:'line',
                     data:[],
                     markLine : {
-                        data : suggestData
+                        data : suggestData,
+                        // itemStyle : { 
+                        //     normal: { 
+                        //         lineStyle: { 
+                        //             color:'#FFC0CB', 
+                        //         }, 
+                        //     } 
+                           
+                        // }, 
                     }
                 }
             ]
@@ -1113,9 +1123,10 @@ class SpecialWorkbench extends Component {
     /**
      * 智能监控_显示预警详情弹窗口
      */
-    showModal = (name,mn,pollutantCode,pollutantName)=>{
+    showModal = (name,mn,pollutantCode,pollutantName,SuggestValue)=>{
 
         this.updateState({
+            SuggestValue:SuggestValue,
             warningDetailsDatas:{
                 ...this.props.warningDetailsDatas,
                 ...{
@@ -1129,8 +1140,9 @@ class SpecialWorkbench extends Component {
         this.getPollutantList(mn);
 
         this.setState({
+            SuggestValue:SuggestValue,
             visibleModal: true,
-            clickThisPointName:name
+            clickThisPointName:name,
         });
     }
 

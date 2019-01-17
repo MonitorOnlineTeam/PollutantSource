@@ -1,3 +1,4 @@
+import { message } from 'antd';
 import {
     GetTaskDetails, GetYwdsj, GetJzRecord,
     GetRecordType, GetJzHistoryRecord, GetConsumablesReplaceRecordList,
@@ -112,8 +113,7 @@ export default Model.extend({
                 if (DataInfo.data != null) {
                     yield update({ JzHistoryRecord: DataInfo.data, RecordCount: DataInfo.total, DGIMN: payload.DGIMN });
                 }
-            }
-            else {
+            } else {
                 yield update({
                     JzHistoryRecord: null,
                     RecordCount: 0,
@@ -314,13 +314,9 @@ export default Model.extend({
             payload,
         }, { call, update }) {
             const DataInfo = yield call(GetRepairDetail, payload);
-            debugger
-
             if (DataInfo.data !== null) {
                 yield update({ Repair: DataInfo.data });
-            }
-
-            else {
+            } else {
                 yield update({ Repair: null });
             }
         },
@@ -436,9 +432,11 @@ export default Model.extend({
         }, { call }) {
             const DataInfo = yield call(GetPostRevokeTask, payload);
             if (DataInfo && DataInfo.requstresult) {
-                message.success('撤单成功!');
+                message.success('打回成功!');
+                payload.close();
+                payload.reload();
             } else {
-                message.error('撤单失败!');
+                message.error('打回失败!');
             }
         },
 

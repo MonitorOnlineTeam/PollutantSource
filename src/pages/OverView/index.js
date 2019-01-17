@@ -220,7 +220,6 @@ class OverViewMap extends PureComponent {
 
   //当前选中的污染物类型
   getNowPollutantType=(key)=>{
-      debugger;
      this.setState({
          pollutantTypeCode:key
      })
