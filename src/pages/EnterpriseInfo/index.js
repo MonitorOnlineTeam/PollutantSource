@@ -199,7 +199,6 @@ class index extends PureComponent {
 
     //回调
     GetData() {
-        debugger;
         console.log(this.child.props.form);
         this.setState({
             polygon:this.child.props.form.getFieldValue('polygon'),
