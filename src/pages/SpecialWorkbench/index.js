@@ -487,7 +487,7 @@ class SpecialWorkbench extends Component {
                 dataIndex: 'OperationName',
                 render: (text, record) => {
                     if (record.TaskStatus === 2)
-                        return <div style={{ position: 'relative' }}>{text}<Tag style={{marginLeft:7}} color="#faad14">运行中</Tag></div>;
+                        return <div style={{ position: 'relative' }}>{text}<Tag style={{marginLeft:7}} color="#faad14">进行中</Tag></div>;
                     return text;
                 }
             }, {
