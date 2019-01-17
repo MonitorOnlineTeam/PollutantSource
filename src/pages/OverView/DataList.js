@@ -325,7 +325,7 @@ class dataList extends PureComponent {
     render() {
         const {normal,over,underline,exception,terate,operationStatus,pollutantCode}=this.state;
         const coldata = this.props.columnsdata;
-        const {selectpoint}=this.props;
+        const {selectpoint}=this.state;
         let fixed=false;
         if(coldata[0])
         {

@@ -1,5 +1,3 @@
-import { Avatar } from 'antd';
-import React from 'react';
 import {getTimeDistance} from '../utils/utils';
 import { Model } from '../dvapack';
 import { loadPollutantType, GetAlarmNotices } from '../services/api';
@@ -11,11 +9,9 @@ export default Model.extend({
     namespace: 'global',
     state: {
         collapsed: false,
-        //报警和预警信息
+        //报警和预警信息和通知信息
         notices: [],
         fetchingNotices: false,
-        //通知信息
-        advises:[],
         pollutanttype: [],
     },
     effects: {
@@ -29,36 +25,40 @@ export default Model.extend({
                 type: 'changeNoticeLoading',
                 payload: true,
             });
+            //报警消息
             let today = getTimeDistance("today");
             const res = yield call(GetAlarmNotices, {beginTime:today[0].format("YYYY-MM-DD HH:mm:ss"),endTime:today[1].format("YYYY-MM-DD HH:mm:ss")});
             let notices = [];
+            let count=0;
             if (res) {
                 const resdata=JSON.parse(res.data);
                 if (resdata) {
                     let dataovers=resdata.overs;
                     let datawarns=resdata.warns;
                     let dataexceptions=resdata.exceptions;
-                    notices=notices.concat(dataovers.map((item,key)=>({
-                        id:`over_${item.DGIMNs}`,
-                        avatar: (<Avatar style={{ backgroundColor: "red", verticalAlign: 'middle' }} size="large">超</Avatar>),
-                        pointname: item.PointName,
-                        pollutantnames:item.PollutantNames,
-                        firsttime:item.FirstTime,
-                        lasttime:item.LastTime,
-                        alarmcount:item.AlarmCount,
-                        sontype:"over",
-                        //组件里根据这个分组
-                        type: 'alarm',
-                        key:`over_${item.DGIMNs}`,
-                        title:`${item.PointName}报警${item.AlarmCount}次`,
-                        description:`${item.PollutantNames}从${item.FirstTime}发生了${item.AlarmCount}次超标报警`,
-                    })));
+                    notices=notices.concat(dataovers.map((item,key)=>{
+                        count+=item.AlarmCount;
+                        return {
+                            id:`over_${item.DGIMNs}`,
+                            pointname: item.PointName,
+                            pollutantnames:item.PollutantNames,
+                            firsttime:item.FirstTime,
+                            lasttime:item.LastTime,
+                            alarmcount:item.AlarmCount,
+                            sontype:"over",
+                            //组件里根据这个分组
+                            type: 'alarm',
+                            key:`over_${item.DGIMNs}`,
+                            title:`${item.PointName}报警${item.AlarmCount}次`,
+                            description:`${item.PollutantNames}从${item.FirstTime}发生了${item.AlarmCount}次超标报警`,
+                        };
+                    }));
                     notices=notices.concat(datawarns.map((item,key)=>{
                         let discription="";
                         discription=discription.concat(item.OverWarnings.map((sonitem)=>`${sonitem.PollutantName}${sonitem.AlarmOverTime}发生预警，建议浓度降到${sonitem.SuggestValue}以下;`));
+                        count+=1;
                         return {
                             id:`warn_${item.DGIMNs}`,
-                            avatar: (<Avatar style={{ backgroundColor: "blue", verticalAlign: 'middle' }} size="large">预</Avatar>),
                             pointname: item.PointName,
                             discription:discription,
                             overwarnings:item.OverWarnings,
@@ -67,41 +67,32 @@ export default Model.extend({
                             type: 'alarm',
                             key:`warn_${item.DGIMNs}`,
                             title:`${item.PointName}发生了预警`,
-                            description:`${item.discription}`,
+                            description:`${discription}`,
                         };
                     }));
-                    notices=notices.concat(dataexceptions.map((item,key)=>({
-                        id:`exception_${item.DGIMNs}`,
-                        avatar: (<Avatar style={{ backgroundColor: "gold", verticalAlign: 'middle' }} size="large">异</Avatar>),
-                        pointname: item.PointName,
-                        exceptiontypes:item.ExceptionTypes,
-                        firsttime:item.FirstAlarmTime,
-                        lasttime:item.LastAlarmTime,
-                        alarmcount:item.AlarmCount,
-                        sontype:"exception",
-                        //组件里根据这个分组
-                        type: 'alarm',
-                        key:`exception_${item.DGIMNs}`,
-                        title:`${item.PointName}报警${item.AlarmCount}次`,
-                        description:`从${item.FirstAlarmTime}至${item.LastAlarmTime}发生了${item.AlarmCount}次异常报警`,
-                    })));
+                    notices=notices.concat(dataexceptions.map((item,key)=>{
+                        count+=item.AlarmCount;
+                        return {
+                            id:`exception_${item.DGIMNs}`,
+                            pointname: item.PointName,
+                            exceptiontypes:item.ExceptionTypes,
+                            firsttime:item.FirstAlarmTime,
+                            lasttime:item.LastAlarmTime,
+                            alarmcount:item.AlarmCount,
+                            sontype:"exception",
+                            //组件里根据这个分组
+                            type: 'alarm',
+                            key:`exception_${item.DGIMNs}`,
+                            title:`${item.PointName}报警${item.AlarmCount}次`,
+                            description:`从${item.FirstAlarmTime}至${item.LastAlarmTime}发生了${item.AlarmCount}次异常报警`,
+                        };
+                    }));
                 }
             }
-            yield put({
-                type: 'saveNotices',
-                payload: notices,
-            });
-            // yield put({
-            //     type: 'user/changeNotifyCount',
-            //     payload: count,
-            // });
-        },
-        * fetchAdvises({payload}, { call,update, put }) {
-            const res = yield call(mymessagelist,{});
-            let advises = [];
-            advises=res.data.map((item,key)=>({
+            //预警消息
+            const res2 = yield call(mymessagelist,{});
+            let advises=res2.data.map((item,key)=>({
                 id:`advise_${item.DGIMN}`,
-                avatar: item.IsView===true?<Avatar style={{ backgroundColor: "red", verticalAlign: 'middle' }} size="large">通</Avatar>:<Avatar style={{ backgroundColor: "gray", verticalAlign: 'middle' }} size="large">通</Avatar>,
                 msgtitle: item.MsgTitle,
                 msg:item.Msg,
                 pushtime:item.PushTime,
@@ -114,7 +105,16 @@ export default Model.extend({
                 title:`${item.MsgTitle}`,
                 description:`${item.Msg}`,
             }));
-            yield update({advises:advises});
+            count+=advises.length;
+            notices=notices.concat(advises);
+            yield put({
+                type: 'saveNotices',
+                payload: notices,
+            });
+            yield put({
+                type: 'user/changeNotifyCount',
+                payload: count,
+            });
         },
         * clearNotices({ payload }, { put, select }) {
             yield put({
@@ -173,7 +173,6 @@ export default Model.extend({
         },
         * changeAdvises({payload}, {put, call, select}) {
             const {message} = payload;
-
         },
     },
 
@@ -255,18 +254,18 @@ export default Model.extend({
                             },
                         });
                         break;
-                    case 'Alarm':
-                        dispatch({
-                            type: 'changeNotices',
-                            payload: {message:obj.Message},
-                        });
-                        break;
-                    case 'Notice':
-                        dispatch({
-                            type: 'changeAdvises',
-                            payload: {message:obj.Message},
-                        });
-                        break;
+                    // case 'Alarm':
+                    //     dispatch({
+                    //         type: 'changeNotices',
+                    //         payload: {message:obj.Message},
+                    //     });
+                    //     break;
+                    // case 'Notice':
+                    //     dispatch({
+                    //         type: 'changeAdvises',
+                    //         payload: {message:obj.Message},
+                    //     });
+                    //     break;
                     default:
                         break;
                 }

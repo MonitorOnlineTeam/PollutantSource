@@ -9,6 +9,7 @@ import {
     GetPostRevokeTask, GetPatrolTypeIdbyTaskId
 } from '../services/taskapi';
 import { Model } from '../dvapack';
+import { message } from 'antd';
 import { EnumRequstResult } from '../utils/enum';
 
 export default Model.extend({
@@ -432,9 +433,11 @@ export default Model.extend({
            }, { call }) {
                 const DataInfo = yield call(GetPostRevokeTask, payload);
                 if (DataInfo && DataInfo.requstresult ) {
-                    message.success('撤单成功!');
+                    message.success('打回成功!');
+                    payload.close();
+                    payload.reload();
                 } else {
-                    message.error('撤单失败!');
+                    message.error('打回失败!');
                 }
             },
 
