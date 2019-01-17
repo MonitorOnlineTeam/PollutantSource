@@ -28,7 +28,7 @@ import TreeCardContent from '../../components/OverView/TreeCardContent';
     pollutantTypeloading: loading.effects['overview/getPollutantTypeList'],
     treedataloading: loading.effects['overview/querydatalist'],
     pollutantTypelist: overview.pollutantTypelist,
-    operation: workbenchmodel.operation,
+    operation: workbenchmodel.OperationCalendar,
 }))
 /*
 页面：运维日历
@@ -163,23 +163,25 @@ export default class OperationCalendar extends Component {
         let commonlistData = [];
         var returnResult = [];
         let thisData = this.props.operation.tempTableDatas.filter(m => moment(m.CreateTime).format('YYYY-MM-DD') === value.format("YYYY-MM-DD"));
-        if (thisData && thisData.length > 0) {
-            let ExceptionTypeText = thisData.filter(m => m.ExceptionTypeText !== "");
-            if (ExceptionTypeText && ExceptionTypeText.length > 0) {
-                for (var i = 0; i < ExceptionTypeText.length; i++) {
-                    for (var j = i + 1; j < ExceptionTypeText.length; j++) {
-                        if (ExceptionTypeText[i].TaskTypeText === ExceptionTypeText[j].TaskTypeText && ExceptionTypeText[i].ExceptionTypeText === ExceptionTypeText[j].ExceptionTypeText) {
-                            ++i;
+        if (!this.props.treedataloading && !this.props.pollutantTypeloading && !this.props.loading) {
+            if (thisData && thisData.length > 0) {
+                let ExceptionTypeText = thisData.filter(m => m.ExceptionTypeText !== "");
+                if (ExceptionTypeText && ExceptionTypeText.length > 0) {
+                    for (var i = 0; i < ExceptionTypeText.length; i++) {
+                        for (var j = i + 1; j < ExceptionTypeText.length; j++) {
+                            if (ExceptionTypeText[i].TaskTypeText === ExceptionTypeText[j].TaskTypeText && ExceptionTypeText[i].ExceptionTypeText === ExceptionTypeText[j].ExceptionTypeText) {
+                                ++i;
+                            }
                         }
+                        exceptionlistData.push(ExceptionTypeText[i]);
                     }
-                    exceptionlistData.push(ExceptionTypeText[i]);
-                }
-                exceptionlistData.map((item) => {
-                    returnResult.push({
-                        'type': 'warning',
-                        'content': item.TaskTypeText + '-' + item.ExceptionTypeText
+                    exceptionlistData.map((item) => {
+                        returnResult.push({
+                            'type': 'warning',
+                            'content': item.TaskTypeText + '-' + item.ExceptionTypeText
+                        })
                     })
-                })
+                }
             }
         }
         return (
