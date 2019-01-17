@@ -61,7 +61,6 @@ export default class MenuGyProcessPic extends Component {
     render() {
         const { scale, translation } = this.state;
         const { flows, isloading } = this.props;
-        debugger
         return (
             <div className={styles.GyProcessPic}>
                 <Spin style={{

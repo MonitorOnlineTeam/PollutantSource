@@ -107,6 +107,7 @@ export default class ManualUpload extends Component {
         };
     }
     componentDidMount() {
+        localStorage.setItem('pollutantType', 2);
         //获取污染物类型
         this.props.dispatch({
             type: 'overview/getPollutantTypeList',
@@ -260,23 +261,23 @@ export default class ManualUpload extends Component {
         this.child.handleSubmitupdate();
         this.GetManualSupplementList(this.props.DGIMN, this.state.SelectHandleChange, this.state.rangeDate[0].format('YYYY-MM-DD 00:00:00'), this.state.rangeDate[1].format('YYYY-MM-DD 23:59:59'), this.props.pageIndex, this.props.pageSize);
     }
-    //选项卡列表
-    tabList = () => {
-        const rtnVal = [];
-        if (this.props.polltuantTypeList.length !== 0) {
-            this.props.polltuantTypeList.map((item) => {
-                rtnVal.push(<TabPane tab={this.getIcon(item.PollutantTypeCode, item.PollutantTypeName)} key={item.PollutantTypeCode}>
-                    <div style={{ marginTop: 15 }}>
-                        <TreeCard getHeight={'calc(100vh - 220px)'} getStatusImg={this.getStatusImg} isloading={this.props.treedataloading} treeCilck={this.treeCilck} treedatalist={this.props.datalist} PollutantType={item.PollutantTypeCode} />
-                    </div>
-                </TabPane>);
-            });
-        }
-        return rtnVal;
-    }
+    // //选项卡列表
+    // tabList = () => {
+    //     const rtnVal = [];
+    //     if (this.props.polltuantTypeList.length !== 0) {
+    //         this.props.polltuantTypeList.map((item) => {
+    //             rtnVal.push(<TabPane tab={this.getIcon(item.PollutantTypeCode, item.PollutantTypeName)} key={item.PollutantTypeCode}>
+    //                 <div style={{ marginTop: 15 }}>
+    //                     <TreeCard getHeight={'calc(100vh - 220px)'} getStatusImg={this.getStatusImg} isloading={this.props.treedataloading} treeCilck={this.treeCilck} treedatalist={this.props.datalist} PollutantType={item.PollutantTypeCode} />
+    //                 </div>
+    //             </TabPane>);
+    //         });
+    //     }
+    //     return rtnVal;
+    // }
     //当前选中的污染物类型
     getNowPollutantType = (key) => {
-        debugger;
+        localStorage.setItem('pollutantType', key);
         this.setState({
             pollutantTypeCode: key
         })
@@ -285,6 +286,7 @@ export default class ManualUpload extends Component {
     }
     //重新加载
     reloadData = (pollutantTypeCode, pointName) => {
+        var getDGIMN = '[object Object]'
         this.props.dispatch({
             type: 'overview/querydatalist',
             payload: {
@@ -297,12 +299,16 @@ export default class ManualUpload extends Component {
                 pageSize: this.props.pageSize,
                 BeginTime: this.state.rangeDate[0].format('YYYY-MM-DD 00:00:00'),
                 EndTime: this.state.rangeDate[1].format('YYYY-MM-DD 23:59:59'),
-                pollutantCode: this.state.SelectHandleChange
+                pollutantCode: this.state.SelectHandleChange,
+                DGIMN: getDGIMN,
             },
         });
     }
     changeTabList = (value) => {
-        debugger
+        var getDGIMN = localStorage.getItem('DGIMN')
+        if (getDGIMN === null) {
+            getDGIMN = '[object Object]';
+        }
         this.setState({ TabsSelect: value })
         //点位列表
         this.props.dispatch({
@@ -316,7 +322,22 @@ export default class ManualUpload extends Component {
                 pageSize: this.props.pageSize,
                 BeginTime: this.state.rangeDate[0].format('YYYY-MM-DD 00:00:00'),
                 EndTime: this.state.rangeDate[1].format('YYYY-MM-DD 23:59:59'),
-                pollutantCode: this.state.SelectHandleChange
+                pollutantCode: this.state.SelectHandleChange,
+                DGIMN: getDGIMN,
+                search: true,
+                callback: (data) => {
+                    if (data !== null) {
+                        const existdata = data.find((value, index, arr) => {
+                            return value.DGIMN == getDGIMN
+                        });
+                        if (existdata === undefined) {
+                            this.GetManualSupplementList(null, this.state.SelectHandleChange, this.state.rangeDate[0].format('YYYY-MM-DD 00:00:00'), this.state.rangeDate[1].format('YYYY-MM-DD 23:59:59'), this.props.pageIndex, this.props.pageSize, this.state.pointName);
+                        }
+                        else {
+                            this.GetManualSupplementList(getDGIMN, this.state.SelectHandleChange, this.state.rangeDate[0].format('YYYY-MM-DD 00:00:00'), this.state.rangeDate[1].format('YYYY-MM-DD 23:59:59'), this.props.pageIndex, this.props.pageSize, this.state.pointName);
+                        }
+                    }
+                }
             }
         });
     }
@@ -342,20 +363,32 @@ export default class ManualUpload extends Component {
                 EndTime: this.state.rangeDate[1].format('YYYY-MM-DD 23:59:59'),
                 pollutantCode: this.state.SelectHandleChange,
                 DGIMN: getDGIMN,
+                search: true,
                 callback: (data) => {
-                    const existdata = data.find((value, index, arr) => {
-                        return value.DGIMN == getDGIMN
-                    });
-                    if (existdata == undefined) {
-                        this.GetManualSupplementList(null, this.state.SelectHandleChange, this.state.rangeDate[0].format('YYYY-MM-DD 00:00:00'), this.state.rangeDate[1].format('YYYY-MM-DD 23:59:59'), this.props.pageIndex, this.props.pageSize);
+                    if (data != null) {
+                        const existdata = data.find((value, index, arr) => {
+                            return value.DGIMN == getDGIMN
+                        });
+                        if (existdata === undefined) {
+                            this.GetManualSupplementList(null, this.state.SelectHandleChange, this.state.rangeDate[0].format('YYYY-MM-DD 00:00:00'), this.state.rangeDate[1].format('YYYY-MM-DD 23:59:59'), this.props.pageIndex, this.props.pageSize, this.state.pointName);
+                        }
+                        else {
+                            this.GetManualSupplementList(getDGIMN, this.state.SelectHandleChange, this.state.rangeDate[0].format('YYYY-MM-DD 00:00:00'), this.state.rangeDate[1].format('YYYY-MM-DD 23:59:59'), this.props.pageIndex, this.props.pageSize, this.state.pointName);
+                        }
                     }
                 }
             }
         });
     }
     render() {
-        console.log(this.props.datalist)
-        const uploaddata = this.props.uploaddatalist === null ? null : this.props.uploaddatalist;
+        const { pollutantTypelist, treedataloading, datalist, pollutantTypeloading } = this.props;
+        var uploaddata = [];
+        var spining = true;
+        if (!this.props.treedataloading && !this.props.pollutantTypeloading && !this.props.loading) {
+            spining = this.props.loading;
+            uploaddata = this.props.uploaddatalist === null ? null : this.props.uploaddatalist;
+        }
+        var pollutantType = localStorage.getItem('pollutantType')
         const columns = [
             {
                 title: '污染物种类',
@@ -467,20 +500,20 @@ export default class ManualUpload extends Component {
                                         style={{
                                             width: '400px',
                                             marginTop: 5,
-                                            background: '#fff'
+                                            background: '#fff',
                                         }}
-                                        pollutantTypeloading={this.props.pollutantTypeloading}
-                                        getHeight={'calc(100vh - 200px)'} getStatusImg={this.getStatusImg} 
+                                        pollutantTypeloading={pollutantTypeloading}
+                                        getHeight={'calc(100vh - 220px)'} getStatusImg={this.getStatusImg}
                                         getNowPollutantType={this.getNowPollutantType}
-                                        PollutantType={2}
-                                        pollutantTypelist={this.props.pollutantTypelist}
+                                        PollutantType={2} treedatalist={datalist}
+                                        pollutantTypelist={pollutantTypelist}
                                         tabkey={this.state.pollutantTypeCode}
                                     />
                                     <TreeCardContent style={{ overflow: 'auto', width: 400, background: '#fff' }}
-                                        getHeight='calc(100vh - 200px)'
-                                        pollutantTypeloading={this.props.pollutantTypeloading}
-                                        getStatusImg={this.getStatusImg} isloading={this.props.treedataloading}
-                                        treeCilck={this.treeCilck} treedatalist={this.props.datalist} PollutantType={2} ifSelect={true} />
+                                        getHeight='calc(100vh - 220px)'
+                                        pollutantTypeloading={pollutantTypeloading}
+                                        getStatusImg={this.getStatusImg} isloading={treedataloading}
+                                        treeCilck={this.treeCilck} treedatalist={datalist} PollutantType={pollutantType} ifSelect={true} />
                                 </div>
                             </div>
                         </div>
@@ -548,7 +581,7 @@ export default class ManualUpload extends Component {
 
                             <Table
                                 style={{ height: 'calc(100vh - 257px)' }}
-                                loading={this.props.loading}
+                                loading={spining}
                                 className={styles.tableCss}
                                 columns={columns}
                                 dataSource={uploaddata}

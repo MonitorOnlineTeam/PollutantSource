@@ -35,15 +35,7 @@ export default [
             { path: '/appoperation/appbdtestrecord/:pointcode/:TaskIds', component: './AppOperation/AppBdTestRecord' },
             /* CEMS设备异常记录表 */
             { path: '/appoperation/appdeviceexceptiondetail/:pointcode/:TaskIds', component: './AppOperation/AppDeviceExceptionDetail' },
-            {
-                path: '/homepage',
-                component: './HomePage',
-            },
         ],
-    },
-    {
-        path: '/homepage',
-        component: './HomePage',
     },
     // app
     {

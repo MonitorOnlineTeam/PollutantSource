@@ -45,6 +45,7 @@ export default class OperationCalendar extends Component {
         };
     }
     componentDidMount() {
+        localStorage.setItem('pollutantType', 2);
         const { dispatch } = this.props;
         dispatch({
             type: 'overview/getPollutantTypeList',
@@ -64,10 +65,8 @@ export default class OperationCalendar extends Component {
                 DGIMN: getDGIMN,
             }
         });
-
     }
     GetData = (DGIMN) => {
-        debugger
         this.props.dispatch({
             type: 'workbenchmodel/getOperationCalendarData',
             payload: {
@@ -97,6 +96,7 @@ export default class OperationCalendar extends Component {
     }
     //当前选中的污染物类型
     getNowPollutantType = (key) => {
+        localStorage.setItem('pollutantType', key);
         this.setState({
             pollutantTypeCode: key
         })
@@ -117,12 +117,25 @@ export default class OperationCalendar extends Component {
                 pointName: searchName,
                 OperationCalendar: true,
                 DGIMN: getDGIMN,
+                search: true,
                 callback: (data) => {
-                    const existdata = data.find((value, index, arr) => {
-                        return value.DGIMN == getDGIMN
-                    });
-                    if (existdata == undefined) {
-                        this.GetData('1');
+                    if (data !== null) {
+                        const existdata = data.find((value, index, arr) => {
+                            return value.DGIMN == getDGIMN
+                        });
+                        if (existdata == undefined) {
+                            this.GetData('1');
+                        }
+                        else
+                        {
+                            this.props.dispatch({
+                                type: 'workbenchmodel/getOperationCalendarData',
+                                payload: {
+                                    IsQueryAllUser: true,
+                                    DGIMNs: getDGIMN,
+                                }
+                            });
+                        }
                     }
                 }
             },
@@ -130,10 +143,7 @@ export default class OperationCalendar extends Component {
     }
     //重新加载
     reloadData = (pollutantTypeCode, searchName) => {
-        var getDGIMN = localStorage.getItem('DGIMN')
-        if (getDGIMN === null) {
-            getDGIMN = '[object Object]';
-        }
+        var getDGIMN = '[object Object]'
         this.props.dispatch({
             type: 'overview/querydatalist',
             payload: {
@@ -243,8 +253,7 @@ export default class OperationCalendar extends Component {
     dateSelect = (date) => {
         //过滤，没有数据不弹出对话框
         const data = this.state.dateType === 'month' ? this.props.operation.tempTableDatas.filter(m => moment(m.CreateTime).format('YYYY-MM-DD') === date.format("YYYY-MM-DD")) : this.props.operation.tempTableDatas.filter(m => moment(m.CreateTime).format('YYYY-MM') === date.format("YYYY-MM"))
-        if(data.length!=0)
-        {
+        if (data.length != 0) {
             this.setState({
                 visible: true,
                 dateValue: date,
@@ -270,10 +279,11 @@ export default class OperationCalendar extends Component {
         const { detailed, statusImg, selectpoint, pointName } = this.state;
         var dataSource = [];
         var spining = true;
-        if (!this.props.treedataloading && !this.props.pollutantTypeloading) {
+        if (!this.props.treedataloading && !this.props.pollutantTypeloading && !this.props.loading) {
             spining = this.props.loading;
             dataSource = this.props.HistoryRepairHistoryRecods === null ? null : this.props.HistoryRepairHistoryRecods;
         }
+        var pollutantType = localStorage.getItem('pollutantType')
         const columns = [{
             title: '校准人',
             width: '20%',
@@ -346,7 +356,7 @@ export default class OperationCalendar extends Component {
                                         style={{
                                             width: '400px',
                                             marginTop: 5,
-                                            background: '#fff'
+                                            background: '#fff',
                                         }}
                                         pollutantTypeloading={pollutantTypeloading}
                                         getHeight={'calc(100vh - 220px)'} getStatusImg={this.getStatusImg}
@@ -359,7 +369,7 @@ export default class OperationCalendar extends Component {
                                         getHeight='calc(100vh - 220px)'
                                         pollutantTypeloading={pollutantTypeloading}
                                         getStatusImg={this.getStatusImg} isloading={treedataloading}
-                                        treeCilck={this.treeCilck} treedatalist={datalist} PollutantType={2} ifSelect={true} />
+                                        treeCilck={this.treeCilck} treedatalist={datalist} PollutantType={pollutantType} ifSelect={true} />
                                 </div>
                             </div>
                         </div>

@@ -268,7 +268,7 @@ class OverViewMap extends PureComponent {
              getHeight='calc(100vh - 290px)'
              pollutantTypeloading={pollutantTypeloading}
              getStatusImg={this.getStatusImg} isloading={treedataloading} 
-            treeCilck={this.treeCilck} treedatalist={datalist} PollutantType={2} />
+            treeCilck={this.treeCilck} treedatalist={datalist} PollutantType={this.state.pollutantTypeCode} />
           </div>
         </div>);
     }else

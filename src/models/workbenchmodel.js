@@ -359,16 +359,13 @@ export default Model.extend({
                         payload.array.map(item=>{
                                 if(item.DGIMN==warningDetailsDatas.DGIMNs)
                                 {
-                                    debugger;
                                     pushdata[item.PollutantCode]=item.MonitorValue;
                                     pushdata['MonitorTime']=item.MonitorTime;
                                     pushdata['DataGatherCode']=warningDetailsDatas.DGIMNs;
                                 }
                         })
-                        debugger;
                         if(pushdata && pushdata['DataGatherCode'])
                         {
-                            debugger;
                             let array=[];
                             array.push(pushdata);
                             warningDetailsDatas.chartDatas= array.concat(warningDetailsDatas.chartDatas);
@@ -382,6 +379,7 @@ export default Model.extend({
         //菜单-运维日历
         * getOperationCalendarData({ payload }, { call, put, update, select }) {
             const { operation } = yield select(state => state.workbenchmodel);
+
             const response = yield call(getOperationHistoryRecordPageList, payload);
             if (response.data !== null) {
                 yield update({

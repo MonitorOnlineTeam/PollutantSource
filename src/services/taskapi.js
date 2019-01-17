@@ -51,7 +51,6 @@ export async function GetJzHistoryRecord(params) {
         BeginTime: params.BeginTime,
         EndTime: params.EndTime
     };
-    debugger
     const result = await post('/api/rest/PollutantSourceApi/PTaskForm/GetJzHistoryInfo', body, null);
     return result === null ? { data: null } : result;
 }
