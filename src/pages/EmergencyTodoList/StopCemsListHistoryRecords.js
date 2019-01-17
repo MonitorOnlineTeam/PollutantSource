@@ -15,7 +15,7 @@ import styles from './StopCemsListHistoryRecords.less';
 import {routerRedux} from 'dva/router';
 
 @connect(({ task, loading }) => ({
-    isloading: loading.effects['task/GetHistoryStopCemsList'],
+    loading: loading.effects['task/GetHistoryStopCemsList'],
     HistoryStopCemsListHistoryRecords: task.HistoryStopCemsList,
     HistoryStopCemsListHistoryRecordsCount: task.total,
     pageIndex: task.pageIndex,
@@ -145,7 +145,7 @@ export default class StopCemsListHistoryRecords extends Component {
                     <Table
                         size="middle"
                         scroll={{ y: 'calc(100vh - 465px)' }}
-                        loading={this.props.isloading}
+                        loading={this.props.loading}
                         className={styles.dataTable}
                         columns={columns}
                         dataSource={dataSource}

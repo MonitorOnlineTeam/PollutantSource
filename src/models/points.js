@@ -2,7 +2,8 @@ import moment from 'moment';
 import React from 'react';
 import { loadMonitorPoint, loadLastdata, queryentpointlist, loadMonitorDatalist
     , maploadMonitorDatalist, loadPointDetail, queryentinfolist, querypollutantlist,
-    queryhistorydatalist, queryoverdatalist, queryprocesschart, querysinglepointinfo } from '../services/api';
+    queryhistorydatalist, queryoverdatalist, queryprocesschart, querysinglepointinfo,
+    queryrealparam } from '../services/api';
 import { Model } from '../dvapack';
 
 import {
@@ -42,7 +43,16 @@ export default Model.extend({
         overdata: [],
         overtotal: 0,
         processchart: {},
-        tablewidth:0
+        tablewidth:0,
+
+
+        operationInfo:null,
+        stateInfo:null,
+        paramsInfo:null,
+        dataInfo:null,
+        stateNameInfo:null,
+        paramNameInfo:null,
+        paramstatusInfo:null
     },
     effects: {
         * querypointdetail({
@@ -436,7 +446,7 @@ export default Model.extend({
         * queryhistorydatalist({ payload
         }, {select, call, update}) {
             const { pollutantlist } = yield select(_ => _.points);
-
+            
             if(!pollutantlist[0])
             {
                 yield update({ datalist: null, chartdata: null, columns: null, datatable: null, total: 0 });
@@ -626,8 +636,103 @@ export default Model.extend({
             {
                 yield update({ selectpoint: null });
             }
-        
-        }
+        },
+        * queryrealparam({
+            payload
+        }, {call, update}) {
+            const res = yield call(queryrealparam, {...payload});
+            if(res)
+            {
+               yield update({
+                    operationInfo:res.operationInfo,
+                    stateInfo:res.stateInfo,
+                    paramsInfo:res.paramsInfo,
+                    dataInfo:res.dataInfo,
+                    stateNameInfo:res.stateNameInfo,
+                    paramNameInfo:res.paramNameInfo,
+                    paramstatusInfo:res.paramstatusInfo
+               })
+            }
+        },
+        *updateDynamicControlParam({payload}
+            ,{update,select}){
+                if(payload && payload.array)
+                {
+                    let  { paramsInfo } = yield select(_ => _.points);
+                    let  { paramstatusInfo } = yield select(_ => _.points);
+                    const { selectpoint } = yield select(_ => _.points);
+                    if(selectpoint)
+                    {
+                        let changeParams=false;
+                        let changeStatus=false;
+                        payload.array.map(item=>{
+                                if(item.DGIMN==selectpoint.dgimn)
+                                {
+                                    if(item.PollutantCode!='cems')
+                                    {
+                                        changeParams=true;
+                                        paramsInfo[item.PollutantCode+"-"+ item.StateCode]=item.NewStateValue;
+                                    }
+                                    else
+                                    {
+                                        changeStatus=true;
+                                        paramstatusInfo[item.StateCode]=item.NewStateValue;
+                                    }
+                                }
+                        })
+                        if(changeParams)
+                        {
+                            yield update({paramsInfo});
+                        }
+                        if(changeStatus)
+                        {
+                            yield update({paramstatusInfo});
+                        }
+                       
+                    } 
+                }
+        },
+        *updateDynamicControlState({payload}
+            ,{update,select}){
+                if(payload && payload.array)
+                {
+                    let  { stateInfo,stateNameInfo } = yield select(_ => _.points);
+                    const { selectpoint } = yield select(_ => _.points);
+                    if(selectpoint)
+                    {
+                        payload.array.map(item=>{
+                                if(item.DGIMN==selectpoint.dgimn)
+                                {
+                                     const stateName=stateNameInfo[item.Code];
+                                     if(stateName)
+                                     {
+                                        stateInfo[item.Code]=stateName+item.State;
+                                     }
+                                }
+                        })
+                        yield update({stateInfo});
+                    } 
+                }
+        },
+        *updateRealTimeData({payload}
+            ,{update,select}){
+                if(payload && payload.array)
+                {
+                    let  { dataInfo } = yield select(_ => _.points);
+                    const { selectpoint } = yield select(_ => _.points);
+                    if(selectpoint)
+                    {
+                        payload.array.map(item=>{
+                                if(item.DGIMN==selectpoint.dgimn)
+                                {
+                                    dataInfo[item.PollutantCode]=item.MonitorValue;
+                               }
+                        })
+                        yield update({dataInfo});
+                    } 
+                }
+        },
+
     },
     subscriptions: {
         setup({ dispatch, history }) {

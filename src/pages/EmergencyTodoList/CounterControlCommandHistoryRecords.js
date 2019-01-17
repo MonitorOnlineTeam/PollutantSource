@@ -15,7 +15,7 @@ import {routerRedux} from 'dva/router';
 import styles from './CounterControlCommandHistoryRecords.less';
 
 @connect(({ task, loading }) => ({
-    isloading: loading.effects['task/GetHistoryConsumablesReplaceRecord'],
+    loading: loading.effects['task/GetHistoryConsumablesReplaceRecord'],
     HistoryConsumablesReplaceRecord: task.HistoryConsumablesReplaceRecordList,
     HistoryConsumablesReplaceRecordCount: task.total,
     pageIndex: task.pageIndex,
@@ -147,7 +147,7 @@ export default class CounterControlCommandHistoryRecords extends Component {
                     <Table
                         size="middle"
                         scroll={{ y: 'calc(100vh - 465px)' }}
-                        loading={this.props.isloading}
+                        loading={this.props.loading}
                         className={styles.dataTable}
                         columns={columns}
                         dataSource={dataSource}

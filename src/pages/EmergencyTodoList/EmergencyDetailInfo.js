@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import styles from '../EmergencyTodoList/EmergencyDetailInfo.less';
-import {Card, Divider, Button, Input, Table, Icon, Spin,Modal,Upload } from 'antd';
+import {Card, Divider, Button, Input, Table, Icon, Spin,Modal,Upload,Form } from 'antd';
 import DescriptionList from '../../components/DescriptionList';
 import { connect } from 'dva';
 import {EnumRequstResult, EnumPatrolTaskType, EnumPsOperationForm} from '../../utils/enum';
@@ -10,9 +10,11 @@ import { CALL_HISTORY_METHOD } from 'react-router-redux';
 import MonitorContent from '../../components/MonitorContent/index';
 import { get } from '../../dvapack/request';
 import { async } from 'q';
+import moment from 'moment';
 const { Description } = DescriptionList;
 const { TextArea } = Input;
-
+const FormItem = Form.Item;
+@Form.create()
 @connect(({ task, loading }) => ({
     isloading: loading.effects['task/GetTaskDetailInfo'],
     taskInfo: task.TaskInfo,
@@ -23,7 +25,8 @@ export default class EmergencyDetailInfo extends Component {
         super(props);
         this.state = {
             previewVisible: false,
-            previewImage: ''
+            previewImage: '',
+            cdvisible:false
         };
     }
 
@@ -152,8 +155,51 @@ export default class EmergencyDetailInfo extends Component {
             return rtnVal;
         }
 
+        //获取撤单按钮
+        getCancelOrderButton=(createtime)=>{
+            if(moment(createtime)>moment(new Date()).add(-7,'day'))
+            {
+                return <Button onClick={this.cdShow}><Icon type="close-circle" />撤单</Button>
+            }
+            else
+            {
+                return <Button disabled ><Icon type="close-circle" />撤单</Button>
+            }
+        }
+        cdShow=()=>{
+            this.setState({
+                cdvisible:true
+            })
+        }
+        cdClose=()=>{
+            this.setState({
+                cdvisible:false
+            })
+        }
+        cdOk=(TaskID)=>{
+        this.props.dispatch({
+            type:'task/GetPostRevokeTask',
+            payload:{
+                taskID: TaskID,
+                userID: this.props.match.params.UserID,
+                revokeReason:this.props.form.getFieldValue('reason')
+            }
+        })
+        }
+        
+
     render() {
         const SCREEN_HEIGHT = document.querySelector('body').offsetHeight - 250;
+
+        const { getFieldDecorator } = this.props.form;
+        const formItemLayout = {
+            labelCol: {
+                sm: { span: 5 },
+            },
+            wrapperCol: {
+                sm: { span: 16 },
+            },
+        };
         if (this.props.taskInfo === null) {
             return (
                 <div />
@@ -182,9 +228,6 @@ export default class EmergencyDetailInfo extends Component {
         if (taskInfo.requstresult == EnumRequstResult.Success && taskInfo.data !== null) {
             data = taskInfo.data[0];
             DGIMN = data.DGIMN;
-            this.state = {
-                DGIMN: DGIMN
-            };
             TaskID = data.ID;
             TaskCode = data.TaskCode;
             PointName = data.PointName;
@@ -299,14 +342,19 @@ export default class EmergencyDetailInfo extends Component {
                 size="large"
             />);
         }
-
         return (
+            <div>
             <MonitorContent  {...this.props} breadCrumbList={this.renderBreadCrumb()}>
+
+         
             <Card title={<span style={{fontWeight: '900'}}>任务详情</span>} extra={
-            <Button style={{float:"right",marginRight:30}} onClick={() => {
+            <div>
+                <span style={{marginRight:20}}>{this.getCancelOrderButton(CreateTime)}</span>
+                 <Button style={{float:"right",marginRight:30}} onClick={() => {
                         this.props.history.goBack(-1);
-                    }}><Icon type="left" />退回</Button>}>
-                    
+                    }}><Icon type="left" />退回</Button>
+                    </div>}>
+                          
                 <div style={{height: SCREEN_HEIGHT}} className={styles.ExceptionDetailDiv}>
                 <Card title={<span style={{fontWeight: '600'}}>基本信息</span>}>
                     <DescriptionList className={styles.headerList} size="large" col="3">
@@ -377,10 +425,32 @@ export default class EmergencyDetailInfo extends Component {
                 </Card>
                 </div>
                 </Card>
+        
+                <Modal
+                  visible={this.state.cdvisible}
+                  onCancel={this.cdClose}
+                  onOk={()=>this.cdOk(TaskID)}
+                  title="撤单"
+                  >
+                                  <Form className="login-form">
+                        <FormItem
+                            {...formItemLayout}
+                            label="原因"
+                        >
+                            {getFieldDecorator('reason', {
+                                rules: [{ required: true, message: '请输入撤单原因' }],
+                            })(
+                                <Input.TextArea rows='3'  prefix={<Icon type="rollback" style={{ color: 'rgba(0,0,0,.25)' }} />}  />
+                            )}
+                        </FormItem>
+                    </Form>
+         </Modal>
                 <Modal width="65%" visible={this.state.previewVisible} footer={null} onCancel={this.handleCancel}>
                     <img alt="example" style={{ width: '100%',marginTop: '20px' }} src={this.state.previewImage} />
                 </Modal>
          </MonitorContent>
+        
+         </div>
         );
     }
 }

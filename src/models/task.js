@@ -5,7 +5,8 @@ import {
     GetHistoryConsumablesReplaceRecord, GetHistoryStandardGasRepalceRecordList,
     GetHistoryInspectionHistoryRecords, GetStopCemsDetail, GetRepairDetail,
     GetHistoryRepairDetail, GetHistoryStopCemsList, GetDeviceExceptionList,
-    GetBdHistoryInfoList, GetDeviceExceptionDetail, GetBdTestRecord
+    GetBdHistoryInfoList, GetDeviceExceptionDetail, GetBdTestRecord,
+    GetPostRevokeTask, GetPatrolTypeIdbyTaskId
 } from '../services/taskapi';
 import { Model } from '../dvapack';
 import { EnumRequstResult } from '../utils/enum';
@@ -55,6 +56,7 @@ export default Model.extend({
         * GetYwdsj({
             payload,
         }, { call, update, select }) {
+            debugger
             const DataInfo = yield call(GetYwdsj, payload);
             if (DataInfo != null && DataInfo.requstresult == EnumRequstResult.Success) {
                 const isLoadMoreOpt = payload.isLoadMoreOpt; // 是否是加载更多操作
@@ -109,16 +111,15 @@ export default Model.extend({
             const DataInfo = yield call(GetJzHistoryRecord, payload);
             if (DataInfo != null && DataInfo.requstresult == EnumRequstResult.Success) {
                 if (DataInfo.data != null) {
-                    yield update({ JzHistoryRecord: DataInfo.data, RecordCount: DataInfo.total,DGIMN:payload.DGIMN });
+                    yield update({ JzHistoryRecord: DataInfo.data, RecordCount: DataInfo.total, DGIMN: payload.DGIMN });
                 }
             }
-            else
-            {
-                yield update({ 
-                    JzHistoryRecord: null, 
+            else {
+                yield update({
+                    JzHistoryRecord: null,
                     RecordCount: 0,
-                    DGIMN:payload.DGIMN 
-                });  
+                    DGIMN: payload.DGIMN
+                });
             }
         },
         // 根据任务id和类型id获取易耗品列表
@@ -256,7 +257,8 @@ export default Model.extend({
                     HistoryInspectionHistoryRecordList: result.data,
                     total: result.total,
                     pageIndex: payload.pageIndex,
-                    pageSize: payload.pageSize
+                    pageSize: payload.pageSize,
+                    DGIMN: payload.DGIMN,
                 });
             } else {
                 yield update({
@@ -264,7 +266,8 @@ export default Model.extend({
                     HistoryInspectionHistoryRecordList: [],
                     total: result.total,
                     pageIndex: payload.pageIndex,
-                    pageSize: payload.pageSize
+                    pageSize: payload.pageSize,
+                    DGIMN: payload.DGIMN,
                 });
             }
         },
@@ -344,7 +347,7 @@ export default Model.extend({
                     pageSize: payload.pageSize,
                     DGIMN: payload.DGIMN,
                 });
-            }  
+            }
         },
         //获取异常记录表单明细
         * GetDeviceExceptionDetail({
@@ -372,7 +375,7 @@ export default Model.extend({
                     total: result.total,
                     pageIndex: payload.pageIndex,
                     pageSize: payload.pageSize,
-                    DGIMN:payload.DGIMN,
+                    DGIMN: payload.DGIMN,
                 });
             } else {
                 yield update({
@@ -381,7 +384,7 @@ export default Model.extend({
                     total: result.total,
                     pageIndex: payload.pageIndex,
                     pageSize: payload.pageSize,
-                    DGIMN:payload.DGIMN,
+                    DGIMN: payload.DGIMN,
                 });
             }
         },
@@ -400,7 +403,7 @@ export default Model.extend({
                     total: result.total,
                     pageIndex: payload.pageIndex,
                     pageSize: payload.pageSize,
-                    DGIMN:payload.DGIMN,
+                    DGIMN: payload.DGIMN,
                 });
             } else {
                 yield update({
@@ -409,7 +412,7 @@ export default Model.extend({
                     total: result.total,
                     pageIndex: payload.pageIndex,
                     pageSize: payload.pageSize,
-                    DGIMN:payload.DGIMN,
+                    DGIMN: payload.DGIMN,
                 });
             }
         },
@@ -423,6 +426,25 @@ export default Model.extend({
                     yield update({ BdRecord: DataInfo.data });
                 }
             }
+        },
+        // 撤单
+         * GetPostRevokeTask({
+            payload,
+           }, { call }) {
+                const DataInfo = yield call(GetPostRevokeTask, payload);
+                if (DataInfo && DataInfo.requstresult ) {
+                    message.success('撤单成功!');
+                } else {
+                    message.error('撤单失败!');
+                }
+            },
+
+        // 根据任务id判断出巡检记录表详情
+        * GetPatrolTypeIdbyTaskId({
+            payload,
+        }, { call }) {
+            const DataInfo = yield call(GetPatrolTypeIdbyTaskId, payload);
+            payload.callback(DataInfo.data);
         }
     },
 

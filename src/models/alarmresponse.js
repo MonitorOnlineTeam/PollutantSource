@@ -5,7 +5,7 @@
  */
 
 import { Model } from '../dvapack';
-import { getAlarmResponseAllMonthStatistics,getSingleMonthAllPointAlarmResponseStatistics,getSinglePointDaysAlarmResponseStatistics } from '../services/AlarmResponseApi';
+import { getAlarmResponseAllMonthStatistics, getSingleMonthAllPointAlarmResponseStatistics, getSinglePointDaysAlarmResponseStatistics } from '../services/AlarmResponseApi';
 import moment from 'moment';
 
 export default Model.extend({
@@ -14,7 +14,7 @@ export default Model.extend({
         pageSize: 20,
         pageIndex: 1,
         beginTime: moment().format('YYYY-01-01 HH:mm:ss'),
-        endTime: moment().add(1,'years').format('YYYY-01-01 00:00:00'),
+        endTime: moment().add(1, 'years').format('YYYY-01-01 00:00:00'),
         selectedDate: moment().format('YYYY-MM-01 HH:mm:ss'),
         clickDate: moment().format('YYYY-MM-01 HH:mm:ss'),
         xAxisData: [],
@@ -29,8 +29,8 @@ export default Model.extend({
     subscriptions: {
     },
     effects: {
-        * getChartData({payload}, { call, put, update, select }) {
-            const {beginTime, endTime} = yield select(state => state.alarmresponse);
+        * getChartData({ payload }, { call, put, update, select }) {
+            const { beginTime, endTime } = yield select(state => state.alarmresponse);
             let body = {
                 beginTime: beginTime,
                 endTime: endTime,
@@ -55,9 +55,8 @@ export default Model.extend({
             }
             console.log('new', response);
         },
-        * getPointsData({payload}, { call, put, update, select }) {
-            const {clickDate, pageIndex, pageSize, sort2, sort8} = yield select(state => state.alarmresponse);
-            // debugger
+        * getPointsData({ payload }, { call, put, update, select }) {
+            const { clickDate, pageIndex, pageSize, sort2, sort8 } = yield select(state => state.alarmresponse);
             let body = {
                 monthTime: clickDate,
                 pageIndex: pageIndex,
@@ -76,8 +75,8 @@ export default Model.extend({
             const pointsTableData = yield select(state => state.alarmresponse.pointsTableData);
             console.log('new', pointsTableData);
         },
-        * getPointDaysData({payload}, { call, put, update, select }) {
-            const {clickDate, pageIndex, pageSize, sort2,sort8,queryDGIMNs} = yield select(state => state.alarmresponse);
+        * getPointDaysData({ payload }, { call, put, update, select }) {
+            const { clickDate, pageIndex, pageSize, sort2, sort8, queryDGIMNs } = yield select(state => state.alarmresponse);
             // debugger
             let body = {
                 monthTime: clickDate,

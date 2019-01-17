@@ -161,8 +161,8 @@ class DataQuery extends Component {
                 dgimn: this.props.selectpoint.DGIMN,
                 pageIndex: pageIndex,
                 pageSize: pageSize,
-                beginTime: beginTime,
-                endTime: endTime,
+                beginTime: beginTime.format('YYYY-MM-DD HH:mm:ss'),
+                endTime: endTime.format('YYYY-MM-DD HH:mm:ss'),
                 pollutantName: pollutantName,
             }
         });

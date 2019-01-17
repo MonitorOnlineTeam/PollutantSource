@@ -153,7 +153,7 @@ export async function loadPointDetail(params) {
 export async function loadCountryPointView(params) {
     let groupstr = '';
     params.GroupID.map(item => {
-        groupstr += `${item  },`;
+        groupstr += `${item },`;
     });
     const body = {
         GroupIDs: groupstr,
@@ -176,13 +176,12 @@ export async function loadCountryPointView(params) {
     return result.data;
 }
 
-export async function getAllPointAlarmInfo(params) {
+export async function GetAlarmNotices(params) {
     const body = {
-        time: params.time,
+        beginTime: params.beginTime,
+        endTime: params.endTime
     };
-    // const result = await get('/api/rest/AlarmDealInfoApi/GetAllPointExceptionInfo', body, null);
-    const result = await get('/api/rest/AtmosphereApi/AlarmData/GetAlarmToVerifyList', body, null);
-
+    const result = await get('/api/rest/PollutantSourceApi/PAlarmData/GetAlarmNotices', body, null);
     return result === null ? { data: null } : result;
 }
 
@@ -305,8 +304,8 @@ export async function queryentedit(params) {
     const body = {
         name: params.entallname,
         code: params.parentID,
-        longitude: (params.latlon && params.latlon.split)?params.latlon.split(',')[0]:'',
-        latitude: (params.latlon && params.latlon.split)? params.latlon.split(',')[1]:'',
+        longitude: params.latlon && params.latlon.split?params.latlon.split(',')[0]:'',
+        latitude: params.latlon && params.latlon.split? params.latlon.split(',')[1]:'',
         // photo:
         pSScaleCode: params.pollutionsources,
         abbreviation: params.enteasyname,
@@ -388,9 +387,6 @@ export async function querypollutantlist(params) {
 }
 // 获取历史数据
 export async function queryhistorydatalist(params) {
-    // debugger;
-    // console.log(params.beginTime);
-    // console.log(params.endTime);
     const body = {
         DGIMNs: params.dgimn,
         // pollutantCodes: params.pollutantCode,
@@ -520,5 +516,13 @@ export async function getPollutantTypeList(params) {
     return result === null ? {data: null} : result.data;
 }
 
+// 获取工艺流程图信息
+export async function queryrealparam(params) {
+    const body = {
+        DGIMN: params.dgimn,
+    };
+    const result = await post('/api/rest/PollutantSourceApi/DataList/GetProcessFlowChartStatus', body, null);
+    return result === null ? { data: null } : result.data;
+}
 
 

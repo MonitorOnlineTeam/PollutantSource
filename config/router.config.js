@@ -133,7 +133,14 @@ export default [
             /* 异常记录 */
             { path: '/patrolform/deviceexceptiondetail/:pointcode/:viewtype/:taskfrom/:histroyrecordtype/:TaskID', component: './EmergencyTodoList/DeviceExceptionDetail' },
 
+            
             //一级菜单
+            /* 运维日历 */
+            { path: '/operation/operationcalendar', component: './Operation/OperationCalendar' },
+            /* 工艺流程图 */
+            { path: '/operation/processflowdiagram', component: './Operation/ProcessFlowDiagram' },
+            /* 运维大事记 */
+            { path: '/operation/ywdsjlist', component: './Operation/ywdsjlist' },
             /* 智能运维-维修记录 */
             { path: '/operation/RepairHistoryRecords', component: './Operation/RepairHistoryRecords' },
             /* 智能运维-停机记录 */

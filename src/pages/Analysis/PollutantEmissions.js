@@ -19,7 +19,7 @@ import moment from 'moment';
 import styles from './index.less';
 import ReactEcharts from 'echarts-for-react';
 import MonitorContent from '../../components/MonitorContent/index';
-import {connect} from 'dva';
+import { connect } from 'dva';
 // import { debug } from 'util';
 // const { MonthPicker } = DatePicker;
 const Option = Select.Option;
@@ -121,16 +121,17 @@ export default class PollutantEmissions extends Component {
         }
     }
     handleChangeDate = (value) => {
-        // debugger;
         let Year = moment().get('year');
         let Month = moment().get('month') + 1;
         let beginTime = moment(`${value}-01-01 00:00:00`);
-
+        if (Month < 10) {
+            Month = '0' + Month
+        }
         // 本年份
         if ((+value) === Year) {
             this.updateState({
                 beginTime: beginTime.format('YYYY-MM-01 HH:mm:ss'),
-                endTime: beginTime.add(1,'years').format('YYYY-01-01 00:00:00'),
+                endTime: beginTime.add(1, 'years').format('YYYY-01-01 00:00:00'),
                 selectedDate: `${Year}-${Month}-01 00:00:00`,
                 clickDate: `${Year}-${Month}-01 00:00:00`,
                 tableDatas: []
@@ -138,7 +139,7 @@ export default class PollutantEmissions extends Component {
         } else {
             this.updateState({
                 beginTime: beginTime.format('YYYY-MM-01 HH:mm:ss'),
-                endTime: beginTime.add(1,'years').format('YYYY-01-01 00:00:00'),
+                endTime: beginTime.add(1, 'years').format('YYYY-01-01 00:00:00'),
                 selectedDate: `${value}-01-01 00:00:00`,// beginTime.format('YYYY-01-01 HH:mm:ss'),
                 clickDate: `${value}-01-01 00:00:00`,
                 tableDatas: []
@@ -176,7 +177,7 @@ export default class PollutantEmissions extends Component {
     }
 
     handleModalCancel = (e) => {
-    // console.log(e);
+        // console.log(e);
         this.setState({
             modalVisible: false,
         });
@@ -237,10 +238,13 @@ export default class PollutantEmissions extends Component {
         return option;
     }
     onChartClick = (opt) => {
-        // debugger;
         let { selectedDate } = this.props;
         console.log(selectedDate);
-        let clickDate = moment(selectedDate).format(`YYYY-${opt.dataIndex + 1}-01 00:00:00`);
+        var dateindex = opt.dataIndex;
+        if (dateindex < 9) {
+            dateindex = '0' + (dateindex + 1);
+        }
+        let clickDate = moment(selectedDate).format(`YYYY-${dateindex}-01 00:00:00`);
 
         this.updateState({
             clickDate: clickDate
@@ -250,7 +254,7 @@ export default class PollutantEmissions extends Component {
     render() {
         const columns = [
             {
-                title: (<span style={{fontWeight: 'bold'}}>排口名称</span>),
+                title: (<span style={{ fontWeight: 'bold' }}>排口名称</span>),
                 dataIndex: 'PointName',
                 key: 'PointName',
                 width: '66.66%',
@@ -264,7 +268,7 @@ export default class PollutantEmissions extends Component {
                 }
             },
             {
-                title: (<span style={{fontWeight: 'bold'}}>排放量(kg)</span>),
+                title: (<span style={{ fontWeight: 'bold' }}>排放量(kg)</span>),
                 dataIndex: 'Emissions',
                 key: 'Emissions',
                 align: 'left',
@@ -278,7 +282,7 @@ export default class PollutantEmissions extends Component {
         ];
         const columnsDays = [
             {
-                title: (<span style={{fontWeight: 'bold'}}>排口名称</span>),
+                title: (<span style={{ fontWeight: 'bold' }}>排口名称</span>),
                 dataIndex: 'PointName',
                 key: 'PointName',
                 align: 'left',
@@ -288,7 +292,7 @@ export default class PollutantEmissions extends Component {
                 }
             },
             {
-                title: (<span style={{fontWeight: 'bold'}}>时间</span>),
+                title: (<span style={{ fontWeight: 'bold' }}>时间</span>),
                 dataIndex: 'DataDate',
                 key: 'DataDate',
                 align: 'left',
@@ -299,7 +303,7 @@ export default class PollutantEmissions extends Component {
                 }
             },
             {
-                title: (<span style={{fontWeight: 'bold'}}>排放量(kg)</span>),
+                title: (<span style={{ fontWeight: 'bold' }}>排放量(kg)</span>),
                 dataIndex: 'Emissions',
                 key: 'Emissions',
                 align: 'left',
@@ -315,62 +319,62 @@ export default class PollutantEmissions extends Component {
         return (
             <MonitorContent {...this.props} breadCrumbList={
                 [
-                    {Name:'首页',Url:'/'},  
-                    {Name:'智能分析',Url:''},
-                    {Name:'月度排放量分析',Url:''}
+                    { Name: '首页', Url: '/' },
+                    { Name: '智能分析', Url: '' },
+                    { Name: '月度排放量分析', Url: '' }
                 ]
             }>
                 <div className={styles.cardTitle}
-                    // style={{
-                    //     height: 'calc(100vh - 248px)'
-                    // }}
+                // style={{
+                //     height: 'calc(100vh - 248px)'
+                // }}
                 >
                     <Card title="排放量统计" extra={
                         <div>
-                            <span style={{color: '#b3b3b3'}}>污染物
+                            <span style={{ color: '#b3b3b3' }}>污染物
                                     <Select
-                                        size="default"
-                                        defaultValue={this.props.pollutantCodes[0]}
-                                        onChange={this.handleChangePollutant}
-                                        style={{ width: 200,marginLeft:10,marginRight:20 }}
-                                    >
-                                        <Option key="01">实测烟尘</Option>
-                                        <Option key="02">实测二氧化硫</Option>
-                                        <Option key="03">实测氮氧化物</Option>
-                                    </Select>
-                                </span>
-                                <span style={{color: '#b3b3b3'}}>时间
+                                    size="default"
+                                    defaultValue={this.props.pollutantCodes[0]}
+                                    onChange={this.handleChangePollutant}
+                                    style={{ width: 200, marginLeft: 10, marginRight: 20 }}
+                                >
+                                    <Option key="01">实测烟尘</Option>
+                                    <Option key="02">实测二氧化硫</Option>
+                                    <Option key="03">实测氮氧化物</Option>
+                                </Select>
+                            </span>
+                            <span style={{ color: '#b3b3b3' }}>时间
                                     <Select
-                                        size="default"
-                                        defaultValue={dateYear}
-                                        onChange={this.handleChangeDate}
-                                        style={{ width: 200,marginLeft:10 }}
-                                    >
-                                        {dateChildren}
-                                    </Select>
-                                </span>
+                                    size="default"
+                                    defaultValue={dateYear}
+                                    onChange={this.handleChangeDate}
+                                    style={{ width: 200, marginLeft: 10 }}
+                                >
+                                    {dateChildren}
+                                </Select>
+                            </span>
                         </div>
-                        }>
+                    }>
                         <Row loading={this.props.loadingChart}>
                             <ReactEcharts
                                 option={this.getOption()}
                                 lazyUpdate={true}
-                                style={{height: '300px', width: '100%'}}
+                                style={{ height: '300px', width: '100%' }}
                                 className="echarts-for-echarts"
                                 onChartReady={this.onChartReadyCallback}
-                                onEvents={{'click': this.onChartClick}}
+                                onEvents={{ 'click': this.onChartClick }}
                                 theme="my_theme" />
                         </Row>
 
                         <Row style={styles.cardTitle.cardBg}>
 
                             <Card
-                                style={{  }}
+                                style={{}}
                                 // type="inner"
                                 bordered={false}
                                 title={`${moment(this.props.clickDate).format('YYYY-MM')}月排放量排口统计`}
                             >
-                                <Table style={{ }} className={styles.dataTable}
+                                <Table style={{}} className={styles.dataTable}
                                     loading={this.props.loadingTable}
                                     columns={columns}
                                     onChange={this.handleTableChange}

@@ -44,7 +44,14 @@ export default class StopCemsListHistoryRecords extends Component {
         };
     }
     componentDidMount() {
+        localStorage.setItem('pollutantType', 2);
         const { dispatch } = this.props;
+        dispatch({
+            type: 'overview/getPollutantTypeList',
+            payload: {
+            }
+        });
+
         var getDGIMN = localStorage.getItem('DGIMN')
         if (getDGIMN === null) {
             getDGIMN = '[object Object]';
@@ -62,11 +69,7 @@ export default class StopCemsListHistoryRecords extends Component {
                 DGIMN: getDGIMN,
             }
         });
-        dispatch({
-            type: 'overview/getPollutantTypeList',
-            payload: {
-            }
-        });
+
     }
 
     GetHistoryRecord = (pageIndex, pageSize, DGIMN, BeginTime, EndTime) => {
@@ -125,36 +128,38 @@ export default class StopCemsListHistoryRecords extends Component {
     }
     //当前选中的污染物类型
     getNowPollutantType = (key) => {
+        localStorage.setItem('pollutantType', key);
         this.setState({
             pollutantTypeCode: key
         })
         const { searchName } = this.state;
         this.reloadData(key, searchName);
     }
-        //重新加载
-        searchData = (pollutantTypeCode, searchName) => {
-            var getDGIMN = localStorage.getItem('DGIMN')
-            if (getDGIMN === null) {
-                getDGIMN = '[object Object]';
-            }
-            this.props.dispatch({
-                type: 'overview/querydatalist',
-                payload: {
-                    map: true,
-                    pollutantTypes: pollutantTypeCode,
-                    pointName: searchName,
-                    StopCemsListHistoryRecords: true,
-                    pageIndex: this.props.pageIndex,
-                    pageSize: this.props.pageSize,
-                    BeginTime: this.state.rangeDate[0].format('YYYY-MM-DD 00:00:00'),
-                    EndTime: this.state.rangeDate[1].format('YYYY-MM-DD 23:59:59'),
-                    DGIMN: getDGIMN,
-                    callback: (data) => {
+    //重新加载
+    searchData = (pollutantTypeCode, searchName) => {
+        var getDGIMN = localStorage.getItem('DGIMN')
+        if (getDGIMN === null) {
+            getDGIMN = '[object Object]';
+        }
+        this.props.dispatch({
+            type: 'overview/querydatalist',
+            payload: {
+                map: true,
+                pollutantTypes: pollutantTypeCode,
+                pointName: searchName,
+                StopCemsListHistoryRecords: true,
+                pageIndex: this.props.pageIndex,
+                pageSize: this.props.pageSize,
+                BeginTime: this.state.rangeDate[0].format('YYYY-MM-DD 00:00:00'),
+                EndTime: this.state.rangeDate[1].format('YYYY-MM-DD 23:59:59'),
+                DGIMN: getDGIMN,
+                search: true,
+                callback: (data) => {
+                    if (data !== null) {
                         const existdata = data.find((value, index, arr) => {
                             return value.DGIMN == getDGIMN
                         });
-                        if(existdata==undefined)
-                        {
+                        if (existdata == undefined) {
                             this.props.dispatch({
                                 type: 'task/GetHistoryStopCemsList',
                                 payload: {
@@ -166,16 +171,27 @@ export default class StopCemsListHistoryRecords extends Component {
                                 }
                             });
                         }
+                        else {
+                            this.props.dispatch({
+                                type: 'task/GetHistoryStopCemsList',
+                                payload: {
+                                    pageIndex: this.props.pageIndex,
+                                    pageSize: this.props.pageSize,
+                                    DGIMN: getDGIMN,
+                                    BeginTime: this.state.BeginTime,
+                                    EndTime: this.state.EndTime,
+                                }
+                            });
+                        }
                     }
-                },
-            });
-        }
+
+                }
+            },
+        });
+    }
     //重新加载
     reloadData = (pollutantTypeCode, searchName) => {
-        var getDGIMN = localStorage.getItem('DGIMN')
-        if (getDGIMN === null) {
-            getDGIMN = '[object Object]';
-        }
+        var getDGIMN = '[object Object]'
         this.props.dispatch({
             type: 'overview/querydatalist',
             payload: {
@@ -197,7 +213,13 @@ export default class StopCemsListHistoryRecords extends Component {
     };
     render() {
         const { pollutantTypelist, treedataloading, datalist, pollutantTypeloading } = this.props;
-        const dataSource = this.props.HistoryStopCemsListHistoryRecords === null ? null : this.props.HistoryStopCemsListHistoryRecords;
+        var dataSource = [];
+        var spining = true;
+        if (!this.props.treedataloading && !this.props.pollutantTypeloading && !this.props.loading) {
+            spining = this.props.loading;
+            dataSource = this.props.HistoryStopCemsListHistoryRecords.length === 0 ? [] : this.props.HistoryStopCemsListHistoryRecords;
+        }
+        var pollutantType = localStorage.getItem('pollutantType')
         const columns = [{
             title: '校准人',
             width: '20%',
@@ -267,12 +289,12 @@ export default class StopCemsListHistoryRecords extends Component {
                                         style={{
                                             width: '400px',
                                             marginTop: 5,
-                                            background: '#fff'
+                                            background: '#fff',
                                         }}
                                         pollutantTypeloading={pollutantTypeloading}
                                         getHeight={'calc(100vh - 220px)'} getStatusImg={this.getStatusImg}
                                         getNowPollutantType={this.getNowPollutantType}
-                                        PollutantType={2}
+                                        PollutantType={2} treedatalist={datalist}
                                         pollutantTypelist={pollutantTypelist}
                                         tabkey={this.state.pollutantTypeCode}
                                     />
@@ -280,7 +302,7 @@ export default class StopCemsListHistoryRecords extends Component {
                                         getHeight='calc(100vh - 220px)'
                                         pollutantTypeloading={pollutantTypeloading}
                                         getStatusImg={this.getStatusImg} isloading={treedataloading}
-                                        treeCilck={this.treeCilck} treedatalist={datalist} PollutantType={2} ifSelect={true} />
+                                        treeCilck={this.treeCilck} treedatalist={datalist} PollutantType={pollutantType} ifSelect={true} />
                                 </div>
                             </div>
                         </div>
@@ -301,7 +323,7 @@ export default class StopCemsListHistoryRecords extends Component {
                                 <Table
                                     size="middle"
                                     scroll={{ y: 'calc(100vh - 350px)' }}
-                                    loading={this.props.loading}
+                                    loading={spining}
                                     className={styles.dataTable}
                                     columns={columns}
                                     dataSource={dataSource}
