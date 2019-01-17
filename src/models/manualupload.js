@@ -87,9 +87,7 @@ export default Model.extend({
             put,
             update,
         }) {
-            debugger
             const result = yield call(GetManualSupplementList, payload);
-            debugger
             if (result.data !== null) {
                 if (result.data.length !== 0) {
 

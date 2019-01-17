@@ -91,7 +91,6 @@ export default Model.extend({
                 type: 'saveNotices',
                 payload: notices,
             });
-            debugger;
             // yield put({
             //     type: 'user/changeNotifyCount',
             //     payload: count,
@@ -116,7 +115,6 @@ export default Model.extend({
                 description:`${item.Msg}`,
             }));
             yield update({advises:advises});
-            debugger;
         },
         * clearNotices({ payload }, { put, select }) {
             yield put({
@@ -131,10 +129,8 @@ export default Model.extend({
         },
         * changeNotices({payload}, {put, call, select}) {
             const {message} = payload;
-            debugger;
             const {Message:data}=JSON.parse(message);
             let { notices = [] } = yield select(t => t.notices);
-            debugger;
             let key="";
             if(data.AlarmType===EnumPropellingAlarmSourceType.DataException||
                 data.AlarmType===EnumPropellingAlarmSourceType.DYPARAMETER||

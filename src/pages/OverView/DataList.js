@@ -54,7 +54,6 @@ class dataList extends PureComponent {
     
     //加载数据
     reloadData=(time,status,operationStatus,terate,warning)=>{
-        debugger;
         this.props.dispatch({
             type: 'overview/querydatalist',
             payload: {
