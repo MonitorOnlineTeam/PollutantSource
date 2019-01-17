@@ -4,7 +4,7 @@ import RangePicker_ from '../../components/PointDetail/RangePicker_';
 import { connect } from 'dva';
 import moment from 'moment';
 import Ywdsjlistss from './Ywdsjlist.less';
-import { EnumPatrolTaskType } from '../../utils/enum';
+import { EnumPatrolTaskType,EnumOperationTaskStatus  } from '../../utils/enum';
 import { routerRedux } from 'dva/router';
 import SearchInput from '../../components/OverView/SearchInput';
 import TreeStatus from '../../components/OverView/TreeStatus';
@@ -252,6 +252,21 @@ export default class Ywdsjlist extends Component {
                     <p className={Ywdsjlistss.taskDate}>{item.NodeDate}</p>
                 </Timeline.Item>);
                 item.NodeList.map((item1) => {
+                    if(item1.TaskStatus===EnumOperationTaskStatus.Underway)
+                    {
+                        let value = `于${item1.CreateTime}，开始任务，正在进行中`;
+                        var valueName = `${item1.OperationsUserName}`;
+                        rtnVal.push(
+                            <Timeline.Item dot={<img style={{width: '38px', height: '38px'}} src="/patrol.png" />}>
+                                <p className={Ywdsjlistss.taskDetail}><span style={{color: '#40B0F5', marginRight: '10px'}}>{valueName}</span>{value}</p>
+                                <div className={Ywdsjlistss.seeDetail} onClick={() => {
+                                    this.props.dispatch(routerRedux.push(`/TaskDetail/emergencydetailinfo/${this.props.match.params.viewtype}/ywdsjlist/${item1.ID}`));
+                                }}>
+                                查看详情
+                                </div>
+                            </Timeline.Item>
+                        );
+                    }else{
                     if (item1.TaskType === EnumPatrolTaskType.PatrolTask) {
                         var value = `于${item1.CompleteTime}完成例行任务`;
                         var valueName = `${item1.OperationsUserName}`;
@@ -289,6 +304,7 @@ export default class Ywdsjlist extends Component {
                             </Timeline.Item>
                         );
                     }
+                }
                 });
             });
             return rtnVal;
