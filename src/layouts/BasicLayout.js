@@ -61,6 +61,13 @@ class BasicLayout extends React.PureComponent {
         this.matchParamsPath = memoizeOne(this.matchParamsPath, isEqual);
     }
 
+    componentWillMount = () => {
+        const { dispatch } = this.props;
+        dispatch({
+            type: 'global/fetchNotices',
+        });
+    }
+
     componentDidMount() {
         const {
             dispatch,
