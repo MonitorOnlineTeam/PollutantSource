@@ -115,7 +115,7 @@ export default class GlobalHeaderRight extends PureComponent {
       const adviseData = this.getAdviseData();
       const unreadMsg = this.getUnreadData(adviseData);
       const unreadAlarmMsg = this.getUnreadAlarmData(noticeData);
-      debugger;
+
       let className = styles.right;
       if (theme === 'dark') {
           className = `${styles.right}  ${styles.dark}`;

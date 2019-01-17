@@ -197,9 +197,9 @@ export default [
             { path: '/sysmanage/pointinfo', component: './PointInfo' },
 
             /* 排口信息管理=排口管理 */
-            { path: '/sysmanage/pointdetail/:DGIMN', component: './PointInfo/AddPoint' },
+            { path: '/sysmanage/pointdetail/:DGIMN/:PollutantType/:Add', component: './PointInfo/AddPoint' },
             /* 排口信息管理=排口管理 */
-            { path: '/sysmanage/pointdetail/:DGIMN/:Name', component: './PointInfo/PointView' },
+            { path: '/sysmanage/pointdetail/:DGIMN/:Name/:PollutantType/:Add', component: './PointInfo/PointView' },
             /* 用户基本信息管理 */
             { path: '/sysmanage/userinfo', component: './Userinfo' },
 
