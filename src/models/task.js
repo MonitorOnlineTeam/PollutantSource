@@ -314,10 +314,14 @@ export default Model.extend({
             payload,
         }, { call, update }) {
             const DataInfo = yield call(GetRepairDetail, payload);
-            if (DataInfo !== null && DataInfo.requstresult === '1') {
-                if (DataInfo.data !== null) {
-                    yield update({ Repair: DataInfo.data });
-                }
+            debugger
+
+            if (DataInfo.data !== null) {
+                yield update({ Repair: DataInfo.data });
+            }
+
+            else {
+                yield update({ Repair: null });
             }
         },
         //获取维修记录历史
@@ -427,16 +431,16 @@ export default Model.extend({
             }
         },
         // 撤单
-         * GetPostRevokeTask({
+        * GetPostRevokeTask({
             payload,
-           }, { call }) {
-                const DataInfo = yield call(GetPostRevokeTask, payload);
-                if (DataInfo && DataInfo.requstresult ) {
-                    message.success('撤单成功!');
-                } else {
-                    message.error('撤单失败!');
-                }
-            },
+        }, { call }) {
+            const DataInfo = yield call(GetPostRevokeTask, payload);
+            if (DataInfo && DataInfo.requstresult) {
+                message.success('撤单成功!');
+            } else {
+                message.error('撤单失败!');
+            }
+        },
 
         // 根据任务id判断出巡检记录表详情
         * GetPatrolTypeIdbyTaskId({

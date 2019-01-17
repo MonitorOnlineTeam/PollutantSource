@@ -31,8 +31,8 @@ class AppConsumablesReplaceRecord extends Component {
         this.props.dispatch({
             type: 'task/fetchuserlist',
             payload: {
-                TaskIds: this.props.match.params.TaskIds,
-                TypeIDs: this.props.match.params.TypeIDs
+                TaskIds: this.props.match.params.TaskID,
+                TypeIDs: this.props.match.params.TypeID,
             },
         });
     }
@@ -73,7 +73,7 @@ class AppConsumablesReplaceRecord extends Component {
     }
 
     render() {
-        const SCREEN_HEIGHT = document.querySelector('body').offsetHeight - 250;
+        const SCREEN_HEIGHT = document.querySelector('body').offsetHeight - 150;
         let DataLength = this.props.ConsumablesReplaceRecordList.length;
         let Data = DataLength === 0 ? null : this.props.ConsumablesReplaceRecordList;
         let DataList = DataLength === 0 ? null : Data.Record.length === 0 ? null : Data.Record.RecordList;

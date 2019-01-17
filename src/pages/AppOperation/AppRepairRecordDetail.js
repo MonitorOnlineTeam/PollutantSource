@@ -21,7 +21,7 @@ export default class AppRepairRecordDetail extends Component {
             type: 'task/GetRepairDetail',
             payload: {
                 TaskID: this.props.match.params.TaskID,
-                TypeID: this.props.match.params.TypeID
+                TypeID: parseInt(this.props.match.params.TypeID),
             }
         });
         const _this = this;
@@ -106,7 +106,7 @@ export default class AppRepairRecordDetail extends Component {
 
 
     render() {
-        const SCREEN_HEIGHT = document.querySelector('body').offsetHeight - 250;
+        const SCREEN_HEIGHT = document.querySelector('body').offsetHeight - 150;
         const Repair = this.props.Repair;
         let EnterpriseName = null;
         let PointPosition = null;
