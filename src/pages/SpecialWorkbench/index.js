@@ -1,11 +1,11 @@
 
 import React, { Component } from 'react';
-import { Map, Markers,Polygon } from 'react-amap';
-import { Row, Col,Card,List, Spin,Table,Calendar, Badge,Tag,Icon,Button,Tabs,Divider,Modal } from 'antd';
+import { Map, Markers, Polygon } from 'react-amap';
+import { Row, Col, Card, List, Spin, Table, Calendar, Badge, Tag, Icon, Button, Tabs, Divider, Modal } from 'antd';
 import ReactEcharts from 'echarts-for-react';
 import moment from 'moment';
-import {connect} from 'dva';
-import {routerRedux} from 'dva/router';
+import { connect } from 'dva';
+import { routerRedux } from 'dva/router';
 import { amapKey } from '../../config';
 import PollutantSelect from '../../components/PointDetail/PollutantSelect';
 import styles from './index.less';
@@ -25,9 +25,9 @@ const gridStyle = {
 };
 
 function getMonthData(value) {
-// if (value.month() === 8) {
-//   return 1394;
-// }
+    // if (value.month() === 8) {
+    //   return 1394;
+    // }
 }
 
 function monthCellRender(value) {
@@ -41,16 +41,16 @@ function monthCellRender(value) {
 }
 
 
-const MarkerLayoutStyle={
-    minWidth:150,
-    position:'absolute',
-    backgroundColor:'white',
-    height:50,
-    top:-55,
-    left:-63,
-    textAlign:'center',
-    borderRadius:'10%',
-    lineHeight:'50px'
+const MarkerLayoutStyle = {
+    minWidth: 150,
+    position: 'absolute',
+    backgroundColor: 'white',
+    height: 50,
+    top: -55,
+    left: -63,
+    textAlign: 'center',
+    borderRadius: '10%',
+    lineHeight: '50px'
 };
 const pageUrl = {
     updateState: 'workbenchmodel/updateState',
@@ -59,15 +59,15 @@ const pageUrl = {
     getRateStatisticsData: 'workbenchmodel/getRateStatisticsData',
     getNetworkeRateData: 'workbenchmodel/getNetworkeRateData',
     getEquipmentoperatingRateData: 'equipmentoperatingrate/getData',
-    getTransmissionefficiencyRateData:'transmissionefficiency/getData',
-    getDataOverWarningData:'workbenchmodel/getDataOverWarningData',
-    getAllPointOverDataList:'workbenchmodel/getAllPointOverDataList',
-    getOverPointList:'workbenchmodel/getOverPointList',
-    getStatisticsPointStatus:'workbenchmodel/getStatisticsPointStatus',
-    getRealTimeWarningDatas:'workbenchmodel/getRealTimeWarningDatas',
-    getPollutantList:'points/querypollutantlist',
+    getTransmissionefficiencyRateData: 'transmissionefficiency/getData',
+    getDataOverWarningData: 'workbenchmodel/getDataOverWarningData',
+    getAllPointOverDataList: 'workbenchmodel/getAllPointOverDataList',
+    getOverPointList: 'workbenchmodel/getOverPointList',
+    getStatisticsPointStatus: 'workbenchmodel/getStatisticsPointStatus',
+    getRealTimeWarningDatas: 'workbenchmodel/getRealTimeWarningDatas',
+    getPollutantList: 'points/querypollutantlist',
     //加载企业信息
-    getEntInfo:'baseinfo/queryentdetail'
+    getEntInfo: 'baseinfo/queryentdetail'
 };
 let _thismap;
 @connect(({
@@ -79,26 +79,26 @@ let _thismap;
     points
 }) => ({
     loadingOperationData: loading.effects[pageUrl.getOperationData],
-    loadingExceptionAlarm:loading.effects[pageUrl.getExceptionAlarmData],
-    loadingRateStatistics:loading.effects[pageUrl.getRateStatisticsData],
-    loadingNetworkeRate:loading.effects[pageUrl.getNetworkeRateData],
-    loadingEquipmentoperatingRate:loading.effects[pageUrl.getEquipmentoperatingRateData],
-    loadingTransmissionefficiencyRate:loading.effects[pageUrl.getTransmissionefficiencyRateData],
-    loadingDataOverWarning:loading.effects[pageUrl.getDataOverWarningData],
-    loadingAllPointOverDataList:loading.effects[pageUrl.getAllPointOverDataList],
-    loadingOverPointList:loading.effects[pageUrl.getOverPointList],
-    loadingRealTimeWarningDatas:loading.effects[pageUrl.getRealTimeWarningDatas],
-    loadingMap:loading.effects[pageUrl.getEntInfo],
+    loadingExceptionAlarm: loading.effects[pageUrl.getExceptionAlarmData],
+    loadingRateStatistics: loading.effects[pageUrl.getRateStatisticsData],
+    loadingNetworkeRate: loading.effects[pageUrl.getNetworkeRateData],
+    loadingEquipmentoperatingRate: loading.effects[pageUrl.getEquipmentoperatingRateData],
+    loadingTransmissionefficiencyRate: loading.effects[pageUrl.getTransmissionefficiencyRateData],
+    loadingDataOverWarning: loading.effects[pageUrl.getDataOverWarningData],
+    loadingAllPointOverDataList: loading.effects[pageUrl.getAllPointOverDataList],
+    loadingOverPointList: loading.effects[pageUrl.getOverPointList],
+    loadingRealTimeWarningDatas: loading.effects[pageUrl.getRealTimeWarningDatas],
+    loadingMap: loading.effects[pageUrl.getEntInfo],
     operation: workbenchmodel.operation,
     exceptionAlarm: workbenchmodel.exceptionAlarm,
     rateStatistics: workbenchmodel.rateStatistics,
     networkeRateList: workbenchmodel.networkeRateList,
     equipmentoperatingRateTableDatas: equipmentoperatingrate.tableDatas,
-    transmissionefficiencyRateTableDatas:transmissionefficiency.tableDatas,
-    hourDataOverWarningList:workbenchmodel.hourDataOverWarningList,
-    allPointOverDataList:workbenchmodel.allPointOverDataList,
-    overPointList:workbenchmodel.overPointList,
-    statisticsPointStatus:workbenchmodel.statisticsPointStatus,
+    transmissionefficiencyRateTableDatas: transmissionefficiency.tableDatas,
+    hourDataOverWarningList: workbenchmodel.hourDataOverWarningList,
+    allPointOverDataList: workbenchmodel.allPointOverDataList,
+    overPointList: workbenchmodel.overPointList,
+    statisticsPointStatus: workbenchmodel.statisticsPointStatus,
     //污染物值
     pollutantList: points.pollutantlist,
     warningDetailsDatas: workbenchmodel.warningDetailsDatas,
@@ -109,11 +109,11 @@ class SpecialWorkbench extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            defaultDateValue:moment(),
+            defaultDateValue: moment(),
             selectedValue: moment(),
-            visibleModal:false,
-            clickThisPointName:'',
-            SuggestValue:null,
+            visibleModal: false,
+            clickThisPointName: '',
+            SuggestValue: null,
         };
     }
 
@@ -133,62 +133,65 @@ class SpecialWorkbench extends Component {
     }
 
 
-    getMap=()=>{
-        const {loadingMap}=this.props;
-      if(loadingMap)
-      {
+    getMap = () => {
+        const { loadingMap } = this.props;
+        if (loadingMap) {
             return (<Spin
-                style={{ width: '100%',
+                style={{
+                    width: '100%',
                     height: 'calc(100vh/2)',
                     display: 'flex',
                     alignItems: 'center',
-                    justifyContent: 'center' }}
+                    justifyContent: 'center'
+                }}
                 size="large"
             />);
-      }
-      const entInfo = this.props.entInfo ? this.props.entInfo[0] : '';
-      let mapCenter;
-      if(entInfo)
-      {
-          mapCenter = { longitude: entInfo.longitude, latitude: entInfo.latitude };
-      }
-      return (
-        <Map  events={this.mapEvents} 
-        mapStyle={'fresh'}
-                                        amapkey={amapKey} center={mapCenter} zoom={12}>
-                                        <Markers
-                                            markers={this.getMarkers()}
-                                            render={(item)=>this.renderMarkerLayout(item)}
-                                        />
-                                        {
-                                            this.getpolygon()
-                                        }
-                                    </Map>
-      )
+        }
+        const entInfo = this.props.entInfo ? this.props.entInfo[0] : '';
+        let mapCenter;
+        if (entInfo) {
+            mapCenter = { longitude: entInfo.longitude, latitude: entInfo.latitude };
+        }
+        return (
+            <Map
+                events={this.mapEvents}
+                mapStyle="fresh"
+                amapkey={amapKey}
+                center={mapCenter}
+                zoom={12}
+            >
+                <Markers
+                    markers={this.getMarkers()}
+                    render={(item) => this.renderMarkerLayout(item)}
+                />
+                {
+                    this.getpolygon()
+                }
+            </Map>
+        );
     }
 
-      /**
-     * 坐标集合
-     */
-      getpolygon=()=>{
-        let res=[];
-        const {entInfo}=this.props;
+    /**
+   * 坐标集合
+   */
+    getpolygon = () => {
+        let res = [];
+        const { entInfo } = this.props;
         const entModel = entInfo ? entInfo[0] : '';
-        if(entModel && entModel.coordinateSet)
-        {
+        if (entModel && entModel.coordinateSet) {
             let arr = eval(entModel.coordinateSet);
             for (let i = 0; i < arr.length; i++) {
                 res.push(<Polygon
-                           key={i}
-                            style={{
-                            strokeColor: '#FF33FF',
-                            strokeOpacity: 0.2,
-                            strokeWeight: 3,
-                            fillColor: '#1791fc',
-                            fillOpacity: 0.35,
-                            }}
-                            path={arr[i]}
-                  />)
+                    key={i}
+                    style={{
+                        strokeColor: '#FF33FF',
+                        strokeOpacity: 0.2,
+                        strokeWeight: 3,
+                        fillColor: '#1791fc',
+                        fillOpacity: 0.35,
+                    }}
+                    path={arr[i]}
+                />);
             }
         }
         return res;
@@ -208,17 +211,17 @@ class SpecialWorkbench extends Component {
         }
     };
 
-  /**
+    /**
      * 催办
      */
-   urge=(DGIMN)=>{
-    this.props.dispatch({
-        type: 'overview/queryurge',
-        payload: {
-            DGIMN:DGIMN
-        }
-    });
-   }
+    urge = (DGIMN) => {
+        this.props.dispatch({
+            type: 'overview/queryurge',
+            payload: {
+                DGIMN: DGIMN
+            }
+        });
+    }
 
     /**
      * 获取企业信息
@@ -256,7 +259,7 @@ class SpecialWorkbench extends Component {
     /**
      * 智能监控_实时预警详情
      */
-    getRealTimeWarningDatas = () =>{
+    getRealTimeWarningDatas = () => {
         this.props.dispatch({
             type: pageUrl.getRealTimeWarningDatas,
             payload: {},
@@ -266,7 +269,7 @@ class SpecialWorkbench extends Component {
     /**
      * 智能监控_排口的所有状态_更新数据
      */
-    getStatisticsPointStatus = () =>{
+    getStatisticsPointStatus = () => {
         this.props.dispatch({
             type: pageUrl.getStatisticsPointStatus,
             payload: {},
@@ -276,7 +279,7 @@ class SpecialWorkbench extends Component {
     /**
      * 智能监控_当前超标排口_更新数据
      */
-    getOverPointList = () =>{
+    getOverPointList = () => {
         this.props.dispatch({
             type: pageUrl.getOverPointList,
             payload: {},
@@ -286,7 +289,7 @@ class SpecialWorkbench extends Component {
     /**
      * 智能监控_排口超标汇总_更新数据
      */
-    getAllPointOverDataList = () =>{
+    getAllPointOverDataList = () => {
         this.props.dispatch({
             type: pageUrl.getAllPointOverDataList,
             payload: {},
@@ -296,7 +299,7 @@ class SpecialWorkbench extends Component {
     /**
      * 智能监控_当小时预警消息_更新数据
      */
-    getDataOverWarningData = () =>{
+    getDataOverWarningData = () => {
         this.props.dispatch({
             type: pageUrl.getDataOverWarningData,
             payload: {},
@@ -306,7 +309,7 @@ class SpecialWorkbench extends Component {
     /**
      * 智能质控_率的统计_更新数据
      */
-    getRateStatisticsData = () =>{
+    getRateStatisticsData = () => {
         this.props.dispatch({
             type: pageUrl.getRateStatisticsData,
             payload: {},
@@ -316,7 +319,7 @@ class SpecialWorkbench extends Component {
     /**
      * 智能质控_排口联网率_更新数据
      */
-    getNetworkeRateData = () =>{
+    getNetworkeRateData = () => {
         this.props.dispatch({
             type: pageUrl.getNetworkeRateData,
             payload: {},
@@ -326,11 +329,11 @@ class SpecialWorkbench extends Component {
     /**
      * 智能质控_排口设备运转率_更新数据
      */
-    getEquipmentoperatingRateData = (pageIndex) =>{
+    getEquipmentoperatingRateData = (pageIndex) => {
         this.props.dispatch({
             type: pageUrl.getEquipmentoperatingRateData,
             payload: {
-                pageIndex: pageIndex||1,
+                pageIndex: pageIndex || 1,
             }
         });
     }
@@ -338,11 +341,11 @@ class SpecialWorkbench extends Component {
     /**
      * 智能质控_排口传输有效率_更新数据
      */
-    getTransmissionefficiencyRateData = (pageIndex) =>{
+    getTransmissionefficiencyRateData = (pageIndex) => {
         this.props.dispatch({
             type: pageUrl.getTransmissionefficiencyRateData,
             payload: {
-                pageIndex: pageIndex||1,
+                pageIndex: pageIndex || 1,
             }
         });
     }
@@ -350,7 +353,7 @@ class SpecialWorkbench extends Component {
     /**
      * 智能质控_异常报警_更新数据
      */
-    getExceptionAlarmData = (pageIndex) =>{
+    getExceptionAlarmData = (pageIndex) => {
         this.props.dispatch({
             type: pageUrl.getExceptionAlarmData,
             payload: {},
@@ -360,28 +363,33 @@ class SpecialWorkbench extends Component {
     /**
      * 智能质控_渲染异常报警数据列表
      */
-    renderExceptionAlarmList = ()=>{
+    renderExceptionAlarmList = () => {
         const listData = [];
-        const colorArray={
-            "数据异常":"magenta",
-            "参数异常":"red",
-            "逻辑异常":"volcano",
-            "状态异常":"orange"
+        const colorArray = {
+            "数据异常": "magenta",
+            "参数异常": "red",
+            "逻辑异常": "volcano",
+            "状态异常": "orange"
         };
-        this.props.exceptionAlarm.tableDatas.map((item)=>{
+        this.props.exceptionAlarm.tableDatas.map((item) => {
             //判断报警是否超过4小时
-            const seconds=moment().diff(moment(item.FirstAlarmTime), 'minutes');
-            const hour=Math.floor(seconds/60);
-            const minutes=Math.floor(seconds%60);
-            const color = hour>= 4 ? 'red':'rgb(129,203,237)';
-            const minutesLable=minutes>0?`${minutes}分钟`:'';
+            const seconds = moment().diff(moment(item.FirstAlarmTime), 'minutes');
+            const hour = Math.floor(seconds / 60);
+            const minutes = Math.floor(seconds % 60);
+            const color = hour >= 4 ? 'red' : 'rgb(129,203,237)';
+            const minutesLable = minutes > 0 ? `${minutes}分钟` : '';
 
-            const labelDiv=<div style={{color:`${color}`}}>已发生{hour}小时{minutesLable}</div>;
-            const btnDiv=hour>= 4 ?(<div style={{marginTop:43}}>
-                <Button onClick={()=>{
-                    this.urge(item.DGIMNs)
-                }}  style={{width:100,border:'none',backgroundColor:'rgb(74,210,187)'}} type="primary">督办</Button>
-                                    </div>):'';
+            const labelDiv = <div style={{ color: `${color}` }}>已发生{hour}小时{minutesLable}</div>;
+            const btnDiv = hour >= 4 ? (<div style={{ marginTop: 43 }}>
+                <Button
+                    onClick={() => {
+                        this.urge(item.DGIMNs);
+                    }}
+                    style={{ width: 100, border: 'none', backgroundColor: 'rgb(74,210,187)' }}
+                    type="primary"
+                >督办
+                </Button>
+            </div>) : '';
             listData.push({
                 href: 'http://ant.design',
                 title: `${item.PointName}`,
@@ -394,15 +402,15 @@ class SpecialWorkbench extends Component {
                             ))
                         }
                     </div>
-                    <div style={{marginTop:10}}>
+                    <div style={{ marginTop: 10 }}>
                         <div>{item.LastAlarmMsg}</div>
                         {/* <div>首次报警时间：2018-12-27</div>
                         <div>报警总次数：<span style={{fontWeight:'bold'}}>98</span></div> */}
                     </div>
                 </div>),
                 content: '',
-                extra:(
-                    <div style={{marginTop:30,marginRight:70,textAlign:'center'}}>
+                extra: (
+                    <div style={{ marginTop: 30, marginRight: 70, textAlign: 'center' }}>
                         {labelDiv}
                         {btnDiv}
                     </div>
@@ -433,7 +441,7 @@ class SpecialWorkbench extends Component {
     /**
      * 智能运维_更新运维数据
      */
-    getOperationData = (pageIndex) =>{
+    getOperationData = (pageIndex) => {
         this.props.dispatch({
             type: pageUrl.getOperationData,
             payload: {},
@@ -443,14 +451,14 @@ class SpecialWorkbench extends Component {
     /**
      * 智能运维_渲染运维历史记录表格
      */
-    renderOperationTable = ()=>{
+    renderOperationTable = () => {
         const columns = [
             {
                 title: '排口名称',
                 dataIndex: 'PointName',
                 render: (text, record) => {
-                    if(record.TaskType===2)
-                        return <div style={{position:'relative'}}>{text}<Tag style={{position:'absolute',top:-10}} color="#faad14">应急</Tag></div>;
+                    if (record.TaskType === 2)
+                        return <div style={{ position: 'relative' }}>{text}<Tag style={{ position: 'absolute', top: -10 }} color="#f50">应急</Tag></div>;
                     return text;
 
                 }
@@ -459,7 +467,7 @@ class SpecialWorkbench extends Component {
                 title: '运维状态',
                 dataIndex: 'ExceptionTypeText',
                 render: (text, record) => {
-                    if(!text)
+                    if (!text)
                         return <Tag color="rgb(76,205,122)">正常</Tag>;
 
                     return (
@@ -477,6 +485,11 @@ class SpecialWorkbench extends Component {
             {
                 title: '运维人',
                 dataIndex: 'OperationName',
+                render: (text, record) => {
+                    if (record.TaskStatus === 2)
+                        return <div style={{ position: 'relative' }}>{text}<Tag style={{marginLeft:7}} color="#faad14">运行中</Tag></div>;
+                    return text;
+                }
             }, {
                 title: '操作',
                 dataIndex: 'opt',
@@ -491,7 +504,7 @@ class SpecialWorkbench extends Component {
 
         return <Table
             columns={columns}
-            dataSource={this.props.operation.tempTableDatas.filter(m=>moment(m.CreateTime).format('YYYY-MM-DD')===this.state.selectedValue.format("YYYY-MM-DD"))}
+            dataSource={this.props.operation.tempTableDatas.filter(m => moment(m.CreateTime).format('YYYY-MM-DD') === this.state.selectedValue.format("YYYY-MM-DD"))}
             size="small"
             pagination={{ pageSize: 5 }}
         />;
@@ -504,20 +517,20 @@ class SpecialWorkbench extends Component {
         let selectValue = value.format('YYYY-MM-DD 00:00:00');
         this.setState({
             // value,
-            defaultDateValue:value,
+            defaultDateValue: value,
             selectedValue: value
         });
-        if(value.format("YYYY-MM")===this.state.selectedValue.format("YYYY-MM")) {
+        if (value.format("YYYY-MM") === this.state.selectedValue.format("YYYY-MM")) {
             return null;
         }
 
-        if(value.format("YYYY-MM")!==moment(this.props.operation.beginTime).format("YYYY-MM")) {
+        if (value.format("YYYY-MM") !== moment(this.props.operation.beginTime).format("YYYY-MM")) {
             this.updateState({
-                operation:{
+                operation: {
                     ...this.props.operation,
                     ...{
-                        beginTime: moment(selectValue).add(-1,'months').format('YYYY-MM-01 00:00:00'),
-                        endTime: moment(selectValue).add(2,'months').format('YYYY-MM-01 00:00:00'),
+                        beginTime: moment(selectValue).add(-1, 'months').format('YYYY-MM-01 00:00:00'),
+                        endTime: moment(selectValue).add(2, 'months').format('YYYY-MM-01 00:00:00'),
                     }
                 }
             });
@@ -528,19 +541,19 @@ class SpecialWorkbench extends Component {
     /**
      * 智能运维_日历表插件基础渲染
      */
-    renderCalendar = () =><Calendar value={this.state.defaultDateValue} fullscreen={false} onSelect={this.onCalendarSelect} dateCellRender={this.dateCellRender} monthCellRender={monthCellRender} />
+    renderCalendar = () => <Calendar value={this.state.defaultDateValue} fullscreen={false} onSelect={this.onCalendarSelect} dateCellRender={this.dateCellRender} monthCellRender={monthCellRender} />
 
     /**
      * 智能运维_日历表插件渲染任务数据
      */
-    dateCellRender = (value) =>{
-        let listData=[];
-        let thisData=this.props.operation.tempTableDatas.filter(m=>moment(m.CreateTime).format('YYYY-MM-DD')===value.format("YYYY-MM-DD"));
-        if(thisData&&thisData.length>0) {
-            let ExceptionTypeText=thisData.filter(m=>m.ExceptionTypeText!=="");
-            if(ExceptionTypeText&&ExceptionTypeText.length>0) {
+    dateCellRender = (value) => {
+        let listData = [];
+        let thisData = this.props.operation.tempTableDatas.filter(m => moment(m.CreateTime).format('YYYY-MM-DD') === value.format("YYYY-MM-DD"));
+        if (thisData && thisData.length > 0) {
+            let ExceptionTypeText = thisData.filter(m => m.ExceptionTypeText !== "");
+            if (ExceptionTypeText && ExceptionTypeText.length > 0) {
                 listData = [{ type: 'warning', content: '' }];
-            }else {
+            } else {
                 listData = [{ type: 'success', content: '' }];
             }
         }
@@ -562,38 +575,38 @@ class SpecialWorkbench extends Component {
      * 智能质控_渲染图表
      */
     getOption = (type) => {
-        const {model}=this.props.rateStatistics;
-        let networkeRate=(parseFloat(model.NetworkeRate) * 100).toFixed(2);
-        let runningRate=(parseFloat(model.RunningRate) * 100).toFixed(2);
-        let transmissionEffectiveRate=(parseFloat(model.TransmissionEffectiveRate) * 100).toFixed(2);
+        const { model } = this.props.rateStatistics;
+        let networkeRate = (parseFloat(model.NetworkeRate) * 100).toFixed(2);
+        let runningRate = (parseFloat(model.RunningRate) * 100).toFixed(2);
+        let transmissionEffectiveRate = (parseFloat(model.TransmissionEffectiveRate) * 100).toFixed(2);
 
-        let legendData=[];
-        let color=[];
-        let seriesName='';
-        let seriesData=[];
-        if(type===1) {
-            legendData=['正常','离线'];
-            color=['rgb(245,68,66)','rgb(160,6,1)'];
-            seriesName='实时联网率';
-            seriesData=[//(parseFloat(model.NetworkeRate) * 100).toFixed(2)
-                {value:networkeRate, name:'正常'},
-                {value:100-networkeRate, name:'离线'}
+        let legendData = [];
+        let color = [];
+        let seriesName = '';
+        let seriesData = [];
+        if (type === 1) {
+            legendData = ['正常', '离线'];
+            color = ['rgb(245,68,66)', 'rgb(160,6,1)'];
+            seriesName = '实时联网率';
+            seriesData = [//(parseFloat(model.NetworkeRate) * 100).toFixed(2)
+                { value: networkeRate, name: '正常' },
+                { value: 100 - networkeRate, name: '离线' }
             ];
-        }else if(type===2) {
-            legendData=['达标','未达标'];
-            color=['rgb(73,226,124)','rgb(48,155,86)'];
-            seriesName='设备运转率';
-            seriesData=[
-                {value:runningRate, name:'达标'},
-                {value:(100-runningRate).toFixed(2), name:'未达标'}
+        } else if (type === 2) {
+            legendData = ['达标', '未达标'];
+            color = ['rgb(73,226,124)', 'rgb(48,155,86)'];
+            seriesName = '设备运转率';
+            seriesData = [
+                { value: runningRate, name: '达标' },
+                { value: (100 - runningRate).toFixed(2), name: '未达标' }
             ];
-        }else {
-            legendData=['达标','未达标'];
-            color=['rgb(245,68,66)','rgb(160,6,1)'];
-            seriesName='传输有效率';
-            seriesData=[
-                {value:transmissionEffectiveRate, name:'达标'},
-                {value:(100-transmissionEffectiveRate).toFixed(2), name:'未达标'}
+        } else {
+            legendData = ['达标', '未达标'];
+            color = ['rgb(245,68,66)', 'rgb(160,6,1)'];
+            seriesName = '传输有效率';
+            seriesData = [
+                { value: transmissionEffectiveRate, name: '达标' },
+                { value: (100 - transmissionEffectiveRate).toFixed(2), name: '未达标' }
             ];
         }
         let option = {
@@ -605,29 +618,29 @@ class SpecialWorkbench extends Component {
             legend: {
                 orient: 'vertical',
                 x: 'left',
-                data:legendData
+                data: legendData
             },
             series: [
                 {
-                    name:seriesName,
-                    type:'pie',
+                    name: seriesName,
+                    type: 'pie',
                     radius: ['50%', '70%'],
                     avoidLabelOverlap: false,
 
-                    itemStyle : {
-                        normal : {
-                            label : {
+                    itemStyle: {
+                        normal: {
+                            label: {
                                 // formatter : function (params){
                                 //     return params.value + '% <br/>详情情况';
                                 // },
                                 formatter: "{b}: {c}%",
                                 textStyle: {
-                                    baseline : 'top'
+                                    baseline: 'top'
                                 }
                             }
                         },
                     },
-                    data:seriesData
+                    data: seriesData
                 }
             ]
         };
@@ -637,13 +650,13 @@ class SpecialWorkbench extends Component {
     /**
      * 智能运维_日期面板改变事件(TODO:后续)
      */
-    onPanelChange = (value, mode)=>{
+    onPanelChange = (value, mode) => {
     }
 
     /**
      * 智能质控_渲染排口联网率表格
      */
-    renderNetWorkingRateTable = () =>{
+    renderNetWorkingRateTable = () => {
         const columns = [
             {
                 title: '排口名称',
@@ -653,20 +666,20 @@ class SpecialWorkbench extends Component {
                 title: '联网率',
                 dataIndex: 'RateValue',
                 render: (text, record) => {
-                    if(text===100)
-                        return `${(parseFloat(text) * 100).toFixed(2) }%`;
+                    if (text === 100)
+                        return `${(parseFloat(text) * 100).toFixed(2)}%`;
                     // return <Tag color="rgb(244,6,94)">离线</Tag>;
-                    return <span style={{color:'red'}}>离线</span>;
+                    return <span style={{ color: 'red' }}>离线</span>;
                 }
             }];
 
-        return <Table loading={this.props.loadingNetworkeRate} columns={columns} dataSource={this.props.networkeRateList.tableDatas.slice(0,3)} size="small" pagination={false} />;
+        return <Table loading={this.props.loadingNetworkeRate} columns={columns} dataSource={this.props.networkeRateList.tableDatas.slice(0, 3)} size="small" pagination={false} />;
     }
 
     /**
      * 智能质控_渲染排口设备运转率表格
      */
-    renderEquipmentoperatingRateTable = () =>{
+    renderEquipmentoperatingRateTable = () => {
         const columns = [
             {
                 title: '排口名称',
@@ -675,16 +688,16 @@ class SpecialWorkbench extends Component {
             {
                 title: '设备运转率',
                 dataIndex: 'RunningRate',
-                render: (text, record) => `${(parseFloat(text) * 100).toFixed(2) }%`
+                render: (text, record) => `${(parseFloat(text) * 100).toFixed(2)}%`
             }];
 
-        return <Table loading={this.props.loadingEquipmentoperatingRate} columns={columns} dataSource={this.props.equipmentoperatingRateTableDatas.slice(0,3)} size="small" pagination={false} />;
+        return <Table loading={this.props.loadingEquipmentoperatingRate} columns={columns} dataSource={this.props.equipmentoperatingRateTableDatas.slice(0, 3)} size="small" pagination={false} />;
     }
 
     /**
      * 智能质控_渲染排口传输有效率表格
      */
-    renderTransmissionefficiencyRateTable = () =>{
+    renderTransmissionefficiencyRateTable = () => {
         const columns = [
             {
                 title: '排口名称',
@@ -693,34 +706,34 @@ class SpecialWorkbench extends Component {
             {
                 title: '传输有效率',
                 dataIndex: 'TransmissionEffectiveRate',
-                render: (text, record) => `${(parseFloat(text) * 100).toFixed(2) }%`
+                render: (text, record) => `${(parseFloat(text) * 100).toFixed(2)}%`
             }];
 
-        return <Table loading={this.props.loadingTransmissionefficiencyRate} columns={columns} dataSource={this.props.transmissionefficiencyRateTableDatas.slice(0,3)} size="small" pagination={false} />;
+        return <Table loading={this.props.loadingTransmissionefficiencyRate} columns={columns} dataSource={this.props.transmissionefficiencyRateTableDatas.slice(0, 3)} size="small" pagination={false} />;
     }
 
     /**
      * 智能监控_渲染当小时预警数据列表
      */
-    renderHourDataOverWarningList = ()=>{
+    renderHourDataOverWarningList = () => {
         const listData = [];
 
-        this.props.hourDataOverWarningList.tableDatas.map((items)=>{
+        this.props.hourDataOverWarningList.tableDatas.map((items) => {
             //判断报警是否超过4小时
             listData.push({
-                title:`${items.PointName}`,
-                description:(
+                title: `${items.PointName}`,
+                description: (
                     <div>
                         {
                             items.OverWarnings.map(item => (
                                 <div>
-                                    <div className={styles.warningsData} onClick={(e)=>this.showModal(items.PointName,items.DGIMNs,item.PollutantCode,item.PollutantName,item.SuggestValue)}>
+                                    <div className={styles.warningsData} onClick={(e) => this.showModal(items.PointName, items.DGIMNs, item.PollutantCode, item.PollutantName, item.SuggestValue)}>
                                         {item.PollutantName}
-                                        <Divider type="vertical" style={{backgroundColor:'#b3b3b3'}} />
-                                    超标预警值为{item.AlarmValue}ug/m3
-                                        <Divider type="vertical" style={{backgroundColor:'#b3b3b3'}} />
-                                    建议浓度为{item.SuggestValue}ug/m3
-                                        <span style={{float:'right'}}>{item.AlarmOverTime}</span>
+                                        <Divider type="vertical" style={{ backgroundColor: '#b3b3b3' }} />
+                                        超标预警值为{item.AlarmValue}ug/m3
+                                        <Divider type="vertical" style={{ backgroundColor: '#b3b3b3' }} />
+                                        建议浓度为{item.SuggestValue}ug/m3
+                                        <span style={{ float: 'right' }}>{item.AlarmOverTime}</span>
                                     </div>
                                 </div>
 
@@ -754,22 +767,22 @@ class SpecialWorkbench extends Component {
     /**
      * 智能监控_渲染数据超标数据列表
      */
-    renderAllPointOverDataList = ()=>{
+    renderAllPointOverDataList = () => {
         const listData = [];
-        this.props.allPointOverDataList.tableDatas.map((item)=>{
+        this.props.allPointOverDataList.tableDatas.map((item) => {
             //判断报警是否超过4小时
             listData.push({
-                title:`${item.pointName}`,
-                description:(
+                title: `${item.pointName}`,
+                description: (
                     <div>
                         {
                             item.pollutantList.map(item => (
                                 <div>
-                                    <div style={{backgroundColor:'rgb(249,249,249)',padding:10,marginBottom:5}}>
+                                    <div style={{ backgroundColor: 'rgb(249,249,249)', padding: 10, marginBottom: 5 }}>
                                         {item.pollutantName} 超标:{item.Count}次
-                                        <Divider type="vertical" style={{backgroundColor:'#b3b3b3'}} />
+                                        <Divider type="vertical" style={{ backgroundColor: '#b3b3b3' }} />
                                         超标倍数:{item.MinMultiple}-{item.MaxMultiple}
-                                        <span style={{float:'right'}}>{item.time}</span>
+                                        <span style={{ float: 'right' }}>{item.time}</span>
                                     </div>
                                 </div>
                             ))
@@ -803,15 +816,15 @@ class SpecialWorkbench extends Component {
     /**
      * 智能监控_地图点位渲染
      */
-    getMarkers =()=>{
-        let markers=[];
-        this.props.overPointList.tableDatas.map((item)=>{
+    getMarkers = () => {
+        let markers = [];
+        this.props.overPointList.tableDatas.map((item) => {
             let position = {
-                longitude:item.Longitude,
-                latitude:item.Latitude,
-                PointName:item.PointName
+                longitude: item.Longitude,
+                latitude: item.Latitude,
+                PointName: item.PointName
             };
-            markers.push({position});
+            markers.push({ position });
 
         });
         return markers;
@@ -820,18 +833,17 @@ class SpecialWorkbench extends Component {
     /**
      * 智能监控_地图点位渲染样式
      */
-    renderMarkerLayout(extData){
-        return <div style={{position:'absolute'}}><div style={MarkerLayoutStyle}>{extData.position.PointName}</div><img style={{width:15}} src="/gisover.png" /></div>;
+    renderMarkerLayout(extData) {
+        return <div style={{ position: 'absolute' }}><div style={MarkerLayoutStyle}>{extData.position.PointName}</div><img style={{ width: 15 }} src="/gisover.png" /></div>;
     }
 
- 
-         
-        // if(this.props.overPointList.tableDatas.length>0) {
-        //     let position = {
-        //         longitude:this.props.overPointList.tableDatas[0].Longitude,
-        //         latitude:this.props.overPointList.tableDatas[0].Latitude,
-        //         PointName:this.props.overPointList.tableDatas[0].PointName
-        //     };
+
+    // if(this.props.overPointList.tableDatas.length>0) {
+    //     let position = {
+    //         longitude:this.props.overPointList.tableDatas[0].Longitude,
+    //         latitude:this.props.overPointList.tableDatas[0].Latitude,
+    //         PointName:this.props.overPointList.tableDatas[0].PointName
+    //     };
 
     //     return position;
     // }
@@ -840,34 +852,34 @@ class SpecialWorkbench extends Component {
     /**
      * 智能监控_渲染排口所有状态
      */
-    renderStatisticsPointStatus = () =>{
-        const {model}=this.props.statisticsPointStatus;
+    renderStatisticsPointStatus = () => {
+        const { model } = this.props.statisticsPointStatus;
 
-        return <span style={{float:"right",marginRight:'5%'}}>
-            <span style={{marginRight:20}}>排放口:<span style={{marginLeft:5,color:'rgb(72,145,255)'}}>{model.PointTotal}</span></span>
-            <span style={{marginRight:20}}>运行:<span style={{marginLeft:5,color:'rgb(93,192,94)'}}>{model.RuningNum}</span></span>
-            <span style={{marginRight:20}}>离线:<span style={{marginLeft:5,color:'rgb(244,5,4)'}}>{model.OffLine}</span></span>
-            <span style={{marginRight:20}}>异常:<span style={{marginLeft:5,color:'gold'}}>{model.ExceptionNum}</span></span>
-            <span style={{marginRight:20}}>关停:<span style={{marginLeft:5,color:'rgb(208,145,14)'}}>{model.StopNum}</span></span>
-               </span>;
+        return <span style={{ float: "right", marginRight: '5%' }}>
+            <span style={{ marginRight: 20 }}>排放口:<span style={{ marginLeft: 5, color: 'rgb(72,145,255)' }}>{model.PointTotal}</span></span>
+            <span style={{ marginRight: 20 }}>运行:<span style={{ marginLeft: 5, color: 'rgb(93,192,94)' }}>{model.RuningNum}</span></span>
+            <span style={{ marginRight: 20 }}>离线:<span style={{ marginLeft: 5, color: 'rgb(244,5,4)' }}>{model.OffLine}</span></span>
+            <span style={{ marginRight: 20 }}>异常:<span style={{ marginLeft: 5, color: 'gold' }}>{model.ExceptionNum}</span></span>
+            <span style={{ marginRight: 20 }}>关停:<span style={{ marginLeft: 5, color: 'rgb(208,145,14)' }}>{model.StopNum}</span></span>
+        </span>;
     }
 
     //如果是数据列表则没有选择污染物，而是展示全部污染物
-    getPollutantSelect =()=>(<PollutantSelect
+    getPollutantSelect = () => (<PollutantSelect
         optionDatas={this.props.pollutantList}
         defaultValue={this.props.warningDetailsDatas.selectedPollutantCode}
-        style={{width: 150,marginRight:10}}
+        style={{ width: 150, marginRight: 10 }}
         onChange={this.handlePollutantChange}
-    /> )
+    />)
 
     // 污染物
-    handlePollutantChange=(value, selectedOptions) => {
+    handlePollutantChange = (value, selectedOptions) => {
         this.updateState({
-            warningDetailsDatas:{
+            warningDetailsDatas: {
                 ...this.props.warningDetailsDatas,
                 ...{
-                    selectedPollutantCode:value,
-                    selectedPollutantName:selectedOptions.props.children
+                    selectedPollutantCode: value,
+                    selectedPollutantName: selectedOptions.props.children
                 }
             }
         });
@@ -876,97 +888,96 @@ class SpecialWorkbench extends Component {
     /**
      * 智能监控_渲染预警详情图表数据
      */
-    getWarningChartOption =() =>{
-        let {chartDatas,selectedPollutantCode,selectedPollutantName}=this.props.warningDetailsDatas;
-        const  {pollutantList}=this.props;
-        let xAxis=[];
-        let seriesData=[];
-       
+    getWarningChartOption = () => {
+        let { chartDatas, selectedPollutantCode, selectedPollutantName } = this.props.warningDetailsDatas;
+        const { pollutantList } = this.props;
+        let xAxis = [];
+        let seriesData = [];
+
         chartDatas.map((item) => {
             xAxis.push(`${moment(item.MonitorTime).format('HH:mm:ss')}`);
             seriesData.push(item[selectedPollutantCode]);
         });
-        let suugestValue=this.state.SuggestValue;
+        let suugestValue = this.state.SuggestValue;
         debugger;
-        
+
         // if(chartDatas.length>0)
         // {
         //     suugestValue=chartDatas[0][selectedPollutantCode+'_SuggestValue'];
         // }
         //当前选中的污染物的信息
-        const selectPllutantInfo=pollutantList.find((value, index, arr) => {
-            return value.pollutantCode == selectedPollutantCode;
-           })
-        let legenddata=[];
-        let pollutantData=[];
+        const selectPllutantInfo = pollutantList.find((value, index, arr) => value.pollutantCode == selectedPollutantCode);
+        let legenddata = [];
+        let pollutantData = [];
         legenddata.push(selectedPollutantName);
-        if(selectPllutantInfo && selectPllutantInfo.alarmType)
-        {
-            legenddata.push('标准值')
-             switch (selectPllutantInfo.alarmType)
-             {
-                 //上限报警
+        if (selectPllutantInfo && selectPllutantInfo.alarmType) {
+            legenddata.push('标准值');
+            switch (selectPllutantInfo.alarmType) {
+                //上限报警
                 case 1:
-                pollutantData= [
-                    {
-                        yAxis: selectPllutantInfo.upperValue,
-                        symbol: 'none',
-                        label: {
-                            normal: {
-                                position: 'end',
-                                formatter: selectPllutantInfo.upperValue
+                    pollutantData = [
+                        {
+                            yAxis: selectPllutantInfo.upperValue,
+                            symbol: 'none',
+                            label: {
+                                normal: {
+                                    position: 'end',
+                                    formatter: selectPllutantInfo.upperValue
+                                }
                             }
-                        }}
-                ]
-                break;
-                      //下限报警
-                      case 2:
-                      pollutantData= [
-                          {
-                              yAxis: selectPllutantInfo.lowerValue,
-                              symbol: 'none',
-                              label: {
-                                  normal: {
-                                      position: 'end',
-                                      formatter: selectPllutantInfo.lowerValue
-                                  }
-                              }}
-                      ]
-                      break;
-                              //区间报警
-                              case 3:
-                              pollutantData= [
-                                  {
-                                      yAxis: selectPllutantInfo.upperValue,
-                                      symbol: 'none',
-                                      label: {
-                                          normal: {
-                                              position: 'end',
-                                              formatter: selectPllutantInfo.upperValue
-                                          }
-                                      }},
-                                      {
-                                        yAxis: selectPllutantInfo.lowerValue,
-                                        symbol: 'none',
-                                        label: {
-                                            normal: {
-                                                position: 'end',
-                                                formatter: selectPllutantInfo.lowerValue
-                                            }
-                                        }}
-                              ]
-                              break;
+                        }
+                    ];
+                    break;
+                //下限报警
+                case 2:
+                    pollutantData = [
+                        {
+                            yAxis: selectPllutantInfo.lowerValue,
+                            symbol: 'none',
+                            label: {
+                                normal: {
+                                    position: 'end',
+                                    formatter: selectPllutantInfo.lowerValue
+                                }
+                            }
+                        }
+                    ];
+                    break;
+                //区间报警
+                case 3:
+                    pollutantData = [
+                        {
+                            yAxis: selectPllutantInfo.upperValue,
+                            symbol: 'none',
+                            label: {
+                                normal: {
+                                    position: 'end',
+                                    formatter: selectPllutantInfo.upperValue
+                                }
+                            }
+                        },
+                        {
+                            yAxis: selectPllutantInfo.lowerValue,
+                            symbol: 'none',
+                            label: {
+                                normal: {
+                                    position: 'end',
+                                    formatter: selectPllutantInfo.lowerValue
+                                }
+                            }
+                        }
+                    ];
+                    break;
             }
         }
 
-        let suggestData=null;
-      
-        
-        if(suugestValue && suugestValue!="-")
-        {
-          
-            legenddata.push('建议浓度')
-            suggestData= [
+        let suggestData = null;
+
+
+        if (suugestValue && suugestValue != "-") {
+
+            legenddata.push('建议浓度');
+            suggestData = [
                 {
                     yAxis: suugestValue,
                     symbol: 'none',
@@ -975,22 +986,23 @@ class SpecialWorkbench extends Component {
                             position: 'end',
                             formatter: suugestValue
                         }
-                    }}
-            ]
+                    }
+                }
+            ];
         }
         let option = {
-            color:['#37b5e4','#ff9d45','#4fde48'],
+            color: ['#37b5e4', '#ff9d45', '#4fde48'],
             tooltip: {
                 trigger: 'axis'
             },
             legend: {
                 data: legenddata
             },
-            xAxis:  {
+            xAxis: {
                 type: 'category',
                 boundaryGap: false,
                 data: xAxis,
-                name:'监测时间'
+                name: '监测时间'
             },
             yAxis: {
                 type: 'value',
@@ -999,38 +1011,38 @@ class SpecialWorkbench extends Component {
                     formatter: '{value}'
                 }
             },
-            grid:{
-                left:'5%',
-                right:'8%'
+            grid: {
+                left: '5%',
+                right: '8%'
             },
             series: [
                 {
-                    name:selectedPollutantName,
-                    type:'line',
-                    data:seriesData,
+                    name: selectedPollutantName,
+                    type: 'line',
+                    data: seriesData,
                 },
                 {
-                    name:'标准值',
-                    type:'line',
-                    data:[],
-                    markLine : {
-                        data : pollutantData
+                    name: '标准值',
+                    type: 'line',
+                    data: [],
+                    markLine: {
+                        data: pollutantData
                     }
                 },
                 {
-                    name:'建议浓度',
-                    type:'line',
-                    data:[],
-                    markLine : {
-                        data : suggestData,
-                        // itemStyle : { 
-                        //     normal: { 
-                        //         lineStyle: { 
-                        //             color:'#FFC0CB', 
-                        //         }, 
-                        //     } 
-                           
-                        // }, 
+                    name: '建议浓度',
+                    type: 'line',
+                    data: [],
+                    markLine: {
+                        data: suggestData,
+                        // itemStyle : {
+                        //     normal: {
+                        //         lineStyle: {
+                        //             color:'#FFC0CB',
+                        //         },
+                        //     }
+
+                        // },
                     }
                 }
             ]
@@ -1040,21 +1052,23 @@ class SpecialWorkbench extends Component {
         return <ReactEcharts
             loadingOption={this.props.loadingRealTimeWarningDatas}
             option={option}
-            style={{height: 'calc(100vh - 400px)', width: '100%'}}
+            style={{ height: 'calc(100vh - 400px)', width: '100%' }}
             className="echarts-for-echarts"
             theme="my_theme"
         />;
 
     }
 
-    renderWarningDetailsCharts = ()=>{
+    renderWarningDetailsCharts = () => {
         if (this.props.loadingRealTimeWarningDatas) {
             return (<Spin
-                style={{ width: '100%',
+                style={{
+                    width: '100%',
                     height: 'calc(100vh/2)',
                     display: 'flex',
                     alignItems: 'center',
-                    justifyContent: 'center' }}
+                    justifyContent: 'center'
+                }}
                 size="large"
             />);
         }
@@ -1064,38 +1078,38 @@ class SpecialWorkbench extends Component {
     /**
      * 智能监控_渲染预警详情表格数据
      */
-    renderWarningDetailsTable = ()=>{
-        let { selectedPollutantCode,selectedPollutantName,chartDatas } = this.props.warningDetailsDatas;
+    renderWarningDetailsTable = () => {
+        let { selectedPollutantCode, selectedPollutantName, chartDatas } = this.props.warningDetailsDatas;
 
         const columns = [
             {
                 title: '监测时间',
                 dataIndex: 'MonitorTime',
-                width:'20%',
-                render: (text, record) => `${moment(text).format('HH:mm:ss') }`,
+                width: '20%',
+                render: (text, record) => `${moment(text).format('HH:mm:ss')}`,
             },
             {
                 title: '污染物',
                 dataIndex: 'none',
-                render: (text, record) => `${selectedPollutantName }`,
-                width:'20%'
+                render: (text, record) => `${selectedPollutantName}`,
+                width: '20%'
             },
             {
                 title: '监测值',
                 dataIndex: selectedPollutantCode,
-                width:'20%',
+                width: '20%',
                 align: 'center'
             },
             {
                 title: '标准值',
                 dataIndex: `${selectedPollutantCode}_StandardValue`,
-                width:'20%',
+                width: '20%',
                 align: 'center'
             },
             {
                 title: '建议浓度',
                 dataIndex: `${selectedPollutantCode}_SuggestValue`,
-                width:'20%',
+                width: '20%',
                 align: 'center'
             }
         ];
@@ -1123,16 +1137,16 @@ class SpecialWorkbench extends Component {
     /**
      * 智能监控_显示预警详情弹窗口
      */
-    showModal = (name,mn,pollutantCode,pollutantName,SuggestValue)=>{
+    showModal = (name, mn, pollutantCode, pollutantName, SuggestValue) => {
 
         this.updateState({
-            SuggestValue:SuggestValue,
-            warningDetailsDatas:{
+            SuggestValue: SuggestValue,
+            warningDetailsDatas: {
                 ...this.props.warningDetailsDatas,
                 ...{
                     DGIMNs: mn,
-                    selectedPollutantCode:pollutantCode,
-                    selectedPollutantName:pollutantName
+                    selectedPollutantCode: pollutantCode,
+                    selectedPollutantName: pollutantName
                 }
             }
         });
@@ -1140,23 +1154,22 @@ class SpecialWorkbench extends Component {
         this.getPollutantList(mn);
 
         this.setState({
-            SuggestValue:SuggestValue,
+            SuggestValue: SuggestValue,
             visibleModal: true,
-            clickThisPointName:name,
+            clickThisPointName: name,
         });
     }
 
-    handleCancel =()=>{
+    handleCancel = () => {
         this.setState({
             visibleModal: false,
         });
     }
 
 
-
     render() {
-   
-      
+
+
         return (
             <div
                 style={{
@@ -1179,8 +1192,8 @@ class SpecialWorkbench extends Component {
                                 bordered={false}
                                 extra={<a href="#">更多>></a>}
                             >
-                                <div id="app" style={{height:400}}>
-                               {this.getMap()}
+                                <div id="app" style={{ height: 400 }}>
+                                    {this.getMap()}
                                 </div>
                             </Card>
                         </Col>
@@ -1190,10 +1203,10 @@ class SpecialWorkbench extends Component {
                                 bordered={false}
                                 loading={this.props.loadingDataOverWarning}
                             >
-                                <Card.Grid style={{width:'100%',height:505,paddingTop:15}}>
+                                <Card.Grid style={{ width: '100%', height: 505, paddingTop: 15 }}>
                                     <Tabs>
                                         <TabPane tab="实时预警" key="1">
-                                            <div style={{height:400,overflow:'auto'}}>
+                                            <div style={{ height: 400, overflow: 'auto' }}>
                                                 {
                                                     this.renderHourDataOverWarningList()
                                                 }
@@ -1201,7 +1214,7 @@ class SpecialWorkbench extends Component {
 
                                         </TabPane>
                                         <TabPane tab="超标汇总" key="2">
-                                            <div style={{height:400,overflow:'auto'}}>
+                                            <div style={{ height: 400, overflow: 'auto' }}>
                                                 {
                                                     this.renderAllPointOverDataList()
                                                 }
@@ -1229,9 +1242,9 @@ class SpecialWorkbench extends Component {
                                             <ReactEcharts
                                                 loadingOption={this.props.loadingRateStatistics}
                                                 option={this.getOption(1)}
-                                                style={{height: '150px', width: '100%'}}
+                                                style={{ height: '150px', width: '100%' }}
                                                 className="echarts-for-echarts"
-                                                onEvents={{'click': this.onChartClick}}
+                                                onEvents={{ 'click': this.onChartClick }}
                                                 theme="my_theme"
                                             />
 
@@ -1248,7 +1261,7 @@ class SpecialWorkbench extends Component {
                                 <Col span={24}>
                                     <Card
                                         title="十月设备运转率"
-                                        style={{marginTop:10}}
+                                        style={{ marginTop: 10 }}
                                         extra={<a
                                             href="/qualitycontrol/equipmentoperatingrate"
                                         >更多>>
@@ -1260,9 +1273,9 @@ class SpecialWorkbench extends Component {
                                             <ReactEcharts
                                                 loadingOption={this.props.loadingRateStatistics}
                                                 option={this.getOption(2)}
-                                                style={{height: '150px', width: '100%'}}
+                                                style={{ height: '150px', width: '100%' }}
                                                 className="echarts-for-echarts"
-                                                onEvents={{'click': this.onChartClick}}
+                                                onEvents={{ 'click': this.onChartClick }}
                                                 theme="my_theme"
                                             />
 
@@ -1279,7 +1292,7 @@ class SpecialWorkbench extends Component {
                                 <Col span={24}>
                                     <Card
                                         title="十月传输有效率"
-                                        style={{marginTop:10}}
+                                        style={{ marginTop: 10 }}
                                         extra={<a
                                             href="/qualitycontrol/transmissionefficiency"
                                         >更多>>
@@ -1290,9 +1303,9 @@ class SpecialWorkbench extends Component {
 
                                             <ReactEcharts
                                                 option={this.getOption(3)}
-                                                style={{height: '150px', width: '100%'}}
+                                                style={{ height: '150px', width: '100%' }}
                                                 className="echarts-for-echarts"
-                                                onEvents={{'click': this.onChartClick}}
+                                                onEvents={{ 'click': this.onChartClick }}
                                                 theme="my_theme"
                                             />
 
@@ -1309,13 +1322,13 @@ class SpecialWorkbench extends Component {
                         <Col xl={12} lg={24} md={24} sm={24} xs={24}>
                             <Card
                                 title="异常报警"
-                                style={{ marginBottom: 10}}
+                                style={{ marginBottom: 10 }}
                                 bordered={false}
                                 // extra={<a href="#">更多>></a>}
                                 className={styles.exceptionAlarm}
                                 loading={this.props.loadingExceptionAlarm}
                             >
-                                <Card.Grid style={{width:'100%',height:736}} key="1">
+                                <Card.Grid style={{ width: '100%', height: 736 }} key="1">
                                     {this.renderExceptionAlarmList()}
                                 </Card.Grid>
                             </Card>
@@ -1329,9 +1342,9 @@ class SpecialWorkbench extends Component {
                     <Row gutter={24}>
                         <Col xl={8} lg={24} md={24} sm={24} xs={24} style={{ marginBottom: 10 }}>
                             <Card style={{}}>
-                                <Card.Grid style={{width:'100%'}}>
+                                <Card.Grid style={{ width: '100%' }}>
                                     <div className={styles.calendarDiv}>
-                                        <div style={{textAlign: 'left', marginBottom: -35}}>
+                                        <div style={{ textAlign: 'left', marginBottom: -35 }}>
                                             <div style={{
                                                 width: 6,
                                                 height: 6,
@@ -1341,7 +1354,7 @@ class SpecialWorkbench extends Component {
                                                 cursor: 'pointer',
                                                 marginRight: 3
                                             }}
-                                            /> <span style={{cursor: 'pointer'}}> 异常任务</span>
+                                            /> <span style={{ cursor: 'pointer' }}> 异常任务</span>
                                             <div style={{
                                                 width: 6,
                                                 height: 6,
@@ -1352,7 +1365,7 @@ class SpecialWorkbench extends Component {
                                                 marginLeft: 20,
                                                 marginRight: 3
                                             }}
-                                            /><span style={{cursor: 'pointer'}}> 正常任务</span>
+                                            /><span style={{ cursor: 'pointer' }}> 正常任务</span>
                                         </div>
                                         {
                                             this.renderCalendar()
@@ -1365,10 +1378,10 @@ class SpecialWorkbench extends Component {
                             <Card
                                 loading={this.props.loadingOperationData}
                                 title={`运维记录 - ${this.state.selectedValue.format('YYYY-MM-DD')} `}
-                                style={{ }}
-                                // extra={<Pagination size="small" total={50} />}
+                                style={{}}
+                            // extra={<Pagination size="small" total={50} />}
                             >
-                                <Card.Grid style={{width:'100%',height:297,padding: 15}}>
+                                <Card.Grid style={{ width: '100%', height: 297, padding: 15 }}>
                                     {
                                         this.renderOperationTable()
                                     }
@@ -1393,7 +1406,7 @@ class SpecialWorkbench extends Component {
                     <Tabs
                         defaultActiveKey="1"
                         tabPosition="left"
-                        style={{height: 'calc(100vh - 400px)'}}
+                        style={{ height: 'calc(100vh - 400px)' }}
                         className={styles.warningDetailsModal}
                     >
                         <TabPane tab="图表分析" key="1">
