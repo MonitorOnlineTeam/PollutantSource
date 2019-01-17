@@ -30,7 +30,6 @@ class AppCompleteExtraction extends Component {
     }
 
     onChange = () => {
-        debugger
         this.props.dispatch({
             type: 'task/GetPatrolRecordListPC',
             payload: {
