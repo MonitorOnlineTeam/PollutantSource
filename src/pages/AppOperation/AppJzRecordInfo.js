@@ -22,7 +22,8 @@ export default class AppJzRecordInfo extends Component {
         this.props.dispatch({
             type: 'task/GetJzRecord',
             payload: {
-                TaskID: this.props.match.params.TaskID
+                TaskID: this.props.match.params.TaskID,
+                TypeID: this.props.match.params.TypeID,
             }
         });
     }
@@ -143,7 +144,7 @@ export default class AppJzRecordInfo extends Component {
     }
 
     render() {
-        const SCREEN_HEIGHT = document.querySelector('body').offsetHeight - 250;
+        const SCREEN_HEIGHT = document.querySelector('body').offsetHeight - 150;
         const JzRecord = this.props.JzRecord;
         let EnterpriseName = null;
         let PointPosition = null;

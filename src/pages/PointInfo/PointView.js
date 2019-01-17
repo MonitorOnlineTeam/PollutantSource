@@ -71,6 +71,7 @@ export default class pointview extends Component {
             GaseousList:[],
             SmokeList:[],
             PMList:[],
+            PollutantType:this.props.match.params.PollutantType===1?"none":"block",
         };
     }
     componentWillMount() {
@@ -483,21 +484,21 @@ export default class pointview extends Component {
                         <DescriptionList size="small" col="4" gutter="10" style={{marginLeft:10}} >
                             <Description term="排口编号">{this.state.DGIMN}</Description>
                             <Description term="排口名称" >{this.state.pointName}</Description>
-                            <Description term="排放类型">{this.state.OutputType}</Description>
-                            <Description term="是否烧结">{this.state.IsSjName}</Description>
+                            <Description term="排放类型" style={{display:this.state.PollutantType}}>{this.state.OutputType}</Description>
+                            <Description term="是否烧结" style={{display:this.state.PollutantType}}>{this.state.IsSjName}</Description>
                             <Description term="排口类型">{this.state.PointType}</Description>
                             <Description term="污染物类型">{this.state.pollutantTypeName}</Description>
                             <Description term="负责人">{this.state.linkman}</Description>
                             <Description term="负责人电话">{this.state.mobilePhone}</Description>
-                            <Description term="排口直径">{this.state.OutputDiameter}</Description>
-                            <Description term="排口高度">{this.state.OutputHigh}</Description>
+                            <Description term="排口直径" style={{display:this.state.PollutantType}}>{this.state.OutputDiameter}</Description>
+                            <Description term="排口高度" style={{display:this.state.PollutantType}}>{this.state.OutputHigh}</Description>
                             <Description term="经度">{this.state.longitude}</Description>
                             <Description term="纬度">{this.state.latitude}</Description>
                             <Description term="运维人">{this.state.OperationerName}</Description>
                         </DescriptionList>
                         <Divider />
                         <DescriptionList size="large"  col="1" style={{marginLeft:10}}>
-                            <Description term="排口排放类型" > {this.state.OutPutWhither} </Description>
+                            <Description term="排口排放类型" style={{display:this.state.PollutantType==="none"?"block":"none"}}> {this.state.OutPutWhither} </Description>
                             <Description term="排口地址" > {this.state.Address} </Description>
                         </DescriptionList>
                     </Card.Grid>
@@ -550,7 +551,7 @@ export default class pointview extends Component {
                  </Card>
                </div>
                <div className={this.state.SVisitable?styles.show:styles.hide}>
-                  <Card style={{height:350}}  title={this.Smokeinfo()} extra={'厂商/编号：'+this.state.Smoke.Manufacturer+'/'+this.state.Smoke.ManufacturerCode}> 
+                  <Card style={{height:350}}  title={this.Smokeinfo()}loading={this.props.pointloading} extra={'厂商/编号：'+this.state.Smoke.Manufacturer+'/'+this.state.Smoke.ManufacturerCode}> 
                     <Table
                             //loading={this.props.effects['stopmanagement/getlist']}
                             columns={columns}
@@ -573,7 +574,7 @@ export default class pointview extends Component {
                   </Card>
                </div>
                <div className={this.state.AddVisitable?styles.show:styles.hide}>
-                <Card> 
+                <Card loading={this.props.pointloading}> 
                     <Button type="dashed" block onClick={()=>{
                         this.setState({
                             MSVisitable:true,

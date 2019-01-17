@@ -16,25 +16,25 @@ export default [
         component: '../layouts/BlankLayout',
         routes: [
             /* 维修记录 */
-            { path: '/appoperation/apprepairrecorddetail/:pointcode/:TaskIds', component: './AppOperation/AppRepairRecordDetail' },
+            { path: '/appoperation/apprepairrecorddetail/:TaskID/:TypeID', component: './AppOperation/AppRepairRecordDetail' },
             /* 停机记录 */
-            { path: '/appoperation/appstopcemsinfo/:pointcode/:TaskIds', component: './AppOperation/AppStopCemsInfo' },
+            { path: '/appoperation/appstopcemsinfo/:TaskID/:TypeID', component: './AppOperation/AppStopCemsInfo' },
             /* 易耗品更换记录 */
-            { path: '/appoperation/appconsumablesreplacerecord/:pointcode/:TaskIds', component: './AppOperation/AppConsumablesReplaceRecord' },
+            { path: '/appoperation/appconsumablesreplacerecord/:TaskID/:TypeID', component: './AppOperation/AppConsumablesReplaceRecord' },
             /* 标气更换记录 */
-            { path: '/appoperation/appstandardgasrepalcerecord/:pointcode/:TaskIds', component: './AppOperation/AppStandardGasRepalceRecord' },
+            { path: '/appoperation/appstandardgasrepalcerecord/:TaskID/:TypeID', component: './AppOperation/AppStandardGasRepalceRecord' },
             /* 完全抽取法CEMS巡检记录表 */
-            { path: '/appoperation/appcompleteextraction/:pointcode/:TaskIds', component: './AppOperation/AppCompleteExtraction' },
+            { path: '/appoperation/appcompleteextraction/:TaskID/:TypeID', component: './AppOperation/AppCompleteExtraction' },
             /* 稀释采样法CEMS巡检记录表 */
-            { path: '/appoperation/appdilutionsampling/:pointcode/:TaskIds', component: './AppOperation/AppDilutionSampling' },
+            { path: '/appoperation/appdilutionsampling/:TaskID/:TypeID', component: './AppOperation/AppDilutionSampling' },
             /* 直接测量法CEMS巡检记录表 */
-            { path: '/appoperation/appdirectmeasurement/:pointcode/:TaskIds', component: './AppOperation/AppDirectMeasurement' },
+            { path: '/appoperation/appdirectmeasurement/:TaskID/:TypeID', component: './AppOperation/AppDirectMeasurement' },
             /* CEMS零点量程漂移与校准记录表记录表 */
-            { path: '/appoperation/appjzrecordinfo/:pointcode/:TaskIds', component: './AppOperation/AppJzRecordInfo' },
+            { path: '/appoperation/appjzrecordinfo/:TaskID/:TypeID', component: './AppOperation/AppJzRecordInfo' },
             /* CEMS校验测试记录 */
-            { path: '/appoperation/appbdtestrecord/:pointcode/:TaskIds', component: './AppOperation/AppBdTestRecord' },
+            { path: '/appoperation/appbdtestrecord/:TaskID/:TypeID', component: './AppOperation/AppBdTestRecord' },
             /* CEMS设备异常记录表 */
-            { path: '/appoperation/appdeviceexceptiondetail/:pointcode/:TaskIds', component: './AppOperation/AppDeviceExceptionDetail' },
+            { path: '/appoperation/appdeviceexceptiondetail/:TaskID/:TypeID', component: './AppOperation/AppDeviceExceptionDetail' },
         ],
     },
     // app
@@ -189,9 +189,9 @@ export default [
             { path: '/sysmanage/pointinfo', component: './PointInfo' },
 
             /* 排口信息管理=排口管理 */
-            { path: '/sysmanage/pointdetail/:DGIMN', component: './PointInfo/AddPoint' },
+            { path: '/sysmanage/pointdetail/:DGIMN/:PollutantType/:Add', component: './PointInfo/AddPoint' },
             /* 排口信息管理=排口管理 */
-            { path: '/sysmanage/pointdetail/:DGIMN/:Name', component: './PointInfo/PointView' },
+            { path: '/sysmanage/pointdetail/:DGIMN/:Name/:PollutantType/:Add', component: './PointInfo/PointView' },
             /* 用户基本信息管理 */
             { path: '/sysmanage/userinfo', component: './Userinfo' },
 

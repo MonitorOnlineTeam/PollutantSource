@@ -21,7 +21,7 @@ export default class AppDeviceExceptionDetail extends Component {
             type: 'task/GetDeviceExceptionDetail',
             payload: {
                 TaskID: this.props.match.params.TaskID,
-                TypeID: this.props.match.params.TypeID
+                TypeID: this.props.match.params.TypeID,
             }
         });
         const _this = this;
@@ -31,7 +31,7 @@ export default class AppDeviceExceptionDetail extends Component {
     }
           
     render() {
-        const SCREEN_HEIGHT = document.querySelector('body').offsetHeight - 250;
+        const SCREEN_HEIGHT = document.querySelector('body').offsetHeight - 150;
         const Exception = this.props.ExceptionDetail;
         let PointPosition = null;
         let Record = null;

@@ -35,7 +35,8 @@ export default class AppBdTestRecord extends Component {
         this.props.dispatch({
             type: 'task/GetBdTestRecord',
             payload: {
-                TaskID: this.props.match.params.TaskID
+                TaskID: this.props.match.params.TaskID,
+                TypeID: this.props.match.params.TypeID,
             }
         });
     }
@@ -263,7 +264,7 @@ export default class AppBdTestRecord extends Component {
 
 
     render() {
-        const SCREEN_HEIGHT = document.querySelector('body').offsetHeight - 250;
+        const SCREEN_HEIGHT = document.querySelector('body').offsetHeight - 150;
         const BdRecord = this.props.BdRecord;
         let EnterpriseName = null; //企业名称
         let CemsSupplier = null; //CEMS供应商

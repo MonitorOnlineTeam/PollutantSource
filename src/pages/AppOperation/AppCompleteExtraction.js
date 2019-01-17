@@ -34,7 +34,7 @@ class AppCompleteExtraction extends Component {
             type: 'task/GetPatrolRecordListPC',
             payload: {
                 TaskIds: this.props.match.params.TaskID,
-                TypeIDs: this.props.match.params.TypeID
+                TypeIDs: this.props.match.params.TypeID,
             },
         });
     }
@@ -169,7 +169,7 @@ class AppCompleteExtraction extends Component {
     }
 
     render() {
-        const SCREEN_HEIGHT = document.querySelector('body').offsetHeight - 250;
+        const SCREEN_HEIGHT = document.querySelector('body').offsetHeight - 150;
         const DataLength = this.props.PatrolRecordListPC.length;
         const Repair = DataLength === 0 ? null : this.props.PatrolRecordListPC[0];
         let EnterpriseName = null;
