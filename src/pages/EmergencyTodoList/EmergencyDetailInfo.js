@@ -31,13 +31,7 @@ export default class EmergencyDetailInfo extends Component {
     }
 
     componentDidMount() {
-        this.props.dispatch({
-            type: 'task/GetTaskDetailInfo',
-            payload: {
-                TaskID: this.props.match.params.TaskID,
-                UserID: this.props.match.params.UserID
-            }
-        });
+        this.reloaddata();
     }
 
     handlePreview = (file) => {
@@ -50,6 +44,16 @@ export default class EmergencyDetailInfo extends Component {
     handleCancel=() => {
         this.setState({
             previewVisible: false
+        });
+    }
+
+    reloaddata=()=>{
+        this.props.dispatch({
+            type: 'task/GetTaskDetailInfo',
+            payload: {
+                TaskID: this.props.match.params.TaskID,
+                UserID: this.props.match.params.UserID
+            }
         });
     }
 
@@ -156,14 +160,14 @@ export default class EmergencyDetailInfo extends Component {
         }
 
         //获取撤单按钮
-        getCancelOrderButton=(createtime)=>{
-            if(moment(createtime)>moment(new Date()).add(-7,'day'))
+        getCancelOrderButton=(createtime,TaskStatus)=>{
+            if(moment(createtime)>moment(new Date()).add(-7,'day') && TaskStatus==3)
             {
-                return <Button onClick={this.cdShow}><Icon type="close-circle" />撤单</Button>
+                return <Button onClick={this.cdShow}><Icon type="close-circle" />打回</Button>
             }
             else
             {
-                return <Button disabled ><Icon type="close-circle" />撤单</Button>
+                return <Button disabled ><Icon type="close-circle" />打回</Button>
             }
         }
         cdShow=()=>{
@@ -182,7 +186,9 @@ export default class EmergencyDetailInfo extends Component {
             payload:{
                 taskID: TaskID,
                 userID: this.props.match.params.UserID,
-                revokeReason:this.props.form.getFieldValue('reason')
+                revokeReason:this.props.form.getFieldValue('reason'),
+                reload:()=>this.reloaddata(),
+                close: ()=>this.cdClose()
             }
         })
         }
@@ -212,6 +218,7 @@ export default class EmergencyDetailInfo extends Component {
         let TaskFrom = ''; // 任务来源
         let EmergencyStatusText = ''; // 紧急程度
         let TaskStatusText = ''; // 任务状态
+        let TaskStatus='';//任务状态编码
         let TaskDescription = ''; // 任务描述
         let OperationsUserName = ''; // 运维人
         let CreateTime = ''; // 任务创建时间
@@ -225,6 +232,8 @@ export default class EmergencyDetailInfo extends Component {
         let CompleteTime = null;
         let DGIMN=null;
         const taskInfo = this.props.taskInfo;
+        debugger;
+        console.log(taskInfo);
         if (taskInfo.requstresult == EnumRequstResult.Success && taskInfo.data !== null) {
             data = taskInfo.data[0];
             DGIMN = data.DGIMN;
@@ -235,6 +244,7 @@ export default class EmergencyDetailInfo extends Component {
             TaskFrom = data.TaskFrom;
             EmergencyStatusText = data.EmergencyStatusText;
             TaskStatusText = data.TaskStatusText;
+            TaskStatus=data.TaskStatus;
             TaskDescription = data.TaskDescription;
             OperationsUserName = data.OperationsUserName;
             CreateTime = data.CreateTime;
@@ -349,7 +359,7 @@ export default class EmergencyDetailInfo extends Component {
          
             <Card title={<span style={{fontWeight: '900'}}>任务详情</span>} extra={
             <div>
-                <span style={{marginRight:20}}>{this.getCancelOrderButton(CreateTime)}</span>
+                <span style={{marginRight:20}}>{this.getCancelOrderButton(CreateTime,TaskStatus)}</span>
                  <Button style={{float:"right",marginRight:30}} onClick={() => {
                         this.props.history.goBack(-1);
                     }}><Icon type="left" />退回</Button>
@@ -430,15 +440,15 @@ export default class EmergencyDetailInfo extends Component {
                   visible={this.state.cdvisible}
                   onCancel={this.cdClose}
                   onOk={()=>this.cdOk(TaskID)}
-                  title="撤单"
+                  title="打回说明"
                   >
                                   <Form className="login-form">
                         <FormItem
                             {...formItemLayout}
-                            label="原因"
+                            label="说明"
                         >
                             {getFieldDecorator('reason', {
-                                rules: [{ required: true, message: '请输入撤单原因' }],
+                                rules: [{ required: true, message: '请输入打回说明' }],
                             })(
                                 <Input.TextArea rows='3'  prefix={<Icon type="rollback" style={{ color: 'rgba(0,0,0,.25)' }} />}  />
                             )}

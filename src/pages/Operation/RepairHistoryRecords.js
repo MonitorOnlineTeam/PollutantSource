@@ -198,7 +198,6 @@ export default class RepairHistoryRecords extends Component {
     render() {
         const { pollutantTypelist, treedataloading, datalist, pollutantTypeloading } = this.props;
         const { detailed, statusImg, selectpoint, pointName } = this.state;
-        debugger
         var dataSource = [];
         var spining = true;
         if (!this.props.treedataloading && !this.props.pollutantTypeloading) {
