@@ -43,7 +43,7 @@ module.exports = {
       "operator-linebreak": [2, "after"],//换行时运算符在行尾还是行首
       "no-floating-decimal": [0],//禁止省略浮点数中的0 .5 3.
       "no-const-assign": 2,//禁止修改const声明的变量
-      "no-debugger": 1,//禁止使用debugger
+      "no-debugger": 2,//禁止使用debugger
       "no-dupe-keys": 2,//在创建对象字面量时不允许键重复 {a:1,a:1}
       "no-dupe-args": 2,//函数参数不能重复
       "no-duplicate-case": 2,//switch中的case标签不能重复
