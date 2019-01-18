@@ -12,9 +12,7 @@ import {pageUrl} from '../utils/common';
  * @params {"pageIndex": 1,"pageSize": 10,"beginTime": "2018-12-01 00:00:00","endTime": "2019-01-01 00:00:00"}
  */
 export async function getOperationHistoryRecordPageList(params) {
-    debugger
     const result = post(pageUrl.workbench.operationHistoryRecord, params, null);
-    debugger
     return result === null ? {
         data: null
     } : result;
