@@ -5,12 +5,13 @@ import {
     Spin,
     Progress,
     Layout,
+    Drawer
 } from 'antd';
 import ReactEcharts from 'echarts-for-react';
 import {
     connect
 } from 'dva';
-import { Map, Polygon,GroundImage,Markers } from 'react-amap';
+import { Map, Polygon,Markers } from 'react-amap';
 import config from '../../config';
 import styles from './index.less';
 /*
@@ -39,7 +40,7 @@ let _thismap;
     baseinfo: baseinfo.entbaseinfo,
     datalist: overview.data,
 }))
-class HomePage extends Component {
+class index extends Component {
     constructor(props) {
         super(props);
 
@@ -148,15 +149,16 @@ class HomePage extends Component {
         let option = {
             color: color,
             title:{
+                show:false,
                 text: seriesName,
                 textAlign:'center',
-                x:'80',
+                x:'65',
                 y: '115',
                 padding:0,
                 textStyle:{
                     fontSize: 14,
                     fontWeight: 'bolder',
-                    color: '#72A0BA'
+                    color: '#72A0BA',
                 }
             },
             tooltip: {
@@ -371,314 +373,273 @@ class HomePage extends Component {
          }
          return (
 
-             <div
-                 style={{
-                     width: '100%',
-                     height: 'calc(100vh)',
-                     overflow: 'hidden'
-                 }}
-                 className={styles.divcontent}
-             >
-
-                 <Row gutter={24}>
-                     <Col span={24}>
-                         <div className={styles.divhead}>
-                             <div className={styles.divleft} />
-                             <div className={styles.divlogotext}>{config.logindesc}</div>
-                             <div className={styles.divright} />
+             <div style={{ width: '100%',height: 'calc(100vh - 67px)'}}>
+                 <Map
+                     resizeEnable={true}
+                     events={this.mapEvents}
+                     zoom={13}
+                     mapStyle="amap://styles/darkblue"
+                     amapkey={amapKey}
+                     center={mapCenter}
+                     loading={<Spin
+                         style={{width: '100%',
+                             height: 'calc(100vh - 260px)',
+                             marginTop: 260 }}
+                         size="large"
+                     />}
+                 >
+                     <div style={
+                         {
+                             width: '426px',
+                             height:'unset',
+                             position: 'absolute',
+                             top: '2%',
+                             left: '2%',
+                             bottom: '2%',
+                         }}
+                     >
+                         <div style={{background:'#00152A',height:'30%',border:'1px solid #274073',marginTop:'2%'}}>
+                             <Row gutter={24}>
+                                 <Col xl={24} lg={24} md={24} sm={12} xs={12}>
+                                     <div className={styles.divfirt}>
+                                         <p>智能质控</p>
+                                     </div>
+                                 </Col>
+                             </Row>
+                             <Row gutter={24}>
+                                 <div style={{margin:'0 auto'}}>
+                                     <Col xl={8} lg={8} md={8} sm={24} xs={24}>
+                                         <div>
+                                             <ReactEcharts
+                                                 loadingOption={this.props.loadingRateStatistics}
+                                                 option={this.getOption(1)}
+                                                 style={{height: '130px', width: '100%'}}
+                                                 className="echarts-for-echarts"
+                                                 theme="my_theme"
+                                             />
+                                         </div>
+                                     </Col>
+                                     <Col xl={8} lg={8} md={8} sm={8} xs={8}>
+                                         <div>
+                                             <ReactEcharts
+                                                 loadingOption={this.props.loadingRateStatistics}
+                                                 option={this.getOption(2)}
+                                                 style={{height: '130px', width: '100%'}}
+                                                 className="echarts-for-echarts"
+                                                 theme="my_theme"
+                                             />
+                                         </div>
+                                     </Col>
+                                     <Col xl={8} lg={8} md={8} sm={8} xs={8}>
+                                         <div>
+                                             <ReactEcharts
+                                                 loadingOption={this.props.loadingRateStatistics}
+                                                 option={this.getOption(3)}
+                                                 style={{height: '130px', width: '100%'}}
+                                                 className="echarts-for-echarts"
+                                                 theme="my_theme"
+                                             />
+                                         </div>
+                                     </Col>
+                                 </div>
+                             </Row>
                          </div>
-                     </Col>
-                 </Row>
-
-
-                 <Row gutter={24}>
-                     <Col xl={7} lg={24} md={24} sm={24} xs={24}>
-                         <Row gutter={24}>
-                             <Col xl={24} lg={24} md={24} sm={24} xs={24}>
-                                 <div className={styles.divfirt}>
-                                     <p>智能质控</p>
+                         <div style={{background:'#00152A',height:'20%',border:'1px solid #274073',marginTop:'2%'}}>
+                             <div className={styles.divsecond}>
+                                 <div className={styles.divson1}>十月质控智能预警<h2>18</h2>次</div>
+                                 <div className={styles.divson2}>
+                                     <div>同比<p className={styles.padd} /><h2 style={{color:'#FF4E4E'}}>3</h2><h5 style={{color:'#FF4E4E'}}>次</h5></div>
+                                     <div style={{margin:'0px 0px 0px 20px'}}>环比<p className={styles.pdeduct} /><h2 style={{color:'#5BF287'}}>10</h2><h5 style={{color:'#5BF287'}}>次</h5></div>
                                  </div>
-                             </Col>
-                         </Row>
-                         <Row gutter={24}>
-                             <div style={{margin:'0px 0px 10px 30px'}}>
-                                 <Col xl={8} lg={8} md={8} sm={8} xs={8}>
-                                     <div>
-                                         <ReactEcharts
-                                             loadingOption={this.props.loadingRateStatistics}
-                                             option={this.getOption(1)}
-                                             style={{height: '130px', width: '110%'}}
-                                             className="echarts-for-echarts"
-                                             theme="my_theme"
-                                         />
-                                     </div>
-                                 </Col>
-                                 <Col xl={8} lg={8} md={8} sm={8} xs={8}>
-                                     <div>
-                                         <ReactEcharts
-                                             loadingOption={this.props.loadingRateStatistics}
-                                             option={this.getOption(2)}
-                                             style={{height: '130px', width: '110%'}}
-                                             className="echarts-for-echarts"
-                                             theme="my_theme"
-                                         />
-                                     </div>
-                                 </Col>
-                                 <Col xl={8} lg={8} md={8} sm={8} xs={8}>
-                                     <div>
-                                         <ReactEcharts
-                                             loadingOption={this.props.loadingRateStatistics}
-                                             option={this.getOption(3)}
-                                             style={{height: '130px', width: '110%'}}
-                                             className="echarts-for-echarts"
-                                             theme="my_theme"
-                                         />
-                                     </div>
-                                 </Col>
                              </div>
-                         </Row>
-                         <Row gutter={24}>
-                             <Col xl={24} lg={24} md={24} sm={24} xs={24}>
-                                 <div className={styles.divsecond}>
-                                     <div className={styles.divson1}>十月质控智能预警<h2>18</h2>次</div>
-                                     <div className={styles.divson2}>
-                                         <div>同比<p className={styles.padd} /><h2 style={{color:'#FF4E4E'}}>3</h2><h5 style={{color:'#FF4E4E'}}>次</h5></div>
-                                         <div style={{margin:'0px 0px 0px 20px'}}>环比<p className={styles.pdeduct} /><h2 style={{color:'#5BF287'}}>10</h2><h5 style={{color:'#5BF287'}}>次</h5></div>
-                                     </div>
-                                 </div>
-                             </Col>
-                         </Row>
-                         <Row gutter={24}>
-                             <Col xl={24} lg={24} md={24} sm={24} xs={24}>
-                                 <div className={styles.divfirt}>
-                                     <p>智能运维</p>
-                                 </div>
-                             </Col>
-                         </Row>
-                         <Row gutter={24}>
-                             <Col xl={24} lg={24} md={24} sm={24} xs={24}>
-                                 <div className={styles.divyw}>
-                                     <div className={styles.divo}>
-                                         <div className={styles.divl} />
-                                         <div className={styles.divm}>
-                                             <Progress
-                                                 percent={100}
-                                                 successPercent={60}
-                                                 strokeColor="red"
-                                                 showInfo={false}
-                                                 strokeWidth={10}
-                                             />
+                         </div>
+                         <div style={{background:'#00152A',height:'45%',border:'1px solid #274073',marginTop:'2%'}}>
+                             <div>
+                                 <Row gutter={24}>
+                                     <Col xl={24} lg={24} md={24} sm={24} xs={24}>
+                                         <div className={styles.divfirt}>
+                                             <p>智能运维</p>
                                          </div>
-                                         <div className={styles.divr} />
+                                     </Col>
+                                 </Row>
+                                 <Row gutter={24}>
+                                     <Col xl={24} lg={24} md={24} sm={24} xs={24}>
+                                         <div className={styles.divyw}>
+                                             <div className={styles.divo}>
+                                                 <div className={styles.divl} />
+                                                 <div className={styles.divm}>
+                                                     <Progress
+                                                         percent={100}
+                                                         successPercent={60}
+                                                         strokeColor="red"
+                                                         showInfo={false}
+                                                         strokeWidth={10}
+                                                     />
+                                                 </div>
+                                                 <div className={styles.divr} />
+                                             </div>
+                                             <div className={styles.diva}>
+                                                 <span className={styles.p1}>实际运维:<h2 style={{color:'#62C400'}}>31</h2>次</span>
+                                                 <span className={styles.p2}>逾期运维:<h2 style={{color:'#F40000'}}>5</h2>次</span>
+                                             </div>
+                                         </div>
+                                     </Col>
+                                 </Row>
+                                 <Row gutter={24}>
+                                     <div style={{margin:'0px 0px 10px 30px'}}>
+                                         <Col xl={12} lg={12} md={12} sm={12} xs={12}>
+                                             <div>
+                                                 <ReactEcharts
+                                                     loadingOption={this.props.loadingRateStatistics}
+                                                     option={this.getoperation()}
+                                                     style={{height: '200px', width: '100%'}}
+                                                     className="echarts-for-echarts"
+                                                     theme="my_theme"
+                                                 />
+                                             </div>
+                                         </Col>
+                                         <Col xl={12} lg={12} md={12} sm={12} xs={12}>
+                                             <div className={styles.divyc}>
+                                                 <span className={styles.s1}>异常报警及响应情况</span><br />
+                                                 <span className={styles.s2}>两小时内响应(111)次</span><br />
+                                                 <span className={styles.s3}>环比上升6%</span><br />
+                                                 <span className={styles.s4}>超八小时响应(52)次</span><br />
+                                                 <span className={styles.s5}>环比下降8%</span><br />
+                                                 <span className={styles.s6}>其它(55)次</span><br />
+                                             </div>
+                                         </Col>
                                      </div>
-                                     <div className={styles.diva}>
-                                         <span className={styles.p1}>实际运维:<h2 style={{color:'#62C400'}}>31</h2>次</span>
-                                         <span className={styles.p2}>逾期运维:<h2 style={{color:'#F40000'}}>5</h2>次</span>
-                                     </div>
-                                 </div>
-                             </Col>
-                         </Row>
-                         <Row gutter={24}>
-                             <div style={{margin:'0px 0px 10px 30px'}}>
-                                 <Col xl={12} lg={12} md={12} sm={12} xs={12}>
-                                     <div>
-                                         <ReactEcharts
-                                             loadingOption={this.props.loadingRateStatistics}
-                                             option={this.getoperation()}
-                                             style={{height: '200px', width: '100%'}}
-                                             className="echarts-for-echarts"
-                                             theme="my_theme"
-                                         />
-                                     </div>
-                                 </Col>
-                                 <Col xl={12} lg={12} md={12} sm={12} xs={12}>
-                                     <div className={styles.divyc}>
-                                         <span className={styles.s1}>异常报警及响应情况</span><br />
-                                         <span className={styles.s2}>两小时内响应(111)次</span><br />
-                                         <span className={styles.s3}>环比上升6%</span><br />
-                                         <span className={styles.s4}>超八小时响应(52)次</span><br />
-                                         <span className={styles.s5}>环比下降8%</span><br />
-                                         <span className={styles.s6}>其它(55)次</span><br />
-                                     </div>
-                                 </Col>
+                                 </Row>
                              </div>
-                         </Row>
-                     </Col>
-                     <Col xl={10} lg={24} md={24} sm={24} xs={24}>
-                         <Row gutter={24}>
-                             <Col xl={24} lg={24} md={24} sm={24} xs={24}>
-                                 <div className={styles.divfirt}>
-                                     <p>智能监控</p>
-                                 </div>
-                             </Col>
-                         </Row>
-                         <Row gutter={24}>
-                             <Col xl={24} lg={24} md={24} sm={24} xs={24}>
-                                 <div style={{
-                                     width: "100%",
-                                     height: "400px",
-                                 }}
-                                 >
-                                     <Map
-                                         resizeEnable={true}
-                                         events={this.mapEvents}
-                                         zoom={12}
-                                         mapStyle="blue_night"
-                                         amapkey={amapKey}
-                                         center={mapCenter}
-                                         loading={<Spin
-                                             style={{width: '100%',
-                                                 height: 'calc(100vh - 260px)',
-                                                 marginTop: 260 }}
-                                             size="large"
-                                         />}
-                                     >
-                                         <Markers
-                                             markers={this.props.datalist}
-                                             className={this.state.special}
-                                             render={(extData) => {
-                                                 if (extData.status === 0) {
-                                                     return <img style={{width:15}} src="/gisunline.png" />;
-                                                 } if (extData.status === 1) {
-                                                     return <img style={{width:15}} src="/gisnormal.png" />;
-                                                 } if (extData.status === 2) {
-                                                     return <img style={{width:15}} src="/gisover.png" />;
-                                                 }
-                                                 return <img style={{width:15}} src="/gisexception.png" />;
-                                             }}
-                                         />
-                                         {
-                                             this.getpolygon(polygonChange)
-                                         }
-                                     </Map>
-                                 </div>
-                             </Col>
-                         </Row>
-                         <Row gutter={24}>
-                             <Col xl={24} lg={24} md={24} sm={24} xs={24}>
-                                 <div className={styles.divtable}>
-                                     <table border="0" cellPadding="0" cellSpacing="20" border-collapse="inherit">
-                                         <tr color="#fff">
-                                             <th> 污染物</th>
-                                             <th> 超标次数 </th>
-                                             <th> 超标倍数</th>
-                                             <th> 最新浓度</th>
-                                         </tr>
-                                         <tr>
-                                             <td>100</td>
-                                             <td>200</td>
-                                             <td>300</td>
-                                             <td>300</td>
-                                         </tr>
-                                         <tr>
-                                             <td>400</td>
-                                             <td>500</td>
-                                             <td>600</td>
-                                             <td>300</td>
-                                         </tr>
-                                     </table>
-                                 </div>
-                             </Col>
-                         </Row>
-                         <Row gutter={24}>
-                             <Col />
-                         </Row>
-                     </Col>
-                     <Col xl={7} lg={24} md={24} sm={24} xs={24}>
-                         <Row gutter={24}>
-                             <Col xl={24} lg={24} md={24} sm={24} xs={24}>
-                                 <div style={{textAlign:'center'}}>
-                                     <div className={styles.divpoint}>
-                                         <div className={styles.left}>
-                                             <div className={styles.top}>运行：20</div>
-                                             <div className={styles.bottom}>离线：9</div>
-                                         </div>
-                                         <div className={styles.center}>
-                                             <div className={styles.number}>40</div>
-                                             <div className={styles.name}>排污口</div>
-                                         </div>
-                                         <div className={styles.right}>
-                                             <div className={styles.top}>异常：5</div>
-                                             <div className={styles.bottom}>关停：60</div>
+                         </div>
+                     </div>
+
+                     <div style={
+                         {
+                             width: '426px',
+                             height: 'unset',
+                             position: 'absolute',
+                             top: '2%',
+                             right: '2%',
+                             bottom: '2%',
+                         }}
+                     >
+
+                         <div style={{background:'#00152A',height:'20%',border:'1px solid #274073',marginTop:'2%'}}>
+                             <Row gutter={24}>
+                                 <Col xl={24} lg={24} md={24} sm={24} xs={24}>
+                                     <div style={{textAlign:'center'}}>
+                                         <div className={styles.divpoint}>
+                                             <div className={styles.left}>
+                                                 <div className={styles.top}>运行：20</div>
+                                                 <div className={styles.bottom}>离线：9</div>
+                                             </div>
+                                             <div className={styles.center}>
+                                                 <div className={styles.number}>40</div>
+                                                 <div className={styles.name}>排污口</div>
+                                             </div>
+                                             <div className={styles.right}>
+                                                 <div className={styles.top}>异常：5</div>
+                                                 <div className={styles.bottom}>关停：60</div>
+                                             </div>
                                          </div>
                                      </div>
-                                 </div>
-                             </Col>
-                         </Row>
-                         <Row gutter={24}>
-                             <Col xl={24} lg={24} md={24} sm={24} xs={24}>
-                                 <div className={styles.divdyhw}>
-                                     <div className={styles.divtitle}>
-                                         <p>氮氧化物排污许可情况</p>
+                                 </Col>
+                             </Row>
+                         </div>
+                         <div style={{background:'#00152A',height:'76%',border:'1px solid #274073',marginTop:'2%'}}>
+                             <Row gutter={24}>
+                                 <Col xl={24} lg={24} md={24} sm={24} xs={24}>
+                                     <div className={styles.divdyhw}>
+                                         <div className={styles.divtitle}>
+                                             <p>氮氧化物排污许可情况</p>
+                                         </div>
+                                         <Row gutter={24}>
+                                             <Col xl={12} lg={12} md={12} sm={12} xs={12}>
+                                                 <ReactEcharts
+                                                     loadingOption={this.props.loadingRateStatistics}
+                                                     option={this.getlicense(1)}
+                                                     style={{height: '130px', width: '80%'}}
+                                                     className="echarts-for-echarts"
+                                                     theme="my_theme"
+                                                 />
+                                             </Col>
+                                             <Col xl={12} lg={12} md={12} sm={12} xs={12}>
+                                                 <div className={styles.divtext}>
+                                                     <p>本年度累计排放量占比</p>
+                                                     <p>91%(0.5/0.6)</p>
+                                                 </div>
+                                             </Col>
+                                         </Row>
                                      </div>
-                                     <Row gutter={24}>
-                                         <Col xl={12} lg={12} md={12} sm={12} xs={12}>
-                                             <ReactEcharts
-                                                 loadingOption={this.props.loadingRateStatistics}
-                                                 option={this.getlicense(1)}
-                                                 style={{height: '130px', width: '80%'}}
-                                                 className="echarts-for-echarts"
-                                                 theme="my_theme"
-                                             />
-                                         </Col>
-                                         <Col xl={12} lg={12} md={12} sm={12} xs={12}>
-                                             <div className={styles.divtext}>
-                                                 <p>本年度累计排放量占比</p>
-                                                 <p>91%(0.5/0.6)</p>
-                                             </div>
-                                         </Col>
-                                     </Row>
-                                 </div>
-                                 <div className={styles.divycpw}>
-                                     <div className={styles.divtitle}>
-                                         <p>烟尘物排污许可情况</p>
+                                     <div className={styles.divycpw}>
+                                         <div className={styles.divtitle}>
+                                             <p>烟尘物排污许可情况</p>
+                                         </div>
+                                         <Row gutter={24}>
+                                             <Col xl={12} lg={12} md={12} sm={12} xs={12}>
+                                                 <ReactEcharts
+                                                     loadingOption={this.props.loadingRateStatistics}
+                                                     option={this.getlicense(2)}
+                                                     style={{height: '130px', width: '80%'}}
+                                                     className="echarts-for-echarts"
+                                                     theme="my_theme"
+                                                 />
+                                             </Col>
+                                             <Col xl={12} lg={12} md={12} sm={12} xs={12}>
+                                                 <div className={styles.divtext}>
+                                                     <p>本年度累计排放量占比</p>
+                                                     <p>91%(0.5/0.6)</p>
+                                                 </div>
+                                             </Col>
+                                         </Row>
                                      </div>
-                                     <Row gutter={24}>
-                                         <Col xl={12} lg={12} md={12} sm={12} xs={12}>
-                                             <ReactEcharts
-                                                 loadingOption={this.props.loadingRateStatistics}
-                                                 option={this.getlicense(2)}
-                                                 style={{height: '130px', width: '80%'}}
-                                                 className="echarts-for-echarts"
-                                                 theme="my_theme"
-                                             />
-                                         </Col>
-                                         <Col xl={12} lg={12} md={12} sm={12} xs={12}>
-                                             <div className={styles.divtext}>
-                                                 <p>本年度累计排放量占比</p>
-                                                 <p>91%(0.5/0.6)</p>
-                                             </div>
-                                         </Col>
-                                     </Row>
-                                 </div>
-                                 <div className={styles.diveyhl}>
-                                     <div className={styles.divtitle}>
-                                         <p>二氧化硫排污许可情况</p>
+                                     <div className={styles.diveyhl}>
+                                         <div className={styles.divtitle}>
+                                             <p>二氧化硫排污许可情况</p>
+                                         </div>
+                                         <Row gutter={24}>
+                                             <Col xl={12} lg={12} md={12} sm={12} xs={12}>
+                                                 <ReactEcharts
+                                                     loadingOption={this.props.loadingRateStatistics}
+                                                     option={this.getlicense(3)}
+                                                     style={{height: '130px', width: '80%'}}
+                                                     className="echarts-for-echarts"
+                                                     theme="my_theme"
+                                                 />
+                                             </Col>
+                                             <Col xl={12} lg={12} md={12} sm={12} xs={12}>
+                                                 <div className={styles.divtext}>
+                                                     <p>本年度累计排放量占比</p>
+                                                     <p>91%(0.5/0.6)</p>
+                                                 </div>
+                                             </Col>
+                                         </Row>
                                      </div>
-                                     <Row gutter={24}>
-                                         <Col xl={12} lg={12} md={12} sm={12} xs={12}>
-                                             <ReactEcharts
-                                                 loadingOption={this.props.loadingRateStatistics}
-                                                 option={this.getlicense(3)}
-                                                 style={{height: '130px', width: '80%'}}
-                                                 className="echarts-for-echarts"
-                                                 theme="my_theme"
-                                             />
-                                         </Col>
-                                         <Col xl={12} lg={12} md={12} sm={12} xs={12}>
-                                             <div className={styles.divtext}>
-                                                 <p>本年度累计排放量占比</p>
-                                                 <p>91%(0.5/0.6)</p>
-                                             </div>
-                                         </Col>
-                                     </Row>
-                                 </div>
-                             </Col>
-                         </Row>
-                     </Col>
-                 </Row>
+                                 </Col>
+                             </Row>
+                         </div>
+                     </div>
+                     <Markers
+                         markers={this.props.datalist}
+                         className={this.state.special}
+                         render={(extData) => {
+                             if (extData.status === 0) {
+                                 return <img style={{width:15}} src="/gisunline.png" />;
+                             } if (extData.status === 1) {
+                                 return <img style={{width:15}} src="/gisnormal.png" />;
+                             } if (extData.status === 2) {
+                                 return <img style={{width:15}} src="/gisover.png" />;
+                             }
+                             return <img style={{width:15}} src="/gisexception.png" />;
+                         }}
+                     />
+                     {
+                         this.getpolygon(polygonChange)
+                     }
+                 </Map>
              </div>
          );
      }
 }
-export default HomePage;
+export default index;
