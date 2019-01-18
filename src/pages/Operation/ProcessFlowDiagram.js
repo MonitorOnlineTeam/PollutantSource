@@ -170,23 +170,10 @@ export default class ProcessFlowDiagram extends Component {
                             <div style={{ marginLeft: 10, marginTop: 10 }}>
                                 <div><SearchInput
                                     onSerach={this.onSerach}
-                                    style={{ marginTop: 5, marginBottom: 5, width: 400 }} searchName="排口名称" /></div>
+                                    style={{ marginTop: 5, marginBottom: 10, width: 400 }} searchName="排口名称" /></div>
                                 <div style={{ marginTop: 5 }}>
-                                    <TreeCard
-                                        style={{
-                                            width: '400px',
-                                            marginTop: 5,
-                                            background: '#fff',
-                                        }}
-                                        pollutantTypeloading={pollutantTypeloading}
-                                        getHeight={'calc(100vh - 220px)'} getStatusImg={this.getStatusImg}
-                                        getNowPollutantType={this.getNowPollutantType}
-                                        PollutantType={2} treedatalist={datalist}
-                                        pollutantTypelist={pollutantTypelist}
-                                        tabkey={this.state.pollutantTypeCode}
-                                    />
                                     <TreeCardContent style={{ overflow: 'auto', width: 400, background: '#fff' }}
-                                        getHeight='calc(100vh - 220px)'
+                                        getHeight='calc(100vh - 165px)'
                                         pollutantTypeloading={pollutantTypeloading}
                                         getStatusImg={this.getStatusImg} isloading={treedataloading}
                                         treeCilck={this.treeCilck} treedatalist={datalist} PollutantType={this.state.pollutantTypeCode} ifSelect={true} />
@@ -194,16 +181,13 @@ export default class ProcessFlowDiagram extends Component {
                             </div>
                         </div>
                     </Col>
-                    <Col style={{ width: document.body.clientWidth - 430, height: 'calc(100vh - 90px)', float: 'right' }}>
-                        <div style={{ marginRight: 10, marginTop: 25 }}>
-                            <Card bordered={false} style={{ height: 'calc(100vh - 110px)', overflow: 'auto' }}>
-                                <GyPic DGIMN={this.state.DGIMN} status={status} />
-                            </Card>
-                        </div>
+                    <Col style={{ width: document.body.clientWidth - 430, float: 'right' }}>
+                        <Card bordered={false} style={{ height: 'calc(100vh - 110px)', overflow: 'hidden', marginRight: 10, marginTop: 25 }}>
+                            <GyPic style={{}} DGIMN={this.state.DGIMN} status={status} />
+                        </Card>
                     </Col>
                 </Row>
             </div>
-
         );
     }
 }

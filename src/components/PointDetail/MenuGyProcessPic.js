@@ -62,7 +62,6 @@ export default class MenuGyProcessPic extends Component {
         const { scale, translation } = this.state;
         const { flows, isloading } = this.props;
         return (
-            <div className={styles.GyProcessPic}>
                 <Spin style={{
                     width: '100%',
                     height: 'calc(100vh - 260px)',
@@ -219,7 +218,7 @@ export default class MenuGyProcessPic extends Component {
                         </div>
                     </MapInteractionCSS>
                 </Spin>
-            </div>
+          
         );
     }
 }
