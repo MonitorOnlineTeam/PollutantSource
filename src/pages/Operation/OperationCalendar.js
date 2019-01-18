@@ -124,8 +124,7 @@ export default class OperationCalendar extends Component {
                         if (existdata == undefined) {
                             this.GetData('1');
                         }
-                        else
-                        {
+                        else {
                             this.props.dispatch({
                                 type: 'workbenchmodel/getOperationCalendarData',
                                 payload: {
@@ -162,6 +161,7 @@ export default class OperationCalendar extends Component {
         let exceptionlistData = [];
         let commonlistData = [];
         var returnResult = [];
+        let operationingday = null;
         let thisData = this.props.operation.tempTableDatas.filter(m => moment(m.CreateTime).format('YYYY-MM-DD') === value.format("YYYY-MM-DD"));
         if (!this.props.treedataloading && !this.props.pollutantTypeloading && !this.props.loading) {
             if (thisData && thisData.length > 0) {
@@ -181,25 +181,36 @@ export default class OperationCalendar extends Component {
                             'content': item.TaskTypeText + '-' + item.ExceptionTypeText
                         })
                     })
+                    operationingday = ExceptionTypeText.filter(m => m.TaskStatus === 2);
                 }
             }
         }
         return (
-            <ul className={styles.day} >
-                {
-                    returnResult.map(item => (
-                        <li key={item.content}>
-                            <Tag style={{ marginBottom: 1, marginTop: 1 }} color={item.ExceptionTypeText === '报警响应异常' ? '#F70303' : item.ExceptionTypeText === '工作超时' ? '#F79503' : '#F7C603'}>{item.content}</Tag>
-                        </li>
-                    ))
-                }
-            </ul>
+            <div style={{ height: '90%' }} >
+                <div style={{ height: '80%' }}>
+                    <ul className={styles.day} >
+                        {
+                            returnResult.map(item => (
+                                <li key={item.content}>
+                                    <Tag style={{ marginBottom: 1, marginTop: 1 }} color={item.ExceptionTypeText === '报警响应异常' ? '#F70303' : item.ExceptionTypeText === '工作超时' ? '#F79503' : '#F7C603'}>{item.content}</Tag>
+                                </li>
+                            ))
+                        }
+                    </ul>
+                </div>
+                <div style={{ height: '20%', textAlign: 'right' }}>
+                    {operationingday === null ? null : operationingday.length === 0 ? null : <Tag color="#F79855">{'进行中' + operationingday.length + '个'}</Tag>}
+                </div>
+            </div>
+
+
         );
     }
     //日历月显示内容
     monthCellRender = (value) => {
         let listData = [];
         var returnResult = [];
+        let operationingmonth = null;
         let thisData = this.props.operation.tempTableDatas.filter(m => moment(m.CreateTime).format('YYYY-MM') === value.format("YYYY-MM"));
         if (thisData && thisData.length > 0) {
             let ExceptionTypeText = thisData.filter(m => m.ExceptionTypeText !== "");
@@ -208,20 +219,27 @@ export default class OperationCalendar extends Component {
                     'TaskType': '异常任务：',
                     'Content': ExceptionTypeText.length + '次'
                 })
+                operationingmonth = ExceptionTypeText.filter(m => m.TaskStatus === 2);
+                debugger
             }
         }
         return (
-            <ul className={styles.month} >
-                {
-                    returnResult.map(item => (
-                        <li key={item.TaskType}>
-
-                            {/* <span>{item.TaskType}</span> */}
-                            <Tag style={{ height: 26, fontSize: 20, paddingBottom: 2, paddingTop: 2 }} color='#E83939'>{item.TaskType}{item.Content}</Tag>
-                        </li>
-                    ))
-                }
-            </ul>
+            <div style={{ height: '65%' }} >
+                <div style={{ height: '80%' }}>
+                    <ul className={styles.month} >
+                        {
+                            returnResult.map(item => (
+                                <li key={item.TaskType}>
+                                    <Tag style={{ height: 26, fontSize: 20, paddingBottom: 2, paddingTop: 2 }} color='#E83939'>{item.TaskType}{item.Content}</Tag>
+                                </li>
+                            ))
+                        }
+                    </ul>
+                </div>
+                <div style={{ height: '20%', textAlign: 'right',whiteSpace:'nowrap',textOverflow:'hidden' }}>
+                    {operationingmonth === null ? null : operationingmonth.length === 0 ? null : <Tag color="#F79855">{'进行中' + operationingmonth.length + '个'}</Tag>}
+                </div>
+            </div>
         );
     }
     dateSelect = (date) => {
