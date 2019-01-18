@@ -283,23 +283,10 @@ export default class RepairHistoryRecords extends Component {
                             <div style={{ marginLeft: 10, marginTop: 10 }}>
                                 <div><SearchInput
                                     onSerach={this.onSerach}
-                                    style={{ marginTop: 5, marginBottom: 5, width: 400 }} searchName="排口名称" /></div>
+                                    style={{ marginTop: 5, marginBottom: 10, width: 400 }} searchName="排口名称" /></div>
                                 <div style={{ marginTop: 5 }}>
-                                    <TreeCard
-                                        style={{
-                                            width: '400px',
-                                            marginTop: 5,
-                                            background: '#fff',
-                                        }}
-                                        pollutantTypeloading={pollutantTypeloading}
-                                        getHeight={'calc(100vh - 220px)'} getStatusImg={this.getStatusImg}
-                                        getNowPollutantType={this.getNowPollutantType}
-                                        PollutantType={2} treedatalist={datalist}
-                                        pollutantTypelist={pollutantTypelist}
-                                        tabkey={this.state.pollutantTypeCode}
-                                    />
                                     <TreeCardContent style={{ overflow: 'auto', width: 400, background: '#fff' }}
-                                        getHeight='calc(100vh - 220px)'
+                                        getHeight='calc(100vh - 165px)'
                                         pollutantTypeloading={pollutantTypeloading}
                                         getStatusImg={this.getStatusImg} isloading={treedataloading}
                                         treeCilck={this.treeCilck} treedatalist={datalist} PollutantType={this.state.pollutantTypeCode} ifSelect={true} />
