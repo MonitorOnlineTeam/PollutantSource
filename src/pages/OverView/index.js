@@ -8,7 +8,7 @@ import {
 import { routerRedux } from 'dva/router';
 import moment from 'moment';
 import AListRadio from '../../components/OverView/AListRadio';
-import { amapKey, centerlongitude, centerlatitude } from '../../config';
+import { amapKey, centerlongitude, centerlatitude,mainpoll } from '../../config';
 import TreeStatus from '../../components/OverView/TreeStatus';
 import MapPollutantDetail from '../../components/OverView/MapPollutantDetail';
 import ChartData from '../../components/OverView/ChartData';
@@ -101,7 +101,7 @@ class OverViewMap extends PureComponent {
         });
         dispatch({
             type: 'overview/querydatalist',
-            payload: { map: true }
+            payload: { map: true,pollutantTypes:this.state.pollutantTypeCode }
         });
         dispatch({
             type: 'baseinfo/queryentdetail',
@@ -120,16 +120,23 @@ class OverViewMap extends PureComponent {
             type: 'overview/querydetailpollutant',
             payload: {
                 dataType: 'HourData',
-                dgimn: row.DGIMN
+                dgimn: row.DGIMN,
+                pollutantTypeCode:this.state.pollutantTypeCode
             }
         });
+        const pollutantInfoList=mainpoll.find(value=>{
+            return value.pollutantCode==this.state.pollutantTypeCode;
+        })
+        const defaultpollutantCode=pollutantInfoList.pollutantInfo[0].pollutantCode;
+        const defaultpollutantName=pollutantInfoList.pollutantInfo[0].pollutantName;
         dispatch({
             type: 'overview/queryoptionData',
             payload: {
                 datatype: 'hour',
                 dgimn: row.DGIMN,
-                pollutantCodes: '01',
-                pollutantName: '烟尘',
+                pollutantCodes: defaultpollutantCode,
+                pollutantName: defaultpollutantName,
+                pollutantTypeCode:this.state.pollutantTypeCode,
                 endTime: (moment(new Date()).add('hour', -1)).format('YYYY-MM-DD HH:00:00'),
                 beginTime: (moment(new Date()).add('hour', -24)).format('YYYY-MM-DD HH:00:00'),
             }
@@ -154,6 +161,7 @@ class OverViewMap extends PureComponent {
             payload: {
                 datatype: 'hour',
                 pollutantName: row.pollutantName,
+                pollutantTypeCode:this.state.pollutantTypeCode,
                 dgimn: row.dgimn,
                 pollutantCodes: row.pcode,
                 endTime: (moment(new Date()).add('hour', -1)).format('YYYY-MM-DD HH:00:00'),
@@ -197,11 +205,14 @@ class OverViewMap extends PureComponent {
 
     //重新加载
     reloadData=(pollutantTypeCode,searchName)=>{
+        this.setState({
+            pollutantTypeCode:pollutantTypeCode
+        })
         this.props.dispatch({
             type: 'overview/querydatalist',
             payload: {
                  map: true,
-                 pollutantCode:pollutantTypeCode,
+                 pollutantTypes:pollutantTypeCode,
                  pointName:searchName
             },
         });
@@ -220,7 +231,6 @@ class OverViewMap extends PureComponent {
 
   //当前选中的污染物类型
   getNowPollutantType=(key)=>{
-      debugger;
      this.setState({
          pollutantTypeCode:key
      })
@@ -269,7 +279,7 @@ class OverViewMap extends PureComponent {
              getHeight='calc(100vh - 290px)'
              pollutantTypeloading={pollutantTypeloading}
              getStatusImg={this.getStatusImg} isloading={treedataloading} 
-            treeCilck={this.treeCilck} treedatalist={datalist} PollutantType={2} />
+            treeCilck={this.treeCilck} treedatalist={datalist} PollutantType={this.state.pollutantTypeCode} />
           </div>
         </div>);
     }else
@@ -285,6 +295,9 @@ class OverViewMap extends PureComponent {
                 size="large"
             />)
          }
+         const pollutantInfoList=mainpoll.find(value=>{
+            return value.pollutantCode==this.state.pollutantTypeCode;
+         })
          return(
             <div style={{ marginLeft: 10, marginTop: 10,overflow:'auto' }}>
               <div>
@@ -295,9 +308,9 @@ class OverViewMap extends PureComponent {
                 />
               </div>
               <div style={{ height: 'calc(100vh - 215px)' }} className={styles.detailInfo}>
-              <div style={{marginTop: 15}}>
+              {pollutantInfoList.csyxl?<div style={{marginTop: 15}}>
                 <TransmissionEfficiency selectdata={selectdata} />
-              </div>
+              </div>:''}
               <div style={{marginTop: 15}}>
                 <MapPollutantDetail
                  isloading={detailpollutantloading}

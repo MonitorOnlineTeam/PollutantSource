@@ -21,7 +21,7 @@ export default class AppStopCemsInfo extends Component {
             type: 'task/GetStopCemsDetail',
             payload: {
                 TaskID: this.props.match.params.TaskID,
-                TypeID: this.props.match.params.TypeID
+                TypeID: this.props.match.params.TypeID,
             }
         });
         const _this = this;
@@ -58,7 +58,7 @@ export default class AppStopCemsInfo extends Component {
 
 
     render() {
-        const SCREEN_HEIGHT = document.querySelector('body').offsetHeight - 250;
+        const SCREEN_HEIGHT = document.querySelector('body').offsetHeight - 150;
         const StopCems = this.props.StopCems;
         let EnterpriseName = null;
         let PointPosition = null;

@@ -33,8 +33,8 @@ class AppDirectMeasurement extends Component {
         this.props.dispatch({
             type: 'task/GetPatrolRecordListPC',
             payload: {
-                TaskIds: this.props.match.params.ClfPatrolTaskIds,
-                TypeIDs: this.props.match.params.ClfPatrolTypeIDs
+                TaskIds: this.props.match.params.TaskID,
+                TypeIDs: this.props.match.params.TypeID,
             },
         });
     }
@@ -167,7 +167,7 @@ class AppDirectMeasurement extends Component {
     }
 
     render() {
-        const SCREEN_HEIGHT = document.querySelector('body').offsetHeight - 250;
+        const SCREEN_HEIGHT = document.querySelector('body').offsetHeight - 150;
         const DataLength = this.props.PatrolRecordListPC.length;
         const Repair = DataLength === 0 ? null : this.props.PatrolRecordListPC[0];
         let EnterpriseName = null;

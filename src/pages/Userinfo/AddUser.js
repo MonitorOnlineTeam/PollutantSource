@@ -88,7 +88,6 @@ class AddUser extends Component {
                  payload: {
                      UserAccount,
                      callback: () => {
-                         debugger;
                          if (that.props.reason === '1') {
                              flag = false;
                              that.props.form.setFields({ // 设置验证返回错误

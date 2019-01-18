@@ -130,7 +130,6 @@ export default class AlarmResponse extends Component {
     }
     // 年份选择改变事件
     handleChangeDate = (value) => {
-        debugger
         let Year = moment().get('year');
         let Month = moment().get('month') + 1;
         if (Month < 10) {

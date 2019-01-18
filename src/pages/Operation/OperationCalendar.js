@@ -28,7 +28,7 @@ import TreeCardContent from '../../components/OverView/TreeCardContent';
     pollutantTypeloading: loading.effects['overview/getPollutantTypeList'],
     treedataloading: loading.effects['overview/querydatalist'],
     pollutantTypelist: overview.pollutantTypelist,
-    operation: workbenchmodel.operation,
+    operation: workbenchmodel.OperationCalendar,
 }))
 /*
 页面：运维日历
@@ -45,7 +45,6 @@ export default class OperationCalendar extends Component {
         };
     }
     componentDidMount() {
-        localStorage.setItem('pollutantType', 2);
         const { dispatch } = this.props;
         dispatch({
             type: 'overview/getPollutantTypeList',
@@ -96,7 +95,6 @@ export default class OperationCalendar extends Component {
     }
     //当前选中的污染物类型
     getNowPollutantType = (key) => {
-        localStorage.setItem('pollutantType', key);
         this.setState({
             pollutantTypeCode: key
         })
@@ -165,48 +163,32 @@ export default class OperationCalendar extends Component {
         let commonlistData = [];
         var returnResult = [];
         let thisData = this.props.operation.tempTableDatas.filter(m => moment(m.CreateTime).format('YYYY-MM-DD') === value.format("YYYY-MM-DD"));
-        if (thisData && thisData.length > 0) {
-            let ExceptionTypeText = thisData.filter(m => m.ExceptionTypeText !== "");
-            // let CommonTypeText = thisData.filter(m => m.ExceptionTypeText === "");
-            if (ExceptionTypeText && ExceptionTypeText.length > 0) {
-                for (var i = 0; i < ExceptionTypeText.length; i++) {
-                    for (var j = i + 1; j < ExceptionTypeText.length; j++) {
-                        if (ExceptionTypeText[i].TaskTypeText === ExceptionTypeText[j].TaskTypeText && ExceptionTypeText[i].ExceptionTypeText === ExceptionTypeText[j].ExceptionTypeText) {
-                            ++i;
+        if (!this.props.treedataloading && !this.props.pollutantTypeloading && !this.props.loading) {
+            if (thisData && thisData.length > 0) {
+                let ExceptionTypeText = thisData.filter(m => m.ExceptionTypeText !== "");
+                if (ExceptionTypeText && ExceptionTypeText.length > 0) {
+                    for (var i = 0; i < ExceptionTypeText.length; i++) {
+                        for (var j = i + 1; j < ExceptionTypeText.length; j++) {
+                            if (ExceptionTypeText[i].TaskTypeText === ExceptionTypeText[j].TaskTypeText && ExceptionTypeText[i].ExceptionTypeText === ExceptionTypeText[j].ExceptionTypeText) {
+                                ++i;
+                            }
                         }
+                        exceptionlistData.push(ExceptionTypeText[i]);
                     }
-                    exceptionlistData.push(ExceptionTypeText[i]);
-                }
-                exceptionlistData.map((item) => {
-                    returnResult.push({
-                        'type': 'warning',
-                        'content': item.TaskTypeText + '-' + item.ExceptionTypeText
+                    exceptionlistData.map((item) => {
+                        returnResult.push({
+                            'type': 'warning',
+                            'content': item.TaskTypeText + '-' + item.ExceptionTypeText
+                        })
                     })
-                })
+                }
             }
-            // if (CommonTypeText && CommonTypeText.length > 0) {
-            //     for (var i = 0; i < CommonTypeText.length; i++) {
-            //         for (var j = i + 1; j < CommonTypeText.length; j++) {
-            //             if (CommonTypeText[i].TaskTypeText === CommonTypeText[j].TaskTypeText) {
-            //                 ++i;
-            //             }
-            //         }
-            //         commonlistData.push(CommonTypeText[i]);
-            //     }
-            //     commonlistData.map((item) => {
-            //         returnResult.push({
-            //             'type': 'success',
-            //             'content': item.TaskTypeText + '-' + '正常'
-            //         })
-            //     })
-            // }
         }
         return (
             <ul className={styles.day} >
                 {
                     returnResult.map(item => (
                         <li key={item.content}>
-                            {/* <Badge style={{ marginBottom: 3 }} status={item.type} /> */}
                             <Tag style={{ marginBottom: 1, marginTop: 1 }} color={item.ExceptionTypeText === '报警响应异常' ? '#F70303' : item.ExceptionTypeText === '工作超时' ? '#F79503' : '#F7C603'}>{item.content}</Tag>
                         </li>
                     ))
@@ -221,20 +203,12 @@ export default class OperationCalendar extends Component {
         let thisData = this.props.operation.tempTableDatas.filter(m => moment(m.CreateTime).format('YYYY-MM') === value.format("YYYY-MM"));
         if (thisData && thisData.length > 0) {
             let ExceptionTypeText = thisData.filter(m => m.ExceptionTypeText !== "");
-            // let CommonTypeText = thisData.filter(m => m.ExceptionTypeText === "");
             if (ExceptionTypeText && ExceptionTypeText.length > 0) {
                 returnResult.push({
                     'TaskType': '异常任务：',
                     'Content': ExceptionTypeText.length + '次'
                 })
             }
-            // if (CommonTypeText && CommonTypeText.length > 0) {
-            //     returnResult.push({
-            //         'TaskType': '正常任务：',
-            //         'Content': CommonTypeText.length + '次'
-            //     })
-            // }
-
         }
         return (
             <ul className={styles.month} >
@@ -283,7 +257,6 @@ export default class OperationCalendar extends Component {
             spining = this.props.loading;
             dataSource = this.props.HistoryRepairHistoryRecods === null ? null : this.props.HistoryRepairHistoryRecods;
         }
-        var pollutantType = localStorage.getItem('pollutantType')
         const columns = [{
             title: '校准人',
             width: '20%',
@@ -369,7 +342,7 @@ export default class OperationCalendar extends Component {
                                         getHeight='calc(100vh - 220px)'
                                         pollutantTypeloading={pollutantTypeloading}
                                         getStatusImg={this.getStatusImg} isloading={treedataloading}
-                                        treeCilck={this.treeCilck} treedatalist={datalist} PollutantType={pollutantType} ifSelect={true} />
+                                        treeCilck={this.treeCilck} treedatalist={datalist} PollutantType={this.state.pollutantTypeCode} ifSelect={true} />
                                 </div>
                             </div>
                         </div>
@@ -381,29 +354,6 @@ export default class OperationCalendar extends Component {
                             }} spinning={spining}>
                                 <Card bordered={false} style={{ height: 'calc(100vh - 110px)', overflow: 'auto' }}>
                                     <div>
-                                        {/* <div style={{ textAlign: 'left', marginBottom: -35 }}>
-                                            <div style={{
-                                                width: 6,
-                                                height: 6,
-                                                backgroundColor: '#faad14',
-                                                display: 'inline-block',
-                                                borderRadius: '100%',
-                                                cursor: 'pointer',
-                                                marginRight: 3
-                                            }}
-                                            /> <span style={{ cursor: 'pointer' }}> 异常任务</span>
-                                            <div style={{
-                                                width: 6,
-                                                height: 6,
-                                                backgroundColor: '#52c41a',
-                                                display: 'inline-block',
-                                                borderRadius: '100%',
-                                                cursor: 'pointer',
-                                                marginLeft: 20,
-                                                marginRight: 3
-                                            }}
-                                            /><span style={{ cursor: 'pointer' }}> 正常任务</span>
-                                        </div> */}
                                         {
                                             <Calendar dateCellRender={this.dateCellRender} monthCellRender={this.monthCellRender} onSelect={this.dateSelect} onPanelChange={this.onPanelChange} />
                                         }

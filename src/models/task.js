@@ -1,3 +1,4 @@
+import { message } from 'antd';
 import {
     GetTaskDetails, GetYwdsj, GetJzRecord,
     GetRecordType, GetJzHistoryRecord, GetConsumablesReplaceRecordList,
@@ -56,7 +57,6 @@ export default Model.extend({
         * GetYwdsj({
             payload,
         }, { call, update, select }) {
-            debugger
             const DataInfo = yield call(GetYwdsj, payload);
             if (DataInfo != null && DataInfo.requstresult == EnumRequstResult.Success) {
                 const isLoadMoreOpt = payload.isLoadMoreOpt; // 是否是加载更多操作
@@ -113,8 +113,7 @@ export default Model.extend({
                 if (DataInfo.data != null) {
                     yield update({ JzHistoryRecord: DataInfo.data, RecordCount: DataInfo.total, DGIMN: payload.DGIMN });
                 }
-            }
-            else {
+            } else {
                 yield update({
                     JzHistoryRecord: null,
                     RecordCount: 0,
@@ -315,10 +314,10 @@ export default Model.extend({
             payload,
         }, { call, update }) {
             const DataInfo = yield call(GetRepairDetail, payload);
-            if (DataInfo !== null && DataInfo.requstresult === '1') {
-                if (DataInfo.data !== null) {
-                    yield update({ Repair: DataInfo.data });
-                }
+            if (DataInfo.data !== null) {
+                yield update({ Repair: DataInfo.data });
+            } else {
+                yield update({ Repair: null });
             }
         },
         //获取维修记录历史
@@ -428,16 +427,18 @@ export default Model.extend({
             }
         },
         // 撤单
-         * GetPostRevokeTask({
+        * GetPostRevokeTask({
             payload,
-           }, { call }) {
-                const DataInfo = yield call(GetPostRevokeTask, payload);
-                if (DataInfo && DataInfo.requstresult ) {
-                    message.success('撤单成功!');
-                } else {
-                    message.error('撤单失败!');
-                }
-            },
+        }, { call }) {
+            const DataInfo = yield call(GetPostRevokeTask, payload);
+            if (DataInfo && DataInfo.requstresult) {
+                message.success('打回成功!');
+                payload.close();
+                payload.reload();
+            } else {
+                message.error('打回失败!');
+            }
+        },
 
         // 根据任务id判断出巡检记录表详情
         * GetPatrolTypeIdbyTaskId({
