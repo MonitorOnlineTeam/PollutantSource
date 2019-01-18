@@ -140,7 +140,6 @@ export default Model.extend({
                 //operationUserId:'766f911d-5e41-4bbf-b705-add427a16e77'
             };
             const response = yield call(getOperationHistoryRecordPageList, body);
-            debugger
             yield update({
                 operation: {
                     ...operation,

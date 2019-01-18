@@ -1,6 +1,6 @@
 
 import React, { Component } from 'react';
-import { Map, Markers, Polygon } from 'react-amap';
+import { Map, Markers, Polygon, InfoWindow } from 'react-amap';
 import { Row, Col, Card, List, Spin, Table, Calendar, Badge, Tag, Icon, Button, Tabs, Divider, Modal } from 'antd';
 import ReactEcharts from 'echarts-for-react';
 import moment from 'moment';
@@ -117,7 +117,10 @@ class SpecialWorkbench extends Component {
             clickThisPointName:'',
             SuggestValue:null,
             pdvisible: false,
-            selectpoint: null
+            selectpoint: null,
+            tooltipvisible: false,
+            overselectpoint:{pointName:""},
+            position:[0,0]
         };
     }
 
@@ -164,12 +167,21 @@ class SpecialWorkbench extends Component {
                 zoom={12}
             >
                 <Markers
+                    events={this.markersEvents}
                     markers={this.getMarkers()}
                     render={(item)=>this.renderMarkerLayout(item)}
                 />
                 {
                     this.getpolygon()
                 }
+                <InfoWindow
+                    position={this.state.position}
+                    visible={this.state.tooltipvisible}
+                    isCustom={true}
+                    offset={[0, -20]}
+                >
+                    {this.state.overselectpoint.pointName}
+                </InfoWindow>
             </Map>
         );
     }
@@ -377,8 +389,10 @@ class SpecialWorkbench extends Component {
         let listData = [];
         const {exceptionAlarm}=this.props;
         const colorArray={
-            "数据异常":"magenta",
-            "参数异常":"red",
+            "数据超标":"red",
+            "超标预警":"blue",
+            "数据异常":"gold",
+            "参数异常":"yellow",
             "逻辑异常":"volcano",
             "状态异常":"orange"
         };
@@ -623,9 +637,9 @@ class SpecialWorkbench extends Component {
             legendData=['正常','离线'];
             color=['rgb(48,155,86)','rgb(245,68,66)'];
             seriesName='实时联网率';
-            seriesData=[//(parseFloat(model.NetworkeRate) * 100).toFixed(2)
+            seriesData=[
                 {value:networkeRate, name:'正常'},
-                {value:100-networkeRate, name:'离线'}
+                {value:(100-networkeRate).toFixed(2), name:'离线'}
             ];
         }else if(type===2) {
             legendData=['达标','未达标'];
@@ -762,8 +776,8 @@ class SpecialWorkbench extends Component {
      */
     renderHourDataOverWarningList = () => {
         const listData = [];
-
-        this.props.hourDataOverWarningList.tableDatas.map((items) => {
+        const {hourDataOverWarningList}=this.props;
+        hourDataOverWarningList.tableDatas.map((items) => {
             //判断报警是否超过4小时
             listData.push({
                 title: `${items.PointName}`,
@@ -814,7 +828,8 @@ class SpecialWorkbench extends Component {
      */
     renderAllPointOverDataList = () => {
         const listData = [];
-        this.props.allPointOverDataList.tableDatas.map((item) => {
+        const {allPointOverDataList}=this.props;
+        allPointOverDataList.tableDatas.map((item) => {
             //判断报警是否超过4小时
             listData.push({
                 title: `${item.pointName}`,
@@ -880,9 +895,33 @@ class SpecialWorkbench extends Component {
      * 智能监控_地图点位渲染样式
      */
     renderMarkerLayout(extData) {
-        return <div style={{ position: 'absolute' }}><div style={MarkerLayoutStyle}>{extData.position.PointName}</div><img style={{ width: 15 }} src="/gisover.png" /></div>;
+        //
+        return <div style={{ position: 'absolute' }}><div style={MarkerLayoutStyle}>{extData.position.PointName}</div><img onMouseOver={this.imgClick.bind(this,extData,1)} onMouseOut={this.imgClick.bind(this,extData,0)} style={{ width: 15 }} src="/gisover.png" /></div>;
     }
 
+    /*     markersEvents = {
+        click: (MapsOption, marker) => {
+            const itemdata = marker.F.extData;
+            this.imgClick(itemdata);
+        }
+    }; */
+
+    imgClick=(extData,flag)=>{
+        if(flag===1){
+            this.setState({
+                tooltipvisible: true,
+                position: {
+                    latitude: extData.position.latitude,
+                    longitude: extData.position.longitude,
+                },
+                overselectpoint:{pointName:extData.position.PointName}
+            });
+        } else{
+            this.setState({
+                tooltipvisible: false
+            });
+        }
+    }
 
     // if(this.props.overPointList.tableDatas.length>0) {
     //     let position = {
@@ -907,7 +946,7 @@ class SpecialWorkbench extends Component {
             <span style={{marginRight:20}}>离线:<span style={{marginLeft:5,color:'rgb(244,5,4)'}}>{model.OffLine}</span></span>
             <span style={{marginRight:20}}>异常:<span style={{marginLeft:5,color:'gold'}}>{model.ExceptionNum}</span></span>
             <span style={{marginRight:20}}>关停:<span style={{marginLeft:5,color:'rgb(208,145,14)'}}>{model.StopNum}</span></span>
-        </span>;
+               </span>;
     }
 
     //如果是数据列表则没有选择污染物，而是展示全部污染物
@@ -1228,7 +1267,7 @@ class SpecialWorkbench extends Component {
                     <Row gutter={24}>
                         <Col xl={12} lg={24} md={24} sm={24} xs={24} style={{ marginBottom: 10 }}>
                             <Card
-                                title={`当前超标排口(${this.props.overPointList.tableDatas.length}个)`}
+                                title={`当月超标排口(${this.props.overPointList.tableDatas.length}个)`}
                                 bordered={false}
                                 extra={<a href="#">更多&gt;&gt;</a>}
                             >
@@ -1333,7 +1372,7 @@ class SpecialWorkbench extends Component {
                                         extra={<a
                                             href="/qualitycontrol/transmissionefficiency"
                                         >更多>>
-                                               </a>}
+                                        </a>}
                                     >
                                         <Card.Grid style={gridStyle} loading={this.props.loadingRateStatistics}>
                                             {/* 十月传输有效率 */}
@@ -1485,6 +1524,7 @@ class SpecialWorkbench extends Component {
                     operationtel={selectpoint?selectpoint.operationtel:null}
                     reloadData={()=>this.Refresh()}
                 />
+
             </div>
         );
     }
