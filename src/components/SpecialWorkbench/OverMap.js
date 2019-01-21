@@ -38,7 +38,8 @@ class OverMap extends Component {
         this.state = {
             tooltipvisible: false,
             overselectpoint: { pointName: "" },
-            position: [0, 0]
+            position: [0, 0],
+            useCluster:true
         };
     }
 
@@ -179,6 +180,7 @@ class OverMap extends Component {
                 <Markers
                     events={this.markersEvents}
                     markers={this.getMarkers()}
+                    useCluster={this.state.useCluster}
                     render={(item) => this.renderMarkerLayout(item)}
                 />
                 {
