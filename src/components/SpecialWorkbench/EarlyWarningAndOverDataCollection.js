@@ -394,6 +394,8 @@ class EarlyWarningAndOverDataCollection extends Component {
     renderAllPointOverDataList = () => {
         const listData = [];
         const { allPointOverDataList } = this.props;
+        console.log(allPointOverDataList);
+        debugger
         allPointOverDataList.tableDatas.map((item) => {
             //判断报警是否超过4小时
             listData.push({
