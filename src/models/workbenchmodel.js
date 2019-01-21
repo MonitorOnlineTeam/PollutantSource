@@ -40,8 +40,8 @@ export default Model.extend({
             total: 0,
         },
         exceptionAlarm: {
-            beginTime: '2018-11-01 00:00:00', //moment().format("YYYY-MM-01 00:00:00"),
-            endTime: moment().add(1, 'seconds').format('YYYY-MM-DD HH:mm:ss'),
+            beginTime: moment().add(-24, 'hour').format("YYYY-MM-DD HH:mm:ss"),
+            endTime: moment().format('YYYY-MM-DD HH:mm:ss'),
             tableDatas: [],
             pageIndex: 1,
             pageSize: 4,
