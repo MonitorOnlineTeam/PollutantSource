@@ -1,3 +1,7 @@
+import React from 'react';
+import moment from 'moment';
+import { Icon, message } from 'antd';
+import { Model } from '../dvapack';
 import { querypolluntantentinfolist,
     queryregionlist,
     queryindustrytypelist,
@@ -13,11 +17,8 @@ import { querypolluntantentinfolist,
     queryaddeep,
     querydelep
 } from '../services/api';
-import React from 'react';
-import moment from 'moment';
-import { Model } from '../dvapack';
-import { Icon, message } from 'antd';
 import {enterpriceid} from '../config';
+
 export default Model.extend({
     namespace: 'baseinfo',
     state: {
@@ -90,16 +91,15 @@ export default Model.extend({
         },
         * queryeeplist({payload}, {call, update}) {
             const pdlist = yield call(queryeeplist);
-            if(pdlist && pdlist.data)
-            {
-                yield update({ 
+            if(pdlist && pdlist.data) {
+                yield update({
                     pdlist:pdlist.data,
                     total:pdlist.total,
                     pageIndex:1,
                     pageSize:20
                 });
             }
-            
+
         },
         * queryaddeep({payload}, {call, put, update}) {
             const requstresult = yield call(queryaddeep, {...payload});

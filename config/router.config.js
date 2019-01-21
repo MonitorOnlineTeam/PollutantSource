@@ -42,7 +42,7 @@ export default [
         path: '/',
         component: '../layouts/BasicLayout',
         routes: [
-            { path: '/', redirect: '/homepage' },
+            { path: '/', redirect: '/workbench' },
             /* 主页 */
             {
                 path: '/homepage', component: './HomePage',
@@ -111,7 +111,7 @@ export default [
             },
 
             /* 任务详情 */
-            { path: '/taskdetail/emergencydetailinfo/:viewtype/:taskfrom/:TaskID', component: './EmergencyTodoList/EmergencyDetailInfo' },
+            { path: '/taskdetail/emergencydetailinfo/:viewtype/:taskfrom/:TaskID/:DGIMN', component: './EmergencyTodoList/EmergencyDetailInfo' },
             /* 停机记录 */
             { path: '/patrolform/stopcemsinfo/:pointcode/:viewtype/:taskfrom/:histroyrecordtype/:TaskID', component: './EmergencyTodoList/StopCemsInfo' },
             /* 维修记录 */
