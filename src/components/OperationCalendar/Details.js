@@ -73,7 +73,7 @@ export default class Details extends Component {
                 dataIndex: 'opt',
                 render: (text, record) => (
                     <a onClick={
-                        () => this.props.dispatch(routerRedux.push(`/TaskDetail/EmergencyDetailInfo/workbench/nop/${record.TaskID}`))
+                        () => this.props.dispatch(routerRedux.push(`/TaskDetail/EmergencyDetailInfo/workbench/nop/${record.TaskID}/${record.DGIMN}`))
                     }
                     > 详情
                     </a>

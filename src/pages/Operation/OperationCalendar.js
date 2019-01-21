@@ -275,45 +275,6 @@ export default class OperationCalendar extends Component {
             spining = this.props.loading;
             dataSource = this.props.HistoryRepairHistoryRecods === null ? null : this.props.HistoryRepairHistoryRecods;
         }
-        const columns = [{
-            title: '校准人',
-            width: '20%',
-            dataIndex: 'CreateUserID',
-            key: 'CreateUserID'
-        }, {
-            title: '维修项目',
-            width: '45%',
-            dataIndex: 'RecordItem',
-            key: 'RecordItem',
-            render: (text, record) => {
-                if (text !== undefined) {
-                    var content = text.split(',');
-                    var resu = [];
-                    content.map((item, key) => {
-                        resu.push(
-                            <Tag style={{ marginBottom: 1.5, marginTop: 1.5 }} color="#108ee9">{item}</Tag>
-                        );
-                    });
-                }
-                return resu;
-            }
-        }, {
-            title: '记录时间',
-            dataIndex: 'CreateTime',
-            width: '20%',
-            key: 'CreateTime',
-            sorter: (a, b) => Date.parse(a.CreateTime) - Date.parse(b.CreateTime),
-        }, {
-            title: '详细',
-            dataIndex: 'TaskID',
-            width: '15%',
-            key: 'TaskID',
-            render: (text, record) => {
-                return <a onClick={
-                    () => this.seeDetail(text, record)
-                } > 详细 </a>;
-            }
-        }];
         if (this.props.isloading) {
             return (<Spin
                 style={{
