@@ -394,23 +394,23 @@ class EarlyWarningAndOverDataCollection extends Component {
     renderAllPointOverDataList = () => {
         const listData = [];
         const { allPointOverDataList } = this.props;
+        console.log('allPointOverDataList',this.props.allPointOverDataList);
         allPointOverDataList.tableDatas.map((item) => {
             //判断报警是否超过4小时
             listData.push({
-                title: `${item.pointName}`,
+                title: `${item.PointName}`,
                 description: (
                     <div>
                         {
-                            item.pollutantList.map(item => (
-                                <div>
-                                    <div style={{ backgroundColor: 'rgb(249,249,249)', padding: 10, marginBottom: 5 }}>
-                                        {item.pollutantName} 超标:{item.Count}次
-                                        <Divider type="vertical" style={{ backgroundColor: '#b3b3b3' }} />
-                                        超标倍数:{item.MinMultiple}-{item.MaxMultiple}
-                                        <span style={{ float: 'right' }}>{item.time}</span>
-                                    </div>
+                            <div>
+                                <div style={{ backgroundColor: 'rgb(249,249,249)', padding: 10, marginBottom: 5 }}>
+                                    {item.PollutantNames}
+                                    <Divider type="vertical" style={{ backgroundColor: '#b3b3b3' }} />
+                                    超标:{item.AlarmCount}次
+                                    <span style={{ float: 'right' }}>{moment(item.LastTime).format('YYYY-MM-DD HH:00')}~{moment(item.FirstTime).format('YYYY-MM-DD HH:00')}</span>
                                 </div>
-                            ))
+                            </div>
+
                         }
                     </div>
                 )

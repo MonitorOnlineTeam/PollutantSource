@@ -170,7 +170,7 @@ class ExceptionAlarm extends Component {
                     className={styles.exceptionAlarm}
                     loading={this.props.loadingExceptionAlarm}
                 >
-                    <Card.Grid style={{ width: '100%', height: 736 }} key="1">
+                    <Card.Grid style={{ width: '100%', height: 736, overflow: 'auto' }} key="1">
                         {this.renderExceptionAlarmList()}
                     </Card.Grid>
                 </Card>
