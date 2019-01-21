@@ -272,6 +272,7 @@ export default class TransmissionEfficiency extends Component {
                                         marginLeft: 100,
                                         marginRight: 3
                                     }} /><span style={{cursor: 'pointer'}}> 排口传输有效率未达标</span>
+                                    <Badge style={{marginLeft:100,marginBottom:4}} status="warning"/><span style={{cursor: 'pointer'}}> 未达到平均值</span>
                                 </div>
                             </Col>
                         </Row>

@@ -1075,12 +1075,24 @@ class SpecialWorkbench extends Component {
         return this.getWarningChartOption();
     }
 
+
     /**
      * 智能监控_渲染预警详情表格数据
      */
     renderWarningDetailsTable = () => {
+        debugger;
         let { selectedPollutantCode, selectedPollutantName, chartDatas } = this.props.warningDetailsDatas;
+        const { pollutantList } = this.props;
 
+        const pollutantInfo=pollutantList.find(value=>{
+            return value.pollutantCode==selectedPollutantCode;
+        })
+        let standardValue=null;
+        if(pollutantInfo && pollutantInfo.standardValueStr)
+        {
+            standardValue=pollutantInfo.standardValueStr;
+        }
+        let suugestValue = this.state.SuggestValue;
         const columns = [
             {
                 title: '监测时间',
@@ -1102,15 +1114,35 @@ class SpecialWorkbench extends Component {
             },
             {
                 title: '标准值',
-                dataIndex: `${selectedPollutantCode}_StandardValue`,
+                dataIndex: 'standardValue',
                 width: '20%',
-                align: 'center'
+                align: 'center',
+                render: (text, record) => {
+                    if(standardValue)
+                    {
+                        return standardValue;
+                    }
+                    else
+                    {
+                        return '-';
+                    }
+                },
             },
             {
                 title: '建议浓度',
                 dataIndex: `${selectedPollutantCode}_SuggestValue`,
                 width: '20%',
-                align: 'center'
+                align: 'center',
+                render: (text, record) => {
+                    if(suugestValue)
+                    {
+                        return suugestValue;
+                    }
+                    else
+                    {
+                        return '-';
+                    }
+                },
             }
         ];
 
