@@ -7,6 +7,7 @@ import styles from './DataList.less';
 import AListRadio from '../../components/OverView/AListRadio';
 import UrgentDispatch from '../../components/OverView/UrgentDispatch';
 
+
 const RadioGroup = Radio.Group;
 @connect(({ loading, overview }) => ({
     columnsdata: overview.columns,
@@ -299,6 +300,7 @@ class dataList extends PureComponent {
         <li style={{ listStyle: 'none', marginBottom: 5 }}>
             <Button onClick={() => {
                 let viewtype='datalistview';
+
                 this.props.dispatch(routerRedux.push(`/pointdetail/${record.DGIMN}/${viewtype}`));
             }}
             ><Icon type="book" style={{ color: '#3C9FDA', marginRight: 5 }} theme="filled" /> 进入站房

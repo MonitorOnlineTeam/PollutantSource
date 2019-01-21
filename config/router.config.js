@@ -59,7 +59,7 @@ export default [
             {
                 path: '/pointdetail/:pointcode/:viewtype', component: './PointDetail', routes: [
                     /* 默认 */
-                    { path: '/pointdetail/:pointcode/:viewtype', redirect: '/pointdetail/:pointcode/:viewtype/processflowdiagram' },
+                    // { path: '/pointdetail/:pointcode/:viewtype', redirect: '/pointdetail/:pointcode/:viewtype/processflowdiagram' },
                     /* 工艺流程图 */
                     { path: '/pointdetail/:pointcode/:viewtype/processflowdiagram', component: './PointDetail/ProcessFlowDiagram' },
                     /* 数据查询 */

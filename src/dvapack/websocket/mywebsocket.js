@@ -1,16 +1,18 @@
-import config from '../../config';
 import Cookie from 'js-cookie';
+import config from '../../config';
 
 // cg add 2018.4.1
-const ws = new WebSocket('ws://' + config.webSocketPushURL + '/');
-
-export function listen(cb) {
+const ws = new WebSocket(`ws://${ config.webSocketPushURL }/`);
+window.ws=ws;
+export function listen(callback) {
     ws.onopen = event => {
-        console.log('connected');
         const response = Cookie.get('token');
         if (response) {
             const user = JSON.parse(response);
-            if (user) { ws.send(user.User_Account); }
+            if (user) {
+                ws.send(user.User_Account);
+                console.log(`onopen:${user.User_Account}`);
+            }
         }
     };
 
@@ -23,16 +25,17 @@ export function listen(cb) {
     };
 
     ws.onmessage = event => {
-        console.log(`Roundtrip time: ${Date.now() - event.data} ms`);
+        // setTimeout(() => {
+        //     const response = Cookie.get('token');
+        //     if (response) {
+        //         const user = JSON.parse(response);
+        //         if (user) {
+        //             ws.send(user.User_Account);
+        //             console.log(`onmessage:${user.User_Account}`);
+        //         }
+        //     }
+        // }, 30000);
 
-        setTimeout(() => {
-            const response = Cookie.get('token');
-            if (response) {
-                const user = JSON.parse(response);
-                if (user) { ws.send(user.User_Account); }
-            }
-        }, 30000);
-
-        cb(event.data);
+        callback(event.data);
     };
 }
