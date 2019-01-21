@@ -141,7 +141,9 @@ export default Model.extend({
                 IsPaging: false
                 //operationUserId:'766f911d-5e41-4bbf-b705-add427a16e77'
             };
+            debugger
             const response = yield call(getOperationHistoryRecordPageList, body);
+            debugger
             yield update({
                 operation: {
                     ...operation,
