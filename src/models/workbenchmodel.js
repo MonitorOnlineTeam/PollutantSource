@@ -44,7 +44,7 @@ export default Model.extend({
             endTime: moment().format('YYYY-MM-DD HH:mm:ss'),
             tableDatas: [],
             pageIndex: 1,
-            pageSize: 4,
+            pageSize: 100,
             total: 0,
         },
         rateStatistics: {
