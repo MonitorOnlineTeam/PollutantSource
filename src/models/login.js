@@ -5,8 +5,8 @@ import { fakeAccountLogin, sendCaptcha } from '../services/user';
 import { Model } from '../dvapack';
 
 const delay = (timeout) => new Promise(resolve => {
-        setTimeout(resolve, timeout);
-    });
+    setTimeout(resolve, timeout);
+});
 export default Model.extend({
     namespace: 'login',
     state: {
@@ -35,9 +35,11 @@ export default Model.extend({
                 payload: { status: response.requstresult === '1' ? 'ok' : 'faild' },
             });
             // Login successfully
-            if (response.requstresult === '1') { 
-                Cookie.set('token', response.data); 
-
+            if (response.requstresult === '1') {
+                Cookie.set('token', response.data);
+                const ws=window.ws;
+                ws.send(response.data.User_Account);
+                console.log(`onmessage:${response.data.User_Account}`);
                 router.push('/');
             }
         },
@@ -49,7 +51,7 @@ export default Model.extend({
                 },
             });
             Cookie.remove('token');
-             router.push('/user/login');
+            router.push('/user/login');
         },
         * getCaptcha({ payload }, { call, put }) {
             // ;
