@@ -23,19 +23,7 @@ modify by wjw 18.12.24
 class SpecialWorkbench extends Component {
     componentWillMount() {
         this.getStatisticsPointStatus();
-        this.getEntInfo();
     }
-
-    /**
-     * 获取企业信息
-     */
-    getEntInfo = () => {
-        this.props.dispatch({
-            type: 'baseinfo/queryentdetail',
-            payload: {}
-        });
-    }
-
     /**
      * 智能监控_排口的所有状态_更新数据
      */
