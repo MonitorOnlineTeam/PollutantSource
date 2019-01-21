@@ -85,8 +85,10 @@ export default Model.extend({
         },
         allPointOverDataList: {
             tableDatas: [],
-            // pageIndex: 1,
-            // pageSize: 3,
+            beginTime: moment().add(-24, 'hour').format("YYYY-MM-DD HH:mm:ss"),
+            endTime: moment().format('YYYY-MM-DD HH:mm:ss'),
+            pageIndex: 1,
+            pageSize: 100,
             total: 0,
         },
         overPointList: {
@@ -280,7 +282,7 @@ export default Model.extend({
                     ...allPointOverDataList,
                     ...{
                         tableDatas: response.data,
-                        // pageIndex:allPointOverDataList.pageIndex || 1,
+                        pageIndex:allPointOverDataList.pageIndex || 1,
                         total: response.total
                     }
                 }

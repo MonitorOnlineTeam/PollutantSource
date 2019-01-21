@@ -409,37 +409,67 @@ class SpecialWorkbench extends Component {
             const labelDiv = <div style={{ color: `${color}` }}>已发生{hour}小时{minutesLable}</div>;
             //未响应，按钮是派单;响应了超过4个小时是督办
             let btnDiv = '';
-            if (item.State === "0") {
-                btnDiv = hour >= 4 ? (
-                    <div style={{ marginTop: 43 }}>
-                        <Button
-                            onClick={() => {
-                                this.urge(item.DGIMNs);
-                            }}
-                            style={{ width: 100, border: 'none', backgroundColor: 'rgb(74,210,187)' }}
-                            type="primary"
-                        >督办
-                        </Button>
-                    </div>
-                ) : '';
-            } else if (item.State === "1") {
-                btnDiv = (
-                    <div style={{ marginTop: 43 }}>
+            // if (item.State === "0") {
+            //     btnDiv = hour >= 4 ? (
+            //         <div style={{ marginTop: 43 }}>
+            //             <Button
+            //                 onClick={() => {
+            //                     this.urge(item.DGIMNs);
+            //                 }}
+            //                 style={{ width: 100, border: 'none', backgroundColor: 'rgb(74,210,187)' }}
+            //                 type="primary"
+            //             >督办
+            //             </Button>
+            //         </div>
+            //     ) : '';
+            // } else if (item.State === "1") {
+            //     btnDiv = (
+            //         <div style={{ marginTop: 43 }}>
+            //             <Button
+            //                 onClick={() => {
+            //                     this.setState({
+            //                         pdvisible: true,
+            //                         selectpoint: null
+            //                     });
+            //                 }}
+            //                 style={{ width: 100, border: 'none', backgroundColor: 'rgb(74,210,187)' }}
+            //                 type="primary"
+            //             >派单
+            //             </Button>
+            //         </div>
+            //     );
+            // }
+            if (item.State==="0") {
+                btnDiv=(
+                    <div style={{marginTop:43}}>
                         <Button
                             onClick={() => {
                                 this.setState({
                                     pdvisible: true,
                                     selectpoint: null
                                 });
+                                
                             }}
-                            style={{ width: 100, border: 'none', backgroundColor: 'rgb(74,210,187)' }}
+                            style={{width:100,border:'none',backgroundColor:'rgb(74,210,187)'}}
                             type="primary"
                         >派单
                         </Button>
                     </div>
                 );
+            }else if(item.State==="1"){
+                btnDiv=hour>= 4 ?(
+                    <div style={{marginTop:43}}>
+                        <Button
+                            onClick={()=>{
+                                this.urge(item.DGIMNs);
+                            }}
+                            style={{width:100,border:'none',backgroundColor:'rgb(74,210,187)'}}
+                            type="primary"
+                        >督办
+                        </Button>
+                    </div>
+                ):'';
             }
-
             return {
                 href: 'http://ant.design',
                 title: `${item.PointName}`,
