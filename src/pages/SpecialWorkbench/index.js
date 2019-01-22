@@ -3,8 +3,8 @@ import React, { PureComponent } from 'react';
 import { Row, Col } from 'antd';
 
 import styles from './index.less';
-import OverMap from '../../components/SpecialWorkbench/OverMap';
-import EarlyWarningAndOverDataCollection from '../../components/SpecialWorkbench/EarlyWarningAndOverDataCollection';
+import OverDataStatistics from '../../components/SpecialWorkbench/OverDataStatistics';
+import RealTimeWarning from '../../components/SpecialWorkbench/RealTimeWarning';
 import ExceptionAlarm from '../../components/SpecialWorkbench/ExceptionAlarm';
 import OperationCalendar from '../../components/SpecialWorkbench/OperationCalendar';
 import PointStates from '../../components/SpecialWorkbench/PointStates';
@@ -19,8 +19,6 @@ modify by wjw 18.12.24
 */
 
 class SpecialWorkbench extends PureComponent {
-
-
     render() {
         return (
             <div
@@ -38,10 +36,11 @@ class SpecialWorkbench extends PureComponent {
                     </div>
                     <Row gutter={24}>
                         <Col xl={12} lg={24} md={24} sm={24} xs={24} style={{ marginBottom: 10 }}>
-                            <OverMap />
+                            {/* <OverMap /> */}
+                            <OverDataStatistics />
                         </Col>
                         <Col xl={12} lg={24} md={24} sm={24} xs={24}>
-                            <EarlyWarningAndOverDataCollection />
+                            <RealTimeWarning />
                         </Col>
                     </Row>
                     <div className={styles.headerDiv}>

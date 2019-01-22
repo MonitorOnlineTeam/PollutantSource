@@ -19,8 +19,7 @@ import {
     getOverPoints,
     getStatisticsPointStatus
 } from '../services/workbenchapi';
-import { querypolluntantentinfolist} from '../services/api';
-import {queryhistorydatalist} from '../services/api';
+import { querypolluntantentinfolist,queryhistorydatalist} from '../services/api';
 import {enterpriceid} from '../config';
 
 export default Model.extend({
@@ -174,6 +173,7 @@ export default Model.extend({
                 //operationUserId:'766f911d-5e41-4bbf-b705-add427a16e77'
             };
             const response = yield call(getDataExceptionAlarmPageList, body);
+            //debugger;
             yield update({
                 exceptionAlarm: {
                     ...exceptionAlarm,
@@ -276,9 +276,13 @@ export default Model.extend({
         * getAllPointOverDataList({ payload }, { call, put, update, select }) {
             const { allPointOverDataList } = yield select(state => state.workbenchmodel);
             //debugger;
-            let body = {};
+            let body = {
+                beginTime: allPointOverDataList.beginTime,
+                endTime: allPointOverDataList.endTime,
+                pageSize: allPointOverDataList.pageSize,
+                pageIndex: allPointOverDataList.pageIndex,
+            };
             const response = yield call(getAllPointOverDataList, body);
-            //debugger;
             yield update({
                 allPointOverDataList: {
                     ...allPointOverDataList,
