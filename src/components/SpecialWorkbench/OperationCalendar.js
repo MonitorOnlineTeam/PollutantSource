@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { Card, Calendar, Badge,Row, Col ,Tag,Table} from 'antd';
 import moment from 'moment';
 import { connect } from 'dva';
@@ -15,7 +15,7 @@ import styles from './OperationCalendar.less';
 /**
  * 运维日历（5）
  */
-class OperationCalendar extends Component {
+class OperationCalendar extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {

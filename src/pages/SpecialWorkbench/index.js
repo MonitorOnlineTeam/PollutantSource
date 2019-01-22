@@ -1,5 +1,5 @@
 
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { Row, Col } from 'antd';
 
 import styles from './index.less';
@@ -16,7 +16,7 @@ add by cg 18.6.8
 modify by wjw 18.12.24
 */
 
-class SpecialWorkbench extends Component {
+class SpecialWorkbench extends PureComponent {
     render() {
         return (
             <div

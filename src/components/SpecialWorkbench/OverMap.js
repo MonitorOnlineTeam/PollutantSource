@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { Card, Spin } from 'antd';
 import { Map, Markers, Polygon, InfoWindow } from 'react-amap';
 import { connect } from 'dva';
@@ -32,7 +32,7 @@ const MarkerLayoutStyle = {
 页面：地图(1)
 */
 
-class OverMap extends Component {
+class OverMap extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {

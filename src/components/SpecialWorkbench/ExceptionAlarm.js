@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { Card, List, Tag, Icon, Button } from 'antd';
 import moment from 'moment';
 import { connect } from 'dva';
@@ -12,7 +12,7 @@ import UrgentDispatch from "../OverView/UrgentDispatch";
     loadingExceptionAlarm: loading.effects['workbenchmodel/getExceptionAlarmData'],
     exceptionAlarm: workbenchmodel.exceptionAlarm,
 }))
-class ExceptionAlarm extends Component {
+class ExceptionAlarm extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { Row, Col, Card, List, Tabs, Divider, Modal, Table } from 'antd';
 import { connect } from 'dva';
 import moment from 'moment';
@@ -28,7 +28,7 @@ const TabPane = Tabs.TabPane;
     pollutantList: points.pollutantlist,
     loadingRealTimeWarningDatas: loading.effects[pageUrl.getRealTimeWarningDatas],
 }))
-class EarlyWarningAndOverDataCollection extends Component {
+class EarlyWarningAndOverDataCollection extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {

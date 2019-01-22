@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { connect } from 'dva';
 
 @connect(({
@@ -6,7 +6,7 @@ import { connect } from 'dva';
 }) => ({
     statisticsPointStatus: workbenchmodel.statisticsPointStatus,
 }))
-class PointStates extends Component {
+class PointStates extends PureComponent {
     componentWillMount() {
         this.getStatisticsPointStatus();
     }

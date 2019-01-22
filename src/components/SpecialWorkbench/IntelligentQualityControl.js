@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { Row, Col, Card, Table, Button, Tabs } from 'antd';
 import ReactEcharts from 'echarts-for-react';
 import moment from 'moment';
@@ -30,7 +30,7 @@ const gridStyle = {
  * 智能质控_加载图表数据(3)
  */
 
-class IntelligentQualityControl extends Component {
+class IntelligentQualityControl extends PureComponent {
     componentWillMount() {
         this.getRateStatisticsData();
         this.getNetworkeRateData();
