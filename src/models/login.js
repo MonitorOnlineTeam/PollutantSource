@@ -37,8 +37,12 @@ export default Model.extend({
             // Login successfully
             if (response.requstresult === '1') {
                 Cookie.set('token', response.data);
-                const ws=window.ws;
-                ws.send(response.data.User_Account);
+                try {
+                    const ws=window.ws;
+                    ws.send(response.data.User_Account);
+                } catch (error) {
+
+                }
                 console.log(`onmessage:${response.data.User_Account}`);
                 router.push('/');
             }
