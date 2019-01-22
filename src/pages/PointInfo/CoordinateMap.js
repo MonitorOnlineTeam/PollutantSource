@@ -19,22 +19,25 @@ class AMapModule extends React.Component {
             status: 0
         };
     }
+
     componentWillMount() {
         if (!window.AMap && !(window.google && window.google.maps)) {
             axios.get(googleMapSdk, {timeout: 1000}).then(res => {
-                $script([googleMapSdk], function(a, b) {});
-            }).catch(function(error) {
-                $script([gaodeMapSdk], function(a, b) {});
+                $script([googleMapSdk], (a, b) => {});
+            }).catch((error) => {
+                $script([gaodeMapSdk], (a, b) => {});
             });
         }
+        this.props.onRef(this);
     }
+
     componentDidMount() {
         let _this = this;
         function listenerStorage() {
             if (window.AMap || (window.google && window.google.maps)) {
                 if (window.AMap) {
-                    const {lat, lng, getMapAddress} = _this.props;
-                    const latlngxy = [(!lng || lng === 'undefined' || lng === '0') ? 116.397428 : lng, (!lat || lat === 'undefined' || lat === '0') ? 39.90923 : lat];// 默认北京天安门
+                    const {lat, lng, getMapAddress,getMapPoint} = _this.props;
+                    const latlngxy = [!lng || lng === 'undefined' || lng === '0' ? 116.397428 : lng, !lat || lat === 'undefined' || lat === '0' ? 39.90923 : lat];// 默认北京天安门
                     map = new window.AMap.Map('allmap', {
                         resizeEnable: true,
                         center: latlngxy,
@@ -56,26 +59,28 @@ class AMapModule extends React.Component {
                         position: latlngxy
                     });
 
-                    map.on('click', function(e) {
+                    map.on('click', (e) => {
                         marker.setPosition(e.lnglat);
-                        window.AMap.service('AMap.Geocoder', function() { // 回调函数
+                        window.AMap.service('AMap.Geocoder', () => { // 回调函数
                             // 实例化Geocoder
                             geocoder = new window.AMap.Geocoder({});
-                            geocoder.getAddress(e.lnglat, function(status, result) {
+                            geocoder.getAddress(e.lnglat, (status, result) => {
                                 if (status === 'complete' && result.info === 'OK') {
                                     const address = result.regeocode.formattedAddress;
                                     getMapAddress && getMapAddress(address);
                                 }
                             });
                         });
+                        const point = [e.lnglat.getLng(), e.lnglat.getLat()];
+                        getMapPoint && getMapPoint(point);
                     });
                 }
 
                 if (window.google && window.google.maps) {
                     const {lat, lng, getMapAddress} = _this.props;
-                    const latlngxy = [(!lng || lng === 'undefined' || lng === '0') ? 116.397428 : lng, (!lat || lat === 'undefined' || lat === '0') ? 39.90923 : lat];// 默认北京天安门
+                    const latlngxy = [!lng || lng === 'undefined' || lng === '0' ? 116.397428 : lng, !lat || lat === 'undefined' || lat === '0' ? 39.90923 : lat];// 默认北京天安门
 
-                    var uluru = {lat: parseFloat(latlngxy[1]), lng: parseFloat(latlngxy[0])}; // google need number
+                    let uluru = {lat: parseFloat(latlngxy[1]), lng: parseFloat(latlngxy[0])}; // google need number
 
                     initMap();
                     function initMap() {
@@ -91,16 +96,16 @@ class AMapModule extends React.Component {
                         });
                     }
 
-                    map.addListener('click', function(e) {
+                    map.addListener('click', (e) => {
                         let latlng = e.latLng;
                         marker.setPosition(latlng);
                         geocoder = new window.google.maps.Geocoder();
-                        geocoder.geocode({'location': latlng}, function(results, status) {
+                        geocoder.geocode({'location': latlng}, (results, status) => {
                             if (status === 'OK') {
                                 const address = results[0].formatted_address;
                                 getMapAddress && getMapAddress(address.substring(0, address.indexOf(' ')));
                             } else {
-                                console.log('Geocoder failed due to: ' + status);
+                                console.log(`Geocoder failed due to: ${ status}`);
                             }
                         });
                     });
@@ -109,7 +114,7 @@ class AMapModule extends React.Component {
                     status: 1
                 });
             } else {
-                setTimeout(function() {
+                setTimeout(() => {
                     listenerStorage();
                 }, 800);
             }
@@ -117,40 +122,40 @@ class AMapModule extends React.Component {
         listenerStorage();
     }
 
-  componentWillReceiveProps=(nextProps) => {
-      const {getMapPoint} = this.props;
-      if (window.AMap && nextProps.address && nextProps.address != this.props.address) {
-          window.AMap.service('AMap.Geocoder', function() { // 回调函数
+  btnserch=() => {
+      debugger;
+      const {getMapPoint,address} = this.props;
+      if (window.AMap && address) {
+          window.AMap.service('AMap.Geocoder', () => { // 回调函数
           // 实例化Geocoder
               geocoder = new window.AMap.Geocoder({});
-              geocoder.getLocation(nextProps.address, function(status, result) {
+              geocoder.getLocation(address, (status, result) => {
                   if (status === 'complete' && result.info === 'OK') {
                       let latlng = result.geocodes[0].location;
-                      getMapPoint && getMapPoint(latlng);
                       // 设置缩放级别和中心点
-                      let latlngxy = [latlng['lng'], latlng['lat']];
+                      let latlngxy = [latlng.lng, latlng.lat];
                       const currentZoom = map.getZoom();
                       map.setZoomAndCenter(currentZoom != zoomLevel ? currentZoom : zoomLevel, latlngxy);
                       // 在新中心点添加 marker
-                      marker.setPosition(latlng);
+                      //   marker.setPosition(latlng);
                   } else {
-                      console.log('search "' + nextProps.address + '" no data');
+                      console.log(`search "${ address }" no data`);
                   }
               });
           });
       }
 
-      if (window.google && window.google.maps && nextProps.address && nextProps.address != this.props.address) {
+      if (window.google && window.google.maps && address) {
           geocoder = new window.google.maps.Geocoder();
-          geocoder.geocode({'address': nextProps.address}, function(results, status) {
+          geocoder.geocode({'address': address}, (results, status) => {
               if (status === 'OK') {
                   let latlng = results[0].geometry.location;
                   getMapPoint && getMapPoint({lat: latlng.lat(), lng: latlng.lng()});
                   map.setCenter(latlng);
                   // 在新中心点添加 marker
-                  marker.setPosition(latlng);
+                  //   marker.setPosition(latlng);
               } else {
-                  console.log('Geocode was not successful for the following reason: ' + status);
+                  console.log(`Geocode was not successful for the following reason: ${ status}`);
               }
           });
       }

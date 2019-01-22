@@ -8,6 +8,9 @@ import {
 import {
     connect
 } from 'dva';
+import {
+  routerRedux
+} from 'dva/router';
 import DescriptionList from '../../components/DescriptionList';
 import MonitorContent from '../../components/MonitorContent/index';
 import AddAnalyzerSys from '../PointInfo/AddAnalyzerSys';
@@ -71,7 +74,8 @@ export default class pointview extends Component {
             GaseousList:[],
             SmokeList:[],
             PMList:[],
-            PollutantType:this.props.match.params.PollutantType===1?"none":"block",
+            PollutantType:null,
+            pointstatus:0,
         };
     }
     componentWillMount() {
@@ -101,6 +105,8 @@ export default class pointview extends Component {
                             OutPutWhither: this.props.editpoint.OutPutWhither,
                             PointType: this.props.editpoint.PointType,
                             OperationerName: this.props.editpoint.OperationerName,
+                            PollutantType: this.props.editpoint.pollutantType === 1 ? "none" : "block",
+                            pointstatus: this.props.editpoint.pointstatus,
                         });
                     }
                 },
@@ -324,11 +330,37 @@ export default class pointview extends Component {
           },
         });
     }
+    backbtn=()=>{
+        const rtnVal=[];
+        rtnVal.push(<Button type = "dashed"
+            onClick = {
+              () => this.props.dispatch(routerRedux.push(`/sysmanage/PointInfo`))
+            } style={{width:'200'}} >
+            返回 </Button>);
+            return rtnVal;
+    }
     pointinfo = () => {
         const rtnVal = [];
+        const status=[];
+        if(this.state.pointstatus===0)
+        {
+            status.push(<Badge className={styles.pintview} status="default" text="离线" />);
+        }
+        if(this.state.pointstatus===1)
+        {
+            status.push(<Badge className={styles.pintview} status="success" text="在线" />);
+        }
+        if(this.state.pointstatus===2)
+        {
+            status.push(<Badge className={styles.pintview} status="error" text="超标" />);
+        }
+        if(this.state.pointstatus===3)
+        {
+            status.push(<Badge className={styles.pintview} status="warning" text="异常" />);
+        }
         rtnVal.push(<div style={{backgroundColor:'#1890FF',width:5,lineHeight:1}}>
         <span style={{marginLeft:10}}>排口基本信息</span>
-        <span style={{marginLeft:10}} className='status'><Badge className={styles.pintview} status="success" text="正常" /></span>
+        <span style={{marginLeft:10}} className='status'>{status}</span>
         </div>);
         return rtnVal;
     }
@@ -479,7 +511,7 @@ export default class pointview extends Component {
                 ]
             }>
                <div style={{marginTop:10,marginLeft:30,marginBottom:10,marginRight:30}}>
-                 <Card title={this.pointinfo()}  loading={this.props.pointloading}>
+                 <Card title={this.pointinfo()}  loading={this.props.pointloading} extra={this.backbtn()}>
                      <Card.Grid style={gridStyle}>
                         <DescriptionList size="small" col="4" gutter="10" style={{marginLeft:10}} >
                             <Description term="排口编号">{this.state.DGIMN}</Description>
