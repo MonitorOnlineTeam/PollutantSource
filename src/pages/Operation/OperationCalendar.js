@@ -124,8 +124,7 @@ export default class OperationCalendar extends Component {
                         if (existdata == undefined) {
                             this.GetData('1');
                         }
-                        else
-                        {
+                        else {
                             this.props.dispatch({
                                 type: 'workbenchmodel/getOperationCalendarData',
                                 payload: {
@@ -162,6 +161,7 @@ export default class OperationCalendar extends Component {
         let exceptionlistData = [];
         let commonlistData = [];
         var returnResult = [];
+        let operationingday = null;
         let thisData = this.props.operation.tempTableDatas.filter(m => moment(m.CreateTime).format('YYYY-MM-DD') === value.format("YYYY-MM-DD"));
         if (!this.props.treedataloading && !this.props.pollutantTypeloading && !this.props.loading) {
             if (thisData && thisData.length > 0) {
@@ -181,25 +181,36 @@ export default class OperationCalendar extends Component {
                             'content': item.TaskTypeText + '-' + item.ExceptionTypeText
                         })
                     })
+                    operationingday = ExceptionTypeText.filter(m => m.TaskStatus === 2);
                 }
             }
         }
         return (
-            <ul className={styles.day} >
-                {
-                    returnResult.map(item => (
-                        <li key={item.content}>
-                            <Tag style={{ marginBottom: 1, marginTop: 1 }} color={item.ExceptionTypeText === '报警响应异常' ? '#F70303' : item.ExceptionTypeText === '工作超时' ? '#F79503' : '#F7C603'}>{item.content}</Tag>
-                        </li>
-                    ))
-                }
-            </ul>
+            <div style={{ height: '90%' }} >
+                <div style={{ height: '80%' }}>
+                    <ul className={styles.day} >
+                        {
+                            returnResult.map(item => (
+                                <li key={item.content}>
+                                    <Tag style={{ marginBottom: 1, marginTop: 1 }} color={item.ExceptionTypeText === '报警响应异常' ? '#F70303' : item.ExceptionTypeText === '工作超时' ? '#F79503' : '#F7C603'}>{item.content}</Tag>
+                                </li>
+                            ))
+                        }
+                    </ul>
+                </div>
+                <div style={{ height: '20%', textAlign: 'right' }}>
+                    {operationingday === null ? null : operationingday.length === 0 ? null : <Tag color="#F79855">{'进行中' + operationingday.length + '个'}</Tag>}
+                </div>
+            </div>
+
+
         );
     }
     //日历月显示内容
     monthCellRender = (value) => {
         let listData = [];
         var returnResult = [];
+        let operationingmonth = null;
         let thisData = this.props.operation.tempTableDatas.filter(m => moment(m.CreateTime).format('YYYY-MM') === value.format("YYYY-MM"));
         if (thisData && thisData.length > 0) {
             let ExceptionTypeText = thisData.filter(m => m.ExceptionTypeText !== "");
@@ -208,20 +219,27 @@ export default class OperationCalendar extends Component {
                     'TaskType': '异常任务：',
                     'Content': ExceptionTypeText.length + '次'
                 })
+                operationingmonth = ExceptionTypeText.filter(m => m.TaskStatus === 2);
+                debugger
             }
         }
         return (
-            <ul className={styles.month} >
-                {
-                    returnResult.map(item => (
-                        <li key={item.TaskType}>
-
-                            {/* <span>{item.TaskType}</span> */}
-                            <Tag style={{ height: 26, fontSize: 20, paddingBottom: 2, paddingTop: 2 }} color='#E83939'>{item.TaskType}{item.Content}</Tag>
-                        </li>
-                    ))
-                }
-            </ul>
+            <div style={{ height: '65%' }} >
+                <div style={{ height: '80%' }}>
+                    <ul className={styles.month} >
+                        {
+                            returnResult.map(item => (
+                                <li key={item.TaskType}>
+                                    <Tag style={{ height: 26, fontSize: 20, paddingBottom: 2, paddingTop: 2 }} color='#E83939'>{item.TaskType}{item.Content}</Tag>
+                                </li>
+                            ))
+                        }
+                    </ul>
+                </div>
+                <div style={{ height: '20%', textAlign: 'right',whiteSpace:'nowrap',textOverflow:'hidden' }}>
+                    {operationingmonth === null ? null : operationingmonth.length === 0 ? null : <Tag color="#F79855">{'进行中' + operationingmonth.length + '个'}</Tag>}
+                </div>
+            </div>
         );
     }
     dateSelect = (date) => {
@@ -257,45 +275,6 @@ export default class OperationCalendar extends Component {
             spining = this.props.loading;
             dataSource = this.props.HistoryRepairHistoryRecods === null ? null : this.props.HistoryRepairHistoryRecods;
         }
-        const columns = [{
-            title: '校准人',
-            width: '20%',
-            dataIndex: 'CreateUserID',
-            key: 'CreateUserID'
-        }, {
-            title: '维修项目',
-            width: '45%',
-            dataIndex: 'RecordItem',
-            key: 'RecordItem',
-            render: (text, record) => {
-                if (text !== undefined) {
-                    var content = text.split(',');
-                    var resu = [];
-                    content.map((item, key) => {
-                        resu.push(
-                            <Tag style={{ marginBottom: 1.5, marginTop: 1.5 }} color="#108ee9">{item}</Tag>
-                        );
-                    });
-                }
-                return resu;
-            }
-        }, {
-            title: '记录时间',
-            dataIndex: 'CreateTime',
-            width: '20%',
-            key: 'CreateTime',
-            sorter: (a, b) => Date.parse(a.CreateTime) - Date.parse(b.CreateTime),
-        }, {
-            title: '详细',
-            dataIndex: 'TaskID',
-            width: '15%',
-            key: 'TaskID',
-            render: (text, record) => {
-                return <a onClick={
-                    () => this.seeDetail(text, record)
-                } > 详细 </a>;
-            }
-        }];
         if (this.props.isloading) {
             return (<Spin
                 style={{
@@ -323,23 +302,10 @@ export default class OperationCalendar extends Component {
                             <div style={{ marginLeft: 10, marginTop: 10 }}>
                                 <div><SearchInput
                                     onSerach={this.onSerach}
-                                    style={{ marginTop: 5, marginBottom: 5, width: 400 }} searchName="排口名称" /></div>
+                                    style={{ marginTop: 5, marginBottom: 10, width: 400 }} searchName="排口名称" /></div>
                                 <div style={{ marginTop: 5 }}>
-                                    <TreeCard
-                                        style={{
-                                            width: '400px',
-                                            marginTop: 5,
-                                            background: '#fff',
-                                        }}
-                                        pollutantTypeloading={pollutantTypeloading}
-                                        getHeight={'calc(100vh - 220px)'} getStatusImg={this.getStatusImg}
-                                        getNowPollutantType={this.getNowPollutantType}
-                                        PollutantType={2} treedatalist={datalist}
-                                        pollutantTypelist={pollutantTypelist}
-                                        tabkey={this.state.pollutantTypeCode}
-                                    />
                                     <TreeCardContent style={{ overflow: 'auto', width: 400, background: '#fff' }}
-                                        getHeight='calc(100vh - 220px)'
+                                        getHeight='calc(100vh - 165px)'
                                         pollutantTypeloading={pollutantTypeloading}
                                         getStatusImg={this.getStatusImg} isloading={treedataloading}
                                         treeCilck={this.treeCilck} treedatalist={datalist} PollutantType={this.state.pollutantTypeCode} ifSelect={true} />

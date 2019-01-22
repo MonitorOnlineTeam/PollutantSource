@@ -1,33 +1,34 @@
 import React, { Component } from 'react';
-import styles from './Tree.less';
-import TreeCardContent from './TreeCardContent';
 import {
     Spin, Tabs
 } from 'antd';
+import styles from './Tree.less';
+import TreeCardContent from './TreeCardContent';
+
 const TabPane = Tabs.TabPane;
 class TreeCard extends Component {
     constructor(props) {
         super(props);
         this.state = {
 
-        }
+        };
     }
+
     getNowPollutantType = (key) => {
         this.props.getNowPollutantType(key);
     }
+
     //填充污染物类型
     getPollutantDoc = () => {
         const { pollutantTypelist } = this.props;
-        var res = [];
+        let res = [];
         if (pollutantTypelist) {
             pollutantTypelist.map(item => {
-                res.push(<TabPane tab={item.pollutantTypeName} key={item.pollutantTypeCode}>
-                </TabPane>);
-            })
+                res.push(<TabPane tab={item.pollutantTypeName} key={item.pollutantTypeCode} />);
+            });
         }
         return res;
     }
-
     render() {
         const { tabkey, pollutantTypeloading } = this.props;
         // if (pollutantTypeloading) {

@@ -258,7 +258,7 @@ export default class Ywdsjlist extends Component {
                             <Timeline.Item dot={<img style={{width: '38px', height: '38px'}} src="/patrol.png" />}>
                                 <p className={Ywdsjlistss.taskDetail}><span style={{color: '#40B0F5', marginRight: '10px'}}>{valueName}</span>{value}</p>
                                 <div className={Ywdsjlistss.seeDetail} onClick={() => {
-                                    this.props.dispatch(routerRedux.push(`/TaskDetail/emergencydetailinfo/${this.props.match.params.viewtype}/ywdsjlist/${item1.ID}`));
+                                    this.props.dispatch(routerRedux.push(`/TaskDetail/emergencydetailinfo/${this.props.match.params.viewtype}/operationywdsjlist/${item1.ID}/${localStorage.getItem('DGIMN')}`));
                                 }}>
                                 查看详情
                                 </div>
@@ -272,7 +272,7 @@ export default class Ywdsjlist extends Component {
                             <Timeline.Item dot={<img style={{ width: '38px', height: '38px' }} src="/patrol.png" />}>
                                 <p className={Ywdsjlistss.taskDetail}><span style={{ color: '#40B0F5', marginRight: '10px' }}>{valueName}</span>{value}</p>
                                 <div className={Ywdsjlistss.seeDetail} onClick={() => {
-                                    this.props.dispatch(routerRedux.push(`/TaskDetail/emergencydetailinfo/${undefined}/ywdsjlist/${item1.ID}`));
+                                    this.props.dispatch(routerRedux.push(`/TaskDetail/emergencydetailinfo/${undefined}/operationywdsjlist/${item1.ID}/${localStorage.getItem('DGIMN')}`));
                                 }}>
                                     查看详情
                                 </div>
@@ -285,7 +285,7 @@ export default class Ywdsjlist extends Component {
                             <Timeline.Item dot={<img style={{ width: '38px', height: '38px' }} src="/emergeny.png" />}>
                                 <p className={Ywdsjlistss.taskDetail}><span style={{ color: '#40B0F5', marginRight: '10px' }}>{valueName1}</span>{value1}</p>
                                 <div className={Ywdsjlistss.seeDetail} onClick={() => {
-                                    this.props.dispatch(routerRedux.push(`/TaskDetail/emergencydetailinfo/${undefined}/ywdsjlist/${item1.ID}`));
+                                    this.props.dispatch(routerRedux.push(`/TaskDetail/emergencydetailinfo/${undefined}/operationywdsjlist/${item1.ID}/${localStorage.getItem('DGIMN')}`));
                                 }}>
                                     查看详情
                                 </div>
@@ -350,23 +350,10 @@ export default class Ywdsjlist extends Component {
                             <div style={{ marginLeft: 10, marginTop: 10 }}>
                                 <div><SearchInput
                                     onSerach={this.onSerach}
-                                    style={{ marginTop: 5, marginBottom: 5, width: 400 }} searchName="排口名称" /></div>
+                                    style={{ marginTop: 5, marginBottom: 10, width: 400 }} searchName="排口名称" /></div>
                                 <div style={{ marginTop: 5 }}>
-                                    <TreeCard
-                                        style={{
-                                            width: '400px',
-                                            marginTop: 5,
-                                            background: '#fff',
-                                        }}
-                                        pollutantTypeloading={pollutantTypeloading}
-                                        getHeight={'calc(100vh - 220px)'} getStatusImg={this.getStatusImg}
-                                        getNowPollutantType={this.getNowPollutantType}
-                                        PollutantType={2} treedatalist={datalist}
-                                        pollutantTypelist={pollutantTypelist}
-                                        tabkey={this.state.pollutantTypeCode}
-                                    />
                                     <TreeCardContent style={{ overflow: 'auto', width: 400, background: '#fff' }}
-                                        getHeight='calc(100vh - 220px)'
+                                        getHeight='calc(100vh - 165px)'
                                         pollutantTypeloading={pollutantTypeloading}
                                         getStatusImg={this.getStatusImg} isloading={treedataloading}
                                         treeCilck={this.treeCilck} treedatalist={datalist} PollutantType={this.state.pollutantTypeCode} ifSelect={true} />

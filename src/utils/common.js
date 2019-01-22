@@ -26,7 +26,7 @@ export const pageUrl = {
         /**小时监测预警 */
         hourDataOverWarningPageList:'/api/rest/PollutantSourceApi/PWorkbench/GetDataOverWarningPageList',
         /**所有排口超标汇总 */
-        allPointOverDataList:'/api/rest/PollutantSourceApi/OverData/GetAllPointOverDataList',
+        allPointOverDataList:'/api/rest/PollutantSourceApi/PWorkbench/GetDataOverAlarmPageList',
         /**获取当前超标排口 */
         overPoints:'/api/rest/PollutantSourceApi/PWorkbench/GetOverPoints',
         /**统计排口状态 */

@@ -19,8 +19,9 @@ import {
     getOverPoints,
     getStatisticsPointStatus
 } from '../services/workbenchapi';
-
+import { querypolluntantentinfolist} from '../services/api';
 import {queryhistorydatalist} from '../services/api';
+import {enterpriceid} from '../config';
 
 export default Model.extend({
     namespace: 'workbenchmodel',
@@ -40,11 +41,11 @@ export default Model.extend({
             total: 0,
         },
         exceptionAlarm: {
-            beginTime: '2018-11-01 00:00:00', //moment().format("YYYY-MM-01 00:00:00"),
-            endTime: moment().add(1, 'seconds').format('YYYY-MM-DD HH:mm:ss'),
+            beginTime: moment().add(-24, 'hour').format("YYYY-MM-DD HH:mm:ss"),
+            endTime: moment().format('YYYY-MM-DD HH:mm:ss'),
             tableDatas: [],
             pageIndex: 1,
-            pageSize: 4,
+            pageSize: 100,
             total: 0,
         },
         rateStatistics: {
@@ -85,8 +86,10 @@ export default Model.extend({
         },
         allPointOverDataList: {
             tableDatas: [],
-            // pageIndex: 1,
-            // pageSize: 3,
+            beginTime: moment().add(-24, 'hour').format("YYYY-MM-DD HH:mm:ss"),
+            endTime: moment().format('YYYY-MM-DD HH:mm:ss'),
+            pageIndex: 1,
+            pageSize: 100,
             total: 0,
         },
         overPointList: {
@@ -118,6 +121,7 @@ export default Model.extend({
             pageSize: 6,
             total: 0,
         },
+        entbaseinfo:[],
     },
     subscriptions: {
     },
@@ -140,7 +144,6 @@ export default Model.extend({
                 //operationUserId:'766f911d-5e41-4bbf-b705-add427a16e77'
             };
             const response = yield call(getOperationHistoryRecordPageList, body);
-            debugger
             yield update({
                 operation: {
                     ...operation,
@@ -281,7 +284,7 @@ export default Model.extend({
                     ...allPointOverDataList,
                     ...{
                         tableDatas: response.data,
-                        // pageIndex:allPointOverDataList.pageIndex || 1,
+                        pageIndex:allPointOverDataList.pageIndex || 1,
                         total: response.total
                     }
                 }
@@ -294,7 +297,7 @@ export default Model.extend({
          */
         * getOverPointList({ payload }, { call, put, update, select }) {
             const { overPointList } = yield select(state => state.workbenchmodel);
-            //debugger;
+            const entbaseinfo = yield call(querypolluntantentinfolist, { parentID: enterpriceid });
             let body = {};
             const response = yield call(getOverPoints, body);
             //debugger;
@@ -305,7 +308,8 @@ export default Model.extend({
                         tableDatas: response.data,
                         total: response.total
                     }
-                }
+                },
+                entbaseinfo:entbaseinfo
             });
         },
         /**

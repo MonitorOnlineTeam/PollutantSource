@@ -2,14 +2,15 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
 import { Modal, Breadcrumb, Tabs, Icon, Select, Button, Card, Spin, Row, Col, Divider, Tag, Input, Form, Radio, Alert } from 'antd';
-import { Link, Switch, Redirect, routerRedux } from 'dva/router';
 import moment from 'moment';
 import Cookie from 'js-cookie';
 import router from 'umi/router';
+import Redirect from 'umi/redirect';
+import Link from 'umi/link';
 import styles from './index.less';
 import { getRoutes } from '../../utils/utils';
 import UrgentDispatch from '../../components/OverView/UrgentDispatch';
-
+const RadioGroup = Radio.Group;
 const { TabPane } = Tabs;
 const Option = Select.Option;
 const Search = Input.Search;
@@ -20,7 +21,8 @@ const { Meta } = Card;
     loadingModel: loading.effects['overview/querydatalist'],
     isloading: loading.effects['points/querysinglepointinfo'],
     pointList: overview.data,
-    dataTemp: overview.dataTemp
+    dataTemp: overview.dataTemp,
+    pollutantTypelist:overview.pollutantTypelist
 }))
 class PointDetail extends Component {
     constructor(props) {
@@ -49,7 +51,8 @@ class PointDetail extends Component {
             pointName: null,
             DGIMN: null,
             status: '',
-            searchName: ''
+            searchName: '',
+            pollutantTypeKey:0
         };
     }
 
@@ -64,6 +67,11 @@ class PointDetail extends Component {
             type: 'overview/querydatalist',
             payload: {
                 time: moment(new Date()).add(-1, 'hour').format('YYYY-MM-DD HH:00:00')
+            }
+        });
+        this.props.dispatch({
+            type: 'overview/getPollutantTypeList',
+            payload: {
             }
         });
     }
@@ -113,11 +121,27 @@ class PointDetail extends Component {
         let locationArray = this.props.location.pathname.split('/');
         if (locationArray.length > 1) {
             let newUrl = this.props.location.pathname.replace(locationArray[2], obj.DGIMN);
-            this.props.dispatch(routerRedux.push(newUrl));
+            router.push(newUrl);
         }
         //TODO:如果地址不正确，需要跳转到错误页面吗？ 吴建伟
 
     }
+
+        //填充污染物类型
+        getPollutantDoc=()=>{
+            const {pollutantTypelist}=this.props;
+            var res=[];
+            if(pollutantTypelist)
+            {
+                
+                res.push(<Radio value={0}>全部</Radio>);
+                pollutantTypelist.map(item=>{
+                    res.push(<Radio value={item.pollutantTypeCode}>{item.pollutantTypeName}</Radio>);
+                })
+            }
+            return res;
+        }
+
 
     /**
      * 渲染选择排口弹出层内容
@@ -225,7 +249,8 @@ class PointDetail extends Component {
         this.setState({
             // pointList: this.props.pointList,
             status: '',
-            searchName: ''
+            searchName: '',
+            pollutantTypeKey:0
         });
     }
 
@@ -275,15 +300,12 @@ class PointDetail extends Component {
      * 渲染排口状态
      */
     renderPointStatus = () => {
-        //console.log("pointInfo",this.props.pointInfo);
-
-
+      
+        
         let pointInfo = this.props.pointList.filter(todo => todo.DGIMN === this.props.pointInfo.DGIMN);
         if (pointInfo.length === 0)
             return null;
-        let {status,pollutantType,DGIMN,existTask,scene,warning,fault} = pointInfo[0];
-        //debugger;
-        console.log('pointInfo', pointInfo);
+        let {status,pollutantTypeCode,DGIMN,existTask,scene,warning,fault} = pointInfo[0];
         let statusText = <span><img src="/gisexception.png" width="11" style={{ marginBottom: 3, marginRight: 5 }} /><span>异常</span></span>;
         if (status === 0) {
             statusText = <span><img src="/gisunline.png" width="11" style={{ marginBottom: 3, marginRight: 5 }} /><span>离线</span></span>;
@@ -293,7 +315,7 @@ class PointDetail extends Component {
             statusText = <span><img src="/gisover.png" width="11" style={{ marginBottom: 3, marginRight: 5 }} /><span>超标</span></span>;
         }
         let pollutantTypeText = <span><Icon type="fire" style={{ color: 'rgb(238,162,15)', marginBottom: 3, marginRight: 5 }} /><span>废气</span></span>;
-        if (pollutantType === "1") {
+        if (pollutantTypeCode == "1") {
             pollutantTypeText = <span><Icon type="fire" style={{ color: 'rgb(238,162,15)', marginBottom: 3, marginRight: 5 }} /><span>废水</span></span>;
         }
         let existTaskText=[];
@@ -335,9 +357,48 @@ class PointDetail extends Component {
         });
     }
 
+    onPollutantChange=(e)=>{
+        const pollutantTypeKey= e.target.value;
+        const {searchName}=this.state;
+        this.setState({
+            pollutantTypeKey
+        })
+        let polist=this.props.pointList;
+        if(pollutantTypeKey!==0)
+        {
+            polist=polist.filter(i=>i.pollutantTypeCode==pollutantTypeKey);
+        }
+        if(searchName)
+        {
+            polist=polist.filter(i=>i.pointName.indexOf(searchName)>-1);
+        }
+        this.props.dispatch({
+            type: 'overview/updateState',
+            payload: {
+                dataTemp: polist
+            },
+        });
+
+    }
+
     render() {
         const { match, routerData, location, children, pointInfo, selectpoint } = this.props;
+        let {tablist,pollutantTypeKey}=this.state;
+        //判断当前排口污染物类型那个
+        let routerPath=`/pointdetail/${this.props.match.params.pointcode}/${this.props.match.params.viewtype}/processflowdiagram`;
+        if(pointInfo && pointInfo.pollutantType)
+        {
+            if(pointInfo.pollutantType=="1")
+            {
+                routerPath=`/pointdetail/${this.props.match.params.pointcode}/${this.props.match.params.viewtype}/dataquery`;
+                tablist= [
+                    { key: 'dataquery', tab: '数据查询' },
+                    { key: 'alarmrecord', tab: '报警记录' },
+                ]
+            }
+        }
         Cookie.set('seldgimn', match.params.pointcode);
+        
         let activeKey = '';
         if (location.pathname.indexOf('qcontrollist') === -1 && location.pathname.indexOf('operationlist') === -1) {
             activeKey = location.pathname.replace(`${match.url}/`, '');
@@ -346,7 +407,7 @@ class PointDetail extends Component {
             if(matchurl!==null)
                 activeKey = matchurl[1];
         }
-        if (this.props.isloading) {
+        if (this.props.isloading || !pointInfo) {
             return (<Spin
                 style={{
                     width: '100%',
@@ -358,6 +419,7 @@ class PointDetail extends Component {
                 size="large"
             />);
         }
+         
         return (
             <div
                 style={{
@@ -366,7 +428,7 @@ class PointDetail extends Component {
                 }}
             >
 
-
+                <Redirect to={routerPath}/>
                 <UrgentDispatch
                     onCancel={this.onCancel}
                     visible={this.state.pdvisible}
@@ -399,7 +461,7 @@ class PointDetail extends Component {
                             router.push(`${match.url}/${key}`);
                         }}
                     >
-                        {this.state.tablist.map(item => <TabPane dgimn={match.params.pointcode} pointInfo={pointInfo} tab={item.tab} key={item.key} />)}
+                        {tablist.map(item => <TabPane dgimn={match.params.pointcode} pointInfo={pointInfo} tab={item.tab} key={item.key} />)}
                     </Tabs>
                     {children}
                 </div>
@@ -412,17 +474,21 @@ class PointDetail extends Component {
                     footer={[]}
                 >
                     <Form layout="inline" style={{ marginBottom: 10 }}>
-                        <Row gutter={8}>
-                            <Col span={7}>
-                                <Search
+                    <Search
                                     placeholder="请输入排口关键字"
                                     defaultValue={this.state.searchName}
                                     onSearch={(value) => {
                                         if (value) {
+
+                                            let polist=this.props.pointList.filter(todo=>todo.pointName.indexOf(value)>-1);
+                                            if(pollutantTypeKey!==0)
+                                            {
+                                                polist=polist.filter(todo=>todo.pollutantTypeCode==pollutantTypeKey);
+                                            }
                                             this.props.dispatch({
                                                 type: 'overview/updateState',
                                                 payload: {
-                                                    dataTemp: this.props.pointList.filter(todo => todo.pointName.indexOf(value) > -1)
+                                                    dataTemp: polist
                                                 },
                                             });
                                             this.setState({
@@ -438,6 +504,7 @@ class PointDetail extends Component {
                                                 },
                                             });
                                             this.setState({
+                                                pollutantTypeKey:0,
                                                 pointList: this.props.pointList,
                                                 status: '',
                                                 searchName: value
@@ -448,16 +515,15 @@ class PointDetail extends Component {
                                     style={{ width: 200 }}
                                 />
                                 <Button type="primary" style={{ marginLeft: 10 }} onClick={this.showAllData}>显示全部</Button>
-                            </Col>
-                            <Col span={7} offset={10}>
-                                <Radio.Group value={this.state.status} onChange={this.handleStatusChange}>
+                                <Radio.Group style={{ marginRight: 20,float: 'right' }}   value={this.state.status} onChange={this.handleStatusChange}>
                                     <Radio.Button value="1"><img src="../../../gisnormal.png" width="15" /> 正常</Radio.Button>
                                     <Radio.Button value="2"><img src="../../../gisover.png" width="15" /> 超标</Radio.Button>
                                     <Radio.Button value="0"><img src="../../../gisunline.png" width="15" /> 离线</Radio.Button>
                                     <Radio.Button value="3"><img src="../../../gisexception.png" width="15" /> 异常</Radio.Button>
                                 </Radio.Group>
-                            </Col>
-                        </Row>
+                                <RadioGroup style={{ marginRight: 20,float: 'right',marginTop:3}} onChange={this.onPollutantChange}  defaultValue={pollutantTypeKey}>
+                                {this.getPollutantDoc()}
+                            </RadioGroup>
                     </Form>
                     <div style={{ height: 'calc(100vh - 340px)' }} className={styles.pointModal}>
                         <Row gutter={48}>
