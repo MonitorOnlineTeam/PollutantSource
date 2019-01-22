@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import { FormattedMessage, formatMessage } from 'umi/locale';
 import { Spin, Tag, Menu, Icon, Avatar, Tooltip } from 'antd';
+import { connect } from 'dva';
 import moment from 'moment';
 import groupBy from 'lodash/groupBy';
 import NoticeIcon from '../NoticeIcon';
@@ -8,8 +9,17 @@ import HeaderSearch from '../HeaderSearch';
 import HeaderDropdown from '../HeaderDropdown';
 import SelectLang from '../SelectLang';
 import styles from './index.less';
-
+@connect(({loading, user}) => ({
+    ...loading,
+    currentUser: user.currentUser
+}))
 export default class GlobalHeaderRight extends PureComponent {
+    componentDidMount() {
+       this.props.dispatch({
+            type: 'user/fetchCurrent',
+        });
+    }
+
     getNoticeData() {
         const { notices = [] } = this.props;
         if (notices.length === 0) {
@@ -139,7 +149,7 @@ export default class GlobalHeaderRight extends PureComponent {
               </Tooltip>
               <NoticeIcon
                   className={styles.action}
-                  count={currentUser.unreadCount}
+                  count={this.props.currentUser.unreadCount}
                   onItemClick={(item, tabProps) => {
             console.log(item, tabProps); // eslint-disable-line
                       this.changeReadState(item, tabProps);

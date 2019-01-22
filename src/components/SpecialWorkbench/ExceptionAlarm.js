@@ -69,7 +69,7 @@ class ExceptionAlarm extends PureComponent {
             "逻辑异常": "volcano",
             "状态异常": "orange"
         };
-        listData = exceptionAlarm.tableDatas.map((item) => {
+        listData = exceptionAlarm.tableDatas.map((item,key) => {
             //判断报警是否超过4小时
             const seconds = moment().diff(moment(item.FirstAlarmTime), 'minutes');
             const hour = Math.floor(seconds / 60);
@@ -89,7 +89,7 @@ class ExceptionAlarm extends PureComponent {
                                     pdvisible: true,
                                     selectpoint: null
                                 });
-                                
+
                             }}
                             style={{width:100,border:'none',backgroundColor:'rgb(74,210,187)'}}
                             type="primary"
@@ -114,14 +114,15 @@ class ExceptionAlarm extends PureComponent {
 
             return {
                 // href: 'http://ant.design',
+                key:key,
                 title: `${item.PointName}`,
                 avatar: (<Icon type="alert" theme="twoTone" />),
                 description: (
                     <div>
                         <div>
                             {
-                                item.ExceptionTypes.split(',').map(item => (
-                                    <Tag color={`${colorArray[item]}`}>{item}</Tag>
+                                item.ExceptionTypes.split(',').map((itemss,keyss)=> (
+                                    <Tag key={keyss} color={`${colorArray[itemss]}`}>{itemss}</Tag>
                                 ))
                             }
                         </div>
@@ -139,23 +140,24 @@ class ExceptionAlarm extends PureComponent {
                 )
             };
         });
-        return (<List
-            itemLayout="vertical"
-            dataSource={listData}
-            renderItem={item => (
-                <List.Item
-                    key={item.title}
-                    actions={[]}
-                    extra={item.extra}
-                >
-                    <List.Item.Meta
-                        title={<a href={item.href}>{item.title}</a>}
-                        description={item.description}
-                    />
-                    {item.content}
-                </List.Item>
-            )}
-        />);
+        return (
+            <List
+                itemLayout="vertical"
+                dataSource={listData}
+                renderItem={(item,key) => (
+                    <List.Item
+                        key={key}
+                        actions={[]}
+                        extra={item.extra}
+                    >
+                        <List.Item.Meta
+                            title={<a href={item.href}>{item.title}</a>}
+                            description={item.description}
+                        />
+                        {item.content}
+                    </List.Item>
+                )}
+            />);
     }
 
     render() {

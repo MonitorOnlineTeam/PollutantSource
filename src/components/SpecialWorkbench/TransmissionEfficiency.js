@@ -149,6 +149,7 @@ class TransmissionEfficiency extends PureComponent {
     }
 
     render() {
+        const loading=this.props.loadingRateStatistics;
         return (
             <Card
                 title="当月传输有效率"
@@ -158,7 +159,7 @@ class TransmissionEfficiency extends PureComponent {
                 >更多>>
                        </a>}
             >
-                <Card.Grid style={gridStyle} loading={this.props.loadingRateStatistics}>
+                <Card.Grid style={gridStyle}>
                     <ReactEcharts
                         option={this.getOption(3)}
                         style={{ height: '150px', width: '100%' }}

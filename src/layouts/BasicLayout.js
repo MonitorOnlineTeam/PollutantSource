@@ -52,7 +52,6 @@ const query = {
 
 @connect(({loading, user}) => ({
     ...loading,
-    menuData: user.currentMenu
 }))
 class BasicLayout extends React.PureComponent {
     constructor(props) {
@@ -73,9 +72,7 @@ class BasicLayout extends React.PureComponent {
             dispatch,
             route: { routes, authority },
         } = this.props;
-        dispatch({
-            type: 'user/fetchCurrent',
-        });
+ 
         dispatch({
             type: 'setting/getSetting',
         });
@@ -156,7 +153,6 @@ class BasicLayout extends React.PureComponent {
           children,
           location: { pathname },
           isMobile,
-          menuData,
           breadcrumbNameMap,
           route: { routes },
           fixedHeader,
@@ -171,7 +167,6 @@ class BasicLayout extends React.PureComponent {
                       logo={logo}
                       theme={navTheme}
                       onCollapse={this.handleMenuCollapse}
-                      menuData={menuData}
                       isMobile={isMobile}
                       {...this.props}
                   />
@@ -183,7 +178,6 @@ class BasicLayout extends React.PureComponent {
                   }}
               >
                   <Header
-                      menuData={menuData}
                       handleMenuCollapse={this.handleMenuCollapse}
                       logo={logo}
                       isMobile={isMobile}
@@ -216,7 +210,6 @@ class BasicLayout extends React.PureComponent {
 export default connect(({ global, setting, menu }) => ({
     collapsed: global.collapsed,
     layout: setting.layout,
-    menuData: menu.menuData,
     breadcrumbNameMap: menu.breadcrumbNameMap,
     ...setting,
 }))(props => (

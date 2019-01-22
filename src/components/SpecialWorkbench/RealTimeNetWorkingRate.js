@@ -141,7 +141,7 @@ class RealTimeNetWorkingRate extends PureComponent {
             <Card title="实时联网率" style={{}} extra={<a href="/overview/datalistview">更多&gt;&gt;</a>}>
                 <Card.Grid style={gridStyle}>
                     <ReactEcharts
-                        loadingOption={this.props.loadingRateStatistics}
+                        // loadingOption={this.props.loadingRateStatistics}
                         option={this.getOption(1)}
                         style={{ height: '150px', width: '100%' }}
                         className="echarts-for-echarts"

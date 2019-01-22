@@ -152,7 +152,7 @@ class OperationRate extends PureComponent {
             >
                 <Card.Grid style={gridStyle}>
                     <ReactEcharts
-                        loadingOption={this.props.loadingRateStatistics}
+                        // loadingOption={this.props.loadingRateStatistics}
                         option={this.getOption(2)}
                         style={{ height: '150px', width: '100%' }}
                         className="echarts-for-echarts"
