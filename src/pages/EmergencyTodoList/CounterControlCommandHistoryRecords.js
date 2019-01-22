@@ -141,7 +141,6 @@ export default class CounterControlCommandHistoryRecords extends Component {
                                 <Col span={21} >
                                     <RangePicker_ style={{width: 350}} onChange={this._handleDateChange} format={'YYYY-MM-DD'} dateValue={this.state.rangeDate} />
                                 </Col>
-                               
                             </Row>
                     </div>
                     <Table
