@@ -14,7 +14,8 @@ import {
 import { Map, Polygon,Markers } from 'react-amap';
 import config from '../../config';
 import styles from './index.less';
-import Adapt from './Adapt.less'
+import Adapt from './Adapt.less';
+
 /*
 页面：首页
 add by xpy
@@ -46,7 +47,7 @@ class index extends Component {
         super(props);
 
         this.state = {
-
+            screenWidth:window.screen.width===1600?50:70
         };
         this.mapEvents = {
             created(m) {
@@ -62,11 +63,19 @@ class index extends Component {
     }
 
     componentWillMount() {
+        window.addEventListener('resize',this.handleScroll());
         this.getRateStatisticsData();
         this.getbaseinfo();
         this.getpointdatalist();
     }
-
+     
+    handleScroll=()=>{
+      this.setState({
+        screenWidth:window.screen.width===1600?50:70
+        
+      })
+      this.getoperation();
+    }
     /**
      *  企业基本信息
      */
@@ -149,6 +158,7 @@ class index extends Component {
         }
         let option = {
             color: color,
+            animation:false,
             title:{
                 show:false,
                 text: seriesName,
@@ -163,10 +173,12 @@ class index extends Component {
                 }
             },
             tooltip: {
+                show:true,
                 trigger: 'item',
                 formatter: "{b}:{d}%",
                 position:[10,20]
             },
+        
             legend: {
                 orient: 'vertical',
                 x: 'left',
@@ -205,7 +217,9 @@ class index extends Component {
     /**
      * 智能运维_渲染图表
      */
+
      getoperation=()=>{
+      //var width  =window.screen.width==1600?50:70;
          let option = {
              color: ['rgb(238,204,45)', 'rgb(61,201,252)', 'rgb(44,199,142)'],
              tooltip:false,
@@ -213,7 +227,7 @@ class index extends Component {
              series: [{
                  name: '异常报警及响应情况',
                  type: 'pie',
-                 radius: [40, 70],
+                 radius: [40, this.state.screenWidth],
                  itemStyle: {
                      normal: {
                          label: {
@@ -284,9 +298,9 @@ class index extends Component {
                  }
              },
              grid: {
-                 left: '3%',
+                 left: '-10%',
                  right: '4%',
-                 bottom: '3%',
+                 bottom: '-10%',
                  containLabel: true
              },
              xAxis : [
@@ -414,7 +428,7 @@ class index extends Component {
                                              <ReactEcharts
                                                  loadingOption={this.props.loadingRateStatistics}
                                                  option={this.getOption(1)}
-                                                 style={{height: '110px', width: '100%'}}
+                                                 style={{height: '90px', width: '100%'}}
                                                  //className="echarts-for-echarts"
                                                  className={Adapt.Echarts}
                                                  theme="my_theme"
@@ -427,7 +441,7 @@ class index extends Component {
                                              <ReactEcharts
                                                  loadingOption={this.props.loadingRateStatistics}
                                                  option={this.getOption(2)}
-                                                 style={{height: '110px', width: '100%'}}
+                                                 style={{height: '90px', width: '100%'}}
                                                  className={Adapt.Echarts}
                                                  theme="my_theme"
                                              />
@@ -439,7 +453,7 @@ class index extends Component {
                                              <ReactEcharts
                                                  loadingOption={this.props.loadingRateStatistics}
                                                  option={this.getOption(3)}
-                                                 style={{height: '110px', width: '100%'}}
+                                                 style={{height: '90px', width: '100%'}}
                                                  className={Adapt.Echarts}
                                                  theme="my_theme"
                                              />
@@ -514,6 +528,7 @@ class index extends Component {
                                
                                    
                                          <div className={Adapt.divyw}>
+                                         <div className={Adapt.divyws}>计划运维<h2 style={{color:'#40ccdd',display:"initial"}}>31</h2>次</div>
                                              <div className={Adapt.divo}>
                                                  <div className={Adapt.divl} />
                                                  <div className={Adapt.divm}>
@@ -543,7 +558,7 @@ class index extends Component {
                                              <ReactEcharts
                                                      loadingOption={this.props.loadingRateStatistics}
                                                      option={this.getoperation()}
-                                                     style={{height: '200px', width: '100%'}}
+                                                     style={{height: '200px'}}
                                                      className="echarts-for-echarts"
                                                      theme="my_theme"
                                                  />
@@ -561,8 +576,6 @@ class index extends Component {
                                                   </div>
                                              </div>
                                              </div>
-                                      
-                                 
                                              <div className={Adapt.Layered1}>
                                              <br />
                                                  <div className={Adapt.s1}>异常报警及响应情况</div>
@@ -619,7 +632,7 @@ class index extends Component {
                                                <ReactEcharts
                                                            loadingOption={this.props.loadingRateStatistics}
                                                            option={this.getlicense(1)}
-                                                           style={{height: '130px', width: '80%'}}
+                                                           style={{height: '110px'}}
                                                            className="echarts-for-echarts"
                                                            theme="my_theme"
                                                        />
@@ -644,7 +657,7 @@ class index extends Component {
                                               <ReactEcharts
                                                           loadingOption={this.props.loadingRateStatistics}
                                                           option={this.getlicense(2)}
-                                                          style={{height: '130px', width: '80%'}}
+                                                          style={{height: '110px'}}
                                                           className="echarts-for-echarts"
                                                           theme="my_theme"
                                                  />
@@ -674,7 +687,7 @@ class index extends Component {
                                                        <ReactEcharts
                                                           loadingOption={this.props.loadingRateStatistics}
                                                           option={this.getlicense(3)}
-                                                          style={{height: '130px', width: '80%'}}
+                                                          style={{height: '110px'}}
                                                           className="echarts-for-echarts"
                                                           theme="my_theme"
                                                       />
