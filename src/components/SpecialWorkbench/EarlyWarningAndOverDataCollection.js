@@ -343,16 +343,17 @@ class EarlyWarningAndOverDataCollection extends PureComponent {
     renderHourDataOverWarningList = () => {
         const listData = [];
         const { hourDataOverWarningList } = this.props;
-        hourDataOverWarningList.tableDatas.map((items) => {
+        hourDataOverWarningList.tableDatas.map((items,key) => {
             //判断报警是否超过4小时
             listData.push({
+                key:key,
                 title: `${items.PointName}`,
                 description: (
                     <div>
                         {
-                            items.OverWarnings.map(item => (
-                                <div>
-                                    <div className={styles.warningsData} onClick={(e) => this.showModal(items.PointName, items.DGIMNs, item.PollutantCode, item.PollutantName, item.SuggestValue)}>
+                            items.OverWarnings.map((item,key) => (
+                                <div key={key}>
+                                    <div key={key} className={styles.warningsData} onClick={(e) => this.showModal(items.PointName, items.DGIMNs, item.PollutantCode, item.PollutantName, item.SuggestValue)}>
                                         {item.PollutantName}
                                         <Divider type="vertical" style={{ backgroundColor: '#b3b3b3' }} />
                                         超标预警值为{item.AlarmValue}ug/m3
@@ -371,9 +372,9 @@ class EarlyWarningAndOverDataCollection extends PureComponent {
         return (<List
             itemLayout="vertical"
             dataSource={listData}
-            renderItem={item => (
+            renderItem={(item,key) => (
                 <List.Item
-                    key={item.title}
+                    key={key}
                     actions={[]}
                 >
                     <List.Item.Meta
@@ -394,7 +395,7 @@ class EarlyWarningAndOverDataCollection extends PureComponent {
     renderAllPointOverDataList = () => {
         const listData = [];
         const { allPointOverDataList } = this.props;
-        allPointOverDataList.tableDatas.map((item) => {
+        allPointOverDataList.tableDatas.map((item,key) => {
             //判断报警是否超过4小时
             listData.push({
                 title: `${item.PointName}`,
@@ -525,7 +526,7 @@ class EarlyWarningAndOverDataCollection extends PureComponent {
                             </TabPane>
                         </Tabs>
                     </Card.Grid>
-                </Card>
+                      </Card>
                 </div>
                 <Modal
                     title={
