@@ -20,12 +20,11 @@ const MarkerLayoutStyle = {
 @connect(({
     loading,
     workbenchmodel,
-    baseinfo,
 }) => ({
     loadingOverPointList: loading.effects['workbenchmodel/getOverPointList'],
     loadingMap: loading.effects['baseinfo/queryentdetail'],
     overPointList: workbenchmodel.overPointList,
-    entInfo: baseinfo.entbaseinfo,
+    entInfo: workbenchmodel.entbaseinfo,
 }))
 
 /*
@@ -45,18 +44,18 @@ class OverMap extends PureComponent {
 
     componentWillMount() {
         this.getOverPointList();
-        this.getEntInfo();
+        // this.getEntInfo();
     }
 
-    /**
-     * 获取企业信息
-     */
-    getEntInfo = () => {
-        this.props.dispatch({
-            type: 'baseinfo/queryentdetail',
-            payload: {}
-        });
-    }
+    // /**
+    //  * 获取企业信息
+    //  */
+    // getEntInfo = () => {
+    //     this.props.dispatch({
+    //         type: 'baseinfo/queryentdetail',
+    //         payload: {}
+    //     });
+    // }
 
     /**
      * 智能监控_当前超标排口_更新数据

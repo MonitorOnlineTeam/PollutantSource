@@ -37,7 +37,6 @@ class OperationCalendar extends PureComponent {
      * 智能运维_日历表时间选择事件
      */
     onCalendarSelect = (value) => {
-        debugger
         let selectValue = value.format('YYYY-MM-DD 00:00:00');
         this.setState({
             selectedValue: value

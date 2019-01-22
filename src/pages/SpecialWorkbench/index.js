@@ -5,10 +5,12 @@ import { Row, Col } from 'antd';
 import styles from './index.less';
 import OverMap from '../../components/SpecialWorkbench/OverMap';
 import EarlyWarningAndOverDataCollection from '../../components/SpecialWorkbench/EarlyWarningAndOverDataCollection';
-import IntelligentQualityControl from '../../components/SpecialWorkbench/IntelligentQualityControl';
 import ExceptionAlarm from '../../components/SpecialWorkbench/ExceptionAlarm';
 import OperationCalendar from '../../components/SpecialWorkbench/OperationCalendar';
 import PointStates from '../../components/SpecialWorkbench/PointStates';
+import RealTimeNetWorkingRate from '../../components/SpecialWorkbench/RealTimeNetWorkingRate';
+import OperationRate from '../../components/SpecialWorkbench/OperationRate';
+import TransmissionEfficiency from '../../components/SpecialWorkbench/TransmissionEfficiency';
 
 /*
 页面：工作台
@@ -45,7 +47,21 @@ class SpecialWorkbench extends PureComponent {
                     </div>
                     <Row gutter={24}>
                         <Col xl={12} lg={24} md={24} sm={24} xs={24} style={{ marginBottom: 10 }}>
-                            <IntelligentQualityControl />
+                            <Row>
+                                <Col span={24}>
+                                    <RealTimeNetWorkingRate />
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col span={24}>
+                                    <OperationRate />
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col span={24}>
+                                    <TransmissionEfficiency />
+                                </Col>
+                            </Row>
                         </Col>
                         <Col xl={12} lg={24} md={24} sm={24} xs={24}>
                             <ExceptionAlarm />

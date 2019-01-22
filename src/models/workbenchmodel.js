@@ -19,8 +19,9 @@ import {
     getOverPoints,
     getStatisticsPointStatus
 } from '../services/workbenchapi';
-
+import { querypolluntantentinfolist} from '../services/api';
 import {queryhistorydatalist} from '../services/api';
+import {enterpriceid} from '../config';
 
 export default Model.extend({
     namespace: 'workbenchmodel',
@@ -120,6 +121,7 @@ export default Model.extend({
             pageSize: 6,
             total: 0,
         },
+        entbaseinfo:[],
     },
     subscriptions: {
     },
@@ -141,9 +143,7 @@ export default Model.extend({
                 IsPaging: false
                 //operationUserId:'766f911d-5e41-4bbf-b705-add427a16e77'
             };
-            debugger
             const response = yield call(getOperationHistoryRecordPageList, body);
-            debugger
             yield update({
                 operation: {
                     ...operation,
@@ -297,7 +297,7 @@ export default Model.extend({
          */
         * getOverPointList({ payload }, { call, put, update, select }) {
             const { overPointList } = yield select(state => state.workbenchmodel);
-            //debugger;
+            const entbaseinfo = yield call(querypolluntantentinfolist, { parentID: enterpriceid });
             let body = {};
             const response = yield call(getOverPoints, body);
             //debugger;
@@ -308,7 +308,8 @@ export default Model.extend({
                         tableDatas: response.data,
                         total: response.total
                     }
-                }
+                },
+                entbaseinfo:entbaseinfo
             });
         },
         /**

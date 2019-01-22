@@ -27,7 +27,7 @@ const gridStyle = {
 }))
 
 /**
- * 智能质控_加载图表数据(3)
+ * 智能质控_加载图表数据(3)-已废
  */
 
 class IntelligentQualityControl extends PureComponent {
@@ -152,28 +152,6 @@ class IntelligentQualityControl extends PureComponent {
             ]
         };
         return option;
-    }
-
-    /**
-     * 智能质控_渲染排口联网率表格
-     */
-    renderNetWorkingRateTable = () => {
-        const columns = [
-            {
-                title: '排口名称',
-                dataIndex: 'PointName'
-            },
-            {
-                title: '联网状态',
-                dataIndex: 'RateValue',
-                render: (text, record) => {
-                    if (text === 100)
-                        return `${(parseFloat(text) * 100).toFixed(2)}%`;
-                    return <span style={{ color: 'red' }}>离线</span>;
-                }
-            }];
-
-        return <Table key="network" loading={this.props.loadingNetworkeRate} columns={columns} dataSource={this.props.networkeRateList.tableDatas.slice(0, 3)} size="small" pagination={false} />;
     }
 
     /**
