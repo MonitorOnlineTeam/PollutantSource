@@ -7,6 +7,14 @@ export function fixedZero(val) {
     return val * 1 < 10 ? `0${val}` : val;
 }
 
+export function asc(a,b){
+    return a.orderby-b.orderby;
+}
+
+export function desc(a,b){
+    return b.orderby-a.orderby;
+}
+
 export function getTimeDistance(type) {
     const now = new Date();
     const oneDay = 1000 * 60 * 60 * 24;

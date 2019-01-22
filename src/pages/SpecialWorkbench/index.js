@@ -1256,6 +1256,8 @@ handleCancel = () => {
 
 
 render() {
+    console.log('--------------------shit-------------------------');
+    
     const { selectpoint } = this.state;
     return (
         <div
