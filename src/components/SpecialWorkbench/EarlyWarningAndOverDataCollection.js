@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { Row, Col, Card, List, Tabs, Divider, Modal, Table } from 'antd';
+import { Row, Col, Card, List, Tabs, Divider, Modal, Table ,Spin} from 'antd';
 import { connect } from 'dva';
 import moment from 'moment';
 import ReactEcharts from 'echarts-for-react';
@@ -307,7 +307,7 @@ class EarlyWarningAndOverDataCollection extends PureComponent {
 
 
         return <ReactEcharts
-            loadingOption={this.props.loadingRealTimeWarningDatas}
+            // loadingOption={this.props.loadingRealTimeWarningDatas}
             option={option}
             style={{ height: 'calc(100vh - 400px)', width: '100%' }}
             className="echarts-for-echarts"
@@ -343,16 +343,17 @@ class EarlyWarningAndOverDataCollection extends PureComponent {
     renderHourDataOverWarningList = () => {
         const listData = [];
         const { hourDataOverWarningList } = this.props;
-        hourDataOverWarningList.tableDatas.map((items) => {
+        hourDataOverWarningList.tableDatas.map((items,key) => {
             //判断报警是否超过4小时
             listData.push({
+                key:key,
                 title: `${items.PointName}`,
                 description: (
                     <div>
                         {
-                            items.OverWarnings.map(item => (
-                                <div>
-                                    <div className={styles.warningsData} onClick={(e) => this.showModal(items.PointName, items.DGIMNs, item.PollutantCode, item.PollutantName, item.SuggestValue)}>
+                            items.OverWarnings.map((item,key) => (
+                                <div key={key}>
+                                    <div key={key} className={styles.warningsData} onClick={(e) => this.showModal(items.PointName, items.DGIMNs, item.PollutantCode, item.PollutantName, item.SuggestValue)}>
                                         {item.PollutantName}
                                         <Divider type="vertical" style={{ backgroundColor: '#b3b3b3' }} />
                                         超标预警值为{item.AlarmValue}ug/m3
@@ -371,9 +372,9 @@ class EarlyWarningAndOverDataCollection extends PureComponent {
         return (<List
             itemLayout="vertical"
             dataSource={listData}
-            renderItem={item => (
+            renderItem={(item,key) => (
                 <List.Item
-                    key={item.title}
+                    key={key}
                     actions={[]}
                 >
                     <List.Item.Meta
@@ -394,8 +395,7 @@ class EarlyWarningAndOverDataCollection extends PureComponent {
     renderAllPointOverDataList = () => {
         const listData = [];
         const { allPointOverDataList } = this.props;
-        console.log('allPointOverDataList',this.props.allPointOverDataList);
-        allPointOverDataList.tableDatas.map((item) => {
+        allPointOverDataList.tableDatas.map((item,key) => {
             //判断报警是否超过4小时
             listData.push({
                 title: `${item.PointName}`,
@@ -445,29 +445,34 @@ class EarlyWarningAndOverDataCollection extends PureComponent {
                 title: '监测时间',
                 dataIndex: 'MonitorTime',
                 width: '20%',
+                key:'MonitorTime',
                 render: (text, record) => `${moment(text).format('HH:mm:ss')}`,
             },
             {
                 title: '污染物',
                 dataIndex: 'none',
+                key:'none',
                 render: (text, record) => `${selectedPollutantName}`,
                 width: '20%'
             },
             {
                 title: '监测值',
                 dataIndex: selectedPollutantCode,
+                key:selectedPollutantCode,
                 width: '20%',
                 align: 'center'
             },
             {
                 title: '标准值',
                 dataIndex: `${selectedPollutantCode}_StandardValue`,
+                key:`${selectedPollutantCode}_StandardValue`,
                 width: '20%',
                 align: 'center'
             },
             {
                 title: '建议浓度',
                 dataIndex: `${selectedPollutantCode}_SuggestValue`,
+                key:`${selectedPollutantCode}_SuggestValue`,
                 width: '20%',
                 align: 'center'
             }
@@ -476,7 +481,7 @@ class EarlyWarningAndOverDataCollection extends PureComponent {
         return <Table
             columns={columns}
             dataSource={chartDatas}
-            key="warntable"
+            // key="warntable"
             size="small"
             pagination={{ pageSize: 15 }}
             loading={this.props.loadingRealTimeWarningDatas}

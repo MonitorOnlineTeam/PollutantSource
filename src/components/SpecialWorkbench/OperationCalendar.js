@@ -147,8 +147,8 @@ class OperationCalendar extends PureComponent {
                     return (
                         <div>
                             {
-                                text.split(',').map(item => (
-                                    <Tag color="rgb(244,6,94)">{item}</Tag>
+                                text.split(',').map((item,key) => (
+                                    <Tag key={key} color="rgb(244,6,94)">{item}</Tag>
                                 ))
                             }
                         </div>
