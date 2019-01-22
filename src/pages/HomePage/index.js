@@ -12,9 +12,11 @@ import {
     connect
 } from 'dva';
 import { Map, Polygon,Markers } from 'react-amap';
+import moment from 'moment';
 import config from '../../config';
 import styles from './index.less';
 import Adapt from './Adapt.less';
+
 /*
 页面：首页
 add by xpy
@@ -46,7 +48,8 @@ class index extends Component {
         super(props);
 
         this.state = {
-
+            screenWidth:window.screen.width===1600?50:70,
+            TheMonth: moment().format('MM'),
         };
         this.mapEvents = {
             created(m) {
@@ -62,9 +65,18 @@ class index extends Component {
     }
 
     componentWillMount() {
+        window.addEventListener('resize',this.handleScroll());
         this.getRateStatisticsData();
         this.getbaseinfo();
         this.getpointdatalist();
+    }
+
+    handleScroll=()=>{
+        this.setState({
+            screenWidth:window.screen.width===1600?50:70
+
+        });
+        this.getoperation();
     }
 
     /**
@@ -149,6 +161,7 @@ class index extends Component {
         }
         let option = {
             color: color,
+            animation:false,
             title:{
                 show:false,
                 text: seriesName,
@@ -163,10 +176,12 @@ class index extends Component {
                 }
             },
             tooltip: {
+                show:true,
                 trigger: 'item',
                 formatter: "{b}:{d}%",
                 position:[10,20]
             },
+
             legend: {
                 orient: 'vertical',
                 x: 'left',
@@ -220,7 +235,9 @@ class index extends Component {
     /**
      * 智能运维_渲染图表
      */
+
      getoperation=()=>{
+         //var width  =window.screen.width==1600?50:70;
          let option = {
              color: ['rgb(238,204,45)', 'rgb(61,201,252)', 'rgb(44,199,142)'],
              tooltip:false,
@@ -228,7 +245,7 @@ class index extends Component {
              series: [{
                  name: '异常报警及响应情况',
                  type: 'pie',
-                 radius: [40, 70],
+                 radius: [40, this.state.screenWidth],
                  itemStyle: {
                      normal: {
                          label: {
@@ -275,11 +292,11 @@ class index extends Component {
      getlicense=(type)=>{
          let color = [];
          if(type===1){
-             color = ['#ffffff'];
+             color = ['#40ccdd'];
          } else if(type===2) {
-             color = ['#EDCB2B'];
+             color = ['#0edaad'];
          } else{
-             color = ['#F84B4E'];
+             color = ['#ffcc44'];
          }
          let option = {
              title: {
@@ -299,9 +316,9 @@ class index extends Component {
                  }
              },
              grid: {
-                 left: '3%',
+                 left: '-10%',
                  right: '4%',
-                 bottom: '3%',
+                 bottom: '-10%',
                  containLabel: true
              },
              xAxis : [
@@ -363,6 +380,7 @@ class index extends Component {
      }
 
      render() {
+         const TheMonth = this.state.TheMonth;
          const baseinfo = this.props.baseinfo[0];
          let polygonChange;
          let mapCenter;
@@ -429,7 +447,7 @@ class index extends Component {
                                              <ReactEcharts
                                                  loadingOption={this.props.loadingRateStatistics}
                                                  option={this.getOption(1)}
-                                                 style={{height: '110px', width: '100%'}}
+                                                 style={{height: '90px', width: '100%'}}
                                                  //className="echarts-for-echarts"
                                                  className={Adapt.Echarts}
                                                  theme="my_theme"
@@ -442,25 +460,25 @@ class index extends Component {
                                              <ReactEcharts
                                                  loadingOption={this.props.loadingRateStatistics}
                                                  option={this.getOption(2)}
-                                                 style={{height: '110px', width: '100%'}}
+                                                 style={{height: '90px', width: '100%'}}
                                                  className={Adapt.Echarts}
                                                  theme="my_theme"
                                              />
                                          </div>
-                                         <div className={Adapt.LeftLayout1Text}>10月设备运转率</div>
+                                         <div className={Adapt.LeftLayout1Text}>{TheMonth}月设备运转率</div>
                                      </div>
                                      <div className={Adapt.ReactEcharts}>
                                          <div>
                                              <ReactEcharts
                                                  loadingOption={this.props.loadingRateStatistics}
                                                  option={this.getOption(3)}
-                                                 style={{height: '110px', width: '100%'}}
+                                                 style={{height: '90px', width: '100%'}}
                                                  className={Adapt.Echarts}
                                                  theme="my_theme"
                                              />
 
                                          </div>
-                                         <div className={Adapt.LeftLayout1Text}>10月传输有效率</div>
+                                         <div className={Adapt.LeftLayout1Text}>{TheMonth}月传输有效率</div>
 
                                      </div>
 
@@ -489,7 +507,7 @@ class index extends Component {
                                                  theme="my_theme"
                                              />
                                          </div>
-                                         <div className={Adapt.LeftLayout1Text}>10月设备运转率</div>
+                                         <div className={Adapt.LeftLayout1Text}>{TheMonth}月设备运转率</div>
                                      </div>
                                      <div className={Adapt.ReactEcharts}>
                                          <div>
@@ -502,7 +520,7 @@ class index extends Component {
                                              />
 
                                          </div>
-                                         <div className={Adapt.LeftLayout1Text}>10月传输有效率</div>
+                                         <div className={Adapt.LeftLayout1Text}>{TheMonth}月传输有效率</div>
 
                                      </div>
 
@@ -513,7 +531,7 @@ class index extends Component {
                          {/* LEFT@2 */}
                          <div className={Adapt.LeftLayout2}>
                              <div className={Adapt.divsecond}>
-                                 <div className={Adapt.divson1}>10月质控智能预警<h2>18</h2>次</div>
+                                 <div className={Adapt.divson1}>{TheMonth}月质控智能预警<h2>18</h2>次</div>
                                  <div className={Adapt.divson2}>
                                      <div className={Adapt.Layered1}>同比<i className={Adapt.padd} /><h2 style={{color:'#FF4E4E'}}>3</h2><h5 style={{color:'#FF4E4E'}}>次</h5></div>
                                      <div className={Adapt.Layered1}>环比<i className={Adapt.pdeduct} /><h2 style={{color:'#5BF287'}}>10</h2><h5 style={{color:'#5BF287'}}>次</h5></div>
@@ -529,6 +547,7 @@ class index extends Component {
 
 
                                  <div className={Adapt.divyw}>
+                                     <div className={Adapt.divyws}>计划运维<h2 style={{color:'#40ccdd',display:"initial"}}>31</h2>次</div>
                                      <div className={Adapt.divo}>
                                          <div className={Adapt.divl} />
                                          <div className={Adapt.divm}>
@@ -558,7 +577,7 @@ class index extends Component {
                                                  <ReactEcharts
                                                      loadingOption={this.props.loadingRateStatistics}
                                                      option={this.getoperation()}
-                                                     style={{height: '200px', width: '100%'}}
+                                                     style={{height: '200px'}}
                                                      className="echarts-for-echarts"
                                                      theme="my_theme"
                                                  />
@@ -576,8 +595,6 @@ class index extends Component {
                                              </div>
                                          </div>
                                      </div>
-
-
                                      <div className={Adapt.Layered1}>
                                          <br />
                                          <div className={Adapt.s1}>异常报警及响应情况</div>
@@ -634,7 +651,7 @@ class index extends Component {
                                      <ReactEcharts
                                          loadingOption={this.props.loadingRateStatistics}
                                          option={this.getlicense(1)}
-                                         style={{height: '130px', width: '80%'}}
+                                         style={{height: '110px'}}
                                          className="echarts-for-echarts"
                                          theme="my_theme"
                                      />
@@ -659,7 +676,7 @@ class index extends Component {
                                      <ReactEcharts
                                          loadingOption={this.props.loadingRateStatistics}
                                          option={this.getlicense(2)}
-                                         style={{height: '130px', width: '80%'}}
+                                         style={{height: '110px'}}
                                          className="echarts-for-echarts"
                                          theme="my_theme"
                                      />
@@ -688,7 +705,7 @@ class index extends Component {
                                      <ReactEcharts
                                          loadingOption={this.props.loadingRateStatistics}
                                          option={this.getlicense(3)}
-                                         style={{height: '130px', width: '80%'}}
+                                         style={{height: '110px'}}
                                          className="echarts-for-echarts"
                                          theme="my_theme"
                                      />
