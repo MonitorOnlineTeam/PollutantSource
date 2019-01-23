@@ -17,9 +17,9 @@ module.exports = {
     webSocketPushURL: '172.16.4.200:40006',
     imgaddress: 'http://172.16.12.152:8011/api/upload/',
     //实时视频地址
-    realtimevideourl:'http://localhost:36999/Video/MonitorLinkCamera/RealtimeCameraReact',
+    realtimevideourl:'http://172.16.12.152:8011/Video/MonitorLinkCamera/RealtimeCameraReact',
     //历史视频地址
-    hisvideourl:'http://localhost:36999/Video/MonitorLinkCamera/HistoryCameraReact',
+    hisvideourl:'http://172.16.12.152:8011/Video/MonitorLinkCamera/HistoryCameraReact',
     mainpollutantInfo: [{
         pollutantCode: '01',
         pollutantName: '烟尘',

@@ -192,7 +192,7 @@ export default Model.extend({
             const res = yield call(queryhistorydatalist, {...payload});
             let realdata=[];
             if(res.data.length>0){
-                realdata.push({key:"1",...res.data[res.data.length-1]});
+                realdata.push({key:"1",...res.data[0]});
             }
             yield update({ realdata: realdata });
         },
@@ -307,5 +307,32 @@ export default Model.extend({
                 currentMenu: action.payload,
             };
         },
+        changeRealTimeData(state,action){
+            //"{"MessageType":"RealTimeData","Message":[{"DGIMN":"51052216080303","PollutantCode":"s01","MonitorTime":"2019-01-23 17:26:00","MonitorValue":7.200,"MinStrength":null,"MaxStrength":null,"CouStrength":null,"IsOver":-1,"IsException":0,"Flag":"","ExceptionType":"","AlarmLevel":"","AlarmType":"无报警","Upperpollutant":"0","Lowerpollutant":"0","PollutantResult":"","AlarmTypeCode":0,"StandardColor":"red","StandardValue":"-","OverStandValue":"","DecimalReserved":3},{"DGIMN":"51052216080303","PollutantCode":"s02","MonitorTime":"2019-01-23 17:26:00","MonitorValue":11.760,"MinStrength":null,"MaxStrength":null,"CouStrength":null,"IsOver":-1,"IsException":0,"Flag":"","ExceptionType":"","AlarmLevel":"","AlarmType":"无报警","Upperpollutant":"0","Lowerpollutant":"0","PollutantResult":"","AlarmTypeCode":0,"StandardColor":"red","StandardValue":"-","OverStandValue":"","DecimalReserved":3},{"DGIMN":"51052216080303","PollutantCode":"s05","MonitorTime":"2019-01-23 17:26:00","MonitorValue":6.000,"MinStrength":null,"MaxStrength":null,"CouStrength":null,"IsOver":-1,"IsException":0,"Flag":"","ExceptionType":"","AlarmLevel":"","AlarmType":"无报警","Upperpollutant":"0","Lowerpollutant":"0","PollutantResult":"","AlarmTypeCode":0,"StandardColor":"red","StandardValue":"-","OverStandValue":"","DecimalReserved":3},{"DGIMN":"51052216080303","PollutantCode":"b02","MonitorTime":"2019-01-23 17:26:00","MonitorValue":54.850,"MinStrength":null,"MaxStrength":null,"CouStrength":null,"IsOver":-1,"IsException":0,"Flag":"","ExceptionType":"","AlarmLevel":"","AlarmType":"无报警","Upperpollutant":"0","Lowerpollutant":"0","PollutantResult":"","AlarmTypeCode":0,"StandardColor":"red","StandardValue":"-","OverStandValue":"","DecimalReserved":3},{"DGIMN":"51052216080303","PollutantCode":"zs01","MonitorTime":"2019-01-23 17:26:00","MonitorValue":11.950,"MinStrength":null,"MaxStrength":null,"CouStrength":null,"IsOver":-1,"IsException":0,"Flag":"","ExceptionType":"","AlarmLevel":"","AlarmType":"无报警","Upperpollutant":"0","Lowerpollutant":"0","PollutantResult":"","AlarmTypeCode":0,"StandardColor":"red","StandardValue":"-","OverStandValue":"","DecimalReserved":3},{"DGIMN":"51052216080303","PollutantCode":"01","MonitorTime":"2019-01-23 17:26:00","MonitorValue":11.000,"MinStrength":null,"MaxStrength":null,"CouStrength":null,"IsOver":1,"IsException":-1,"Flag":"","ExceptionType":"","AlarmLevel":"企业","AlarmType":"上限报警","Upperpollutant":"9","Lowerpollutant":"-1","PollutantResult":"[<9.000]","AlarmTypeCode":1,"StandardColor":"#FF0033","StandardValue":"[<9.000]","OverStandValue":"0.222","DecimalReserved":3},{"DGIMN":"51052216080303","PollutantCode":"02","MonitorTime":"2019-01-23 17:26:00","MonitorValue":1755.860,"MinStrength":null,"MaxStrength":null,"CouStrength":null,"IsOver":-1,"IsException":-1,"Flag":"","ExceptionType":"","AlarmLevel":"","AlarmType":"无报警","Upperpollutant":"0","Lowerpollutant":"0","PollutantResult":"","AlarmTypeCode":0,"StandardColor":"red","StandardValue":"-","OverStandValue":"","DecimalReserved":3},{"DGIMN":"51052216080303","PollutantCode":"03","MonitorTime":"2019-01-23 17:26:00","MonitorValue":83.010,"MinStrength":null,"MaxStrength":null,"CouStrength":null,"IsOver":-1,"IsException":-1,"Flag":"","ExceptionType":"","AlarmLevel":"","AlarmType":"无报警","Upperpollutant":"0","Lowerpollutant":"0","PollutantResult":"","AlarmTypeCode":0,"StandardColor":"red","StandardValue":"-","OverStandValue":"","DecimalReserved":3}]}"
+            const {realdata}=state;
+            if (realdata.length===0) {
+                return {...state};
+            }
+            let nwrealdata=[];
+            let tempnwrealdata={};
+            action.payload.array.map(item=>{
+                if(item.DGIMN===realdata[0].DataGatherCode){
+                    if(!tempnwrealdata.DataGatherCode)
+                        tempnwrealdata.DataGatherCode=item.DGIMN;
+                    if(!tempnwrealdata.MonitorTime)
+                        tempnwrealdata.MonitorTime=item.MonitorTime;
+                    tempnwrealdata[item.PollutantCode]=item.MonitorValue;
+                }
+            });
+            if(tempnwrealdata.DataGatherCode)
+                nwrealdata.push(tempnwrealdata);
+            if (nwrealdata.length===0) {
+                return {...state};
+            }
+            return {
+                ...state,
+                realdata: nwrealdata,
+            };
+        }
     },
 });
