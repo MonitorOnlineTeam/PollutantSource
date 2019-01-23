@@ -154,5 +154,6 @@ export default connect(({ global, setting, loading }) => ({
     collapsed: global.collapsed,
     fetchingNotices: loading.effects['global/fetchNotices'],
     notices: global.notices,
+    currentUserNoticeCnt: global.currentUserNoticeCnt,
     setting,
 }))(HeaderView);
