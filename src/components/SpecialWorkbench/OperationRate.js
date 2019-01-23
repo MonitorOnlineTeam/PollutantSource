@@ -129,7 +129,7 @@ class OperationRate extends PureComponent {
                     return <span style={{ color: 'red' }}>{rr}</span>;
                 }
             }];
-        return <Table key="runrate" loading={this.props.loadingEquipmentoperatingRate} columns={columns} dataSource={this.props.equipmentoperatingRateTableDatas.slice(0, 3)} size="small" pagination={false} />;
+        return <Table rowKey="runrate" loading={this.props.loadingEquipmentoperatingRate} columns={columns} dataSource={this.props.equipmentoperatingRateTableDatas.slice(0, 3)} size="small" pagination={false} />;
     }
 
     render() {

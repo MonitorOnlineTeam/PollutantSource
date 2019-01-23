@@ -75,6 +75,22 @@ class OverDataStatistics extends Component {
                 type: 'category',
                 data: []
             },
+            dataZoom: [
+                {
+                    type: 'inside',
+                    start: 0,
+                    end: 100
+                },
+                {
+                    show: true,
+                    yAxisIndex: 0,
+                    filterMode: 'empty',
+                    width: 30,
+                    height: '80%',
+                    showDataShadow: false,
+                    left: '93%'
+                }
+            ],
             series: []
         };
 
@@ -111,7 +127,7 @@ class OverDataStatistics extends Component {
             option.series.map((s,skey) =>{
                 let $thisValue=item.DataOvers.filter(m=>m.PollutantName===s.name);
                 //debugger;
-                if($thisValue) {
+                if($thisValue.length>0) {
                     s.data.push($thisValue[0].AlarmCount);
                 }else {
                     s.data.push('-');
@@ -121,52 +137,6 @@ class OverDataStatistics extends Component {
         });
 
         return option;
-    }
-
-    /**
-     * 智能监控_渲染数据超标数据列表
-     */
-    renderAllPointOverDataList = () => {
-        const listData = [];
-        const { allPointOverDataList } = this.props;
-
-        allPointOverDataList.tableDatas.map((item,key) => {
-            //判断报警是否超过4小时
-            listData.push({
-                title: `${item.PointName}`,
-                description: (
-                    <div>
-                        {
-                            <div>
-                                <div style={{ backgroundColor: 'rgb(249,249,249)', padding: 10, marginBottom: 5 }}>
-                                    {item.PollutantNames}
-                                    <Divider type="vertical" style={{ backgroundColor: '#b3b3b3' }} />
-                                    超标:{item.AlarmCount}次
-                                    <span style={{ float: 'right' }}>{moment(item.LastTime).format('YYYY-MM-DD HH:00')}~{moment(item.FirstTime).format('YYYY-MM-DD HH:00')}</span>
-                                </div>
-                            </div>
-
-                        }
-                    </div>
-                )
-            });
-        });
-        return (<List
-            itemLayout="vertical"
-            dataSource={listData}
-            renderItem={item => (
-                <List.Item
-                    key={item.title}
-                    actions={[]}
-                >
-                    <List.Item.Meta
-                        title={<a href={item.href}>{item.title}</a>}
-                        description={item.description}
-                    />
-                </List.Item>
-            )}
-        />
-        );
     }
 
     render() {

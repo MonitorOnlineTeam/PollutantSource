@@ -134,7 +134,7 @@ class TransmissionEfficiency extends PureComponent {
                 }
             }];
 
-        return <Table key="effectrate" loading={this.props.loadingTransmissionefficiencyRate} columns={columns} dataSource={this.props.transmissionefficiencyRateTableDatas.slice(0, 3)} size="small" pagination={false} />;
+        return <Table rowKey="effectrate" loading={this.props.loadingTransmissionefficiencyRate} columns={columns} dataSource={this.props.transmissionefficiencyRateTableDatas.slice(0, 3)} size="small" pagination={false} />;
     }
 
     render() {

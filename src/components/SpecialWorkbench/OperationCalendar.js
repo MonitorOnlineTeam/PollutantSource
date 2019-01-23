@@ -177,7 +177,7 @@ class OperationCalendar extends PureComponent {
             }];
 
         return <Table
-            key="oprationtable"
+            rowKey="oprationtable"
             columns={columns}
             dataSource={this.state.dateType === 'month' ? this.props.operation.tempTableDatas.filter(m => moment(m.CreateTime).format('YYYY-MM-DD') === this.state.selectedValue.format("YYYY-MM-DD")) : this.props.operation.tempTableDatas.filter(m => moment(m.CreateTime).format('YYYY-MM') === this.state.selectedValue.format("YYYY-MM"))}
             size="small"
