@@ -11,12 +11,16 @@ import SelectLang from '../SelectLang';
 import styles from './index.less';
 import {asc} from '../../utils/utils';
 
+
+
+@connect(({user,loading,global}) => ({
+    currentUser:user.currentUser,
+    fetchingNotices: loading.effects['global/fetchNotices'],
+    notices: global.notices,
+    currentUserNoticeCnt: global.currentUserNoticeCnt,
+}))
 export default class GlobalHeaderRight extends PureComponent {
-    componentDidMount() {
-       this.props.dispatch({
-            type: 'user/fetchCurrent',
-        });
-    }
+ 
 
     getNoticeData() {
         const { notices = [] } = this.props;

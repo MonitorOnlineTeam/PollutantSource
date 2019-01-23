@@ -50,9 +50,7 @@ const query = {
     },
 };
 
-@connect(({loading, user}) => ({
-    ...loading,
-}))
+
 class BasicLayout extends React.PureComponent {
     constructor(props) {
         super(props);
@@ -70,15 +68,13 @@ class BasicLayout extends React.PureComponent {
     componentDidMount() {
         const {
             dispatch,
-            route: { routes, authority },
         } = this.props;
  
         dispatch({
             type: 'setting/getSetting',
         });
         dispatch({
-            type: 'menu/getMenuData',
-            payload: { routes, authority },
+            type: 'user/fetchCurrent',
         });
     }
 

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Row, Col, Card, List, Tabs, Divider, Modal, Table,Spin } from 'antd';
+import { Row, Col, Card, List, Tabs, Divider, Modal, Table, Spin } from 'antd';
 import { connect } from 'dva';
 import moment from 'moment';
 import ReactEcharts from 'echarts-for-react';
@@ -328,16 +328,16 @@ class RealTimeWarning extends Component {
     renderHourDataOverWarningList = () => {
         const listData = [];
         const { hourDataOverWarningList } = this.props;
-        hourDataOverWarningList.tableDatas.map((items) => {
+        hourDataOverWarningList.tableDatas.map((items,key)=> {
             //判断报警是否超过4小时
             listData.push({
                 title: `${items.PointName}`,
                 description: (
-                    <div>
+                    <div key={key}>
                         {
-                            items.OverWarnings.map(item => (
-                                <div>
-                                    <div className={styles.warningsData} onClick={(e) => this.showModal(items.PointName, items.DGIMNs, item.PollutantCode, item.PollutantName, item.SuggestValue)}>
+                            items.OverWarnings.map((item, key) => (
+                                <div key={key}>
+                                    <div key={key} className={styles.warningsData} onClick={(e) => this.showModal(items.PointName, items.DGIMNs, item.PollutantCode, item.PollutantName, item.SuggestValue)}>
                                         {item.PollutantName}
                                         <Divider type="vertical" style={{ backgroundColor: '#b3b3b3' }} />
                                         超标预警值为{item.AlarmValue}ug/m3
