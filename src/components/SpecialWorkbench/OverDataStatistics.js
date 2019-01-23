@@ -159,7 +159,7 @@ class OverDataStatistics extends Component {
                                 option={this.getOption()}
                                 style={{ minHeight: '350px' }}
                                 className="echarts-for-echarts"
-                                theme="my_theme"
+                                theme="macarons"
                             />
                             {/* <div style={{ height: 400, overflow: 'auto' }}>
                                 {
