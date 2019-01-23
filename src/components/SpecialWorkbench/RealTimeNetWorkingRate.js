@@ -14,36 +14,36 @@ const gridStyle = {
     workbenchmodel,
 }) => ({
     loadingRateStatistics: loading.effects['workbenchmodel/getRateStatisticsData'],
-    loadingNetworkeRate: loading.effects['workbenchmodel/getNetworkeRateData'],
+    // loadingNetworkeRate: loading.effects['workbenchmodel/getNetworkeRateData'],
     networkeRateList: workbenchmodel.networkeRateList,
     rateStatistics: workbenchmodel.rateStatistics,
 }))
 class RealTimeNetWorkingRate extends PureComponent {
 
-    componentWillMount() {
-        this.getRateStatisticsData();
-        this.getNetworkeRateData();
-    }
+    // componentWillMount() {
+    //     this.getRateStatisticsData();
+    //     // this.getNetworkeRateData();
+    // }
 
-    /**
-     * 智能质控_率的统计_更新数据
-     */
-    getRateStatisticsData = () => {
-        this.props.dispatch({
-            type: 'workbenchmodel/getRateStatisticsData',
-            payload: {},
-        });
-    }
+    // /**
+    //  * 智能质控_率的统计_更新数据
+    //  */
+    // getRateStatisticsData = () => {
+    //     this.props.dispatch({
+    //         type: 'workbenchmodel/getRateStatisticsData',
+    //         payload: {},
+    //     });
+    // }
 
-    /**
-     * 智能质控_排口联网率_更新数据
-     */
-    getNetworkeRateData = () => {
-        this.props.dispatch({
-            type: 'workbenchmodel/getNetworkeRateData',
-            payload: {},
-        });
-    }
+    // /**
+    //  * 智能质控_排口联网率_更新数据
+    //  */
+    // getNetworkeRateData = () => {
+    //     this.props.dispatch({
+    //         type: 'workbenchmodel/getNetworkeRateData',
+    //         payload: {},
+    //     });
+    // }
 
     getOption = (type) => {
         const { model } = this.props.rateStatistics;
@@ -133,7 +133,7 @@ class RealTimeNetWorkingRate extends PureComponent {
                 }
             }];
 
-        return <Table key="network" loading={this.props.loadingNetworkeRate} columns={columns} dataSource={this.props.networkeRateList.tableDatas.slice(0, 3)} size="small" pagination={false} />;
+        return <Table key="network" loading={this.props.loadingRateStatistics} columns={columns} dataSource={this.props.networkeRateList.tableDatas.slice(0, 3)} size="small" pagination={false} />;
     }
 
     render() {

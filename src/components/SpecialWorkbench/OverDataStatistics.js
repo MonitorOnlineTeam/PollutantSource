@@ -24,19 +24,19 @@ class OverDataStatistics extends Component {
         this.state = {};
     }
 
-    componentWillMount() {
-        this.getAllPointOverDataList();
-    }
+    // componentWillMount() {
+    //     this.getAllPointOverDataList();
+    // }
 
-    /**
-     * 智能监控_排口超标汇总_更新数据
-     */
-    getAllPointOverDataList = () => {
-        this.props.dispatch({
-            type: pageUrl.getAllPointOverDataList,
-            payload: {},
-        });
-    }
+    // /**
+    //  * 智能监控_排口超标汇总_更新数据
+    //  */
+    // getAllPointOverDataList = () => {
+    //     this.props.dispatch({
+    //         type: pageUrl.getAllPointOverDataList,
+    //         payload: {},
+    //     });
+    // }
 
     /**
       * 更新model中的state

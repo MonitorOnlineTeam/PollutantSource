@@ -25,32 +25,21 @@ const gridStyle = {
  */
 
 class OperationRate extends PureComponent {
-    componentWillMount() {
-        this.getRateStatisticsData();
-        this.getEquipmentoperatingRateData();
-    }
+    // componentWillMount() {
+    //     this.getEquipmentoperatingRateData();
+    // }
 
-    /**
-     * 智能质控_率的统计_更新数据
-     */
-    getRateStatisticsData = () => {
-        this.props.dispatch({
-            type: 'workbenchmodel/getRateStatisticsData',
-            payload: {},
-        });
-    }
-
-    /**
-     * 智能质控_排口设备运转率_更新数据
-     */
-    getEquipmentoperatingRateData = (pageIndex) => {
-        this.props.dispatch({
-            type: 'equipmentoperatingrate/getData',
-            payload: {
-                pageIndex: pageIndex || 1,
-            }
-        });
-    }
+    // /**
+    //  * 智能质控_排口设备运转率_更新数据
+    //  */
+    // getEquipmentoperatingRateData = (pageIndex) => {
+    //     this.props.dispatch({
+    //         type: 'equipmentoperatingrate/getData',
+    //         payload: {
+    //             pageIndex: pageIndex || 1,
+    //         }
+    //     });
+    // }
 
     getOption = (type) => {
         const { model } = this.props.rateStatistics;

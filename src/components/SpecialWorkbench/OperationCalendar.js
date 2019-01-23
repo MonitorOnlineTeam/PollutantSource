@@ -24,9 +24,9 @@ class OperationCalendar extends PureComponent {
         };
     }
 
-    componentWillMount() {
-        this.getOperationData(1);
-    }
+    // componentWillMount() {
+    //     this.getOperationData(1);
+    // }
 
     /**
      * 智能运维_日历表插件基础渲染

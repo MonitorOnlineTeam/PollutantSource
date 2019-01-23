@@ -25,32 +25,21 @@ const gridStyle = {
  */
 
 class TransmissionEfficiency extends PureComponent {
-    componentWillMount() {
-        this.getRateStatisticsData();
-        this.getTransmissionefficiencyRateData();
-    }
+    // componentWillMount() {
+    //     this.getTransmissionefficiencyRateData();
+    // }
 
-    /**
-     * 智能质控_率的统计_更新数据
-     */
-    getRateStatisticsData = () => {
-        this.props.dispatch({
-            type: 'workbenchmodel/getRateStatisticsData',
-            payload: {},
-        });
-    }
-
-    /**
-     * 智能质控_排口传输有效率_更新数据
-     */
-    getTransmissionefficiencyRateData = (pageIndex) => {
-        this.props.dispatch({
-            type: 'transmissionefficiency/getData',
-            payload: {
-                pageIndex: pageIndex || 1,
-            }
-        });
-    }
+    // /**
+    //  * 智能质控_排口传输有效率_更新数据
+    //  */
+    // getTransmissionefficiencyRateData = (pageIndex) => {
+    //     this.props.dispatch({
+    //         type: 'transmissionefficiency/getData',
+    //         payload: {
+    //             pageIndex: pageIndex || 1,
+    //         }
+    //     });
+    // }
 
     getOption = (type) => {
         const { model } = this.props.rateStatistics;

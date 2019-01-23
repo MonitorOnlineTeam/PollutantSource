@@ -42,10 +42,10 @@ class OverMap extends PureComponent {
         };
     }
 
-    componentWillMount() {
-        this.getOverPointList();
-        // this.getEntInfo();
-    }
+    // componentWillMount() {
+    //     this.getOverPointList();
+    //     // this.getEntInfo();
+    // }
 
     // /**
     //  * 获取企业信息
@@ -57,15 +57,15 @@ class OverMap extends PureComponent {
     //     });
     // }
 
-    /**
-     * 智能监控_当前超标排口_更新数据
-     */
-    getOverPointList = () => {
-        this.props.dispatch({
-            type: 'workbenchmodel/getOverPointList',
-            payload: {},
-        });
-    }
+    // /**
+    //  * 智能监控_当前超标排口_更新数据
+    //  */
+    // getOverPointList = () => {
+    //     this.props.dispatch({
+    //         type: 'workbenchmodel/getOverPointList',
+    //         payload: {},
+    //     });
+    // }
 
     /**
      * 智能监控_地图点位渲染

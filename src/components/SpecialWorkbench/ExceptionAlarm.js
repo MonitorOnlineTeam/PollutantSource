@@ -21,20 +21,20 @@ class ExceptionAlarm extends PureComponent {
         };
     }
 
-    componentWillMount() {
-        this.getExceptionAlarmData(1);
+    // componentWillMount() {
+    //     this.getExceptionAlarmData(1);
 
-    }
+    // }
 
-    /**
-     * 智能质控_异常报警_更新数据
-     */
-    getExceptionAlarmData = (pageIndex) => {
-        this.props.dispatch({
-            type: 'workbenchmodel/getExceptionAlarmData',
-            payload: {},
-        });
-    }
+    // /**
+    //  * 智能质控_异常报警_更新数据
+    //  */
+    // getExceptionAlarmData = (pageIndex) => {
+    //     this.props.dispatch({
+    //         type: 'workbenchmodel/getExceptionAlarmData',
+    //         payload: {},
+    //     });
+    // }
 
     /**
      * 催办

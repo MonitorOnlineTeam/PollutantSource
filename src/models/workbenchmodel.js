@@ -19,8 +19,8 @@ import {
     getOverPoints,
     getStatisticsPointStatus
 } from '../services/workbenchapi';
-import { querypolluntantentinfolist,queryhistorydatalist} from '../services/api';
-import {enterpriceid} from '../config';
+import { querypolluntantentinfolist, queryhistorydatalist } from '../services/api';
+import { enterpriceid } from '../config';
 
 export default Model.extend({
     namespace: 'workbenchmodel',
@@ -29,7 +29,7 @@ export default Model.extend({
         pageIndex: 1,
         beginTime: '2018-12-01 00:00:00',//moment().format('YYYY-MM-DD HH:mm:ss'),
         endTime: '2019-01-01 00:00:00',//moment().format('YYYY-MM-DD HH:mm:ss'),
-        tableDatas:[],
+        tableDatas: [],
         operation: {
             beginTime: moment().add(-3, 'months').format("YYYY-MM-01 00:00:00"),//'2018-12-01 00:00:00',//moment().format('YYYY-MM-DD HH:mm:ss'),
             endTime: moment().format('YYYY-MM-DD HH:mm:ss'),//'2019-01-01 00:00:00',//moment().format('YYYY-MM-DD HH:mm:ss'),
@@ -75,10 +75,10 @@ export default Model.extend({
             pageSize: 3,
             total: 0,
         },
-        hourDataOverWarningList:{
-            beginTime:moment().minute()<30?moment().add(-1,'hour').format("YYYY-MM-DD HH:00:00"):moment().format("YYYY-MM-DD HH:00:00"),
-            endTime: moment().add(1,'hour').format('YYYY-MM-DD HH:00:00'),
-            tableDatas:[],
+        hourDataOverWarningList: {
+            beginTime: moment().minute() < 30 ? moment().add(-1, 'hour').format("YYYY-MM-DD HH:00:00") : moment().format("YYYY-MM-DD HH:00:00"),
+            endTime: moment().add(1, 'hour').format('YYYY-MM-DD HH:00:00'),
+            tableDatas: [],
             pageIndex: 1,
             pageSize: 3,
             total: 0,
@@ -106,7 +106,7 @@ export default Model.extend({
             selectedPollutantCode: '',
             pageIndex: 1,
             pageSize: 2000,
-            beginTime:moment().add(-2,'hour').format("YYYY-MM-DD HH:00:00"),
+            beginTime: moment().add(-2, 'hour').format("YYYY-MM-DD HH:00:00"),
             endTime: moment().format('YYYY-MM-DD HH:00:00'),
             // beginTime:'2018-12-28 20:00:00',
             // endTime: '2018-12-28 21:00:00',
@@ -120,7 +120,7 @@ export default Model.extend({
             pageSize: 6,
             total: 0,
         },
-        entbaseinfo:[],
+        entbaseinfo: [],
     },
     subscriptions: {
     },
@@ -132,7 +132,6 @@ export default Model.extend({
          */
         * getOperationData({ payload }, { call, put, update, select }) {
             const { operation } = yield select(state => state.workbenchmodel);
-            // debugger;
             let body = {
                 beginTime: operation.beginTime,
                 endTime: operation.endTime,
@@ -162,7 +161,6 @@ export default Model.extend({
          */
         * getExceptionAlarmData({ payload }, { call, put, update, select }) {
             const { exceptionAlarm } = yield select(state => state.workbenchmodel);
-            //debugger;
             let body = {
                 beginTime: exceptionAlarm.beginTime,
                 endTime: exceptionAlarm.endTime,
@@ -173,7 +171,6 @@ export default Model.extend({
                 //operationUserId:'766f911d-5e41-4bbf-b705-add427a16e77'
             };
             const response = yield call(getDataExceptionAlarmPageList, body);
-            //debugger;
             yield update({
                 exceptionAlarm: {
                     ...exceptionAlarm,
@@ -193,14 +190,20 @@ export default Model.extend({
          * @param {操作} 操作项
          */
         * getRateStatisticsData({ payload }, { call, put, update, select }) {
+
             const { rateStatistics } = yield select(state => state.workbenchmodel);
-            //debugger;
+            const { networkeRateList } = yield select(state => state.workbenchmodel);
             let body = {
                 beginTime: rateStatistics.beginTime,
                 endTime: rateStatistics.endTime
             };
+            let realtimebody = {
+                beginTime: networkeRateList.beginTime,
+                endTime: networkeRateList.endTime,
+                NetSort: networkeRateList.NetSort
+            };
             const response = yield call(getRateStatistics, body);
-            //debugger;
+            const realtimeresponse = yield call(getRealTimeNetWorkingRateForPointsPageList, realtimebody);
             yield update({
                 rateStatistics: {
                     ...rateStatistics,
@@ -209,37 +212,46 @@ export default Model.extend({
                         pageIndex: payload.pageIndex || 1,
                         total: response.total
                     }
-                }
-            });
-        },
-        /**
-         * 获取排口的联网率数据列表
-         * @param {传递参数} 传递参数
-         * @param {操作} 操作项
-         */
-        * getNetworkeRateData({ payload }, { call, put, update, select }) {
-            const { networkeRateList } = yield select(state => state.workbenchmodel);
-            //debugger;
-            let body = {
-                beginTime: networkeRateList.beginTime,
-                endTime: networkeRateList.endTime,
-                NetSort: networkeRateList.NetSort
-
-            };
-            const response = yield call(getRealTimeNetWorkingRateForPointsPageList, body);
-            //debugger;
-            yield update({
+                },
                 networkeRateList: {
                     ...networkeRateList,
                     ...{
-                        tableDatas: response.data,
+                        tableDatas: realtimeresponse.data,
                         pageIndex: payload.pageIndex || 1,
-                        total: response.total,
+                        total: realtimeresponse.total,
                         NetSort: networkeRateList.NetSort
                     }
                 }
             });
         },
+        // /**
+        //  * 获取排口的联网率数据列表
+        //  * @param {传递参数} 传递参数
+        //  * @param {操作} 操作项
+        //  */
+        // * getNetworkeRateData({ payload }, { call, put, update, select }) {
+        //     const { networkeRateList } = yield select(state => state.workbenchmodel);
+        //     //debugger;
+        //     let body = {
+        //         beginTime: networkeRateList.beginTime,
+        //         endTime: networkeRateList.endTime,
+        //         NetSort: networkeRateList.NetSort
+
+        //     };
+        //     const response = yield call(getRealTimeNetWorkingRateForPointsPageList, body);
+        //     //debugger;
+        //     yield update({
+        //         networkeRateList: {
+        //             ...networkeRateList,
+        //             ...{
+        //                 tableDatas: response.data,
+        //                 pageIndex: payload.pageIndex || 1,
+        //                 total: response.total,
+        //                 NetSort: networkeRateList.NetSort
+        //             }
+        //         }
+        //     });
+        // },
         /**
          * 获取小时监测预警消息
          * @param {传递参数} 传递参数
@@ -247,7 +259,6 @@ export default Model.extend({
          */
         * getDataOverWarningData({ payload }, { call, put, update, select }) {
             const { hourDataOverWarningList } = yield select(state => state.workbenchmodel);
-            //debugger;
             let body = {
                 beginTime: hourDataOverWarningList.beginTime,
                 endTime: hourDataOverWarningList.endTime,
@@ -256,7 +267,6 @@ export default Model.extend({
 
             };
             const response = yield call(getDataOverWarningPageList, body);
-            //debugger;
             yield update({
                 hourDataOverWarningList: {
                     ...hourDataOverWarningList,
@@ -288,7 +298,7 @@ export default Model.extend({
                     ...allPointOverDataList,
                     ...{
                         tableDatas: response.data,
-                        pageIndex:allPointOverDataList.pageIndex || 1,
+                        pageIndex: allPointOverDataList.pageIndex || 1,
                         total: response.total
                     }
                 }
@@ -313,7 +323,7 @@ export default Model.extend({
                         total: response.total
                     }
                 },
-                entbaseinfo:entbaseinfo
+                entbaseinfo: entbaseinfo
             });
         },
         /**
@@ -365,24 +375,24 @@ export default Model.extend({
             });
         },
         //
-        *updateRealTimeData({payload}
-            ,{update,select}){
-            if(payload && payload.array) {
+        *updateRealTimeData({ payload }
+            , { update, select }) {
+            if (payload && payload.array) {
                 let { warningDetailsDatas } = yield select(_ => _.workbenchmodel);
-                if(warningDetailsDatas.DGIMNs) {
-                    let pushdata={};
-                    payload.array.map(item=>{
-                        if(item.DGIMN==warningDetailsDatas.DGIMNs) {
-                            pushdata[item.PollutantCode]=item.MonitorValue;
-                            pushdata.MonitorTime=item.MonitorTime;
-                            pushdata.DataGatherCode=warningDetailsDatas.DGIMNs;
+                if (warningDetailsDatas.DGIMNs) {
+                    let pushdata = {};
+                    payload.array.map(item => {
+                        if (item.DGIMN == warningDetailsDatas.DGIMNs) {
+                            pushdata[item.PollutantCode] = item.MonitorValue;
+                            pushdata.MonitorTime = item.MonitorTime;
+                            pushdata.DataGatherCode = warningDetailsDatas.DGIMNs;
                         }
                     });
-                    if(pushdata && pushdata.DataGatherCode) {
-                        let array=[];
+                    if (pushdata && pushdata.DataGatherCode) {
+                        let array = [];
                         array.push(pushdata);
-                        warningDetailsDatas.chartDatas= array.concat(warningDetailsDatas.chartDatas);
-                        yield update({warningDetailsDatas});
+                        warningDetailsDatas.chartDatas = array.concat(warningDetailsDatas.chartDatas);
+                        yield update({ warningDetailsDatas });
                     }
 
                 }
@@ -418,6 +428,57 @@ export default Model.extend({
                     }
                 });
             }
+
+        },
+        //获取工作台所有方法
+        * getAllMethods({ payload }, { call, put, update, select }) {
+            //报警汇总
+            yield put({
+                type: 'getAllPointOverDataList',
+                payload: {}
+            });
+
+            //实时预警
+            yield put({
+                type: 'getDataOverWarningData',
+                payload: {}
+            });
+
+            //实时联网率
+            yield put({
+                type: 'getRateStatisticsData',
+                payload: {}
+            });
+
+            //设备运转率
+            yield put({
+                type: 'equipmentoperatingrate/getData',
+                payload: {}
+            });
+
+            //传输有效率
+            yield put({
+                type: '   transmissionefficiency/getData',
+                payload: {}
+            });
+            
+            //报警信息
+            yield put({
+                type: 'getExceptionAlarmData',
+                payload: {}
+            });
+
+            //运维日历
+            yield put({
+                type: 'getOperationData',
+                payload: {}
+            });
+
+            //加载点状态
+            yield put({
+                type: 'getStatisticsPointStatus',
+                payload: {}
+            });
 
         },
     },

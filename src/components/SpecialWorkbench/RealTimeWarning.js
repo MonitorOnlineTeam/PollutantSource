@@ -34,19 +34,19 @@ class RealTimeWarning extends Component {
         };
     }
 
-    componentWillMount() {
-        this.getDataOverWarningData();
-    }
+    // componentWillMount() {
+    //     this.getDataOverWarningData();
+    // }
 
-    /**
-     * 智能监控_当小时预警消息_更新数据
-     */
-    getDataOverWarningData = () => {
-        this.props.dispatch({
-            type: pageUrl.getDataOverWarningData,
-            payload: {},
-        });
-    }
+    // /**
+    //  * 智能监控_当小时预警消息_更新数据
+    //  */
+    // getDataOverWarningData = () => {
+    //     this.props.dispatch({
+    //         type: pageUrl.getDataOverWarningData,
+    //         payload: {},
+    //     });
+    // }
 
     /**
       * 更新model中的state
