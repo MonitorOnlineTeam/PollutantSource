@@ -1,12 +1,13 @@
 import React, { PureComponent } from 'react';
 import classNames from 'classnames';
 import { Menu, Icon } from 'antd';
+import { connect } from 'dva';
 import Link from 'umi/link';
 import { urlToList } from '../_utils/pathTools';
 import { getMenuMatches } from './SiderMenuUtils';
 import { isUrl } from '@/utils/utils';
 import styles from './index.less';
-
+import { getFlatMenuKeys } from '../SiderMenu/SiderMenuUtils';
 const { SubMenu } = Menu;
 
 // Allow menu.js config icon as string or ReactNode
@@ -22,6 +23,10 @@ const getIcon = icon => {
   }
   return icon;
 };
+
+@connect(({ loading, user }) => ({
+  menuData: user.currentMenu
+}))
 
 export default class BaseMenu extends PureComponent {
 
@@ -41,7 +46,8 @@ export default class BaseMenu extends PureComponent {
 
   // Get the currently selected menu
   getSelectedMenuKeys = pathname => {
-    const { flatMenuKeys } = this.props;
+    const { menuData } = this.props;
+    const flatMenuKeys=getFlatMenuKeys(menuData);
     return urlToList(pathname).map(itemPath => getMenuMatches(flatMenuKeys, itemPath).pop());
   };
 
@@ -61,8 +67,8 @@ export default class BaseMenu extends PureComponent {
                 <span>{name}</span>
               </span>
             ) : (
-              name
-            )
+                name
+              )
           }
           key={item.path}
         >
@@ -101,8 +107,8 @@ export default class BaseMenu extends PureComponent {
         onClick={
           isMobile
             ? () => {
-                onCollapse(true);
-              }
+              onCollapse(true);
+            }
             : undefined
         }
       >
@@ -139,7 +145,7 @@ export default class BaseMenu extends PureComponent {
         openKeys: openKeys.length === 0 ? [...selectedKeys] : openKeys,
       };
     }
-    const { handleOpenChange, style, menuData } = this.props;
+    const { handleOpenChange, style } = this.props;
     const cls = classNames(className, {
       'top-nav-menu': mode === 'horizontal',
     });
@@ -155,7 +161,7 @@ export default class BaseMenu extends PureComponent {
         className={cls}
         {...props}
       >
-        {this.getNavMenuItems(menuData)}
+        {this.getNavMenuItems(this.props.menuData)}
       </Menu>
     );
   }

@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import { FormattedMessage, formatMessage } from 'umi/locale';
 import { Spin, Tag, Menu, Icon, Avatar, Tooltip } from 'antd';
+import { connect } from 'dva';
 import moment from 'moment';
 import groupBy from 'lodash/groupBy';
 import NoticeIcon from '../NoticeIcon';
@@ -8,14 +9,24 @@ import HeaderSearch from '../HeaderSearch';
 import HeaderDropdown from '../HeaderDropdown';
 import SelectLang from '../SelectLang';
 import styles from './index.less';
+import {asc} from '../../utils/utils';
 
+
+
+@connect(({user,loading,global}) => ({
+    currentUser:user.currentUser,
+    fetchingNotices: loading.effects['global/fetchNotices'],
+    notices: global.notices,
+    currentUserNoticeCnt: global.currentUserNoticeCnt,
+}))
 export default class GlobalHeaderRight extends PureComponent {
     getNoticeData() {
         const { notices = [] } = this.props;
         if (notices.length === 0) {
             return {};
         }
-        const newNotices = notices.map(notice => {
+        const noticesAsc=notices.sort(asc);
+        const newNotices = noticesAsc.map(notice => {
             const newNotice = { ...notice };
             if (newNotice.exceptiontypes) {
                 let exceptiontypes=newNotice.exceptiontypes.split(",");
@@ -82,11 +93,13 @@ export default class GlobalHeaderRight extends PureComponent {
       const {
           currentUser,
           fetchingNotices,
+          currentUserNoticeCnt,
           onNoticeVisibleChange,
           onMenuClick,
           onNoticeClear,
           theme,
       } = this.props;
+      //debugger;
       const menu = (
           <Menu className={styles.menu} selectedKeys={[]} onClick={onMenuClick}>
               <Menu.Item key="userCenter">
@@ -139,7 +152,7 @@ export default class GlobalHeaderRight extends PureComponent {
               </Tooltip>
               <NoticeIcon
                   className={styles.action}
-                  count={currentUser.unreadCount}
+                  count={currentUserNoticeCnt.unreadCount}
                   onItemClick={(item, tabProps) => {
             console.log(item, tabProps); // eslint-disable-line
                       this.changeReadState(item, tabProps);
@@ -158,7 +171,6 @@ export default class GlobalHeaderRight extends PureComponent {
                       count={unreadMsg.alarm}
                       list={noticeData.alarm}
                       title={formatMessage({ id: 'component.globalHeader.notification' })}
-                      
                       name="alarm"
                       emptyText={formatMessage({ id: 'component.globalHeader.notification.empty' })}
                       emptyImage="https://gw.alipayobjects.com/zos/rmsportal/wAhyIChODzsoKIOBHcBk.svg"

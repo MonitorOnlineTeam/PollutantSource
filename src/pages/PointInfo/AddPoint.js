@@ -67,16 +67,14 @@ class AddPoint extends Component {
             DGIMNdisabled: false,
             PollutantTypes: [],
             GasOutputType: [],
-            PollutantType:this.props.match.params.PollutantType===1?"none":"block",
+            PollutantType:null,
 
         };
     }
 
     componentWillMount() {
-
         const DGIMN = this.props.match.params.DGIMN;
-       
-
+        const type = this.props.match.params.PollutantType;
         if (DGIMN !== 'null') {
 
             this.props.dispatch({
@@ -93,8 +91,8 @@ class AddPoint extends Component {
         this.getOperationer();
         this.getpollutanttype();
         this.getgasoutputtype();
-        
-    
+        this.setPollutantType(type);
+
     }
 
      onRef1 = (ref) => {
@@ -113,6 +111,12 @@ class AddPoint extends Component {
              });
          });
      }
+
+ setPollutantType = (type) => {
+     this.setState({
+         PollutantType: type === "1" ? "none" : "block"
+     });
+ }
 
     getOperationer=() => {
         this.props.dispatch({
@@ -257,8 +261,7 @@ class AddPoint extends Component {
          const {editpoint,isloading}=this.props;
          const {getFieldDecorator} = this.props.form;
 
-     
-         
+
          if(isloading) {
              return (<Spin
                  style={{ width: '100%',
@@ -271,26 +274,25 @@ class AddPoint extends Component {
          }
          // const UserId = this.props.match.params.UserId;
          const {
-            pointName           ,
-            DGIMN               ,
-            OutputType          ,
-            RunState            ,
-            mobilePhone         ,
-            linkman             ,
-            PointType           ,
-            pollutantType       ,
-            IsSj                ,
-            OutputDiameter      ,
-            OutputHigh          ,
-            OutPutWhitherCode   ,
-            Sort                ,
-            OperationerId       ,
-            Address             ,
-            longitude           ,
-            latitude            ,
-        } = editpoint === null || this.props.match.params.DGIMN ==="null" ? {} : editpoint;
-     
- 
+             pointName ,
+             DGIMN ,
+             OutputType ,
+             RunState ,
+             mobilePhone ,
+             linkman ,
+             PointType ,
+             pollutantType ,
+             IsSj ,
+             OutputDiameter ,
+             OutputHigh ,
+             OutPutWhitherCode ,
+             Sort ,
+             OperationerId ,
+             Address ,
+             longitude ,
+             latitude ,
+         } = editpoint === null || this.props.match.params.DGIMN ==="null" ? {} : editpoint;
+
 
          return (
              <MonitorContent
@@ -351,7 +353,7 @@ class AddPoint extends Component {
                                              style={{ width:200 }}
                                              placeholder="排口编号"
                                              disabled={
-                                                this.props.match.params.DGIMN ==="null"?false:true
+                                                 this.props.match.params.DGIMN !=="null"
                                              }
                                          />
                                          )
@@ -359,9 +361,9 @@ class AddPoint extends Component {
                                  </FormItem>
                              </Col>
                              <Col span={8}>
-                          
 
-                             <FormItem
+
+                                 <FormItem
                                      {...formItemLayout}
 
                                      label="污染物类型"
@@ -369,7 +371,7 @@ class AddPoint extends Component {
                                          getFieldDecorator('PollutantType',
                                              {
                                                  initialValue: pollutantType===''?undefined:pollutantType,
-                                                
+
                                              }
                                          )(
                                              <Select
@@ -379,13 +381,13 @@ class AddPoint extends Component {
                                                  style={{ width:200 }}
                                                  placeholder="请选择"
                                                  onChange={(value,op)=>{
-  
-                                                  this.setState({
-                                                    PollutantType:value===1?"none":"block"
 
-                                                  });
+                                                     this.setState({
+                                                         PollutantType:value===1?"none":"block"
+
+                                                     });
                                                  }}
-                                             
+
                                              >
                                                  {this.state.PollutantTypes}
                                              </Select>
@@ -412,17 +414,17 @@ class AddPoint extends Component {
                                          })(<Input style={{ width:200 }} placeholder="负责人电话" />)}
                                  </FormItem>
                              </Col>
-                             <Col span={8} >
-                             <FormItem
+                             <Col span={8}>
+                                 <FormItem
                                      {...formItemLayout}
 
                                      label="负责人"
                                  > {
                                          getFieldDecorator('Linkman',{
-                                            initialValue: linkman,
+                                             initialValue: linkman,
 
                                          }
-                                         
+
                                          )(<Input style={{ width:200 }} placeholder="负责人" />
                                          )}
                                  </FormItem>
@@ -453,7 +455,7 @@ class AddPoint extends Component {
                                      }
                                  </FormItem>
                              </Col>
-                     
+
                          </Row>
                          <Divider dashed={true} />
                          <Row gutter={8} />
@@ -478,9 +480,9 @@ class AddPoint extends Component {
                                      }
                                  </FormItem>
                              </Col>
-                             
-                              <Col span={8} >
-                              <FormItem
+
+                             <Col span={8}>
+                                 <FormItem
                                      {...formItemLayout}
 
                                      label="上传数据类型"
@@ -497,17 +499,17 @@ class AddPoint extends Component {
                                              />)
                                      }
                                  </FormItem>
-                          </Col>
-                             
-                             
+                             </Col>
+
+
                              <Col span={8}>
-                             <FormItem
+                                 <FormItem
                                      {...formItemLayout}
 
                                      label="排序"
                                  > {
                                          getFieldDecorator('Sort',{
-                                            initialValue: Sort,
+                                             initialValue: Sort,
                                          }
                                          )(
                                              <InputNumber min={0} max={10000} />)
@@ -518,24 +520,24 @@ class AddPoint extends Component {
                          <Division />
                          <Row gutter={8}>
                              <Col span={8} style={{display:this.state.PollutantType}}>
-                             
-                             <FormItem
-                                  {...formItemLayout}
 
-                                  label="是否烧结"
-                              > {
-                                      getFieldDecorator('IsSj',
-                                          {
-                                              initialValue: IsSj===0?true:false,
-                                              valuePropName: 'checked',
-                                          }
-                                      )(
-                                          <Switch
-                                              checkedChildren="烧结"
-                                              unCheckedChildren="非烧结"
-                                          />)
-                                  }
-                              </FormItem>
+                                 <FormItem
+                                     {...formItemLayout}
+
+                                     label="是否烧结"
+                                 > {
+                                         getFieldDecorator('IsSj',
+                                             {
+                                                 initialValue: IsSj===0,
+                                                 valuePropName: 'checked',
+                                             }
+                                         )(
+                                             <Switch
+                                                 checkedChildren="烧结"
+                                                 unCheckedChildren="非烧结"
+                                             />)
+                                     }
+                                 </FormItem>
                              </Col>
                              <Col span={8} style={{display:this.state.PollutantType}}>
                                  <FormItem
@@ -554,23 +556,23 @@ class AddPoint extends Component {
                              </Col>
 
                              <Col span={8} style={{display:this.state.PollutantType}}>
-                                 
-                             <FormItem
+
+                                 <FormItem
                                      {...formItemLayout}
 
                                      label="排口高度"
                                  > {
                                          getFieldDecorator('OutputHigh',{
 
-                                            initialValue: OutputHigh,
+                                             initialValue: OutputHigh,
 
                                          }
-                                         
+
                                          )(
                                              <InputNumber min={0} max={10000} />)
                                      }
                                  </FormItem>
-                           
+
                              </Col>
                          </Row>
                          <Divider dashed={true} />
@@ -624,7 +626,7 @@ class AddPoint extends Component {
                                      label="排口坐标"
                                  > {
                                          getFieldDecorator('Coordinate', {
-                                            initialValue:(longitude===undefined?"116.397026":longitude)+','+(latitude===undefined?"39.918058":latitude),
+                                             initialValue:`${longitude===undefined?"116.397026":longitude},${latitude===undefined?"39.918058":latitude}`,
                                              rules: [{
                                                  required: true,
                                                  message: '请输入排口坐标!'
@@ -635,13 +637,13 @@ class AddPoint extends Component {
                                              enterButton="查看坐标"
                                              style={{ width:300 }}
                                              onSearch={(value) => {
-                                                 
-                                      
+
+
                                                  this.setState({
                                                      coordinate: value,
                                                      Mapvisible: true,
                                                      title: '选择坐标',
-                                                     width: 1130
+                                                     width: '90%'
                                                  });
                                              }}
                                          />)
