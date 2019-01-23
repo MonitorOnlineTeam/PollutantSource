@@ -1,7 +1,12 @@
+import {
+    querypollutanttypecode, querydatalist, querylastestdatalist,
+    queryhistorydatalist, querypollutantlist, addtaskinfo, queryurge, getPollutantTypeList,
+    querypolluntantentinfolist
+} from '../services/api';
 import React from 'react';
 import moment from 'moment';
 import { message } from 'antd';
-
+import { mainpollutantInfo,mainpoll,enterpriceid } from '../../src/config';
 import {
     Popover,
     Badge,
@@ -29,12 +34,13 @@ export default Model.extend({
         existdata: false,
         gwidth: 0,
         gheight: 0,
-        selectdata: [],
         pollutantName: [],
         detailtime: null,
         addtaskstatus: false,
         pollutantTypelist: null,
-
+        entbaseinfo:[],
+        selectpoint:null,
+        selectpollutantTypeCode:'2'
     },
     effects: {
         * querypollutanttypecode({
@@ -42,14 +48,21 @@ export default Model.extend({
         }, { call, update, put, take }) {
             let gwidth = 300 + 140 + 70;
             const data = yield call(querypollutanttypecode, payload);
+            // yield put({
+            //     type: 'querydatalist',
+            //     payload: {
+            //         ...payload,
+            //         pollutantTypes:payload.pollutantCode
+            //     },
+            // });
             yield put({
-                type: 'querydatalist',
+                type: 'getPollutantTypeList',
                 payload: {
                     ...payload,
                     pollutantTypes: payload.pollutantCode
                 },
             });
-            yield take('querydatalist/@@end');
+            yield take('getPollutantTypeList/@@end');
             if (data) {
                 gwidth += 200 * data.length;
             }
@@ -57,7 +70,7 @@ export default Model.extend({
         },
         * querydatalist({
             payload,
-        }, { call, update, put, take }) {
+        }, { call, update, put, take,select }) {
             const data = yield call(querydatalist, payload);
             if (payload.map && data) {
                 data.map((item) => {
@@ -68,6 +81,18 @@ export default Model.extend({
                     item.key = item.DGIMN;
                 });
             }
+            let { selectpoint } = yield select(_ => _.overview);
+            if(selectpoint)
+            {
+                const newpoint=data.find(value=>{
+                    return value.DGIMN==selectpoint.DGIMN;
+                })
+                yield update({
+                    selectpoint:newpoint
+                })
+            }
+
+            
 
             //手工上传
             if (payload.manualUpload) {
@@ -469,9 +494,10 @@ export default Model.extend({
         },
         * querydetailpollutant({
             payload,
-        }, { call, update }) {
-
-            const pollutantInfoList = mainpoll.find(value => value.pollutantCode == payload.pollutantTypeCode);
+        }, { call, update,put,take }) {
+            const pollutantInfoList=mainpoll.find(value=>{
+                return value.pollutantCode==payload.pollutantTypeCode;
+            })
             // 地图详细表格列头
             let detailpcol = [{
                 title: '因子',
@@ -579,13 +605,22 @@ export default Model.extend({
                 });
 
             }
-            const selectdata = res.data ? res.data[0] : '';
+          
             yield update({
                 detailtime,
                 detaildata,
                 detailpcol,
-                selectdata
             });
+            yield put({
+                type:'queryoptionData',
+                payload:{
+                    ...payload,
+                   
+                }
+            })
+            yield take('queryoptionData/@@end');
+
+
         },
         * queryoptionData({ payload }, {
             call, update
@@ -624,7 +659,8 @@ export default Model.extend({
                     }]
                 };
             }
-            if (zspolluntinfo && zspolluntinfo.standardValue) {
+            if(zspolluntinfo && zspolluntinfo.standardValue)
+            {
                 zsmarkLine = {
                     symbol: 'none', // 去掉警戒线最后面的箭头
                     data: [{
@@ -732,111 +768,120 @@ export default Model.extend({
                     zsseriesdata = zsseriesdata.concat(item[`zs${payload.pollutantCodes}`]);
                 });
             }
-            //污染物标准线的组织;
-            let polluntinfo;
-            let zspolluntinfo;
-            let markLine = {};
-            let zsmarkLine = {};
-            if (pollutantlist) {
-                polluntinfo = pollutantlist.find((value, index, arr) => value.pollutantCode === payload.pollutantCodes);
-                zspolluntinfo = pollutantlist.find((value, index, arr) => value.pollutantCode === `zs${payload.pollutantCodes}`);
-            }
-            if (polluntinfo && polluntinfo.standardValue) {
-                markLine = {
-                    symbol: 'none', // 去掉警戒线最后面的箭头
-                    data: [{
-                        lineStyle: {
-                            type: 'dash',
-                            color: '#54A8FF',
-                        },
-                        yAxis: polluntinfo.standardValue
-                    }]
-                };
-            }
-            if (zspolluntinfo && zspolluntinfo.standardValue) {
-                zsmarkLine = {
-                    symbol: 'none', // 去掉警戒线最后面的箭头
-                    data: [{
-                        lineStyle: {
-                            type: 'dash',
-                            color: '#FF00FF',
-                        },
-                        yAxis: zspolluntinfo.standardValue
-                    }]
-                };
-            }
-            let existdata = true;
-            if (!seriesdata[0] && !zsseriesdata[0]) {
-                existdata = false;
-            }
-            const pollutantInfoList = mainpoll.find(value => value.pollutantCode == payload.pollutantTypeCode);
-            let legend = [payload.pollutantName];
-            if (pollutantInfoList.zspollutant) {
-                legend.push(`折算${payload.pollutantName}`);
-            }
-            const option = {
-                legend: {
-                    data: legend
-                },
-                tooltip: {
-                    trigger: 'axis',
-                    formatter: function (params, ticket, callback) {
-                        let res = `${params[0].axisValue}时<br/>`;
-                        params.map(item => {
-                            res += `${item.seriesName}:${item.value}<br />`;
-                        });
-                        return res;
-                    }
-                },
-                toolbox: {
-                    show: true,
-                    feature: {
-                        saveAsImage: {}
-                    }
-                },
-                xAxis: {
-                    type: 'category',
-                    name: '时间',
-                    boundaryGap: false,
-                    data: xData
-                },
-                yAxis: {
-                    type: 'value',
-                    name: '浓度(' + 'mg/m³' + ')',
-                    axisLabel: {
-                        formatter: '{value}'
-                    },
-                },
-                series: [{
-                    type: 'line',
-                    name: payload.pollutantName,
-                    data: seriesdata,
-                    markLine: markLine,
-                    itemStyle: {
-                        normal: {
-                            color: '#54A8FF',
-                            lineStyle: {
-                                color: '#54A8FF'
-                            }
-                        }
-                    },
-                },
-                {
-                    type: 'line',
-                    name: `折算${payload.pollutantName}`,
-                    data: zsseriesdata,
-                    markLine: zsmarkLine,
-                    itemStyle: {
-                        normal: {
-                            color: '#FF00FF',
-                            lineStyle: {
-                                color: '#FF00FF'
-                            }
-                        }
-                    },
-                }
-                ]
-            };
+             //污染物标准线的组织;
+             let polluntinfo;
+             let zspolluntinfo;
+             let markLine = {};
+             let zsmarkLine={};
+             if (pollutantlist) {
+                 polluntinfo = pollutantlist.find((value, index, arr) => {
+                     return value.pollutantCode === payload.pollutantCodes;
+                 });
+                 zspolluntinfo=pollutantlist.find((value, index, arr) => {
+                     return value.pollutantCode === 'zs'+ payload.pollutantCodes;
+                 });
+             }
+             if (polluntinfo && polluntinfo.standardValue) {
+                 markLine = {
+                     symbol: 'none', // 去掉警戒线最后面的箭头
+                     data: [{
+                         lineStyle: {
+                             type: 'dash',
+                             color: '#54A8FF',
+                         },
+                         yAxis: polluntinfo.standardValue
+                     }]
+                 };
+             }
+             if(zspolluntinfo && zspolluntinfo.standardValue)
+             {
+                 zsmarkLine = {
+                     symbol: 'none', // 去掉警戒线最后面的箭头
+                     data: [{
+                         lineStyle: {
+                             type: 'dash',
+                             color: '#FF00FF',
+                         },
+                         yAxis: zspolluntinfo.standardValue
+                     }]
+                 };
+             }
+             let existdata = true;
+             if (!seriesdata[0] && !zsseriesdata[0]) {
+                 existdata = false;
+             }
+             const pollutantInfoList=mainpoll.find(value=>{
+                 return value.pollutantCode==payload.pollutantTypeCode;
+             })
+             let legend=[payload.pollutantName];
+             if(pollutantInfoList.zspollutant)
+             {
+                 legend.push('折算' + payload.pollutantName);
+             }
+             const option = {
+                 legend: {
+                     data: legend
+                 },
+                 tooltip: {
+                     trigger: 'axis',
+                     formatter: function (params, ticket, callback) {
+                         console.log(params);
+                         let res=params[0].axisValue+"时<br/>"
+                         params.map(item=>{
+                             res+=item.seriesName+":"+item.value+"<br />"
+                         })
+                         return res;
+                     }
+                 },
+                 toolbox: {
+                     show: true,
+                     feature: {
+                         saveAsImage: {}
+                     }
+                 },
+                 xAxis: {
+                     type: 'category',
+                     name: '时间',
+                     boundaryGap: false,
+                     data: xData
+                 },
+                 yAxis: {
+                     type: 'value',
+                     name: '浓度(' + 'mg/m³' + ')',
+                     axisLabel: {
+                         formatter: '{value}'
+                     },
+                 },
+                 series: [{
+                     type: 'line',
+                     name: payload.pollutantName,
+                     data: seriesdata,
+                     markLine: markLine,
+                     itemStyle: {
+                         normal: {
+                             color: '#54A8FF',
+                             lineStyle: {
+                                 color: '#54A8FF'
+                             }
+                         }
+                     },
+                 },
+                 {
+                     type: 'line',
+                     name: '折算' + payload.pollutantName,
+                     data: zsseriesdata,
+                     markLine:zsmarkLine,
+                     itemStyle: {
+                         normal: {
+                             color: '#FF00FF',
+                             lineStyle: {
+                                 color: '#FF00FF'
+                             }
+                         }
+                     },
+                 }
+                 ]
+             };
 
             yield update({
                 chartdata: option,
@@ -869,17 +914,39 @@ export default Model.extend({
         //获取系统污染物类型
         * getPollutantTypeList({
             payload
-        }, { call, update }) {
+        }, { call, update,put,take }) {
             const res = yield call(getPollutantTypeList, payload);
             if (res) {
                 yield update({
                     pollutantTypelist: res
                 });
-            } else {
+                yield put({
+                    type: 'querydatalist',
+                    payload: {
+                        ...payload,
+                    },
+                });
+                yield take('querydatalist/@@end');
+            }
+            else {
                 yield update({
                     pollutantTypelist: null
                 });
             }
+        },
+        //获取企业信息
+        * queryentdetail({
+            payload,
+        }, { call, update,put,take }) {
+            const entbaseinfo = yield call(querypolluntantentinfolist, { parentID: enterpriceid });
+            yield update({ entbaseinfo: entbaseinfo });
+            yield put({
+                type: 'getPollutantTypeList',
+                payload: {
+                    ...payload,
+                },
+            });
+            yield take('getPollutantTypeList/@@end');
         },
     }
 });

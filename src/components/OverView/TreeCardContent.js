@@ -2,12 +2,36 @@ import React, { Component } from 'react';
 import {
     Spin, Tabs
 } from 'antd';
+import {connect} from 'dva';
 import styles from './Tree.less';
+
+@connect(({ loading, overview }) => ({
+    //点位数据信息
+    treedatalist: overview.data,
+    //加载数据
+    isloading:loading.effects['overview/querydatalist']
+}))
 
 class TreeCardContent extends Component {
     constructor(props) {
         super(props);
     }
+
+    componentWillMount(){
+
+    }
+
+    getStatusImg=(value) => {
+        if (value === 0) {
+            return <img style={{width:15}} src="/gisunline.png" />;
+        } if (value === 1) {
+            return <img style={{width:15}} src="/gisnormal.png" />;
+        } if (value === 2) {
+            return <img style={{width:15}} src="/gisover.png" />;
+        }
+        return <img style={{width:15}} src="/gisexception.png" />;
+    }
+
 
     getTreeDatalist = () => {
         const { isloading, treedatalist, PollutantType } = this.props;
@@ -31,7 +55,7 @@ class TreeCardContent extends Component {
                     >
                         <div key={key} className={styles.cardtopspan}>
                             <span className={styles.statusimg}>
-                                {this.props.getStatusImg(item.status)}
+                                {this.getStatusImg(item.status)}
                             </span>
                             <span className={styles.pointName}>
                                 {item.pointName}
@@ -65,8 +89,6 @@ class TreeCardContent extends Component {
     }
 
     render() {
-        // if(!this.props.pollutantTypeloading)
-        // {
         if (this.props.isloading) {
             return (
                 <div style={{
@@ -77,7 +99,6 @@ class TreeCardContent extends Component {
                 >
                     <Spin
                         style={{
-                            // width: '100%',
                             height: 'calc(100vh/2)',
                             display: 'flex',
                             alignItems: 'center',
@@ -88,13 +109,7 @@ class TreeCardContent extends Component {
                 </div>
             );
         }
-        // }
-
-
         let { getHeight, treedatalist } = this.props;
-        // if (!treedatalist || !treedatalist[0]) {
-        //     getHeight = 70;
-        // }
         return (
             <div style={{ ...this.props.style, height: getHeight }}>
                 {this.getTreeDatalist()}

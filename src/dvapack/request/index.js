@@ -28,6 +28,8 @@ async function geturl(url, tooken) {
             if (user !== null) {
                 newurl += `?authorCode=${user.User_ID}`;
             }
+        } else{
+            return;
         }
     } else if (tooken !== 'notooken') {
         newurl += `?authorCode=${tooken}`;
@@ -50,7 +52,7 @@ const fetchtimeout = (requestPromise, timeout = 30000) => {
 
 async function request(url, _options) {
     // console.log(`这是请求的url${url}`);
-    
+
     const options = _options || {};
     options.method = options.method || 'GET';
     options.headers = options.headers || {};
