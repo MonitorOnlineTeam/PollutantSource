@@ -384,27 +384,32 @@ class RealTimeWarning extends Component {
                 title: '监测时间',
                 dataIndex: 'MonitorTime',
                 width: '20%',
+                key:'MonitorTime',
                 render: (text, record) => `${moment(text).format('HH:mm:ss')}`,
             },
             {
                 title: '污染物',
                 dataIndex: 'none',
+                key:'none',
                 render: (text, record) => `${selectedPollutantName}`,
                 width: '20%'
             },
             {
+                key:selectedPollutantCode,
                 title: '监测值',
                 dataIndex: selectedPollutantCode,
                 width: '20%',
                 align: 'center'
             },
             {
+                key:`${selectedPollutantCode}_StandardValue`,
                 title: '标准值',
                 dataIndex: `${selectedPollutantCode}_StandardValue`,
                 width: '20%',
                 align: 'center'
             },
             {
+                key:`${selectedPollutantCode}_SuggestValue`,
                 title: '建议浓度',
                 dataIndex: `${selectedPollutantCode}_SuggestValue`,
                 width: '20%',

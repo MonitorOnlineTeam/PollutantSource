@@ -132,6 +132,7 @@ class OperationCalendar extends PureComponent {
             {
                 title: '排口名称',
                 dataIndex: 'PointName',
+                key:'PointName',
                 render: (text, record) => {
                     if (record.TaskType === 2)
                         return <div style={{ position: 'relative' }}>{text}<Tag style={{ position: 'absolute', top: -10 }} color="#f50">应急</Tag></div>;
@@ -141,6 +142,7 @@ class OperationCalendar extends PureComponent {
             {
                 title: '运维状态',
                 dataIndex: 'ExceptionTypeText',
+                key:'ExceptionTypeText',
                 render: (text, record) => {
                     if (!text)
                         return <Tag color="rgb(76,205,122)">正常</Tag>;
@@ -158,6 +160,7 @@ class OperationCalendar extends PureComponent {
             {
                 title: '运维人',
                 dataIndex: 'OperationName',
+                key:'OperationName',
                 render: (text, record) => {
                     if (record.TaskStatus === 2)
                         return <div style={{ position: 'relative' }}>{text}<Tag style={{ marginLeft: 7 }} color="#faad14">进行中</Tag></div>;
@@ -166,6 +169,7 @@ class OperationCalendar extends PureComponent {
             }, {
                 title: '操作',
                 dataIndex: 'opt',
+                key: 'opt',
                 render: (text, record) => (
 
                     <a onClick={

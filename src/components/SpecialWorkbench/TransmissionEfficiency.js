@@ -120,10 +120,12 @@ class TransmissionEfficiency extends PureComponent {
     renderTransmissionefficiencyRateTable = () => {
         const columns = [
             {
+                key:'PointName',
                 title: '排口名称',
                 dataIndex: 'PointName'
             },
             {
+                key:'TransmissionEffectiveRate',
                 title: '传输有效率',
                 dataIndex: 'TransmissionEffectiveRate',
                 render: (text, record) => {

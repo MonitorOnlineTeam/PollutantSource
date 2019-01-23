@@ -69,7 +69,7 @@ class OverDataStatistics extends Component {
             },
             xAxis:  {
                 type: 'value',
-                name:'mg/m³'
+                name:'次'
             },
             yAxis: {
                 type: 'category',

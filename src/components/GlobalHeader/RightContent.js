@@ -99,7 +99,7 @@ export default class GlobalHeaderRight extends PureComponent {
           onNoticeClear,
           theme,
       } = this.props;
-      debugger;
+      //debugger;
       const menu = (
           <Menu className={styles.menu} selectedKeys={[]} onClick={onMenuClick}>
               <Menu.Item key="userCenter">

@@ -19,32 +19,6 @@ const gridStyle = {
     rateStatistics: workbenchmodel.rateStatistics,
 }))
 class RealTimeNetWorkingRate extends PureComponent {
-
-    // componentWillMount() {
-    //     this.getRateStatisticsData();
-    //     // this.getNetworkeRateData();
-    // }
-
-    // /**
-    //  * 智能质控_率的统计_更新数据
-    //  */
-    // getRateStatisticsData = () => {
-    //     this.props.dispatch({
-    //         type: 'workbenchmodel/getRateStatisticsData',
-    //         payload: {},
-    //     });
-    // }
-
-    // /**
-    //  * 智能质控_排口联网率_更新数据
-    //  */
-    // getNetworkeRateData = () => {
-    //     this.props.dispatch({
-    //         type: 'workbenchmodel/getNetworkeRateData',
-    //         payload: {},
-    //     });
-    // }
-
     getOption = (type) => {
         const { model } = this.props.rateStatistics;
         let networkeRate = (parseFloat(model.NetworkeRate) * 100).toFixed(2);
@@ -121,11 +95,13 @@ class RealTimeNetWorkingRate extends PureComponent {
         const columns = [
             {
                 title: '排口名称',
-                dataIndex: 'PointName'
+                dataIndex: 'PointName',
+                key:'PointName'
             },
             {
                 title: '联网状态',
                 dataIndex: 'RateValue',
+                key:'RateValue',
                 render: (text, record) => {
                     if (text === 100)
                         return `${(parseFloat(text) * 100).toFixed(2)}%`;
