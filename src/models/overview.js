@@ -5,20 +5,21 @@ import {
 } from '../services/api';
 import React from 'react';
 import moment from 'moment';
-import { message } from 'antd';
+// import { message } from 'antd';
 import { mainpollutantInfo,mainpoll,enterpriceid } from '../../src/config';
 import {
     Popover,
     Badge,
     Icon,
-    Divider
+    Divider,
+    message
 } from 'antd';
-import { mainpollutantInfo, mainpoll } from "../config";
+// import { mainpollutantInfo, mainpoll } from "../config";
 import { Model } from '../dvapack';
-import {
-    querypollutanttypecode, querydatalist, querylastestdatalist,
-    queryhistorydatalist, querypollutantlist, addtaskinfo, queryurge, getPollutantTypeList
-} from '../services/api';
+// import {
+//     querypollutanttypecode, querydatalist, querylastestdatalist,
+//     queryhistorydatalist, querypollutantlist, addtaskinfo, queryurge, getPollutantTypeList
+// } from '../services/api';
 
 export default Model.extend({
     namespace: 'overview',
