@@ -190,9 +190,9 @@ export default class OperationCalendar extends Component {
                 <div style={{ height: '80%' }}>
                     <ul className={styles.day} >
                         {
-                            returnResult.map(item => (
-                                <li key={item.content}>
-                                    <Tag style={{ marginBottom: 1, marginTop: 1 }} color={item.ExceptionTypeText === '报警响应异常' ? '#F70303' : item.ExceptionTypeText === '工作超时' ? '#F79503' : '#F7C603'}>{item.content}</Tag>
+                            returnResult.map((item,key) => (
+                                <li key={key}>
+                                    <Tag  key={key} style={{ marginBottom: 1, marginTop: 1 }} color={item.ExceptionTypeText === '报警响应异常' ? '#F70303' : item.ExceptionTypeText === '工作超时' ? '#F79503' : '#F7C603'}>{item.content}</Tag>
                                 </li>
                             ))
                         }
@@ -220,7 +220,6 @@ export default class OperationCalendar extends Component {
                     'Content': ExceptionTypeText.length + '次'
                 })
                 operationingmonth = ExceptionTypeText.filter(m => m.TaskStatus === 2);
-                debugger
             }
         }
         return (
@@ -228,9 +227,9 @@ export default class OperationCalendar extends Component {
                 <div style={{ height: '80%' }}>
                     <ul className={styles.month} >
                         {
-                            returnResult.map(item => (
-                                <li key={item.TaskType}>
-                                    <Tag style={{ height: 26, fontSize: 20, paddingBottom: 2, paddingTop: 2 }} color='#E83939'>{item.TaskType}{item.Content}</Tag>
+                            returnResult.map((item,key) => (
+                                <li key={key}>
+                                    <Tag key={key} style={{ height: 26, fontSize: 20, paddingBottom: 2, paddingTop: 2 }} color='#E83939'>{item.TaskType}{item.Content}</Tag>
                                 </li>
                             ))
                         }

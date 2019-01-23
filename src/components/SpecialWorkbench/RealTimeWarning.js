@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Row, Col, Card, List, Tabs, Divider, Modal, Table,Spin } from 'antd';
+import { Row, Col, Card, List, Tabs, Divider, Modal, Table, Spin } from 'antd';
 import { connect } from 'dva';
 import moment from 'moment';
 import ReactEcharts from 'echarts-for-react';
@@ -33,20 +33,6 @@ class RealTimeWarning extends Component {
             SuggestValue: null,
         };
     }
-
-    // componentWillMount() {
-    //     this.getDataOverWarningData();
-    // }
-
-    // /**
-    //  * 智能监控_当小时预警消息_更新数据
-    //  */
-    // getDataOverWarningData = () => {
-    //     this.props.dispatch({
-    //         type: pageUrl.getDataOverWarningData,
-    //         payload: {},
-    //     });
-    // }
 
     /**
       * 更新model中的state
@@ -142,11 +128,6 @@ class RealTimeWarning extends Component {
             seriesData.push(item[selectedPollutantCode]);
         });
         let suugestValue = this.state.SuggestValue;
-
-        // if(chartDatas.length>0)
-        // {
-        //     suugestValue=chartDatas[0][selectedPollutantCode+'_SuggestValue'];
-        // }
         //当前选中的污染物的信息
         const selectPllutantInfo = pollutantList.find((value, index, arr) => value.pollutantCode == selectedPollutantCode);
         let legenddata = [];
@@ -277,14 +258,6 @@ class RealTimeWarning extends Component {
                     data: [],
                     markLine: {
                         data: suggestData,
-                        // itemStyle : {
-                        //     normal: {
-                        //         lineStyle: {
-                        //             color:'#FFC0CB',
-                        //         },
-                        //     }
-
-                        // },
                     }
                 }
             ]
@@ -328,16 +301,16 @@ class RealTimeWarning extends Component {
     renderHourDataOverWarningList = () => {
         const listData = [];
         const { hourDataOverWarningList } = this.props;
-        hourDataOverWarningList.tableDatas.map((items) => {
+        hourDataOverWarningList.tableDatas.map((items,key)=> {
             //判断报警是否超过4小时
             listData.push({
                 title: `${items.PointName}`,
                 description: (
-                    <div>
+                    <div key={key}>
                         {
-                            items.OverWarnings.map(item => (
-                                <div>
-                                    <div className={styles.warningsData} onClick={(e) => this.showModal(items.PointName, items.DGIMNs, item.PollutantCode, item.PollutantName, item.SuggestValue)}>
+                            items.OverWarnings.map((item, key) => (
+                                <div key={key}>
+                                    <div key={key} className={styles.warningsData} onClick={(e) => this.showModal(items.PointName, items.DGIMNs, item.PollutantCode, item.PollutantName, item.SuggestValue)}>
                                         {item.PollutantName}
                                         <Divider type="vertical" style={{ backgroundColor: '#b3b3b3' }} />
                                         超标预警值为{item.AlarmValue}ug/m3
@@ -384,27 +357,32 @@ class RealTimeWarning extends Component {
                 title: '监测时间',
                 dataIndex: 'MonitorTime',
                 width: '20%',
+                key:'MonitorTime',
                 render: (text, record) => `${moment(text).format('HH:mm:ss')}`,
             },
             {
                 title: '污染物',
                 dataIndex: 'none',
+                key:'none',
                 render: (text, record) => `${selectedPollutantName}`,
                 width: '20%'
             },
             {
+                key:selectedPollutantCode,
                 title: '监测值',
                 dataIndex: selectedPollutantCode,
                 width: '20%',
                 align: 'center'
             },
             {
+                key:`${selectedPollutantCode}_StandardValue`,
                 title: '标准值',
                 dataIndex: `${selectedPollutantCode}_StandardValue`,
                 width: '20%',
                 align: 'center'
             },
             {
+                key:`${selectedPollutantCode}_SuggestValue`,
                 title: '建议浓度',
                 dataIndex: `${selectedPollutantCode}_SuggestValue`,
                 width: '20%',
@@ -415,7 +393,7 @@ class RealTimeWarning extends Component {
         return <Table
             columns={columns}
             dataSource={chartDatas}
-            key="warntable"
+            rowKey="warntable"
             size="small"
             pagination={{ pageSize: 15 }}
             loading={this.props.loadingRealTimeWarningDatas}

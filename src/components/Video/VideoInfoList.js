@@ -55,7 +55,7 @@ export default class VideoInfoList extends Component {
                                     initialValue: this.props.item.PointName,
 
                                 })(
-                                    <Input style={{border: 0}} readOnly="true" />
+                                    <Input style={{border: 0}} readOnly={true} />
                                 )}
                             </FormItem>
                         </Col>
@@ -67,7 +67,7 @@ export default class VideoInfoList extends Component {
                                     initialValue: this.props.item.VedioDevice_Name,
 
                                 })(
-                                    <Input style={{border: 0}} readOnly="true" />
+                                    <Input style={{border: 0}} readOnly={true} />
                                 )}
                             </FormItem>
                         </Col>
@@ -82,7 +82,7 @@ export default class VideoInfoList extends Component {
                                     initialValue: this.props.item.VedioDevice_No,
 
                                 })(
-                                    <Input style={{border: 0}} readOnly="true" />
+                                    <Input style={{border: 0}} readOnly={true} />
                                 )}
                             </FormItem>
                         </Col>
@@ -94,7 +94,7 @@ export default class VideoInfoList extends Component {
                                     initialValue: this.props.item.VedioDevice_Position,
 
                                 })(
-                                    <Input style={{border: 0}} readOnly="true" />
+                                    <Input style={{border: 0}} readOnly={true} />
                                 )}
                             </FormItem>
                         </Col>
@@ -108,7 +108,7 @@ export default class VideoInfoList extends Component {
                                 {getFieldDecorator('IP', {
                                     initialValue: this.props.item.IP,
                                 })(
-                                    <Input style={{border: 0}} readOnly="true" />
+                                    <Input style={{border: 0}} readOnly={true} />
                                 )}
                             </FormItem>
                         </Col>
@@ -119,7 +119,7 @@ export default class VideoInfoList extends Component {
                                 {getFieldDecorator('Device_Port', {
                                     initialValue: this.props.item.Device_Port,
                                 })(
-                                    <Input style={{border: 0}} readOnly="true" />
+                                    <Input style={{border: 0}} readOnly={true} />
                                 )}
                             </FormItem>
                         </Col>
@@ -133,7 +133,7 @@ export default class VideoInfoList extends Component {
                                 {getFieldDecorator('User_Name', {
                                     initialValue: this.props.item.User_Name,
                                 })(
-                                    <Input style={{border: 0}} readOnly="true" />
+                                    <Input style={{border: 0}} readOnly={true} />
                                 )}
                             </FormItem>
                         </Col>
@@ -144,7 +144,7 @@ export default class VideoInfoList extends Component {
                                 {getFieldDecorator('User_Pwd', {
                                     initialValue: this.props.item.User_Pwd,
                                 })(
-                                    <Input style={{border: 0}} readOnly="true" />
+                                    <Input style={{border: 0}} readOnly={true} />
                                 )}
                             </FormItem>
                         </Col>
@@ -158,7 +158,7 @@ export default class VideoInfoList extends Component {
                                 {getFieldDecorator('VedioCamera_Name', {
                                     initialValue: this.props.item.VedioCamera_Name,
                                 })(
-                                    <Input style={{border: 0}} readOnly="true" />
+                                    <Input style={{border: 0}} readOnly={true} />
                                 )}
                             </FormItem>
                         </Col>
@@ -170,7 +170,7 @@ export default class VideoInfoList extends Component {
                                     initialValue: this.props.item.VedioCamera_Position,
 
                                 })(
-                                    <Input style={{border: 0}} readOnly="true" />
+                                    <Input style={{border: 0}} readOnly={true} />
                                 )}
                             </FormItem>
                         </Col>
@@ -184,7 +184,7 @@ export default class VideoInfoList extends Component {
                                 {getFieldDecorator('VedioCamera_No', {
                                     initialValue: this.props.item.VedioCamera_No,
                                 })(
-                                    <Input style={{border: 0}} readOnly="true" />
+                                    <Input style={{border: 0}} readOnly={true} />
                                 )}
                             </FormItem>
                         </Col>
@@ -196,7 +196,7 @@ export default class VideoInfoList extends Component {
                                     initialValue: this.props.item.VedioCamera_Version,
 
                                 })(
-                                    <Input style={{border: 0}} readOnly="true" />
+                                    <Input style={{border: 0}} readOnly={true} />
                                 )}
                             </FormItem>
                         </Col>
@@ -210,7 +210,7 @@ export default class VideoInfoList extends Component {
                                 {getFieldDecorator('Longitude', {
                                     initialValue: this.props.item.Longitude,
                                 })(
-                                    <Input style={{border: 0}} readOnly="true" />
+                                    <Input style={{border: 0}} readOnly={true} />
                                 )}
                             </FormItem>
                         </Col>
@@ -222,7 +222,7 @@ export default class VideoInfoList extends Component {
                                     initialValue: this.props.item.Latitude,
 
                                 })(
-                                    <Input style={{border: 0}} readOnly="true" />
+                                    <Input style={{border: 0}} readOnly={true} />
                                 )}
                             </FormItem>
                         </Col>
@@ -239,7 +239,7 @@ export default class VideoInfoList extends Component {
                                     {
                                         initialValue: this.props.item.ProduceDate,
                                     })(
-                                    <Input style={{border: 0}} readOnly="true" />
+                                    <Input style={{border: 0}} readOnly={true} />
                                 )}
                             </FormItem>
                         </Col>
@@ -251,7 +251,7 @@ export default class VideoInfoList extends Component {
                                     initialValue: this.props.item.VedioDevice_ID,
 
                                 })(
-                                    <Input style={{border: 0}} readOnly="true" />
+                                    <Input style={{border: 0}} readOnly={true} />
                                 )}
                             </FormItem>
                         </Col>
@@ -263,7 +263,7 @@ export default class VideoInfoList extends Component {
                                     initialValue: this.props.item.CameraMonitorID,
 
                                 })(
-                                    <Input style={{border: 0}} readOnly="true" />
+                                    <Input style={{border: 0}} readOnly={true} />
                                 )}
                             </FormItem>
                         </Col>
@@ -274,7 +274,7 @@ export default class VideoInfoList extends Component {
                                 {getFieldDecorator('VedioCamera_ID', {
                                     initialValue: this.props.item.VedioCamera_ID,
                                 })(
-                                    <Input style={{border: 0}} readOnly="true" />
+                                    <Input style={{border: 0}} readOnly={true} />
                                 )}
                             </FormItem>
                         </Col>

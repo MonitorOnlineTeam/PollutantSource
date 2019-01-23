@@ -25,21 +25,21 @@ const gridStyle = {
  */
 
 class OperationRate extends PureComponent {
-    // componentWillMount() {
-    //     this.getEquipmentoperatingRateData();
-    // }
+    componentWillMount() {
+        this.getEquipmentoperatingRateData();
+    }
 
-    // /**
-    //  * 智能质控_排口设备运转率_更新数据
-    //  */
-    // getEquipmentoperatingRateData = (pageIndex) => {
-    //     this.props.dispatch({
-    //         type: 'equipmentoperatingrate/getData',
-    //         payload: {
-    //             pageIndex: pageIndex || 1,
-    //         }
-    //     });
-    // }
+    /**
+     * 智能质控_排口设备运转率_更新数据
+     */
+    getEquipmentoperatingRateData = (pageIndex) => {
+        this.props.dispatch({
+            type: 'equipmentoperatingrate/getData',
+            payload: {
+                pageIndex: pageIndex || 1,
+            }
+        });
+    }
 
     getOption = (type) => {
         const { model } = this.props.rateStatistics;
@@ -129,7 +129,7 @@ class OperationRate extends PureComponent {
                     return <span style={{ color: 'red' }}>{rr}</span>;
                 }
             }];
-        return <Table key="runrate" loading={this.props.loadingEquipmentoperatingRate} columns={columns} dataSource={this.props.equipmentoperatingRateTableDatas.slice(0, 3)} size="small" pagination={false} />;
+        return <Table rowKey={(record, index) => `complete${index}`} loading={this.props.loadingEquipmentoperatingRate} columns={columns} dataSource={this.props.equipmentoperatingRateTableDatas.slice(0, 3)} size="small" pagination={false} />;
     }
 
     render() {

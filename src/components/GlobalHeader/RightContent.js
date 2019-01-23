@@ -11,6 +11,14 @@ import SelectLang from '../SelectLang';
 import styles from './index.less';
 import {asc} from '../../utils/utils';
 
+
+
+@connect(({user,loading,global}) => ({
+    currentUser:user.currentUser,
+    fetchingNotices: loading.effects['global/fetchNotices'],
+    notices: global.notices,
+    currentUserNoticeCnt: global.currentUserNoticeCnt,
+}))
 export default class GlobalHeaderRight extends PureComponent {
     getNoticeData() {
         const { notices = [] } = this.props;
@@ -91,7 +99,7 @@ export default class GlobalHeaderRight extends PureComponent {
           onNoticeClear,
           theme,
       } = this.props;
-      debugger;
+      //debugger;
       const menu = (
           <Menu className={styles.menu} selectedKeys={[]} onClick={onMenuClick}>
               <Menu.Item key="userCenter">

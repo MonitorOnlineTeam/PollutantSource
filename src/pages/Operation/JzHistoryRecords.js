@@ -241,7 +241,7 @@ export default class JzHistoryRecords extends Component {
                             item = item + ')';
                         }
                         resu.push(
-                            <Tag style={{ marginBottom: 1.5, marginTop: 1.5 }} color="#108ee9">{item}</Tag>
+                            <Tag key={key} style={{ marginBottom: 1.5, marginTop: 1.5 }} color="#108ee9">{item}</Tag>
                         );
                     });
                 }
@@ -317,6 +317,7 @@ export default class JzHistoryRecords extends Component {
                                     </Row>
                                 </div>
                                 <Table
+                                    rowKey={(record, index) => `complete${index}`}
                                     size="middle"
                                     scroll={{ y: 'calc(100vh - 350px)' }}
                                     loading={spining}
