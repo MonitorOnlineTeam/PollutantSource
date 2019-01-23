@@ -57,7 +57,7 @@ export default class pointlist extends Component {
         };
     }
     componentWillMount() {
-        this.onChange();
+        this.onChange(this.props.pageIndex, this.props.pageSize);
     }
   onShowSizeChange = (pageIndex, pageSize) => {
       this.props.dispatch({
@@ -245,7 +245,7 @@ export default class pointlist extends Component {
                                              type: 'pointinfo/getpointlist',
                                              payload: {
                                                  pageIndex: 1,
-                                                 pageSize: 10,
+                                                 pageSize: this.props.props.pageSize,
                                                  DGIMNs: value
                                              },
                                          });

@@ -8,9 +8,11 @@ import {
     Row,
     Col,
     Form,
+    Button
 } from 'antd';
 import AMap from '../PointInfo/CoordinateMap';
 const FormItem = Form.Item;
+const Search = Input.Search;
 @Form.create()
 export default class addcoordinate extends Component {
     constructor(props) {
@@ -46,10 +48,13 @@ export default class addcoordinate extends Component {
             lng: lng,
             lat: lat,
         });
-
-        this.props.onRef(this);
     };
-
+        onRef1 = (ref) => {
+          this.child = ref;
+        }
+        onSearch=()=>{
+            this.child.btnserch();
+        }
     render() {
         const {getFieldDecorator} = this.props.form;
         return (
@@ -64,8 +69,12 @@ export default class addcoordinate extends Component {
                                         {
                                             initialValue: this.state.address !== null ? this.state.address : '',
                                         }
-                                    )(<Input placeholder="请输入地址" />)
-                                } </FormItem>
+                                    )( < Search placeholder = "地址"
+                                      onSearch ={()=>this.onSearch()}
+                                      enterButton='搜索' /> )
+                                } 
+                                </FormItem>
+                               
                         </Col>
                     </Row>
                     <Row gutter={48} >
@@ -93,13 +102,14 @@ export default class addcoordinate extends Component {
                     </Row>
                 </Card>
                 <AMap
+                    height = 'calc(100vh - 500px)'
                     lng={this.props.form.getFieldValue('longitude')}
                     lat={this.props.form.getFieldValue('latitude')}
                     address={this.props.form.getFieldValue('position')}
                     getMapPoint={(point) => {
                         this.props.form.setFieldsValue({
-                            latitude: point.lat,
-                            longitude: point.lng
+                             latitude: point[1],
+                               longitude: point[0]
                         });
                     }}
                     getMapAddress={(address) => {
@@ -107,6 +117,7 @@ export default class addcoordinate extends Component {
                             position: address
                         });
                     }}
+                    onRef={this.onRef1}
                 />
             </div>
         );

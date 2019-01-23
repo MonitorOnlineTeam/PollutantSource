@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import { FormattedMessage, formatMessage } from 'umi/locale';
 import { Spin, Tag, Menu, Icon, Avatar, Tooltip } from 'antd';
+import { connect } from 'dva';
 import moment from 'moment';
 import groupBy from 'lodash/groupBy';
 import NoticeIcon from '../NoticeIcon';
@@ -11,6 +12,12 @@ import styles from './index.less';
 import {asc} from '../../utils/utils';
 
 export default class GlobalHeaderRight extends PureComponent {
+    componentDidMount() {
+       this.props.dispatch({
+            type: 'user/fetchCurrent',
+        });
+    }
+
     getNoticeData() {
         const { notices = [] } = this.props;
         if (notices.length === 0) {
