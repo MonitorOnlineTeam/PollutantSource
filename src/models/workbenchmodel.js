@@ -458,10 +458,10 @@ export default Model.extend({
 
             //传输有效率
             yield put({
-                type: '   transmissionefficiency/getData',
+                type: 'transmissionefficiency/getData',
                 payload: {}
             });
-            
+
             //报警信息
             yield put({
                 type: 'getExceptionAlarmData',
