@@ -17,6 +17,7 @@ import SearchInput from '../../components/OverView/SearchInput';
 import TreeStatus from '../../components/OverView/TreeStatus';
 import TreeCard from '../../components/OverView/TreeCard';
 import TreeCardContent from '../../components/OverView/TreeCardContent';
+import { DEFAULT_ECDH_CURVE } from 'tls';
 
 @connect(({ task, overview, loading }) => ({
     loading: loading.effects['task/GetHistoryStandardGasRepalceRecordList'],
@@ -167,8 +168,7 @@ export default class StandardGasHistoryRecords extends Component {
                                 }
                             });
                         }
-                        else
-                        {
+                        else {
                             this.props.dispatch({
                                 type: 'task/GetHistoryStandardGasRepalceRecordList',
                                 payload: {
@@ -178,7 +178,7 @@ export default class StandardGasHistoryRecords extends Component {
                                     BeginTime: this.state.BeginTime,
                                     EndTime: this.state.EndTime,
                                 }
-                            });   
+                            });
                         }
                     }
 
@@ -228,14 +228,21 @@ export default class StandardGasHistoryRecords extends Component {
             dataIndex: 'Content',
             key: 'Content',
             render: (text, record) => {
-                if (text !== undefined) {
+                if (text !== undefined) {  
                     var content = text.split(',');
                     var resu = [];
                     content.map((item, key) => {
-                        item = item.replace('(', ' - ');
-                        item = item.replace(')', '');
+                        if(text.indexOf('()')==='-1')
+                        {
+                            item = item.replace('(', ' - ');
+                            item = item.replace(')', '');
+                        } 
+                       else
+                       {
+                        item =item.replace('()', '');
+                       }
                         resu.push(
-                            <Tag style={{ marginBottom: 1.5, marginTop: 1.5 }} color="#108ee9">{item}</Tag>
+                            <Tag key={key} style={{ marginBottom: 1.5, marginTop: 1.5 }} color="#108ee9">{item}</Tag>
                         );
                     });
                 }
@@ -298,6 +305,7 @@ export default class StandardGasHistoryRecords extends Component {
                                     </Row>
                                 </div>
                                 <Table
+                                    rowKey={(record, index) => `complete${index}`}
                                     size="middle"
                                     scroll={{ y: 'calc(100vh - 350px)' }}
                                     loading={spining}

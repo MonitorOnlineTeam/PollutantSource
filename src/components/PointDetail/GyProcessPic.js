@@ -93,7 +93,7 @@ export default class GyProcessPic extends Component {
         {
            
               return  (<Card title={ pollutantInfo.pollutantName+"分析仪"} style={{ borderRadius: 10 }}>
-                    <table className={styles.FormTable}>
+                    <table key={(record, index) => `complete${index}`} className={styles.FormTable}>
                         <tbody>
                             <tr>
                                 <td style={{width: '40%', textAlign: 'center'}}>{pollutantInfo.pollutantName}({pollutantInfo.unit})</td>

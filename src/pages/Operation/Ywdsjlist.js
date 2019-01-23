@@ -4,7 +4,7 @@ import RangePicker_ from '../../components/PointDetail/RangePicker_';
 import { connect } from 'dva';
 import moment from 'moment';
 import Ywdsjlistss from './Ywdsjlist.less';
-import { EnumPatrolTaskType,EnumOperationTaskStatus  } from '../../utils/enum';
+import { EnumPatrolTaskType, EnumOperationTaskStatus } from '../../utils/enum';
 import { routerRedux } from 'dva/router';
 import SearchInput from '../../components/OverView/SearchInput';
 import TreeStatus from '../../components/OverView/TreeStatus';
@@ -245,64 +245,63 @@ export default class Ywdsjlist extends Component {
     renderItem = (data) => {
         if (data != null && data.length > 0) {
             const rtnVal = [];
-            data.map((item) => {
-                rtnVal.push(<Timeline.Item dot={<div className={Ywdsjlistss.DateLoad} />}>
+            data.map((item, key) => {
+                rtnVal.push(<Timeline.Item key={key} dot={<div className={Ywdsjlistss.DateLoad} />}>
                     <p className={Ywdsjlistss.taskDate}>{item.NodeDate}</p>
                 </Timeline.Item>);
-                item.NodeList.map((item1) => {
-                    if(item1.TaskStatus===EnumOperationTaskStatus.Underway)
-                    {
+                item.NodeList.map((item1, key1) => {
+                    if (item1.TaskStatus === EnumOperationTaskStatus.Underway) {
                         let value = `于${item1.CreateTime}，开始任务，正在进行中`;
                         var valueName = `${item1.OperationsUserName}`;
                         rtnVal.push(
-                            <Timeline.Item dot={<img style={{width: '38px', height: '38px'}} src="/patrol.png" />}>
-                                <p className={Ywdsjlistss.taskDetail}><span style={{color: '#40B0F5', marginRight: '10px'}}>{valueName}</span>{value}</p>
-                                <div className={Ywdsjlistss.seeDetail} onClick={() => {
-                                    this.props.dispatch(routerRedux.push(`/TaskDetail/emergencydetailinfo/${this.props.match.params.viewtype}/operationywdsjlist/${item1.ID}/${localStorage.getItem('DGIMN')}`));
-                                }}>
-                                查看详情
-                                </div>
-                            </Timeline.Item>
-                        );
-                    }else{
-                    if (item1.TaskType === EnumPatrolTaskType.PatrolTask) {
-                        var value = `于${item1.CompleteTime}完成例行任务`;
-                        var valueName = `${item1.OperationsUserName}`;
-                        rtnVal.push(
-                            <Timeline.Item dot={<img style={{ width: '38px', height: '38px' }} src="/patrol.png" />}>
+                            <Timeline.Item key={key1 + '1' + key} dot={<img style={{ width: '38px', height: '38px' }} src="/patrol.png" />}>
                                 <p className={Ywdsjlistss.taskDetail}><span style={{ color: '#40B0F5', marginRight: '10px' }}>{valueName}</span>{value}</p>
                                 <div className={Ywdsjlistss.seeDetail} onClick={() => {
-                                    this.props.dispatch(routerRedux.push(`/TaskDetail/emergencydetailinfo/${undefined}/operationywdsjlist/${item1.ID}/${localStorage.getItem('DGIMN')}`));
-                                }}>
-                                    查看详情
-                                </div>
-                            </Timeline.Item>
-                        );
-                    } else if (item1.TaskType === EnumPatrolTaskType.ExceptionTask) {
-                        var value1 = `于${item1.CompleteTime === null ? '' : item1.CompleteTime}完成应急任务`;
-                        var valueName1 = `${item1.OperationsUserName}`;
-                        rtnVal.push(
-                            <Timeline.Item dot={<img style={{ width: '38px', height: '38px' }} src="/emergeny.png" />}>
-                                <p className={Ywdsjlistss.taskDetail}><span style={{ color: '#40B0F5', marginRight: '10px' }}>{valueName1}</span>{value1}</p>
-                                <div className={Ywdsjlistss.seeDetail} onClick={() => {
-                                    this.props.dispatch(routerRedux.push(`/TaskDetail/emergencydetailinfo/${undefined}/operationywdsjlist/${item1.ID}/${localStorage.getItem('DGIMN')}`));
+                                    this.props.dispatch(routerRedux.push(`/TaskDetail/emergencydetailinfo/${this.props.match.params.viewtype}/operationywdsjlist/${item1.ID}/${localStorage.getItem('DGIMN')}`));
                                 }}>
                                     查看详情
                                 </div>
                             </Timeline.Item>
                         );
                     } else {
-                        var value2 = `需要对当前排口进行处理，`;
-                        var valueName2 = `${item1.OperationsUserName}`;
-                        var value3 = `${item1.Remark === null ? '' : item1.Remark}`;
-                        rtnVal.push(
-                            <Timeline.Item dot={<img style={{ width: '38px', height: '38px' }} src="/alarmpic.png" />}>
-                                <p className={Ywdsjlistss.taskDetail}><span style={{ color: '#40B0F5', marginRight: '10px' }}>{valueName2}</span>{value2}</p>
-                                <p className={Ywdsjlistss.pLoad}>{value3}</p>
-                            </Timeline.Item>
-                        );
+                        if (item1.TaskType === EnumPatrolTaskType.PatrolTask) {
+                            var value = `于${item1.CompleteTime}完成例行任务`;
+                            var valueName = `${item1.OperationsUserName}`;
+                            rtnVal.push(
+                                <Timeline.Item key={key1 + '2' + key} dot={<img style={{ width: '38px', height: '38px' }} src="/patrol.png" />}>
+                                    <p className={Ywdsjlistss.taskDetail}><span style={{ color: '#40B0F5', marginRight: '10px' }}>{valueName}</span>{value}</p>
+                                    <div className={Ywdsjlistss.seeDetail} onClick={() => {
+                                        this.props.dispatch(routerRedux.push(`/TaskDetail/emergencydetailinfo/${undefined}/operationywdsjlist/${item1.ID}/${localStorage.getItem('DGIMN')}`));
+                                    }}>
+                                        查看详情
+                                </div>
+                                </Timeline.Item>
+                            );
+                        } else if (item1.TaskType === EnumPatrolTaskType.ExceptionTask) {
+                            var value1 = `于${item1.CompleteTime === null ? '' : item1.CompleteTime}完成应急任务`;
+                            var valueName1 = `${item1.OperationsUserName}`;
+                            rtnVal.push(
+                                <Timeline.Item key={key1 + '3' + key} dot={<img style={{ width: '38px', height: '38px' }} src="/emergeny.png" />}>
+                                    <p className={Ywdsjlistss.taskDetail}><span style={{ color: '#40B0F5', marginRight: '10px' }}>{valueName1}</span>{value1}</p>
+                                    <div className={Ywdsjlistss.seeDetail} onClick={() => {
+                                        this.props.dispatch(routerRedux.push(`/TaskDetail/emergencydetailinfo/${undefined}/operationywdsjlist/${item1.ID}/${localStorage.getItem('DGIMN')}`));
+                                    }}>
+                                        查看详情
+                                </div>
+                                </Timeline.Item>
+                            );
+                        } else {
+                            var value2 = `需要对当前排口进行处理，`;
+                            var valueName2 = `${item1.OperationsUserName}`;
+                            var value3 = `${item1.Remark === null ? '' : item1.Remark}`;
+                            rtnVal.push(
+                                <Timeline.Item key={key1 + '4' + key} dot={<img style={{ width: '38px', height: '38px' }} src="/alarmpic.png" />}>
+                                    <p className={Ywdsjlistss.taskDetail}><span style={{ color: '#40B0F5', marginRight: '10px' }}>{valueName2}</span>{value2}</p>
+                                    <p className={Ywdsjlistss.pLoad}>{value3}</p>
+                                </Timeline.Item>
+                            );
+                        }
                     }
-                }
                 });
             });
             return rtnVal;

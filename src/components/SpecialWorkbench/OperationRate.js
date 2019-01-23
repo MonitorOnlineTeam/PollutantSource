@@ -25,21 +25,21 @@ const gridStyle = {
  */
 
 class OperationRate extends PureComponent {
-    // componentWillMount() {
-    //     this.getEquipmentoperatingRateData();
-    // }
+    componentWillMount() {
+        this.getEquipmentoperatingRateData();
+    }
 
-    // /**
-    //  * 智能质控_排口设备运转率_更新数据
-    //  */
-    // getEquipmentoperatingRateData = (pageIndex) => {
-    //     this.props.dispatch({
-    //         type: 'equipmentoperatingrate/getData',
-    //         payload: {
-    //             pageIndex: pageIndex || 1,
-    //         }
-    //     });
-    // }
+    /**
+     * 智能质控_排口设备运转率_更新数据
+     */
+    getEquipmentoperatingRateData = (pageIndex) => {
+        this.props.dispatch({
+            type: 'equipmentoperatingrate/getData',
+            payload: {
+                pageIndex: pageIndex || 1,
+            }
+        });
+    }
 
     getOption = (type) => {
         const { model } = this.props.rateStatistics;
@@ -117,13 +117,11 @@ class OperationRate extends PureComponent {
         const columns = [
             {
                 title: '排口名称',
-                dataIndex: 'PointName',
-                key:'PointName'
+                dataIndex: 'PointName'
             },
             {
                 title: '设备运转率',
                 dataIndex: 'RunningRate',
-                key:'RunningRate',
                 render: (text, record) => {
                     let rr = `${(parseFloat(text) * 100).toFixed(2)}%`;
                     if (text >= 90)
@@ -131,7 +129,7 @@ class OperationRate extends PureComponent {
                     return <span style={{ color: 'red' }}>{rr}</span>;
                 }
             }];
-        return <Table rowKey="runrate" loading={this.props.loadingEquipmentoperatingRate} columns={columns} dataSource={this.props.equipmentoperatingRateTableDatas.slice(0, 3)} size="small" pagination={false} />;
+        return <Table rowKey={(record, index) => `complete${index}`} loading={this.props.loadingEquipmentoperatingRate} columns={columns} dataSource={this.props.equipmentoperatingRateTableDatas.slice(0, 3)} size="small" pagination={false} />;
     }
 
     render() {

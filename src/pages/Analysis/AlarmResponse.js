@@ -15,7 +15,7 @@ import moment from 'moment';
 import styles from './index.less';
 import ReactEcharts from 'echarts-for-react';
 import MonitorContent from '../../components/MonitorContent/index';
-import {connect} from 'dva';
+import { connect } from 'dva';
 const Option = Select.Option;
 const pageUrl = {
     updateState: 'alarmresponse/updateState',
@@ -93,7 +93,7 @@ export default class AlarmResponse extends Component {
             },
         });
     }
-    handleTableChange =(pagination, filters, sorter) => {
+    handleTableChange = (pagination, filters, sorter) => {
         if (sorter.order) {
             this.updateState({
                 sort2: sorter.field === 'LessThan2Hour' ? sorter.order : '',
@@ -136,7 +136,7 @@ export default class AlarmResponse extends Component {
             Month = '0' + Month
         }
         const beginTime = moment(`${value}-01-01 00:00:00`).format('YYYY-01-01 HH:mm:ss');
-        const endTime = moment(`${value}-01-01 00:00:00`).add(1,'years').format('YYYY-01-01 HH:mm:ss');
+        const endTime = moment(`${value}-01-01 00:00:00`).add(1, 'years').format('YYYY-01-01 HH:mm:ss');
         // 本年份
         if ((+value) === Year) {
             this.updateState({
@@ -196,7 +196,7 @@ export default class AlarmResponse extends Component {
     }
     getOption = () => {
         let option = {
-            color: ['rgb(66,186,161)','rgb(250,203,1)'],// 66 186 161 ['rgb(102,163,255)','rgb(250,203,1)']
+            color: ['rgb(66,186,161)', 'rgb(250,203,1)'],// 66 186 161 ['rgb(102,163,255)','rgb(250,203,1)']
             tooltip: {
                 trigger: 'axis',
                 axisPointer: { // 坐标轴指示器，坐标轴触发有效
@@ -209,7 +209,7 @@ export default class AlarmResponse extends Component {
                 }
             },
             legend: {
-                data: ['2小时内','超8小时']
+                data: ['2小时内', '超8小时']
             },
             grid: {
                 left: '3%',
@@ -244,7 +244,7 @@ export default class AlarmResponse extends Component {
                             position: 'inside'
                         }
                     },
-                    data: this.props.seriesData2 ,// [800, 1000, 1100, 1200, 1300, 550, 820, 830, 1000, 1050, 1000, 900]
+                    data: this.props.seriesData2,// [800, 1000, 1100, 1200, 1300, 550, 820, 830, 1000, 1050, 1000, 900]
                 },
                 {
                     name: '超8小时',
@@ -266,7 +266,7 @@ export default class AlarmResponse extends Component {
     render() {
         const columnsPoints = [
             {
-                title: (<span style={{fontWeight: 'bold'}}>排口名称</span>),
+                title: (<span style={{ fontWeight: 'bold' }}>排口名称</span>),
                 dataIndex: 'PointName',
                 key: 'PointName',
                 width: '50%',
@@ -280,7 +280,7 @@ export default class AlarmResponse extends Component {
                 }
             },
             {
-                title: (<span style={{fontWeight: 'bold'}}>2小时内</span>),
+                title: (<span style={{ fontWeight: 'bold' }}>2小时内</span>),
                 dataIndex: 'LessThan2Hour',
                 key: 'LessThan2Hour',
                 align: 'left',
@@ -291,7 +291,7 @@ export default class AlarmResponse extends Component {
                 }
             },
             {
-                title: (<span style={{fontWeight: 'bold'}}>超8小时</span>),
+                title: (<span style={{ fontWeight: 'bold' }}>超8小时</span>),
                 dataIndex: 'GreaterThan8Hour',
                 key: 'GreaterThan8Hour',
                 align: 'left',
@@ -305,7 +305,7 @@ export default class AlarmResponse extends Component {
 
         const columnsDays = [
             {
-                title: (<span style={{fontWeight: 'bold'}}>排口名称</span>),
+                title: (<span style={{ fontWeight: 'bold' }}>排口名称</span>),
                 dataIndex: 'PointName',
                 key: 'PointName',
                 width: '25%',
@@ -315,7 +315,7 @@ export default class AlarmResponse extends Component {
                 }
             },
             {
-                title: (<span style={{fontWeight: 'bold'}}>时间</span>),
+                title: (<span style={{ fontWeight: 'bold' }}>时间</span>),
                 dataIndex: 'AlarmResponseTime',
                 key: 'AlarmResponseTime',
                 align: 'left',
@@ -325,7 +325,7 @@ export default class AlarmResponse extends Component {
                 }
             },
             {
-                title: (<span style={{fontWeight: 'bold'}}>2小时内</span>),
+                title: (<span style={{ fontWeight: 'bold' }}>2小时内</span>),
                 dataIndex: 'LessThan2Hour',
                 key: 'LessThan2Hour',
                 align: 'left',
@@ -336,7 +336,7 @@ export default class AlarmResponse extends Component {
                 }
             },
             {
-                title: (<span style={{fontWeight: 'bold'}}>超8小时</span>),
+                title: (<span style={{ fontWeight: 'bold' }}>超8小时</span>),
                 dataIndex: 'GreaterThan8Hour',
                 key: 'GreaterThan8Hour',
                 align: 'left',
@@ -350,9 +350,9 @@ export default class AlarmResponse extends Component {
         return (
             <MonitorContent {...this.props} breadCrumbList={
                 [
-                    {Name:'首页',Url:'/'},
-                    {Name:'智能分析',Url:''},
-                    {Name:'报警及时响应情况',Url:''}
+                    { Name: '首页', Url: '/' },
+                    { Name: '智能分析', Url: '' },
+                    { Name: '报警及时响应情况', Url: '' }
                 ]
             }>
                 <div className={styles.cardTitle} >
@@ -360,8 +360,8 @@ export default class AlarmResponse extends Component {
                         // type="inner"
                         title="报警及时响应统计"
                         extra={
-                            <span style={{color: '#b3b3b3'}}>
-                            时间选择：
+                            <span style={{ color: '#b3b3b3' }}>
+                                时间选择：
                                 <Select
                                     size="default"
                                     defaultValue={dateYear}
@@ -375,9 +375,9 @@ export default class AlarmResponse extends Component {
                         <Row>
                             <ReactEcharts
                                 option={this.getOption()}
-                                style={{height: '300px', width: '100%'}}
+                                style={{ height: '300px', width: '100%' }}
                                 className="echarts-for-echarts"
-                                onEvents={{'click': this.onChartClick}}
+                                onEvents={{ 'click': this.onChartClick }}
                                 theme="my_theme" />
                         </Row>
 
@@ -389,7 +389,8 @@ export default class AlarmResponse extends Component {
                                 bordered={false}
                                 title={`${moment(this.props.clickDate).format('YYYY-MM')}月响应情况`}>
                                 <Table
-                                    style={{ }}
+                                    rowKey={(record, index) => `complete${index}`}
+                                    style={{}}
                                     className={styles.dataTable}
                                     loading={this.props.loadingPointsTable}
                                     columns={columnsPoints}
@@ -418,7 +419,9 @@ export default class AlarmResponse extends Component {
                             onCancel={this.handleModalCancel}
                             destroyOnClose={true}
                         >
-                            <Table style={{ marginTop: 16 }} className={styles.dataTable}
+                            <Table
+                                rowKey={(record, index) => `complete${index}`}
+                                style={{ marginTop: 16 }} className={styles.dataTable}
                                 loading={this.props.loadingDays}
                                 columns={columnsDays}
                                 onChange={this.handleTableChange}

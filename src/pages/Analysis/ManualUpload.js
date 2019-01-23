@@ -178,8 +178,8 @@ export default class ManualUpload extends Component {
     SelectOptions = () => {
         const rtnVal = [];
         if (this.props.selectdata.length !== 0) {
-            this.props.selectdata.map((item) => {
-                rtnVal.push(<Option key={item.PollutantCode}>{item.PollutantName}</Option>);
+            this.props.selectdata.map((item, key) => {
+                rtnVal.push(<Option key={key}>{item.PollutantName}</Option>);
             });
         }
         return rtnVal;
@@ -294,7 +294,7 @@ export default class ManualUpload extends Component {
                 pollutantTypes: pollutantTypeCode,
                 pointName: pointName,
                 RunState: this.state.TabsSelect,
-                map: true, manualUpload: true,
+                manualUpload: true,
                 pageIndex: this.props.pageIndex,
                 pageSize: this.props.pageSize,
                 BeginTime: this.state.rangeDate[0].format('YYYY-MM-DD 00:00:00'),
@@ -580,6 +580,7 @@ export default class ManualUpload extends Component {
                             </Card>
 
                             <Table
+                                rowKey={(record, index) => `complete${index}`}
                                 style={{ height: 'calc(100vh - 257px)' }}
                                 loading={spining}
                                 className={styles.tableCss}
