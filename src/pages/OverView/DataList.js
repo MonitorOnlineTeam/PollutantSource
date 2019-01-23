@@ -46,11 +46,11 @@ class dataList extends PureComponent {
                 time: this.state.time.format('YYYY-MM-DD HH:00:00'),
             }
         });
-        this.props.dispatch({
-            type: 'overview/getPollutantTypeList',
-            payload: {
-            }
-        });
+        // this.props.dispatch({
+        //     type: 'overview/getPollutantTypeList',
+        //     payload: {
+        //     }
+        // });
     }
     
     //加载数据

@@ -1,6 +1,20 @@
 import React, { Component } from 'react';
 import styles from './OverView.less';
 import { Button } from 'antd/lib/radio';
+import {
+  Spin
+} from 'antd';
+
+import { connect } from 'dva';
+@connect(({ loading, overview }) => ({
+    //点位数据信息
+    datalist: overview.data,
+    //加载数据
+    loading:loading.effects['overview/querydatalist'],
+    //加载所以初始化显示的信息
+    maploading:loading.effects['overview/queryentdetail']
+}))
+
 class TreeStatus extends Component {
     getTimeImgSpan=()=>{
       const {datalist}=this.props;
@@ -12,16 +26,36 @@ class TreeStatus extends Component {
             </div> 
             )
       }
-
     }
     render() {
+    const {loading,maploading}=this.props;
+    if(maploading)
+    {
+        return(<Spin
+            style={{ width: '100%',
+                height: 70,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center' }}
+            size="large"
+        />)
+    }
+    if(loading)
+    {
+        return(<Spin
+            style={{ width: '100%',
+                height: 70,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center' }}
+            size="large"
+        />)
+    }
         return (
             <div style={{
                 width: 400,
                 height: 75,
                 background: '#fff',
-               // borderRadius: 7,
-            //    boxShadow: 'rgba(136, 136, 136, 0.41) 4px 3px 9px'
             }}>
                 <div className={styles.statuslist}>
                     <span><img style={{width:15}} src="/gisunline.png" />离线</span>

@@ -177,12 +177,12 @@ export async function loadCountryPointView(params) {
 }
 
 export async function GetAlarmNotices(params) {
-    const body = {
-        beginTime: params.beginTime,
-        endTime: params.endTime
-    };
-    const result = await get('/api/rest/PollutantSourceApi/PAlarmData/GetAlarmNotices', body, null);
-    return result === null ? { data: null } : result;
+    // const body = {
+    //     beginTime: params.beginTime,
+    //     endTime: params.endTime
+    // };
+    // const result = await get('/api/rest/PollutantSourceApi/PAlarmData/GetAlarmNotices', body, null);
+    // return result === null ? { data: null } : result;
 }
 
 export async function getAllExceptionInfo(params) {
