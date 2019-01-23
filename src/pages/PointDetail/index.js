@@ -60,20 +60,22 @@ class PointDetail extends Component {
         this.props.dispatch({
             type: 'points/querysinglepointinfo',
             payload: {
-                dgimn: this.props.match.params.pointcode
+                dgimn: this.props.match.params.pointcode,
+                time: moment(new Date()).add(-1, 'hour').format('YYYY-MM-DD HH:00:00'),
+                isfirst:true
             }
         });
-        this.props.dispatch({
-            type: 'overview/querydatalist',
-            payload: {
-                time: moment(new Date()).add(-1, 'hour').format('YYYY-MM-DD HH:00:00')
-            }
-        });
-        this.props.dispatch({
-            type: 'overview/getPollutantTypeList',
-            payload: {
-            }
-        });
+        // this.props.dispatch({
+        //     type: 'overview/querydatalist',
+        //     payload: {
+        //         time: moment(new Date()).add(-1, 'hour').format('YYYY-MM-DD HH:00:00')
+        //     }
+        // });
+        // this.props.dispatch({
+        //     type: 'overview/getPollutantTypeList',
+        //     payload: {
+        //     }
+        // });
     }
 
     pdShow = () => {

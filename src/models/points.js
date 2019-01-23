@@ -625,9 +625,8 @@ export default Model.extend({
         },
         * querysinglepointinfo({
             payload
-        }, {call, update}) {
+        }, {call, update,put,take}) {
             const res = yield call(querysinglepointinfo, {...payload});
-            // debugger;
             if(res)
             {
                 yield update({ selectpoint: res[0] });
@@ -635,6 +634,15 @@ export default Model.extend({
             else
             {
                 yield update({ selectpoint: null });
+            }
+
+            if(payload.isfirst)
+            {
+                yield put({
+                    type:'overview/getPollutantTypeList',
+                    payload:payload
+                })
+                yield take('overview/getPollutantTypeList/@@end');
             }
         },
         * queryrealparam({
