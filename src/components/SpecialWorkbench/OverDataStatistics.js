@@ -77,18 +77,22 @@ class OverDataStatistics extends Component {
             },
             dataZoom: [
                 {
-                    type: 'inside',
-                    start: 0,
-                    end: 100
+                    show: true,
+                   
+                    yAxisIndex: 0,
+                    // filterMode: 'empty',
+                    // width: 30,
+                    
+                    height: '50%',
+                    showDataShadow: true,
+                    left: '93%'
                 },
                 {
-                    show: true,
-                    yAxisIndex: 0,
-                    filterMode: 'empty',
-                    width: 30,
-                    height: '80%',
-                    showDataShadow: false,
-                    left: '93%'
+                    show:true,
+                    type:'inside',
+                    // start:20,
+                    yAxisIndex: 0
+                    // type:'inside'
                 }
             ],
             series: []
