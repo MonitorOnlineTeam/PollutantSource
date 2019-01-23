@@ -15,7 +15,7 @@ import TransmissionEfficiency from '../../components/SpecialWorkbench/Transmissi
 /*
 页面：工作台
 add by cg 18.6.8
-modify by wjw 18.12.24
+modify by wjw 18.12.24  
 */
 
 class SpecialWorkbench extends PureComponent {
