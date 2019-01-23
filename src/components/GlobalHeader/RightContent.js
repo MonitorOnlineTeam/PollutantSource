@@ -12,12 +12,6 @@ import styles from './index.less';
 import {asc} from '../../utils/utils';
 
 export default class GlobalHeaderRight extends PureComponent {
-    componentDidMount() {
-       this.props.dispatch({
-            type: 'user/fetchCurrent',
-        });
-    }
-
     getNoticeData() {
         const { notices = [] } = this.props;
         if (notices.length === 0) {
@@ -97,6 +91,7 @@ export default class GlobalHeaderRight extends PureComponent {
           onNoticeClear,
           theme,
       } = this.props;
+      debugger;
       const menu = (
           <Menu className={styles.menu} selectedKeys={[]} onClick={onMenuClick}>
               <Menu.Item key="userCenter">
