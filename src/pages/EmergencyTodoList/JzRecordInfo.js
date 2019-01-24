@@ -46,13 +46,13 @@ export default class JzRecordInfo extends Component {
         const rtnVal = [];
         if (code != null && code.length > 0) {
             if (Record != null && Record.length > 0) {
-                code.map((item) => {
+                code.map((item,key) => {
                     let rd = Record.filter(function(item1) {
                         return item1.ItemID === item;
                     });
                     if (rd) {
-                        rtnVal.push(<table className={styles.FormTable}>
-                            <tbody>
+                        rtnVal.push(<table key={key} className={styles.FormTable}>
+                            <tbody >
                                 <tr>
                                     <td colSpan="7" style={{height: '30px', fontWeight: 'bold'}}>{item}分析仪校准</td>
                                 </tr>
@@ -101,7 +101,7 @@ export default class JzRecordInfo extends Component {
                             </tbody>
                         </table>);
                     } else {
-                        rtnVal.push(<table className={styles.FormTable}>
+                        rtnVal.push(<table key={key+'a'} className={styles.FormTable}>
                             <tbody>
                                 <tr>
                                     <td colSpan="7" style={{height: '30px', fontWeight: 'bold'}}>{item}分析仪校准</td>

@@ -14,7 +14,7 @@ import {
 import { connect } from 'dva';
 import moment from 'moment';
 import RangePicker_ from '../../components/PointDetail/RangePicker_';
-import {routerRedux} from 'dva/router';
+import { routerRedux } from 'dva/router';
 
 const pageIndex = 1;
 const pageSize = 10;
@@ -41,7 +41,7 @@ export default class JzHistoryRecords extends Component {
         this.GetHistoryRecord(pageIndex, pageSize, this.state.DGIMN, this.state.typeID, this.state.beginTime, this.state.endTime);
     }
 
-    GetHistoryRecord=(pageIndex, pageSize, dgimn, typeID, beginTime, endTime) => {
+    GetHistoryRecord = (pageIndex, pageSize, dgimn, typeID, beginTime, endTime) => {
         this.props.dispatch({
             type: 'task/GetJzHistoryRecord',
             payload: {
@@ -55,7 +55,7 @@ export default class JzHistoryRecords extends Component {
         });
     };
 
-    _handleDateChange=(date, dateString) => {
+    _handleDateChange = (date, dateString) => {
         this.setState(
             {
                 rangeDate: date,
@@ -74,7 +74,7 @@ export default class JzHistoryRecords extends Component {
         this.GetHistoryRecord(pageIndex, pageSize, this.state.DGIMN, this.state.typeID, this.state.BeginTime, this.state.EndTime);
     }
 
-    seeDetail=(Record) => {
+    seeDetail = (Record) => {
         this.props.dispatch(routerRedux.push(`/PatrolForm/JzRecordInfo/${this.state.DGIMN}/${this.props.match.params.viewtype}/qcontrollist/JzHistoryRecords/${Record.TaskID}`));
     }
 
@@ -95,14 +95,14 @@ export default class JzHistoryRecords extends Component {
                 if (text !== undefined) {
                     var content = text.split('),');
                     var resu = [];
-                    content.map((item,key) => {
+                    content.map((item, key) => {
                         // item = item.replace('(',' - ');
                         // item = item.replace(')','');
                         if (key !== content.length - 1) {
                             item = item + ')';
                         }
                         resu.push(
-                            <Tag style={{marginBottom: 1.5,marginTop: 1.5}} color="#108ee9">{item}</Tag>
+                            <Tag key={key} style={{ marginBottom: 1.5, marginTop: 1.5 }} color="#108ee9">{item}</Tag>
                         );
                     });
                 }
@@ -126,57 +126,60 @@ export default class JzHistoryRecords extends Component {
         }];
         if (this.props.isloading) {
             return (<Spin
-                style={{ width: '100%',
+                style={{
+                    width: '100%',
                     height: 'calc(100vh/2)',
                     display: 'flex',
                     alignItems: 'center',
-                    justifyContent: 'center' }}
+                    justifyContent: 'center'
+                }}
                 size="large"
             />);
         }
         return (
             <div className={styles.cardTitle}>
-            <Card bordered={false}>
-                <div className={styles.conditionDiv}>
-                            <Row gutter={8}>
-                                <Col span={3} >
-                            <label className={styles.conditionLabel}>记录时间：</label>
-                                </Col>
-                                <Col span={21} >
-                                    <RangePicker_ style={{width: 350}} onChange={this._handleDateChange} format={'YYYY-MM-DD'} dateValue={this.state.rangeDate} />
-                                </Col>
-                               
-                            </Row>
+                <Card bordered={false}>
+                    <div className={styles.conditionDiv}>
+                        <Row gutter={8}>
+                            <Col span={3} >
+                                <label className={styles.conditionLabel}>记录时间：</label>
+                            </Col>
+                            <Col span={21} >
+                                <RangePicker_ style={{ width: 350 }} onChange={this._handleDateChange} format={'YYYY-MM-DD'} dateValue={this.state.rangeDate} />
+                            </Col>
+
+                        </Row>
                     </div>
-                <Table
-                   size="middle"
-                   scroll={{ y: 'calc(100vh - 465px)' }}
-                   loading={this.props.loading}
-                   className={styles.dataTable}
-                   columns={columns}
-                   dataSource={dataSource}
-                   rowClassName={
-                       (record, index, indent) => {
-                           if (index === 0) {
-                               return;
-                           }
-                           if (index % 2 !== 0) {
-                               return 'light';
-                           }
-                       }
-                   }
-                    pagination={{
-                        showSizeChanger: true,
-                        showQuickJumper: true,
-                        'total': this.props.RecordCount,
-                        'pageSize': this.props.pageSize,
-                        'current': this.props.pageIndex,
-                        onChange: this.onChange,
-                        onShowSizeChange: this.onShowSizeChange,
-                        pageSizeOptions: ['10', '20', '30', '40']
-                    }}
-                />
-            </Card>
+                    <Table
+                        rowKey={(record, index) => `complete${index}`}
+                        size="middle"
+                        scroll={{ y: 'calc(100vh - 465px)' }}
+                        loading={this.props.loading}
+                        className={styles.dataTable}
+                        columns={columns}
+                        dataSource={dataSource}
+                        rowClassName={
+                            (record, index, indent) => {
+                                if (index === 0) {
+                                    return;
+                                }
+                                if (index % 2 !== 0) {
+                                    return 'light';
+                                }
+                            }
+                        }
+                        pagination={{
+                            showSizeChanger: true,
+                            showQuickJumper: true,
+                            'total': this.props.RecordCount,
+                            'pageSize': this.props.pageSize,
+                            'current': this.props.pageIndex,
+                            onChange: this.onChange,
+                            onShowSizeChange: this.onShowSizeChange,
+                            pageSizeOptions: ['10', '20', '30', '40']
+                        }}
+                    />
+                </Card>
             </div>
         );
     }

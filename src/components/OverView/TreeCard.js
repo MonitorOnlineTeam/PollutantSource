@@ -66,7 +66,7 @@ class TreeCard extends Component {
         }
         return (
             <div className={styles.treelist} style={{ ...this.props.style }}>
-                <Tabs className={styles.tab} defaultActiveKey={tabkey} onChange={this.getNowPollutantType}>
+                <Tabs className={styles.tab} defaultActiveKey={tabkey.toString()} onChange={this.getNowPollutantType}>
                     {this.getPollutantDoc()}
                 </Tabs>
             </div>

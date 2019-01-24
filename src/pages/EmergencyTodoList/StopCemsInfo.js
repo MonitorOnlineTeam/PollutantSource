@@ -50,7 +50,7 @@ export default class StopCemsInfo extends Component {
         if (Record !== null && Record.length > 0) {
             Record.map((item,index) => {
                 rtnVal.push(
-                    <tr>
+                    <tr key={index}>
                         <td style={{ width: '18%', height: '50px', textAlign: 'center',fontSize: '14px' }}>
                             {index + 1}
                         </td>

@@ -57,7 +57,7 @@ class ConsumablesReplaceRecord extends Component {
         if (record !== null && record.length > 0) {
             record.map((item, index) => {
                 rtnVal.push(
-                    <tr>
+                    <tr key={index} >
                         <td style={{ height: '50px', textAlign: 'center', fontSize: '14px' }}>
                             {index + 1}
                         </td>

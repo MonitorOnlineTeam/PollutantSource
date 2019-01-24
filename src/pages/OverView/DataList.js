@@ -232,8 +232,8 @@ class dataList extends PureComponent {
         const { pollutantTypelist } = this.props;
         let res = [];
         if (pollutantTypelist) {
-            pollutantTypelist.map(item => {
-                res.push(<Radio value={item.pollutantTypeCode}>{item.pollutantTypeName}</Radio>);
+            pollutantTypelist.map((item,key) => {
+                res.push(<Radio key={key} value={item.pollutantTypeCode}>{item.pollutantTypeName}</Radio>);
             });
         }
         return res;
@@ -305,9 +305,9 @@ class dataList extends PureComponent {
                         }}
                     ><Icon type="phone" style={{ color: '#3C9FDA', marginRight: 5 }} theme="filled" />紧急派单
                     </Button>
-                </li>
+                        </li>
         }
-    </div>)
+                                  </div>)
 
     render() {
         const { normal, over, underline, exception, terate, operationStatus, pollutantCode } = this.state;
@@ -345,16 +345,16 @@ class dataList extends PureComponent {
                 const content = this.gerpointButton(record);
                 let lable = [];
                 if (record.fault) {
-                    lable.push(<span className={styles.fault}>故障中</span>);
+                    lable.push(<span key={1} className={styles.fault}>故障中</span>);
                 }
                 if (record.warning) {
-                    lable.push(<span className={styles.warning}>预警中</span>);
+                    lable.push(<span key={2} className={styles.warning}>预警中</span>);
                 }
                 if (record.scene) {
-                    lable.push(<span className={styles.operation}>运维中</span>);
+                    lable.push(<span key={3} className={styles.operation}>运维中</span>);
                 }
                 if (record.status == 4) {
-                    lable.push(<span className={styles.stop}>停产中</span>);
+                    lable.push(<span key={4} className={styles.stop}>停产中</span>);
                 }
 
 
@@ -362,7 +362,7 @@ class dataList extends PureComponent {
                     <span style={{ cursor: 'pointer' }}>{value}
                         {lable}
                     </span>
-                </Popover>);
+                        </Popover>);
             },
         },
 
@@ -418,7 +418,7 @@ class dataList extends PureComponent {
                                 <li style={{ listStyle: 'none', marginBottom: 10 }}>
                                     <Badge status="error" text={`超标倍数：${additionalInfo[3]}`} />
                                 </li>
-                            </div>);
+                                             </div>);
                             return (<Popover content={content}><span style={{ color: '#ff0000', cursor: 'pointer' }}>{value || (value === 0 ? 0 : '-')}</span></Popover>);
                         }
                         const content = (<div>
@@ -429,7 +429,7 @@ class dataList extends PureComponent {
                             <li style={{ listStyle: 'none', marginBottom: 10 }}>
                                 <Badge status="warning" text={`异常原因：${additionalInfo[2]}`} />
                             </li>
-                        </div>);
+                                         </div>);
                         return (<Popover content={content}><span style={{ color: '#F3AC00', cursor: 'pointer' }}>{value || (value === 0 ? 0 : '-')}</span></Popover>);
                     }
                     return value || (value === 0 ? 0 : '-');
