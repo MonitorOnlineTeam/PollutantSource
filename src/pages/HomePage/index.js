@@ -362,7 +362,7 @@ class index extends Component {
             <div className={Adapt.s4}>超八小时响应({aaData.GreaterThan8Hour})次</div>
             <div className={Adapt.s5}>{aaData.GreaterThan8Hourlink>0?`环比上升${aaData.GreaterThan8Hourlink}%`:`环比下降${Math.abs(aaData.GreaterThan8Hourlink)}%`}</div>
             <div className={Adapt.s6}>其它({aaData.OtherTime})次</div>
-        </div>);
+                    </div>);
         return retVal;
     }
     /**
@@ -636,6 +636,29 @@ class index extends Component {
          let eyhlLink;
          if (eyhlAnalData.length !== 0) {
              eyhlLink = `${Math.abs(eyhlAnalData.linkFlag.toFixed(2))}%(${eyhlAnalData.monthSum.toFixed(2)}/${eyhlAnalData.flag.toFixed(2)})`;
+         }
+         const {
+             loadingRateStatistics,
+             loadingbaseinfo,
+             loadingrateStatistics,
+             loadingTaskCount,
+             loadingAlarmAnalysis,
+             loadingStatisticsPointStatus,
+             loadingAllMonthEmissionsByPollutant
+         } = this.props;
+         if (loadingRateStatistics && loadingbaseinfo && loadingrateStatistics && loadingTaskCount && loadingAlarmAnalysis && loadingStatisticsPointStatus && loadingAllMonthEmissionsByPollutant) {
+             return ( <Spin
+                 style={
+                     {
+                         width: '100%',
+                         height: 'calc(100vh/2)',
+                         display: 'flex',
+                         alignItems: 'center',
+                         justifyContent: 'center'
+                     }
+                 }
+                 size="large"
+             /> );
          }
          return (
 
