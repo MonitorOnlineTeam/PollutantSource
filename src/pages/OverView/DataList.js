@@ -14,7 +14,7 @@ const RadioGroup = Radio.Group;
     data: overview.data,
     gwidth: overview.gwidth,
     isloading: loading.effects['overview/querypollutanttypecode'],
-    pollutantTypelist:overview.pollutantTypelist
+    pollutantTypelist: overview.pollutantTypelist
 }))
 class dataList extends PureComponent {
     constructor(props) {
@@ -22,18 +22,18 @@ class dataList extends PureComponent {
         this.state = {
             pdvisible: false,
             time: moment(new Date()).add(-1, 'hour'),
-            normal:false,
-            over:false,
-            underline:false,
-            exception:false,
-            selectStatus:null,
-            pollutantCode:2,
-            status:null,
-            operationStatus:null,
-            terate:null,
-            warning:null,
-            selectpoint:null,
-            
+            normal: false,
+            over: false,
+            underline: false,
+            exception: false,
+            selectStatus: null,
+            pollutantCode: 2,
+            status: null,
+            operationStatus: null,
+            terate: null,
+            warning: null,
+            selectpoint: null,
+
         };
     }
 
@@ -46,230 +46,213 @@ class dataList extends PureComponent {
                 time: this.state.time.format('YYYY-MM-DD HH:00:00'),
             }
         });
-        this.props.dispatch({
-            type: 'overview/getPollutantTypeList',
-            payload: {
-            }
-        });
+        // this.props.dispatch({
+        //     type: 'overview/getPollutantTypeList',
+        //     payload: {
+        //     }
+        // });
     }
-    
+
     //加载数据
-    reloadData=(time,status,operationStatus,terate,warning)=>{
+    reloadData = (time, status, operationStatus, terate, warning) => {
         this.props.dispatch({
             type: 'overview/querydatalist',
             payload: {
                 time: time.format('YYYY-MM-DD HH:00:00'),
-                status:status,
-                operationStatus:operationStatus,
-                terate:terate,
-                warning:warning
+                status: status,
+                operationStatus: operationStatus,
+                terate: terate,
+                warning: warning
             }
         });
     }
-    
+
     //直接刷新（带数据）
-    Refresh=()=>{
-        const {status,operationStatus,terate,warning,time}=this.state;
-        this.reloadData(time,status,operationStatus,terate,warning);
+    Refresh = () => {
+        const { status, operationStatus, terate, warning, time } = this.state;
+        this.reloadData(time, status, operationStatus, terate, warning);
     }
 
     //时间更改
-    pickerChange=(time, timeString) => {
-     
+    pickerChange = (time, timeString) => {
+
         if (time) {
             this.setState({
-                 time
+                time
             });
-        const {status,operationStatus,terate,warning}=this.state;
-        this.reloadData(time,status,operationStatus,terate,warning)
+            const { status, operationStatus, terate, warning } = this.state;
+            this.reloadData(time, status, operationStatus, terate, warning);
         }
     }
 
 
- 
-    
     //状态搜索
-    statusChange=(value)=>{
-       const {selectStatus}=this.state;
-       let status=null;
-       switch(value)
-       {
-           case 'normal':
-           if(value==selectStatus)
-           {
-               this.setState({
-                   normal:false,
-                   over:false,
-                   underline:false,
-                   exception:false,
-                   selectStatus:null,
-                   status:null
+    statusChange = (value) => {
+        const { selectStatus } = this.state;
+        let status = null;
+        switch (value) {
+            case 'normal':
+                if (value == selectStatus) {
+                    this.setState({
+                        normal: false,
+                        over: false,
+                        underline: false,
+                        exception: false,
+                        selectStatus: null,
+                        status: null
 
-               });
-               status=null;
-           }
-           else
-           {
-                this.setState({
-                    normal:true,
-                    over:false,
-                    underline:false,
-                    exception:false,
-                    selectStatus:value,
-                    status:1
-                });
-                status=1;
-           }
-           break;
-           case 'over':
-           if(value==selectStatus)
-           {
-               this.setState({
-                   normal:false,
-                   over:false,
-                   underline:false,
-                   exception:false,
-                   selectStatus:null,
-                   status:null
-               });
-               status=null;
-           }
-           else
-           {
-                this.setState({
-                    normal:false,
-                    over:true,
-                    underline:false,
-                    exception:false,
-                    selectStatus:value,
-                    status:2
-                });
-                status=2;
-           }
-           break;
-           case 'underline':
-           if(value==selectStatus)
-           {
-               this.setState({
-                   normal:false,
-                   over:false,
-                   underline:false,
-                   exception:false,
-                   selectStatus:null,
-                   status:null
-               });
-               status=null;
-           }
-           else
-           {
-                this.setState({
-                    normal:false,
-                    over:false,
-                    underline:true,
-                    exception:false,
-                    selectStatus:value,
-                    status:0
-                });
-                status=0;
-           }
-           break;
-           case 'exception':
-           if(value==selectStatus)
-           {
-               this.setState({
-                   normal:false,
-                   over:false,
-                   underline:false,
-                   exception:false,
-                   selectStatus:null,
-                   status:null
-               });
-               status=null;
-           }
-           else
-           {
-                this.setState({
-                    normal:false,
-                    over:false,
-                    underline:false,
-                    exception:true,
-                    selectStatus:value,
-                    status:3
-                });
-                status=3;
-           }
-           break;
-       }
-       const {time,operationStatus,terate,warning}=this.state;
-       this.reloadData(time,status,operationStatus,terate,warning);
+                    });
+                    status = null;
+                } else {
+                    this.setState({
+                        normal: true,
+                        over: false,
+                        underline: false,
+                        exception: false,
+                        selectStatus: value,
+                        status: 1
+                    });
+                    status = 1;
+                }
+                break;
+            case 'over':
+                if (value == selectStatus) {
+                    this.setState({
+                        normal: false,
+                        over: false,
+                        underline: false,
+                        exception: false,
+                        selectStatus: null,
+                        status: null
+                    });
+                    status = null;
+                } else {
+                    this.setState({
+                        normal: false,
+                        over: true,
+                        underline: false,
+                        exception: false,
+                        selectStatus: value,
+                        status: 2
+                    });
+                    status = 2;
+                }
+                break;
+            case 'underline':
+                if (value == selectStatus) {
+                    this.setState({
+                        normal: false,
+                        over: false,
+                        underline: false,
+                        exception: false,
+                        selectStatus: null,
+                        status: null
+                    });
+                    status = null;
+                } else {
+                    this.setState({
+                        normal: false,
+                        over: false,
+                        underline: true,
+                        exception: false,
+                        selectStatus: value,
+                        status: 0
+                    });
+                    status = 0;
+                }
+                break;
+            case 'exception':
+                if (value == selectStatus) {
+                    this.setState({
+                        normal: false,
+                        over: false,
+                        underline: false,
+                        exception: false,
+                        selectStatus: null,
+                        status: null
+                    });
+                    status = null;
+                } else {
+                    this.setState({
+                        normal: false,
+                        over: false,
+                        underline: false,
+                        exception: true,
+                        selectStatus: value,
+                        status: 3
+                    });
+                    status = 3;
+                }
+                break;
+        }
+        const { time, operationStatus, terate, warning } = this.state;
+        this.reloadData(time, status, operationStatus, terate, warning);
     }
+
     //搜索传输有效率不足的排口
-    terateSearch=()=>{
-        const {terate}=this.state;
-        let terateValue=null;
-        if(terate)
-        {
+    terateSearch = () => {
+        const { terate } = this.state;
+        let terateValue = null;
+        if (terate) {
             this.setState({
-                terate:null
-            })
-            terateValue=null;
-        }
-        else{
-            this.setState({
-                terate:1
+                terate: null
             });
-            terateValue=1;
+            terateValue = null;
+        } else {
+            this.setState({
+                terate: 1
+            });
+            terateValue = 1;
         }
-        const {time,operationStatus,warning,status}=this.state;
-       this.reloadData(time,status,operationStatus,terateValue,warning);
+        const { time, operationStatus, warning, status } = this.state;
+        this.reloadData(time, status, operationStatus, terateValue, warning);
     }
+
     //是否有运维人员在现场
-    operationSearch=()=>{
-        const {operationStatus}=this.state;
-        let operationValue=null;
-        if(operationStatus)
-        {
+    operationSearch = () => {
+        const { operationStatus } = this.state;
+        let operationValue = null;
+        if (operationStatus) {
             this.setState({
-                operationStatus:null
-            })
-            operationValue=null;
-        }
-        else{
-            this.setState({
-                operationStatus:1
+                operationStatus: null
             });
-            operationValue=1;
+            operationValue = null;
+        } else {
+            this.setState({
+                operationStatus: 1
+            });
+            operationValue = 1;
         }
-        const {time,warning,status,terate}=this.state;
-       this.reloadData(time,status,operationValue,terate,warning);
+        const { time, warning, status, terate } = this.state;
+        this.reloadData(time, status, operationValue, terate, warning);
     }
 
     //填充污染物类型
-    getPollutantDoc=()=>{
-        const {pollutantTypelist}=this.props;
-        var res=[];
-        if(pollutantTypelist)
-        {
-            pollutantTypelist.map(item=>{
+    getPollutantDoc = () => {
+        const { pollutantTypelist } = this.props;
+        let res = [];
+        if (pollutantTypelist) {
+            pollutantTypelist.map(item => {
                 res.push(<Radio value={item.pollutantTypeCode}>{item.pollutantTypeName}</Radio>);
-            })
+            });
         }
         return res;
     }
+
     //污染物类型选择
-    onPollutantChange=(e)=>{
+    onPollutantChange = (e) => {
         this.setState({
-            pollutantCode:e.target.value,
-            normal:false,
-            over:false,
-            underline:false,
-            exception:false,
-            selectStatus:null,
-            status:null,
-            operationStatus:null,
-            terate:null,
-            warning:null
-        })
+            pollutantCode: e.target.value,
+            normal: false,
+            over: false,
+            underline: false,
+            exception: false,
+            selectStatus: null,
+            status: null,
+            operationStatus: null,
+            terate: null,
+            warning: null
+        });
         this.props.dispatch({
             type: 'overview/querypollutanttypecode',
             payload: {
@@ -278,28 +261,30 @@ class dataList extends PureComponent {
             }
         });
     }
-   //派单窗口关闭
-   onCancel=() => {
-    this.setState({
-        pdvisible: false,
-    });
-   }
+
+    //派单窗口关闭
+    onCancel = () => {
+        this.setState({
+            pdvisible: false,
+        });
+    }
+
     //催办
-    urge=(record)=>{
+    urge = (record) => {
         this.props.dispatch({
             type: 'overview/queryurge',
             payload: {
-                personId:record.operationUserID,
+                personId: record.operationUserID,
                 DGIMN: record.DGIMN
             }
         });
     }
 
     //获取详情按钮
-    gerpointButton=(record) => (<div>
+    gerpointButton = (record) => (<div>
         <li style={{ listStyle: 'none', marginBottom: 5 }}>
             <Button onClick={() => {
-                let viewtype='datalistview';
+                let viewtype = 'datalistview';
 
                 this.props.dispatch(routerRedux.push(`/pointdetail/${record.DGIMN}/${viewtype}`));
             }}
@@ -309,7 +294,7 @@ class dataList extends PureComponent {
         {
             record.existTask === 1 ?
                 <li style={{ listStyle: 'none' }}>
-                    <Button onClick={()=>this.urge(record)}><Icon type="phone" style={{ color: '#3C9FDA', marginRight: 5 }} theme="filled" />紧急催办</Button>
+                    <Button onClick={() => this.urge(record)}><Icon type="phone" style={{ color: '#3C9FDA', marginRight: 5 }} theme="filled" />紧急催办</Button>
                 </li> : <li style={{ listStyle: 'none' }}>
                     <Button
                         onClick={() => {
@@ -320,19 +305,18 @@ class dataList extends PureComponent {
                         }}
                     ><Icon type="phone" style={{ color: '#3C9FDA', marginRight: 5 }} theme="filled" />紧急派单
                     </Button>
-                        </li>
+                </li>
         }
-            </div>)
+    </div>)
 
     render() {
-        const {normal,over,underline,exception,terate,operationStatus,pollutantCode}=this.state;
+        const { normal, over, underline, exception, terate, operationStatus, pollutantCode } = this.state;
         const coldata = this.props.columnsdata;
-        const {selectpoint}=this.state;
-        let {gwidth}=this.props;
-        let fixed=false;
-        if(coldata[0])
-        {
-            fixed=true;
+        const { selectpoint } = this.state;
+        let { gwidth } = this.props;
+        let fixed = false;
+        if (coldata[0]) {
+            fixed = true;
         }
         let columns = [{
             title: '状态',
@@ -343,13 +327,13 @@ class dataList extends PureComponent {
             fixed: fixed,
             render: (value, record, index) => {
                 if (value === 0) {
-                    return <img style={{width:15}} src="/gisunline.png" />;
+                    return <img style={{ width: 15 }} src="/gisunline.png" />;
                 } if (value === 1) {
-                    return <img style={{width:15}} src="/gisnormal.png" />;
+                    return <img style={{ width: 15 }} src="/gisnormal.png" />;
                 } if (value === 2) {
-                    return <img style={{width:15}} src="/gisover.png" />;
+                    return <img style={{ width: 15 }} src="/gisover.png" />;
                 }
-                return <img style={{width:15}} src="/gisexception.png" />;
+                return <img style={{ width: 15 }} src="/gisexception.png" />;
             },
         }, {
             title: '排口',
@@ -359,63 +343,58 @@ class dataList extends PureComponent {
             fixed: fixed,
             render: (value, record, index) => {
                 const content = this.gerpointButton(record);
-                let lable=[];
-                if(record.fault)
-                {
-                    lable.push(<span className={styles.fault}>故障中</span>)
+                let lable = [];
+                if (record.fault) {
+                    lable.push(<span className={styles.fault}>故障中</span>);
                 }
-                if(record.warning)
-                {
-                    lable.push(<span className={styles.warning}>预警中</span>)
+                if (record.warning) {
+                    lable.push(<span className={styles.warning}>预警中</span>);
                 }
-                if(record.scene)
-                {
-                    lable.push(<span className={styles.operation}>运维中</span>)
+                if (record.scene) {
+                    lable.push(<span className={styles.operation}>运维中</span>);
                 }
-                if(record.status==4)
-                {
-                    lable.push(<span className={styles.stop}>停产中</span>)
+                if (record.status == 4) {
+                    lable.push(<span className={styles.stop}>停产中</span>);
                 }
 
-            
+
                 return (<Popover trigger="click" content={content}>
-                <span style={{ cursor: 'pointer' }}>{value} 
-                 { lable}
-                </span></Popover>);
+                    <span style={{ cursor: 'pointer' }}>{value}
+                        {lable}
+                    </span>
+                </Popover>);
             },
         },
-       
+
         ];
-     
-        let csyxl=0;
-        if(pollutantCode==2)
-        {
-            csyxl=140;
-            columns= columns.concat(
-            {
-                title: '传输有效率',
-                dataIndex: 'transmissionEffectiveRate',
-                key: 'transmissionEffectiveRate',
-                width: 140,
-                fixed: fixed,
-                align: 'center',
-                render: (value, record, index) => ({
-                    props: {
-                        className: value && value.split('%')[0] < 90 ? styles.red : '',
-                    },
-                    children: value || '-'
-                })
-            })
+
+        let csyxl = 0;
+        if (pollutantCode == 2) {
+            csyxl = 140;
+            columns = columns.concat(
+                {
+                    title: '传输有效率',
+                    dataIndex: 'transmissionEffectiveRate',
+                    key: 'transmissionEffectiveRate',
+                    width: 140,
+                    fixed: fixed,
+                    align: 'center',
+                    render: (value, record, index) => ({
+                        props: {
+                            className: value && value.split('%')[0] < 90 ? styles.red : '',
+                        },
+                        children: value || '-'
+                    })
+                });
         }
 
-        let colwidth=200;
-        const scroll=document.body.scrollWidth-40;
-        if(gwidth<scroll && coldata[0])
-        {
-            gwidth=scroll;
-            colwidth= (scroll-(300 + csyxl + 70))/coldata.length;
+        let colwidth = 200;
+        const scroll = document.body.scrollWidth - 40;
+        if (gwidth < scroll && coldata[0]) {
+            gwidth = scroll;
+            colwidth = (scroll - (300 + csyxl + 70)) / coldata.length;
         }
-    
+
         const res = coldata[0] ? coldata.map((item, key) => {
             columns = columns.concat({
                 title: item.title,
@@ -439,8 +418,8 @@ class dataList extends PureComponent {
                                 <li style={{ listStyle: 'none', marginBottom: 10 }}>
                                     <Badge status="error" text={`超标倍数：${additionalInfo[3]}`} />
                                 </li>
-                                             </div>);
-                            return (<Popover content={content}><span style={{ color: '#ff0000', cursor: 'pointer' }}>{ value || (value === 0 ? 0 : '-') }</span></Popover>);
+                            </div>);
+                            return (<Popover content={content}><span style={{ color: '#ff0000', cursor: 'pointer' }}>{value || (value === 0 ? 0 : '-')}</span></Popover>);
                         }
                         const content = (<div>
                             <div style={{ marginBottom: 10 }}>
@@ -450,7 +429,7 @@ class dataList extends PureComponent {
                             <li style={{ listStyle: 'none', marginBottom: 10 }}>
                                 <Badge status="warning" text={`异常原因：${additionalInfo[2]}`} />
                             </li>
-                                         </div>);
+                        </div>);
                         return (<Popover content={content}><span style={{ color: '#F3AC00', cursor: 'pointer' }}>{value || (value === 0 ? 0 : '-')}</span></Popover>);
                     }
                     return value || (value === 0 ? 0 : '-');
@@ -460,15 +439,16 @@ class dataList extends PureComponent {
         }) : [];
         if (this.props.isloading) {
             return (<Spin
-                style={{ width: '100%',
+                style={{
+                    width: '100%',
                     height: 'calc(100vh/2)',
                     display: 'flex',
                     alignItems: 'center',
-                    justifyContent: 'center' }}
+                    justifyContent: 'center'
+                }}
                 size="large"
             />);
         }
-        console.log(columns);
         return (
             <div
                 style={{ width: '100%', height: 'calc(100vh - 65px)' }}
@@ -477,12 +457,12 @@ class dataList extends PureComponent {
                 <UrgentDispatch
                     onCancel={this.onCancel}
                     visible={this.state.pdvisible}
-                    operationUserID={selectpoint?selectpoint.operationUserID:null}
-                    DGIMN={selectpoint?selectpoint.DGIMN:null}
-                    pointName={selectpoint?selectpoint.pointName:null}
-                    operationUserName={selectpoint?selectpoint.operationUserName:null}
-                    operationtel={selectpoint?selectpoint.operationtel:null}
-                    reloadData={()=>this.Refresh()}
+                    operationUserID={selectpoint ? selectpoint.operationUserID : null}
+                    DGIMN={selectpoint ? selectpoint.DGIMN : null}
+                    pointName={selectpoint ? selectpoint.pointName : null}
+                    operationUserName={selectpoint ? selectpoint.operationUserName : null}
+                    operationtel={selectpoint ? selectpoint.operationtel : null}
+                    reloadData={() => this.Refresh()}
                 />
                 <Card
                     bordered={false}
@@ -494,30 +474,31 @@ class dataList extends PureComponent {
                     }
                     extra={
                         <div>
-                            <TimePicker onChange={this.pickerChange} style={{ width: 150, marginRight: 20,float: 'left' }} defaultValue={this.state.time} format="HH:00:00" />
-                           
-                            <RadioGroup style={{ marginRight: 20,float: 'left',marginTop:3 }} onChange={this.onPollutantChange} defaultValue={this.state.pollutantCode}>
+                            <TimePicker onChange={this.pickerChange} style={{ width: 150, marginRight: 20, float: 'left' }} defaultValue={this.state.time} format="HH:00:00" />
+
+                            <RadioGroup style={{ marginRight: 20, float: 'left', marginTop: 3 }} onChange={this.onPollutantChange} defaultValue={this.state.pollutantCode}>
                                 {this.getPollutantDoc()}
                             </RadioGroup>
 
-                            <div style={{ width: 'calc(100vw - 220px)',marginLeft: 60 }}>
-                            <AListRadio style={{ float: 'right' }} dvalue="b" />
-                            <div  style={{ float: 'right',marginTop:3 }}>
-                                {/* <span onClick={this.operationSearch} className={operationStatus?styles.selectStatus:styles.statusButton} style={{ marginRight: 10 }}>
+                            <div style={{ width: 'calc(100vw - 220px)', marginLeft: 60 }}>
+                                <AListRadio style={{ float: 'right' }} dvalue="b" />
+                                <div style={{ float: 'right', marginTop: 3 }}>
+                                    {/* <span onClick={this.operationSearch} className={operationStatus?styles.selectStatus:styles.statusButton} style={{ marginRight: 10 }}>
                                 <Icon type="user" style={{ color: '#3B91FF' }} /> 运维中</span> */}
-                                <span onClick={this.terateSearch} className={terate?styles.selectStatus:styles.statusButton} style={{ marginRight: 20 }}><span style={{ fontSize: 16, color: '#ffca00' }}>■</span> 传输有效率不达标</span>
+                                    <span onClick={this.terateSearch} className={terate ? styles.selectStatus : styles.statusButton} style={{ marginRight: 20 }}><span style={{ fontSize: 16, color: '#ffca00' }}>■</span> 传输有效率不达标</span>
 
-                                <span onClick={()=>this.statusChange('normal')} className={normal?styles.selectStatus:styles.statusButton}><img className={styles.statusButtonImg} src="../../../gisnormal.png" />正常</span>
-                                <span onClick={()=>this.statusChange('over')} className={over?styles.selectStatus:styles.statusButton}><img className={styles.statusButtonImg}  src="../../../gisover.png" />超标</span>
-                                <span  onClick={()=>this.statusChange('underline')} className={underline?styles.selectStatus:styles.statusButton}><img className={styles.statusButtonImg}  src="../../../gisunline.png" />离线</span>
-                                <span onClick={()=>this.statusChange('exception')} className={exception?styles.selectStatus:styles.statusButton}><img className={styles.statusButtonImg}  src="../../../gisexception.png" />异常</span>
+                                    <span onClick={() => this.statusChange('normal')} className={normal ? styles.selectStatus : styles.statusButton}><img className={styles.statusButtonImg} src="../../../gisnormal.png" />正常</span>
+                                    <span onClick={() => this.statusChange('over')} className={over ? styles.selectStatus : styles.statusButton}><img className={styles.statusButtonImg} src="../../../gisover.png" />超标</span>
+                                    <span onClick={() => this.statusChange('underline')} className={underline ? styles.selectStatus : styles.statusButton}><img className={styles.statusButtonImg} src="../../../gisunline.png" />离线</span>
+                                    <span onClick={() => this.statusChange('exception')} className={exception ? styles.selectStatus : styles.statusButton}><img className={styles.statusButtonImg} src="../../../gisexception.png" />异常</span>
                                 </div>
-                              
+
                             </div>
                         </div>
                     }
                 >
                     <Table
+                        rowKey={(record, index) => `complete${index}`}
                         className={styles.tableCss}
                         columns={columns}
                         size="middle"
@@ -526,7 +507,6 @@ class dataList extends PureComponent {
                         loading={this.props.isloading}
                         scroll={{ x: gwidth, y: 'calc(100vh - 190px)' }}
                         bordered={true}
-                        rowKey="DGIMN"
                         onRow={record => {
                         }}
                         rowClassName={

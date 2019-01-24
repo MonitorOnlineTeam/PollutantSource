@@ -7,19 +7,6 @@ import { connect } from 'dva';
     statisticsPointStatus: workbenchmodel.statisticsPointStatus,
 }))
 class PointStates extends PureComponent {
-    componentWillMount() {
-        this.getStatisticsPointStatus();
-    }
-
-    /**
-     * 智能监控_排口的所有状态_更新数据
-     */
-    getStatisticsPointStatus = () => {
-        this.props.dispatch({
-            type: 'workbenchmodel/getStatisticsPointStatus',
-            payload: {},
-        });
-    }
 
     /**
      * 智能监控_渲染排口所有状态（右侧）

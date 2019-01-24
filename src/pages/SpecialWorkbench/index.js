@@ -1,10 +1,10 @@
 
 import React, { PureComponent } from 'react';
 import { Row, Col } from 'antd';
-
+import { connect } from 'dva';
 import styles from './index.less';
-import OverMap from '../../components/SpecialWorkbench/OverMap';
-import EarlyWarningAndOverDataCollection from '../../components/SpecialWorkbench/EarlyWarningAndOverDataCollection';
+import OverDataStatistics from '../../components/SpecialWorkbench/OverDataStatistics';
+import RealTimeWarning from '../../components/SpecialWorkbench/RealTimeWarning';
 import ExceptionAlarm from '../../components/SpecialWorkbench/ExceptionAlarm';
 import OperationCalendar from '../../components/SpecialWorkbench/OperationCalendar';
 import PointStates from '../../components/SpecialWorkbench/PointStates';
@@ -17,9 +17,26 @@ import TransmissionEfficiency from '../../components/SpecialWorkbench/Transmissi
 add by cg 18.6.8
 modify by wjw 18.12.24
 */
-
+@connect(({
+    workbenchmodel,
+}) => ({
+    exceptionAlarm: workbenchmodel.exceptionAlarm,
+}))
 class SpecialWorkbench extends PureComponent {
+    componentWillMount() {
+        this.getAllMethods();
 
+    }
+
+    /**
+     * 获取所有工作台方法
+     */
+    getAllMethods = () => {
+        this.props.dispatch({
+            type: 'workbenchmodel/getAllMethods',
+            payload: {},
+        });
+    }
 
     render() {
         return (
@@ -38,10 +55,11 @@ class SpecialWorkbench extends PureComponent {
                     </div>
                     <Row gutter={24}>
                         <Col xl={12} lg={24} md={24} sm={24} xs={24} style={{ marginBottom: 10 }}>
-                            <OverMap />
+                            {/* <OverMap /> */}
+                            <OverDataStatistics />
                         </Col>
                         <Col xl={12} lg={24} md={24} sm={24} xs={24}>
-                            <EarlyWarningAndOverDataCollection />
+                            <RealTimeWarning />
                         </Col>
                     </Row>
                     <div className={styles.headerDiv}>

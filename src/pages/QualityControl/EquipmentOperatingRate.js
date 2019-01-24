@@ -13,13 +13,14 @@ import {
     Col,
     Popover,
     Icon,
-    Badge 
+    Badge
 } from 'antd';
 import moment from 'moment';
-import {routerRedux} from 'dva/router';
+import { routerRedux } from 'dva/router';
 import MonitorContent from '../../components/MonitorContent/index';
 import styles from './index.less';
-import {connect} from 'dva';
+import { connect } from 'dva';
+import { number } from 'prop-types';
 const { MonthPicker } = DatePicker;
 const monthFormat = 'YYYY-MM';
 const pageUrl = {
@@ -70,7 +71,7 @@ export default class EquipmentOperatingRate extends Component {
             },
         });
     }
-    handleTableChange =(pagination, filters, sorter) => {
+    handleTableChange = (pagination, filters, sorter) => {
         if (sorter.order) {
             this.updateState({
                 EORSort: sorter.order,
@@ -100,10 +101,10 @@ export default class EquipmentOperatingRate extends Component {
         this.getTableData(this.props.pageIndex);
     }
     render() {
-        const {avgstoptime,avgnormaltime,avgworktime}=this.props;
+        const { avgstoptime, avgnormaltime, avgworktime } = this.props;
         const columns = [
             {
-                title: (<span style={{fontWeight: 'bold'}}>排口名称</span>),
+                title: (<span style={{ fontWeight: 'bold' }}>排口名称</span>),
                 dataIndex: 'PointName',
                 key: 'PointName',
                 width: '20%',
@@ -114,58 +115,55 @@ export default class EquipmentOperatingRate extends Component {
                 }
             },
             {
-                title: (<span style={{fontWeight: 'bold'}}>正常运转时间</span>),
+                title: (<span style={{ fontWeight: 'bold' }}>正常运转时间</span>),
                 dataIndex: 'NormalRunTime',
                 key: 'NormalRunTime',
                 width: '20%',
                 align: 'left',
                 render: (text, record) => {
-                    if(record.AvgNormalRunTime<=text)
-                    {
-                        return <span className={styles.normaldata}>{text}</span> ;
+                    if (record.AvgNormalRunTime <= text) {
+                        return <span className={styles.normaldata}>{text}</span>;
                     }
-                   const content=(<span><Icon type="warning" style={{color:'#EEC900'}}  />平均值{record.AvgNormalRunTime}</span>)
-                   return (<Popover content={content} trigger="hover">
-                       <span className={styles.avgtext}>   <Badge className={styles.warningdata} status="warning"/>{text}
+                    const content = (<span><Icon type="warning" style={{ color: '#EEC900' }} />平均值{record.AvgNormalRunTime}</span>)
+                    return (<Popover content={content} trigger="hover">
+                        <span className={styles.avgtext}>   <Badge className={styles.warningdata} status="warning" />{text}
                         </span> </Popover>);
                 }
             },
             {
-                title: (<span style={{fontWeight: 'bold'}}>生产时间</span>),
+                title: (<span style={{ fontWeight: 'bold' }}>生产时间</span>),
                 dataIndex: 'ProducesTime',
                 key: 'ProducesTime',
                 width: '15%',
                 align: 'left',
                 render: (text, record) => {
-                    if(record.AvgProducesTime<=text)
-                    {
-                        return <span className={styles.normaldata}>{text}</span> ;
+                    if (record.AvgProducesTime <= text) {
+                        return <span className={styles.normaldata}>{text}</span>;
                     }
-                    const content=(<span><Icon type="warning" style={{color:'#EEC900'}}  />平均值{record.AvgProducesTime}</span>)
+                    const content = (<span><Icon type="warning" style={{ color: '#EEC900' }} />平均值{record.AvgProducesTime}</span>)
                     return (<Popover content={content} trigger="hover">
-                         <span className={styles.avgtext}><Badge className={styles.warningdata}  status="warning"/> {text}
-                         </span> </Popover>);
+                        <span className={styles.avgtext}><Badge className={styles.warningdata} status="warning" /> {text}
+                        </span> </Popover>);
                 }
             },
             {
-                title: (<span style={{fontWeight: 'bold'}}>停产时间</span>),
+                title: (<span style={{ fontWeight: 'bold' }}>停产时间</span>),
                 dataIndex: 'StopProductionTime',
                 key: 'StopProductionTime',
                 width: '15%',
                 align: 'left',
                 render: (text, record) => {
-                    if(record.AvgStopProductionTime<=text)
-                    {
-                        return <span className={styles.normaldata}>{text}</span> ;
+                    if (record.AvgStopProductionTime <= text) {
+                        return <span className={styles.normaldata}>{text}</span>;
                     }
-                    const content=(<span><Icon type="warning" style={{color:'#EEC900'}}  />平均值{record.AvgStopProductionTime}</span>)
+                    const content = (<span><Icon type="warning" style={{ color: '#EEC900' }} />平均值{record.AvgStopProductionTime}</span>)
                     return (<Popover content={content} trigger="hover">
-                         <span className={styles.avgtext}><Badge className={styles.warningdata} status="warning"/> {text}
-                         </span> </Popover>);
+                        <span className={styles.avgtext}><Badge className={styles.warningdata} status="warning" /> {text}
+                        </span> </Popover>);
                 }
             },
             {
-                title: (<span style={{fontWeight: 'bold'}}>运转率</span>),
+                title: (<span style={{ fontWeight: 'bold' }}>运转率</span>),
                 dataIndex: 'RunningRate',
                 key: 'RunningRate',
                 width: '20%',
@@ -179,24 +177,24 @@ export default class EquipmentOperatingRate extends Component {
                         return (<div style={{ width: 200 }}>
                             <Progress
                                 successPercent={percent}
-                                percent={percent}
-                                size="small" format={percent => (<span style={{color: 'black'}}>{percent}%</span>)}
+                                percent={percent-0}
+                                size="small" format={percent => (<span style={{ color: 'black' }}>{percent}%</span>)}
                             />
                         </div>);
                     }
                     return (<div style={{ width: 200 }}>
                         <Progress
                             successPercent={0}
-                            percent={percent}
+                            percent={percent-0}
                             status="exception"
                             size="small"
-                            format={percent => (<span style={{color: 'black'}}>{percent}%</span>)}
+                            format={percent => (<span style={{ color: 'black' }}>{percent}%</span>)}
                         />
                     </div>);
                 }
             },
             {
-                title: (<span style={{fontWeight: 'bold'}}>操作</span>),
+                title: (<span style={{ fontWeight: 'bold' }}>操作</span>),
                 dataIndex: 'opt',
                 key: 'opt',
                 width: '10%',
@@ -214,24 +212,24 @@ export default class EquipmentOperatingRate extends Component {
         return (
             <MonitorContent {...this.props} breadCrumbList={
                 [
-                    {Name:'首页',Url:'/'},
-                    {Name:'智能质控',Url:''},
-                    {Name:'设备运转率',Url:''}
+                    { Name: '首页', Url: '/' },
+                    { Name: '智能质控', Url: '' },
+                    { Name: '设备运转率', Url: '' }
                 ]
             }>
                 <Row className={styles.cardTitle}>
                     <Card
                         title="设备运转率列表"
                         extra={
-                            <span style={{color: '#b3b3b3'}}>
-                            时间选择：
+                            <span style={{ color: '#b3b3b3' }}>
+                                时间选择：
                                 <MonthPicker defaultValue={this.state.beginTime} format={monthFormat} onChange={this.onDateChange} />
                             </span>
                         }
                     >
                         <Row>
                             <Col span={24}>
-                                <div style={{textAlign: 'center', marginBottom: 20}}>
+                                <div style={{ textAlign: 'center', marginBottom: 20 }}>
                                     <div style={{
                                         width: 20,
                                         height: 9,
@@ -240,7 +238,7 @@ export default class EquipmentOperatingRate extends Component {
                                         borderRadius: '20%',
                                         cursor: 'pointer',
                                         marginRight: 3
-                                    }} /> <span style={{cursor: 'pointer'}}> 排口设备运转率达标</span>
+                                    }} /> <span style={{ cursor: 'pointer' }}> 排口设备运转率达标</span>
                                     <div style={{
                                         width: 20,
                                         height: 9,
@@ -250,13 +248,14 @@ export default class EquipmentOperatingRate extends Component {
                                         cursor: 'pointer',
                                         marginLeft: 100,
                                         marginRight: 3
-                                    }} /><span style={{cursor: 'pointer'}}> 排口设备运转率未达标</span>
-                                       <Badge style={{marginLeft:100,marginBottom:4}} status="warning"/><span style={{cursor: 'pointer'}}> 未达到平均值</span>
+                                    }} /><span style={{ cursor: 'pointer' }}> 排口设备运转率未达标</span>
+                                    <Badge style={{ marginLeft: 100, marginBottom: 4 }} status="warning" /><span style={{ cursor: 'pointer' }}> 未达到平均值</span>
                                 </div>
                             </Col>
                         </Row>
                         <Row>
                             <Table className={styles.dataTable}
+                                rowKey={(record, index) => `complete${index}`}
                                 loading={this.props.loading}
                                 columns={columns}
                                 onChange={this.handleTableChange}

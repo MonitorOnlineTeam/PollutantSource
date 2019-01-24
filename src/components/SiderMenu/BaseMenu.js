@@ -29,11 +29,7 @@ const getIcon = icon => {
 }))
 
 export default class BaseMenu extends PureComponent {
-  componentDidMount() {
-    this.props.dispatch({
-        type: 'user/fetchCurrent',
-    });
-}
+
   /**
    * 获得菜单子节点
    * @memberof SiderMenu

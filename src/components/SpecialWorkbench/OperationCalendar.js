@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { Card, Calendar, Badge,Row, Col ,Tag,Table} from 'antd';
+import { Card, Calendar, Badge, Row, Col, Tag, Table } from 'antd';
 import moment from 'moment';
 import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
@@ -60,7 +60,7 @@ class OperationCalendar extends PureComponent {
 
     //日期面板变化回调
     onPanelChange = (date, datestring) => {
-        this.setState({ dateType: datestring,selectedValue:date});
+        this.setState({ dateType: datestring, selectedValue: date });
     }
 
     /**
@@ -147,7 +147,7 @@ class OperationCalendar extends PureComponent {
                     return (
                         <div>
                             {
-                                text.split(',').map((item,key) => (
+                                text.split(',').map((item, key) => (
                                     <Tag key={key} color="rgb(244,6,94)">{item}</Tag>
                                 ))
                             }
@@ -177,7 +177,7 @@ class OperationCalendar extends PureComponent {
             }];
 
         return <Table
-            key="oprationtable"
+            rowKey={(record, index) => `complete${index}`}
             columns={columns}
             dataSource={this.state.dateType === 'month' ? this.props.operation.tempTableDatas.filter(m => moment(m.CreateTime).format('YYYY-MM-DD') === this.state.selectedValue.format("YYYY-MM-DD")) : this.props.operation.tempTableDatas.filter(m => moment(m.CreateTime).format('YYYY-MM') === this.state.selectedValue.format("YYYY-MM"))}
             size="small"
@@ -225,7 +225,7 @@ class OperationCalendar extends PureComponent {
                 <Col xl={16} lg={24} md={24} sm={24} xs={24}>
                     <Card
                         loading={this.props.loadingOperationData}
-                        title={`运维记录 - ${this.state.dateType==='month'? `${this.state.selectedValue.format('YYYY')}年${this.state.selectedValue.format('MM')}月${this.state.selectedValue.format('DD')}日`:`${this.state.selectedValue.format('YYYY')}年${this.state.selectedValue.format('MM')}月`} `}
+                        title={`运维记录 - ${this.state.dateType === 'month' ? `${this.state.selectedValue.format('YYYY')}年${this.state.selectedValue.format('MM')}月${this.state.selectedValue.format('DD')}日` : `${this.state.selectedValue.format('YYYY')}年${this.state.selectedValue.format('MM')}月`} `}
                         style={{}}
                     >
                         <Card.Grid style={{ width: '100%', height: 297, padding: 15 }}>

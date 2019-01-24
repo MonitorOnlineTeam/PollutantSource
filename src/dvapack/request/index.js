@@ -25,9 +25,11 @@ async function geturl(url, tooken) {
     if (!tooken) {
         if (usertoken) {
             const user = JSON.parse(usertoken);
-            if (user != null) {
+            if (user !== null) {
                 newurl += `?authorCode=${user.User_ID}`;
             }
+        } else{
+            return;
         }
     } else if (tooken !== 'notooken') {
         newurl += `?authorCode=${tooken}`;
@@ -49,13 +51,14 @@ const fetchtimeout = (requestPromise, timeout = 30000) => {
 };
 
 async function request(url, _options) {
+    // console.log(`这是请求的url${url}`);
+
     const options = _options || {};
     options.method = options.method || 'GET';
-    options.headers = options.headers || {}; ``;
+    options.headers = options.headers || {};
     const resp = await fetch(url, options);
-    console.log(`status${resp.status}`);
     const text = await resp.text();
-    console.log('RESP:', text); ``;
+    // console.log(`这是请求结果${text}`);
     try {
         const json = await JSON.parse(text);
         // 如果请求失败

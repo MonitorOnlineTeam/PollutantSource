@@ -355,7 +355,7 @@ export default class PollutantEmissions extends Component {
                             </span>
                         </div>
                     }>
-                        <Row loading={this.props.loadingChart}>
+                        <Row>
                             <ReactEcharts
                                 option={this.getOption()}
                                 lazyUpdate={true}
@@ -375,6 +375,7 @@ export default class PollutantEmissions extends Component {
                                 title={`${moment(this.props.clickDate).format('YYYY-MM')}月排放量排口统计`}
                             >
                                 <Table style={{}} className={styles.dataTable}
+                                    rowKey={(record, index) => `complete${index}`}
                                     loading={this.props.loadingTable}
                                     columns={columns}
                                     onChange={this.handleTableChange}
@@ -403,6 +404,7 @@ export default class PollutantEmissions extends Component {
                             destroyOnClose={true}
                         >
                             <Table style={{ marginTop: 16 }} className={styles.dataTable}
+                                rowKey={(record, index) => `complete${index}`}
                                 loading={this.props.loadingDays}
                                 columns={columnsDays}
                                 onChange={this.handleTableChange}

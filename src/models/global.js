@@ -11,6 +11,10 @@ export default Model.extend({
         collapsed: false,
         //报警和预警信息和通知信息
         notices: [],
+        currentUserNoticeCnt: {
+            notifyCount: 0,
+            unreadCount: 0,
+        },
         fetchingNotices: false,
         pollutanttype: [],
     },
@@ -25,18 +29,19 @@ export default Model.extend({
                 type: 'changeNoticeLoading',
                 payload: true,
             });
+
             //报警消息
             let today = getTimeDistance("today");
             const res = yield call(GetAlarmNotices, {beginTime:today[0].format("YYYY-MM-DD HH:mm:ss"),endTime:today[1].format("YYYY-MM-DD HH:mm:ss")});
             let notices = [];
-            let count=0;
+            let count = 0;
             if (res) {
                 const resdata=JSON.parse(res.data);
                 if (resdata) {
                     let dataovers=resdata.overs;
                     let datawarns=resdata.warns;
                     let dataexceptions=resdata.exceptions;
-                    notices=notices.concat(dataovers.map((item,key)=>{
+                    notices=notices.concat(dataovers.map((item,index)=>{
                         count+=item.AlarmCount;
                         return {
                             id:`over_${item.DGIMNs}`,
@@ -48,12 +53,14 @@ export default Model.extend({
                             sontype:"over",
                             //组件里根据这个分组
                             type: 'alarm',
+                            //排序从1到2000
+                            orderby:index+1,
                             key:`over_${item.DGIMNs}`,
                             title:`${item.PointName}报警${item.AlarmCount}次`,
                             description:`${item.PollutantNames}从${item.FirstTime}发生了${item.AlarmCount}次超标报警`,
                         };
                     }));
-                    notices=notices.concat(datawarns.map((item,key)=>{
+                    notices=notices.concat(datawarns.map((item,index)=>{
                         let discription="";
                         discription=discription.concat(item.OverWarnings.map((sonitem)=>`${sonitem.PollutantName}${sonitem.AlarmOverTime}发生预警，建议浓度降到${sonitem.SuggestValue}以下;`));
                         count+=1;
@@ -65,12 +72,14 @@ export default Model.extend({
                             sontype:"warn",
                             //组件里根据这个分组
                             type: 'alarm',
+                            //排序从2001到3000
+                            orderby:2001+index,
                             key:`warn_${item.DGIMNs}`,
                             title:`${item.PointName}发生了预警`,
                             description:`${discription}`,
                         };
                     }));
-                    notices=notices.concat(dataexceptions.map((item,key)=>{
+                    notices=notices.concat(dataexceptions.map((item,index)=>{
                         count+=item.AlarmCount;
                         return {
                             id:`exception_${item.DGIMNs}`,
@@ -82,6 +91,8 @@ export default Model.extend({
                             sontype:"exception",
                             //组件里根据这个分组
                             type: 'alarm',
+                            //排序从3001到5000
+                            orderby:3001+index,
                             key:`exception_${item.DGIMNs}`,
                             title:`${item.PointName}报警${item.AlarmCount}次`,
                             description:`从${item.FirstAlarmTime}至${item.LastAlarmTime}发生了${item.AlarmCount}次异常报警`,
@@ -89,31 +100,34 @@ export default Model.extend({
                     }));
                 }
             }
-            //预警消息
+            //通知消息
             const res2 = yield call(mymessagelist,{});
-            let advises=res2.data.map((item,key)=>({
-                id:`advise_${item.DGIMN}`,
-                msgtitle: item.MsgTitle,
-                msg:item.Msg,
-                pushtime:item.PushTime,
-                pushusername:item.PushUserName,
-                isview:item.IsView,
-                sontype:item.PushType,
-                //组件里根据这个分组
-                type: 'advise',
-                key:`advise_${item.DGIMN}_${item.ID}`,
-                title:`${item.MsgTitle}`,
-                description:`${item.Msg}`,
-            }));
-            count+=advises.length;
-            notices=notices.concat(advises);
+            if(res2){
+                let advises=res2.data.map((item,index)=>({
+                    id:`advise_${item.DGIMN}`,
+                    msgtitle: item.MsgTitle,
+                    msg:item.Msg,
+                    pushtime:item.PushTime,
+                    pushusername:item.PushUserName,
+                    isview:item.IsView,
+                    sontype:item.PushType,
+                    //组件里根据这个分组
+                    type: 'advise',
+                    //排序从5001到9000
+                    orderby:5001+index,
+                    key:`advise_${item.DGIMN}_${item.ID}`,
+                    title:`${item.MsgTitle}`,
+                    description:`${item.Msg}`,
+                }));
+                count+=advises.length;
+                notices=notices.concat(advises);
+            }
             yield put({
                 type: 'saveNotices',
-                payload: notices,
-            });
-            yield put({
-                type: 'user/changeNotifyCount',
-                payload: count,
+                payload: {notices:notices,
+                    notifyCount: count,
+                    unreadCount: count
+                }
             });
         },
         * clearNotices({ payload }, { put, select }) {
@@ -126,50 +140,6 @@ export default Model.extend({
                 type: 'user/changeNotifyCount',
                 payload: count,
             });
-        },
-        * changeNotices({payload}, {put, call, select}) {
-            const {message} = payload;
-            const {Message:data}=JSON.parse(message);
-            let { notices = [] } = yield select(t => t.notices);
-            let key="";
-            if(data.AlarmType===EnumPropellingAlarmSourceType.DataException||
-                data.AlarmType===EnumPropellingAlarmSourceType.DYPARAMETER||
-                data.AlarmType===EnumPropellingAlarmSourceType.DataLogicErr||
-                data.AlarmType===EnumPropellingAlarmSourceType.DYSTATEALARM) {
-                key="exception_";
-                key+=data.DGIMN;
-                let newnotice=notices.find(n => n.id===key);
-                if(newnotice){
-                    newnotice.lasttime=data.AlarmTime;
-                    newnotice.alarmcount+=1;
-                }
-            } else if(data.AlarmType===EnumPropellingAlarmSourceType.DataOver){
-                key="over_";
-                key+=data.DGIMN;
-                let newnotice=notices.find(n => n.id===key);
-                if(newnotice){
-                    newnotice.lasttime=data.AlarmTime;
-                    newnotice.alarmcount+=1;
-                }
-            } else if (data.AlarmType===EnumPropellingAlarmSourceType.Data){
-                key="warn_";
-                key+=data.DGIMN;
-                let newnotice=notices.find(n => n.id===key);
-                if(newnotice){
-                    newnotice.OverWarnings.push(
-                        {
-                            PollutantName : data.PollutantName,
-                            PollutantCode : data.PollutantCode,
-                            AlarmOverTime : data.FirstOverTime,
-                            AlarmValue : data.AlarmValue,
-                            SuggestValue : data.SuggestValue
-                        }
-                    );
-                    let discription="";
-                    discription=discription.concat(newnotice.OverWarnings.map((sonitem)=>`${sonitem.PollutantName}${sonitem.AlarmOverTime}发生预警，建议浓度降到${sonitem.SuggestValue}以下;`));
-                    newnotice.discription=discription;
-                }
-            }
         },
         * changeAdvises({payload}, {put, call, select}) {
             const {message} = payload;
@@ -186,7 +156,11 @@ export default Model.extend({
         saveNotices(state, { payload }) {
             return {
                 ...state,
-                notices: payload,
+                notices: payload.notices,
+                currentUserNoticeCnt:{
+                    notifyCount: payload.notifyCount,
+                    unreadCount: payload.unreadCount,
+                },
                 fetchingNotices: false,
             };
         },
@@ -202,8 +176,121 @@ export default Model.extend({
                 fetchingNotices: payload,
             };
         },
-    },
+        changeNotices(state,{payload}) {
+            const {message} = payload;
+            const {Message:data}=message;
+            const {notices} = state;
+            let count = state.currentUserNoticeCnt.unreadCount;
+            let {key,newnotices}={key:"",newnotices:[]};
+            data.AlarmType=parseInt(data.AlarmType);
+            if(!notices.find(t=>t.id.includes(`over_${data.DGIMN}`))&&data.AlarmType===EnumPropellingAlarmSourceType.DataOver) {
+                newnotices=notices;
+                newnotices.push({
+                    id:`over_${data.DGIMN}`,
+                    pointname: data.PointName,
+                    pollutantnames:data.PollutantName,
+                    firsttime:data.FirstOverTime,
+                    lasttime:data.AlarmTime,
+                    alarmcount:data.AlarmCount,
+                    sontype:"over",
+                    //组件里根据这个分组
+                    type: 'alarm',
+                    //排序从1到2000
+                    orderby:0,
+                    key:`over_${data.DGIMN}`,
+                    title:`${data.PointName}报警${data.AlarmCount}次`,
+                    description:`${data.PollutantName}从${data.FirstOverTime}发生了${data.AlarmCount}次超标报警`,
+                });
+            }else if(!notices.find(t=>t.id.includes(`warn_${data.DGIMN}`))&&data.AlarmType===EnumPropellingAlarmSourceType.DataOverWarning) {
+                newnotices=notices;
+                newnotices.push({
+                    id:`warn_${data.DGIMN}`,
+                    pointname: data.PointName,
+                    discription:"",
+                    overwarnings:"",
+                    sontype:"warn",
+                    //组件里根据这个分组
+                    type: 'alarm',
+                    //排序从2001到3000
+                    orderby:2001,
+                    key:`warn_${data.DGIMN}`,
+                    title:`${data.PointName}发生了预警`,
+                    description:``,
+                });
+            }else if(!notices.find(t=>t.id.includes(`exception_${data.DGIMN}`))&&(data.AlarmType===EnumPropellingAlarmSourceType.DataException||
+                data.AlarmType===EnumPropellingAlarmSourceType.DYPARAMETER||
+                data.AlarmType===EnumPropellingAlarmSourceType.DataLogicErr||
+                data.AlarmType===EnumPropellingAlarmSourceType.DYSTATEALARM)) {
+                newnotices=notices;
+                newnotices.push({
+                    id:`exception_${data.DGIMN}`,
+                    pointname: data.PointName,
+                    pollutantnames:data.PollutantName,
+                    firsttime:data.FirstOverTime,
+                    lasttime:data.AlarmTime,
+                    alarmcount:data.AlarmCount,
+                    sontype:"exception",
+                    //组件里根据这个分组
+                    type: 'alarm',
+                    //排序从3001到5000
+                    orderby:3001,
+                    key:`exception_${data.DGIMN}`,
+                    title:`${data.PointName}报警${data.AlarmCount}次`,
+                    description:`从${data.FirstOverTime}至${data.AlarmTime}发生了${data.AlarmCount}次异常报警`,
+                });
+            }else {
+                newnotices=notices.map(notice=>{
+                    let newnotice={...notice};
+                    if(data.AlarmType===EnumPropellingAlarmSourceType.DataOver){
+                        key=`over_${data.DGIMN}`;
+                        if (newnotice.id===key) {
+                            newnotice.lasttime=data.AlarmTime;
+                            newnotice.alarmcount+=1;
+                            count+=1;
+                        }
+                    } else if (data.AlarmType===EnumPropellingAlarmSourceType.DataOverWarning){
+                        key=`warn_${data.DGIMN}`;
+                        if (newnotice.id===key) {
+                            newnotice.OverWarnings=[];
+                            newnotice.OverWarnings.push(
+                                {
+                                    PollutantName : data.PollutantName,
+                                    PollutantCode : data.PollutantCode,
+                                    AlarmOverTime : data.FirstOverTime,
+                                    AlarmValue : data.AlarmValue,
+                                    SuggestValue : data.SuggestValue
+                                }
+                            );
+                            let discription="";
+                            discription=discription.concat(newnotice.OverWarnings.map((sonitem)=>`${sonitem.PollutantName}${sonitem.AlarmOverTime}发生预警，建议浓度降到${sonitem.SuggestValue}以下;`));
+                            newnotice.discription=discription;
+                            count+=1;
+                        }
+                    }else if(data.AlarmType===EnumPropellingAlarmSourceType.DataException||
+                        data.AlarmType===EnumPropellingAlarmSourceType.DYPARAMETER||
+                        data.AlarmType===EnumPropellingAlarmSourceType.DataLogicErr||
+                        data.AlarmType===EnumPropellingAlarmSourceType.DYSTATEALARM) {
+                        key=`exception_${data.DGIMN}`;
+                        if (newnotice.id===key) {
+                            newnotice.lasttime=data.AlarmTime;
+                            newnotice.alarmcount+=1;
+                            count+=1;
+                        }
 
+                    }
+                    return newnotice;
+                });
+            }
+            return {
+                ...state,
+                notices: newnotices,
+                currentUserNoticeCnt:{
+                    notifyCount:count,
+                    unreadCount:count
+                }
+            };
+        },
+    },
     subscriptions: {
         socket({dispatch}) { // socket相关
             return service.listen(data => {
@@ -218,8 +305,15 @@ export default Model.extend({
                                 array:obj.Message
                             },
                         });
-                        dispatch({
+                        /*   dispatch({
                             type: 'workbenchmodel/updateRealTimeData',
+                            payload: {
+                                array:obj.Message
+                            },
+                        });
+ */
+                        dispatch({
+                            type: 'videolist/changeRealTimeData',
                             payload: {
                                 array:obj.Message
                             },
@@ -239,27 +333,27 @@ export default Model.extend({
                     case 'DynamicControlParam':
                     // debugger;
                     // console.log(obj);
-                        dispatch({
+                        /*  dispatch({
                             type: 'points/updateDynamicControlParam',
                             payload: {
                                 array:obj.Message
                             },
-                        });
+                        }); */
                         break;
                     case 'DynamicControlState':
-                        dispatch({
+                        /* dispatch({
                             type: 'points/updateDynamicControlState',
                             payload: {
                                 array:obj.Message
                             },
+                        }); */
+                        break;
+                    case 'Alarm':
+                        dispatch({
+                            type: 'changeNotices',
+                            payload: {message:obj.Message},
                         });
                         break;
-                    // case 'Alarm':
-                    //     dispatch({
-                    //         type: 'changeNotices',
-                    //         payload: {message:obj.Message},
-                    //     });
-                    //     break;
                     // case 'Notice':
                     //     dispatch({
                     //         type: 'changeAdvises',

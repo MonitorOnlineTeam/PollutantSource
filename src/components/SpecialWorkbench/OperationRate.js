@@ -26,18 +26,7 @@ const gridStyle = {
 
 class OperationRate extends PureComponent {
     componentWillMount() {
-        this.getRateStatisticsData();
         this.getEquipmentoperatingRateData();
-    }
-
-    /**
-     * 智能质控_率的统计_更新数据
-     */
-    getRateStatisticsData = () => {
-        this.props.dispatch({
-            type: 'workbenchmodel/getRateStatisticsData',
-            payload: {},
-        });
     }
 
     /**
@@ -140,7 +129,7 @@ class OperationRate extends PureComponent {
                     return <span style={{ color: 'red' }}>{rr}</span>;
                 }
             }];
-        return <Table key="runrate" loading={this.props.loadingEquipmentoperatingRate} columns={columns} dataSource={this.props.equipmentoperatingRateTableDatas.slice(0, 3)} size="small" pagination={false} />;
+        return <Table rowKey={(record, index) => `complete${index}`} loading={this.props.loadingEquipmentoperatingRate} columns={columns} dataSource={this.props.equipmentoperatingRateTableDatas.slice(0, 3)} size="small" pagination={false} />;
     }
 
     render() {
