@@ -46,7 +46,6 @@ export default Model.extend({
         * GetTaskDetailInfo({
             payload,
         }, { call, update }) {
-            debugger
             const taskInfo = yield call(GetTaskDetails, payload);
             if (taskInfo != null) {
                 yield update({

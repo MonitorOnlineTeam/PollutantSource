@@ -51,7 +51,7 @@ export default class RepairRecordDetail extends Component {
             if (Repair.Code !== null && Repair.Code.length > 0) {
                 Repair.Code.map((item, index) => {
                     rtnVal.push(
-                        <tr>
+                        <tr key={index}>
                             <td rowSpan="2" style={{ width: '20%', height: '50px', textAlign: 'center',fontSize: '14px' }}>
                                 {item.Name}
                             </td >
@@ -64,7 +64,7 @@ export default class RepairRecordDetail extends Component {
                         </tr>
                     );
                     rtnVal.push(
-                        <tr>
+                        <tr key={index+'1'}>
                             <td style={{ width: '20%', height: '50px', textAlign: 'center',fontSize: '14px' }}>
                                 更换部件
                             </td>
@@ -84,7 +84,7 @@ export default class RepairRecordDetail extends Component {
             Repair.Record.RecordList.map((items,index) => {
                 if (items.ItemID === item) {
                     rtnValChildOne.push(
-                        <td style={{ width: '60%', height: '50px', textAlign: 'center' ,fontSize: '14px' }}>
+                        <td key={index} style={{ width: '60%', height: '50px', textAlign: 'center' ,fontSize: '14px' }}>
                             {items.RepairDescription}
                         </td>
                     );
@@ -104,7 +104,7 @@ export default class RepairRecordDetail extends Component {
             Repair.Record.RecordList.map((items,index) => {
                 if (items.ItemID === item) {
                     rtnValChildTwo.push(
-                        <td style={{ width: '60%', height: '50px', textAlign: 'center' ,fontSize: '14px' }}>
+                        <td key={index} style={{ width: '60%', height: '50px', textAlign: 'center' ,fontSize: '14px' }}>
                             {items.ChangeSpareparts}
                         </td>
                     );

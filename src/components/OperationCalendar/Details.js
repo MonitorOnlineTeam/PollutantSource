@@ -30,13 +30,12 @@ export default class Details extends Component {
             pollutantList: [],
         };
     }
-    componentWillMount() {
-    }
     render() {
         const columns = [
             {
                 title: '排口名称',
                 dataIndex: 'PointName',
+                key:'PointName',
                 render: (text, record) => {
                     if (record.TaskType === 2)
                         return <div style={{ position: 'relative' }}>{text}<Tag style={{ position: 'absolute', top: -10 }} color="#f50">应急</Tag></div>;
@@ -45,32 +44,35 @@ export default class Details extends Component {
             },
             {
                 title: '运维状态',
+                key:'ExceptionTypeText',
                 dataIndex: 'ExceptionTypeText',
                 render: (text, record) => {
                     if (!text)
                         return <Tag color="rgb(76,205,122)">正常</Tag>;
-                        return (
-                            <div>
-                                {
-                                    text.split(',').map(item => (
-                                        <Tag color="rgb(244,6,94)">{item}</Tag>
-                                    ))
-                                }
-                            </div>
-                        );
+                    return (
+                        <div>
+                            {
+                                text.split(',').map((item,key) => (
+                                    <Tag key={key} color="rgb(244,6,94)">{item}</Tag>
+                                ))
+                            }
+                        </div>
+                    );
                 }
             },
             {
                 title: '运维人',
                 dataIndex: 'OperationName',
+                key:'OperationName',
                 render: (text, record) => {
-                    if(record.TaskStatus===2)
-                    return <div style={{ position: 'relative' }}>{text}<Tag style={{marginLeft:7}} color="#faad14">进行中</Tag></div>;
-                return text;
+                    if (record.TaskStatus === 2)
+                        return <div style={{ position: 'relative' }}>{text}<Tag style={{ marginLeft: 7 }} color="#faad14">进行中</Tag></div>;
+                    return text;
                 }
             }, {
                 title: '操作',
                 dataIndex: 'opt',
+                key:'opt',
                 render: (text, record) => (
                     <a onClick={
                         () => this.props.dispatch(routerRedux.push(`/TaskDetail/EmergencyDetailInfo/workbench/nop/${record.TaskID}/${record.DGIMN}`))
@@ -83,6 +85,7 @@ export default class Details extends Component {
         return (
             <div>
                 <Table
+                    rowKey={(record, index) => `complete${index}`}
                     columns={columns}
                     dataSource={data}
                     size="middle"

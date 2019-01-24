@@ -312,6 +312,13 @@ export default Model.extend({
                             },
                         });
  */
+                        dispatch({
+                            type: 'videolist/changeRealTimeData',
+                            payload: {
+                                array:obj.Message
+                            },
+                        });
+
                         break;
                     case 'MinuteData':
                         // dispatch({
