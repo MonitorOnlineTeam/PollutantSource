@@ -354,31 +354,5 @@ export default Model.extend({
             });
             payload.callback(result.requstresult);
         },
-
-        //判断文件是否存在
-        * GetUrlByID({
-            payload
-        }, {
-            call,
-            put,
-            update,
-            select
-        }) {
-            const result = yield call(GetUrlByID, payload);
-            if (result.data) {
-                yield update({
-                    requstresult: result.requstresult,
-                    url: result.data,
-                });
-            }
-            else
-            {
-                yield update({
-                    requstresult: result.requstresult,
-                    url: null,
-                });
-            }
-            payload.callback(result.requstresult,result.data);
-        },
     },
 });

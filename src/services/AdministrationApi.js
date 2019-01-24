@@ -316,14 +316,3 @@ export async function IfExists(params) {
         data: null
     } : result;
 }
-
-//根据ID获取文件路径
-export async function GetUrlByID(params) {
-    const body = {
-        ID: params.ID
-    };
-    const result = upload('/api/rest/PollutantSourceApi/KBM/GetUrlByID', body, null);
-    return result === null ? {
-        data: null
-    } : result;
-}
