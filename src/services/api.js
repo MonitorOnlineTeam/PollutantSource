@@ -430,7 +430,7 @@ export async function querypollutanttypecode(params) {
 }
 // 获取数据一览数据
 export async function querydatalist(params) {
-    const body = {
+    let body = {
         time: params.time,
         pointType:params.pointType,
         pollutantTypes:params.pollutantTypes,
@@ -441,6 +441,8 @@ export async function querydatalist(params) {
         warning:params.warning,
         RunState:params.RunState,
     };
+    if(params.dgimn)
+        body.DGIMNs=params.dgimn;
     const result = await post('/api/rest/PollutantSourceApi/DataList/SummaryList', body, null);
     return result === null ? { data: null } : result.data;
 }
