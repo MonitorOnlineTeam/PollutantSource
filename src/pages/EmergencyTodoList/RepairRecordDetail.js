@@ -52,10 +52,10 @@ export default class RepairRecordDetail extends Component {
                 Repair.Code.map((item, index) => {
                     rtnVal.push(
                         <tr key={index}>
-                            <td rowSpan="2" style={{ width: '20%', height: '50px', textAlign: 'center',fontSize: '14px' }}>
+                            <td key={index+'a'} rowSpan="2" style={{ width: '20%', height: '50px', textAlign: 'center',fontSize: '14px' }}>
                                 {item.Name}
                             </td >
-                            <td style={{ width: '20%', height: '50px', textAlign: 'center',fontSize: '14px' }}>
+                            <td key={index+'b'} style={{ width: '20%', height: '50px', textAlign: 'center',fontSize: '14px' }}>
                                 维修情况描述
                             </td>
                             {
@@ -65,7 +65,7 @@ export default class RepairRecordDetail extends Component {
                     );
                     rtnVal.push(
                         <tr key={index+'1'}>
-                            <td style={{ width: '20%', height: '50px', textAlign: 'center',fontSize: '14px' }}>
+                            <td key={index+'a'} style={{ width: '20%', height: '50px', textAlign: 'center',fontSize: '14px' }}>
                                 更换部件
                             </td>
                             {
@@ -93,7 +93,7 @@ export default class RepairRecordDetail extends Component {
         }
         if (rtnValChildOne.length === 0) {
             rtnValChildOne.push(
-                <td style={{ width: '60%', height: '50px', textAlign: 'center',fontSize: '14px' }} />
+                <td key='a' style={{ width: '60%', height: '50px', textAlign: 'center',fontSize: '14px' }} />
             );
         }
         return rtnValChildOne;
@@ -104,7 +104,7 @@ export default class RepairRecordDetail extends Component {
             Repair.Record.RecordList.map((items,index) => {
                 if (items.ItemID === item) {
                     rtnValChildTwo.push(
-                        <td key={index} style={{ width: '60%', height: '50px', textAlign: 'center' ,fontSize: '14px' }}>
+                        <td key={index+'1'} style={{ width: '60%', height: '50px', textAlign: 'center' ,fontSize: '14px' }}>
                             {items.ChangeSpareparts}
                         </td>
                     );
@@ -113,7 +113,7 @@ export default class RepairRecordDetail extends Component {
         }
         if (rtnValChildTwo.length === 0) {
             rtnValChildTwo.push(
-                <td style={{ width: '60%', height: '50px', textAlign: 'center',fontSize: '14px' }} />
+                <td key='a' style={{ width: '60%', height: '50px', textAlign: 'center',fontSize: '14px' }} />
             );
         }
         return rtnValChildTwo;
@@ -209,7 +209,7 @@ export default class RepairRecordDetail extends Component {
                 <div className={styles.FormDiv} style={{ height: SCREEN_HEIGHT }}>
                     <div className={styles.FormName}>CEMS维修记录表</div>
                     <div className={styles.HeadDiv} style={{ fontWeight: 'bold' }}>企业名称：{EnterpriseName}</div>
-                    <table className={styles.FormTable}>
+                    <table key='1' className={styles.FormTable}>
                         <tbody>
                             <tr>
                                 <td style={{ width: '20%', height: '50px', textAlign: 'center',fontSize: '14px' }}>
@@ -258,7 +258,7 @@ export default class RepairRecordDetail extends Component {
                             </tr>
                         </tbody>
                     </table>
-                    <table className={styles.FormTable}>
+                    <table key='2' className={styles.FormTable}>
                         <tbody>
                             <tr>
                                 <td style={{ width: '87%', height: '50px', textAlign: 'right', border: '0', fontWeight: 'bold' }}>负责人签名：</td>

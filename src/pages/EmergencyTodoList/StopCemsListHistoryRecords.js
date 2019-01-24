@@ -12,7 +12,7 @@ import { connect } from 'dva';
 import moment from 'moment';
 import RangePicker_ from '../../components/PointDetail/RangePicker_';
 import styles from './StopCemsListHistoryRecords.less';
-import {routerRedux} from 'dva/router';
+import { routerRedux } from 'dva/router';
 
 @connect(({ task, loading }) => ({
     loading: loading.effects['task/GetHistoryStopCemsList'],
@@ -43,7 +43,7 @@ export default class StopCemsListHistoryRecords extends Component {
         });
     }
 
-    GetHistoryRecord=(pageIndex, pageSize, DGIMN, typeID, BeginTime, EndTime) => {
+    GetHistoryRecord = (pageIndex, pageSize, DGIMN, typeID, BeginTime, EndTime) => {
         this.props.dispatch({
             type: 'task/GetHistoryStopCemsList',
             payload: {
@@ -57,7 +57,7 @@ export default class StopCemsListHistoryRecords extends Component {
         });
     };
 
-    _handleDateChange=(date, dateString) => {
+    _handleDateChange = (date, dateString) => {
         this.setState(
             {
                 rangeDate: date,
@@ -76,7 +76,7 @@ export default class StopCemsListHistoryRecords extends Component {
         this.GetHistoryRecord(pageIndex, pageSize, this.state.DGIMN, this.state.TypeID, this.state.BeginTime, this.state.EndTime);
     }
 
-    seeDetail=(record) => {
+    seeDetail = (record) => {
         this.props.dispatch(routerRedux.push(`/PatrolForm/StopCemsInfo/${this.state.DGIMN}/${this.props.match.params.viewtype}/qcontrollist/StopCemsListHistoryRecords/${record.TaskID}`));
     }
 
@@ -96,7 +96,7 @@ export default class StopCemsListHistoryRecords extends Component {
                 var resu = [];
                 if (text !== undefined) {
                     resu.push(
-                        <Tag style={{marginBottom: 1.5,marginTop: 1.5}} color="#108ee9">{text}</Tag>
+                        <Tag key={text} style={{ marginBottom: 1.5, marginTop: 1.5 }} color="#108ee9">{text}</Tag>
                     );
                 }
                 return resu;
@@ -120,29 +120,32 @@ export default class StopCemsListHistoryRecords extends Component {
         }];
         if (this.props.isloading) {
             return (<Spin
-                style={{ width: '100%',
+                style={{
+                    width: '100%',
                     height: 'calc(100vh/2)',
                     display: 'flex',
                     alignItems: 'center',
-                    justifyContent: 'center' }}
+                    justifyContent: 'center'
+                }}
                 size="large"
             />);
         }
         return (
             <div className={styles.cardTitle}>
                 <Card bordered={false}>
-                <div className={styles.conditionDiv}>
-                            <Row gutter={8}>
-                                <Col span={3} >
-                            <label className={styles.conditionLabel}>记录时间：</label>
-                                </Col>
-                                <Col span={21} >
-                                    <RangePicker_ style={{width: 350}} onChange={this._handleDateChange} format={'YYYY-MM-DD'} dateValue={this.state.rangeDate} />
-                                </Col>
-                               
-                            </Row>
+                    <div className={styles.conditionDiv}>
+                        <Row gutter={8}>
+                            <Col span={3} >
+                                <label className={styles.conditionLabel}>记录时间：</label>
+                            </Col>
+                            <Col span={21} >
+                                <RangePicker_ style={{ width: 350 }} onChange={this._handleDateChange} format={'YYYY-MM-DD'} dateValue={this.state.rangeDate} />
+                            </Col>
+
+                        </Row>
                     </div>
                     <Table
+                        rowKey={(record, index) => `complete${index}`}
                         size="middle"
                         scroll={{ y: 'calc(100vh - 465px)' }}
                         loading={this.props.loading}

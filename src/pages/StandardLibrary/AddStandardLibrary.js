@@ -370,7 +370,7 @@ export default class AddStandardLibrary extends Component {
                 [
                     {Name:'首页',Url:'/'},
                     {Name:'系统管理',Url:''},
-                    {Name:'标准库管理',Url:'/sysmanage/StandardLibraryDetail/'},
+                    {Name:'标准库管理',Url:'/sysmanage/standardlibrary'},
                      {Name:'标准库维护',Url:''}
                 ]
             }>

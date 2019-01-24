@@ -112,7 +112,6 @@ export async function GetPatrolRecordListPC(params) {
         TaskID: params.TaskIds,
         TypeID: params.TypeIDs
     };
-    debugger
     const result = authorpost('/api/rest/PollutantSourceApi/PTaskForm/GetPatrolRecordListPC?authorCode=48f3889c-af8d-401f-ada2-c383031af92d', body, null);
     return result === null ? {
         data: null

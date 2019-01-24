@@ -1,8 +1,6 @@
 
 import React, { Component } from 'react';
-import RangePicker_ from '../../components/PointDetail/RangePicker_';
 import moment from 'moment';
-import PollutantSelect from '../../components/PointDetail/PollutantSelect';
 import { Card,
     Row,
     Col,
@@ -12,7 +10,10 @@ import { Card,
 } from 'antd';
 
 import {connect} from 'dva';
+import PollutantSelect from '../../components/PointDetail/PollutantSelect';
+import RangePicker_ from '../../components/PointDetail/RangePicker_';
 import styles from './index.less';
+
 const FormItem = Form.Item;
 @connect(({points, loading}) => ({
     pollutantlist: points.pollutantlist,
@@ -32,6 +33,7 @@ class AlarmRecord extends Component {
             pageSize: 15
         };
     }
+
     componentWillMount() {
         this.props.dispatch({
             type: 'points/querypollutantlist',
@@ -44,8 +46,9 @@ class AlarmRecord extends Component {
                 overdata:true
             }
         });
-       // this.reloaddatalist(this.state.pollutantCode, this.state.current, this.state.pageSize, this.state.rangeDate[0], this.state.rangeDate[1]);
+        // this.reloaddatalist(this.state.pollutantCode, this.state.current, this.state.pageSize, this.state.rangeDate[0], this.state.rangeDate[1]);
     }
+
     _handleDateChange=(date, dateString) => {
         this.setState({
             rangeDate: date,
@@ -69,6 +72,7 @@ class AlarmRecord extends Component {
           });
           this.reloaddatalist(this.state.pollutantCode, page, this.state.pageSize, this.state.rangeDate[0], this.state.rangeDate[1]);
       }
+
       reloaddatalist=(pollutantCode, pageIndex, pageSize, beginTime, endTime) => {
           this.props.dispatch({
               type: 'points/queryoverdatalist',
@@ -82,16 +86,16 @@ class AlarmRecord extends Component {
               }
           });
       }
+
       render() {
-          
-        let tablewidth=0;
-        const colcount=5;
-        let width= (window.screen.availWidth - 120)/colcount;
-        if(width<200)
-        {
-            width=200;
-        }
-        tablewidth=  width*colcount;
+
+          let tablewidth=0;
+          const colcount=5;
+          let width= (window.screen.availWidth - 120)/colcount;
+          if(width<200) {
+              width=200;
+          }
+          tablewidth= width*colcount;
 
 
           const columns = [{
@@ -101,7 +105,7 @@ class AlarmRecord extends Component {
               width:width,
               key: 'time'
           },
-          {  
+          {
               title: '超标污染物',
               dataIndex: 'pollutantName',
               width:width,
@@ -125,56 +129,59 @@ class AlarmRecord extends Component {
           }];
 
           if(this.props.isloading) {
-            return (<Spin
-                style={{ width: '100%',
-                    height: 'calc(100vh/2)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center' }}
-                size="large"
-            />);
-        }
+              return (<Spin
+                  style={{ width: '100%',
+                      height: 'calc(100vh/2)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center' }}
+                  size="large"
+              />);
+          }
           return (
               <div>
-                      <div className={styles.cardTitle}>
-                      <Card  extra={
-                        <div>
-                            <span>超标时间</span> <RangePicker_ style={{width: 350,textAlign:'left',marginRight:10}} format="YYYY-MM-DD" onChange={this._handleDateChange} dateValue={this.state.rangeDate} />
-                            <span>污染物因子</span>
-                                          <PollutantSelect
-                                              optionDatas={this.props.pollutantlist}
-                                              style={{width: 200,marginRight:10,marginLeft:10}}
-                                              onChange={this._handlePollutantChange}
-                                              placeholder="请选择污染物"
-                                          />
-                        </div>
-                        } style={{ width: '100%', height: 'calc(100vh - 213px)' }}>
-                         <Table
-                         loading={this.props.dataloading}
-                                      columns={columns}
-                                      dataSource={this.props.data}
-                                      rowKey="key"
-                                      scroll={{ y: 'calc(100vh - 420px)',x:tablewidth }}
-                                      rowClassName={
-                                        (record, index, indent) => {
-                                            if (index === 0) {
-                                                return;
-                                            }
-                                            if (index % 2 !== 0) {
-                                                return 'light';
-                                            }
-                                        }
-                                    }
-                                      pagination={{
-                                          'total': this.props.total,
-                                          'pageSize': this.state.pageSize,
-                                          'current': this.state.current,
-                                          onChange: this.pageIndexChange
-                                      }}
+                  <div className={styles.cardTitle}>
+                      <Card
+                          extra={
+                              <div>
+                                  <span>超标时间</span> <RangePicker_ style={{width: 350,textAlign:'left',marginRight:10}} format="YYYY-MM-DD" onChange={this._handleDateChange} dateValue={this.state.rangeDate} />
+                                  <span>污染物因子</span>
+                                  <PollutantSelect
+                                      optionDatas={this.props.pollutantlist}
+                                      style={{width: 200,marginRight:10,marginLeft:10}}
+                                      onChange={this._handlePollutantChange}
+                                      placeholder="请选择污染物"
                                   />
-                    </Card>
-                    </div>
+                              </div>
+                          }
+                          style={{ width: '100%', height: 'calc(100vh - 213px)' }}
+                      >
+                          <Table
+                              loading={this.props.dataloading}
+                              columns={columns}
+                              dataSource={this.props.data}
+                              rowKey="key"
+                              scroll={{ y: 'calc(100vh - 420px)',x:tablewidth }}
+                              rowClassName={
+                                  (record, index, indent) => {
+                                      if (index === 0) {
+                                          return;
+                                      }
+                                      if (index % 2 !== 0) {
+                                          return 'light';
+                                      }
+                                  }
+                              }
+                              pagination={{
+                                  'total': this.props.total,
+                                  'pageSize': this.state.pageSize,
+                                  'current': this.state.current,
+                                  onChange: this.pageIndexChange
+                              }}
+                          />
+                      </Card>
                   </div>
+              </div>
           );
       }
 }
