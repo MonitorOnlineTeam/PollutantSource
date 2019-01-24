@@ -204,7 +204,7 @@ export async function GetKBMList(params) {
         pageIndex: params.pageIndex,
         pageSize: params.pageSize
     };
-    const result = post('/api/rest/PollutantSourceApi/KBM/GetAlarmListbyTime', body, null);
+    const result = post('/api/rest/PollutantSourceApi/KBM/GetKBMListbyTime', body, null);
     return result === null ? {
         data: null
     } : result;

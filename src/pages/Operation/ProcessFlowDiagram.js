@@ -8,7 +8,7 @@ import {
     Spin,
     Tag
 } from 'antd';
-import GyPic from '../../components/PointDetail/MenuGyProcessPic';
+import GyPic from '../../components/PointDetail/GyProcessPic';
 import SearchInput from '../../components/OverView/SearchInput';
 import TreeStatus from '../../components/OverView/TreeStatus';
 import TreeCard from '../../components/OverView/TreeCard';
@@ -71,14 +71,6 @@ export default class ProcessFlowDiagram extends Component {
         const { pollutantTypeCode } = this.state;
         this.searchData(pollutantTypeCode, value);
     }
-    //当前选中的污染物类型
-    getNowPollutantType = (key) => {
-        this.setState({
-            pollutantTypeCode: key
-        })
-        const { searchName } = this.state;
-        this.reloadData(key, searchName);
-    }
     //重新加载
     searchData = (pollutantTypeCode, searchName) => {
         var getDGIMN = localStorage.getItem('DGIMN')
@@ -121,29 +113,9 @@ export default class ProcessFlowDiagram extends Component {
             },
         });
     }
-    //重新加载
-    reloadData = (pollutantTypeCode, searchName) => {
-        var getDGIMN = '[object Object]'
-        this.props.dispatch({
-            type: 'overview/querydatalist',
-            payload: {
-                map: true,
-                ProcessFlowDiagram: true,
-                pollutantTypes: pollutantTypeCode,
-                pointName: searchName,
-                DGIMN: getDGIMN,
-            },
-        });
-    }
     treeCilck = (row, key) => {
         localStorage.setItem('DGIMN', row.DGIMN);
         this.setState({ DGIMN: row.DGIMN })
-        this.props.dispatch({
-            type: 'points/queryprocesschart',
-            payload: {
-                dgimn: row.DGIMN // this.props.pointInfo.DGIMN
-            }
-        });
     };
     render() {
         const { pollutantTypelist, treedataloading, datalist, pollutantTypeloading } = this.props;
@@ -155,6 +127,7 @@ export default class ProcessFlowDiagram extends Component {
         } else {
             status = '0';
         }
+        debugger
         return (
             <div className={styles.cardTitle}>
                 <Row>
@@ -183,7 +156,7 @@ export default class ProcessFlowDiagram extends Component {
                     </Col>
                     <Col style={{ width: document.body.clientWidth - 430, float: 'right' }}>
                         <Card bordered={false} style={{ height: 'calc(100vh - 110px)', overflow: 'hidden', marginRight: 10, marginTop: 25 }}>
-                            <GyPic style={{}} DGIMN={this.state.DGIMN} status={status} />
+                            <GyPic DGIMN={this.state.DGIMN} status={status} />
                         </Card>
                     </Col>
                 </Row>
