@@ -99,7 +99,7 @@ class TreeCardContent extends Component {
                 >
                     <Spin
                         style={{
-                            height: 'calc(100vh/2)',
+                            height: 'calc(100vh/1.4)',
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center'

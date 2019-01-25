@@ -160,20 +160,14 @@ export default class KBM extends Component {
     }
     //下载文件
     showFile = (record) => {
-        this.props.dispatch({
-            type: 'administration/GetUrlByID',
-            payload: {
-                ID: record.ID,
-                callback: (requstresult, data) => {
-                    if (requstresult === '1') {
-                        window.open('../upload/' + data)
-                    }
-                    else {
-                        message.error("未上传任何文件！")
-                    }
-                }
-            }
-        })
+       if(record.FileName!=="")
+       {
+        window.open('../upload/' + record.FileName)
+       }
+       else
+       {
+           message.error('未上传文件')
+       }
     }
     //重新加载数据
     reloaddata = (Name, pageIndex, pageSize) => {

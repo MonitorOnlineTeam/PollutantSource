@@ -32,13 +32,13 @@ export default class GyProcessPic extends Component {
         this.props.dispatch({
             type: 'points/queryprocesschart',
             payload: {
-                dgimn: this.props.pointInfo.DGIMN // this.props.pointInfo.DGIMN
+                dgimn: this.props.DGIMN // this.props.pointInfo.DGIMN
             }
         });
         this.props.dispatch({
             type: 'points/queryrealparam',
             payload: {
-                dgimn: this.props.pointInfo.DGIMN// sgjt001003
+                dgimn: this.props.DGIMN// sgjt001003
             }
         });
     }

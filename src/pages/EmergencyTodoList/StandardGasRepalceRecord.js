@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Row, Col, Layout, Table, List, Button, Icon,Spin,Card } from 'antd';
+import { Row, Col, Layout, Table, List, Button, Icon, Spin, Card } from 'antd';
 import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
 import styles from "./StandardGasRepalceRecord.less";
@@ -21,11 +21,11 @@ class StandardGasRepalceRecord extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            listUrl:this.props.match.params.viewtype,
-            taskfrom:this.props.match.params.taskfrom,
-            taskID:this.props.match.params.TaskID,
-            histroyrecordtype:this.props.match.params.histroyrecordtype,
-            DGIMN:this.props.match.params.pointcode
+            listUrl: this.props.match.params.viewtype,
+            taskfrom: this.props.match.params.taskfrom,
+            taskID: this.props.match.params.TaskID,
+            histroyrecordtype: this.props.match.params.histroyrecordtype,
+            DGIMN: this.props.match.params.pointcode
         };
     }
 
@@ -51,11 +51,11 @@ class StandardGasRepalceRecord extends Component {
     }
 
     enterTaskDetail = () => {
-        if(this.state.taskfrom==='ywdsjlist'){ //运维大事记
+        if (this.state.taskfrom === 'ywdsjlist') { //运维大事记
             this.props.dispatch(routerRedux.push(`/TaskDetail/emergencydetailinfo/${this.state.listUrl}/${this.state.taskfrom}/${this.props.match.params.StandardGasTaskIds}/${this.props.match.params.pointcode}`));
-        }else if(this.state.taskfrom==='qcontrollist'){ //质控记录
+        } else if (this.state.taskfrom === 'qcontrollist') { //质控记录
             this.props.dispatch(routerRedux.push(`/TaskDetail/emergencydetailinfo/${this.state.listUrl}/${this.state.taskfrom}-${this.state.histroyrecordtype}/${this.props.match.params.StandardGasTaskIds}/${this.props.match.params.pointcode}`));
-        }else{ //其他
+        } else { //其他
             this.props.dispatch(routerRedux.push(`/TaskDetail/emergencydetailinfo/${this.state.listUrl}/nop/${this.props.match.params.StandardGasTaskIds}/${this.props.match.params.pointcode}`));
         }
     }
@@ -63,31 +63,31 @@ class StandardGasRepalceRecord extends Component {
     renderItem = (record) => {
         const rtnVal = [];
         if (record !== null && record.length > 0) {
-            record.map((item,index) => {
+            record.map((item, index) => {
                 rtnVal.push(
                     <tr key={index}>
-                        <td style={{ height: '50px', textAlign: 'center',fontSize: '14px' }}>
+                        <td style={{ height: '50px', textAlign: 'center', fontSize: '14px' }}>
                             {index + 1}
                         </td>
-                        <td style={{ height: '50px', textAlign: 'center',fontSize: '14px' }}>
+                        <td style={{ height: '50px', textAlign: 'center', fontSize: '14px' }}>
                             {item.ReplaceDate}
                         </td>
-                        <td style={{ height: '50px', textAlign: 'center',fontSize: '14px' }}>
+                        <td style={{ height: '50px', textAlign: 'center', fontSize: '14px' }}>
                             {item.StandardGasName}
                         </td>
-                        <td style={{ height: '50px', textAlign: 'center',fontSize: '14px' }}>
+                        <td style={{ height: '50px', textAlign: 'center', fontSize: '14px' }}>
                             {item.GasStrength}
                         </td>
-                        <td style={{ height: '50px', textAlign: 'center',fontSize: '14px' }}>
+                        <td style={{ height: '50px', textAlign: 'center', fontSize: '14px' }}>
                             {item.Unit}
                         </td>
-                        <td style={{ height: '50px', textAlign: 'center',fontSize: '14px' }}>
+                        <td style={{ height: '50px', textAlign: 'center', fontSize: '14px' }}>
                             {item.Num}
                         </td>
-                        <td style={{ height: '50px', textAlign: 'center',fontSize: '14px' }}>
+                        <td style={{ height: '50px', textAlign: 'center', fontSize: '14px' }}>
                             {item.Supplier}
                         </td>
-                        <td style={{ height: '50px', textAlign: 'center',fontSize: '14px' }}>
+                        <td style={{ height: '50px', textAlign: 'center', fontSize: '14px' }}>
                             {item.PeriodOfValidity}
                         </td>
                     </tr>
@@ -99,39 +99,39 @@ class StandardGasRepalceRecord extends Component {
     }
 
     //生成面包屑
-    renderBreadCrumb=()=>{
+    renderBreadCrumb = () => {
         const rtnVal = [];
-        let listUrl=this.state.listUrl;
-        let taskID=this.state.taskID;
-        let DGIMN=this.state.DGIMN;
-        let taskfrom=this.state.taskfrom;
-        let histroyrecordtype=this.state.histroyrecordtype;
-        rtnVal.push({Name:'首页',Url:'/'},);
-        switch(listUrl){
+        let listUrl = this.state.listUrl;
+        let taskID = this.state.taskID;
+        let DGIMN = this.state.DGIMN;
+        let taskfrom = this.state.taskfrom;
+        let histroyrecordtype = this.state.histroyrecordtype;
+        rtnVal.push({ Name: '首页', Url: '/' });
+        switch (listUrl) {
             case 'datalistview': //数据一栏
-                rtnVal.push({Name:'数据一览',Url:`/overview/${listUrl}`},);
+                rtnVal.push({ Name: '数据一览', Url: `/overview/${listUrl}` });
                 break;
             case 'mapview': //地图一栏
-                rtnVal.push({Name:'地图一栏',Url:`/overview/${listUrl}`},);
+                rtnVal.push({ Name: '地图一栏', Url: `/overview/${listUrl}` });
                 break;
             case 'pielist': //我的派单
-                rtnVal.push({Name:'我的派单',Url:`/account/settings/mypielist`},);
+                rtnVal.push({ Name: '我的派单', Url: `/account/settings/mypielist` });
                 break;
             case 'workbench': //工作台
-                rtnVal.push({Name:'工作台',Url:`/${listUrl}`},);
+                rtnVal.push({ Name: '工作台', Url: `/${listUrl}` });
                 break;
             default:
                 break;
         }
-        if(taskfrom==='ywdsjlist'){ //运维大事记
-            rtnVal.push({Name:'运维大事记',Url:`/pointdetail/${DGIMN}/${listUrl}/${taskfrom}`},);
-            rtnVal.push({Name:'任务详情',Url:`/TaskDetail/emergencydetailinfo/${listUrl}/${taskfrom}/${taskID}`},);
-        }else if(taskfrom==='qcontrollist'){ //质控记录
-            rtnVal.push({Name:'质控记录',Url:`/pointdetail/${DGIMN}/${listUrl}/${taskfrom}/${histroyrecordtype}`},);
-        }else{ //其他
-            rtnVal.push({Name:'任务详情',Url:`/TaskDetail/emergencydetailinfo/${listUrl}/nop/${taskID}`},);
+        if (taskfrom === 'ywdsjlist') { //运维大事记
+            rtnVal.push({ Name: '运维大事记', Url: `/pointdetail/${DGIMN}/${listUrl}/${taskfrom}` });
+            rtnVal.push({ Name: '任务详情', Url: `/TaskDetail/emergencydetailinfo/${listUrl}/${taskfrom}/${taskID}` });
+        } else if (taskfrom === 'qcontrollist') { //质控记录
+            rtnVal.push({ Name: '质控记录', Url: `/pointdetail/${DGIMN}/${listUrl}/${taskfrom}/${histroyrecordtype}` });
+        } else { //其他
+            rtnVal.push({ Name: '任务详情', Url: `/TaskDetail/emergencydetailinfo/${listUrl}/nop/${taskID}` });
         }
-        rtnVal.push({Name:'标准气体更换记录表',Url:''});
+        rtnVal.push({ Name: '标准气体更换记录表', Url: '' });
         return rtnVal;
     }
 
@@ -207,25 +207,27 @@ class StandardGasRepalceRecord extends Component {
         }];
         if (this.props.isloading) {
             return (<Spin
-                style={{ width: '100%',
+                style={{
+                    width: '100%',
                     height: 'calc(100vh/2)',
                     display: 'flex',
                     alignItems: 'center',
-                    justifyContent: 'center' }}
+                    justifyContent: 'center'
+                }}
                 size="large"
             />);
         }
         return (
             <MonitorContent {...this.props} breadCrumbList={this.renderBreadCrumb()}>
                 <Card
-                    title={<span style={{fontWeight: '900'}}>运维表单</span>}
+                    title={<span style={{ fontWeight: '900' }}>运维表单</span>}
                     extra={
                         <p>
-                            <Button type="primary" ghost={true} style={{float:"left",marginRight:20}} onClick={this.enterTaskDetail}>
+                            <Button type="primary" ghost={true} style={{ float: "left", marginRight: 20 }} onClick={this.enterTaskDetail}>
                                 <Icon type="file-text" />任务单
                             </Button>
                             <Button
-                                style={{float:"right",marginRight:30}}
+                                style={{ float: "right", marginRight: 30 }}
                                 onClick={() => {
                                     this.props.history.goBack(-1);
                                 }}
@@ -239,65 +241,65 @@ class StandardGasRepalceRecord extends Component {
                         <table className={styles.FormTable}>
                             <tbody>
                                 <tr>
-                                    <td colSpan="2" style={{ width: '18%', height: '50px', textAlign: 'center',fontSize: '14px' }}>
-                            维护管理单位
+                                    <td colSpan="2" style={{ width: '18%', height: '50px', textAlign: 'center', fontSize: '14px' }}>
+                                        维护管理单位
                                     </td>
-                                    <td colSpan="2" style={{textAlign: 'center',fontSize: '14px'}}>
+                                    <td colSpan="2" style={{ textAlign: 'center', fontSize: '14px' }}>
                                         {MaintenanceManagementUnit}
                                     </td>
-                                    <td colSpan="2" style={{ width: '18%', height: '50px', textAlign: 'center',fontSize: '14px' }}>
-                            安装地点
+                                    <td colSpan="2" style={{ width: '18%', height: '50px', textAlign: 'center', fontSize: '14px' }}>
+                                        安装地点
                                     </td>
-                                    <td colSpan="2" style={{textAlign: 'center',fontSize: '14px'}}>
+                                    <td colSpan="2" style={{ textAlign: 'center', fontSize: '14px' }}>
                                         {PointPosition}
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td style={{ width: '9%', height: '50px', textAlign: 'center', backgroundColor: '#FAFAFA',fontSize: '14px',fontWeight: '600' }}>
-                            序号
+                                    <td style={{ width: '9%', height: '50px', textAlign: 'center', backgroundColor: '#FAFAFA', fontSize: '14px', fontWeight: '600' }}>
+                                        序号
                                     </td>
-                                    <td style={{ width: '18%', height: '50px', textAlign: 'center' , backgroundColor: '#FAFAFA' ,fontSize: '14px',fontWeight: '600' }}>
-                            更换日期
+                                    <td style={{ width: '18%', height: '50px', textAlign: 'center', backgroundColor: '#FAFAFA', fontSize: '14px', fontWeight: '600' }}>
+                                        更换日期
                                     </td>
-                                    <td style={{ width: '14%', height: '50px', textAlign: 'center' , backgroundColor: '#FAFAFA',fontSize: '14px',fontWeight: '600' }}>
-                            标准物质名称
+                                    <td style={{ width: '14%', height: '50px', textAlign: 'center', backgroundColor: '#FAFAFA', fontSize: '14px', fontWeight: '600' }}>
+                                        标准物质名称
                                     </td>
-                                    <td style={{ width: '12%', height: '50px', textAlign: 'center' , backgroundColor: '#FAFAFA',fontSize: '14px',fontWeight: '600' }}>
-                            气体浓度
+                                    <td style={{ width: '12%', height: '50px', textAlign: 'center', backgroundColor: '#FAFAFA', fontSize: '14px', fontWeight: '600' }}>
+                                        气体浓度
                                     </td>
-                                    <td style={{ width: '10%', height: '50px', textAlign: 'center' , backgroundColor: '#FAFAFA',fontSize: '14px',fontWeight: '600' }}>
-                            单位
+                                    <td style={{ width: '10%', height: '50px', textAlign: 'center', backgroundColor: '#FAFAFA', fontSize: '14px', fontWeight: '600' }}>
+                                        单位
                                     </td>
-                                    <td style={{ width: '10%', height: '50px', textAlign: 'center' , backgroundColor: '#FAFAFA',fontSize: '14px',fontWeight: '600' }}>
-                            数量
+                                    <td style={{ width: '10%', height: '50px', textAlign: 'center', backgroundColor: '#FAFAFA', fontSize: '14px', fontWeight: '600' }}>
+                                        数量
                                     </td>
-                                    <td style={{ width: '10%', height: '50px', textAlign: 'center' , backgroundColor: '#FAFAFA',fontSize: '14px',fontWeight: '600' }}>
-                            供应商
+                                    <td style={{ width: '10%', height: '50px', textAlign: 'center', backgroundColor: '#FAFAFA', fontSize: '14px', fontWeight: '600' }}>
+                                        供应商
                                     </td>
-                                    <td style={{ width: '17%', height: '50px', textAlign: 'center' , backgroundColor: '#FAFAFA',fontSize: '14px',fontWeight: '600' }}>
-                            有效期
+                                    <td style={{ width: '17%', height: '50px', textAlign: 'center', backgroundColor: '#FAFAFA', fontSize: '14px', fontWeight: '600' }}>
+                                        有效期
                                     </td>
                                 </tr>
                                 {
                                     this.renderItem(DataList)
                                 }
                                 <tr>
-                                    <td colSpan="2" style={{ height: '50px', textAlign: 'center',fontSize: '14px' }}>
-                            运行维护人员
+                                    <td colSpan="2" style={{ height: '50px', textAlign: 'center', fontSize: '14px' }}>
+                                        运行维护人员
                                     </td>
-                                    <td colSpan="2" style={{textAlign: 'center',fontSize: '14px'}}>
+                                    <td colSpan="2" style={{ textAlign: 'center', fontSize: '14px' }}>
                                         {CreateUserID}
                                     </td>
-                                    <td colSpan="2" style={{ height: '50px', textAlign: 'center',fontSize: '14px' }}>
-                            时间
+                                    <td colSpan="2" style={{ height: '50px', textAlign: 'center', fontSize: '14px' }}>
+                                        时间
                                     </td>
-                                    <td colSpan="2" style={{textAlign: 'center',fontSize: '14px',colSpan: '2'}}>
+                                    <td colSpan="2" style={{ textAlign: 'center', fontSize: '14px', colSpan: '2' }}>
                                         {CreateTime}
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td colSpan="8" style={{ width: '18%', height: '50px',fontSize: '14px',paddingLeft: 15 }}>
-                        注：更换易耗品时应及时记录，每半年汇总存档。
+                                    <td colSpan="8" style={{ width: '18%', height: '50px', fontSize: '14px', paddingLeft: 15 }}>
+                                        注：更换标准气体时应及时记录，每半年汇总存档。
                                     </td>
                                 </tr>
                             </tbody>
@@ -305,12 +307,12 @@ class StandardGasRepalceRecord extends Component {
                         <table className={styles.FormTable}>
                             <tbody>
                                 <tr>
-                                    <td style={{width: '87%', height: '50px', textAlign: 'right', border: '0', fontWeight: 'bold'}}>负责人签名：</td>
-                                    <td style={{width: '13%', height: '50px', border: '0'}}>{DataLength === 0 ? null : Data.Record.length === 0 ? null : Data.Record.SignContent === null ? null : <img src={SignContent} />}</td>
+                                    <td style={{ width: '87%', height: '50px', textAlign: 'right', border: '0', fontWeight: 'bold' }}>负责人签名：</td>
+                                    <td style={{ width: '13%', height: '50px', border: '0' }}>{DataLength === 0 ? null : Data.Record.length === 0 ? null : Data.Record.SignContent === null ? null : <img src={SignContent} />}</td>
                                 </tr>
                                 <tr>
-                                    <td style={{width: '87%', height: '50px', textAlign: 'right', border: '0', fontWeight: 'bold'}}>签名时间：</td>
-                                    <td style={{width: '13%', height: '50px', border: '0'}}>{SignTime}</td>
+                                    <td style={{ width: '87%', height: '50px', textAlign: 'right', border: '0', fontWeight: 'bold' }}>签名时间：</td>
+                                    <td style={{ width: '13%', height: '50px', border: '0' }}>{SignTime}</td>
                                 </tr>
                             </tbody>
                         </table>
