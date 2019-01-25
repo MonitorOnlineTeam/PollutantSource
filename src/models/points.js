@@ -52,7 +52,12 @@ export default Model.extend({
         dataInfo:null,
         stateNameInfo:null,
         paramNameInfo:null,
-        paramstatusInfo:null
+        paramstatusInfo:null,
+
+
+
+
+        test:0
     },
     effects: {
         * querypointdetail({
@@ -662,85 +667,155 @@ export default Model.extend({
                })
             }
         },
-        *updateDynamicControlParam({payload}
-            ,{update,select}){
-                if(payload && payload.array)
-                {
-                    let  { paramsInfo } = yield select(_ => _.points);
-                    let  { paramstatusInfo } = yield select(_ => _.points);
-                    const { selectpoint } = yield select(_ => _.points);
-                    if(selectpoint)
-                    {
-                        let changeParams=false;
-                        let changeStatus=false;
-                        payload.array.map(item=>{
-                                if(item.DGIMN==selectpoint.dgimn)
-                                {
-                                    if(item.PollutantCode!='cems')
-                                    {
-                                        changeParams=true;
-                                        paramsInfo[item.PollutantCode+"-"+ item.StateCode]=item.NewStateValue;
-                                    }
-                                    else
-                                    {
-                                        changeStatus=true;
-                                        paramstatusInfo[item.StateCode]=item.NewStateValue;
-                                    }
-                                }
-                        })
-                        if(changeParams)
-                        {
-                            yield update({paramsInfo});
-                        }
-                        if(changeStatus)
-                        {
-                            yield update({paramstatusInfo});
-                        }
+        // *updateDynamicControlParam({payload}
+        //     ,{update,select}){
+        //         if(payload && payload.array)
+        //         {
+        //             let  { paramsInfo } = yield select(_ => _.points);
+        //             let  { paramstatusInfo } = yield select(_ => _.points);
+        //             const { selectpoint } = yield select(_ => _.points);
+        //             if(selectpoint)
+        //             {
+        //                 let changeParams=false;
+        //                 let changeStatus=false;
+        //                 payload.array.map(item=>{
+        //                         if(item.DGIMN==selectpoint.dgimn)
+        //                         {
+        //                             if(item.PollutantCode!='cems')
+        //                             {
+        //                                 changeParams=true;
+        //                                 paramsInfo[item.PollutantCode+"-"+ item.StateCode]=item.NewStateValue;
+        //                             }
+        //                             else
+        //                             {
+        //                                 changeStatus=true;
+        //                                 paramstatusInfo[item.StateCode]=item.NewStateValue;
+        //                             }
+        //                         }
+        //                 })
+        //                 if(changeParams)
+        //                 {
+        //                     yield update({paramsInfo});
+        //                 }
+        //                 if(changeStatus)
+        //                 {
+        //                     yield update({paramstatusInfo});
+        //                 }
                        
-                    } 
-                }
-        },
-        *updateDynamicControlState({payload}
-            ,{update,select}){
-                if(payload && payload.array)
-                {
-                    let  { stateInfo,stateNameInfo } = yield select(_ => _.points);
-                    const { selectpoint } = yield select(_ => _.points);
-                    if(selectpoint)
-                    {
-                        payload.array.map(item=>{
-                                if(item.DGIMN==selectpoint.dgimn)
-                                {
-                                     const stateName=stateNameInfo[item.Code];
-                                     if(stateName)
-                                     {
-                                        stateInfo[item.Code]=stateName+item.State;
-                                     }
-                                }
-                        })
-                        yield update({stateInfo});
-                    } 
-                }
-        },
-        *updateRealTimeData({payload}
-            ,{update,select}){
-                if(payload && payload.array)
-                {
-                    let  { dataInfo } = yield select(_ => _.points);
-                    const { selectpoint } = yield select(_ => _.points);
-                    if(selectpoint)
-                    {
-                        payload.array.map(item=>{
-                                if(item.DGIMN==selectpoint.dgimn)
-                                {
-                                    dataInfo[item.PollutantCode]=item.MonitorValue;
-                               }
-                        })
-                        yield update({dataInfo});
-                    } 
-                }
-        },
+        //             } 
+        //         }
+        // },
+        // *updateDynamicControlState({payload}
+        //     ,{update,select}){
+        //         if(payload && payload.array)
+        //         {
+        //             let  { stateInfo,stateNameInfo } = yield select(_ => _.points);
+        //             const { selectpoint } = yield select(_ => _.points);
+        //             if(selectpoint)
+        //             {
+        //                 payload.array.map(item=>{
+        //                         if(item.DGIMN==selectpoint.dgimn)
+        //                         {
+        //                              const stateName=stateNameInfo[item.Code];
+        //                              if(stateName)
+        //                              {
+        //                                 stateInfo[item.Code]=stateName+item.State;
+        //                              }
+        //                         }
+        //                 })
+        //                 yield update({stateInfo});
+        //             } 
+        //         }
+        // },
+    },
+    reducers: {
+        //更新工艺流程图的实时数据
+        updateRealTimeData(state, { payload }) {
+            if (payload && payload.array) {
+                const {selectpoint,dataInfo}=state;
+                let {test}=state;
 
+                let resdata = JSON.parse(JSON.stringify(dataInfo));
+                if(selectpoint && selectpoint.DGIMN && resdata)
+                {
+                    payload.array.map(item=>{
+                         if(item.DGIMN==selectpoint.DGIMN)
+                         {
+                            resdata[item.PollutantCode]=item.MonitorValue;
+                        }
+                     })
+                  
+                    return {
+                        ...state,
+                        dataInfo:resdata
+                    }
+                }
+                return state;
+            }
+           
+        },
+        //更新工艺流程图参数信息
+        updateDynamicControlParam(state, { payload }) {
+            if (payload && payload.array) {
+                const  { paramsInfo,selectpoint,paramstatusInfo } = state;
+                //污染物参数
+                let resparamsInfo=JSON.parse(JSON.stringify(paramsInfo));
+                //系统参数
+                let resparamstatusInfo=JSON.parse(JSON.stringify(paramstatusInfo));
+                if(selectpoint && resparamsInfo && resparamstatusInfo)
+                {
+                    debugger;
+                    payload.array.map(item=>{
+                            if(item.DGIMN==selectpoint.DGIMN)
+                            {
+                                if(item.PollutantCode!='cems')
+                                {
+                                    resparamsInfo[item.PollutantCode+"-"+ item.StateCode]=item.NewStateValue;
+                                }
+                                else
+                                {
+                                    resparamstatusInfo[item.StateCode]=item.NewStateValue;
+                                }
+                             }
+                    })
+                    return {
+                        ...state,
+                        paramsInfo:resparamsInfo,
+                        paramstatusInfo:resparamstatusInfo
+                    }
+                }
+                return state;
+            }
+           
+        },
+        //更新工艺流程图系统状态信息
+        updateDynamicControlState(state, { payload }) {
+            if (payload && payload.array) {
+                const  { stateInfo,stateNameInfo,selectpoint } = state;
+                let resstateInfo=JSON.parse(JSON.stringify(stateInfo));;
+                if(selectpoint && statresstateInfoeInfo)
+                {
+                    debugger;
+                    payload.array.map(item=>{
+                            if(item.DGIMN==selectpoint.DGIMN)
+                            {
+                                 const stateName=stateNameInfo[item.Code];
+                                 if(stateName)
+                                 {
+                                    statresstateInfoeInfo[item.Code]=stateName+item.State;
+                                 }
+                            }
+                    })
+                    return {
+                        ...state,
+                        stateInfo:resstateInfo,
+                    }
+                } 
+                return state;
+            }
+           
+        },
+       
     },
     subscriptions: {
         setup({ dispatch, history }) {

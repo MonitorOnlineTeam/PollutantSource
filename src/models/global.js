@@ -302,13 +302,13 @@ export default Model.extend({
                                 array:obj.Message
                             },
                         });
-                        /*   dispatch({
+                        dispatch({
                             type: 'workbenchmodel/updateRealTimeData',
                             payload: {
                                 array:obj.Message
                             },
                         });
- */
+  
                         break;
                     case 'MinuteData':
                         // dispatch({
@@ -321,22 +321,21 @@ export default Model.extend({
                         // });
                         break;
                     case 'DynamicControlParam':
-                    // debugger;
                     // console.log(obj);
-                        /*  dispatch({
+                        dispatch({
                             type: 'points/updateDynamicControlParam',
                             payload: {
                                 array:obj.Message
                             },
-                        }); */
+                        }); 
                         break;
                     case 'DynamicControlState':
-                        /* dispatch({
+                         dispatch({
                             type: 'points/updateDynamicControlState',
                             payload: {
                                 array:obj.Message
                             },
-                        }); */
+                        });  
                         break;
                     case 'Alarm':
                         dispatch({

@@ -19,6 +19,7 @@ import {
     paramstatusInfo:points.paramstatusInfo,
     stateNameInfo:points.stateNameInfo,
     paramNameInfo:points.paramNameInfo,
+    test:points.test
 }))
 export default class GyProcessPic extends Component {
     constructor(props) {
@@ -161,6 +162,8 @@ export default class GyProcessPic extends Component {
         const jzfStatus=this.getSystemStatus(stateInfo,'i12104');
         //皮托管状态
         const ptgStatus=this.getSystemStatus(stateInfo,'i12106');
+
+        console.log('---------------------------------------------------');
 
         return (
    
