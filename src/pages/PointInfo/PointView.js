@@ -93,7 +93,7 @@ export default class pointview extends Component {
                             DGIMN: this.props.editpoint.DGIMN,
                             pointName: this.props.editpoint.pointName,
                             pollutantTypeName: this.props.editpoint.pollutantTypeName,
-                            linkman: this.props.editpoint.linkman,
+                            linkman: this.props.editpoint.SWUserName,
                             mobilePhone: this.props.editpoint.mobilePhone,
                             latitude: this.props.editpoint.latitude,
                             longitude: this.props.editpoint.longitude,
@@ -511,7 +511,6 @@ export default class pointview extends Component {
                                 <Description term="排口类型">{this.state.PointType}</Description>
                                 <Description term="污染物类型">{this.state.pollutantTypeName}</Description>
                                 <Description term="负责人">{this.state.linkman}</Description>
-                                <Description term="负责人电话">{this.state.mobilePhone}</Description>
                                 <Description term="排口直径" style={{ display: this.state.PollutantType }}>{this.state.OutputDiameter}</Description>
                                 <Description term="排口高度" style={{ display: this.state.PollutantType }}>{this.state.OutputHigh}</Description>
                                 <Description term="经度">{this.state.longitude}</Description>

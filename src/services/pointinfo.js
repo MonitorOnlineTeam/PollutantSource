@@ -27,7 +27,7 @@ export async function addpoint(params) {
         Coordinate: params.Coordinate,
         OutPutWhitherCode: params.OutPutWhitherCode,
         Linkman: params.Linkman,
-        MobilePhone: params.MobilePhone,
+        Col3: params.Col3,
         GasOutputTypeCode: params.GasOutputTypeCode,
         OutputDiameter: params.OutputDiameter,
         OutputHigh: params.OutputHigh,
@@ -47,6 +47,14 @@ export async function getoperationsuserList(params) {
     const body = {
     };
     const result = post('/api/rest/PollutantSourceApi/PUserInfo/GetOperationsUserList', body, null);
+    return result === null ? {
+        data: null
+    } : result;
+}
+// 获取环保专工
+export async function getspecialworkeruserList(params) {
+    const body = {};
+    const result = post('/api/rest/PollutantSourceApi/PUserInfo/GetSpecialWorkerUserList', body, null);
     return result === null ? {
         data: null
     } : result;
@@ -73,7 +81,7 @@ export async function editpoint(params) {
         Coordinate: params.Coordinate,
         OutPutWhitherCode: params.OutPutWhitherCode,
         Linkman: params.Linkman,
-        MobilePhone: params.MobilePhone,
+        Col3: params.Col3,
         GasOutputTypeCode: params.GasOutputTypeCode,
         OutputDiameter: params.OutputDiameter,
         OutputHigh: params.OutputHigh,

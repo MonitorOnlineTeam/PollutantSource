@@ -48,6 +48,7 @@ export default class addcoordinate extends Component {
             lng: lng,
             lat: lat,
         });
+        this.props.onRef(this);
     };
         onRef1 = (ref) => {
           this.child = ref;
