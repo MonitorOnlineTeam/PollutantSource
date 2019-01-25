@@ -40,49 +40,49 @@ export default class AppJzRecordInfo extends Component {
                         rtnVal.push(<table className={styles.FormTable}>
                             <tbody>
                                 <tr>
-                                    <td colSpan="7" style={{ height: '30px', fontWeight: 'bold' }}>{item}分析仪校准</td>
+                                    <td style={{ width: '18%', minWidth: 150 }} colSpan="7" style={{ height: '25px', fontWeight: 'bold' }}>{item}分析仪校准</td>
                                 </tr>
                                 <tr>
-                                    <td style={{ width: '16%', height: '30px' }}>分析仪原理</td>
-                                    <td colSpan="2">{rd[0].FxyYl}</td>
-                                    <td style={{ width: '14%', height: '30px' }}>分析仪量程</td>
-                                    <td style={{ width: '14%', height: '30px' }}>{rd[0].FxyLc}</td>
-                                    <td style={{ width: '14%', height: '30px' }}>计量单位</td>
-                                    <td style={{ width: '14%', height: '30px' }}>{rd[0].JlUnit}</td>
+                                    <td style={{ width: '16%', height: '25px', minWidth: 150 }}>分析仪原理</td>
+                                    <td style={{ width: '16%', height: '25px', minWidth: 150 }} colSpan="2">{rd[0].FxyYl}</td>
+                                    <td style={{ width: '14%', height: '25px', minWidth: 150 }}>分析仪量程</td>
+                                    <td style={{ width: '14%', height: '25px', minWidth: 150 }}>{rd[0].FxyLc}</td>
+                                    <td style={{ width: '14%', height: '25px', minWidth: 150 }}>计量单位</td>
+                                    <td style={{ width: '14%', height: '25px', minWidth: 150 }}>{rd[0].JlUnit}</td>
                                 </tr>
                                 <tr>
-                                    <td rowSpan="2" style={{ width: '16%', height: '30px' }}>零点漂移校准</td>
-                                    <td style={{ width: '14%', height: '30px' }}>{item !== '颗粒物' ? '零气浓度值' : '零气校准参考值'}</td>
-                                    <td style={{ width: '14%', height: '30px' }}>上次校准后测试值</td>
-                                    <td style={{ width: '14%', height: '30px' }}>校前测试值</td>
-                                    <td style={{ width: '14%', height: '30px' }}>零点漂移%F.S.</td>
-                                    <td style={{ width: '14%', height: '30px' }}>仪器校准是否正常</td>
-                                    <td style={{ width: '14%', height: '30px' }}>校准后测试值</td>
+                                    <td rowSpan="2" style={{ width: '16%', height: '25px' }}>零点漂移校准</td>
+                                    <td style={{ width: '14%', height: '25px' }}>{item !== '颗粒物' ? '零气浓度值' : '零气校准参考值'}</td>
+                                    <td style={{ width: '14%', height: '25px' }}>上次校准后测试值</td>
+                                    <td style={{ width: '14%', height: '25px' }}>校前测试值</td>
+                                    <td style={{ width: '14%', height: '25px' }}>零点漂移%F.S.</td>
+                                    <td style={{ width: '14%', height: '25px' }}>仪器校准是否正常</td>
+                                    <td style={{ width: '14%', height: '25px' }}>校准后测试值</td>
                                 </tr>
                                 <tr>
-                                    <td style={{ width: '14%', height: '30px' }}>{rd[0].LqNdz}</td>
-                                    <td style={{ width: '14%', height: '30px' }}>{rd[0].LdLastCalibrationValue}</td>
-                                    <td style={{ width: '14%', height: '30px' }}>{rd[0].LdCalibrationPreValue}</td>
-                                    <td style={{ width: '14%', height: '30px' }}>{rd[0].LdPy}</td>
-                                    <td style={{ width: '14%', height: '30px' }}>{rd[0].LdCalibrationIsOk}</td>
-                                    <td style={{ width: '14%', height: '30px' }}>{rd[0].LdCalibrationSufValue}</td>
+                                    <td style={{ width: '14%', height: '25px' }}>{rd[0].LqNdz}</td>
+                                    <td style={{ width: '14%', height: '25px' }}>{rd[0].LdLastCalibrationValue}</td>
+                                    <td style={{ width: '14%', height: '25px' }}>{rd[0].LdCalibrationPreValue}</td>
+                                    <td style={{ width: '14%', height: '25px' }}>{rd[0].LdPy}</td>
+                                    <td style={{ width: '14%', height: '25px' }}>{rd[0].LdCalibrationIsOk}</td>
+                                    <td style={{ width: '14%', height: '25px' }}>{rd[0].LdCalibrationSufValue}</td>
                                 </tr>
                                 <tr>
                                     <td rowSpan="2" style={{ width: '16%' }}>量程漂移校准</td>
-                                    <td style={{ width: '14%', height: '30px' }}>{item !== '颗粒物' ? '标气浓度值' : '量程校准参考值'}</td>
-                                    <td style={{ width: '14%', height: '30px' }}>上次校准后测试值</td>
-                                    <td style={{ width: '14%', height: '30px' }}>校前测试值</td>
-                                    <td style={{ width: '14%', height: '30px' }}>量程漂移%F.S.</td>
-                                    <td style={{ width: '14%', height: '30px' }}>仪器校准是否正常</td>
-                                    <td style={{ width: '14%', height: '30px' }}>校准后测试值</td>
+                                    <td style={{ width: '14%', height: '25px' }}>{item !== '颗粒物' ? '标气浓度值' : '量程校准参考值'}</td>
+                                    <td style={{ width: '14%', height: '25px' }}>上次校准后测试值</td>
+                                    <td style={{ width: '14%', height: '25px' }}>校前测试值</td>
+                                    <td style={{ width: '14%', height: '25px' }}>量程漂移%F.S.</td>
+                                    <td style={{ width: '14%', height: '25px' }}>仪器校准是否正常</td>
+                                    <td style={{ width: '14%', height: '25px' }}>校准后测试值</td>
                                 </tr>
                                 <tr>
-                                    <td style={{ width: '14%', height: '30px' }}>{rd[0].BqNdz}</td>
-                                    <td style={{ width: '14%', height: '30px' }}>{rd[0].LcLastCalibrationValue}</td>
-                                    <td style={{ width: '14%', height: '30px' }}>{rd[0].LcCalibrationPreValue}</td>
-                                    <td style={{ width: '14%', height: '30px' }}>{rd[0].LcPy}</td>
-                                    <td style={{ width: '14%', height: '30px' }}>{rd[0].LcCalibrationIsOk}</td>
-                                    <td style={{ width: '14%', height: '30px' }}>{rd[0].LcCalibrationSufValue}</td>
+                                    <td style={{ width: '14%', height: '25px' }}>{rd[0].BqNdz}</td>
+                                    <td style={{ width: '14%', height: '25px' }}>{rd[0].LcLastCalibrationValue}</td>
+                                    <td style={{ width: '14%', height: '25px' }}>{rd[0].LcCalibrationPreValue}</td>
+                                    <td style={{ width: '14%', height: '25px' }}>{rd[0].LcPy}</td>
+                                    <td style={{ width: '14%', height: '25px' }}>{rd[0].LcCalibrationIsOk}</td>
+                                    <td style={{ width: '14%', height: '25px' }}>{rd[0].LcCalibrationSufValue}</td>
                                 </tr>
                             </tbody>
                         </table>);
@@ -90,49 +90,49 @@ export default class AppJzRecordInfo extends Component {
                         rtnVal.push(<table className={styles.FormTable}>
                             <tbody>
                                 <tr>
-                                    <td colSpan="7" style={{ height: '30px', fontWeight: 'bold' }}>{item}分析仪校准</td>
+                                    <td colSpan="7" style={{ height: '25px', fontWeight: 'bold' }}>{item}分析仪校准</td>
                                 </tr>
                                 <tr>
-                                    <td style={{ width: '16%', height: '30px' }}>分析仪原理</td>
+                                    <td style={{ width: '16%', height: '25px' }}>分析仪原理</td>
                                     <td colSpan="2" />
-                                    <td style={{ width: '14%', height: '30px' }}>分析仪量程</td>
-                                    <td style={{ width: '14%', height: '30px' }} />
-                                    <td style={{ width: '14%', height: '30px' }}>计量单位</td>
-                                    <td style={{ width: '14%', height: '30px' }} />
+                                    <td style={{ width: '14%', height: '25px' }}>分析仪量程</td>
+                                    <td style={{ width: '14%', height: '25px' }} />
+                                    <td style={{ width: '14%', height: '25px' }}>计量单位</td>
+                                    <td style={{ width: '14%', height: '25px' }} />
                                 </tr>
                                 <tr>
-                                    <td rowSpan="2" style={{ width: '16%', height: '30px' }}>零点漂移校准</td>
-                                    <td style={{ width: '14%', height: '30px' }}>{item !== '颗粒物' ? '零气浓度值' : '零气'}</td>
-                                    <td style={{ width: '14%', height: '30px' }}>上次校准后测试值</td>
-                                    <td style={{ width: '14%', height: '30px' }}>校前测试值</td>
-                                    <td style={{ width: '14%', height: '30px' }}>零点漂移%F.S.</td>
-                                    <td style={{ width: '14%', height: '30px' }}>仪器校准是否正常</td>
-                                    <td style={{ width: '14%', height: '30px' }}>校准后测试值</td>
+                                    <td rowSpan="2" style={{ width: '16%', height: '25px' }}>零点漂移校准</td>
+                                    <td style={{ width: '14%', height: '25px' }}>{item !== '颗粒物' ? '零气浓度值' : '零气'}</td>
+                                    <td style={{ width: '14%', height: '25px' }}>上次校准后测试值</td>
+                                    <td style={{ width: '14%', height: '25px' }}>校前测试值</td>
+                                    <td style={{ width: '14%', height: '25px' }}>零点漂移%F.S.</td>
+                                    <td style={{ width: '14%', height: '25px' }}>仪器校准是否正常</td>
+                                    <td style={{ width: '14%', height: '25px' }}>校准后测试值</td>
                                 </tr>
                                 <tr>
-                                    <td style={{ width: '14%', height: '30px' }} />
-                                    <td style={{ width: '14%', height: '30px' }} />
-                                    <td style={{ width: '14%', height: '30px' }} />
-                                    <td style={{ width: '14%', height: '30px' }} />
-                                    <td style={{ width: '14%', height: '30px' }} />
-                                    <td style={{ width: '14%', height: '30px' }} />
+                                    <td style={{ width: '14%', height: '25px' }} />
+                                    <td style={{ width: '14%', height: '25px' }} />
+                                    <td style={{ width: '14%', height: '25px' }} />
+                                    <td style={{ width: '14%', height: '25px' }} />
+                                    <td style={{ width: '14%', height: '25px' }} />
+                                    <td style={{ width: '14%', height: '25px' }} />
                                 </tr>
                                 <tr>
-                                    <td rowSpan="2" style={{ width: '16%', height: '30px' }}>量程漂移校准</td>
-                                    <td style={{ width: '14%', height: '30px' }}>{item !== '颗粒物' ? '标气浓度值' : '校准用量程值'}</td>
-                                    <td style={{ width: '14%', height: '30px' }}>上次校准后测试值</td>
-                                    <td style={{ width: '14%', height: '30px' }}>校前测试值</td>
-                                    <td style={{ width: '14%', height: '30px' }}>量程漂移%F.S.</td>
-                                    <td style={{ width: '14%', height: '30px' }}>仪器校准是否正常</td>
-                                    <td style={{ width: '14%', height: '30px' }}>校准后测试值</td>
+                                    <td rowSpan="2" style={{ width: '16%', height: '25px' }}>量程漂移校准</td>
+                                    <td style={{ width: '14%', height: '25px' }}>{item !== '颗粒物' ? '标气浓度值' : '校准用量程值'}</td>
+                                    <td style={{ width: '14%', height: '25px' }}>上次校准后测试值</td>
+                                    <td style={{ width: '14%', height: '25px' }}>校前测试值</td>
+                                    <td style={{ width: '14%', height: '25px' }}>量程漂移%F.S.</td>
+                                    <td style={{ width: '14%', height: '25px' }}>仪器校准是否正常</td>
+                                    <td style={{ width: '14%', height: '25px' }}>校准后测试值</td>
                                 </tr>
                                 <tr>
-                                    <td style={{ width: '14%', height: '30px' }} />
-                                    <td style={{ width: '14%', height: '30px' }} />
-                                    <td style={{ width: '14%', height: '30px' }} />
-                                    <td style={{ width: '14%', height: '30px' }} />
-                                    <td style={{ width: '14%', height: '30px' }} />
-                                    <td style={{ width: '14%', height: '30px' }} />
+                                    <td style={{ width: '14%', height: '25px' }} />
+                                    <td style={{ width: '14%', height: '25px' }} />
+                                    <td style={{ width: '14%', height: '25px' }} />
+                                    <td style={{ width: '14%', height: '25px' }} />
+                                    <td style={{ width: '14%', height: '25px' }} />
+                                    <td style={{ width: '14%', height: '25px' }} />
                                 </tr>
                             </tbody>
                         </table>);
@@ -197,59 +197,59 @@ export default class AppJzRecordInfo extends Component {
         return (
             <MapInteractionCSS>
                 <Card>
-                    <div className={styles.FormDiv} style={{ height: SCREEN_HEIGHT }}>
-                        <div className={styles.FormName}>CEMS零点量程漂移与校准记录表</div>
-                        <div className={styles.HeadDiv} style={{ fontWeight: 'bold' }}>企业名称：{EnterpriseName}</div>
+                    <div className={styles.FormDiv}>
+                        <div style={{ minWidth: 900, textAlign: 'center', fontSize: 15, fontWeight: 'bold' }}>CEMS零点量程漂移与校准记录表</div>
+                        <div style={{ fontWeight: 'bold', minWidth: 900, fontSize: 12 }}>企业名称：{EnterpriseName}</div>
                         <table className={styles.FormTable}>
                             <tbody>
                                 <tr>
-                                    <td style={{ width: '18%', height: '30px', textAlign: 'left' }}>
+                                    <td style={{ width: '18%', height: '25px', textAlign: 'left', minWidth: 150 }}>
                                         气态污染物CEMS设备生产商
                             </td>
-                                    <td style={{ width: '16%', height: '30px' }}>
+                                    <td style={{ width: '16%', height: '25px', minWidth: 150 }}>
                                         {GasCemsEquipmentManufacturer}
                                     </td>
-                                    <td>
+                                    <td style={{ width: '18%', height: '25px', minWidth: 150 }}>
                                         气态污染物CEMS设备规格型号
                             </td>
-                                    <td style={{ width: '18%', height: '30px' }}>
+                                    <td style={{ width: '18%', height: '25px', minWidth: 150 }}>
                                         {GasCemsCode}
                                     </td>
-                                    <td>
+                                    <td style={{ width: '18%', height: '25px', minWidth: 150 }}>
                                         校准日期
                             </td>
-                                    <td style={{ width: '16%', height: '30px' }}>
+                                    <td style={{ width: '16%', height: '25px' , minWidth: 150 }}>
                                         {AdjustDate}
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td style={{ width: '18%', height: '30px', textAlign: 'left' }}>
+                                    <td style={{ width: '18%', height: '25px', textAlign: 'left' }}>
                                         颗粒物CEMS设备生产商
                             </td>
-                                    <td style={{ width: '16%', height: '30px' }}>
+                                    <td style={{ width: '16%', height: '25px' }}>
                                         {KlwCemsEquipmentManufacturer}
                                     </td>
                                     <td>
                                         颗粒物CEMS设备规格型号
                             </td>
-                                    <td style={{ width: '18%', height: '30px' }}>
+                                    <td style={{ width: '18%', height: '25px' }}>
                                         {KlwCemsCode}
                                     </td>
-                                    <td style={{ width: '16%', height: '30px' }}>
+                                    <td style={{ width: '16%', height: '25px' }}>
                                         校准开始日期
                             </td>
-                                    <td style={{ width: '16%', height: '30px' }}>
+                                    <td style={{ width: '16%', height: '25px' }}>
                                         {AdjustStartTime}
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td style={{ width: '18%', height: '30px', textAlign: 'left' }}>
+                                    <td style={{ width: '18%', height: '25px', textAlign: 'left' }}>
                                         安装地点
                             </td>
-                                    <td style={{ width: '16%', height: '30px' }}>
+                                    <td style={{ width: '16%', height: '25px' }}>
                                         {PointPosition}
                                     </td>
-                                    <td style={{ width: '18%', height: '30px', textAlign: 'left' }}>
+                                    <td style={{ width: '18%', height: '25px', textAlign: 'left' }}>
                                         维护管理单位
                             </td>
                                     <td colSpan="3">
@@ -264,22 +264,22 @@ export default class AppJzRecordInfo extends Component {
                         <table className={styles.FormTable} style={{ border: '0' }}>
                             <tbody>
                                 <tr>
-                                    <td style={{ width: '25%', height: '30px' }}>校准人：</td>
-                                    <td style={{ width: '25%', height: '30px' }}>{CreateUserID}</td>
-                                    <td style={{ width: '25%', height: '30px' }}>校准结束时间：</td>
-                                    <td style={{ width: '25%', height: '30px' }}>{AdjustEndTime}</td>
+                                    <td style={{ width: '25%', height: '25px', minWidth: 225  }}>校准人：</td>
+                                    <td style={{ width: '25%', height: '25px', minWidth: 225  }}>{CreateUserID}</td>
+                                    <td style={{ width: '25%', height: '25px', minWidth: 225  }}>校准结束时间：</td>
+                                    <td style={{ width: '25%', height: '25px', minWidth: 225  }}>{AdjustEndTime}</td>
                                 </tr>
                             </tbody>
                         </table>
                         <table className={styles.FormTable}>
                             <tbody>
                                 <tr>
-                                    <td style={{ width: '75%', height: '30px', textAlign: 'right', border: '0', fontWeight: 'bold' }}>负责人签名：</td>
-                                    <td style={{ width: '25%', height: '30px', border: '0' }}><img src={SignContent} /></td>
+                                    <td style={{ width: '75%', height: '25px', textAlign: 'right', border: '0', fontWeight: 'bold', minWidth: 800  }}>负责人签名：</td>
+                                    <td style={{ width: '25%', height: '25px', border: '0', minWidth: 100  }}><img src={SignContent} /></td>
                                 </tr>
                                 <tr>
-                                    <td style={{ width: '75%', height: '30px', textAlign: 'right', border: '0', fontWeight: 'bold' }}>签名时间：</td>
-                                    <td style={{ width: '25%', height: '30px', border: '0' }}>{SignTime}</td>
+                                    <td style={{ width: '75%', height: '25px', textAlign: 'right', border: '0', fontWeight: 'bold', minWidth: 800  }}>签名时间：</td>
+                                    <td style={{ width: '25%', height: '25px', border: '0', minWidth: 100  }}>{SignTime}</td>
                                 </tr>
                             </tbody>
                         </table>
