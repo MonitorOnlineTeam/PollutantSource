@@ -231,7 +231,7 @@ export default class StopCemsListHistoryRecords extends Component {
                 var resu = [];
                 if (text !== undefined) {
                     resu.push(
-                        <Tag style={{ marginBottom: 1.5, marginTop: 1.5 }} color="#108ee9">{text}</Tag>
+                        <Tag key={text} style={{ marginBottom: 1.5, marginTop: 1.5 }} color="#108ee9">{text}</Tag>
                     );
                 }
                 return resu;
@@ -305,6 +305,7 @@ export default class StopCemsListHistoryRecords extends Component {
                                     </Row>
                                 </div>
                                 <Table
+                                   rowKey={(record, index) => `complete${index}`}     
                                     size="middle"
                                     scroll={{ y: 'calc(100vh - 350px)' }}
                                     loading={spining}

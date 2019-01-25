@@ -25,21 +25,6 @@ const gridStyle = {
  */
 
 class TransmissionEfficiency extends PureComponent {
-    // componentWillMount() {
-    //     this.getTransmissionefficiencyRateData();
-    // }
-
-    // /**
-    //  * 智能质控_排口传输有效率_更新数据
-    //  */
-    // getTransmissionefficiencyRateData = (pageIndex) => {
-    //     this.props.dispatch({
-    //         type: 'transmissionefficiency/getData',
-    //         payload: {
-    //             pageIndex: pageIndex || 1,
-    //         }
-    //     });
-    // }
 
     getOption = (type) => {
         const { model } = this.props.rateStatistics;
@@ -136,11 +121,10 @@ class TransmissionEfficiency extends PureComponent {
                 }
             }];
 
-        return <Table rowKey="effectrate" loading={this.props.loadingTransmissionefficiencyRate} columns={columns} dataSource={this.props.transmissionefficiencyRateTableDatas.slice(0, 3)} size="small" pagination={false} />;
+        return <Table rowKey={(record, index) => `complete${index}`} loading={this.props.loadingTransmissionefficiencyRate} columns={columns} dataSource={this.props.transmissionefficiencyRateTableDatas.slice(0, 3)} size="small" pagination={false} />;
     }
 
     render() {
-        const loading=this.props.loadingRateStatistics;
         return (
             <Card
                 title="当月传输有效率"

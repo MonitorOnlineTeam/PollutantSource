@@ -138,8 +138,9 @@ export default class AddStandardLibrary extends Component {
           e.preventDefault();
           let flag = true;
           this.props.form.validateFieldsAndScroll((err, values) => {
+              const StandardLibraryID = this.props.match.params.StandardLibraryID;
               const that = this;
-              if (this.state.StandardLibraryID === null) {
+              if (StandardLibraryID === 'null') {
                   if (!err && flag === true) {
                       that.props.dispatch({
                           type: 'standardlibrary/addstandardlibrary',
@@ -165,7 +166,7 @@ export default class AddStandardLibrary extends Component {
                       that.props.dispatch({
                           type: 'standardlibrary/editstandardlibrary',
                           payload: {
-                              StandardLibraryID: this.state.StandardLibraryID,
+                              StandardLibraryID: StandardLibraryID,
                               Name: values.Name,
                               Type: values.Type,
                               IsUsed: values.IsUsed === true ? '1' : '0',
@@ -186,12 +187,6 @@ export default class AddStandardLibrary extends Component {
           });
       };
  success = (StandardLibraryID) => {
-     //  let index = this.props.dispatch(routerRedux.push(`/sysmanage/Userinfo`));
-     //  if (this.state.UserId !== null) {
-     //      message.success('修改成功', 3).then(() => index);
-     //  } else {
-     //      message.success('新增成功', 3).then(() => index);
-     //  }
      if (StandardLibraryID != null) {
          this.setState({
              StandardLibraryID: StandardLibraryID
@@ -205,9 +200,6 @@ export default class AddStandardLibrary extends Component {
  componentWillMount() {
      const StandardLibraryID = this.props.match.params.StandardLibraryID;
      if (StandardLibraryID !== 'null') {
-         this.setState({
-             StandardLibraryID: StandardLibraryID,
-         });
          this.props.dispatch({
              type: 'standardlibrary/getStandardlibrarybyid',
              payload: {
@@ -215,16 +207,9 @@ export default class AddStandardLibrary extends Component {
                  callback: () => {
                      console.log(this.props.editstandardlibrary);
                      if (this.props.requstresult === '1') {
-                         this.setState({
-                             IsUsed: this.props.editstandardlibrary.IsUsed,
-                             fileList: this.props.editstandardlibrary.Filelist,
-                         }, () => {
-                             this.props.form.setFieldsValue({
-                                 Name: this.props.editstandardlibrary.Name,
-                                 Type: this.props.editstandardlibrary.Type,
-                                 IsUsed: this.props.editstandardlibrary.IsUsed
-                             });
-                         });
+                          this.setState({
+                            fileList: this.props.editstandardlibrary.Filelist,
+                          });
                      }
                  }
              },
@@ -262,6 +247,18 @@ export default class AddStandardLibrary extends Component {
       });
   }
   render() {
+      const {
+        dispatch,
+        form,
+        match,
+        editstandardlibrary
+      } = this.props;
+      const {StandardLibraryID} = match.params;
+      const {
+            Name,
+            Type,
+            IsUsed,
+        } = editstandardlibrary === null || StandardLibraryID === "null" ? {} : editstandardlibrary;
       const columns = [{
           title: '污染物编号',
           dataIndex: 'PollutantCode',
@@ -370,7 +367,7 @@ export default class AddStandardLibrary extends Component {
                 [
                     {Name:'首页',Url:'/'},
                     {Name:'系统管理',Url:''},
-                    {Name:'标准库管理',Url:'/sysmanage/StandardLibraryDetail/'},
+                    {Name:'标准库管理',Url:'/sysmanage/standardlibrary'},
                      {Name:'标准库维护',Url:''}
                 ]
             }>
@@ -386,6 +383,7 @@ export default class AddStandardLibrary extends Component {
                                       label="标准库名称">
                                       {getFieldDecorator('Name'
                                           , {
+                                              initialValue: Name,
                                               rules: [{
                                                   required: true,
                                                   message: '请输入标准库名称!'
@@ -403,6 +401,7 @@ export default class AddStandardLibrary extends Component {
                                       label="标准库类型">
                                       {getFieldDecorator('Type'
                                           , {
+                                              initialValue: Type,
                                               rules: [{
                                                   required: true,
                                                   message: '请选择标准库类型!'
@@ -444,45 +443,14 @@ export default class AddStandardLibrary extends Component {
                                       label="启用状态">
                                       {getFieldDecorator('IsUsed',
                                           {
+                                              initialValue: IsUsed,
                                               valuePropName: 'checked',
                                           })(<Switch checkedChildren="启用" unCheckedChildren="禁用" />
                                       )}
                                   </FormItem>
                               </Col>
                           </Row>
-               
-                      </Card>
-                  </Form>
-                  <Divider dashed  />
-                  <Card bordered={false} style={{marginTop: 10,}}>
-             
-                      <Table
-                          loading={this.props.effects['standardlibrary/getstandardlibrarypollutantlist']}
-                          columns={columns}
-                          dataSource={this.state.StandardLibraryID !== null ? this.props.standardlibrarypollutant : null}
-                          pagination={true}
-                          size='small'
-                          scroll={{ y: 'calc(100vh - 80px)' }}
-                      />
-                  </Card>
-                  <Modal
-                      visible={this.state.Mvisible}
-                      title={this.state.title}
-                      width={this.state.width}
-                      destroyOnClose={true}// 清除上次数据
-                      footer={false}
-                      onCancel={
-                          () => {
-                              this.setState({
-                                  Mvisible: false
-                              });
-                          }
-                      } >
-                      {
-                          <AddPollutant pid={this.state.StandardLibraryID} onRef={this.onRef1} getlist={this.ChildGetList} Id={this.state.Id} />
-                      }
-                  </Modal>
-                  <Row gutter={48}>
+               <Row gutter={48}>
                   <Divider orientation="right"  style={{border:'1px dashed #FFFFFF'}}>
                  
                      
@@ -515,6 +483,39 @@ export default class AddStandardLibrary extends Component {
                               </Col>
                               </Divider>
                           </Row>
+                      </Card>
+                       
+                  </Form>
+                  <Divider dashed  />
+                  <Card bordered={false} style={{marginTop: 10,}}>
+             
+                      <Table
+                          loading={this.props.effects['standardlibrary/getstandardlibrarypollutantlist']}
+                          columns={columns}
+                          dataSource={this.state.StandardLibraryID !== null ? this.props.standardlibrarypollutant : null}
+                          pagination={true}
+                          size='small'
+                          scroll={{ y: 'calc(100vh - 80px)' }}
+                      />
+                  </Card>
+                  <Modal
+                      visible={this.state.Mvisible}
+                      title={this.state.title}
+                      width={this.state.width}
+                      destroyOnClose={true}// 清除上次数据
+                      footer={false}
+                      onCancel={
+                          () => {
+                              this.setState({
+                                  Mvisible: false
+                              });
+                          }
+                      } >
+                      {
+                          <AddPollutant pid={this.state.StandardLibraryID} onRef={this.onRef1} getlist={this.ChildGetList} Id={this.state.Id} />
+                      }
+                  </Modal>
+                 
               </Card>
           </div>
           </MonitorContent>

@@ -13,12 +13,12 @@ import {
     Popover,
     Col,
     Icon,
-    Badge 
+    Badge
 } from 'antd';
 import moment from 'moment';
 import styles from './index.less';
 import MonitorContent from '../../components/MonitorContent/index';
-import {connect} from 'dva';
+import { connect } from 'dva';
 const { MonthPicker } = DatePicker;
 const monthFormat = 'YYYY-MM';
 const pageUrl = {
@@ -61,7 +61,7 @@ export default class TransmissionEfficiency extends Component {
             },
         });
     }
-    handleTableChange =(pagination, filters, sorter) => {
+    handleTableChange = (pagination, filters, sorter) => {
         if (sorter.order) {
             this.updateState({
                 transmissionEffectiveRate: sorter.order,
@@ -99,11 +99,9 @@ export default class TransmissionEfficiency extends Component {
         this.getTableData(this.props.pageIndex);
     }
     render() {
-
-        console.log(this.props.tableDatas);
         const columns = [
             {
-                title: (<span style={{fontWeight: 'bold'}}>排口名称</span>),
+                title: (<span style={{ fontWeight: 'bold' }}>排口名称</span>),
                 dataIndex: 'PointName',
                 key: 'PointName',
                 width: '20%',
@@ -113,93 +111,88 @@ export default class TransmissionEfficiency extends Component {
                 }
             },
             {
-                title: (<span style={{fontWeight: 'bold'}}>应传个数</span>),
+                title: (<span style={{ fontWeight: 'bold' }}>应传个数</span>),
                 dataIndex: 'ShouldNumber',
                 key: 'ShouldNumber',
                 width: '10%',
                 align: 'left',
                 render: (text, record) => {
-                    if(record.AvgShouldNumber<=text)
-                    {
-                        return <span className={styles.normaldata}>{text}</span> ;
+                    if (record.AvgShouldNumber <= text) {
+                        return <span className={styles.normaldata}>{text}</span>;
                     }
-                   const content=(<span><Icon type="warning" style={{color:'#EEC900'}}  />平均值{record.AvgShouldNumber}</span>)
-                   return (<Popover content={content} trigger="hover">
-                        <span className={styles.avgtext}> <Badge className={styles.warningdata} status="warning"/>{text}
+                    const content = (<span><Icon type="warning" style={{ color: '#EEC900' }} />平均值{record.AvgShouldNumber}</span>)
+                    return (<Popover content={content} trigger="hover">
+                        <span className={styles.avgtext}> <Badge className={styles.warningdata} status="warning" />{text}
                         </span> </Popover>);
                 }
             },
             {
-                title: (<span style={{fontWeight: 'bold'}}>实传个数</span>),
+                title: (<span style={{ fontWeight: 'bold' }}>实传个数</span>),
                 dataIndex: 'TransmissionNumber',
                 key: 'TransmissionNumber',
                 width: '10%',
                 align: 'left',
                 render: (text, record) => {
-                    if(record.AvgTransmissionNumber<=text)
-                    {
-                        return <span className={styles.normaldata}>{text}</span> ;
+                    if (record.AvgTransmissionNumber <= text) {
+                        return <span className={styles.normaldata}>{text}</span>;
                     }
-                   const content=(<span><Icon type="warning" style={{color:'#EEC900'}}  />平均值{record.AvgTransmissionNumber}</span>)
-                   return (<Popover content={content} trigger="hover">
-                        <span className={styles.avgtext}> <Badge className={styles.warningdata} status="warning"/>{text}
+                    const content = (<span><Icon type="warning" style={{ color: '#EEC900' }} />平均值{record.AvgTransmissionNumber}</span>)
+                    return (<Popover content={content} trigger="hover">
+                        <span className={styles.avgtext}> <Badge className={styles.warningdata} status="warning" />{text}
                         </span> </Popover>);
                 }
             },
             {
-                title: (<span style={{fontWeight: 'bold'}}>有效个数</span>),
+                title: (<span style={{ fontWeight: 'bold' }}>有效个数</span>),
                 dataIndex: 'EffectiveNumber',
                 key: 'EffectiveNumber',
                 width: '13.3%',
                 align: 'left',
                 render: (text, record) => {
-                    if(record.AvgEffectiveNumber<=text)
-                    {
-                        return <span className={styles.normaldata}>{text}</span> ;
+                    if (record.AvgEffectiveNumber <= text) {
+                        return <span className={styles.normaldata}>{text}</span>;
                     }
-                   const content=(<span><Icon type="warning" style={{color:'#EEC900'}}  />平均值{record.AvgEffectiveNumber}</span>)
-                   return (<Popover content={content} trigger="hover">
-                        <span className={styles.avgtext}><Badge className={styles.warningdata} status="warning"/>{text}
+                    const content = (<span><Icon type="warning" style={{ color: '#EEC900' }} />平均值{record.AvgEffectiveNumber}</span>)
+                    return (<Popover content={content} trigger="hover">
+                        <span className={styles.avgtext}><Badge className={styles.warningdata} status="warning" />{text}
                         </span> </Popover>);
                 }
             },
             {
-                title: (<span style={{fontWeight: 'bold'}}>传输率</span>),
+                title: (<span style={{ fontWeight: 'bold' }}>传输率</span>),
                 dataIndex: 'TransmissionRate',
                 key: 'TransmissionRate',
                 width: '13.3%',
                 align: 'left',
                 render: (text, record) => {
-                    if(record.AvgTransmissionRate<=text)
-                    {
+                    if (record.AvgTransmissionRate <= text) {
                         return <span className={styles.normaldata}>{(parseFloat(text) * 100).toFixed(2) + '%'}</span>;
                     }
-                   const content=(<span><Icon type="warning" style={{color:'#EEC900'}}  />平均值{(parseFloat(record.AvgTransmissionRate) * 100).toFixed(2) + '%'}</span>)
-                   return (<Popover content={content} trigger="hover">
-                        <span className={styles.avgtext}><Badge className={styles.warningdata} status="warning"/>{(parseFloat(text) * 100).toFixed(2) + '%'}
+                    const content = (<span><Icon type="warning" style={{ color: '#EEC900' }} />平均值{(parseFloat(record.AvgTransmissionRate) * 100).toFixed(2) + '%'}</span>)
+                    return (<Popover content={content} trigger="hover">
+                        <span className={styles.avgtext}><Badge className={styles.warningdata} status="warning" />{(parseFloat(text) * 100).toFixed(2) + '%'}
                         </span> </Popover>);
                 }
             },
             {
-                title: (<span style={{fontWeight: 'bold'}}>有效率</span>),
+                title: (<span style={{ fontWeight: 'bold' }}>有效率</span>),
                 dataIndex: 'EffectiveRate',
                 key: 'EffectiveRate',
                 width: '13.3%',
                 align: 'left',
                 sorter: (a, b) => a.EffectiveRate - b.EffectiveRate,
                 render: (text, record) => {
-                    if(record.AvgEffectiveRate<=text)
-                    {
+                    if (record.AvgEffectiveRate <= text) {
                         return <span className={styles.normaldata}>{(parseFloat(text) * 100).toFixed(2) + '%'}</span>;
                     }
-                   const content=(<span><Icon type="warning" style={{color:'#EEC900'}}  />平均值{(parseFloat(record.AvgEffectiveRate) * 100).toFixed(2) + '%'}</span>)
-                   return (<Popover content={content} trigger="hover">
-                        <span className={styles.avgtext}><Badge className={styles.warningdata} status="warning"/>{(parseFloat(text) * 100).toFixed(2) + '%'}
+                    const content = (<span><Icon type="warning" style={{ color: '#EEC900' }} />平均值{(parseFloat(record.AvgEffectiveRate) * 100).toFixed(2) + '%'}</span>)
+                    return (<Popover content={content} trigger="hover">
+                        <span className={styles.avgtext}><Badge className={styles.warningdata} status="warning" />{(parseFloat(text) * 100).toFixed(2) + '%'}
                         </span> </Popover>);
                 }
             },
             {
-                title: (<span style={{fontWeight: 'bold'}}>传输有效率</span>),
+                title: (<span style={{ fontWeight: 'bold' }}>传输有效率</span>),
                 dataIndex: 'TransmissionEffectiveRate',
                 key: 'TransmissionEffectiveRate',
                 // width: '250px',
@@ -209,23 +202,22 @@ export default class TransmissionEfficiency extends Component {
                 render: (text, record) => {
                     // 红色：#f5222d 绿色：#52c41a
                     const percent = (parseFloat(text) * 100).toFixed(2);
-                    console.log(percent);
                     if (percent >= 90) {
                         return (<div style={{ width: 200 }}>
                             <Progress
                                 successPercent={percent}
-                                percent={percent}
-                                size="small" format={percent => (<span style={{color: 'black'}}>{percent}%</span>)}
+                                percent={percent - 0}
+                                size="small" format={percent => (<span style={{ color: 'black' }}>{percent}%</span>)}
                             />
                         </div>);
                     }
                     return (<div style={{ width: 200 }}>
                         <Progress
                             successPercent={0}
-                            percent={percent}
+                            percent={percent - 0}
                             status="exception"
                             size="small"
-                            format={percent => (<span style={{color: 'black'}}>{percent}%</span>)}
+                            format={percent => (<span style={{ color: 'black' }}>{percent}%</span>)}
                         />
                     </div>);
                 }
@@ -234,9 +226,9 @@ export default class TransmissionEfficiency extends Component {
         return (
             <MonitorContent {...this.props} breadCrumbList={
                 [
-                    {Name:'首页',Url:'/'},
-                    {Name:'智能质控',Url:''},
-                    {Name:'传输有效率',Url:''}
+                    { Name: '首页', Url: '/' },
+                    { Name: '智能质控', Url: '' },
+                    { Name: '传输有效率', Url: '' }
                 ]
             }>
                 <Row className={styles.cardTitle}>
@@ -244,15 +236,15 @@ export default class TransmissionEfficiency extends Component {
                         title="传输有效率列表"
                         bordered={false}
                         extra={
-                            <span style={{color: '#b3b3b3'}}>
-                            时间选择：
+                            <span style={{ color: '#b3b3b3' }}>
+                                时间选择：
                                 <MonthPicker defaultValue={this.state.beginTime} format={monthFormat} onChange={this.onDateChange} />
                             </span>
                         }
                     >
                         <Row>
                             <Col span={24}>
-                                <div style={{textAlign: 'center', marginBottom: 20}}>
+                                <div style={{ textAlign: 'center', marginBottom: 20 }}>
                                     <div style={{
                                         width: 20,
                                         height: 9,
@@ -261,7 +253,7 @@ export default class TransmissionEfficiency extends Component {
                                         borderRadius: '20%',
                                         cursor: 'pointer',
                                         marginRight: 3
-                                    }} /> <span style={{cursor: 'pointer'}}> 排口传输有效率达标</span>
+                                    }} /> <span style={{ cursor: 'pointer' }}> 排口传输有效率达标</span>
                                     <div style={{
                                         width: 20,
                                         height: 9,
@@ -271,13 +263,14 @@ export default class TransmissionEfficiency extends Component {
                                         cursor: 'pointer',
                                         marginLeft: 100,
                                         marginRight: 3
-                                    }} /><span style={{cursor: 'pointer'}}> 排口传输有效率未达标</span>
-                                    <Badge style={{marginLeft:100,marginBottom:4}} status="warning"/><span style={{cursor: 'pointer'}}> 未达到平均值</span>
+                                    }} /><span style={{ cursor: 'pointer' }}> 排口传输有效率未达标</span>
+                                    <Badge style={{ marginLeft: 100, marginBottom: 4 }} status="warning" /><span style={{ cursor: 'pointer' }}> 未达到平均值</span>
                                 </div>
                             </Col>
                         </Row>
                         <Row>
                             <Table className={styles.dataTable}
+                                rowKey={(record, index) => `complete${index}`}
                                 loading={this.props.loading}
                                 columns={columns}
                                 bordered={false}

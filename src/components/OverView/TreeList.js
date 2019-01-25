@@ -1,13 +1,18 @@
 import React, { Component } from 'react';
 import {Table} from 'antd';
 import styles from './OverView.less';
+
 class TreeList extends Component {
     render() {
         const {treecol, pointInfo} = this.props;
         return (
             <div style={{borderRadius: 7}}>
-                <Table size={'small'} columns={treecol} dataSource={pointInfo} pagination={false}
-                    rowKey="DGIMN"
+                <Table
+                    rowKey={(record, index) => `complete${index}`}
+                    size="small"
+                    columns={treecol}
+                    dataSource={pointInfo}
+                    pagination={false}
                     loading={this.props.treedataloading}
                     className={styles.treeTable}
                     scroll={{ y: 'calc(100vh - 340px)' }}

@@ -186,9 +186,9 @@ export default class pointlist extends Component {
          }
      },
      {
-         title: '电话号',
-         dataIndex: 'mobilePhone',
-         key: 'mobilePhone',
+         title: '运维人',
+         dataIndex: 'Col2',
+         key: 'Col2',
          width: '12%',
          align: 'center',
          render: (text, record) => {

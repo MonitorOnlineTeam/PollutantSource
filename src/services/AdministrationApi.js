@@ -204,7 +204,7 @@ export async function GetKBMList(params) {
         pageIndex: params.pageIndex,
         pageSize: params.pageSize
     };
-    const result = post('/api/rest/PollutantSourceApi/KBM/GetAlarmListbyTime', body, null);
+    const result = post('/api/rest/PollutantSourceApi/KBM/GetKBMListbyTime', body, null);
     return result === null ? {
         data: null
     } : result;
@@ -312,17 +312,6 @@ export async function IfExists(params) {
         uid: params.uid
     };
     const result = upload('/api/rest/PollutantSourceApi/KBM/IfExists', body, null);
-    return result === null ? {
-        data: null
-    } : result;
-}
-
-//根据ID获取文件路径
-export async function GetUrlByID(params) {
-    const body = {
-        ID: params.ID
-    };
-    const result = upload('/api/rest/PollutantSourceApi/KBM/GetUrlByID', body, null);
     return result === null ? {
         data: null
     } : result;

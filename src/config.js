@@ -17,9 +17,13 @@ module.exports = {
     webSocketPushURL: '172.16.4.200:40006',
     imgaddress: 'http://172.16.12.152:8011/api/upload/',
     //实时视频地址
-    realtimevideourl:'http://localhost:36999/Video/MonitorLinkCamera/RealtimeCameraReact',
+    realtimevideourl:'http://172.16.12.152:8011/Video/MonitorLinkCamera/RealtimeCameraReact',
     //历史视频地址
     hisvideourl:'http://localhost:36999/Video/MonitorLinkCamera/HistoryCameraReact',
+    //设备运转率标准%
+    RunningRate:90,
+    //传输有效率标准%
+    TransmissionEffectiveRate:90,
     mainpollutantInfo: [{
         pollutantCode: '01',
         pollutantName: '烟尘',
@@ -76,15 +80,15 @@ module.exports = {
             //     pollutantName: 'pH值',
             //     unit: ''
             // },
-         {
-                pollutantCode: '011',
-                pollutantName: 'COD',
-                unit: 'mg/L'
-            }, {
-                pollutantCode: '060',
-                pollutantName: '氨氮',
-                unit: 'mg/L'
-            }
+                {
+                    pollutantCode: '011',
+                    pollutantName: 'COD',
+                    unit: 'mg/L'
+                }, {
+                    pollutantCode: '060',
+                    pollutantName: '氨氮',
+                    unit: 'mg/L'
+                }
             ],
         },
         {

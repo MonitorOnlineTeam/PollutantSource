@@ -29,6 +29,7 @@ export default Model.extend({
                 type: 'changeNoticeLoading',
                 payload: true,
             });
+
             //报警消息
             let today = getTimeDistance("today");
             const res = yield call(GetAlarmNotices, {beginTime:today[0].format("YYYY-MM-DD HH:mm:ss"),endTime:today[1].format("YYYY-MM-DD HH:mm:ss")});
@@ -101,24 +102,26 @@ export default Model.extend({
             }
             //通知消息
             const res2 = yield call(mymessagelist,{});
-            let advises=res2.data.map((item,index)=>({
-                id:`advise_${item.DGIMN}`,
-                msgtitle: item.MsgTitle,
-                msg:item.Msg,
-                pushtime:item.PushTime,
-                pushusername:item.PushUserName,
-                isview:item.IsView,
-                sontype:item.PushType,
-                //组件里根据这个分组
-                type: 'advise',
-                //排序从5001到9000
-                orderby:5001+index,
-                key:`advise_${item.DGIMN}_${item.ID}`,
-                title:`${item.MsgTitle}`,
-                description:`${item.Msg}`,
-            }));
-            count+=advises.length;
-            notices=notices.concat(advises);
+            if(res2){
+                let advises=res2.data.map((item,index)=>({
+                    id:`advise_${item.DGIMN}`,
+                    msgtitle: item.MsgTitle,
+                    msg:item.Msg,
+                    pushtime:item.PushTime,
+                    pushusername:item.PushUserName,
+                    isview:item.IsView,
+                    sontype:item.PushType,
+                    //组件里根据这个分组
+                    type: 'advise',
+                    //排序从5001到9000
+                    orderby:5001+index,
+                    key:`advise_${item.DGIMN}_${item.ID}`,
+                    title:`${item.MsgTitle}`,
+                    description:`${item.Msg}`,
+                }));
+                count+=advises.length;
+                notices=notices.concat(advises);
+            }
             yield put({
                 type: 'saveNotices',
                 payload: {notices:notices,
@@ -308,7 +311,14 @@ export default Model.extend({
                                 array:obj.Message
                             },
                         });
-  
+ 
+                        dispatch({
+                            type: 'videolist/changeRealTimeData',
+                            payload: {
+                                array:obj.Message
+                            },
+                        });
+
                         break;
                     case 'MinuteData':
                         // dispatch({

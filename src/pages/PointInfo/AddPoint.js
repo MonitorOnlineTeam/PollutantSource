@@ -24,6 +24,9 @@ import {
     routerRedux
 } from 'dva/router';
 import { isNullOrUndefined } from 'util';
+import {
+    EnumPsOperationForm,
+} from '../../utils/enum';
 import MonitorContent from '../../components/MonitorContent/index';
 import Division from '../../components/Layout/Division';
 
@@ -47,6 +50,7 @@ const Search = Input.Search;
     pollutanttypelist_requstresult: pointinfo.pollutanttypelist_requstresult,
     editpoint: pointinfo.editpoint,
     userlist: pointinfo.userlist,
+    swuserlist: pointinfo.swuserlist,
     gasoutputtypelist: pointinfo.gasoutputtypelist,
     pollutanttypelist: pointinfo.pollutanttypelist,
 }))
@@ -59,6 +63,7 @@ class AddPoint extends Component {
             IsSj: true,
             RunState:true,
             Operationer: [],
+            specialworkeruser:[],
             Mapvisible: false,
             Coordinate: null,
             address: null,
@@ -92,7 +97,7 @@ class AddPoint extends Component {
         this.getpollutanttype();
         this.getgasoutputtype();
         this.setPollutantType(type);
-
+        this.getspecialworkeruserList();
     }
 
      onRef1 = (ref) => {
@@ -129,6 +134,33 @@ class AddPoint extends Component {
                         );
                     } else {
                         message.error('请添加运维人员');
+                    }
+                }
+            },
+        });
+    }
+
+    getspecialworkeruserList = () => {
+        this.props.dispatch({
+            type: 'pointinfo/getspecialworkeruserList',
+            payload: {
+                callback: () => {
+                    if (this.props.requstresult === '1') {
+                        this.props.swuserlist.map(user =>
+                            this.state.specialworkeruser.push( <Option
+                                key={
+                                    user.User_ID
+                                }
+                                value={
+                                    user.User_ID
+                                }
+                            > {
+                                    `${user.User_Name }(${ user.User_Account })`
+                                }
+                            </Option>)
+                        );
+                    } else {
+                        message.error('请添加环保专攻');
                     }
                 }
             },
@@ -188,12 +220,12 @@ class AddPoint extends Component {
                             Coordinate: values.Coordinate === undefined ? '' : values.Coordinate,
                             OutPutWhitherCode: values.OutPutWhitherCode === undefined ? '' : values.OutPutWhitherCode,
                             Sort: values.Sort === undefined ? '' : values.Sort,
-                            Linkman: values.Linkman === undefined ? '' : values.Linkman,
+                            Linkman: values.linkman === undefined ? '' : values.linkman,
                             OutputDiameter: values.OutputDiameter === undefined ? '' : values.OutputDiameter,
                             OutputHigh: values.OutputHigh === undefined ? '' : values.OutputHigh,
                             OutputType: values.OutputType === true ? '1' : '0',
                             Address: values.Address,
-                            MobilePhone: values.MobilePhone === undefined ? '' : values.MobilePhone,
+                            Col3: values.Col3 === undefined ? '' : values.Col3,
                             OperationerId: values.OperationerId,
                             callback: () => {
                                 if (this.props.requstresult === '1') {
@@ -218,12 +250,12 @@ class AddPoint extends Component {
                         Coordinate: values.Coordinate === undefined ? '' : values.Coordinate,
                         OutPutWhitherCode: values.OutPutWhitherCode === undefined ? '' : values.OutPutWhitherCode,
                         Sort: values.Sort === undefined ? '' : values.Sort,
-                        Linkman: values.Linkman === undefined ? '' : values.Linkman,
+                        Linkman: values.linkman === undefined ? '' : values.linkman,
                         OutputDiameter: values.OutputDiameter === undefined ? '' : values.OutputDiameter,
                         OutputHigh: values.OutputHigh === undefined ? '' : values.OutputHigh,
                         OutputType: values.OutputType === true ? '1' : '0',
                         Address: values.Address,
-                        MobilePhone: values.MobilePhone === undefined ? '' : values.MobilePhone,
+                        Col3: values.Col3 === undefined ? '' : values.Col3,
                         OperationerId: values.OperationerId,
                         callback: () => {
                             if (this.props.requstresult === '1') {
@@ -278,7 +310,6 @@ class AddPoint extends Component {
              DGIMN ,
              OutputType ,
              RunState ,
-             mobilePhone ,
              linkman ,
              PointType ,
              pollutantType ,
@@ -291,6 +322,7 @@ class AddPoint extends Component {
              Address ,
              longitude ,
              latitude ,
+             Col3
          } = editpoint === null || this.props.match.params.DGIMN ==="null" ? {} : editpoint;
 
 
@@ -402,31 +434,55 @@ class AddPoint extends Component {
                              <Col span={8}>
                                  <FormItem
                                      {...formItemLayout}
+                                     labelCol={{ span: 8 }}
+                                     wrapperCol={{ span: 8 }}
+                                     label="运维人"
+                                 >
+                                     {getFieldDecorator('OperationerId', {
+                                         initialValue: OperationerId,
+                                         rules: [{
+                                             required: true,
+                                             message: '请选择运维人!'
+                                         } ]
 
-                                     label="负责人电话"
-                                 > {
-                                         getFieldDecorator('MobilePhone', {
-                                             initialValue: mobilePhone,
-                                             rules: [{
-                                                 pattern: /^1\d{10}$/,
-                                                 message: '请输入正确的手机号!'
-                                             }]
-                                         })(<Input style={{ width:200 }} placeholder="负责人电话" />)}
+                                     })(
+                                         <Select
+                                             loading={this.props.osloading}
+                                             optionFilterProp="children"
+                                             showSearch={true}
+                                             style={{ width:200 }}
+                                             placeholder="请选择运维人"
+                                         >
+                                             {this.state.Operationer}
+                                         </Select>
+                                     )}
                                  </FormItem>
                              </Col>
                              <Col span={8}>
                                  <FormItem
                                      {...formItemLayout}
-
+                                     labelCol={{ span: 8 }}
+                                     wrapperCol={{ span: 8 }}
                                      label="负责人"
-                                 > {
-                                         getFieldDecorator('Linkman',{
-                                             initialValue: linkman,
+                                 >
+                                     {getFieldDecorator('linkman', {
+                                         initialValue: linkman === '' ? undefined : linkman,
+                                         rules: [{
+                                             required: true,
+                                             message: '请选择负责人!'
+                                         } ]
 
-                                         }
-
-                                         )(<Input style={{ width:200 }} placeholder="负责人" />
-                                         )}
+                                     })(
+                                         <Select
+                                             loading={this.props.osloading}
+                                             optionFilterProp="children"
+                                             showSearch={true}
+                                             style={{ width:200 }}
+                                             placeholder="请选择负责人"
+                                         >
+                                             {this.state.specialworkeruser}
+                                         </Select>
+                                     )}
                                  </FormItem>
                              </Col>
                              <Col span={8} style={{display:this.state.PollutantType}}>
@@ -654,28 +710,23 @@ class AddPoint extends Component {
                              <Col span={8}>
                                  <FormItem
                                      {...formItemLayout}
-                                     labelCol={{ span: 8 }}
-                                     wrapperCol={{ span: 8 }}
-                                     label="运维人"
-                                 >
-                                     {getFieldDecorator('OperationerId', {
-                                         initialValue: OperationerId,
-                                         rules: [{
-                                             required: true,
-                                             message: '请选择运维人!'
-                                         } ]
 
-                                     })(
-                                         <Select
-                                             loading={this.props.osloading}
-                                             optionFilterProp="children"
-                                             showSearch={true}
-                                             style={{ width:200 }}
-                                             placeholder="请选择运维人"
-                                         >
-                                             {this.state.Operationer}
-                                         </Select>
-                                     )}
+                                     label="日常巡查表单类型"
+                                 > {
+                                         getFieldDecorator('Col3', {
+                                             initialValue: Col3,
+                                             rules: [{
+                                                 required: true,
+                                                 message: '请输入日常巡查表单类型!'
+                                             } ]
+
+                                         })(
+                                             <Select placeholder="请选择" style={{ width:300 }}>
+                                                 <Option value={EnumPsOperationForm.CqfPatrol}> 完全抽取法CEMS表单 </Option>
+                                                 <Option value={EnumPsOperationForm.CyfPatrol}> 稀释采样法CEMS表单 </Option>
+                                                 <Option value={EnumPsOperationForm.ClfPatrol}> 直接测量法CEMS表单 </Option>
+                                             </Select>)
+                                     }
                                  </FormItem>
                              </Col>
                              <Division />

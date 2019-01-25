@@ -89,7 +89,7 @@ class DilutionSampling extends Component {
                 Repair.Record[0].RecordList.map((items,index) => {
                     if (items.count !== 0) {
                         rtnValChild.push(
-                            <tr>
+                            <tr key={index}>
                                 <td rowSpan={items.count} style={{ height: '50px', textAlign: 'center',fontSize: '14px' }}>
                                     {items.parentName}
                                 </td>
@@ -105,18 +105,18 @@ class DilutionSampling extends Component {
                             </tr>
                         );
                     } else {
-                        Repair.Record[0].RecordList.map((itemss,index) => {
+                        Repair.Record[0].RecordList.map((itemss,indexs) => {
                             if (itemss.parentId === items.parentId) {
                                 if (itemss.count === 0) {
                                     if (childIDarray !== null) {
-                                        childIDarray.map((itemsss,index) => {
+                                        childIDarray.map((itemsss,indexss) => {
                                             if (itemss.childID === itemsss) {
                                                 flag = 1;
                                             }
                                         });
                                         if (flag === 0) {
                                             rtnValChild.push(
-                                                <tr>
+                                                <tr key={`${indexs }a`}>
                                                     <td style={{ height: '50px', textAlign: 'center' ,fontSize: '14px' }}>
                                                         {itemss.childName}
                                                     </td>
@@ -128,7 +128,7 @@ class DilutionSampling extends Component {
                                         }
                                     } else {
                                         rtnValChild.push(
-                                            <tr>
+                                            <tr key={`${indexs }b`}>
                                                 <td style={{ height: '50px', textAlign: 'center' ,fontSize: '14px' }}>
                                                     {itemss.childName}
                                                 </td>
@@ -162,7 +162,7 @@ class DilutionSampling extends Component {
                 if (items.parentId === id) {
                     if (items.count === 0) {
                         rtnValChildren.push(
-                            <tr>
+                            <tr key={index}>
                                 <td style={{ height: '50px', textAlign: 'center' ,fontSize: '14px' }}>
                                     {item.childName}
                                 </td>
@@ -174,7 +174,7 @@ class DilutionSampling extends Component {
         }
         if (rtnValChildren.length === 0) {
             rtnValChildren.push(
-                <tr>
+                <tr key="0">
                     <td style={{ height: '50px', textAlign: 'center',fontSize: '14px' }} />
                 </tr>
             );
@@ -284,11 +284,12 @@ class DilutionSampling extends Component {
                     <div className={styles.FormDiv} style={{ height: SCREEN_HEIGHT }}>
                         <div className={styles.FormName}>稀释采样法CEMS日常巡检记录表</div>
                         <table className={styles.FormTable}>
-                            <tr>
-                                <td style={{ width: '50%', height: '50px', textAlign: 'left' ,fontSize: '14px',fontWeight: 'bold' }}>企业名称：{EnterpriseName}</td>
-                                <td style={{ width: '50%', height: '50px', textAlign: 'left' ,fontSize: '14px',fontWeight: 'bold' }}> 巡检日期：{PatrolDate}</td>
-                            </tr>
-
+                            <tbody>
+                                <tr>
+                                    <td style={{ width: '50%', height: '50px', textAlign: 'left' ,fontSize: '14px',fontWeight: 'bold' }}>企业名称：{EnterpriseName}</td>
+                                    <td style={{ width: '50%', height: '50px', textAlign: 'left' ,fontSize: '14px',fontWeight: 'bold' }}> 巡检日期：{PatrolDate}</td>
+                                </tr>
+                            </tbody>
                         </table>
                         <table className={styles.FormTable}>
                             <tbody>

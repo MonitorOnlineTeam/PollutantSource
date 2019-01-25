@@ -34,20 +34,6 @@ class RealTimeWarning extends Component {
         };
     }
 
-    // componentWillMount() {
-    //     this.getDataOverWarningData();
-    // }
-
-    // /**
-    //  * 智能监控_当小时预警消息_更新数据
-    //  */
-    // getDataOverWarningData = () => {
-    //     this.props.dispatch({
-    //         type: pageUrl.getDataOverWarningData,
-    //         payload: {},
-    //     });
-    // }
-
     /**
       * 更新model中的state
       */
@@ -142,11 +128,6 @@ class RealTimeWarning extends Component {
             seriesData.push(item[selectedPollutantCode]);
         });
         let suugestValue = this.state.SuggestValue;
-
-        // if(chartDatas.length>0)
-        // {
-        //     suugestValue=chartDatas[0][selectedPollutantCode+'_SuggestValue'];
-        // }
         //当前选中的污染物的信息
         const selectPllutantInfo = pollutantList.find((value, index, arr) => value.pollutantCode == selectedPollutantCode);
         let legenddata = [];
@@ -277,14 +258,6 @@ class RealTimeWarning extends Component {
                     data: [],
                     markLine: {
                         data: suggestData,
-                        // itemStyle : {
-                        //     normal: {
-                        //         lineStyle: {
-                        //             color:'#FFC0CB',
-                        //         },
-                        //     }
-
-                        // },
                     }
                 }
             ]
@@ -428,7 +401,7 @@ class RealTimeWarning extends Component {
         return <Table
             columns={columns}
             dataSource={chartDatas}
-            key="warntable"
+            rowKey="warntable"
             size="small"
             pagination={{ pageSize: 15 }}
             loading={this.props.loadingRealTimeWarningDatas}

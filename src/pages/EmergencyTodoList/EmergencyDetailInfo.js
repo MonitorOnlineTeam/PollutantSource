@@ -63,56 +63,56 @@ export default class EmergencyDetailInfo extends Component {
         if (taskfrom.indexOf("qcontrollist") > -1) {
             taskfrom = taskfrom.split('-')[0];
         }
-        data.map((item) => {
+        data.map((item, key) => {
             if (item.FormMainID !== null) {
                 switch (item.ID) {
                     case EnumPsOperationForm.Repair:
-                        rtnVal.push(<p style={{ marginBottom: 0 }}><Button style={{ marginBottom: '5px' }} icon="check-circle-o" onClick={() => {
+                        rtnVal.push(<p key={key} style={{ marginBottom: 0 }}><Button style={{ marginBottom: '5px' }} icon="check-circle-o" onClick={() => {
                             this.props.dispatch(routerRedux.push(`/PatrolForm/RepairRecordDetail/${this.state.DGIMN}/${this.props.match.params.viewtype}/${taskfrom}/nop/${taskID}`));
                         }}>{item.CnName}</Button></p>);
                         break;
                     case EnumPsOperationForm.StopMachine:
-                        rtnVal.push(<p style={{ marginBottom: 0 }}><Button style={{ marginBottom: '5px' }} icon="check-circle-o" onClick={() => {
+                        rtnVal.push(<p key={key} style={{ marginBottom: 0 }}><Button style={{ marginBottom: '5px' }} icon="check-circle-o" onClick={() => {
                             this.props.dispatch(routerRedux.push(`/PatrolForm/StopCemsInfo/${this.state.DGIMN}/${this.props.match.params.viewtype}/${taskfrom}/nop/${taskID}`));
                         }}>{item.CnName}</Button></p>);
                         break;
                     case EnumPsOperationForm.YhpReplace:
-                        rtnVal.push(<p style={{ marginBottom: 0 }}><Button style={{ marginBottom: '5px' }} icon="check-circle-o" onClick={() => {
+                        rtnVal.push(<p key={key} style={{ marginBottom: 0 }}><Button  style={{ marginBottom: '5px' }} icon="check-circle-o" onClick={() => {
                             this.props.dispatch(routerRedux.push(`/PatrolForm/ConsumablesReplaceRecord/${this.state.DGIMN}/${this.props.match.params.viewtype}/${taskfrom}/nop/${taskID}`));
                         }}>{item.CnName}</Button></p>);
                         break;
                     case EnumPsOperationForm.StandardGasReplace:
-                        rtnVal.push(<p style={{ marginBottom: 0 }}><Button style={{ marginBottom: '5px' }} icon="check-circle-o" onClick={() => {
+                        rtnVal.push(<p key={key} style={{ marginBottom: 0 }}><Button  style={{ marginBottom: '5px' }} icon="check-circle-o" onClick={() => {
                             this.props.dispatch(routerRedux.push(`/PatrolForm/StandardGasRepalceRecord/${this.state.DGIMN}/${this.props.match.params.viewtype}/${taskfrom}/nop/${taskID}`));
                         }}>{item.CnName}</Button></p>);
                         break;
                     case EnumPsOperationForm.CqfPatrol:
-                        rtnVal.push(<p style={{ marginBottom: 0 }}><Button style={{ marginBottom: '5px' }} icon="check-circle-o" onClick={() => {
+                        rtnVal.push(<p key={key} style={{ marginBottom: 0 }}><Button  style={{ marginBottom: '5px' }} icon="check-circle-o" onClick={() => {
                             this.props.dispatch(routerRedux.push(`/PatrolForm/CompleteExtraction/${this.state.DGIMN}/${this.props.match.params.viewtype}/${taskfrom}/nop/${taskID}`));
                         }}>{item.CnName}</Button></p>);
                         break;
                     case EnumPsOperationForm.CyfPatrol:
-                        rtnVal.push(<p style={{ marginBottom: 0 }}><Button style={{ marginBottom: '5px' }} icon="check-circle-o" onClick={() => {
+                        rtnVal.push(<p key={key} style={{ marginBottom: 0 }}><Button  style={{ marginBottom: '5px' }} icon="check-circle-o" onClick={() => {
                             this.props.dispatch(routerRedux.push(`/PatrolForm/DilutionSampling/${this.state.DGIMN}/${this.props.match.params.viewtype}/${taskfrom}/nop/${taskID}`));
                         }}>{item.CnName}</Button></p>);
                         break;
                     case EnumPsOperationForm.ClfPatrol:
-                        rtnVal.push(<p style={{ marginBottom: 0 }}><Button style={{ marginBottom: '5px' }} icon="check-circle-o" onClick={() => {
+                        rtnVal.push(<p key={key} style={{ marginBottom: 0 }}><Button  style={{ marginBottom: '5px' }} icon="check-circle-o" onClick={() => {
                             this.props.dispatch(routerRedux.push(`/PatrolForm/DirectMeasurement/${this.state.DGIMN}/${this.props.match.params.viewtype}/${taskfrom}/nop/${taskID}`));
                         }}>{item.CnName}</Button></p>);
                         break;
                     case EnumPsOperationForm.CheckRecord:
-                        rtnVal.push(<p style={{ marginBottom: 0 }}><Button style={{ marginBottom: '5px' }} icon="check-circle-o" onClick={() => {
+                        rtnVal.push(<p key={key} style={{ marginBottom: 0 }}><Button  style={{ marginBottom: '5px' }} icon="check-circle-o" onClick={() => {
                             this.props.dispatch(routerRedux.push(`/PatrolForm/JzRecordInfo/${this.state.DGIMN}/${this.props.match.params.viewtype}/${taskfrom}/nop/${taskID}`));
                         }}>{item.CnName}</Button></p>);
                         break;
                     case EnumPsOperationForm.TestRecord:
-                        rtnVal.push(<p style={{ marginBottom: 0 }}><Button style={{ marginBottom: '5px' }} icon="check-circle-o" onClick={() => {
+                        rtnVal.push(<p key={key} style={{ marginBottom: 0 }}><Button  style={{ marginBottom: '5px' }} icon="check-circle-o" onClick={() => {
                             this.props.dispatch(routerRedux.push(`/PatrolForm/BdTestRecord/${this.state.DGIMN}/${this.props.match.params.viewtype}/${taskfrom}/nop/${taskID}`));
                         }}>{item.CnName}</Button></p>);
                         break;
                     case EnumPsOperationForm.DataException:
-                        rtnVal.push(<p style={{ marginBottom: 0 }}><Button style={{ marginBottom: '5px' }} icon="check-circle-o" onClick={() => {
+                        rtnVal.push(<p key={key} style={{ marginBottom: 0 }}><Button style={{ marginBottom: '5px' }} icon="check-circle-o" onClick={() => {
                             this.props.dispatch(routerRedux.push(`/PatrolForm/DeviceExceptionDetail/${this.state.DGIMN}/${this.props.match.params.viewtype}/${taskfrom}/nop/${taskID}`));
                         }}>{item.CnName}</Button></p>);
                         break;
@@ -150,9 +150,8 @@ export default class EmergencyDetailInfo extends Component {
         if (taskfrom === 'ywdsjlist') {     //大事记
             rtnVal.push({ Name: '运维大事记', Url: `/pointdetail/${this.props.match.params.DGIMN}/${listUrl}/${taskfrom}` });
         }
-        else if(taskfrom==='operationywdsjlist')
-        {
-            rtnVal.push({ Name: '运维大事记', Url: `/operation/ywdsjlist` });  
+        else if (taskfrom === 'operationywdsjlist') {
+            rtnVal.push({ Name: '运维大事记', Url: `/operation/ywdsjlist` });
         }
         else if (taskfrom.indexOf('qcontrollist') > -1) {    //质控记录（从表单进来时）
             taskfrom = taskfrom.split('-')[0]
@@ -271,17 +270,19 @@ export default class EmergencyDetailInfo extends Component {
 
         const pics = Attachments !== '' ? Attachments.ThumbimgList : [];
         const fileList = [];
-        pics.map((item) => {
+        var index=0;
+        pics.map((item,key) => {
+            index++;
             if (item === 'no') {
                 fileList.push({
-                    uid: item,
+                    uid: index,
                     name: item,
                     status: 'done',
                     url: `/NoPic.png`,
                 });
             } else {
                 fileList.push({
-                    uid: item,
+                    uid: index,
                     name: item.replace('_thumbnail', ''),
                     status: 'done',
                     url: `${imgaddress}${item}`,
@@ -315,26 +316,31 @@ export default class EmergencyDetailInfo extends Component {
                 title: '步骤',
                 width: '10%',
                 dataIndex: 'Remark',
+                key: 'Remark',
                 align: 'center'
             }, {
                 title: '处理人',
                 width: '20%',
                 dataIndex: 'CreateUserName',
+                key: 'CreateUserName',
                 align: 'center'
             }, {
                 title: '创建时间',
                 width: '20%',
                 dataIndex: 'CreateTime',
+                key: 'CreateTime',
                 align: 'center'
             }, {
                 title: '说明',
                 width: '20%',
                 dataIndex: 'TaskRemark',
+                key: 'TaskRemark',
                 align: 'center'
             }, {
                 title: '处理状态',
                 width: '10%',
                 dataIndex: 'TaskStatusText',
+                key: 'TaskStatusText',
                 align: 'center'
             }];
 
@@ -391,15 +397,15 @@ export default class EmergencyDetailInfo extends Component {
                                 }
                                 {
                                     TaskType === EnumPatrolTaskType.PatrolTask ? null :
-                                        <Table style={{ backgroundColor: 'white' }} bordered={false} dataSource={AlarmList} pagination={false} columns={columns} />
+                                        <Table rowKey={(record, index) => `complete${index}`} style={{ backgroundColor: 'white' }} bordered={false} dataSource={AlarmList} pagination={false} columns={columns} />
                                 }
 
                             </Card>
                             <Card title={<span style={{ fontWeight: '900' }}>处理说明</span>} style={{ marginTop: 20 }}>
                                 <DescriptionList className={styles.headerList} size="large" col="1">
                                     <Description>
-                                        <TextArea rows={8} style={{ width: '600px' }}>
-                                            {Remark}
+                                        <TextArea rows={8} style={{ width: '600px' }} value={Remark}>
+
                                         </TextArea>
                                     </Description>
                                 </DescriptionList>
@@ -430,8 +436,8 @@ export default class EmergencyDetailInfo extends Component {
                             </Card>
                             <Card title={<span style={{ fontWeight: '900' }}>日志表</span>} style={{ marginTop: 20 }}>
                                 <Table columns={LogColumn}
+                                    rowKey={(record, index) => `complete${index}`}
                                     dataSource={TaskLogList}
-                                    rowKey="StepID"
                                     bordered={true}
                                     pagination={false}
                                 />

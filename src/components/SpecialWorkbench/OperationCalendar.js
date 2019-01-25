@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { Card, Calendar, Badge,Row, Col ,Tag,Table} from 'antd';
+import { Card, Calendar, Badge, Row, Col, Tag, Table } from 'antd';
 import moment from 'moment';
 import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
@@ -24,9 +24,9 @@ class OperationCalendar extends PureComponent {
         };
     }
 
-    // componentWillMount() {
-    //     this.getOperationData(1);
-    // }
+    componentWillMount() {
+        this.getOperationData(1);
+    }
 
     /**
      * 智能运维_日历表插件基础渲染
@@ -60,7 +60,7 @@ class OperationCalendar extends PureComponent {
 
     //日期面板变化回调
     onPanelChange = (date, datestring) => {
-        this.setState({ dateType: datestring,selectedValue:date});
+        this.setState({ dateType: datestring, selectedValue: date });
     }
 
     /**
@@ -132,7 +132,6 @@ class OperationCalendar extends PureComponent {
             {
                 title: '排口名称',
                 dataIndex: 'PointName',
-                key:'PointName',
                 render: (text, record) => {
                     if (record.TaskType === 2)
                         return <div style={{ position: 'relative' }}>{text}<Tag style={{ position: 'absolute', top: -10 }} color="#f50">应急</Tag></div>;
@@ -142,14 +141,13 @@ class OperationCalendar extends PureComponent {
             {
                 title: '运维状态',
                 dataIndex: 'ExceptionTypeText',
-                key:'ExceptionTypeText',
                 render: (text, record) => {
                     if (!text)
                         return <Tag color="rgb(76,205,122)">正常</Tag>;
                     return (
                         <div>
                             {
-                                text.split(',').map((item,key) => (
+                                text.split(',').map((item, key) => (
                                     <Tag key={key} color="rgb(244,6,94)">{item}</Tag>
                                 ))
                             }
@@ -160,7 +158,6 @@ class OperationCalendar extends PureComponent {
             {
                 title: '运维人',
                 dataIndex: 'OperationName',
-                key:'OperationName',
                 render: (text, record) => {
                     if (record.TaskStatus === 2)
                         return <div style={{ position: 'relative' }}>{text}<Tag style={{ marginLeft: 7 }} color="#faad14">进行中</Tag></div>;
@@ -169,7 +166,6 @@ class OperationCalendar extends PureComponent {
             }, {
                 title: '操作',
                 dataIndex: 'opt',
-                key: 'opt',
                 render: (text, record) => (
 
                     <a onClick={
@@ -181,7 +177,7 @@ class OperationCalendar extends PureComponent {
             }];
 
         return <Table
-            rowKey="oprationtable"
+            rowKey={(record, index) => `complete${index}`}
             columns={columns}
             dataSource={this.state.dateType === 'month' ? this.props.operation.tempTableDatas.filter(m => moment(m.CreateTime).format('YYYY-MM-DD') === this.state.selectedValue.format("YYYY-MM-DD")) : this.props.operation.tempTableDatas.filter(m => moment(m.CreateTime).format('YYYY-MM') === this.state.selectedValue.format("YYYY-MM"))}
             size="small"
@@ -229,7 +225,7 @@ class OperationCalendar extends PureComponent {
                 <Col xl={16} lg={24} md={24} sm={24} xs={24}>
                     <Card
                         loading={this.props.loadingOperationData}
-                        title={`运维记录 - ${this.state.dateType==='month'? `${this.state.selectedValue.format('YYYY')}年${this.state.selectedValue.format('MM')}月${this.state.selectedValue.format('DD')}日`:`${this.state.selectedValue.format('YYYY')}年${this.state.selectedValue.format('MM')}月`} `}
+                        title={`运维记录 - ${this.state.dateType === 'month' ? `${this.state.selectedValue.format('YYYY')}年${this.state.selectedValue.format('MM')}月${this.state.selectedValue.format('DD')}日` : `${this.state.selectedValue.format('YYYY')}年${this.state.selectedValue.format('MM')}月`} `}
                         style={{}}
                     >
                         <Card.Grid style={{ width: '100%', height: 297, padding: 15 }}>

@@ -306,6 +306,7 @@ export default class DeviceExceptionListHistoryRecords extends Component {
                                     </Row>
                                 </div>
                                 <Table
+                                    rowKey={(record, index) => `complete${index}`}
                                     size="middle"
                                     scroll={{ y: 'calc(100vh - 350px)' }}
                                     loading={spining}

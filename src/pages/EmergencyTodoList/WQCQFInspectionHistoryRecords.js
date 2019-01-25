@@ -99,7 +99,7 @@ export default class WQCQFInspectionHistoryRecords extends Component {
                         item = item.replace(')', '');
                         if (item !== '') {
                             resu.push(
-                                <Tag style={{ marginBottom: 1.5, marginTop: 1.5 }} color="#108ee9">{item}</Tag>
+                                <Tag key={key} style={{ marginBottom: 1.5, marginTop: 1.5 }} color="#108ee9">{item}</Tag>
                             );
                         }
                     });
@@ -150,6 +150,7 @@ export default class WQCQFInspectionHistoryRecords extends Component {
                         </Row>
                     </div>
                     <Table
+                        rowKey={(record, index) => `complete${index}`}
                         size="middle"
                         scroll={{ y: 'calc(100vh - 465px)' }}
                         loading={this.props.loading}

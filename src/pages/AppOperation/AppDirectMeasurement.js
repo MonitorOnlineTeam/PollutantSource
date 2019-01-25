@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import { Button, Icon,Spin,Card } from 'antd';
+import { Button, Icon, Spin, Card } from 'antd';
 import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
 import { MapInteractionCSS } from 'react-map-interaction';
-import styles from "./AppDirectMeasurement.less";
+import styles from "./ProductionRecord.less";
 
 @connect(({ task, loading }) => ({
     isloading: loading.effects['task/GetPatrolRecordListPC'],
@@ -70,30 +70,30 @@ class AppDirectMeasurement extends Component {
 
             const rtnValChild = [];
             if (Repair.Record[0].RecordList !== null && Repair.Record[0].RecordList.length > 0) {
-                Repair.Record[0].RecordList.map((items,index) => {
+                Repair.Record[0].RecordList.map((items, index) => {
                     if (items.count !== 0) {
                         rtnValChild.push(
                             <tr>
-                                <td rowSpan={items.count} style={{ height: '50px', textAlign: 'center',fontSize: '14px' }}>
+                                <td rowSpan={items.count} style={{ height: '50px', textAlign: 'center', fontSize: '14px' }}>
                                     {items.parentName}
                                 </td>
-                                <td style={{ height: '50px', textAlign: 'center' ,fontSize: '14px' }}>
+                                <td style={{ height: '50px', textAlign: 'center', fontSize: '14px' }}>
                                     {items.childName}
                                 </td>
-                                <td style={{ height: '50px', textAlign: 'center' ,fontSize: '14px' }}>
+                                <td style={{ height: '50px', textAlign: 'center', fontSize: '14px' }}>
                                     {items.MintenanceDescription}
                                 </td>
-                                <td rowSpan={items.count} style={{ height: '50px', textAlign: 'center' ,fontSize: '14px' }}>
+                                <td rowSpan={items.count} style={{ height: '50px', textAlign: 'center', fontSize: '14px' }}>
                                     {remark[index]}
                                 </td>
                             </tr>
                         );
                     } else {
-                        Repair.Record[0].RecordList.map((itemss,index) => {
+                        Repair.Record[0].RecordList.map((itemss, index) => {
                             if (itemss.parentId === items.parentId) {
                                 if (itemss.count === 0) {
                                     if (childIDarray !== null) {
-                                        childIDarray.map((itemsss,index) => {
+                                        childIDarray.map((itemsss, index) => {
                                             if (itemss.childID === itemsss) {
                                                 flag = 1;
                                             }
@@ -101,10 +101,10 @@ class AppDirectMeasurement extends Component {
                                         if (flag === 0) {
                                             rtnValChild.push(
                                                 <tr>
-                                                    <td style={{ height: '50px', textAlign: 'center' ,fontSize: '14px' }}>
+                                                    <td style={{ height: '50px', textAlign: 'center', fontSize: '14px' }}>
                                                         {itemss.childName}
                                                     </td>
-                                                    <td style={{ height: '50px', textAlign: 'center' ,fontSize: '14px' }}>
+                                                    <td style={{ height: '50px', textAlign: 'center', fontSize: '14px' }}>
                                                         {itemss.MintenanceDescription}
                                                     </td>
                                                 </tr>
@@ -113,10 +113,10 @@ class AppDirectMeasurement extends Component {
                                     } else {
                                         rtnValChild.push(
                                             <tr>
-                                                <td style={{ height: '50px', textAlign: 'center' ,fontSize: '14px' }}>
+                                                <td style={{ height: '50px', textAlign: 'center', fontSize: '14px' }}>
                                                     {itemss.childName}
                                                 </td>
-                                                <td style={{ height: '50px', textAlign: 'center' ,fontSize: '14px' }}>
+                                                <td style={{ height: '50px', textAlign: 'center', fontSize: '14px' }}>
                                                     {itemss.MintenanceDescription}
                                                 </td>
                                             </tr>
@@ -132,22 +132,22 @@ class AppDirectMeasurement extends Component {
             }
             if (rtnValChild.length === 0) {
                 rtnValChild.push(
-                    <td style={{ height: '50px', textAlign: 'center',fontSize: '14px' }} />
+                    <td style={{ height: '50px', textAlign: 'center', fontSize: '14px' }} />
                 );
             }
             return rtnValChild;
         }
     }
 
-    renderItemChild=(id,item) => {
+    renderItemChild = (id, item) => {
         let rtnValChildren = '';
         if (item !== null && item.length > 0) {
-            item.map((items,index) => {
+            item.map((items, index) => {
                 if (items.parentId === id) {
                     if (items.count === 0) {
                         rtnValChildren.push(
                             <tr>
-                                <td style={{ height: '50px', textAlign: 'center' ,fontSize: '14px' }}>
+                                <td style={{ height: '50px', textAlign: 'center', fontSize: '14px' }}>
                                     {item.childName}
                                 </td>
                             </tr>
@@ -159,7 +159,7 @@ class AppDirectMeasurement extends Component {
         if (rtnValChildren.length === 0) {
             rtnValChildren.push(
                 <tr>
-                    <td style={{ height: '50px', textAlign: 'center',fontSize: '14px' }} />
+                    <td style={{ height: '50px', textAlign: 'center', fontSize: '14px' }} />
                 </tr>
             );
         }
@@ -200,46 +200,46 @@ class AppDirectMeasurement extends Component {
             <MapInteractionCSS>
                 <Card>
                     <div className={styles.FormDiv} style={{ height: SCREEN_HEIGHT }}>
-                        <div className={styles.FormName}>直接测量法CEMS日常巡检记录表</div>
+                        <div style={{ minWidth: 950, textAlign: 'center', fontSize: 15, fontWeight: 'bold' }}>直接测量法CEMS日常巡检记录表</div>
                         <table className={styles.FormTable}>
                             <tr>
-                                <td style={{ width: '50%', height: '50px', textAlign: 'left' ,fontSize: '14px',fontWeight: 'bold' }}>企业名称：{EnterpriseName}</td>
-                                <td style={{ width: '50%', height: '50px', textAlign: 'left' ,fontSize: '14px',fontWeight: 'bold' }}> 巡检日期：{PatrolDate}</td>
+                                <td style={{ width: '50%', height: '50px', textAlign: 'left', fontSize: '14px', fontWeight: 'bold', minWidth: 450 }}>企业名称：{EnterpriseName}</td>
+                                <td style={{ width: '50%', height: '50px', textAlign: 'left', fontSize: '14px', fontWeight: 'bold', minWidth: 500 }}> 巡检日期：{PatrolDate}</td>
                             </tr>
                         </table>
                         <table className={styles.FormTable}>
                             <tbody>
                                 <tr>
-                                    <td style={{ width: '50%', height: '50px', textAlign: 'left' ,fontSize: '14px' }}>{GasCemsEquipmentManufacturer}</td>
-                                    <td style={{ width: '50%', height: '50px', textAlign: 'left' ,fontSize: '14px' }}>{GasCemsCode}</td>
+                                    <td style={{ width: '50%', height: '50px', textAlign: 'left', fontSize: '14px', minWidth: 450 }}>{GasCemsEquipmentManufacturer}</td>
+                                    <td style={{ width: '50%', height: '50px', textAlign: 'left', fontSize: '14px', minWidth: 500 }}>{GasCemsCode}</td>
                                 </tr>
                                 <tr>
-                                    <td style={{ width: '50%', height: '50px', textAlign: 'left' ,fontSize: '14px' }}>{KlwCemsEquipmentManufacturer}</td>
-                                    <td style={{ width: '50%', height: '50px', textAlign: 'left' ,fontSize: '14px' }}>{KlwCemsCode}</td>
+                                    <td style={{ width: '50%', height: '50px', textAlign: 'left', fontSize: '14px', minWidth: 450 }}>{KlwCemsEquipmentManufacturer}</td>
+                                    <td style={{ width: '50%', height: '50px', textAlign: 'left', fontSize: '14px', minWidth: 500 }}>{KlwCemsCode}</td>
                                 </tr>
                                 <tr>
-                                    <td style={{ width: '50%', height: '50px', textAlign: 'left' ,fontSize: '14px' }}>{PointPosition}</td>
-                                    <td style={{ width: '50%', height: '50px', textAlign: 'left' ,fontSize: '14px' }}>{MaintenanceManagementUnit}</td>
+                                    <td style={{ width: '50%', height: '50px', textAlign: 'left', fontSize: '14px', minWidth: 450 }}>{PointPosition}</td>
+                                    <td style={{ width: '50%', height: '50px', textAlign: 'left', fontSize: '14px', minWidth: 500 }}>{MaintenanceManagementUnit}</td>
                                 </tr>
                             </tbody>
                         </table>
-                        <div className={styles.HeadDiv} style={{ fontWeight: 'bold' }}>运行维护内容及处理说明：</div>
+                        <div style={{ fontWeight: 'bold' }}>运行维护内容及处理说明：</div>
                         <table className={styles.FormTable}>
                             <tbody>
                                 <tr>
-                                    <td style={{ width: '20%', height: '50px', textAlign: 'center' ,fontSize: '14px' }}>项目</td>
-                                    <td style={{ width: '40%', height: '50px', textAlign: 'center' ,fontSize: '14px' }}>内容</td>
-                                    <td style={{ width: '20%', height: '50px', textAlign: 'center' ,fontSize: '14px' }}>维护情况</td>
-                                    <td style={{ width: '20%', height: '50px', textAlign: 'center' ,fontSize: '14px' }}>备注</td>
+                                    <td style={{ width: '20%', height: '50px', textAlign: 'center', fontSize: '14px' }}>项目</td>
+                                    <td style={{ width: '40%', height: '50px', textAlign: 'center', fontSize: '14px' }}>内容</td>
+                                    <td style={{ width: '20%', height: '50px', textAlign: 'center', fontSize: '14px' }}>维护情况</td>
+                                    <td style={{ width: '20%', height: '50px', textAlign: 'center', fontSize: '14px' }}>备注</td>
                                 </tr>
                                 {
                                     this.renderItem(Repair)
                                 }
                                 <tr>
-                                    <td style={{ width: '18%', height: '50px', textAlign: 'center',fontSize: '14px' }}>
-                                异常情况处理
+                                    <td style={{ width: '18%', height: '50px', textAlign: 'center', fontSize: '14px' }}>
+                                        异常情况处理
                                     </td>
-                                    <td colSpan="3" style={{textAlign: 'center',fontSize: '14px'}}>
+                                    <td colSpan="3" style={{ textAlign: 'center', fontSize: '14px' }}>
                                         {ExceptionHandling}
                                     </td>
                                 </tr>
@@ -248,12 +248,12 @@ class AppDirectMeasurement extends Component {
                         <table className={styles.FormTable}>
                             <tbody>
                                 <tr>
-                                    <td style={{ width: '87%', height: '50px', textAlign: 'right', border: '0', fontWeight: 'bold' }}>负责人签名：</td>
-                                    <td style={{ width: '13%', height: '50px', border: '0' }}><img src={SignContent} /></td>
+                                    <td style={{ width: '87%', height: '50px', textAlign: 'right', border: '0', fontWeight: 'bold', minWidth: 850 }}>负责人签名：</td>
+                                    <td style={{ width: '13%', height: '50px', border: '0', minWidth: 100 }}><img src={SignContent} /></td>
                                 </tr>
                                 <tr>
-                                    <td style={{ width: '87%', height: '50px', textAlign: 'right', border: '0', fontWeight: 'bold' }}>签名时间：</td>
-                                    <td style={{ width: '13%', height: '50px', border: '0' }}>{SignTime}</td>
+                                    <td style={{ width: '87%', height: '50px', textAlign: 'right', border: '0', fontWeight: 'bold', minWidth: 850 }}>签名时间：</td>
+                                    <td style={{ width: '13%', height: '50px', border: '0', minWidth: 100 }}>{SignTime}</td>
                                 </tr>
                             </tbody>
                         </table>

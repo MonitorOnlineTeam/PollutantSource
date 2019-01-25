@@ -53,11 +53,6 @@ export default Model.extend({
         stateNameInfo:null,
         paramNameInfo:null,
         paramstatusInfo:null,
-
-
-
-
-        test:0
     },
     effects: {
         * querypointdetail({
@@ -733,8 +728,6 @@ export default Model.extend({
         updateRealTimeData(state, { payload }) {
             if (payload && payload.array) {
                 const {selectpoint,dataInfo}=state;
-                let {test}=state;
-
                 let resdata = JSON.parse(JSON.stringify(dataInfo));
                 if(selectpoint && selectpoint.DGIMN && resdata)
                 {

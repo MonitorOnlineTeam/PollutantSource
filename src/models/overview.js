@@ -4,16 +4,23 @@ import {
     querypolluntantentinfolist
 } from '../services/api';
 import React from 'react';
-import { Model } from '../dvapack';
 import moment from 'moment';
-import { message } from 'antd';
+// import { message } from 'antd';
 import { mainpollutantInfo,mainpoll,enterpriceid } from '../../src/config';
 import {
     Popover,
     Badge,
     Icon,
-    Divider
+    Divider,
+    message
 } from 'antd';
+// import { mainpollutantInfo, mainpoll } from "../config";
+import { Model } from '../dvapack';
+// import {
+//     querypollutanttypecode, querydatalist, querylastestdatalist,
+//     queryhistorydatalist, querypollutantlist, addtaskinfo, queryurge, getPollutantTypeList
+// } from '../services/api';
+
 export default Model.extend({
     namespace: 'overview',
     state: {
@@ -53,12 +60,12 @@ export default Model.extend({
                 type: 'getPollutantTypeList',
                 payload: {
                     ...payload,
-                    pollutantTypes:payload.pollutantCode
+                    pollutantTypes: payload.pollutantCode
                 },
             });
             yield take('getPollutantTypeList/@@end');
             if (data) {
-                gwidth = gwidth + 200 * data.length;
+                gwidth += 200 * data.length;
             }
             yield update({ columns: data, gwidth });
         },
@@ -104,8 +111,7 @@ export default Model.extend({
                             }
                         });
                     }
-                }
-                else {
+                } else {
                     //知道有问题但是手机端调用这个接口是不传参数返回所有的值，
                     //所以，在这里将MN号码给了一个不可能查询到的值，让返回列表为空，因为点表为空
                     yield put({
@@ -133,8 +139,7 @@ export default Model.extend({
                         });
                     }
 
-                }
-                else {
+                } else {
                     yield put({
                         type: 'task/GetHistoryRepairDetail',
                         payload: {
@@ -161,8 +166,7 @@ export default Model.extend({
                         });
                     }
 
-                }
-                else {
+                } else {
                     yield put({
                         type: 'task/GetHistoryStopCemsList',
                         payload: {
@@ -189,8 +193,7 @@ export default Model.extend({
                         });
                     }
 
-                }
-                else {
+                } else {
                     yield put({
                         type: 'task/GetHistoryConsumablesReplaceRecord',
                         payload: {
@@ -217,8 +220,7 @@ export default Model.extend({
                         });
                     }
 
-                }
-                else {
+                } else {
                     yield put({
                         type: 'task/GetHistoryStandardGasRepalceRecordList',
                         payload: {
@@ -246,8 +248,7 @@ export default Model.extend({
                         });
                     }
 
-                }
-                else {
+                } else {
                     yield put({
                         type: 'task/GetHistoryInspectionHistoryRecords',
                         payload: {
@@ -274,8 +275,7 @@ export default Model.extend({
                         });
                     }
 
-                }
-                else {
+                } else {
                     yield put({
                         type: 'task/GetJzHistoryRecord',
                         payload: {
@@ -302,8 +302,7 @@ export default Model.extend({
                         });
                     }
 
-                }
-                else {
+                } else {
                     yield put({
                         type: 'task/GetBdHistoryInfoList',
                         payload: {
@@ -331,8 +330,7 @@ export default Model.extend({
                         });
                     }
 
-                }
-                else {
+                } else {
                     yield put({
                         type: 'task/GetDeviceExceptionList',
                         payload: {
@@ -360,8 +358,7 @@ export default Model.extend({
                             }
                         });
                     }
-                }
-                else {
+                } else {
                     yield put({
                         type: 'task/GetYwdsj',
                         payload: {
@@ -387,8 +384,7 @@ export default Model.extend({
                         });
                     }
 
-                }
-                else {
+                } else {
                     yield put({
                         type: 'points/queryprocesschart',
                         payload: {
@@ -415,9 +411,8 @@ export default Model.extend({
                             }
                         });
                     }
-                    
-                }
-                else {
+
+                } else {
                     yield put({
                         type: 'workbenchmodel/getOperationCalendarData',
                         payload: {
@@ -430,8 +425,7 @@ export default Model.extend({
             yield update({ data });
             yield update({ dataTemp: data });
             if (payload.callback === undefined) {
-            }
-            else {
+            } else {
                 payload.callback(data);
             }
         },
@@ -458,13 +452,13 @@ export default Model.extend({
             }];
             mainpollutantInfo.map((item, key) => {
                 col = col.concat({
-                    title: item.pollutantName +
-                        '(' + item.unit + ')',
+                    title: `${item.pollutantName
+                        }(${item.unit})`,
                     dataIndex: item.pollutantCode,
                     key: item.pollutantCode,
                     align: 'center',
                     render: (value, record, index) => {
-                        const additional = record[item.field + '_params'];
+                        const additional = record[`${item.field}_params`];
                         if (additional) {
                             const additionalInfo = additional.split('§');
                             if (additionalInfo[0] === 'IsOver') {
@@ -506,18 +500,18 @@ export default Model.extend({
                 return value.pollutantCode==payload.pollutantTypeCode;
             })
             // 地图详细表格列头
-             let detailpcol = [{
+            let detailpcol = [{
                 title: '因子',
                 dataIndex: 'pollutantName',
                 key: 'pollutantName',
                 align: 'center',
             }, {
-                title: '浓度('+pollutantInfoList.unit+')',
+                title: `浓度(${pollutantInfoList.unit})`,
                 dataIndex: 'pollutantCode',
                 key: 'pollutantCode',
                 align: 'center',
                 render: (value, record, index) => {
-                    const additional = record['pollutantCodeParam'];
+                    const additional = record.pollutantCodeParam;
                     if (additional) {
                         const additionalInfo = additional.split('§');
                         if (additionalInfo[0] === 'IsOver') {
@@ -549,16 +543,15 @@ export default Model.extend({
                     return value || (value === 0 ? 0 : '-');
                 }
             }
-           ];
-            if(pollutantInfoList.zspollutant)
-            {
-                detailpcol=detailpcol.concat({
-                    title: '折算('+pollutantInfoList.unit+')',
+            ];
+            if (pollutantInfoList.zspollutant) {
+                detailpcol = detailpcol.concat({
+                    title: `折算(${pollutantInfoList.unit})`,
                     dataIndex: 'zspollutantCode',
                     key: 'zspollutantCode',
                     align: 'center',
                     render: (value, record, index) => {
-                        const additional = record['zspollutantCodeParam'];
+                        const additional = record.zspollutantCodeParam;
                         if (additional) {
                             const additionalInfo = additional.split('§');
                             if (additionalInfo[0] === 'IsOver') {
@@ -589,7 +582,7 @@ export default Model.extend({
                         }
                         return value || (value === 0 ? 0 : '-');
                     }
-                })
+                });
             }
 
             let detaildata = [];
@@ -597,21 +590,21 @@ export default Model.extend({
             const res = yield call(querylastestdatalist, payload);
             if (res.data && res.data[0]) {
                 detailtime = res.data[0].MonitorTime;
-                pollutantInfoList.pollutantInfo.map(item=>{
+                pollutantInfoList.pollutantInfo.map(item => {
                     detaildata.push(
                         {
                             pollutantName: item.pollutantName,
                             pollutantCode: res.data[0][item.pollutantCode] ? res.data[0][item.pollutantCode] : '-',
-                            pollutantCodeParam:res.data[0][item.pollutantCode+"_params"],
-                            zspollutantCode: pollutantInfoList.zspollutant ? (res.data[0][item.zspollutantCode] ?
-                            res.data[0][item.zspollutantCode] : '-'):'-',
-                            zspollutantCodeParam:res.data[0][item.zspollutantCode+"_params"],
+                            pollutantCodeParam: res.data[0][`${item.pollutantCode}_params`],
+                            zspollutantCode: pollutantInfoList.zspollutant ? res.data[0][item.zspollutantCode] ?
+                                res.data[0][item.zspollutantCode] : '-' : '-',
+                            zspollutantCodeParam: res.data[0][`${item.zspollutantCode}_params`],
                             dgimn: payload.dgimn,
                             pcode: item.pollutantCode,
                         },
-                    )
-                })
- 
+                    );
+                });
+
             }
           
             yield update({
@@ -643,21 +636,17 @@ export default Model.extend({
                     const time = moment(item.MonitorTime).hour();
                     xData = xData.concat(time);
                     seriesdata = seriesdata.concat(item[payload.pollutantCodes]);
-                    zsseriesdata = zsseriesdata.concat(item['zs' + payload.pollutantCodes]);
+                    zsseriesdata = zsseriesdata.concat(item[`zs${payload.pollutantCodes}`]);
                 });
             }
             //污染物标准线的组织;
             let polluntinfo;
             let zspolluntinfo;
             let markLine = {};
-            let zsmarkLine={};
+            let zsmarkLine = {};
             if (pollutantlist) {
-                polluntinfo = pollutantlist.find((value, index, arr) => {
-                    return value.pollutantCode === payload.pollutantCodes;
-                });
-                zspolluntinfo=pollutantlist.find((value, index, arr) => {
-                    return value.pollutantCode === 'zs'+ payload.pollutantCodes;
-                });
+                polluntinfo = pollutantlist.find((value, index, arr) => value.pollutantCode === payload.pollutantCodes);
+                zspolluntinfo = pollutantlist.find((value, index, arr) => value.pollutantCode === `zs${payload.pollutantCodes}`);
             }
             if (polluntinfo && polluntinfo.standardValue) {
                 markLine = {
@@ -688,13 +677,10 @@ export default Model.extend({
             if (!seriesdata[0] && !zsseriesdata[0]) {
                 existdata = false;
             }
-            const pollutantInfoList=mainpoll.find(value=>{
-                return value.pollutantCode==payload.pollutantTypeCode;
-            })
-            let legend=[payload.pollutantName];
-            if(pollutantInfoList.zspollutant)
-            {
-                legend.push('折算' + payload.pollutantName);
+            const pollutantInfoList = mainpoll.find(value => value.pollutantCode == payload.pollutantTypeCode);
+            let legend = [payload.pollutantName];
+            if (pollutantInfoList.zspollutant) {
+                legend.push(`折算${payload.pollutantName}`);
             }
             const option = {
                 legend: {
@@ -704,10 +690,10 @@ export default Model.extend({
                     trigger: 'axis',
                     formatter: function (params, ticket, callback) {
                         console.log(params);
-                        let res=params[0].axisValue+"时<br/>"
-                        params.map(item=>{
-                            res+=item.seriesName+":"+item.value+"<br />"
-                        })
+                        let res = `${params[0].axisValue}时<br/>`;
+                        params.map(item => {
+                            res += `${item.seriesName}:${item.value}<br />`;
+                        });
                         return res;
                     }
                 },
@@ -746,9 +732,9 @@ export default Model.extend({
                 },
                 {
                     type: 'line',
-                    name: '折算' + payload.pollutantName,
+                    name: `折算${payload.pollutantName}`,
                     data: zsseriesdata,
-                    markLine:zsmarkLine,
+                    markLine: zsmarkLine,
                     itemStyle: {
                         normal: {
                             color: '#FF00FF',
@@ -780,7 +766,7 @@ export default Model.extend({
                     const time = moment(item.MonitorTime).hour();
                     xData = xData.concat(time);
                     seriesdata = seriesdata.concat(item[payload.pollutantCodes]);
-                    zsseriesdata = zsseriesdata.concat(item['zs' + payload.pollutantCodes]);
+                    zsseriesdata = zsseriesdata.concat(item[`zs${payload.pollutantCodes}`]);
                 });
             }
              //污染物标准线的组织;

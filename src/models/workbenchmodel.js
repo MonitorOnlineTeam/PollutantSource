@@ -85,10 +85,10 @@ export default Model.extend({
         },
         allPointOverDataList: {
             tableDatas: [],
-            beginTime: moment().format("YYYY-MM-01 00:00:00"),
+            beginTime: moment().add(-24, 'hour').format("YYYY-MM-DD HH:mm:ss"),
             endTime: moment().format('YYYY-MM-DD HH:mm:ss'),
             pageIndex: 1,
-            pageSize: 500,
+            pageSize: 100,
             total: 0,
         },
         overPointList: {
