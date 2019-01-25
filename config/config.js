@@ -30,14 +30,14 @@ const plugins = [
                 },
             },
             ...!process.env.TEST && os.platform() === 'darwin' ?
-        {
+                {
                     dll: {
                         include: ['dva', 'dva/router', 'dva/saga', 'dva/fetch'],
                         exclude: ['@babel/runtime'],
                     },
                     hardSource: true,
                 } :
-        {},
+                {},
         },
     ],
 ];
@@ -81,7 +81,7 @@ export default {
     // },
     "proxy": {
         "/api": {
-            "target":"http://172.16.12.152:8011/api",
+            "target": "http://localhost:52199/",
             "changeOrigin": true,
             "pathRewrite": { "^/api": "" }
         },

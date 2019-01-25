@@ -2,7 +2,7 @@ import {
     Model
 } from '../dvapack';
 import {
-    getpointlist, addpoint, getoperationsuserList, getpoint, editpoint, deletepoint, getanalyzersys, addalyzersys, getanalyzersysmnmodel, editalyzersys, deletealyzersys
+    getpointlist, addpoint, getoperationsuserList, getspecialworkeruserList, getpoint, editpoint, deletepoint, getanalyzersys, addalyzersys, getanalyzersysmnmodel, editalyzersys, deletealyzersys
     , getcomponent, addalyzerchild, getanalyzerchild, getanalyzerchildmodel, deletealyzerchild, editalyzerchild, getpollutanttypelist, getgasoutputtypelist
 } from '../services/pointinfo';
 
@@ -13,6 +13,7 @@ export default Model.extend({
         requstresult: null,
         list: [],
         userlist: [],
+        swuserlist: [],
         editpoint: null,
         total: 0,
         loading: false,
@@ -105,7 +106,7 @@ export default Model.extend({
                 Coordinate,
                 OutPutWhitherCode,
                 Linkman,
-                MobilePhone,
+                Col3,
                 GasOutputTypeCode,
                 OutputDiameter,
                 OutputHigh,
@@ -131,7 +132,7 @@ export default Model.extend({
                 Coordinate: Coordinate,
                 OutPutWhitherCode: OutPutWhitherCode,
                 Linkman: Linkman,
-                MobilePhone: MobilePhone,
+                Col3: Col3,
                 GasOutputTypeCode: GasOutputTypeCode,
                 OutputDiameter: OutputDiameter,
                 OutputHigh: OutputHigh,
@@ -167,6 +168,30 @@ export default Model.extend({
                 yield update({
                     requstresult: result.requstresult,
                     userlist: [],
+                });
+            }
+            callback();
+        },
+        * getspecialworkeruserList({
+            payload: {
+                callback
+            }
+        }, {
+            call,
+            put,
+            update,
+            select
+        }) {
+            const result = yield call(getspecialworkeruserList, {});
+            if (result.requstresult === '1') {
+                yield update({
+                    requstresult: result.requstresult,
+                    swuserlist: result.data,
+                });
+            } else {
+                yield update({
+                    requstresult: result.requstresult,
+                    swuserlist: [],
                 });
             }
             callback();
@@ -253,7 +278,7 @@ export default Model.extend({
                 Coordinate,
                 OutPutWhitherCode,
                 Linkman,
-                MobilePhone,
+                Col3,
                 GasOutputTypeCode,
                 OutputDiameter,
                 OutputHigh,
@@ -279,7 +304,7 @@ export default Model.extend({
                 Coordinate: Coordinate,
                 OutPutWhitherCode: OutPutWhitherCode,
                 Linkman: Linkman,
-                MobilePhone: MobilePhone,
+                Col3: Col3,
                 GasOutputTypeCode: GasOutputTypeCode,
                 OutputDiameter: OutputDiameter,
                 OutputHigh: OutputHigh,

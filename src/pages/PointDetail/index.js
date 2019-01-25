@@ -392,9 +392,18 @@ class PointDetail extends Component {
         if (location.pathname.indexOf('qcontrollist') === -1 && location.pathname.indexOf('operationlist') === -1) {
             activeKey = location.pathname.replace(`${match.url}/`, '');
         } else {
-            const matchurl=location.pathname.match(/mapview\/(\S*)\//);
-            if(matchurl!==null)
+            let matchurl=null;
+            if(location.pathname.indexOf('mapview')!==-1){
+                matchurl=location.pathname.match(/mapview\/(\S*)\//);
+            }else if(location.pathname.indexOf('datalistview')!==-1){
+                matchurl=location.pathname.match(/datalistview\/(\S*)\//);
+            }
+
+            if(matchurl!==null){
                 activeKey = matchurl[1];
+            }
+            
+            
         }
         if (this.props.isloading || !pointInfo) {
             return (<Spin
