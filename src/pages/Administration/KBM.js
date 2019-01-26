@@ -162,7 +162,12 @@ export default class KBM extends Component {
     showFile = (record) => {
        if(record.FileName!=="")
        {
-        window.open('../upload/' + record.FileName)
+           const fileName=record.FileName.split('.');
+           var name='';
+           fileName.forEach(element => {
+               
+           });
+        window.open('../upload/' + record.FileName+'.pdf')
        }
        else
        {

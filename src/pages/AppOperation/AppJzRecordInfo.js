@@ -196,7 +196,6 @@ export default class AppJzRecordInfo extends Component {
 
         return (
             <MapInteractionCSS>
-                <Card>
                     <div className={styles.FormDiv}>
                         <div style={{ minWidth: 900, textAlign: 'center', fontSize: 15, fontWeight: 'bold' }}>CEMS零点量程漂移与校准记录表</div>
                         <div style={{ fontWeight: 'bold', minWidth: 900, fontSize: 12 }}>企业名称：{EnterpriseName}</div>
@@ -284,7 +283,6 @@ export default class AppJzRecordInfo extends Component {
                             </tbody>
                         </table>
                     </div>
-                </Card>
             </MapInteractionCSS>
         );
     }

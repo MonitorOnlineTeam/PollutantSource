@@ -290,7 +290,6 @@ export default class KBMModal extends Component {
                                 </Col>
                             </Row>
                             <Row gutter={48}>
-
                                 <Col span={12}>
                                     <FormItem
                                         {...formItemLayout}

@@ -150,7 +150,6 @@ export default class AppRepairRecordDetail extends Component {
         }
         return (
             <MapInteractionCSS>
-                <Card>
                     <div style={{ height: SCREEN_HEIGHT }}>
                         <div className={styles.FormName}>CEMS维修记录表</div>
                         <div className={styles.HeadDiv} style={{ fontWeight: 'bold', fontSize: '12px' }}>企业名称：{EnterpriseName}</div>
@@ -216,7 +215,6 @@ export default class AppRepairRecordDetail extends Component {
                             </tbody>
                         </table>
                     </div>
-                </Card>
             </MapInteractionCSS>
         );
     }

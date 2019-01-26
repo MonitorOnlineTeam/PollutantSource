@@ -16,6 +16,7 @@ import SearchInput from '../../components/OverView/SearchInput';
 import TreeStatus from '../../components/OverView/TreeStatus';
 import TreeCard from '../../components/OverView/TreeCard';
 import TreeCardContent from '../../components/OverView/TreeCardContent';
+import MonitorContent from '../../components/MonitorContent/index';
 
 @connect(({ task, overview, loading }) => ({
     loading: loading.effects['task/GetDeviceExceptionList'],
@@ -44,11 +45,6 @@ export default class DeviceExceptionListHistoryRecords extends Component {
     }
     componentDidMount() {
         const { dispatch } = this.props;
-        dispatch({
-            type: 'overview/getPollutantTypeList',
-            payload: {
-            }
-        });
         var getDGIMN = localStorage.getItem('DGIMN')
         if (getDGIMN === null) {
             getDGIMN = '[object Object]';
@@ -124,14 +120,6 @@ export default class DeviceExceptionListHistoryRecords extends Component {
         }
         return <img style={{ width: 15 }} src="/gisexception.png" />;
     }
-    //当前选中的污染物类型
-    getNowPollutantType = (key) => {
-        this.setState({
-            pollutantTypeCode: key
-        })
-        const { searchName } = this.state;
-        this.reloadData(key, searchName);
-    }
     //重新加载
     searchData = (pollutantTypeCode, searchName) => {
         var getDGIMN = localStorage.getItem('DGIMN')
@@ -183,25 +171,6 @@ export default class DeviceExceptionListHistoryRecords extends Component {
                     }
 
                 }
-            },
-        });
-    }
-    //重新加载
-    reloadData = (pollutantTypeCode, searchName) => {
-        var getDGIMN = '[object Object]'
-        this.props.dispatch({
-            type: 'overview/querydatalist',
-            payload: {
-                map: true,
-                pollutantTypes: pollutantTypeCode,
-                pointName: searchName,
-                DeviceExceptionListHistoryRecords: true,
-                pageIndex: this.props.pageIndex,
-                pageSize: this.props.pageSize,
-                BeginTime: this.state.rangeDate[0].format('YYYY-MM-DD 00:00:00'),
-                EndTime: this.state.rangeDate[1].format('YYYY-MM-DD 23:59:59'),
-                DGIMN: getDGIMN,
-                IfTabs: true, //切换选项卡事件
             },
         });
     }
@@ -267,79 +236,84 @@ export default class DeviceExceptionListHistoryRecords extends Component {
             />);
         }
         return (
-            <div className={styles.cardTitle}>
-                <Row>
-                    <Col>
-                        <div style={{
-                            width: 450,
-                            position: 'absolute',
-                            top: 10,
-                            left: 5,
-                            borderRadius: 10
-                        }}
-                        >
-                            <div style={{ marginLeft: 10, marginTop: 10 }}>
-                                <div><SearchInput
-                                    onSerach={this.onSerach}
-                                    style={{ marginTop: 5, marginBottom: 10, width: 400 }} searchName="排口名称" /></div>
-                                <div style={{ marginTop: 5 }}>
-                                    <TreeCardContent style={{ overflow: 'auto', width: 400, background: '#fff' }}
-                                        getHeight='calc(100vh - 165px)'
-                                        pollutantTypeloading={pollutantTypeloading}
-                                        getStatusImg={this.getStatusImg} isloading={treedataloading}
-                                        treeCilck={this.treeCilck} treedatalist={datalist} PollutantType={this.state.pollutantTypeCode} ifSelect={true} />
+            <MonitorContent {...this.props} breadCrumbList={
+                [
+                    { Name: '首页', Url: '/' },
+                    { Name: '智能分析', Url: '' },
+                    { Name: '设备数据异常记录表', Url: '' }
+                ]
+            }>
+                <div className={styles.cardTitle}>
+                    <Row>
+                        <Col>
+                            <div style={{
+                                width: 450,
+                                position: 'absolute',
+                                borderRadius: 10
+                            }}
+                            >
+                                <div style={{ marginLeft: 5, marginTop: 5 }}>
+                                    <div><SearchInput
+                                        onSerach={this.onSerach}
+                                        style={{ marginTop: 5, marginBottom: 5, width: 400 }} searchName="排口名称" /></div>
+                                    <div style={{ marginTop: 5 }}>
+                                        <TreeCardContent style={{ overflow: 'auto', width: 400, background: '#fff' }}
+                                            getHeight='calc(100vh - 200px)'
+                                            pollutantTypeloading={pollutantTypeloading}
+                                            getStatusImg={this.getStatusImg} isloading={treedataloading}
+                                            treeCilck={this.treeCilck} treedatalist={datalist} PollutantType={this.state.pollutantTypeCode} ifSelect={true} />
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </Col>
-                    <Col style={{ width: document.body.clientWidth - 430, height: 'calc(100vh - 90px)', float: 'right' }}>
-                        <div style={{ marginRight: 10, marginTop: 25 }}>
-                            <Card bordered={false} style={{ height: 'calc(100vh - 110px)' }}>
-                                <div className={styles.conditionDiv}>
-                                    <Row gutter={8}>
-                                        <Col span={3} >
-                                            记录时间：
+                        </Col>
+                        <Col style={{ width: document.body.clientWidth - 470, height: 'calc(100vh - 150px)', float: 'right' }}>
+                            <div style={{ marginRight: 10, marginTop: 10 }}>
+                                <Card bordered={false} style={{ height: 'calc(100vh - 150px)' }}>
+                                    <div className={styles.conditionDiv}>
+                                        <Row gutter={8}>
+                                            <Col span={3} >
+                                                记录时间：
                                                     </Col>
-                                        <Col span={21} >
-                                            <RangePicker_ style={{ width: 350 }} onChange={this._handleDateChange} format={'YYYY-MM-DD'} dateValue={this.state.rangeDate} />
-                                        </Col>
-                                    </Row>
-                                </div>
-                                <Table
-                                    rowKey={(record, index) => `complete${index}`}
-                                    size="middle"
-                                    scroll={{ y: 'calc(100vh - 350px)' }}
-                                    loading={spining}
-                                    className={styles.dataTable}
-                                    columns={columns}
-                                    dataSource={dataSource}
-                                    rowClassName={
-                                        (record, index, indent) => {
-                                            if (index === 0) {
-                                                return;
-                                            }
-                                            if (index % 2 !== 0) {
-                                                return 'light';
+                                            <Col span={21} >
+                                                <RangePicker_ style={{ width: 350 }} onChange={this._handleDateChange} format={'YYYY-MM-DD'} dateValue={this.state.rangeDate} />
+                                            </Col>
+                                        </Row>
+                                    </div>
+                                    <Table
+                                        rowKey={(record, index) => `complete${index}`}
+                                        size="middle"
+                                        scroll={{ y: 'calc(100vh - 400px)' }}
+                                        loading={spining}
+                                        className={styles.dataTable}
+                                        columns={columns}
+                                        dataSource={dataSource}
+                                        rowClassName={
+                                            (record, index, indent) => {
+                                                if (index === 0) {
+                                                    return;
+                                                }
+                                                if (index % 2 !== 0) {
+                                                    return 'light';
+                                                }
                                             }
                                         }
-                                    }
-                                    pagination={{
-                                        showSizeChanger: true,
-                                        showQuickJumper: true,
-                                        'total': this.props.HistoryDeviceExceptionListCount,
-                                        'pageSize': this.props.pageSize,
-                                        'current': this.props.pageIndex,
-                                        onChange: this.onChange,
-                                        onShowSizeChange: this.onShowSizeChange,
-                                        pageSizeOptions: ['10', '20', '30', '40']
-                                    }}
-                                />
-                            </Card>
-                        </div>
-                    </Col>
-                </Row>
-            </div>
-
+                                        pagination={{
+                                            showSizeChanger: true,
+                                            showQuickJumper: true,
+                                            'total': this.props.HistoryDeviceExceptionListCount,
+                                            'pageSize': this.props.pageSize,
+                                            'current': this.props.pageIndex,
+                                            onChange: this.onChange,
+                                            onShowSizeChange: this.onShowSizeChange,
+                                            pageSizeOptions: ['10', '20', '30', '40']
+                                        }}
+                                    />
+                                </Card>
+                            </div>
+                        </Col>
+                    </Row>
+                </div>
+            </MonitorContent>
 
 
         );
