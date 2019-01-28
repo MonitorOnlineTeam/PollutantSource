@@ -99,7 +99,7 @@ export default class RepairHistoryRecords extends Component {
 
     seeDetail = (text, record) => {
         localStorage.setItem('DGIMN', this.props.DGIMN);
-        this.props.dispatch(routerRedux.push(`/PatrolForm/RepairRecordDetail/${this.props.DGIMN}/${this.props.match.params.viewtype}/qcontrollist/RepairHistoryRecords/${record.TaskID}`));
+        this.props.dispatch(routerRedux.push(`/PatrolForm/RepairRecordDetail/${this.props.DGIMN}/menu/intelligentOperation/RepairHistoryRecords/${record.TaskID}`));
     }
     //查询
     onSerach = (value) => {

@@ -73,7 +73,7 @@ export default class XSCYFInspectionHistoryRecords extends Component {
     }
 
     seeDetail = (record) => {
-        this.props.dispatch(routerRedux.push(`/PatrolForm/DilutionSampling/${this.state.DGIMN}/${this.props.match.params.viewtype}/qcontrollist/XSCYFInspectionHistoryRecords/${record.TaskID}`));
+        this.props.dispatch(routerRedux.push(`/PatrolForm/DilutionSampling/${this.state.DGIMN}/${this.props.match.params.viewtype}/operationlist/XSCYFInspectionHistoryRecords/${record.TaskID}`));
     }
 
     render() {

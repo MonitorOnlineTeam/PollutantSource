@@ -100,7 +100,7 @@ export default class DeviceExceptionListHistoryRecords extends Component {
 
     seeDetail = (record) => {
         localStorage.setItem('DGIMN', this.props.DGIMN);
-        this.props.dispatch(routerRedux.push(`/PatrolForm/DeviceExceptionDetail/${this.props.DGIMN}/${this.props.match.params.viewtype}/qcontrollist/DeviceExceptionListHistoryRecords/${record.TaskID}`));
+        this.props.dispatch(routerRedux.push(`/PatrolForm/DeviceExceptionDetail/${this.props.DGIMN}/menu/qualityControlOperation/DeviceExceptionListHistoryRecords/${record.TaskID}`));
     }
     //查询
     onSerach = (value) => {
@@ -239,7 +239,7 @@ export default class DeviceExceptionListHistoryRecords extends Component {
             <MonitorContent {...this.props} breadCrumbList={
                 [
                     { Name: '首页', Url: '/' },
-                    { Name: '智能分析', Url: '' },
+                    { Name: '智能质控', Url: '' },
                     { Name: '设备数据异常记录表', Url: '' }
                 ]
             }>

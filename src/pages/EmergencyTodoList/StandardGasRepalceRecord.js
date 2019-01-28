@@ -112,7 +112,7 @@ class StandardGasRepalceRecord extends Component {
                 rtnVal.push({ Name: '数据一览', Url: `/overview/${listUrl}` });
                 break;
             case 'mapview': //地图一栏
-                rtnVal.push({ Name: '地图一栏', Url: `/overview/${listUrl}` });
+                rtnVal.push({ Name: '地图一览', Url: `/overview/${listUrl}` });
                 break;
             case 'pielist': //我的派单
                 rtnVal.push({ Name: '我的派单', Url: `/account/settings/mypielist` });
@@ -128,10 +128,19 @@ class StandardGasRepalceRecord extends Component {
             rtnVal.push({ Name: '任务详情', Url: `/TaskDetail/emergencydetailinfo/${listUrl}/${taskfrom}/${taskID}` });
         } else if (taskfrom === 'qcontrollist') { //质控记录
             rtnVal.push({ Name: '质控记录', Url: `/pointdetail/${DGIMN}/${listUrl}/${taskfrom}/${histroyrecordtype}` });
+        } else if (taskfrom === 'operationlist') { //运维记录
+            rtnVal.push({ Name: '运维记录', Url: `/pointdetail/${DGIMN}/${listUrl}/${taskfrom}/${histroyrecordtype}` });
+        } else if (taskfrom === 'intelligentOperation') { //智能运维
+            rtnVal.push({ Name: '智能运维', Url: `` });
         } else { //其他
             rtnVal.push({ Name: '任务详情', Url: `/TaskDetail/emergencydetailinfo/${listUrl}/nop/${taskID}` });
         }
-        rtnVal.push({ Name: '标准气体更换记录表', Url: '' });
+        if (listUrl !== 'menu') {
+            rtnVal.push({ Name: '标准气体更换记录表', Url: '' });
+        }
+        if (listUrl === 'menu') {
+            rtnVal.push({ Name: '标气更换记录表', Url: `/operation/StandardGasHistoryRecords` });
+        }
         return rtnVal;
     }
 

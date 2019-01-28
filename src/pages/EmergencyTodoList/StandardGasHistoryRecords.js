@@ -72,7 +72,7 @@ export default class StandardGasHistoryRecords extends Component {
     }
 
     seeDetail = (record) => {
-        this.props.dispatch(routerRedux.push(`/PatrolForm/StandardGasRepalceRecord/${this.state.DGIMN}/${this.props.match.params.viewtype}/qcontrollist/StandardGasHistoryRecords/${record.TaskID}`));
+        this.props.dispatch(routerRedux.push(`/PatrolForm/StandardGasRepalceRecord/${this.state.DGIMN}/${this.props.match.params.viewtype}/operationlist/StandardGasHistoryRecords/${record.TaskID}`));
     }
 
     render() {
@@ -92,15 +92,13 @@ export default class StandardGasHistoryRecords extends Component {
                     var content = text.split(',');
                     var resu = [];
                     content.map((item, key) => {
-                        if(text.indexOf('()')==='-1')
-                        {
+                        if (text.indexOf('()') === '-1') {
                             item = item.replace('(', ' - ');
                             item = item.replace(')', '');
-                        } 
-                       else
-                       {
-                        item =item.replace('()', '');
-                       }
+                        }
+                        else {
+                            item = item.replace('()', '');
+                        }
                         resu.push(
                             <Tag key={key} style={{ marginBottom: 1.5, marginTop: 1.5 }} color="#108ee9">{item}</Tag>
                         );

@@ -100,7 +100,7 @@ export default class CounterControlCommandHistoryRecords extends Component {
 
     seeDetail = (record) => {
         localStorage.setItem('DGIMN', this.props.DGIMN);
-        this.props.dispatch(routerRedux.push(`/PatrolForm/ConsumablesReplaceRecord/${this.props.DGIMN}/${this.props.match.params.viewtype}/qcontrollist/CounterControlCommandHistoryRecords/${record.TaskID}`));
+        this.props.dispatch(routerRedux.push(`/PatrolForm/ConsumablesReplaceRecord/${this.props.DGIMN}/menu/intelligentOperation/CounterControlCommandHistoryRecords/${record.TaskID}`));
     }
     //查询
     onSerach = (value) => {
