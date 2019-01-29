@@ -17,6 +17,7 @@ import {
     Icon,
     Modal,
     DatePicker,
+    Spin,
 } from 'antd';
 import {
     connect
@@ -47,6 +48,7 @@ export default class KBMModal extends Component {
             width: 200,
             Mvisible: false,
             Id: null,
+            fileLoading: false
         };
         this.uuid = () => {
             var s = [];
@@ -62,42 +64,89 @@ export default class KBMModal extends Component {
         };
         this.addimg = ({ file }) => {
             _this.setState({
-                fileList: []
+                fileList: [],
             });
-            let reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onloadend = function () {
-                let base64 = reader.result; // base64就是图片的转换的结果
-                const attachId = _this.uuid();
-                _this.props.dispatch({
-                    type: 'administration/uploadfiles',
-                    payload: {
-                        file: base64.split(',')[1],
-                        fileName: file.name,
-                        callback: (result) => {
-                            if (result === '1') {
-                                const type = file.name.split('.');
-                                const newimg = {
-                                    uid: attachId,
-                                    name: file.name,
-                                    status: 'done',
-                                    url: '',
-                                    filetype: '.' + type[type.length - 1],
-                                    filesize: file.size,
-                                };
-                                const imglist = _this.state.fileList.concat(newimg);
-                                // let arr3 = Array.from(new Set(imglist));
-                                _this.setState({
-                                    fileList: imglist
-                                });
-                            } else {
-                                message.error(this.props.reason);
+            //验证传入类型
+            const fileType = this.AuthenticationFormat(file.type);
+            //验证后缀
+            const postfix = this.VerificationPostfix(file.name);
+            //双重验证
+            if (fileType) {
+                if (postfix) {
+                    _this.setState({
+                        fileLoading: true
+                    })
+                    let reader = new FileReader();
+                    reader.readAsDataURL(file);
+                    reader.onloadend = function () {
+                        let base64 = reader.result; // base64就是图片的转换的结果
+                        const attachId = _this.uuid();
+                        _this.props.dispatch({
+                            type: 'administration/uploadfiles',
+                            payload: {
+                                file: base64.split(',')[1],
+                                fileName: file.name,
+                                callback: (result) => {
+                                    debugger
+                                    if (result === '1') {
+                                        const type = file.name.split('.');
+                                        const newimg = {
+                                            uid: attachId,
+                                            name: file.name,
+                                            status: 'done',
+                                            url: '',
+                                            filetype: '.' + type[type.length - 1],
+                                            filesize: file.size,
+                                        };
+                                        const imglist = _this.state.fileList.concat(newimg);
+                                        // let arr3 = Array.from(new Set(imglist));
+                                        _this.setState({
+                                            fileList: imglist,
+                                            fileLoading: false
+                                        });
+                                    } else {
+                                        message.error(this.props.reason);
+                                    }
+                                }
                             }
-                        }
-                    }
-                });
-            };
+                        });
+                    };
+                }
+                else {
+                    message.error('上传格式不正确！')
+                }
+            }
+            else {
+                message.error('上传格式不正确！')
+            }
+
         };
+        //验证格式
+        this.AuthenticationFormat = (type) => {
+            if (type === 'application/msword' || type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+                || type === 'application/vnd.ms-excel' || type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                || type === 'text/plain' || type === 'application/pdf' || type === 'application/vnd.ms-powerpoint' || type === 'image/gif'
+                || type === 'image/jpeg' || type === 'image/png' || type === 'image/bmp'
+            ) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+        //验证后缀
+        this.VerificationPostfix = (name) => {
+            const nameSplit = name.split('.');
+            const postfix = nameSplit[nameSplit.length - 1];
+            if (postfix === 'doc' || postfix === 'docx' || postfix === 'xls' || postfix === 'xlsx'
+                || postfix === 'txt' || postfix === 'pdf' || postfix === 'ppt' || postfix === 'gif'
+                || postfix === 'jpg' || postfix === 'png' || postfix === 'bmp') {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
         this.handleChange = ({
             fileList,
             file
@@ -116,7 +165,7 @@ export default class KBMModal extends Component {
                                         GUID: file.uid.split('.')[0],
                                     }
                                 });
-                            } 
+                            }
                         }
                     }
                 });
@@ -207,7 +256,7 @@ export default class KBMModal extends Component {
                             }
                         },
                     });
-                } 
+                }
             } else {
                 //修改，稍等，未修改
                 if (!err && flag === true) {
@@ -320,9 +369,24 @@ export default class KBMModal extends Component {
                                         >
                                             <Button>
                                                 <Icon type="upload" /> 上传
-                                          </Button>
+                                            </Button>
+                                            <Spin
+                                                delay={500}
+                                                spinning={this.state.fileLoading}
+                                                style={{
+                                                    marginLeft: 10,
+                                                    height: '100%',
+                                                    width: '30px',
+                                                    alignItems: 'center',
+                                                    justifyContent: 'center'
+                                                }}
+                                            />
                                         </Upload>
                                     </FormItem>
+
+                                    <div style={{ textAlign: 'right', color: 'red' }}>
+                                        上传格式(Word、Excel、PPT、TXT、常用图片格式等)
+                                    </div>
                                 </Col>
                             </Row>
                             <Row gutter={48} style={{ display: 'none' }}>
@@ -331,7 +395,7 @@ export default class KBMModal extends Component {
                                         {...formItemLayout}
                                         label="名称">
                                         {getFieldDecorator('ID'
-                                        )(<Input placeholder="请输入名称" />)
+                                        )(<Input placeholder="" />)
                                         }
                                     </FormItem>
                                 </Col>

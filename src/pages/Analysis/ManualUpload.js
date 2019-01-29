@@ -465,165 +465,171 @@ export default class ManualUpload extends Component {
             }
         ];
         return (
-            <div className={styles.cardTitle}>
-                <Row >
-                    <Col>
-                        <div style={{
-                            width: 400,
-                            height: 'calc(100vh - 90px)',
-                            position: 'absolute',
-                            top: 10,
-                            left: 5,
-                            background: 'rgba(255, 255, 255, 0.5)',
-                            borderRadius: 10
-                        }}
-                        >
-                            <div style={{ marginBottom: 16 }}>
-                                <Select
-                                    placeholder="监测点类型"
-                                    style={{ width: 190 }}
-                                    onChange={this.changeTabList}
-                                >
-                                    <Option value="2">手动</Option>
-                                    <Option value="1">自动</Option>
-                                </Select>
-                                <Divider type="vertical" />
-                                <Search placeholder="排口名称"
-                                    onSearch={
-                                        this.searchPointbyPointName
-                                    }
-                                    style={{ width: 190 }} />
-                            </div>
-                            <div>
-                                <div style={{ marginTop: 5 }}>
-                                    <TreeCard
-                                        style={{
-                                            width: '400px',
-                                            marginTop: 5,
-                                            background: '#fff',
-                                        }}
-                                        pollutantTypeloading={pollutantTypeloading}
-                                        getHeight={'calc(100vh - 220px)'} getStatusImg={this.getStatusImg}
-                                        getNowPollutantType={this.getNowPollutantType}
-                                        PollutantType={2} treedatalist={datalist}
-                                        pollutantTypelist={pollutantTypelist}
-                                        tabkey={this.state.pollutantTypeCode}
-                                    />
-                                    <TreeCardContent style={{ overflow: 'auto', width: 400, background: '#fff' }}
-                                        getHeight='calc(100vh - 220px)'
-                                        pollutantTypeloading={pollutantTypeloading}
-                                        getStatusImg={this.getStatusImg} isloading={treedataloading}
-                                        treeCilck={this.treeCilck} treedatalist={datalist} PollutantType={pollutantType} ifSelect={true} />
+            <MonitorContent {...this.props} breadCrumbList={
+                [
+                    { Name: '首页', Url: '/' },
+                    { Name: '自行监控', Url: '' },
+                    { Name: '手工数据上传', Url: '' }
+                ]
+            }>
+                <div className={styles.cardTitle}>
+                    <Row >
+                        <Col>
+                            <div style={{
+                                width: 400,
+                                marginTop: 10,
+                                position: 'absolute',
+                                background: 'rgba(255, 255, 255, 0.5)',
+                                borderRadius: 10
+                            }}
+                            >
+                                <div style={{ marginBottom: 16 }}>
+                                    <Select
+                                        placeholder="监测点类型"
+                                        style={{ width: 190 }}
+                                        onChange={this.changeTabList}
+                                    >
+                                        <Option value="2">手动</Option>
+                                        <Option value="1">自动</Option>
+                                    </Select>
+                                    <Divider type="vertical" />
+                                    <Search placeholder="排口名称"
+                                        onSearch={
+                                            this.searchPointbyPointName
+                                        }
+                                        style={{ width: 190 }} />
+                                </div>
+                                <div>
+                                    <div style={{ marginTop: 5 }}>
+                                        <TreeCard
+                                            style={{
+                                                width: '400px',
+                                                marginTop: 5,
+                                                background: '#fff',
+                                            }}
+                                            pollutantTypeloading={pollutantTypeloading}
+                                            getHeight={'calc(100vh - 255px)'} getStatusImg={this.getStatusImg}
+                                            getNowPollutantType={this.getNowPollutantType}
+                                            PollutantType={2} treedatalist={datalist}
+                                            pollutantTypelist={pollutantTypelist}
+                                            tabkey={this.state.pollutantTypeCode}
+                                        />
+                                        <TreeCardContent style={{ overflow: 'auto', width: 400, background: '#fff' }}
+                                            getHeight='calc(100vh - 255px)'
+                                            pollutantTypeloading={pollutantTypeloading}
+                                            getStatusImg={this.getStatusImg} isloading={treedataloading}
+                                            treeCilck={this.treeCilck} treedatalist={datalist} PollutantType={pollutantType} ifSelect={true} />
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </Col>
-                    <Col style={{ width: document.body.clientWidth - 420, height: 'calc(100vh - 90px)', float: 'right' }}>
-                        <Card style={{ top: 10, height: 'calc(100vh - 90px)' }} bordered={false}>
-                            <Card style={{ height: '120px' }}>
-                                <Form style={{ marginTop: '17px' }} layout="inline">
-                                    <Row>
-                                        <Col span={8} >
-                                            <RangePicker_ style={{ width: '90%' }} onChange={this._handleDateChange} format={'YYYY-MM-DD'} dateValue={this.state.rangeDate} />
-                                        </Col>
-                                        <Col span={6} >
-                                            <Select
-                                                mode="multiple"
-                                                style={{ width: '90%' }}
-                                                placeholder="请选择污染物"
-                                                onChange={this.SelectHandleChange}
-                                            >
-                                                {this.SelectOptions()}
-                                            </Select>
-                                        </Col>
-                                        <Col span={4} style={{ textAlign: 'center' }} >
-                                            <Button onClick={this.Template}>
-                                                <Icon type="download" />模板下载
+                        </Col>
+                        <Col style={{ width: document.body.clientWidth - 475, height: 'calc(100vh - 150px)', float: 'right' }}>
+                            <Card style={{ top: 10, height: 'calc(100vh - 150px)' }} bordered={false}>
+                                <Card style={{ height: '120px' }}>
+                                    <Form style={{ marginTop: '17px' }} layout="inline">
+                                        <Row>
+                                            <Col span={8} >
+                                                <RangePicker_ style={{ width: '90%' }} onChange={this._handleDateChange} format={'YYYY-MM-DD'} dateValue={this.state.rangeDate} />
+                                            </Col>
+                                            <Col span={6} >
+                                                <Select
+                                                    mode="multiple"
+                                                    style={{ width: '90%' }}
+                                                    placeholder="请选择污染物"
+                                                    onChange={this.SelectHandleChange}
+                                                >
+                                                    {this.SelectOptions()}
+                                                </Select>
+                                            </Col>
+                                            <Col span={4} style={{ textAlign: 'center' }} >
+                                                <Button onClick={this.Template}>
+                                                    <Icon type="download" />模板下载
                                             </Button>
-                                        </Col>
-                                        <Col span={4} style={{ textAlign: 'center' }} >
-                                            <Upload
+                                            </Col>
+                                            <Col span={4} style={{ textAlign: 'center' }} >
+                                                <Upload
 
-                                                action='.doc,.docx'
-                                                customRequest={this.addimg}
-                                                fileList={this.state.fileList}
-                                                showUploadList={false}
-                                            >
-                                                <Button type="primary">
-                                                    <Icon type="upload" />导入文件
+                                                    action='.doc,.docx'
+                                                    customRequest={this.addimg}
+                                                    fileList={this.state.fileList}
+                                                    showUploadList={false}
+                                                >
+                                                    <Button type="primary">
+                                                        <Icon type="upload" />导入文件
                                                 </Button>
-                                            </Upload>
-                                        </Col>
-                                        <Col span={2} style={{ textAlign: 'center' }} >
-                                            <Button
-                                                onClick={() => {
-                                                    this.setState({
-                                                        visible: true,
-                                                        type: 'add',
-                                                        title: '添加数据' + '-' + this.props.pointName,
-                                                        width: 1000,
-                                                        footer: <div>
-                                                            <Button key="back" onClick={this.onCancel}>取消</Button>
-                                                            <Button key="submit" type="primary" onClick={this.AddData}>
-                                                                确定
+                                                </Upload>
+                                            </Col>
+                                            <Col span={2} style={{ textAlign: 'center' }} >
+                                                <Button
+                                                    onClick={() => {
+                                                        this.setState({
+                                                            visible: true,
+                                                            type: 'add',
+                                                            title: '添加数据' + '-' + this.props.pointName,
+                                                            width: 1000,
+                                                            footer: <div>
+                                                                <Button key="back" onClick={this.onCancel}>取消</Button>
+                                                                <Button key="submit" type="primary" onClick={this.AddData}>
+                                                                    确定
                                                         </Button>
-                                                        </div>
-                                                    });
-                                                }}
-                                            >
-                                                添加
+                                                            </div>
+                                                        });
+                                                    }}
+                                                >
+                                                    添加
                                              </Button>
-                                        </Col>
+                                            </Col>
 
-                                    </Row>
-                                </Form>
-                            </Card>
+                                        </Row>
+                                    </Form>
+                                </Card>
 
-                            <Table
-                                rowKey={(record, index) => `complete${index}`}
-                                style={{ height: 'calc(100vh - 257px)' }}
-                                loading={spining}
-                                className={styles.tableCss}
-                                columns={columns}
-                                dataSource={uploaddata}
-                                size={'middle'}
-                                scroll={{ x: '1000px', y: 'calc(100vh - 390px)' }}
-                                rowClassName={
-                                    (record, index, indent) => {
-                                        if (index === 0) {
-                                            return;
-                                        }
-                                        if (index % 2 !== 0) {
-                                            return 'light';
+                                <Table
+                                    rowKey={(record, index) => `complete${index}`}
+                                    // style={{ height: 'calc(100vh - 257px)' }}
+                                    loading={spining}
+                                    className={styles.tableCss}
+                                    columns={columns}
+                                    dataSource={uploaddata}
+                                    size={'middle'}
+                                    scroll={{ x: '1000px', y: 'calc(100vh - 460px)' }}
+                                    rowClassName={
+                                        (record, index, indent) => {
+                                            if (index === 0) {
+                                                return;
+                                            }
+                                            if (index % 2 !== 0) {
+                                                return 'light';
+                                            }
                                         }
                                     }
-                                }
-                                pagination={{
-                                    showSizeChanger: true,
-                                    showQuickJumper: true,
-                                    'total': this.props.total,
-                                    'pageSize': this.props.pageSize,
-                                    'current': this.props.pageIndex,
-                                    onChange: this.onChange,
-                                    onShowSizeChange: this.onShowSizeChange,
-                                    pageSizeOptions: ['10', '20', '30', '40']
-                                }}
-                            />
-                            <Modal
-                                footer={this.state.footer}
-                                destroyOnClose="true"
-                                visible={this.state.visible}
-                                title={this.state.title}
-                                width={this.state.width}
-                                onCancel={this.onCancel}>
-                                {
-                                    this.state.type === 'add' ? <Add onCancels={this.onCancel} dgimn={this.props.DGIMN} onRef={this.onRef1} /> : this.state.type === 'update' ? <Update onCancels={this.onCancel} item={this.state.data} onRef={this.onRef1} /> : null
-                                }
-                            </Modal>
-                        </Card>
-                    </Col>
-                </Row>
-            </div>
+                                    pagination={{
+                                        showSizeChanger: true,
+                                        showQuickJumper: true,
+                                        'total': this.props.total,
+                                        'pageSize': this.props.pageSize,
+                                        'current': this.props.pageIndex,
+                                        onChange: this.onChange,
+                                        onShowSizeChange: this.onShowSizeChange,
+                                        pageSizeOptions: ['10', '20', '30', '40']
+                                    }}
+                                />
+                                <Modal
+                                    footer={this.state.footer}
+                                    destroyOnClose="true"
+                                    visible={this.state.visible}
+                                    title={this.state.title}
+                                    width={this.state.width}
+                                    onCancel={this.onCancel}>
+                                    {
+                                        this.state.type === 'add' ? <Add onCancels={this.onCancel} dgimn={this.props.DGIMN} onRef={this.onRef1} /> : this.state.type === 'update' ? <Update onCancels={this.onCancel} item={this.state.data} onRef={this.onRef1} /> : null
+                                    }
+                                </Modal>
+                            </Card>
+                        </Col>
+                    </Row>
+                </div>
+            </MonitorContent>
         );
     }
 }

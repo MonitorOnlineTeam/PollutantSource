@@ -236,7 +236,7 @@ class AppDirectMeasurement extends Component {
                             }
                             <tr>
                                 <td style={{ width: '18%', height: '50px', textAlign: 'center', fontSize: '14px' }}>
-                                        异常情况处理
+                                    异常情况处理
                                 </td>
                                 <td colSpan="3" style={{ textAlign: 'center', fontSize: '14px' }}>
                                     {ExceptionHandling}
@@ -244,15 +244,15 @@ class AppDirectMeasurement extends Component {
                             </tr>
                         </tbody>
                     </table>
-                    <table className={styles.FormTable}>
+                    <table className={styles.FormTableBottom}>
                         <tbody>
                             <tr>
-                                <td style={{ width: '87%', height: '50px', textAlign: 'right', border: '0', fontWeight: 'bold', minWidth: 850 }}>负责人签名：</td>
-                                <td style={{ width: '13%', height: '50px', border: '0', minWidth: 100 }}><img src={SignContent} /></td>
+                                <td style={{ width: '70%', height: '25px', textAlign: 'right', fontWeight: 'bold', minWidth: 800 }}>负责人签名：</td>
+                                <td style={{ width: '30%', height: '25px' }}>{SignContent === null ? null : <img style={{ width: '90px', height: '30px' }} src={SignContent} />} </td>
                             </tr>
                             <tr>
-                                <td style={{ width: '87%', height: '50px', textAlign: 'right', border: '0', fontWeight: 'bold', minWidth: 850 }}>签名时间：</td>
-                                <td style={{ width: '13%', height: '50px', border: '0', minWidth: 100 }}>{SignTime}</td>
+                                <td style={{ width: '70%', height: '25px', textAlign: 'right', fontWeight: 'bold', fontSize: '12px' , minWidth: 800}}>签名时间：</td>
+                                <td style={{ width: '30%', height: '25px', fontSize: '10px', minWidth: 150 }}>{SignTime}</td>
                             </tr>
                         </tbody>
                     </table>

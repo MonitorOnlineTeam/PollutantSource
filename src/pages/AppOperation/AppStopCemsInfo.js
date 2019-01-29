@@ -94,73 +94,73 @@ export default class AppStopCemsInfo extends Component {
         }
         return (
             <MapInteractionCSS>
-                    <div className={styles.FormDiv} style={{ height: SCREEN_HEIGHT }}>
-                        <div className={styles.FormName}>CEMS停机记录表</div>
-                        <div className={styles.HeadDiv} style={{ fontWeight: 'bold' }}>企业名称：{EnterpriseName}</div>
-                        <table className={styles.FormTable}>
-                            <tbody>
-                                <tr>
-                                    <td style={{ width: '25%', height: '25px', textAlign: 'center', fontSize: '12px' }}>
-                                        安装地点
+                <div className={styles.FormDiv} style={{ height: SCREEN_HEIGHT }}>
+                    <div className={styles.FormName}>CEMS停机记录表</div>
+                    <div className={styles.HeadDiv} style={{ fontWeight: 'bold' }}>企业名称：{EnterpriseName}</div>
+                    <table className={styles.FormTable}>
+                        <tbody>
+                            <tr>
+                                <td style={{ width: '25%', height: '25px', textAlign: 'center', fontSize: '12px' }}>
+                                    安装地点
                                 </td>
-                                    <td colSpan="3" style={{ textAlign: 'center', fontSize: '12px' }}>
-                                        {PointPosition}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style={{ width: '25%', height: '25px', textAlign: 'center', backgroundColor: '#FAFAFA', fontSize: '12px', fontWeight: '600' }}>
-                                        序号
+                                <td colSpan="3" style={{ textAlign: 'center', fontSize: '12px' }}>
+                                    {PointPosition}
                                 </td>
-                                    <td style={{ width: '25%', height: '25px', textAlign: 'center', backgroundColor: '#FAFAFA', fontSize: '12px', fontWeight: '600' }}>
-                                        开始时间
+                            </tr>
+                            <tr>
+                                <td style={{ width: '25%', height: '25px', textAlign: 'center', backgroundColor: '#FAFAFA', fontSize: '12px', fontWeight: '600' }}>
+                                    序号
+                                </td>
+                                <td style={{ width: '25%', height: '25px', textAlign: 'center', backgroundColor: '#FAFAFA', fontSize: '12px', fontWeight: '600' }}>
+                                    开始时间
                                 </td >
-                                    <td style={{ width: '25%', height: '25px', textAlign: 'center', backgroundColor: '#FAFAFA', fontSize: '12px', fontWeight: '600' }}>
-                                        结束时间
+                                <td style={{ width: '25%', height: '25px', textAlign: 'center', backgroundColor: '#FAFAFA', fontSize: '12px', fontWeight: '600' }}>
+                                    结束时间
                                 </td>
-                                    <td style={{ width: '25%', height: '25px', textAlign: 'center', backgroundColor: '#FAFAFA', fontSize: '12px', fontWeight: '600' }}>
-                                        停机原因
+                                <td style={{ width: '25%', height: '25px', textAlign: 'center', backgroundColor: '#FAFAFA', fontSize: '12px', fontWeight: '600' }}>
+                                    停机原因
                                 </td>
-                                </tr>
-                                {
-                                    this.renderItem(RecordList)
-                                }
-                                <tr>
-                                    <td style={{ width: '18%', height: '25px', textAlign: 'center', fontSize: '12px' }}>
-                                        情况总结
+                            </tr>
+                            {
+                                this.renderItem(RecordList)
+                            }
+                            <tr>
+                                <td style={{ width: '18%', height: '25px', textAlign: 'center', fontSize: '12px' }}>
+                                    情况总结
                                 </td>
-                                    <td colSpan="3" style={{ textAlign: 'center', fontSize: '12px' }}>
-                                        {StopSummary}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style={{ width: '18%', height: '25px', textAlign: 'center', fontSize: '12px' }}>
-                                        停机人
+                                <td colSpan="3" style={{ textAlign: 'center', fontSize: '12px' }}>
+                                    {StopSummary}
                                 </td>
-                                    <td style={{ width: '25%', height: '25px', textAlign: 'center', fontSize: '12px' }}>
-                                        {CreateUserID}
-                                    </td >
-                                    <td style={{ width: '25%', height: '25px', textAlign: 'center', fontSize: '12px' }}>
-                                        时间
+                            </tr>
+                            <tr>
+                                <td style={{ width: '18%', height: '25px', textAlign: 'center', fontSize: '12px' }}>
+                                    停机人
                                 </td>
-                                    <td style={{ width: '32%', height: '25px', textAlign: 'center', fontSize: '12px' }}>
-                                        {CreateTime}
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <table className={styles.FormTableBottom}>
-                            <tbody>
-                                <tr>
-                                    <td style={{ width: '87%', height: '25px', textAlign: 'right', border: '0', fontWeight: 'bold' }}>负责人签名：</td>
-                                    <td style={{ width: '13%', height: '25px', border: '0' }}><img style={{width: '90px', height:'30px'}} src={SignContent} /></td>
-                                </tr>
-                                <tr>
-                                    <td style={{ width: '87%', height: '25px', textAlign: 'right', border: '0', fontWeight: 'bold',fontSize: '12px' }}>签名时间：</td>
-                                    <td style={{ width: '13%', height: '25px', border: '0' }}>{SignTime}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+                                <td style={{ width: '25%', height: '25px', textAlign: 'center', fontSize: '12px' }}>
+                                    {CreateUserID}
+                                </td >
+                                <td style={{ width: '25%', height: '25px', textAlign: 'center', fontSize: '12px' }}>
+                                    时间
+                                </td>
+                                <td style={{ width: '32%', height: '25px', textAlign: 'center', fontSize: '12px' }}>
+                                    {CreateTime}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <table className={styles.FormTableBottom}>
+                        <tbody>
+                            <tr>
+                                <td style={{ width: '70%', height: '25px', textAlign: 'right', fontWeight: 'bold' }}>负责人签名：</td>
+                                <td style={{ width: '30%', height: '25px', }}>{SignContent === null ? null : <img style={{ width: '90px', height: '30px' }} src={SignContent} />} </td>
+                            </tr>
+                            <tr>
+                                <td style={{ width: '70%', height: '25px', textAlign: 'right', border: '0', fontWeight: 'bold', fontSize: '12px' }}>签名时间：</td>
+                                <td style={{ width: '30%', height: '25px', fontSize: '10px', minWidth: 120 }}>{SignTime}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </MapInteractionCSS>
         );
     }

@@ -160,19 +160,30 @@ export default class KBM extends Component {
     }
     //下载文件
     showFile = (record) => {
-       if(record.FileName!=="")
-       {
-           const fileName=record.FileName.split('.');
-           var name='';
-           fileName.forEach(element => {
-               
-           });
-        window.open('../upload/' + record.FileName+'.pdf')
-       }
-       else
-       {
-           message.error('未上传文件')
-       }
+        if (record.FileName !== "") {
+            const fileName = record.FileName.split('.');
+            var name = fileName[0] + '.';
+            if (fileName.length > 2) {
+                name = "";
+                for (let index = 0; index < fileName.length; index++) {
+                    const element = array[index];
+                    if (index < fileName.length - 1) {
+                        name += element + '.';
+                    }
+
+                }
+            }
+            debugger
+            if (fileName[fileName.length - 1] === 'png' || fileName[fileName.length - 1] === 'gif'|| fileName[fileName.length - 1] === 'bmp'|| fileName[fileName.length - 1] === 'jpg') {
+                window.open('../upload/' + name + fileName[fileName.length - 1])
+            }
+            else {
+                window.open('../upload/' + name + 'pdf')
+            }
+        }
+        else {
+            message.error('未上传文件')
+        }
     }
     //重新加载数据
     reloaddata = (Name, pageIndex, pageSize) => {

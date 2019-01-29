@@ -298,15 +298,19 @@ export default class BdTestRecord extends Component {
         }
         if (taskfrom === 'ywdsjlist') {    //运维大事记
             rtnVal.push({ Name: '运维大事记', Url: `/pointdetail/${DGIMN}/${listUrl}/${taskfrom}` });
-            rtnVal.push({ Name: '任务详情', Url: `/TaskDetail/emergencydetailinfo/${listUrl}/${taskfrom}/${taskID}` });
+            rtnVal.push({ Name: '任务详情', Url: `/TaskDetail/emergencydetailinfo/${listUrl}/${taskfrom}/${taskID}/${DGIMN}` });
         } else if (taskfrom === 'qcontrollist') {    //质控记录
             rtnVal.push({ Name: '质控记录', Url: `/pointdetail/${DGIMN}/${listUrl}/${taskfrom}/${histroyrecordtype}` });
         }
         else if (taskfrom === 'qualityControlOperation') {    //智能质控
             rtnVal.push({ Name: '智能质控', Url: `` });
+        } else if (taskfrom === 'operationywdsjlist') { //运维大事记
+            rtnVal.push({ Name: '智能运维', Url: `` });
+            rtnVal.push({ Name: '运维大事记', Url: `/operation/ywdsjlist` });
+            rtnVal.push({ Name: '任务详情', Url: `/TaskDetail/emergencydetailinfo/undefined/operationywdsjlist/${taskID}/${DGIMN}` });
         }
         else {    //其他
-            rtnVal.push({ Name: '任务详情', Url: `/TaskDetail/emergencydetailinfo/${listUrl}/nop/${taskID}` });
+            rtnVal.push({ Name: '任务详情', Url: `/TaskDetail/emergencydetailinfo/${listUrl}/nop/${taskID}/${DGIMN}` });
         }
         if (listUrl !== 'menu') {
             rtnVal.push({ Name: 'CEMS校验测试记录', Url: '' });
@@ -591,12 +595,12 @@ export default class BdTestRecord extends Component {
                         <table className={styles.FormTable}>
                             <tbody>
                                 <tr>
-                                    <td style={{ width: '75%', height: '30px', textAlign: 'right', border: '0', fontWeight: 'bold' }}>负责人签名：</td>
-                                    <td style={{ width: '25%', height: '30px', border: '0' }}><img src={SignContent} /></td>
+                                    <td style={{ width: '87%', height: '30px', textAlign: 'right', border: '0', fontWeight: 'bold' }}>负责人签名：</td>
+                                    <td style={{ width: '13%', height: '30px', border: '0' }}><img style={{ width: '80%', height: '110%' }} src={SignContent} /></td>
                                 </tr>
                                 <tr>
-                                    <td style={{ width: '75%', height: '30px', textAlign: 'right', border: '0', fontWeight: 'bold' }}>签名时间：</td>
-                                    <td style={{ width: '25%', height: '30px', border: '0' }}>{SignTime}</td>
+                                    <td style={{ width: '87%', height: '30px', textAlign: 'right', border: '0', fontWeight: 'bold' }}>签名时间：</td>
+                                    <td style={{ width: '13%', height: '30px', border: '0' }}>{SignTime}</td>
                                 </tr>
                             </tbody>
                         </table>
