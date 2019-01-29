@@ -94,7 +94,6 @@ export default class AppStopCemsInfo extends Component {
         }
         return (
             <MapInteractionCSS>
-                <Card>
                     <div className={styles.FormDiv} style={{ height: SCREEN_HEIGHT }}>
                         <div className={styles.FormName}>CEMS停机记录表</div>
                         <div className={styles.HeadDiv} style={{ fontWeight: 'bold' }}>企业名称：{EnterpriseName}</div>
@@ -153,16 +152,15 @@ export default class AppStopCemsInfo extends Component {
                             <tbody>
                                 <tr>
                                     <td style={{ width: '87%', height: '25px', textAlign: 'right', border: '0', fontWeight: 'bold' }}>负责人签名：</td>
-                                    <td style={{ width: '13%', height: '25px', border: '0' }}><img src={SignContent} /></td>
+                                    <td style={{ width: '13%', height: '25px', border: '0' }}><img style={{width: '90px', height:'30px'}} src={SignContent} /></td>
                                 </tr>
                                 <tr>
-                                    <td style={{ width: '87%', height: '25px', textAlign: 'right', border: '0', fontWeight: 'bold' }}>签名时间：</td>
+                                    <td style={{ width: '87%', height: '25px', textAlign: 'right', border: '0', fontWeight: 'bold',fontSize: '12px' }}>签名时间：</td>
                                     <td style={{ width: '13%', height: '25px', border: '0' }}>{SignTime}</td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
-                </Card>
             </MapInteractionCSS>
         );
     }

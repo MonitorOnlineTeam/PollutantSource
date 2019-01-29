@@ -77,7 +77,7 @@ export default class StopCemsListHistoryRecords extends Component {
     }
 
     seeDetail = (record) => {
-        this.props.dispatch(routerRedux.push(`/PatrolForm/StopCemsInfo/${this.state.DGIMN}/${this.props.match.params.viewtype}/qcontrollist/StopCemsListHistoryRecords/${record.TaskID}`));
+        this.props.dispatch(routerRedux.push(`/PatrolForm/StopCemsInfo/${this.state.DGIMN}/${this.props.match.params.viewtype}/operationlist/StopCemsListHistoryRecords/${record.TaskID}`));
     }
 
     render() {

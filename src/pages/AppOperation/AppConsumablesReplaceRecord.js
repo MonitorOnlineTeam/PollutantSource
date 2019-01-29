@@ -114,109 +114,107 @@ class AppConsumablesReplaceRecord extends Component {
         }
         return (
             <MapInteractionCSS>
-                <Card>
-                    <div className={styles.FormDiv} style={{ height: SCREEN_HEIGHT }}>
-                        <div style={{ minWidth: 950, textAlign: 'center',fontSize:15,fontWeight:'bold' }}>易耗品更换记录表</div>
-                        <div style={{ fontWeight: 'bold', minWidth: 950,fontSize:12 }}>企业名称：{EnterpriseName}</div>
-                        <table
-                            className={styles.FormTable}
-                        >
-                            <tbody>
-                                <tr>
-                                    <td style={{ height: '25px', textAlign: 'center', fontSize: '12px', minWidth: 100 }}>
+                <div className={styles.FormDiv} style={{ height: SCREEN_HEIGHT }}>
+                    <div style={{ minWidth: 950, textAlign: 'center',fontSize:15,fontWeight:'bold' }}>易耗品更换记录表</div>
+                    <div style={{ fontWeight: 'bold', minWidth: 950,fontSize:12 }}>企业名称：{EnterpriseName}</div>
+                    <table
+                        className={styles.FormTable}
+                    >
+                        <tbody>
+                            <tr>
+                                <td style={{ height: '25px', textAlign: 'center', fontSize: '12px', minWidth: 100 }}>
                                         设备名称
-                                    </td>
-                                    <td style={{ textAlign: 'center', fontSize: '12px', minWidth: 150 }}>
-                                        {DeviceName}
-                                    </td>
-                                    <td style={{ height: '25px', textAlign: 'center', fontSize: '12px', minWidth: 100 }}>
+                                </td>
+                                <td style={{ textAlign: 'center', fontSize: '12px', minWidth: 150 }}>
+                                    {DeviceName}
+                                </td>
+                                <td style={{ height: '25px', textAlign: 'center', fontSize: '12px', minWidth: 100 }}>
                                         规格型号
-                                    </td>
-                                    <td style={{ textAlign: 'center', fontSize: '12px', minWidth: 100 }}>
-                                        {Code}
-                                    </td>
-                                    <td style={{ height: '25px', textAlign: 'center', fontSize: '12px', minWidth: 100 }}>
+                                </td>
+                                <td style={{ textAlign: 'center', fontSize: '12px', minWidth: 100 }}>
+                                    {Code}
+                                </td>
+                                <td style={{ height: '25px', textAlign: 'center', fontSize: '12px', minWidth: 100 }}>
                                         设备编号
-                                    </td>
-                                    <td colSpan="2" style={{ textAlign: 'center', fontSize: '12px', minWidth: 200 }}>
-                                        {Equipment}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td colSpan="2" style={{ height: '25px', textAlign: 'center', fontSize: '12px', minWidth: 250 }}>
+                                </td>
+                                <td colSpan="2" style={{ textAlign: 'center', fontSize: '12px', minWidth: 200 }}>
+                                    {Equipment}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colSpan="2" style={{ height: '25px', textAlign: 'center', fontSize: '12px', minWidth: 250 }}>
                                         维护管理单位
-                                    </td>
-                                    <td colSpan="2" style={{ textAlign: 'center', fontSize: '12px', minWidth: 200 }}>
-                                        {MaintenanceManagementUnit}
-                                    </td>
-                                    <td colSpan="2" style={{ height: '25px', textAlign: 'center', fontSize: '12px', minWidth: 250 }}>
+                                </td>
+                                <td colSpan="2" style={{ textAlign: 'center', fontSize: '12px', minWidth: 200 }}>
+                                    {MaintenanceManagementUnit}
+                                </td>
+                                <td colSpan="2" style={{ height: '25px', textAlign: 'center', fontSize: '12px', minWidth: 250 }}>
                                         安装地点
-                                    </td>
-                                    <td style={{ textAlign: 'center', fontSize: '12px', minWidth: 250 }}>
-                                        {PointPosition}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style={{ width: '9%', height: '25px', textAlign: 'center', backgroundColor: '#FAFAFA', fontSize: '12px', fontWeight: '600' }}>
+                                </td>
+                                <td style={{ textAlign: 'center', fontSize: '12px', minWidth: 250 }}>
+                                    {PointPosition}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style={{ width: '9%', height: '25px', textAlign: 'center', backgroundColor: '#FAFAFA', fontSize: '12px', fontWeight: '600' }}>
                                         序号
-                                    </td>
-                                    <td style={{ width: '18%', height: '25px', textAlign: 'center', backgroundColor: '#FAFAFA', fontSize: '12px', fontWeight: '600' }}>
+                                </td>
+                                <td style={{ width: '18%', height: '25px', textAlign: 'center', backgroundColor: '#FAFAFA', fontSize: '12px', fontWeight: '600' }}>
                                         更换日期
-                                    </td>
-                                    <td style={{ width: '12%', height: '25px', textAlign: 'center', backgroundColor: '#FAFAFA', fontSize: '12px', fontWeight: '600' }}>
+                                </td>
+                                <td style={{ width: '12%', height: '25px', textAlign: 'center', backgroundColor: '#FAFAFA', fontSize: '12px', fontWeight: '600' }}>
                                         易耗品名称
-                                    </td>
-                                    <td style={{ width: '12%', height: '25px', textAlign: 'center', backgroundColor: '#FAFAFA', fontSize: '12px', fontWeight: '600' }}>
+                                </td>
+                                <td style={{ width: '12%', height: '25px', textAlign: 'center', backgroundColor: '#FAFAFA', fontSize: '12px', fontWeight: '600' }}>
                                         规格型号
-                                    </td>
-                                    <td style={{ width: '12%', height: '25px', textAlign: 'center', backgroundColor: '#FAFAFA', fontSize: '12px', fontWeight: '600' }}>
+                                </td>
+                                <td style={{ width: '12%', height: '25px', textAlign: 'center', backgroundColor: '#FAFAFA', fontSize: '12px', fontWeight: '600' }}>
                                         单位
-                                    </td>
-                                    <td style={{ width: '12%', height: '25px', textAlign: 'center', backgroundColor: '#FAFAFA', fontSize: '12px', fontWeight: '600' }}>
+                                </td>
+                                <td style={{ width: '12%', height: '25px', textAlign: 'center', backgroundColor: '#FAFAFA', fontSize: '12px', fontWeight: '600' }}>
                                         数量
-                                    </td>
-                                    <td style={{ width: '23%', height: '25px', textAlign: 'center', backgroundColor: '#FAFAFA', fontSize: '12px', fontWeight: '600' }}>
+                                </td>
+                                <td style={{ width: '23%', height: '25px', textAlign: 'center', backgroundColor: '#FAFAFA', fontSize: '12px', fontWeight: '600' }}>
                                         更换原因说明（备注）
-                                    </td>
-                                </tr>
-                                {
-                                    this.renderItem(DataList)
-                                }
-                                <tr>
-                                    <td colSpan="2" style={{ height: '25px', textAlign: 'center', fontSize: '12px' }}>
+                                </td>
+                            </tr>
+                            {
+                                this.renderItem(DataList)
+                            }
+                            <tr>
+                                <td colSpan="2" style={{ height: '25px', textAlign: 'center', fontSize: '12px' }}>
                                         运行维护人员
-                                    </td>
-                                    <td colSpan="2" style={{ textAlign: 'center', fontSize: '12px' }}>
-                                        {CreateUserID}
-                                    </td>
-                                    <td colSpan="2" style={{ height: '25px', textAlign: 'center', fontSize: '12px' }}>
+                                </td>
+                                <td colSpan="2" style={{ textAlign: 'center', fontSize: '12px' }}>
+                                    {CreateUserID}
+                                </td>
+                                <td colSpan="2" style={{ height: '25px', textAlign: 'center', fontSize: '12px' }}>
                                         时间
-                                    </td>
-                                    <td style={{ textAlign: 'center', fontSize: '12px', colSpan: '2' }}>
-                                        {CreateTime}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td colSpan="7" style={{ width: '18%', height: '25px', fontSize: '12px', paddingLeft: 15 }}>
+                                </td>
+                                <td style={{ textAlign: 'center', fontSize: '12px', colSpan: '2' }}>
+                                    {CreateTime}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colSpan="7" style={{ width: '18%', height: '25px', fontSize: '12px', paddingLeft: 15 }}>
                                         注：更换易耗品时应及时记录，每半年汇总存档。
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <table className={styles.FormTable}>
-                            <tbody>
-                                <tr>
-                                    <td style={{ height: '25px', textAlign: 'right', border: '0', fontWeight: 'bold', minWidth: 850 }}>负责人签名：</td>
-                                    <td style={{ height: '25px', border: '0', minWidth: 100 }}>{SignContents}</td>
-                                </tr>
-                                <tr>
-                                    <td style={{ height: '25px', textAlign: 'right', border: '0', fontWeight: 'bold', minWidth: 850 }}>签名时间：</td>
-                                    <td style={{ height: '25px', border: '0', minWidth: 100 }}>{SignTime}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </Card>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <table className={styles.FormTable}>
+                        <tbody>
+                            <tr>
+                                <td style={{ height: '25px', textAlign: 'right', border: '0', fontWeight: 'bold', minWidth: 850 }}>负责人签名：</td>
+                                <td style={{ height: '25px', border: '0', minWidth: 100 }}>{SignContents}</td>
+                            </tr>
+                            <tr>
+                                <td style={{ height: '25px', textAlign: 'right', border: '0', fontWeight: 'bold', minWidth: 850 }}>签名时间：</td>
+                                <td style={{ height: '25px', border: '0', minWidth: 100 }}>{SignTime}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </MapInteractionCSS>
         );
     }

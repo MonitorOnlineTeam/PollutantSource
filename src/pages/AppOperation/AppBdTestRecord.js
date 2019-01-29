@@ -319,7 +319,6 @@ export default class AppBdTestRecord extends Component {
         }
         return (
             <MapInteractionCSS>
-                <Card >
                     <div className={styles.FormDiv}>
                         <div style={{ minWidth: 1000, textAlign: 'center', fontSize: 15, fontWeight: 'bold' }}>CEMS校验测试记录</div>
                         <div style={{ fontWeight: 'bold', minWidth: 1000, fontSize: 12 }}>企业名称：{EnterpriseName}</div>
@@ -541,7 +540,6 @@ export default class AppBdTestRecord extends Component {
                             </tbody>
                         </table>
                     </div>
-                </Card>
             </MapInteractionCSS>
         );
     }

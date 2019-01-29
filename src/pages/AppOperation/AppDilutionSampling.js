@@ -209,68 +209,66 @@ class AppDilutionSampling extends Component {
         }
         return (
             <MapInteractionCSS>
-                <Card>
-                    <div className={styles.FormDiv} style={{ height: SCREEN_HEIGHT }}>
-                        <div style={{ minWidth: 950, textAlign: 'center',fontSize:15,fontWeight:'bold' }}>稀释采样法CEMS日常巡检记录表</div>
-                        <table className={styles.FormTable}>
-                            <tr>
-                                <td style={{ width: '50%', height: '50px', textAlign: 'left' ,fontSize: '14px',fontWeight: 'bold', minWidth: 450  }}>企业名称：{EnterpriseName}</td>
-                                <td style={{ width: '50%', height: '50px', textAlign: 'left' ,fontSize: '14px',fontWeight: 'bold', minWidth: 500  }}> 巡检日期：{PatrolDate}</td>
-                            </tr>
+                <div className={styles.FormDiv} style={{ height: SCREEN_HEIGHT }}>
+                    <div style={{ minWidth: 950, textAlign: 'center',fontSize:15,fontWeight:'bold' }}>稀释采样法CEMS日常巡检记录表</div>
+                    <table className={styles.FormTable}>
+                        <tr>
+                            <td style={{ width: '50%', height: '50px', textAlign: 'left' ,fontSize: '14px',fontWeight: 'bold', minWidth: 450 }}>企业名称：{EnterpriseName}</td>
+                            <td style={{ width: '50%', height: '50px', textAlign: 'left' ,fontSize: '14px',fontWeight: 'bold', minWidth: 500 }}> 巡检日期：{PatrolDate}</td>
+                        </tr>
 
-                        </table>
-                        <table className={styles.FormTable}>
-                            <tbody>
-                                <tr>
-                                    <td style={{ width: '50%', height: '50px', textAlign: 'left' ,fontSize: '14px', minWidth: 450  }}>{GasCemsEquipmentManufacturer}</td>
-                                    <td style={{ width: '50%', height: '50px', textAlign: 'left' ,fontSize: '14px', minWidth: 500  }}>{GasCemsCode}</td>
-                                </tr>
-                                <tr>
-                                    <td style={{ width: '50%', height: '50px', textAlign: 'left' ,fontSize: '14px', minWidth: 450  }}>{KlwCemsEquipmentManufacturer}</td>
-                                    <td style={{ width: '50%', height: '50px', textAlign: 'left' ,fontSize: '14px', minWidth: 500  }}>{KlwCemsCode}</td>
-                                </tr>
-                                <tr>
-                                    <td style={{ width: '50%', height: '50px', textAlign: 'left' ,fontSize: '14px', minWidth: 450  }}>{PointPosition}</td>
-                                    <td style={{ width: '50%', height: '50px', textAlign: 'left' ,fontSize: '14px', minWidth: 500  }}>{MaintenanceManagementUnit}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <div style={{ fontWeight: 'bold' }}>运行维护内容及处理说明：</div>
-                        <table className={styles.FormTable}>
-                            <tbody>
-                                <tr>
-                                    <td style={{ width: '20%', height: '50px', textAlign: 'center' ,fontSize: '14px' }}>项目</td>
-                                    <td style={{ width: '40%', height: '50px', textAlign: 'center' ,fontSize: '14px' }}>内容</td>
-                                    <td style={{ width: '20%', height: '50px', textAlign: 'center' ,fontSize: '14px' }}>维护情况</td>
-                                    <td style={{ width: '20%', height: '50px', textAlign: 'center' ,fontSize: '14px' }}>备注</td>
-                                </tr>
-                                {
-                                    this.renderItem(Repair)
-                                }
-                                <tr>
-                                    <td style={{ width: '18%', height: '50px', textAlign: 'center',fontSize: '14px' }}>
+                    </table>
+                    <table className={styles.FormTable}>
+                        <tbody>
+                            <tr>
+                                <td style={{ width: '50%', height: '50px', textAlign: 'left' ,fontSize: '14px', minWidth: 450 }}>{GasCemsEquipmentManufacturer}</td>
+                                <td style={{ width: '50%', height: '50px', textAlign: 'left' ,fontSize: '14px', minWidth: 500 }}>{GasCemsCode}</td>
+                            </tr>
+                            <tr>
+                                <td style={{ width: '50%', height: '50px', textAlign: 'left' ,fontSize: '14px', minWidth: 450 }}>{KlwCemsEquipmentManufacturer}</td>
+                                <td style={{ width: '50%', height: '50px', textAlign: 'left' ,fontSize: '14px', minWidth: 500 }}>{KlwCemsCode}</td>
+                            </tr>
+                            <tr>
+                                <td style={{ width: '50%', height: '50px', textAlign: 'left' ,fontSize: '14px', minWidth: 450 }}>{PointPosition}</td>
+                                <td style={{ width: '50%', height: '50px', textAlign: 'left' ,fontSize: '14px', minWidth: 500 }}>{MaintenanceManagementUnit}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div style={{ fontWeight: 'bold' }}>运行维护内容及处理说明：</div>
+                    <table className={styles.FormTable}>
+                        <tbody>
+                            <tr>
+                                <td style={{ width: '20%', height: '50px', textAlign: 'center' ,fontSize: '14px' }}>项目</td>
+                                <td style={{ width: '40%', height: '50px', textAlign: 'center' ,fontSize: '14px' }}>内容</td>
+                                <td style={{ width: '20%', height: '50px', textAlign: 'center' ,fontSize: '14px' }}>维护情况</td>
+                                <td style={{ width: '20%', height: '50px', textAlign: 'center' ,fontSize: '14px' }}>备注</td>
+                            </tr>
+                            {
+                                this.renderItem(Repair)
+                            }
+                            <tr>
+                                <td style={{ width: '18%', height: '50px', textAlign: 'center',fontSize: '14px' }}>
                                 异常情况处理
-                                    </td>
-                                    <td colSpan="3" style={{textAlign: 'center',fontSize: '14px'}}>
-                                        {ExceptionHandling}
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <table className={styles.FormTable}>
-                            <tbody>
-                                <tr>
-                                    <td style={{ width: '87%', height: '50px', textAlign: 'right', border: '0', fontWeight: 'bold' , minWidth: 850 }}>负责人签名：</td>
-                                    <td style={{ width: '13%', height: '50px', border: '0', minWidth: 100 }}><img src={SignContent} /></td>
-                                </tr>
-                                <tr>
-                                    <td style={{ width: '87%', height: '50px', textAlign: 'right', border: '0', fontWeight: 'bold', minWidth: 850 }}>签名时间：</td>
-                                    <td style={{ width: '13%', height: '50px', border: '0', minWidth: 100 }}>{SignTime}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </Card>
+                                </td>
+                                <td colSpan="3" style={{textAlign: 'center',fontSize: '14px'}}>
+                                    {ExceptionHandling}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <table className={styles.FormTable}>
+                        <tbody>
+                            <tr>
+                                <td style={{ width: '87%', height: '50px', textAlign: 'right', border: '0', fontWeight: 'bold' , minWidth: 850 }}>负责人签名：</td>
+                                <td style={{ width: '13%', height: '50px', border: '0', minWidth: 100 }}><img src={SignContent} /></td>
+                            </tr>
+                            <tr>
+                                <td style={{ width: '87%', height: '50px', textAlign: 'right', border: '0', fontWeight: 'bold', minWidth: 850 }}>签名时间：</td>
+                                <td style={{ width: '13%', height: '50px', border: '0', minWidth: 100 }}>{SignTime}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </MapInteractionCSS>
         );
     }

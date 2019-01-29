@@ -73,7 +73,7 @@ export default class ZZCLFInspectionHistoryRecords extends Component {
     }
 
     seeDetail = (record) => {
-        this.props.dispatch(routerRedux.push(`/PatrolForm/DirectMeasurement/${this.state.DGIMN}/${this.props.match.params.viewtype}/qcontrollist/ZZCLFInspectionHistoryRecords/${record.TaskID}`));
+        this.props.dispatch(routerRedux.push(`/PatrolForm/DirectMeasurement/${this.state.DGIMN}/${this.props.match.params.viewtype}/operationlist/ZZCLFInspectionHistoryRecords/${record.TaskID}`));
     }
 
     render() {

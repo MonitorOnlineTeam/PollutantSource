@@ -69,7 +69,6 @@ export default class AppDeviceExceptionDetail extends Component {
         }
         return (
             <MapInteractionCSS>
-            <Card >
                 <div className={styles.FormDiv} style={{ height: SCREEN_HEIGHT }}>
                     <div className={styles.FormName}>CEMS设备数据异常记录表</div>
                     <table className={styles.FormTable}>
@@ -152,7 +151,6 @@ export default class AppDeviceExceptionDetail extends Component {
                         </tbody>
                     </table>
                 </div>
-                </Card>
                 </MapInteractionCSS>
         );
     }
