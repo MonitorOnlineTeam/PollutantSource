@@ -10,6 +10,7 @@ import SearchInput from '../../components/OverView/SearchInput';
 import TreeStatus from '../../components/OverView/TreeStatus';
 import TreeCard from '../../components/OverView/TreeCard';
 import TreeCardContent from '../../components/OverView/TreeCardContent';
+import MonitorContent from '../../components/MonitorContent/index';
 
 const RadioButton = Radio.Button;
 const RadioGroup = Radio.Group;
@@ -42,11 +43,6 @@ export default class Ywdsjlist extends Component {
 
     componentDidMount() {
         const { dispatch } = this.props;
-        dispatch({
-            type: 'overview/getPollutantTypeList',
-            payload: {
-            }
-        });
         var getDGIMN = localStorage.getItem('DGIMN')
         if (getDGIMN === null) {
             getDGIMN = '[object Object]';
@@ -152,14 +148,6 @@ export default class Ywdsjlist extends Component {
         }
         return <img style={{ width: 15 }} src="/gisexception.png" />;
     }
-    //当前选中的污染物类型
-    getNowPollutantType = (key) => {
-        this.setState({
-            pollutantTypeCode: key
-        })
-        const { searchName } = this.state;
-        this.reloadData(key, searchName);
-    }
     //重新加载
     searchData = (pollutantTypeCode, searchName) => {
         var getDGIMN = localStorage.getItem('DGIMN')
@@ -217,24 +205,6 @@ export default class Ywdsjlist extends Component {
                     }
 
                 }
-            },
-        });
-    }
-    //重新加载
-    reloadData = (pollutantTypeCode, searchName) => {
-        var getDGIMN = '[object Object]'
-        this.props.dispatch({
-            type: 'overview/querydatalist',
-            payload: {
-                map: true,
-                pollutantTypes: pollutantTypeCode,
-                pointName: searchName,
-                RepairHistoryRecords: true,
-                pageIndex: this.props.pageIndex,
-                pageSize: this.props.pageSize,
-                BeginTime: this.state.rangeDate[0].format('YYYY-MM-DD 00:00:00'),
-                EndTime: this.state.rangeDate[1].format('YYYY-MM-DD 23:59:59'),
-                DGIMN: getDGIMN,
             },
         });
     }
@@ -335,57 +305,62 @@ export default class Ywdsjlist extends Component {
         const IsOver = this.props.IsOver;
 
         return (
-            <div className={Ywdsjlistss.cardTitle}>
-                <Row>
-                    <Col>
-                        <div style={{
-                            width: 450,
-                            position: 'absolute',
-                            top: 10,
-                            left: 5,
-                            borderRadius: 10
-                        }}
-                        >
-                            <div style={{ marginLeft: 10, marginTop: 10 }}>
-                                <div><SearchInput
-                                    onSerach={this.onSerach}
-                                    style={{ marginTop: 5, marginBottom: 10, width: 400 }} searchName="排口名称" /></div>
-                                <div style={{ marginTop: 5 }}>
-                                    <TreeCardContent style={{ overflow: 'auto', width: 400, background: '#fff' }}
-                                        getHeight='calc(100vh - 165px)'
-                                        pollutantTypeloading={pollutantTypeloading}
-                                        getStatusImg={this.getStatusImg} isloading={treedataloading}
-                                        treeCilck={this.treeCilck} treedatalist={datalist} PollutantType={this.state.pollutantTypeCode} ifSelect={true} />
+            <MonitorContent {...this.props} breadCrumbList={
+                [
+                    { Name: '首页', Url: '/' },
+                    { Name: '智能运维', Url: '' },
+                    { Name: '运维大事记', Url: '' }
+                ]
+            }>
+                <div className={Ywdsjlistss.cardTitle}>
+                    <Row>
+                        <Col>
+                            <div style={{
+                                width: 450,
+                                position: 'absolute',
+                                borderRadius: 10
+                            }}
+                            >
+                                <div style={{ marginLeft: 5, marginTop: 5 }}>
+                                    <div><SearchInput
+                                        onSerach={this.onSerach}
+                                        style={{ marginTop: 5, marginBottom: 5, width: 400 }} searchName="排口名称" /></div>
+                                    <div style={{ marginTop: 5 }}>
+                                        <TreeCardContent style={{ overflow: 'auto', width: 400, background: '#fff' }}
+                                            getHeight='calc(100vh - 200px)'
+                                            pollutantTypeloading={pollutantTypeloading}
+                                            getStatusImg={this.getStatusImg} isloading={treedataloading}
+                                            treeCilck={this.treeCilck} treedatalist={datalist} PollutantType={this.state.pollutantTypeCode} ifSelect={true} />
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </Col>
-                    <Col style={{ width: document.body.clientWidth - 430, height: 'calc(100vh - 90px)', float: 'right' }}>
-
-                        <div style={{ marginRight: 10, marginTop: 25 }}>
-                            <Spin style={{
-                                marginTop: '20%',
-                            }} spinning={spining}>
-                                <Card extra={extraContent} bordered={false}>
-                                    {
-                                        <div style={{ height: 'calc(100vh - 205px)' }} className={Ywdsjlistss.divTimeLine}>
-                                            <Timeline mode="left">
-                                                {
-                                                    this.renderItem(data)
-                                                }
-                                            </Timeline>
-                                            {data != null && data.length > 0 ? (IsOver ? <div>已加载全部</div> : <Button
-                                                loading={this.state.iconLoading} onClick={this.enterIconLoading}>
-                                                加载更多
+                        </Col>
+                        <Col style={{ width: document.body.clientWidth - 470, height: 'calc(100vh - 150px)', float: 'right' }}>
+                            <div style={{ marginRight: 10, marginTop: 10 }}>
+                                <Spin style={{
+                                    marginTop: '20%',
+                                }} spinning={spining}>
+                                    <Card extra={extraContent} bordered={false}>
+                                        {
+                                            <div style={{ height: 'calc(100vh - 245px)' }} className={Ywdsjlistss.divTimeLine}>
+                                                <Timeline mode="left">
+                                                    {
+                                                        this.renderItem(data)
+                                                    }
+                                                </Timeline>
+                                                {data != null && data.length > 0 ? (IsOver ? <div>已加载全部</div> : <Button
+                                                    loading={this.state.iconLoading} onClick={this.enterIconLoading}>
+                                                    加载更多
                         </Button>) : ''}
-                                        </div>}
-                                </Card>
-                            </Spin>
-                        </div>
+                                            </div>}
+                                    </Card>
+                                </Spin>
+                            </div>
 
-                    </Col>
-                </Row>
-            </div>
+                        </Col>
+                    </Row>
+                </div>
+            </MonitorContent>
         );
     }
 }

@@ -45,11 +45,11 @@ export default class AppBdTestRecord extends Component {
         const rtnVal = [];
         if (record !== null && record !== undefined) {
             rtnVal.push(<tr>
-                <td style={{ width: '20%' }} className={styles.tdTitle}>仪器名称</td>
-                <td style={{ width: '20%' }} className={styles.tdTitle}>设备型号</td>
-                <td style={{ width: '20%' }} className={styles.tdTitle}>制造商</td>
-                <td style={{ width: '20%' }} className={styles.tdTitle}>测试项目</td>
-                <td style={{ width: '20%' }} className={styles.tdTitle}>测量原理</td>
+                <td style={{ width: '20%', minWidth: 200 }} className={styles.tdTitle}>仪器名称</td>
+                <td style={{ width: '20%', minWidth: 200 }} className={styles.tdTitle}>设备型号</td>
+                <td style={{ width: '20%', minWidth: 200 }} className={styles.tdTitle}>制造商</td>
+                <td style={{ width: '20%', minWidth: 200 }} className={styles.tdTitle}>测试项目</td>
+                <td style={{ width: '20%', minWidth: 200 }} className={styles.tdTitle}>测量原理</td>
             </tr>);
             record.map((item) => {
                 rtnVal.push(
@@ -141,7 +141,7 @@ export default class AppBdTestRecord extends Component {
                 break;
             case 'SO2':
                 rtnVal.push(
-                    <td rowSpan="2" style={{ width: '10%' }}>
+                    <td rowSpan="2" style={{ width: '15%' }}>
                         <Checkbox checked={sltValue1}>相对准确度</Checkbox><br />
                         <Checkbox checked={sltValue2}>相对误差</Checkbox><br />
                         <Checkbox checked={sltValue3}>绝对误差</Checkbox>
@@ -149,26 +149,26 @@ export default class AppBdTestRecord extends Component {
                 break;
             case 'NOX':
                 rtnVal.push(
-                    <td rowSpan="2" style={{ width: '10%' }}>
+                    <td rowSpan="2" style={{ width: '15%' }}>
                         <Checkbox checked={sltValue1}>相对准确度</Checkbox><br />
                         <Checkbox checked={sltValue2}>相对误差</Checkbox><br />
                         <Checkbox checked={sltValue3}>绝对误差</Checkbox>
                     </td>);
                 break;
             case 'O2':
-                rtnVal.push(<td rowSpan="2" style={{ width: '10%' }}>
+                rtnVal.push(<td rowSpan="2" style={{ width: '15%' }}>
                     <Checkbox checked={sltValue1}>相对准确度</Checkbox><br />
                     <Checkbox checked={sltValue3}>绝对误差</Checkbox>
                 </td>);
                 break;
             case '流速':
-                rtnVal.push(<td rowSpan="2" style={{ width: '10%' }}>
+                rtnVal.push(<td rowSpan="2" style={{ width: '15%' }}>
                     <Checkbox checked={sltValue2}>相对误差</Checkbox><br />
                     <Checkbox checked={sltValue3}>绝对误差</Checkbox>
                 </td>);
                 break;
             case '湿度':
-                rtnVal.push(<td rowSpan="2" style={{ width: '10%' }}>
+                rtnVal.push(<td rowSpan="2" style={{ width: '15%' }}>
                     <Checkbox checked={sltValue2}>相对误差</Checkbox><br />
                     <Checkbox checked={sltValue3}>绝对误差</Checkbox>
                 </td>);
@@ -319,17 +319,16 @@ export default class AppBdTestRecord extends Component {
         }
         return (
             <MapInteractionCSS>
-                <Card >
-                    <div className={styles.FormDiv} style={{ height: SCREEN_HEIGHT }}>
-                        <div className={styles.FormName}>CEMS校验测试记录</div>
-                        <div className={styles.HeadDiv} style={{ fontWeight: 'bold' }}>企业名称：{EnterpriseName}</div>
+                    <div className={styles.FormDiv}>
+                        <div style={{ minWidth: 1000, textAlign: 'center', fontSize: 15, fontWeight: 'bold' }}>CEMS校验测试记录</div>
+                        <div style={{ fontWeight: 'bold', minWidth: 1000, fontSize: 12 }}>企业名称：{EnterpriseName}</div>
                         <table className={styles.FormTable}>
                             <tbody>
                                 <tr>
-                                    <td>
+                                <td style={{ width: '18%', height: '25px', minWidth: 150 }}>
                                         CEMS供应商：
                                 </td>
-                                    <td colSpan="5">
+                                    <td colSpan="5" style={{ width: '18%', height: '25px', minWidth: 150 }} >
                                         {CemsSupplier}
                                     </td>
                                 </tr>
@@ -531,17 +530,16 @@ export default class AppBdTestRecord extends Component {
                         <table className={styles.FormTable}>
                             <tbody>
                                 <tr>
-                                    <td style={{ width: '75%', height: '30px', textAlign: 'right', border: '0', fontWeight: 'bold' }}>负责人签名：</td>
-                                    <td style={{ width: '25%', height: '30px', border: '0' }}><img src={SignContent} /></td>
+                                    <td style={{ width: '75%', height: '30px', textAlign: 'right', border: '0', fontWeight: 'bold', minWidth: 800 }}>负责人签名：</td>
+                                    <td style={{ width: '25%', height: '30px', border: '0', minWidth: 100 }}><img src={SignContent} /></td>
                                 </tr>
                                 <tr>
-                                    <td style={{ width: '75%', height: '30px', textAlign: 'right', border: '0', fontWeight: 'bold' }}>签名时间：</td>
-                                    <td style={{ width: '25%', height: '30px', border: '0' }}>{SignTime}</td>
+                                    <td style={{ width: '75%', height: '30px', textAlign: 'right', border: '0', fontWeight: 'bold', minWidth: 800 }}>签名时间：</td>
+                                    <td style={{ width: '25%', height: '30px', border: '0', minWidth: 100 }}>{SignTime}</td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
-                </Card>
             </MapInteractionCSS>
         );
     }

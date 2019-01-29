@@ -201,7 +201,31 @@ class AddPoint extends Component {
            });
        }
 
-    handleSubmit = (e) => {
+       //保存后返回的路径
+       saveBack=(e)=>{
+           const viewMap=this.props.match.params.Add;
+           const {dispatch}=this.props;
+           let index;
+           if(viewMap=="mapview")
+           {
+                index=dispatch(routerRedux.push('/overview/mapview'));
+           }
+           else if(viewMap=="datalist")
+           {
+                index=dispatch(routerRedux.push('/overview/datalistview'));
+           }
+           else if(viewMap.indexOf("pointInfo")>-1)
+           {
+               const backviewType=viewMap.split('@')[1];
+               const key=this.props.match.params.DGIMN;   
+               index=dispatch(routerRedux.push(`/pointdetail/${key}/${backviewType}`));
+           }
+           else{
+               index = dispatch(routerRedux.push(`/sysmanage/PointInfo`));
+           }
+       }
+
+       handleSubmit = (e) => {
         e.preventDefault();
         let flag = true;
         this.props.form.validateFieldsAndScroll((err, values) => {
@@ -271,7 +295,7 @@ class AddPoint extends Component {
     };
 
      success = () => {
-         let index = this.props.dispatch(routerRedux.push(`/sysmanage/PointInfo`));
+         let index = this.saveBack();
          if (this.props.match.params.DGIMN !== 'null') {
              message.success('修改成功', 3).then(() => index);
          } else {
@@ -324,7 +348,7 @@ class AddPoint extends Component {
              latitude ,
              Col3
          } = editpoint === null || this.props.match.params.DGIMN ==="null" ? {} : editpoint;
-
+      
 
          return (
              <MonitorContent

@@ -21,6 +21,7 @@ import SearchInput from '../../components/OverView/SearchInput';
 import TreeStatus from '../../components/OverView/TreeStatus';
 import TreeCard from '../../components/OverView/TreeCard';
 import TreeCardContent from '../../components/OverView/TreeCardContent';
+import MonitorContent from '../../components/MonitorContent/index';
 
 @connect(({ task, overview, workbenchmodel, loading }) => ({
     loading: loading.effects['workbenchmodel/getOperationCalendarData'],
@@ -46,11 +47,6 @@ export default class OperationCalendar extends Component {
     }
     componentDidMount() {
         const { dispatch } = this.props;
-        dispatch({
-            type: 'overview/getPollutantTypeList',
-            payload: {
-            }
-        });
         var getDGIMN = localStorage.getItem('DGIMN')
         if (getDGIMN === null) {
             getDGIMN = '[object Object]';
@@ -93,14 +89,6 @@ export default class OperationCalendar extends Component {
         }
         return <img style={{ width: 15 }} src="/gisexception.png" />;
     }
-    //当前选中的污染物类型
-    getNowPollutantType = (key) => {
-        this.setState({
-            pollutantTypeCode: key
-        })
-        const { searchName } = this.state;
-        this.reloadData(key, searchName);
-    }
     //重新加载
     searchData = (pollutantTypeCode, searchName) => {
         var getDGIMN = localStorage.getItem('DGIMN')
@@ -135,20 +123,6 @@ export default class OperationCalendar extends Component {
                         }
                     }
                 }
-            },
-        });
-    }
-    //重新加载
-    reloadData = (pollutantTypeCode, searchName) => {
-        var getDGIMN = '[object Object]'
-        this.props.dispatch({
-            type: 'overview/querydatalist',
-            payload: {
-                map: true,
-                pollutantTypes: pollutantTypeCode,
-                pointName: searchName,
-                OperationCalendar: true,
-                DGIMN: getDGIMN,
             },
         });
     }
@@ -190,9 +164,9 @@ export default class OperationCalendar extends Component {
                 <div style={{ height: '80%' }}>
                     <ul className={styles.day} >
                         {
-                            returnResult.map((item,key) => (
+                            returnResult.map((item, key) => (
                                 <li key={key}>
-                                    <Tag  key={key} style={{ marginBottom: 1, marginTop: 1 }} color={item.ExceptionTypeText === '报警响应异常' ? '#F70303' : item.ExceptionTypeText === '工作超时' ? '#F79503' : '#F7C603'}>{item.content}</Tag>
+                                    <Tag key={key} style={{ marginBottom: 1, marginTop: 1 }} color={item.ExceptionTypeText === '报警响应异常' ? '#F70303' : item.ExceptionTypeText === '工作超时' ? '#F79503' : '#F7C603'}>{item.content}</Tag>
                                 </li>
                             ))
                         }
@@ -227,7 +201,7 @@ export default class OperationCalendar extends Component {
                 <div style={{ height: '80%' }}>
                     <ul className={styles.month} >
                         {
-                            returnResult.map((item,key) => (
+                            returnResult.map((item, key) => (
                                 <li key={key}>
                                     <Tag key={key} style={{ height: 26, fontSize: 20, paddingBottom: 2, paddingTop: 2 }} color='#E83939'>{item.TaskType}{item.Content}</Tag>
                                 </li>
@@ -235,7 +209,7 @@ export default class OperationCalendar extends Component {
                         }
                     </ul>
                 </div>
-                <div style={{ height: '20%', textAlign: 'right',whiteSpace:'nowrap',textOverflow:'hidden' }}>
+                <div style={{ height: '20%', textAlign: 'right', whiteSpace: 'nowrap', textOverflow: 'hidden' }}>
                     {operationingmonth === null ? null : operationingmonth.length === 0 ? null : <Tag color="#F79855">{'进行中' + operationingmonth.length + '个'}</Tag>}
                 </div>
             </div>
@@ -287,58 +261,64 @@ export default class OperationCalendar extends Component {
             />);
         }
         return (
-            <div className={styles.cardTitle}>
-                <Row>
-                    <Col>
-                        <div style={{
-                            width: 450,
-                            position: 'absolute',
-                            top: 10,
-                            left: 5,
-                            borderRadius: 10
-                        }}
-                        >
-                            <div style={{ marginLeft: 10, marginTop: 10 }}>
-                                <div><SearchInput
-                                    onSerach={this.onSerach}
-                                    style={{ marginTop: 5, marginBottom: 10, width: 400 }} searchName="排口名称" /></div>
-                                <div style={{ marginTop: 5 }}>
-                                    <TreeCardContent style={{ overflow: 'auto', width: 400, background: '#fff' }}
-                                        getHeight='calc(100vh - 165px)'
-                                        pollutantTypeloading={pollutantTypeloading}
-                                        getStatusImg={this.getStatusImg} isloading={treedataloading}
-                                        treeCilck={this.treeCilck} treedatalist={datalist} PollutantType={this.state.pollutantTypeCode} ifSelect={true} />
+            <MonitorContent {...this.props} breadCrumbList={
+                [
+                    { Name: '首页', Url: '/' },
+                    { Name: '智能运维', Url: '' },
+                    { Name: '运维日历', Url: '' }
+                ]
+            }>
+                <div className={styles.cardTitle}>
+                    <Row>
+                        <Col>
+                            <div style={{
+                                width: 450,
+                                position: 'absolute',
+                                borderRadius: 10
+                            }}
+                            >
+                                <div style={{ marginLeft: 5, marginTop: 5 }}>
+                                    <div><SearchInput
+                                        onSerach={this.onSerach}
+                                        style={{ marginTop: 5, marginBottom: 5, width: 400 }} searchName="排口名称" /></div>
+                                    <div style={{ marginTop: 5 }}>
+                                        <TreeCardContent style={{ overflow: 'auto', width: 400, background: '#fff' }}
+                                            getHeight='calc(100vh - 200px)'
+                                            pollutantTypeloading={pollutantTypeloading}
+                                            getStatusImg={this.getStatusImg} isloading={treedataloading}
+                                            treeCilck={this.treeCilck} treedatalist={datalist} PollutantType={this.state.pollutantTypeCode} ifSelect={true} />
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </Col>
-                    <Col style={{ width: document.body.clientWidth - 430, height: 'calc(100vh - 90px)', float: 'right' }}>
-                        <div style={{ marginRight: 10, marginTop: 25 }}>
-                            <Spin style={{
-                                marginTop: '20%',
-                            }} spinning={spining}>
-                                <Card bordered={false} style={{ height: 'calc(100vh - 110px)', overflow: 'auto' }}>
-                                    <div>
-                                        {
-                                            <Calendar dateCellRender={this.dateCellRender} monthCellRender={this.monthCellRender} onSelect={this.dateSelect} onPanelChange={this.onPanelChange} />
-                                        }
-                                    </div>
-                                </Card>
-                            </Spin>
-                        </div>
-                        <Modal
-                            footer={null}
-                            title="详情"
-                            width='60%'
-                            visible={this.state.visible}
-                            onOk={this.handleOk}
-                            onCancel={this.handleCancel}
-                        >
-                            <Details data={this.props.operation.tempTableDatas} dateValue={this.state.dateValue} dataType={this.state.dateType} />
-                        </Modal>
-                    </Col>
-                </Row>
-            </div>
+                        </Col>
+                        <Col style={{ width: document.body.clientWidth - 470, height: 'calc(100vh - 150px)', float: 'right' }}>
+                            <div style={{ marginRight: 10, marginTop: 10 }}>
+                                <Spin style={{
+                                    marginTop: '20%',
+                                }} spinning={spining}>
+                                    <Card bordered={false} style={{ height: 'calc(100vh - 150px)', overflow: 'auto' }}>
+                                        <div>
+                                            {
+                                                <Calendar dateCellRender={this.dateCellRender} monthCellRender={this.monthCellRender} onSelect={this.dateSelect} onPanelChange={this.onPanelChange} />
+                                            }
+                                        </div>
+                                    </Card>
+                                </Spin>
+                            </div>
+                            <Modal
+                                footer={null}
+                                title="详情"
+                                width='60%'
+                                visible={this.state.visible}
+                                onOk={this.handleOk}
+                                onCancel={this.handleCancel}
+                            >
+                                <Details data={this.props.operation.tempTableDatas} dateValue={this.state.dateValue} dataType={this.state.dateType} />
+                            </Modal>
+                        </Col>
+                    </Row>
+                </div>
+            </MonitorContent>
         );
     }
 }

@@ -76,7 +76,7 @@ export default Model.extend({
             total: 0,
         },
         hourDataOverWarningList: {
-            beginTime: moment().minute() < 30 ? moment().add(-1, 'hour').format("YYYY-MM-DD HH:00:00") : moment().format("YYYY-MM-DD HH:00:00"),
+            beginTime: moment().minute() < 30 ? moment().add(-1, 'hour').format("YYYY-MM-DD HH:00:00") : moment().add(-1, 'hour').format("YYYY-MM-DD HH:00:00"),
             endTime: moment().add(1, 'hour').format('YYYY-MM-DD HH:00:00'),
             tableDatas: [],
             pageIndex: 1,
@@ -85,7 +85,7 @@ export default Model.extend({
         },
         allPointOverDataList: {
             tableDatas: [],
-            beginTime: moment().add(-24, 'hour').format("YYYY-MM-DD HH:mm:ss"),
+            beginTime: moment().format("YYYY-MM-01 00:00:00"),
             endTime: moment().format('YYYY-MM-DD HH:mm:ss'),
             pageIndex: 1,
             pageSize: 100,
@@ -374,31 +374,6 @@ export default Model.extend({
                 }
             });
         },
-        //
-        *updateRealTimeData({ payload }
-            , { update, select }) {
-            if (payload && payload.array) {
-                let { warningDetailsDatas } = yield select(_ => _.workbenchmodel);
-                if (warningDetailsDatas.DGIMNs) {
-                    let pushdata = {};
-                    payload.array.map(item => {
-                        if (item.DGIMN == warningDetailsDatas.DGIMNs) {
-                            pushdata[item.PollutantCode] = item.MonitorValue;
-                            pushdata.MonitorTime = item.MonitorTime;
-                            pushdata.DataGatherCode = warningDetailsDatas.DGIMNs;
-                        }
-                    });
-                    if (pushdata && pushdata.DataGatherCode) {
-                        let array = [];
-                        array.push(pushdata);
-                        warningDetailsDatas.chartDatas = array.concat(warningDetailsDatas.chartDatas);
-                        yield update({ warningDetailsDatas });
-                    }
-
-                }
-            }
-        },
-
         //菜单-运维日历
         * getOperationCalendarData({ payload }, { call, put, update, select }) {
             const { OperationCalendar } = yield select(state => state.workbenchmodel);
@@ -482,4 +457,42 @@ export default Model.extend({
 
         },
     },
+    reducers: {
+        updateRealTimeData(state, { payload }) {
+            if (payload && payload.array) {
+                let { warningDetailsDatas } = state;
+             
+                if (warningDetailsDatas.DGIMNs) {
+                    let pushdata = {};
+                    payload.array.map(item => {
+                       if (item.DGIMN == warningDetailsDatas.DGIMNs) {
+                            pushdata[item.PollutantCode] = item.MonitorValue;
+                            pushdata.MonitorTime = item.MonitorTime;
+                            pushdata.DataGatherCode = warningDetailsDatas.DGIMNs;
+                       }
+                    });
+                    if (pushdata && pushdata.DataGatherCode) {
+                        let array = [];
+                        array.push(pushdata);
+                      //  let resdata=warningDetailsDatas;
+
+                        let resdata = JSON.parse(JSON.stringify(warningDetailsDatas));
+                        const chartDatas= array.concat(warningDetailsDatas.chartDatas);
+                        resdata.chartDatas=chartDatas;
+                        //resdata["change"]=true;
+                        
+                        return {
+                            ...state,
+                            warningDetailsDatas:resdata,
+                        };
+                    }
+
+                }
+                return state;
+                
+            }
+           
+        },
+    }
+
 });

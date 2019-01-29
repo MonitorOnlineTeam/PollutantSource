@@ -351,7 +351,9 @@ class RealTimeWarning extends Component {
      */
     renderWarningDetailsTable = () => {
         let { selectedPollutantCode, selectedPollutantName, chartDatas } = this.props.warningDetailsDatas;
-
+        const { pollutantList } = this.props;
+        const selectPllutantInfo = pollutantList.find((value, index, arr) => value.pollutantCode == selectedPollutantCode);
+        const suugestValue = this.state.SuggestValue;
         const columns = [
             {
                 title: '监测时间',
@@ -379,14 +381,20 @@ class RealTimeWarning extends Component {
                 title: '标准值',
                 dataIndex: `${selectedPollutantCode}_StandardValue`,
                 width: '20%',
-                align: 'center'
+                align: 'center',
+                render: (text, record) => {
+                    return selectPllutantInfo.standardValueStr
+                },
             },
             {
                 key:`${selectedPollutantCode}_SuggestValue`,
                 title: '建议浓度',
                 dataIndex: `${selectedPollutantCode}_SuggestValue`,
                 width: '20%',
-                align: 'center'
+                align: 'center',
+                render: (text, record) => {
+                    return suugestValue
+                },
             }
         ];
 

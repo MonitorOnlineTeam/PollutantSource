@@ -62,7 +62,7 @@ export default class BdTestRecord extends Component {
             </tr>);
             record.map((item, key) => {
                 rtnVal.push(
-                    <tr key={key+1}>
+                    <tr key={key + 1}>
                         <td>{item.InstrumentName}</td>
                         <td>{item.InstrumentCode}</td>
                         <td>{item.Manufacturer}</td>
@@ -285,7 +285,7 @@ export default class BdTestRecord extends Component {
                 rtnVal.push({ Name: '数据一览', Url: `/overview/${listUrl}` });
                 break;
             case 'mapview':         //地图一栏
-                rtnVal.push({ Name: '地图一栏', Url: `/overview/${listUrl}` });
+                rtnVal.push({ Name: '地图一览', Url: `/overview/${listUrl}` });
                 break;
             case 'pielist': //我的派单
                 rtnVal.push({ Name: '我的派单', Url: `/account/settings/mypielist` });
@@ -301,10 +301,19 @@ export default class BdTestRecord extends Component {
             rtnVal.push({ Name: '任务详情', Url: `/TaskDetail/emergencydetailinfo/${listUrl}/${taskfrom}/${taskID}` });
         } else if (taskfrom === 'qcontrollist') {    //质控记录
             rtnVal.push({ Name: '质控记录', Url: `/pointdetail/${DGIMN}/${listUrl}/${taskfrom}/${histroyrecordtype}` });
-        } else {    //其他
+        }
+        else if (taskfrom === 'qualityControlOperation') {    //智能质控
+            rtnVal.push({ Name: '智能质控', Url: `` });
+        }
+        else {    //其他
             rtnVal.push({ Name: '任务详情', Url: `/TaskDetail/emergencydetailinfo/${listUrl}/nop/${taskID}` });
         }
-        rtnVal.push({ Name: 'CEMS校验测试记录', Url: '' });
+        if (listUrl !== 'menu') {
+            rtnVal.push({ Name: 'CEMS校验测试记录', Url: '' });
+        }
+        if (listUrl === 'menu') {
+            rtnVal.push({ Name: '校验测试记录', Url: `/qualitycontrol/BdHistoryInfoHistoryRecords` });
+        }
         return rtnVal;
     }
 

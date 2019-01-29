@@ -41,7 +41,11 @@ export default Model.extend({
         pollutantTypelist: null,
         entbaseinfo:[],
         selectpoint:null,
-        selectpollutantTypeCode:'2'
+   
+        onlypollutantList:[],
+
+        selectpollutantTypeCode:2,
+        searchName:null
     },
     effects: {
         * querypollutanttypecode({
@@ -949,5 +953,21 @@ export default Model.extend({
             });
             yield take('getPollutantTypeList/@@end');
         },
+        // //获取系统污染物类型（无接口关联）
+        // * getPollutantTypeListOnly({
+        //     payload
+        // }, { call, update }) {
+        //     const res = yield call(getPollutantTypeList, payload);
+        //     if (res) {
+        //         yield update({
+        //             onlypollutantList: res
+        //         });
+        //     }
+        //     else {
+        //         yield update({
+        //             onlypollutantList: null
+        //         });
+        //     }
+        // },
     }
 });
