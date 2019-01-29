@@ -206,8 +206,14 @@ class MapTreeDetail extends Component {
         const pollutantInfoList=mainpoll.find(value=>{
             return value.pollutantCode==selectpoint.pollutantTypeCode;
          })
+        let mainHeight=730;
+        const screenHight=window.screen.height;
+        if(screenHight<820)
+        {
+            mainHeight=screenHight-230;
+        }
         return (
-            <div style={{height:'calc(100vh - 335px)'}} className={styles.mainDiv}>
+            <div style={{height:mainHeight}} className={styles.mainDiv}>
             <div style={{ marginLeft: 10, marginTop: 10,overflow:'auto' }}>
                     <div style={{
                         width: 420,

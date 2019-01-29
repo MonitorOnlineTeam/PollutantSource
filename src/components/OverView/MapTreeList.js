@@ -193,6 +193,7 @@ class MapTreeList extends Component {
 
     //搜索框查询
     onSerach=(value)=>{
+        const {dispatch}=this.props;
         dispatch({
             type: 'overview/updateState',
             payload: {
