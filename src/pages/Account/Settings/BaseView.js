@@ -46,25 +46,12 @@ class BaseView extends Component {
         const userCookie = Cookie.get('token');
         if (userCookie) {
             const user = JSON.parse(userCookie);
-            this.setState({
-                user_id: user.User_ID,
-            });
             this.props.dispatch({
                 type: 'userinfo/getuser',
                 payload: {
                     UserId: user.User_ID,
                     callback: () => {
-                        if (this.props.requstresult === '1') {
-                            this.props.form.setFieldsValue({
-                                User_Name: this.props.editUser.User_Name,
-                                User_Sex: this.props.editUser.User_Sex,
-                                Email: this.props.editUser.Email,
-                                Phone: this.props.editUser.Phone,
-                                AlarmType: this.props.editUser.AlarmType === '' ? undefined : this.props.editUser.AlarmType,
-                                SendPush: this.props.editUser.SendPush === '' ? undefined : this.props.editUser.SendPush.split(','),
-                                AlarmTime: this.props.editUser.AlarmTime === '' ? undefined : this.props.editUser.AlarmTime.split(','),
-                            });
-                        }
+
                     }
                 },
             });
@@ -83,12 +70,17 @@ class BaseView extends Component {
    handleSubmit = (e) => {
        e.preventDefault();
        const that = this;
+       const userCookie = Cookie.get('token');
+       let user='';
+       if (userCookie) {
+           user = JSON.parse(userCookie);
+       }
        this.props.form.validateFieldsAndScroll((err, values) => {
            if (!err) {
                that.props.dispatch({
                    type: 'userinfo/editpersonaluser',
                    payload: {
-                       UserId: this.state.user_id,
+                       UserId: user.User_ID,
                        UserName: values.User_Name,
                        UserSex: values.User_Sex,
                        Email: values.Email === undefined ? '' : values.Email,
@@ -114,20 +106,35 @@ class BaseView extends Component {
    };
 
    render() {
-       const {getFieldDecorator} = this.props.form;
+       const {
+           form,
+           match,
+           editUser
+       } = this.props;
+       const {
+           getFieldDecorator
+       } = form;
+       const {
+           User_Name: UserName = null,
+           User_Sex: UserSex,
+           Email,
+           Phone,
+           AlarmType,
+           SendPush,
+           AlarmTime,
+       } = editUser === null ? {} : editUser;
        return (
            <div>
                <Card bordered={false} title="基本设置" style={{height:'calc(100vh - 160px)' }} loading={this.props.userinfoloading}>
                    <Form onSubmit={this.handleSubmit}>
-                   <Row gutter={48}>
-                   
-                   </Row>
+                       <Row gutter={48} />
                        <Row gutter={48}>
                            <Col span={8}>
                                <FormItem
                                    label="姓名"
                                > {
                                        getFieldDecorator('User_Name', {
+                                           initialValue: UserName,
                                            rules: [{
                                                required: true,
                                                message: '请输入姓名!'
@@ -138,17 +145,16 @@ class BaseView extends Component {
                                    }
                                </FormItem>
                            </Col>
-                           <Col span={8}>
-                               <Avatar size={100} src="https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png" />
-                           </Col>
+                           <Col span={8} />
                        </Row>
                        <Row gutter={48}>
                            <Col span={8}>
                                <FormItem
-                                   label="性别" > {
+                                   label="性别"
+                               > {
                                        getFieldDecorator('User_Sex',
                                            {
-                                               initialValue: 1,
+                                               initialValue: UserSex || 1,
                                            }
                                        )(
                                            <RadioGroup>
@@ -166,6 +172,7 @@ class BaseView extends Component {
                                >
                                    {getFieldDecorator('Email',
                                        {
+                                           initialValue: Email,
                                            rules: [{ type: 'email', message: '请输入正确的邮箱!' }]
                                        })(<Input placeholder="E-mail" />
                                    )}
@@ -180,6 +187,7 @@ class BaseView extends Component {
                                >
                                    {getFieldDecorator('Phone',
                                        {
+                                           initialValue: Phone,
                                            rules: [{ pattern: /^1\d{10}$/, message: '请输入正确的手机号!' }]
                                        })(<Input placeholder="手机号" />
                                    )}
@@ -192,7 +200,7 @@ class BaseView extends Component {
                                    label="报警类型"
                                >
                                    {getFieldDecorator('AlarmType', {
-                                       initialValue: undefined
+                                       initialValue: AlarmType || undefined
                                    })(
                                        <Select placeholder="请选择">
                                            <Option value="1">实时报警</Option>
@@ -208,7 +216,7 @@ class BaseView extends Component {
                                    label="报警时间"
                                >
                                    {getFieldDecorator('AlarmTime', {
-                                       initialValue: undefined
+                                       initialValue: AlarmTime ? AlarmTime.split(',') : undefined
                                    })(
                                        <Select
                                            mode="multiple"
@@ -227,7 +235,7 @@ class BaseView extends Component {
                                    label="推送类型"
                                >
                                    {getFieldDecorator('SendPush', {
-                                       initialValue: undefined,
+                                       initialValue: SendPush ? SendPush.split(',') : undefined,
                                    })(
                                        <Select
                                            mode="multiple"
@@ -241,16 +249,16 @@ class BaseView extends Component {
                                </FormItem>
                            </Col>
                        </Row>
-                   
-                   
-                           <Divider orientation="right"  style={{border:'1px dashed #FFFFFF'}}>
-                               <Button
-                                   type="primary"
-                                   htmlType="submit"
-                               >更新个人设置
-                               </Button>
-                               </Divider>
-                   
+
+
+                       <Divider orientation="right" style={{border:'1px dashed #FFFFFF'}}>
+                           <Button
+                               type="primary"
+                               htmlType="submit"
+                           >更新个人设置
+                           </Button>
+                       </Divider>
+
                    </Form>
 
                </Card>

@@ -128,7 +128,6 @@ export async function editpersonaluser(params) {
         SendPush: params.SendPush,
         AlarmType: params.AlarmType,
         AlarmTime: params.AlarmTime,
-        Roles_Id: params.RolesId
     };
     const result = post('/api/rest/PollutantSourceApi/PUserInfo/EditUser', body, null);
     return result === null ? {
