@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Spin,Button,Table} from 'antd';
+import {Spin,Button,Table,Popconfirm} from 'antd';
 import { connect } from 'dva';
 import { mainpoll } from '../../config';
 import ReactEcharts from 'echarts-for-react';
@@ -32,21 +32,51 @@ class MapTreeDetail extends Component {
         const {selectpoint}=this.props;
         if(selectpoint)
         {
+            const text='没有关联运维人,是否前去关联?';
             if(selectpoint.existTask==1)
             {
+                if(selectpoint.operationUserID)
+                {
+                    return (
+                        <span onClick={this.urge} style={{cursor: 'pointer'}}>
+                        <img style={{width: 15, marginRight: 6, marginBottom: 4}}
+                         src="/alarm.png" />紧急催办</span>
+                            )
+                }
                 return (
-                <span onClick={this.urge} style={{cursor: 'pointer'}}>
-                   <img style={{width: 15, marginRight: 6, marginBottom: 4}}
-                    src="/alarm.png" />紧急催办</span>)
+                    <Popconfirm  title={text} onConfirm={this.addoperationInfo} okText="是" cancelText="否">
+                    <span style={{cursor: 'pointer'}}>
+                       <img style={{width: 15, marginRight: 6, marginBottom: 4}}
+                        src="/alarm.png" />紧急催办</span>
+                     </Popconfirm>)
             }
             else
             {
-                return (<span onClick={this.pdShow} style={{cursor: 'pointer'}}>
-                       <img style={{width: 15, marginRight: 6, marginBottom: 4}}
-                        src="/alarm.png" />紧急派单</span>)
+                if(selectpoint.operationUserID)
+                {
+                    return (
+                        <span onClick={this.pdShow} style={{cursor: 'pointer'}}>
+                        <img style={{width: 15, marginRight: 6, marginBottom: 4}}
+                            src="/alarm.png" />紧急派单</span>
+                    )
+                }
+                return (
+                    <Popconfirm  title={text} onConfirm={this.addoperationInfo} okText="是" cancelText="否">
+                    <span style={{cursor: 'pointer'}}>
+                        <img style={{width: 15, marginRight: 6, marginBottom: 4}}
+                            src="/alarm.png" />紧急派单</span>
+                     </Popconfirm>
+                        )
             }
         }
     }
+
+   //跳转到添加运维人员界面
+   addoperationInfo=()=>{
+    const {selectpoint}=this.props;
+    let viewtype='mapview';
+    this.props.dispatch(routerRedux.push(`/sysmanage/pointdetail/${selectpoint.DGIMN}/${selectpoint.pollutantTypeCode}/${viewtype}`));
+   }
 
    //催办
    urge=()=>{
@@ -159,19 +189,25 @@ class MapTreeDetail extends Component {
         const {detailloading,detailpcol,detaildata,selectpoint,detailtime}=this.props;
         if(detailloading)
         {
-            return(<Spin
+       
+            return(
+            <div style={{height:'calc(100vh - 335px)'}} className={styles.mainDiv}>
+            <Spin
                style={{ width: '100%',
                    height: 'calc(100vh/2)',
                    display: 'flex',
                    alignItems: 'center',
                    justifyContent: 'center' }}
                size="large"
-           />)
+           />
+           </div>
+           )
         }
         const pollutantInfoList=mainpoll.find(value=>{
             return value.pollutantCode==selectpoint.pollutantTypeCode;
          })
         return (
+            <div style={{height:'calc(100vh - 335px)'}} className={styles.mainDiv}>
             <div style={{ marginLeft: 10, marginTop: 10,overflow:'auto' }}>
                     <div style={{
                         width: 420,
@@ -253,6 +289,7 @@ class MapTreeDetail extends Component {
                     operationtel={selectpoint?selectpoint.operationtel:null}
                     reloadData={()=>this.Refresh()}
                 />
+          </div>
           </div>
         );
     }

@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
-import { Table, Radio, Card, TimePicker, Icon, Button, Spin, Popover, Badge, Divider } from 'antd';
+import { Table, Radio, Card, TimePicker, Icon, Button, Spin, Popover, Badge, Divider,Popconfirm } from 'antd';
 import moment from 'moment';
 import { routerRedux } from 'dva/router';
 import styles from './DataList.less';
@@ -232,9 +232,13 @@ class dataList extends PureComponent {
         const { pollutantTypelist } = this.props;
         let res = [];
         if (pollutantTypelist) {
-            pollutantTypelist.map((item,key) => {
-                res.push(<Radio key={key} value={item.pollutantTypeCode}>{item.pollutantTypeName}</Radio>);
-            });
+            pollutantTypelist.map((item,key)=>{
+                res.push( <Radio.Button value={item.pollutantTypeCode}>{item.pollutantTypeName}</Radio.Button>)
+             })
+
+            // pollutantTypelist.map((item,key) => {
+            //     res.push(<Radio key={key} value={item.pollutantTypeCode}>{item.pollutantTypeName}</Radio>);
+            // });
         }
         return res;
     }
@@ -292,22 +296,70 @@ class dataList extends PureComponent {
             </Button>
         </li>
         {
-            record.existTask === 1 ?
-                <li style={{ listStyle: 'none' }}>
-                    <Button onClick={() => this.urge(record)}><Icon type="phone" style={{ color: '#3C9FDA', marginRight: 5 }} theme="filled" />紧急催办</Button>
-                </li> : <li style={{ listStyle: 'none' }}>
-                    <Button
-                        onClick={() => {
-                            this.setState({
-                                pdvisible: true,
-                                selectpoint: record
-                            });
-                        }}
-                    ><Icon type="phone" style={{ color: '#3C9FDA', marginRight: 5 }} theme="filled" />紧急派单
-                    </Button>
-                        </li>
+           this.getbutton(record)
         }
-                                  </div>)
+        </div>)
+
+        //判断是派单还是催办按钮
+        getbutton=(selectpoint)=>{
+            if(selectpoint)
+            {
+                const text='没有关联运维人,是否前去关联?';
+                if(selectpoint.existTask==1)
+                {
+                    if(selectpoint.operationUserID)
+                    {
+                        return (
+                            <li style={{ listStyle: 'none' }}>
+                             <Button onClick={() => this.urge(selectpoint)}><Icon type="phone" 
+                             style={{ color: '#3C9FDA', marginRight: 5 }} theme="filled" />紧急催办</Button>
+                            </li>
+                                )
+                    }
+                    return (
+                        <Popconfirm  title={text} onConfirm={()=>this.addoperationInfo(selectpoint)} okText="是" cancelText="否">
+                          <li style={{ listStyle: 'none' }}>
+                             <Button><Icon type="phone" 
+                             style={{ color: '#3C9FDA', marginRight: 5 }} theme="filled" />紧急催办</Button>
+                          </li>
+                         </Popconfirm>)
+                }
+                else
+                {
+                    if(selectpoint.operationUserID)
+                    {
+                        return (
+                            <li style={{ listStyle: 'none' }}>
+                            <Button
+                                onClick={() => {
+                                    this.setState({
+                                        pdvisible: true,
+                                        selectpoint: selectpoint
+                                    });
+                                }}
+                            ><Icon type="phone" style={{ color: '#3C9FDA', marginRight: 5 }} theme="filled" />紧急派单
+                            </Button>
+                        </li>
+                        )
+                    }
+                    return (
+                        <Popconfirm  title={text} onConfirm={()=>this.addoperationInfo(selectpoint)} okText="是" cancelText="否">
+                         <li style={{ listStyle: 'none' }}>
+                            <Button
+                            ><Icon type="phone" style={{ color: '#3C9FDA', marginRight: 5 }} theme="filled" />紧急派单
+                            </Button>
+                         </li>
+                         </Popconfirm>
+                            )
+                }
+            }
+        }
+
+        //跳转到添加运维人员界面
+        addoperationInfo=(selectpoint)=>{
+            let viewtype='datalist';
+            this.props.dispatch(routerRedux.push(`/sysmanage/pointdetail/${selectpoint.DGIMN}/${selectpoint.pollutantTypeCode}/${viewtype}`));
+           }
 
     render() {
         const { normal, over, underline, exception, terate, operationStatus, pollutantCode } = this.state;
@@ -476,9 +528,9 @@ class dataList extends PureComponent {
                         <div>
                             <TimePicker onChange={this.pickerChange} style={{ width: 150, marginRight: 20, float: 'left' }} defaultValue={this.state.time} format="HH:00:00" />
 
-                            <RadioGroup style={{ marginRight: 20, float: 'left', marginTop: 3 }} onChange={this.onPollutantChange} defaultValue={this.state.pollutantCode}>
+                            <Radio.Group buttonStyle="solid" style={{ marginLeft: 50, float: 'left' }} onChange={this.onPollutantChange} defaultValue={this.state.pollutantCode}>
                                 {this.getPollutantDoc()}
-                            </RadioGroup>
+                            </Radio.Group>
 
                             <div style={{ width: 'calc(100vw - 220px)', marginLeft: 60 }}>
                                 <AListRadio style={{ float: 'right' }} dvalue="b" />

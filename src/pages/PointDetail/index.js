@@ -1,7 +1,7 @@
 // import liraries
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import { Modal, Breadcrumb, Tabs, Icon, Select, Button, Card, Spin, Row, Col, Divider, Tag, Input, Form, Radio, Alert } from 'antd';
+import { Modal, Breadcrumb, Popconfirm,Tabs, Icon, Select, Button, Card, Spin, Row, Col, Divider, Tag, Input, Form, Radio, Alert } from 'antd';
 import moment from 'moment';
 import Cookie from 'js-cookie';
 import router from 'umi/router';
@@ -10,7 +10,7 @@ import Link from 'umi/link';
 import styles from './index.less';
 import { getRoutes } from '../../utils/utils';
 import UrgentDispatch from '../../components/OverView/UrgentDispatch';
-
+import { routerRedux } from 'dva/router';
 const RadioGroup = Radio.Group;
 const { TabPane } = Tabs;
 const Option = Select.Option;
@@ -150,7 +150,7 @@ class PointDetail extends Component {
      */
     renderPointList = () => {
         const rtnVal = [];
-
+        debugger;
         //rtnVal.push(this.props.dataTemp.filter(todo=>todo.DGIMN===this.props.pointInfo.DGIMN)[0]);
         //let selectedPoint=this.props.dataTemp.filter(todo=>todo.DGIMN===this.props.pointInfo.DGIMN)[0];
 
@@ -179,13 +179,13 @@ class PointDetail extends Component {
                 optStatus.push(<li key={3}><Tag className={styles.stop}>停产中</Tag></li>);
             }
 
-            if (key === 0) {
-                item = this.props.dataTemp.filter(todo => todo.DGIMN === this.props.pointInfo.DGIMN)[0];
-                if (!item) {
-                    return false;
-                }
-            } else if (item.DGIMN === this.props.pointInfo.DGIMN)
-                return false;
+            // if (key === 0) {
+            //     item = this.props.dataTemp.filter(todo => todo.DGIMN === this.props.pointInfo.DGIMN)[0];
+            //     if (!item) {
+            //         return false;
+            //     }
+            // } else if (item.DGIMN === this.props.pointInfo.DGIMN)
+            //     return false;
 
             rtnVal.push(
                 <div key={item.DGIMN}>
@@ -272,25 +272,79 @@ class PointDetail extends Component {
     }
 
 
-    //获取派单还是督办按钮
-    getPDDBButton = () => {
-        const { pointInfo } = this.props;
-        if (pointInfo) {
-            if (pointInfo.existTask) {
-                return (<Button onClick={() => this.urge()} type="primary" ghost={true} style={{ float: "right", marginRight: 30, top: -5 }}><Icon type="bell" />督办</Button>);
+    // //获取派单还是督办按钮
+    // getPDDBButton = () => {
+        
+    //     const { pointInfo } = this.props;
+    //     if (pointInfo) {
+    //         if (pointInfo.existTask) {
+    //             return (<Button onClick={() => this.urge()} type="primary" ghost={true} style={{ float: "right", marginRight: 30, top: -5 }}><Icon type="bell" />督办</Button>);
+    //         }
+    //         return (<Button
+    //             onClick={() => {
+    //                 this.setState({
+    //                     pdvisible: true,
+    //                 });
+    //             }} type="primary" ghost={true} style={{ float: "right", marginRight: 30, top: -5 }}
+    //         ><Icon type="bell" />派单
+    //         </Button>);
+
+    //     }
+    // }
+  //判断是派单还是催办按钮
+  getPDDBButton=()=>{
+    const { pointInfo } = this.props;
+    if(pointInfo)
+    {
+        const text='没有关联运维人,是否前去关联?';
+        if(pointInfo.existTask==1)
+        {
+            if(pointInfo.operationUserID)
+            {
+                return (
+                    <Button onClick={() => this.urge()} type="primary" ghost={true} 
+                    style={{ float: "right", marginRight: 30, top: -5 }}><Icon type="bell" />督办</Button>
+                        )
             }
-
-            return (<Button
-                onClick={() => {
-                    this.setState({
-                        pdvisible: true,
-                    });
-                }} type="primary" ghost={true} style={{ float: "right", marginRight: 30, top: -5 }}
-            ><Icon type="bell" />派单
-            </Button>);
-
+            return (
+                <Popconfirm  title={text} onConfirm={()=>this.addoperationInfo(pointInfo)} okText="是" cancelText="否">
+                  <Button  type="primary" ghost={true} 
+                    style={{ float: "right", marginRight: 30, top: -5 }}><Icon type="bell" />督办</Button>
+                 </Popconfirm>)
+        }
+        else
+        {
+            if(pointInfo.operationUserID)
+            {
+                return (
+                    <Button
+                        onClick={() => {
+                            this.setState({
+                                pdvisible: true,
+                            });
+                        }} type="primary" ghost={true} style={{ float: "right", marginRight: 30, top: -5 }}
+                    ><Icon type="bell" />派单
+                    </Button>
+                )
+            }
+            return (
+                <Popconfirm  title={text} onConfirm={()=>this.addoperationInfo(pointInfo)} okText="是" cancelText="否">
+                    <Button
+                       type="primary" ghost={true} style={{ float: "right", marginRight: 30, top: -5 }}
+                    ><Icon type="bell" />派单
+                    </Button>
+                 </Popconfirm>
+                    )
         }
     }
+}
+
+//跳转到添加运维人员界面
+addoperationInfo=(selectpoint)=>{
+    const viewtype= this.props.match.params.viewtype;
+    this.props.dispatch(routerRedux.push(`/sysmanage/pointdetail/${selectpoint.DGIMN}/${selectpoint.pollutantTypeCode}/pointInfo@${viewtype}`));
+   }
+
 
     /**
      * 渲染排口状态
@@ -372,6 +426,12 @@ class PointDetail extends Component {
 
     }
 
+    getBackButton=()=>{
+        const viewtype= this.props.match.params.viewtype;
+        const backpath=`/overview/${viewtype}`;
+        return(<Link to={backpath}><Icon type="left" />返回</Link>);
+    }
+
     render() {
         const { match, routerData, location, children, pointInfo, selectpoint } = this.props;
         let {tablist,pollutantTypeKey}=this.state;
@@ -446,7 +506,7 @@ class PointDetail extends Component {
                     }
 
 
-                    <Button style={{ float: "right", marginRight: 30, top: -5 }}><Link to="/overview/mapview"><Icon type="left" />返回</Link></Button>
+                    <Button style={{ float: "right", marginRight: 30, top: -5 }}>{this.getBackButton()}</Button>
                     {
                         this.getPDDBButton()
                     }

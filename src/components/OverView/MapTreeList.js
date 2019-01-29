@@ -187,15 +187,17 @@ class MapTreeList extends Component {
                   selectpollutantTypeCode:`${key}`
               },
           });
-
           const {searchName}=this.state;
           this.reloadData(key,searchName);
       }
 
     //搜索框查询
     onSerach=(value)=>{
-        this.setState({
-            searchName:value
+        dispatch({
+            type: 'overview/updateState',
+            payload: {
+                searchName:value
+            },
         });
         const {pollutantTypeCode}=this.props;
         this.reloadData(pollutantTypeCode,value);
@@ -217,14 +219,6 @@ class MapTreeList extends Component {
          const {maploading,pollutantTypeCode}=this.props;
          console.log(pollutantTypeCode);
          if(maploading) {
-             // return(<Spin
-             //     style={{ width: '100%',
-             //         height: 'calc(100vh/2)',
-             //         display: 'flex',
-             //         alignItems: 'center',
-             //         justifyContent: 'center' }}
-             //     size="large"
-             // />)
              return '';
          }
          return (
@@ -261,9 +255,9 @@ class MapTreeList extends Component {
 
                  <div>
                      <div className={styles.treelist} style={{ width: '400px',marginTop: 5,background:'#fff' }}>
-                         <Tabs className={styles.tab} defaultActiveKey={pollutantTypeCode} onChange={this.getNowPollutantType}>
+                         {/* <Tabs className={styles.tab} defaultActiveKey={pollutantTypeCode} onChange={this.getNowPollutantType}>
                              {this.getPollutantDoc()}
-                         </Tabs>
+                         </Tabs> */}
                          <div style={{ overflow:'auto',width:400,background:'#fff', height:'calc(100vh - 290px)' }}>
                              {this.getTreeDatalist()}
                          </div>

@@ -640,7 +640,10 @@ export default Model.extend({
             {
                 yield put({
                     type:'overview/getPollutantTypeList',
-                    payload:payload
+                    payload:{
+                        ...payload,
+                        dgimn:null
+                    }
                 })
                 yield take('overview/getPollutantTypeList/@@end');
             }
