@@ -87,8 +87,8 @@ export default Model.extend({
             payload,
         }, { call, update }) {
             const DataInfo = yield call(GetJzRecord, payload);
-            if (DataInfo != null && DataInfo.requstresult == EnumRequstResult.Success) {
-                if (DataInfo.data != null) {
+            if (DataInfo !== null && DataInfo.requstresult == EnumRequstResult.Success) {
+                if (DataInfo.data !== null) {
                     yield update({ JzRecord: DataInfo.data });
                 }
             }
@@ -109,8 +109,8 @@ export default Model.extend({
             payload,
         }, { call, update }) {
             const DataInfo = yield call(GetJzHistoryRecord, payload);
-            if (DataInfo != null && DataInfo.requstresult == EnumRequstResult.Success) {
-                if (DataInfo.data != null) {
+            if (DataInfo !== null && DataInfo.requstresult == EnumRequstResult.Success) {
+                if (DataInfo.data !== null) {
                     yield update({ JzHistoryRecord: DataInfo.data, RecordCount: DataInfo.total, DGIMN: payload.DGIMN });
                 }
             } else {

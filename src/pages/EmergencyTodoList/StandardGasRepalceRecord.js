@@ -23,7 +23,7 @@ class StandardGasRepalceRecord extends Component {
         this.state = {
             listUrl: this.props.match.params.viewtype,
             taskfrom: this.props.match.params.taskfrom,
-            taskID: this.props.match.params.TaskID,
+            taskID: this.props.match.params.StandardGasTaskIds,
             histroyrecordtype: this.props.match.params.histroyrecordtype,
             DGIMN: this.props.match.params.pointcode
         };
@@ -125,15 +125,19 @@ class StandardGasRepalceRecord extends Component {
         }
         if (taskfrom === 'ywdsjlist') { //运维大事记
             rtnVal.push({ Name: '运维大事记', Url: `/pointdetail/${DGIMN}/${listUrl}/${taskfrom}` });
-            rtnVal.push({ Name: '任务详情', Url: `/TaskDetail/emergencydetailinfo/${listUrl}/${taskfrom}/${taskID}` });
+            rtnVal.push({ Name: '任务详情', Url: `/TaskDetail/emergencydetailinfo/${listUrl}/${taskfrom}/${taskID}/${DGIMN}` });
         } else if (taskfrom === 'qcontrollist') { //质控记录
             rtnVal.push({ Name: '质控记录', Url: `/pointdetail/${DGIMN}/${listUrl}/${taskfrom}/${histroyrecordtype}` });
         } else if (taskfrom === 'operationlist') { //运维记录
             rtnVal.push({ Name: '运维记录', Url: `/pointdetail/${DGIMN}/${listUrl}/${taskfrom}/${histroyrecordtype}` });
         } else if (taskfrom === 'intelligentOperation') { //智能运维
             rtnVal.push({ Name: '智能运维', Url: `` });
+        } else if (taskfrom === 'operationywdsjlist') { //运维大事记
+            rtnVal.push({ Name: '智能运维', Url: `` });
+            rtnVal.push({ Name: '运维大事记', Url: `/operation/ywdsjlist` });
+            rtnVal.push({ Name: '任务详情', Url: `/TaskDetail/emergencydetailinfo/undefined/operationywdsjlist/${taskID}/${DGIMN}` });
         } else { //其他
-            rtnVal.push({ Name: '任务详情', Url: `/TaskDetail/emergencydetailinfo/${listUrl}/nop/${taskID}` });
+            rtnVal.push({ Name: '任务详情', Url: `/TaskDetail/emergencydetailinfo/${listUrl}/nop/${taskID}/${DGIMN}` });
         }
         if (listUrl !== 'menu') {
             rtnVal.push({ Name: '标准气体更换记录表', Url: '' });
@@ -317,7 +321,7 @@ class StandardGasRepalceRecord extends Component {
                             <tbody>
                                 <tr>
                                     <td style={{ width: '87%', height: '50px', textAlign: 'right', border: '0', fontWeight: 'bold' }}>负责人签名：</td>
-                                    <td style={{ width: '13%', height: '50px', border: '0' }}>{DataLength === 0 ? null : Data.Record.length === 0 ? null : Data.Record.SignContent === null ? null : <img src={SignContent} />}</td>
+                                    <td style={{ width: '13%', height: '50px', border: '0' }}>{DataLength === 0 ? null : Data.Record.length === 0 ? null : Data.Record.SignContent === null ? null : <img style={{ width: '80%', height: '110%' }} src={SignContent} />}</td>
                                 </tr>
                                 <tr>
                                     <td style={{ width: '87%', height: '50px', textAlign: 'right', border: '0', fontWeight: 'bold' }}>签名时间：</td>

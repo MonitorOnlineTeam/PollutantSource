@@ -18,7 +18,7 @@ class ConsumablesReplaceRecord extends Component {
         this.state = {
             listUrl: this.props.match.params.viewtype,
             taskfrom: this.props.match.params.taskfrom,
-            taskID: this.props.match.params.TaskID,
+            taskID: this.props.match.params.TaskIds,
             histroyrecordtype: this.props.match.params.histroyrecordtype,
             DGIMN: this.props.match.params.pointcode
         };
@@ -114,15 +114,19 @@ class ConsumablesReplaceRecord extends Component {
         }
         if (taskfrom === 'ywdsjlist') { //运维大事记
             rtnVal.push({ Name: '运维大事记', Url: `/pointdetail/${DGIMN}/${listUrl}/${taskfrom}` });
-            rtnVal.push({ Name: '任务详情', Url: `/TaskDetail/emergencydetailinfo/${listUrl}/${taskfrom}/${taskID}` });
+            rtnVal.push({ Name: '任务详情', Url: `/TaskDetail/emergencydetailinfo/${listUrl}/${taskfrom}/${taskID}/${DGIMN}` });
         } else if (taskfrom === 'qcontrollist') { //质控记录
             rtnVal.push({ Name: '质控记录', Url: `/pointdetail/${DGIMN}/${listUrl}/${taskfrom}/${histroyrecordtype}` });
         } else if (taskfrom === 'operationlist') { //运维记录
             rtnVal.push({ Name: '运维记录', Url: `/pointdetail/${DGIMN}/${listUrl}/${taskfrom}/${histroyrecordtype}` });
         } else if (taskfrom === 'intelligentOperation') { //一级菜单
             rtnVal.push({ Name: '智能运维', Url: `` });
+        } else if (taskfrom === 'operationywdsjlist') { //运维大事记
+            rtnVal.push({ Name: '智能运维', Url: `` });
+            rtnVal.push({ Name: '运维大事记', Url: `/operation/ywdsjlist` });
+            rtnVal.push({ Name: '任务详情', Url: `/TaskDetail/emergencydetailinfo/undefined/${taskfrom}/${taskID}/${DGIMN}` });
         } else { //其他
-            rtnVal.push({ Name: '任务详情', Url: `/TaskDetail/emergencydetailinfo/${listUrl}/nop/${taskID}` });
+            rtnVal.push({ Name: '任务详情', Url: `/TaskDetail/emergencydetailinfo/${listUrl}/nop/${taskID}/${DGIMN}` });
         }
         if (listUrl !== 'menu') {
             rtnVal.push({ Name: '易耗品更换记录表', Url: '' });
@@ -159,7 +163,7 @@ class ConsumablesReplaceRecord extends Component {
             CreateUserID = DataLength === 0 ? null : Data.Record.length === 0 ? null : Data.Record.CreateUserID;
             CreateTime = DataLength === 0 ? null : Data.Record.length === 0 ? null : Data.Record.CreateTime;
             SignTime = DataLength === 0 ? null : Data.Record.length === 0 ? null : Data.Record.SignTime;
-            SignContents = DataLength === 0 ? null : Data.Record.length === 0 ? null : Data.Record.SignContent === null ? null : <img src={SignContent} />;
+            SignContents = DataLength === 0 ? null : Data.Record.length === 0 ? null : Data.Record.SignContent === null ? null : <img style={{ width: '80%', height: '110%' }} src={SignContent} />;
         }
         if (this.props.isloading) {
             return (<Spin

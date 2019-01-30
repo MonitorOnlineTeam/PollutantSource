@@ -150,71 +150,71 @@ export default class AppRepairRecordDetail extends Component {
         }
         return (
             <MapInteractionCSS>
-                    <div style={{ height: SCREEN_HEIGHT }}>
-                        <div className={styles.FormName}>CEMS维修记录表</div>
-                        <div className={styles.HeadDiv} style={{ fontWeight: 'bold', fontSize: '12px' }}>企业名称：{EnterpriseName}</div>
-                        <table className={styles.FormTable}>
-                            <tbody>
-                                <tr>
-                                    <td style={{ width: '25%', height: '25px', textAlign: 'center', fontSize: '12px' }}>
-                                        安装地点
+                <div>
+                    <div className={styles.FormName}>CEMS维修记录表</div>
+                    <div className={styles.HeadDiv} style={{ fontWeight: 'bold', fontSize: '12px' }}>企业名称：{EnterpriseName}</div>
+                    <table className={styles.FormTable}>
+                        <tbody>
+                            <tr>
+                                <td style={{ width: '25%', height: '25px', textAlign: 'center', fontSize: '12px' }}>
+                                    安装地点
                                 </td>
-                                    <td colSpan="2" style={{ textAlign: 'center', fontSize: '12px' }}>
-                                        {PointPosition}
-                                    </td>
-                                </tr>
-                                {
-                                    this.renderItem(Repair)
-                                }
-                                <tr>
-                                    <td style={{ width: '18%', height: '25px', textAlign: 'center', fontSize: '12px' }}>
-                                        站房是否清理
+                                <td colSpan="2" style={{ textAlign: 'center', fontSize: '12px' }}>
+                                    {PointPosition}
                                 </td>
-                                    <td colSpan="2" style={{ textAlign: 'center', fontSize: '12px' }}>
-                                        {IsClear}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style={{ width: '18%', height: '25px', textAlign: 'center', fontSize: '12px' }}>
-                                        维修情况总结
+                            </tr>
+                            {
+                                this.renderItem(Repair)
+                            }
+                            <tr>
+                                <td style={{ width: '18%', height: '25px', textAlign: 'center', fontSize: '12px' }}>
+                                    站房是否清理
                                 </td>
-                                    <td colSpan="2" style={{ textAlign: 'center', fontSize: '12px' }}>
-                                        {RepairSummary}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style={{ width: '18%', height: '25px', textAlign: 'center', fontSize: '12px' }}>
-                                        备注
+                                <td colSpan="2" style={{ textAlign: 'center', fontSize: '12px' }}>
+                                    {IsClear}
                                 </td>
-                                    <td colSpan="2" style={{ width: '25%', height: '25px', textAlign: 'center', fontSize: '12px' }}>
-                                        {Remark}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style={{ width: '18%', height: '25px', textAlign: 'center', fontSize: '12px' }}>
-                                        <b>维修人:</b>{CreateUserID}
-                                    </td>
+                            </tr>
+                            <tr>
+                                <td style={{ width: '18%', height: '25px', textAlign: 'center', fontSize: '12px' }}>
+                                    维修情况总结
+                                </td>
+                                <td colSpan="2" style={{ textAlign: 'center', fontSize: '12px' }}>
+                                    {RepairSummary}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style={{ width: '18%', height: '25px', textAlign: 'center', fontSize: '12px' }}>
+                                    备注
+                                </td>
+                                <td colSpan="2" style={{ width: '25%', height: '25px', textAlign: 'center', fontSize: '12px' }}>
+                                    {Remark}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style={{ width: '18%', height: '25px', textAlign: 'center', fontSize: '12px' }}>
+                                    <b>维修人:</b>{CreateUserID}
+                                </td>
 
-                                    <td style={{ width: '25%', height: '25px', textAlign: 'center', fontSize: '12px' }} colSpan="2">
-                                        <b>维修时间&nbsp;：</b>{StartTime === null ? '--' : StartTime} &nbsp;至&nbsp;{EndTime === null ? '--' : EndTime}
-                                    </td>
+                                <td style={{ width: '25%', height: '25px', textAlign: 'center', fontSize: '12px' }} colSpan="2">
+                                    <b>维修时间&nbsp;：</b>{StartTime === null ? '--' : StartTime} &nbsp;至&nbsp;{EndTime === null ? '--' : EndTime}
+                                </td>
 
-                                </tr>
-                            </tbody>
-                        </table>
-                        <table className={styles.FormTableBottom}>
-                            <tbody>
-                                <tr>
-                                    <td style={{ width: '90%', height: '25px', textAlign: 'right', border: '0', fontWeight: 'bold' }}>负责人签名：</td>
-                                    <td style={{ width: '10%', height: '25px', border: '0' }}><img src={SignContent} /></td>
-                                </tr>
-                                <tr>
-                                    <td style={{ width: '90%', height: '25px', textAlign: 'right', border: '0', fontWeight: 'bold' }}>签名时间：</td>
-                                    <td style={{ width: '10%', height: '25px', border: '0' }}>{SignTime}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <table className={styles.FormTableBottom}>
+                        <tbody>
+                            <tr>
+                                <td style={{ width: '70%', height: '25px', textAlign: 'right', border: '0', fontWeight: 'bold' }}>负责人签名：</td>
+                                <td style={{ width: '30%', height: '25px', border: '0' }}>{SignContent === null ? null : <img style={{ width: '90px', height: '30px' }} src={SignContent} />} </td>
+                            </tr>
+                            <tr>
+                                <td style={{ width: '70%', height: '25px', textAlign: 'right', border: '0', fontWeight: 'bold', fontSize: '12px' }}>签名时间：</td>
+                                <td style={{ width: '30%', height: '25px', border: '0', fontSize: '10px', minWidth: 120 }}>{SignTime}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </MapInteractionCSS>
         );
     }

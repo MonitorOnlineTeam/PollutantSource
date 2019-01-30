@@ -3,8 +3,10 @@ import {
 } from '../dvapack';
 import {
     getpointlist, addpoint, getoperationsuserList, getspecialworkeruserList, getpoint, editpoint, deletepoint, getanalyzersys, addalyzersys, getanalyzersysmnmodel, editalyzersys, deletealyzersys
-    , getcomponent, addalyzerchild, getanalyzerchild, getanalyzerchildmodel, deletealyzerchild, editalyzerchild, getpollutanttypelist, getgasoutputtypelist
+    , getcomponent, addalyzerchild, getanalyzerchild, getanalyzerchildmodel, deletealyzerchild, editalyzerchild, getpollutanttypelist, getgasoutputtypelist,getmaininstrumentName,getchildcems
+    , getanalyzersysmn,getanalyzerbymn
 } from '../services/pointinfo';
+import { EnumRequstResult } from '../utils/enum';
 
 export default Model.extend({
     namespace: 'pointinfo',
@@ -38,7 +40,10 @@ export default Model.extend({
         gasoutputtypelist:[],
         pollutanttypelist:[],
         gasoutputtypelist_requstresult: null,
-        pollutanttypelist_requstresult:null
+        pollutanttypelist_requstresult:null,
+        MainInstrumentName:[], //主要仪器名称
+        ChildCems:[],           //CEMS监测子系统
+        Analyzers:[]           //监测仪器信息
     },
     subscriptions: {
         setup({
@@ -353,23 +358,21 @@ export default Model.extend({
         * getanalyzersys({
             payload: {
                 DGIMN,
-                callback
             }
         }, {
             call,
-            put,
             update,
-            select
         }) {
-            const result = yield call(getanalyzersys, {
+            const DataInfo = yield call(getanalyzersys, {
                 DGIMN: DGIMN
             });
-            yield update({
-                getanalyzersys_requstresult: result.requstresult,
-                AnalyzerSys: result.data,
-                total: result.total,
-            });
-            callback();
+            if (DataInfo !== null&& DataInfo.requstresult == EnumRequstResult.Success) {
+                if (DataInfo.data !== null) {
+                    yield update({
+                        AnalyzerSys: DataInfo.data
+                    });
+                }
+            }
         },
         * addalyzersys({
             payload: {
@@ -406,7 +409,6 @@ export default Model.extend({
             call,
             put,
             update,
-            select
         }) {
             const result = yield call(getanalyzersysmnmodel, {
                 ID: ID
@@ -629,6 +631,48 @@ export default Model.extend({
                 reason: result.reason,
             });
             callback();
+        },
+        * getmaininstrumentName({
+            payload: {
+                callback
+            }
+        },{
+            call,
+            update
+        }) {
+            const DataInfo = yield call(getmaininstrumentName, {});
+            if (DataInfo !== null && DataInfo.requstresult == EnumRequstResult.Success) {
+                if (DataInfo.data !== null) {
+                    yield update({ MainInstrumentName: DataInfo.data });
+                    callback();
+                }
+            }
+        },
+        * getchildcems({
+            payload,
+        },{
+            call,
+            update
+        }) {
+            const DataInfo = yield call(getchildcems, payload);
+            if (DataInfo !== null&& DataInfo.requstresult == EnumRequstResult.Success) {
+                if (DataInfo.data !== null) {
+                    yield update({ ChildCems: DataInfo.data });
+                }
+            }
+        },
+        * getanalyzerbymn({
+            payload,
+        },{
+            call,
+            update
+        }) {
+            const DataInfo = yield call(getanalyzerbymn, payload);
+            if (DataInfo !== null&& DataInfo.requstresult == EnumRequstResult.Success) {
+                if (DataInfo.data !== null) {
+                    yield update({ Analyzers: DataInfo.data });
+                }
+            }
         },
     },
     reducers: {

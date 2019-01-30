@@ -105,7 +105,7 @@ export async function deletepoint(params) {
         data: null
     } : result;
 }
-// 获取排口分析仪
+// 获取排口CEMS监测子系统
 export async function getanalyzersys(params) {
     const body = {
         DGIMN: params.DGIMN
@@ -258,6 +258,37 @@ export async function getgasoutputtypelist(params) {
         code: '',
     };
     const result = post('/api/rest/PollutantSourceApi/PPointAndData/GasOutputTypeList', body, null);
+    return result === null ? {
+        data: null
+    } : result;
+}
+
+// 获取主要仪器名称
+export async function getmaininstrumentName(params) {
+    const body = {
+    };
+    const result = post('/api/rest/PollutantSourceApi/Analyzer/GetMainInstrumentName', body, null);
+    return result === null ? {
+        data: null
+    } : result;
+}
+
+// 获取CEMS监测子系统名称
+export async function getchildcems(params) {
+    const body = {
+    };
+    const result = post('/api/rest/PollutantSourceApi/Analyzer/GetChildCems', body, null);
+    return result === null ? {
+        data: null
+    } : result;
+}
+
+// 获取指定排口的分析仪子表
+export async function getanalyzerbymn(params) {
+    const body = {
+        DGIMN:params.DGIMN,
+    };
+    const result = post('/api/rest/PollutantSourceApi/Analyzer/GetAnalyzerByMn', body, null);
     return result === null ? {
         data: null
     } : result;
