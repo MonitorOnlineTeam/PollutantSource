@@ -241,11 +241,20 @@ export default Model.extend({
             select
         }) {
             const result = yield call(uploadfiles, payload);
-            yield update({
-                requstresult: result.requstresult,
-                reason: result.reason
-            });
-            payload.callback(result.requstresult);
+            if(result!==null)
+            {
+                yield update({
+                    requstresult: result.requstresult,
+                    reason: result.reason
+                });
+            }
+            else
+            {
+                yield update({
+                    reason: '上传失败!'
+                });
+            }
+            payload.callback(result===null?'0': result.requstresult);
         },
 
         //添加知识库
