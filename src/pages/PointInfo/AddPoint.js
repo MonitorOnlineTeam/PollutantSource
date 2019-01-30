@@ -157,10 +157,10 @@ class AddPoint extends Component {
                             > {
                                     `${user.User_Name }(${ user.User_Account })`
                                 }
-                            </Option>)
+                                                               </Option>)
                         );
                     } else {
-                        message.error('请添加环保专攻');
+                        message.error('请添加环保专工');
                     }
                 }
             },
@@ -206,93 +206,87 @@ class AddPoint extends Component {
            const viewMap=this.props.match.params.Add;
            const {dispatch}=this.props;
            let index;
-           if(viewMap=="mapview")
-           {
-                index=dispatch(routerRedux.push('/overview/mapview'));
-           }
-           else if(viewMap=="datalist")
-           {
-                index=dispatch(routerRedux.push('/overview/datalistview'));
-           }
-           else if(viewMap.indexOf("pointInfo")>-1)
-           {
+           if(viewMap=="mapview") {
+               index=dispatch(routerRedux.push('/overview/mapview'));
+           } else if(viewMap=="datalist") {
+               index=dispatch(routerRedux.push('/overview/datalistview'));
+           } else if(viewMap.indexOf("pointInfo")>-1) {
                const backviewType=viewMap.split('@')[1];
-               const key=this.props.match.params.DGIMN;   
+               const key=this.props.match.params.DGIMN;
                index=dispatch(routerRedux.push(`/pointdetail/${key}/${backviewType}`));
-           }
-           else{
+           } else{
                index = dispatch(routerRedux.push(`/sysmanage/PointInfo`));
            }
        }
 
        handleSubmit = (e) => {
-        e.preventDefault();
-        let flag = true;
-        this.props.form.validateFieldsAndScroll((err, values) => {
-            const that = this;
-            if (this.props.match.params.DGIMN === 'null') {
-                if (!err && flag === true) {
-                    that.props.dispatch({
-                        type: 'pointinfo/addpoint',
-                        payload: {
-                            DGIMN: values.DGIMN,
-                            PointName: values.PointName,
-                            PointType: values.PointType === undefined ? '' : values.PointType,
-                            PollutantType: values.PollutantType === undefined ? '' : values.PollutantType,
-                            IsSj: values.IsSj === true ? '1' : '0',
-                            RunState: values.RunState === true ? 1 : 2,
-                            Coordinate: values.Coordinate === undefined ? '' : values.Coordinate,
-                            OutPutWhitherCode: values.OutPutWhitherCode === undefined ? '' : values.OutPutWhitherCode,
-                            Sort: values.Sort === undefined ? '' : values.Sort,
-                            Linkman: values.linkman === undefined ? '' : values.linkman,
-                            OutputDiameter: values.OutputDiameter === undefined ? '' : values.OutputDiameter,
-                            OutputHigh: values.OutputHigh === undefined ? '' : values.OutputHigh,
-                            OutputType: values.OutputType === true ? '1' : '0',
-                            Address: values.Address,
-                            Col3: values.Col3 === undefined ? '' : values.Col3,
-                            OperationerId: values.OperationerId,
-                            callback: () => {
-                                if (this.props.requstresult === '1') {
-                                    this.success();
-                                } else {
-                                    message.error(this.props.reason);
-                                }
-                            }
-                        },
-                    });
-                }
-            } else if (!err && flag === true) {
-                that.props.dispatch({
-                    type: 'pointinfo/editpoint',
-                    payload: {
-                        DGIMN: values.DGIMN,
-                        PointName: values.PointName,
-                        PointType: values.PointType === undefined ? '' : values.PointType,
-                        PollutantType: values.PollutantType === undefined ? '' : values.PollutantType,
-                        IsSj: values.IsSj === true ? '1' : '0',
-                        RunState: values.RunState === true ? 1 : 2,
-                        Coordinate: values.Coordinate === undefined ? '' : values.Coordinate,
-                        OutPutWhitherCode: values.OutPutWhitherCode === undefined ? '' : values.OutPutWhitherCode,
-                        Sort: values.Sort === undefined ? '' : values.Sort,
-                        Linkman: values.linkman === undefined ? '' : values.linkman,
-                        OutputDiameter: values.OutputDiameter === undefined ? '' : values.OutputDiameter,
-                        OutputHigh: values.OutputHigh === undefined ? '' : values.OutputHigh,
-                        OutputType: values.OutputType === true ? '1' : '0',
-                        Address: values.Address,
-                        Col3: values.Col3 === undefined ? '' : values.Col3,
-                        OperationerId: values.OperationerId,
-                        callback: () => {
-                            if (this.props.requstresult === '1') {
-                                this.success();
-                            } else {
-                                message.error(this.props.reason);
-                            }
-                        }
-                    },
-                });
-            }
-        });
-    };
+           e.preventDefault();
+           let flag = true;
+           this.props.form.validateFieldsAndScroll((err, values) => {
+               const that = this;
+               if (this.props.match.params.DGIMN === 'null') {
+                   if (!err && flag === true) {
+                       that.props.dispatch({
+                           type: 'pointinfo/addpoint',
+                           payload: {
+                               DGIMN: values.DGIMN,
+                               PointName: values.PointName,
+                               PointType: values.PointType === undefined ? '' : values.PointType,
+                               PollutantType: values.PollutantType === undefined ? '' : values.PollutantType,
+                               IsSj: values.IsSj === true ? '1' : '0',
+                               RunState: values.RunState === true ? 1 : 2,
+                               Coordinate: values.Coordinate === undefined ? '' : values.Coordinate,
+                               OutPutWhitherCode: values.OutPutWhitherCode === undefined ? '' : values.OutPutWhitherCode,
+                               Sort: values.Sort === undefined ? '' : values.Sort,
+                               Linkman: values.linkman === undefined ? '' : values.linkman,
+                               OutputDiameter: values.OutputDiameter === undefined ? '' : values.OutputDiameter,
+                               OutputHigh: values.OutputHigh === undefined ? '' : values.OutputHigh,
+                               OutputType: values.OutputType === true ? '1' : '0',
+                               Address: values.Address,
+                               Col3: values.Col3 === undefined ? '' : values.Col3,
+                               OperationerId: values.OperationerId,
+                               callback: () => {
+                                   if (this.props.requstresult === '1') {
+                                       this.success();
+                                   } else {
+                                       message.error(this.props.reason);
+                                   }
+                               }
+                           },
+                       });
+                   }
+               } else if (!err && flag === true) {
+                   that.props.dispatch({
+                       type: 'pointinfo/editpoint',
+                       payload: {
+                           DGIMN: values.DGIMN,
+                           PointName: values.PointName,
+                           PointType: values.PointType === undefined ? '' : values.PointType,
+                           PollutantType: values.PollutantType === undefined ? '' : values.PollutantType,
+                           IsSj: values.IsSj === true ? '1' : '0',
+                           RunState: values.RunState === true ? 1 : 2,
+                           Coordinate: values.Coordinate === undefined ? '' : values.Coordinate,
+                           OutPutWhitherCode: values.OutPutWhitherCode === undefined ? '' : values.OutPutWhitherCode,
+                           Sort: values.Sort === undefined ? '' : values.Sort,
+                           Linkman: values.linkman === undefined ? '' : values.linkman,
+                           OutputDiameter: values.OutputDiameter === undefined ? '' : values.OutputDiameter,
+                           OutputHigh: values.OutputHigh === undefined ? '' : values.OutputHigh,
+                           OutputType: values.OutputType === true ? '1' : '0',
+                           Address: values.Address,
+                           Col3: values.Col3 === undefined ? '' : values.Col3,
+                           OperationerId: values.OperationerId,
+                           callback: () => {
+                               if (this.props.requstresult === '1') {
+                                   this.success();
+                               } else {
+                                   message.error(this.props.reason);
+                               }
+                           }
+                       },
+                   });
+               }
+           });
+       };
 
      success = () => {
          let index = this.saveBack();
@@ -348,7 +342,7 @@ class AddPoint extends Component {
              latitude ,
              Col3
          } = editpoint === null || this.props.match.params.DGIMN ==="null" ? {} : editpoint;
-      
+
 
          return (
              <MonitorContent
