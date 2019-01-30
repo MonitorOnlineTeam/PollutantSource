@@ -307,7 +307,7 @@ export const EnumFileClass={
 
 };
 //运维任务类型
-export const EnumEnumPatrolTaskType={
+export const EnumPatrolTaskType={
     PatrolTask:1, //巡检任务
     ExceptionTask:2, //故障任务
 
