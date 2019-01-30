@@ -443,16 +443,17 @@ export async function querydatalist(params) {
     };
     if(params.dgimn)
         body.DGIMNs=params.dgimn;
-    const result = await post('/api/rest/PollutantSourceApi/DataList/SummaryList', body, null);
+    const result = await post('/api/rest/PollutantSourceApi/DataList/AllTypeSummaryList', body, null);
     return result === null ? { data: null } : result.data;
 }
 // 获取最新一条数据
 export async function querylastestdatalist(params) {
     const body = {
         dataType: params.dataType,
-        DGIMNs: params.dgimn
+        DGIMNs: params.dgimn,
+        isLastest:true
     };
-    const result = await post('/api/rest/PollutantSourceApi/DataList/LastestRealTimeDataList', body, null);
+    const result = await post('/api/rest/PollutantSourceApi/DataList/AllTypeSummaryList', body, null);
     return result === null ? { data: null } : result;
 }
 // 获得单点数据信息

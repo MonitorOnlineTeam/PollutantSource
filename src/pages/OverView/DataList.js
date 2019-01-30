@@ -405,7 +405,7 @@ class dataList extends PureComponent {
                 if (record.scene) {
                     lable.push(<span key={3} className={styles.operation}>运维中</span>);
                 }
-                if (record.status == 4) {
+                if (record.stop) {
                     lable.push(<span key={4} className={styles.stop}>停产中</span>);
                 }
 
@@ -528,7 +528,7 @@ class dataList extends PureComponent {
                         <div>
                             <TimePicker onChange={this.pickerChange} style={{ width: 150, marginRight: 20, float: 'left' }} defaultValue={this.state.time} format="HH:00:00" />
 
-                            <Radio.Group buttonStyle="solid" style={{ marginLeft: 50, float: 'left' }} onChange={this.onPollutantChange} defaultValue={this.state.pollutantCode}>
+                            <Radio.Group   style={{ marginLeft: 50, float: 'left' }} onChange={this.onPollutantChange} defaultValue={this.state.pollutantCode}>
                                 {this.getPollutantDoc()}
                             </Radio.Group>
 

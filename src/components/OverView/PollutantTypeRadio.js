@@ -39,7 +39,7 @@ class PollutantTypeRadio extends Component {
         }
         return (
             <div>
-                <Radio.Group onChange={this.onChange} defaultValue={2} buttonStyle="solid">
+                <Radio.Group onChange={this.onChange} defaultValue={2}>
                     {
                         pollutantTypelist.map((item,key)=>{
                            return ( <Radio.Button value={item.pollutantTypeCode}>{item.pollutantTypeName}</Radio.Button>)
