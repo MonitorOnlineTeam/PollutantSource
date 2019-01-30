@@ -99,7 +99,7 @@ export default class BdHistoryInfoHistoryRecords extends Component {
 
     seeDetail = (record) => {
         localStorage.setItem('DGIMN', this.props.DGIMN);
-        this.props.dispatch(routerRedux.push(`/PatrolForm/BdTestRecord/${this.props.DGIMN}/${this.props.match.params.viewtype}/qcontrollist/BdHistoryInfoHistoryRecords/${record.TaskID}`));
+        this.props.dispatch(routerRedux.push(`/PatrolForm/BdTestRecord/${this.props.DGIMN}/menu/qualityControlOperation/BdHistoryInfoHistoryRecords/${record.TaskID}`));
     }
     //查询
     onSerach = (value) => {

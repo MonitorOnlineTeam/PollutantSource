@@ -73,7 +73,7 @@ export default class CounterControlCommandHistoryRecords extends Component {
     }
 
     seeDetail = (record) => {
-        this.props.dispatch(routerRedux.push(`/PatrolForm/ConsumablesReplaceRecord/${this.state.DGIMN}/${this.props.match.params.viewtype}/qcontrollist/CounterControlCommandHistoryRecords/${record.TaskID}`));
+        this.props.dispatch(routerRedux.push(`/PatrolForm/ConsumablesReplaceRecord/${this.state.DGIMN}/${this.props.match.params.viewtype}/operationlist/CounterControlCommandHistoryRecords/${record.TaskID}`));
     }
 
     render() {

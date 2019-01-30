@@ -640,7 +640,10 @@ export default Model.extend({
             {
                 yield put({
                     type:'overview/getPollutantTypeList',
-                    payload:payload
+                    payload:{
+                        ...payload,
+                        dgimn:null
+                    }
                 })
                 yield take('overview/getPollutantTypeList/@@end');
             }
@@ -786,7 +789,7 @@ export default Model.extend({
             if (payload && payload.array) {
                 const  { stateInfo,stateNameInfo,selectpoint } = state;
                 let resstateInfo=JSON.parse(JSON.stringify(stateInfo));;
-                if(selectpoint && statresstateInfoeInfo)
+                if(selectpoint && resstateInfo)
                 {
                     debugger;
                     payload.array.map(item=>{
@@ -795,7 +798,7 @@ export default Model.extend({
                                  const stateName=stateNameInfo[item.Code];
                                  if(stateName)
                                  {
-                                    statresstateInfoeInfo[item.Code]=stateName+item.State;
+                                    resstateInfo[item.Code]=stateName+item.State;
                                  }
                             }
                     })

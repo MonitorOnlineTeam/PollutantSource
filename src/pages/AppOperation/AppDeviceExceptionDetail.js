@@ -1,6 +1,6 @@
- import React, { Component } from 'react';
+import React, { Component } from 'react';
 import styles from './AppDeviceExceptionDetail.less';
-import { Spin, Button, Icon,Card } from 'antd';
+import { Spin, Button, Icon, Card } from 'antd';
 import { connect } from 'dva';
 import MonitorContent from '../../components/MonitorContent/index';
 import { routerRedux } from 'dva/router';
@@ -29,7 +29,7 @@ export default class AppDeviceExceptionDetail extends Component {
             loading: false
         });
     }
-          
+
     render() {
         const SCREEN_HEIGHT = document.querySelector('body').offsetHeight - 150;
         const Exception = this.props.ExceptionDetail;
@@ -59,99 +59,101 @@ export default class AppDeviceExceptionDetail extends Component {
         }
         if (this.props.isloading) {
             return (<Spin
-                style={{ width: '100%',
+                style={{
+                    width: '100%',
                     height: 'calc(100vh/2)',
                     display: 'flex',
                     alignItems: 'center',
-                    justifyContent: 'center' }}
+                    justifyContent: 'center'
+                }}
                 size="large"
             />);
         }
         return (
             <MapInteractionCSS>
-                <div className={styles.FormDiv} style={{ height: SCREEN_HEIGHT }}>
+                <div className={styles.FormDiv}>
                     <div className={styles.FormName}>CEMS设备数据异常记录表</div>
                     <table className={styles.FormTable}>
                         <tbody>
                             <tr>
-                                <td style={{ width: '20%', height: '25px', textAlign: 'center',fontSize: '12px' }}>
+                                <td style={{ width: '20%', height: '25px', textAlign: 'center', fontSize: '12px' }}>
                                     站点名称
                                 </td>
-                                <td style={{ width: '20%', height: '25px', textAlign: 'center',fontSize: '12px' }}>
+                                <td style={{ width: '20%', height: '25px', textAlign: 'center', fontSize: '12px' }}>
                                     {PointPosition}
                                 </td>
-                                <td style={{ width: '20%', height: '25px', textAlign: 'center',fontSize: '12px' }}>
+                                <td style={{ width: '20%', height: '25px', textAlign: 'center', fontSize: '12px' }}>
                                     设备名称
                                 </td>
-                                <td style={{ width: '40%', height: '25px', textAlign: 'center',fontSize: '12px' }}>
+                                <td style={{ width: '40%', height: '25px', textAlign: 'center', fontSize: '12px' }}>
                                     {DeviceName}
                                 </td>
                             </tr>
                             <tr>
-                                <td rowSpan="3" style={{ height: '100px', textAlign: 'center',fontSize: '12px' }}>
-                            数据异常
+                                <td rowSpan="3" style={{ height: '100px', textAlign: 'center', fontSize: '12px' }}>
+                                    数据异常
                                 </td>
-                                <td style={{ height: '100px', textAlign: 'center',fontSize: '12px' }}>
-                            异常状况
+                                <td style={{ height: '100px', textAlign: 'center', fontSize: '12px' }}>
+                                    异常状况
                                 </td>
-                                <td colSpan="2" style={{ height: '100px', textAlign: 'center',fontSize: '12px' }}>
+                                <td colSpan="2" style={{ height: '100px', textAlign: 'center', fontSize: '12px' }}>
                                     {ExceptionStatus}
                                 </td>
                             </tr>
                             <tr>
-                                <td style={{ height: '100px', textAlign: 'center',fontSize: '12px' }}>
-                            异常原因
+                                <td style={{ height: '100px', textAlign: 'center', fontSize: '12px' }}>
+                                    异常原因
                                 </td>
-                                <td colSpan="2" style={{ height: '100px', textAlign: 'center',fontSize: '12px' }}>
+                                <td colSpan="2" style={{ height: '100px', textAlign: 'center', fontSize: '12px' }}>
                                     {ExceptionReason}
                                 </td>
                             </tr>
                             <tr>
-                                <td style={{ height: '100px', textAlign: 'center',fontSize: '12px' }}>
-                            处理情况
+                                <td style={{ height: '100px', textAlign: 'center', fontSize: '12px' }}>
+                                    处理情况
                                 </td>
-                                <td colSpan="2" style={{ height: '100px', textAlign: 'center',fontSize: '12px' }}>
+                                <td colSpan="2" style={{ height: '100px', textAlign: 'center', fontSize: '12px' }}>
                                     {DealingSituations}
                                 </td>
                             </tr>
                             <tr>
-                                <td style={{ width: '30%', height: '25px', textAlign: 'center',fontSize: '12px' }}>
-                            是否正常恢复运行
+                                <td style={{ width: '30%', height: '25px', textAlign: 'center', fontSize: '12px' }}>
+                                    是否正常恢复运行
                                 </td>
-                                <td colSpan="3" style={{ width: '30%', height: '25px', textAlign: 'center',fontSize: '12px' }}>
+                                <td colSpan="3" style={{ width: '30%', height: '25px', textAlign: 'center', fontSize: '12px' }}>
                                     {IsOk === 1 ? '是' : '否'}
                                 </td>
                             </tr>
                             <tr>
-                                <td style={{ width: '20%', height: '25px', textAlign: 'center',fontSize: '12px' }}>
+                                <td style={{ width: '20%', height: '25px', textAlign: 'center', fontSize: '12px' }}>
                                     维护人
                                 </td>
-                                <td style={{ width: '20%', height: '25px', textAlign: 'center',fontSize: '12px' }}>
+                                <td style={{ width: '20%', height: '25px', textAlign: 'center', fontSize: '12px' }}>
                                     {CreateUserID}
                                 </td>
-                                <td style={{ width: '20%', height: '25px', textAlign: 'center',fontSize: '12px' }}>
+                                <td style={{ width: '20%', height: '25px', textAlign: 'center', fontSize: '12px' }}>
                                     维护时间
                                 </td>
-                                <td style={{ width: '40%', height: '25px', textAlign: 'center',fontSize: '12px' }}>
+                                <td style={{ width: '40%', height: '25px', textAlign: 'center', fontSize: '12px' }}>
                                     {CreateTime}
                                 </td>
                             </tr>
                         </tbody>
                     </table>
-                    <table className={styles.FormTable}>
+                    <table className={styles.FormTableBottom}>
                         <tbody>
                             <tr>
-                                <td style={{ width: '87%', height: '25px', textAlign: 'right', border: '0', fontWeight: 'bold',fontSize:'12px' }}>负责人签名：</td>
-                                <td style={{ width: '13%', height: '25px', border: '0',fontSize:'12px' }}><img src={SignContent} /></td>
+                                <td style={{ width: '70%', height: '25px', textAlign: 'right', fontWeight: 'bold' }}>负责人签名：</td>
+                                <td style={{ width: '30%', height: '25px' }}>{SignContent === null ? null : <img style={{ width: '90px', height: '30px' }} src={SignContent} />} </td>
                             </tr>
                             <tr>
-                                <td style={{ width: '87%', height: '25px', textAlign: 'right', border: '0', fontWeight: 'bold',fontSize:'12px' }}>签名时间：</td>
-                                <td style={{ width: '13%', height: '25px', border: '0',fontSize:'12px' }}>{SignTime}</td>
+                                <td style={{ width: '70%', height: '25px', textAlign: 'right', fontWeight: 'bold', fontSize: '12px' }}>签名时间：</td>
+                                <td style={{ width: '30%', height: '25px', fontSize: '10px', minWidth: 120 }}>{SignTime}</td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
-                </MapInteractionCSS>
+            </MapInteractionCSS>
         );
     }
 }

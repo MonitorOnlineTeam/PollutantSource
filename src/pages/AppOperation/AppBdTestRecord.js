@@ -319,227 +319,227 @@ export default class AppBdTestRecord extends Component {
         }
         return (
             <MapInteractionCSS>
-                    <div className={styles.FormDiv}>
-                        <div style={{ minWidth: 1000, textAlign: 'center', fontSize: 15, fontWeight: 'bold' }}>CEMS校验测试记录</div>
-                        <div style={{ fontWeight: 'bold', minWidth: 1000, fontSize: 12 }}>企业名称：{EnterpriseName}</div>
-                        <table className={styles.FormTable}>
-                            <tbody>
-                                <tr>
+                <div className={styles.FormDiv}>
+                    <div style={{ minWidth: 1000, textAlign: 'center', fontSize: 15, fontWeight: 'bold' }}>CEMS校验测试记录</div>
+                    <div style={{ fontWeight: 'bold', minWidth: 1000, fontSize: 12 }}>企业名称：{EnterpriseName}</div>
+                    <table className={styles.FormTable}>
+                        <tbody>
+                            <tr>
                                 <td style={{ width: '18%', height: '25px', minWidth: 150 }}>
-                                        CEMS供应商：
+                                    CEMS供应商：
                                 </td>
-                                    <td colSpan="5" style={{ width: '18%', height: '25px', minWidth: 150 }} >
-                                        {CemsSupplier}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td colSpan="6" style={{ textAlign: 'center', fontWeight: 'bold', borderBottom: '0' }}>
-                                        CEMS主要仪器型号：
+                                <td colSpan="5" style={{ width: '18%', height: '25px', minWidth: 150 }} >
+                                    {CemsSupplier}
                                 </td>
-                                </tr>
-                                <tr>
-                                    <td colSpan="6" style={{ padding: '0', border: '0' }}>
-                                        <table style={{ width: '100%', marginTop: '0', marginBottom: '0' }} className={styles.FormTable}>
-                                            <tbody>
-                                                {
-                                                    this.renderCemsMainInstrument(CemsMainInstrument)
-                                                }
-                                            </tbody>
-                                        </table>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style={{ borderTop: '0' }}>CEMS安装地点</td>
-                                    <td colSpan="2" style={{ borderTop: '0' }}>{PointPosition}</td>
-                                    <td style={{ borderTop: '0' }}>维护管理单位</td>
-                                    <td colSpan="2" style={{ borderTop: '0' }}>{MaintenanceManagementUnit}</td>
-                                </tr>
-                                <tr>
-                                    <td>本次校验日期</td>
-                                    <td colSpan="2">{CurrentTestDate}</td>
-                                    <td>上次校验日期</td>
-                                    <td colSpan="2">{LastTestDate}</td>
-                                </tr>
-                                <tr><td colSpan="6" style={{ textAlign: 'center', fontWeight: 'bold' }}>颗粒物校验</td></tr>
-                                <tr>
-                                    <td rowSpan="2" style={{ width: '20%' }}>监测时间</td>
-                                    <td style={{ width: '20%' }}>参比方法测定值</td>
-                                    <td style={{ width: '20%' }}>CEMS测定值</td>
-                                    {
-                                        this.renderFormulaInfo(TestResult, '颗粒物')
-                                    }
-                                    <td rowSpan="2" style={{ width: '20%' }}>评价标准</td>
-                                    <td rowSpan="2" style={{ width: '10%' }}>评价结果</td>
-                                </tr>
-                                <tr>
-                                    <td>（mg/m3）</td>
-                                    <td>（mg/m3）</td>
-                                </tr>
-                                {this.renderCemsTestInfo(TestRecord, TestResult, '颗粒物')}
-                                <tr><td colSpan="6" style={{ textAlign: 'center', fontWeight: 'bold' }}>SO2校验</td></tr>
-                                <tr>
-                                    <td rowSpan="2">监测时间</td>
-                                    <td>参比方法测定值</td>
-                                    <td>CEMS测定值</td>
-                                    {
-                                        this.renderFormulaInfo(TestResult, 'SO2')
-                                    }
-                                    <td rowSpan="2">评价标准</td>
-                                    <td rowSpan="2">评价结果</td>
-                                </tr>
+                            </tr>
+                            <tr>
+                                <td colSpan="6" style={{ textAlign: 'center', fontWeight: 'bold', borderBottom: '0' }}>
+                                    CEMS主要仪器型号：
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colSpan="6" style={{ padding: '0', border: '0' }}>
+                                    <table style={{ width: '100%', marginTop: '0', marginBottom: '0' }} className={styles.FormTable}>
+                                        <tbody>
+                                            {
+                                                this.renderCemsMainInstrument(CemsMainInstrument)
+                                            }
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style={{ borderTop: '0' }}>CEMS安装地点</td>
+                                <td colSpan="2" style={{ borderTop: '0' }}>{PointPosition}</td>
+                                <td style={{ borderTop: '0' }}>维护管理单位</td>
+                                <td colSpan="2" style={{ borderTop: '0' }}>{MaintenanceManagementUnit}</td>
+                            </tr>
+                            <tr>
+                                <td>本次校验日期</td>
+                                <td colSpan="2">{CurrentTestDate}</td>
+                                <td>上次校验日期</td>
+                                <td colSpan="2">{LastTestDate}</td>
+                            </tr>
+                            <tr><td colSpan="6" style={{ textAlign: 'center', fontWeight: 'bold' }}>颗粒物校验</td></tr>
+                            <tr>
+                                <td rowSpan="2" style={{ width: '20%' }}>监测时间</td>
+                                <td style={{ width: '20%' }}>参比方法测定值</td>
+                                <td style={{ width: '20%' }}>CEMS测定值</td>
                                 {
-                                    this.renderUnitInfo(TestResult, 'SO2')
+                                    this.renderFormulaInfo(TestResult, '颗粒物')
                                 }
-                                {this.renderCemsTestInfo(TestRecord, TestResult, 'SO2')}
-                                <tr><td colSpan="6" style={{ textAlign: 'center', fontWeight: 'bold' }}>NOX校验</td></tr>
-                                <tr>
-                                    <td rowSpan="2">监测时间</td>
-                                    <td>参比方法测定值</td>
-                                    <td>CEMS测定值</td>
-                                    {
-                                        this.renderFormulaInfo(TestResult, 'NOX')
-                                    }
-                                    <td rowSpan="2">评价标准</td>
-                                    <td rowSpan="2">评价结果</td>
-                                </tr>
+                                <td rowSpan="2" style={{ width: '20%' }}>评价标准</td>
+                                <td rowSpan="2" style={{ width: '10%' }}>评价结果</td>
+                            </tr>
+                            <tr>
+                                <td>（mg/m3）</td>
+                                <td>（mg/m3）</td>
+                            </tr>
+                            {this.renderCemsTestInfo(TestRecord, TestResult, '颗粒物')}
+                            <tr><td colSpan="6" style={{ textAlign: 'center', fontWeight: 'bold' }}>SO2校验</td></tr>
+                            <tr>
+                                <td rowSpan="2">监测时间</td>
+                                <td>参比方法测定值</td>
+                                <td>CEMS测定值</td>
                                 {
-                                    this.renderUnitInfo(TestResult, 'SO2')
+                                    this.renderFormulaInfo(TestResult, 'SO2')
                                 }
-                                {this.renderCemsTestInfo(TestRecord, TestResult, 'NOX')}
-                                <tr><td colSpan="6" style={{ textAlign: 'center', fontWeight: 'bold' }}>O2校验</td></tr>
-                                <tr>
-                                    <td rowSpan="2">监测时间</td>
-                                    <td>参比方法测定值</td>
-                                    <td>CEMS测定值</td>
-                                    {
-                                        this.renderFormulaInfo(TestResult, 'O2')
-                                    }
-                                    <td rowSpan="2">评价标准</td>
-                                    <td rowSpan="2">评价结果</td>
-                                </tr>
-                                <tr>
-                                    <td>（%）</td>
-                                    <td>（%）</td>
-                                </tr>
-                                {this.renderCemsTestInfo(TestRecord, TestResult, 'O2')}
-                                <tr><td colSpan="6" style={{ textAlign: 'center', fontWeight: 'bold' }}>流速校验</td></tr>
-                                <tr>
-                                    <td rowSpan="2">监测时间</td>
-                                    <td>参比方法测定值</td>
-                                    <td>CEMS测定值</td>
-                                    {
-                                        this.renderFormulaInfo(TestResult, '流速')
-                                    }
-                                    <td rowSpan="2">评价标准</td>
-                                    <td rowSpan="2">评价结果</td>
-                                </tr>
-                                <tr>
-                                    <td>（m/s）</td>
-                                    <td>（m/s）</td>
-                                </tr>
-                                {this.renderCemsTestInfo(TestRecord, TestResult, '流速')}
-                                <tr><td colSpan="6" style={{ textAlign: 'center', fontWeight: 'bold' }}>温度校验</td></tr>
-                                <tr>
-                                    <td rowSpan="2">监测时间</td>
-                                    <td>参比方法测定值</td>
-                                    <td>CEMS测定值</td>
-                                    <td rowSpan="2">绝对误差（℃）</td>
-                                    <td rowSpan="2">评价标准</td>
-                                    <td rowSpan="2">评价结果</td>
-                                </tr>
-                                <tr>
-                                    <td>（℃）</td>
-                                    <td>（℃）</td>
-                                </tr>
-                                {this.renderCemsTestInfo(TestRecord, TestResult, '温度')}
-                                <tr><td colSpan="6" style={{ textAlign: 'center', fontWeight: 'bold' }}>湿度校验</td></tr>
-                                <tr>
-                                    <td rowSpan="2">监测时间</td>
-                                    <td>参比方法测定值</td>
-                                    <td>CEMS测定值</td>
-                                    {
-                                        this.renderFormulaInfo(TestResult, '湿度')
-                                    }
-                                    <td rowSpan="2">评价标准</td>
-                                    <td rowSpan="2">评价结果</td>
-                                </tr>
-                                <tr>
-                                    <td>（%）</td>
-                                    <td>（%）</td>
-                                </tr>
-                                {this.renderCemsTestInfo(TestRecord, TestResult, '湿度')}
-                                <tr>
-                                    <td rowSpan="6">校验结论</td>
-                                    <td colSpan="5">如校验合格前对系统进行过处理、调整、参数修改，请说明：</td>
-                                </tr>
-                                <tr>
-                                    <td colSpan="5">{CheckConclusionResult1}</td>
-                                </tr>
-                                <tr>
-                                    <td colSpan="5">如校验后，颗粒物测量仪、流速仪的原校正系统改动，请说明：</td>
-                                </tr>
-                                <tr>
-                                    <td colSpan="5">{CheckConclusionResult2}</td>
-                                </tr>
-                                <tr>
-                                    <td colSpan="5">总体校验是否合格：</td>
-                                </tr>
-                                <tr>
-                                    <td colSpan="5">
-                                        {CheckIsOk}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td colSpan="6" style={{ borderBottom: '0', textAlign: 'center', fontWeight: 'bold' }}>标准气体</td>
-                                </tr>
-                                <tr>
-                                    <td colSpan="6" style={{ padding: '0', border: '0' }}>
-                                        <table style={{ width: '100%', marginTop: '0', marginBottom: '0' }} className={styles.FormTable}>
-                                            <tbody>
-                                                {
-                                                    this.renderGasInfo(StandardGas)
-                                                }
-                                            </tbody>
-                                        </table>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td colSpan="6" style={{ borderTop: '0', borderBottom: '0', textAlign: 'center', fontWeight: 'bold' }}>参比方法测试设备</td>
-                                </tr>
-                                <tr>
-                                    <td colSpan="6" style={{ padding: '0', border: '0' }}>
-                                        <table style={{ width: '100%', marginTop: '0', marginBottom: '0' }} className={styles.FormTable}>
-                                            <tbody>
-                                                {
-                                                    this.renderCbInfo(CbTestEquipment)
-                                                }
-                                            </tbody>
-                                        </table>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td colSpan="4" style={{ textAlign: 'right', borderTop: '0' }}>
-                                        日期：
+                                <td rowSpan="2">评价标准</td>
+                                <td rowSpan="2">评价结果</td>
+                            </tr>
+                            {
+                                this.renderUnitInfo(TestResult, 'SO2')
+                            }
+                            {this.renderCemsTestInfo(TestRecord, TestResult, 'SO2')}
+                            <tr><td colSpan="6" style={{ textAlign: 'center', fontWeight: 'bold' }}>NOX校验</td></tr>
+                            <tr>
+                                <td rowSpan="2">监测时间</td>
+                                <td>参比方法测定值</td>
+                                <td>CEMS测定值</td>
+                                {
+                                    this.renderFormulaInfo(TestResult, 'NOX')
+                                }
+                                <td rowSpan="2">评价标准</td>
+                                <td rowSpan="2">评价结果</td>
+                            </tr>
+                            {
+                                this.renderUnitInfo(TestResult, 'SO2')
+                            }
+                            {this.renderCemsTestInfo(TestRecord, TestResult, 'NOX')}
+                            <tr><td colSpan="6" style={{ textAlign: 'center', fontWeight: 'bold' }}>O2校验</td></tr>
+                            <tr>
+                                <td rowSpan="2">监测时间</td>
+                                <td>参比方法测定值</td>
+                                <td>CEMS测定值</td>
+                                {
+                                    this.renderFormulaInfo(TestResult, 'O2')
+                                }
+                                <td rowSpan="2">评价标准</td>
+                                <td rowSpan="2">评价结果</td>
+                            </tr>
+                            <tr>
+                                <td>（%）</td>
+                                <td>（%）</td>
+                            </tr>
+                            {this.renderCemsTestInfo(TestRecord, TestResult, 'O2')}
+                            <tr><td colSpan="6" style={{ textAlign: 'center', fontWeight: 'bold' }}>流速校验</td></tr>
+                            <tr>
+                                <td rowSpan="2">监测时间</td>
+                                <td>参比方法测定值</td>
+                                <td>CEMS测定值</td>
+                                {
+                                    this.renderFormulaInfo(TestResult, '流速')
+                                }
+                                <td rowSpan="2">评价标准</td>
+                                <td rowSpan="2">评价结果</td>
+                            </tr>
+                            <tr>
+                                <td>（m/s）</td>
+                                <td>（m/s）</td>
+                            </tr>
+                            {this.renderCemsTestInfo(TestRecord, TestResult, '流速')}
+                            <tr><td colSpan="6" style={{ textAlign: 'center', fontWeight: 'bold' }}>温度校验</td></tr>
+                            <tr>
+                                <td rowSpan="2">监测时间</td>
+                                <td>参比方法测定值</td>
+                                <td>CEMS测定值</td>
+                                <td rowSpan="2">绝对误差（℃）</td>
+                                <td rowSpan="2">评价标准</td>
+                                <td rowSpan="2">评价结果</td>
+                            </tr>
+                            <tr>
+                                <td>（℃）</td>
+                                <td>（℃）</td>
+                            </tr>
+                            {this.renderCemsTestInfo(TestRecord, TestResult, '温度')}
+                            <tr><td colSpan="6" style={{ textAlign: 'center', fontWeight: 'bold' }}>湿度校验</td></tr>
+                            <tr>
+                                <td rowSpan="2">监测时间</td>
+                                <td>参比方法测定值</td>
+                                <td>CEMS测定值</td>
+                                {
+                                    this.renderFormulaInfo(TestResult, '湿度')
+                                }
+                                <td rowSpan="2">评价标准</td>
+                                <td rowSpan="2">评价结果</td>
+                            </tr>
+                            <tr>
+                                <td>（%）</td>
+                                <td>（%）</td>
+                            </tr>
+                            {this.renderCemsTestInfo(TestRecord, TestResult, '湿度')}
+                            <tr>
+                                <td rowSpan="6">校验结论</td>
+                                <td colSpan="5">如校验合格前对系统进行过处理、调整、参数修改，请说明：</td>
+                            </tr>
+                            <tr>
+                                <td colSpan="5">{CheckConclusionResult1}</td>
+                            </tr>
+                            <tr>
+                                <td colSpan="5">如校验后，颗粒物测量仪、流速仪的原校正系统改动，请说明：</td>
+                            </tr>
+                            <tr>
+                                <td colSpan="5">{CheckConclusionResult2}</td>
+                            </tr>
+                            <tr>
+                                <td colSpan="5">总体校验是否合格：</td>
+                            </tr>
+                            <tr>
+                                <td colSpan="5">
+                                    {CheckIsOk}
                                 </td>
-                                    <td colSpan="2" style={{ borderTop: '0' }}>
-                                        {CheckDate}
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <table className={styles.FormTable}>
-                            <tbody>
-                                <tr>
-                                    <td style={{ width: '75%', height: '30px', textAlign: 'right', border: '0', fontWeight: 'bold', minWidth: 800 }}>负责人签名：</td>
-                                    <td style={{ width: '25%', height: '30px', border: '0', minWidth: 100 }}><img src={SignContent} /></td>
-                                </tr>
-                                <tr>
-                                    <td style={{ width: '75%', height: '30px', textAlign: 'right', border: '0', fontWeight: 'bold', minWidth: 800 }}>签名时间：</td>
-                                    <td style={{ width: '25%', height: '30px', border: '0', minWidth: 100 }}>{SignTime}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+                            </tr>
+                            <tr>
+                                <td colSpan="6" style={{ borderBottom: '0', textAlign: 'center', fontWeight: 'bold' }}>标准气体</td>
+                            </tr>
+                            <tr>
+                                <td colSpan="6" style={{ padding: '0', border: '0' }}>
+                                    <table style={{ width: '100%', marginTop: '0', marginBottom: '0' }} className={styles.FormTable}>
+                                        <tbody>
+                                            {
+                                                this.renderGasInfo(StandardGas)
+                                            }
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colSpan="6" style={{ borderTop: '0', borderBottom: '0', textAlign: 'center', fontWeight: 'bold' }}>参比方法测试设备</td>
+                            </tr>
+                            <tr>
+                                <td colSpan="6" style={{ padding: '0', border: '0' }}>
+                                    <table style={{ width: '100%', marginTop: '0', marginBottom: '0' }} className={styles.FormTable}>
+                                        <tbody>
+                                            {
+                                                this.renderCbInfo(CbTestEquipment)
+                                            }
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colSpan="4" style={{ textAlign: 'right', borderTop: '0' }}>
+                                    日期：
+                                </td>
+                                <td colSpan="2" style={{ borderTop: '0' }}>
+                                    {CheckDate}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <table className={styles.FormTableBottom}>
+                        <tbody>
+                            <tr>
+                                <td style={{ width: '70%', height: '25px', textAlign: 'right', fontWeight: 'bold', minWidth: 800 }}>负责人签名：</td>
+                                <td style={{ width: '30%', height: '25px' }}>{SignContent === null ? null : <img style={{ width: '90px', height: '30px' }} src={SignContent} />} </td>
+                            </tr>
+                            <tr>
+                                <td style={{ width: '70%', height: '25px', textAlign: 'right', fontWeight: 'bold', fontSize: '12px' , minWidth: 800 }}>签名时间：</td>
+                                <td style={{ width: '30%', height: '25px', fontSize: '10px', minWidth: 150 }}>{SignTime}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </MapInteractionCSS>
         );
     }

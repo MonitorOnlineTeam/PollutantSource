@@ -18,7 +18,7 @@ class ConsumablesReplaceRecord extends Component {
         this.state = {
             listUrl: this.props.match.params.viewtype,
             taskfrom: this.props.match.params.taskfrom,
-            taskID: this.props.match.params.TaskID,
+            taskID: this.props.match.params.TaskIds,
             histroyrecordtype: this.props.match.params.histroyrecordtype,
             DGIMN: this.props.match.params.pointcode
         };
@@ -57,7 +57,7 @@ class ConsumablesReplaceRecord extends Component {
         if (record !== null && record.length > 0) {
             record.map((item, index) => {
                 rtnVal.push(
-                    <tr key={index} >
+                    <tr key={index}>
                         <td style={{ height: '50px', textAlign: 'center', fontSize: '14px' }}>
                             {index + 1}
                         </td>
@@ -101,7 +101,7 @@ class ConsumablesReplaceRecord extends Component {
                 rtnVal.push({ Name: '数据一览', Url: `/overview/${listUrl}` });
                 break;
             case 'mapview': //地图一栏
-                rtnVal.push({ Name: '地图一栏', Url: `/overview/${listUrl}` });
+                rtnVal.push({ Name: '地图一览', Url: `/overview/${listUrl}` });
                 break;
             case 'pielist': //我的派单
                 rtnVal.push({ Name: '我的派单', Url: `/account/settings/mypielist` });
@@ -114,13 +114,26 @@ class ConsumablesReplaceRecord extends Component {
         }
         if (taskfrom === 'ywdsjlist') { //运维大事记
             rtnVal.push({ Name: '运维大事记', Url: `/pointdetail/${DGIMN}/${listUrl}/${taskfrom}` });
-            rtnVal.push({ Name: '任务详情', Url: `/TaskDetail/emergencydetailinfo/${listUrl}/${taskfrom}/${taskID}` });
+            rtnVal.push({ Name: '任务详情', Url: `/TaskDetail/emergencydetailinfo/${listUrl}/${taskfrom}/${taskID}/${DGIMN}` });
         } else if (taskfrom === 'qcontrollist') { //质控记录
             rtnVal.push({ Name: '质控记录', Url: `/pointdetail/${DGIMN}/${listUrl}/${taskfrom}/${histroyrecordtype}` });
+        } else if (taskfrom === 'operationlist') { //运维记录
+            rtnVal.push({ Name: '运维记录', Url: `/pointdetail/${DGIMN}/${listUrl}/${taskfrom}/${histroyrecordtype}` });
+        } else if (taskfrom === 'intelligentOperation') { //一级菜单
+            rtnVal.push({ Name: '智能运维', Url: `` });
+        } else if (taskfrom === 'operationywdsjlist') { //运维大事记
+            rtnVal.push({ Name: '智能运维', Url: `` });
+            rtnVal.push({ Name: '运维大事记', Url: `/operation/ywdsjlist` });
+            rtnVal.push({ Name: '任务详情', Url: `/TaskDetail/emergencydetailinfo/undefined/${taskfrom}/${taskID}/${DGIMN}` });
         } else { //其他
-            rtnVal.push({ Name: '任务详情', Url: `/TaskDetail/emergencydetailinfo/${listUrl}/nop/${taskID}` });
+            rtnVal.push({ Name: '任务详情', Url: `/TaskDetail/emergencydetailinfo/${listUrl}/nop/${taskID}/${DGIMN}` });
         }
-        rtnVal.push({ Name: '易耗品更换记录表', Url: '' });
+        if (listUrl !== 'menu') {
+            rtnVal.push({ Name: '易耗品更换记录表', Url: '' });
+        }
+        if (listUrl === 'menu') {
+            rtnVal.push({ Name: '易耗品更换记录表', Url: `/operation/CounterControlCommandHistoryRecords` });
+        }
         return rtnVal;
     }
 
@@ -150,7 +163,7 @@ class ConsumablesReplaceRecord extends Component {
             CreateUserID = DataLength === 0 ? null : Data.Record.length === 0 ? null : Data.Record.CreateUserID;
             CreateTime = DataLength === 0 ? null : Data.Record.length === 0 ? null : Data.Record.CreateTime;
             SignTime = DataLength === 0 ? null : Data.Record.length === 0 ? null : Data.Record.SignTime;
-            SignContents = DataLength === 0 ? null : Data.Record.length === 0 ? null : Data.Record.SignContent === null ? null : <img src={SignContent} />
+            SignContents = DataLength === 0 ? null : Data.Record.length === 0 ? null : Data.Record.SignContent === null ? null : <img style={{ width: '80%', height: '110%' }} src={SignContent} />;
         }
         if (this.props.isloading) {
             return (<Spin
@@ -175,14 +188,14 @@ class ConsumablesReplaceRecord extends Component {
                         <p>
                             <Button type="primary" ghost={true} style={{ float: "left", marginRight: 20 }} onClick={this.enterTaskDetail}>
                                 <Icon type="file-text" />任务单
-                             </Button>
+                            </Button>
                             <Button
                                 style={{ float: "right", marginRight: 30 }}
                                 onClick={() => {
                                     this.props.history.goBack(-1);
                                 }}
                             ><Icon type="left" />退回
-                             </Button>
+                            </Button>
                         </p>}
                 >
                     <div className={styles.FormDiv} style={{ height: SCREEN_HEIGHT }}>
@@ -195,19 +208,19 @@ class ConsumablesReplaceRecord extends Component {
                                 <tr>
                                     <td style={{ width: '12%', height: '50px', textAlign: 'center', fontSize: '14px' }}>
                                         设备名称
-                                     </td>
+                                    </td>
                                     <td style={{ width: '16%', textAlign: 'center', fontSize: '14px' }}>
                                         {DeviceName}
                                     </td>
                                     <td style={{ width: '13%', height: '50px', textAlign: 'center', fontSize: '14px' }}>
                                         规格型号
-                                     </td>
+                                    </td>
                                     <td style={{ width: '13%', textAlign: 'center', fontSize: '14px' }}>
                                         {Code}
                                     </td>
                                     <td style={{ width: '12%', height: '50px', textAlign: 'center', fontSize: '14px' }}>
                                         设备编号
-                                     </td>
+                                    </td>
                                     <td colSpan="2" style={{ width: '30%', textAlign: 'center', fontSize: '14px' }}>
                                         {Equipment}
                                     </td>
@@ -215,13 +228,13 @@ class ConsumablesReplaceRecord extends Component {
                                 <tr>
                                     <td colSpan="2" style={{ width: '18%', height: '50px', textAlign: 'center', fontSize: '14px' }}>
                                         维护管理单位
-                                     </td>
+                                    </td>
                                     <td colSpan="2" style={{ textAlign: 'center', fontSize: '14px' }}>
                                         {MaintenanceManagementUnit}
                                     </td>
                                     <td colSpan="2" style={{ width: '18%', height: '50px', textAlign: 'center', fontSize: '14px' }}>
                                         安装地点
-                                     </td>
+                                    </td>
                                     <td style={{ textAlign: 'center', fontSize: '14px' }}>
                                         {PointPosition}
                                     </td>
@@ -229,25 +242,25 @@ class ConsumablesReplaceRecord extends Component {
                                 <tr>
                                     <td style={{ width: '9%', height: '50px', textAlign: 'center', backgroundColor: '#FAFAFA', fontSize: '14px', fontWeight: '600' }}>
                                         序号
-                                     </td>
+                                    </td>
                                     <td style={{ width: '18%', height: '50px', textAlign: 'center', backgroundColor: '#FAFAFA', fontSize: '14px', fontWeight: '600' }}>
                                         更换日期
-                                     </td>
+                                    </td>
                                     <td style={{ width: '14%', height: '50px', textAlign: 'center', backgroundColor: '#FAFAFA', fontSize: '14px', fontWeight: '600' }}>
                                         易耗品名称
-                                     </td>
+                                    </td>
                                     <td style={{ width: '12%', height: '50px', textAlign: 'center', backgroundColor: '#FAFAFA', fontSize: '14px', fontWeight: '600' }}>
                                         规格型号
-                                     </td>
+                                    </td>
                                     <td style={{ width: '12%', height: '50px', textAlign: 'center', backgroundColor: '#FAFAFA', fontSize: '14px', fontWeight: '600' }}>
                                         单位
-                                     </td>
+                                    </td>
                                     <td style={{ width: '12%', height: '50px', textAlign: 'center', backgroundColor: '#FAFAFA', fontSize: '14px', fontWeight: '600' }}>
                                         数量
-                                     </td>
+                                    </td>
                                     <td style={{ width: '23%', height: '50px', textAlign: 'center', backgroundColor: '#FAFAFA', fontSize: '14px', fontWeight: '600' }}>
                                         更换原因说明（备注）
-                                     </td>
+                                    </td>
                                 </tr>
                                 {
                                     this.renderItem(DataList)
@@ -255,13 +268,13 @@ class ConsumablesReplaceRecord extends Component {
                                 <tr>
                                     <td colSpan="2" style={{ height: '50px', textAlign: 'center', fontSize: '14px' }}>
                                         运行维护人员
-                                     </td>
+                                    </td>
                                     <td colSpan="2" style={{ textAlign: 'center', fontSize: '14px' }}>
                                         {CreateUserID}
                                     </td>
                                     <td colSpan="2" style={{ height: '50px', textAlign: 'center', fontSize: '14px' }}>
                                         时间
-                                     </td>
+                                    </td>
                                     <td style={{ textAlign: 'center', fontSize: '14px', colSpan: '2' }}>
                                         {CreateTime}
                                     </td>
@@ -269,7 +282,7 @@ class ConsumablesReplaceRecord extends Component {
                                 <tr>
                                     <td colSpan="7" style={{ width: '18%', height: '50px', fontSize: '14px', paddingLeft: 15 }}>
                                         注：更换易耗品时应及时记录，每半年汇总存档。
-                                     </td>
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>

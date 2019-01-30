@@ -108,13 +108,13 @@ export default class InspectionHistoryRecords extends Component {
                 TaskID: record.TaskID,
                 callback: (typeId) => {
                     if (typeId === 5) {
-                        this.props.dispatch(routerRedux.push(`/PatrolForm/completeextraction/${this.props.DGIMN}/${this.props.match.params.viewtype}/qcontrollist/wqcqfinspectionhistoryrecords/${record.TaskID}`));
+                        this.props.dispatch(routerRedux.push(`/PatrolForm/completeextraction/${this.props.DGIMN}/menu/intelligentOperation/wqcqfinspectionhistoryrecords/${record.TaskID}`));
                     }
                     else if (typeId === 6) {
-                        this.props.dispatch(routerRedux.push(`/PatrolForm/dilutionsampling/${this.props.DGIMN}/${this.props.match.params.viewtype}/qcontrollist/xscyfinspectionhistoryrecords/${record.TaskID}`));
+                        this.props.dispatch(routerRedux.push(`/PatrolForm/dilutionsampling/${this.props.DGIMN}/menu/intelligentOperation/xscyfinspectionhistoryrecords/${record.TaskID}`));
                     }
                     else {
-                        this.props.dispatch(routerRedux.push(`/PatrolForm/directmeasurement/${this.props.DGIMN}/${this.props.match.params.viewtype}/qcontrollist/zzclfinspectionhistoryrecords/${record.TaskID}`));
+                        this.props.dispatch(routerRedux.push(`/PatrolForm/directmeasurement/${this.props.DGIMN}/menu/intelligentOperation/zzclfinspectionhistoryrecords/${record.TaskID}`));
                     }
                 }
             }
@@ -265,7 +265,7 @@ export default class InspectionHistoryRecords extends Component {
                 [
                     { Name: '首页', Url: '/' },
                     { Name: '智能运维', Url: '' },
-                    { Name: '标气更换记录', Url: '' }
+                    { Name: '巡检记录', Url: '' }
                 ]
             }>
             <div className={styles.cardTitle}>

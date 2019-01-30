@@ -5,6 +5,7 @@ import MapContent from '../../components/OverView/MapContent';
 import MapTreeDetail from '../../components/OverView/MapTreeDetail';
 import MapTreeList from '../../components/OverView/MapTreeList';
 import AListRadio from '../../components/OverView/AListRadio';
+import PollutantTypeRadio from '../../components/OverView/PollutantTypeRadio';
 import styles from './index.less';
 
 @connect(({ overview }) => ({
@@ -50,6 +51,16 @@ class OverViewMap extends PureComponent {
                 </div>
 
                 <MapContent />
+                <div
+                style={{
+                    position: 'absolute',
+                    top: 90,
+                    left: 500,
+                    zIndex:100
+                }}
+                >
+               <PollutantTypeRadio />
+                </div>
                 <div
                     style={{
                         position: 'absolute',

@@ -70,7 +70,7 @@ export default class RepairHistoryRecords extends Component {
     }
 
     seeDetail = (record) => {
-        this.props.dispatch(routerRedux.push(`/PatrolForm/RepairRecordDetail/${this.state.DGIMN}/${this.props.match.params.viewtype}/qcontrollist/RepairHistoryRecords/${record.TaskID}`));
+        this.props.dispatch(routerRedux.push(`/PatrolForm/RepairRecordDetail/${this.state.DGIMN}/${this.props.match.params.viewtype}/operationlist/RepairHistoryRecords/${record.TaskID}`));
     }
 
     render() {

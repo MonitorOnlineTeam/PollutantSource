@@ -102,7 +102,7 @@ export default class JzHistoryRecords extends Component {
 
     seeDetail = (Record) => {
         localStorage.setItem('DGIMN', this.props.DGIMN);
-        this.props.dispatch(routerRedux.push(`/PatrolForm/JzRecordInfo/${this.props.DGIMN}/${this.props.match.params.viewtype}/qcontrollist/JzHistoryRecords/${Record.TaskID}`));
+        this.props.dispatch(routerRedux.push(`/PatrolForm/JzRecordInfo/${this.props.DGIMN}/menu/qualityControlOperation/JzHistoryRecords/${Record.TaskID}`));
     }
     //查询
     onSerach = (value) => {
@@ -248,7 +248,7 @@ export default class JzHistoryRecords extends Component {
             <MonitorContent {...this.props} breadCrumbList={
                 [
                     { Name: '首页', Url: '/' },
-                    { Name: '智能分析', Url: '' },
+                    { Name: '智能质控', Url: '' },
                     { Name: '零点量程偏移与校准记录表', Url: '' }
                 ]
             }>

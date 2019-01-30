@@ -100,7 +100,7 @@ export default class StandardGasHistoryRecords extends Component {
 
     seeDetail = (record) => {
         localStorage.setItem('DGIMN', this.props.DGIMN);
-        this.props.dispatch(routerRedux.push(`/PatrolForm/StandardGasRepalceRecord/${this.props.DGIMN}/${this.props.match.params.viewtype}/qcontrollist/StandardGasHistoryRecords/${record.TaskID}`));
+        this.props.dispatch(routerRedux.push(`/PatrolForm/StandardGasRepalceRecord/${this.props.DGIMN}/menu/intelligentOperation/StandardGasHistoryRecords/${record.TaskID}`));
     }
     //查询
     onSerach = (value) => {

@@ -196,93 +196,93 @@ export default class AppJzRecordInfo extends Component {
 
         return (
             <MapInteractionCSS>
-                    <div className={styles.FormDiv}>
-                        <div style={{ minWidth: 900, textAlign: 'center', fontSize: 15, fontWeight: 'bold' }}>CEMS零点量程漂移与校准记录表</div>
-                        <div style={{ fontWeight: 'bold', minWidth: 900, fontSize: 12 }}>企业名称：{EnterpriseName}</div>
-                        <table className={styles.FormTable}>
-                            <tbody>
-                                <tr>
-                                    <td style={{ width: '18%', height: '25px', textAlign: 'left', minWidth: 150 }}>
-                                        气态污染物CEMS设备生产商
+                <div className={styles.FormDiv}>
+                    <div style={{ minWidth: 900, textAlign: 'center', fontSize: 15, fontWeight: 'bold' }}>CEMS零点量程漂移与校准记录表</div>
+                    <div style={{ fontWeight: 'bold', minWidth: 900, fontSize: 12 }}>企业名称：{EnterpriseName}</div>
+                    <table className={styles.FormTable}>
+                        <tbody>
+                            <tr>
+                                <td style={{ width: '18%', height: '25px', textAlign: 'left', minWidth: 150 }}>
+                                    气态污染物CEMS设备生产商
                             </td>
-                                    <td style={{ width: '16%', height: '25px', minWidth: 150 }}>
-                                        {GasCemsEquipmentManufacturer}
-                                    </td>
-                                    <td style={{ width: '18%', height: '25px', minWidth: 150 }}>
-                                        气态污染物CEMS设备规格型号
+                                <td style={{ width: '16%', height: '25px', minWidth: 150 }}>
+                                    {GasCemsEquipmentManufacturer}
+                                </td>
+                                <td style={{ width: '18%', height: '25px', minWidth: 150 }}>
+                                    气态污染物CEMS设备规格型号
                             </td>
-                                    <td style={{ width: '18%', height: '25px', minWidth: 150 }}>
-                                        {GasCemsCode}
-                                    </td>
-                                    <td style={{ width: '18%', height: '25px', minWidth: 150 }}>
-                                        校准日期
+                                <td style={{ width: '18%', height: '25px', minWidth: 150 }}>
+                                    {GasCemsCode}
+                                </td>
+                                <td style={{ width: '18%', height: '25px', minWidth: 150 }}>
+                                    校准日期
                             </td>
-                                    <td style={{ width: '16%', height: '25px' , minWidth: 150 }}>
-                                        {AdjustDate}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style={{ width: '18%', height: '25px', textAlign: 'left' }}>
-                                        颗粒物CEMS设备生产商
+                                <td style={{ width: '16%', height: '25px', minWidth: 150 }}>
+                                    {AdjustDate}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style={{ width: '18%', height: '25px', textAlign: 'left' }}>
+                                    颗粒物CEMS设备生产商
                             </td>
-                                    <td style={{ width: '16%', height: '25px' }}>
-                                        {KlwCemsEquipmentManufacturer}
-                                    </td>
-                                    <td>
-                                        颗粒物CEMS设备规格型号
+                                <td style={{ width: '16%', height: '25px' }}>
+                                    {KlwCemsEquipmentManufacturer}
+                                </td>
+                                <td>
+                                    颗粒物CEMS设备规格型号
                             </td>
-                                    <td style={{ width: '18%', height: '25px' }}>
-                                        {KlwCemsCode}
-                                    </td>
-                                    <td style={{ width: '16%', height: '25px' }}>
-                                        校准开始日期
+                                <td style={{ width: '18%', height: '25px' }}>
+                                    {KlwCemsCode}
+                                </td>
+                                <td style={{ width: '16%', height: '25px' }}>
+                                    校准开始日期
                             </td>
-                                    <td style={{ width: '16%', height: '25px' }}>
-                                        {AdjustStartTime}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style={{ width: '18%', height: '25px', textAlign: 'left' }}>
-                                        安装地点
+                                <td style={{ width: '16%', height: '25px' }}>
+                                    {AdjustStartTime}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style={{ width: '18%', height: '25px', textAlign: 'left' }}>
+                                    安装地点
                             </td>
-                                    <td style={{ width: '16%', height: '25px' }}>
-                                        {PointPosition}
-                                    </td>
-                                    <td style={{ width: '18%', height: '25px', textAlign: 'left' }}>
-                                        维护管理单位
+                                <td style={{ width: '16%', height: '25px' }}>
+                                    {PointPosition}
+                                </td>
+                                <td style={{ width: '18%', height: '25px', textAlign: 'left' }}>
+                                    维护管理单位
                             </td>
-                                    <td colSpan="3">
-                                        {MaintenanceManagementUnit}
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        {
-                            this.renderItem(RecordList, Code)
-                        }
-                        <table className={styles.FormTable} style={{ border: '0' }}>
-                            <tbody>
-                                <tr>
-                                    <td style={{ width: '25%', height: '25px', minWidth: 225  }}>校准人：</td>
-                                    <td style={{ width: '25%', height: '25px', minWidth: 225  }}>{CreateUserID}</td>
-                                    <td style={{ width: '25%', height: '25px', minWidth: 225  }}>校准结束时间：</td>
-                                    <td style={{ width: '25%', height: '25px', minWidth: 225  }}>{AdjustEndTime}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <table className={styles.FormTable}>
-                            <tbody>
-                                <tr>
-                                    <td style={{ width: '75%', height: '25px', textAlign: 'right', border: '0', fontWeight: 'bold', minWidth: 800  }}>负责人签名：</td>
-                                    <td style={{ width: '25%', height: '25px', border: '0', minWidth: 100  }}><img src={SignContent} /></td>
-                                </tr>
-                                <tr>
-                                    <td style={{ width: '75%', height: '25px', textAlign: 'right', border: '0', fontWeight: 'bold', minWidth: 800  }}>签名时间：</td>
-                                    <td style={{ width: '25%', height: '25px', border: '0', minWidth: 100  }}>{SignTime}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+                                <td colSpan="3">
+                                    {MaintenanceManagementUnit}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    {
+                        this.renderItem(RecordList, Code)
+                    }
+                    <table className={styles.FormTable} style={{ border: '0' }}>
+                        <tbody>
+                            <tr>
+                                <td style={{ width: '25%', height: '25px', minWidth: 225 }}>校准人：</td>
+                                <td style={{ width: '25%', height: '25px', minWidth: 225 }}>{CreateUserID}</td>
+                                <td style={{ width: '25%', height: '25px', minWidth: 225 }}>校准结束时间：</td>
+                                <td style={{ width: '25%', height: '25px', minWidth: 225 }}>{AdjustEndTime}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <table className={styles.FormTableBottom}>
+                        <tbody>
+                            <tr>
+                                <td style={{ width: '70%', height: '25px', textAlign: 'right', fontWeight: 'bold', minWidth: 800 }}>负责人签名：</td>
+                                <td style={{ width: '30%', height: '25px' }}>{SignContent === null ? null : <img style={{ width: '90px', height: '30px' }} src={SignContent} />} </td>
+                            </tr>
+                            <tr>
+                                <td style={{ width: '70%', height: '25px', textAlign: 'right', fontWeight: 'bold', fontSize: '12px', minWidth: 800 }}>签名时间：</td>
+                                <td style={{ width: '30%', height: '25px', fontSize: '10px', minWidth: 150 }}>{SignTime}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </MapInteractionCSS>
         );
     }
