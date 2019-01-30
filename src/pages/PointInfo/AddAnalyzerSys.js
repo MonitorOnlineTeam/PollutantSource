@@ -26,11 +26,14 @@ const Option = Select.Option;
      pointinfo
 }) => ({
     ...loading,
+    childloading:loading.effects['pointinfo/getpoint'],
+    sysloading:loading.effects['pointinfo/getanalyzersysmnmodel'],
     reason: pointinfo.reason,
     addalyzersys_requstresult: pointinfo.addalyzersys_requstresult,
     getanalyzersysmnmodel_requstresult: pointinfo.getanalyzersysmnmodel_requstresult,
     editAnalyzerSys: pointinfo.editAnalyzerSys,
-    editalyzersys_requstresult: pointinfo.editalyzersys_requstresult
+    editalyzersys_requstresult: pointinfo.editalyzersys_requstresult,
+    ChildCems:pointinfo.ChildCems
 }))
 @Form.create()
 export default class AddAnalyzerSys extends Component {
@@ -42,17 +45,23 @@ export default class AddAnalyzerSys extends Component {
             Disabled:false,
         };
     }
+    
     componentWillMount() {
         this.setState({
             DGIMN:this.props.DGIMN,
         })
         const ID = this.props.ID;
-        console.log(ID);
+        this.props.dispatch({
+            type: 'pointinfo/getchildcems',
+            payload: {
+            }
+        });
         if (ID !=='null') {
             this.setState({
                 ID: ID,
                 Disabled:true,
             });
+           
             this.props.dispatch({
                 type: 'pointinfo/getanalyzersysmnmodel',
                 payload: {
@@ -88,7 +97,7 @@ export default class AddAnalyzerSys extends Component {
                             ManufacturerCode: values.ManufacturerCode,
                             callback: () => {
                                 if (this.props.addalyzersys_requstresult === '1') {
-                                    message.success('添加成功！').then(() => this.props.ChildVisitable());
+                                    message.success('添加成功！',0.5).then(() => this.props.ChildVisitable());
                                 } else {
                                     message.error(this.props.reason);
                                 }
@@ -106,7 +115,7 @@ export default class AddAnalyzerSys extends Component {
                         ManufacturerCode: values.ManufacturerCode,
                         callback: () => {
                           if (this.props.editalyzersys_requstresult === '1') {
-                            message.success('编辑成功！').then(() => this.props.ChildVisitable());
+                            message.success('编辑成功！',0.5).then(() => this.props.ChildVisitable());
                           } else {
                             message.error(this.props.reason);
                           }
@@ -117,8 +126,34 @@ export default class AddAnalyzerSys extends Component {
             }
         });
     };
+
+    //获取CEMS监测子系统名称
+    renderCemsInfo = () => {
+        const rtnVal = [];
+        debugger;
+        if (this.props.ChildCems !== null && this.props.ChildCems.length>0) {
+            this.props.ChildCems.map((item, key) => {
+                    rtnVal.push(<Option value={item.ChildID} >{item.Name}</Option>);
+                });
+        }
+        return rtnVal;
+    }
+
      render() {
          const {getFieldDecorator} = this.props.form;
+         if (this.props.childloading&&this.props.sysloading) {
+            return (<Spin
+                style={{
+                    width: '100%',
+                    height: 'calc(100vh/2)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                }}
+                size="large"
+            />);
+        }   
+        
          return (
              <div>
               <Form onSubmit={this.handleSubmit} >
@@ -127,19 +162,19 @@ export default class AddAnalyzerSys extends Component {
                          <Col span={24} >
                              <FormItem labelCol={{span: 8}}
                                  wrapperCol={{span: 12}}
-                                 label="设备类型" > {
+                                 label="系统类型" > {
                                      getFieldDecorator('Type',
                                          {
                                              initialValue: undefined,
                                               rules: [{
                                                 required: true,
-                                                message: '请选择设备类型!'
+                                                message: '请选择系统类型!'
                                               }]
                                          }
                                      )(<Select placeholder="请选择"  disabled={this.state.Disabled} >
-                                         <Option value="1" > 气态污染物CEMS设备仪器 </Option>
-                                         <Option value="2" > 烟尘污染物CEMS设备仪器 </Option>
-                                         <Option value="3" > 颗粒污染物CEMS设备仪器 </Option>
+                                         {
+                                                    this.renderCemsInfo()
+                                                }
                                      </Select>)
                                  } </FormItem>
                          </Col>
@@ -148,14 +183,14 @@ export default class AddAnalyzerSys extends Component {
                          <Col span={24} >
                              <FormItem labelCol={{span: 8}}
                                  wrapperCol={{span: 12}}
-                                 label="供应商名称" > {
+                                 label="设备生产商" > {
                                      getFieldDecorator('Manufacturer', {
                                          rules: [{
                                              required: true,
-                                             message: '请输入供应商名称!'
+                                             message: '请输入设备生产商!'
                                          } ]
 
-                                     })(<Input placeholder="供应商名称" />)
+                                     })(<Input placeholder="设备生产商" />)
                                  } </FormItem>
                          </Col>
                      </Row>
@@ -163,13 +198,13 @@ export default class AddAnalyzerSys extends Component {
                       <Col span={24} >
                              <FormItem labelCol={{span: 8}}
                                  wrapperCol={{span: 12}}
-                                 label="供应商编号" > {
+                                 label="设备规格型号" > {
                                      getFieldDecorator('ManufacturerCode', {
                                          rules: [{
                                              required: true,
-                                             message: '请输入供应商编号!'
+                                             message: '请输入设备规格型号!'
                                          }]
-                                     })( < Input placeholder = "供应商编号"
+                                     })( < Input placeholder = "设备规格型号"
                                          disabled={
                                              this.state.DGIMNdisabled
                                          }

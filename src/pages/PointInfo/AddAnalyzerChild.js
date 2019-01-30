@@ -33,6 +33,7 @@ const Option = Select.Option;
     editalyzersyschild: pointinfo.editalyzersyschild,
     getanalyzerchildmodel_requstresult: pointinfo.getanalyzerchildmodel_requstresult,
     editalyzerchild_requstresult: pointinfo.editalyzerchild_requstresult,
+    MainInstrumentName:pointinfo.MainInstrumentName
 }))
 @Form.create()
 export default class AddAnalyzerChild extends Component {
@@ -43,6 +44,7 @@ export default class AddAnalyzerChild extends Component {
             ID: null,
             AnalyzerSys_Id:null,
             component: [],
+            MainInstrumentName:[],
         };
     }
     componentWillMount() {
@@ -54,6 +56,7 @@ export default class AddAnalyzerChild extends Component {
         })
         const ID = this.props.ID;
         this.getOperationer();
+        this.getMaininstrumentName();
         if (ID !==null) {
             this.setState({
                 ID: ID,
@@ -93,12 +96,29 @@ export default class AddAnalyzerChild extends Component {
                             this.state.component.push(<Option key={c.ChildID} value={c.ChildID}> {c.Name} </Option>)
                         );
                     } else {
-                        message.error('请维护检测项目');
+                        message.error('请维护监测项目');
                     }
                 }
             },
         });
     }
+    getMaininstrumentName=(e) => {
+        this.props.dispatch({
+            type: 'pointinfo/getmaininstrumentName',
+            payload: {
+                callback: () => {
+                    if(this.props.MainInstrumentName!=null&&this.props.MainInstrumentName.length>0){
+                        this.props.MainInstrumentName.map(c =>
+                            this.state.MainInstrumentName.push(<Option key={c.ChildID} value={c.ChildID}> {c.Name} </Option>)
+                        );
+                    }else {
+                        message.error('请维护监测仪器名称');
+                    }
+                }
+            },
+        });
+    }
+
     handleSubmit = (e) => {
         e.preventDefault();
         let flag = true;
@@ -125,7 +145,7 @@ export default class AddAnalyzerChild extends Component {
                             Intercept: values.Intercept,
                             callback: () => {
                                 if (this.props.addalyzerchild_requstresult === '1') {
-                                    message.success('添加成功！').then(() => this.props.ChildCVisitable());
+                                    message.success('添加成功！',0.5).then(() => this.props.ChildCVisitable());
                                 } else {
                                     message.error(this.props.reason);
                                 }
@@ -153,7 +173,7 @@ export default class AddAnalyzerChild extends Component {
                         Intercept: values.Intercept,
                         callback: () => {
                           if (this.props.editalyzerchild_requstresult === '1') {
-                            message.success('编辑成功！').then(() => this.props.ChildCVisitable());
+                            message.success('编辑成功！',0.5).then(() => this.props.ChildCVisitable());
                           } else {
                             message.error(this.props.reason);
                           }
@@ -172,67 +192,76 @@ export default class AddAnalyzerChild extends Component {
                  <Card >
                      <Row gutter={48} >
                          <Col span={12} >
-                             <FormItem labelCol={{span: 8}}
-                                 wrapperCol={{span: 12}}
-                                 label="分析仪名称" > {
-                                     getFieldDecorator('Name', {
-                                         rules: [{
-                                             required: true,
-                                             message: '请输入分析仪名称!'
-                                         } ]
+                                 <FormItem
+                                 labelCol={{ span: 8 }}
+                                 wrapperCol={{ span: 12 }}
+                                 label="监测仪器名称">
+                                 {getFieldDecorator('Name', {
+                                     initialValue: undefined,
+                                     rules: [{
+                                         required: true,
+                                         message: '请输入监测仪器名称!'
+                                     } ]
 
-                                     })(<Input placeholder="分析仪名称" />)
-                                 } </FormItem>
+                                 })(
+                                     <Select
+                                         optionFilterProp="children"
+                                         showSearch={true}
+                                         style={{ width: '100%' }}
+                                         placeholder="请输入监测仪器名称"
+                                     >
+                                         {this.state.MainInstrumentName}
+                                     </Select>
+                                 )}
+                             </FormItem>
                          </Col>
                           <Col span={12} >
                              <FormItem labelCol={{span: 8}}
                                  wrapperCol={{span: 12}}
-                                 label="分析仪型号" > {
+                                 label="仪器型号" > {
                                      getFieldDecorator('DeviceModel', {
                                          rules: [{
                                              required: true,
-                                             message: '请输入分析仪型号!'
+                                             message: '请输入仪器型号!'
                                          } ]
 
-                                     })(<Input placeholder="分析仪名称" />)
+                                     })(<Input placeholder="仪器型号" />)
                                  } </FormItem>
                          </Col>
                      </Row>
                      <Row gutter={48} >
                          <Col span={12} >
-                             <FormItem labelCol={{span: 8}}
-                                 wrapperCol={{span: 12}}
-                                 label="制造商" > {
-                                     getFieldDecorator('Manufacturer')
-                                     (<Input placeholder="制造商" />)
-                                 } </FormItem>
+                             <FormItem
+                                 labelCol={{ span: 8 }}
+                                 wrapperCol={{ span: 12 }}
+                                 label="监测项目">
+                                 {getFieldDecorator('TestComponent', {
+                                     initialValue: undefined,
+                                     rules: [{
+                                         required: true,
+                                         message: '请选择监测项目!'
+                                     } ]
+
+                                 })(
+                                     <Select
+                                         optionFilterProp="children"
+                                         showSearch={true}
+                                         style={{ width: '100%' }}
+                                         placeholder="请选择监测项目"
+                                     >
+                                         {this.state.component}
+                                     </Select>
+                                 )}
+                             </FormItem>
                          </Col>
-                          <Col span={12} >
-                             <FormItem labelCol={{span: 8}}
-                                 wrapperCol={{span: 12}}
-                                 label="制造商简称" > {
-                                     getFieldDecorator('ManufacturerAbbreviation')
-                                     (<Input placeholder="分析仪名称" />)
-                                 } </FormItem>
-                         </Col>
-                     </Row>
-                     <Row gutter={48} >
                          <Col span={12} >
-                             <FormItem labelCol={{span: 8}}
-                                 wrapperCol={{span: 12}}
-                                 label="分析仪原理" > {
-                                     getFieldDecorator('AnalyzerPrinciple')
-                                     (<Input placeholder="分析仪原理" />)
-                                 } </FormItem>
-                         </Col>
-                          <Col span={12} >
-                             <FormItem labelCol={{span: 8}}
-                                 wrapperCol={{span: 12}}
-                                 label="计量单位" > {
-                                     getFieldDecorator('MeasurementUnit')
-                                     (<Input placeholder="计量单位" />)
-                                 } </FormItem>
-                         </Col>
+                         <FormItem labelCol={{span: 8}}
+                             wrapperCol={{span: 12}}
+                             label="测量原理" > {
+                                 getFieldDecorator('AnalyzerPrinciple')
+                                 (<Input placeholder="测量原理" />)
+                             } </FormItem>
+                     </Col>
                      </Row>
                      <Row gutter={48} >
                          <Col span={12} >
@@ -252,51 +281,55 @@ export default class AddAnalyzerChild extends Component {
                                  } </FormItem>
                          </Col>
                      </Row>
-                      <Row gutter={48} >
-                         <Col span={12} >
-                             <FormItem labelCol={{span: 8}}
-                                 wrapperCol={{span: 12}}
-                                 label = "分析仪量程最小值" > {
-                                     getFieldDecorator('AnalyzerRangeMin')
-                                     ( < Input placeholder = "分析仪量程最小值" / > )
-                                 } </FormItem>
-                         </Col>
-                          <Col span={12} >
-                             <FormItem labelCol={{span: 8}}
-                                 wrapperCol={{span: 12}}
-                                 label = "分析仪量程最大值" > {
-                                     getFieldDecorator('AnalyzerRangeMax')
-                                     ( < Input placeholder = "分析仪量程最大值" / > )
-                                 } </FormItem>
-                         </Col>
-                     </Row>
-                       <Row gutter={48} >
-                         <Col span={12} >
-                             <FormItem
-                                 labelCol={{ span: 8 }}
-                                 wrapperCol={{ span: 12 }}
-                                 label="测试项目">
-                                 {getFieldDecorator('TestComponent', {
-                                     initialValue: undefined,
-                                     rules: [{
-                                         required: true,
-                                         message: '请选择测试项目!'
-                                     } ]
-
-                                 })(
-                                     <Select
-                                         optionFilterProp="children"
-                                         showSearch={true}
-                                         style={{ width: '100%' }}
-                                         placeholder="请选择测试项目"
-                                     >
-                                         {this.state.component}
-                                     </Select>
-                                 )}
-                             </FormItem>
-                         </Col>
-                         <Col span={12} />
-                     </Row>
+                      
+                     <Row gutter={48} >
+                     <Col span={12} >
+                         <FormItem labelCol={{span: 8}}
+                             wrapperCol={{span: 12}}
+                             label="制造商" > {
+                                 getFieldDecorator('Manufacturer')
+                                 (<Input placeholder="制造商" />)
+                             } </FormItem>
+                     </Col>
+                      <Col span={12} >
+                         <FormItem labelCol={{span: 8}}
+                             wrapperCol={{span: 12}}
+                             label="制造商简称" > {
+                                 getFieldDecorator('ManufacturerAbbreviation')
+                                 (<Input placeholder="制造商简称" />)
+                             } </FormItem>
+                     </Col>
+                 </Row>
+                 <Row gutter={48} >
+                 <Col span={12} >
+                     <FormItem labelCol={{span: 8}}
+                         wrapperCol={{span: 12}}
+                         label = "最小值(量程)" > {
+                             getFieldDecorator('AnalyzerRangeMin')
+                             ( < Input placeholder = "最小值" / > )
+                         } </FormItem>
+                 </Col>
+                  <Col span={12} >
+                     <FormItem labelCol={{span: 8}}
+                         wrapperCol={{span: 12}}
+                         label = "最大值(量程)" > {
+                             getFieldDecorator('AnalyzerRangeMax')
+                             ( < Input placeholder = "最大值" / > )
+                         } </FormItem>
+                 </Col>
+             </Row>
+             <Row gutter={48} >
+              <Col span={12} >
+                 <FormItem labelCol={{span: 8}}
+                     wrapperCol={{span: 12}}
+                     label="计量单位" > {
+                         getFieldDecorator('MeasurementUnit')
+                         (<Input placeholder="计量单位" />)
+                     } </FormItem>
+             </Col>
+             <Col span={12} >
+             </Col>
+         </Row>
                      <Row gutter={48}>
                          <Col span={24} style={{textAlign: 'center'}}>
                              <Button type="primary"

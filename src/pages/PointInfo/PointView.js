@@ -26,17 +26,15 @@ const {
 }) => ({
     ...loading,
     pointloading: loading.effects['pointinfo/getpoint'],
-    analyzerloading: loading.effects['pointinfo/getanalyzersys'],
+    cemsloading: loading.effects['pointinfo/getanalyzersys'],
+    analyzerloading: loading.effects['pointinfo/getanalyzerbymn'],
     reason: pointinfo.reason,
-    requstresult: pointinfo.requstresult,
     editpoint: pointinfo.editpoint,
-    total: pointinfo.total,
     AnalyzerSys: pointinfo.AnalyzerSys,
-    getanalyzersys_requstresult: pointinfo.getanalyzersys_requstresult,
     deletealyzersys_requstresult: pointinfo.deletealyzersys_requstresult,
     analyzerchild: pointinfo.analyzerchild,
-    getanalyzerchild_requstresult: pointinfo.getanalyzerchild_requstresult,
     deletealyzerchild_requstresult: pointinfo.deletealyzerchild_requstresult,
+    Analyzers:pointinfo.Analyzers
 }))
 export default class pointview extends Component {
     constructor(props) {
@@ -58,22 +56,13 @@ export default class pointview extends Component {
             PointType: null,
             OperationerName: null,
             Gaseous: [],
-            Smoke: [],
-            PM: [],
-            GVisitable: false,
-            SVisitable: false,
-            PVisitable: false,
             AddVisitable: true,
             MSVisitable: false,
             MSCVisitable: false,
-            MSCVVisitable: false,
             title: '',
             width: '50%',
             ID: null,
             ChildId: null,
-            GaseousList: [],
-            SmokeList: [],
-            PMList: [],
             PollutantType: null,
             pointstatus: 0,
         };
@@ -118,103 +107,18 @@ export default class pointview extends Component {
         this.props.dispatch({
             type: 'pointinfo/getanalyzersys',
             payload: {
-                DGIMN: DGIMN,
-                callback: () => {
-                    if (this.props.getanalyzersys_requstresult === '1') {
-                        if (this.props.total > 0) {
-                            this.setState({
-                                Gaseous: [],
-                                GVisitable: false,
-                                moke: [],
-                                SVisitable: false,
-                                PM: [],
-                                PVisitable: false,
-                                AddVisitable: true,
-                            })
-                            for (let i = 0; i < this.props.AnalyzerSys.length; i++) {
-                                let aa = this.props.AnalyzerSys[i];
-                                if (aa.Type === 1) {
-                                    this.setState({
-                                        Gaseous: aa,
-                                        GVisitable: true,
-                                    })
-                                    this.props.dispatch({
-                                        type: 'pointinfo/getanalyzerchild',
-                                        payload: {
-                                            ID: aa.ID,
-                                            callback: () => {
-                                                if (this.props.getanalyzerchild_requstresult === '1') {
-                                                    this.setState({
-                                                        GaseousList: this.props.analyzerchild,
-                                                    })
-                                                }
-                                            }
-                                        },
-                                    });
-                                }
-                                if (aa.Type === 2) {
-                                    this.setState({
-                                        Smoke: aa,
-                                        SVisitable: true,
-                                    })
-                                    this.props.dispatch({
-                                        type: 'pointinfo/getanalyzerchild',
-                                        payload: {
-                                            ID: aa.ID,
-                                            callback: () => {
-                                                if (this.props.getanalyzerchild_requstresult === '1') {
-                                                    console.log(this.props.analyzerchild.length);
-                                                    this.setState({
-                                                        SmokeList: this.props.analyzerchild,
-                                                    })
-                                                }
-                                            }
-                                        },
-                                    });
+                DGIMN: DGIMN
+            },
+        });
 
-                                }
-                                if (aa.Type === 3) {
-                                    this.setState({
-                                        PM: aa,
-                                        PVisitable: true,
-                                    })
-                                    this.props.dispatch({
-                                        type: 'pointinfo/getanalyzerchild',
-                                        payload: {
-                                            ID: aa.ID,
-                                            callback: () => {
-                                                if (this.props.getanalyzerchild_requstresult === '1') {
-                                                    this.setState({
-                                                        PMList: this.props.analyzerchild,
-                                                    })
-                                                }
-                                            }
-                                        },
-                                    });
-                                }
-                            }
-                            if (this.props.total === 3) {
-                                this.setState({
-                                    AddVisitable: false,
-                                })
-                            }
-                        }
-                    }
-                    else {
-                        this.setState({
-                            Gaseous: [],
-                            GVisitable: false,
-                            moke: [],
-                            SVisitable: false,
-                            PM: [],
-                            PVisitable: false,
-                            AddVisitable: true,
-                        })
-                    }
-                }
+        this.props.dispatch({
+            type: 'pointinfo/getanalyzerbymn',
+            payload: {
+                DGIMN: DGIMN
             },
         });
     }
+    
     ChildVisitable = () => {
         this.setState({
             MSVisitable: false,
@@ -229,75 +133,30 @@ export default class pointview extends Component {
             this.LoadAnalyzer(this.state.DGIMN);
         })
     }
-    EditAnalyzerSys = (type) => {
-        if (type === 1) {
-            this.setState({
-                title: '编辑',
-                MSVisitable: true,
-                ID: this.state.Gaseous.ID
-            })
-        }
-        if (type === 2) {
-            this.setState({
-                title: '编辑',
-                MSVisitable: true,
-                ID: this.state.Smoke.ID
-            })
-        }
-        if (type === 3) {
-            this.setState({
-                title: '编辑',
-                MSVisitable: true,
-                ID: this.state.PM.ID
-            })
-        }
-
+    EditAnalyzerSys = (id) => {
+        this.setState({
+            title: '编辑',
+            MSVisitable: true,
+            ID: id
+        })
     }
-    AddAnalyzerChild = (type) => {
-        if (type === 1) {
-            this.setState({
-                title: '添加分析仪',
-                width: '60%',
-                MSCVisitable: true,
-                ID: this.state.Gaseous.ID
+    AddAnalyzerChild = (id) => {
+        this.setState({
+            title: '添加',
+            width: '60%',
+            MSCVisitable: true,
+            ID: id,
+            ChildId:null
             })
-        }
-        if (type === 2) {
-            this.setState({
-                title: '添加分析仪',
-                width: '60%',
-                MSCVisitable: true,
-                ID: this.state.Smoke.ID
-            })
-        }
-        if (type === 3) {
-            this.setState({
-                title: '添加分析仪',
-                width: '60%',
-                MSCVisitable: true,
-                ID: this.state.PM.ID
-            })
-        }
-
     }
-    DeleteAnalyzerSys = (type) => {
-        let code = null;
-        if (type === 1) {
-            code = this.state.Gaseous.ID;
-        }
-        if (type === 2) {
-            code = this.state.Smoke.ID;
-        }
-        if (type === 3) {
-            code = this.state.PM.ID;
-        }
+    DeleteAnalyzerSys = (id) => {
         this.props.dispatch({
             type: 'pointinfo/deletealyzersys',
             payload: {
-                ID: code,
+                ID: id,
                 callback: () => {
                     if (this.props.deletealyzersys_requstresult === '1') {
-                        message.success('删除成功！').then(() => {
+                        message.success('删除成功！',0.5).then(() => {
                             this.LoadAnalyzer(this.state.DGIMN);
                         });
                     } else {
@@ -314,7 +173,7 @@ export default class pointview extends Component {
                 ID: code,
                 callback: () => {
                     if (this.props.deletealyzerchild_requstresult === '1') {
-                        message.success('删除成功！').then(() => {
+                        message.success('删除成功！',0.5).then(() => {
                             this.LoadAnalyzer(this.state.DGIMN);
                         });
                     } else {
@@ -354,63 +213,10 @@ export default class pointview extends Component {
         </div>);
         return rtnVal;
     }
-    Gaseousinfo = () => {
+    renderChildCems = () => {
         const rtnVal = [];
-        rtnVal.push(<div style={{ backgroundColor: '#1890FF', width: 5, lineHeight: 1 }}>
-            <span style={{ marginLeft: 10 }}>气态污染物CEMS设备仪器</span>
-            <span style={{ marginLeft: 10, cursor: 'pointer' }}><Popconfirm placement="top" title='确定要删除此设备吗？' onConfirm={() => {
-                this.DeleteAnalyzerSys(1);
-            }} okText="是" cancelText="否">
-                <Icon type="delete" theme="twoTone" title='删除设备' /></Popconfirm></span>
-            <span style={{ marginLeft: 10, cursor: 'pointer' }}><Icon type="edit" theme="twoTone" title='编辑' onClick={() => {
-                this.EditAnalyzerSys(1);
-            }} /></span>
-            <span style={{ marginLeft: 10, cursor: 'pointer' }}><Icon type="plus-circle" theme="twoTone" title='添加子设备' onClick={() => {
-                this.AddAnalyzerChild(1);
-            }} /></span>
-        </div>);
-        return rtnVal;
-    }
-    Smokeinfo = () => {
-        const rtnVal = [];
-        rtnVal.push(<div style={{ backgroundColor: '#1890FF', width: 5, lineHeight: 1 }}>
-            <span style={{ marginLeft: 10 }}>烟尘污染物CEMS设备仪器</span>
-            <span style={{ marginLeft: 10, cursor: 'pointer' }}><Popconfirm placement="top" title='确定要删除此设备吗？' onConfirm={() => {
-                this.DeleteAnalyzerSys(2);
-            }} okText="是" cancelText="否">
-                <Icon type="delete" theme="twoTone" title='删除设备' /></Popconfirm></span>
-            <span style={{ marginLeft: 10, cursor: 'pointer' }}><Icon type="edit" theme="twoTone" title='编辑' onClick={() => {
-                this.EditAnalyzerSys(2);
-            }} /></span>
-            <span style={{ marginLeft: 10, cursor: 'pointer' }}><Icon type="plus-circle" theme="twoTone" title='添加子设备' onClick={() => {
-                this.AddAnalyzerChild(2);
-            }} /></span>
-        </div>);
-        return rtnVal;
-    }
-    PMinfo = () => {
-        const rtnVal = [];
-        rtnVal.push(<div style={{ backgroundColor: '#1890FF', width: 5, lineHeight: 1 }}>
-            <span style={{ marginLeft: 10 }}>颗粒污染物CEMS设备仪器</span>
-            <span style={{ marginLeft: 10, cursor: 'pointer' }}><Popconfirm placement="top" title='确定要删除此设备吗？' onConfirm={() => {
-                this.DeleteAnalyzerSys(3);
-            }} okText="是" cancelText="否">
-                <Icon type="delete" theme="twoTone" title='删除设备' /></Popconfirm></span>
-            <span style={{ marginLeft: 10, cursor: 'pointer' }}><Icon type="edit" theme="twoTone" title='编辑' onClick={() => {
-                this.EditAnalyzerSys(3);
-            }} /></span>
-            <span style={{ marginLeft: 10, cursor: 'pointer' }}><Icon type="plus-circle" theme="twoTone" title='添加子设备' onClick={() => {
-                this.AddAnalyzerChild(3);
-            }} /></span>
-        </div>);
-        return rtnVal;
-    }
-    render() {
-        const gridStyle = {
-            width: '100%',
-        };
         const columns = [{
-            title: '分析仪名称',
+            title: '监测仪器名称',
             dataIndex: 'Name',
             key: 'Name',
             width: '20%',
@@ -419,7 +225,7 @@ export default class pointview extends Component {
                 return text;
             }
         }, {
-            title: '测试项目',
+            title: '监测项目',
             dataIndex: 'TestComponent',
             key: 'TestComponent',
             width: '20%',
@@ -429,7 +235,7 @@ export default class pointview extends Component {
             }
         },
             , {
-            title: '量程(最大/最小)',
+            title: '量程',
             dataIndex: 'AnalyzerRange',
             key: 'AnalyzerRange',
             width: '10%',
@@ -492,6 +298,79 @@ export default class pointview extends Component {
             ),
         }
         ];
+        if (this.props.AnalyzerSys !== null && this.props.AnalyzerSys.length>0) {
+            this.props.AnalyzerSys.map((item, key) => {
+                let cemsAnalyzers=[];
+                if(this.props.Analyzers!=null&&this.props.Analyzers.length>0){
+                    cemsAnalyzers=this.props.Analyzers.filter(analyzer => analyzer.AnalyzerSys_Id===item.ID)
+                }
+                rtnVal.push(
+                    <div className={styles.show}>
+                    <Card style={{ height: 350 }} title={this.Gaseousinfo(item)} extra={'厂商/编号：' + item.Manufacturer + '/' + item.ManufacturerCode}>
+                        <Table
+                            rowKey={(record, index) => `complete${index}`}
+                            //loading={this.props.effects['stopmanagement/getlist']}
+                            columns={columns}
+                            className={styles.dataTable}
+                            dataSource={cemsAnalyzers}
+                            scroll={{ x: 1500, y: 200 }}
+                            size="small" // small middle
+                            pagination={false}
+                            rowClassName={
+                                (record, index, indent) => {
+                                    if (index === 0) {
+                                        return;
+                                    }
+                                    if (index % 2 !== 0) {
+                                        return 'light';
+                                    }
+                                }
+                            }
+                        />
+                    </Card>
+                </div>
+                );
+            });
+        }
+        return rtnVal;
+    }
+
+    Gaseousinfo = (item) => {
+        const rtnVal = [];
+        rtnVal.push(<div style={{ backgroundColor: '#1890FF', width: 5, lineHeight: 1 }}>
+            <span style={{ marginLeft: 10 }}>{item.TypeName}</span>
+            <span style={{ marginLeft: 10, cursor: 'pointer' }}><Popconfirm placement="top" title='确定要删除此设备吗？' onConfirm={() => {
+                this.DeleteAnalyzerSys(item.ID);
+            }} okText="是" cancelText="否">
+                <Icon type="delete" theme="twoTone" title='删除设备' /></Popconfirm></span>
+            <span style={{ marginLeft: 10, cursor: 'pointer' }}><Icon type="edit" theme="twoTone" title='编辑' onClick={() => {
+                this.EditAnalyzerSys(item.ID);
+            }} /></span>
+            <span style={{ marginLeft: 10, cursor: 'pointer' }}><Icon type="plus-circle" theme="twoTone" title='添加子设备' onClick={() => {
+                this.AddAnalyzerChild(item.ID);
+            }} /></span>
+        </div>);
+        return rtnVal;
+    }
+
+    render() {
+        const gridStyle = {
+            width: '100%',
+        };
+
+        if (this.props.pointloading&&this.props.cemsloading&&this.props.analyzerloading) {
+            return (<Spin
+                style={{
+                    width: '100%',
+                    height: 'calc(100vh/2)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                }}
+                size="large"
+            />);
+        }
+
         return (
             <MonitorContent {...this.props} breadCrumbList={
                 [
@@ -524,92 +403,19 @@ export default class pointview extends Component {
                             </DescriptionList>
                         </Card.Grid>
                     </Card>
-                    <Spin spinning={this.props.analyzerloading}>
-                        <div className={this.state.GVisitable ? styles.show : styles.hide}>
-                            <Card style={{ height: 350 }} title={this.Gaseousinfo()} extra={'厂商/编号：' + this.state.Gaseous.Manufacturer + '/' + this.state.Gaseous.ManufacturerCode}>
-                                <Table
-                                    rowKey={(record, index) => `complete${index}`}
-                                    //loading={this.props.effects['stopmanagement/getlist']}
-                                    columns={columns}
-                                    className={styles.dataTable}
-                                    dataSource={this.state.GaseousList.length > 0 ? this.state.GaseousList : null}
-                                    scroll={{ x: 1500, y: 200 }}
-                                    size="small" // small middle
-                                    pagination={false}
-                                    rowClassName={
-                                        (record, index, indent) => {
-                                            if (index === 0) {
-                                                return;
-                                            }
-                                            if (index % 2 !== 0) {
-                                                return 'light';
-                                            }
-                                        }
-                                    }
-                                />
-                            </Card>
-                        </div>
-                        <div className={this.state.PVisitable ? styles.show : styles.hide}>
-                            <Card style={{ height: 350 }} title={this.PMinfo()} extra={'厂商/编号：' + this.state.PM.Manufacturer + '/' + this.state.PM.ManufacturerCode}>
-                                <Table
-                                    rowKey={(record, index) => `complete${index}`}
-                                    //loading={this.props.effects['stopmanagement/getlist']}
-                                    columns={columns}
-                                    className={styles.dataTable}
-                                    dataSource={this.state.PMList.length > 0 ? this.state.PMList : null}
-                                    scroll={{ x: 1500, y: 200 }}
-                                    size="small" // small middle
-                                    pagination={false}
-                                    rowClassName={
-                                        (record, index, indent) => {
-                                            if (index === 0) {
-                                                return;
-                                            }
-                                            if (index % 2 !== 0) {
-                                                return 'light';
-                                            }
-                                        }
-                                    }
-                                />
-                            </Card>
-                        </div>
-                        <div className={this.state.SVisitable ? styles.show : styles.hide}>
-                            <Card style={{ height: 350 }} title={this.Smokeinfo()} loading={this.props.pointloading} extra={'厂商/编号：' + this.state.Smoke.Manufacturer + '/' + this.state.Smoke.ManufacturerCode}>
-                                <Table
-                                    rowKey={(record, index) => `complete${index}`}
-                                    //loading={this.props.effects['stopmanagement/getlist']}
-                                    columns={columns}
-                                    className={styles.dataTable}
-                                    dataSource={this.state.SmokeList.length > 0 ? this.state.SmokeList : null}
-                                    scroll={{ x: 1500, y: 200 }}
-                                    size="small" // small middle
-                                    pagination={false}
-                                    rowClassName={
-                                        (record, index, indent) => {
-                                            if (index === 0) {
-                                                return;
-                                            }
-                                            if (index % 2 !== 0) {
-                                                return 'light';
-                                            }
-                                        }
-                                    }
-                                />
-                            </Card>
-                        </div>
+                        {this.renderChildCems()}
                         <div className={this.state.AddVisitable ? styles.show : styles.hide}>
-                            <Card loading={this.props.pointloading}>
+                            <Card>
                                 <Button type="dashed" block onClick={() => {
                                     this.setState({
                                         MSVisitable: true,
-                                        title: '添加设备系统',
+                                        title: '监测系统',
                                         width: '40%',
                                         ID: 'null',
                                     })
-                                }}>添加仪器</Button>
+                                }}>添加监测子系统</Button>
                             </Card>
                         </div>
-                    </Spin>
                 </div>
                 <Modal
                     visible={this.state.MSVisitable}
@@ -645,23 +451,7 @@ export default class pointview extends Component {
                         <AddAnalyzerChild DGIMN={this.state.DGIMN} ChildCVisitable={this.ChildCVisitable} AnalyzerSys_Id={this.state.ID} ID={this.state.ChildId} />
                     }
                 </Modal>
-                <Modal
-                    visible={this.state.MSCVVisitable}
-                    title={this.state.title}
-                    width={this.state.width}
-                    destroyOnClose={true}// 清除上次数据
-                    footer={false}
-                    onCancel={
-                        () => {
-                            this.setState({
-                                MSCVVisitable: false
-                            });
-                        }
-                    } >
-                    {
-                        <ViewAnalyzerChild ID={this.state.ChildId} />
-                    }
-                </Modal>
+                
             </MonitorContent>
         );
     }
