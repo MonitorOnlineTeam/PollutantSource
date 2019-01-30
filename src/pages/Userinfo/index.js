@@ -220,7 +220,10 @@ export default class UserList extends Component {
             title: '操作',
             width: '30%',
             align: 'center',
-            render: (text, record) => (<Fragment >
+            render: (text, record) => {
+                if (record.Roles_ID !== 'eec719c2-7c94-4132-be32-39fe57e738c9'){
+                    
+                return <Fragment >
                 <a onClick={
                     () => this.props.dispatch(routerRedux.push(`/sysmanage/UserDetail/${record.key}`))
                 } > 编辑 </a>
@@ -228,6 +231,7 @@ export default class UserList extends Component {
                  <Popconfirm placement="left" title="确定要删除此用户吗？" onConfirm={() => this.deleteuserbyid(record.key)} okText="是" cancelText="否">
                     <a href="#" > 删除 </a>
                 </Popconfirm>
+                
                 <Divider type="vertical" />
                 <Dropdown overlay={menu(record.key)} >
                     <a>
@@ -235,7 +239,20 @@ export default class UserList extends Component {
                     </a>
                 </Dropdown>
             </Fragment>
-            ),
+            }
+            else
+            {
+                return <Fragment >
+                <a onClick={
+                    () => this.props.dispatch(routerRedux.push(`/sysmanage/UserDetail/${record.key}`))
+                } > 编辑 </a>
+                <Divider type="vertical" />
+                 <Popconfirm placement="left" title="确定要删除此用户吗？" onConfirm={() => this.deleteuserbyid(record.key)} okText="是" cancelText="否">
+                    <a href="#" > 删除 </a>
+                </Popconfirm>
+            </Fragment>
+            }
+        },
         },
         ];
         return (
