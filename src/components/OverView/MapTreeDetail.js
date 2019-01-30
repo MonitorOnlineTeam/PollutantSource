@@ -228,7 +228,7 @@ class MapTreeDetail extends Component {
                             {selectpoint.scene ? <span className={styles.operation}>运维中</span> : ''}
                             {selectpoint.warning ? <span className={styles.warning}>预警中</span> : ''}
                             {selectpoint.fault ? <span className={styles.fault}>故障中</span>: ''}
-                            {selectpoint.status==4 ?  <span className={styles.stop}>停产中</span>: ''}
+                            {selectpoint.stop ?  <span className={styles.stop}>停产中</span>: ''}
                             <Button onClick={this.backTreeList} className={styles.backButton}>返回</Button>
                         </div>
                         <div style={{borderBottom: '1px solid #EBEBEB',marginTop: 6}} />

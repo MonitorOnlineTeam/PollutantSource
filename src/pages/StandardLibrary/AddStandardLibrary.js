@@ -18,15 +18,16 @@ import {
     Modal,
     Spin
 } from 'antd';
-import MonitorContent from '../../components/MonitorContent/index';
-import AddPollutant from '../StandardLibrary/AddStandardLibraryPollutant';
-import styles from './AddStandardLibrary.less';
 import {
     connect
 } from 'dva';
 import {
     routerRedux
 } from 'dva/router';
+import MonitorContent from '../../components/MonitorContent/index';
+import AddPollutant from "./AddStandardLibraryPollutant";
+import styles from './AddStandardLibrary.less';
+
 const FormItem = Form.Item;
 const Option = Select.Option;
 @connect(({
@@ -42,7 +43,7 @@ const Option = Select.Option;
     standardlibrarypollutant: standardlibrary.standardlibrarypollutant,
 }))
 @Form.create()
-export default class AddStandardLibrary extends Component {
+class AddStandardLibrary extends Component {
     constructor(props) {
         super(props);
         const _this = this;
@@ -57,15 +58,15 @@ export default class AddStandardLibrary extends Component {
 
         };
         this.uuid = () => {
-            var s = [];
-            var hexDigits = '0123456789abcdef';
-            for (var i = 0; i < 36; i++) {
+            let s = [];
+            let hexDigits = '0123456789abcdef';
+            for (let i = 0; i < 36; i++) {
                 s[i] = hexDigits.substr(Math.floor(Math.random() * 0x10), 1);
             }
             s[14] = '4'; // bits 12-15 of the time_hi_and_version field to 0010
             s[19] = hexDigits.substr((s[19] & 0x3) | 0x8, 1); // bits 6-7 of the clock_seq_hi_and_reserved to 01
             s[8] = s[13] = s[18] = s[23] = '-';
-            var uuid = s.join('');
+            let uuid = s.join('');
             return uuid;
         };
         this.addimg = ({file}) => {
@@ -86,7 +87,7 @@ export default class AddStandardLibrary extends Component {
                                     name: file.name,
                                     status: 'done',
                                     url: '',
-                                    filetype: '.' + file.name.split('.')[1],
+                                    filetype: `.${ file.name.split('.')[1]}`,
                                     filesize: file.size,
                                 };
                                 const imglist = _this.state.fileList.concat(newimg);
@@ -133,7 +134,8 @@ export default class AddStandardLibrary extends Component {
                 });
             }
         };
-    };
+    }
+
       handleSubmit = (e) => {
           e.preventDefault();
           let flag = true;
@@ -161,31 +163,30 @@ export default class AddStandardLibrary extends Component {
                   } else {
 
                   }
-              } else {
-                  if (!err && flag === true) {
-                      that.props.dispatch({
-                          type: 'standardlibrary/editstandardlibrary',
-                          payload: {
-                              StandardLibraryID: StandardLibraryID,
-                              Name: values.Name,
-                              Type: values.Type,
-                              IsUsed: values.IsUsed === true ? '1' : '0',
-                              Files: this.state.fileList,
-                              callback: () => {
-                                  if (this.props.requstresult === '1') {
-                                      this.success();
-                                  } else {
-                                      message.error(this.props.reason);
-                                  }
+              } else if (!err && flag === true) {
+                  that.props.dispatch({
+                      type: 'standardlibrary/editstandardlibrary',
+                      payload: {
+                          StandardLibraryID: StandardLibraryID,
+                          Name: values.Name,
+                          Type: values.Type,
+                          IsUsed: values.IsUsed === true ? '1' : '0',
+                          Files: this.state.fileList,
+                          callback: () => {
+                              if (this.props.requstresult === '1') {
+                                  this.success();
+                              } else {
+                                  message.error(this.props.reason);
                               }
-                          },
-                      });
-                  } else {
+                          }
+                      },
+                  });
+              } else {
 
-                  }
               }
           });
       };
+
  success = (StandardLibraryID) => {
      if (StandardLibraryID != null) {
          this.setState({
@@ -194,9 +195,11 @@ export default class AddStandardLibrary extends Component {
      }
      message.success('保存成功', 3);
  };
+
  onRef1 = (ref) => {
      this.child = ref;
  };
+
  componentWillMount() {
      const StandardLibraryID = this.props.match.params.StandardLibraryID;
      if (StandardLibraryID !== 'null') {
@@ -207,9 +210,9 @@ export default class AddStandardLibrary extends Component {
                  callback: () => {
                      console.log(this.props.editstandardlibrary);
                      if (this.props.requstresult === '1') {
-                          this.setState({
-                            fileList: this.props.editstandardlibrary.Filelist,
-                          });
+                         this.setState({
+                             fileList: this.props.editstandardlibrary.Filelist,
+                         });
                      }
                  }
              },
@@ -217,7 +220,11 @@ export default class AddStandardLibrary extends Component {
          this.Getstandardlibrarypollutantlist(StandardLibraryID);
      }
  }
+
  Getstandardlibrarypollutantlist(StandardLibraryID) {
+     this.setState({
+         StandardLibraryID: StandardLibraryID,
+     });
      this.props.dispatch({
          type: 'standardlibrary/getstandardlibrarypollutantlist',
          payload: {
@@ -225,11 +232,13 @@ export default class AddStandardLibrary extends Component {
          },
      });
  }
+
  ChildGetList = () => {
      this.setState({
          Mvisible: false,
      });
  }
+
   confirm = (id) => {
       this.props.dispatch({
           type: 'standardlibrary/deletestandardlibrarypollutantbyid',
@@ -246,28 +255,27 @@ export default class AddStandardLibrary extends Component {
           },
       });
   }
+
   render() {
       const {
-        dispatch,
-        form,
-        match,
-        editstandardlibrary
+          dispatch,
+          form,
+          match,
+          editstandardlibrary
       } = this.props;
       const {StandardLibraryID} = match.params;
       const {
-            Name,
-            Type,
-            IsUsed,
-        } = editstandardlibrary === null || StandardLibraryID === "null" ? {} : editstandardlibrary;
+          Name,
+          Type,
+          IsUsed,
+      } = editstandardlibrary === null || StandardLibraryID === "null" ? {} : editstandardlibrary;
       const columns = [{
           title: '污染物编号',
           dataIndex: 'PollutantCode',
           key: 'PollutantCode',
           width: '10%',
           align: 'center',
-          render: (text, record) => {
-              return text;
-          }
+          render: (text, record) => text
       },
       {
           title: '污染物名称',
@@ -275,9 +283,7 @@ export default class AddStandardLibrary extends Component {
           key: 'PollutantName',
           width: '20%',
           align: 'center',
-          render: (text, record) => {
-              return text;
-          }
+          render: (text, record) => text
       },
       {
           title: '污染物类型',
@@ -285,9 +291,7 @@ export default class AddStandardLibrary extends Component {
           key: 'Type',
           width: '10%',
           align: 'center',
-          render: (text, record) => {
-              return '废气';
-          }
+          render: (text, record) => '废气'
       },
       {
           title: '上限',
@@ -295,9 +299,7 @@ export default class AddStandardLibrary extends Component {
           key: 'UpperLimit',
           width: '10%',
           align: 'center',
-          render: (text, record) => {
-              return text;
-          }
+          render: (text, record) => text
       },
       {
           title: '下限',
@@ -305,9 +307,7 @@ export default class AddStandardLibrary extends Component {
           key: 'LowerLimit',
           width: '10%',
           align: 'center',
-          render: (text, record) => {
-              return text;
-          }
+          render: (text, record) => text
       },
       {
           title: '报警类型',
@@ -317,16 +317,16 @@ export default class AddStandardLibrary extends Component {
           align: 'center',
           render: (text, record) => {
               if (text === 0) {
-                  return <span > <Tag color="magenta" > 无报警 </Tag > </span >;
+                  return <span> <Tag color="magenta"> 无报警 </Tag> </span>;
               }
               if (text === 1) {
-                  return <span > <Tag color="green" > 上限报警 </Tag > </span >;
+                  return <span> <Tag color="green"> 上限报警 </Tag> </span>;
               }
               if(text===2){
-                  return <span > <Tag color="cyan" > 下线报警 </Tag > </span >;
+                  return <span> <Tag color="cyan"> 下线报警 </Tag> </span>;
               }
               if(text===3){
-                  return <span > <Tag color="lime" > 区间报警 </Tag > </span >;
+                  return <span> <Tag color="lime"> 区间报警 </Tag> </span>;
               }
           }
       },
@@ -334,7 +334,7 @@ export default class AddStandardLibrary extends Component {
           title: '操作',
           width: '10%',
           align: 'center',
-          render: (text, record) => (<Fragment >
+          render: (text, record) => (<Fragment>
               <a onClick={
                   () => this.setState({
                       Mvisible: true,
@@ -342,183 +342,200 @@ export default class AddStandardLibrary extends Component {
                       width: 800,
                       Id: record.key
                   })
-              } > 编辑 </a> <Divider type="vertical" />
+              }
+              > 编辑
+              </a> <Divider type="vertical" />
               <Popconfirm placement="left" title="确定要删除此标准下所有数据吗？" onConfirm={() => this.confirm(record.key)} okText="是" cancelText="否">
-                  <a href="#" > 删除 </a>
+                  <a href="#"> 删除 </a>
               </Popconfirm>
-          </Fragment >
+                                     </Fragment>
           ),
       },
       ];
       const { getFieldDecorator } = this.props.form;
       const{isloading}=this.props;
       if(isloading) {
-        return (<Spin
-            style={{ width: '100%',
-                height: 'calc(100vh/2)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center' }}
-            size="large"
-        />);
-    }
+          return (<Spin
+              style={{ width: '100%',
+                  height: 'calc(100vh/2)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center' }}
+              size="large"
+          />);
+      }
       return (
-          <MonitorContent {...this.props} breadCrumbList={
-                [
-                    {Name:'首页',Url:'/'},
-                    {Name:'系统管理',Url:''},
-                    {Name:'标准库管理',Url:'/sysmanage/standardlibrary'},
-                     {Name:'标准库维护',Url:''}
-                ]
-            }>
-          <div className={styles.upload}>
-              <Card bordered={false}        title="标准库维护">
-                  <Form onSubmit={this.handleSubmit}>
-                      <Card bordered={false}>
-                          <Row gutter={48}>
-                              <Col span={12} >
-                                  <FormItem
-                                      labelCol={{ span: 8 }}
-                                      wrapperCol={{ span: 12 }}
-                                      label="标准库名称">
-                                      {getFieldDecorator('Name'
-                                          , {
-                                              initialValue: Name,
-                                              rules: [{
-                                                  required: true,
-                                                  message: '请输入标准库名称!'
-                                              },
-                                              ]
-
-                                          })(<Input placeholder="标准库名称" />)
-                                      }
-                                  </FormItem>
-                              </Col>
-                              <Col span={12}>
-                                  <FormItem
-                                      labelCol={{ span: 8 }}
-                                      wrapperCol={{ span: 12 }}
-                                      label="标准库类型">
-                                      {getFieldDecorator('Type'
-                                          , {
-                                              initialValue: Type,
-                                              rules: [{
-                                                  required: true,
-                                                  message: '请选择标准库类型!'
-                                              },
-                                              ]
-                                          }
-                                      )(
-                                          <Select placeholder="请选择" >
-                                              <Option value="1">国标</Option>
-                                              <Option value="2">地标</Option>
-                                              <Option value="3">行标</Option>
-                                          </Select>
-                                      )}
-                                  </FormItem>
-                              </Col>
-                          </Row>
-                          <Row gutter={48}>
-                              <Col span={12} >
-                                  <FormItem
-                                      labelCol={{ span: 8 }}
-                                      wrapperCol={{ span: 12 }}
-                                      label="上传附件">
-                                      <Upload
-                                          onChange={this.handleChange}
-                                          customRequest={this.addimg}
-                                          fileList={this.state.fileList}
+          <MonitorContent
+              {...this.props}
+              breadCrumbList={
+                  [
+                      {Name:'首页',Url:'/'},
+                      {Name:'系统管理',Url:''},
+                      {Name:'标准库管理',Url:'/sysmanage/standardlibrary'},
+                      {Name:'标准库维护',Url:''}
+                  ]
+              }
+          >
+              <div className={styles.upload}>
+                  <Card bordered={false} title="标准库维护">
+                      <Form onSubmit={this.handleSubmit}>
+                          <Card bordered={false}>
+                              <Row gutter={48}>
+                                  <Col span={12}>
+                                      <FormItem
+                                          labelCol={{ span: 8 }}
+                                          wrapperCol={{ span: 12 }}
+                                          label="标准库名称"
                                       >
-                                          <Button>
-                                              <Icon type="upload" /> 上传
-                                          </Button>
-                                      </Upload>
-                                  </FormItem>
-                              </Col>
+                                          {getFieldDecorator('Name'
+                                              , {
+                                                  initialValue: Name,
+                                                  rules: [{
+                                                      required: true,
+                                                      message: '请输入标准库名称!'
+                                                  },
+                                                  ]
 
-                              <Col span={12} >
-                                  <FormItem
-                                      labelCol={{ span: 8 }}
-                                      wrapperCol={{ span: 12 }}
-                                      label="启用状态">
-                                      {getFieldDecorator('IsUsed',
-                                          {
-                                              initialValue: IsUsed,
-                                              valuePropName: 'checked',
-                                          })(<Switch checkedChildren="启用" unCheckedChildren="禁用" />
-                                      )}
-                                  </FormItem>
-                              </Col>
-                          </Row>
-               <Row gutter={48}>
-                  <Divider orientation="right"  style={{border:'1px dashed #FFFFFF'}}>
-                 
-                     
-                
-                              <Col span={24} style={{textAlign: 'center'}}>
-                              <Button type="primary"
-                                  onClick={() => {
-                                      if (this.state.StandardLibraryID === null) {
-                                          message.error('请先添加标准库！');
-                                      } else {
-                                          this.setState({
-                                              Mvisible: true,
-                                              title: '添加污染物',
-                                              width: 800
-                                          });
-                                      }
-                                  }}>添加污染物</Button>
-                                     <Divider type="vertical" />
-                                  <Button type="primary"
-                                      htmlType="submit">
+                                              })(<Input placeholder="标准库名称" />)
+                                          }
+                                      </FormItem>
+                                  </Col>
+                                  <Col span={12}>
+                                      <FormItem
+                                          labelCol={{ span: 8 }}
+                                          wrapperCol={{ span: 12 }}
+                                          label="标准库类型"
+                                      >
+                                          {getFieldDecorator('Type'
+                                              , {
+                                                  initialValue: Type,
+                                                  rules: [{
+                                                      required: true,
+                                                      message: '请选择标准库类型!'
+                                                  },
+                                                  ]
+                                              }
+                                          )(
+                                              <Select placeholder="请选择">
+                                                  <Option value="1">国标</Option>
+                                                  <Option value="2">地标</Option>
+                                                  <Option value="3">行标</Option>
+                                              </Select>
+                                          )}
+                                      </FormItem>
+                                  </Col>
+                              </Row>
+                              <Row gutter={48}>
+                                  <Col span={12}>
+                                      <FormItem
+                                          labelCol={{ span: 8 }}
+                                          wrapperCol={{ span: 12 }}
+                                          label="上传附件"
+                                      >
+                                          <Upload
+                                              onChange={this.handleChange}
+                                              customRequest={this.addimg}
+                                              fileList={this.state.fileList}
+                                          >
+                                              <Button>
+                                                  <Icon type="upload" /> 上传
+                                              </Button>
+                                          </Upload>
+                                      </FormItem>
+                                  </Col>
+
+                                  <Col span={12}>
+                                      <FormItem
+                                          labelCol={{ span: 8 }}
+                                          wrapperCol={{ span: 12 }}
+                                          label="启用状态"
+                                      >
+                                          {getFieldDecorator('IsUsed',
+                                              {
+                                                  initialValue: IsUsed,
+                                                  valuePropName: 'checked',
+                                              })(<Switch checkedChildren="启用" unCheckedChildren="禁用" />
+                                          )}
+                                      </FormItem>
+                                  </Col>
+                              </Row>
+                              <Row gutter={48}>
+                                  <Divider orientation="right" style={{border:'1px dashed #FFFFFF'}}>
+
+
+                                      <Col span={24} style={{textAlign: 'center'}}>
+                                          <Button
+                                              type="primary"
+                                              onClick={() => {
+                                                  if (this.state.StandardLibraryID === null) {
+                                                      message.error('请先添加标准库！');
+                                                  } else {
+                                                      this.setState({
+                                                          Mvisible: true,
+                                                          title: '添加污染物',
+                                                          width: 800
+                                                      });
+                                                  }
+                                              }}
+                                          >添加污染物
+                                          </Button>
+                                          <Divider type="vertical" />
+                                          <Button
+                                              type="primary"
+                                              htmlType="submit"
+                                          >
                           保存
-                                  </Button>
-                                  <Divider type="vertical" />
-                                  <Button type="dashed"
-                                      onClick={
-                                          () => this.props.dispatch(routerRedux.push(`/sysmanage/StandardLibrary`))
-                                      } >
+                                          </Button>
+                                          <Divider type="vertical" />
+                                          <Button
+                                              type="dashed"
+                                              onClick={
+                                                  () => this.props.dispatch(routerRedux.push(`/sysmanage/StandardLibrary`))
+                                              }
+                                          >
                           返回
-                                  </Button>
-                              </Col>
-                              </Divider>
-                          </Row>
+                                          </Button>
+                                      </Col>
+                                  </Divider>
+                              </Row>
+                          </Card>
+
+                      </Form>
+                      <Divider dashed={true} />
+                      <Card bordered={false} style={{marginTop: 10}}>
+
+                          <Table
+                              loading={this.props.effects['standardlibrary/getstandardlibrarypollutantlist']}
+                              columns={columns}
+                              dataSource={this.state.StandardLibraryID !== null ? this.props.standardlibrarypollutant : null}
+                              pagination={true}
+                              size="small"
+                              scroll={{ y: 'calc(100vh - 80px)' }}
+                          />
                       </Card>
-                       
-                  </Form>
-                  <Divider dashed  />
-                  <Card bordered={false} style={{marginTop: 10,}}>
-             
-                      <Table
-                          loading={this.props.effects['standardlibrary/getstandardlibrarypollutantlist']}
-                          columns={columns}
-                          dataSource={this.state.StandardLibraryID !== null ? this.props.standardlibrarypollutant : null}
-                          pagination={true}
-                          size='small'
-                          scroll={{ y: 'calc(100vh - 80px)' }}
-                      />
-                  </Card>
-                  <Modal
-                      visible={this.state.Mvisible}
-                      title={this.state.title}
-                      width={this.state.width}
-                      destroyOnClose={true}// 清除上次数据
-                      footer={false}
-                      onCancel={
-                          () => {
-                              this.setState({
-                                  Mvisible: false
-                              });
+                      <Modal
+                          visible={this.state.Mvisible}
+                          title={this.state.title}
+                          width={this.state.width}
+                          destroyOnClose={true}// 清除上次数据
+                          footer={false}
+                          onCancel={
+                              () => {
+                                  this.setState({
+                                      Mvisible: false
+                                  });
+                              }
                           }
-                      } >
-                      {
-                          <AddPollutant pid={this.state.StandardLibraryID} onRef={this.onRef1} getlist={this.ChildGetList} Id={this.state.Id} />
-                      }
-                  </Modal>
-                 
-              </Card>
-          </div>
+                      >
+                          {
+                              <AddPollutant pid={this.state.StandardLibraryID} onRef={this.onRef1} getlist={this.ChildGetList} Id={this.state.Id} />
+                          }
+                      </Modal>
+
+                  </Card>
+              </div>
           </MonitorContent>
       );
   }
 }
+export default AddStandardLibrary;

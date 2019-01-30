@@ -355,7 +355,7 @@ addoperationInfo=(selectpoint)=>{
         let pointInfo = this.props.pointList.filter(todo => todo.DGIMN === this.props.pointInfo.DGIMN);
         if (pointInfo.length === 0)
             return null;
-        let {status,pollutantTypeCode,DGIMN,existTask,scene,warning,fault} = pointInfo[0];
+        let {status,pollutantTypeCode,DGIMN,existTask,scene,warning,fault,stop} = pointInfo[0];
         let statusText = <span><img src="/gisexception.png" width="11" style={{ marginBottom: 3, marginRight: 5 }} /><span>异常</span></span>;
         if (status === 0) {
             statusText = <span><img src="/gisunline.png" width="11" style={{ marginBottom: 3, marginRight: 5 }} /><span>离线</span></span>;
@@ -378,7 +378,7 @@ addoperationInfo=(selectpoint)=>{
         if(fault) {
             existTaskText.push(<span key={2}><Divider type="vertical" /><Icon type="tool" className={styles.faultcolor} style={{ color: 'rgb(212,197,123)',marginBottom:3,marginRight:5 }} /><span>故障</span></span>);
         }
-        if(status===4) {
+        if(stop) {
             existTaskText.push (<span key={3}><Divider type="vertical" /><Icon type="tool" className={styles.stopcolor} style={{ color: 'rgb(212,197,123)',marginBottom:3,marginRight:5 }} /><span>停产</span></span>);
         }
 

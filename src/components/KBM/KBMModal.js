@@ -87,7 +87,6 @@ export default class KBMModal extends Component {
                                 file: base64.split(',')[1],
                                 fileName: file.name,
                                 callback: (result) => {
-                                    debugger
                                     if (result === '1') {
                                         const type = file.name.split('.');
                                         const newimg = {
