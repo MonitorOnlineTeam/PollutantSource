@@ -178,7 +178,7 @@ class MyPieList extends Component {
                        <List.Item
                            actions={[
                                <a onClick={()=>{
-                                   this.props.dispatch(routerRedux.push(`/TaskDetail/EmergencyDetailInfo/pielist/nop/${item.TaskID}`));
+                                   this.props.dispatch(routerRedux.push(`/TaskDetail/EmergencyDetailInfo/pielist/nop/${item.TaskID}/${item.DGIMN}`));
                                }}
                                >
                       查看
