@@ -1,9 +1,10 @@
 import React, { Component,Fragment } from 'react';
 import { Button, Table, Spin, Modal, Divider, Popconfirm,Icon,Card,Form,Row,Col } from 'antd';
 import { connect } from 'dva';
-import styles from './index.less';
 import moment from 'moment';
+import styles from './index.less';
 import Addepinfo from './addepinfo.js';
+
 @connect(({baseinfo, loading}) => ({
     isloading: loading.effects['baseinfo/queryeeplist'],
     pdlist: baseinfo.pdlist,
@@ -21,31 +22,35 @@ class index extends Component {
 
         };
     }
+
     //初始化
     componentWillMount() {
         const {pageIndex, pageSize }=this.props;
         this.reloaddata(pageIndex,pageSize);
     }
+
     //页码变化
     onChange = (pageIndex, pageSize) => {
         this.reloaddata(pageIndex,pageSize);
     }
+
     //重新加载数据
     reloaddata=(pageIndex,pageSize)=>{
-    this.props.dispatch({
-        type:'baseinfo/queryeeplist',
-        payload:{
-            pageIndex: pageIndex,
-            pageSize: pageSize 
-        }
-    })}
+        this.props.dispatch({
+            type:'baseinfo/queryeeplist',
+            payload:{
+                pageIndex: pageIndex,
+                pageSize: pageSize
+            }
+        });
+    }
 
     buttonback = () => this.props.history.goBack(-1);
+
     showModal = (row) => {
         let title ="添加排污许可证信息";
-        if(row)
-        {
-            title='修改排污许可证信息'+row.EPName
+        if(row) {
+            title=`修改排污许可证信息${row.EPName}`;
         }
         this.setState({
             visible: true,
@@ -53,11 +58,13 @@ class index extends Component {
             title
         });
     };
+
     hideModal = () => {
         this.setState({
             visible: false,
         });
     };
+
     //删除
     deletebutton = (record) => {
         this.props.dispatch({
@@ -91,11 +98,10 @@ class index extends Component {
             width: '15%',
             align: 'center',
             render: (text, record) =>{
-               if(text)
-               {
-                  return "正在使用"
-               }
-               return "已过期"
+                if(text) {
+                    return "正在使用";
+                }
+                return "已过期";
             }
         },
         {
@@ -104,9 +110,7 @@ class index extends Component {
             key: 'BeginTime',
             width: '20%',
             align: 'center',
-            render: (text, record) =>{
-                return (moment(record.BeginTime).format('YYYY-MM-DD') + ' - ' + moment(record.EndTime).format('YYYY-MM-DD'))
-            }
+            render: (text, record) =>`${moment(record.BeginTime).format('YYYY-MM-DD') } - ${ moment(record.EndTime).format('YYYY-MM-DD')}`
         },
         {
             title: '描述',
@@ -133,37 +137,44 @@ class index extends Component {
             title: '操作',
             width: '15%',
             align: 'center',
-            render: (text, record) => (<Fragment >
+            render: (text, record) => (<Fragment>
                 <a onClick={
                     () => this.showModal(record)
-                } > 编辑 </a>
+                }
+                > 编辑
+                </a>
                 <Divider type="vertical" />
                 <Popconfirm placement="left" title="确定要删除此信息吗？" onConfirm={() => this.deletebutton(record)} okText="是" cancelText="否">
-                       <a href="#" > 删除 </a>
-                   </Popconfirm>
-            </Fragment >
+                    <a href="#"> 删除 </a>
+                </Popconfirm>
+            </Fragment>
             ),
         },
-      ];
+        ];
 
         return (
-                <div className={styles.cardTitle}>
+            <div className={styles.cardTitle}>
                 <Card bordered={false}>
 
-                     <Form layout="inline" style={{marginBottom: 10}}>
-                         <Row gutter={8} >
-                             <Col span={24} >
-                                     <Button type="primary" style={{marginLeft:10}}
-                                     onClick={ ()=>this.showModal(null)} > 添加 </Button>
-                             </Col >
-                         </Row>
-                     </Form>
-                    <Table loading={isloading}
-                        columns={ columns }
+                    <Form layout="inline" style={{marginBottom: 10}}>
+                        <Row gutter={8}>
+                            <Col span={24}>
+                                <Button
+                                    type="primary"
+                                    style={{marginLeft:10}}
+                                    onClick={()=>this.showModal(null)}
+                                > 添加
+                                </Button>
+                            </Col>
+                        </Row>
+                    </Form>
+                    <Table
+                        loading={isloading}
+                        columns={columns}
                         className={styles.dataTable}
                         rowKey="ID"
                         dataSource={pdlist}
-                        size="small" 
+                        size="small"
                         scroll={{ y: 'calc(100vh - 330px)' }}
                         rowClassName={
                             (record, index, indent) => {
@@ -186,20 +197,22 @@ class index extends Component {
                                 onChange: this.onChange,
                                 onShowSizeChange: this.onChange,
                                 pageSizeOptions: ['20', '30', '40', '50']
-                            }} />
+                            }}
+                    />
                 </Card>
 
-                        <Modal
-                            footer={null}
-                            destroyOnClose="true"
-                            visible={this.state.visible}
-                            title={this.state.title}
-                            onCancel={this.hideModal}
-                            width='50%'>
-                            {
-                                 <Addepinfo closemodal={this.hideModal} row={this.state.row}/>
-                            }
-                        </Modal>
+                <Modal
+                    footer={null}
+                    destroyOnClose="true"
+                    visible={this.state.visible}
+                    title={this.state.title}
+                    onCancel={this.hideModal}
+                    width="50%"
+                >
+                    {
+                        <Addepinfo closemodal={this.hideModal} row={this.state.row} />
+                    }
+                </Modal>
             </div>
         );
     }

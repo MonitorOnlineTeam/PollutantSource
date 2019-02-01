@@ -276,7 +276,7 @@ export default class UserList extends Component {
                                             type: 'userinfo/fetchuserlist',
                                             payload: {
                                                 pageIndex: 1,
-                                                pageSize: this.props.props.pageSize,
+                                                pageSize: this.props.pageSize,
                                                 DeleteMark: this.state.DeleteMark,
                                                 UserAccount: value,
                                             },
@@ -290,7 +290,7 @@ export default class UserList extends Component {
                                             type: 'userinfo/fetchuserlist',
                                             payload: {
                                                 pageIndex: 1,
-                                                pageSize: this.props.props.pageSize,
+                                                pageSize: this.props.pageSize,
                                                 DeleteMark: value,
                                                 UserAccount: this.state.UserAccount
                                             },

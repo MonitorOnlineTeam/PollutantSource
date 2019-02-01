@@ -45,6 +45,8 @@ export default Model.extend({
                 }
                 console.log(`onmessage:${response.data.User_Account}`);
                 router.push('/');
+            }else{
+                message.error(response.reason,1);
             }
         },
         * logout(_, { put }) {

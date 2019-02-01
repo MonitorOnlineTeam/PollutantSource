@@ -34,7 +34,7 @@ export default Model.extend({
             aaData: []
         },
         AllMonthEmissionsByPollutant: {
-            beginTime: moment().format('YYYY-MM-01 HH:mm:ss'),
+            beginTime: moment().format('YYYY-01-01 HH:mm:ss'),
             endTime: moment().add(1, 'years').format('YYYY-MM-01 HH:mm:ss'),
             pollutantCode:['01','02','03'],
             ycdate: [],

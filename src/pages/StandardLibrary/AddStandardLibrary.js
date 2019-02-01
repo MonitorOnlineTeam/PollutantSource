@@ -32,15 +32,18 @@ const FormItem = Form.Item;
 const Option = Select.Option;
 @connect(({
     loading,
-    standardlibrary
+    standardlibrary,
+    pointinfo
 }) => ({
     ...loading,
     isloading:loading.effects['standardlibrary/getStandardlibrarybyid'],
     reason: standardlibrary.reason,
     requstresult: standardlibrary.requstresult,
+    pollutanttypelist_requstresult: pointinfo.pollutanttypelist_requstresult,
     editstandardlibrary: standardlibrary.editstandardlibrary,
     StandardLibraryID: standardlibrary.StandardLibraryID,
     standardlibrarypollutant: standardlibrary.standardlibrarypollutant,
+    pollutanttypelist: pointinfo.pollutanttypelist,
 }))
 @Form.create()
 class AddStandardLibrary extends Component {
@@ -55,6 +58,7 @@ class AddStandardLibrary extends Component {
             width: 200,
             Mvisible: false,
             Id: null,
+            PollutantTypes:[]
 
         };
         this.uuid = () => {
@@ -151,6 +155,7 @@ class AddStandardLibrary extends Component {
                               Type: values.Type,
                               IsUsed: values.IsUsed === true ? '1' : '0',
                               Files: this.state.fileList,
+                              PollutantType: values.PollutantType,
                               callback: () => {
                                   if (this.props.requstresult === '1') {
                                       this.success(this.props.StandardLibraryID);
@@ -172,6 +177,7 @@ class AddStandardLibrary extends Component {
                           Type: values.Type,
                           IsUsed: values.IsUsed === true ? '1' : '0',
                           Files: this.state.fileList,
+                          PollutantType: values.PollutantType,
                           callback: () => {
                               if (this.props.requstresult === '1') {
                                   this.success();
@@ -217,8 +223,36 @@ class AddStandardLibrary extends Component {
                  }
              },
          });
+         this.getpollutanttype();
          this.Getstandardlibrarypollutantlist(StandardLibraryID);
      }
+ }
+
+ getpollutanttype = () => {
+     this.props.dispatch({
+         type: 'pointinfo/getpollutanttypelist',
+         payload: {
+             callback: () => {
+                 if (this.props.pollutanttypelist_requstresult === '1') {
+                     this.props.pollutanttypelist.map(p =>
+                         this.state.PollutantTypes.push( <Option
+                             key={
+                                 p.pollutantTypeCode
+                             }
+                             value={
+                                 p.pollutantTypeCode
+                             }
+                         > {
+                                 p.pollutantTypeName
+                             }
+                                                         </Option>)
+                     );
+                 } else {
+                     message.error('请添加污染物类型');
+                 }
+             }
+         },
+     });
  }
 
  Getstandardlibrarypollutantlist(StandardLibraryID) {
@@ -268,6 +302,7 @@ class AddStandardLibrary extends Component {
           Name,
           Type,
           IsUsed,
+          PollutantType,
       } = editstandardlibrary === null || StandardLibraryID === "null" ? {} : editstandardlibrary;
       const columns = [{
           title: '污染物编号',
@@ -287,11 +322,11 @@ class AddStandardLibrary extends Component {
       },
       {
           title: '污染物类型',
-          dataIndex: 'Type',
-          key: 'Type',
+          dataIndex: 'PollutantType',
+          key: 'PollutantType',
           width: '10%',
           align: 'center',
-          render: (text, record) => '废气'
+          render: (text, record) => text
       },
       {
           title: '上限',
@@ -348,7 +383,7 @@ class AddStandardLibrary extends Component {
               <Popconfirm placement="left" title="确定要删除此标准下所有数据吗？" onConfirm={() => this.confirm(record.key)} okText="是" cancelText="否">
                   <a href="#"> 删除 </a>
               </Popconfirm>
-                                     </Fragment>
+          </Fragment>
           ),
       },
       ];
@@ -430,17 +465,29 @@ class AddStandardLibrary extends Component {
                                       <FormItem
                                           labelCol={{ span: 8 }}
                                           wrapperCol={{ span: 12 }}
-                                          label="上传附件"
+                                          label="污染物类型"
                                       >
-                                          <Upload
-                                              onChange={this.handleChange}
-                                              customRequest={this.addimg}
-                                              fileList={this.state.fileList}
-                                          >
-                                              <Button>
-                                                  <Icon type="upload" /> 上传
-                                              </Button>
-                                          </Upload>
+                                          {
+                                              getFieldDecorator('PollutantType',
+                                                  {
+                                                      initialValue: PollutantType === '' ? undefined : PollutantType,
+                                                      rules: [{
+                                                          required: true,
+                                                          message: '请选择污染物类型!'
+                                                      } ]
+                                                  }
+                                              )(
+                                                  <Select
+                                                      optionFilterProp="children"
+                                                      showSearch={true}
+                                                      style={{ width:200 }}
+                                                      placeholder="请选择"
+
+                                                  >
+                                                      {this.state.PollutantTypes}
+                                                  </Select>
+                                              )
+                                          }
                                       </FormItem>
                                   </Col>
 
@@ -456,6 +503,25 @@ class AddStandardLibrary extends Component {
                                                   valuePropName: 'checked',
                                               })(<Switch checkedChildren="启用" unCheckedChildren="禁用" />
                                           )}
+                                      </FormItem>
+                                  </Col>
+                              </Row>
+                              <Row gutter={48}>
+                                  <Col span={12}>
+                                      <FormItem
+                                          labelCol={{ span: 8 }}
+                                          wrapperCol={{ span: 12 }}
+                                          label="上传附件"
+                                      >
+                                          <Upload
+                                              onChange={this.handleChange}
+                                              customRequest={this.addimg}
+                                              fileList={this.state.fileList}
+                                          >
+                                              <Button>
+                                                  <Icon type="upload" /> 上传
+                                              </Button>
+                                          </Upload>
                                       </FormItem>
                                   </Col>
                               </Row>

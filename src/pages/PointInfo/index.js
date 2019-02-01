@@ -245,7 +245,7 @@ export default class pointlist extends Component {
                                              type: 'pointinfo/getpointlist',
                                              payload: {
                                                  pageIndex: 1,
-                                                 pageSize: this.props.props.pageSize,
+                                                 pageSize: this.props.pageSize,
                                                  DGIMNs: value
                                              },
                                          });

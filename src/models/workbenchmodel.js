@@ -461,26 +461,26 @@ export default Model.extend({
         updateRealTimeData(state, { payload }) {
             if (payload && payload.array) {
                 let { warningDetailsDatas } = state;
-             
+
                 if (warningDetailsDatas.DGIMNs) {
                     let pushdata = {};
                     payload.array.map(item => {
-                       if (item.DGIMN == warningDetailsDatas.DGIMNs) {
+                        if (item.DGIMN == warningDetailsDatas.DGIMNs) {
                             pushdata[item.PollutantCode] = item.MonitorValue;
                             pushdata.MonitorTime = item.MonitorTime;
                             pushdata.DataGatherCode = warningDetailsDatas.DGIMNs;
-                       }
+                        }
                     });
                     if (pushdata && pushdata.DataGatherCode) {
                         let array = [];
                         array.push(pushdata);
-                      //  let resdata=warningDetailsDatas;
+                        //  let resdata=warningDetailsDatas;
 
                         let resdata = JSON.parse(JSON.stringify(warningDetailsDatas));
                         const chartDatas= array.concat(warningDetailsDatas.chartDatas);
                         resdata.chartDatas=chartDatas;
                         //resdata["change"]=true;
-                        
+
                         return {
                             ...state,
                             warningDetailsDatas:resdata,
@@ -489,9 +489,9 @@ export default Model.extend({
 
                 }
                 return state;
-                
+
             }
-           
+
         },
     }
 
