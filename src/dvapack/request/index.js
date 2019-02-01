@@ -83,10 +83,10 @@ async function request(url, _options) {
             return null;
         }
     } catch (error) {
-        notification.error({
-            message: '服务器信息',
-            description: '程序发生错误',
-        });
+        // notification.error({
+        //     message: '服务器信息',
+        //     description: '程序发生错误',
+        // });
         return null;
     }
 }

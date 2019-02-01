@@ -14,7 +14,8 @@ const RadioGroup = Radio.Group;
     data: overview.data,
     gwidth: overview.gwidth,
     isloading: loading.effects['overview/querypollutanttypecode'],
-    pollutantTypelist: overview.pollutantTypelist
+    pollutantTypelist: overview.pollutantTypelist,
+    selectpollutantTypeCode:overview.selectpollutantTypeCode
 }))
 class dataList extends PureComponent {
     constructor(props) {
@@ -27,7 +28,6 @@ class dataList extends PureComponent {
             underline: false,
             exception: false,
             selectStatus: null,
-            pollutantCode: 2,
             status: null,
             operationStatus: null,
             terate: null,
@@ -39,10 +39,11 @@ class dataList extends PureComponent {
 
     //页面初始化
     componentDidMount() {
-        this.props.dispatch({
+        const {selectpollutantTypeCode,dispatch}=this.props;
+        dispatch({
             type: 'overview/querypollutanttypecode',
             payload: {
-                pollutantCode: this.state.pollutantCode,
+                pollutantCode: selectpollutantTypeCode,
                 time: this.state.time.format('YYYY-MM-DD HH:00:00'),
             }
         });
@@ -246,7 +247,7 @@ class dataList extends PureComponent {
     //污染物类型选择
     onPollutantChange = (e) => {
         this.setState({
-            pollutantCode: e.target.value,
+            
             normal: false,
             over: false,
             underline: false,
@@ -257,7 +258,15 @@ class dataList extends PureComponent {
             terate: null,
             warning: null
         });
-        this.props.dispatch({
+        const {dispatch}=this.props;
+
+        dispatch({
+            type: 'overview/updateState',
+            payload: {
+            selectpollutantTypeCode:e.target.value
+        },
+        })
+        dispatch({
             type: 'overview/querypollutanttypecode',
             payload: {
                 pollutantCode: e.target.value,
@@ -362,7 +371,8 @@ class dataList extends PureComponent {
            }
 
     render() {
-        const { normal, over, underline, exception, terate, operationStatus, pollutantCode } = this.state;
+        const { normal, over, underline, exception, terate, operationStatus } = this.state;
+        const {selectpollutantTypeCode}=this.props;
         const coldata = this.props.columnsdata;
         const { selectpoint } = this.state;
         let { gwidth } = this.props;
@@ -421,7 +431,7 @@ class dataList extends PureComponent {
         ];
 
         let csyxl = 0;
-        if (pollutantCode == 2) {
+        if (selectpollutantTypeCode == 2) {
             csyxl = 140;
             columns = columns.concat(
                 {
@@ -528,7 +538,7 @@ class dataList extends PureComponent {
                         <div>
                             <TimePicker onChange={this.pickerChange} style={{ width: 150, marginRight: 20, float: 'left' }} defaultValue={this.state.time} format="HH:00:00" />
 
-                            <Radio.Group   style={{ marginLeft: 50, float: 'left' }} onChange={this.onPollutantChange} defaultValue={this.state.pollutantCode}>
+                            <Radio.Group   style={{ marginLeft: 50, float: 'left' }} onChange={this.onPollutantChange} defaultValue={selectpollutantTypeCode}>
                                 {this.getPollutantDoc()}
                             </Radio.Group>
 

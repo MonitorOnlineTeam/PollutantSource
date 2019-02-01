@@ -268,7 +268,7 @@ export default class EmergencyDetailInfo extends Component {
                 });
             }
         }
-
+        console.log(TaskLogList);
         const pics = Attachments !== '' ? Attachments.ThumbimgList : [];
         const fileList = [];
         var index = 0;

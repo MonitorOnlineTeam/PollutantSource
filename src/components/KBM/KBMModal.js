@@ -123,7 +123,7 @@ export default class KBMModal extends Component {
         //验证格式
         this.AuthenticationFormat = (type) => {
             if (type === 'application/msword' || type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
-                || type === 'application/vnd.ms-excel' || type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                // || type === 'application/vnd.ms-excel' || type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
                 || type === 'text/plain' || type === 'application/pdf' || type === 'application/vnd.ms-powerpoint' || type === 'image/gif'
                 || type === 'image/jpeg' || type === 'image/png' || type === 'image/bmp'
             ) {
@@ -137,7 +137,7 @@ export default class KBMModal extends Component {
         this.VerificationPostfix = (name) => {
             const nameSplit = name.split('.');
             const postfix = nameSplit[nameSplit.length - 1];
-            if (postfix === 'doc' || postfix === 'docx' || postfix === 'xls' || postfix === 'xlsx'
+            if (postfix === 'doc' || postfix === 'docx' 
                 || postfix === 'txt' || postfix === 'pdf' || postfix === 'ppt' || postfix === 'gif'
                 || postfix === 'jpg' || postfix === 'png' || postfix === 'bmp') {
                 return true;
@@ -384,7 +384,7 @@ export default class KBMModal extends Component {
                                     </FormItem>
 
                                     <div style={{ textAlign: 'right', color: 'red' }}>
-                                        上传格式(Word、Excel、PPT、TXT、常用图片格式等)
+                                        上传格式(Word、PPT、TXT、常用图片格式等)
                                     </div>
                                 </Col>
                             </Row>

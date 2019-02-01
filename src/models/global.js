@@ -102,7 +102,7 @@ export default Model.extend({
             }
             //通知消息
             const res2 = yield call(mymessagelist,{});
-            if(res2){
+            if(res2&&res2.data!==null){
                 let advises=res2.data.map((item,index)=>({
                     id:`advise_${item.DGIMN}`,
                     msgtitle: item.MsgTitle,
