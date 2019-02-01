@@ -43,6 +43,7 @@ let _thismap;
     overview,
     homepage,
 }) => ({
+    loadingdatalist: loading.effects[pageUrl.getdatalist],
     loadingRateStatistics: loading.effects[pageUrl.getRateStatisticsByEnt],
     loadingbaseinfo: loading.effects[pageUrl.getbaseinfo],
     loadingrateStatistics: loading.effects[pageUrl.getExceptionProcessing],
@@ -223,9 +224,9 @@ class index extends Component {
      */
     getOption = (type) => {
         const {rsdata}=this.props.RateStatisticsByEnt;
-        let networkeRate = (parseFloat(rsdata.NetworkeRate) * 100).toFixed(0);
-        let runningRate = (parseFloat(rsdata.RunningRate) * 100).toFixed(0);
-        let transmissionEffectiveRate = (parseFloat(rsdata.TransmissionEffectiveRate) * 100).toFixed(0);
+        let networkeRate = rsdata.NetworkeRate===undefined?0:(parseFloat(rsdata.NetworkeRate) * 100).toFixed(0);
+        let runningRate = rsdata.RunningRate === undefined ? 0 : (parseFloat(rsdata.RunningRate) * 100).toFixed(0);
+        let transmissionEffectiveRate = rsdata.TransmissionEffectiveRate === undefined ? 0 : (parseFloat(rsdata.TransmissionEffectiveRate) * 100).toFixed(0);
 
         let legendData=[];
         let color=[];
@@ -644,9 +645,10 @@ class index extends Component {
              loadingTaskCount,
              loadingAlarmAnalysis,
              loadingStatisticsPointStatus,
-             loadingAllMonthEmissionsByPollutant
+             loadingAllMonthEmissionsByPollutant,
+             loadingdatalist,
          } = this.props;
-         if (loadingRateStatistics && loadingbaseinfo && loadingrateStatistics && loadingTaskCount && loadingAlarmAnalysis && loadingStatisticsPointStatus && loadingAllMonthEmissionsByPollutant) {
+         if (loadingdatalist&&loadingRateStatistics && loadingbaseinfo && loadingrateStatistics && loadingTaskCount && loadingAlarmAnalysis && loadingStatisticsPointStatus && loadingAllMonthEmissionsByPollutant) {
              return ( <Spin
                  style={
                      {

@@ -299,6 +299,7 @@ export default Model.extend({
                 Type,
                 IsUsed,
                 Files,
+                PollutantType,
                 callback,
             }
         }, {
@@ -311,6 +312,7 @@ export default Model.extend({
                 Name: Name,
                 Type: Type,
                 IsUsed: IsUsed,
+                PollutantType: PollutantType,
                 Files: Files,
             });
             yield update({
@@ -355,6 +357,7 @@ export default Model.extend({
                 Type,
                 IsUsed,
                 Files,
+                PollutantType,
                 callback,
             }
         }, {
@@ -368,6 +371,7 @@ export default Model.extend({
                 Name: Name,
                 Type: Type,
                 IsUsed: IsUsed,
+                PollutantType: PollutantType,
                 Files: Files,
             });
             yield update({
@@ -490,6 +494,7 @@ export default Model.extend({
         },
         * getpollutantlist({
             payload: {
+                StandardLibraryID,
                 callback
             }
         }, {
@@ -499,6 +504,7 @@ export default Model.extend({
             select
         }) {
             const result = yield call(getpollutantlist, {
+                StandardLibraryID: StandardLibraryID,
             });
             yield update({
                 PollutantList: result.data,

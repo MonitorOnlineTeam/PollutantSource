@@ -15,6 +15,7 @@ import {
 import {
     connect
 } from 'dva';
+
 const FormItem = Form.Item;
 const Option = Select.Option;
 @connect(({
@@ -28,7 +29,7 @@ const Option = Select.Option;
     editstandardlibrarypollutant: standardlibrary.editstandardlibrarypollutant,
 }))
 @Form.create()
-export default class AddStandardLibraryPollutant extends Component {
+class AddStandardLibraryPollutant extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -40,18 +41,20 @@ export default class AddStandardLibraryPollutant extends Component {
             btndisabled: false,
             flag: false,
         };
-    };
+    }
+
       handleSubmit = (e) => {
           e.preventDefault();
           let flag = true;
           this.props.form.validateFieldsAndScroll((err, values) => {
               const that = this;
+              const pid = this.props.pid;
               if (this.state.Id === null) {
                   if (!err && flag === true) {
                       that.props.dispatch({
                           type: 'standardlibrary/addstandardlibrarypollutant',
                           payload: {
-                              StandardLibraryID: this.state.StandardLibraryID,
+                              StandardLibraryID: pid,
                               PollutantCode: values.PollutantCode,
                               AlarmType: values.AlarmType,
                               UpperLimit: values.UpperLimit,
@@ -61,7 +64,7 @@ export default class AddStandardLibraryPollutant extends Component {
                                       this.props.dispatch({
                                           type: 'standardlibrary/getstandardlibrarypollutantlist',
                                           payload: {
-                                              StandardLibraryID: this.state.StandardLibraryID,
+                                              StandardLibraryID: pid,
                                           },
                                       });
                                       if (this.state.flag === false) {
@@ -78,37 +81,36 @@ export default class AddStandardLibraryPollutant extends Component {
                   } else {
 
                   }
-              } else {
-                  if (!err && flag === true) {
-                      that.props.dispatch({
-                          type: 'standardlibrary/editstandardlibrarypollutant',
-                          payload: {
-                              Guid:this.state.Id,
-                              PollutantCode: values.PollutantCode,
-                              AlarmType: values.AlarmType,
-                              UpperLimit: values.UpperLimit,
-                              LowerLimit: values.LowerLimit,
-                              callback: () => {
-                                  if (this.props.requstresult === '1') {
-                                      this.props.dispatch({
-                                          type: 'standardlibrary/getstandardlibrarypollutantlist',
-                                          payload: {
-                                              StandardLibraryID: this.state.StandardLibraryID,
-                                          },
-                                      });
-                                      this.props.getlist();
-                                  } else {
-                                      message.error(this.props.reason);
-                                  }
+              } else if (!err && flag === true) {
+                  that.props.dispatch({
+                      type: 'standardlibrary/editstandardlibrarypollutant',
+                      payload: {
+                          Guid:this.state.Id,
+                          PollutantCode: values.PollutantCode,
+                          AlarmType: values.AlarmType,
+                          UpperLimit: values.UpperLimit,
+                          LowerLimit: values.LowerLimit,
+                          callback: () => {
+                              if (this.props.requstresult === '1') {
+                                  this.props.dispatch({
+                                      type: 'standardlibrary/getstandardlibrarypollutantlist',
+                                      payload: {
+                                          StandardLibraryID: pid,
+                                      },
+                                  });
+                                  this.props.getlist();
+                              } else {
+                                  message.error(this.props.reason);
                               }
-                          },
-                      });
-                  } else {
+                          }
+                      },
+                  });
+              } else {
 
-                  }
               }
           });
       };
+
  success = (Id) => {
      //  let index = this.props.dispatch(routerRedux.push(`/sysmanage/Userinfo`));
      //  if (this.state.UserId !== null) {
@@ -141,32 +143,32 @@ export default class AddStandardLibraryPollutant extends Component {
              payload: {
                  Guid: Id,
                  callback: () => {
-                     this.props.form.setFieldsValue({
-                         PollutantCode:this.props.editstandardlibrarypollutant.PollutantCode,
-                         AlarmType:this.props.editstandardlibrarypollutant.AlarmType,
-                         UpperLimit:this.props.editstandardlibrarypollutant.UpperLimit,
-                         LowerLimit:this.props.editstandardlibrarypollutant.LowerLimit
-                     })
                  }
              },
          });
      }
-     this.GetPollutantList();
- };
- GetPollutantList = (e) => {
+     this.GetPollutantList(this.props.pid);
+ }
+
+ GetPollutantList = (pid) => {
      this.props.dispatch({
          type: 'standardlibrary/getpollutantlist',
          payload: {
+             StandardLibraryID: pid,
              callback: () => {
                  if (this.props.requstresult === '1') {
                      this.props.PollutantList.map(plist =>
-                         this.state.PollutantList.push(<Option key={
-                             plist.PollutantCode
-                         }value={
-                             plist.PollutantCode
-                         } > {
-                                 plist.PollutantName + '(' + plist.PollutantCode + ')'
-                             } </Option>)
+                         this.state.PollutantList.push(<Option
+                             key={
+                                 plist.PollutantCode
+                             }
+                             value={
+                                 plist.PollutantCode
+                             }
+                         > {
+                                 `${plist.PollutantName }(${ plist.PollutantCode })`
+                             }
+                         </Option>)
                      );
                  } else {
                      message.error('请添加污染物');
@@ -175,32 +177,47 @@ export default class AddStandardLibraryPollutant extends Component {
          },
      });
  }
+
  continue=(e) => {
      this.setState({
          flag: true,
      });
      this.handleSubmit(e);
  }
+
   save = (e) => {
       this.setState({
           flag: false,
       });
       this.handleSubmit(e);
   }
+
   render() {
+      const {
+          Id,
+          match,
+          editstandardlibrarypollutant
+      } = this.props;
+      const {
+          PollutantCode,
+          AlarmType,
+          UpperLimit,
+          LowerLimit,
+      } = editstandardlibrarypollutant === null || Id === "null" ? {} : editstandardlibrarypollutant;
       const { getFieldDecorator } = this.props.form;
       return (
           <Card bordered={false}>
               <Form onSubmit={this.handleSubmit}>
                   <Card bordered={false}>
                       <Row gutter={48}>
-                          <Col span={12} >
+                          <Col span={12}>
                               <FormItem
                                   labelCol={{ span: 8 }}
                                   wrapperCol={{ span: 12 }}
-                                  label="污染物">
+                                  label="污染物"
+                              >
                                   {getFieldDecorator('PollutantCode', {
-                                      initialValue:undefined,
+                                      initialValue: PollutantCode === '' ? undefined : PollutantCode ,
                                       rules: [{
                                           required: true,
                                           message: '请选择污染物!'
@@ -223,10 +240,11 @@ export default class AddStandardLibraryPollutant extends Component {
                               <FormItem
                                   labelCol={{ span: 8 }}
                                   wrapperCol={{ span: 12 }}
-                                  label="报警类型">
+                                  label="报警类型"
+                              >
                                   {getFieldDecorator('AlarmType'
                                       , {
-                                          initialValue:undefined,
+                                          initialValue: AlarmType === '' ? undefined : AlarmType ,
                                           rules: [{
                                               required: true,
                                               message: '请选择报警类型!'
@@ -234,25 +252,26 @@ export default class AddStandardLibraryPollutant extends Component {
                                           ]
                                       }
                                   )(
-                                      <Select placeholder="请选择报警类型" >
+                                      <Select placeholder="请选择报警类型">
                                           <Option value="0">无间报警</Option>
                                           <Option value="1">上限报警</Option>
                                           <Option value="2">下限报警</Option>
-                                          <Option value="2">区间报警</Option>
+                                          <Option value="3">区间报警</Option>
                                       </Select>
                                   )}
                               </FormItem>
                           </Col>
                       </Row>
                       <Row gutter={48}>
-                          <Col span={12} >
+                          <Col span={12}>
                               <FormItem
                                   labelCol={{ span: 8 }}
                                   wrapperCol={{ span: 12 }}
-                                  label="上限">
+                                  label="上限"
+                              >
                                   {getFieldDecorator('UpperLimit',
                                       {
-                                          initialValue:0,
+                                          initialValue: UpperLimit === 0 ? 0 : UpperLimit,
                                           rules: [{
                                               required: true,
                                               message: '请输入上限!'
@@ -262,14 +281,15 @@ export default class AddStandardLibraryPollutant extends Component {
                                   )}
                               </FormItem>
                           </Col>
-                          <Col span={12} >
+                          <Col span={12}>
                               <FormItem
                                   labelCol={{ span: 8 }}
                                   wrapperCol={{ span: 12 }}
-                                  label="下限">
+                                  label="下限"
+                              >
                                   {getFieldDecorator('LowerLimit',
                                       {
-                                          initialValue: 0,
+                                          initialValue: LowerLimit === 0 ? 0 : LowerLimit,
                                           rules: [{
                                               required: true,
                                               message: '请输入下限!'
@@ -282,18 +302,23 @@ export default class AddStandardLibraryPollutant extends Component {
                       </Row>
                       <Row gutter={48}>
                           <Col span={24} style={{textAlign: 'center'}}>
-                              <Button type="primary"
+                              <Button
+                                  type="primary"
                                   onClick={
                                       (e) =>
                                           this.save(e)
-                                  } >
+                                  }
+                              >
                           保存
                               </Button>
                               <Divider type="" />
-                              <Button type="primary" disabled={this.state.btndisabled}
+                              <Button
+                                  type="primary"
+                                  disabled={this.state.btndisabled}
                                   onClick={(e) =>
                                       this.continue(e)
-                                  } >
+                                  }
+                              >
                           保存并继续添加
                               </Button>
                           </Col>
@@ -304,3 +329,4 @@ export default class AddStandardLibraryPollutant extends Component {
       );
   }
 }
+export default AddStandardLibraryPollutant;

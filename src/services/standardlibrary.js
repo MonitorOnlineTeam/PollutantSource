@@ -66,6 +66,7 @@ export async function addstandardlibrary(params) {
         Type: params.Type,
         IsUsed: params.IsUsed,
         Files: params.Files,
+        PollutantType: params.PollutantType,
     };
     const result = post('/api/rest/PollutantSourceApi/StandardLibrary/AddStandardLibrary', body, null);
     return result === null ? {
@@ -136,6 +137,7 @@ export async function editstandardlibrary(params) {
         Type: params.Type,
         IsUsed: params.IsUsed,
         Files: params.Files,
+        PollutantType: params.PollutantType,
     };
     const result = post('/api/rest/PollutantSourceApi/StandardLibrary/EditStandardLibrary', body, null);
     return result === null ? {
@@ -160,6 +162,7 @@ export async function editstandardlibrarypollutant(params) {
 // 获取所有污染物
 export async function getpollutantlist(params) {
     const body = {
+        StandardLibraryID : params.StandardLibraryID,
     };
     const result = post('/api/rest/PollutantSourceApi/StandardLibrary/GetPollutantList', body, null);
     return result === null ? {
