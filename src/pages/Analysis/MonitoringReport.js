@@ -12,6 +12,7 @@ import {
 import moment from 'moment';
 import { routerRedux } from 'dva/router';
 import { connect } from 'dva';
+import { readFileSync } from 'fs';
 import MonitorContent from '../../components/MonitorContent/index';
 import styles from './MonitoringReport.less';
 import RangePicker_ from '../../components/PointDetail/RangePicker_';
@@ -29,13 +30,14 @@ class MonitoringReport extends Component {
         super(props);
         this.state = {
             mode: ['year', 'year'],
-            rangeDate: [moment(new Date()).add(-1, 'year'), moment(new Date())],
+            rangeDate: [moment(moment(new Date()).format('YYYY-01-01')).add(-1, 'year').add(8, 'hours'), moment(new Date()).add(8, 'hours')],
             radiovalue: 'year',
             format: 'YYYY',
             reportname: null,
             numPages: null,
             pageNumber: 1,
-            isfirst: true
+            isfirst: true,
+            catchDate: []
         };
     }
 
@@ -53,29 +55,40 @@ class MonitoringReport extends Component {
         if (value) {
             this.setState({
                 rangeDate: value,
-                mode: [
-                    'year',
-                    'year',
-                ],
+                mode: ['year', 'year'],
             });
         }
     }
 
     onOpenChange = (status) => {
+        let { catchDate, rangeDate } = this.state;
+        let { dispatch } = this.props;
+        //日期窗口关闭是触发事件
         if (!status) {
-            if (this.state.rangeDate[0] > this.state.rangeDate[1]) {
-                this.setState({ rangeDate: [moment(new Date()).add(-1, 'year'), moment(new Date())] });
+            if (rangeDate[0] > rangeDate[1]) {
+                this.setState({ rangeDate: [moment(moment(new Date()).format('YYYY-01-01')).add(-1, 'year').add(8, 'hours'), moment(new Date()).add(8, 'hours')] });
                 message.error('开始时间不能大于结束时间！');
-            } else {
-                this.props.dispatch({
+            } else if (catchDate.length === 0) {
+                if (rangeDate[0].format('YYYY-01-01') !== moment(moment(new Date()).format('YYYY-01-01')).add(-1, 'year') && rangeDate[1].format('YYYY-01-01') !== moment(new Date()).format('YYYY-01-01')) {
+                    dispatch({
+                        type: 'analysisdata/queryreportlist',
+                        payload: {
+                            beginTime: rangeDate[0],
+                            endTime: rangeDate[1]
+                        }
+                    });
+                }
+                this.setState({ catchDate: [rangeDate[0], rangeDate[1]] });
+            } else if (rangeDate[0] !== catchDate[0] && rangeDate[1] !== catchDate[1]) {
+                dispatch({
                     type: 'analysisdata/queryreportlist',
                     payload: {
-                        beginTime: this.state.rangeDate[0],
-                        endTime: this.state.rangeDate[1]
+                        beginTime: rangeDate[0],
+                        endTime: rangeDate[1]
                     }
                 });
+                this.setState({ catchDate: [rangeDate[0], rangeDate[1]] });
             }
-
         }
     }
 
@@ -99,6 +112,7 @@ class MonitoringReport extends Component {
         }
         this.setState(
             {
+                reportname: null,
                 radiovalue,
                 format,
                 mode,
@@ -139,9 +153,8 @@ class MonitoringReport extends Component {
             }
         }
 
-
         let address = imgaddress + reportname;
-        let height = 'calc(100vh - 255px)';
+        let height = 'calc(100vh - 259px)';
         if (!reportname) {
             address = null;
             height = 70;
@@ -158,6 +171,7 @@ class MonitoringReport extends Component {
 
     getreportlist = () => {
         const list = this.props.reportlist;
+        debugger;
         const type = this.state.radiovalue;
         let res = [];
         if (list) {
@@ -189,7 +203,6 @@ class MonitoringReport extends Component {
     }
 
     render() {
-
         const { rangeDate, mode, radiovalue, format } = this.state;
         const { loading, children } = this.props;
         if (this.props.loading) {
@@ -238,12 +251,12 @@ class MonitoringReport extends Component {
                         }
                     >
                         <Row>
-                            <Col style={{ float: "left", overflow: 'scroll', height: 'calc(100vh - 250px)' }}>
+                            <Col style={{ float: "left", overflow: 'scroll', height: 'calc(100vh - 245px)' }}>
                                 <div style={{ width: '400px' }}>
                                     {this.getreportlist()}
                                 </div>
                             </Col>
-                            <Col style={{ width: document.body.clientWidth - 550, float: 'left', overflow: 'scroll', height: 'calc(100vh - 250px)' }}>
+                            <Col style={{ width: document.body.clientWidth - 550, float: 'left', overflow: 'scroll', height: 'calc(100vh - 245px)' }}>
                                 {this.getshowpdf()}
                             </Col>
                         </Row>
