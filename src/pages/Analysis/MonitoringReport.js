@@ -6,7 +6,8 @@ import {
     DatePicker,
     Spin,
     Row,
-    Col
+    Col,
+    message
 } from 'antd';
 import moment from 'moment';
 import { routerRedux } from 'dva/router';
@@ -52,7 +53,29 @@ class MonitoringReport extends Component {
         if (value) {
             this.setState({
                 rangeDate: value,
+                mode: [
+                    'year',
+                    'year',
+                ],
             });
+        }
+    }
+
+    onOpenChange = (status) => {
+        if (!status) {
+            if (this.state.rangeDate[0] > this.state.rangeDate[1]) {
+                this.setState({ rangeDate: [moment(new Date()).add(-1, 'year'), moment(new Date())] });
+                message.error('开始时间不能大于结束时间！');
+            } else {
+                this.props.dispatch({
+                    type: 'analysisdata/queryreportlist',
+                    payload: {
+                        beginTime: this.state.rangeDate[0],
+                        endTime: this.state.rangeDate[1]
+                    }
+                });
+            }
+
         }
     }
 
@@ -118,7 +141,7 @@ class MonitoringReport extends Component {
 
 
         let address = imgaddress + reportname;
-        let height = 'calc(100vh - 300px)';
+        let height = 'calc(100vh - 255px)';
         if (!reportname) {
             address = null;
             height = 70;
@@ -208,6 +231,8 @@ class MonitoringReport extends Component {
                                     value={rangeDate}
                                     mode={mode}
                                     onPanelChange={this.handlePanelChange}
+                                    onOpenChange={this.onOpenChange}
+                                    showTime={true}
                                 />
                             </div>
                         }
