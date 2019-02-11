@@ -12,7 +12,7 @@ import MonitorContent from '../../components/MonitorContent/index';
 import { get } from '../../dvapack/request';
 import { async } from 'q';
 import moment from 'moment';
-import Lightbox from "react-image-lightbox";
+import Lightbox from "react-image-lightbox-rotate";
 import "react-image-lightbox/style.css";
 import ReactTooltip from 'react-tooltip'
 const { Description } = DescriptionList;
@@ -550,7 +550,7 @@ export default class EmergencyDetailInfo extends Component {
                             </Card>
                             <Card title={<span style={{ fontWeight: '900' }}>日志表</span>} style={{ marginTop: 20 }}>
                                 {
-                                    <Steps width={this.stepsWidth(TaskLogList)} style={{ overflow: 'scroll' }}>
+                                    <Steps width={this.stepsWidth(TaskLogList)} style={{ overflowX: 'scroll' }}>
                                         {
                                             this.TaskLogList(TaskLogList)
                                         }
@@ -586,8 +586,9 @@ export default class EmergencyDetailInfo extends Component {
                     </Modal>
 
                     {this.state.previewVisible && (
-                        <div style={{ position: 'absolute', width: '500px', height: '500px' }}>
+                        <div style={{ position: 'absolute', width: '500px', height: '500px', transform: 'rotate(-90deg)' }}>
                             <Lightbox
+                                transform='rotate(-90deg)'
                                 mainSrc={ImageList[photoIndex]}
                                 nextSrc={ImageList[(photoIndex + 1) % ImageList.length]}
                                 prevSrc={ImageList[(photoIndex + ImageList.length - 1) % ImageList.length]}
