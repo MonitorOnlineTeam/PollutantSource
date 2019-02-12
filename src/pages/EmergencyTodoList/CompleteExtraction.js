@@ -304,8 +304,8 @@ class CompleteExtraction extends Component {
                         <table className={styles.FormTable}>
                             <tbody>
                                 <tr>
-                                    <td style={{ width: '50%', height: '50px', textAlign: 'left', fontSize: '14px', fontWeight: 'bold' }}>企业名称：{EnterpriseName}</td>
-                                    <td style={{ width: '50%', height: '50px', textAlign: 'left', fontSize: '14px', fontWeight: 'bold' }}> 巡检日期：{PatrolDate}</td>
+                                    <td style={{ width: '50%', height: '50px', textAlign: 'left', fontSize: '14px', fontWeight: 'bold', border: 0 }}>企业名称：{EnterpriseName}</td>
+                                    <td style={{ width: '50%', height: '50px', textAlign: 'left', fontSize: '14px', fontWeight: 'bold', border: 0 }}> 巡检日期：{PatrolDate}</td>
                                 </tr>
                             </tbody>
                         </table>
