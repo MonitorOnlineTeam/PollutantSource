@@ -585,25 +585,22 @@ export default class EmergencyDetailInfo extends Component {
                     </Modal>
 
                     {this.state.previewVisible && (
-                        <div style={{ position: 'absolute', width: '500px', height: '500px', transform: 'rotate(-90deg)' }}>
                             <Lightbox
-                                transform='rotate(-90deg)'
                                 mainSrc={ImageList[photoIndex]}
                                 nextSrc={ImageList[(photoIndex + 1) % ImageList.length]}
                                 prevSrc={ImageList[(photoIndex + ImageList.length - 1) % ImageList.length]}
                                 onCloseRequest={() => this.setState({ previewVisible: false })}
-                                onMovePrevRequest={() =>
+                                onPreMovePrevRequest={() => 
                                     this.setState({
                                         photoIndex: (photoIndex + ImageList.length - 1) % ImageList.length
                                     })
                                 }
-                                onMoveNextRequest={() =>
+                                onPreMoveNextRequest={() =>
                                     this.setState({
                                         photoIndex: (photoIndex + 1) % ImageList.length
                                     })
                                 }
                             />
-                        </div>
                     )}
 
                     < Modal
