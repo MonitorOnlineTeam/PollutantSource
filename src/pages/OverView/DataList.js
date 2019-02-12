@@ -234,8 +234,8 @@ class dataList extends PureComponent {
         let res = [];
         if (pollutantTypelist) {
             pollutantTypelist.map((item,key)=>{
-                res.push( <Radio.Button value={item.pollutantTypeCode}>{item.pollutantTypeName}</Radio.Button>)
-             })
+                res.push( <Radio.Button key={key} value={item.pollutantTypeCode}>{item.pollutantTypeName}</Radio.Button>);
+            });
 
             // pollutantTypelist.map((item,key) => {
             //     res.push(<Radio key={key} value={item.pollutantTypeCode}>{item.pollutantTypeName}</Radio>);
@@ -247,7 +247,7 @@ class dataList extends PureComponent {
     //污染物类型选择
     onPollutantChange = (e) => {
         this.setState({
-            
+
             normal: false,
             over: false,
             underline: false,
@@ -263,9 +263,9 @@ class dataList extends PureComponent {
         dispatch({
             type: 'overview/updateState',
             payload: {
-            selectpollutantTypeCode:e.target.value
-        },
-        })
+                selectpollutantTypeCode:e.target.value
+            },
+        });
         dispatch({
             type: 'overview/querypollutanttypecode',
             payload: {
@@ -305,40 +305,43 @@ class dataList extends PureComponent {
             </Button>
         </li>
         {
-           this.getbutton(record)
+            this.getbutton(record)
         }
-        </div>)
+    </div>)
 
         //判断是派单还是催办按钮
         getbutton=(selectpoint)=>{
-            if(selectpoint)
-            {
+            if(selectpoint) {
                 const text='没有关联运维人,是否前去关联?';
-                if(selectpoint.existTask==1)
-                {
-                    if(selectpoint.operationUserID)
-                    {
+                if(selectpoint.existTask==1) {
+                    if(selectpoint.operationUserID) {
                         return (
                             <li style={{ listStyle: 'none' }}>
-                             <Button onClick={() => this.urge(selectpoint)}><Icon type="phone" 
-                             style={{ color: '#3C9FDA', marginRight: 5 }} theme="filled" />紧急催办</Button>
+                                <Button onClick={() => this.urge(selectpoint)}><Icon
+                                    type="phone"
+                                    style={{ color: '#3C9FDA', marginRight: 5 }}
+                                    theme="filled"
+                                />紧急催办
+                                </Button>
                             </li>
-                                )
+                        );
                     }
                     return (
-                        <Popconfirm  title={text} onConfirm={()=>this.addoperationInfo(selectpoint)} okText="是" cancelText="否">
-                          <li style={{ listStyle: 'none' }}>
-                             <Button><Icon type="phone" 
-                             style={{ color: '#3C9FDA', marginRight: 5 }} theme="filled" />紧急催办</Button>
-                          </li>
-                         </Popconfirm>)
-                }
-                else
-                {
-                    if(selectpoint.operationUserID)
-                    {
-                        return (
+                        <Popconfirm title={text} onConfirm={()=>this.addoperationInfo(selectpoint)} okText="是" cancelText="否">
                             <li style={{ listStyle: 'none' }}>
+                                <Button><Icon
+                                    type="phone"
+                                    style={{ color: '#3C9FDA', marginRight: 5 }}
+                                    theme="filled"
+                                />紧急催办
+                                </Button>
+                            </li>
+                        </Popconfirm>);
+                }
+
+                if(selectpoint.operationUserID) {
+                    return (
+                        <li style={{ listStyle: 'none' }}>
                             <Button
                                 onClick={() => {
                                     this.setState({
@@ -349,18 +352,17 @@ class dataList extends PureComponent {
                             ><Icon type="phone" style={{ color: '#3C9FDA', marginRight: 5 }} theme="filled" />紧急派单
                             </Button>
                         </li>
-                        )
-                    }
-                    return (
-                        <Popconfirm  title={text} onConfirm={()=>this.addoperationInfo(selectpoint)} okText="是" cancelText="否">
-                         <li style={{ listStyle: 'none' }}>
-                            <Button
-                            ><Icon type="phone" style={{ color: '#3C9FDA', marginRight: 5 }} theme="filled" />紧急派单
-                            </Button>
-                         </li>
-                         </Popconfirm>
-                            )
+                    );
                 }
+                return (
+                    <Popconfirm title={text} onConfirm={()=>this.addoperationInfo(selectpoint)} okText="是" cancelText="否">
+                        <li style={{ listStyle: 'none' }}>
+                            <Button><Icon type="phone" style={{ color: '#3C9FDA', marginRight: 5 }} theme="filled" />紧急派单
+                            </Button>
+                        </li>
+                    </Popconfirm>
+                );
+
             }
         }
 
@@ -368,223 +370,223 @@ class dataList extends PureComponent {
         addoperationInfo=(selectpoint)=>{
             let viewtype='datalist';
             this.props.dispatch(routerRedux.push(`/sysmanage/pointdetail/${selectpoint.DGIMN}/${selectpoint.pollutantTypeCode}/${viewtype}`));
-           }
-
-    render() {
-        const { normal, over, underline, exception, terate, operationStatus } = this.state;
-        const {selectpollutantTypeCode}=this.props;
-        const coldata = this.props.columnsdata;
-        const { selectpoint } = this.state;
-        let { gwidth } = this.props;
-        let fixed = false;
-        if (coldata[0]) {
-            fixed = true;
-        }
-        let columns = [{
-            title: '状态',
-            dataIndex: 'status',
-            key: 'status',
-            width: 70,
-            align: 'center',
-            fixed: fixed,
-            render: (value, record, index) => {
-                if (value === 0) {
-                    return <img style={{ width: 15 }} src="/gisunline.png" />;
-                } if (value === 1) {
-                    return <img style={{ width: 15 }} src="/gisnormal.png" />;
-                } if (value === 2) {
-                    return <img style={{ width: 15 }} src="/gisover.png" />;
-                }
-                return <img style={{ width: 15 }} src="/gisexception.png" />;
-            },
-        }, {
-            title: '排口',
-            dataIndex: 'pointName',
-            key: 'pointName',
-            width: 300,
-            fixed: fixed,
-            render: (value, record, index) => {
-                const content = this.gerpointButton(record);
-                let lable = [];
-                if (record.fault) {
-                    lable.push(<span key={1} className={styles.fault}>故障中</span>);
-                }
-                if (record.warning) {
-                    lable.push(<span key={2} className={styles.warning}>预警中</span>);
-                }
-                if (record.scene) {
-                    lable.push(<span key={3} className={styles.operation}>运维中</span>);
-                }
-                if (record.stop) {
-                    lable.push(<span key={4} className={styles.stop}>停产中</span>);
-                }
-
-
-                return (<Popover trigger="click" content={content}>
-                    <span style={{ cursor: 'pointer' }}>{value}
-                        {lable}
-                    </span>
-                        </Popover>);
-            },
-        },
-
-        ];
-
-        let csyxl = 0;
-        if (selectpollutantTypeCode == 2) {
-            csyxl = 140;
-            columns = columns.concat(
-                {
-                    title: '传输有效率',
-                    dataIndex: 'transmissionEffectiveRate',
-                    key: 'transmissionEffectiveRate',
-                    width: 140,
-                    fixed: fixed,
-                    align: 'center',
-                    render: (value, record, index) => ({
-                        props: {
-                            className: value && value.split('%')[0] < 90 ? styles.red : '',
-                        },
-                        children: value || '-'
-                    })
-                });
         }
 
-        let colwidth = 200;
-        const scroll = document.body.scrollWidth - 40;
-        if (gwidth < scroll && coldata[0]) {
-            gwidth = scroll;
-            colwidth = (scroll - (300 + csyxl + 70)) / coldata.length;
-        }
-
-        const res = coldata[0] ? coldata.map((item, key) => {
-            columns = columns.concat({
-                title: item.title,
-                dataIndex: item.field,
-                key: item.field,
+        render() {
+            const { normal, over, underline, exception, terate, operationStatus } = this.state;
+            const {selectpollutantTypeCode}=this.props;
+            const coldata = this.props.columnsdata;
+            const { selectpoint } = this.state;
+            let { gwidth } = this.props;
+            let fixed = false;
+            if (coldata[0]) {
+                fixed = true;
+            }
+            let columns = [{
+                title: '状态',
+                dataIndex: 'status',
+                key: 'status',
+                width: 70,
                 align: 'center',
-                width: colwidth,
+                fixed: fixed,
                 render: (value, record, index) => {
-                    const additional = record[`${item.field}_params`];
-                    if (additional) {
-                        const additionalInfo = additional.split('§');
-                        if (additionalInfo[0] === 'IsOver') {
+                    if (value === 0) {
+                        return <img style={{ width: 15 }} src="/gisunline.png" />;
+                    } if (value === 1) {
+                        return <img style={{ width: 15 }} src="/gisnormal.png" />;
+                    } if (value === 2) {
+                        return <img style={{ width: 15 }} src="/gisover.png" />;
+                    }
+                    return <img style={{ width: 15 }} src="/gisexception.png" />;
+                },
+            }, {
+                title: '排口',
+                dataIndex: 'pointName',
+                key: 'pointName',
+                width: 300,
+                fixed: fixed,
+                render: (value, record, index) => {
+                    const content = this.gerpointButton(record);
+                    let lable = [];
+                    if (record.fault) {
+                        lable.push(<span key={1} className={styles.fault}>故障中</span>);
+                    }
+                    if (record.warning) {
+                        lable.push(<span key={2} className={styles.warning}>预警中</span>);
+                    }
+                    if (record.scene) {
+                        lable.push(<span key={3} className={styles.operation}>运维中</span>);
+                    }
+                    if (record.stop) {
+                        lable.push(<span key={4} className={styles.stop}>停产中</span>);
+                    }
+
+
+                    return (<Popover trigger="click" content={content}>
+                        <span style={{ cursor: 'pointer' }}>{value}
+                            {lable}
+                        </span>
+                            </Popover>);
+                },
+            },
+
+            ];
+
+            let csyxl = 0;
+            if (selectpollutantTypeCode == 2) {
+                csyxl = 140;
+                columns = columns.concat(
+                    {
+                        title: '传输有效率',
+                        dataIndex: 'transmissionEffectiveRate',
+                        key: 'transmissionEffectiveRate',
+                        width: 140,
+                        fixed: fixed,
+                        align: 'center',
+                        render: (value, record, index) => ({
+                            props: {
+                                className: value && value.split('%')[0] < 90 ? styles.red : '',
+                            },
+                            children: value || '-'
+                        })
+                    });
+            }
+
+            let colwidth = 200;
+            const scroll = document.body.scrollWidth - 40;
+            if (gwidth < scroll && coldata[0]) {
+                gwidth = scroll;
+                colwidth = (scroll - (300 + csyxl + 70)) / coldata.length;
+            }
+
+            const res = coldata[0] ? coldata.map((item, key) => {
+                columns = columns.concat({
+                    title: item.title,
+                    dataIndex: item.field,
+                    key: item.field,
+                    align: 'center',
+                    width: colwidth,
+                    render: (value, record, index) => {
+                        const additional = record[`${item.field}_params`];
+                        if (additional) {
+                            const additionalInfo = additional.split('§');
+                            if (additionalInfo[0] === 'IsOver') {
+                                const content = (<div>
+                                    <div style={{ marginBottom: 10 }}>
+                                        <Icon style={{ color: '#ff0000', fontSize: 25, marginRight: 10 }} type="warning" />
+                                        <span style={{ fontWeight: 'Bold', fontSize: 16 }}>数据超标</span>
+                                    </div>
+                                    <li style={{ listStyle: 'none', marginBottom: 10 }}>
+                                        <Badge status="success" text={`标准值：${additionalInfo[2]}`} />
+                                    </li>
+                                    <li style={{ listStyle: 'none', marginBottom: 10 }}>
+                                        <Badge status="error" text={`超标倍数：${additionalInfo[3]}`} />
+                                    </li>
+                                                 </div>);
+                                return (<Popover content={content}><span style={{ color: '#ff0000', cursor: 'pointer' }}>{value || (value === 0 ? 0 : '-')}</span></Popover>);
+                            }
                             const content = (<div>
                                 <div style={{ marginBottom: 10 }}>
-                                    <Icon style={{ color: '#ff0000', fontSize: 25, marginRight: 10 }} type="warning" />
-                                    <span style={{ fontWeight: 'Bold', fontSize: 16 }}>数据超标</span>
+                                    <Icon style={{ color: '#ff0000', fontSize: 25, marginRight: 10 }} type="close-circle" />
+                                    <span style={{ fontWeight: 'Bold', fontSize: 16 }}>数据异常</span>
                                 </div>
                                 <li style={{ listStyle: 'none', marginBottom: 10 }}>
-                                    <Badge status="success" text={`标准值：${additionalInfo[2]}`} />
-                                </li>
-                                <li style={{ listStyle: 'none', marginBottom: 10 }}>
-                                    <Badge status="error" text={`超标倍数：${additionalInfo[3]}`} />
+                                    <Badge status="warning" text={`异常原因：${additionalInfo[2]}`} />
                                 </li>
                                              </div>);
-                            return (<Popover content={content}><span style={{ color: '#ff0000', cursor: 'pointer' }}>{value || (value === 0 ? 0 : '-')}</span></Popover>);
+                            return (<Popover content={content}><span style={{ color: '#F3AC00', cursor: 'pointer' }}>{value || (value === 0 ? 0 : '-')}</span></Popover>);
                         }
-                        const content = (<div>
-                            <div style={{ marginBottom: 10 }}>
-                                <Icon style={{ color: '#ff0000', fontSize: 25, marginRight: 10 }} type="close-circle" />
-                                <span style={{ fontWeight: 'Bold', fontSize: 16 }}>数据异常</span>
-                            </div>
-                            <li style={{ listStyle: 'none', marginBottom: 10 }}>
-                                <Badge status="warning" text={`异常原因：${additionalInfo[2]}`} />
-                            </li>
-                                         </div>);
-                        return (<Popover content={content}><span style={{ color: '#F3AC00', cursor: 'pointer' }}>{value || (value === 0 ? 0 : '-')}</span></Popover>);
+                        return value || (value === 0 ? 0 : '-');
                     }
-                    return value || (value === 0 ? 0 : '-');
-                }
 
-            });
-        }) : [];
-        if (this.props.isloading) {
-            return (<Spin
-                style={{
-                    width: '100%',
-                    height: 'calc(100vh/2)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center'
-                }}
-                size="large"
-            />);
-        }
-        return (
-            <div
-                style={{ width: '100%', height: 'calc(100vh - 65px)' }}
-                className={styles.standardList}
-            >
-                <UrgentDispatch
-                    onCancel={this.onCancel}
-                    visible={this.state.pdvisible}
-                    operationUserID={selectpoint ? selectpoint.operationUserID : null}
-                    DGIMN={selectpoint ? selectpoint.DGIMN : null}
-                    pointName={selectpoint ? selectpoint.pointName : null}
-                    operationUserName={selectpoint ? selectpoint.operationUserName : null}
-                    operationtel={selectpoint ? selectpoint.operationtel : null}
-                    reloadData={() => this.Refresh()}
-                />
-                <Card
-                    bordered={false}
-                    className={styles.cardextra}
-                    bodyStyle={
-                        {
-                            padding: '0px 20px',
-                        }
-                    }
-                    extra={
-                        <div>
-                            <TimePicker onChange={this.pickerChange} style={{ width: 150, marginRight: 20, float: 'left' }} defaultValue={this.state.time} format="HH:00:00" />
-
-                            <Radio.Group   style={{ marginLeft: 50, float: 'left' }} onChange={this.onPollutantChange} defaultValue={selectpollutantTypeCode}>
-                                {this.getPollutantDoc()}
-                            </Radio.Group>
-
-                            <div style={{ width: 'calc(100vw - 220px)', marginLeft: 60 }}>
-                                <AListRadio style={{ float: 'right' }} dvalue="b" />
-                                <div style={{ float: 'right', marginTop: 3 }}>
-                                    {/* <span onClick={this.operationSearch} className={operationStatus?styles.selectStatus:styles.statusButton} style={{ marginRight: 10 }}>
-                                <Icon type="user" style={{ color: '#3B91FF' }} /> 运维中</span> */}
-                                    <span onClick={this.terateSearch} className={terate ? styles.selectStatus : styles.statusButton} style={{ marginRight: 20 }}><span style={{ fontSize: 16, color: '#ffca00' }}>■</span> 传输有效率不达标</span>
-
-                                    <span onClick={() => this.statusChange('normal')} className={normal ? styles.selectStatus : styles.statusButton}><img className={styles.statusButtonImg} src="../../../gisnormal.png" />正常</span>
-                                    <span onClick={() => this.statusChange('over')} className={over ? styles.selectStatus : styles.statusButton}><img className={styles.statusButtonImg} src="../../../gisover.png" />超标</span>
-                                    <span onClick={() => this.statusChange('underline')} className={underline ? styles.selectStatus : styles.statusButton}><img className={styles.statusButtonImg} src="../../../gisunline.png" />离线</span>
-                                    <span onClick={() => this.statusChange('exception')} className={exception ? styles.selectStatus : styles.statusButton}><img className={styles.statusButtonImg} src="../../../gisexception.png" />异常</span>
-                                </div>
-
-                            </div>
-                        </div>
-                    }
+                });
+            }) : [];
+            if (this.props.isloading) {
+                return (<Spin
+                    style={{
+                        width: '100%',
+                        height: 'calc(100vh/2)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center'
+                    }}
+                    size="large"
+                />);
+            }
+            return (
+                <div
+                    style={{ width: '100%', height: 'calc(100vh - 65px)' }}
+                    className={styles.standardList}
                 >
-                    <Table
-                        rowKey={(record, index) => `complete${index}`}
-                        className={styles.tableCss}
-                        columns={columns}
-                        size="middle"
-                        dataSource={this.props.data}
-                        pagination={false}
-                        loading={this.props.isloading}
-                        scroll={{ x: gwidth, y: 'calc(100vh - 190px)' }}
-                        bordered={true}
-                        onRow={record => {
-                        }}
-                        rowClassName={
-                            (record, index, indent) => {
-                                if (index === 0) {
-                                    return;
-                                }
-                                if (index % 2 !== 0) {
-                                    return 'light';
-                                }
+                    <UrgentDispatch
+                        onCancel={this.onCancel}
+                        visible={this.state.pdvisible}
+                        operationUserID={selectpoint ? selectpoint.operationUserID : null}
+                        DGIMN={selectpoint ? selectpoint.DGIMN : null}
+                        pointName={selectpoint ? selectpoint.pointName : null}
+                        operationUserName={selectpoint ? selectpoint.operationUserName : null}
+                        operationtel={selectpoint ? selectpoint.operationtel : null}
+                        reloadData={() => this.Refresh()}
+                    />
+                    <Card
+                        bordered={false}
+                        className={styles.cardextra}
+                        bodyStyle={
+                            {
+                                padding: '0px 20px',
                             }
                         }
-                    />
-                </Card>
-            </div>
-        );
-    }
+                        extra={
+                            <div>
+                                <TimePicker onChange={this.pickerChange} style={{ width: 150, marginRight: 20, float: 'left' }} defaultValue={this.state.time} format="HH:00:00" />
+
+                                <Radio.Group style={{ marginLeft: 50, float: 'left' }} onChange={this.onPollutantChange} defaultValue={selectpollutantTypeCode}>
+                                    {this.getPollutantDoc()}
+                                </Radio.Group>
+
+                                <div style={{ width: 'calc(100vw - 220px)', marginLeft: 60 }}>
+                                    <AListRadio style={{ float: 'right' }} dvalue="b" />
+                                    <div style={{ float: 'right', marginTop: 3 }}>
+                                        {/* <span onClick={this.operationSearch} className={operationStatus?styles.selectStatus:styles.statusButton} style={{ marginRight: 10 }}>
+                                <Icon type="user" style={{ color: '#3B91FF' }} /> 运维中</span> */}
+                                        <span onClick={this.terateSearch} className={terate ? styles.selectStatus : styles.statusButton} style={{ marginRight: 20 }}><span style={{ fontSize: 16, color: '#ffca00' }}>■</span> 传输有效率不达标</span>
+
+                                        <span onClick={() => this.statusChange('normal')} className={normal ? styles.selectStatus : styles.statusButton}><img className={styles.statusButtonImg} src="../../../gisnormal.png" />正常</span>
+                                        <span onClick={() => this.statusChange('over')} className={over ? styles.selectStatus : styles.statusButton}><img className={styles.statusButtonImg} src="../../../gisover.png" />超标</span>
+                                        <span onClick={() => this.statusChange('underline')} className={underline ? styles.selectStatus : styles.statusButton}><img className={styles.statusButtonImg} src="../../../gisunline.png" />离线</span>
+                                        <span onClick={() => this.statusChange('exception')} className={exception ? styles.selectStatus : styles.statusButton}><img className={styles.statusButtonImg} src="../../../gisexception.png" />异常</span>
+                                    </div>
+
+                                </div>
+                            </div>
+                        }
+                    >
+                        <Table
+                            rowKey={(record, index) => `complete${index}`}
+                            className={styles.tableCss}
+                            columns={columns}
+                            size="middle"
+                            dataSource={this.props.data}
+                            pagination={false}
+                            loading={this.props.isloading}
+                            scroll={{ x: gwidth, y: 'calc(100vh - 190px)' }}
+                            bordered={true}
+                            onRow={record => {
+                            }}
+                            rowClassName={
+                                (record, index, indent) => {
+                                    if (index === 0) {
+                                        return;
+                                    }
+                                    if (index % 2 !== 0) {
+                                        return 'light';
+                                    }
+                                }
+                            }
+                        />
+                    </Card>
+                </div>
+            );
+        }
 }
 export default dataList;
