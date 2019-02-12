@@ -187,6 +187,12 @@ export default class EmergencyDetailInfo extends Component {
             histroyrecordtype = taskfrom.split('-')[1];
             rtnVal.push({ Name: '质控记录', Url: `/pointdetail/${this.props.match.params.DGIMN}/${listUrl}/${taskfrom}/${histroyrecordtype}` });
         }
+        else if(taskfrom==='OperationCalendar')
+        {
+            rtnVal.push({ Name: '智能运维', Url: `` });
+            rtnVal.push({ Name: '运维日历', Url: `/operation/operationcalendar` });
+        }
+
 
         rtnVal.push({ Name: '任务详情', Url: '' })
         return rtnVal;
