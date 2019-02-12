@@ -58,7 +58,8 @@ class AddStandardLibrary extends Component {
             width: 200,
             Mvisible: false,
             Id: null,
-            PollutantTypes: []
+            PollutantTypes: [],
+            fileLoading: false
 
         };
         this.uuid = () => {
@@ -81,6 +82,9 @@ class AddStandardLibrary extends Component {
             //双重验证
             if (fileType) {
                 if (postfix) {
+                    _this.setState({
+                        fileLoading: true
+                    });
                     let reader = new FileReader();
                     reader.readAsDataURL(file);
                     reader.onloadend = function() {
@@ -104,7 +108,8 @@ class AddStandardLibrary extends Component {
                                         const imglist = _this.state.fileList.concat(newimg);
                                         let arr3 = Array.from(new Set(imglist));
                                         _this.setState({
-                                            fileList: arr3
+                                            fileList: arr3,
+                                            fileLoading: false
                                         });
                                     } else {
                                         message.error(this.props.reason);
@@ -556,6 +561,17 @@ class AddStandardLibrary extends Component {
                                                 <Button>
                                                     <Icon type="upload" /> 上传
                                                 </Button>
+                                                <Spin
+                                                    delay={500}
+                                                    spinning={this.state.fileLoading}
+                                                    style={{
+                                                        marginLeft: 10,
+                                                        height: '100%',
+                                                        width: '30px',
+                                                        alignItems: 'center',
+                                                        justifyContent: 'center'
+                                                    }}
+                                                />
                                             </Upload>
                                         </FormItem>
                                     </Col>

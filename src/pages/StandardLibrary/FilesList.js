@@ -74,7 +74,6 @@ export default class FilesList extends Component {
                                     if (index < fileName.length - 1) {
                                         name += element + '.';
                                     }
-
                                 }
                             }
                             if (fileName[fileName.length - 1] === 'png' || fileName[fileName.length - 1] === 'gif' || fileName[fileName.length - 1] === 'bmp' || fileName[fileName.length - 1] === 'jpg') {
@@ -89,7 +88,7 @@ export default class FilesList extends Component {
                                     cover={<img alt="example" src={'/' + item.FileType} style={{ width: 80, height: 80, margin: 'auto', marginTop: 10 }} />}
                                 >
                                     <Meta
-                                        description={<a onClick={() => this.click(returnName)}>{returnName}</a>}
+                                        description={<a onClick={() => this.click(returnName)}>{item.FileName}</a>}
                                     />
                                 </Card>
                             </List.Item>
