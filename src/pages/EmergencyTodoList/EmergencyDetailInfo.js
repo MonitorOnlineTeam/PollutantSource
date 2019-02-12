@@ -14,7 +14,6 @@ import { async } from 'q';
 import moment from 'moment';
 import Lightbox from "react-image-lightbox-rotate";
 import "react-image-lightbox/style.css";
-import ReactTooltip from 'react-tooltip'
 const { Description } = DescriptionList;
 const { TextArea } = Input;
 const FormItem = Form.Item;
@@ -539,7 +538,7 @@ export default class EmergencyDetailInfo extends Component {
                             </Card>
                             <Card title={<span style={{ fontWeight: '900' }}>附件</span>}>
                                 {
-                                    upload.fileList.length === 0 ? '暂无附件' :
+                                    upload.fileList.length === 0 ? '没有上传附件' :
                                         <Upload
                                             {...upload}
                                             onPreview={(file) => {
