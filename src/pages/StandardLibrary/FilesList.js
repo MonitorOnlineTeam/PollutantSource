@@ -36,12 +36,12 @@ export default class FilesList extends Component {
         document.getElementById('ifile').src = url;
     }
     click = (returnName) => {
-        window.open('../upload/' + returnName)
+        window.open(returnName)
     }
     render() {
         return (
             <div>
-                <Card >
+                <Card style={{height:document.querySelector('body').offsetHeight - 400,overflowY:'scroll',borderRadius:'10px'}}>
                     <List
                         grid={
                             {
@@ -84,11 +84,12 @@ export default class FilesList extends Component {
                             }
                             return (<List.Item >
                                 <Card
-                                    style={{ width: 150, height: 200 }}
+                                    onClick={() => this.click(returnName)}
+                                    style={{ width: 180, height: 180, cursor: 'pointer',margin:'auto',borderRadius:'5px',backgroundColor:'#F8F8F8' }}
                                     cover={<img alt="example" src={'/' + item.FileType} style={{ width: 80, height: 80, margin: 'auto', marginTop: 10 }} />}
                                 >
                                     <Meta
-                                        description={<a onClick={() => this.click(returnName)}>{item.FileName}</a>}
+                                        description={item.FileName}
                                     />
                                 </Card>
                             </List.Item>
