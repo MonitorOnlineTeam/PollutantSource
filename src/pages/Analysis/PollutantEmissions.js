@@ -156,7 +156,6 @@ export default class PollutantEmissions extends Component {
         this.getPointsTableData(1);
     }
     showModal = (params) => {
-        // debugger
         this.setState({
             modalVisible: true,
             pointName: params.PointName
@@ -191,7 +190,6 @@ export default class PollutantEmissions extends Component {
                     type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
                 },
                 formatter: (params) => {
-                    // debugger;
                     var tar = params[0];
                     return tar.name + '<br/>' + tar.seriesName + ' : ' + tar.value + ' kg';
                 }

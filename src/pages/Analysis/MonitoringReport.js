@@ -171,7 +171,6 @@ class MonitoringReport extends Component {
 
     getreportlist = () => {
         const list = this.props.reportlist;
-        debugger;
         const type = this.state.radiovalue;
         let res = [];
         if (list) {

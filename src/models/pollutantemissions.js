@@ -34,7 +34,6 @@ export default Model.extend({
     effects: {
         * getChartData({ payload }, { call, put, update, select }) {
             const { beginTime, endTime, pageSize, pollutantCodes } = yield select(state => state.pollutantemissions);
-            // debugger
             let body = {
                 beginTime: beginTime,
                 endTime: endTime,
@@ -60,7 +59,6 @@ export default Model.extend({
         },
         * getPointsData({ payload }, { call, put, update, select }) {
             const { clickDate, pageIndex, pageSize, pollutantCodes, emissionsSort } = yield select(state => state.pollutantemissions);
-            // debugger
             let body = {
                 monthTime: clickDate,
                 pageIndex: pageIndex,
@@ -80,7 +78,6 @@ export default Model.extend({
         },
         * getPointDaysData({ payload }, { call, put, update, select }) {
             const { clickDate, pageIndex, pageSize, pollutantCodes, emissionsSort, queryDGIMNs } = yield select(state => state.pollutantemissions);
-            // debugger
             let body = {
                 monthTime: clickDate,
                 pageIndex: pageIndex,

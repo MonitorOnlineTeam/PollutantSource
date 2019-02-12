@@ -282,7 +282,6 @@ export default class ManualUpload extends Component {
         });
     }
     changeTabList = (value) => {
-        debugger
         var getDGIMN = localStorage.getItem('DGIMN')
         if (getDGIMN === null) {
             getDGIMN = '[object Object]';
@@ -305,11 +304,9 @@ export default class ManualUpload extends Component {
                 search: true,
                 callback: (data) => {
                     if (data !== null) {
-                        debugger
                         const existdata = data.find((value, index, arr) => {
                             return value.DGIMN == getDGIMN
                         });
-                        debugger
                         if (existdata === undefined) {
                             this.GetManualSupplementList('1', this.state.SelectHandleChange, this.state.rangeDate[0].format('YYYY-MM-DD 00:00:00'), this.state.rangeDate[1].format('YYYY-MM-DD 23:59:59'), this.props.pageIndex, this.props.pageSize, this.state.pointName);
                         }

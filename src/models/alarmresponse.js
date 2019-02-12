@@ -77,7 +77,6 @@ export default Model.extend({
         },
         * getPointDaysData({ payload }, { call, put, update, select }) {
             const { clickDate, pageIndex, pageSize, sort2, sort8, queryDGIMNs } = yield select(state => state.alarmresponse);
-            // debugger
             let body = {
                 monthTime: clickDate,
                 pageIndex: pageIndex,
@@ -95,7 +94,6 @@ export default Model.extend({
                 });
             }
             const pointDaysTableData = yield select(state => state.alarmresponse.pointDaysTableData);
-            console.log('new', pointDaysTableData);
         },
     },
 });

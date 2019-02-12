@@ -123,7 +123,6 @@ class AMapModule extends React.Component {
     }
 
   btnserch=() => {
-      debugger;
       const {getMapPoint,address} = this.props;
       if (window.AMap && address) {
           window.AMap.service('AMap.Geocoder', () => { // 回调函数

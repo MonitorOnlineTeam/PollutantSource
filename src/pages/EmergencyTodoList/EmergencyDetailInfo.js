@@ -62,7 +62,6 @@ export default class EmergencyDetailInfo extends Component {
     //         )
     //     })
     //     console.log(fileList);
-    //     debugger
 
     //     return returnImageList;
     // }

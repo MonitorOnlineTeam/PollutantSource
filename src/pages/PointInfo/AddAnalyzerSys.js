@@ -130,7 +130,6 @@ export default class AddAnalyzerSys extends Component {
     //获取CEMS监测子系统名称
     renderCemsInfo = () => {
         const rtnVal = [];
-        debugger;
         if (this.props.ChildCems !== null && this.props.ChildCems.length>0) {
             this.props.ChildCems.map((item, key) => {
                     rtnVal.push(<Option value={item.ChildID} >{item.Name}</Option>);

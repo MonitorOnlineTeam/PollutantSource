@@ -88,7 +88,6 @@ export default class EquipmentOperatingRate extends Component {
         this.getTableData(pagination.current);
     }
     onDateChange = (value, dateString) => {
-        // debugger
         let endTime = moment(dateString).add(1, 'months').format('YYYY-MM-01 00:00:00');
 
         // if (moment(dateString).format('YYYY-MM-DD HH:mm:ss') > moment().format('YYYY-MM-DD HH:mm:ss')) {
