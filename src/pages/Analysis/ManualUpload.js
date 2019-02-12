@@ -460,7 +460,7 @@ export default class ManualUpload extends Component {
                                 borderRadius: 10
                             }}
                             >
-                                <div style={{ marginBottom: 16 }}>
+                                <div style={{ marginBottom: 8, marginTop: 8 }}>
                                     <Select
                                         placeholder="监测点类型"
                                         style={{ width: 190 }}
