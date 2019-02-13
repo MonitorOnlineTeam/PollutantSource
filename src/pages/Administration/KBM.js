@@ -173,7 +173,6 @@ export default class KBM extends Component {
 
                 }
             }
-            debugger
             if (fileName[fileName.length - 1] === 'png' || fileName[fileName.length - 1] === 'gif'|| fileName[fileName.length - 1] === 'bmp'|| fileName[fileName.length - 1] === 'jpg') {
                 window.open('../upload/' + name + fileName[fileName.length - 1])
             }

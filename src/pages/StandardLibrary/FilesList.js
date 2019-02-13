@@ -35,10 +35,13 @@ export default class FilesList extends Component {
     Down(url) {
         document.getElementById('ifile').src = url;
     }
+    click = (returnName) => {
+        window.open(returnName)
+    }
     render() {
         return (
             <div>
-                <Card >
+                <Card style={{height:document.querySelector('body').offsetHeight - 400,overflowY:'scroll',borderRadius:'10px'}}>
                     <List
                         grid={
                             {
@@ -60,14 +63,33 @@ export default class FilesList extends Component {
                         pagination={false}
                         size="small"
                         renderItem={(item) => {
+                            //此处修改下载名称，后台上传已将其他格式修改为PDF（董晓云）
+                            var returnName = '';
+                            const fileName = item.FileName.split('.');
+                            var name = fileName[0] + '.';
+                            if (fileName.length > 2) {
+                                name = "";
+                                for (let index = 0; index < fileName.length; index++) {
+                                    const element = array[index];
+                                    if (index < fileName.length - 1) {
+                                        name += element + '.';
+                                    }
+                                }
+                            }
+                            if (fileName[fileName.length - 1] === 'png' || fileName[fileName.length - 1] === 'gif' || fileName[fileName.length - 1] === 'bmp' || fileName[fileName.length - 1] === 'jpg') {
+                                returnName = '../upload/' + name + fileName[fileName.length - 1]
+                            }
+                            else {
+                                returnName = '../upload/' + name + 'pdf'
+                            }
                             return (<List.Item >
                                 <Card
-                                    style={{ width: 150, height: 200 }}
-                                    cover={<img alt="example" src={'/' + item.FileType} style={{width: 80,height: 80,textAlign: 'center'}} />}
-                                    // actions={[<a href="../upload/新建XLS 工作表.xls"><Icon type="down-circle" theme="twoTone" /></a>]}
+                                    onClick={() => this.click(returnName)}
+                                    style={{ width: 180, height: 180, cursor: 'pointer',margin:'auto',borderRadius:'5px',backgroundColor:'#F8F8F8' }}
+                                    cover={<img alt="example" src={'/' + item.FileType} style={{ width: 80, height: 80, margin: 'auto', marginTop: 10 }} />}
                                 >
                                     <Meta
-                                        description={<a href={'../upload/' + item.FileName}>{item.FileName}</a>}
+                                        description={item.FileName}
                                     />
                                 </Card>
                             </List.Item>

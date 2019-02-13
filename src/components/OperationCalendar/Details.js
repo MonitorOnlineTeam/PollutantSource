@@ -75,7 +75,7 @@ export default class Details extends Component {
                 key:'opt',
                 render: (text, record) => (
                     <a onClick={
-                        () => this.props.dispatch(routerRedux.push(`/TaskDetail/EmergencyDetailInfo/workbench/nop/${record.TaskID}/${record.DGIMN}`))
+                        () => this.props.dispatch(routerRedux.push(`/TaskDetail/EmergencyDetailInfo/${undefined}/OperationCalendar/${record.TaskID}/${record.DGIMN}`))
                     }
                     > 详情
                     </a>

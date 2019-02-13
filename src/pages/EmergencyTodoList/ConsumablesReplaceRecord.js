@@ -125,7 +125,11 @@ class ConsumablesReplaceRecord extends Component {
             rtnVal.push({ Name: '智能运维', Url: `` });
             rtnVal.push({ Name: '运维大事记', Url: `/operation/ywdsjlist` });
             rtnVal.push({ Name: '任务详情', Url: `/TaskDetail/emergencydetailinfo/undefined/${taskfrom}/${taskID}/${DGIMN}` });
-        } else { //其他
+        } else if (taskfrom === 'OperationCalendar') { //运维日历
+            rtnVal.push({ Name: '智能运维', Url: `` });
+            rtnVal.push({ Name: '运维日历', Url: `/operation/OperationCalendar` });
+            rtnVal.push({ Name: '任务详情', Url: `/TaskDetail/emergencydetailinfo/undefined/OperationCalendar/${taskID}/${DGIMN}` });
+        }else { //其他
             rtnVal.push({ Name: '任务详情', Url: `/TaskDetail/emergencydetailinfo/${listUrl}/nop/${taskID}/${DGIMN}` });
         }
         if (listUrl !== 'menu') {

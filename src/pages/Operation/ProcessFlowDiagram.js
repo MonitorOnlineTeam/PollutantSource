@@ -257,7 +257,6 @@ export default class ProcessFlowDiagram extends Component {
         if (!treedataloading && !loading) {
             spin = false;
         }
-        debugger
         //运行状态
         const cemsStatus = this.getSystemStatus(stateInfo, 'i12103');
         //工作状态

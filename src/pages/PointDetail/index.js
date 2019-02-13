@@ -150,13 +150,9 @@ class PointDetail extends Component {
      */
     renderPointList = () => {
         const rtnVal = [];
-        debugger;
         //rtnVal.push(this.props.dataTemp.filter(todo=>todo.DGIMN===this.props.pointInfo.DGIMN)[0]);
         //let selectedPoint=this.props.dataTemp.filter(todo=>todo.DGIMN===this.props.pointInfo.DGIMN)[0];
-
-        // debugger;
         this.props.dataTemp.map((item, key) => {
-            //debugger
             let status = <img src="/gisexception.png" width="15" />;
             if (item.status === 0) {
                 status = <img src="/gisunline.png" width="15" />;
@@ -220,8 +216,6 @@ class PointDetail extends Component {
      * 排口状态过滤事件
      */
     handleStatusChange = (e) => {
-        //debugger
-
         this.props.dispatch({
             type: 'overview/updateState',
             payload: {

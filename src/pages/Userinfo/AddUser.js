@@ -52,7 +52,6 @@ class AddUser extends Component {
                     UserId: UserId,
                     callback: () => {
                         // if (this.props.requstresult === '1') {
-                        //     debugger;
                         //     this.props.form.setFieldsValue({
                         //     User_Name: this.props.editUser.User_Name,
                         //     User_Account: this.props.editUser.User_Account,

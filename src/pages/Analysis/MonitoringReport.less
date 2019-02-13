@@ -16,8 +16,9 @@
 }
 .reportdiv{
     float: left;
-    width: 100px;
-    margin-right: 10px;
+    width: 120px;
+    height: 150px;
+    // margin-right: 10px;
     cursor: pointer;
 }
 .reportcontent{
@@ -50,3 +51,9 @@
     -webkit-border-radius:4px;
    }
 }  
+:global {
+    .ant-calendar-range.ant-calendar-time .ant-calendar-footer .ant-calendar-time-picker-btn {
+        margin-right: 8px;
+        display: none;
+    }
+}

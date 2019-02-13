@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import styles from '../EmergencyTodoList/EmergencyDetailInfo.less';
-import { Card, Divider, Button, Input, Table, Icon, Spin, Modal, Upload, Form } from 'antd';
+import { Card, Divider, Button, Input, Table, Icon, Spin, Modal, Upload, Form, Col, Row, message, Carousel, Steps, Tooltip, Popover } from 'antd';
 import DescriptionList from '../../components/DescriptionList';
+import AlarmDetails from '../../components/EmergencyDetailInfo/AlarmDetails';
 import { connect } from 'dva';
-import { EnumRequstResult, EnumPatrolTaskType, EnumPsOperationForm } from '../../utils/enum';
+import { EnumRequstResult, EnumPatrolTaskType, EnumPsOperationForm, EnumOperationTaskStatus } from '../../utils/enum';
 import { routerRedux } from 'dva/router';
 import { imgaddress } from '../../config.js';
 import { CALL_HISTORY_METHOD } from 'react-router-redux';
@@ -11,9 +12,12 @@ import MonitorContent from '../../components/MonitorContent/index';
 import { get } from '../../dvapack/request';
 import { async } from 'q';
 import moment from 'moment';
+import Lightbox from "react-image-lightbox-rotate";
+import "react-image-lightbox/style.css";
 const { Description } = DescriptionList;
 const { TextArea } = Input;
 const FormItem = Form.Item;
+const Step = Steps.Step;
 @Form.create()
 @connect(({ task, loading }) => ({
     isloading: loading.effects['task/GetTaskDetailInfo'],
@@ -26,7 +30,9 @@ export default class EmergencyDetailInfo extends Component {
         this.state = {
             previewVisible: false,
             previewImage: '',
-            cdvisible: false
+            cdvisible: false,
+            // uid: null,
+            photoIndex: 0,
         };
     }
 
@@ -34,14 +40,35 @@ export default class EmergencyDetailInfo extends Component {
         this.reloaddata();
     }
 
-    handlePreview = (file) => {
+    handlePreview = (file, fileList) => {
+        var ImageList = 0;
+        fileList.map((item, index) => {
+            if (item.uid === file.uid) {
+                ImageList = index
+            }
+        })
         this.setState({
-            previewImage: `${imgaddress}${file.name}`,
+            // previewImage: `${imgaddress}${file.name}`,
             previewVisible: true,
+            // uid: file.uid,
+            photoIndex: ImageList
         });
     }
+    // imageData = (fileList) => {
+    //     var ImageList = [];
+    //     fileList.map((item) => {
+    //         ImageList.push(
+    //             `${imgaddress}${item.name}`
+    //         )
+    //     })
+    //     console.log(fileList);
 
-    handleCancel = () => {
+    //     return returnImageList;
+    // }
+    onChange = (a, b, c) => {
+        console.log(a, b, c);
+    }
+    handleCancels = () => {
         this.setState({
             previewVisible: false
         });
@@ -159,6 +186,12 @@ export default class EmergencyDetailInfo extends Component {
             histroyrecordtype = taskfrom.split('-')[1];
             rtnVal.push({ Name: '质控记录', Url: `/pointdetail/${this.props.match.params.DGIMN}/${listUrl}/${taskfrom}/${histroyrecordtype}` });
         }
+        else if(taskfrom==='OperationCalendar')
+        {
+            rtnVal.push({ Name: '智能运维', Url: `` });
+            rtnVal.push({ Name: '运维日历', Url: `/operation/operationcalendar` });
+        }
+
 
         rtnVal.push({ Name: '任务详情', Url: '' })
         return rtnVal;
@@ -196,10 +229,77 @@ export default class EmergencyDetailInfo extends Component {
         })
     }
 
+    handleCancel = (e) => {
+        this.setState({
+            visible: false,
+        });
+    }
+    //步骤条
+    TaskLogList = (TaskLogList) => {
+        var returnStepList = [];
+        TaskLogList.map((item) => {
+            returnStepList.push(
+                <Step status="finish" title={item.TaskStatusText} description={this.description(item)}
+                    icon={<Icon type={item.TaskStatusText == '待执行' ? 'minus-circle' :
+                        item.TaskStatusText == '进行中' ? 'clock-circle' :
+                            item.TaskStatusText == '已完成' ? 'check-circle' :
+                                item.TaskStatusText == '待审核' ? 'exclamation-circle' :
+                                    item.TaskStatusText == '审核通过' ? 'clock-circle' :
+                                        item.TaskStatusText == '驳回' ? 'close-circle' :
+                                            item.TaskStatusText == '待调整' ? 'warning' :
+                                                item.TaskStatusText == '已调整' ? 'check-square' :
+                                                    'schedule'
+                    } />} />
+            )
+        })
+        return returnStepList;
+    }
+    //步骤条描述
+    description = (item) => {
+        if (item.TaskRemark === "" || item.TaskRemark === null) {
+            return (
+                <div style={{ marginBottom: 40 }}  >
+                    <div style={{ marginTop: 5 }}>
+                        {item.Remark}
+                    </div>
+                    <div style={{ marginTop: 5 }}>
+                        {item.CreateUserName}
+                    </div>
+                    <div style={{ marginTop: 5 }}>
+                        {item.CreateTime}
+                    </div>
 
+                </div>
+            )
+        }
+        else {
+            return (
+                <Popover content={<span>{item.TaskRemark}</span>}>
+                    <div style={{ marginBottom: 40 }}  >
+                        <div style={{ marginTop: 5 }}>
+                            {item.Remark}
+                        </div>
+                        <div style={{ marginTop: 5 }}>
+                            {item.CreateUserName}
+                        </div>
+                        <div style={{ marginTop: 5 }}>
+                            {item.CreateTime}
+                        </div>
+
+                    </div>
+                </Popover>
+            )
+        }
+
+
+    }
+    stepsWidth = (item) => {
+        var width = item.length * 350
+        return width
+    }
     render() {
         const SCREEN_HEIGHT = document.querySelector('body').offsetHeight - 250;
-
+        const { photoIndex } = this.state;
         const { getFieldDecorator } = this.props.form;
         const formItemLayout = {
             labelCol: {
@@ -258,17 +358,18 @@ export default class EmergencyDetailInfo extends Component {
             CompleteTime = data.CompleteTime;
             if (data.AlarmList !== null && data.AlarmList.length > 0) {
                 data.AlarmList.map((item) => {
-                    AlarmList.push({
-                        key: item.key,
-                        BeginAlarmTime: item.FirstTime,
-                        AlarmTime: item.AlarmTime,
-                        AlarmMsg: item.AlarmMsg,
-                        AlarmCount: item.AlarmCount
-                    });
+                    if (AlarmList.length < 5) {
+                        AlarmList.push({
+                            key: item.key,
+                            BeginAlarmTime: item.FirstTime,
+                            AlarmTime: item.AlarmTime,
+                            AlarmMsg: item.AlarmMsg,
+                            AlarmCount: item.AlarmCount
+                        });
+                    }
                 });
             }
         }
-        console.log(TaskLogList);
         const pics = Attachments !== '' ? Attachments.ThumbimgList : [];
         const fileList = [];
         var index = 0;
@@ -291,6 +392,13 @@ export default class EmergencyDetailInfo extends Component {
             }
 
         });
+        //拼接图片地址数组
+        var ImageList = [];
+        fileList.map((item) => {
+            ImageList.push(
+                `${imgaddress}${item.name}`
+            )
+        })
         const columns = [{
             title: '开始报警时间',
             width: '20%',
@@ -365,8 +473,6 @@ export default class EmergencyDetailInfo extends Component {
         return (
             <div>
                 <MonitorContent  {...this.props} breadCrumbList={this.renderBreadCrumb()}>
-
-
                     <Card title={<span style={{ fontWeight: '900' }}>任务详情</span>} extra={
                         <div>
                             <span style={{ marginRight: 20 }}>{this.getCancelOrderButton(CreateTime, TaskStatus)}</span>
@@ -374,7 +480,6 @@ export default class EmergencyDetailInfo extends Component {
                                 this.props.history.goBack(-1);
                             }}><Icon type="left" />退回</Button>
                         </div>}>
-
                         <div style={{ height: SCREEN_HEIGHT }} className={styles.ExceptionDetailDiv}>
                             <Card title={<span style={{ fontWeight: '600' }}>基本信息</span>}>
                                 <DescriptionList className={styles.headerList} size="large" col="3">
@@ -393,14 +498,22 @@ export default class EmergencyDetailInfo extends Component {
                                     <Description term="创建时间">{CreateTime}</Description>
                                 </DescriptionList>
                                 {
-                                    TaskType === EnumPatrolTaskType.PatrolTask ? null :
+                                    TaskType === EnumPatrolTaskType.PatrolTask ? null : AlarmList.length === 0 ? null :
                                         <Divider style={{ marginBottom: 20 }} />
                                 }
                                 {
-                                    TaskType === EnumPatrolTaskType.PatrolTask ? null :
+                                    TaskType === EnumPatrolTaskType.PatrolTask ? null : AlarmList.length === 0 ? null :
+                                        <div style={{ marginBottom: '10px', textAlign: 'right' }}> <a onClick={() => {
+                                            this.setState({
+                                                visible: true
+                                            })
+                                        }}>查看更多>></a></div>
+                                }
+                                {
+
+                                    TaskType === EnumPatrolTaskType.PatrolTask ? null : AlarmList.length === 0 ? null :
                                         <Table rowKey={(record, index) => `complete${index}`} style={{ backgroundColor: 'white' }} bordered={false} dataSource={AlarmList} pagination={false} columns={columns} />
                                 }
-
                             </Card>
                             <Card title={<span style={{ fontWeight: '900' }}>处理说明</span>} style={{ marginTop: 20 }}>
                                 <DescriptionList className={styles.headerList} size="large" col="1">
@@ -410,7 +523,6 @@ export default class EmergencyDetailInfo extends Component {
                                         </TextArea>
                                     </Description>
                                 </DescriptionList>
-
                             </Card>
                             <Card title={<span style={{ fontWeight: '900' }}>处理记录</span>} style={{ marginTop: 20 }}>
                                 <DescriptionList className={styles.headerList} size="large" col="1">
@@ -430,22 +542,33 @@ export default class EmergencyDetailInfo extends Component {
                                 </DescriptionList>
                             </Card>
                             <Card title={<span style={{ fontWeight: '900' }}>附件</span>}>
-                                <Upload
-                                    {...upload}
-                                    onPreview={this.handlePreview}
-                                />
+                                {
+                                    upload.fileList.length === 0 ? '没有上传附件' :
+                                        <Upload
+                                            {...upload}
+                                            onPreview={(file) => {
+                                                this.handlePreview(file, fileList);
+                                            }}
+                                        />
+                                }
                             </Card>
                             <Card title={<span style={{ fontWeight: '900' }}>日志表</span>} style={{ marginTop: 20 }}>
-                                <Table columns={LogColumn}
+                                {
+                                    <Steps width={this.stepsWidth(TaskLogList)} style={{ overflowX: 'scroll' }}>
+                                        {
+                                            this.TaskLogList(TaskLogList)
+                                        }
+                                    </Steps>
+                                }
+                                {/* <Table columns={LogColumn}
                                     rowKey={(record, index) => `complete${index}`}
                                     dataSource={TaskLogList}
                                     bordered={true}
                                     pagination={false}
-                                />
+                                /> */}
                             </Card>
                         </div>
                     </Card>
-
                     <Modal
                         visible={this.state.cdvisible}
                         onCancel={this.cdClose}
@@ -465,12 +588,38 @@ export default class EmergencyDetailInfo extends Component {
                             </FormItem>
                         </Form>
                     </Modal>
-                    <Modal width="65%" visible={this.state.previewVisible} footer={null} onCancel={this.handleCancel}>
-                        <img alt="example" style={{ width: '100%', marginTop: '20px' }} src={this.state.previewImage} />
-                    </Modal>
-                </MonitorContent>
 
-            </div>
+                    {this.state.previewVisible && (
+                            <Lightbox
+                                mainSrc={ImageList[photoIndex]}
+                                nextSrc={ImageList[(photoIndex + 1) % ImageList.length]}
+                                prevSrc={ImageList[(photoIndex + ImageList.length - 1) % ImageList.length]}
+                                onCloseRequest={() => this.setState({ previewVisible: false })}
+                                onPreMovePrevRequest={() => 
+                                    this.setState({
+                                        photoIndex: (photoIndex + ImageList.length - 1) % ImageList.length
+                                    })
+                                }
+                                onPreMoveNextRequest={() =>
+                                    this.setState({
+                                        photoIndex: (photoIndex + 1) % ImageList.length
+                                    })
+                                }
+                            />
+                    )}
+
+                    < Modal
+                        footer={null}
+                        title="报警记录"
+                        width='70%'
+                        height='70%'
+                        visible={this.state.visible}
+                        onCancel={this.handleCancel}
+                    >
+                        <AlarmDetails data={data.AlarmList} />
+                    </Modal >
+                </MonitorContent >
+            </div >
         );
     }
 }

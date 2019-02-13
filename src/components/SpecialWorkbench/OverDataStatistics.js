@@ -116,7 +116,6 @@ class OverDataStatistics extends Component {
 
             option.series.map((s,skey) =>{
                 let $thisValue=item.DataOvers.filter(m=>m.PollutantName===s.name);
-                //debugger;
                 if($thisValue.length>0) {
                     s.data.push($thisValue[0].AlarmCount);
                 }else {

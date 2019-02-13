@@ -231,7 +231,6 @@ export default Model.extend({
         //  */
         // * getNetworkeRateData({ payload }, { call, put, update, select }) {
         //     const { networkeRateList } = yield select(state => state.workbenchmodel);
-        //     //debugger;
         //     let body = {
         //         beginTime: networkeRateList.beginTime,
         //         endTime: networkeRateList.endTime,
@@ -239,7 +238,6 @@ export default Model.extend({
 
         //     };
         //     const response = yield call(getRealTimeNetWorkingRateForPointsPageList, body);
-        //     //debugger;
         //     yield update({
         //         networkeRateList: {
         //             ...networkeRateList,
@@ -285,7 +283,6 @@ export default Model.extend({
          */
         * getAllPointOverDataList({ payload }, { call, put, update, select }) {
             const { allPointOverDataList } = yield select(state => state.workbenchmodel);
-            //debugger;
             let body = {
                 beginTime: allPointOverDataList.beginTime,
                 endTime: allPointOverDataList.endTime,
@@ -314,7 +311,6 @@ export default Model.extend({
             const entbaseinfo = yield call(querypolluntantentinfolist, { parentID: enterpriceid });
             let body = {};
             const response = yield call(getOverPoints, body);
-            //debugger;
             yield update({
                 overPointList: {
                     ...overPointList,
@@ -333,10 +329,8 @@ export default Model.extend({
          */
         * getStatisticsPointStatus({ payload }, { call, put, update, select }) {
             const { statisticsPointStatus } = yield select(state => state.workbenchmodel);
-            //debugger;
             let body = {};
             const response = yield call(getStatisticsPointStatus, body);
-            //debugger;
             yield update({
                 statisticsPointStatus: {
                     ...statisticsPointStatus,
@@ -354,7 +348,6 @@ export default Model.extend({
          */
         * getRealTimeWarningDatas({ payload }, { call, put, update, select }) {
             const { warningDetailsDatas } = yield select(state => state.workbenchmodel);
-            // debugger;
             let body = {
                 dgimn: warningDetailsDatas.DGIMNs,
                 // pollutantCodes: params.pollutantCode,

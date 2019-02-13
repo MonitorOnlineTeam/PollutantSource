@@ -1,4 +1,4 @@
-import React, { Component,Fragment} from 'react';
+import React, { Component, Fragment } from 'react';
 import {
     Row,
     Col,
@@ -20,19 +20,20 @@ import Attention from '../StopManagement/files';
 import RangePicker_ from '../../components/PointDetail/RangePicker_';
 import MonitorContent from '../../components/MonitorContent/index';
 import styles from './index.less';
-import {connect} from 'dva';
+import { connect } from 'dva';
 const Search = Input.Search;
 /*
 页面：停产管理
 描述：停产情况维护，需要上传附件。描述清楚是勒令停产还是企业减少产能。（自动打标）依据恢复生产动作
 */
-@connect(({loading, stopmanagement}) => ({
+@connect(({ loading, stopmanagement }) => ({
     ...loading,
     list: stopmanagement.list,
     total: stopmanagement.total,
     pageSize: stopmanagement.pageSize,
     pageIndex: stopmanagement.pageIndex,
     requstresult: stopmanagement.requstresult,
+    fileslist: stopmanagement.fileslist,
 }))
 @Form.create()
 export default class Content extends Component {
@@ -60,19 +61,19 @@ export default class Content extends Component {
         if (DGIMN !== 'null') {
             this.setState({
                 DGIMN: DGIMN
-            },() => {
+            }, () => {
                 this.onChange();
             });
         }
     }
-     onRef = (ref) => {
-         this.child = ref;
-     };
-     cancel=() => {
-         this.setState({
-             visible: false,
-         });
-     }
+    onRef = (ref) => {
+        this.child = ref;
+    };
+    cancel = () => {
+        this.setState({
+            visible: false,
+        });
+    }
     onShowSizeChange = (pageIndex, pageSize) => {
         this.props.dispatch({
             type: 'stopmanagement/getlist',
@@ -101,28 +102,28 @@ export default class Content extends Component {
             },
         });
     }
-       confirm = (id) => {
-           this.props.dispatch({
-               type: 'stopmanagement/deletebyid',
-               payload: {
-                   pageIndex: this.props.pageIndex === undefined ? 1 : this.props.pageIndex,
-                   pageSize: this.props.pageSize === undefined ? 20 : this.props.pageSize,
-                   DGIMN: this.state.DGIMN,
-                   Data: this.state.rangeDate.join(','),
-                   RecordUserName: this.state.RecordUserName,
-                   StopHours: this.state.duration, //时长
-                   datatype: this.state.datatype, //类型 天或小时
-                   OutputStopID: id,
-                   callback: () => {
-                       if (this.props.requstresult === '1') {
-                           message.success('删除成功！');
-                       } else {
-                           message.success('删除失败！');
-                       }
-                   }
-               },
-           });
-       }
+    confirm = (id) => {
+        this.props.dispatch({
+            type: 'stopmanagement/deletebyid',
+            payload: {
+                pageIndex: this.props.pageIndex === undefined ? 1 : this.props.pageIndex,
+                pageSize: this.props.pageSize === undefined ? 20 : this.props.pageSize,
+                DGIMN: this.state.DGIMN,
+                Data: this.state.rangeDate.join(','),
+                RecordUserName: this.state.RecordUserName,
+                StopHours: this.state.duration, //时长
+                datatype: this.state.datatype, //类型 天或小时
+                OutputStopID: id,
+                callback: () => {
+                    if (this.props.requstresult === '1') {
+                        message.success('删除成功！');
+                    } else {
+                        message.success('删除失败！');
+                    }
+                }
+            },
+        });
+    }
     handleFormReset = () => {
         const { form } = this.props;
         form.resetFields();
@@ -130,7 +131,7 @@ export default class Content extends Component {
             formValues: {},
         });
     };
-    _handleDateChange=(date, dateString) => {
+    _handleDateChange = (date, dateString) => {
         this.setState({
             rangeDate: dateString,
             Datestring: date,
@@ -138,13 +139,26 @@ export default class Content extends Component {
     };
     showFile = (record) => {
         if (record.Isfiles === 1) {
-            this.setState({
-                OutputStopID: record.key,
-                attentionvisible: true,
+            this.props.dispatch({
+                type: 'stopmanagement/getoutputstopfiles',
+                payload: {
+                    OutputStopID: record.key,
+                    callback: () => {
+                        this.setState({
+                            OutputStopID: record.key,
+                            attentionvisible: true,
+                        });
+                    }
+                },
             });
         } else {
             message.error('没有可以下载的文件');
         }
+    }
+    onCancel = () => {
+        this.setState({
+            visible: false
+        });
     }
     render() {
         const columns = [{
@@ -193,19 +207,19 @@ export default class Content extends Component {
                 if (text < 0) {
                     return <span>
                         <Progress percent={0} size="small" status="active" />
-                        <span style={{fontSize: 11}}><Badge status="default" />未开始</span>
+                        <span style={{ fontSize: 11 }}><Badge status="default" />未开始</span>
                     </span>;
                 }
                 if (text === 100) {
                     return <span>
                         <Progress percent={text} strokeColor="#52c41a" size="small" status="active" />
-                        <span style={{fontSize: 11}}><Badge status="success" />已结束</span>
+                        <span style={{ fontSize: 11 }}><Badge status="success" />已结束</span>
                     </span>;
                 }
                 if (text < 100) {
                     return <span>
                         <Progress percent={text} size="small" status="active" />
-                        <span style={{fontSize: 11}}> <Badge status="processing" />进行中</span>
+                        <span style={{ fontSize: 11 }}> <Badge status="processing" />进行中</span>
                     </span>;
                 }
             }
@@ -233,35 +247,35 @@ export default class Content extends Component {
         }
         ];
         return (
-              <MonitorContent {...this.props} breadCrumbList={
+            <MonitorContent {...this.props} breadCrumbList={
                 [
-                    {Name:'首页',Url:'/'},
-                    {Name:'系统管理',Url:''},
-                    {Name:'排口管理',Url:'/sysmanage/pointinfo'},
-                    {Name:'停产管理',Url:''}
+                    { Name: '首页', Url: '/' },
+                    { Name: '系统管理', Url: '' },
+                    { Name: '排口管理', Url: '/sysmanage/pointinfo' },
+                    { Name: '停产管理', Url: '' }
                 ]
             }>
                 <div className={styles.cardTitle}>
-                <Card bordered={false} title={this.props.match.params.PointName} style={{width:'100%'}}>
-                        <Form layout="inline" style={{marginBottom: 10}}>
+                    <Card bordered={false} title={this.props.match.params.PointName} style={{ width: '100%' }}>
+                        <Form layout="inline" style={{ marginBottom: 10 }}>
                             <Row gutter={{ md: 8, lg: 8, xl: 8 }}>
                                 <Col md={8} sm={24}>
-                                    <RangePicker_ style={{width: 350}} showTime={{format: 'HH'}} format="YYYY-MM-DD HH:mm:ss" onChange={this._handleDateChange}
+                                    <RangePicker_ style={{ width: 350 }} showTime={{ format: 'HH' }} format="YYYY-MM-DD HH:mm:ss" onChange={this._handleDateChange}
                                         onOk={() => this.onChange()} dateValue={this.state.Datestring} />
                                 </Col>
                                 <Col md={8} sm={24}>
                                     <Search
-                                        style={{width:150}}
+                                        style={{ width: 150 }}
                                         placeholder="报备人"
                                         onSearch={value =>
                                             this.setState({
                                                 RecordUserName: value,
-                                            },() => {
+                                            }, () => {
                                                 this.onChange();
                                             })
                                         }
                                     />
-                                     <Button type="primary" style={{marginLeft:5}} onClick={() => {
+                                    <Button type="primary" style={{ marginLeft: 5 }} onClick={() => {
                                         this.setState({
                                             visible: true,
                                             type: 'add',
@@ -271,7 +285,7 @@ export default class Content extends Component {
                                     }}> 增加 </Button>
                                 </Col>
                                 <Col md={2} sm={2}>
-                                   
+
                                 </Col>
                             </Row>
                         </Form>
@@ -281,7 +295,7 @@ export default class Content extends Component {
                             className={styles.dataTable}
                             dataSource={this.props.requstresult === '1' ? this.props.list : null}
                             scroll={{ y: 'calc(100vh - 385px)' }}
-                            size = "small" // small middle
+                            size="small" // small middle
                             pagination={{
                                 showSizeChanger: true,
                                 showQuickJumper: true,
@@ -316,7 +330,7 @@ export default class Content extends Component {
                                 });
                             }}>
                             {
-                                <Add onRef={this.onRef} cancel={this.cancel} DGIMN={this.state.DGIMN} />
+                                <Add onRef={this.onRef} cancel={this.cancel} DGIMN={this.state.DGIMN} onCancels={this.onCancel} />
                             }
                         </Modal>
                         <Modal
@@ -350,7 +364,7 @@ export default class Content extends Component {
                                 });
                             }}>
                             {
-                                <Attention OutputStopID={this.state.OutputStopID} />
+                                <Attention OutputStopID={this.state.OutputStopID} fileslist={this.props.fileslist} />
                             }
                         </Modal>
                     </Card>

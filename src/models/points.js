@@ -760,7 +760,6 @@ export default Model.extend({
                 let resparamstatusInfo=JSON.parse(JSON.stringify(paramstatusInfo));
                 if(selectpoint && resparamsInfo && resparamstatusInfo)
                 {
-                    debugger;
                     payload.array.map(item=>{
                             if(item.DGIMN==selectpoint.DGIMN)
                             {
@@ -791,7 +790,6 @@ export default Model.extend({
                 let resstateInfo=JSON.parse(JSON.stringify(stateInfo));;
                 if(selectpoint && resstateInfo)
                 {
-                    debugger;
                     payload.array.map(item=>{
                             if(item.DGIMN==selectpoint.DGIMN)
                             {

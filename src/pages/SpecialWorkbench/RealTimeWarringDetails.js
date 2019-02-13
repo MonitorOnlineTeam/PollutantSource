@@ -182,7 +182,6 @@ export default class RealTimeWarringDetails extends Component {
         });
     }
     onChartClick = (opt) => {
-        // debugger;
         let { selectedDate } = this.props;
         console.log(selectedDate);
         let clickDate = moment(selectedDate).format(`YYYY-${opt.dataIndex + 1}-01 00:00:00`);
@@ -201,7 +200,6 @@ export default class RealTimeWarringDetails extends Component {
                     type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
                 },
                 formatter: (params) => {
-                    // debugger;
                     var tar = params[0];
                     var tar1 = params[1];
                     return tar.name + '<br/>' + tar.seriesName + ' : ' + tar.value + ' 个<br/>' + tar1.seriesName + ' : ' + tar1.value + ' 个';

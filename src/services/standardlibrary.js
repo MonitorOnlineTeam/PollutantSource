@@ -94,7 +94,7 @@ export async function uploadfiles(params) {
         file: params.file,
         fileName: params.fileName,
     };
-    const result = upload('/api/rest/PollutantSourceApi/PUploadImage/UploadFilse', body, null);
+    const result = upload('/api/rest/PollutantSourceApi/KBM/UploadFilse', body, null);
     return result === null ? {
         data: null
     } : result;
