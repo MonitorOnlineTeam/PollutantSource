@@ -173,12 +173,12 @@ export default class KBM extends Component {
 
                 }
             }
-            if (fileName[fileName.length - 1] === 'png' || fileName[fileName.length - 1] === 'gif'|| fileName[fileName.length - 1] === 'bmp'|| fileName[fileName.length - 1] === 'jpg') {
-                window.open('../upload/' + name + fileName[fileName.length - 1])
-            }
-            else {
-                window.open('../upload/' + name + 'pdf')
-            }
+            // if (fileName[fileName.length - 1] === 'png' || fileName[fileName.length - 1] === 'gif'|| fileName[fileName.length - 1] === 'bmp'|| fileName[fileName.length - 1] === 'jpg') {
+            //     window.open('../upload/' + name + fileName[fileName.length - 1])
+            // }
+            // else {
+            window.open('../upload/' + name + 'pdf')
+            // }
         }
         else {
             message.error('未上传文件')

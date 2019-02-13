@@ -36,12 +36,7 @@ export default class files extends Component {
                             }
                         }
                     }
-                    if (fileName[fileName.length - 1] === 'png' || fileName[fileName.length - 1] === 'gif' || fileName[fileName.length - 1] === 'bmp' || fileName[fileName.length - 1] === 'jpg') {
-                        returnName = name + fileName[fileName.length - 1];
-                    } else {
-                        returnName = `${name}pdf`;
-                    }
-
+                    returnName = `${name}pdf`;
                     rtnVal.push(<Col onClick={() => this.click(returnName)} span={4} align="center">
                         <Button type="primary" size="large" style={{ width: 100, height: 100 }}>
                             <Icon type={item.FileType} style={{ fontSize: 60 }} />
