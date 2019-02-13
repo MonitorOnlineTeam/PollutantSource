@@ -354,18 +354,40 @@ export async function queryeeplist() {
     const result = await post('/api/rest/PollutantSourceApi/PEmissionPermits/GetPDPermitList', body, null);
     return result === null ? { data: null } : result;
 }
-// 添加、修改排污许可证
-export async function queryaddeep(params) {
+// 添加排污许可证
+export async function addPDPermit(params) {
+    let arr = params.Data.split(',');
     const body = {
-        epnum: params.epnum,
-        begintime: params.effectivetime[0],
-        endtime: params.effectivetime[1],
-        describe: params.describe,
-        epname: params.epname,
-        code: params.code
+        epnum: params.EPNum,
+        begintime: arr[0],
+        endtime: arr[1],
+        epname: params.EPName,
+        NOx: params.NOx,
+        YC: params.YC,
+        SO2: params.SO2,
+        file: params.Files,
     };
-    const result = await post('/api/rest/PollutantSourceApi/PEmissionPermits/EditPDPermit', body, null);
-    return result === null ? { data: null } : result.requstresult;
+    const result = await post('/api/rest/PollutantSourceApi/PEmissionPermits/AddPDPermit', body, null);
+    return result === null ? { data: null } : result;
+}
+// 编辑排污许可证
+export async function editPDPermit(params) {
+    let arr = params.Data.split(',');
+    const body = {
+        code: params.code,
+        epnum: params.EPNum,
+        begintime: arr[0],
+        endtime: arr[1],
+        epname: params.EPName,
+        NOx: params.NOx,
+        YC: params.YC,
+        SO2: params.SO2,
+        file: params.Files,
+    };
+    const result = await post('/api/rest/PollutantSourceApi/PEmissionPermits/EidtPDPermit', body, null);
+    return result === null ? {
+        data: null
+    } : result;
 }
 // 删除排污许可证
 export async function querydelep(params) {
@@ -375,7 +397,16 @@ export async function querydelep(params) {
     const result = await post('/api/rest/PollutantSourceApi/PEmissionPermits/DeletePDPermit', body, null);
     return result === null ? { data: null } : result.requstresult;
 }
-
+// 获取排污许可证实体
+export async function getPDPermitById(params) {
+    const body = {
+        code: params.code
+    };
+    const result = post('/api/rest/PollutantSourceApi/PEmissionPermits/GetPDPermitById', body, null);
+    return result === null ? {
+        data: null
+    } : result;
+}
 // 获取排口下的污染物
 export async function querypollutantlist(params) {
     const body = {
