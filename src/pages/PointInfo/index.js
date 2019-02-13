@@ -292,7 +292,7 @@ export default class pointlist extends Component {
                                  'current': this.props.pageIndex,
                                  onChange: this.onChange,
                                  onShowSizeChange: this.onShowSizeChange,
-                                 pageSizeOptions: ['20', '30', '40', '50']
+                                 pageSizeOptions: ['10', '20', '30', '40', '50']
                              }} />
                  </Card>
              </div>

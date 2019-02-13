@@ -169,6 +169,7 @@ export default Model.extend({
         }, {
             call,
             update,
+            put
         }) {
             const result = yield call(addPDPermit, {
                 EPNum: EPNum,
@@ -181,6 +182,13 @@ export default Model.extend({
             });
             yield update({
                 Addrequstresult: result.requstresult,
+            });
+            yield put({
+                type: 'queryeeplist',
+                payload: {
+                    pageIndex: 1,
+                    pageSize: 20
+                },
             });
             callback();
         },
@@ -199,6 +207,7 @@ export default Model.extend({
         }, {
             call,
             update,
+            put
         }) {
             const result = yield call(editPDPermit, {
                 code:code,
@@ -212,6 +221,13 @@ export default Model.extend({
             });
             yield update({
                 Addrequstresult: result.requstresult,
+            });
+            yield put({
+                type: 'queryeeplist',
+                payload: {
+                    pageIndex: 1,
+                    pageSize: 20
+                },
             });
             callback();
         },

@@ -151,7 +151,7 @@ class addepinfo extends PureComponent {
                          Data: that.state.rangeDate.join(','),
                          callback: () => {
                              if (Addrequstresult === '1') {
-                                 message.success('添加成功');
+                                 message.success('添加成功！', 0.5).then(() => this.props.closemodal());
                              } else {
                                  message.error('错误');
                              }
@@ -174,7 +174,7 @@ class addepinfo extends PureComponent {
                      Data: that.state.rangeDate.join(','),
                      callback: () => {
                          if (Addrequstresult === '1') {
-                             message.success('修改成功');
+                             message.success('修改成功！', 0.5).then(() => this.props.closemodal());
                          } else {
                              message.error('错误');
                          }
