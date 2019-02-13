@@ -248,22 +248,26 @@ class AddStandardLibrary extends Component {
 
     componentWillMount() {
         const StandardLibraryID = this.props.match.params.StandardLibraryID;
-        this.props.dispatch({
-            type: 'standardlibrary/getStandardlibrarybyid',
-            payload: {
-                StandardLibraryID: StandardLibraryID,
-                callback: () => {
-                    console.log(this.props.editstandardlibrary);
-                    if (this.props.requstresult === '1') {
-                        this.setState({
-                            fileList: this.props.editstandardlibrary.Filelist,
-                        });
+        if (StandardLibraryID!=='null'){
+
+            this.props.dispatch({
+                type: 'standardlibrary/getStandardlibrarybyid',
+                payload: {
+                    StandardLibraryID: StandardLibraryID,
+                    callback: () => {
+                        console.log(this.props.editstandardlibrary);
+                        if (this.props.requstresult === '1') {
+                            this.setState({
+                                fileList: this.props.editstandardlibrary.Filelist,
+                            });
+                        }
                     }
-                }
-            },
-        });
+                },
+            });
+
+            this.Getstandardlibrarypollutantlist(StandardLibraryID);
+        }
         this.getpollutanttype();
-        this.Getstandardlibrarypollutantlist(StandardLibraryID);
     }
 
     getpollutanttype = () => {

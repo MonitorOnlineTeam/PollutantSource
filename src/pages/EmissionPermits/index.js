@@ -70,7 +70,7 @@ class index extends Component {
         this.props.dispatch({
             type: 'baseinfo/querydelep',
             payload: {
-                code: record.EPID,
+                code: record.key,
             },
         });
     };
@@ -88,51 +88,59 @@ class index extends Component {
             title: '编号',
             dataIndex: 'EPNum',
             key: 'EPNum',
-            width: '15%',
+            width: '10%',
             align: 'left',
-        },
-        {
-            title: '状态',
-            dataIndex: 'Status',
-            key: 'Status',
-            width: '15%',
-            align: 'center',
-            render: (text, record) =>{
-                if(text) {
-                    return "正在使用";
-                }
-                return "已过期";
-            }
         },
         {
             title: '有效时间',
             dataIndex: 'BeginTime',
             key: 'BeginTime',
-            width: '20%',
+            width: '10%',
             align: 'center',
             render: (text, record) =>`${moment(record.BeginTime).format('YYYY-MM-DD') } - ${ moment(record.EndTime).format('YYYY-MM-DD')}`
         },
         {
-            title: '描述',
-            dataIndex: 'Describe',
-            key: 'Describe',
-            width: '15%',
+            title: '附件',
+            dataIndex: 'IsFiles',
+            key: 'IsFiles',
+            width: '10%',
+            align: 'center',
+            render: (text, record) => <Button
+                type="primary"
+                shape="circle"
+                icon="download"
+                size="small"
+                id={
+                    record.key
+                }
+                onClick={
+                    () => {
+                        this.showFile(record);
+                    }
+                }
+            />
+        },
+        {
+            title: '氮氧化物总量（t）',
+            dataIndex: 'NOx',
+            key: 'NOx',
+            width: '10%',
             align: 'center',
         },
-        // {
-        //     title: '附件',
-        //     dataIndex: 'File',
-        //     key: 'File',
-        //     width: '20%',
-        //     align: 'center',
-        //     render: (text, record) =>{
-        //          if(text)
-        //          {
-        //             return (<Icon style={{cursor: 'pointer'}} type="file-text" />);
-        //          }
-        //          return '暂未上传附件'
-        //     }
-        // },
+        {
+            title: '烟尘总量（t）',
+            dataIndex: 'YC',
+            key: 'YC',
+            width: '10%',
+            align: 'center',
+        },
+        {
+            title: '二氧化硫总量（t）',
+            dataIndex: 'SO2',
+            key: 'SO2',
+            width: '10%',
+            align: 'center',
+        },
         {
             title: '操作',
             width: '15%',
@@ -144,7 +152,7 @@ class index extends Component {
                 > 编辑
                 </a>
                 <Divider type="vertical" />
-                <Popconfirm placement="left" title="确定要删除此信息吗？" onConfirm={() => this.deletebutton(record)} okText="是" cancelText="否">
+                <Popconfirm placement="left" title="确定要删除吗？" onConfirm={() => this.deletebutton(record)} okText="是" cancelText="否">
                     <a href="#"> 删除 </a>
                 </Popconfirm>
             </Fragment>

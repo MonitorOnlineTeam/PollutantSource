@@ -14,8 +14,10 @@ import { querypolluntantentinfolist,
     queryupload,
     querydeleteimg,
     queryeeplist,
-    queryaddeep,
-    querydelep
+    addPDPermit,
+    querydelep,
+    getPDPermitById,
+    editPDPermit,
 } from '../services/api';
 import {enterpriceid} from '../config';
 
@@ -31,9 +33,12 @@ export default Model.extend({
         registTypelist: [],
         subjectionRelationlist: [],
         pdlist: [],
+        editeep:[],
         total: 0,
         pageIndex:1,
         pageSize:20,
+        EditPDPermit:null,
+        Addrequstresult:null,
     },
     effects: {
         * queryentdetail({
@@ -54,7 +59,7 @@ export default Model.extend({
                 unitTypelist,
                 pSScalelist,
                 registTypelist,
-                subjectionRelationlist
+                subjectionRelationlist,
             });
         },
         * queryeditent({
@@ -119,8 +124,7 @@ export default Model.extend({
         * querydelep({payload}, {call, put, update}) {
             const requstresult = yield call(querydelep, {...payload});
             if (requstresult) {
-                message.info('操作成功');
-                payload.closemodal();
+                message.success('删除成功');
             } else {
                 message.error('操作失败');
             }
@@ -131,7 +135,102 @@ export default Model.extend({
                     pageSize:20
                 },
             });
-        }
+        },
+        * getPDPermitById({
+            payload: {
+                code,
+                callback
+            }
+        }, {
+            call,
+            put,
+            update,
+            select
+        }) {
+            const result = yield call(getPDPermitById, {
+                code: code
+            });
+            yield update({
+                EditPDPermit: result.data[0]
+            });
+            callback();
+        },
+        * addPDPermit({
+            payload: {
+                EPNum,
+                Data,
+                EPName,
+                NOx,
+                YC,
+                SO2,
+                Files,
+                callback
+            }
+        }, {
+            call,
+            update,
+            put
+        }) {
+            const result = yield call(addPDPermit, {
+                EPNum: EPNum,
+                Data: Data,
+                EPName: EPName,
+                NOx: NOx,
+                YC: YC,
+                SO2: SO2,
+                Files: Files,
+            });
+            yield update({
+                Addrequstresult: result.requstresult,
+            });
+            yield put({
+                type: 'queryeeplist',
+                payload: {
+                    pageIndex: 1,
+                    pageSize: 20
+                },
+            });
+            callback();
+        },
+        * editPDPermit({
+            payload: {
+                code,
+                EPNum,
+                Data,
+                EPName,
+                NOx,
+                YC,
+                SO2,
+                Files,
+                callback
+            }
+        }, {
+            call,
+            update,
+            put
+        }) {
+            const result = yield call(editPDPermit, {
+                code:code,
+                EPNum: EPNum,
+                Data: Data,
+                EPName: EPName,
+                NOx: NOx,
+                YC: YC,
+                SO2: SO2,
+                Files: Files,
+            });
+            yield update({
+                Addrequstresult: result.requstresult,
+            });
+            yield put({
+                type: 'queryeeplist',
+                payload: {
+                    pageIndex: 1,
+                    pageSize: 20
+                },
+            });
+            callback();
+        },
     },
     subscriptions: {
         setup({ dispatch, history }) {
