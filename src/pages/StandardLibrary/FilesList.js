@@ -76,12 +76,7 @@ export default class FilesList extends Component {
                                     }
                                 }
                             }
-                            if (fileName[fileName.length - 1] === 'png' || fileName[fileName.length - 1] === 'gif' || fileName[fileName.length - 1] === 'bmp' || fileName[fileName.length - 1] === 'jpg') {
-                                returnName = '../upload/' + name + fileName[fileName.length - 1]
-                            }
-                            else {
                                 returnName = '../upload/' + name + 'pdf'
-                            }
                             return (<List.Item >
                                 <Card
                                     onClick={() => this.click(returnName)}
