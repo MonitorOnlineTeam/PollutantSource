@@ -123,6 +123,9 @@ class OperationRate extends PureComponent {
                 title: '设备运转率',
                 dataIndex: 'RunningRate',
                 render: (text, record) => {
+                    if(parseFloat(text)<0) {
+                        text=0;
+                    }
                     let rr = `${(parseFloat(text) * 100).toFixed(2)}%`;
                     if (text >= 90)
                         return rr;
