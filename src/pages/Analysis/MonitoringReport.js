@@ -250,12 +250,12 @@ class MonitoringReport extends Component {
                         }
                     >
                         <Row>
-                            <Col style={{ float: "left", overflow: 'scroll', height: 'calc(100vh - 245px)' }}>
+                            <Col style={{ float: "left", overflowY: 'scroll', height: 'calc(100vh - 245px)' }}>
                                 <div style={{ width: '400px' }}>
                                     {this.getreportlist()}
                                 </div>
                             </Col>
-                            <Col style={{ width: document.body.clientWidth - 550, float: 'left', overflow: 'scroll', height: 'calc(100vh - 245px)' }}>
+                            <Col style={{ width: document.body.clientWidth - 550, float: 'left', height: 'calc(100vh - 245px)' }}>
                                 {this.getshowpdf()}
                             </Col>
                         </Row>
