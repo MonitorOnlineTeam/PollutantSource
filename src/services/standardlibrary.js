@@ -184,8 +184,7 @@ export async function getuselist(params) {
     const body = {
         pageIndex: params.pageIndex,
         pageSize: params.pageSize,
-        Name: params.Name,
-        Type: params.Type,
+        DGIMN: params.DGIMN,
         flag: 1,
     };
     const result = post('/api/rest/PollutantSourceApi/StandardLibrary/GetStandardLibraryList', body, null);
@@ -251,6 +250,8 @@ export async function editmonitorpointPollutant(params) {
         OverrunContinuityCount: params.OverrunContinuityCount,
         ZeroContinuityCount: params.ZeroContinuityCount,
         SerialContinuityCount: params.SerialContinuityCount,
+        AbnormalUpperLimit: params.AbnormalUpperLimit,
+        AbnormalLowerLimit: params.AbnormalLowerLimit,
     };
     const result = post('/api/rest/PollutantSourceApi/StandardLibrary/EditMonitorPointPollutant', body, null);
     return result === null ? {

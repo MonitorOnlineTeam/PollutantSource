@@ -115,8 +115,7 @@ export default Model.extend({
             payload: {
                 pageIndex,
                 pageSize,
-                Name,
-                Type
+                DGIMN
             }
         }, {
             call,
@@ -127,8 +126,7 @@ export default Model.extend({
             const result = yield call(getuselist, {
                 pageIndex: pageIndex,
                 pageSize: pageSize,
-                Name: Name,
-                Type: Type
+                DGIMN: DGIMN,
             });
             if (result.requstresult === '1') {
                 yield update({
@@ -592,6 +590,8 @@ export default Model.extend({
                 AlarmType,
                 LowerLimit,
                 UpperLimit,
+                AbnormalUpperLimit,
+                AbnormalLowerLimit,
                 AlarmDescription,
                 AlarmContinuityCount,
                 OverrunContinuityCount,
@@ -611,6 +611,8 @@ export default Model.extend({
                 AlarmType: AlarmType,
                 LowerLimit: LowerLimit,
                 UpperLimit: UpperLimit,
+                AbnormalUpperLimit: AbnormalUpperLimit,
+                AbnormalLowerLimit: AbnormalLowerLimit,
                 AlarmDescription: AlarmDescription,
                 AlarmContinuityCount: AlarmContinuityCount,
                 OverrunContinuityCount: OverrunContinuityCount,
