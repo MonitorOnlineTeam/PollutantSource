@@ -287,7 +287,7 @@ class AddStandardLibrary extends Component {
                             > {
                                     p.pollutantTypeName
                                 }
-                            </Option>)
+                                                           </Option>)
                         );
                     } else {
                         message.error('请添加污染物类型');
@@ -425,7 +425,7 @@ class AddStandardLibrary extends Component {
                 <Popconfirm placement="left" title="确定要删除此标准下所有数据吗？" onConfirm={() => this.confirm(record.key)} okText="是" cancelText="否">
                     <a href="#"> 删除 </a>
                 </Popconfirm>
-            </Fragment>
+                                       </Fragment>
             ),
         },
         ];
@@ -592,6 +592,7 @@ class AddStandardLibrary extends Component {
                                                         message.error('请先添加标准库！');
                                                     } else {
                                                         this.setState({
+                                                            Id:null,
                                                             Mvisible: true,
                                                             title: '添加污染物',
                                                             width: 800

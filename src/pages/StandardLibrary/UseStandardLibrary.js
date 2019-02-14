@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {
-    Card, Icon, Divider, Table, message, Tag, Modal, Pagination, Badge, Button, Row, Col
+    Card, Icon, Divider, Table, message, Tag, Modal, Pagination, Popconfirm, Button, Row, Col, Empty,
 } from 'antd';
 import {
     connect
@@ -52,6 +52,7 @@ class UseStandardLibrary extends Component {
         this.props.dispatch({
             type: 'standardlibrary/getuselist',
             payload: {
+                DGIMN:this.state.DGIMN,
                 pageIndex: pageIndex === undefined ? 1 : pageIndex,
                 pageSize: pageSize === undefined ? 4 : pageSize,
             },
@@ -97,56 +98,59 @@ class UseStandardLibrary extends Component {
     };
 
     renderStandardList = () => {
+        debugger;
+        console.log(this.props.list);
         const rtnVal = [];
         const that = this;
-        this.props.list.map((item, key) => {
-            rtnVal.push(
-                <div key={`${key }1`} className={styles.item}>
-                    <div key={`${key }2`} className={styles.standardlibrary}>{item.Name}</div>
-                    <Divider key={`${key }3`} dashed={true} />
-                    <div key={`${key }4`} className={styles.child}>{that.renderPollutantItem(item.child)}</div>
-                    <div key={`${key }5`} className={styles.foot}>
-                        <div key={`${key }6`} className={styles.use}>
-                            <div key={`${key }7`} style={{ position: 'relative' }}>
-                                <Row key={`${key }8`} justify="center" type="flex">
-                                    <Col key={`${key }9`} span={9}>
+        if (this.props.list.length > 0) {
+            this.props.list.map((item, key) => {
+                rtnVal.push(
+                    <div key={`${key }1`} className={styles.item}>
+                        <div key={`${key }2`} className={styles.standardlibrary}>{item.Name}</div>
+                        <Divider key={`${key }3`} dashed={true} />
+                        <div key={`${key }4`} className={styles.child}>{that.renderPollutantItem(item.child)}</div>
+                        <div key={`${key }5`} className={styles.foot}>
+                            <div key={`${key }6`} className={styles.use}>
+                                <div key={`${key }7`} style={{ position: 'relative' }}>
+                                    <Row key={`${key }8`} justify="center" type="flex">
+                                        <Col key={`${key }9`} span={9}>
 
-                                        <a
-                                            key={`${key }10`}
-                                            className={styles.a}
-                                            onClick={() => {
-                                                that.setState({
-                                                    StandardLibraryID: item.key,
-                                                    Pvisible: true,
-                                                    title: `${item.Name}中的污染物`,
-                                                    width: '50%'
-                                                });
-                                            }}
-                                        >
+                                            <a
+                                                key={`${key }10`}
+                                                className={styles.a}
+                                                onClick={() => {
+                                                    that.setState({
+                                                        StandardLibraryID: item.key,
+                                                        Pvisible: true,
+                                                        title: `${item.Name}中的污染物`,
+                                                        width: '50%'
+                                                    });
+                                                }}
+                                            >
 
-                                            <Icon  key={`${key }11`} type="search" /> 查看更多
-                                        </a>
-                                    </Col>
-                                    <Col key={`${key }11`} span={3}>  <Divider type="vertical" />
-                                    </Col>
-                                    <Col key={`${key }12`} span={9}>
-
-
-                                        <a
-                                            key={`${key }13`}
-                                            className={styles.a}
-                                            onClick={() => {
-                                                that.UseALL(item.key);
-                                            }}
-                                        > <Icon   key={`${key }14`} type="appstore" /> 应用全部
-                                        </a>
-                                    </Col>
-                                </Row>
+                                                <Icon key={`${key }11`} type="search" /> 查看更多
+                                            </a>
+                                        </Col>
+                                        <Col key={`${key }11`} span={3}>  <Divider type="vertical" />
+                                        </Col>
+                                        <Col key={`${key }12`} span={9}>
+                                            <Popconfirm placement="left" title="确定要此标准下所有污染物应用到此排口下吗？" onConfirm={() => that.UseALL(item.key)} okText="是" cancelText="否">
+                                                <a
+                                                    key={`${key }13`}
+                                                    className={styles.a}
+                                                > <Icon key={`${key }14`} type="appstore" /> 应用全部
+                                                </a>
+                                            </Popconfirm>
+                                        </Col>
+                                    </Row>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </div>);
-        });
+                    </div>);
+            });
+        } else {
+            rtnVal.push(<div><img src="/nodata.png" /></div>);
+        }
         return rtnVal;
     }
 
@@ -157,7 +161,7 @@ class UseStandardLibrary extends Component {
                 {
                     <Col key={`${key }2`} span={12}><span className={styles.pollutantName}>{item.PollutantName}:</span></Col>
                 }   <Col key={`${key }3`} span={12}><span className={styles.UpperLimit}>{item.UpperLimit}-{item.LowerLimit}</span></Col>
-                        </div>);
+            </div>);
         });
         return rtnVal;
     }
@@ -176,10 +180,11 @@ class UseStandardLibrary extends Component {
                 title: '污染物名称',
                 dataIndex: 'PollutantName',
                 key: 'PollutantName',
-                width: '40%',
+                width: '10%',
                 align: 'left',
                 render: (text, record) => text
             },
+
             {
                 title: '报警类型',
                 dataIndex: 'AlarmType',
@@ -201,6 +206,21 @@ class UseStandardLibrary extends Component {
                 }
             },
             {
+                title: '检出上限',
+                dataIndex: 'AbnormalUpperLimit',
+                key: 'AbnormalUpperLimit',
+                width: '10%',
+                align: 'center',
+                render: (text, record) => text
+            }, {
+                title: '检出下限',
+                dataIndex: 'AbnormalLowerLimit',
+                key: 'AbnormalLowerLimit',
+                width: '10%',
+                align: 'center',
+                render: (text, record) => text
+            },
+            {
                 title: '报警上限',
                 dataIndex: 'UpperLimit',
                 key: 'UpperLimit',
@@ -212,6 +232,14 @@ class UseStandardLibrary extends Component {
                 title: '报警下限',
                 dataIndex: 'LowerLimit',
                 key: 'LowerLimit',
+                width: '10%',
+                align: 'center',
+                render: (text, record) => text
+            },
+            {
+                title: '标准值',
+                dataIndex: 'StandardValue',
+                key: 'StandardValue',
                 width: '10%',
                 align: 'center',
                 render: (text, record) => text
@@ -235,7 +263,7 @@ class UseStandardLibrary extends Component {
                                 ><Icon type="exclamation-circle" />  未监测
                                 </a>
                             </Button>
-                               </span>;
+                        </span>;
                     }
                     return <span> <Button color="blue"> <a
                         title="单击从监测中移除"
@@ -243,9 +271,9 @@ class UseStandardLibrary extends Component {
                             () => this.IsEnabled(0, record)
                         }
                     ><Icon type="setting" spin={true} /> 监测中
-                    </a>
-                                  </Button>
-                           </span>;
+                                                        </a>
+                    </Button>
+                    </span>;
                 }
             },
             {
@@ -263,7 +291,7 @@ class UseStandardLibrary extends Component {
                             })
                         }
                         > 编辑
-                        </a>;
+                               </a>;
                     }
                     return <a style={{ color: '#D1D1D1' }}> 编辑 </a>;
                 }

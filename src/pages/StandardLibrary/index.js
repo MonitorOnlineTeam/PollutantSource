@@ -178,7 +178,7 @@ export default class StandardLibrary extends Component {
                     return <span > <Badge status="error" text="国标" /></span >;
                 }
                 if (text === 2) {
-                    return <span > <Badge status="success" text="地表" /> </span >;
+                    return <span > <Badge status="success" text="地标" /> </span >;
                 }
                 return <span > <Badge status="warning" text="行标" /></span >;
             }
@@ -281,7 +281,7 @@ export default class StandardLibrary extends Component {
                                     }}>
                                         <Radio.Button value="0"><Badge status="default" text="全部" /></Radio.Button>
                                         <Radio.Button value="1"><Badge status="error" text="国标" /></Radio.Button>
-                                        <Radio.Button value="2"><Badge status="success" text="地表" /></Radio.Button>
+                                        <Radio.Button value="2"><Badge status="success" text="地标" /></Radio.Button>
                                         <Radio.Button value="3"><Badge status="warning" text="行标" /></Radio.Button>
                                     </Radio.Group>
                                     </Col>
