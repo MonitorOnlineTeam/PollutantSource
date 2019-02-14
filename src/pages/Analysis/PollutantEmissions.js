@@ -191,7 +191,7 @@ export default class PollutantEmissions extends Component {
                 },
                 formatter: (params) => {
                     var tar = params[0];
-                    return tar.name + '<br/>' + tar.seriesName + ' : ' + tar.value + ' kg';
+                    return tar.name + '<br/>' + tar.seriesName + ' : ' + tar.value + ' t';
                 }
             },
             legend: {
@@ -215,7 +215,7 @@ export default class PollutantEmissions extends Component {
             yAxis: [
                 {
                     type: 'value',
-                    name: '单位：(kg)'
+                    name: '单位：(t)'
                 }
             ],
             series: [
@@ -266,7 +266,7 @@ export default class PollutantEmissions extends Component {
                 }
             },
             {
-                title: (<span style={{ fontWeight: 'bold' }}>排放量(kg)</span>),
+                title: (<span style={{ fontWeight: 'bold' }}>排放量(g)</span>),
                 dataIndex: 'Emissions',
                 key: 'Emissions',
                 align: 'left',
@@ -301,7 +301,7 @@ export default class PollutantEmissions extends Component {
                 }
             },
             {
-                title: (<span style={{ fontWeight: 'bold' }}>排放量(kg)</span>),
+                title: (<span style={{ fontWeight: 'bold' }}>排放量(g)</span>),
                 dataIndex: 'Emissions',
                 key: 'Emissions',
                 align: 'left',
