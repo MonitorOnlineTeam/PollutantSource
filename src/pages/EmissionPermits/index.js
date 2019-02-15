@@ -7,6 +7,7 @@ import Addepinfo from './addepinfo.js';
 
 @connect(({baseinfo, loading}) => ({
     isloading: loading.effects['baseinfo/queryeeplist'],
+    requstresult: baseinfo.requstresult,
     pdlist: baseinfo.pdlist,
     total: baseinfo.total,
     pageIndex:baseinfo.pageIndex,
@@ -76,7 +77,14 @@ class index extends Component {
     };
 
     render() {
-        const {pageSize,pageIndex,total,pdlist,isloading}=this.props;
+        const {
+            pageSize,
+            pageIndex,
+            total,
+            pdlist,
+            isloading,
+            requstresult
+        } = this.props;
         console.log(pdlist);
         const columns = [{
             title: '名称',
@@ -182,7 +190,7 @@ class index extends Component {
                         columns={columns}
                         className={styles.dataTable}
                         rowKey="ID"
-                        dataSource={pdlist}
+                        dataSource={requstresult==='1'?pdlist:null}
                         size="small"
                         scroll={{ y: 'calc(100vh - 220px)' }}
                         rowClassName={
