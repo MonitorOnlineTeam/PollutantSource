@@ -52,14 +52,14 @@ export default class BdTestRecord extends Component {
 
     renderCemsMainInstrument = (record) => {
         const rtnVal = [];
-        if (record !== null && record !== undefined) {
-            rtnVal.push(<tr key='0'>
+        rtnVal.push(<tr key='0'>
                 <td style={{ width: '20%' }} className={styles.tdTitle}>仪器名称</td>
                 <td style={{ width: '20%' }} className={styles.tdTitle}>设备型号</td>
                 <td style={{ width: '20%' }} className={styles.tdTitle}>制造商</td>
                 <td style={{ width: '20%' }} className={styles.tdTitle}>测试项目</td>
                 <td style={{ width: '20%' }} className={styles.tdTitle}>测量原理</td>
             </tr>);
+        if (record !== null && record !== undefined) {
             record.map((item, key) => {
                 rtnVal.push(
                     <tr key={key + 1}>
@@ -71,6 +71,16 @@ export default class BdTestRecord extends Component {
                     </tr>
                 );
             });
+        }else{
+            rtnVal.push(
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td colSpan="2"></td>
+                </tr>
+            );
         }
         return rtnVal;
     }
@@ -84,9 +94,9 @@ export default class BdTestRecord extends Component {
             let result = recordResult.filter((item) => {
                 return item.ItemID === itemName;
             });
-            let record = recordInfo.filter((item) => {
+            let record = recordInfo!==null&&recordInfo!==undefined?recordInfo.filter((item) => {
                 return item.ItemID === itemName;
-            });
+            }):recordInfo;
             if (record !== null && record !== undefined) {
                 this.state.unit.map((item) => {
                     if (item.item === itemName) {
@@ -228,12 +238,12 @@ export default class BdTestRecord extends Component {
     //展示测试中的标气使用信息
     renderGasInfo = (record) => {
         const rtnVal = [];
-        if (record !== null && record !== undefined) {
-            rtnVal.push(<tr key='0'>
+        rtnVal.push(<tr key='0'>
                 <td style={{ width: '33%' }} className={styles.tdTitle}>标准气体名称</td>
                 <td style={{ width: '33%' }} className={styles.tdTitle}>浓度值</td>
                 <td style={{ width: '34%' }} className={styles.tdTitle}>生产厂商名称</td>
             </tr>);
+        if (record !== null && record !== undefined) {
             record.map((item, key) => {
                 rtnVal.push(
                     <tr key={key + 1}>
@@ -243,6 +253,14 @@ export default class BdTestRecord extends Component {
                     </tr>
                 );
             });
+        }else{
+            rtnVal.push(
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            );
         }
         return rtnVal;
     }
@@ -250,13 +268,13 @@ export default class BdTestRecord extends Component {
     //展示测试中手持设备
     renderCbInfo = (record) => {
         const rtnVal = [];
-        if (record !== null && record !== undefined) {
-            rtnVal.push(<tr key='0'>
+        rtnVal.push(<tr key='0'>
                 <td style={{ width: '25%' }} className={styles.tdTitle}>测试项目</td>
                 <td style={{ width: '25%' }} className={styles.tdTitle}>测试设备生产商</td>
                 <td style={{ width: '25%' }} className={styles.tdTitle}>测试设备型号</td>
                 <td style={{ width: '25%' }} className={styles.tdTitle}>方法依据</td>
             </tr>);
+        if (record !== null && record !== undefined) {
             record.map((item, key) => {
                 rtnVal.push(
                     <tr key={key + 1}>
@@ -267,6 +285,15 @@ export default class BdTestRecord extends Component {
                     </tr>
                 );
             });
+        }else{
+            rtnVal.push(
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            );
         }
         return rtnVal;
     }

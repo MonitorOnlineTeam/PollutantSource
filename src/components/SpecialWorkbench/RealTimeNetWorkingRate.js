@@ -95,12 +95,14 @@ class RealTimeNetWorkingRate extends PureComponent {
             {
                 title: '排口名称',
                 dataIndex: 'PointName',
-                key:'PointName'
+                key:'PointName',
+                width:'60%',
             },
             {
                 title: '联网状态',
                 dataIndex: 'RateValue',
                 key:'RateValue',
+                width:'40%',
                 render: (text, record) => {
                     if (text === 100)
                         return `${(parseFloat(text) * 100).toFixed(2)}%`;

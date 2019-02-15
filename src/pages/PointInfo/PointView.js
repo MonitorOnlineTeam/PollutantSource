@@ -306,7 +306,7 @@ export default class pointview extends Component {
                 }
                 rtnVal.push(
                     <div className={styles.show}>
-                    <Card style={{ height: 350 }} title={this.Gaseousinfo(item)} extra={'厂商/编号：' + item.Manufacturer + '/' + item.ManufacturerCode}>
+                    <Card style={{ height: 350 }} title={this.Gaseousinfo(item)} extra={'厂商/型号：' + item.Manufacturer + '/' + item.ManufacturerCode}>
                         <Table
                             rowKey={(record, index) => `complete${index}`}
                             //loading={this.props.effects['stopmanagement/getlist']}
