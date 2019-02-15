@@ -47,6 +47,7 @@ export default class AddSparePart extends Component {
                         parttype:allvalue.parttype,
                         code:allvalue.code,
                         partName:allvalue.partName,
+                        unit:allvalue.unit,
                         id:row?row.ID:null,
                         closemodal:closemodal()
                     }
@@ -105,6 +106,21 @@ export default class AddSparePart extends Component {
                     </Col>
                     </Row>
                 <Row gutter={24}>
+                <Col xs={2} sm={6} md={12} lg={12} xl={12} xxl={12}>
+                <FormItem
+                            {...formItemLayout}
+                            label={'单位'}>
+                            {getFieldDecorator('unit', {
+                                 initialValue:row?row.Unit:'',
+                                 rules: [{
+                                     required: true,
+                                     message: '请输入单位',
+                                 }],
+                            })(
+                                <Input  />
+                            )}
+                        </FormItem>
+                    </Col>
                     <Col xs={2} sm={6} md={12} lg={12} xl={12} xxl={12}>
                         <FormItem
                             {...formItemLayout}
