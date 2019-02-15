@@ -77,6 +77,7 @@ class index extends Component {
 
     render() {
         const {pageSize,pageIndex,total,pdlist,isloading}=this.props;
+        console.log(pdlist);
         const columns = [{
             title: '名称',
             dataIndex: 'EPName',
@@ -183,7 +184,7 @@ class index extends Component {
                         rowKey="ID"
                         dataSource={pdlist}
                         size="small"
-                        scroll={{ y: 'calc(100vh - 330px)' }}
+                        scroll={{ y: 'calc(100vh - 220px)' }}
                         rowClassName={
                             (record, index, indent) => {
                                 if (index === 0) {

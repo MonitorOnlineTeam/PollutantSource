@@ -101,7 +101,7 @@ handleSubmit = (e) => {
                         AlarmDescription: values.AlarmDescription,
                         callback: () => {
                             if (this.props.requstresult === '1') {
-                                message.success('编辑成功').then(() => this.props.oncancel());
+                                message.success('编辑成功',1).then(() => this.props.oncancel());
                             } else {
                                 message.error(this.props.reason);
                             }
