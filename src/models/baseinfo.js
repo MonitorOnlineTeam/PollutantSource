@@ -39,6 +39,7 @@ export default Model.extend({
         pageSize:20,
         EditPDPermit:null,
         Addrequstresult:null,
+        requstresult:null,
     },
     effects: {
         * queryentdetail({
@@ -98,6 +99,7 @@ export default Model.extend({
             const pdlist = yield call(queryeeplist);
             if(pdlist && pdlist.data) {
                 yield update({
+                    requstresult: pdlist.requstresult,
                     pdlist:pdlist.data,
                     total:pdlist.total,
                     pageIndex:1,
