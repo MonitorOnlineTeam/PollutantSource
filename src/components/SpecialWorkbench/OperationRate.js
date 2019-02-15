@@ -117,11 +117,13 @@ class OperationRate extends PureComponent {
         const columns = [
             {
                 title: '排口名称',
-                dataIndex: 'PointName'
+                dataIndex: 'PointName',
+                width:'60%',
             },
             {
                 title: '设备运转率',
                 dataIndex: 'RunningRate',
+                width:'40%',
                 render: (text, record) => {
                     if(parseFloat(text)<0) {
                         text=0;
