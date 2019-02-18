@@ -11,6 +11,7 @@ import SelectLang from '../SelectLang';
 import styles from './index.less';
 import {asc} from '../../utils/utils';
 import RealTimeWarningModal from '../../components/SpecialWorkbench/RealTimeWarningModal';
+import AlarmRecordModal from './AlarmRecordModal';
 import { routerRedux } from 'dva/router';
 
 @connect(({user,loading,global}) => ({
@@ -89,9 +90,13 @@ export default class GlobalHeaderRight extends PureComponent {
       });
   };
 
-  onRef = (ref) => {
-    this.child = ref;
-}
+  onRefWarning = (ref) => {
+      this.childWarning = ref;
+  }
+
+  onRefAlarm = (ref) => {
+    this.childAlarm = ref;
+  }
 
   render() {
       const {
@@ -162,15 +167,14 @@ export default class GlobalHeaderRight extends PureComponent {
                     //报警
                     if (item.type==="alarm") {
                         if(item.sontype==="warn"){
-                            this.child.showModal(item.pointname, item.DGIMN, item.overwarnings[0].PollutantCode, item.overwarnings[0].PollutantName, item.overwarnings[0].SuggestValue);
+                            this.childWarning.showModal(item.pointname, item.DGIMN, item.overwarnings[0].PollutantCode, item.overwarnings[0].PollutantName, item.overwarnings[0].SuggestValue);
                         }
                         else if(item.sontype==="over"){
-                            debugger;
-                           /*  dispatch({
-                                type: `/pointdetail/${item.DGIMN}/alarmrecord/alarmrecord`,
-                                payload: {firsttime:item.firsttime,lasttime:item.lasttime},
-                            }); */
-                            dispatch(routerRedux.push(`/pointdetail/${item.DGIMN}/alarmrecord/alarmrecord`));
+                            // dispatch(routerRedux.push(`/pointdetail/${item.DGIMN}/alarmrecord/alarmrecord`));
+                            this.childAlarm.showModal(item.firsttime,item.lasttime,item.DGIMN,item.pointname);
+                        }
+                        else if(item.sontype==="exception"){
+
                         }
                     }
                     //修改通知的已读状态
@@ -219,7 +223,8 @@ export default class GlobalHeaderRight extends PureComponent {
                   <Spin size="small" style={{ marginLeft: 8, marginRight: 8 }} />
               )}
 
-                <RealTimeWarningModal {...this.props} onRef={this.onRef} />
+                <RealTimeWarningModal {...this.props} onRef={this.onRefWarning} />
+                <AlarmRecordModal  {...this.props} onRef={this.onRefAlarm} />
           </div>
       );
   }
