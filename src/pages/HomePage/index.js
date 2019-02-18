@@ -4,14 +4,13 @@ import {
     Col,
     Spin,
     Progress,
-    Layout,
-    Drawer
+    Radio,
 } from 'antd';
 import ReactEcharts from 'echarts-for-react';
 import {
     connect
 } from 'dva';
-import { Map, Polygon,Markers } from 'react-amap';
+import { Map, Polygon,Markers,InfoWindow } from 'react-amap';
 import moment from 'moment';
 import config from '../../config';
 import styles from './index.less';
@@ -34,6 +33,7 @@ const pageUrl = {
 };
 const { RunningRate,TransmissionEffectiveRate,amapKey } = config;
 const {enterpriceid}=config;
+const RadioButton = Radio.Button;
 let _thismap;
 
 @connect(({
@@ -67,6 +67,11 @@ class index extends Component {
         this.state = {
             screenWidth:window.screen.width===1600?50:70,
             TheMonth: moment().format('MM'),
+            position: [
+                0, 0
+            ],
+            visible: false,
+            pointName: null
         };
         this.mapEvents = {
             created(m) {
@@ -125,7 +130,7 @@ class index extends Component {
              type: pageUrl.getdatalist,
              payload: {
                  map: true,
-
+                 pollutantTypes:'2'
              },
          });
      }
@@ -363,7 +368,7 @@ class index extends Component {
             <div className={Adapt.s4}>超八小时响应({aaData.GreaterThan8Hour})次</div>
             <div className={Adapt.s5}>{aaData.GreaterThan8Hourlink>0?`环比上升${aaData.GreaterThan8Hourlink}%`:`环比下降${Math.abs(aaData.GreaterThan8Hourlink)}%`}</div>
             <div className={Adapt.s6}>其它({aaData.OtherTime})次</div>
-                    </div>);
+        </div>);
         return retVal;
     }
     /**
@@ -473,15 +478,18 @@ class index extends Component {
          let title=null;
          let i=1;
          if(type===1){
+             let outed=0;
              SurplusDisplacement = ycAnalData.length !== 0 ? ycAnalData.Remainder.toFixed(2) : 0;
              if (SurplusDisplacement>0) {
+                 outed = SurplusDisplacement / (12 - Number.parseInt(TheMonth));
                  title = `余${SurplusDisplacement}(kg)`;
              }else {
                  title = `超${Math.abs(SurplusDisplacement)}(kg)`;
              }
              ycdata.map((ele) => {
+
                  if (Number.parseInt(TheMonth) <i) {
-                     seriesData.push({value:5,itemStyle: {normal: {color: '#051732',barBorderColor: 'tomato',barBorderWidth:1,barBorderRadius:0,borderType:"dotted"}}});
+                     seriesData.push({value:outed.toFixed(2),itemStyle: {normal: {color: '#051732',barBorderColor: 'tomato',barBorderWidth:1,barBorderRadius:0,borderType:"dotted"}}});
                  }else{
                      seriesData.push(ele);
                  }
@@ -490,15 +498,17 @@ class index extends Component {
              xAxisData = ycdate;
              color = ['#0edaad'];
          } else if(type===2) {
+             let outed = 0;
              SurplusDisplacement = eyhlAnalData.length !== 0 ? eyhlAnalData.Remainder.toFixed(2) : 0;
              if (SurplusDisplacement > 0) {
+                 outed = SurplusDisplacement / (12 - Number.parseInt(TheMonth));
                  title = `余${SurplusDisplacement}(kg)`;
              } else {
                  title = `超${Math.abs(SurplusDisplacement)}(kg)`;
              }
              eyhldata.map((ele) => {
                  if (Number.parseInt(TheMonth) <i) {
-                     seriesData.push({value:5,itemStyle: {normal: {color: '#051732',barBorderColor: 'tomato',barBorderWidth:1,barBorderRadius:0,borderType:"dotted"}}});
+                     seriesData.push({value:outed.toFixed(2),itemStyle: {normal: {color: '#051732',barBorderColor: 'tomato',barBorderWidth:1,barBorderRadius:0,borderType:"dotted"}}});
                  }else{
                      seriesData.push(ele);
                  }
@@ -509,14 +519,16 @@ class index extends Component {
 
          } else{
              SurplusDisplacement = dyhwAnalData.length !== 0 ? dyhwAnalData.Remainder.toFixed(2) : 0;
+             let outed=0;
              if (SurplusDisplacement > 0) {
+                 outed=SurplusDisplacement / (12 - Number.parseInt(TheMonth));
                  title = `余${SurplusDisplacement}(kg)`;
              } else {
                  title = `超${Math.abs(SurplusDisplacement)}(kg)`;
              }
              dyhwdata.map((ele) => {
                  if (Number.parseInt(TheMonth) <i) {
-                     seriesData.push({value:5,itemStyle: {normal: {color: '#051732',barBorderColor: 'tomato',barBorderWidth:1,barBorderRadius:0,borderType:"dotted"}}});
+                     seriesData.push({value:outed.toFixed(2),itemStyle: {normal: {color: '#051732',barBorderColor: 'tomato',barBorderWidth:1,barBorderRadius:0,borderType:"dotted"}}});
                  }else{
                      seriesData.push(ele);
                  }
@@ -605,10 +617,67 @@ class index extends Component {
          return res;
      }
 
+     mapEvents = {
+         created(m) {
+             _thismap = m;
+         },
+         zoomchange: (value) => {},
+         complete: () => {
+         }
+     };
+
+        //地图点位点击
+        markersEvents = {
+            click: (MapsOption, marker) => {
+                const itemdata = marker.F.extData;
+                this.treeCilck(itemdata);
+            }
+        };
+
+treeCilck = (row) => {
+    const {
+        dispatch,
+    } = this.props;
+    this.setState({
+        visible: true,
+        pointName: row.pointName,
+        position: {
+            latitude: row.latitude,
+            longitude: row.longitude,
+        },
+    });
+    _thismap.setZoomAndCenter(15, [row.longitude, row.latitude]);
+};
+
+     /**污染物类型切换 */
+     onRadioChange=(e)=>{
+         const value = e.target.value;
+         const {
+             dispatch
+         } = this.props;
+         dispatch({
+             type: pageUrl.getdatalist,
+             payload: {
+                 map: true,
+                 pollutantTypes: value
+             },
+         });
+         this.setState({
+             visible:false,
+         });
+     }
+
      render() {
          const TheMonth = this.state.TheMonth;
          const baseinfo = this.props.baseinfo[0];
          const { model } = this.props.statisticsPointStatus;
+         const {
+             pointName,
+             position,
+             visible
+         } = this.state;
+         let pointposition = position;
+         let pointvisible = visible;
          let polygonChange;
          let mapCenter;
          if (baseinfo) {
@@ -619,6 +688,7 @@ class index extends Component {
                  latitude: baseinfo.latitude
              };
          }
+
          const {tcData}=this.props.TaskCount;
          const {
              ycAnalData,
@@ -857,7 +927,20 @@ class index extends Component {
                              </div>
                          </div>
                      </div>
-
+                     {/**中间污染物类型*/}
+                     <div
+                         style={{
+                             position: 'absolute',
+                             top: '2%',
+                             left: 500,
+                             zIndex:100
+                         }}
+                     >
+                         <Radio.Group defaultValue="2" buttonStyle="solid" size="small" onChange={this.onRadioChange}>
+                             <RadioButton value="2">废气</RadioButton>
+                             <RadioButton value="1">废水</RadioButton>
+                         </Radio.Group>
+                     </div>
                      <div style={
                          {
                              width: '426px',
@@ -975,6 +1058,7 @@ class index extends Component {
                      </div>
                      <Markers
                          markers={this.props.datalist}
+                         events={this.markersEvents}
                          className={this.state.special}
                          render={(extData) => {
                              if (extData.status === 0) {
@@ -990,6 +1074,14 @@ class index extends Component {
                      {
                          this.getpolygon(polygonChange)
                      }
+                     <InfoWindow
+                         position={pointposition}
+                         visible={this.state.visible}
+                         isCustom={true}
+                         offset={[0, -25]}
+                     >
+                         {pointName}
+                     </InfoWindow>
                  </Map>
              </div>
          );

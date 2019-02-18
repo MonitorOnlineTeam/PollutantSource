@@ -39,6 +39,7 @@ export default Model.extend({
         pageSize:20,
         EditPDPermit:null,
         Addrequstresult:null,
+        Editrequstresult:null,
         requstresult:null,
     },
     effects: {
@@ -222,7 +223,7 @@ export default Model.extend({
                 Files: Files,
             });
             yield update({
-                Addrequstresult: result.requstresult,
+                Editrequstresult: result.requstresult,
             });
             yield put({
                 type: 'queryeeplist',

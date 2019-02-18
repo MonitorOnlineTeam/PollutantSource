@@ -1,3 +1,4 @@
+import moment from 'moment';
 import { post, get } from '../dvapack/request';
 // import userlist from '../mockdata/User/userinfo.json';
 
@@ -356,11 +357,12 @@ export async function queryeeplist() {
 }
 // 添加排污许可证
 export async function addPDPermit(params) {
-    let arr = params.Data.split(',');
+    let Btime = moment(params.Data).format("YYYY-01-01");
+    let Etime = moment(params.Data).format("YYYY-12-31");
     const body = {
         epnum: params.EPNum,
-        begintime: arr[0],
-        endtime: arr[1],
+        begintime: Btime,
+        endtime: Etime,
         epname: params.EPName,
         NOx: params.NOx,
         YC: params.YC,
@@ -372,12 +374,13 @@ export async function addPDPermit(params) {
 }
 // 编辑排污许可证
 export async function editPDPermit(params) {
-    let arr = params.Data.split(',');
+    let Btime = moment(params.Data).format("YYYY-01-01");
+    let Etime = moment(params.Data).format("YYYY-12-31");
     const body = {
         code: params.code,
         epnum: params.EPNum,
-        begintime: arr[0],
-        endtime: arr[1],
+        begintime: Btime,
+        endtime: Etime,
         epname: params.EPName,
         NOx: params.NOx,
         YC: params.YC,
