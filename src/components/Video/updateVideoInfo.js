@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Input, Select, InputNumber, Form, Button, Upload, DatePicker, Row, Col, Radio, message} from 'antd';
+import { Input, Select, InputNumber, Form, Button, Upload, DatePicker, Row, Col, Radio, message } from 'antd';
 import { connect } from 'dva';
 import RangePicker_ from '../../components/PointDetail/RangePicker_';
 import moment from 'moment';
@@ -9,7 +9,7 @@ import {
 const Option = Select.Option;
 const FormItem = Form.Item;
 const RadioGroup = Radio.Group;
-const {TextArea} = Input;
+const { TextArea } = Input;
 
 @connect()
 @Form.create()
@@ -28,8 +28,6 @@ export default class updateVideoInfo extends Component {
         this.props.onRef(this);
     }
     handleSubmitupdate = (e) => {
-        ;
-        console.log(this.props.dgimn);
         let flag = true;
         this.props.form.validateFieldsAndScroll((err, values) => {
             if (!err && flag === true) {
@@ -65,7 +63,6 @@ export default class updateVideoInfo extends Component {
     }
 
     render() {
-        console.log(this.props.item);
         const { getFieldDecorator } = this.props.form;
         const formItemLayout = {
             labelCol: {
@@ -267,7 +264,7 @@ export default class updateVideoInfo extends Component {
                                 {getFieldDecorator('Longitude', {
                                     initialValue: this.props.item.Longitude,
                                 })(
-                                    <Input type="number" placeholder="请输入经度" />
+                                    <Input placeholder="请输入经度" onkeyup="value=value.replace(/[^\d{1,}\.\d{1,}|\d{1,}]/g,'')" />
                                 )}
                             </FormItem>
                         </Col>
@@ -279,7 +276,7 @@ export default class updateVideoInfo extends Component {
                                     initialValue: this.props.item.Latitude,
 
                                 })(
-                                    <Input type="number" placeholder="请输入纬度" />
+                                    <Input placeholder="请输入纬度" onkeyup="value=value.replace(/[^\d{1,}\.\d{1,}|\d{1,}]/g,'')" />
                                 )}
                             </FormItem>
                         </Col>
@@ -297,10 +294,10 @@ export default class updateVideoInfo extends Component {
                                         initialValue: moment(this.props.item.ProduceDate === null ? Date.now() : this.props.item.ProduceDate),
                                     })(
                                         <DatePicker />
-                                )}
+                                    )}
                             </FormItem>
                         </Col>
-                        <Col xs={2} sm={6} md={12} lg={12} xl={12} xxl={12} style={{display: 'none'}}>
+                        <Col xs={2} sm={6} md={12} lg={12} xl={12} xxl={12} style={{ display: 'none' }}>
                             <FormItem
                                 {...formItemLayout}
                                 label={'点编号'}>
@@ -312,7 +309,7 @@ export default class updateVideoInfo extends Component {
                                 )}
                             </FormItem>
                         </Col>
-                        <Col xs={2} sm={6} md={12} lg={12} xl={12} xxl={12} style={{display: 'none'}}>
+                        <Col xs={2} sm={6} md={12} lg={12} xl={12} xxl={12} style={{ display: 'none' }}>
                             <FormItem
                                 {...formItemLayout}
                                 label={'点编号'}>
@@ -324,7 +321,7 @@ export default class updateVideoInfo extends Component {
                                 )}
                             </FormItem>
                         </Col>
-                        <Col xs={2} sm={6} md={12} lg={12} xl={12} xxl={12} style={{display: 'none'}}>
+                        <Col xs={2} sm={6} md={12} lg={12} xl={12} xxl={12} style={{ display: 'none' }}>
                             <FormItem
                                 {...formItemLayout}
                                 label={'点编号'}>

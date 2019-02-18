@@ -9,11 +9,12 @@ import {
     Row,
     Col,
     Divider,
-    InputNumber
+    InputNumber,
+    DatePicker,
+    Spin
 } from 'antd';
 import moment from 'moment';
 import { connect } from 'dva';
-import RangePicker_ from '../../components/PointDetail/RangePicker_';
 
 const FormItem = Form.Item;
 @Form.create()
@@ -28,6 +29,7 @@ const FormItem = Form.Item;
     reason: standardlibrary.reason,
     EditPDPermit: baseinfo.EditPDPermit,
     Addrequstresult: baseinfo.Addrequstresult,
+    Editrequstresult: baseinfo.Editrequstresult,
 }))
 class addepinfo extends PureComponent {
     constructor(props) {
@@ -35,10 +37,9 @@ class addepinfo extends PureComponent {
         const _this = this;
         this.state = {
             rangeDate: [],
-            Datestring: this.props.row ? [moment(this.props.row.BeginTime),
-                moment(this.props.row.EndTime)
-            ] : [],
-            img: '',
+            isopen: false,
+            time: moment(),
+            fileLoading: false,
             fileList: [],
         };
         this.uuid = () => {
@@ -53,39 +54,78 @@ class addepinfo extends PureComponent {
             let uuid = s.join('');
             return uuid;
         };
-        this.addimg = ({file}) => {
-            let reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onloadend = function() {
-                let base64 = reader.result; // base64就是图片的转换的结果
-                const attachId = _this.uuid();
-                _this.props.dispatch({
-                    type: 'standardlibrary/uploadfiles',
-                    payload: {
-                        file: base64.split(',')[1],
-                        fileName: file.name,
-                        callback: () => {
-                            if (_this.props.requstresult === '1') {
-                                const newimg = {
-                                    uid: attachId,
-                                    name: file.name,
-                                    status: 'done',
-                                    url: '',
-                                    filetype: `.${ file.name.split('.')[1]}`,
-                                    filesize: file.size,
-                                };
-                                const imglist = _this.state.fileList.concat(newimg);
-                                let arr3 = Array.from(new Set(imglist));
-                                _this.setState({
-                                    fileList: arr3
-                                });
-                            } else {
-                                message.error(this.props.reason);
+        //验证格式
+        this.AuthenticationFormat = (type) => {
+            if (type === 'application/msword' || type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' ||
+            // || type === 'application/vnd.ms-excel' || type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+            type === 'text/plain' || type === 'application/pdf' || type === 'application/vnd.ms-powerpoint' || type === 'image/gif' ||
+            type === 'image/jpeg' || type === 'image/png' || type === 'image/bmp'
+            ) {
+                return true;
+            }
+            return false;
+        };
+        //验证后缀
+        this.VerificationPostfix = (name) => {
+            const nameSplit = name.split('.');
+            const postfix = nameSplit[nameSplit.length - 1];
+            if (postfix === 'doc' || postfix === 'docx' ||
+            postfix === 'txt' || postfix === 'pdf' || postfix === 'ppt' || postfix === 'gif' ||
+            postfix === 'jpg' || postfix === 'png' || postfix === 'bmp') {
+                return true;
+            }
+            return false;
+        };
+        this.addimg = ({ file }) => {
+            //验证传入类型
+            const fileType = this.AuthenticationFormat(file.type);
+            //验证后缀
+            const postfix = this.VerificationPostfix(file.name);
+            //双重验证
+            if (fileType) {
+                if (postfix) {
+                    _this.setState({
+                        fileLoading: true
+                    });
+                    let reader = new FileReader();
+                    reader.readAsDataURL(file);
+                    reader.onloadend = function() {
+                        let base64 = reader.result; // base64就是图片的转换的结果
+                        const attachId = _this.uuid();
+                        _this.props.dispatch({
+                            type: 'standardlibrary/uploadfiles',
+                            payload: {
+                                file: base64.split(',')[1],
+                                fileName: file.name,
+                                callback: () => {
+                                    if (_this.props.requstresult === '1') {
+                                        const newimg = {
+                                            uid: attachId,
+                                            name: file.name,
+                                            status: 'done',
+                                            url: '',
+                                            filetype: `.${file.name.split('.')[1]}`,
+                                            filesize: file.size,
+                                        };
+                                        const imglist = _this.state.fileList.concat(newimg);
+                                        let arr3 = Array.from(new Set(imglist));
+                                        _this.setState({
+                                            fileList: arr3,
+                                            fileLoading: false
+                                        });
+                                    } else {
+                                        message.error(this.props.reason);
+                                    }
+                                }
                             }
-                        }
-                    }
-                });
-            };
+                        });
+                    };
+                } else {
+                    message.error('上传格式不正确！');
+                }
+            } else {
+                message.error('上传格式不正确！');
+            }
         };
         this.handleChange = ({
             fileList,
@@ -133,7 +173,8 @@ class addepinfo extends PureComponent {
      const {
          row,
          form,
-         Addrequstresult
+         Addrequstresult,
+         Editrequstresult
      } = this.props;
      form.validateFieldsAndScroll((err, values) => {
          const that = this;
@@ -148,12 +189,10 @@ class addepinfo extends PureComponent {
                          YC: values.YC,
                          SO2: values.SO2,
                          Files: that.state.fileList,
-                         Data: that.state.rangeDate.join(','),
+                         Data: that.state.time,
                          callback: () => {
                              if (Addrequstresult === '1') {
                                  message.success('添加成功！', 0.5).then(() => this.props.closemodal());
-                             } else {
-                                 message.error('错误');
                              }
                          }
                      },
@@ -171,12 +210,10 @@ class addepinfo extends PureComponent {
                      YC: values.YC,
                      SO2: values.SO2,
                      Files: that.state.fileList,
-                     Data: that.state.rangeDate.join(','),
+                     Data: that.state.time,
                      callback: () => {
-                         if (Addrequstresult === '1') {
+                         if (Editrequstresult === '1') {
                              message.success('修改成功！', 0.5).then(() => this.props.closemodal());
-                         } else {
-                             message.error('错误');
                          }
                      }
                  },
@@ -184,6 +221,7 @@ class addepinfo extends PureComponent {
          }
      });
  }
+
 
     componentWillMount = () => {
         const row = this.props.row;
@@ -194,6 +232,7 @@ class addepinfo extends PureComponent {
                     code: row.key,
                     callback:()=>{
                         this.setState({
+                            time: moment(this.props.EditPDPermit.BeginTime),
                             fileList: this.props.EditPDPermit.Filelist,
                         });
                     }
@@ -264,16 +303,28 @@ class addepinfo extends PureComponent {
                                 label="有效时间"
                             >
                                 {getFieldDecorator('effectivetime', {
+                                    initialValue: this.state.time,
                                     rules: [{
                                         required: true, message: '请输入有效时间!',
                                     }],
                                 })(
-                                    <RangePicker_
-                                        style={{width: 250}}
-                                        placeholder="请选择时间"
-                                        format="YYYY-MM-DD"
-                                        onChange={this._handleDateChange}
-                                        dateValue={this.state.Datestring}
+                                    <DatePicker
+                                        Value={this.state.time}
+                                        open={this.state.isopen}
+                                        mode="year"
+                                        format="YYYY"
+                                        onFocus={() => {
+                                            this.setState({isopen: true});
+                                        }}
+                                        onBlur={() => {
+                                            this.setState({isopen: false});
+                                        }}
+                                        onPanelChange={(v) => {
+                                            this.setState({
+                                                time: v,
+                                                isopen: false
+                                            });
+                                        }}
                                     />
                                 )}
                             </FormItem>
@@ -349,6 +400,17 @@ class addepinfo extends PureComponent {
                                     <Button>
                                         <Icon type="upload" /> 上传
                                     </Button>
+                                    <Spin
+                                        delay={500}
+                                        spinning={this.state.fileLoading}
+                                        style={{
+                                            marginLeft: 10,
+                                            height: '100%',
+                                            width: '30px',
+                                            alignItems: 'center',
+                                            justifyContent: 'center'
+                                        }}
+                                    />
                                 </Upload>
                             </FormItem>
                         </Col>
