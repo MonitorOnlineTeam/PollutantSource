@@ -46,6 +46,7 @@ export default Model.extend({
                         return {
                             id:`over_${item.DGIMNs}`,
                             pointname: item.PointName,
+                            DGIMN:`${item.DGIMNs}`,
                             pollutantnames:item.PollutantNames,
                             firsttime:item.FirstTime,
                             lasttime:item.LastTime,
@@ -67,6 +68,7 @@ export default Model.extend({
                         return {
                             id:`warn_${item.DGIMNs}`,
                             pointname: item.PointName,
+                            DGIMN:`${item.DGIMNs}`,
                             discription:discription,
                             overwarnings:item.OverWarnings,
                             sontype:"warn",
@@ -84,6 +86,7 @@ export default Model.extend({
                         return {
                             id:`exception_${item.DGIMNs}`,
                             pointname: item.PointName,
+                            DGIMN:`${item.DGIMNs}`,
                             exceptiontypes:item.ExceptionTypes,
                             firsttime:item.FirstAlarmTime,
                             lasttime:item.LastAlarmTime,
@@ -105,6 +108,7 @@ export default Model.extend({
             if(res2&&res2.data!==null){
                 let advises=res2.data.map((item,index)=>({
                     id:`advise_${item.DGIMN}`,
+                    DGIMN:`${item.DGIMN}`,
                     msgtitle: item.MsgTitle,
                     msg:item.Msg,
                     pushtime:item.PushTime,
@@ -124,7 +128,8 @@ export default Model.extend({
             }
             yield put({
                 type: 'saveNotices',
-                payload: {notices:notices,
+                payload: {
+                    notices:notices,
                     notifyCount: count,
                     unreadCount: count
                 }

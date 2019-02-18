@@ -134,19 +134,26 @@ export default class StandardGas extends Component {
                         title: '标气名称',
                         dataIndex: 'StandardGasName',
                         key: 'StandardGasName',
-                        width: '33%',
+                        width: '25%',
                         align: 'left',
                     },
                     {
                         title: '生产厂家',
                         dataIndex: 'Manufacturer',
                         key: 'Manufacturer',
-                        width: '33%',
+                        width: '25%',
+                        align: 'left',
+                    },
+                    {
+                        title: '单位',
+                        dataIndex: 'Unit',
+                        key: 'Unit',
+                        width: '25%',
                         align: 'left',
                     },
                     {
                         title: '操作',
-                        width: '33%',
+                        width: '25%',
                         align: 'center',
                         render: (text, record) => (<Fragment >
                             <a onClick={

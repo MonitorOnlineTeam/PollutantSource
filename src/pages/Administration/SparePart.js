@@ -144,14 +144,14 @@ export default class SparePart extends Component {
                         title: '备件名称',
                         dataIndex: 'PartName',
                         key: 'PartName',
-                        width: '25%',
+                        width: '20%',
                         align: 'left',
                     },
                     {
                         title: '备件类型',
                         dataIndex: 'PartType',
                         key: 'PartType',
-                        width: '25%',
+                        width: '20%',
                         align: 'left',
                         render: (text, record) => {
                             if(text==1)
@@ -168,7 +168,14 @@ export default class SparePart extends Component {
                         title: '设备型号',
                         dataIndex: 'Code',
                         key: 'Code',
-                        width: '25%',
+                        width: '20%',
+                        align: 'center',
+                    },
+                    {
+                        title: '单位',
+                        dataIndex: 'Unit',
+                        key: 'Unit',
+                        width: '20%',
                         align: 'center',
                     },
                     {

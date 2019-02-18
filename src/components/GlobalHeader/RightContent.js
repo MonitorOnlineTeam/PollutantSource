@@ -10,8 +10,8 @@ import HeaderDropdown from '../HeaderDropdown';
 import SelectLang from '../SelectLang';
 import styles from './index.less';
 import {asc} from '../../utils/utils';
-
-
+import RealTimeWarningModal from '../../components/SpecialWorkbench/RealTimeWarningModal';
+import { routerRedux } from 'dva/router';
 
 @connect(({user,loading,global}) => ({
     currentUser:user.currentUser,
@@ -89,6 +89,10 @@ export default class GlobalHeaderRight extends PureComponent {
       });
   };
 
+  onRef = (ref) => {
+    this.child = ref;
+}
+
   render() {
       const {
           currentUser,
@@ -98,7 +102,8 @@ export default class GlobalHeaderRight extends PureComponent {
           onMenuClick,
           onNoticeClear,
           theme,
-      } = this.props;
+          dispatch
+      } = this.props;      
       const menu = (
           <Menu className={styles.menu} selectedKeys={[]} onClick={onMenuClick}>
               <Menu.Item key="userCenter">
@@ -153,8 +158,23 @@ export default class GlobalHeaderRight extends PureComponent {
                   className={styles.action}
                   count={currentUserNoticeCnt.unreadCount}
                   onItemClick={(item, tabProps) => {
-            console.log(item, tabProps); // eslint-disable-line
-                      this.changeReadState(item, tabProps);
+                    console.log(item, tabProps); // eslint-disable-line
+                    //报警
+                    if (item.type==="alarm") {
+                        if(item.sontype==="warn"){
+                            this.child.showModal(item.pointname, item.DGIMN, item.overwarnings[0].PollutantCode, item.overwarnings[0].PollutantName, item.overwarnings[0].SuggestValue);
+                        }
+                        else if(item.sontype==="over"){
+                            debugger;
+                           /*  dispatch({
+                                type: `/pointdetail/${item.DGIMN}/alarmrecord/alarmrecord`,
+                                payload: {firsttime:item.firsttime,lasttime:item.lasttime},
+                            }); */
+                            dispatch(routerRedux.push(`/pointdetail/${item.DGIMN}/alarmrecord/alarmrecord`));
+                        }
+                    }
+                    //修改通知的已读状态
+                    //   this.changeReadState(item, tabProps);
                   }}
                   locale={{
                       emptyText: formatMessage({ id: 'component.noticeIcon.empty' }),
@@ -199,6 +219,7 @@ export default class GlobalHeaderRight extends PureComponent {
                   <Spin size="small" style={{ marginLeft: 8, marginRight: 8 }} />
               )}
 
+                <RealTimeWarningModal {...this.props} onRef={this.onRef} />
           </div>
       );
   }

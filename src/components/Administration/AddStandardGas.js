@@ -46,6 +46,7 @@ export default class AddStandardGas extends Component {
                     payload:{
                         manufacturer:allvalue.manufacturer,
                         gasName:allvalue.gasName,
+                        unit:allvalue.unit,
                         id:row?row.ID:null,
                         closemodal:closemodal()
                     }
@@ -75,12 +76,12 @@ export default class AddStandardGas extends Component {
                         <Col xs={2} sm={6} md={12} lg={12} xl={12} xxl={12}>
                             <FormItem
                                 {...formItemLayout}
-                                label={'备件名称'}>
+                                label={'标气名称'}>
                                 {getFieldDecorator('gasName', {
                                   initialValue:row?row.StandardGasName:'',
                                   rules: [{
                                       required: true,
-                                      message: '请输入备件名称',
+                                      message: '请输入标气名称',
                                   }],
                                 })(
                                  <Input   />
@@ -102,6 +103,23 @@ export default class AddStandardGas extends Component {
                             )}
                         </FormItem>
                     </Col>
+                    </Row>
+                    <Row gutter={24}>
+                        <Col xs={2} sm={6} md={12} lg={12} xl={12} xxl={12}>
+                            <FormItem
+                                {...formItemLayout}
+                                label={'单位'}>
+                                {getFieldDecorator('unit', {
+                                  initialValue:row?row.Unit:'',
+                                  rules: [{
+                                      required: true,
+                                      message: '请输入单位',
+                                  }],
+                                })(
+                                 <Input   />
+                            )}
+                            </FormItem>
+                        </Col>
                     </Row>
                       <Form.Item>
                         <Button style={{float:'right',marginRight:50 }} type="primary" onClick={this.handleSubmit}>
