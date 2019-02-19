@@ -8,6 +8,7 @@ import UrgentDispatch from './UrgentDispatch';
     operationUserInfo:urgentdispatch.operationUserInfo,
     existTask:urgentdispatch.existTask,
     loading:loading.effects['urgentdispatch/queryoperationInfo'],
+    dgimn:urgentdispatch.dgimn
 }))
 class PdButton extends Component {
      constructor(props)
@@ -21,10 +22,11 @@ class PdButton extends Component {
 
        //催办
        urge = () => {
-        const {operationUserInfo,existTask,DGIMN,dispatch,id}=this.props; 
+        let {operationUserInfo,dgimn,existTask,DGIMN,dispatch,id}=this.props; 
         if(!id && operationUserInfo && operationUserInfo.operationUserID)
         {
             id=operationUserInfo.operationUserID;
+            DGIMN=dgimn;
         }
         if(id && DGIMN)
         {
@@ -40,7 +42,12 @@ class PdButton extends Component {
        
        //跳转到添加运维人员界面
        addoperationInfo=()=>{
-            const {DGIMN,dispatch,viewtype,pollutantTypeCode}=this.props;  
+            const {DGIMN,dgimn,dispatch,viewtype,pollutantTypeCode}=this.props;  
+
+            if(!DGIMN)
+            {
+                DGIMN=dgimn;
+            }
             dispatch(routerRedux.push(`/sysmanage/pointdetail/${DGIMN}/${pollutantTypeCode}/${viewtype}`));
         }
     
@@ -62,8 +69,11 @@ class PdButton extends Component {
 
      //判断是派单还是催办按钮
      getbutton=()=>{
-        let { operationUserInfo,existTask,DGIMN,viewType,id,name,tel,exist }=this.props;
-        debugger;
+        let { operationUserInfo,existTask,DGIMN,dgimn,viewType,id,name,tel,exist }=this.props;
+        if(!DGIMN)
+        {
+            DGIMN=dgimn;
+        }
         if(DGIMN) {
             const text='没有关联运维人,是否前去关联?';
             //如果有传入值，则优先采取传入值
@@ -179,9 +189,9 @@ class PdButton extends Component {
 
     render() {
         //如果没有值的话，会从后台加载数据
-        const {operationUserInfo,DGIMN,viewType,loading,pointName}=this.props;
+        const {operationUserInfo,dgimn,viewType,loading,pointName}=this.props;
         //组件传值的话优先采用传入的值
-        let {id,name,tel,pname}=this.props;
+        let {id,name,tel,pname,DGIMN}=this.props;
           
         if(!id && operationUserInfo)
         {
@@ -189,6 +199,7 @@ class PdButton extends Component {
            name=operationUserInfo.operationUserName;
            tel=operationUserInfo.operationtel;
            pname=pointName;
+           DGIMN=dgimn;
         }
     //    let res='';
         // if(loading)

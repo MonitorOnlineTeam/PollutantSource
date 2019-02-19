@@ -99,6 +99,7 @@ export default Model.extend({
                             key:`exception_${item.DGIMNs}`,
                             title:`${item.PointName}报警${item.AlarmCount}次`,
                             description:`从${item.FirstAlarmTime}至${item.LastAlarmTime}发生了${item.AlarmCount}次异常报警`,
+                            descriptionbak:`从${item.FirstAlarmTime}至${item.LastAlarmTime}发生了${item.AlarmCount}次异常报警`,
                         };
                     }));
                 }
