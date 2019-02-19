@@ -1,9 +1,11 @@
 import React, { PureComponent } from 'react';
-import { Card, List, Tag, Icon, Button } from 'antd';
+import { Card, List, Tag, Icon, Button,Popconfirm } from 'antd';
 import moment from 'moment';
 import { connect } from 'dva';
 import styles from './ExceptionAlarm.less';
 import UrgentDispatch from "../OverView/UrgentDispatch";
+import { routerRedux } from 'dva/router';
+import PdButton from '../../components/OverView/PdButton';
 
 @connect(({
     loading,
@@ -21,24 +23,7 @@ class ExceptionAlarm extends PureComponent {
         };
     }
 
-    /**
-     * 催办
-     */
-    urge = (DGIMN) => {
-        this.props.dispatch({
-            type: 'overview/queryurge',
-            payload: {
-                DGIMN: DGIMN
-            }
-        });
-    }
-
-    //派单窗口关闭
-    onCancel = () => {
-        this.setState({
-            pdvisible: false,
-        });
-    }
+ 
 
     /**
  * 智能质控_渲染异常报警数据列表
@@ -54,7 +39,10 @@ class ExceptionAlarm extends PureComponent {
             "逻辑异常": "volcano",
             "状态异常": "orange"
         };
+        const text='没有关联运维人,是否前去关联?';
         listData = exceptionAlarm.tableDatas.map((item,key) => {
+
+            console.log(item);
             //判断报警是否超过4小时
             const seconds = moment().diff(moment(item.FirstAlarmTime), 'minutes');
             const hour = Math.floor(seconds / 60);
@@ -65,37 +53,94 @@ class ExceptionAlarm extends PureComponent {
             const labelDiv = <div style={{ color: `${color}` }}>已发生{hour}小时{minutesLable}</div>;
             //未响应，按钮是派单;响应了超过4个小时是督办
             let btnDiv = '';
-            if (item.State==="0") {
-                btnDiv=(
-                    <div style={{marginTop:43}}>
-                        <Button
-                            onClick={() => {
-                                this.setState({
-                                    pdvisible: true,
-                                    selectpoint: null
-                                });
 
-                            }}
-                            style={{width:100,border:'none',backgroundColor:'rgb(74,210,187)'}}
-                            type="primary"
-                        >派单
-                        </Button>
-                    </div>
-                );
-            }else if(item.State==="1"){
-                btnDiv=hour>= 4 ?(
-                    <div style={{marginTop:43}}>
-                        <Button
-                            onClick={()=>{
-                                this.urge(item.DGIMNs);
-                            }}
-                            style={{width:100,border:'none',backgroundColor:'rgb(74,210,187)'}}
-                            type="primary"
-                        >督办
-                        </Button>
-                    </div>
-                ):'';
+            if(hour>=4 || item.State==="0")
+            {
+                btnDiv= 
+                <div style={{marginTop:43}}>
+                <PdButton DGIMN={item.DGIMNs} id={item.OperationUserTel}
+                 pname={item.PointName}  reloadData={() => this.renderExceptionAlarmList()}
+                exist={item.State} name={item.OperationUserName} tel={item.OperationUserTel} viewType="workbench"/>
+                </div>
             }
+            // if (item.State==="0") {
+
+              
+            //     if(item.OperationUserID)
+            //     {
+            //         btnDiv=(
+            //             <div style={{marginTop:43}}>
+            //                 <Button
+            //                     onClick={() => {
+            //                         this.setState({
+            //                             pdvisible: true,
+            //                             selectpoint: item
+            //                         });
+            //                     }}
+            //                     style={{width:100,border:'none',backgroundColor:'rgb(74,210,187)'}}
+            //                     type="primary"
+            //                 >派单
+            //                 </Button>
+            //             </div>
+            //         );
+            //     }
+            //     else
+            //     {
+            //         btnDiv=(
+            //             <Popconfirm  title={text} onConfirm={this.addoperationInfo} okText="是" cancelText="否">
+            //             <div style={{marginTop:43}}>
+            //                 <Button
+            //                     onClick={() => {
+            //                         this.setState({
+            //                             selectpoint: item
+            //                         });
+            //                     }}
+            //                     style={{width:100,border:'none',backgroundColor:'rgb(74,210,187)'}}
+            //                     type="primary"
+            //                 >派单
+            //                 </Button>
+            //             </div>
+            //             </Popconfirm>
+            //         );
+            //     }
+            // }else if(item.State==="1"){
+                
+            //     if(item.OperationUserID)
+            //     {
+            //         btnDiv=hour>= 4 ?(
+            //             <div style={{marginTop:43}}>
+            //                 <Button
+            //                     onClick={()=>{
+            //                         this.urge(item.DGIMNs);
+            //                     }}
+            //                     style={{width:100,border:'none',backgroundColor:'rgb(74,210,187)'}}
+            //                     type="primary"
+            //                 >督办
+            //                 </Button>
+            //             </div>
+            //         ):'';
+            //     }
+            //     else
+            //     {
+            //         btnDiv=hour>= 4 ?(
+            //             <Popconfirm  title={text} onConfirm={this.addoperationInfo} okText="是" cancelText="否">
+            //             <div style={{marginTop:43}}>
+            //                 <Button
+            //                     onClick={()=>{
+            //                         this.setState({
+            //                             selectpoint: item
+            //                         });
+            //                     }}
+            //                     style={{width:100,border:'none',backgroundColor:'rgb(74,210,187)'}}
+            //                     type="primary"
+            //                 >督办
+            //                 </Button>
+            //             </div>
+            //             </Popconfirm>
+            //         ):'';
+
+            //     }
+            // }
 
             return {
                 // href: 'http://ant.design',
@@ -161,19 +206,6 @@ class ExceptionAlarm extends PureComponent {
                         {this.renderExceptionAlarmList()}
                     </Card.Grid>
                 </Card>
-
-                <div>
-                    <UrgentDispatch
-                        onCancel={this.onCancel}
-                        visible={this.state.pdvisible}
-                        operationUserID={selectpoint ? selectpoint.operationUserID : null}
-                        DGIMN={selectpoint ? selectpoint.DGIMN : null}
-                        pointName={selectpoint ? selectpoint.pointName : null}
-                        operationUserName={selectpoint ? selectpoint.operationUserName : null}
-                        operationtel={selectpoint ? selectpoint.operationtel : null}
-                        reloadData={() => this.Refresh()}
-                    />
-                </div>
             </div>
 
         );

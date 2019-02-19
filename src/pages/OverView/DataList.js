@@ -5,7 +5,7 @@ import moment from 'moment';
 import { routerRedux } from 'dva/router';
 import styles from './DataList.less';
 import AListRadio from '../../components/OverView/AListRadio';
-import UrgentDispatch from '../../components/OverView/UrgentDispatch';
+import PdButton from '../../components/OverView/PdButton';
 
 
 const RadioGroup = Radio.Group;
@@ -21,7 +21,6 @@ class dataList extends PureComponent {
     constructor(props) {
         super(props);
         this.state = {
-            pdvisible: false,
             time: moment(new Date()).add(-1, 'hour'),
             normal: false,
             over: false,
@@ -47,11 +46,6 @@ class dataList extends PureComponent {
                 time: this.state.time.format('YYYY-MM-DD HH:00:00'),
             }
         });
-        // this.props.dispatch({
-        //     type: 'overview/getPollutantTypeList',
-        //     payload: {
-        //     }
-        // });
     }
 
     //加载数据
@@ -273,105 +267,23 @@ class dataList extends PureComponent {
                 time: this.state.time.format('YYYY-MM-DD HH:00:00'),
             }
         });
-    }
-
-    //派单窗口关闭
-    onCancel = () => {
-        this.setState({
-            pdvisible: false,
-        });
-    }
-
-    //催办
-    urge = (record) => {
-        this.props.dispatch({
-            type: 'overview/queryurge',
-            payload: {
-                personId: record.operationUserID,
-                DGIMN: record.DGIMN
-            }
-        });
-    }
-
+    } 
     //获取详情按钮
     gerpointButton = (record) => (<div>
         <li style={{ listStyle: 'none', marginBottom: 5 }}>
             <Button onClick={() => {
                 let viewtype = 'datalistview';
-
                 this.props.dispatch(routerRedux.push(`/pointdetail/${record.DGIMN}/${viewtype}`));
+               
             }}
             ><Icon type="book" style={{ color: '#3C9FDA', marginRight: 5 }} theme="filled" /> 进入站房
             </Button>
         </li>
-        {
-            this.getbutton(record)
-        }
+      <PdButton DGIMN={record.DGIMN} id={record.operationUserID} pname={record.pointName}  reloadData={() => this.Refresh()}
+       exist={record.existTask} name={record.operationUserName} tel={record.operationtel} viewType="datalist"/>
     </div>)
 
-        //判断是派单还是催办按钮
-        getbutton=(selectpoint)=>{
-            if(selectpoint) {
-                const text='没有关联运维人,是否前去关联?';
-                if(selectpoint.existTask==1) {
-                    if(selectpoint.operationUserID) {
-                        return (
-                            <li style={{ listStyle: 'none' }}>
-                                <Button onClick={() => this.urge(selectpoint)}><Icon
-                                    type="phone"
-                                    style={{ color: '#3C9FDA', marginRight: 5 }}
-                                    theme="filled"
-                                />紧急催办
-                                </Button>
-                            </li>
-                        );
-                    }
-                    return (
-                        <Popconfirm title={text} onConfirm={()=>this.addoperationInfo(selectpoint)} okText="是" cancelText="否">
-                            <li style={{ listStyle: 'none' }}>
-                                <Button><Icon
-                                    type="phone"
-                                    style={{ color: '#3C9FDA', marginRight: 5 }}
-                                    theme="filled"
-                                />紧急催办
-                                </Button>
-                            </li>
-                        </Popconfirm>);
-                }
-
-                if(selectpoint.operationUserID) {
-                    return (
-                        <li style={{ listStyle: 'none' }}>
-                            <Button
-                                onClick={() => {
-                                    this.setState({
-                                        pdvisible: true,
-                                        selectpoint: selectpoint
-                                    });
-                                }}
-                            ><Icon type="phone" style={{ color: '#3C9FDA', marginRight: 5 }} theme="filled" />紧急派单
-                            </Button>
-                        </li>
-                    );
-                }
-                return (
-                    <Popconfirm title={text} onConfirm={()=>this.addoperationInfo(selectpoint)} okText="是" cancelText="否">
-                        <li style={{ listStyle: 'none' }}>
-                            <Button><Icon type="phone" style={{ color: '#3C9FDA', marginRight: 5 }} theme="filled" />紧急派单
-                            </Button>
-                        </li>
-                    </Popconfirm>
-                );
-
-            }
-        }
-
-        //跳转到添加运维人员界面
-        addoperationInfo=(selectpoint)=>{
-            let viewtype='datalist';
-            this.props.dispatch(routerRedux.push(`/sysmanage/pointdetail/${selectpoint.DGIMN}/${selectpoint.pollutantTypeCode}/${viewtype}`));
-        }
-
+       
         render() {
             const { normal, over, underline, exception, terate, operationStatus } = this.state;
             const {selectpollutantTypeCode}=this.props;
@@ -421,8 +333,8 @@ class dataList extends PureComponent {
                         lable.push(<span key={4} className={styles.stop}>停产中</span>);
                     }
 
-
-                    return (<Popover trigger="click" content={content}>
+ 
+                    return (<Popover trigger="click"  content={content}>
                         <span style={{ cursor: 'pointer' }}>{value}
                             {lable}
                         </span>
@@ -518,16 +430,7 @@ class dataList extends PureComponent {
                     style={{ width: '100%', height: 'calc(100vh - 65px)' }}
                     className={styles.standardList}
                 >
-                    <UrgentDispatch
-                        onCancel={this.onCancel}
-                        visible={this.state.pdvisible}
-                        operationUserID={selectpoint ? selectpoint.operationUserID : null}
-                        DGIMN={selectpoint ? selectpoint.DGIMN : null}
-                        pointName={selectpoint ? selectpoint.pointName : null}
-                        operationUserName={selectpoint ? selectpoint.operationUserName : null}
-                        operationtel={selectpoint ? selectpoint.operationtel : null}
-                        reloadData={() => this.Refresh()}
-                    />
+              
                     <Card
                         bordered={false}
                         className={styles.cardextra}
@@ -571,8 +474,6 @@ class dataList extends PureComponent {
                             loading={this.props.isloading}
                             scroll={{ x: gwidth, y: 'calc(100vh - 190px)' }}
                             bordered={true}
-                            onRow={record => {
-                            }}
                             rowClassName={
                                 (record, index, indent) => {
                                     if (index === 0) {

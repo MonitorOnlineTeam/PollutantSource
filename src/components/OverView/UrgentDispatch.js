@@ -1,21 +1,32 @@
 import React, { Component } from 'react';
 import {connect} from 'dva';
-import { Modal, Button, Input,Form,Icon,message } from 'antd';
+import { Modal, Button, Input,Form,Icon,message,Spin } from 'antd';
+import { debug } from 'util';
 const FormItem = Form.Item;
 @Form.create()
-@connect(({overview}) => ({
-    complete:overview
+@connect(({urgentdispatch,loading}) => ({
+    operationUserInfo:urgentdispatch.operationUserInfo,
+    existTask:urgentdispatch.existTask,
+    loading:loading.effects['urgentdispatch/queryoperationInfo'],
 }))
 ///紧急派单
 class UrgentDispatch extends Component {
-
+    componentWillMount(){
+        const {DGIMN,dispatch}=this.props;
+        dispatch({
+            type:'urgentdispatch/queryoperationInfo',
+            payload:{
+                dgimn:DGIMN
+            }
+        }) 
+    }
     onSubmit=()=>{
-        const {DGIMN,operationUserID}=this.props;
+        const {DGIMN,operationUserInfo}=this.props;
             this.props.dispatch({
                 type:'overview/addtaskinfo',
                 payload:{
                     dgimn: DGIMN,
-                    personId:operationUserID,
+                    personId:operationUserInfo.operationUserID,
                     remark:this.props.form.getFieldValue('remark')
                 }
             })
@@ -26,8 +37,22 @@ class UrgentDispatch extends Component {
             }
             this.props.onCancel();
     }
+    //获取运维信息文字
+    getOperationText=()=>{
+        const {existTask}=this.props;
+        if(existTask)
+        {
+           return "紧急督办";             
+        }
+        else
+        {
+            return "紧急派单";      
+        }
+    }
+    
+
     render() {
-        const {pointName,operationUserName,operationtel}=this.props;
+        const {operationUserInfo,loading}=this.props;
         const { getFieldDecorator } = this.props.form;
         const formItemLayout = {
             labelCol: {
@@ -40,7 +65,7 @@ class UrgentDispatch extends Component {
         return (
             <div>
                 <Modal
-                    title={ pointName }
+                    title={ operationUserInfo?operationUserInfo.pointName:'' }
                     visible={this.props.visible}
                     onOk={this.onSubmit}
                     destroyOnClose={true}
@@ -52,7 +77,7 @@ class UrgentDispatch extends Component {
                             label="运维人员"
                         >
                             {getFieldDecorator('operationName', {
-                                initialValue:operationUserName,
+                                initialValue:operationUserInfo?operationUserInfo.operationUserName:'',
                                 rules: [{ required: true, message: '请输入运维人名称' }],
                             })(
                                 <Input disabled={true} prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder="Username" />
@@ -64,7 +89,7 @@ class UrgentDispatch extends Component {
                         >
                             {getFieldDecorator('phone', {
 
-                                initialValue:operationtel,
+                                initialValue:operationUserInfo?operationUserInfo.operationtel:'',
                                 rules: [{ required: true, message: '请输入电话号码' }],
                             })(
                                 <Input disabled={true} prefix={<Icon type="phone" style={{ color: 'rgba(0,0,0,.25)' }} />} type="phone" />
@@ -88,3 +113,4 @@ class UrgentDispatch extends Component {
 }
 
 export default UrgentDispatch;
+ 

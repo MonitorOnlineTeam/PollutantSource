@@ -11,11 +11,13 @@ import styles from './index.less';
 import { getRoutes } from '../../utils/utils';
 import UrgentDispatch from '../../components/OverView/UrgentDispatch';
 import { routerRedux } from 'dva/router';
+import PdButton from '../../components/OverView/PdButton';
 const RadioGroup = Radio.Group;
 const { TabPane } = Tabs;
 const Option = Select.Option;
 const Search = Input.Search;
 const { Meta } = Card;
+
 
 @connect(({ points, loading, overview }) => ({
     pointInfo: points.selectpoint,
@@ -45,7 +47,6 @@ class PointDetail extends Component {
                 'RepairHistoryRecods',
                 'JzHistoryRecords'
             ],
-            pdvisible: false,
             modalVisible: false,
             loadingCard: true,
             pointList: null,
@@ -79,11 +80,6 @@ class PointDetail extends Component {
         // });
     }
 
-    pdShow = () => {
-        this.setState({
-            pdvisible: true,
-        });
-    }
 
     openModal = (params) => {
         // console.log(this.props.pointList);
@@ -240,106 +236,12 @@ class PointDetail extends Component {
             },
         });
         this.setState({
-            // pointList: this.props.pointList,
             status: '',
             searchName: '',
             pollutantTypeKey:0
         });
     }
-
-    //催办
-    urge = () => {
-        this.props.dispatch({
-            type: 'overview/queryurge',
-            payload: {
-                personId: this.props.pointInfo.operationUserID,
-                DGIMN: this.props.pointInfo.DGIMN
-            }
-        });
-    }
-
-    //派单窗口关闭
-    onCancel = () => {
-        this.setState({
-            pdvisible: false,
-        });
-    }
-
-
-    // //获取派单还是督办按钮
-    // getPDDBButton = () => {
-        
-    //     const { pointInfo } = this.props;
-    //     if (pointInfo) {
-    //         if (pointInfo.existTask) {
-    //             return (<Button onClick={() => this.urge()} type="primary" ghost={true} style={{ float: "right", marginRight: 30, top: -5 }}><Icon type="bell" />督办</Button>);
-    //         }
-    //         return (<Button
-    //             onClick={() => {
-    //                 this.setState({
-    //                     pdvisible: true,
-    //                 });
-    //             }} type="primary" ghost={true} style={{ float: "right", marginRight: 30, top: -5 }}
-    //         ><Icon type="bell" />派单
-    //         </Button>);
-
-    //     }
-    // }
-  //判断是派单还是催办按钮
-  getPDDBButton=()=>{
-    const { pointInfo } = this.props;
-    if(pointInfo)
-    {
-        const text='没有关联运维人,是否前去关联?';
-        if(pointInfo.existTask==1)
-        {
-            if(pointInfo.operationUserID)
-            {
-                return (
-                    <Button onClick={() => this.urge()} type="primary" ghost={true} 
-                    style={{ float: "right", marginRight: 30, top: -5 }}><Icon type="bell" />督办</Button>
-                        )
-            }
-            return (
-                <Popconfirm  title={text} onConfirm={()=>this.addoperationInfo(pointInfo)} okText="是" cancelText="否">
-                  <Button  type="primary" ghost={true} 
-                    style={{ float: "right", marginRight: 30, top: -5 }}><Icon type="bell" />督办</Button>
-                 </Popconfirm>)
-        }
-        else
-        {
-            if(pointInfo.operationUserID)
-            {
-                return (
-                    <Button
-                        onClick={() => {
-                            this.setState({
-                                pdvisible: true,
-                            });
-                        }} type="primary" ghost={true} style={{ float: "right", marginRight: 30, top: -5 }}
-                    ><Icon type="bell" />派单
-                    </Button>
-                )
-            }
-            return (
-                <Popconfirm  title={text} onConfirm={()=>this.addoperationInfo(pointInfo)} okText="是" cancelText="否">
-                    <Button
-                       type="primary" ghost={true} style={{ float: "right", marginRight: 30, top: -5 }}
-                    ><Icon type="bell" />派单
-                    </Button>
-                 </Popconfirm>
-                    )
-        }
-    }
-}
-
-//跳转到添加运维人员界面
-addoperationInfo=(selectpoint)=>{
-    const viewtype= this.props.match.params.viewtype;
-    this.props.dispatch(routerRedux.push(`/sysmanage/pointdetail/${selectpoint.DGIMN}/${selectpoint.pollutantTypeCode}/pointInfo@${viewtype}`));
-   }
-
-
+ 
     /**
      * 渲染排口状态
      */
@@ -429,6 +331,7 @@ addoperationInfo=(selectpoint)=>{
     render() {
         const { match, routerData, location, children, pointInfo, selectpoint } = this.props;
         let {tablist,pollutantTypeKey}=this.state;
+        const viewType="pointInfo@"+match.params.viewtype;
         //判断当前排口污染物类型那个
         let routerPath='';
         if(pointInfo && pointInfo.pollutantType) {
@@ -483,16 +386,6 @@ addoperationInfo=(selectpoint)=>{
                 {
                     routerPath!==''?<Redirect to={routerPath} />:null
                 }
-                <UrgentDispatch
-                    onCancel={this.onCancel}
-                    visible={this.state.pdvisible}
-                    operationUserID={selectpoint ? selectpoint.operationUserID : null}
-                    DGIMN={pointInfo ? pointInfo.DGIMN : null}
-                    pointName={pointInfo ? pointInfo.pointName : null}
-                    operationUserName={pointInfo ? pointInfo.operationUserName : null}
-                    operationtel={pointInfo ? pointInfo.operationtel : null}
-                    reloadData={() => this.Refresh()}
-                />
                 <div className={styles.pageHeader} style={{}}>
                     <span style={{ cursor: 'pointer' }} onClick={this.openModal}>{pointInfo.pointName}  <Icon type="down" /></span>
                     {
@@ -501,10 +394,10 @@ addoperationInfo=(selectpoint)=>{
 
 
                     <Button style={{ float: "right", marginRight: 30, top: -5 }}>{this.getBackButton()}</Button>
-                    {
-                        this.getPDDBButton()
-                    }
-                    {/* <Button type="primary" ghost={true} style={{float:"right",marginRight:30,top:-5}}><Icon type="bell" />派单</Button> */}
+
+                    <PdButton DGIMN={pointInfo.DGIMN} id={pointInfo.operationUserID} pname={pointInfo.pointName} 
+                    reloadData={() => this.Refresh()} exist={pointInfo.existTask} name={pointInfo.operationUserName} 
+                    tel={pointInfo.operationtel} viewType={viewType}/>
                 </div>
                 <div style={{ backgroundColor: '#fff', margin: 10, padding: 10 }}>
                     <Tabs

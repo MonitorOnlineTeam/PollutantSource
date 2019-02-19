@@ -7,6 +7,8 @@ import styles from './MapTreeDetail.less';
 import UrgentDispatch from '../../components/OverView/UrgentDispatch';
 import moment from 'moment';
 import { routerRedux } from 'dva/router';
+import PdButton from '../../components/OverView/PdButton';
+
 @connect(({ loading, overview, global, baseinfo }) => ({
     detailloading: loading.effects['overview/querydetailpollutant'],
     detailpcol: overview.detailpcol,
@@ -22,87 +24,7 @@ class MapTreeDetail extends Component {
      constructor(props)
      {
          super(props);
-         this.state={
-            pdvisible:false
-         };
-     }
- 
-    //判断是派单还是催办按钮
-    getbutton=()=>{
-        const {selectpoint}=this.props;
-        if(selectpoint)
-        {
-            const text='没有关联运维人,是否前去关联?';
-            if(selectpoint.existTask==1)
-            {
-                if(selectpoint.operationUserID)
-                {
-                    return (
-                        <span onClick={this.urge} style={{cursor: 'pointer'}}>
-                        <img style={{width: 15, marginRight: 6, marginBottom: 4}}
-                         src="/alarm.png" />紧急催办</span>
-                            )
-                }
-                return (
-                    <Popconfirm  title={text} onConfirm={this.addoperationInfo} okText="是" cancelText="否">
-                    <span style={{cursor: 'pointer'}}>
-                       <img style={{width: 15, marginRight: 6, marginBottom: 4}}
-                        src="/alarm.png" />紧急催办</span>
-                     </Popconfirm>)
-            }
-            else
-            {
-                if(selectpoint.operationUserID)
-                {
-                    return (
-                        <span onClick={this.pdShow} style={{cursor: 'pointer'}}>
-                        <img style={{width: 15, marginRight: 6, marginBottom: 4}}
-                            src="/alarm.png" />紧急派单</span>
-                    )
-                }
-                return (
-                    <Popconfirm  title={text} onConfirm={this.addoperationInfo} okText="是" cancelText="否">
-                    <span style={{cursor: 'pointer'}}>
-                        <img style={{width: 15, marginRight: 6, marginBottom: 4}}
-                            src="/alarm.png" />紧急派单</span>
-                     </Popconfirm>
-                        )
-            }
-        }
-    }
-
-   //跳转到添加运维人员界面
-   addoperationInfo=()=>{
-    const {selectpoint}=this.props;
-    let viewtype='mapview';
-    this.props.dispatch(routerRedux.push(`/sysmanage/pointdetail/${selectpoint.DGIMN}/${selectpoint.pollutantTypeCode}/${viewtype}`));
-   }
-
-   //催办
-   urge=()=>{
-    const {dispatch,selectpoint}=this.props;
-    this.props.dispatch({
-        type: 'overview/queryurge',
-        payload: {
-            personId:selectpoint.operationUserID,
-            DGIMN:selectpoint.DGIMN
-        }
-    });
-   }
-
-   //派单
-   pdShow = () => {
-    this.setState({
-        pdvisible: true,
-    });
-    }
-    //派单窗口关闭
-       onCancel=() => {
-        this.setState({
-            pdvisible: false,
-        });
-    }
-
+     } 
     //主要污染物table点击事件(获取图表信息)
     detialTreeClick = (row) => {
         const { selectpoint } =this.props;
@@ -236,7 +158,9 @@ class MapTreeDetail extends Component {
                             <img style={{width: 15, marginRight: 10, marginBottom: 4}} src="/treetime.png" />{this.props.detailtime}
                             <span style={{float: 'right',marginRight: 10}}>
                                 <span onClick={this.stationClick} style={{marginRight: 15, cursor: 'pointer'}}><img style={{width: 15, marginRight: 6, marginBottom: 4}} src="/home.png" />进入站房</span>
-                                {this.getbutton()}
+                                <span style={{float:"right"}}><PdButton DGIMN={selectpoint.DGIMN} id={selectpoint.operationUserID} pname={selectpoint.pointName}  reloadData={() => this.Refresh()}
+                                exist={selectpoint.existTask} name={selectpoint.operationUserName} tel={selectpoint.operationtel} viewType="mapview"/>
+                               </span>  {/* {this.getbutton()} */}
                             </span>
                         </div>
                     </div>
@@ -284,17 +208,6 @@ class MapTreeDetail extends Component {
                         </div>
                         </div>
                     </div>
-
-                    <UrgentDispatch
-                    onCancel={this.onCancel}
-                    visible={this.state.pdvisible}
-                    operationUserID={selectpoint?selectpoint.operationUserID:null}
-                    DGIMN={selectpoint?selectpoint.DGIMN:null}
-                    pointName={selectpoint?selectpoint.pointName:null}
-                    operationUserName={selectpoint?selectpoint.operationUserName:null}
-                    operationtel={selectpoint?selectpoint.operationtel:null}
-                    reloadData={()=>this.Refresh()}
-                />
           </div>
           </div>
         );
