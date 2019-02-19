@@ -12,13 +12,13 @@ import {
 import styles from './index.less';
 import MonitorContent from '../../components/MonitorContent/index';
 import NewDataFilter from '../Userinfo/DataFilterNew';
-import {routerRedux} from 'dva/router';
-import {connect} from 'dva';
+import { routerRedux } from 'dva/router';
+import { connect } from 'dva';
 const Option = Select.Option;
 const Search = Input.Search;
 const confirm = Modal.confirm;
 
-@connect(({loading, userinfo}) => ({
+@connect(({ loading, userinfo }) => ({
     ...loading,
     list: userinfo.list,
     total: userinfo.total,
@@ -43,7 +43,7 @@ export default class UserList extends Component {
         };
     }
     componentWillMount() {
-        this.onChange(this.props.pageIndex,this.props.pageSize);
+        this.onChange(this.props.pageIndex, this.props.pageSize);
     }
     selectRow = (record) => {
         this.setState({
@@ -68,10 +68,10 @@ export default class UserList extends Component {
             },
         });
     }
-    handleOK=(e) => {
+    handleOK = (e) => {
         this.addForm.handleSubmit();
     }
-    deleteuserbyid=(id) => {
+    deleteuserbyid = (id) => {
         this.props.dispatch({
             type: 'userinfo/deleteuser',
             payload: {
@@ -86,7 +86,7 @@ export default class UserList extends Component {
             },
         });
     }
-    delete=(id) => {
+    delete = (id) => {
         confirm({
             title: '确定要删除吗?',
             okText: '是',
@@ -123,10 +123,10 @@ export default class UserList extends Component {
             width: 1130
         });
     }
-    AddData=() => {
+    AddData = () => {
         this.child.AddDataFilter();
     }
-    onMenu = (key,id) => {
+    onMenu = (key, id) => {
         switch (key) {
             case '1':
                 this.setState({
@@ -144,7 +144,7 @@ export default class UserList extends Component {
     render() {
         const menu = (id) => (
             <Menu onClick={(e) => {
-                this.onMenu.bind()(e.key,id);
+                this.onMenu.bind()(e.key, id);
             }}>
                 <Menu.Item key="1"><Icon type="setting" />数据过滤</Menu.Item>
             </Menu>
@@ -153,8 +153,8 @@ export default class UserList extends Component {
             title: '登录名称',
             dataIndex: 'User_Account',
             key: 'User_Account',
-            width: '10%',
-            align:'center',
+            width: '15%',
+            align: 'center',
             sorter: (a, b) => a.User_Account.length - b.User_Account.length,
             render: (text, record) => {
                 return text;
@@ -200,72 +200,72 @@ export default class UserList extends Component {
                 return text;
             }
         },
-        { title: '状态',
+        {
+            title: '状态',
             dataIndex: 'DeleteMark',
             key: 'DeleteMark',
             width: '10%',
             align: 'center',
             render: (text, record) => {
                 if (text === '禁用') {
-                    return <span > <Tag color="red" > <a onClick={
+                    return <span style={{ paddingLeft: 10 }} > <Tag color="red" > <a onClick={
                         () => this.IsEnabled(1, record)
                     } > {text} </a></Tag > </span>;
                 }
-                return <span > <Tag color="blue" > <a onClick={
+                return <span style={{ paddingLeft: 10 }} > <Tag color="blue" > <a onClick={
                     () => this.IsEnabled(2, record)
                 } > {text} </a></Tag > </span>;
             }
         },
         {
             title: '操作',
-            width: '30%',
+            width: '25%',
             align: 'center',
             render: (text, record) => {
-                if (record.Roles_ID !== 'eec719c2-7c94-4132-be32-39fe57e738c9'){
-                    
-                return <Fragment >
-                <a onClick={
-                    () => this.props.dispatch(routerRedux.push(`/sysmanage/UserDetail/${record.key}`))
-                } > 编辑 </a>
-                <Divider type="vertical" />
-                 <Popconfirm placement="left" title="确定要删除此用户吗？" onConfirm={() => this.deleteuserbyid(record.key)} okText="是" cancelText="否">
-                    <a href="#" > 删除 </a>
-                </Popconfirm>
-                
-                <Divider type="vertical" />
-                <Dropdown overlay={menu(record.key)} >
-                    <a>
-                   更多 <Icon type="down" />
-                    </a>
-                </Dropdown>
-            </Fragment>
-            }
-            else
-            {
-                return <Fragment >
-                <a onClick={
-                    () => this.props.dispatch(routerRedux.push(`/sysmanage/UserDetail/${record.key}`))
-                } > 编辑 </a>
-                <Divider type="vertical" />
-                 <Popconfirm placement="left" title="确定要删除此用户吗？" onConfirm={() => this.deleteuserbyid(record.key)} okText="是" cancelText="否">
-                    <a href="#" > 删除 </a>
-                </Popconfirm>
-            </Fragment>
-            }
-        },
+                if (record.Roles_ID !== 'eec719c2-7c94-4132-be32-39fe57e738c9') {
+
+                    return <Fragment >
+                        <a onClick={
+                            () => this.props.dispatch(routerRedux.push(`/sysmanage/UserDetail/${record.key}`))
+                        } > 编辑 </a>
+                        <Divider type="vertical" />
+                        <Popconfirm placement="left" title="确定要删除此用户吗？" onConfirm={() => this.deleteuserbyid(record.key)} okText="是" cancelText="否">
+                            <a href="#" > 删除 </a>
+                        </Popconfirm>
+
+                        <Divider type="vertical" />
+                        <Dropdown overlay={menu(record.key)} >
+                            <a>
+                                更多 <Icon type="down" />
+                            </a>
+                        </Dropdown>
+                    </Fragment>
+                }
+                else {
+                    return <Fragment >
+                        <a onClick={
+                            () => this.props.dispatch(routerRedux.push(`/sysmanage/UserDetail/${record.key}`))
+                        } > 编辑 </a>
+                        <Divider type="vertical" />
+                        <Popconfirm placement="left" title="确定要删除此用户吗？" onConfirm={() => this.deleteuserbyid(record.key)} okText="是" cancelText="否">
+                            <a href="#" > 删除 </a>
+                        </Popconfirm>
+                    </Fragment>
+                }
+            },
         },
         ];
         return (
             <MonitorContent {...this.props} breadCrumbList={
                 [
-                    {Name:'首页',Url:'/'},
-                    {Name:'系统管理',Url:''},
-                    {Name:'用户管理',Url:''}
+                    { Name: '首页', Url: '/' },
+                    { Name: '系统管理', Url: '' },
+                    { Name: '用户管理', Url: '' }
                 ]
             }>
                 <div className={styles.cardTitle}>
                     <Card bordered={false} >
-                        <Form layout="inline" style={{marginBottom: 10}}>
+                        <Form layout="inline" style={{ marginBottom: 10 }}>
                             <Row gutter={8}>
                                 <Col span={24} >
                                     <Search placeholder="用户名/登录名" onSearch={(value) => {
@@ -281,8 +281,8 @@ export default class UserList extends Component {
                                                 UserAccount: value,
                                             },
                                         });
-                                    }}style={{ width: 200 }} />
-                                    <Select value={this.state.DeleteMark} style={{ width: 120,marginLeft:10 }} onChange={(value) => {
+                                    }} style={{ width: 200 }} />
+                                    <Select value={this.state.DeleteMark} style={{ width: 120, marginLeft: 10 }} onChange={(value) => {
                                         this.setState({
                                             DeleteMark: value
                                         });
@@ -300,10 +300,10 @@ export default class UserList extends Component {
                                         <Option value="1">启用</Option>
                                         <Option value="2">禁用</Option>
                                     </Select>
-                                    <Button type="primary" style={{marginLeft:10}}
-                                    onClick={() => {
-                                        this.props.dispatch(routerRedux.push(`/sysmanage/UserDetail/null`));
-                                    }}>添加</Button>
+                                    <Button type="primary" style={{ marginLeft: 10 }}
+                                        onClick={() => {
+                                            this.props.dispatch(routerRedux.push(`/sysmanage/UserDetail/null`));
+                                        }}>添加</Button>
                                 </Col>
                             </Row>
                         </Form>

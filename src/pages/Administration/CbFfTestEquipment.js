@@ -177,7 +177,7 @@ export default class CbFfTestEquipment extends Component {
                      <Form layout="inline" style={{marginBottom: 10}}>
                          <Row gutter={8} >
                              <Col span={24} >
-                                 <Search placeholder="设备名称"
+                                 <Search placeholder="测试项目"
                                      onSearch={ this.serachName }
                                      style={{width: 200,marginRight:20}} />
                                      <Button type="primary" style={{marginLeft:10}}
