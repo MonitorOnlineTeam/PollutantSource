@@ -12,6 +12,7 @@ import styles from './index.less';
 import {asc} from '../../utils/utils';
 import RealTimeWarningModal from '../../components/SpecialWorkbench/RealTimeWarningModal';
 import AlarmRecordModal from './AlarmRecordModal';
+import EmergencyDetailInfoModal from './EmergencyDetailInfoModal';
 import { routerRedux } from 'dva/router';
 
 @connect(({user,loading,global}) => ({
@@ -48,7 +49,7 @@ export default class GlobalHeaderRight extends PureComponent {
                         newNotice.avatar=(<Avatar style={{ backgroundColor: "gold", verticalAlign: 'middle' }} size="large">异</Avatar>);
                     }
                 }else if(newNotice.type==="advise"){
-                    newNotice.avatar=newNotice.isview===true?<Avatar style={{ backgroundColor: "red", verticalAlign: 'middle' }} size="large">通</Avatar>:<Avatar style={{ backgroundColor: "gray", verticalAlign: 'middle' }} size="large">通</Avatar>;
+                    newNotice.avatar=!newNotice.isview?<Avatar style={{ backgroundColor: "red", verticalAlign: 'middle' }} size="large">通</Avatar>:<Avatar style={{ backgroundColor: "gray", verticalAlign: 'middle' }} size="large">通</Avatar>;
                 }
             }
             return newNotice;
@@ -64,7 +65,7 @@ export default class GlobalHeaderRight extends PureComponent {
           }
           if (Array.isArray(value)) {
               if(key==="advise")
-                  unreadMsg[key] = value.filter(item => item.isview).length;
+                  unreadMsg[key] = value.filter(item => !item.isview).length;
               else{
                   const arr=value;
                   let result=0;
@@ -96,6 +97,10 @@ export default class GlobalHeaderRight extends PureComponent {
 
   onRefAlarm = (ref) => {
     this.childAlarm = ref;
+  }
+
+  onRefEmergencyDetailInfo= (ref) => {
+    this.childEmergencyDetailInfo = ref;
   }
 
   render() {
@@ -174,7 +179,14 @@ export default class GlobalHeaderRight extends PureComponent {
                             this.childAlarm.showModal(item.firsttime,item.lasttime,item.DGIMN,item.pointname);
                         }
                         else if(item.sontype==="exception"){
-
+                            
+                        }
+                    }else if(item.type==="advise"){
+                        if(item.params){
+                            const params=JSON.parse(JSON.parse(item.params));
+                            // this.props.dispatch(routerRedux.push(`/workbench`));
+                            // this.props.dispatch(routerRedux.push(`/TaskDetail/emergencydetailinfo/null/ywdsjlist/${params.TaskId}/${item.DGIMN}`));
+                            this.childEmergencyDetailInfo.showModal(item.DGIMN,params.TaskId,item.pointname);
                         }
                     }
                     //修改通知的已读状态
@@ -225,6 +237,7 @@ export default class GlobalHeaderRight extends PureComponent {
 
                 <RealTimeWarningModal {...this.props} onRef={this.onRefWarning} />
                 <AlarmRecordModal  {...this.props} onRef={this.onRefAlarm} />
+                <EmergencyDetailInfoModal  {...this.props} onRef={this.onRefEmergencyDetailInfo} />
           </div>
       );
   }

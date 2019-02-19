@@ -601,7 +601,7 @@ export default Model.extend({
                             pollutantName: item.pollutantName,
                             pollutantCode: res.data[0][item.pollutantCode] ? res.data[0][item.pollutantCode] : '-',
                             pollutantCodeParam: res.data[0][`${item.pollutantCode}_params`],
-                            zspollutantCode: pollutantInfoList.zspollutant ? res.data[0][item.zspollutantCode] ?
+                            zspollutantCode: pollutantInfoList.zspollutant ? ( res.data[0][item.zspollutantCode]===0 || res.data[0][item.zspollutantCode]) ?
                                 res.data[0][item.zspollutantCode] : '-' : '-',
                             zspollutantCodeParam: res.data[0][`${item.zspollutantCode}_params`],
                             dgimn: payload.dgimn,

@@ -227,7 +227,7 @@ export default class Ywdsjlist extends Component {
                             <Timeline.Item key={key1 + '1' + key} dot={<img style={{ width: '38px', height: '38px' }} src="/patrol.png" />}>
                                 <p className={Ywdsjlistss.taskDetail}><span style={{ color: '#40B0F5', marginRight: '10px' }}>{valueName}</span>{value}</p>
                                 <div className={Ywdsjlistss.seeDetail} onClick={() => {
-                                    this.props.dispatch(routerRedux.push(`/TaskDetail/emergencydetailinfo/${this.props.match.params.viewtype}/operationywdsjlist/${item1.ID}/${localStorage.getItem('DGIMN')}`));
+                                    this.props.dispatch(routerRedux.push(`/TaskDetail/emergencydetailinfolayout/${this.props.match.params.viewtype}/operationywdsjlist/${item1.ID}/${localStorage.getItem('DGIMN')}`));
                                 }}>
                                     查看详情
                                 </div>
@@ -241,7 +241,7 @@ export default class Ywdsjlist extends Component {
                                 <Timeline.Item key={key1 + '2' + key} dot={<img style={{ width: '38px', height: '38px' }} src="/patrol.png" />}>
                                     <p className={Ywdsjlistss.taskDetail}><span style={{ color: '#40B0F5', marginRight: '10px' }}>{valueName}</span>{value}</p>
                                     <div className={Ywdsjlistss.seeDetail} onClick={() => {
-                                        this.props.dispatch(routerRedux.push(`/TaskDetail/emergencydetailinfo/${undefined}/operationywdsjlist/${item1.ID}/${localStorage.getItem('DGIMN')}`));
+                                        this.props.dispatch(routerRedux.push(`/TaskDetail/emergencydetailinfolayout/${undefined}/operationywdsjlist/${item1.ID}/${localStorage.getItem('DGIMN')}`));
                                     }}>
                                         查看详情
                                 </div>
@@ -254,7 +254,7 @@ export default class Ywdsjlist extends Component {
                                 <Timeline.Item key={key1 + '3' + key} dot={<img style={{ width: '38px', height: '38px' }} src="/emergeny.png" />}>
                                     <p className={Ywdsjlistss.taskDetail}><span style={{ color: '#40B0F5', marginRight: '10px' }}>{valueName1}</span>{value1}</p>
                                     <div className={Ywdsjlistss.seeDetail} onClick={() => {
-                                        this.props.dispatch(routerRedux.push(`/TaskDetail/emergencydetailinfo/${undefined}/operationywdsjlist/${item1.ID}/${localStorage.getItem('DGIMN')}`));
+                                        this.props.dispatch(routerRedux.push(`/TaskDetail/emergencydetailinfolayout/${undefined}/operationywdsjlist/${item1.ID}/${localStorage.getItem('DGIMN')}`));
                                     }}>
                                         查看详情
                                 </div>

@@ -155,6 +155,9 @@ export async function mymessagelist(params) {
         beginTime: params.beginTime,
         endTime: params.endTime
     };
+    if(params.isView !== undefined)
+        //保存是否已读
+        body.isAsc=params.isView;
     const result = post('/api/rest/PollutantSourceApi/PUserInfo/GetMyMessageList', body, null);
     return result === null ? {
         data: null

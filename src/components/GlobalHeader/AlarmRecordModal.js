@@ -47,7 +47,6 @@ class AlarmRecordModal extends Component {
                   this.setState({ visibleAlarmModal: false });
               }}
               width="70%"
-              height="80%"
               footer={[]}
           >
               <AlarmRecord firsttime={moment(firsttime)} lasttime={moment(lasttime)} DGIMN={DGIMN} />

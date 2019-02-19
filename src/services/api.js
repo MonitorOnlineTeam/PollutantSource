@@ -560,5 +560,22 @@ export async function queryrealparam(params) {
     const result = await post('/api/rest/PollutantSourceApi/DataList/GetProcessFlowChartStatus', body, null);
     return result === null ? { data: null } : result.data;
 }
+// 获取单排口运维信息
+export async function queryoperationInfo(params) {
+    const body = {
+        DGIMNs: params.dgimn,
+    };
+    const result = await post('/api/rest/PollutantSourceApi/PPointAndData/GetOperationByDgimn', body, null);
+    return result === null ? { data: null } : result;
+}
+
+// 获取单排口下是否有任务
+export async function queryoperationTaskInfo(params) {
+    const body = {
+        DGIMNs: params.dgimn,
+    };
+    const result = await post('/api/rest/PollutantSourceApi/PPointAndData/GetOperationTaskByDgimn', body, null);
+    return result === null ? { data: null } : result;
+}
 
 

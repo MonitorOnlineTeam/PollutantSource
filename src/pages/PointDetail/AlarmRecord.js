@@ -118,8 +118,8 @@ class AlarmRecord extends Component {
           let tablewidth=0;
           const colcount=5;
           let width= (window.screen.availWidth - 120)/colcount;
-          if(width<200) {
-              width=200;
+          if(width < 200) {
+              width = 200;
           }
           tablewidth= width*colcount;
 
@@ -179,14 +179,14 @@ class AlarmRecord extends Component {
                                       placeholder="请选择污染物"
                                   />
                               </div>
-                          }                          
+                          }
                       >
                           <Table
                               loading={this.props.dataloading}
                               columns={columns}
                               dataSource={this.props.data}
                               rowKey="key"
-                              scroll={{ y: 'calc(100vh - 450px)',x:tablewidth }}
+                              scroll={{ y: 'calc(100vh - 500px)',x:tablewidth }}
                               rowClassName={
                                   (record, index, indent) => {
                                       if (index === 0) {
