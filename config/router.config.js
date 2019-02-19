@@ -111,7 +111,7 @@ export default [
             },
 
             /* 任务详情 */
-            { path: '/taskdetail/emergencydetailinfo/:viewtype/:taskfrom/:TaskID/:DGIMN', component: './EmergencyTodoList/EmergencyDetailInfo' },
+            { path: '/taskdetail/emergencydetailinfolayout/:viewtype/:taskfrom/:TaskID/:DGIMN', component: './EmergencyTodoList/EmergencyDetailInfoLayout' },
             /* 停机记录 */
             { path: '/patrolform/stopcemsinfo/:pointcode/:viewtype/:taskfrom/:histroyrecordtype/:TaskID', component: './EmergencyTodoList/StopCemsInfo' },
             /* 维修记录 */

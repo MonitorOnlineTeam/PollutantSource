@@ -1,73 +1,78 @@
 import React, { Component } from 'react';
-import styles from '../EmergencyTodoList/EmergencyDetailInfo.less';
 import { Card, Divider, Button, Input, Table, Icon, Spin, Modal, Upload, Form, Col, Row, message, Carousel, Steps, Tooltip, Popover } from 'antd';
-import DescriptionList from '../../components/DescriptionList';
-import AlarmDetails from '../../components/EmergencyDetailInfo/AlarmDetails';
 import { connect } from 'dva';
-import { EnumRequstResult, EnumPatrolTaskType, EnumPsOperationForm, EnumOperationTaskStatus } from '../../utils/enum';
 import { routerRedux } from 'dva/router';
-import { imgaddress } from '../../config.js';
 import { CALL_HISTORY_METHOD } from 'react-router-redux';
-import MonitorContent from '../../components/MonitorContent/index';
-import { get } from '../../dvapack/request';
 import { async } from 'q';
 import moment from 'moment';
 import Lightbox from "react-image-lightbox-rotate";
+import styles from "./EmergencyDetailInfo.less";
+import DescriptionList from '../../components/DescriptionList';
+import AlarmDetails from '../../components/EmergencyDetailInfo/AlarmDetails';
+import { EnumRequstResult, EnumPatrolTaskType, EnumPsOperationForm, EnumOperationTaskStatus } from '../../utils/enum';
+import { imgaddress } from '../../config.js';
+import MonitorContent from '../../components/MonitorContent/index';
+import { get } from '../../dvapack/request';
 import "react-image-lightbox/style.css";
+
 const { Description } = DescriptionList;
 const { TextArea } = Input;
 const FormItem = Form.Item;
 const Step = Steps.Step;
+let SCREEN_HEIGHT = document.querySelector('body').offsetHeight - 250;
+
 @Form.create()
-@connect(({ task, loading }) => ({
+@connect(({ task,loading }) => ({
     isloading: loading.effects['task/GetTaskDetailInfo'],
     taskInfo: task.TaskInfo,
-    DGIMN: null
 }))
-export default class EmergencyDetailInfo extends Component {
+class EmergencyDetailInfo extends Component {
     constructor(props) {
         super(props);
+        const {DGIMN,TaskID}=this.props;
+
         this.state = {
             previewVisible: false,
             previewImage: '',
             cdvisible: false,
             // uid: null,
             photoIndex: 0,
+            //参数改变让页面刷新
+            DGIMN:DGIMN,
+            TaskID:TaskID
         };
     }
 
-    componentDidMount() {
+    componentDidMount=()=> {
         this.reloaddata();
     }
 
+    componentWillReceiveProps(nextProps){
+        const {DGIMN,TaskID} = this.props;
+        //如果传入参数有变化，则重新加载数据
+        if(nextProps.DGIMN !== DGIMN||nextProps.TaskID !== TaskID){
+            this.setState({
+                //参数改变让页面刷新
+                DGIMN:nextProps.DGIMN,
+                TaskID:nextProps.TaskID
+            });
+            this.reloaddata();
+        }
+    }
+
     handlePreview = (file, fileList) => {
-        var ImageList = 0;
+        let ImageList = 0;
         fileList.map((item, index) => {
             if (item.uid === file.uid) {
-                ImageList = index
+                ImageList = index;
             }
-        })
+        });
         this.setState({
-            // previewImage: `${imgaddress}${file.name}`,
             previewVisible: true,
-            // uid: file.uid,
             photoIndex: ImageList
         });
     }
-    // imageData = (fileList) => {
-    //     var ImageList = [];
-    //     fileList.map((item) => {
-    //         ImageList.push(
-    //             `${imgaddress}${item.name}`
-    //         )
-    //     })
-    //     console.log(fileList);
 
-    //     return returnImageList;
-    // }
-    onChange = (a, b, c) => {
-        console.log(a, b, c);
-    }
     handleCancels = () => {
         this.setState({
             previewVisible: false
@@ -78,70 +83,131 @@ export default class EmergencyDetailInfo extends Component {
         this.props.dispatch({
             type: 'task/GetTaskDetailInfo',
             payload: {
-                TaskID: this.props.match.params.TaskID,
-                UserID: this.props.match.params.UserID
+                TaskID: this.props.TaskID
             }
         });
     }
 
     renderItem = (data, taskID) => {
         const rtnVal = [];
-        let taskfrom = this.props.match.params.taskfrom;
+        let taskfrom = this.props.taskfrom||'';
         if (taskfrom.indexOf("qcontrollist") > -1) {
             taskfrom = taskfrom.split('-')[0];
         }
+
+
         data.map((item, key) => {
             if (item.FormMainID !== null) {
                 switch (item.ID) {
                     case EnumPsOperationForm.Repair:
-                        rtnVal.push(<p key={key} style={{ marginBottom: 0 }}><Button style={{ marginBottom: '5px' }} icon="check-circle-o" onClick={() => {
-                            this.props.dispatch(routerRedux.push(`/PatrolForm/RepairRecordDetail/${this.props.match.params.DGIMN}/${this.props.match.params.viewtype}/${taskfrom}/nop/${taskID}`));
-                        }}>{item.CnName}</Button></p>);
+                        rtnVal.push(<p key={key} style={{ marginBottom: 0 }}><Button
+                            style={{ marginBottom: '5px' }}
+                            icon="check-circle-o"
+                            onClick={() => {
+                                this.props.dispatch(routerRedux.push(`/PatrolForm/RepairRecordDetail/${this.props.DGIMN}/${this.props.viewtype}/${taskfrom}/nop/${taskID}`));
+                            }}
+                        >{item.CnName}
+                                                                             </Button>
+                                    </p>);
                         break;
                     case EnumPsOperationForm.StopMachine:
-                        rtnVal.push(<p key={key} style={{ marginBottom: 0 }}><Button style={{ marginBottom: '5px' }} icon="check-circle-o" onClick={() => {
-                            this.props.dispatch(routerRedux.push(`/PatrolForm/StopCemsInfo/${this.props.match.params.DGIMN}/${this.props.match.params.viewtype}/${taskfrom}/nop/${taskID}`));
-                        }}>{item.CnName}</Button></p>);
+                        rtnVal.push(<p key={key} style={{ marginBottom: 0 }}><Button
+                            style={{ marginBottom: '5px' }}
+                            icon="check-circle-o"
+                            onClick={() => {
+                                this.props.dispatch(routerRedux.push(`/PatrolForm/StopCemsInfo/${this.props.DGIMN}/${this.props.viewtype}/${taskfrom}/nop/${taskID}`));
+                            }}
+                        >{item.CnName}
+                                                                             </Button>
+                                    </p>);
                         break;
                     case EnumPsOperationForm.YhpReplace:
-                        rtnVal.push(<p key={key} style={{ marginBottom: 0 }}><Button style={{ marginBottom: '5px' }} icon="check-circle-o" onClick={() => {
-                            this.props.dispatch(routerRedux.push(`/PatrolForm/ConsumablesReplaceRecord/${this.props.match.params.DGIMN}/${this.props.match.params.viewtype}/${taskfrom}/nop/${taskID}`));
-                        }}>{item.CnName}</Button></p>);
+                        rtnVal.push(<p key={key} style={{ marginBottom: 0 }}><Button
+                            style={{ marginBottom: '5px' }}
+                            icon="check-circle-o"
+                            onClick={() => {
+                                this.props.dispatch(routerRedux.push(`/PatrolForm/ConsumablesReplaceRecord/${this.props.DGIMN}/${this.props.viewtype}/${taskfrom}/nop/${taskID}`));
+                            }}
+                        >{item.CnName}
+                                                                             </Button>
+                                    </p>);
                         break;
                     case EnumPsOperationForm.StandardGasReplace:
-                        rtnVal.push(<p key={key} style={{ marginBottom: 0 }}><Button style={{ marginBottom: '5px' }} icon="check-circle-o" onClick={() => {
-                            this.props.dispatch(routerRedux.push(`/PatrolForm/StandardGasRepalceRecord/${this.props.match.params.DGIMN}/${this.props.match.params.viewtype}/${taskfrom}/nop/${taskID}`));
-                        }}>{item.CnName}</Button></p>);
+                        rtnVal.push(<p key={key} style={{ marginBottom: 0 }}><Button
+                            style={{ marginBottom: '5px' }}
+                            icon="check-circle-o"
+                            onClick={() => {
+                                this.props.dispatch(routerRedux.push(`/PatrolForm/StandardGasRepalceRecord/${this.props.DGIMN}/${this.props.viewtype}/${taskfrom}/nop/${taskID}`));
+                            }}
+                        >{item.CnName}
+                                                                             </Button>
+                                    </p>);
                         break;
                     case EnumPsOperationForm.CqfPatrol:
-                        rtnVal.push(<p key={key} style={{ marginBottom: 0 }}><Button style={{ marginBottom: '5px' }} icon="check-circle-o" onClick={() => {
-                            this.props.dispatch(routerRedux.push(`/PatrolForm/CompleteExtraction/${this.props.match.params.DGIMN}/${this.props.match.params.viewtype}/${taskfrom}/nop/${taskID}`));
-                        }}>{item.CnName}</Button></p>);
+                        rtnVal.push(<p key={key} style={{ marginBottom: 0 }}><Button
+                            style={{ marginBottom: '5px' }}
+                            icon="check-circle-o"
+                            onClick={() => {
+                                this.props.dispatch(routerRedux.push(`/PatrolForm/CompleteExtraction/${this.props.DGIMN}/${this.props.viewtype}/${taskfrom}/nop/${taskID}`));
+                            }}
+                        >{item.CnName}
+                                                                             </Button>
+                                    </p>);
                         break;
                     case EnumPsOperationForm.CyfPatrol:
-                        rtnVal.push(<p key={key} style={{ marginBottom: 0 }}><Button style={{ marginBottom: '5px' }} icon="check-circle-o" onClick={() => {
-                            this.props.dispatch(routerRedux.push(`/PatrolForm/DilutionSampling/${this.props.match.params.DGIMN}/${this.props.match.params.viewtype}/${taskfrom}/nop/${taskID}`));
-                        }}>{item.CnName}</Button></p>);
+                        rtnVal.push(<p key={key} style={{ marginBottom: 0 }}><Button
+                            style={{ marginBottom: '5px' }}
+                            icon="check-circle-o"
+                            onClick={() => {
+                                this.props.dispatch(routerRedux.push(`/PatrolForm/DilutionSampling/${this.props.DGIMN}/${this.props.viewtype}/${taskfrom}/nop/${taskID}`));
+                            }}
+                        >{item.CnName}
+                                                                             </Button>
+                                    </p>);
                         break;
                     case EnumPsOperationForm.ClfPatrol:
-                        rtnVal.push(<p key={key} style={{ marginBottom: 0 }}><Button style={{ marginBottom: '5px' }} icon="check-circle-o" onClick={() => {
-                            this.props.dispatch(routerRedux.push(`/PatrolForm/DirectMeasurement/${this.props.match.params.DGIMN}/${this.props.match.params.viewtype}/${taskfrom}/nop/${taskID}`));
-                        }}>{item.CnName}</Button></p>);
+                        rtnVal.push(<p key={key} style={{ marginBottom: 0 }}><Button
+                            style={{ marginBottom: '5px' }}
+                            icon="check-circle-o"
+                            onClick={() => {
+                                this.props.dispatch(routerRedux.push(`/PatrolForm/DirectMeasurement/${this.props.DGIMN}/${this.props.viewtype}/${taskfrom}/nop/${taskID}`));
+                            }}
+                        >{item.CnName}
+                                                                             </Button>
+                                    </p>);
                         break;
                     case EnumPsOperationForm.CheckRecord:
-                        rtnVal.push(<p key={key} style={{ marginBottom: 0 }}><Button style={{ marginBottom: '5px' }} icon="check-circle-o" onClick={() => {
-                            this.props.dispatch(routerRedux.push(`/PatrolForm/JzRecordInfo/${this.props.match.params.DGIMN}/${this.props.match.params.viewtype}/${taskfrom}/nop/${taskID}`));
-                        }}>{item.CnName}</Button></p>);
+                        rtnVal.push(<p key={key} style={{ marginBottom: 0 }}><Button
+                            style={{ marginBottom: '5px' }}
+                            icon="check-circle-o"
+                            onClick={() => {
+                                this.props.dispatch(routerRedux.push(`/PatrolForm/JzRecordInfo/${this.props.DGIMN}/${this.props.viewtype}/${taskfrom}/nop/${taskID}`));
+                            }}
+                        >{item.CnName}
+                                                                             </Button>
+                                    </p>);
                         break;
                     case EnumPsOperationForm.TestRecord:
-                        rtnVal.push(<p key={key} style={{ marginBottom: 0 }}><Button style={{ marginBottom: '5px' }} icon="check-circle-o" onClick={() => {
-                            this.props.dispatch(routerRedux.push(`/PatrolForm/BdTestRecord/${this.props.match.params.DGIMN}/${this.props.match.params.viewtype}/${taskfrom}/nop/${taskID}`));
-                        }}>{item.CnName}</Button></p>);
+                        rtnVal.push(<p key={key} style={{ marginBottom: 0 }}><Button
+                            style={{ marginBottom: '5px' }}
+                            icon="check-circle-o"
+                            onClick={() => {
+                                this.props.dispatch(routerRedux.push(`/PatrolForm/BdTestRecord/${this.props.DGIMN}/${this.props.viewtype}/${taskfrom}/nop/${taskID}`));
+                            }}
+                        >{item.CnName}
+                                                                             </Button>
+                                    </p>);
                         break;
                     case EnumPsOperationForm.DataException:
-                        rtnVal.push(<p key={key} style={{ marginBottom: 0 }}><Button style={{ marginBottom: '5px' }} icon="check-circle-o" onClick={() => {
-                            this.props.dispatch(routerRedux.push(`/PatrolForm/DeviceExceptionDetail/${this.props.match.params.DGIMN}/${this.props.match.params.viewtype}/${taskfrom}/nop/${taskID}`));
-                        }}>{item.CnName}</Button></p>);
+                        rtnVal.push(<p key={key} style={{ marginBottom: 0 }}><Button
+                            style={{ marginBottom: '5px' }}
+                            icon="check-circle-o"
+                            onClick={() => {
+                                this.props.dispatch(routerRedux.push(`/PatrolForm/DeviceExceptionDetail/${this.props.DGIMN}/${this.props.viewtype}/${taskfrom}/nop/${taskID}`));
+                            }}
+                        >{item.CnName}
+                                                                             </Button>
+                                    </p>);
                         break;
                     default:
                         break;
@@ -151,82 +217,38 @@ export default class EmergencyDetailInfo extends Component {
         return rtnVal;
     }
 
-    //生成面包屑
-    renderBreadCrumb = () => {
-        const rtnVal = [];
-        let listUrl = this.props.match.params.viewtype;
-        let taskID = this.props.match.params.TaskID;
-        let taskfrom = this.props.match.params.taskfrom;
-        let histroyrecordtype = null;
-        rtnVal.push({ Name: '首页', Url: '/' });
-        switch (listUrl) {
-            case 'datalistview':    //数据一栏
-                rtnVal.push({ Name: '数据一览', Url: `/overview/${listUrl}` });
-                break;
-            case 'mapview':         //地图一栏
-                rtnVal.push({ Name: '地图一览', Url: `/overview/${listUrl}` });
-                break;
-            case 'pielist':                //我的派单
-                rtnVal.push({ Name: '我的派单', Url: `/account/settings/mypielist` });
-                break;
-            case 'workbench':
-                rtnVal.push({ Name: '工作台', Url: `/${listUrl}` });
-            default:
-                break;
-        }
-        if (taskfrom === 'ywdsjlist') {     //大事记
-            rtnVal.push({ Name: '运维大事记', Url: `/pointdetail/${this.props.match.params.DGIMN}/${listUrl}/${taskfrom}` });
-        }
-        else if (taskfrom === 'operationywdsjlist') {
-            rtnVal.push({ Name: '智能运维', Url: `` });
-            rtnVal.push({ Name: '运维大事记', Url: `/operation/ywdsjlist` });
-        }
-        else if (taskfrom.indexOf('qcontrollist') > -1) {    //质控记录（从表单进来时）
-            taskfrom = taskfrom.split('-')[0]
-            histroyrecordtype = taskfrom.split('-')[1];
-            rtnVal.push({ Name: '质控记录', Url: `/pointdetail/${this.props.match.params.DGIMN}/${listUrl}/${taskfrom}/${histroyrecordtype}` });
-        }
-        else if(taskfrom==='OperationCalendar')
-        {
-            rtnVal.push({ Name: '智能运维', Url: `` });
-            rtnVal.push({ Name: '运维日历', Url: `/operation/operationcalendar` });
-        }
-
-
-        rtnVal.push({ Name: '任务详情', Url: '' })
-        return rtnVal;
-    }
-
     //获取撤单按钮
     getCancelOrderButton = (createtime, TaskStatus) => {
         if (moment(createtime) > moment(new Date()).add(-7, 'day') && TaskStatus == 3) {
-            return <Button onClick={this.cdShow}><Icon type="close-circle" />打回</Button>
+            return <Button onClick={this.cdShow}><Icon type="close-circle" />打回</Button>;
         }
-        else {
-            return <Button disabled ><Icon type="close-circle" />打回</Button>
-        }
+
+        return <Button disabled={true}><Icon type="close-circle" />打回</Button>;
+
     }
+
     cdShow = () => {
         this.setState({
             cdvisible: true
-        })
+        });
     }
+
     cdClose = () => {
         this.setState({
             cdvisible: false
-        })
+        });
     }
+
     cdOk = (TaskID) => {
         this.props.dispatch({
             type: 'task/GetPostRevokeTask',
             payload: {
                 taskID: TaskID,
-                userID: this.props.match.params.UserID,
                 revokeReason: this.props.form.getFieldValue('reason'),
                 reload: () => this.reloaddata(),
                 close: () => this.cdClose()
             }
-        })
+        });
     }
 
     handleCancel = (e) => {
@@ -234,12 +256,17 @@ export default class EmergencyDetailInfo extends Component {
             visible: false,
         });
     }
+
     //步骤条
     TaskLogList = (TaskLogList) => {
-        var returnStepList = [];
+        let returnStepList = [];
         TaskLogList.map((item) => {
+
             returnStepList.push(
-                <Step status="finish" title={item.TaskStatusText} description={this.description(item)}
+                <Step
+                    status="finish"
+                    title={item.TaskStatusText}
+                    description={this.description(item)}
                     icon={<Icon type={item.TaskStatusText == '待执行' ? 'minus-circle' :
                         item.TaskStatusText == '进行中' ? 'clock-circle' :
                             item.TaskStatusText == '已完成' ? 'check-circle' :
@@ -249,16 +276,19 @@ export default class EmergencyDetailInfo extends Component {
                                             item.TaskStatusText == '待调整' ? 'warning' :
                                                 item.TaskStatusText == '已调整' ? 'check-square' :
                                                     'schedule'
-                    } />} />
-            )
-        })
+                    }
+                    />}
+                />
+            );
+        });
         return returnStepList;
     }
+
     //步骤条描述
     description = (item) => {
         if (item.TaskRemark === "" || item.TaskRemark === null) {
             return (
-                <div style={{ marginBottom: 40 }}  >
+                <div style={{ marginBottom: 40 }}>
                     <div style={{ marginTop: 5 }}>
                         {item.Remark}
                     </div>
@@ -270,35 +300,52 @@ export default class EmergencyDetailInfo extends Component {
                     </div>
 
                 </div>
-            )
+            );
         }
-        else {
-            return (
-                <Popover content={<span>{item.TaskRemark}</span>}>
-                    <div style={{ marginBottom: 40 }}  >
-                        <div style={{ marginTop: 5 }}>
-                            {item.Remark}
-                        </div>
-                        <div style={{ marginTop: 5 }}>
-                            {item.CreateUserName}
-                        </div>
-                        <div style={{ marginTop: 5 }}>
-                            {item.CreateTime}
-                        </div>
 
+        return (
+            <Popover content={<span>{item.TaskRemark}</span>}>
+                <div style={{ marginBottom: 40 }}>
+                    <div style={{ marginTop: 5 }}>
+                        {item.Remark}
                     </div>
-                </Popover>
-            )
-        }
+                    <div style={{ marginTop: 5 }}>
+                        {item.CreateUserName}
+                    </div>
+                    <div style={{ marginTop: 5 }}>
+                        {item.CreateTime}
+                    </div>
+
+                </div>
+            </Popover>
+        );
 
 
     }
+
     stepsWidth = (item) => {
-        var width = item.length * 350
-        return width
+        let width = item.length * 350;
+        return width;
     }
+
+    getGoBack = () => {
+        const {history,goback} = this.props;
+        if(goback === "none"){
+            SCREEN_HEIGHT = document.querySelector('body').offsetHeight - 500;
+            return (<span />);
+        }
+        return (
+            <Button
+                style={{ float: "right", marginRight: 30}}
+                onClick={() => {
+                    history.goBack(-1);
+                }}
+            ><Icon type="left" />退回
+            </Button>
+        );
+    }
+
     render() {
-        const SCREEN_HEIGHT = document.querySelector('body').offsetHeight - 250;
         const { photoIndex } = this.state;
         const { getFieldDecorator } = this.props.form;
         const formItemLayout = {
@@ -343,6 +390,12 @@ export default class EmergencyDetailInfo extends Component {
             PointName = data.PointName;
             EnterpriseName = data.EnterpriseName;
             TaskFrom = data.TaskFrom;
+            EmergencyStatusText = data.EmergencyGIMN;
+            TaskID = data.ID;
+            TaskCode = data.TaskCode;
+            PointName = data.PointName;
+            EnterpriseName = data.EnterpriseName;
+            TaskFrom = data.TaskFrom;
             EmergencyStatusText = data.EmergencyStatusText;
             TaskStatusText = data.TaskStatusText;
             TaskStatus = data.TaskStatus;
@@ -372,7 +425,7 @@ export default class EmergencyDetailInfo extends Component {
         }
         const pics = Attachments !== '' ? Attachments.ThumbimgList : [];
         const fileList = [];
-        var index = 0;
+        let index = 0;
         pics.map((item, key) => {
             index++;
             if (item === 'no') {
@@ -393,12 +446,13 @@ export default class EmergencyDetailInfo extends Component {
 
         });
         //拼接图片地址数组
-        var ImageList = [];
+        let ImageList = [];
         fileList.map((item) => {
             ImageList.push(
                 `${imgaddress}${item.name}`
-            )
-        })
+            );
+        });
+        //报警列表列名
         const columns = [{
             title: '开始报警时间',
             width: '20%',
@@ -420,45 +474,13 @@ export default class EmergencyDetailInfo extends Component {
             width: '15%',
             key: 'AlarmCount',
         }];
-        const LogColumn = [
-            {
-                title: '步骤',
-                width: '10%',
-                dataIndex: 'Remark',
-                key: 'Remark',
-                align: 'center'
-            }, {
-                title: '处理人',
-                width: '20%',
-                dataIndex: 'CreateUserName',
-                key: 'CreateUserName',
-                align: 'center'
-            }, {
-                title: '创建时间',
-                width: '20%',
-                dataIndex: 'CreateTime',
-                key: 'CreateTime',
-                align: 'center'
-            }, {
-                title: '说明',
-                width: '20%',
-                dataIndex: 'TaskRemark',
-                key: 'TaskRemark',
-                align: 'center'
-            }, {
-                title: '处理状态',
-                width: '10%',
-                dataIndex: 'TaskStatusText',
-                key: 'TaskStatusText',
-                align: 'center'
-            }];
-
         const upload = {
             showUploadList: { showPreviewIcon: true, showRemoveIcon: false },
             listType: 'picture-card',
             fileList: [...fileList]
         };
-        if (this.props.isloading) {
+        const {isloading} = this.props;
+        if (isloading) {
             return (<Spin
                 style={{
                     width: '100%',
@@ -470,156 +492,151 @@ export default class EmergencyDetailInfo extends Component {
                 size="large"
             />);
         }
+
         return (
             <div>
-                <MonitorContent  {...this.props} breadCrumbList={this.renderBreadCrumb()}>
-                    <Card title={<span style={{ fontWeight: '900' }}>任务详情</span>} extra={
+                <Card
+                    title={<span style={{ fontWeight: '900' }}>任务详情</span>}
+                    extra={
                         <div>
                             <span style={{ marginRight: 20 }}>{this.getCancelOrderButton(CreateTime, TaskStatus)}</span>
-                            <Button style={{ float: "right", marginRight: 30 }} onClick={() => {
-                                this.props.history.goBack(-1);
-                            }}><Icon type="left" />退回</Button>
-                        </div>}>
-                        <div style={{ height: SCREEN_HEIGHT }} className={styles.ExceptionDetailDiv}>
-                            <Card title={<span style={{ fontWeight: '600' }}>基本信息</span>}>
-                                <DescriptionList className={styles.headerList} size="large" col="3">
-                                    <Description term="任务单号">{TaskCode}</Description>
-                                    <Description term="排口" >{PointName}</Description>
-                                    <Description term="企业">{EnterpriseName}</Description>
-                                </DescriptionList>
-                                <DescriptionList style={{ marginTop: 20 }} className={styles.headerList} size="large" col="3">
-                                    <Description term="任务来源">{TaskFrom}</Description>
-                                    <Description term="紧急程度"><div style={{ color: 'red' }}>{EmergencyStatusText}</div></Description>
-                                    <Description term="任务状态"> <div style={{ color: '#32CD32' }}>{TaskStatusText}</div></Description>
-                                    <Description term="任务内容">{TaskDescription}</Description>
-                                </DescriptionList>
-                                <DescriptionList style={{ marginTop: 20 }} className={styles.headerList} size="large" col="3">
-                                    <Description term="运维人">{OperationsUserName}</Description>
-                                    <Description term="创建时间">{CreateTime}</Description>
-                                </DescriptionList>
-                                {
-                                    TaskType === EnumPatrolTaskType.PatrolTask ? null : AlarmList.length === 0 ? null :
-                                        <Divider style={{ marginBottom: 20 }} />
-                                }
-                                {
-                                    TaskType === EnumPatrolTaskType.PatrolTask ? null : AlarmList.length === 0 ? null :
-                                        <div style={{ marginBottom: '10px', textAlign: 'right' }}> <a onClick={() => {
-                                            this.setState({
-                                                visible: true
-                                            })
-                                        }}>查看更多>></a></div>
-                                }
-                                {
+                            {this.getGoBack()}
+                        </div>}
+                >
 
-                                    TaskType === EnumPatrolTaskType.PatrolTask ? null : AlarmList.length === 0 ? null :
-                                        <Table rowKey={(record, index) => `complete${index}`} style={{ backgroundColor: 'white' }} bordered={false} dataSource={AlarmList} pagination={false} columns={columns} />
-                                }
-                            </Card>
-                            <Card title={<span style={{ fontWeight: '900' }}>处理说明</span>} style={{ marginTop: 20 }}>
-                                <DescriptionList className={styles.headerList} size="large" col="1">
-                                    <Description>
-                                        <TextArea rows={8} style={{ width: '600px' }} value={Remark}>
+                    <div style={{ height: SCREEN_HEIGHT }} className={styles.ExceptionDetailDiv}>
+                        <Card title={<span style={{ fontWeight: '600' }}>基本信息</span>}>
+                            <DescriptionList className={styles.headerList} size="large" col="3">
+                                <Description term="任务单号">{TaskCode}</Description>
+                                <Description term="排口">{PointName}</Description>
+                                <Description term="企业">{EnterpriseName}</Description>
+                            </DescriptionList>
+                            <DescriptionList style={{ marginTop: 20 }} className={styles.headerList} size="large" col="3">
+                                <Description term="任务来源">{TaskFrom}</Description>
+                                <Description term="紧急程度"><div style={{ color: 'red' }}>{EmergencyStatusText}</div></Description>
+                                <Description term="任务状态"> <div style={{ color: '#32CD32' }}>{TaskStatusText}</div></Description>
+                                <Description term="任务内容">{TaskDescription}</Description>
+                            </DescriptionList>
+                            <DescriptionList style={{ marginTop: 20 }} className={styles.headerList} size="large" col="3">
+                                <Description term="运维人">{OperationsUserName}</Description>
+                                <Description term="创建时间">{CreateTime}</Description>
+                            </DescriptionList>
+                            {
+                                TaskType === EnumPatrolTaskType.PatrolTask ? null : AlarmList.length === 0 ? null : (<Divider style={{ marginBottom: 20 }} />)
+                            }
+                            {
+                                TaskType === EnumPatrolTaskType.PatrolTask ? null : AlarmList.length === 0 ? null :
+                                    <div style={{ marginBottom: '10px', textAlign: 'right' }}> <a onClick={() => {
+                                        this.setState({
+                                            visible: true
+                                        });
+                                    }}
+                                >查看更多>>
+                                </a>
+                                </div>
+                            }
+                            {
 
-                                        </TextArea>
-                                    </Description>
-                                </DescriptionList>
-                            </Card>
-                            <Card title={<span style={{ fontWeight: '900' }}>处理记录</span>} style={{ marginTop: 20 }}>
-                                <DescriptionList className={styles.headerList} size="large" col="1">
-                                    <Description>
-                                        {
-                                            this.renderItem(RecordTypeInfo, TaskID)
-                                        }
-                                    </Description>
-                                </DescriptionList>
-                                <DescriptionList style={{ marginTop: 20 }} className={styles.headerList} size="large" col="2">
-                                    <Description term="处理人">
-                                        {OperationsUserName}
-                                    </Description>
-                                    <Description term="处理时间">
-                                        {CompleteTime}
-                                    </Description>
-                                </DescriptionList>
-                            </Card>
-                            <Card title={<span style={{ fontWeight: '900' }}>附件</span>}>
-                                {
-                                    upload.fileList.length === 0 ? '没有上传附件' :
-                                        <Upload
-                                            {...upload}
-                                            onPreview={(file) => {
-                                                this.handlePreview(file, fileList);
-                                            }}
-                                        />
-                                }
-                            </Card>
-                            <Card title={<span style={{ fontWeight: '900' }}>日志表</span>} style={{ marginTop: 20 }}>
-                                {
-                                    <Steps width={this.stepsWidth(TaskLogList)} style={{ overflowX: 'scroll' }}>
-                                        {
-                                            this.TaskLogList(TaskLogList)
-                                        }
-                                    </Steps>
-                                }
-                                {/* <Table columns={LogColumn}
-                                    rowKey={(record, index) => `complete${index}`}
-                                    dataSource={TaskLogList}
-                                    bordered={true}
-                                    pagination={false}
-                                /> */}
-                            </Card>
-                        </div>
-                    </Card>
-                    <Modal
-                        visible={this.state.cdvisible}
-                        onCancel={this.cdClose}
-                        onOk={() => this.cdOk(TaskID)}
-                        title="打回说明"
-                    >
-                        <Form className="login-form">
-                            <FormItem
-                                {...formItemLayout}
-                                label="说明"
-                            >
-                                {getFieldDecorator('reason', {
-                                    rules: [{ required: true, message: '请输入打回说明' }],
-                                })(
-                                    <Input.TextArea rows='3' prefix={<Icon type="rollback" style={{ color: 'rgba(0,0,0,.25)' }} />} />
-                                )}
-                            </FormItem>
-                        </Form>
-                    </Modal>
+                                TaskType === EnumPatrolTaskType.PatrolTask ? null : AlarmList.length === 0 ? null :
+                                    <Table rowKey={(record, index) => `complete${index}`} style={{ backgroundColor: 'white' }} bordered={false} dataSource={AlarmList} pagination={false} columns={columns} />
+                            }
+                        </Card>
+                        <Card title={<span style={{ fontWeight: '900' }}>处理说明</span>} style={{ marginTop: 20 }}>
+                            <DescriptionList className={styles.headerList} size="large" col="1">
+                                <Description>
+                                    <TextArea rows={8} style={{ width: '600px' }} value={Remark} />
+                                </Description>
+                            </DescriptionList>
+                        </Card>
+                        <Card title={<span style={{ fontWeight: '900' }}>处理记录</span>} style={{ marginTop: 20 }}>
+                            <DescriptionList className={styles.headerList} size="large" col="1">
+                                <Description>
+                                    {
+                                        this.renderItem(RecordTypeInfo, TaskID)
+                                    }
+                                </Description>
+                            </DescriptionList>
+                            <DescriptionList style={{ marginTop: 20 }} className={styles.headerList} size="large" col="2">
+                                <Description term="处理人">
+                                    {OperationsUserName}
+                                </Description>
+                                <Description term="处理时间">
+                                    {CompleteTime}
+                                </Description>
+                            </DescriptionList>
+                        </Card>
+                        <Card title={<span style={{ fontWeight: '900' }}>附件</span>}>
+                            {
+                                upload.fileList.length === 0 ? '没有上传附件' : (<Upload
+                                    {...upload}
+                                    onPreview={(file) => {
+                                        this.handlePreview(file, fileList);
+                                    }}
+                                />)
+                            }
+                        </Card>
+                        <Card title={<span style={{ fontWeight: '900' }}>日志表</span>} style={{ marginTop: 20 }}>
+                            {
+                                <Steps width={this.stepsWidth(TaskLogList)} style={{ overflowX: 'scroll' }}>
+                                    {
+                                        this.TaskLogList(TaskLogList)
+                                    }
+                                </Steps>
+                            }
+                        </Card>
+                    </div>
+                </Card>
+                <Modal
+                    visible={this.state.cdvisible}
+                    onCancel={this.cdClose}
+                    onOk={() => this.cdOk(TaskID)}
+                    title="打回说明"
+                >
+                    <Form className="login-form">
+                        <FormItem
+                            {...formItemLayout}
+                            label="说明"
+                        >
+                            {getFieldDecorator('reason', {
+                                rules: [{ required: true, message: '请输入打回说明' }],
+                            })(
+                                <Input.TextArea rows="3" prefix={<Icon type="rollback" style={{ color: 'rgba(0,0,0,.25)' }} />} />
+                            )}
+                        </FormItem>
+                    </Form>
+                </Modal>
 
-                    {this.state.previewVisible && (
-                            <Lightbox
-                                mainSrc={ImageList[photoIndex]}
-                                nextSrc={ImageList[(photoIndex + 1) % ImageList.length]}
-                                prevSrc={ImageList[(photoIndex + ImageList.length - 1) % ImageList.length]}
-                                onCloseRequest={() => this.setState({ previewVisible: false })}
-                                onPreMovePrevRequest={() => 
-                                    this.setState({
-                                        photoIndex: (photoIndex + ImageList.length - 1) % ImageList.length
-                                    })
-                                }
-                                onPreMoveNextRequest={() =>
-                                    this.setState({
-                                        photoIndex: (photoIndex + 1) % ImageList.length
-                                    })
-                                }
-                            />
-                    )}
+                {this.state.previewVisible && (
+                    <Lightbox
+                        mainSrc={ImageList[photoIndex]}
+                        nextSrc={ImageList[(photoIndex + 1) % ImageList.length]}
+                        prevSrc={ImageList[(photoIndex + ImageList.length - 1) % ImageList.length]}
+                        onCloseRequest={() => this.setState({ previewVisible: false })}
+                        onPreMovePrevRequest={() =>
+                            this.setState({
+                                photoIndex: (photoIndex + ImageList.length - 1) % ImageList.length
+                            })
+                        }
+                        onPreMoveNextRequest={() =>
+                            this.setState({
+                                photoIndex: (photoIndex + 1) % ImageList.length
+                            })
+                        }
+                    />
+                )}
 
-                    < Modal
-                        footer={null}
-                        title="报警记录"
-                        width='70%'
-                        height='70%'
-                        visible={this.state.visible}
-                        onCancel={this.handleCancel}
-                    >
-                        <AlarmDetails data={data.AlarmList} />
-                    </Modal >
-                </MonitorContent >
-            </div >
+                <Modal
+                    footer={null}
+                    title="报警记录"
+                    width="70%"
+                    height="70%"
+                    visible={this.state.visible}
+                    onCancel={this.handleCancel}
+                >
+                    <AlarmDetails data={data.AlarmList} />
+                </Modal>
+            </div>
         );
     }
 }
+export default EmergencyDetailInfo;
