@@ -24,12 +24,12 @@ export default class Ywdsjlist extends Component {
             rangeDate: [moment(moment(new Date()).subtract(3, 'month').format('YYYY-MM-DD 00:00:00')), moment(moment(new Date()).format('YYYY-MM-DD 23:59:59'))],
             pageIndex: pageIndex,
             pageSize: pageSize,
-            IsAlarmTimeout: true,
+            IsAlarmTimeout: false,
             beginTime: moment().subtract(3, 'month').format('YYYY-MM-DD 00:00:00'),
             endTime: moment().format('YYYY-MM-DD 23:59:59'),
             taskType: 0,
             iconLoading: false,
-            alarmStatus:true
+            alarmStatus:false
         };
     }
 
