@@ -1,12 +1,26 @@
 import React, { Component,Fragment } from 'react';
-import { Button, Table, Spin, Modal, Divider, Popconfirm,Icon,Card,Form,Row,Col } from 'antd';
+import {
+    Button,
+    Table,
+    Spin,
+    Modal,
+    Divider,
+    Popconfirm,
+    message,
+    Card,
+    Form,
+    Row,
+    Col
+} from 'antd';
 import { connect } from 'dva';
 import moment from 'moment';
 import styles from './index.less';
 import Addepinfo from './addepinfo.js';
+import FilesList from "../StandardLibrary/FilesList";
 
 @connect(({baseinfo, loading}) => ({
     isloading: loading.effects['baseinfo/queryeeplist'],
+    requstresult: baseinfo.requstresult,
     pdlist: baseinfo.pdlist,
     total: baseinfo.total,
     pageIndex:baseinfo.pageIndex,
@@ -65,6 +79,19 @@ class index extends Component {
         });
     };
 
+     showFile = (record) => {
+         if (record.IsFiles === 1) {
+             this.setState({
+                 StandardLibraryID: record.key,
+                 Fvisible: true,
+                 title: '文件列表',
+                 width: 800
+             });
+         } else {
+             message.error('没有可以下载的文件');
+         }
+     }
+
     //删除
     deletebutton = (record) => {
         this.props.dispatch({
@@ -76,7 +103,14 @@ class index extends Component {
     };
 
     render() {
-        const {pageSize,pageIndex,total,pdlist,isloading}=this.props;
+        const {
+            pageSize,
+            pageIndex,
+            total,
+            pdlist,
+            isloading,
+            requstresult
+        } = this.props;
         const columns = [{
             title: '名称',
             dataIndex: 'EPName',
@@ -181,9 +215,9 @@ class index extends Component {
                         columns={columns}
                         className={styles.dataTable}
                         rowKey="ID"
-                        dataSource={pdlist}
+                        dataSource={requstresult==='1'?pdlist:null}
                         size="small"
-                        scroll={{ y: 'calc(100vh - 330px)' }}
+                        scroll={{ y: 'calc(100vh - 220px)' }}
                         rowClassName={
                             (record, index, indent) => {
                                 if (index === 0) {
@@ -219,6 +253,24 @@ class index extends Component {
                 >
                     {
                         <Addepinfo closemodal={this.hideModal} row={this.state.row} />
+                    }
+                </Modal>
+                <Modal
+                    visible={this.state.Fvisible}
+                    title={this.state.title}
+                    width={this.state.width}
+                    destroyOnClose={true}// 清除上次数据
+                    footer={false}
+                    onCancel={
+                        () => {
+                            this.setState({
+                                Fvisible: false
+                            });
+                        }
+                    }
+                >
+                    {
+                        <FilesList pid={this.state.StandardLibraryID} />
                     }
                 </Modal>
             </div>

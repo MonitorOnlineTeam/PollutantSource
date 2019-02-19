@@ -45,7 +45,8 @@ export async function AddOrUpdateSpareParts(params) {
         IsUsed: 1,
         Code: params.code,
         PartName: params.partName,
-        ID: params.id
+        ID: params.id,
+        Unit:params.unit
     };
     const result = post('/api/rest/PollutantSourceApi/PTaskForm/AddOrUpdateSpareParts', body, null);
     return result === null ? {
@@ -105,7 +106,8 @@ export async function AddOrUpdateStandardGas(params) {
         IsUsed: 1,
         Manufacturer: params.manufacturer,
         StandardGasName: params.gasName,
-        ID: params.id
+        ID: params.id,
+        Unit:params.unit
     };
     const result = post('/api/rest/PollutantSourceApi/PTaskForm/AddOrUpdateStandardGas', body, null);
     return result === null ? {

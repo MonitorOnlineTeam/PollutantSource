@@ -10,8 +10,10 @@ import HeaderDropdown from '../HeaderDropdown';
 import SelectLang from '../SelectLang';
 import styles from './index.less';
 import {asc} from '../../utils/utils';
-
-
+import RealTimeWarningModal from '../../components/SpecialWorkbench/RealTimeWarningModal';
+import AlarmRecordModal from './AlarmRecordModal';
+import EmergencyDetailInfoModal from './EmergencyDetailInfoModal';
+import { routerRedux } from 'dva/router';
 
 @connect(({user,loading,global}) => ({
     currentUser:user.currentUser,
@@ -47,7 +49,7 @@ export default class GlobalHeaderRight extends PureComponent {
                         newNotice.avatar=(<Avatar style={{ backgroundColor: "gold", verticalAlign: 'middle' }} size="large">异</Avatar>);
                     }
                 }else if(newNotice.type==="advise"){
-                    newNotice.avatar=newNotice.isview===true?<Avatar style={{ backgroundColor: "red", verticalAlign: 'middle' }} size="large">通</Avatar>:<Avatar style={{ backgroundColor: "gray", verticalAlign: 'middle' }} size="large">通</Avatar>;
+                    newNotice.avatar=!newNotice.isview?<Avatar style={{ backgroundColor: "red", verticalAlign: 'middle' }} size="large">通</Avatar>:<Avatar style={{ backgroundColor: "gray", verticalAlign: 'middle' }} size="large">通</Avatar>;
                 }
             }
             return newNotice;
@@ -63,7 +65,7 @@ export default class GlobalHeaderRight extends PureComponent {
           }
           if (Array.isArray(value)) {
               if(key==="advise")
-                  unreadMsg[key] = value.filter(item => item.isview).length;
+                  unreadMsg[key] = value.filter(item => !item.isview).length;
               else{
                   const arr=value;
                   let result=0;
@@ -89,6 +91,18 @@ export default class GlobalHeaderRight extends PureComponent {
       });
   };
 
+  onRefWarning = (ref) => {
+      this.childWarning = ref;
+  }
+
+  onRefAlarm = (ref) => {
+    this.childAlarm = ref;
+  }
+
+  onRefEmergencyDetailInfo= (ref) => {
+    this.childEmergencyDetailInfo = ref;
+  }
+
   render() {
       const {
           currentUser,
@@ -98,7 +112,8 @@ export default class GlobalHeaderRight extends PureComponent {
           onMenuClick,
           onNoticeClear,
           theme,
-      } = this.props;
+          dispatch
+      } = this.props;      
       const menu = (
           <Menu className={styles.menu} selectedKeys={[]} onClick={onMenuClick}>
               <Menu.Item key="userCenter">
@@ -153,8 +168,29 @@ export default class GlobalHeaderRight extends PureComponent {
                   className={styles.action}
                   count={currentUserNoticeCnt.unreadCount}
                   onItemClick={(item, tabProps) => {
-            console.log(item, tabProps); // eslint-disable-line
-                      this.changeReadState(item, tabProps);
+                    console.log(item, tabProps); // eslint-disable-line
+                    //报警
+                    if (item.type==="alarm") {
+                        if(item.sontype==="warn"){
+                            this.childWarning.showModal(item.pointname, item.DGIMN, item.overwarnings[0].PollutantCode, item.overwarnings[0].PollutantName, item.overwarnings[0].SuggestValue);
+                        }
+                        else if(item.sontype==="over"){
+                            // dispatch(routerRedux.push(`/pointdetail/${item.DGIMN}/alarmrecord/alarmrecord`));
+                            this.childAlarm.showModal(item.firsttime,item.lasttime,item.DGIMN,item.pointname);
+                        }
+                        else if(item.sontype==="exception"){
+                            
+                        }
+                    }else if(item.type==="advise"){
+                        if(item.params){
+                            const params=JSON.parse(JSON.parse(item.params));
+                            // this.props.dispatch(routerRedux.push(`/workbench`));
+                            // this.props.dispatch(routerRedux.push(`/TaskDetail/emergencydetailinfo/null/ywdsjlist/${params.TaskId}/${item.DGIMN}`));
+                            this.childEmergencyDetailInfo.showModal(item.DGIMN,params.TaskId,item.pointname);
+                        }
+                    }
+                    //修改通知的已读状态
+                    //   this.changeReadState(item, tabProps);
                   }}
                   locale={{
                       emptyText: formatMessage({ id: 'component.noticeIcon.empty' }),
@@ -199,6 +235,9 @@ export default class GlobalHeaderRight extends PureComponent {
                   <Spin size="small" style={{ marginLeft: 8, marginRight: 8 }} />
               )}
 
+                <RealTimeWarningModal {...this.props} onRef={this.onRefWarning} />
+                <AlarmRecordModal  {...this.props} onRef={this.onRefAlarm} />
+                <EmergencyDetailInfoModal  {...this.props} onRef={this.onRefEmergencyDetailInfo} />
           </div>
       );
   }

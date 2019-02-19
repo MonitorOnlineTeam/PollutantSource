@@ -1,3 +1,4 @@
+import moment from 'moment';
 import { post, get } from '../dvapack/request';
 // import userlist from '../mockdata/User/userinfo.json';
 
@@ -177,12 +178,12 @@ export async function loadCountryPointView(params) {
 }
 
 export async function GetAlarmNotices(params) {
-    // const body = {
-    //     beginTime: params.beginTime,
-    //     endTime: params.endTime
-    // };
-    // const result = await get('/api/rest/PollutantSourceApi/PAlarmData/GetAlarmNotices', body, null);
-    // return result === null ? { data: null } : result;
+    const body = {
+        beginTime: "2019-02-10",
+        endTime: params.endTime
+    };
+    const result = await get('/api/rest/PollutantSourceApi/PAlarmData/GetAlarmNotices', body, null);
+    return result === null ? { data: null } : result;
 }
 
 export async function getAllExceptionInfo(params) {
@@ -356,11 +357,12 @@ export async function queryeeplist() {
 }
 // 添加排污许可证
 export async function addPDPermit(params) {
-    let arr = params.Data.split(',');
+    let Btime = moment(params.Data).format("YYYY-01-01");
+    let Etime = moment(params.Data).format("YYYY-12-31");
     const body = {
         epnum: params.EPNum,
-        begintime: arr[0],
-        endtime: arr[1],
+        begintime: Btime,
+        endtime: Etime,
         epname: params.EPName,
         NOx: params.NOx,
         YC: params.YC,
@@ -372,12 +374,13 @@ export async function addPDPermit(params) {
 }
 // 编辑排污许可证
 export async function editPDPermit(params) {
-    let arr = params.Data.split(',');
+    let Btime = moment(params.Data).format("YYYY-01-01");
+    let Etime = moment(params.Data).format("YYYY-12-31");
     const body = {
         code: params.code,
         epnum: params.EPNum,
-        begintime: arr[0],
-        endtime: arr[1],
+        begintime: Btime,
+        endtime: Etime,
         epname: params.EPName,
         NOx: params.NOx,
         YC: params.YC,

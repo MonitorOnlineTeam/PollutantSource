@@ -133,7 +133,7 @@ class AddStandardLibraryPollutant extends Component {
      this.props.onRef(this);
      const Id = this.props.Id;
      console.log(Id);
-     if (Id !== null) {
+     if (Id !== "null") {
          this.setState({
              Id: Id,
              btndisabled: true,
@@ -253,7 +253,7 @@ class AddStandardLibraryPollutant extends Component {
                                       }
                                   )(
                                       <Select placeholder="请选择报警类型">
-                                          <Option value="0">无间报警</Option>
+                                          <Option value="0">无报警</Option>
                                           <Option value="1">上限报警</Option>
                                           <Option value="2">下限报警</Option>
                                           <Option value="3">区间报警</Option>

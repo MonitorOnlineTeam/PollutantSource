@@ -42,8 +42,8 @@ export default Model.extend({
         gasoutputtypelist_requstresult: null,
         pollutanttypelist_requstresult:null,
         MainInstrumentName:[], //主要仪器名称
-        ChildCems:[],           //CEMS监测子系统
-        Analyzers:[]           //监测仪器信息
+        ChildCems:[], //CEMS监测子系统
+        Analyzers:[] //监测仪器信息
     },
     subscriptions: {
         setup({
@@ -372,7 +372,12 @@ export default Model.extend({
                         AnalyzerSys: DataInfo.data
                     });
                 }
+            }else{
+                yield update({
+                    AnalyzerSys: null
+                });
             }
+
         },
         * addalyzersys({
             payload: {

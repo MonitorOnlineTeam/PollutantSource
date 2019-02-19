@@ -46,6 +46,7 @@ export default Model.extend({
                         return {
                             id:`over_${item.DGIMNs}`,
                             pointname: item.PointName,
+                            DGIMN:`${item.DGIMNs}`,
                             pollutantnames:item.PollutantNames,
                             firsttime:item.FirstTime,
                             lasttime:item.LastTime,
@@ -67,6 +68,7 @@ export default Model.extend({
                         return {
                             id:`warn_${item.DGIMNs}`,
                             pointname: item.PointName,
+                            DGIMN:`${item.DGIMNs}`,
                             discription:discription,
                             overwarnings:item.OverWarnings,
                             sontype:"warn",
@@ -84,6 +86,7 @@ export default Model.extend({
                         return {
                             id:`exception_${item.DGIMNs}`,
                             pointname: item.PointName,
+                            DGIMN:`${item.DGIMNs}`,
                             exceptiontypes:item.ExceptionTypes,
                             firsttime:item.FirstAlarmTime,
                             lasttime:item.LastAlarmTime,
@@ -100,17 +103,20 @@ export default Model.extend({
                     }));
                 }
             }
-            //通知消息
-            const res2 = yield call(mymessagelist,{});
+            //通知消息,未读消息
+            const res2 = yield call(mymessagelist,{isView:false});
             if(res2&&res2.data!==null){
                 let advises=res2.data.map((item,index)=>({
                     id:`advise_${item.DGIMN}`,
+                    pointname:`${item.PointName}`,
+                    DGIMN:`${item.DGIMN}`,
                     msgtitle: item.MsgTitle,
                     msg:item.Msg,
                     pushtime:item.PushTime,
                     pushusername:item.PushUserName,
                     isview:item.IsView,
                     sontype:item.PushType,
+                    params:item.Col1,
                     //组件里根据这个分组
                     type: 'advise',
                     //排序从5001到9000
@@ -124,7 +130,8 @@ export default Model.extend({
             }
             yield put({
                 type: 'saveNotices',
-                payload: {notices:notices,
+                payload: {
+                    notices:notices,
                     notifyCount: count,
                     unreadCount: count
                 }
@@ -311,7 +318,7 @@ export default Model.extend({
                                 array:obj.Message
                             },
                         });
- 
+
                         dispatch({
                             type: 'videolist/changeRealTimeData',
                             payload: {
@@ -337,15 +344,15 @@ export default Model.extend({
                             payload: {
                                 array:obj.Message
                             },
-                        }); 
+                        });
                         break;
                     case 'DynamicControlState':
-                         dispatch({
+                        dispatch({
                             type: 'points/updateDynamicControlState',
                             payload: {
                                 array:obj.Message
                             },
-                        });  
+                        });
                         break;
                     case 'Alarm':
                         dispatch({

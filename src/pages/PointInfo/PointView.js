@@ -17,6 +17,7 @@ import AddAnalyzerSys from '../PointInfo/AddAnalyzerSys';
 import AddAnalyzerChild from '../PointInfo/AddAnalyzerChild';
 import ViewAnalyzerChild from '../PointInfo/ViewAnalyzerChild';
 import styles from './index.less';
+import { EnumPollutantTypeCode } from '../../utils/enum';
 const {
     Description
 } = DescriptionList;
@@ -306,7 +307,7 @@ export default class pointview extends Component {
                 }
                 rtnVal.push(
                     <div className={styles.show}>
-                    <Card style={{ height: 350 }} title={this.Gaseousinfo(item)} extra={'厂商/编号：' + item.Manufacturer + '/' + item.ManufacturerCode}>
+                    <Card style={{ height: 350 }} title={this.Gaseousinfo(item)} extra={'厂商/型号：' + item.Manufacturer + '/' + item.ManufacturerCode}>
                         <Table
                             rowKey={(record, index) => `complete${index}`}
                             //loading={this.props.effects['stopmanagement/getlist']}
@@ -403,8 +404,9 @@ export default class pointview extends Component {
                             </DescriptionList>
                         </Card.Grid>
                     </Card>
-                        {this.renderChildCems()}
-                        <div className={this.state.AddVisitable ? styles.show : styles.hide}>
+                        {this.state.PollutantType=== "none"? null:this.renderChildCems()}
+                        <div className={this.state.AddVisitable ? styles.show : styles.hide} 
+                        style={{display: this.state.PollutantType}}>
                             <Card>
                                 <Button type="dashed" block onClick={() => {
                                     this.setState({

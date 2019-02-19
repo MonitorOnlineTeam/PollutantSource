@@ -107,12 +107,14 @@ class TransmissionEfficiency extends PureComponent {
             {
                 key:'PointName',
                 title: '排口名称',
-                dataIndex: 'PointName'
+                dataIndex: 'PointName',
+                width:'60%',
             },
             {
                 key:'TransmissionEffectiveRate',
                 title: '传输有效率',
                 dataIndex: 'TransmissionEffectiveRate',
+                width:'40%',
                 render: (text, record) => {
                     let rr = `${(parseFloat(text) * 100).toFixed(2)}%`;
                     if (text >= 90)

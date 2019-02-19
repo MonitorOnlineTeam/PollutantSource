@@ -52,14 +52,14 @@ export default class BdTestRecord extends Component {
 
     renderCemsMainInstrument = (record) => {
         const rtnVal = [];
-        if (record !== null && record !== undefined) {
-            rtnVal.push(<tr key='0'>
+        rtnVal.push(<tr key='0'>
                 <td style={{ width: '20%' }} className={styles.tdTitle}>仪器名称</td>
                 <td style={{ width: '20%' }} className={styles.tdTitle}>设备型号</td>
                 <td style={{ width: '20%' }} className={styles.tdTitle}>制造商</td>
                 <td style={{ width: '20%' }} className={styles.tdTitle}>测试项目</td>
                 <td style={{ width: '20%' }} className={styles.tdTitle}>测量原理</td>
             </tr>);
+        if (record !== null && record !== undefined) {
             record.map((item, key) => {
                 rtnVal.push(
                     <tr key={key + 1}>
@@ -71,22 +71,29 @@ export default class BdTestRecord extends Component {
                     </tr>
                 );
             });
+        }else{
+            rtnVal.push(
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td colSpan="2"></td>
+                </tr>
+            );
         }
         return rtnVal;
     }
 
-    renderCemsTestInfo = (recordInfo, recordResult, itemName) => {
+    renderCemsTestInfo = (recordResult, itemName) => {
         const rtnVal = [];
         let rowNum = 0;
-        if (recordInfo !== null &&
-            recordResult !== null &&
+        if (recordResult !== null &&
             itemName !== null) {
             let result = recordResult.filter((item) => {
-                return item.ItemID === itemName;
+                return item.ItemName === itemName;
             });
-            let record = recordInfo.filter((item) => {
-                return item.ItemID === itemName;
-            });
+            let record = result!==null&&result!==undefined&&result.length>0?result[0].TestResult:null;
             if (record !== null && record !== undefined) {
                 this.state.unit.map((item) => {
                     if (item.item === itemName) {
@@ -95,16 +102,16 @@ export default class BdTestRecord extends Component {
                     }
                 });
                 record.map((item, key) => {
-                    if (rowNum === 0) {
-                        let evaluateResult = result !== null && result.length > 0 ? result[0].EvaluateResults : '';
+                    if (rowNum === 0) {debugger;
+                        let evaluateResult = result !== null && result.length > 0 ? result[0].EvaluateResults==="1"?"合格":"不合格" : '';
                         rtnVal.push(
                             <tr key={key}>
                                 <td>{item.TestTime}</td>
                                 <td>{item.CbValue}</td>
                                 <td>{item.CemsTextValue}</td>
-                                <td rowSpan={record.length + 1}>{result !== null && result.length > 0 ? result[0].WcValue : ''}</td>
+                                <td rowSpan={record.length + 1} style={{textAlign:'center'}}>{result !== null && result.length > 0 ? result[0].WcValue : ''}</td>
                                 <td rowSpan={record.length + 1}>{result !== null && result.length > 0 ? result[0].EvaluateStadard : ''}</td>
-                                <td rowSpan={record.length + 1}>{evaluateResult}</td>
+                                <td rowSpan={record.length + 1} style={{textAlign:'center'}}>{evaluateResult}</td>
                             </tr>
                         );
                     } else {
@@ -135,7 +142,7 @@ export default class BdTestRecord extends Component {
         const rtnVal = [];
         if (recordResult !== null && recordResult !== undefined) {
             result = recordResult.filter((item) => {
-                return item.ItemID === itemName;
+                return item.ItemName === itemName;
             });
         }
         let sltValue1 = result !== null && result.length > 0 && result[0].Formula === '相对准确度' ? true : false;
@@ -195,7 +202,7 @@ export default class BdTestRecord extends Component {
         const rtnVal = [];
         if (recordResult !== null && recordResult !== undefined) {
             result = recordResult.filter((item) => {
-                return item.ItemID === itemName;
+                return item.ItemName === itemName;
             });
         }
         let sltValue1 = result !== null && result.length > 0 && result[0].Unit === 'μmol/mol' ? true : false;
@@ -228,12 +235,12 @@ export default class BdTestRecord extends Component {
     //展示测试中的标气使用信息
     renderGasInfo = (record) => {
         const rtnVal = [];
-        if (record !== null && record !== undefined) {
-            rtnVal.push(<tr key='0'>
+        rtnVal.push(<tr key='0'>
                 <td style={{ width: '33%' }} className={styles.tdTitle}>标准气体名称</td>
                 <td style={{ width: '33%' }} className={styles.tdTitle}>浓度值</td>
                 <td style={{ width: '34%' }} className={styles.tdTitle}>生产厂商名称</td>
             </tr>);
+        if (record !== null && record !== undefined) {
             record.map((item, key) => {
                 rtnVal.push(
                     <tr key={key + 1}>
@@ -243,6 +250,14 @@ export default class BdTestRecord extends Component {
                     </tr>
                 );
             });
+        }else{
+            rtnVal.push(
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            );
         }
         return rtnVal;
     }
@@ -250,13 +265,13 @@ export default class BdTestRecord extends Component {
     //展示测试中手持设备
     renderCbInfo = (record) => {
         const rtnVal = [];
-        if (record !== null && record !== undefined) {
-            rtnVal.push(<tr key='0'>
+        rtnVal.push(<tr key='0'>
                 <td style={{ width: '25%' }} className={styles.tdTitle}>测试项目</td>
                 <td style={{ width: '25%' }} className={styles.tdTitle}>测试设备生产商</td>
                 <td style={{ width: '25%' }} className={styles.tdTitle}>测试设备型号</td>
                 <td style={{ width: '25%' }} className={styles.tdTitle}>方法依据</td>
             </tr>);
+        if (record !== null && record !== undefined) {
             record.map((item, key) => {
                 rtnVal.push(
                     <tr key={key + 1}>
@@ -267,6 +282,15 @@ export default class BdTestRecord extends Component {
                     </tr>
                 );
             });
+        }else{
+            rtnVal.push(
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            );
         }
         return rtnVal;
     }
@@ -337,7 +361,6 @@ export default class BdTestRecord extends Component {
         let CemsMainInstrument = null; //CEMS主要设备型号
         let StandardGas = null; //使用标气信息
         let CbTestEquipment = null; //参比方法设备
-        let TestRecord = null; //校准测试记录
         let TestResult = null; //校准测试结果
         let CheckConclusionResult1 = null; //校验结论1
         let CheckConclusionResult2 = null; //校验结论2
@@ -359,9 +382,8 @@ export default class BdTestRecord extends Component {
             CemsMainInstrument = Record.Content.cemsMainInstrumentCode;
             StandardGas = Record.Content.standardGas;
             CbTestEquipment = Record.Content.cbTestEquipment;
-            TestRecord = Record.RecordList1;
             TestResult = Record.RecordList;
-            CheckIsOk = Record.Content.CheckIsOk;
+            CheckIsOk = Record.Content.CheckIsOk!==null?(Record.Content.CheckIsOk==="1"?"合格":"不合格"):"";
             CheckDate = Record.Content.CheckDate;
             CreateUserID = Record.CreateUserID;
             SignContent = Record.SignContent === null ? null : `data:image/jpeg;base64,${Record.SignContent}`;
@@ -444,7 +466,7 @@ export default class BdTestRecord extends Component {
                                     <td>（mg/m3）</td>
                                     <td>（mg/m3）</td>
                                 </tr>
-                                {this.renderCemsTestInfo(TestRecord, TestResult, '颗粒物')}
+                                {this.renderCemsTestInfo(TestResult, '颗粒物')}
                                 <tr><td colSpan="6" style={{ textAlign: 'center', fontWeight: 'bold' }}>SO2校验</td></tr>
                                 <tr>
                                     <td rowSpan="2">监测时间</td>
@@ -459,7 +481,7 @@ export default class BdTestRecord extends Component {
                                 {
                                     this.renderUnitInfo(TestResult, 'SO2')
                                 }
-                                {this.renderCemsTestInfo(TestRecord, TestResult, 'SO2')}
+                                {this.renderCemsTestInfo(TestResult, 'SO2')}
                                 <tr><td colSpan="6" style={{ textAlign: 'center', fontWeight: 'bold' }}>NOX校验</td></tr>
                                 <tr>
                                     <td rowSpan="2">监测时间</td>
@@ -474,7 +496,7 @@ export default class BdTestRecord extends Component {
                                 {
                                     this.renderUnitInfo(TestResult, 'SO2')
                                 }
-                                {this.renderCemsTestInfo(TestRecord, TestResult, 'NOX')}
+                                {this.renderCemsTestInfo(TestResult, 'NOX')}
                                 <tr><td colSpan="6" style={{ textAlign: 'center', fontWeight: 'bold' }}>O2校验</td></tr>
                                 <tr>
                                     <td rowSpan="2">监测时间</td>
@@ -490,7 +512,7 @@ export default class BdTestRecord extends Component {
                                     <td>（%）</td>
                                     <td>（%）</td>
                                 </tr>
-                                {this.renderCemsTestInfo(TestRecord, TestResult, 'O2')}
+                                {this.renderCemsTestInfo(TestResult, 'O2')}
                                 <tr><td colSpan="6" style={{ textAlign: 'center', fontWeight: 'bold' }}>流速校验</td></tr>
                                 <tr>
                                     <td rowSpan="2">监测时间</td>
@@ -506,7 +528,7 @@ export default class BdTestRecord extends Component {
                                     <td>（m/s）</td>
                                     <td>（m/s）</td>
                                 </tr>
-                                {this.renderCemsTestInfo(TestRecord, TestResult, '流速')}
+                                {this.renderCemsTestInfo(TestResult, '流速')}
                                 <tr><td colSpan="6" style={{ textAlign: 'center', fontWeight: 'bold' }}>温度校验</td></tr>
                                 <tr>
                                     <td rowSpan="2">监测时间</td>
@@ -520,7 +542,7 @@ export default class BdTestRecord extends Component {
                                     <td>（℃）</td>
                                     <td>（℃）</td>
                                 </tr>
-                                {this.renderCemsTestInfo(TestRecord, TestResult, '温度')}
+                                {this.renderCemsTestInfo(TestResult, '温度')}
                                 <tr><td colSpan="6" style={{ textAlign: 'center', fontWeight: 'bold' }}>湿度校验</td></tr>
                                 <tr>
                                     <td rowSpan="2">监测时间</td>
@@ -536,7 +558,7 @@ export default class BdTestRecord extends Component {
                                     <td>（%）</td>
                                     <td>（%）</td>
                                 </tr>
-                                {this.renderCemsTestInfo(TestRecord, TestResult, '湿度')}
+                                {this.renderCemsTestInfo(TestResult, '湿度')}
                                 <tr>
                                     <td rowSpan="6">校验结论</td>
                                     <td colSpan="5">如校验合格前对系统进行过处理、调整、参数修改，请说明：</td>

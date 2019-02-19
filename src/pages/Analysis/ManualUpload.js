@@ -122,7 +122,8 @@ export default class ManualUpload extends Component {
         this.props.dispatch({
             type: 'overview/querydatalist',
             payload: {
-                pollutantTypes: null,
+                pollutantTypes: this.state.pollutantTypeCode,
+                change:true, //当页面刷新时的条件
                 map: true, manualUpload: true,
                 pageIndex: this.props.pageIndex,
                 pageSize: this.props.pageSize,

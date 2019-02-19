@@ -30,7 +30,6 @@ export default class VideoList extends Component {
             width: 400,
             expandForm: false,
             loading: true,
-            DGIMN: this.props.match.params.pointcode,
             pointName: this.props.match.params.pointname,
             footer: <div>
                 <Button key="back" onClick={this.handleCancel}>Return</Button>,
@@ -48,7 +47,7 @@ export default class VideoList extends Component {
         this.props.dispatch({
             type: 'videolist/fetchuserlist',
             payload: {
-                DGIMN: this.state.DGIMN,
+                DGIMN: this.props.match.params.pointcode,
             },
         });
 
@@ -60,6 +59,7 @@ export default class VideoList extends Component {
         this.setState({
             visible: false
         });
+        this.onChange();
     }
     // 添加
     AddData = () => {
@@ -85,13 +85,23 @@ export default class VideoList extends Component {
         this.props.dispatch({
             type: 'videolist/deleteVideoInfo',
             payload: {
-                DGIMN: this.state.DGIMN,
+                DGIMN: this.props.match.params.pointcode,
                 VedioCamera_ID: record.VedioCamera_ID,
                 VedioDevice_ID: record.VedioDevice_ID,
                 CameraMonitorID: record.CameraMonitorID,
+                callback: (result) => {
+                    if (result === '1') {
+                        this.onChange();
+                        message.success('删除成功！')
+                    }
+                    else {
+                        message.error('删除失败！')
+                    }
+                }
             },
         });
     }
+    //加这个有什么意义吗？
     info() {
         Modal.info({
             title: 'This is a notification message',
@@ -105,7 +115,6 @@ export default class VideoList extends Component {
         });
     }
     render() {
-        console.log(this.props.match.params.pointcode === null ? null : this.props.match.params.pointcode);
         const columns = [
             { title: '设备名称', dataIndex: 'VedioDevice_Name', key: 'VedioDevice_Name', width: '10%' },
             { title: '相机名称', dataIndex: 'VedioCamera_Name', key: 'VedioCamera_Name', width: '10%' },
@@ -132,7 +141,6 @@ export default class VideoList extends Component {
                         }}>详情</a>
                         <Divider type="vertical" />
                         <a onClick={() => {
-                            console.log(record);
                             this.setState({
                                 visible: true,
                                 type: 'update',
@@ -192,7 +200,7 @@ export default class VideoList extends Component {
                         </Form>
                         <Table
                             columns={columns}
-                            dataSource={this.props.requstresult === '1' ? this.props.list : null}
+                            dataSource={this.props.list}
                             pagination={false}
                             rowKey="VedioCamera_ID"
                             onRow={(record, index) => {
@@ -229,7 +237,7 @@ export default class VideoList extends Component {
                             width={this.state.width}
                             onCancel={this.onCancel}>
                             {
-                                this.state.type === 'add' ? <Add onCancels={this.onCancel} dgimn={this.state.DGIMN} name={this.state.pointName} onRef={this.onRef1} /> : this.state.type === 'update' ? <Update onCancels={this.onCancel} dgimn={this.state.DGIMN} item={this.state.data} onRef={this.onRef1} /> : <InfoList onCancels={this.onCancel} dgimn={this.state.DGIMN} item={this.state.data} onRef={this.onRef1} />
+                                this.state.type === 'add' ? <Add onCancels={this.onCancel} dgimn={this.props.match.params.pointcode} name={this.state.pointName} onRef={this.onRef1} /> : this.state.type === 'update' ? <Update onCancels={this.onCancel} dgimn={this.state.DGIMN} item={this.state.data} onRef={this.onRef1} /> : <InfoList onCancels={this.onCancel} dgimn={this.state.DGIMN} item={this.state.data} onRef={this.onRef1} />
                             }
 
                         </Modal>
