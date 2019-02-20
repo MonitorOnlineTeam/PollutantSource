@@ -116,15 +116,15 @@ export default class TransmissionEfficiency extends Component {
                 key: 'ShouldNumber',
                 width: '10%',
                 align: 'left',
-                render: (text, record) => {
-                    if (record.AvgShouldNumber <= text) {
-                        return <span className={styles.normaldata}>{text}</span>;
-                    }
-                    const content = (<span><Icon type="warning" style={{ color: '#EEC900' }} />平均值{record.AvgShouldNumber}</span>)
-                    return (<Popover content={content} trigger="hover">
-                        <span className={styles.avgtext}> <Badge className={styles.warningdata} status="warning" />{text}
-                        </span> </Popover>);
-                }
+                // render: (text, record) => {
+                //     if (record.AvgShouldNumber <= text) {
+                //         return <span className={styles.normaldata}>{text}</span>;
+                //     }
+                //     const content = (<span><Icon type="warning" style={{ color: '#EEC900' }} />平均值{record.AvgShouldNumber}</span>)
+                //     return (<Popover content={content} trigger="hover">
+                //         <span className={styles.avgtext}> <Badge className={styles.warningdata} status="warning" />{text}
+                //         </span> </Popover>);
+                // }·
             },
             {
                 title: (<span style={{ fontWeight: 'bold' }}>实传个数</span>),

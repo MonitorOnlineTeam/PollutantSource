@@ -369,8 +369,11 @@ export async function addPDPermit(params) {
         SO2: params.SO2,
         file: params.Files,
     };
-    const result = await post('/api/rest/PollutantSourceApi/PEmissionPermits/AddPDPermit', body, null);
-    return result === null ? { data: null } : result;
+    const result = post('/api/rest/PollutantSourceApi/PEmissionPermits/AddPDPermit', body, null);
+    debugger;
+    return result === null ? {
+        data: null
+    } : result;
 }
 // 编辑排污许可证
 export async function editPDPermit(params) {

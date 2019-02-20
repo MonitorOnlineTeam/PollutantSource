@@ -106,40 +106,95 @@ class OverPointList extends Component {
        }
        else{
        let res=[];
-       this.props.overdatalist?this.props.overdatalist.map((item) => {
-           res.push(<Col key={item.pointName} span={8} >
-            <div className={styles.cardcss}>
-                <div className={styles.cardtitle}> 
-                    <img style={{width: 20, marginRight: 10, marginBottom: 4}} src='/star.png' />  <span>{item.pointName}</span>
-                    <span  className={styles.timetitle} > <img style={{width: 15, marginRight: 10, marginBottom: 4}} src="/treetime.png" />
-                    <span> 最新超标时间：{item.lastTime} </span>
-                    </span>
-                </div>
-                    <div className={styles.factormain}>
-                    <div className={styles.factor}> 
-                        <span style={{width:105}} className={styles.spancontent}>烟尘 : {item.zs01?item.zs01.Count:'-'}次</span>
-                        <span style={{width:140}} className={styles.spancontent}>超标倍数 : {item.zs01?(item.zs01.MinMultiple+'-'+ item.zs01.MaxMultiple):'-'}</span>
-                        <span className={styles.spancontent}>最新浓度 : {item.zs01?(item.zs01.lastValue):'-'}</span>
-                        <div style={{clear:'both'}}></div>
+       const {overdatalist}=this.props;
+       if(overdatalist)
+       {
+            overdatalist.map(item=>{
+                const zs01p=item.pollutantList.find(value=>{
+                    return value.pollutantCode=="zs01"; 
+                })
+                const zs02p=item.pollutantList.find(value=>{
+                    return  value.pollutantCode=="zs02";
+                })
+                const zs03p=item.pollutantList.find(value=>{
+                    return  value.pollutantCode=="zs03";
+                })
+                if( zs01p || zs02p || zs03p )
+                {
+                    res.push(
+                    <Col key={item.pointName} span={8} >
+                    <div className={styles.cardcss}>
+                        <div className={styles.cardtitle}> 
+                            <img style={{width: 20, marginRight: 10, marginBottom: 4}} src='/star.png' />  <span>{item.pointName}</span>
+                            <span  className={styles.timetitle} > <img style={{width: 15, marginRight: 10, marginBottom: 4}} src="/treetime.png" />
+                            <span> 最新超标时间：{item.lastTime} </span>
+                            </span>
+                        </div>
+                            <div className={styles.factormain}>
+                            <div className={styles.factor}> 
+                                <span style={{width:105}} className={styles.spancontent}>烟尘 : {zs01p?zs01p.Count:'-'}次</span>
+                                <span style={{width:180}} className={styles.spancontent}>超标倍数 : {zs01p?(zs01p.MinMultiple+'-'+ zs01p.MaxMultiple):'-'}</span>
+                                <span className={styles.spancontent}>最新浓度 : {zs01p?(zs01p.lastValue):'-'}</span>
+                                <div style={{clear:'both'}}></div>
+                            </div>
+                            <div className={styles.factor}> 
+                            <span style={{width:105}} className={styles.spancontent}>二氧化硫 : {zs02p?zs02p.Count:'-'}次</span>
+                                <span style={{width:180}} className={styles.spancontent}>超标倍数 : {zs02p?(zs02p.MinMultiple+'-'+ zs02p.MaxMultiple):'-'}</span>
+                                <span className={styles.spancontent}>最新浓度:{zs02p?(zs02p.lastValue):'-'}</span>
+                                <div style={{clear:'both'}}></div>
+                            </div>
+                            <div className={styles.factorlast}> 
+                            <span style={{width:105}} className={styles.spancontent}>氮氧化物 : {zs03p?zs03p.Count:'-'}次</span>
+                                <span style={{width:180}} className={styles.spancontent}>超标倍数 : {zs03p?(zs03p.MinMultiple+'-'+ zs03p.MaxMultiple):'-'}</span>
+                                <span className={styles.spancontent}>最新浓度 : {zs03p?(zs03p.lastValue):'-'}</span>
+                                <div style={{clear:'both'}}></div>
+                            </div></div>
+                            <div onClick={()=>this.onDetail(item.DGIMN)} className={styles.detail}>
+                                <span>查看详情</span>
+                            </div>
                     </div>
-                    <div className={styles.factor}> 
-                    <span style={{width:105}} className={styles.spancontent}>二氧化硫 : {item.zs02?item.zs02.Count:'-'}次</span>
-                        <span style={{width:140}} className={styles.spancontent}>超标倍数 : {item.zs02?(item.zs02.MinMultiple+'-'+ item.zs02.MaxMultiple):'-'}</span>
-                        <span className={styles.spancontent}>最新浓度:{item.zs02?(item.zs02.lastValue):'-'}</span>
-                        <div style={{clear:'both'}}></div>
-                    </div>
-                    <div className={styles.factorlast}> 
-                    <span style={{width:105}} className={styles.spancontent}>氮氧化物 : {item.zs03?item.zs03.Count:'-'}次</span>
-                        <span style={{width:140}} className={styles.spancontent}>超标倍数 : {item.zs03?(item.zs03.MinMultiple+'-'+ item.zs03.MaxMultiple):'-'}</span>
-                        <span className={styles.spancontent}>最新浓度 : {item.zs03?(item.zs03.lastValue):'-'}</span>
-                        <div style={{clear:'both'}}></div>
-                    </div></div>
-                    <div onClick={()=>this.onDetail(item.DGIMN)} className={styles.detail}>
-                        <span>查看详情</span>
-                    </div>
-            </div>
-            </Col>)
-          }):'';
+                    </Col>  )
+                }
+            })
+       }
+       if(!res || res.length==0)
+       {
+           res=<div style={{textAlign:"center"}}>暂无数据</div>
+       }
+    //    this.props.overdatalist?this.props.overdatalist.map((item) => {
+    //        res.push(<Col key={item.pointName} span={8} >
+    //         <div className={styles.cardcss}>
+    //             <div className={styles.cardtitle}> 
+    //                 <img style={{width: 20, marginRight: 10, marginBottom: 4}} src='/star.png' />  <span>{item.pointName}</span>
+    //                 <span  className={styles.timetitle} > <img style={{width: 15, marginRight: 10, marginBottom: 4}} src="/treetime.png" />
+    //                 <span> 最新超标时间：{item.lastTime} </span>
+    //                 </span>
+    //             </div>
+    //                 <div className={styles.factormain}>
+    //                 <div className={styles.factor}> 
+    //                     <span style={{width:105}} className={styles.spancontent}>烟尘 : {item.zs01?item.zs01.Count:'-'}次</span>
+    //                     <span style={{width:140}} className={styles.spancontent}>超标倍数 : {item.zs01?(item.zs01.MinMultiple+'-'+ item.zs01.MaxMultiple):'-'}</span>
+    //                     <span className={styles.spancontent}>最新浓度 : {item.zs01?(item.zs01.lastValue):'-'}</span>
+    //                     <div style={{clear:'both'}}></div>
+    //                 </div>
+    //                 <div className={styles.factor}> 
+    //                 <span style={{width:105}} className={styles.spancontent}>二氧化硫 : {item.zs02?item.zs02.Count:'-'}次</span>
+    //                     <span style={{width:140}} className={styles.spancontent}>超标倍数 : {item.zs02?(item.zs02.MinMultiple+'-'+ item.zs02.MaxMultiple):'-'}</span>
+    //                     <span className={styles.spancontent}>最新浓度:{item.zs02?(item.zs02.lastValue):'-'}</span>
+    //                     <div style={{clear:'both'}}></div>
+    //                 </div>
+    //                 <div className={styles.factorlast}> 
+    //                 <span style={{width:105}} className={styles.spancontent}>氮氧化物 : {item.zs03?item.zs03.Count:'-'}次</span>
+    //                     <span style={{width:140}} className={styles.spancontent}>超标倍数 : {item.zs03?(item.zs03.MinMultiple+'-'+ item.zs03.MaxMultiple):'-'}</span>
+    //                     <span className={styles.spancontent}>最新浓度 : {item.zs03?(item.zs03.lastValue):'-'}</span>
+    //                     <div style={{clear:'both'}}></div>
+    //                 </div></div>
+    //                 <div onClick={()=>this.onDetail(item.DGIMN)} className={styles.detail}>
+    //                     <span>查看详情</span>
+    //                 </div>
+    //         </div>
+    //         </Col>)
+    //       }):<div>暂无数据</div>;
         return res;
     }
    }

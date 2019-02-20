@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { FormattedMessage, formatMessage } from 'umi/locale';
-import { Spin, Tag, Menu, Icon, Avatar, Tooltip } from 'antd';
+import { Spin, Tag, Menu, Icon, Avatar, Tooltip,Popover,Button } from 'antd';
 import { connect } from 'dva';
 import moment from 'moment';
 import groupBy from 'lodash/groupBy';
@@ -14,6 +14,7 @@ import RealTimeWarningModal from '../../components/SpecialWorkbench/RealTimeWarn
 import AlarmRecordModal from './AlarmRecordModal';
 import EmergencyDetailInfoModal from './EmergencyDetailInfoModal';
 import { routerRedux } from 'dva/router';
+import PdButton from '../../components/OverView/PdButton';
 
 @connect(({user,loading,global}) => ({
     currentUser:user.currentUser,
@@ -51,6 +52,31 @@ export default class GlobalHeaderRight extends PureComponent {
                 }else if(newNotice.type==="advise"){
                     newNotice.avatar=!newNotice.isview?<Avatar style={{ backgroundColor: "red", verticalAlign: 'middle' }} size="large">通</Avatar>:<Avatar style={{ backgroundColor: "gray", verticalAlign: 'middle' }} size="large">通</Avatar>;
                 }
+            }
+            //如果是异常特殊处理，让其点击弹出
+            if(newNotice.sontype==="exception"){
+                newNotice.title=(
+                    <Popover trigger="click"  content={
+                        <div>
+                            <PdButton DGIMN={newNotice.DGIMN} viewType="datalist"/>
+                        </div>
+                    }>
+                        <span style={{ cursor: 'pointer' }}>
+                            {newNotice.title}
+                        </span>
+                    </Popover>
+                );
+                newNotice.description=(
+                    <Popover trigger="click"  content={
+                        <div>
+                            <PdButton DGIMN={newNotice.DGIMN} viewType="datalist"/>
+                        </div>
+                    }>
+                        <span style={{ cursor: 'pointer' }}>
+                            {newNotice.description}
+                        </span>
+                    </Popover>
+                );
             }
             return newNotice;
         });
@@ -179,7 +205,12 @@ export default class GlobalHeaderRight extends PureComponent {
                             this.childAlarm.showModal(item.firsttime,item.lasttime,item.DGIMN,item.pointname);
                         }
                         else if(item.sontype==="exception"){
-                            
+                           this.props.dispatch({
+                               type:'urgentdispatch/queryoperationInfo',
+                               payload:{
+                                dgimn:item.DGIMN
+                               }
+                           });
                         }
                     }else if(item.type==="advise"){
                         if(item.params){

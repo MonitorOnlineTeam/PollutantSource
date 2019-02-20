@@ -166,7 +166,7 @@ class DataFilterNew extends Component {
           const yichangDgimn = new Map(this.state.yichangDgimn);
           const chaobiaoDgimn = new Map(this.state.chaobiaoDgimn);
           const alldgimn = new Map(this.state.alldgimn);
-          if (selected.size === alldgimn.size) {
+          if (selected.size >= alldgimn.size) {
               this.props.dispatch({
                   type: 'userdgimndata/addAllDgimnDataFilter',
                   payload: {
@@ -469,90 +469,117 @@ class DataFilterNew extends Component {
          }
 
          render() {
-             console.log(this.state.yichangDgimn);
+             console.log(this.props.listloading);
+             console.log(this.props.addloading);
+             if (this.props.listloading) {
+                 return ( <Spin
+                     style={
+                         {
+                             width: '100%',
+                             height: 'calc(100vh/2)',
+                             display: 'flex',
+                             alignItems: 'center',
+                             justifyContent: 'center'
+                         }
+                     }
+                     size="large"
+                 /> );
+             }
+             if (this.props.addloading) {
+                 return ( <Spin
+                     style={
+                         {
+                             width: '100%',
+                             height: 'calc(100vh/2)',
+                             display: 'flex',
+                             alignItems: 'center',
+                             justifyContent: 'center'
+                         }
+                     }
+                     size="large"
+                 /> );
+             }
              return (
-                 <Spin spinning={this.props.listloading}>
-                     <div>
-                         <Card>
-                             <Form layout="inline">
-                                 <Row gutter={16}>
-                                     <Col span={5}>
-                                         <Search
-                                             placeholder="排口名称、排口编号"
-                                             style={{ width: 200 }}
-                                             onSearch={
-                                                 (value) => {
-                                                     this.setState({
-                                                         testkey: value
-                                                     },() => {
-                                                         this.onChange();
-                                                     });
-                                                 }
-                                             }
-                                         />
-                                     </Col>
-                                     <Col span={3}>
-                                         <Button
-                                             type="primary"
-                                             onClick={() => {
-                                                 this.AddAllPointClick();
-                                             }}
-                                         >全选
-                                         </Button>
-                                     </Col>
-                                     <Col span={10}>
-                                         <Checkbox
-                                             defaultChecked={this.state.yctype}
-                                             onChange={()=>{
+                 <div>
+                     <Card>
+                         <Form layout="inline">
+                             <Row gutter={16}>
+                                 <Col span={5}>
+                                     <Search
+                                         placeholder="排口名称、排口编号"
+                                         style={{ width: 200 }}
+                                         onSearch={
+                                             (value) => {
                                                  this.setState({
-                                                     yctype: this.state.yctype !== true,
+                                                     testkey: value
+                                                 },() => {
+                                                     this.onChange();
+                                                 });
+                                             }
+                                         }
+                                     />
+                                 </Col>
+                                 <Col span={3}>
+                                     <Button
+                                         type="primary"
+                                         onClick={() => {
+                                             this.AddAllPointClick();
+                                         }}
+                                     >全选
+                                     </Button>
+                                 </Col>
+                                 <Col span={10}>
+                                     <Checkbox
+                                         defaultChecked={this.state.yctype}
+                                         onChange={()=>{
+                                             this.setState({
+                                                 yctype: this.state.yctype !== true,
+                                             });
+                                         }}
+                                     >异常报警通知
+                                     </Checkbox>
+                                     <Checkbox
+                                         defaultChecked={this.state.cbtype}
+                                         onChange={()=>{
+                                             this.setState({
+                                                 cbtype: this.state.cbtype !== true,
+                                             });
+                                         }}
+                                     >超标报警通知
+                                     </Checkbox>
+                                     <Checkbox
+                                         defaultChecked={
+                                             this.state.yjtype
+                                         }
+                                         onChange={
+                                             () => {
+                                                 this.setState({
+                                                     yjtype: this.state.yjtype!==true,
                                                  });
                                              }}
-                                         >异常报警通知
-                                         </Checkbox>
-                                         <Checkbox
-                                             defaultChecked={this.state.cbtype}
-                                             onChange={()=>{
-                                                 this.setState({
-                                                     cbtype: this.state.cbtype !== true,
-                                                 });
-                                             }}
-                                         >超标报警通知
-                                         </Checkbox>
-                                         <Checkbox
-                                             defaultChecked={
-                                                 this.state.yjtype
-                                             }
-                                             onChange={
-                                                 () => {
-                                                     this.setState({
-                                                         yjtype: this.state.yjtype!==true,
-                                                     });
-                                                 }}
-                                         >超标预警通知
-                                         </Checkbox>
-                                     </Col>
-                                 </Row>
-                             </Form>
-                         </Card>
-                         <div className={styles.card}>
-                             {this.renderStandardList()}
-                         </div>
-                         <div style={{textAlign: 'center',marginTop: 20}}>
-                             <Pagination
-                                 size="small"
-                                 showSizeChanger={true}
-                                 showQuickJumper={true}
-                                 total={this.props.total}
-                                 pageSize={this.props.pageSize}
-                                 current={this.props.pageIndex}
-                                 onChange={this.PonChange}
-                                 onShowSizeChange={this.onShowSizeChange}
-                                 pageSizeOptions={['12', '16', '20', '24', '28']}
-                             />
-                         </div>
+                                     >超标预警通知
+                                     </Checkbox>
+                                 </Col>
+                             </Row>
+                         </Form>
+                     </Card>
+                     <div className={styles.card}>
+                         {this.renderStandardList()}
                      </div>
-                 </Spin>
+                     <div style={{textAlign: 'center',marginTop: 20}}>
+                         <Pagination
+                             size="small"
+                             showSizeChanger={true}
+                             showQuickJumper={true}
+                             total={this.props.total}
+                             pageSize={this.props.pageSize}
+                             current={this.props.pageIndex}
+                             onChange={this.PonChange}
+                             onShowSizeChange={this.onShowSizeChange}
+                             pageSizeOptions={['12', '16', '20', '24', '28']}
+                         />
+                     </div>
+                 </div>
              );
          }
 }

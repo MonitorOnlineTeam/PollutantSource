@@ -6,7 +6,8 @@ export default Model.extend({
     namespace: 'urgentdispatch',
     state: {
         operationUserInfo: null,
-        existTask:null
+        existTask:null,
+        dgimn:null
     },
     effects: {
         * queryoperationInfo({
@@ -20,16 +21,18 @@ export default Model.extend({
             yield put({
                 type:'queryoperationTaskInfo',
                 payload:payload
-            })
+            });
             yield take('queryoperationTaskInfo/@@end');
             const result = yield call(queryoperationInfo, payload);
             if (result.requstresult === '1') {
                 yield update({
                     operationUserInfo: result.data,
+                    dgimn:payload.dgimn
                 });
             } else {
                 yield update({
                     operationUserInfo: null,
+                    dgimn:null
                 });
             }
            

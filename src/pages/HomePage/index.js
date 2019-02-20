@@ -482,9 +482,9 @@ class index extends Component {
              SurplusDisplacement = ycAnalData.length !== 0 ? ycAnalData.Remainder.toFixed(2) : 0;
              if (SurplusDisplacement>0) {
                  outed = SurplusDisplacement / (12 - Number.parseInt(TheMonth));
-                 title = `余${SurplusDisplacement}(kg)`;
+                 title = `余${SurplusDisplacement}(t)`;
              }else {
-                 title = `超${Math.abs(SurplusDisplacement)}(kg)`;
+                 title = `超${Math.abs(SurplusDisplacement)}(t)`;
              }
              ycdata.map((ele) => {
 
@@ -502,9 +502,9 @@ class index extends Component {
              SurplusDisplacement = eyhlAnalData.length !== 0 ? eyhlAnalData.Remainder.toFixed(2) : 0;
              if (SurplusDisplacement > 0) {
                  outed = SurplusDisplacement / (12 - Number.parseInt(TheMonth));
-                 title = `余${SurplusDisplacement}(kg)`;
+                 title = `余${SurplusDisplacement}(t)`;
              } else {
-                 title = `超${Math.abs(SurplusDisplacement)}(kg)`;
+                 title = `超${Math.abs(SurplusDisplacement)}(t)`;
              }
              eyhldata.map((ele) => {
                  if (Number.parseInt(TheMonth) <i) {
@@ -522,9 +522,9 @@ class index extends Component {
              let outed=0;
              if (SurplusDisplacement > 0) {
                  outed=SurplusDisplacement / (12 - Number.parseInt(TheMonth));
-                 title = `余${SurplusDisplacement}(kg)`;
+                 title = `余${SurplusDisplacement}(t)`;
              } else {
-                 title = `超${Math.abs(SurplusDisplacement)}(kg)`;
+                 title = `超${Math.abs(SurplusDisplacement)}(t)`;
              }
              dyhwdata.map((ele) => {
                  if (Number.parseInt(TheMonth) <i) {
