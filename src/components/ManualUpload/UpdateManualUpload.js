@@ -84,7 +84,6 @@ export default class UpdateManualUpload extends Component {
         });
     }
     render() {
-        console.log(this.props.item)
         const { getFieldDecorator } = this.props.form;
         const formItemLayout = {
             labelCol: {

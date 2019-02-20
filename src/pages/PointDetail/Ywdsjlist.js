@@ -184,7 +184,7 @@ export default class Ywdsjlist extends Component {
             <RadioButton value={EnumPatrolTaskType.PatrolTask}>例行任务</RadioButton>
             </RadioGroup>
               <RangePicker_ style={{width: 350,textAlign:'left',marginLeft:'10px'}} onChange={this._handleDateChange} dateValue={this.state.rangeDate} />
-              <Switch style={{marginLeft:'10px',marginBottom:'6px'}} checkedChildren="报警响应超时" unCheckedChildren="报警响应未超时" defaultChecked={this.state.alarmStatus} onChange={this.OpenonChange} />
+              <Switch style={{marginLeft:'10px',marginBottom:'6px'}} checkedChildren="报警响应超时" unCheckedChildren="全部" defaultChecked={this.state.alarmStatus} onChange={this.OpenonChange} />
             </div>
           );
         let data = this.props.OperationInfo;

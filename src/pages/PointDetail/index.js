@@ -7,6 +7,7 @@ import Cookie from 'js-cookie';
 import router from 'umi/router';
 import Redirect from 'umi/redirect';
 import Link from 'umi/link';
+import { routerRedux } from 'dva/router';
 import styles from './index.less';
 import PdButton from '../../components/OverView/PdButton';
 
@@ -307,7 +308,10 @@ class PointDetail extends Component {
 
     getBackButton=()=>{
         const viewtype= this.props.match.params.viewtype;
-        const backpath=`/overview/${viewtype}`;
+        let backpath=`/overview/${viewtype}`;
+        if(viewtype==="pointinfo"){
+            backpath=`/sysmanage/${viewtype}`;
+        }
         return(<Link to={backpath}><Icon type="left" />返回</Link>);
     }
 

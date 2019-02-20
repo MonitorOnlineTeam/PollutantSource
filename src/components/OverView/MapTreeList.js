@@ -237,9 +237,9 @@ class MapTreeList extends Component {
 
                  <div style={{
                      width: 400,
-                     height: 75,
+                     height: 48,
                      background: '#fff',
-                     marginTop:10
+                     marginTop:5
                  }}
                  >
                      <div className={styles.statuslist}>
@@ -248,10 +248,10 @@ class MapTreeList extends Component {
                          <span><img style={{width:15}} src="/gisover.png" />超标</span>
                          <span><img style={{width:15}} src="/gisexception.png" />异常</span>
                      </div>
-                     <div style={{borderBottom: '1px solid #EBEBEB'}} />
+                     {/* <div style={{borderBottom: '1px solid #EBEBEB'}} />
                      <div style={{marginLeft: 120, marginTop: 3}}>
                          {this.getTimeImgSpan()}
-                     </div>
+                     </div> */}
                  </div>
 
                  <div>
