@@ -368,7 +368,7 @@ class index extends Component {
             <div className={Adapt.s4}>超八小时响应({aaData.GreaterThan8Hour})次</div>
             <div className={Adapt.s5}>{aaData.GreaterThan8Hourlink>0?`环比上升${aaData.GreaterThan8Hourlink}%`:`环比下降${Math.abs(aaData.GreaterThan8Hourlink)}%`}</div>
             <div className={Adapt.s6}>其它({aaData.OtherTime})次</div>
-        </div>);
+                    </div>);
         return retVal;
     }
     /**
@@ -738,7 +738,7 @@ treeCilck = (row) => {
                  <Map
                      resizeEnable={true}
                      events={this.mapEvents}
-                     zoom={13}
+                     zoom={12}
                      mapStyle="amap://styles/darkblue"
                      amapkey={amapKey}
                      center={mapCenter}
