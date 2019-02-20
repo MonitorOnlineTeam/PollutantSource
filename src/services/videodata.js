@@ -1,9 +1,6 @@
 
 import request from '../utils/request';
-import {
-    post
-}
-    from '../dvapack/request';
+import { post} from '../dvapack/request';
 // 视频列表
 export async function getList(params) {
     const body = {

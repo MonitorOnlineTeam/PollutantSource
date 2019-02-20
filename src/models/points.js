@@ -1,14 +1,13 @@
 import moment from 'moment';
 import React from 'react';
+import { Icon, Popover, Badge } from 'antd';
 import { loadMonitorPoint, loadLastdata, queryentpointlist, loadMonitorDatalist
     , maploadMonitorDatalist, loadPointDetail, queryentinfolist, querypollutantlist,
     queryhistorydatalist, queryoverdatalist, queryprocesschart, querysinglepointinfo,
     queryrealparam } from '../services/api';
+import {getList} from '../services/videodata';
 import { Model } from '../dvapack';
 
-import {
-    Icon, Popover, Badge, Divider
-} from 'antd';
 export default Model.extend({
     namespace: 'points',
     state: {
@@ -21,6 +20,16 @@ export default Model.extend({
         selectpoint: [],
         isfinished: false,
         selpoint: null,
+        tablist: [
+            { key: 'processflowdiagram', tab: '工艺流程图' },
+            { key: 'dataquery', tab: '数据查询' },
+            { key: 'alarmrecord', tab: '报警记录' },
+            { key: 'realvideo', tab: '实时视频' },
+            { key: 'hisvideo', tab: '历史视频' },
+            { key: 'ywdsjlist', tab: '运维大事记' },
+            { key: 'qcontrollist', tab: '质控记录' },
+            { key: 'operationlist', tab: '运维记录' },
+        ],
         data: [],
         size: 30,
         current: 1,
@@ -163,9 +172,7 @@ export default Model.extend({
                     allcountrydata = allcountrydata.concat(result);
                 }
                 allcountrydata.map((item, key) => {
-                    const existdata = chartdata.find((value, index, arr) => {
-                        return value.MonitorTime == item.MonitorTime && value.DataGatherCode == item.DataGatherCode;
-                    });
+                    const existdata = chartdata.find((value, index, arr) => value.MonitorTime == item.MonitorTime && value.DataGatherCode == item.DataGatherCode);
                     if (!existdata) {
                         chartdata.push(item);
                     }
@@ -290,10 +297,8 @@ export default Model.extend({
                         if (item.MonitorTime == moment(citem.MonitorTime).format('YYYY-MM-DD HH')) {
                             item[citem.DataGatherCode] = citem[payload.pollutant];
                         }
-                    } else {
-                        if (item.MonitorTime == moment(citem.MonitorTime).format('YYYY-MM-DD')) {
-                            item[citem.DataGatherCode] = citem[payload.pollutant];
-                        }
+                    } else if (item.MonitorTime == moment(citem.MonitorTime).format('YYYY-MM-DD')) {
+                        item[citem.DataGatherCode] = citem[payload.pollutant];
                     }
                 });
             });
@@ -420,24 +425,21 @@ export default Model.extend({
                     pollutantName: result[0].pollutantName,
                     pollutantInfo: result[0]
                 };
-                
-                 //如果请求的是超标数据
-                 if(payload.overdata)
-                 {
+
+                //如果请求的是超标数据
+                if(payload.overdata) {
                     yield put({
                         type: 'queryoverdatalist',
                         payload: payload
                     });
                     yield take('queryoverdatalist/@@end');
-                 }
-                 else
-                 {
+                } else {
                     yield put({
                         type: 'queryhistorydatalist',
                         payload: params
                     });
                     yield take('queryhistorydatalist/@@end');
-                 }
+                }
 
             } else {
                 yield update({ pollutantlist: [],datalist: null, chartdata: null, columns: null, datatable: null, total: 0 });
@@ -446,9 +448,8 @@ export default Model.extend({
         * queryhistorydatalist({ payload
         }, {select, call, update}) {
             const { pollutantlist } = yield select(_ => _.points);
-            
-            if(!pollutantlist[0])
-            {
+
+            if(!pollutantlist[0]) {
                 yield update({ datalist: null, chartdata: null, columns: null, datatable: null, total: 0 });
                 return;
             }
@@ -470,29 +471,26 @@ export default Model.extend({
             if (payload.pollutantInfo) {
                 polluntinfo = payload.pollutantInfo;
             }
-            polluntinfo = pollutantlist.find((value, index, arr) => {
-                return value.pollutantCode === payload.pollutantCode;
-            });
+            polluntinfo = pollutantlist.find((value, index, arr) => value.pollutantCode === payload.pollutantCode);
             let pollutantcols = [];
             let tablewidth=0;
             let width= (window.screen.availWidth - 200 - 120)/pollutantlist.length;
-            if(width<200)
-            {
+            if(width<200) {
                 width=200;
             }
-               
 
-             tablewidth=  width*pollutantlist.length+200;
-        
+
+            tablewidth= width*pollutantlist.length+200;
+
             pollutantlist.map((item, key) => {
                 pollutantcols = pollutantcols.concat({
-                    title: item.pollutantName + '(' + item.unit + ')',
+                    title: `${item.pollutantName }(${ item.unit })`,
                     dataIndex: item.pollutantCode,
                     key: item.pollutantCode,
                     align:'center',
                     width: width,
                     render: (value, record, index) => {
-                        const additional = record[item.pollutantCode + '_params'];
+                        const additional = record[`${item.pollutantCode }_params`];
                         if (additional) {
                             const additionalInfo = additional.split('§');
                             if (additionalInfo[0] === 'IsOver') {
@@ -574,12 +572,12 @@ export default Model.extend({
                             formatter: '{value}'
                         },
                     },
-                     grid:{
-                              x:60,
-                              y:45,
-                              x2:45,
-                              y2:20,
-                          },
+                    grid:{
+                        x:60,
+                        y:45,
+                        x2:45,
+                        y2:20,
+                    },
                     series: [{
                         type: 'line',
                         name: payload.pollutantName,
@@ -608,7 +606,7 @@ export default Model.extend({
                 res.data.map((item, key) => {
                     reslist = reslist.concat({
                         ...item,
-                        overValue: item.value + '(' + item.unit + ')',
+                        overValue: `${item.value }(${ item.unit })`,
                         key: key
                     });
                 });
@@ -627,24 +625,20 @@ export default Model.extend({
             payload
         }, {call, update,put,take}) {
             const res = yield call(querysinglepointinfo, {...payload});
-            if(res)
-            {
+            if(res) {
                 yield update({ selectpoint: res[0] });
-            }
-            else
-            {
+            } else {
                 yield update({ selectpoint: null });
             }
 
-            if(payload.isfirst)
-            {
+            if(payload.isfirst) {
                 yield put({
                     type:'overview/getPollutantTypeList',
                     payload:{
                         ...payload,
                         dgimn:null
                     }
-                })
+                });
                 yield take('overview/getPollutantTypeList/@@end');
             }
         },
@@ -652,9 +646,8 @@ export default Model.extend({
             payload
         }, {call, update}) {
             const res = yield call(queryrealparam, {...payload});
-            if(res)
-            {
-               yield update({
+            if(res) {
+                yield update({
                     operationInfo:res.operationInfo,
                     stateInfo:res.stateInfo,
                     paramsInfo:res.paramsInfo,
@@ -662,69 +655,20 @@ export default Model.extend({
                     stateNameInfo:res.stateNameInfo,
                     paramNameInfo:res.paramNameInfo,
                     paramstatusInfo:res.paramstatusInfo
-               })
+                });
             }
         },
-        // *updateDynamicControlParam({payload}
-        //     ,{update,select}){
-        //         if(payload && payload.array)
-        //         {
-        //             let  { paramsInfo } = yield select(_ => _.points);
-        //             let  { paramstatusInfo } = yield select(_ => _.points);
-        //             const { selectpoint } = yield select(_ => _.points);
-        //             if(selectpoint)
-        //             {
-        //                 let changeParams=false;
-        //                 let changeStatus=false;
-        //                 payload.array.map(item=>{
-        //                         if(item.DGIMN==selectpoint.dgimn)
-        //                         {
-        //                             if(item.PollutantCode!='cems')
-        //                             {
-        //                                 changeParams=true;
-        //                                 paramsInfo[item.PollutantCode+"-"+ item.StateCode]=item.NewStateValue;
-        //                             }
-        //                             else
-        //                             {
-        //                                 changeStatus=true;
-        //                                 paramstatusInfo[item.StateCode]=item.NewStateValue;
-        //                             }
-        //                         }
-        //                 })
-        //                 if(changeParams)
-        //                 {
-        //                     yield update({paramsInfo});
-        //                 }
-        //                 if(changeStatus)
-        //                 {
-        //                     yield update({paramstatusInfo});
-        //                 }
-                       
-        //             } 
-        //         }
-        // },
-        // *updateDynamicControlState({payload}
-        //     ,{update,select}){
-        //         if(payload && payload.array)
-        //         {
-        //             let  { stateInfo,stateNameInfo } = yield select(_ => _.points);
-        //             const { selectpoint } = yield select(_ => _.points);
-        //             if(selectpoint)
-        //             {
-        //                 payload.array.map(item=>{
-        //                         if(item.DGIMN==selectpoint.dgimn)
-        //                         {
-        //                              const stateName=stateNameInfo[item.Code];
-        //                              if(stateName)
-        //                              {
-        //                                 stateInfo[item.Code]=stateName+item.State;
-        //                              }
-        //                         }
-        //                 })
-        //                 yield update({stateInfo});
-        //             } 
-        //         }
-        // },
+        * updateVideoMenu({ payload }, {select, call, update}) {
+            const res = yield call(getList, {...payload});
+            if(!res.data) {
+                const { tablist } = yield select(_ => _.points);
+                let newtablist=tablist.filter(t=>t.key!=="realvideo"&&t.key!=="hisvideo");
+                debugger;
+                yield update({
+                    tablist:newtablist
+                });
+            }
+        },
     },
     reducers: {
         //更新工艺流程图的实时数据
@@ -732,84 +676,74 @@ export default Model.extend({
             if (payload && payload.array) {
                 const {selectpoint,dataInfo}=state;
                 let resdata = JSON.parse(JSON.stringify(dataInfo));
-                if(selectpoint && selectpoint.DGIMN && resdata)
-                {
+                if(selectpoint && selectpoint.DGIMN && resdata) {
                     payload.array.map(item=>{
-                         if(item.DGIMN==selectpoint.DGIMN)
-                         {
+                        if(item.DGIMN==selectpoint.DGIMN) {
                             resdata[item.PollutantCode]=item.MonitorValue;
                         }
-                     })
-                  
+                    });
+
                     return {
                         ...state,
                         dataInfo:resdata
-                    }
+                    };
                 }
                 return state;
             }
-           
+
         },
         //更新工艺流程图参数信息
         updateDynamicControlParam(state, { payload }) {
             if (payload && payload.array) {
-                const  { paramsInfo,selectpoint,paramstatusInfo } = state;
+                const { paramsInfo,selectpoint,paramstatusInfo } = state;
                 //污染物参数
                 let resparamsInfo=JSON.parse(JSON.stringify(paramsInfo));
                 //系统参数
                 let resparamstatusInfo=JSON.parse(JSON.stringify(paramstatusInfo));
-                if(selectpoint && resparamsInfo && resparamstatusInfo)
-                {
+                if(selectpoint && resparamsInfo && resparamstatusInfo) {
                     payload.array.map(item=>{
-                            if(item.DGIMN==selectpoint.DGIMN)
-                            {
-                                if(item.PollutantCode!='cems')
-                                {
-                                    resparamsInfo[item.PollutantCode+"-"+ item.StateCode]=item.NewStateValue;
-                                }
-                                else
-                                {
-                                    resparamstatusInfo[item.StateCode]=item.NewStateValue;
-                                }
-                             }
-                    })
+                        if(item.DGIMN==selectpoint.DGIMN) {
+                            if(item.PollutantCode!='cems') {
+                                resparamsInfo[`${item.PollutantCode}-${ item.StateCode}`]=item.NewStateValue;
+                            } else {
+                                resparamstatusInfo[item.StateCode]=item.NewStateValue;
+                            }
+                        }
+                    });
                     return {
                         ...state,
                         paramsInfo:resparamsInfo,
                         paramstatusInfo:resparamstatusInfo
-                    }
+                    };
                 }
                 return state;
             }
-           
+
         },
         //更新工艺流程图系统状态信息
         updateDynamicControlState(state, { payload }) {
             if (payload && payload.array) {
-                const  { stateInfo,stateNameInfo,selectpoint } = state;
-                let resstateInfo=JSON.parse(JSON.stringify(stateInfo));;
-                if(selectpoint && resstateInfo)
-                {
+                const { stateInfo,stateNameInfo,selectpoint } = state;
+                let resstateInfo=JSON.parse(JSON.stringify(stateInfo));
+                if(selectpoint && resstateInfo) {
                     payload.array.map(item=>{
-                            if(item.DGIMN==selectpoint.DGIMN)
-                            {
-                                 const stateName=stateNameInfo[item.Code];
-                                 if(stateName)
-                                 {
-                                    resstateInfo[item.Code]=stateName+item.State;
-                                 }
+                        if(item.DGIMN==selectpoint.DGIMN) {
+                            const stateName=stateNameInfo[item.Code];
+                            if(stateName) {
+                                resstateInfo[item.Code]=stateName+item.State;
                             }
-                    })
+                        }
+                    });
                     return {
                         ...state,
                         stateInfo:resstateInfo,
-                    }
-                } 
+                    };
+                }
                 return state;
             }
-           
+
         },
-       
+
     },
     subscriptions: {
         setup({ dispatch, history }) {

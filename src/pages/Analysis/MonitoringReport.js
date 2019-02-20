@@ -232,11 +232,11 @@ class MonitoringReport extends Component {
                         title="自行监测年度报告"
                         extra={
                             <div>
-                                <span>报表类型：</span><RadioGroup value={radiovalue} onChange={this.radioChange}>
+                                {/* <span>报表类型：</span><RadioGroup value={radiovalue} onChange={this.radioChange}>
                                     <Radio value="year">年报</Radio>
                                     <Radio value="season">季报</Radio>
                                     <Radio value="month">月报</Radio>
-                                </RadioGroup>
+                                </RadioGroup> */}
                                 <RangePicker
                                     style={{ width: 250, marginLeft: 40, textAlign: 'center' }}
                                     format={format}
