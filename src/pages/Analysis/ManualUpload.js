@@ -502,18 +502,11 @@ export default class ManualUpload extends Component {
                                                 marginTop: 5,
                                                 background: '#fff',
                                             }}
-                                            pollutantTypeloading={pollutantTypeloading}
-                                            getHeight={'calc(100vh - 275px)'} getStatusImg={this.getStatusImg}
                                             getNowPollutantType={this.getNowPollutantType}
-                                            PollutantType={pollutantType} treedatalist={datalist}
-                                            pollutantTypelist={pollutantTypelist}
-                                            tabkey={this.state.pollutantTypeCode}
                                         />
                                         <TreeCardContent style={{ overflow: 'auto', width: 400, background: '#fff' }}
                                             getHeight='calc(100vh - 275px)'
-                                            // pollutantTypeloading={pollutantTypeloading}
-                                            // getStatusImg={this.getStatusImg} isloading={treedataloading}
-                                            treeCilck={this.treeCilck} treedatalist={datalist} PollutantType={pollutantType} ifSelect={true} />
+                                            treeCilck={this.treeCilck} PollutantType={pollutantType} ifSelect={true} />
                                     </div>
                                 </div>
                             </div>
