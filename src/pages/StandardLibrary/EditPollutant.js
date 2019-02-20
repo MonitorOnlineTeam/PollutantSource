@@ -83,6 +83,14 @@ handleSubmit = (e) => {
     this.props.form.validateFieldsAndScroll((err, values) => {
         const that = this;
         if (this.state.PollutantCode !== null && this.state.DGIMN !== null) {
+            if (values.AbnormalUpperLimit < values.AbnormalLowerLimit) {
+                message.error("错误：检出上限小于检出下线！", 3).then(() => {
+                    flag = false;
+                });
+                flag = false;
+            }else{
+                flag = true;
+            }
             if (!err && flag === true) {
                 that.props.dispatch({
                     type: 'standardlibrary/editmonitorpointPollutant',
