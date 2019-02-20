@@ -19,7 +19,7 @@ class PdButton extends Component {
      }
 
 
-       //催办
+       //督办
        urge = () => {
         const {operationUserInfo,existTask,DGIMN,dispatch,id}=this.props; 
         if(!id && operationUserInfo && operationUserInfo.operationUserID)
@@ -60,7 +60,7 @@ class PdButton extends Component {
        }
     }
 
-     //判断是派单还是催办按钮
+     //判断是派单还是督办按钮
      getbutton=()=>{
         let { operationUserInfo,existTask,DGIMN,viewType,id,name,tel,exist }=this.props;
         debugger;
@@ -86,7 +86,7 @@ class PdButton extends Component {
                     type="phone"
                       style={{ color: '#3C9FDA', marginRight: 5 }}
                      theme="filled"
-                />紧急催办
+                />督办
                  </Button>
                </li>
                 </PdPopconfirm>)
@@ -98,7 +98,7 @@ class PdButton extends Component {
                     <PdPopconfirm  operationUserID={id} addoperationInfo={()=>this.addoperationInfo()} >
                     <span onClick={() => this.urge()} style={{cursor: 'pointer'}}>
                        <img style={{width: 15, marginRight: 6, marginBottom: 4}}
-                        src="/alarm.png" />紧急催办</span>
+                        src="/alarm.png" />督办</span>
                      </PdPopconfirm>
                      )
               }
@@ -135,7 +135,7 @@ class PdButton extends Component {
                 return(
                     <PdPopconfirm operationUserID={id} addoperationInfo={()=>this.addoperationInfo()} >
                     <li style={{ listStyle: 'none' }}>
-                        <Button onClick={()=>this.pdshow(id)}><Icon type="phone" style={{ color: '#3C9FDA', marginRight: 5 }} theme="filled" />紧急派单
+                        <Button onClick={()=>this.pdshow(id)}><Icon type="phone" style={{ color: '#3C9FDA', marginRight: 5 }} theme="filled" />派单
                         </Button>
                     </li>
                    </PdPopconfirm>
@@ -147,7 +147,7 @@ class PdButton extends Component {
                return(<PdPopconfirm operationUserID={id} addoperationInfo={()=>this.addoperationInfo()} >
                 <span onClick={()=>this.pdshow(id)} style={{cursor: 'pointer'}}>
                 <img style={{width: 15, marginRight: 6, marginBottom: 4}}
-                    src="/alarm.png" />紧急派单</span>
+                    src="/alarm.png" />派单</span>
                 </PdPopconfirm>)
              }
              else if(viewType.indexOf("pointInfo@")>-1)
