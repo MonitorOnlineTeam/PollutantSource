@@ -170,7 +170,7 @@ class AlarmRecord extends Component {
                       <Card
                           extra={
                               <div>
-                                  <span>超标时间</span> <RangePicker_ style={{width: 350,textAlign:'left',marginRight:10}} format="YYYY-MM-DD" onChange={this._handleDateChange} dateValue={this.state.rangeDate} />
+                                  <span>超标时间</span> <RangePicker_ style={{width: 350,textAlign:'left',marginRight:10}} format="YYYY-MM-DD HH:mm:ss" onChange={this._handleDateChange} dateValue={this.state.rangeDate} />
                                   <span>污染物因子</span>
                                   <PollutantSelect
                                       optionDatas={this.props.pollutantlist}
