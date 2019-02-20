@@ -7,11 +7,12 @@ import Cookie from 'js-cookie';
 import router from 'umi/router';
 import Redirect from 'umi/redirect';
 import Link from 'umi/link';
+import { routerRedux } from 'dva/router';
 import styles from './index.less';
 import { getRoutes } from '../../utils/utils';
 import UrgentDispatch from '../../components/OverView/UrgentDispatch';
-import { routerRedux } from 'dva/router';
 import PdButton from '../../components/OverView/PdButton';
+
 const RadioGroup = Radio.Group;
 const { TabPane } = Tabs;
 const Option = Select.Option;
@@ -241,7 +242,7 @@ class PointDetail extends Component {
             pollutantTypeKey:0
         });
     }
- 
+
     /**
      * 渲染排口状态
      */
@@ -324,14 +325,17 @@ class PointDetail extends Component {
 
     getBackButton=()=>{
         const viewtype= this.props.match.params.viewtype;
-        const backpath=`/overview/${viewtype}`;
+        let backpath=`/overview/${viewtype}`;
+        if(viewtype==="pointinfo"){
+            backpath=`/sysmanage/${viewtype}`;
+        }
         return(<Link to={backpath}><Icon type="left" />返回</Link>);
     }
 
     render() {
         const { match, routerData, location, children, pointInfo, selectpoint } = this.props;
         let {tablist,pollutantTypeKey}=this.state;
-        const viewType="pointInfo@"+match.params.viewtype;
+        const viewType=`pointInfo@${match.params.viewtype}`;
         //判断当前排口污染物类型那个
         let routerPath='';
         if(pointInfo && pointInfo.pollutantType) {
@@ -359,8 +363,8 @@ class PointDetail extends Component {
             if(matchurl!==null){
                 activeKey = matchurl[1];
             }
-            
-            
+
+
         }
         if (this.props.isloading || !pointInfo) {
             return (<Spin
@@ -395,9 +399,16 @@ class PointDetail extends Component {
 
                     <Button style={{ float: "right", marginRight: 30, top: -5 }}>{this.getBackButton()}</Button>
 
-                    <PdButton DGIMN={pointInfo.DGIMN} id={pointInfo.operationUserID} pname={pointInfo.pointName} 
-                    reloadData={() => this.Refresh()} exist={pointInfo.existTask} name={pointInfo.operationUserName} 
-                    tel={pointInfo.operationtel} viewType={viewType}/>
+                    <PdButton
+                        DGIMN={pointInfo.DGIMN}
+                        id={pointInfo.operationUserID}
+                        pname={pointInfo.pointName}
+                        reloadData={() => this.Refresh()}
+                        exist={pointInfo.existTask}
+                        name={pointInfo.operationUserName}
+                        tel={pointInfo.operationtel}
+                        viewType={viewType}
+                    />
                 </div>
                 <div style={{ backgroundColor: '#fff', margin: 10, padding: 10 }}>
                     <Tabs
