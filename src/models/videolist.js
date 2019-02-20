@@ -58,10 +58,10 @@ export default Model.extend({
                 requstresult: result.requstresult,
                 reason: result.reason
             });
-            yield put({
-                type: 'fetchuserlist',
-                payload: payload.DGIMN,
-            });
+            // yield put({
+            //     type: 'fetchuserlist',
+            //     payload: payload.DGIMN,
+            // });
         },
         * addVideoInfos({ payload }, { call, put, update }) {
             const result = yield call(addVideoInfo, { ...payload });
@@ -69,10 +69,10 @@ export default Model.extend({
                 requstresult: result.requstresult,
                 reason: result.reason
             });
-            yield put({
-                type: 'fetchuserlist',
-                payload: payload.DGIMN,
-            });
+            // yield put({
+            //     type: 'fetchuserlist',
+            //     payload: payload.DGIMN,
+            // });
         },
         * deleteVideoInfo({ payload }, { call, put, update }) {
             const result = yield call(deleteVideoInfo, { ...payload });
@@ -80,10 +80,11 @@ export default Model.extend({
                 requstresult: result.requstresult,
                 editUser: result.data[0]
             });
-            yield put({
-                type: 'fetchuserlist',
-                payload: payload.DGIMN,
-            });
+            payload.callback(result.requstresult);
+            // yield put({
+            //     type: 'fetchuserlist',
+            //     payload: payload.DGIMN,
+            // });
         },
         * gethistoryVideoList({ payload }, { call, update }) {
             const result = yield call(gethistoryVideoList, { ...payload });

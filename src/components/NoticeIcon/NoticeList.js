@@ -29,11 +29,11 @@ export default function NoticeList({
                         [styles.read]: item.read,
                     });
                     // eslint-disable-next-line no-nested-ternary
-                    const leftIcon = item.avatar ?
-                        typeof item.avatar === 'string' ? (
-                            <Avatar className={styles.avatar} src={item.avatar} />
-                        ) :
-                            item.avatar :
+                    const leftIcon = item.avatar ? typeof item.avatar === 'string' ? ( <Avatar className={styles.avatar} src={item.avatar} /> ) : item.avatar : null;
+
+                    // eslint-disable-next-line no-nested-ternary
+                    const descriptiontitle = item.description ?
+                        typeof item.description === 'string' ? item.description:item.descriptionbak:
                         null;
 
                     return (
@@ -49,7 +49,7 @@ export default function NoticeList({
                                 }
                                 description={
                                     <div>
-                                        <div className={styles.description} title={item.description}>
+                                        <div className={styles.description} title={descriptiontitle}>
                                             {item.description}
                                         </div>
                                         <div className={styles.datetime}>{item.datetime}</div>

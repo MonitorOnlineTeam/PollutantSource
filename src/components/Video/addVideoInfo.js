@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import { Input, Select, InputNumber, Form, Button, Upload, DatePicker, Row, Col, Radio, message} from 'antd';
+import { Input, Select, InputNumber, Form, Button, Upload, DatePicker, Row, Col, Radio, message } from 'antd';
 import { connect } from 'dva';
 import RangePicker_ from '../../components/PointDetail/RangePicker_';
 import moment from 'moment';
 const Option = Select.Option;
 const FormItem = Form.Item;
 const RadioGroup = Radio.Group;
-const {TextArea} = Input;
+const { TextArea } = Input;
 
 @connect()
 @Form.create()
@@ -236,48 +236,48 @@ export default class addVideoInfo extends Component {
                                 label={'经度'}>
                                 {getFieldDecorator('Longitude', {
                                 })(
-                                    <Input placeholder="请输入经度" />
-                                )}
+                                    <Input placeholder="请输入经度" onkeyup="value=value.replace(/[^\d{1,}\.\d{1,}|\d{1,}]/g,'')"/>
+                                 )}
                             </FormItem>
                         </Col>
                         <Col xs={2} sm={6} md={12} lg={12} xl={12} xxl={12}>
-                            <FormItem
-                                {...formItemLayout}
-                                label={'纬度'}>
-                                {getFieldDecorator('Latitude', {
-                                })(
-                                    <Input placeholder="请输入纬度" />
-                                )}
-                            </FormItem>
-                        </Col>
+                                    <FormItem
+                                        {...formItemLayout}
+                                        label={'纬度'}>
+                                        {getFieldDecorator('Latitude', {
+                                        })(
+                                            <Input placeholder="请输入纬度" onkeyup="value=value.replace(/[^\d{1,}\.\d{1,}|\d{1,}]/g,'')"/>
+                                        )}
+                                    </FormItem>
+                                </Col>
                     </Row>
-                    <Row gutter={16} style={{ marginTop: 8 }}>
+                            <Row gutter={16} style={{ marginTop: 8 }}>
 
-                        <Col xs={2} sm={6} md={12} lg={12} xl={12} xxl={12}>
-                            <FormItem
-                                {...formItemLayout}
-                                label="生产日期"
-                            >
-                                {getFieldDecorator('ProduceDate')(
-                                    <DatePicker />
-                                )}
-                            </FormItem>
-                        </Col>
-                        <Col xs={2} sm={6} md={12} lg={12} xl={12} xxl={12} style={{display: 'none'}}>
-                            <FormItem
-                                {...formItemLayout}
-                                label={'点编号'}>
-                                {getFieldDecorator('DGIMN', {
-                                    initialValue: this.props.dgimn,
+                                <Col xs={2} sm={6} md={12} lg={12} xl={12} xxl={12}>
+                                    <FormItem
+                                        {...formItemLayout}
+                                        label="生产日期"
+                                    >
+                                        {getFieldDecorator('ProduceDate')(
+                                            <DatePicker />
+                                        )}
+                                    </FormItem>
+                                </Col>
+                                <Col xs={2} sm={6} md={12} lg={12} xl={12} xxl={12} style={{ display: 'none' }}>
+                                    <FormItem
+                                        {...formItemLayout}
+                                        label={'点编号'}>
+                                        {getFieldDecorator('DGIMN', {
+                                            initialValue: this.props.dgimn,
 
-                                })(
-                                    <Input placeholder="请输入纬度" value={121212} />
-                                )}
-                            </FormItem>
-                        </Col>
-                    </Row>
+                                        })(
+                                            <Input placeholder="请输入纬度" value={121212} />
+                                        )}
+                                    </FormItem>
+                                </Col>
+                            </Row>
                 </Form>
             </div>
-        );
-    }
-}
+                    );
+                }
+            }

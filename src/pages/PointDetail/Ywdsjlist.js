@@ -24,12 +24,12 @@ export default class Ywdsjlist extends Component {
             rangeDate: [moment(moment(new Date()).subtract(3, 'month').format('YYYY-MM-DD 00:00:00')), moment(moment(new Date()).format('YYYY-MM-DD 23:59:59'))],
             pageIndex: pageIndex,
             pageSize: pageSize,
-            IsAlarmTimeout: true,
+            IsAlarmTimeout: false,
             beginTime: moment().subtract(3, 'month').format('YYYY-MM-DD 00:00:00'),
             endTime: moment().format('YYYY-MM-DD 23:59:59'),
             taskType: 0,
             iconLoading: false,
-            alarmStatus:true
+            alarmStatus:false
         };
     }
 
@@ -122,7 +122,7 @@ export default class Ywdsjlist extends Component {
                             <Timeline.Item key={key1 + '1' + key} dot={<img style={{width: '38px', height: '38px'}} src="/patrol.png" />}>
                                 <p className={Ywdsjlistss.taskDetail}><span style={{color: '#40B0F5', marginRight: '10px'}}>{valueName}</span>{value}</p>
                                 <div className={Ywdsjlistss.seeDetail} onClick={() => {
-                                    this.props.dispatch(routerRedux.push(`/TaskDetail/emergencydetailinfo/${this.props.match.params.viewtype}/ywdsjlist/${item1.ID}/${this.props.match.params.pointcode}`));
+                                    this.props.dispatch(routerRedux.push(`/TaskDetail/emergencydetailinfolayout/${this.props.match.params.viewtype}/ywdsjlist/${item1.ID}/${this.props.match.params.pointcode}`));
                                 }}>
                                 查看详情
                                 </div>
@@ -136,7 +136,7 @@ export default class Ywdsjlist extends Component {
                                 <Timeline.Item key={key1 + '2' + key} dot={<img style={{width: '38px', height: '38px'}} src="/patrol.png" />}>
                                     <p className={Ywdsjlistss.taskDetail}><span style={{color: '#40B0F5', marginRight: '10px'}}>{valueName}</span>{value}</p>
                                     <div className={Ywdsjlistss.seeDetail} onClick={() => {
-                                        this.props.dispatch(routerRedux.push(`/TaskDetail/emergencydetailinfo/${this.props.match.params.viewtype}/ywdsjlist/${item1.ID}/${this.props.match.params.pointcode}`));
+                                        this.props.dispatch(routerRedux.push(`/TaskDetail/emergencydetailinfolayout/${this.props.match.params.viewtype}/ywdsjlist/${item1.ID}/${this.props.match.params.pointcode}`));
                                     }}>
                                     查看详情
                                     </div>
@@ -149,7 +149,7 @@ export default class Ywdsjlist extends Component {
                                 <Timeline.Item key={key1 + '3' + key} dot={<img style={{width: '38px', height: '38px'}} src="/emergeny.png" />}>
                                     <p className={Ywdsjlistss.taskDetail}><span style={{color: '#40B0F5', marginRight: '10px'}}>{valueName1}</span>{value1}</p>
                                     <div className={Ywdsjlistss.seeDetail} onClick={() => {
-                                        this.props.dispatch(routerRedux.push(`/TaskDetail/emergencydetailinfo/${this.props.match.params.viewtype}/ywdsjlist/${item1.ID}/${this.props.match.params.pointcode}`));
+                                        this.props.dispatch(routerRedux.push(`/TaskDetail/emergencydetailinfolayout/${this.props.match.params.viewtype}/ywdsjlist/${item1.ID}/${this.props.match.params.pointcode}`));
                                     }}>
                                     查看详情
                                     </div>

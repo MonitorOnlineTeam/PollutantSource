@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { FormattedMessage, formatMessage } from 'umi/locale';
-import { Spin, Tag, Menu, Icon, Avatar, Tooltip } from 'antd';
+import { Spin, Tag, Menu, Icon, Avatar, Tooltip,Popover,Button } from 'antd';
 import { connect } from 'dva';
 import moment from 'moment';
 import groupBy from 'lodash/groupBy';
@@ -11,7 +11,10 @@ import SelectLang from '../SelectLang';
 import styles from './index.less';
 import {asc} from '../../utils/utils';
 import RealTimeWarningModal from '../../components/SpecialWorkbench/RealTimeWarningModal';
+import AlarmRecordModal from './AlarmRecordModal';
+import EmergencyDetailInfoModal from './EmergencyDetailInfoModal';
 import { routerRedux } from 'dva/router';
+import PdButton from '../../components/OverView/PdButton';
 
 @connect(({user,loading,global}) => ({
     currentUser:user.currentUser,
@@ -47,8 +50,33 @@ export default class GlobalHeaderRight extends PureComponent {
                         newNotice.avatar=(<Avatar style={{ backgroundColor: "gold", verticalAlign: 'middle' }} size="large">异</Avatar>);
                     }
                 }else if(newNotice.type==="advise"){
-                    newNotice.avatar=newNotice.isview===true?<Avatar style={{ backgroundColor: "red", verticalAlign: 'middle' }} size="large">通</Avatar>:<Avatar style={{ backgroundColor: "gray", verticalAlign: 'middle' }} size="large">通</Avatar>;
+                    newNotice.avatar=!newNotice.isview?<Avatar style={{ backgroundColor: "red", verticalAlign: 'middle' }} size="large">通</Avatar>:<Avatar style={{ backgroundColor: "gray", verticalAlign: 'middle' }} size="large">通</Avatar>;
                 }
+            }
+            //如果是异常特殊处理，让其点击弹出
+            if(newNotice.sontype==="exception"){
+                newNotice.title=(
+                    <Popover trigger="click"  content={
+                        <div>
+                            <PdButton DGIMN={newNotice.DGIMN} viewType="datalist"/>
+                        </div>
+                    }>
+                        <span style={{ cursor: 'pointer' }}>
+                            {newNotice.title}
+                        </span>
+                    </Popover>
+                );
+                newNotice.description=(
+                    <Popover trigger="click"  content={
+                        <div>
+                            <PdButton DGIMN={newNotice.DGIMN} viewType="datalist"/>
+                        </div>
+                    }>
+                        <span style={{ cursor: 'pointer' }}>
+                            {newNotice.description}
+                        </span>
+                    </Popover>
+                );
             }
             return newNotice;
         });
@@ -63,7 +91,7 @@ export default class GlobalHeaderRight extends PureComponent {
           }
           if (Array.isArray(value)) {
               if(key==="advise")
-                  unreadMsg[key] = value.filter(item => item.isview).length;
+                  unreadMsg[key] = value.filter(item => !item.isview).length;
               else{
                   const arr=value;
                   let result=0;
@@ -89,9 +117,17 @@ export default class GlobalHeaderRight extends PureComponent {
       });
   };
 
-  onRef = (ref) => {
-    this.child = ref;
-}
+  onRefWarning = (ref) => {
+      this.childWarning = ref;
+  }
+
+  onRefAlarm = (ref) => {
+    this.childAlarm = ref;
+  }
+
+  onRefEmergencyDetailInfo= (ref) => {
+    this.childEmergencyDetailInfo = ref;
+  }
 
   render() {
       const {
@@ -162,15 +198,26 @@ export default class GlobalHeaderRight extends PureComponent {
                     //报警
                     if (item.type==="alarm") {
                         if(item.sontype==="warn"){
-                            this.child.showModal(item.pointname, item.DGIMN, item.overwarnings[0].PollutantCode, item.overwarnings[0].PollutantName, item.overwarnings[0].SuggestValue);
+                            this.childWarning.showModal(item.pointname, item.DGIMN, item.overwarnings[0].PollutantCode, item.overwarnings[0].PollutantName, item.overwarnings[0].SuggestValue);
                         }
                         else if(item.sontype==="over"){
-                            debugger;
-                           /*  dispatch({
-                                type: `/pointdetail/${item.DGIMN}/alarmrecord/alarmrecord`,
-                                payload: {firsttime:item.firsttime,lasttime:item.lasttime},
-                            }); */
-                            dispatch(routerRedux.push(`/pointdetail/${item.DGIMN}/alarmrecord/alarmrecord`));
+                            // dispatch(routerRedux.push(`/pointdetail/${item.DGIMN}/alarmrecord/alarmrecord`));
+                            this.childAlarm.showModal(item.firsttime,item.lasttime,item.DGIMN,item.pointname);
+                        }
+                        else if(item.sontype==="exception"){
+                           this.props.dispatch({
+                               type:'urgentdispatch/queryoperationInfo',
+                               payload:{
+                                dgimn:item.DGIMN
+                               }
+                           });
+                        }
+                    }else if(item.type==="advise"){
+                        if(item.params){
+                            const params=JSON.parse(JSON.parse(item.params));
+                            // this.props.dispatch(routerRedux.push(`/workbench`));
+                            // this.props.dispatch(routerRedux.push(`/TaskDetail/emergencydetailinfo/null/ywdsjlist/${params.TaskId}/${item.DGIMN}`));
+                            this.childEmergencyDetailInfo.showModal(item.DGIMN,params.TaskId,item.pointname);
                         }
                     }
                     //修改通知的已读状态
@@ -219,7 +266,9 @@ export default class GlobalHeaderRight extends PureComponent {
                   <Spin size="small" style={{ marginLeft: 8, marginRight: 8 }} />
               )}
 
-                <RealTimeWarningModal {...this.props} onRef={this.onRef} />
+                <RealTimeWarningModal {...this.props} onRef={this.onRefWarning} />
+                <AlarmRecordModal  {...this.props} onRef={this.onRefAlarm} />
+                <EmergencyDetailInfoModal  {...this.props} onRef={this.onRefEmergencyDetailInfo} />
           </div>
       );
   }

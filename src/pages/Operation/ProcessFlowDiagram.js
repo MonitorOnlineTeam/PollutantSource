@@ -115,13 +115,25 @@ export default class ProcessFlowDiagram extends Component {
                             this.props.dispatch({
                                 type: 'points/queryprocesschart',
                                 payload: {
-                                    dgimn: null
+                                    dgimn: "1"
+                                }
+                            });
+                            this.props.dispatch({
+                                type: 'points/queryrealparam',
+                                payload: {
+                                    dgimn: "1"
                                 }
                             });
                         }
                         else {
                             this.props.dispatch({
                                 type: 'points/queryprocesschart',
+                                payload: {
+                                    dgimn: getDGIMN
+                                }
+                            });
+                            this.props.dispatch({
+                                type: 'points/queryrealparam',
                                 payload: {
                                     dgimn: getDGIMN
                                 }
@@ -320,7 +332,7 @@ export default class ProcessFlowDiagram extends Component {
                                                 <div style={{ width: '100px', height: '20px', position: 'relative', left: '635px', top: '152px', fontWeight: '700', fontSize: '10px' }}>制冷温度：{this.getregistValue(paramstatusInfo, 'i33002', '°C')}</div>
                                                 <div style={{ width: '100px', height: '20px', position: 'relative', left: '720px', top: '172px', fontWeight: '700', fontSize: '10px' }}> </div>
                                                 <div style={{ width: '90px', height: '20px', position: 'relative', left: '890px', top: '160px', fontWeight: '700', fontSize: '10px' }}>下次更换时间：{this.getregistValue(operationInfo, '取样泵')}</div>
-                                                <div style={{ width: '100px', height: '20px', position: 'relative', left: '890px', top: '182px', fontWeight: '700', fontSize: '10px' }}><span className={!flows ? style.AlarmCommon : (flows.Status !== '0' ? style.shine_red : style.AlarmCommon)}>{flows ? '' : flows.SdAlarm}</span></div>
+                                                <div style={{ width: '100px', height: '20px', position: 'relative', left: '890px', top: '182px', fontWeight: '700', fontSize: '10px' }}><span className={flows === null ? style.AlarmCommon : (flows.Status !== '0' ? style.shine_red : style.AlarmCommon)}>{flows === null ? '' : flows.SdAlarm}</span></div>
                                                 <div style={{ width: '100px', height: '20px', position: 'relative', left: '1070px', top: '225px', fontWeight: '700', fontSize: '10px' }}>下次更换时间：{this.getregistValue(operationInfo, '过滤器')}</div>
                                                 <div style={{ width: '100px', height: '20px', position: 'relative', left: '860px', top: '240px', fontWeight: '700', fontSize: '10px' }}>下次更换时间：{this.getregistValue(operationInfo, '蠕动泵')}</div>
                                                 <div style={{ width: '120px', height: '20px', position: 'relative', left: '720px', top: '275px', fontWeight: '700', fontSize: '10px' }}>滤芯下次更换时间：{this.getregistValue(operationInfo, '调节阀滤芯')}</div>

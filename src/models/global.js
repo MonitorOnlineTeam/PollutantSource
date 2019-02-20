@@ -99,15 +99,17 @@ export default Model.extend({
                             key:`exception_${item.DGIMNs}`,
                             title:`${item.PointName}报警${item.AlarmCount}次`,
                             description:`从${item.FirstAlarmTime}至${item.LastAlarmTime}发生了${item.AlarmCount}次异常报警`,
+                            descriptionbak:`从${item.FirstAlarmTime}至${item.LastAlarmTime}发生了${item.AlarmCount}次异常报警`,
                         };
                     }));
                 }
             }
-            //通知消息
-            const res2 = yield call(mymessagelist,{});
+            //通知消息,未读消息
+            const res2 = yield call(mymessagelist,{isView:false});
             if(res2&&res2.data!==null){
                 let advises=res2.data.map((item,index)=>({
                     id:`advise_${item.DGIMN}`,
+                    pointname:`${item.PointName}`,
                     DGIMN:`${item.DGIMN}`,
                     msgtitle: item.MsgTitle,
                     msg:item.Msg,
@@ -115,6 +117,7 @@ export default Model.extend({
                     pushusername:item.PushUserName,
                     isview:item.IsView,
                     sontype:item.PushType,
+                    params:item.Col1,
                     //组件里根据这个分组
                     type: 'advise',
                     //排序从5001到9000
@@ -316,7 +319,7 @@ export default Model.extend({
                                 array:obj.Message
                             },
                         });
- 
+
                         dispatch({
                             type: 'videolist/changeRealTimeData',
                             payload: {
@@ -342,15 +345,15 @@ export default Model.extend({
                             payload: {
                                 array:obj.Message
                             },
-                        }); 
+                        });
                         break;
                     case 'DynamicControlState':
-                         dispatch({
+                        dispatch({
                             type: 'points/updateDynamicControlState',
                             payload: {
                                 array:obj.Message
                             },
-                        });  
+                        });
                         break;
                     case 'Alarm':
                         dispatch({

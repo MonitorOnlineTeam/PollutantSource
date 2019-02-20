@@ -27,26 +27,38 @@ const FormItem = Form.Item;
 class AlarmRecord extends Component {
     constructor(props) {
         super(props);
+        let {firsttime,lasttime,DGIMN}=this.props;
+        firsttime=firsttime || moment(new Date()).add(-1, 'month');
+        lasttime=lasttime || moment(new Date());
         this.state = {
-            rangeDate: [moment(new Date()).add(-1, 'month'), moment(new Date())],
+            rangeDate: [firsttime, lasttime],
             current: 1,
-            pageSize: 15
+            pageSize: 15,
+            //参数改变让页面刷新
+            DGIMN:DGIMN,
+            firsttime:firsttime,
+            lasttime:lasttime
         };
     }
 
-    componentWillMount() {
-        this.props.dispatch({
+    componentDidMount = () => {
+        this._querylist();
+    }
+
+    _querylist=()=> {
+        let {dispatch,DGIMN,selectpoint} = this.props;
+        DGIMN = DGIMN||selectpoint.DGIMN;
+        dispatch({
             type: 'points/querypollutantlist',
             payload: {
-                dgimn: this.props.selectpoint.DGIMN,
+                dgimn: DGIMN,
                 beginTime: this.state.rangeDate[0],
                 endTime: this.state.rangeDate[1],
                 pageIndex: this.state.current,
                 pageSize: this.state.pageSize,
-                overdata:true
+                overdata: true
             }
         });
-        // this.reloaddatalist(this.state.pollutantCode, this.state.current, this.state.pageSize, this.state.rangeDate[0], this.state.rangeDate[1]);
     }
 
     _handleDateChange=(date, dateString) => {
@@ -87,13 +99,27 @@ class AlarmRecord extends Component {
           });
       }
 
-      render() {
+      componentWillReceiveProps = (nextProps) => {
+          const {DGIMN,lasttime,firsttime}=this.props;
+          //如果传入参数有变化，则重新加载数据
+          if(nextProps.DGIMN !== DGIMN||nextProps.lasttime!==lasttime||nextProps.firsttime!==firsttime){
+              this.setState({
+                  rangeDate: [nextProps.firsttime, nextProps.lasttime],
+                  //参数改变让页面刷新
+                  DGIMN:nextProps.DGIMN,
+                  firsttime:nextProps.firsttime,
+                  lasttime:nextProps.lasttime
+              });
+              this._querylist();
+          }
+      }
 
+      render() {
           let tablewidth=0;
           const colcount=5;
           let width= (window.screen.availWidth - 120)/colcount;
-          if(width<200) {
-              width=200;
+          if(width < 200) {
+              width = 200;
           }
           tablewidth= width*colcount;
 
@@ -144,7 +170,7 @@ class AlarmRecord extends Component {
                       <Card
                           extra={
                               <div>
-                                  <span>超标时间</span> <RangePicker_ style={{width: 350,textAlign:'left',marginRight:10}} format="YYYY-MM-DD" onChange={this._handleDateChange} dateValue={this.state.rangeDate} />
+                                  <span>超标时间</span> <RangePicker_ style={{width: 350,textAlign:'left',marginRight:10}} format="YYYY-MM-DD HH:mm:ss" onChange={this._handleDateChange} dateValue={this.state.rangeDate} />
                                   <span>污染物因子</span>
                                   <PollutantSelect
                                       optionDatas={this.props.pollutantlist}
@@ -154,14 +180,13 @@ class AlarmRecord extends Component {
                                   />
                               </div>
                           }
-                          style={{ width: '100%', height: 'calc(100vh - 213px)' }}
                       >
                           <Table
                               loading={this.props.dataloading}
                               columns={columns}
                               dataSource={this.props.data}
                               rowKey="key"
-                              scroll={{ y: 'calc(100vh - 420px)',x:tablewidth }}
+                              scroll={{ y: 'calc(100vh - 500px)',x:tablewidth }}
                               rowClassName={
                                   (record, index, indent) => {
                                       if (index === 0) {
