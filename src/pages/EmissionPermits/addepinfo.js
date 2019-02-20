@@ -168,6 +168,7 @@ class addepinfo extends PureComponent {
     };
 
  handleSubmit = (e) => {
+     debugger;
      e.preventDefault();
      let flag = true;
      const {
@@ -191,8 +192,11 @@ class addepinfo extends PureComponent {
                          Files: that.state.fileList,
                          Data: that.state.time,
                          callback: () => {
-                             if (Addrequstresult === '1') {
+                             debugger;
+                             if (this.props.Addrequstresult === '1') {
                                  message.success('添加成功！', 0.5).then(() => this.props.closemodal());
+                             } else {
+                                 message.error('添加失败。请勿添加重复日期');
                              }
                          }
                      },
@@ -212,8 +216,10 @@ class addepinfo extends PureComponent {
                      Files: that.state.fileList,
                      Data: that.state.time,
                      callback: () => {
-                         if (Editrequstresult === '1') {
+                         if (this.props.Editrequstresult === '1') {
                              message.success('修改成功！', 0.5).then(() => this.props.closemodal());
+                         } else {
+                             message.error('添加失败。请勿添加重复日期');
                          }
                      }
                  },
@@ -323,7 +329,12 @@ class addepinfo extends PureComponent {
                                             this.setState({
                                                 time: v,
                                                 isopen: false
+                                            },()=>{
+                                                this.props.form.setFieldsValue({
+                                                    effectivetime: this.state.time,
+                                                });
                                             });
+
                                         }}
                                     />
                                 )}

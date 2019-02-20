@@ -207,6 +207,12 @@ class index extends Component {
                                     onClick={()=>this.showModal(null)}
                                 > 添加
                                 </Button>
+                                <Button
+                                    type="dashed"
+                                    style={{marginLeft:10}}
+                                    onClick={()=>this.buttonback()}
+                                > 返回
+                                </Button>
                             </Col>
                         </Row>
                     </Form>
@@ -217,7 +223,7 @@ class index extends Component {
                         rowKey="ID"
                         dataSource={requstresult==='1'?pdlist:null}
                         size="small"
-                        scroll={{ y: 'calc(100vh - 220px)' }}
+                        scroll={{ y: 'calc(100vh - 270px)' }}
                         rowClassName={
                             (record, index, indent) => {
                                 if (index === 0) {
