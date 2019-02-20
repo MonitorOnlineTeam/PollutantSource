@@ -26,8 +26,12 @@ class EmergencyDetailInfoLayout extends Component {
             case 'pielist': //我的派单
                 rtnVal.push({ Name: '我的派单', Url: `/account/settings/mypielist` });
                 break;
-            case 'workbench':
+            case 'workbench': //工作台
                 rtnVal.push({ Name: '工作台', Url: `/${params.viewtype}` });
+                break;
+            case 'pointinfo': //排口管理
+                rtnVal.push({ Name: '排口管理', Url: `/sysmanage/${params.viewtype}` });
+                break;
             default:
                 break;
         }
