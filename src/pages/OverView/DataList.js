@@ -56,6 +56,7 @@ class dataList extends PureComponent {
                 time: time.format('YYYY-MM-DD HH:00:00'),
                 status: status,
                 operationStatus: operationStatus,
+                pollutantTypes:this.props.selectpollutantTypeCode,
                 terate: terate,
                 warning: warning
             }
@@ -236,6 +237,17 @@ class dataList extends PureComponent {
             // });
         }
         return res;
+    }
+
+    //获取传输有效率的图例（废水没有传输有效率）
+    getcsyxlButton=()=>{
+       const {selectpollutantTypeCode}=this.props;
+       if(selectpollutantTypeCode==2)
+       {
+           return  <span onClick={this.terateSearch} className={this.state.terate ? styles.selectStatus : styles.statusButton} 
+           style={{ marginRight: 20 }}><span style={{ fontSize: 16, color: '#ffca00' }}>■</span> 传输有效率不达标</span>
+       }
+       return '';
     }
 
     //污染物类型选择
@@ -452,8 +464,9 @@ class dataList extends PureComponent {
                                     <div style={{ float: 'right', marginTop: 3 }}>
                                         {/* <span onClick={this.operationSearch} className={operationStatus?styles.selectStatus:styles.statusButton} style={{ marginRight: 10 }}>
                                 <Icon type="user" style={{ color: '#3B91FF' }} /> 运维中</span> */}
-                                        <span onClick={this.terateSearch} className={terate ? styles.selectStatus : styles.statusButton} style={{ marginRight: 20 }}><span style={{ fontSize: 16, color: '#ffca00' }}>■</span> 传输有效率不达标</span>
-
+                                        
+                                        {/* <span onClick={this.terateSearch} className={terate ? styles.selectStatus : styles.statusButton} style={{ marginRight: 20 }}><span style={{ fontSize: 16, color: '#ffca00' }}>■</span> 传输有效率不达标</span> */}
+                                        {this.getcsyxlButton()}
                                         <span onClick={() => this.statusChange('normal')} className={normal ? styles.selectStatus : styles.statusButton}><img className={styles.statusButtonImg} src="../../../gisnormal.png" />正常</span>
                                         <span onClick={() => this.statusChange('over')} className={over ? styles.selectStatus : styles.statusButton}><img className={styles.statusButtonImg} src="../../../gisover.png" />超标</span>
                                         <span onClick={() => this.statusChange('underline')} className={underline ? styles.selectStatus : styles.statusButton}><img className={styles.statusButtonImg} src="../../../gisunline.png" />离线</span>

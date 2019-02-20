@@ -179,6 +179,9 @@ export default class JzRecordInfo extends Component {
             case 'workbench':    //工作台
                 rtnVal.push({ Name: '工作台', Url: `/${listUrl}` });
                 break;
+            case 'pointinfo': //排口管理
+                rtnVal.push({ Name: '排口管理', Url: `/sysmanage/${listUrl}` });
+                break;
             default:
                 break;
         }
