@@ -32,7 +32,7 @@ export async function addGetPollutantByPoint(params) {
     const body = {
         DGIMN: params.DGIMN,
     };
-    const result = post('/api/rest/PollutantSourceApi/ManualSupplement/GetPollutantByDGIMN', body, null);
+    const result = post('/api/rest/PollutantSourceApi/ManualSupplement/GetPollutantByDGIMNAdd', body, null);
     return result === null ? {
         data: null
     } : result;
