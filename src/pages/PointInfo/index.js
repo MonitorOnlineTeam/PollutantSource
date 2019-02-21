@@ -113,7 +113,7 @@ export default class pointlist extends Component {
              this.props.dispatch(routerRedux.push(`/sysmanage/videolists/${id}/${name}`));
              break;
          case '4':
-             this.props.dispatch(routerRedux.push(`/pointdetail/${id}/datalistview`));
+             this.props.dispatch(routerRedux.push(`/pointdetail/${id}/pointinfo`));
              break;
          default:
              break;

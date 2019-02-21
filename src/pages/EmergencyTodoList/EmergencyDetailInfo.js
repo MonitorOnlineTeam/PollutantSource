@@ -267,15 +267,21 @@ class EmergencyDetailInfo extends Component {
                     status="finish"
                     title={item.TaskStatusText}
                     description={this.description(item)}
-                    icon={<Icon type={item.TaskStatusText == '待执行' ? 'minus-circle' :
-                        item.TaskStatusText == '进行中' ? 'clock-circle' :
-                            item.TaskStatusText == '已完成' ? 'check-circle' :
-                                item.TaskStatusText == '待审核' ? 'exclamation-circle' :
-                                    item.TaskStatusText == '审核通过' ? 'clock-circle' :
-                                        item.TaskStatusText == '驳回' ? 'close-circle' :
-                                            item.TaskStatusText == '待调整' ? 'warning' :
-                                                item.TaskStatusText == '已调整' ? 'check-square' :
-                                                    'schedule'
+                    icon={<Icon type={
+                        ( ()=>{
+                            switch(item.TaskStatusText){
+                                case "待执行":return 'minus-circle';
+                                case "进行中":return 'clock-circle';
+                                case "已完成":return 'issues-close';
+                                case "待审核":return 'exclamation-circle';
+                                case "审核通过":return 'check-circle';
+                                case "驳回":return 'close-circle';
+                                case "待调整":return 'warning';
+                                case "已调整":return 'check-square';
+                                default:return 'schedule';
+                            }
+                        }
+                        )()
                     }
                     />}
                 />
