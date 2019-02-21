@@ -194,6 +194,7 @@ export default class GlobalHeaderRight extends PureComponent {
                   className={styles.action}
                   count={currentUserNoticeCnt.unreadCount}
                   onItemClick={(item, tabProps) => {
+                    
                     console.log(item, tabProps); // eslint-disable-line
                     //报警
                     if (item.type==="alarm") {
