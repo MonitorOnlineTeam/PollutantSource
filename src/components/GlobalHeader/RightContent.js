@@ -180,29 +180,6 @@ export default class GlobalHeaderRight extends PureComponent {
                   onPressEnter={value => {
             console.log('enter', value); // eslint-disable-line
                   }}
-<<<<<<< HEAD
-              />
-              <Tooltip title={formatMessage({ id: 'component.globalHeader.help' })}>
-                  <a
-                      target="_blank"
-                      href="http://www.baidu.com"
-                      rel="noopener noreferrer"
-                      className={styles.action}
-                  >
-                      <Icon type="question-circle-o" />
-                  </a>
-              </Tooltip>
-              <NoticeIcon
-                  className={styles.action}
-                  count={currentUserNoticeCnt.unreadCount}
-                  onItemClick={(item, tabProps) => {
-                    
-                    console.log(item, tabProps); // eslint-disable-line
-                    //报警
-                    if (item.type==="alarm") {
-                        if(item.sontype==="warn"){
-                            this.childWarning.showModal(item.pointname, item.DGIMN, item.overwarnings[0].PollutantCode, item.overwarnings[0].PollutantName, item.overwarnings[0].SuggestValue);
-=======
               /> */}
                 <Tooltip title={formatMessage({ id: 'component.globalHeader.help' })}>
                     <a
@@ -246,7 +223,6 @@ export default class GlobalHeaderRight extends PureComponent {
                                 // this.props.dispatch(routerRedux.push(`/TaskDetail/emergencydetailinfo/null/ywdsjlist/${params.TaskId}/${item.DGIMN}`));
                                 this.childEmergencyDetailInfo.showModal(item.DGIMN, params.TaskId, item.pointname);
                             }
->>>>>>> 03e5d0b4605c52c2848a40322a9b644a8e6a5982
                         }
                         //修改通知的已读状态
                         //   this.changeReadState(item, tabProps);
