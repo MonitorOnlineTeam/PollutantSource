@@ -250,6 +250,7 @@ class AddPoint extends Component {
                                Address: values.Address,
                                Col3: values.Col3 === undefined ? '' : values.Col3,
                                OperationerId: values.OperationerId,
+                               DevicePassword:values.DevicePassword||'',
                                callback: () => {
                                    if (this.props.requstresult === '1') {
                                        this.success();
@@ -280,6 +281,7 @@ class AddPoint extends Component {
                            Address: values.Address,
                            Col3: values.Col3 === undefined ? '' : values.Col3,
                            OperationerId: values.OperationerId,
+                           DevicePassword:values.DevicePassword||'',
                            callback: () => {
                                if (this.props.requstresult === '1') {
                                    this.success();
@@ -345,7 +347,8 @@ class AddPoint extends Component {
              Address ,
              longitude ,
              latitude ,
-             Col3
+             Col3,
+             DevicePassword
          } = editpoint === null || this.props.match.params.DGIMN ==="null" ? {} : editpoint;
 
 
@@ -749,6 +752,23 @@ class AddPoint extends Component {
                                                  <Option value={EnumPsOperationForm.CyfPatrol}> 稀释采样法CEMS表单 </Option>
                                                  <Option value={EnumPsOperationForm.ClfPatrol}> 直接测量法CEMS表单 </Option>
                                              </Select>)
+                                     }
+                                 </FormItem>
+                             </Col>
+                             <Col span={8}>
+                                 <FormItem
+                                     {...formItemLayout}
+
+                                     label="排口访问密码"
+                                 > {
+                                         getFieldDecorator('DevicePassword', {
+                                             initialValue: DevicePassword,
+                                             rules: [{
+                                                 message: '请输入排口访问密码!'
+                                             } ]
+
+                                         })(
+                                             <Input style={{ width:300 }} placeholder="排口访问密码" />)
                                      }
                                  </FormItem>
                              </Col>

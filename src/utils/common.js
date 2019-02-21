@@ -31,6 +31,17 @@ export const pageUrl = {
         overPoints:'/api/rest/PollutantSourceApi/PWorkbench/GetOverPoints',
         /**统计排口状态 */
         statisticsPointStatus:'/api/rest/PollutantSourceApi/PWorkbench/GetStatisticsPointStatus',
+    },
+    EnterpriseManager:{
+        getEnterprise:'/api/rest/PollutantSourceApi/UserInfoApi/GetEnterprise',
+        getEnterprisePageList:'/api/rest/PollutantSourceApi/UserInfoApi/GetEnterprisePageList',
+        addEnterprise:'/api/rest/PollutantSourceApi/UserInfoApi/AddEnterprise',
+        editEnterprise:'/api/rest/PollutantSourceApi/UserInfoApi/EditEnterprise',
+        deleteEnterprise:'/api/rest/PollutantSourceApi/UserInfoApi/DeleteEnterprise',
+    },
+    UserManager:{
+        setEnterpriseDataRole:'/api/rest/PollutantSourceApi/UserInfoApi/SetEnterpriseDataRole',
     }
 };
+
 

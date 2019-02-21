@@ -186,6 +186,8 @@ export default [
             },
             /* 基本信息管理 */
             { path: '/sysmanage/entoperation', component: './EnterpriseInfo' },
+            /* 基本信息管理[微信小程序专用] */
+            { path: '/sysmanage/EnterpriseManager', component: './EnterpriseInfo/EnterpriseManager' },
             /* 排污许可证 */
             { path: '/sysmanage/emissionpermits', component: './EmissionPermits' },
             /* 排口信息管理 */
