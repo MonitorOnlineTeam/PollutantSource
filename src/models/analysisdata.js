@@ -1,11 +1,12 @@
-import { queryalloverdatalist,queryreportlist } from '../services/api';
+import { queryalloverdatalist, queryreportlist, GetDocumentationList } from '../services/api';
 import { Model } from '../dvapack';
 
 export default Model.extend({
     namespace: 'analysisdata',
     state: {
         overdatalist: [],
-        reportlist:null
+        reportlist: null,
+        documentationList: [],
     },
     effects: {
         * queryalloverdatalist({
@@ -19,6 +20,16 @@ export default Model.extend({
         }, { call, update }) {
             const reportlist = yield call(queryreportlist, payload);
             yield update({ reportlist });
+        },
+        * GetDocumentationList({
+            payload,
+        }, { call, update }) {
+            const documentationList = yield call(GetDocumentationList, payload);
+            if (documentationList !== null) {
+                if (documentationList.length !== 0) {
+                    yield update({ documentationList });
+                }
+            }
         }
     }
 });
