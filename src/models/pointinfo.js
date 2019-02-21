@@ -119,6 +119,7 @@ export default Model.extend({
                 Address,
                 OutputType,
                 OperationerId,
+                DevicePassword,
                 callback
             }
         }, {
@@ -145,6 +146,7 @@ export default Model.extend({
                 Address: Address,
                 OutputType: OutputType,
                 OperationerId: OperationerId,
+                DevicePassword:DevicePassword
             });
             yield update({
                 requstresult: result.requstresult,
@@ -291,6 +293,7 @@ export default Model.extend({
                 Address,
                 OutputType,
                 OperationerId,
+                DevicePassword,
                 callback
             }
         }, {
@@ -317,6 +320,7 @@ export default Model.extend({
                 Address: Address,
                 OutputType: OutputType,
                 OperationerId: OperationerId,
+                DevicePassword:DevicePassword
             });
             yield update({
                 requstresult: result.requstresult,
