@@ -176,7 +176,18 @@ export async function mymessagelist(params) {
  * },
  */
 export async function setEnterpriseDataRole(params){
-    const result = post(pageUrl.EnterpriseManager.addEnterprise, params, null);
+    const result = post(pageUrl.UserManager.setEnterpriseDataRole, params, null);
+    return result === null ? {
+        data: null
+    } : result;
+}
+
+/**
+ * 【用户管理】获取已授权的企业
+ * @params {"UserId":"766f911d-5e41-4bbf-b705-add427a16e77"}  
+ */
+export async function getEnterpriseDataRoles(params){
+    const result = post(pageUrl.UserManager.getEnterpriseDataRoles, params, null);
     return result === null ? {
         data: null
     } : result;
