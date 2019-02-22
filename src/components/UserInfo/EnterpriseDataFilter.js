@@ -1,19 +1,11 @@
+/**
+ * 功能：根据用户设置企业授权
+ * 创建人：吴建伟
+ * 创建时间：2019-02-21
+ */
 import React, {Component} from 'react';
 import {
-    Col,
-    Row,
-    Form,
-    Input,
-    Switch,
-    InputNumber,
     message,
-    Select,
-    Button,
-    Card,
-    Modal,
-    Divider,
-    Radio,
-    TreeSelect,
     Spin,
     Transfer
 } from 'antd';
@@ -40,7 +32,6 @@ const pageUrl = {
     enterpriseList:enterprisemanagermodel.enterpriseList,
     enterpriseDataRoles:userinfo.EnterpriseDataRoles
 }))
-@Form.create()
 class EnterpriseDataFilter extends Component {
 //初始化
     componentWillMount() {
@@ -50,19 +41,21 @@ class EnterpriseDataFilter extends Component {
     }
 
 updateState = (payload) => {
-    this.props.dispatch({
+    let {dispatch} =this.props;
+    dispatch({
         type: pageUrl.updateState,
         payload: payload,
     });
 }
 
 setEnterpriseDataRole=(payload)=>{
-    this.props.dispatch({
+    let {dispatch,isSuccessEntRole} =this.props;
+    dispatch({
         type: pageUrl.setEnterpriseDataRole,
         payload: {
             ...payload,
-            callback:(item)=>{
-                if(this.props.isSuccessEntRole) {
+            callback:()=>{
+                if(isSuccessEntRole) {
                     message.success("操作成功");
                     this.getEnterpriseDataRoles();
                 }
@@ -72,7 +65,8 @@ setEnterpriseDataRole=(payload)=>{
 }
 
 getEnterprisePageList =()=>{
-    this.props.dispatch({
+    let {dispatch}=this.props;
+    dispatch({
         type: pageUrl.getEnterprisePageList,
         payload: {
             pageIndex:1,
@@ -82,51 +76,27 @@ getEnterprisePageList =()=>{
 }
 
 getEnterpriseDataRoles =()=>{
-    this.props.dispatch({
+    let {dispatch,userId}=this.props;
+    dispatch({
         type: pageUrl.getEnterpriseDataRoles,
         payload: {
-            UserId:this.props.userId
+            UserId:userId
         },
     });
 }
-
 
      onRef1 = (ref) => {
          this.child = ref;
      }
 
-     getMock = () => {
-
-
-         const targetKeys = [];
-         const mockData = [];
-         for (let i = 0; i < 2; i++) {
-             const data = {
-                 key: i.toString(),
-                 title: `content${i + 1}`,
-                 description: `description of content${i + 1}`,
-                 chosen: Math.random() * 2 > 1,
-             };
-             if (data.chosen) {
-                 targetKeys.push(data.key);
-             }
-             mockData.push(data);
-         }
-         this.setState({ mockData, targetKeys });
-     }
-
      handleChange = (targetKeys, direction, moveKeys) => {
-         console.log(targetKeys, direction, moveKeys);
-         this.setState({ targetKeys });
-
+         let {userId}=this.props;
          let dataRoles=[];
          dataRoles.push({
-             UserId:this.props.userId,
+             UserId:userId,
              EnterpriseIds:targetKeys
          });
-         console.log(dataRoles);
          this.setEnterpriseDataRole({RoleDatas:dataRoles});
-
      }
 
      renderItem = (item) => {
@@ -144,11 +114,10 @@ getEnterpriseDataRoles =()=>{
 
      render() {
 
-         let {enterpriseList,enterpriseDataRoles}=this.props;
-         console.log(enterpriseDataRoles);
+         let {enterpriseList,enterpriseDataRoles,loadingEnterpriseDataRoles}=this.props;
          let dataSource=[];
          let targetKeys=[];
-         enterpriseList.map((item,index)=>{
+         enterpriseList.map((item)=>{
              dataSource.push({
                  key: item.EntCode,
                  title: item.EntName,
@@ -160,7 +129,7 @@ getEnterpriseDataRoles =()=>{
              });
 
          });
-         if(this.props.loadingEnterpriseDataRoles){
+         if(loadingEnterpriseDataRoles){
              return (<Spin
                  style={{ width: '100%',
                      height: 'calc(100vh/2)',
