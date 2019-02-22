@@ -2,7 +2,8 @@ import {
     Model
 } from '../dvapack';
 import {
-    getList, deleteuser, enableduser, isexistenceuser, adduser, getuser, edituser, userDgimnDataFilter, editpersonaluser, getmypielist,mymessagelist
+    getList, deleteuser, enableduser, isexistenceuser, adduser, getuser, edituser, userDgimnDataFilter, editpersonaluser, getmypielist, mymessagelist,
+    getip
 } from '../services/userlist';
 
 export default Model.extend({
@@ -18,10 +19,11 @@ export default Model.extend({
         pageSize: 10,
         pageIndex: 1,
         reason: null,
-        mypielist:[],
-        mymessagelist:[],
-        UserAccount:'',
-        DeleteMark:''
+        mypielist: [],
+        mymessagelist: [],
+        UserAccount: '',
+        DeleteMark: '',
+        getIPList: [],
     },
     subscriptions: {
         setup({
@@ -55,7 +57,7 @@ export default Model.extend({
             update,
             select
         }) {
-            const result = yield call(getList, {pageIndex: pageIndex, pageSize: pageSize, UserAccount: UserAccount, DeleteMark: DeleteMark});
+            const result = yield call(getList, { pageIndex: pageIndex, pageSize: pageSize, UserAccount: UserAccount, DeleteMark: DeleteMark });
 
             if (result.requstresult === '1') {
                 yield update({
@@ -97,7 +99,7 @@ export default Model.extend({
             });
             yield put({
                 type: 'fetchuserlist',
-                payload:{
+                payload: {
                     pageIndex,
                     pageSize,
                     UserAccount,
@@ -414,6 +416,19 @@ export default Model.extend({
                     pageIndex: null,
                     pageSize: null
                 });
+            }
+        },
+        //获取IP
+        * getip({
+            payload: {}
+        }, {
+            call,
+        }) {
+            const result = yield call(getip, {
+            });
+            debugger;
+            if(result!==null) {
+
             }
         },
     },
