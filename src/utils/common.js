@@ -41,6 +41,7 @@ export const pageUrl = {
     },
     UserManager:{
         setEnterpriseDataRole:'/api/rest/PollutantSourceApi/UserInfoApi/SetEnterpriseDataRole',
+        getEnterpriseDataRoles:'/api/rest/PollutantSourceApi/UserInfoApi/GetEnterpriseDataRoles',
     }
 };
 
