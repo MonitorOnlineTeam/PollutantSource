@@ -42,12 +42,12 @@ class AlarmRecord extends Component {
     }
 
     componentDidMount = () => {
-        this._querylist();
+        this._querylist(this.props.DGIMN);
     }
 
-    _querylist=()=> {
-        let {dispatch,DGIMN,selectpoint} = this.props;
-        DGIMN = DGIMN||selectpoint.DGIMN;
+    _querylist = (dgimn) => {
+        let {dispatch,selectpoint} = this.props;
+        let DGIMN = dgimn || selectpoint.DGIMN;
         dispatch({
             type: 'points/querypollutantlist',
             payload: {
@@ -86,10 +86,11 @@ class AlarmRecord extends Component {
       }
 
       reloaddatalist=(pollutantCode, pageIndex, pageSize, beginTime, endTime) => {
+          let dgimn = this.props.DGIMN || this.props.selectpoint.DGIMN;
           this.props.dispatch({
               type: 'points/queryoverdatalist',
               payload: {
-                  dgimn: this.props.selectpoint.DGIMN,
+                  dgimn: dgimn,
                   pollutantCode: pollutantCode,
                   beginTime: beginTime,
                   endTime: endTime,
@@ -102,7 +103,7 @@ class AlarmRecord extends Component {
       componentWillReceiveProps = (nextProps) => {
           const {DGIMN,lasttime,firsttime}=this.props;
           //如果传入参数有变化，则重新加载数据
-          if(nextProps.DGIMN !== DGIMN||nextProps.lasttime!==lasttime||nextProps.firsttime!==firsttime){
+          if (nextProps.DGIMN !== DGIMN || moment(nextProps.lasttime).format('yyyy-MM-dd HH:mm:ss') !== moment(lasttime).format('yyyy-MM-dd HH:mm:ss') || moment(nextProps.firsttime).format('yyyy-MM-dd HH:mm:ss') !== moment(firsttime).format('yyyy-MM-dd HH:mm:ss')) {
               this.setState({
                   rangeDate: [nextProps.firsttime, nextProps.lasttime],
                   //参数改变让页面刷新
@@ -110,7 +111,7 @@ class AlarmRecord extends Component {
                   firsttime:nextProps.firsttime,
                   lasttime:nextProps.lasttime
               });
-              this._querylist();
+              this._querylist(nextProps.DGIMN);
           }
       }
 

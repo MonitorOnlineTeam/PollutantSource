@@ -133,7 +133,7 @@ export default [
             /* 异常记录 */
             { path: '/patrolform/deviceexceptiondetail/:pointcode/:viewtype/:taskfrom/:histroyrecordtype/:TaskID', component: './EmergencyTodoList/DeviceExceptionDetail' },
 
-            
+
             //一级菜单
             /* 运维日历 */
             { path: '/operation/operationcalendar', component: './Operation/OperationCalendar' },
@@ -180,7 +180,10 @@ export default [
             /* 手工数据上传 */
             { path: '/selfmonitor/manualupload', component: './Analysis/ManualUpload' },
 
-
+            /* 使用文档 */
+            {
+                path: '/selfmonitor/documentation', component: './Analysis/Documentation'
+            },
             /* 基本信息管理 */
             { path: '/sysmanage/entoperation', component: './EnterpriseInfo' },
             /* 基本信息管理[微信小程序专用] */
