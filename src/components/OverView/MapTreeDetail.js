@@ -8,6 +8,8 @@ import UrgentDispatch from '../../components/OverView/UrgentDispatch';
 import moment from 'moment';
 import { routerRedux } from 'dva/router';
 import PdButton from '../../components/OverView/PdButton';
+import {getPointStatusImg} from '../../utils/getStatusImg';
+
 
 @connect(({ loading, overview, global, baseinfo }) => ({
     detailloading: loading.effects['overview/querydetailpollutant'],
@@ -36,14 +38,23 @@ class MapTreeDetail extends Component {
                 pollutantTypeCode:selectpoint.pollutantTypeCode,
                 dgimn: row.dgimn,
                 pollutantCodes: row.pcode,
-                endTime: (moment(new Date()).add('hour', -1)).format('YYYY-MM-DD HH:00:00'),
-                beginTime: (moment(new Date()).add('hour', -24)).format('YYYY-MM-DD HH:00:00'),
+                endTime: (moment(new Date())).format('YYYY-MM-DD HH:00:00'),
+                beginTime: (moment(new Date()).add('hour', -23)).format('YYYY-MM-DD HH:00:00'),
+                isAsc:true
             }
         });
     }
 
     //返回按钮
     backTreeList = () => {
+        const { selectpoint } =this.props;
+        this.props.dispatch({
+            type: 'overview/querydatalist',
+            payload: {
+                map: true,
+                pollutantTypes:selectpoint.pollutantTypeCode,
+            },
+        });
         this.props.dispatch({
             type: 'overview/updateState',
             payload: {
@@ -55,7 +66,11 @@ class MapTreeDetail extends Component {
 
     //图表加载事件
     getChartOption=()=>{
-        const {chartdataloading,existdata,chartdata}=this.props;
+        const {chartdataloading,existdata,chartdata,selectpoint}=this.props;
+        if(selectpoint.stop)
+        {
+            return(<img style={{width: 150, marginLeft: 120, marginTop: 70}} src="/stopimg.png" />);
+        }
         if(chartdataloading)
         {
             return (<Spin style={{width: '100%',
@@ -73,18 +88,6 @@ class MapTreeDetail extends Component {
         }
         return(<img style={{width: 150, marginLeft: 120, marginTop: 70}} src="/nodata.png" />);
     }
-
-       //获取状态图片
-       getStatusImg=(value) => {
-        if (value === 0) {
-            return <img style={{width:15}} src="/gisunline.png" />;
-        } if (value === 1) {
-            return <img style={{width:15}} src="/gisnormal.png" />;
-        } if (value === 2) {
-            return <img style={{width:15}} src="/gisover.png" />;
-        }
-        return <img style={{width:15}} src="/gisexception.png" />;
-      }
 
       //派单完毕之后刷新数据
       Refresh=()=>{
@@ -106,6 +109,29 @@ class MapTreeDetail extends Component {
         let viewtype='mapview';
          this.props.dispatch(routerRedux.push(`/pointdetail/${selectpoint.DGIMN}/${viewtype}`));
      };
+
+     getpointStatus=(item)=>{
+        let res=[];
+         if(item.stop)
+         {
+            res.push(<span className={styles.stop}>停产中</span>)
+         }
+         else{
+             if(item.scene)
+             {
+                res.push(<span className={styles.operation}>运维中</span>)
+             }
+             if(item.warning)
+             {
+                res.push(<span className={styles.warning}>预警中</span>)
+             }
+             if(item.fault)
+             {
+                res.push(<span className={styles.fault}>故障中</span>)
+             }
+         }
+        return res;
+    }
 
     render() {
         const {detailloading,detailpcol,detaildata,selectpoint,detailtime}=this.props;
@@ -145,12 +171,9 @@ class MapTreeDetail extends Component {
                         boxShadow: 'rgba(136, 136, 136, 0.41) 4px 3px 9px'
                     }}>
                         <div style={{fontSize: 16, marginLeft: 15, paddingTop: 15}}>
-                            <span style={{position: 'relative',top: -2,marginRight: 2}}>{this.getStatusImg(selectpoint.status)}</span>
+                            <span style={{position: 'relative',top: -2,marginRight: 2}}>{getPointStatusImg(selectpoint.status,selectpoint.stop)}</span>
                             {selectpoint.pointName} 
-                            {selectpoint.scene ? <span className={styles.operation}>运维中</span> : ''}
-                            {selectpoint.warning ? <span className={styles.warning}>预警中</span> : ''}
-                            {selectpoint.fault ? <span className={styles.fault}>故障中</span>: ''}
-                            {selectpoint.stop ?  <span className={styles.stop}>停产中</span>: ''}
+                            {this.getpointStatus(selectpoint)}
                             <Button onClick={this.backTreeList} className={styles.backButton}>返回</Button>
                         </div>
                         <div style={{borderBottom: '1px solid #EBEBEB',marginTop: 6}} />

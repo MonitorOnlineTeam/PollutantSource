@@ -12,6 +12,7 @@ import { getRoutes } from '../../utils/utils';
 import UrgentDispatch from '../../components/OverView/UrgentDispatch';
 import { routerRedux } from 'dva/router';
 import PdButton from '../../components/OverView/PdButton';
+import {getPointStatusImg} from '../../utils/getStatusImg';
 const RadioGroup = Radio.Group;
 const { TabPane } = Tabs;
 const Option = Select.Option;
@@ -149,28 +150,33 @@ class PointDetail extends Component {
         //rtnVal.push(this.props.dataTemp.filter(todo=>todo.DGIMN===this.props.pointInfo.DGIMN)[0]);
         //let selectedPoint=this.props.dataTemp.filter(todo=>todo.DGIMN===this.props.pointInfo.DGIMN)[0];
         this.props.dataTemp.map((item, key) => {
-            let status = <img src="/gisexception.png" width="15" />;
-            if (item.status === 0) {
-                status = <img src="/gisunline.png" width="15" />;
-            } if (item.status === 1) {
-                status = <img src="/gisnormal.png" width="15" />;
-            } if (item.status === 2) {
-                status = <img src="/gisover.png" width="15" />;
-            }
+            // let status = <img src="/gisexception.png" width="15" />;
+            // if (item.status === 0) {
+            //     status = <img src="/gisunline.png" width="15" />;
+            // } if (item.status === 1) {
+            //     status = <img src="/gisnormal.png" width="15" />;
+            // } if (item.status === 2) {
+            //     status = <img src="/gisover.png" width="15" />;
+            // }
+            let status=getPointStatusImg(item.status,item.stop);
+
             let optStatus=[];//TODO:排口运维状态不确定 故障：#119f9d
-            if(item.scene) {
-                optStatus.push(<li key={0}><Tag className={styles.operation}>运维中</Tag></li>);
-            }
-            if(item.warning) {
-                optStatus.push(<li key={1}><Tag className={styles.warning}>预警中</Tag></li>);
-            }
-            if(item.fault) {
-                optStatus.push(<li key={2}><Tag className={styles.fault}>故障中</Tag></li>);
-            }
-            if(status===4) {
+
+            if(item.stop) {
                 optStatus.push(<li key={3}><Tag className={styles.stop}>停产中</Tag></li>);
             }
-
+            else
+            {
+                if(item.scene) {
+                    optStatus.push(<li key={0}><Tag className={styles.operation}>运维中</Tag></li>);
+                }
+                if(item.warning) {
+                    optStatus.push(<li key={1}><Tag className={styles.warning}>预警中</Tag></li>);
+                }
+                if(item.fault) {
+                    optStatus.push(<li key={2}><Tag className={styles.fault}>故障中</Tag></li>);
+                }
+            }
             // if (key === 0) {
             //     item = this.props.dataTemp.filter(todo => todo.DGIMN === this.props.pointInfo.DGIMN)[0];
             //     if (!item) {
@@ -252,32 +258,37 @@ class PointDetail extends Component {
         if (pointInfo.length === 0)
             return null;
         let {status,pollutantTypeCode,DGIMN,existTask,scene,warning,fault,stop} = pointInfo[0];
-        let statusText = <span><img src="/gisexception.png" width="11" style={{ marginBottom: 3, marginRight: 5 }} /><span>异常</span></span>;
-        if (status === 0) {
-            statusText = <span><img src="/gisunline.png" width="11" style={{ marginBottom: 3, marginRight: 5 }} /><span>离线</span></span>;
-        } if (status === 1) {
-            statusText = <span><img src="/gisnormal.png" width="11" style={{ marginBottom: 3, marginRight: 5 }} /><span>正常</span></span>;
-        } if (status === 2) {
-            statusText = <span><img src="/gisover.png" width="11" style={{ marginBottom: 3, marginRight: 5 }} /><span>超标</span></span>;
-        }
+
+        let statusText=getPointStatusImg(status,stop);
+        // let statusText = <span><img src="/gisexception.png" width="11" style={{ marginBottom: 3, marginRight: 5 }} /><span>异常</span></span>;
+        // if (status === 0) {
+        //     statusText = <span><img src="/gisunline.png" width="11" style={{ marginBottom: 3, marginRight: 5 }} /><span>离线</span></span>;
+        // } if (status === 1) {
+        //     statusText = <span><img src="/gisnormal.png" width="11" style={{ marginBottom: 3, marginRight: 5 }} /><span>正常</span></span>;
+        // } if (status === 2) {
+        //     statusText = <span><img src="/gisover.png" width="11" style={{ marginBottom: 3, marginRight: 5 }} /><span>超标</span></span>;
+        // }
         let pollutantTypeText = <span><Icon type="fire" style={{ color: 'rgb(238,162,15)', marginBottom: 3, marginRight: 5 }} /><span>废气</span></span>;
-        if (pollutantTypeCode === "1") {
+        if (pollutantTypeCode == 1) {
             pollutantTypeText = <span><Icon type="fire" style={{ color: 'rgb(238,162,15)', marginBottom: 3, marginRight: 5 }} /><span>废水</span></span>;
         }
         let existTaskText=[];
-        if(scene) {
-            existTaskText.push(<span key={0}><Divider type="vertical" /><span><Icon type="user" className={styles.operationcolor} style={{marginBottom:3,marginRight:5 }} /><span>运维中</span></span></span>);
-        }
-        if(warning) {
-            existTaskText.push(<span key={1}><Divider type="vertical" /><Icon type="bell" className={styles.warningcolor} style={{ color: 'red',marginBottom:3,marginRight:5 }} /><span>预警</span></span>);
-        }
-        if(fault) {
-            existTaskText.push(<span key={2}><Divider type="vertical" /><Icon type="tool" className={styles.faultcolor} style={{ color: 'rgb(212,197,123)',marginBottom:3,marginRight:5 }} /><span>故障</span></span>);
-        }
+
         if(stop) {
             existTaskText.push (<span key={3}><Divider type="vertical" /><Icon type="tool" className={styles.stopcolor} style={{ color: 'rgb(212,197,123)',marginBottom:3,marginRight:5 }} /><span>停产</span></span>);
         }
-
+        else
+        {
+            if(scene) {
+                existTaskText.push(<span key={0}><Divider type="vertical" /><span><Icon type="user" className={styles.operationcolor} style={{marginBottom:3,marginRight:5 }} /><span>运维中</span></span></span>);
+            }
+            if(warning) {
+                existTaskText.push(<span key={1}><Divider type="vertical" /><Icon type="bell" className={styles.warningcolor} style={{ color: 'red',marginBottom:3,marginRight:5 }} /><span>预警</span></span>);
+            }
+            if(fault) {
+                existTaskText.push(<span key={2}><Divider type="vertical" /><Icon type="tool" className={styles.faultcolor} style={{ color: 'rgb(212,197,123)',marginBottom:3,marginRight:5 }} /><span>故障</span></span>);
+            }
+        }
         return (
             <span style={{ marginLeft: 20, fontSize: 12 }}>
                 {statusText}

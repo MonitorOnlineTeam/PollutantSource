@@ -493,6 +493,7 @@ export default Model.extend({
                     width: width,
                     render: (value, record, index) => {
                         const additional = record[item.pollutantCode + '_params'];
+                        debugger;
                         if (additional) {
                             const additionalInfo = additional.split('§');
                             if (additionalInfo[0] === 'IsOver') {
@@ -569,7 +570,7 @@ export default Model.extend({
                     },
                     yAxis: {
                         type: 'value',
-                        name: '浓度(' + `${payload.pollutantName}` + `${polluntinfo.unit}` + ')',
+                        name: '浓度(' + `${payload.pollutantName}` + `${polluntinfo.unit?polluntinfo.unit:''}` + ')',
                         axisLabel: {
                             formatter: '{value}'
                         },

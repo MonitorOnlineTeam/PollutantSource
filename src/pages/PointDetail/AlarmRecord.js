@@ -71,6 +71,10 @@ class AlarmRecord extends Component {
 
       // 污染物
       _handlePollutantChange=(value, selectedOptions) => {
+          if(value==-1)
+          {
+            value=null;
+          }
           this.setState({
               pollutantCode: value,
               current: 1
@@ -175,6 +179,7 @@ class AlarmRecord extends Component {
                                   <PollutantSelect
                                       optionDatas={this.props.pollutantlist}
                                       style={{width: 200,marginRight:10,marginLeft:10}}
+                                      allpollutant={true}
                                       onChange={this._handlePollutantChange}
                                       placeholder="请选择污染物"
                                   />
