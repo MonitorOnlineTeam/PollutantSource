@@ -31,7 +31,8 @@ class PollutantTypeRadio extends Component {
     }
 
     render() {
-        const { pollutantTypelist, selectpollutantTypeCode } = this.props;
+        let { pollutantTypelist, selectpollutantTypeCode } = this.props;
+        selectpollutantTypeCode=parseInt(selectpollutantTypeCode);
         if (!pollutantTypelist) {
             return '';
         }

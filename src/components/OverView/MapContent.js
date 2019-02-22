@@ -6,6 +6,7 @@ import {
     Spin,
 } from 'antd';
 import { amapKey,mainpoll } from '../../config';
+import {getPointStatusImg} from '../../utils/getStatusImg';
 
 
 //地图工具
@@ -92,8 +93,9 @@ class MapContent extends Component {
                 datatype: 'hour',
                 pollutantCodes: defaultpollutantCode,
                 pollutantName: defaultpollutantName,
-                endTime: moment(new Date()).add('hour', -1).format('YYYY-MM-DD HH:00:00'),
-                beginTime: moment(new Date()).add('hour', -24).format('YYYY-MM-DD HH:00:00'),
+                endTime: moment(new Date()).format('YYYY-MM-DD HH:00:00'),
+                beginTime: moment(new Date()).add('hour', -23).format('YYYY-MM-DD HH:00:00'),
+                stop:row.stop
             }
         });
         this.setState({
@@ -190,14 +192,11 @@ class MapContent extends Component {
                   markers={this.props.datalist}
                   events={this.markersEvents}
                   render={(extData) => {
-                      if (extData.status === 0) {
-                          return <img style={{width:15}} src="/gisunline.png" />;
-                      } if (extData.status === 1) {
-                          return <img style={{width:15}} src="/gisnormal.png" />;
-                      } if (extData.status === 2) {
-                          return <img style={{width:15}} src="/gisover.png" />;
+                      if(extData.stop)
+                      {
+                        return  <img style={{width:25}} src="/stopstatus.png" />;
                       }
-                      return <img style={{width:15}} src="/gisexception.png" />;
+                      return getPointStatusImg(extData.status,extData.stop);
                   }}
               />
               <InfoWindow

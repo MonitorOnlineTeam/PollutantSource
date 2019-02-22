@@ -329,20 +329,6 @@ class index extends PureComponent {
                                         events={this.mapEvents}
                                         zoom={11} loading={<Spin />} amapkey={amapKey} plugins={plugins} center={mapCenter} >
                                         {
-                                            // allcoo ? allcoo.map((item, key) => {
-                                            //     return (
-                                            //         <Polygon
-                                            //             key={key}
-                                            //             style={{
-                                            //                 strokeColor: '#FF33FF',
-                                            //                 strokeOpacity: 0.2,
-                                            //                 strokeWeight: 3,
-                                            //                 fillColor: '#1791fc',
-                                            //                 fillOpacity: 0.35,
-                                            //             }}
-                                            //             path={item[key]}
-                                            //         />);
-                                            // }) : ''
                                             this.getpolygon(polygonChange)
                                         }
                                     </Map></div>

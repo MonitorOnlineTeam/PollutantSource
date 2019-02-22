@@ -718,7 +718,7 @@ treeCilck = (row) => {
              loadingAllMonthEmissionsByPollutant,
              loadingdatalist,
          } = this.props;
-         if (loadingdatalist&&loadingRateStatistics && loadingbaseinfo && loadingrateStatistics && loadingTaskCount && loadingAlarmAnalysis && loadingStatisticsPointStatus && loadingAllMonthEmissionsByPollutant) {
+         if (loadingdatalist || loadingRateStatistics || loadingbaseinfo || loadingrateStatistics || loadingTaskCount || loadingAlarmAnalysis || loadingStatisticsPointStatus || loadingAllMonthEmissionsByPollutant) {
              return ( <Spin
                  style={
                      {
@@ -742,12 +742,7 @@ treeCilck = (row) => {
                      mapStyle="amap://styles/darkblue"
                      amapkey={amapKey}
                      center={mapCenter}
-                     loading={<Spin
-                         style={{width: '100%',
-                             height: 'calc(100vh - 260px)',
-                             marginTop: 260 }}
-                         size="large"
-                     />}
+
                  >
                      <div style={
                          {

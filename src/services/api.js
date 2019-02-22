@@ -370,7 +370,6 @@ export async function addPDPermit(params) {
         file: params.Files,
     };
     const result = post('/api/rest/PollutantSourceApi/PEmissionPermits/AddPDPermit', body, null);
-    debugger;
     return result === null ? {
         data: null
     } : result;
@@ -430,22 +429,24 @@ export async function queryhistorydatalist(params) {
         pageIndex: params.pageIndex,
         pageSize: params.pageSize,
         beginTime: params.beginTime,
-        endTime: params.endTime
+        endTime: params.endTime,
+        isAsc:params.isAsc
     };
     const result = await post('/api/rest/PollutantSourceApi/DataList/GetAllTypeDataList', body, null);
     return result === null ? { data: null } : result;
 }
 // 获取单排口超标数据
 export async function queryoverdatalist(params) {
-    console.log(params);
+    console.log(params.beginTime);
     const body = {
         DGIMN: params.dgimn,
         pollutantCode: params.pollutantCode,
-        beginTime: params.beginTime,
-        endTime: params.endTime,
+        beginTime: params.beginTime.format("YYYY-MM-DD HH:mm:ss"),
+        endTime: params.endTime.format("YYYY-MM-DD HH:mm:ss"),
         pageIndex: params.pageIndex,
         pageSize: params.pageSize
     };
+    debugger;
     const result = await post('/api/rest/PollutantSourceApi/OverData/GetOnePointOverDataList', body, null);
     return result === null ? { data: null } : result;
 }

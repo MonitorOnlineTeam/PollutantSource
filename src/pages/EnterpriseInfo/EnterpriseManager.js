@@ -37,7 +37,8 @@ const confirm = Modal.confirm;
 const pageUrl = {
     updateState: 'enterprisemanagermodel/updateState',
     getData: 'enterprisemanagermodel/getEnterprisePageList',
-    deleteEnterprise:'enterprisemanagermodel/deleteEnterprise'
+    deleteEnterprise:'enterprisemanagermodel/deleteEnterprise',
+    getAllPointQRCoderZip:'enterprisemanagermodel/getAllPointQRCoderZip'
 };
 @connect(({
     loading,
@@ -45,11 +46,13 @@ const pageUrl = {
 }) => ({
     loading:loading.effects[pageUrl.getData],
     loadingDeleteEnterprise:loading.effects[pageUrl.deleteEnterprise],
+    loadingAllPointQRCoderZip:loading.effects[pageUrl.getAllPointQRCoderZip],
     enterpriseList: enterprisemanagermodel.enterpriseList,
     pageIndex:enterprisemanagermodel.pageIndex,
     pageSize:enterprisemanagermodel.pageSize,
     total:enterprisemanagermodel.total,
-    isSuccess:enterprisemanagermodel.isSuccess
+    isSuccess:enterprisemanagermodel.isSuccess,
+    zipUrl:enterprisemanagermodel.zipUrl
 }))
 class EnterpriseManager extends Component {
     constructor(props) {
@@ -108,6 +111,24 @@ class EnterpriseManager extends Component {
                     if(this.props.isSuccess) {
                         message.success("操作成功");
                         this.getTableData(1);
+                    }
+                }
+            }
+        });
+    }
+
+    getAllPointQRCoderZip =(row)=>{
+        const {dispatch,zipUrl}=this.props;
+        dispatch({
+            type:pageUrl.getAllPointQRCoderZip,
+            payload:{
+                entCode:row.EntCode,
+                callback:(item)=>{
+                    if(item&&item.IsSuccess) {
+                        message.success("下载成功");
+                        window.location.href=item.Data;
+                    }else {
+                        message.success(item.Message||'服务器内部错误！');
                     }
                 }
             }
@@ -197,10 +218,29 @@ class EnterpriseManager extends Component {
                 <Popconfirm placement="left" title="确定要删除此信息吗？" onConfirm={() => this.deletepoint(record)} okText="是" cancelText="否">
                     <a href="#"> 删除 </a>
                 </Popconfirm>
+                <Divider type="vertical" />
+                <a onClick={
+                    () => {
+                        this.getAllPointQRCoderZip(record);
+                    }
+                }
+                > 生成二维码
+                </a>
             </Fragment>
             ),
         },
         ];
+
+        if(this.props.loadingAllPointQRCoderZip){
+            return (<Spin
+                style={{ width: '100%',
+                    height: 'calc(100vh/2)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center' }}
+                size="large"
+            />);
+        }
         return (
             <MonitorContent
                 {...this.props}

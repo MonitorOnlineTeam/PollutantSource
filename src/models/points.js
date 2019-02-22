@@ -505,7 +505,7 @@ export default Model.extend({
                                     <li style={{listStyle: 'none', marginBottom: 10}}>
                                         <Badge status="error" text={`超标倍数：${additionalInfo[3]}`} />
                                     </li>
-                                </div>);
+                                                 </div>);
                                 return (<Popover content={content}><span style={{ color: '#ff0000', cursor: 'pointer' }}>{ value || (value === 0 ? 0 : '-') }</span></Popover>);
                             }
                             const content = (<div>
@@ -516,7 +516,7 @@ export default Model.extend({
                                 <li style={{listStyle: 'none', marginBottom: 10}}>
                                     <Badge status="warning" text={`异常原因：${additionalInfo[2]}`} />
                                 </li>
-                            </div>);
+                                             </div>);
                             return (<Popover content={content}><span style={{ color: '#F3AC00', cursor: 'pointer' }}>{value || (value === 0 ? 0 : '-')}</span></Popover>);
                         }
                         return value || (value === 0 ? 0 : '-');
@@ -567,7 +567,7 @@ export default Model.extend({
                     },
                     yAxis: {
                         type: 'value',
-                        name: '浓度(' + `${payload.pollutantName}` + `${polluntinfo.unit}` + ')',
+                        name: '浓度(' + `${payload.pollutantName}` + `${polluntinfo.unit?polluntinfo.unit:''}` + ')',
                         axisLabel: {
                             formatter: '{value}'
                         },
@@ -663,7 +663,6 @@ export default Model.extend({
             if(!res.data) {
                 const { tablist } = yield select(_ => _.points);
                 let newtablist=tablist.filter(t=>t.key!=="realvideo"&&t.key!=="hisvideo");
-                debugger;
                 yield update({
                     tablist:newtablist
                 });
