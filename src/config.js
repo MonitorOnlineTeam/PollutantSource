@@ -13,6 +13,7 @@ module.exports = {
     CORS: [],
     openPages: ['/login'],
     enterpriceid:'51216eae-8f11-4578-ad63-5127f78f6cca',
+    isMultiEnterprise:false,
     apiPrefix: '/mock',
     webSocketPushURL: '172.16.4.200:40006',
     imgaddress: 'http://172.16.12.152:8011/api/upload/',

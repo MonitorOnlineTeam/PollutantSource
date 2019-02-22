@@ -381,6 +381,7 @@ export default Model.extend({
         * editstandardlibrarypollutant({
             payload: {
                 Guid,
+                StandardLibraryID,
                 PollutantCode,
                 AlarmType,
                 UpperLimit,
@@ -395,6 +396,7 @@ export default Model.extend({
         }) {
             const result = yield call(editstandardlibrarypollutant, {
                 Guid: Guid,
+                StandardLibraryID: StandardLibraryID,
                 PollutantCode: PollutantCode,
                 AlarmType: AlarmType,
                 UpperLimit: UpperLimit,

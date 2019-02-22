@@ -110,6 +110,14 @@ export default Model.extend({
                                 pointName: data[0].pointName
                             }
                         });
+                        //获取绑定下拉污染物
+                        yield put({
+                            type: 'manualupload/GetPollutantByPoint',
+                            payload: {
+                                DGIMN: dgimns,
+                                PollutantType: payload.pollutantTypeCode
+                            }
+                        });
                     }
                 } else {
                     //知道有问题但是手机端调用这个接口是不传参数返回所有的值，
@@ -602,7 +610,7 @@ export default Model.extend({
                             pollutantName: item.pollutantName,
                             pollutantCode: res.data[0][item.pollutantCode] ? res.data[0][item.pollutantCode] : '-',
                             pollutantCodeParam: res.data[0][`${item.pollutantCode}_params`],
-                            zspollutantCode: pollutantInfoList.zspollutant ? ( res.data[0][item.zspollutantCode]===0 || res.data[0][item.zspollutantCode]) ?
+                            zspollutantCode: pollutantInfoList.zspollutant ? res.data[0][item.zspollutantCode] === 0 || res.data[0][item.zspollutantCode] ?
                                 res.data[0][item.zspollutantCode] : '-' : '-',
                             zspollutantCodeParam: res.data[0][`${item.zspollutantCode}_params`],
                             dgimn: payload.dgimn,
@@ -650,7 +658,7 @@ export default Model.extend({
             let zsmarkLine = {};
             if (pollutantlist) {
                 polluntinfo = pollutantlist.find((value, index, arr) => value.pollutantCode === payload.pollutantCodes);
-                zspolluntinfo = pollutantlist.find((value, index, arr) => value.pollutantCode === `zs${ payload.pollutantCodes}`);
+                zspolluntinfo = pollutantlist.find((value, index, arr) => value.pollutantCode === `zs${payload.pollutantCodes}`);
             }
             if (polluntinfo && polluntinfo.standardValue) {
                 markLine = {
@@ -683,7 +691,7 @@ export default Model.extend({
             const pollutantInfoList = mainpoll.find(value => value.pollutantCode == payload.pollutantTypeCode);
             let legend = [payload.pollutantName];
             if (pollutantInfoList.zspollutant) {
-                legend.push(`折算${ payload.pollutantName}`);
+                legend.push(`折算${payload.pollutantName}`);
             }
             const option = {
                 legend: {
@@ -693,9 +701,9 @@ export default Model.extend({
                     trigger: 'axis',
                     formatter: function(params, ticket, callback) {
                         console.log(params);
-                        let res = `${params[0].axisValue }时<br/>`;
+                        let res = `${params[0].axisValue}时<br/>`;
                         params.map(item => {
-                            res += `${item.seriesName }:${ item.value }<br />`;
+                            res += `${item.seriesName}:${item.value}<br />`;
                         });
                         return res;
                     }
@@ -735,7 +743,7 @@ export default Model.extend({
                 },
                 {
                     type: 'line',
-                    name: `折算${ payload.pollutantName}`,
+                    name: `折算${payload.pollutantName}`,
                     data: zsseriesdata,
                     markLine: zsmarkLine,
                     itemStyle: {

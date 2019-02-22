@@ -9,16 +9,16 @@ export async function fakeAccountLogin(params) {
         USer_Pwd: params.User_Pwd,
     };
     //let userArray = Array.from(users).filter(t => t.User_Account === params.User_Account && t.User_Pwd === params.User_Pwd);
-    let result = {'requstresult': '0', 'reason': '验证失败', 'operation': 'Post', 'data': {}, 'total': 0};
+    let result = { 'requstresult': '0', 'reason': '验证失败', 'operation': 'Post', 'data': {}, 'total': 0 };
     // = await post('/api/rest/AtmosphereApi/Author/IsLogins/', body, null, 'notooken');
     //if (userArray.length > 0) {
-    result = {'requstresult': '1', 'reason': '验证成功', 'operation': 'Post', 'data': {...userArray[0]}, 'total': 1};
+    result = { 'requstresult': '1', 'reason': '验证成功', 'operation': 'Post', 'data': { ...userArray[0] }, 'total': 1 };
     //}
     return result === null ? { data: null } : result;
 }
 export async function loadPollutantType() {
     // const result = await post('/api/rest/AtmosphereApi/Cod/GetPollutantTypesByUserId/', {}, null);
-    const result = {'requstresult': '1', 'reason': '验证成功', 'operation': 'Post', 'data': {'PollutantTypeCode': '2', 'PollutantTypeName': '废气'}, 'total': 1};
+    const result = { 'requstresult': '1', 'reason': '验证成功', 'operation': 'Post', 'data': { 'PollutantTypeCode': '2', 'PollutantTypeName': '废气' }, 'total': 1 };
     return result === null ? { data: null } : result;
 }
 export async function loadLastdata(params) {
@@ -154,7 +154,7 @@ export async function loadPointDetail(params) {
 export async function loadCountryPointView(params) {
     let groupstr = '';
     params.GroupID.map(item => {
-        groupstr += `${item },`;
+        groupstr += `${item},`;
     });
     const body = {
         GroupIDs: groupstr,
@@ -179,7 +179,7 @@ export async function loadCountryPointView(params) {
 
 export async function GetAlarmNotices(params) {
     const body = {
-        beginTime: "2019-02-10",
+        beginTime: params.beginTime,
         endTime: params.endTime
     };
     const result = await get('/api/rest/PollutantSourceApi/PAlarmData/GetAlarmNotices', body, null);
@@ -304,8 +304,8 @@ export async function queryentedit(params) {
     const body = {
         name: params.entallname,
         code: params.parentID,
-        longitude: params.latlon && params.latlon.split?params.latlon.split(',')[0]:'',
-        latitude: params.latlon && params.latlon.split? params.latlon.split(',')[1]:'',
+        longitude: params.latlon && params.latlon.split ? params.latlon.split(',')[0] : '',
+        latitude: params.latlon && params.latlon.split ? params.latlon.split(',')[1] : '',
         // photo:
         pSScaleCode: params.pollutionsources,
         abbreviation: params.enteasyname,
@@ -320,7 +320,7 @@ export async function queryentedit(params) {
         registTypeCode: params.registration,
         subjectionRelationCode: params.subjection,
         unitTypeCode: params.unit,
-        polygon:params.polygon
+        polygon: params.polygon
     };
     const result = await post('/api/rest/PollutantSourceApi/PPointAndData/EditEnt', body, null);
     return result === null ? { data: null } : result.requstresult;
@@ -437,15 +437,16 @@ export async function queryhistorydatalist(params) {
 }
 // 获取单排口超标数据
 export async function queryoverdatalist(params) {
-    console.log(params);
+    console.log(params.beginTime);
     const body = {
         DGIMN: params.dgimn,
         pollutantCode: params.pollutantCode,
-        beginTime: params.beginTime,
-        endTime: params.endTime,
+        beginTime: params.beginTime.format("YYYY-MM-DD HH:mm:ss"),
+        endTime: params.endTime.format("YYYY-MM-DD HH:mm:ss"),
         pageIndex: params.pageIndex,
         pageSize: params.pageSize
     };
+    debugger;
     const result = await post('/api/rest/PollutantSourceApi/OverData/GetOnePointOverDataList', body, null);
     return result === null ? { data: null } : result;
 }
@@ -469,17 +470,17 @@ export async function querypollutanttypecode(params) {
 export async function querydatalist(params) {
     let body = {
         time: params.time,
-        pointType:params.pointType,
-        pollutantTypes:params.pollutantTypes,
-        pointName:params.pointName,
-        status:params.status,
-        operationStatus:params.operationStatus,
-        terate:params.terate,
-        warning:params.warning,
-        RunState:params.RunState,
+        pointType: params.pointType,
+        pollutantTypes: params.pollutantTypes,
+        pointName: params.pointName,
+        status: params.status,
+        operationStatus: params.operationStatus,
+        terate: params.terate,
+        warning: params.warning,
+        RunState: params.RunState,
     };
-    if(params.dgimn)
-        body.DGIMNs=params.dgimn;
+    if (params.dgimn)
+        body.DGIMNs = params.dgimn;
     const result = await post('/api/rest/PollutantSourceApi/DataList/AllTypeSummaryList', body, null);
     return result === null ? { data: null } : result.data;
 }
@@ -488,7 +489,7 @@ export async function querylastestdatalist(params) {
     const body = {
         dataType: params.dataType,
         DGIMNs: params.dgimn,
-        isLastest:true
+        isLastest: true
     };
     const result = await post('/api/rest/PollutantSourceApi/DataList/AllTypeSummaryList', body, null);
     return result === null ? { data: null } : result;
@@ -499,51 +500,60 @@ export async function querysinglepointinfo(params) {
         DGIMNs: params.dgimn
     };
     const result = await post('/api/rest/PollutantSourceApi/PPointAndData/GetPoint', body, null);
-    return result === null ? {data: null} : result.data;
+    return result === null ? { data: null } : result.data;
 }
 // 获取企业超标排口汇总数据
 export async function queryalloverdatalist(params) {
     const body = {
         DGIMNs: params.dgimn,
-        beginTime:params.beginTime,
-        endTime:params.endTime,
+        beginTime: params.beginTime,
+        endTime: params.endTime,
         pollutantCodeList: params.summaryPolluntantCode
     };
     const result = await post('/api/rest/PollutantSourceApi/OverData/GetAllPointOverDataList', body, null);
-    return result === null ? {data: null} : result.data;
+    return result === null ? { data: null } : result.data;
 }
 //专工派单
 export async function addtaskinfo(params) {
     const body = {
         DGIMNs: params.dgimn,
-        taskType:2,
+        taskType: 2,
         taskFrom: 3,
-        operationsUserId:params.personId,
-        remark:params.remark
+        operationsUserId: params.personId,
+        remark: params.remark
     };
     const result = await post('/api/rest/PollutantSourceApi/PTaskProcessing/AddTask', body, null);
-    return result === null ? {data: null} : result.requstresult;
+    return result === null ? { data: null } : result.requstresult;
 }
 //催办
 export async function queryurge(params) {
     const body = {
-        NoticeTitle:'通知',
-        ToUserId:params.personId,
+        NoticeTitle: '通知',
+        ToUserId: params.personId,
         //1是督办
-        NoticeType:1,
-        DGIMN:params.DGIMN
+        NoticeType: 1,
+        DGIMN: params.DGIMN
     };
     const result = await post('/api/rest/PollutantSourceApi/PTaskProcessing/PostTaskSupervise', body, null);
-    return result === null ? {data: null} : result.requstresult;
+    return result === null ? { data: null } : result.requstresult;
 }
 //获取监测报告列表
 export async function queryreportlist(params) {
     const body = {
-        beginTime:params.beginTime,
-        endTime:params.endTime,
+        beginTime: params.beginTime,
+        endTime: params.endTime,
     };
     const result = await post('/api/rest/PollutantSourceApi/DataList/GetYearDataList', body, null);
-    return result === null ? {data: null} : result.data;
+    return result === null ? { data: null } : result.data;
+}
+//获取使用文档列表
+export async function GetDocumentationList(params) {
+    const body = {
+        beginTime: params.beginTime,
+        endTime: params.endTime,
+    };
+    const result = await post('/api/rest/PollutantSourceApi/Documentation/GetDocumentationList', body, null);
+    return result === null ? { data: null } : result.data;
 }
 
 
@@ -552,7 +562,7 @@ export async function getPollutantTypeList(params) {
     const body = {
     };
     const result = await post('/api/rest/PollutantSourceApi/DataList/GetPollutantTypeList', body, null);
-    return result === null ? {data: null} : result.data;
+    return result === null ? { data: null } : result.data;
 }
 
 // 获取工艺流程图信息

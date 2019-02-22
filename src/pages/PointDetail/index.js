@@ -1,27 +1,24 @@
 // import liraries
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import { Modal, Breadcrumb, Popconfirm,Tabs, Icon, Select, Button, Card, Spin, Row, Col, Divider, Tag, Input, Form, Radio, Alert } from 'antd';
+import { Modal, Tabs, Icon, Button, Card, Spin, Row, Col, Divider, Tag, Input, Form, Radio, Alert } from 'antd';
 import moment from 'moment';
 import Cookie from 'js-cookie';
 import router from 'umi/router';
 import Redirect from 'umi/redirect';
 import Link from 'umi/link';
-import styles from './index.less';
-import { getRoutes } from '../../utils/utils';
-import UrgentDispatch from '../../components/OverView/UrgentDispatch';
 import { routerRedux } from 'dva/router';
+import styles from './index.less';
 import PdButton from '../../components/OverView/PdButton';
 import {getPointStatusImg} from '../../utils/getStatusImg';
 const RadioGroup = Radio.Group;
 const { TabPane } = Tabs;
-const Option = Select.Option;
-const Search = Input.Search;
-const { Meta } = Card;
+const { Search } = Input.Search;
 
 
 @connect(({ points, loading, overview }) => ({
     pointInfo: points.selectpoint,
+    tablist:points.tablist||[],
     loadingModel: loading.effects['overview/querydatalist'],
     isloading: loading.effects['points/querysinglepointinfo'],
     pointList: overview.data,
@@ -34,20 +31,6 @@ class PointDetail extends Component {
         this.menus = props.menuData;
 
         this.state = {
-            tablist: [
-                { key: 'processflowdiagram', tab: '工艺流程图' },
-                { key: 'dataquery', tab: '数据查询' },
-                { key: 'alarmrecord', tab: '报警记录' },
-                { key: 'realvideo', tab: '实时视频' },
-                { key: 'hisvideo', tab: '历史视频' },
-                { key: 'ywdsjlist', tab: '运维大事记' },
-                { key: 'qcontrollist', tab: '质控记录' },
-                { key: 'operationlist', tab: '运维记录' },
-            ],
-            recordType: [
-                'RepairHistoryRecods',
-                'JzHistoryRecords'
-            ],
             modalVisible: false,
             loadingCard: true,
             pointList: null,
@@ -59,6 +42,17 @@ class PointDetail extends Component {
         };
     }
 
+    componentWillMount = () => {
+        const {dispatch,match}=this.props;
+        dispatch({
+            type: 'points/updateVideoMenu',
+            payload: {
+                DGIMN: match.params.pointcode,
+            }
+        });
+    }
+
+
     componentDidMount() {
         this.props.dispatch({
             type: 'points/querysinglepointinfo',
@@ -68,17 +62,6 @@ class PointDetail extends Component {
                 isfirst:true
             }
         });
-        // this.props.dispatch({
-        //     type: 'overview/querydatalist',
-        //     payload: {
-        //         time: moment(new Date()).add(-1, 'hour').format('YYYY-MM-DD HH:00:00')
-        //     }
-        // });
-        // this.props.dispatch({
-        //     type: 'overview/getPollutantTypeList',
-        //     payload: {
-        //     }
-        // });
     }
 
 
@@ -247,7 +230,7 @@ class PointDetail extends Component {
             pollutantTypeKey:0
         });
     }
- 
+
     /**
      * 渲染排口状态
      */
@@ -335,19 +318,22 @@ class PointDetail extends Component {
 
     getBackButton=()=>{
         const viewtype= this.props.match.params.viewtype;
-        const backpath=`/overview/${viewtype}`;
+        let backpath=`/overview/${viewtype}`;
+        if(viewtype==="pointinfo"){
+            backpath=`/sysmanage/${viewtype}`;
+        }
         return(<Link to={backpath}><Icon type="left" />返回</Link>);
     }
 
     render() {
-        const { match, routerData, location, children, pointInfo, selectpoint } = this.props;
-        let {tablist,pollutantTypeKey}=this.state;
-        const viewType="pointInfo@"+match.params.viewtype;
+        let { match, location, children, pointInfo, tablist } = this.props;
+        let {pollutantTypeKey}=this.state;
+        const viewType=`pointInfo@${match.params.viewtype}`;
         //判断当前排口污染物类型那个
         let routerPath='';
         if(pointInfo && pointInfo.pollutantType) {
-            if(pointInfo.pollutantType=="1") {
-                routerPath=`/pointdetail/${this.props.match.params.pointcode}/${this.props.match.params.viewtype}/dataquery`;
+            if(pointInfo.pollutantType === "1") {
+                routerPath=`/pointdetail/${match.params.pointcode}/${match.params.viewtype}/dataquery`;
                 tablist= [
                     { key: 'dataquery', tab: '数据查询' },
                     { key: 'alarmrecord', tab: '报警记录' },
@@ -370,8 +356,8 @@ class PointDetail extends Component {
             if(matchurl!==null){
                 activeKey = matchurl[1];
             }
-            
-            
+
+
         }
         if (this.props.isloading || !pointInfo) {
             return (<Spin
@@ -406,16 +392,22 @@ class PointDetail extends Component {
 
                     <Button style={{ float: "right", marginRight: 30, top: -5 }}>{this.getBackButton()}</Button>
 
-                    <PdButton DGIMN={pointInfo.DGIMN} id={pointInfo.operationUserID} pname={pointInfo.pointName} 
-                    reloadData={() => this.Refresh()} exist={pointInfo.existTask} name={pointInfo.operationUserName} 
-                    tel={pointInfo.operationtel} viewType={viewType}/>
+                    <PdButton
+                        DGIMN={pointInfo.DGIMN}
+                        id={pointInfo.operationUserID}
+                        pname={pointInfo.pointName}
+                        reloadData={() => this.Refresh()}
+                        exist={pointInfo.existTask}
+                        name={pointInfo.operationUserName}
+                        tel={pointInfo.operationtel}
+                        viewType={viewType}
+                    />
                 </div>
                 <div style={{ backgroundColor: '#fff', margin: 10, padding: 10 }}>
                     <Tabs
                         className={styles.tabs}
                         activeKey={activeKey}
                         onChange={(key) => {
-                            const { match } = this.props;
                             router.push(`${match.url}/${key}`);
                         }}
                     >
@@ -432,7 +424,7 @@ class PointDetail extends Component {
                     footer={[]}
                 >
                     <Form layout="inline" style={{ marginBottom: 10 }}>
-                        <Search
+                        <Input.Search
                             placeholder="请输入排口关键字"
                             defaultValue={this.state.searchName}
                             onSearch={(value) => {
@@ -478,9 +470,9 @@ class PointDetail extends Component {
                             <Radio.Button key={2} value="0"><img src="../../../gisunline.png" width="15" /> 离线</Radio.Button>
                             <Radio.Button key={3} value="3"><img src="../../../gisexception.png" width="15" /> 异常</Radio.Button>
                         </Radio.Group>
-                        <RadioGroup style={{ marginRight: 20,float: 'right',marginTop:3}} onChange={this.onPollutantChange} defaultValue={pollutantTypeKey}>
+                        <Radio.Group style={{ marginRight: 20,float: 'right',marginTop:3}} onChange={this.onPollutantChange} defaultValue={pollutantTypeKey}>
                             {this.getPollutantDoc()}
-                        </RadioGroup>
+                        </Radio.Group>
                     </Form>
                     <div style={{ height: 'calc(100vh - 340px)' }} className={styles.pointModal}>
                         <Row gutter={48}>

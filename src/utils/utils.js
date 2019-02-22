@@ -8,11 +8,19 @@ export function fixedZero(val) {
 }
 
 export function asc(a,b){
-    return a.orderby-b.orderby;
+    //数字类型
+    if(typeof a.orderby==="number")
+        return a.orderby-b.orderby;
+    //时间类型
+    return a.orderby<b.orderby?1:-1;
 }
 
 export function desc(a,b){
-    return b.orderby-a.orderby;
+    //数字类型
+    if(typeof a.orderby==="number")
+        return b.orderby-a.orderby;
+    //时间类型
+    return b.orderby<a.orderby?1:-1;
 }
 
 export function getTimeDistance(type) {
