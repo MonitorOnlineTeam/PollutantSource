@@ -414,7 +414,7 @@ class PointDetail extends Component {
                     footer={[]}
                 >
                     <Form layout="inline" style={{ marginBottom: 10 }}>
-                        <Search
+                        <Input.Search
                             placeholder="请输入排口关键字"
                             defaultValue={this.state.searchName}
                             onSearch={(value) => {
@@ -460,9 +460,9 @@ class PointDetail extends Component {
                             <Radio.Button key={2} value="0"><img src="../../../gisunline.png" width="15" /> 离线</Radio.Button>
                             <Radio.Button key={3} value="3"><img src="../../../gisexception.png" width="15" /> 异常</Radio.Button>
                         </Radio.Group>
-                        <RadioGroup style={{ marginRight: 20,float: 'right',marginTop:3}} onChange={this.onPollutantChange} defaultValue={pollutantTypeKey}>
+                        <Radio.Group style={{ marginRight: 20,float: 'right',marginTop:3}} onChange={this.onPollutantChange} defaultValue={pollutantTypeKey}>
                             {this.getPollutantDoc()}
-                        </RadioGroup>
+                        </Radio.Group>
                     </Form>
                     <div style={{ height: 'calc(100vh - 340px)' }} className={styles.pointModal}>
                         <Row gutter={48}>

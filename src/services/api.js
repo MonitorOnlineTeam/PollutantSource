@@ -437,15 +437,16 @@ export async function queryhistorydatalist(params) {
 }
 // 获取单排口超标数据
 export async function queryoverdatalist(params) {
-    console.log(params);
+    console.log(params.beginTime);
     const body = {
         DGIMN: params.dgimn,
         pollutantCode: params.pollutantCode,
-        beginTime: params.beginTime,
-        endTime: params.endTime,
+        beginTime: params.beginTime.format("YYYY-MM-DD HH:mm:ss"),
+        endTime: params.endTime.format("YYYY-MM-DD HH:mm:ss"),
         pageIndex: params.pageIndex,
         pageSize: params.pageSize
     };
+    debugger;
     const result = await post('/api/rest/PollutantSourceApi/OverData/GetOnePointOverDataList', body, null);
     return result === null ? { data: null } : result;
 }
