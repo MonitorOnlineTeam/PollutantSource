@@ -21,6 +21,7 @@ const TabPane = Tabs.TabPane;
     warningDetailsDatas: workbenchmodel.warningDetailsDatas,
     pollutantList: points.pollutantlist,
     loadingRealTimeWarningDatas: loading.effects[pageUrl.getRealTimeWarningDatas],
+    loadingPollutantList: loading.effects[pageUrl.getPollutantList],
 }))
 class RealTimeWarningModal extends Component {
     constructor(props) {
@@ -72,6 +73,8 @@ class RealTimeWarningModal extends Component {
  * 智能监控_显示预警详情弹窗口
  */
     showModal = (name, mn, pollutantCode, pollutantName, SuggestValue) => {
+        debugger;
+        this.getPollutantList(mn);
         this.updateState({
             SuggestValue: SuggestValue,
             warningDetailsDatas: {
@@ -84,8 +87,6 @@ class RealTimeWarningModal extends Component {
             }
         });
         this.getRealTimeWarningDatas();
-        this.getPollutantList(mn);
-
         this.setState({
             SuggestValue: SuggestValue,
             visibleModal: true,
@@ -276,7 +277,7 @@ class RealTimeWarningModal extends Component {
     }
 
     //如果是数据列表则没有选择污染物，而是展示全部污染物
-    getPollutantSelect = () => (<PollutantSelect
+    getPollutantSelect = () => (this.props.loadingPollutantList&&this.props.loadingRealTimeWarningDatas?'':<PollutantSelect
         optionDatas={this.props.pollutantList}
         defaultValue={this.props.warningDetailsDatas.selectedPollutantCode}
         style={{ width: 150, marginRight: 10 }}
@@ -366,6 +367,17 @@ class RealTimeWarningModal extends Component {
     }
 
     render() {
+        // if(this.props.loadingPollutantList){
+        //     return (<Spin
+        //         style={{ width: '100%',
+        //             height: 'calc(100vh/2)',
+        //             display: 'flex',
+        //             alignItems: 'center',
+        //             justifyContent: 'center' }}
+        //         size="large"
+        //     />);
+        // }
+
         return (
             <div>
                 <Modal
