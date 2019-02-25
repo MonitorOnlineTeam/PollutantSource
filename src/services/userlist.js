@@ -192,3 +192,14 @@ export async function getEnterpriseDataRoles(params){
         data: null
     } : result;
 }
+// 获取二维码ip
+export async function getip() {
+    const body = {
+        pageIndex: 1,
+        pageSize: 1,
+    };
+    const result = post('/api/rest/PollutantSourceApi/PUserInfo/GetMyPieList', body, null);
+    return result === null ? {
+        data: null
+    } : result;
+}

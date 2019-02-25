@@ -10,7 +10,8 @@ import {
     getEnterprise,
     addEnterprise,
     editEnterprise,
-    deleteEnterprise
+    deleteEnterprise,
+    getAllPointQRCoderZip
 } from '../services/EnterpriseManagerApi';
 import { queryattentiondegreelist,queryregionlist } from '../services/api';
 import { enterpriceid } from '../config';
@@ -27,7 +28,8 @@ export default Model.extend({
         enterprise:{},
         isSuccess:false,
         attentionOptions:[],
-        regionList:[]
+        regionList:[],
+        zipUrl:''
     },
     subscriptions: {
     },
@@ -103,6 +105,19 @@ export default Model.extend({
                 isSuccess: response.IsSuccess
             });
             payload.callback();
+        },
+        /**
+         * 根据企业ID，获取所有排口二维码并压缩
+         * @param {传递参数} 传递参数
+         * @param {操作} 操作项
+         */
+        * getAllPointQRCoderZip({ payload }, { call, put, update, select }) {
+            const response = yield call(getAllPointQRCoderZip, {...payload});
+            yield update({
+                isSuccess: response.IsSuccess,
+                zipUrl:response.Data
+            });
+            payload.callback(response);
         },
         /**
          * 获取企业关注度

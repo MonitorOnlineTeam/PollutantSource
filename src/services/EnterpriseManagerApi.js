@@ -84,3 +84,15 @@ export async function deleteEnterprise(params) {
         data: null
     } : result;
 }
+/**
+ * 【企业管理】根据企业ID，获取所有排口二维码并压缩
+ * @params {
+ * "EntCode": "企业编码"
+ * }
+ */
+export async function getAllPointQRCoderZip(params) {
+    const result = post(pageUrl.EnterpriseManager.getAllPointQRCoderZip, params, null);
+    return result === null ? {
+        data: null
+    } : result;
+}

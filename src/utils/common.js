@@ -38,6 +38,7 @@ export const pageUrl = {
         addEnterprise:'/api/rest/PollutantSourceApi/UserInfoApi/AddEnterprise',
         editEnterprise:'/api/rest/PollutantSourceApi/UserInfoApi/EditEnterprise',
         deleteEnterprise:'/api/rest/PollutantSourceApi/UserInfoApi/DeleteEnterprise',
+        getAllPointQRCoderZip:'/api/rest/PollutantSourceApi/UserInfoApi/GetAllPointQRCoderZip'
     },
     UserManager:{
         setEnterpriseDataRole:'/api/rest/PollutantSourceApi/UserInfoApi/SetEnterpriseDataRole',

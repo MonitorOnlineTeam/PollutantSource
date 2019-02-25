@@ -2,21 +2,8 @@ import {
     Model
 } from '../dvapack';
 import {
-    getList,
-    deleteuser,
-    enableduser,
-    isexistenceuser,
-    adduser,
-    getuser,
-    edituser,
-    userDgimnDataFilter,
-    editpersonaluser,
-    getmypielist,
-    mymessagelist,
-    setEnterpriseDataRole,
-    getEnterpriseDataRoles
+    getList, deleteuser, enableduser, isexistenceuser, adduser, getuser, edituser, userDgimnDataFilter, editpersonaluser, getmypielist,mymessagelist
 } from '../services/userlist';
-import {isMultiEnterprise} from '../config';
 
 export default Model.extend({
     namespace: 'userinfo',
@@ -34,10 +21,7 @@ export default Model.extend({
         mypielist:[],
         mymessagelist:[],
         UserAccount:'',
-        DeleteMark:'',
-        EnterpriseDataRoles:[],
-        isSuccess:false,
-        isMultiEnterprise:isMultiEnterprise
+        DeleteMark:''
     },
     subscriptions: {
         setup({
@@ -58,29 +42,6 @@ export default Model.extend({
         },
     },
     effects: {
-        /**
-         * 获取已授权的企业
-         * @param {传递参数} 传递参数
-         * @param {操作} 操作项
-         */
-        * getEnterpriseDataRoles({ payload }, { call, put, update, select }) {
-            const response = yield call(getEnterpriseDataRoles, {...payload});
-            yield update({
-                EnterpriseDataRoles: response.Data
-            });
-        },
-        /**
-         * 设置授权的企业
-         * @param {传递参数} 传递参数
-         * @param {操作} 操作项
-         */
-        * setEnterpriseDataRole({ payload }, { call, put, update, select }) {
-            const response = yield call(setEnterpriseDataRole, {...payload});
-            yield update({
-                isSuccess: response.IsSuccess
-            });
-            payload.callback();
-        },
         * fetchuserlist({
             payload: {
                 pageIndex,
