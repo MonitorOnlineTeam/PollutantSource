@@ -132,6 +132,20 @@ class MapTreeDetail extends Component {
          }
         return res;
     }
+     
+    getTimeImg=()=>{
+       const {detailtime}=this.props;
+       if(detailtime)
+       {
+           return   (<span><img style={{width: 15, marginRight: 10, marginBottom: 4}} src="/treetime.png" />
+                    {detailtime}</span>)
+       }
+       else
+       {
+           return '';
+       }
+    }
+
 
     render() {
         const {detailloading,detailpcol,detaildata,selectpoint,detailtime}=this.props;
@@ -178,13 +192,16 @@ class MapTreeDetail extends Component {
                         </div>
                         <div style={{borderBottom: '1px solid #EBEBEB',marginTop: 6}} />
                         <div style={{marginLeft: 15, marginTop: 10,paddingBottom: 10}}>
-                            <img style={{width: 15, marginRight: 10, marginBottom: 4}} src="/treetime.png" />{this.props.detailtime}
+                            {
+                                this.getTimeImg()
+                            }
                             <span style={{float: 'right',marginRight: 10}}>
                                 <span onClick={this.stationClick} style={{marginRight: 15, cursor: 'pointer'}}><img style={{width: 15, marginRight: 6, marginBottom: 4}} src="/home.png" />进入站房</span>
                                 <span style={{float:"right"}}><PdButton DGIMN={selectpoint.DGIMN} id={selectpoint.operationUserID} pname={selectpoint.pointName}  reloadData={() => this.Refresh()}
                                 exist={selectpoint.existTask} name={selectpoint.operationUserName} tel={selectpoint.operationtel} viewType="mapview"/>
                                </span>  {/* {this.getbutton()} */}
                             </span>
+                            <div style={{clear:'both'}}></div>
                         </div>
                     </div>
                     
