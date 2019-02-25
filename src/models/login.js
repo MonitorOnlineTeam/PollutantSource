@@ -1,7 +1,7 @@
 import Cookie from 'js-cookie';
 import router from 'umi/router';
 import { message } from 'antd';
-import { fakeAccountLogin, sendCaptcha } from '../services/user';
+import { fakeAccountLogin, sendCaptcha, getip } from '../services/user';
 import { Model } from '../dvapack';
 
 const delay = (timeout) => new Promise(resolve => {
@@ -14,7 +14,8 @@ export default Model.extend({
         getCaptchaStatus: false,
         smgCodeText: '获取验证码',
         second: 10,
-        MsgId: '111'
+        MsgId: '111',
+        getIPList: [],
     },
     effects: {
         * login({ payload }, { call, put, select }) {
@@ -29,7 +30,7 @@ export default Model.extend({
                 type: 'changeSubmitting',
                 payload: true,
             });
-            const response = yield call(fakeAccountLogin, {...payload, MsgId});
+            const response = yield call(fakeAccountLogin, { ...payload, MsgId });
             yield put({
                 type: 'changeLoginStatus',
                 payload: { status: response.requstresult === '1' ? 'ok' : 'faild' },
@@ -38,15 +39,14 @@ export default Model.extend({
             if (response.requstresult === '1') {
                 Cookie.set('token', response.data);
                 try {
-                    const ws=window.ws;
+                    const ws = window.ws;
                     ws.send(response.data.User_Account);
                 } catch (error) {
 
                 }
-                console.log(`onmessage:${response.data.User_Account}`);
                 router.push('/');
-            }else{
-                message.error(response.reason,1);
+            } else {
+                message.error(response.reason, 1);
             }
         },
         * logout(_, { put }) {
@@ -58,6 +58,18 @@ export default Model.extend({
             });
             Cookie.remove('token');
             router.push('/user/login');
+        },
+        //获取二维码信息
+        * getip({ payload }, { put, call, update }) {
+            const response = yield call(getip, { ...payload });
+            if (response !== null) {
+                if (response.requstresult === "1") {
+                    yield update({
+                        getIPList: response.data,
+                    });
+                }
+            }
+
         },
         * getCaptcha({ payload }, { call, put }) {
             // ;
@@ -123,6 +135,12 @@ export default Model.extend({
             };
         },
         updateCaptchaInfo(state, { payload }) {
+            return {
+                ...state,
+                ...payload,
+            };
+        },
+        getip(state, { payload }) {
             return {
                 ...state,
                 ...payload,

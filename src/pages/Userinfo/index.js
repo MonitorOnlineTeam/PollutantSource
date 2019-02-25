@@ -12,6 +12,7 @@ import {
 import styles from './index.less';
 import MonitorContent from '../../components/MonitorContent/index';
 import NewDataFilter from '../Userinfo/DataFilterNew';
+import EnterpriseDataFilter from '../../components/UserInfo/EnterpriseDataFilter';
 import { routerRedux } from 'dva/router';
 import { connect } from 'dva';
 const Option = Select.Option;
@@ -25,6 +26,7 @@ const confirm = Modal.confirm;
     pageSize: userinfo.pageSize,
     pageIndex: userinfo.pageIndex,
     requstresult: userinfo.requstresult,
+    isMultiEnterprise:userinfo.isMultiEnterprise
 }))
 export default class UserList extends Component {
     constructor(props) {
@@ -33,6 +35,7 @@ export default class UserList extends Component {
         this.state = {
             Addvisible: false,
             DataFiltervisible: false,
+            EntDataFilterVisible:false,
             loading: false,
             type: '',
             title: '',
@@ -40,6 +43,8 @@ export default class UserList extends Component {
             DeleteMark: '',
             UserAccount: '',
             userId: '',
+            userName:'',
+            roleName:''
         };
     }
     componentWillMount() {
@@ -126,7 +131,7 @@ export default class UserList extends Component {
     AddData = () => {
         this.child.AddDataFilter();
     }
-    onMenu = (key, id) => {
+    onMenu = (key, id,userName,roleName) => {
         switch (key) {
             case '1':
                 this.setState({
@@ -137,18 +142,41 @@ export default class UserList extends Component {
                     userId: id,
                 });
                 break;
+            case '2':
+                this.setState({
+                    EntDataFilterVisible:true,
+                    userId: id,
+                    userName:userName,
+                    roleName:roleName
+                })
+                break;
             default:
                 break;
         }
     }
     render() {
-        const menu = (id) => (
+        const {isMultiEnterprise}=this.props;
+        const dataMenu=(id,userName,roleName) => (
             <Menu onClick={(e) => {
-                this.onMenu.bind()(e.key, id);
+                this.onMenu.bind()(e.key, id,userName,roleName);
             }}>
-                <Menu.Item key="1"><Icon type="setting" />数据过滤</Menu.Item>
+                
+                        <Menu.Item key="1"><Icon type="setting" />数据过滤</Menu.Item>
+                        {
+                            isMultiEnterprise?<Menu.Item key="2"><Icon type="setting" />企业过滤</Menu.Item>
+                            :''
+                        }
+                
             </Menu>
         );
+        const entDataMenu=(id,userName,roleName) => (
+            <Menu onClick={(e) => {
+                this.onMenu.bind()(e.key, id,userName,roleName);
+            }}>
+                   <Menu.Item key="2"><Icon type="setting" />企业过滤</Menu.Item>
+            </Menu>
+        );
+
         const columns = [{
             title: '登录名称',
             dataIndex: 'User_Account',
@@ -220,7 +248,7 @@ export default class UserList extends Component {
         {
             title: '操作',
             width: '25%',
-            align: 'center',
+            align: 'left',
             render: (text, record) => {
                 if (record.Roles_ID !== 'eec719c2-7c94-4132-be32-39fe57e738c9') {
 
@@ -232,9 +260,8 @@ export default class UserList extends Component {
                         <Popconfirm placement="left" title="确定要删除此用户吗？" onConfirm={() => this.deleteuserbyid(record.key)} okText="是" cancelText="否">
                             <a href="#" > 删除 </a>
                         </Popconfirm>
-
                         <Divider type="vertical" />
-                        <Dropdown overlay={menu(record.key)} >
+                        <Dropdown overlay={dataMenu(record.key,record.User_Name,record.Roles_Name)} >
                             <a>
                                 更多 <Icon type="down" />
                             </a>
@@ -250,6 +277,18 @@ export default class UserList extends Component {
                         <Popconfirm placement="left" title="确定要删除此用户吗？" onConfirm={() => this.deleteuserbyid(record.key)} okText="是" cancelText="否">
                             <a href="#" > 删除 </a>
                         </Popconfirm>
+                        {
+                            isMultiEnterprise?<Divider type="vertical" />:''
+                        }
+                       { isMultiEnterprise?(
+                        
+                        <Dropdown overlay={entDataMenu(record.key,record.User_Name,record.Roles_Name)} >
+                            <a>
+                                更多 <Icon type="down" />
+                            </a>
+                        </Dropdown>
+                       ):''}
+                        
                     </Fragment>
                 }
             },
@@ -304,6 +343,12 @@ export default class UserList extends Component {
                                         onClick={() => {
                                             this.props.dispatch(routerRedux.push(`/sysmanage/UserDetail/null`));
                                         }}>添加</Button>
+                                    {/* <Button type="primary" style={{ marginLeft: 10 }}
+                                        onClick={() => {
+                                            this.setState({
+                                                EntDataFilterVisible:true
+                                            })
+                                        }}>企业过滤</Button> */}
                                 </Col>
                             </Row>
                         </Form>
@@ -349,6 +394,22 @@ export default class UserList extends Component {
                             }}>
                             {
                                 <NewDataFilter pid={this.state.userId} />
+                            }
+                        </Modal>
+
+                        <Modal
+                            visible={this.state.EntDataFilterVisible}
+                            title={`企业过滤-${this.state.userName}-${this.state.roleName}`}
+                            width='50%'
+                            destroyOnClose={true}// 清除上次数据
+                            footer={false}
+                            onCancel={() => {
+                                this.setState({
+                                    EntDataFilterVisible: false
+                                });
+                            }}>
+                            {
+                                <EnterpriseDataFilter  userId={this.state.userId}/>
                             }
                         </Modal>
                     </Card>

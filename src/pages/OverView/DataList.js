@@ -6,7 +6,7 @@ import { routerRedux } from 'dva/router';
 import styles from './DataList.less';
 import AListRadio from '../../components/OverView/AListRadio';
 import PdButton from '../../components/OverView/PdButton';
-
+import {getPointStatusImg} from '../../utils/getStatusImg';
 
 const RadioGroup = Radio.Group;
 @connect(({ loading, overview }) => ({
@@ -298,7 +298,8 @@ class dataList extends PureComponent {
        
         render() {
             const { normal, over, underline, exception, terate, operationStatus } = this.state;
-            const {selectpollutantTypeCode}=this.props;
+            let {selectpollutantTypeCode}=this.props;
+            selectpollutantTypeCode=parseInt(selectpollutantTypeCode);
             const coldata = this.props.columnsdata;
             const { selectpoint } = this.state;
             let { gwidth } = this.props;
@@ -314,14 +315,7 @@ class dataList extends PureComponent {
                 align: 'center',
                 fixed: fixed,
                 render: (value, record, index) => {
-                    if (value === 0) {
-                        return <img style={{ width: 15 }} src="/gisunline.png" />;
-                    } if (value === 1) {
-                        return <img style={{ width: 15 }} src="/gisnormal.png" />;
-                    } if (value === 2) {
-                        return <img style={{ width: 15 }} src="/gisover.png" />;
-                    }
-                    return <img style={{ width: 15 }} src="/gisexception.png" />;
+                    return getPointStatusImg(record.status,record.stop);
                 },
             }, {
                 title: '排口',
@@ -332,20 +326,21 @@ class dataList extends PureComponent {
                 render: (value, record, index) => {
                     const content = this.gerpointButton(record);
                     let lable = [];
-                    if (record.fault) {
-                        lable.push(<span key={1} className={styles.fault}>故障中</span>);
-                    }
-                    if (record.warning) {
-                        lable.push(<span key={2} className={styles.warning}>预警中</span>);
-                    }
-                    if (record.scene) {
-                        lable.push(<span key={3} className={styles.operation}>运维中</span>);
-                    }
                     if (record.stop) {
                         lable.push(<span key={4} className={styles.stop}>停产中</span>);
                     }
-
- 
+                    else
+                    {
+                        if (record.fault) {
+                            lable.push(<span key={1} className={styles.fault}>故障中</span>);
+                        }
+                        if (record.warning) {
+                            lable.push(<span key={2} className={styles.warning}>预警中</span>);
+                        }
+                        if (record.scene) {
+                            lable.push(<span key={3} className={styles.operation}>运维中</span>);
+                        }
+                    }
                     return (<Popover trigger="click"  content={content}>
                         <span style={{ cursor: 'pointer' }}>{value}
                             {lable}
@@ -391,6 +386,10 @@ class dataList extends PureComponent {
                     align: 'center',
                     width: colwidth,
                     render: (value, record, index) => {
+                        if(record.stop)
+                        {
+                            return "停产";
+                        }
                         const additional = record[`${item.field}_params`];
                         if (additional) {
                             const additionalInfo = additional.split('§');

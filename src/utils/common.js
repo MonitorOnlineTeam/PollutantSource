@@ -33,5 +33,18 @@ export const pageUrl = {
         statisticsPointStatus:'/api/rest/PollutantSourceApi/PWorkbench/GetStatisticsPointStatus',
     },
     changeMyMessageStatus:'/api/rest/PollutantSourceApi/PWorkbench/SetMyMessageStatus',
+    EnterpriseManager:{
+        getEnterprise:'/api/rest/PollutantSourceApi/UserInfoApi/GetEnterprise',
+        getEnterprisePageList:'/api/rest/PollutantSourceApi/UserInfoApi/GetEnterprisePageList',
+        addEnterprise:'/api/rest/PollutantSourceApi/UserInfoApi/AddEnterprise',
+        editEnterprise:'/api/rest/PollutantSourceApi/UserInfoApi/EditEnterprise',
+        deleteEnterprise:'/api/rest/PollutantSourceApi/UserInfoApi/DeleteEnterprise',
+        getAllPointQRCoderZip:'/api/rest/PollutantSourceApi/UserInfoApi/GetAllPointQRCoderZip'
+    },
+    UserManager:{
+        setEnterpriseDataRole:'/api/rest/PollutantSourceApi/UserInfoApi/SetEnterpriseDataRole',
+        getEnterpriseDataRoles:'/api/rest/PollutantSourceApi/UserInfoApi/GetEnterpriseDataRoles',
+    }
 };
+
 

@@ -69,8 +69,9 @@ async function request(url, _options) {
                 description: errortext,
             });
         }
-        if (json.requstresult) {
-            if (json && json != null) {
+        if (json) {
+            if (json.requstresult) {
+
                 if (json.requstresult === '1' || json.requstresult === '0') {
                     return json;
                 }
@@ -79,9 +80,19 @@ async function request(url, _options) {
                     description: json.reason,
                 });
                 return null;
+            } if (json && (json.IsSuccess||!json.IsSuccess)) {
+                return json;
+                // if (json.IsSuccess) {
+                //     return json;
+                // }
+                // notification.error({
+                //     message: '服务器信息',
+                //     description: json.Message,
+                // });
+                // return null;
             }
-            return null;
         }
+        return null;
     } catch (error) {
         // notification.error({
         //     message: '服务器信息',

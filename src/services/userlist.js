@@ -4,6 +4,8 @@ import {
     post
 }
     from '../dvapack/request';
+import { async } from 'q';
+import {pageUrl} from '../utils/common';
 // 用户列表
 export async function getList(params) {
     const body = {
@@ -159,6 +161,44 @@ export async function mymessagelist(params) {
         //保存是否已读
         body.isAsc=params.isView;
     const result = post('/api/rest/PollutantSourceApi/PUserInfo/GetMyMessageList', body, null);
+    return result === null ? {
+        data: null
+    } : result;
+}
+/**
+ * 【用户管理】设置用户企业权限（支持批量用户同时赋权限）
+ * @params [
+ * {"UserId":"766f911d-5e41-4bbf-b705-add427a16e77",
+ * "EnterpriseIds":["51216eae-8f11-4578-ad63-5127f78f6cca","3cbfa1f4-3e0a-473b-aab0-5a9a168010ee"]
+ * },
+ * {"UserId":"eb85dbe8-49fd-4918-9ba1-34f7c337bd44",
+ * "EnterpriseIds":["51216eae-8f11-4578-ad63-5127f78f6cca","3cbfa1f4-3e0a-473b-aab0-5a9a168010ee"]
+ * },
+ */
+export async function setEnterpriseDataRole(params){
+    const result = post(pageUrl.UserManager.setEnterpriseDataRole, params, null);
+    return result === null ? {
+        data: null
+    } : result;
+}
+
+/**
+ * 【用户管理】获取已授权的企业
+ * @params {"UserId":"766f911d-5e41-4bbf-b705-add427a16e77"}  
+ */
+export async function getEnterpriseDataRoles(params){
+    const result = post(pageUrl.UserManager.getEnterpriseDataRoles, params, null);
+    return result === null ? {
+        data: null
+    } : result;
+}
+// 获取二维码ip
+export async function getip() {
+    const body = {
+        pageIndex: 1,
+        pageSize: 1,
+    };
+    const result = post('/api/rest/PollutantSourceApi/PUserInfo/GetMyPieList', body, null);
     return result === null ? {
         data: null
     } : result;

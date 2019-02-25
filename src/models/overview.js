@@ -53,13 +53,6 @@ export default Model.extend({
         }, { call, update, put, take }) {
             let gwidth = 300 + 140 + 70;
             const data = yield call(querypollutanttypecode, payload);
-            // yield put({
-            //     type: 'querydatalist',
-            //     payload: {
-            //         ...payload,
-            //         pollutantTypes:payload.pollutantCode
-            //     },
-            // });
             yield put({
                 type: 'getPollutantTypeList',
                 payload: {
@@ -524,6 +517,10 @@ export default Model.extend({
                 key: 'pollutantCode',
                 align: 'center',
                 render: (value, record, index) => {
+                    if(payload.stop)
+                    {
+                        return "停产"
+                    }
                     const additional = record.pollutantCodeParam;
                     if (additional) {
                         const additionalInfo = additional.split('§');
@@ -564,6 +561,10 @@ export default Model.extend({
                     key: 'zspollutantCode',
                     align: 'center',
                     render: (value, record, index) => {
+                        if(payload.stop)
+                        {
+                            return "停产"
+                        }
                         const additional = record.zspollutantCodeParam;
                         if (additional) {
                             const additionalInfo = additional.split('§');
@@ -626,144 +627,13 @@ export default Model.extend({
                 detailpcol,
             });
             yield put({
-                type: 'queryoptionData',
+                type: 'queryoptionDataOnClick',
                 payload: {
                     ...payload,
-
+                    isAsc:true
                 }
             });
-            yield take('queryoptionData/@@end');
-
-
-        },
-        * queryoptionData({ payload }, {
-            call, update
-        }) {
-            const resultlist = yield call(queryhistorydatalist, { ...payload });
-            const pollutantlist = yield call(querypollutantlist, { ...payload });
-            let seriesdata = [];
-            let zsseriesdata = [];
-            let xData = [];
-            if (resultlist && resultlist.data) {
-                resultlist.data.map(item => {
-                    const time = moment(item.MonitorTime).hour();
-                    xData = xData.concat(time);
-                    seriesdata = seriesdata.concat(item[payload.pollutantCodes]);
-                    zsseriesdata = zsseriesdata.concat(item[`zs${payload.pollutantCodes}`]);
-                });
-            }
-            //污染物标准线的组织;
-            let polluntinfo;
-            let zspolluntinfo;
-            let markLine = {};
-            let zsmarkLine = {};
-            if (pollutantlist) {
-                polluntinfo = pollutantlist.find((value, index, arr) => value.pollutantCode === payload.pollutantCodes);
-                zspolluntinfo = pollutantlist.find((value, index, arr) => value.pollutantCode === `zs${payload.pollutantCodes}`);
-            }
-            if (polluntinfo && polluntinfo.standardValue) {
-                markLine = {
-                    symbol: 'none', // 去掉警戒线最后面的箭头
-                    data: [{
-                        lineStyle: {
-                            type: 'dash',
-                            color: '#54A8FF',
-                        },
-                        yAxis: polluntinfo.standardValue
-                    }]
-                };
-            }
-            if (zspolluntinfo && zspolluntinfo.standardValue) {
-                zsmarkLine = {
-                    symbol: 'none', // 去掉警戒线最后面的箭头
-                    data: [{
-                        lineStyle: {
-                            type: 'dash',
-                            color: '#FF00FF',
-                        },
-                        yAxis: zspolluntinfo.standardValue
-                    }]
-                };
-            }
-            let existdata = true;
-            if (!seriesdata[0] && !zsseriesdata[0]) {
-                existdata = false;
-            }
-            const pollutantInfoList = mainpoll.find(value => value.pollutantCode == payload.pollutantTypeCode);
-            let legend = [payload.pollutantName];
-            if (pollutantInfoList.zspollutant) {
-                legend.push(`折算${payload.pollutantName}`);
-            }
-            const option = {
-                legend: {
-                    data: legend
-                },
-                tooltip: {
-                    trigger: 'axis',
-                    formatter: function(params, ticket, callback) {
-                        console.log(params);
-                        let res = `${params[0].axisValue}时<br/>`;
-                        params.map(item => {
-                            res += `${item.seriesName}:${item.value}<br />`;
-                        });
-                        return res;
-                    }
-                },
-                toolbox: {
-                    show: true,
-                    feature: {
-                        saveAsImage: {}
-                    }
-                },
-                xAxis: {
-                    type: 'category',
-                    name: '时间',
-                    boundaryGap: false,
-                    data: xData
-                },
-                yAxis: {
-                    type: 'value',
-                    name: '浓度(' + 'mg/m³' + ')',
-                    axisLabel: {
-                        formatter: '{value}'
-                    },
-                },
-                series: [{
-                    type: 'line',
-                    name: payload.pollutantName,
-                    data: seriesdata,
-                    markLine: markLine,
-                    itemStyle: {
-                        normal: {
-                            color: '#54A8FF',
-                            lineStyle: {
-                                color: '#54A8FF'
-                            }
-                        }
-                    },
-                },
-                {
-                    type: 'line',
-                    name: `折算${payload.pollutantName}`,
-                    data: zsseriesdata,
-                    markLine: zsmarkLine,
-                    itemStyle: {
-                        normal: {
-                            color: '#FF00FF',
-                            lineStyle: {
-                                color: '#FF00FF'
-                            }
-                        }
-                    },
-                }
-                ]
-            };
-
-            yield update({
-                chartdata: option,
-                existdata,
-                pollutantName: payload.pollutantName,
-            });
+            yield take('queryoptionDataOnClick/@@end');
         },
         * queryoptionDataOnClick({ payload }, {
             call, update
@@ -815,7 +685,7 @@ export default Model.extend({
                 };
             }
             let existdata = true;
-            if (!seriesdata[0] && !zsseriesdata[0]) {
+            if ((!seriesdata[0] && seriesdata[0]!=0) && (!zsseriesdata[0] && zsseriesdata[0]!=0)) {
                 existdata = false;
             }
             const pollutantInfoList = mainpoll.find(value => value.pollutantCode == payload.pollutantTypeCode);
