@@ -217,7 +217,7 @@ export default class GlobalHeaderRight extends PureComponent {
                             const params=JSON.parse(JSON.parse(item.params));
                             // this.props.dispatch(routerRedux.push(`/workbench`));
                             // this.props.dispatch(routerRedux.push(`/TaskDetail/emergencydetailinfo/null/ywdsjlist/${params.TaskId}/${item.DGIMN}`));
-                            this.childEmergencyDetailInfo.showModal(item.DGIMN,params.TaskId,item.pointname);
+                            this.childEmergencyDetailInfo.showModal(item.DGIMN,params.TaskId,item.pointname,item.pushid,moment(new Date()).format("YYYY-MM-DD HH:mm:ss"));
                         }
                     }
                     //修改通知的已读状态

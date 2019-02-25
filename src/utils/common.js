@@ -31,6 +31,7 @@ export const pageUrl = {
         overPoints:'/api/rest/PollutantSourceApi/PWorkbench/GetOverPoints',
         /**统计排口状态 */
         statisticsPointStatus:'/api/rest/PollutantSourceApi/PWorkbench/GetStatisticsPointStatus',
-    }
+    },
+    changeMyMessageStatus:'/api/rest/PollutantSourceApi/PWorkbench/SetMyMessageStatus',
 };
 

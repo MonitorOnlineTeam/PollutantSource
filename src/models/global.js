@@ -4,6 +4,7 @@ import { loadPollutantType, GetAlarmNotices } from '../services/api';
 import {mymessagelist} from '../services/userlist';
 import * as service from '../dvapack/websocket/mywebsocket';
 import {EnumPropellingAlarmSourceType} from '../utils/enum';
+import {setMyMessageStatus} from '../services/workbenchapi';
 
 export default Model.extend({
     namespace: 'global',
@@ -111,6 +112,7 @@ export default Model.extend({
                     id:`advise_${item.DGIMN}`,
                     pointname:`${item.PointName}`,
                     DGIMN:`${item.DGIMN}`,
+                    pushid:`${item.ID}`,
                     msgtitle: item.MsgTitle,
                     msg:item.Msg,
                     isview:item.IsView,
@@ -146,6 +148,25 @@ export default Model.extend({
                 type: 'user/changeNotifyCount',
                 payload: count,
             });
+        },
+        /**
+         * 修改消息状态
+         * @param {传递参数} 传递参数
+         */
+        * setMyMessageStatus({ payload }, { call, update,select }) {
+            const response = yield call(setMyMessageStatus, {...payload});
+            if(response.requstresult === "1"){
+                const notices = yield select(state => state.global.notices);
+                const count = yield select(state => state.global.currentUserNoticeCnt.unreadCount);
+                let newnotices=notices.filter(t=>t.pushid!==payload.MsgIds[0]);
+                yield update({
+                    notices:newnotices,
+                    currentUserNoticeCnt:{
+                        notifyCount:count - 1,
+                        unreadCount:count - 1
+                    }
+                });
+            }
         },
     },
 
@@ -307,6 +328,7 @@ export default Model.extend({
                 id:`advise_${item.DGIMN}`,
                 pointname:`${item.PointName}`,
                 DGIMN:`${item.DGIMN}`,
+                pushid:`${item.PushID}`,
                 msgtitle: item.Title,
                 msg:item.Message,
                 isview:item.IsView,

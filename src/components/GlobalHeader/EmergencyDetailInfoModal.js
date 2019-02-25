@@ -14,12 +14,17 @@ class EmergencyDetailInfoModal extends Component {
         };
     }
 
-  showModal = (DGIMN,TaskId,title) => {
+  showModal = (DGIMN,TaskId,title,pushid,viewtime) => {
       this.setState({
           title:title,
           visibleEmeDetailModal: true,
           DGIMN:DGIMN,
           TaskId:TaskId
+      });
+      const {dispatch} = this.props;
+      dispatch({
+          type:"global/setMyMessageStatus",
+          payload:{MsgIds:[pushid],beginTime:viewtime}
       });
   }
 
