@@ -60,7 +60,7 @@ class DataQuery extends Component {
     }
 
     _handleDateChange = (date, dateString) => {
-        if(data)
+        if(date)
         {
             const {dataType}=this.state;
             if(dataType=="realtime")
