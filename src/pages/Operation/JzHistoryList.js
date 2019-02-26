@@ -12,37 +12,25 @@ import {
     Spin
 } from 'antd';
 import { connect } from 'dva';
-import moment from 'moment';
-import RangePicker_ from '../../components/PointDetail/RangePicker_';
 import { routerRedux } from 'dva/router';
 import SearchInput from '../../components/OverView/SearchInput';
 import TreeStatus from '../../components/OverView/TreeStatus';
 import TreeCard from '../../components/OverView/TreeCard';
 import TreeCardContent from '../../components/OverView/TreeCardContent';
 import MonitorContent from '../../components/MonitorContent/index';
+import JzHistoryListContent from '../EmergencyTodoList/JzHistoryListContent';
+import { EnumPollutantTypeCode } from '../../utils/enum';
 
-const pageIndex = 1;
-const pageSize = 10;
 @connect(({ task, overview, loading }) => ({
-    loading: loading.effects['task/GetJzHistoryRecord'],
-    JzHistoryRecord: task.JzHistoryRecord,
-    RecordCount: task.RecordCount,
     datalist: overview.data,
     pollutantTypeloading: loading.effects['overview/getPollutantTypeList'],
-    treedataloading: loading.effects['overview/querydatalist'],
-    pollutantTypelist: overview.pollutantTypelist,
-    DGIMN: task.DGIMN,
+    treedataloading: loading.effects['overview/querydatalist']
 }))
-export default class JzHistoryRecords extends Component {
+export default class JzHistoryList extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            rangeDate: [moment(moment(new Date()).subtract(3, 'month').format('YYYY-MM-DD 00:00:00')), moment(moment(new Date()).format('YYYY-MM-DD 23:59:59'))],
-            pageIndex: pageIndex,
-            pageSize: pageSize,
-            BeginTime: moment().subtract(3, 'month').format('YYYY-MM-DD 00:00:00'),
-            EndTime: moment().format('YYYY-MM-DD 23:59:59'),
-            pollutantTypeCode: "2",
+            pollutantTypeCode: EnumPollutantTypeCode.GAS
         };
     }
 
@@ -56,54 +44,11 @@ export default class JzHistoryRecords extends Component {
             type: 'overview/querydatalist',
             payload: {
                 map: true,
-                pollutantTypes: this.state.pollutantTypeCode,
-                JzHistoryRecords: true,
-                pageIndex: this.props.pageIndex,
-                pageSize: this.props.pageSize,
-                BeginTime: this.state.rangeDate[0].format('YYYY-MM-DD 00:00:00'),
-                EndTime: this.state.rangeDate[1].format('YYYY-MM-DD 23:59:59'),
-                DGIMN: getDGIMN,
+                pollutantTypes: this.state.pollutantTypeCode
             }
         });
-
     }
 
-    GetHistoryRecord = (pageIndex, pageSize, dgimn, BeginTime, EndTime) => {
-        this.props.dispatch({
-            type: 'task/GetJzHistoryRecord',
-            payload: {
-                pageIndex: pageIndex,
-                pageSize: pageSize,
-                DGIMN: dgimn,
-                BeginTime: moment(BeginTime).format('YYYY-MM-DD 00:00:00'),
-                EndTime: moment(EndTime).format('YYYY-MM-DD 23:59:59'),
-            }
-        });
-    };
-
-    _handleDateChange = (date, dateString) => {
-        this.setState(
-            {
-                rangeDate: date,
-                BeginTime: dateString[0],
-                EndTime: dateString[1]
-            }
-        );
-        this.GetHistoryRecord(pageIndex, pageSize, this.props.DGIMN, dateString[0], dateString[1]);
-    };
-
-    onShowSizeChange = (pageIndex, pageSize) => {
-        this.GetHistoryRecord(pageIndex, pageSize, this.props.DGIMN, this.state.BeginTime, this.state.EndTime);
-    }
-
-    onChange = (pageIndex, pageSize) => {
-        this.GetHistoryRecord(pageIndex, pageSize, this.props.DGIMN, this.state.BeginTime, this.state.EndTime);
-    }
-
-    seeDetail = (Record) => {
-        localStorage.setItem('DGIMN', this.props.DGIMN);
-        this.props.dispatch(routerRedux.push(`/PatrolForm/JzRecord/${this.props.DGIMN}/menu/qualityControlOperation/JzHistoryRecords/${Record.TaskID}`));
-    }
     //查询
     onSerach = (value) => {
         this.setState({
@@ -142,97 +87,24 @@ export default class JzHistoryRecords extends Component {
                 DGIMN: getDGIMN,
                 search: true,
                 callback: (data) => {
-                    if (data !== null) {
-                        const existdata = data.find((value, index, arr) => {
-                            return value.DGIMN == getDGIMN
-                        });
-                        if (existdata == undefined) {
-                            this.props.dispatch({
-                                type: 'task/GetJzHistoryRecord',
-                                payload: {
-                                    pageIndex: this.props.pageIndex,
-                                    pageSize: this.props.pageSize,
-                                    DGIMN: null,
-                                    BeginTime: this.state.BeginTime,
-                                    EndTime: this.state.EndTime,
-                                }
-                            });
-                        }
-                        else {
-                            this.props.dispatch({
-                                type: 'task/GetJzHistoryRecord',
-                                payload: {
-                                    pageIndex: this.props.pageIndex,
-                                    pageSize: this.props.pageSize,
-                                    DGIMN: getDGIMN,
-                                    BeginTime: this.state.BeginTime,
-                                    EndTime: this.state.EndTime,
-                                }
-                            });
-                        }
-                    }
-
                 }
             },
         });
     }
     treeCilck = (row) => {
+        this.props.dispatch({
+            type: 'maintenancelist/updateState',
+            payload: {DGIMN:row.DGIMN}
+        });
         localStorage.setItem('DGIMN', row.DGIMN);
-        this.GetHistoryRecord(this.props.pageIndex, this.props.pageSize, row.DGIMN, this.state.BeginTime, this.state.EndTime);
+        this.props.dispatch({
+            type: 'maintenancelist/GetJzHistoryList',
+            payload: {
+            }
+        });
     };
     render() {
-        const { pollutantTypelist, treedataloading, datalist, pollutantTypeloading } = this.props;
-        const SCREEN_HEIGHT = document.querySelector('body').offsetHeight - 150;
-        var dataSource = [];
-        var spining = true;
-        if (!this.props.treedataloading && !this.props.pollutantTypeloading && !this.props.loading) {
-            spining = this.props.loading;
-            dataSource = this.props.JzHistoryRecord;
-        }
-        const columns = [{
-            title: '校准人',
-            width: '20%',
-            dataIndex: 'CreateUserID',
-            key: 'CreateUserID'
-        }, {
-            title: '分析仪校准是否正常',
-            width: '45%',
-            dataIndex: 'Content',
-            key: 'Content',
-            render: (text, Record) => {
-                if (text !== undefined) {
-                    var content = text.split('),');
-                    var resu = [];
-                    content.map((item, key) => {
-                        // item = item.replace('(',' - ');
-                        // item = item.replace(')','');
-                        if (key !== content.length - 1) {
-                            item = item + ')';
-                        }
-                        resu.push(
-                            <Tag key={key} style={{ marginBottom: 1.5, marginTop: 1.5 }} color="#108ee9">{item}</Tag>
-                        );
-                    });
-                }
-                return resu;
-            }
-        }, {
-            title: '记录时间',
-            dataIndex: 'CreateTime',
-            width: '20%',
-            key: 'CreateTime'
-        }, {
-            title: '详细',
-            dataIndex: 'TaskID',
-            width: '15%',
-            key: 'TaskID',
-            render: (text, Record) => {
-                return <a onClick={
-                    () => this.seeDetail(Record)
-                } > 详细 </a>;
-            }
-        }];
-        if (this.props.isloading) {
+        if (this.props.treedataloading && this.props.pollutantTypeloading) {
             return (<Spin
                 style={{
                     width: '100%',
@@ -244,6 +116,7 @@ export default class JzHistoryRecords extends Component {
                 size="large"
             />);
         }
+
         return (
             <MonitorContent {...this.props} breadCrumbList={
                 [
@@ -276,54 +149,11 @@ export default class JzHistoryRecords extends Component {
                             </div>
                         </Col>
                         <Col style={{ width: document.body.clientWidth - 470, height: 'calc(100vh - 150px)', float: 'right' }}>
-                            <div style={{ marginRight: 10, marginTop: 10 }}>
-                                <Card bordered={false} style={{ height: 'calc(100vh - 150px)' }}>
-                                    <div className={styles.conditionDiv}>
-                                        <Row gutter={8}>
-                                            <Col span={3} >
-                                                <label className={styles.conditionLabel}>记录时间：</label>
-                                            </Col>
-                                            <Col span={21} >
-                                                <RangePicker_ style={{ width: 350 }} onChange={this._handleDateChange} format={'YYYY-MM-DD'} dateValue={this.state.rangeDate} />
-                                            </Col>
-                                        </Row>
-                                    </div>
-                                    <Table
-                                        rowKey={(record, index) => `complete${index}`}
-                                        size="middle"
-                                        scroll={{ y: 'calc(100vh - 400px)' }}
-                                        loading={spining}
-                                        className={styles.dataTable}
-                                        columns={columns}
-                                        dataSource={dataSource}
-                                        rowClassName={
-                                            (record, index, indent) => {
-                                                if (index === 0) {
-                                                    return;
-                                                }
-                                                if (index % 2 !== 0) {
-                                                    return 'light';
-                                                }
-                                            }
-                                        }
-                                        pagination={{
-                                            showSizeChanger: true,
-                                            showQuickJumper: true,
-                                            'total': this.props.RecordCount,
-                                            'pageSize': this.props.pageSize,
-                                            'current': this.props.pageIndex,
-                                            onChange: this.onChange,
-                                            onShowSizeChange: this.onShowSizeChange,
-                                            pageSizeOptions: ['10', '20', '30', '40']
-                                        }}
-                                    />
-                                </Card>
-                            </div>
+                        <JzHistoryListContent  pointcode={localStorage.getItem('DGIMN')} viewtype="no" height="calc(100vh - 360px)" operation="menu/intelligentOperation"/>
                         </Col>
                     </Row>
                 </div>
             </MonitorContent>
-
         );
     }
 }

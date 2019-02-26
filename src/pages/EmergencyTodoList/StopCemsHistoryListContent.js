@@ -88,7 +88,11 @@ class StopCemsHistoryListContent extends Component {
     }
 
     seeDetail = (record) => {
-        this.props.dispatch(routerRedux.push(`/PatrolForm/StopCemsRecord/${this.props.DGIMN}/${this.props.viewtype}/operationlist/StopCemsHistoryList/${record.TaskID}`));
+        if(this.props.operation===undefined){
+            this.props.dispatch(routerRedux.push(`/PatrolForm/StopCemsRecord/${this.props.DGIMN}/${this.props.viewtype}/operationlist/StopCemsHistoryList/${record.TaskID}`));
+        }else{
+            this.props.dispatch(routerRedux.push(`/PatrolForm/StopCemsRecord/${this.props.DGIMN}/${this.props.operation}/StopCemsHistoryList/${record.TaskID}`));
+        }
     }
 
     ChangeModelState=(condition)=>{

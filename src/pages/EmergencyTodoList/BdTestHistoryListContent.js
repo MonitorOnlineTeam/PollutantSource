@@ -4,19 +4,19 @@ import {
     Row,
     Col,
     Table,
-    Spin,
-    Tag
+    Tag,
+    Spin
 } from 'antd';
 import { connect } from 'dva';
 import moment from 'moment';
 import { routerRedux } from 'dva/router';
 import RangePicker_ from '../../components/PointDetail/RangePicker_';
-import styles from './StandardGasRepalceHistoryList.less';
+import styles from './BdTestHistoryListContent.less';
 
 @connect(({ maintenancelist, loading }) => ({
-    loading: loading.effects['maintenancelist/GetStandardGasRepalceHistoryList'],
-    HistoryStandardGasRepalceRecordList: maintenancelist.StandardGasRepalceHistoryList,
-    HistoryStandardGasRepalceRecordListCount: maintenancelist.total,
+    loading: loading.effects['maintenancelist/GetBdTestHistoryList'],
+    BdHistoryInfoList: maintenancelist.BdTestHistoryList,
+    BdHistoryInfoListCount: maintenancelist.total,
     pageIndex: maintenancelist.pageIndex,
     pageSize: maintenancelist.pageSize,
     beginTime:maintenancelist.beginTime, //开始时间
@@ -24,9 +24,9 @@ import styles from './StandardGasRepalceHistoryList.less';
     DGIMN:maintenancelist.DGIMN
 }))
 /*
-页面：标准气体历史记录
+页面：校验测试历史记录
 */
-class StandardGasRepalceHistoryListContent extends Component {
+class BdTestHistoryListContent extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -48,7 +48,7 @@ class StandardGasRepalceHistoryListContent extends Component {
 
     GetHistoryRecord = () => {
         this.props.dispatch({
-            type: 'maintenancelist/GetStandardGasRepalceHistoryList',
+            type: 'maintenancelist/GetBdTestHistoryList',
             payload: {
             }
         });
@@ -89,9 +89,9 @@ class StandardGasRepalceHistoryListContent extends Component {
 
     seeDetail = (record) => {
         if(this.props.operation===undefined){
-            this.props.dispatch(routerRedux.push(`/PatrolForm/StandardGasRepalceRecord/${this.props.DGIMN}/${this.props.viewtype}/operationlist/StandardGasRepalceHistoryList/${record.TaskID}`));
+            this.props.dispatch(routerRedux.push(`/PatrolForm/BdTestRecord/${this.props.DGIMN}/${this.props.viewtype}/operationlist/BdTestHistoryList/${record.TaskID}`));
         }else{
-            this.props.dispatch(routerRedux.push(`/PatrolForm/StandardGasRepalceRecord/${this.props.DGIMN}/${this.props.operation}/StandardGasRepalceHistoryList/${record.TaskID}`));
+            this.props.dispatch(routerRedux.push(`/PatrolForm/BdTestRecord/${this.props.DGIMN}/${this.props.operation}/BdTestHistoryList/${record.TaskID}`));
         }
     }
 
@@ -103,28 +103,24 @@ class StandardGasRepalceHistoryListContent extends Component {
     }
 
     render() {
-        const dataSource = this.props.HistoryStandardGasRepalceRecordList === [] ? [] : this.props.HistoryStandardGasRepalceRecordList;
+        const dataSource = this.props.BdHistoryInfoList === null ? null : this.props.BdHistoryInfoList;
         const columns = [{
-            title: '校准人',
+            title: '操作人',
             width: '20%',
             dataIndex: 'CreateUserID',
             key: 'CreateUserID'
         }, {
-            title: '标准物质名称（名称-有效期）',
-            width: '45%',
-            dataIndex: 'Content',
-            key: 'Content',
+            title: '评价结果',
+            width: '49%',
+            dataIndex: 'DealingSituations',
+            key: 'DealingSituations',
             render: (text, record) => {
                 if (text !== undefined) {
                     let content = text.split(',');
                     var resu = [];
                     content.map((item, key) => {
-                        if (text.indexOf('()') === '-1') {
-                            item = item.replace('(', ' - ');
-                            item = item.replace(')', '');
-                        } else {
-                            item = item.replace('()', '');
-                        }
+                        item = item.replace('(', '  ');
+                        item = item.replace(')', '');
                         resu.push(
                             <Tag key={key} style={{ marginBottom: 1.5, marginTop: 1.5 }} color="#108ee9">{item}</Tag>
                         );
@@ -147,7 +143,7 @@ class StandardGasRepalceHistoryListContent extends Component {
                 () => this.seeDetail(record)
             }
             > 详细
-            </a>
+                                      </a>
         }];
         if (this.props.loading) {
             return (<Spin
@@ -167,7 +163,7 @@ class StandardGasRepalceHistoryListContent extends Component {
                     <div className={styles.conditionDiv}>
                         <Row gutter={8}>
                             <Col span={3}>
-                                <label className={styles.conditionLabel}>记录时间：</label>
+                                记录时间：
                             </Col>
                             <Col span={21}>
                                 <RangePicker_ style={{ width: 350 }} onChange={this._handleDateChange} format="YYYY-MM-DD" dateValue={this.state.rangeDate} />
@@ -196,7 +192,7 @@ class StandardGasRepalceHistoryListContent extends Component {
                         pagination={{
                             showSizeChanger: true,
                             showQuickJumper: true,
-                            'total': this.props.HistoryStandardGasRepalceRecordListCount,
+                            'total': this.props.BdHistoryInfoListCount,
                             'pageSize': this.props.pageSize,
                             'current': this.props.pageIndex,
                             onChange: this.onChange,
@@ -209,4 +205,4 @@ class StandardGasRepalceHistoryListContent extends Component {
         );
     }
 }
-export default StandardGasRepalceHistoryListContent;
+export default BdTestHistoryListContent;

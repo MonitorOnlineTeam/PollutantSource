@@ -150,7 +150,7 @@ export default class InspectionHistoryList extends Component {
                         </div>
                     </Col>
                     <Col style={{ width: document.body.clientWidth - 470, height: 'calc(100vh - 150px)', float: 'right' }}>
-                    <WQCQFInspectionHistoryListContent  pointcode={localStorage.getItem('DGIMN')} viewtype="no" height="calc(100vh - 360px)"/>
+                    <WQCQFInspectionHistoryListContent  pointcode={localStorage.getItem('DGIMN')} viewtype="no" height="calc(100vh - 360px)" operation="menu/intelligentOperation"/>
                     </Col>
                 </Row>
             </div>

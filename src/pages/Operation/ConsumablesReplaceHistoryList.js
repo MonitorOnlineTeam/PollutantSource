@@ -47,7 +47,6 @@ export default class ConsumablesReplaceHistoryList extends Component {
                 pollutantTypes: this.state.pollutantTypeCode
             }
         });
-
     }
 
     //查询
@@ -150,7 +149,7 @@ export default class ConsumablesReplaceHistoryList extends Component {
                             </div>
                         </Col>
                         <Col style={{ width: document.body.clientWidth - 470, height: 'calc(100vh - 150px)', float: 'right' }}>
-                        <ConsumablesReplaceHistoryListContent  pointcode={localStorage.getItem('DGIMN')} viewtype="no" height="calc(100vh - 360px)"/>
+                        <ConsumablesReplaceHistoryListContent  pointcode={localStorage.getItem('DGIMN')} viewtype="no" height="calc(100vh - 360px)" operation="menu/intelligentOperation"/>
                         </Col>
                     </Row>
                 </div>
