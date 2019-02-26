@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import YwdsjlistContent from './YwdsjlistContent';
+import RepairHistoryListContent from './RepairHistoryListContent';
 
-class Ywdsjlist extends Component {
+class RepairHistoryList extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -12,9 +12,9 @@ class Ywdsjlist extends Component {
         const {match}=this.props;
         return (
             <div>
-                <YwdsjlistContent {...match.params} taskfrom="ywdsjlist" height="calc(100vh - 330px)" />
+                <RepairHistoryListContent {...match.params} height="calc(100vh - 465px)" />
             </div>
         );
     }
 }
-export default Ywdsjlist;
+export default RepairHistoryList;

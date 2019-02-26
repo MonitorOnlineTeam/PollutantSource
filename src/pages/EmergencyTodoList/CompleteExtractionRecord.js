@@ -2,19 +2,19 @@ import React, { Component } from 'react';
 import { Button, Icon, Spin, Card } from 'antd';
 import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
-import styles from "./CompleteExtraction.less";
+import styles from "./CompleteExtractionRecord.less";
 import MonitorContent from '../../components/MonitorContent/index';
 
 @connect(({ task, loading }) => ({
-    isloading: loading.effects['task/GetPatrolRecordListPC'],
-    PatrolRecordListPC: task.PatrolRecordListPC
+    isloading: loading.effects['task/GetPatrolRecord'],
+    PatrolRecord: task.PatrolRecord
 }))
 
 /*
 页面：完全抽取法CEMS日常巡检记录表
 */
 
-class CompleteExtraction extends Component {
+class CompleteExtractionRecord extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -36,7 +36,7 @@ class CompleteExtraction extends Component {
 
     onChange = () => {
         this.props.dispatch({
-            type: 'task/GetPatrolRecordListPC',
+            type: 'task/GetPatrolRecord',
             payload: {
                 TaskIds: this.props.match.params.TaskID,
                 TypeIDs: this.props.match.params.TypeID
@@ -46,11 +46,11 @@ class CompleteExtraction extends Component {
 
     enterTaskDetail = () => {
         if (this.state.taskfrom === 'ywdsjlist') { //运维大事记
-            this.props.dispatch(routerRedux.push(`/TaskDetail/emergencydetailinfo/${this.state.listUrl}/${this.state.taskfrom}/${this.state.taskID}/${this.props.match.params.pointcode}`));
+            this.props.dispatch(routerRedux.push(`/TaskDetail/emergencydetailinfolayout/${this.state.listUrl}/${this.state.taskfrom}/${this.state.taskID}/${this.props.match.params.pointcode}`));
         } else if (this.state.taskfrom === 'qcontrollist') { //质控记录
-            this.props.dispatch(routerRedux.push(`/TaskDetail/emergencydetailinfo/${this.state.listUrl}/${this.state.taskfrom}-${this.state.histroyrecordtype}/${this.state.taskID}/${this.props.match.params.pointcode}`));
+            this.props.dispatch(routerRedux.push(`/TaskDetail/emergencydetailinfolayout/${this.state.listUrl}/${this.state.taskfrom}-${this.state.histroyrecordtype}/${this.state.taskID}/${this.props.match.params.pointcode}`));
         } else { //其他
-            this.props.dispatch(routerRedux.push(`/TaskDetail/emergencydetailinfo/${this.state.listUrl}/nop/${this.state.taskID}/${this.props.match.params.pointcode}`));
+            this.props.dispatch(routerRedux.push(`/TaskDetail/emergencydetailinfolayout/${this.state.listUrl}/nop/${this.state.taskID}/${this.props.match.params.pointcode}`));
         }
     }
 
@@ -212,7 +212,7 @@ class CompleteExtraction extends Component {
         }
         if (taskfrom === 'ywdsjlist') { //运维大事记
             rtnVal.push({ Name: '运维大事记', Url: `/pointdetail/${DGIMN}/${listUrl}/${taskfrom}` });
-            rtnVal.push({ Name: '任务详情', Url: `/TaskDetail/emergencydetailinfo/${listUrl}/${taskfrom}/${taskID}/${DGIMN}` });
+            rtnVal.push({ Name: '任务详情', Url: `/TaskDetail/emergencydetailinfolayout/${listUrl}/${taskfrom}/${taskID}/${DGIMN}` });
         } else if (taskfrom === 'qcontrollist') { //质控记录
             rtnVal.push({ Name: '质控记录', Url: `/pointdetail/${DGIMN}/${listUrl}/${taskfrom}/${histroyrecordtype}` });
         } else if (taskfrom === 'operationlist') { //运维记录
@@ -222,27 +222,28 @@ class CompleteExtraction extends Component {
         } else if (taskfrom === 'operationywdsjlist') { //运维大事记
             rtnVal.push({ Name: '智能运维', Url: `` });
             rtnVal.push({ Name: '运维大事记', Url: `/operation/ywdsjlist` });
-            rtnVal.push({ Name: '任务详情', Url: `/TaskDetail/emergencydetailinfo/undefined/operationywdsjlist/${taskID}/${DGIMN}` });
+            rtnVal.push({ Name: '任务详情', Url: `/TaskDetail/emergencydetailinfolayout/undefined/operationywdsjlist/${taskID}/${DGIMN}` });
         } else if (taskfrom === 'OperationCalendar') { //运维日历
             rtnVal.push({ Name: '智能运维', Url: `` });
             rtnVal.push({ Name: '运维日历', Url: `/operation/OperationCalendar` });
-            rtnVal.push({ Name: '任务详情', Url: `/TaskDetail/emergencydetailinfo/undefined/OperationCalendar/${taskID}/${DGIMN}` });
+            rtnVal.push({ Name: '任务详情', Url: `/TaskDetail/emergencydetailinfolayout/undefined/OperationCalendar/${taskID}/${DGIMN}` });
         }else { //其他
-            rtnVal.push({ Name: '任务详情', Url: `/TaskDetail/emergencydetailinfo/${listUrl}/nop/${taskID}/${DGIMN}` });
+            rtnVal.push({ Name: '任务详情', Url: `/TaskDetail/emergencydetailinfolayout/${listUrl}/nop/${taskID}/${DGIMN}` });
         }
         if (listUrl !== 'menu') {
             rtnVal.push({ Name: '日常巡检记录表', Url: '' });
         }
         if (listUrl === 'menu') {
-            rtnVal.push({ Name: '巡检记录表', Url: `/operation/InspectionHistoryRecords` });
+            rtnVal.push({ Name: '巡检记录', Url: `/operation/InspectionHistoryList` });
+            rtnVal.push({ Name: '巡检记录表', Url: `` });
         }
         return rtnVal;
     }
 
     render() {
         const SCREEN_HEIGHT = document.querySelector('body').offsetHeight - 250;
-        const DataLength = this.props.PatrolRecordListPC.length;
-        const Repair = DataLength === 0 ? null : this.props.PatrolRecordListPC[0];
+        const DataLength = this.props.PatrolRecord.length;
+        const Repair = DataLength === 0 ? null : this.props.PatrolRecord[0];
         let EnterpriseName = null;
         let PointPosition = null;
         let Record = null;
@@ -371,4 +372,4 @@ class CompleteExtraction extends Component {
         );
     }
 }
-export default CompleteExtraction;
+export default CompleteExtractionRecord;

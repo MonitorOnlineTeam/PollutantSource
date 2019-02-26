@@ -42,11 +42,11 @@ export default class BdTestRecord extends Component {
 
     enterTaskDetail = () => {
         if (this.state.taskfrom === 'ywdsjlist') {    //运维大事记
-            this.props.dispatch(routerRedux.push(`/TaskDetail/emergencydetailinfo/${this.state.listUrl}/${this.state.taskfrom}/${this.state.taskID}/${this.props.match.params.pointcode}`));
+            this.props.dispatch(routerRedux.push(`/TaskDetail/emergencydetailinfolayout/${this.state.listUrl}/${this.state.taskfrom}/${this.state.taskID}/${this.props.match.params.pointcode}`));
         } else if (this.state.taskfrom === 'qcontrollist') {    //质控记录
-            this.props.dispatch(routerRedux.push(`/TaskDetail/emergencydetailinfo/${this.state.listUrl}/${this.state.taskfrom}-${this.state.histroyrecordtype}/${this.state.taskID}/${this.props.match.params.pointcode}`));
+            this.props.dispatch(routerRedux.push(`/TaskDetail/emergencydetailinfolayout/${this.state.listUrl}/${this.state.taskfrom}-${this.state.histroyrecordtype}/${this.state.taskID}/${this.props.match.params.pointcode}`));
         } else {    //其他
-            this.props.dispatch(routerRedux.push(`/TaskDetail/emergencydetailinfo/${this.state.listUrl}/nop/${this.state.taskID}/${this.props.match.params.pointcode}`));
+            this.props.dispatch(routerRedux.push(`/TaskDetail/emergencydetailinfolayout/${this.state.listUrl}/nop/${this.state.taskID}/${this.props.match.params.pointcode}`));
         }
     }
 
@@ -325,7 +325,7 @@ export default class BdTestRecord extends Component {
         }
         if (taskfrom === 'ywdsjlist') {    //运维大事记
             rtnVal.push({ Name: '运维大事记', Url: `/pointdetail/${DGIMN}/${listUrl}/${taskfrom}` });
-            rtnVal.push({ Name: '任务详情', Url: `/TaskDetail/emergencydetailinfo/${listUrl}/${taskfrom}/${taskID}/${DGIMN}` });
+            rtnVal.push({ Name: '任务详情', Url: `/TaskDetail/emergencydetailinfolayout/${listUrl}/${taskfrom}/${taskID}/${DGIMN}` });
         } else if (taskfrom === 'qcontrollist') {    //质控记录
             rtnVal.push({ Name: '质控记录', Url: `/pointdetail/${DGIMN}/${listUrl}/${taskfrom}/${histroyrecordtype}` });
         }
@@ -334,20 +334,21 @@ export default class BdTestRecord extends Component {
         } else if (taskfrom === 'operationywdsjlist') { //运维大事记
             rtnVal.push({ Name: '智能运维', Url: `` });
             rtnVal.push({ Name: '运维大事记', Url: `/operation/ywdsjlist` });
-            rtnVal.push({ Name: '任务详情', Url: `/TaskDetail/emergencydetailinfo/undefined/operationywdsjlist/${taskID}/${DGIMN}` });
+            rtnVal.push({ Name: '任务详情', Url: `/TaskDetail/emergencydetailinfolayout/undefined/operationywdsjlist/${taskID}/${DGIMN}` });
         }else if (taskfrom === 'OperationCalendar') { //运维日历
             rtnVal.push({ Name: '智能运维', Url: `` });
             rtnVal.push({ Name: '运维日历', Url: `/operation/OperationCalendar` });
-            rtnVal.push({ Name: '任务详情', Url: `/TaskDetail/emergencydetailinfo/undefined/OperationCalendar/${taskID}/${DGIMN}` });
+            rtnVal.push({ Name: '任务详情', Url: `/TaskDetail/emergencydetailinfolayout/undefined/OperationCalendar/${taskID}/${DGIMN}` });
         }
         else {    //其他
-            rtnVal.push({ Name: '任务详情', Url: `/TaskDetail/emergencydetailinfo/${listUrl}/nop/${taskID}/${DGIMN}` });
+            rtnVal.push({ Name: '任务详情', Url: `/TaskDetail/emergencydetailinfolayout/${listUrl}/nop/${taskID}/${DGIMN}` });
         }
         if (listUrl !== 'menu') {
             rtnVal.push({ Name: 'CEMS校验测试记录', Url: '' });
         }
         if (listUrl === 'menu') {
-            rtnVal.push({ Name: '校验测试记录', Url: `/qualitycontrol/BdHistoryInfoHistoryRecords` });
+            rtnVal.push({ Name: '校验测试', Url: `/qualitycontrol/BdTestHistoryList` });
+            rtnVal.push({ Name: '校验测试记录表', Url: `` });
         }
         return rtnVal;
     }

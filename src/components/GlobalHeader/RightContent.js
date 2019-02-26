@@ -216,7 +216,7 @@ export default class GlobalHeaderRight extends PureComponent {
                         if(item.params){
                             const params=JSON.parse(JSON.parse(item.params));
                             // this.props.dispatch(routerRedux.push(`/workbench`));
-                            // this.props.dispatch(routerRedux.push(`/TaskDetail/emergencydetailinfo/null/ywdsjlist/${params.TaskId}/${item.DGIMN}`));
+                            // this.props.dispatch(routerRedux.push(`/TaskDetail/emergencydetailinfolayout/null/ywdsjlist/${params.TaskId}/${item.DGIMN}`));
                             this.childEmergencyDetailInfo.showModal(item.DGIMN,params.TaskId,item.pointname);
                         }
                     }

@@ -9,16 +9,16 @@ const {
     Header, Content, Footer, Sider,
 } = Layout;
 @connect(({ task, loading }) => ({
-    isloading: loading.effects['task/GetYwdsj'],
+    isloading: loading.effects['task/GetRecordType'],
     RecordTypes: task.RecordTypes
 }))
 export default class QControllist extends Component {
     constructor(props) {
         super(props);
         const tablist = [
-            { key: 'JzHistoryRecords', tab: 'CEMS零点量程漂移与校准记录表' },
-            { key: 'BdHistoryInfoHistoryRecords', tab: 'CEMS校验测试记录' },
-            { key: 'DeviceExceptionListHistoryRecords', tab: 'CEMS设备数据异常记录表' }
+            { key: 'JzHistoryList', tab: 'CEMS零点量程漂移与校准记录表' },
+            { key: 'BdTestHistoryList', tab: 'CEMS校验测试记录' },
+            { key: 'DeviceExceptionHistoryList', tab: 'CEMS设备数据异常记录表' }
         ];
 
         this.state = {

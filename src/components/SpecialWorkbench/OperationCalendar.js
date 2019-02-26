@@ -169,7 +169,7 @@ class OperationCalendar extends PureComponent {
                 render: (text, record) => (
 
                     <a onClick={
-                        () => this.props.dispatch(routerRedux.push(`/TaskDetail/EmergencyDetailInfo/workbench/nop/${record.TaskID}/${record.DGIMN}`))
+                        () => this.props.dispatch(routerRedux.push(`/TaskDetail/EmergencyDetailInfoLayout/workbench/nop/${record.TaskID}/${record.DGIMN}`))
                     }
                     > 详情
                     </a>

@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
-import styles from '../EmergencyTodoList/DeviceExceptionDetail.less';
+import styles from '../EmergencyTodoList/DeviceExceptionRecord.less';
 import { Spin, Button, Icon, Card } from 'antd';
 import { connect } from 'dva';
 import MonitorContent from '../../components/MonitorContent/index';
 import { routerRedux } from 'dva/router';
 
 @connect(({ task, loading }) => ({
-    isloading: loading.effects['task/GetRepairDetail'],
-    ExceptionDetail: task.ExceptionDetail
+    isloading: loading.effects['task/GetDeviceExceptionRecord'],
+    ExceptionRecord: task.ExceptionRecord
 }))
-export default class DeviceExceptionDetail extends Component {
+export default class DeviceExceptionRecord extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -23,7 +23,7 @@ export default class DeviceExceptionDetail extends Component {
 
     componentDidMount() {
         this.props.dispatch({
-            type: 'task/GetDeviceExceptionDetail',
+            type: 'task/GetDeviceExceptionRecord',
             payload: {
                 TaskID: this.props.match.params.TaskID,
                 TypeID: this.props.match.params.TypeID
@@ -37,11 +37,11 @@ export default class DeviceExceptionDetail extends Component {
 
     enterTaskDetail = () => {
         if (this.state.taskfrom === 'ywdsjlist') {    //运维大事记
-            this.props.dispatch(routerRedux.push(`/TaskDetail/emergencydetailinfo/${this.state.listUrl}/${this.state.taskfrom}/${this.state.taskID}/${this.props.match.params.pointcode}`));
+            this.props.dispatch(routerRedux.push(`/TaskDetail/emergencydetailinfolayout/${this.state.listUrl}/${this.state.taskfrom}/${this.state.taskID}/${this.props.match.params.pointcode}`));
         } else if (this.state.taskfrom === 'qcontrollist') {    //质控记录
-            this.props.dispatch(routerRedux.push(`/TaskDetail/emergencydetailinfo/${this.state.listUrl}/${this.state.taskfrom}-${this.state.histroyrecordtype}/${this.state.taskID}/${this.props.match.params.pointcode}`));
+            this.props.dispatch(routerRedux.push(`/TaskDetail/emergencydetailinfolayout/${this.state.listUrl}/${this.state.taskfrom}-${this.state.histroyrecordtype}/${this.state.taskID}/${this.props.match.params.pointcode}`));
         } else {    //其他
-            this.props.dispatch(routerRedux.push(`/TaskDetail/emergencydetailinfo/${this.state.listUrl}/nop/${this.state.taskID}/${this.props.match.params.pointcode}`));
+            this.props.dispatch(routerRedux.push(`/TaskDetail/emergencydetailinfolayout/${this.state.listUrl}/nop/${this.state.taskID}/${this.props.match.params.pointcode}`));
         }
     }
 
@@ -76,7 +76,7 @@ export default class DeviceExceptionDetail extends Component {
         }
         if (taskfrom === 'ywdsjlist') {    //运维大事记
             rtnVal.push({ Name: '运维大事记', Url: `/pointdetail/${DGIMN}/${listUrl}/${taskfrom}` });
-            rtnVal.push({ Name: '任务详情', Url: `/TaskDetail/emergencydetailinfo/${listUrl}/${taskfrom}/${taskID}/${DGIMN}` });
+            rtnVal.push({ Name: '任务详情', Url: `/TaskDetail/emergencydetailinfolayout/${listUrl}/${taskfrom}/${taskID}/${DGIMN}` });
         } else if (taskfrom === 'qcontrollist') {    //质控记录
             rtnVal.push({ Name: '质控记录', Url: `/pointdetail/${DGIMN}/${listUrl}/${taskfrom}/${histroyrecordtype}` });
         } else if (taskfrom === 'qualityControlOperation') {    //智能质控
@@ -84,26 +84,27 @@ export default class DeviceExceptionDetail extends Component {
         } else if (taskfrom === 'operationywdsjlist') { //运维大事记
             rtnVal.push({ Name: '智能运维', Url: `` });
             rtnVal.push({ Name: '运维大事记', Url: `/operation/ywdsjlist` });
-            rtnVal.push({ Name: '任务详情', Url: `/TaskDetail/emergencydetailinfo/undefined/operationywdsjlist/${taskID}/${DGIMN}` });
+            rtnVal.push({ Name: '任务详情', Url: `/TaskDetail/emergencydetailinfolayout/undefined/operationywdsjlist/${taskID}/${DGIMN}` });
         } else if (taskfrom === 'OperationCalendar') { //运维日历
             rtnVal.push({ Name: '智能运维', Url: `` });
             rtnVal.push({ Name: '运维日历', Url: `/operation/OperationCalendar` });
-            rtnVal.push({ Name: '任务详情', Url: `/TaskDetail/emergencydetailinfo/undefined/OperationCalendar/${taskID}/${DGIMN}` });
+            rtnVal.push({ Name: '任务详情', Url: `/TaskDetail/emergencydetailinfolayout/undefined/OperationCalendar/${taskID}/${DGIMN}` });
         }else {    //其他
-            rtnVal.push({ Name: '任务详情', Url: `/TaskDetail/emergencydetailinfo/${listUrl}/nop/${taskID}/${DGIMN}` });
+            rtnVal.push({ Name: '任务详情', Url: `/TaskDetail/emergencydetailinfolayout/${listUrl}/nop/${taskID}/${DGIMN}` });
         }
         if (listUrl !== 'menu') {
             rtnVal.push({ Name: 'CEMS设备数据异常记录表', Url: '' });
         }
         if (listUrl === 'menu') {
-            rtnVal.push({ Name: '设备数据异常记录表', Url: `/qualitycontrol/deviceexceptionlisthistoryrecords` });
+            rtnVal.push({ Name: '设备数据异常记录', Url: `/qualitycontrol/deviceexceptionhistorylist` });
+            rtnVal.push({ Name: '设备数据异常记录表', Url: `` });
         }
         return rtnVal;
     }
 
     render() {
         const SCREEN_HEIGHT = document.querySelector('body').offsetHeight - 250;
-        const Exception = this.props.ExceptionDetail;
+        const Exception = this.props.ExceptionRecord;
         let PointPosition = null;
         let Record = null;
         let SignContent = null;
@@ -115,7 +116,7 @@ export default class DeviceExceptionDetail extends Component {
         let IsOk = null;
         let CreateUserID = null;
         let CreateTime = null;
-        if (Exception !== null && Exception.length !== 0) {
+        if (Exception !== null) {
             Record = Exception.Record;
             PointPosition = Record.Content.DGIMN; //站点名称
             SignContent = Record.SignContent === null ? null : `data:image/jpeg;base64,${Record.SignContent}`;

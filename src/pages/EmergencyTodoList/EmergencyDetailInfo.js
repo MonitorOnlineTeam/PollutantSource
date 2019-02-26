@@ -23,8 +23,8 @@ let SCREEN_HEIGHT = document.querySelector('body').offsetHeight - 250;
 
 @Form.create()
 @connect(({ task,loading }) => ({
-    isloading: loading.effects['task/GetTaskDetailInfo'],
-    taskInfo: task.TaskInfo,
+    isloading: loading.effects['task/GetTaskRecord'],
+    taskInfo: task.TaskRecord,
 }))
 class EmergencyDetailInfo extends Component {
     constructor(props) {
@@ -81,7 +81,7 @@ class EmergencyDetailInfo extends Component {
 
     reloaddata = () => {
         this.props.dispatch({
-            type: 'task/GetTaskDetailInfo',
+            type: 'task/GetTaskRecord',
             payload: {
                 TaskID: this.props.TaskID
             }
@@ -104,22 +104,22 @@ class EmergencyDetailInfo extends Component {
                             style={{ marginBottom: '5px' }}
                             icon="check-circle-o"
                             onClick={() => {
-                                this.props.dispatch(routerRedux.push(`/PatrolForm/RepairRecordDetail/${this.props.DGIMN}/${this.props.viewtype}/${taskfrom}/nop/${taskID}`));
+                                this.props.dispatch(routerRedux.push(`/PatrolForm/RepairRecord/${this.props.DGIMN}/${this.props.viewtype}/${taskfrom}/nop/${taskID}`));
                             }}
                         >{item.CnName}
-                                                                             </Button>
-                                    </p>);
+                        </Button>
+                        </p>);
                         break;
                     case EnumPsOperationForm.StopMachine:
                         rtnVal.push(<p key={key} style={{ marginBottom: 0 }}><Button
                             style={{ marginBottom: '5px' }}
                             icon="check-circle-o"
                             onClick={() => {
-                                this.props.dispatch(routerRedux.push(`/PatrolForm/StopCemsInfo/${this.props.DGIMN}/${this.props.viewtype}/${taskfrom}/nop/${taskID}`));
+                                this.props.dispatch(routerRedux.push(`/PatrolForm/StopCemsRecord/${this.props.DGIMN}/${this.props.viewtype}/${taskfrom}/nop/${taskID}`));
                             }}
                         >{item.CnName}
-                                                                             </Button>
-                                    </p>);
+                        </Button>
+                        </p>);
                         break;
                     case EnumPsOperationForm.YhpReplace:
                         rtnVal.push(<p key={key} style={{ marginBottom: 0 }}><Button
@@ -129,8 +129,8 @@ class EmergencyDetailInfo extends Component {
                                 this.props.dispatch(routerRedux.push(`/PatrolForm/ConsumablesReplaceRecord/${this.props.DGIMN}/${this.props.viewtype}/${taskfrom}/nop/${taskID}`));
                             }}
                         >{item.CnName}
-                                                                             </Button>
-                                    </p>);
+                        </Button>
+                        </p>);
                         break;
                     case EnumPsOperationForm.StandardGasReplace:
                         rtnVal.push(<p key={key} style={{ marginBottom: 0 }}><Button
@@ -140,52 +140,52 @@ class EmergencyDetailInfo extends Component {
                                 this.props.dispatch(routerRedux.push(`/PatrolForm/StandardGasRepalceRecord/${this.props.DGIMN}/${this.props.viewtype}/${taskfrom}/nop/${taskID}`));
                             }}
                         >{item.CnName}
-                                                                             </Button>
-                                    </p>);
+                        </Button>
+                        </p>);
                         break;
                     case EnumPsOperationForm.CqfPatrol:
                         rtnVal.push(<p key={key} style={{ marginBottom: 0 }}><Button
                             style={{ marginBottom: '5px' }}
                             icon="check-circle-o"
                             onClick={() => {
-                                this.props.dispatch(routerRedux.push(`/PatrolForm/CompleteExtraction/${this.props.DGIMN}/${this.props.viewtype}/${taskfrom}/nop/${taskID}`));
+                                this.props.dispatch(routerRedux.push(`/PatrolForm/CompleteExtractionRecord/${this.props.DGIMN}/${this.props.viewtype}/${taskfrom}/nop/${taskID}`));
                             }}
                         >{item.CnName}
-                                                                             </Button>
-                                    </p>);
+                        </Button>
+                        </p>);
                         break;
                     case EnumPsOperationForm.CyfPatrol:
                         rtnVal.push(<p key={key} style={{ marginBottom: 0 }}><Button
                             style={{ marginBottom: '5px' }}
                             icon="check-circle-o"
                             onClick={() => {
-                                this.props.dispatch(routerRedux.push(`/PatrolForm/DilutionSampling/${this.props.DGIMN}/${this.props.viewtype}/${taskfrom}/nop/${taskID}`));
+                                this.props.dispatch(routerRedux.push(`/PatrolForm/DilutionSamplingRecord/${this.props.DGIMN}/${this.props.viewtype}/${taskfrom}/nop/${taskID}`));
                             }}
                         >{item.CnName}
-                                                                             </Button>
-                                    </p>);
+                        </Button>
+                        </p>);
                         break;
                     case EnumPsOperationForm.ClfPatrol:
                         rtnVal.push(<p key={key} style={{ marginBottom: 0 }}><Button
                             style={{ marginBottom: '5px' }}
                             icon="check-circle-o"
                             onClick={() => {
-                                this.props.dispatch(routerRedux.push(`/PatrolForm/DirectMeasurement/${this.props.DGIMN}/${this.props.viewtype}/${taskfrom}/nop/${taskID}`));
+                                this.props.dispatch(routerRedux.push(`/PatrolForm/DirectMeasurementRecord/${this.props.DGIMN}/${this.props.viewtype}/${taskfrom}/nop/${taskID}`));
                             }}
                         >{item.CnName}
-                                                                             </Button>
-                                    </p>);
+                        </Button>
+                        </p>);
                         break;
                     case EnumPsOperationForm.CheckRecord:
                         rtnVal.push(<p key={key} style={{ marginBottom: 0 }}><Button
                             style={{ marginBottom: '5px' }}
                             icon="check-circle-o"
                             onClick={() => {
-                                this.props.dispatch(routerRedux.push(`/PatrolForm/JzRecordInfo/${this.props.DGIMN}/${this.props.viewtype}/${taskfrom}/nop/${taskID}`));
+                                this.props.dispatch(routerRedux.push(`/PatrolForm/JzRecord/${this.props.DGIMN}/${this.props.viewtype}/${taskfrom}/nop/${taskID}`));
                             }}
                         >{item.CnName}
-                                                                             </Button>
-                                    </p>);
+                        </Button>
+                        </p>);
                         break;
                     case EnumPsOperationForm.TestRecord:
                         rtnVal.push(<p key={key} style={{ marginBottom: 0 }}><Button
@@ -195,19 +195,19 @@ class EmergencyDetailInfo extends Component {
                                 this.props.dispatch(routerRedux.push(`/PatrolForm/BdTestRecord/${this.props.DGIMN}/${this.props.viewtype}/${taskfrom}/nop/${taskID}`));
                             }}
                         >{item.CnName}
-                                                                             </Button>
-                                    </p>);
+                        </Button>
+                        </p>);
                         break;
                     case EnumPsOperationForm.DataException:
                         rtnVal.push(<p key={key} style={{ marginBottom: 0 }}><Button
                             style={{ marginBottom: '5px' }}
                             icon="check-circle-o"
                             onClick={() => {
-                                this.props.dispatch(routerRedux.push(`/PatrolForm/DeviceExceptionDetail/${this.props.DGIMN}/${this.props.viewtype}/${taskfrom}/nop/${taskID}`));
+                                this.props.dispatch(routerRedux.push(`/PatrolForm/DeviceExceptionRecord/${this.props.DGIMN}/${this.props.viewtype}/${taskfrom}/nop/${taskID}`));
                             }}
                         >{item.CnName}
-                                                                             </Button>
-                                    </p>);
+                        </Button>
+                        </p>);
                         break;
                     default:
                         break;
@@ -241,7 +241,7 @@ class EmergencyDetailInfo extends Component {
 
     cdOk = (TaskID) => {
         this.props.dispatch({
-            type: 'task/GetPostRevokeTask',
+            type: 'task/RevokeTask',
             payload: {
                 taskID: TaskID,
                 revokeReason: this.props.form.getFieldValue('reason'),
@@ -526,19 +526,19 @@ class EmergencyDetailInfo extends Component {
                             }
                             {
                                 TaskType === EnumPatrolTaskType.PatrolTask ? null : AlarmList.length === 0 ? null :
-                                    <div style={{ marginBottom: '10px', textAlign: 'right' }}> <a onClick={() => {
+                                <div style={{ marginBottom: '10px', textAlign: 'right' }}> <a onClick={() => {
                                         this.setState({
                                             visible: true
                                         });
                                     }}
-                                >查看更多>>
-                                </a>
-                                </div>
+                                    >查看更多>>
+                                    </a>
+                                    </div>
                             }
                             {
 
                                 TaskType === EnumPatrolTaskType.PatrolTask ? null : AlarmList.length === 0 ? null :
-                                    <Table rowKey={(record, index) => `complete${index}`} style={{ backgroundColor: 'white' }} bordered={false} dataSource={AlarmList} pagination={false} columns={columns} />
+                                <Table rowKey={(record, index) => `complete${index}`} style={{ backgroundColor: 'white' }} bordered={false} dataSource={AlarmList} pagination={false} columns={columns} />
                             }
                         </Card>
                         <Card title={<span style={{ fontWeight: '900' }}>处理说明</span>} style={{ marginTop: 20 }}>

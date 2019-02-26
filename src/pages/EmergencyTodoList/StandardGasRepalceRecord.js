@@ -9,8 +9,8 @@ const {
     Header, Footer, Sider, Content,
 } = Layout;
 @connect(({ task, loading }) => ({
-    isloading: loading.effects['task/StandardGasRepalceRecordList'],
-    StandardGasRepalceRecordList: task.StandardGasRepalceRecordList
+    isloading: loading.effects['task/GetStandardGasReplaceRecord'],
+    StandardGasRepalceRecord: task.StandardGasRepalceRecord
 }))
 
 /*
@@ -42,7 +42,7 @@ class StandardGasRepalceRecord extends Component {
 
     onChange = () => {
         this.props.dispatch({
-            type: 'task/StandardGasRepalceRecordList',
+            type: 'task/GetStandardGasReplaceRecord',
             payload: {
                 TaskIds: this.props.match.params.StandardGasTaskIds,
                 TypeIDs: this.props.match.params.StandardGasTypeIDs
@@ -52,11 +52,11 @@ class StandardGasRepalceRecord extends Component {
 
     enterTaskDetail = () => {
         if (this.state.taskfrom === 'ywdsjlist') { //运维大事记
-            this.props.dispatch(routerRedux.push(`/TaskDetail/emergencydetailinfo/${this.state.listUrl}/${this.state.taskfrom}/${this.props.match.params.StandardGasTaskIds}/${this.props.match.params.pointcode}`));
+            this.props.dispatch(routerRedux.push(`/TaskDetail/emergencydetailinfolayout/${this.state.listUrl}/${this.state.taskfrom}/${this.props.match.params.StandardGasTaskIds}/${this.props.match.params.pointcode}`));
         } else if (this.state.taskfrom === 'qcontrollist') { //质控记录
-            this.props.dispatch(routerRedux.push(`/TaskDetail/emergencydetailinfo/${this.state.listUrl}/${this.state.taskfrom}-${this.state.histroyrecordtype}/${this.props.match.params.StandardGasTaskIds}/${this.props.match.params.pointcode}`));
+            this.props.dispatch(routerRedux.push(`/TaskDetail/emergencydetailinfolayout/${this.state.listUrl}/${this.state.taskfrom}-${this.state.histroyrecordtype}/${this.props.match.params.StandardGasTaskIds}/${this.props.match.params.pointcode}`));
         } else { //其他
-            this.props.dispatch(routerRedux.push(`/TaskDetail/emergencydetailinfo/${this.state.listUrl}/nop/${this.props.match.params.StandardGasTaskIds}/${this.props.match.params.pointcode}`));
+            this.props.dispatch(routerRedux.push(`/TaskDetail/emergencydetailinfolayout/${this.state.listUrl}/nop/${this.props.match.params.StandardGasTaskIds}/${this.props.match.params.pointcode}`));
         }
     }
 
@@ -128,7 +128,7 @@ class StandardGasRepalceRecord extends Component {
         }
         if (taskfrom === 'ywdsjlist') { //运维大事记
             rtnVal.push({ Name: '运维大事记', Url: `/pointdetail/${DGIMN}/${listUrl}/${taskfrom}` });
-            rtnVal.push({ Name: '任务详情', Url: `/TaskDetail/emergencydetailinfo/${listUrl}/${taskfrom}/${taskID}/${DGIMN}` });
+            rtnVal.push({ Name: '任务详情', Url: `/TaskDetail/emergencydetailinfolayout/${listUrl}/${taskfrom}/${taskID}/${DGIMN}` });
         } else if (taskfrom === 'qcontrollist') { //质控记录
             rtnVal.push({ Name: '质控记录', Url: `/pointdetail/${DGIMN}/${listUrl}/${taskfrom}/${histroyrecordtype}` });
         } else if (taskfrom === 'operationlist') { //运维记录
@@ -138,27 +138,28 @@ class StandardGasRepalceRecord extends Component {
         } else if (taskfrom === 'operationywdsjlist') { //运维大事记
             rtnVal.push({ Name: '智能运维', Url: `` });
             rtnVal.push({ Name: '运维大事记', Url: `/operation/ywdsjlist` });
-            rtnVal.push({ Name: '任务详情', Url: `/TaskDetail/emergencydetailinfo/undefined/operationywdsjlist/${taskID}/${DGIMN}` });
+            rtnVal.push({ Name: '任务详情', Url: `/TaskDetail/emergencydetailinfolayout/undefined/operationywdsjlist/${taskID}/${DGIMN}` });
         }else if (taskfrom === 'OperationCalendar') { //运维日历
             rtnVal.push({ Name: '智能运维', Url: `` });
             rtnVal.push({ Name: '运维日历', Url: `/operation/OperationCalendar` });
-            rtnVal.push({ Name: '任务详情', Url: `/TaskDetail/emergencydetailinfo/undefined/OperationCalendar/${taskID}/${DGIMN}` });
+            rtnVal.push({ Name: '任务详情', Url: `/TaskDetail/emergencydetailinfolayout/undefined/OperationCalendar/${taskID}/${DGIMN}` });
         } else { //其他
-            rtnVal.push({ Name: '任务详情', Url: `/TaskDetail/emergencydetailinfo/${listUrl}/nop/${taskID}/${DGIMN}` });
+            rtnVal.push({ Name: '任务详情', Url: `/TaskDetail/emergencydetailinfolayout/${listUrl}/nop/${taskID}/${DGIMN}` });
         }
         if (listUrl !== 'menu') {
             rtnVal.push({ Name: '标准气体更换记录表', Url: '' });
         }
         if (listUrl === 'menu') {
-            rtnVal.push({ Name: '标气更换记录表', Url: `/operation/StandardGasHistoryRecords` });
+            rtnVal.push({ Name: '标气更换记录', Url: `/operation/StandardGasRepalceHistoryList` });
+            rtnVal.push({ Name: '标气更换记录表', Url: `` });
         }
         return rtnVal;
     }
 
     render() {
         const SCREEN_HEIGHT = document.querySelector('body').offsetHeight - 250;
-        let DataLength = this.props.StandardGasRepalceRecordList.length;
-        let Data = DataLength === 0 ? null : this.props.StandardGasRepalceRecordList;
+        let DataLength = this.props.StandardGasRepalceRecord.length;
+        let Data = DataLength === 0 ? null : this.props.StandardGasRepalceRecord;
         let DataList = DataLength === 0 ? null : Data.Record.length === 0 ? null : Data.Record.RecordList;
         let EnterpriseName = null; //企业名称
         let SignContent = null; //签名
@@ -178,7 +179,7 @@ class StandardGasRepalceRecord extends Component {
         }
 
 
-        const signContent = this.props.StandardGasRepalceRecordList.length === 0 ? null : `data:image/jpeg;base64,${Data.Record.length === 0 ? null : Data.Record.SignContent}`;
+        const signContent = this.props.StandardGasRepalceRecord.length === 0 ? null : `data:image/jpeg;base64,${Data.Record.length === 0 ? null : Data.Record.SignContent}`;
         const columns = [{
             title: '序号',
             dataIndex: 'name',

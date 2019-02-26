@@ -1,4 +1,3 @@
-
 import React, { Component } from 'react';
 import {
     Card,
@@ -6,46 +5,47 @@ import {
     Col,
     Table,
     Form,
-    Spin,
-    Tag
+    Spin
 } from 'antd';
 import { connect } from 'dva';
 import moment from 'moment';
 import RangePicker_ from '../../components/PointDetail/RangePicker_';
-import styles from './XSCYFInspectionHistoryRecords.less';
+import styles from '../EmergencyTodoList/DeviceExceptionHistoryList.less';
 import { routerRedux } from 'dva/router';
 
-@connect(({ task, loading }) => ({
-    loading: loading.effects['task/GetHistoryInspectionHistoryRecords'],
-    HistoryInspectionHistoryRecordList: task.HistoryInspectionHistoryRecordList,
-    HistoryInspectionHistoryRecordListCount: task.total,
-    pageIndex: task.pageIndex,
-    pageSize: task.pageSize,
+
+@connect(({ maintenancelist, loading }) => ({
+    loading: loading.effects['maintenancelist/GetDeviceExceptionHistoryList'],
+    HistoryDeviceExceptionList: maintenancelist.DeviceExceptionHistroyList,
+    HistoryDeviceExceptionListCount: maintenancelist.total,
+    pageIndex: maintenancelist.pageIndex,
+    pageSize: maintenancelist.pageSize,
 }))
 /*
-页面：稀释采样法CEMS日常巡检记录表(历史记录)
+页面：异常历史记录
 */
-export default class XSCYFInspectionHistoryRecords extends Component {
+export default class DeviceExceptionHistoryList extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            rangeDate: [moment(moment().subtract(3, 'month').format('YYYY-MM-01')), moment(moment().format('YYYY-MM-DD'))], // 最近七天
+            rangeDate: [moment(moment(new Date()).subtract(3, 'month').format('YYYY-MM-DD 00:00:00')), moment(moment(new Date()).format('YYYY-MM-DD 23:59:59'))], // 最近七天
             BeginTime: moment().subtract(3, 'month').format('YYYY-MM-DD 00:00:00'),
             EndTime: moment().format('YYYY-MM-DD 23:59:59'),
             DGIMN: this.props.match.params.pointcode,
-            typeID: this.props.match.params.TypeID,
+            TypeID: this.props.match.params.TypeID,
         };
     }
     componentDidMount() {
-        this.GetHistoryRecord(this.props.pageIndex, this.props.pageSize, this.state.DGIMN, this.state.typeID, this.state.BeginTime, this.state.EndTime);
+        this.GetHistoryRecord(this.props.pageIndex, this.props.pageSize, this.state.DGIMN, this.state.TypeID, this.state.BeginTime, this.state.EndTime);
     }
-    GetHistoryRecord = (pageIndex, pageSize, DGIMN, typeID, BeginTime, EndTime) => {
+
+    GetHistoryRecord = (pageIndex, pageSize, DGIMN, TypeID, BeginTime, EndTime) => {
         this.props.dispatch({
-            type: 'task/GetHistoryInspectionHistoryRecords',
+            type: 'maintenancelist/GetDeviceExceptionHistoryList',
             payload: {
                 pageIndex: pageIndex,
                 pageSize: pageSize,
-                TypeID: typeID,
+                TypeID: TypeID,
                 DGIMN: DGIMN,
                 BeginTime: moment(BeginTime).format('YYYY-MM-DD 00:00:00'),
                 EndTime: moment(EndTime).format('YYYY-MM-DD 23:59:59'),
@@ -73,37 +73,31 @@ export default class XSCYFInspectionHistoryRecords extends Component {
     }
 
     seeDetail = (record) => {
-        this.props.dispatch(routerRedux.push(`/PatrolForm/DilutionSampling/${this.state.DGIMN}/${this.props.match.params.viewtype}/operationlist/XSCYFInspectionHistoryRecords/${record.TaskID}`));
+        this.props.dispatch(routerRedux.push(`/PatrolForm/DeviceExceptionRecord/${this.state.DGIMN}/${this.props.match.params.viewtype}/qcontrollist/DeviceExceptionHistoryList/${record.TaskID}`));
     }
 
     render() {
-        const dataSource = this.props.HistoryInspectionHistoryRecordList === null ? null : this.props.HistoryInspectionHistoryRecordList;
+        const dataSource = this.props.HistoryDeviceExceptionList === null ? null : this.props.HistoryDeviceExceptionList;
         const columns = [{
             title: '校准人',
-            width: '20%',
+            width: '13%',
             dataIndex: 'CreateUserID',
             key: 'CreateUserID'
         }, {
-            title: '异常情况处理',
-            width: '45%',
-            dataIndex: 'Content',
-            key: 'Content',
-            render: (text, record) => {
-                if (text !== undefined) {
-                    var content = text.split(',');
-                    var resu = [];
-                    content.map((item, key) => {
-                        item = item.replace('(', '  ');
-                        item = item.replace(')', '');
-                        if (item !== '') {
-                            resu.push(
-                                <Tag key={key} style={{ marginBottom: 1.5, marginTop: 1.5 }} color="#108ee9">{item}</Tag>
-                            );
-                        }
-                    });
-                }
-                return resu;
-            }
+            title: '异常状况',
+            width: '19%',
+            dataIndex: 'ExceptionStatus',
+            key: 'ExceptionStatus'
+        }, {
+            title: '异常原因',
+            width: '19%',
+            dataIndex: 'ExceptionReason',
+            key: 'ExceptionReason'
+        }, {
+            title: '处理情况',
+            width: '19%',
+            dataIndex: 'DealingSituations',
+            key: 'DealingSituations'
         }, {
             title: '记录时间',
             dataIndex: 'CreateTime',
@@ -113,7 +107,7 @@ export default class XSCYFInspectionHistoryRecords extends Component {
         }, {
             title: '详细',
             dataIndex: 'TaskID',
-            width: '15%',
+            width: '10%',
             key: 'TaskID',
             render: (text, record) => {
                 return <a onClick={
@@ -139,8 +133,8 @@ export default class XSCYFInspectionHistoryRecords extends Component {
                     <div className={styles.conditionDiv}>
                         <Row gutter={8}>
                             <Col span={3} >
-                                <label className={styles.conditionLabel}>记录时间：</label>
-                            </Col>
+                                记录时间：
+                                </Col>
                             <Col span={21} >
                                 <RangePicker_ style={{ width: 350 }} onChange={this._handleDateChange} format={'YYYY-MM-DD'} dateValue={this.state.rangeDate} />
                             </Col>
@@ -168,7 +162,7 @@ export default class XSCYFInspectionHistoryRecords extends Component {
                         pagination={{
                             showSizeChanger: true,
                             showQuickJumper: true,
-                            'total': this.props.HistoryInspectionHistoryRecordListCount,
+                            'total': this.props.HistoryDeviceExceptionListCount,
                             'pageSize': this.props.pageSize,
                             'current': this.props.pageIndex,
                             onChange: this.onChange,
@@ -181,4 +175,3 @@ export default class XSCYFInspectionHistoryRecords extends Component {
         );
     }
 }
-

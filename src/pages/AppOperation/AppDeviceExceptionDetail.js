@@ -6,7 +6,7 @@ import MonitorContent from '../../components/MonitorContent/index';
 import { routerRedux } from 'dva/router';
 import { MapInteractionCSS } from 'react-map-interaction';
 @connect(({ task, loading }) => ({
-    isloading: loading.effects['task/GetRepairDetail'],
+    isloading: loading.effects['task/GetDeviceExceptionRecord'],
     ExceptionDetail: task.ExceptionDetail
 }))
 export default class AppDeviceExceptionDetail extends Component {
@@ -18,7 +18,7 @@ export default class AppDeviceExceptionDetail extends Component {
 
     componentDidMount() {
         this.props.dispatch({
-            type: 'task/GetDeviceExceptionDetail',
+            type: 'task/GetDeviceExceptionRecord',
             payload: {
                 TaskID: this.props.match.params.TaskID,
                 TypeID: this.props.match.params.TypeID,

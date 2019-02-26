@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
-import styles from '../EmergencyTodoList/RepairRecordDetail.less';
+import styles from '../EmergencyTodoList/RepairRecord.less';
 import { Spin, Button, Icon, Card } from 'antd';
 import { connect } from 'dva';
 import MonitorContent from '../../components/MonitorContent/index';
 import { routerRedux } from 'dva/router';
 
 @connect(({ task, loading }) => ({
-    isloading: loading.effects['task/GetRepairDetail'],
-    Repair: task.Repair
+    isloading: loading.effects['task/GetRepairRecord'],
+    Repair: task.RepairRecord
 }))
-export default class RepairRecordDetail extends Component {
+export default class RepairRecord extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -23,7 +23,7 @@ export default class RepairRecordDetail extends Component {
 
     componentDidMount() {
         this.props.dispatch({
-            type: 'task/GetRepairDetail',
+            type: 'task/GetRepairRecord',
             payload: {
                 TaskID: this.props.match.params.TaskID,
                 TypeID: this.props.match.params.TypeID
@@ -37,17 +37,18 @@ export default class RepairRecordDetail extends Component {
 
     enterTaskDetail = () => {
         if (this.state.taskfrom === 'ywdsjlist') {    //运维大事记
-            this.props.dispatch(routerRedux.push(`/TaskDetail/emergencydetailinfo/${this.state.listUrl}/${this.state.taskfrom}/${this.state.taskID}/${this.props.match.params.pointcode}`));
+            this.props.dispatch(routerRedux.push(`/TaskDetail/emergencydetailinfolayout/${this.state.listUrl}/${this.state.taskfrom}/${this.state.taskID}/${this.props.match.params.pointcode}`));
         } else if (this.state.taskfrom === 'qcontrollist') {    //质控记录
-            this.props.dispatch(routerRedux.push(`/TaskDetail/emergencydetailinfo/${this.state.listUrl}/${this.state.taskfrom}-${this.state.histroyrecordtype}/${this.state.taskID}/${this.props.match.params.pointcode}`));
+            this.props.dispatch(routerRedux.push(`/TaskDetail/emergencydetailinfolayout/${this.state.listUrl}/${this.state.taskfrom}-${this.state.histroyrecordtype}/${this.state.taskID}/${this.props.match.params.pointcode}`));
         } else {    //其他
-            this.props.dispatch(routerRedux.push(`/TaskDetail/emergencydetailinfo/${this.state.listUrl}/nop/${this.state.taskID}/${this.props.match.params.pointcode}`));
+            this.props.dispatch(routerRedux.push(`/TaskDetail/emergencydetailinfolayout/${this.state.listUrl}/nop/${this.state.taskID}/${this.props.match.params.pointcode}`));
         }
     }
 
     renderItem = (Repair) => {
         const rtnVal = [];
         if (Repair !== null) {
+            debugger;
             if (Repair.Code !== null && Repair.Code.length > 0) {
                 Repair.Code.map((item, index) => {
                     rtnVal.push(
@@ -147,9 +148,10 @@ export default class RepairRecordDetail extends Component {
             default:
                 break;
         }
+        
         if (taskfrom === 'ywdsjlist') {    //运维大事记
             rtnVal.push({ Name: '运维大事记', Url: `/pointdetail/${DGIMN}/${listUrl}/${taskfrom}` });
-            rtnVal.push({ Name: '任务详情', Url: `/TaskDetail/emergencydetailinfo/${listUrl}/${taskfrom}/${taskID}/${DGIMN}` });
+            rtnVal.push({ Name: '任务详情', Url: `/TaskDetail/emergencydetailinfolayout/${listUrl}/${taskfrom}/${taskID}/${DGIMN}` });
         } else if (taskfrom === 'qcontrollist') {    //质控记录
             rtnVal.push({ Name: '质控记录', Url: `/pointdetail/${DGIMN}/${listUrl}/${taskfrom}/${histroyrecordtype}` });
         } else if (taskfrom === 'operationlist') {    //运维记录
@@ -159,20 +161,21 @@ export default class RepairRecordDetail extends Component {
         } else if (taskfrom === 'operationywdsjlist') { //运维大事记
             rtnVal.push({ Name: '智能运维', Url: `` });
             rtnVal.push({ Name: '运维大事记', Url: `/operation/ywdsjlist` });
-            rtnVal.push({ Name: '任务详情', Url: `/TaskDetail/emergencydetailinfo/undefined/operationywdsjlist/${taskID}/${DGIMN}` });
+            rtnVal.push({ Name: '任务详情', Url: `/TaskDetail/emergencydetailinfolayout/undefined/operationywdsjlist/${taskID}/${DGIMN}` });
         }else if (taskfrom === 'OperationCalendar') { //运维日历
             rtnVal.push({ Name: '智能运维', Url: `` });
             rtnVal.push({ Name: '运维日历', Url: `/operation/OperationCalendar` });
             rtnVal.push({ Name: '任务详情', Url: `/TaskDetail/emergencydetailinfo/undefined/OperationCalendar/${taskID}/${DGIMN}` });
         }
         else {    //其他
-            rtnVal.push({ Name: '任务详情', Url: `/TaskDetail/emergencydetailinfo/${listUrl}/nop/${taskID}/${DGIMN}` });
+            rtnVal.push({ Name: '任务详情', Url: `/TaskDetail/emergencydetailinfolayout/${listUrl}/nop/${taskID}/${DGIMN}` });
         }
         if (listUrl !== 'menu') {
             rtnVal.push({ Name: '维修记录表', Url: '' });
         }
         if (listUrl === 'menu') {
-            rtnVal.push({ Name: '维修记录表', Url: `/operation/RepairHistoryRecords` });
+            rtnVal.push({ Name: '维修记录', Url: `/operation/RepairHistoryList` });
+            rtnVal.push({ Name: '维修记录表', Url: `` });
         }
         return rtnVal;
     }

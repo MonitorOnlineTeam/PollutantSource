@@ -130,7 +130,7 @@ export default Model.extend({
                 }
             }
             //菜单-维修
-            if (payload.RepairHistoryRecords) {
+            if (payload.RepairHistoryList) {
                 if (data && data[0]) {
                     if (!payload.search) {
                         if (payload.DGIMN === '[object Object]') {

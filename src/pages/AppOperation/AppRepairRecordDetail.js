@@ -6,7 +6,7 @@ import { routerRedux } from 'dva/router';
 import { MapInteractionCSS } from 'react-map-interaction';
 
 @connect(({ task, loading }) => ({
-    isloading: loading.effects['task/GetRepairDetail'],
+    isloading: loading.effects['task/GetRepairRecord'],
     Repair: task.Repair
 }))
 export default class AppRepairRecordDetail extends Component {
@@ -18,7 +18,7 @@ export default class AppRepairRecordDetail extends Component {
 
     componentDidMount() {
         this.props.dispatch({
-            type: 'task/GetRepairDetail',
+            type: 'task/GetRepairRecord',
             payload: {
                 TaskID: this.props.match.params.TaskID,
                 TypeID: parseInt(this.props.match.params.TypeID),

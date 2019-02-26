@@ -10,7 +10,7 @@ const {
     Header, Footer, Sider, Content,
 } = Layout;
 @connect(({ task, loading }) => ({
-    isloading: loading.effects['task/StandardGasRepalceRecordList'],
+    isloading: loading.effects['task/GetStandardGasReplaceRecord'],
     StandardGasRepalceRecordList: task.StandardGasRepalceRecordList
 }))
 
@@ -38,7 +38,7 @@ class AppStandardGasRepalceRecord extends Component {
 
     onChange = () => {
         this.props.dispatch({
-            type: 'task/StandardGasRepalceRecordList',
+            type: 'task/GetStandardGasReplaceRecord',
             payload: {
                 TaskIds: this.props.match.params.TaskID,
                 TypeIDs: this.props.match.params.TypeID,

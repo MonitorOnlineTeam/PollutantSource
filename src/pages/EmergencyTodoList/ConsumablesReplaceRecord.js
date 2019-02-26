@@ -6,8 +6,8 @@ import styles from "./ConsumablesReplaceRecord.less";
 import MonitorContent from '../../components/MonitorContent/index';
 
 @connect(({ task, loading }) => ({
-    isloading: loading.effects['task/fetchuserlist'],
-    ConsumablesReplaceRecordList: task.ConsumablesReplaceRecordList
+    isloading: loading.effects['task/GetConsumablesReplaceRecord'],
+    ConsumablesReplaceRecord: task.ConsumablesReplaceRecord
 }))
 /*
 页面：易耗品更换记录表
@@ -34,7 +34,7 @@ class ConsumablesReplaceRecord extends Component {
 
     onChange = () => {
         this.props.dispatch({
-            type: 'task/fetchuserlist',
+            type: 'task/GetConsumablesReplaceRecord',
             payload: {
                 TaskIds: this.props.match.params.TaskIds,
                 TypeIDs: this.props.match.params.TypeIDs
@@ -44,11 +44,11 @@ class ConsumablesReplaceRecord extends Component {
 
     enterTaskDetail = () => {
         if (this.state.taskfrom === 'ywdsjlist') { //运维大事记
-            this.props.dispatch(routerRedux.push(`/TaskDetail/emergencydetailinfo/${this.state.listUrl}/${this.state.taskfrom}/${this.props.match.params.TaskIds}/${this.props.match.params.pointcode}`));
+            this.props.dispatch(routerRedux.push(`/TaskDetail/emergencydetailinfolayout/${this.state.listUrl}/${this.state.taskfrom}/${this.props.match.params.TaskIds}/${this.props.match.params.pointcode}`));
         } else if (this.state.taskfrom === 'qcontrollist') { //质控记录
-            this.props.dispatch(routerRedux.push(`/TaskDetail/emergencydetailinfo/${this.state.listUrl}/${this.state.taskfrom}-${this.state.histroyrecordtype}/${this.props.match.params.TaskIds}/${this.props.match.params.pointcode}`));
+            this.props.dispatch(routerRedux.push(`/TaskDetail/emergencydetailinfolayout/${this.state.listUrl}/${this.state.taskfrom}-${this.state.histroyrecordtype}/${this.props.match.params.TaskIds}/${this.props.match.params.pointcode}`));
         } else { //其他
-            this.props.dispatch(routerRedux.push(`/TaskDetail/emergencydetailinfo/${this.state.listUrl}/nop/${this.props.match.params.TaskIds}/${this.props.match.params.pointcode}`));
+            this.props.dispatch(routerRedux.push(`/TaskDetail/emergencydetailinfolayout/${this.state.listUrl}/nop/${this.props.match.params.TaskIds}/${this.props.match.params.pointcode}`));
         }
     }
 
@@ -117,7 +117,7 @@ class ConsumablesReplaceRecord extends Component {
         }
         if (taskfrom === 'ywdsjlist') { //运维大事记
             rtnVal.push({ Name: '运维大事记', Url: `/pointdetail/${DGIMN}/${listUrl}/${taskfrom}` });
-            rtnVal.push({ Name: '任务详情', Url: `/TaskDetail/emergencydetailinfo/${listUrl}/${taskfrom}/${taskID}/${DGIMN}` });
+            rtnVal.push({ Name: '任务详情', Url: `/TaskDetail/emergencydetailinfolayout/${listUrl}/${taskfrom}/${taskID}/${DGIMN}` });
         } else if (taskfrom === 'qcontrollist') { //质控记录
             rtnVal.push({ Name: '质控记录', Url: `/pointdetail/${DGIMN}/${listUrl}/${taskfrom}/${histroyrecordtype}` });
         } else if (taskfrom === 'operationlist') { //运维记录
@@ -127,27 +127,28 @@ class ConsumablesReplaceRecord extends Component {
         } else if (taskfrom === 'operationywdsjlist') { //运维大事记
             rtnVal.push({ Name: '智能运维', Url: `` });
             rtnVal.push({ Name: '运维大事记', Url: `/operation/ywdsjlist` });
-            rtnVal.push({ Name: '任务详情', Url: `/TaskDetail/emergencydetailinfo/undefined/${taskfrom}/${taskID}/${DGIMN}` });
+            rtnVal.push({ Name: '任务详情', Url: `/TaskDetail/emergencydetailinfolayout/undefined/${taskfrom}/${taskID}/${DGIMN}` });
         } else if (taskfrom === 'OperationCalendar') { //运维日历
             rtnVal.push({ Name: '智能运维', Url: `` });
             rtnVal.push({ Name: '运维日历', Url: `/operation/OperationCalendar` });
-            rtnVal.push({ Name: '任务详情', Url: `/TaskDetail/emergencydetailinfo/undefined/OperationCalendar/${taskID}/${DGIMN}` });
+            rtnVal.push({ Name: '任务详情', Url: `/TaskDetail/emergencydetailinfolayout/undefined/OperationCalendar/${taskID}/${DGIMN}` });
         }else { //其他
-            rtnVal.push({ Name: '任务详情', Url: `/TaskDetail/emergencydetailinfo/${listUrl}/nop/${taskID}/${DGIMN}` });
+            rtnVal.push({ Name: '任务详情', Url: `/TaskDetail/emergencydetailinfolayout/${listUrl}/nop/${taskID}/${DGIMN}` });
         }
         if (listUrl !== 'menu') {
             rtnVal.push({ Name: '易耗品更换记录表', Url: '' });
         }
         if (listUrl === 'menu') {
-            rtnVal.push({ Name: '易耗品更换记录表', Url: `/operation/CounterControlCommandHistoryRecords` });
+            rtnVal.push({ Name: '易耗品更换记录', Url: `/operation/ConsumablesReplaceHistoryList` });
+            rtnVal.push({ Name: '易耗品更换记录表', Url: `` });
         }
         return rtnVal;
     }
 
     render() {
         const SCREEN_HEIGHT = document.querySelector('body').offsetHeight - 250;
-        let DataLength = this.props.ConsumablesReplaceRecordList.length;
-        let Data = DataLength === 0 ? null : this.props.ConsumablesReplaceRecordList;
+        let DataLength = this.props.ConsumablesReplaceRecord.length;
+        let Data = DataLength === 0 ? null : this.props.ConsumablesReplaceRecord;
         let DataList = DataLength === 0 ? null : Data.Record.length === 0 ? null : Data.Record.RecordList;
         let EnterpriseName = null; //企业名称
         let SignContent = null; //签名

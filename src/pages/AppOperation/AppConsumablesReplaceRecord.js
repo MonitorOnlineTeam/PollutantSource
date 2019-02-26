@@ -6,7 +6,7 @@ import { MapInteractionCSS } from 'react-map-interaction';
 import styles from "./AppConsumablesReplaceRecord.less";
 
 @connect(({ task, loading }) => ({
-    isloading: loading.effects['task/fetchuserlist'],
+    isloading: loading.effects['task/GetConsumablesReplaceRecord'],
     ConsumablesReplaceRecordList: task.ConsumablesReplaceRecordList
 }))
 /*
@@ -29,7 +29,7 @@ class AppConsumablesReplaceRecord extends Component {
 
     onChange = () => {
         this.props.dispatch({
-            type: 'task/fetchuserlist',
+            type: 'task/GetConsumablesReplaceRecord',
             payload: {
                 TaskIds: this.props.match.params.TaskID,
                 TypeIDs: this.props.match.params.TypeID,

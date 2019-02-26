@@ -11,94 +11,111 @@ import {
 import { connect } from 'dva';
 import moment from 'moment';
 import RangePicker_ from '../../components/PointDetail/RangePicker_';
-import styles from './BdHistoryInfoHistoryRecords.less';
+import styles from './StopCemsHistoryListContent.less';
 import { routerRedux } from 'dva/router';
 
-@connect(({ task, loading }) => ({
-    loading: loading.effects['task/GetBdHistoryInfoList'],
-    BdHistoryInfoList: task.List,
-    BdHistoryInfoListCount: task.total,
-    pageIndex: task.pageIndex,
-    pageSize: task.pageSize,
+@connect(({ maintenancelist, loading }) => ({
+    loading: loading.effects['maintenancelist/GetStopCemsHistoryList'],
+    StopCemsHistoryList: maintenancelist.StopCemsHistoryList,
+    HistoryStopCemsListHistoryRecordsCount: maintenancelist.total,
+    pageIndex: maintenancelist.pageIndex,
+    pageSize: maintenancelist.pageSize,
+    beginTime:maintenancelist.beginTime,    //开始时间
+    endTime:maintenancelist.endTime,      //结束时间
+    DGIMN:maintenancelist.DGIMN
 }))
 /*
-页面：校验测试历史记录
+页面：停机历史记录
 */
-export default class BdHistoryInfoHistoryRecords extends Component {
+class StopCemsHistoryListContent extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            rangeDate: [moment(moment(new Date()).subtract(3, 'month').format('YYYY-MM-DD 00:00:00')), moment(moment(new Date()).format('YYYY-MM-DD 23:59:59'))], // 最近七天
-            BeginTime: moment().subtract(3, 'month').format('YYYY-MM-DD 00:00:00'),
-            EndTime: moment().format('YYYY-MM-DD 23:59:59'),
-            DGIMN: this.props.match.params.pointcode,
-            typeID: this.props.match.params.TypeID,
+            rangeDate: [moment(moment(new Date()).subtract(3, 'month').format('YYYY-MM-DD 00:00:00')), moment(moment(new Date()).format('YYYY-MM-DD 23:59:59'))], // 最近3月
         };
     }
     componentDidMount() {
-        this.GetHistoryRecord(this.props.pageIndex, this.props.pageSize, this.state.DGIMN, this.state.typeID, this.state.BeginTime, this.state.EndTime);
+        const condition={
+            pageIndex: 1,
+            pageSize: 10,
+            beginTime:moment().subtract(3, 'month').format('YYYY-MM-DD 00:00:00'), //运维大事记开始时间
+            endTime:moment().format('YYYY-MM-DD 23:59:59'), //运维大事记结束时间
+            DGIMN: this.props.pointcode
+        };
+        this.ChangeModelState(condition);
+        this.GetHistoryRecord();
     }
 
-    GetHistoryRecord = (pageIndex, pageSize, DGIMN, typeID, BeginTime, EndTime) => {
+    GetHistoryRecord = () => {
         this.props.dispatch({
-            type: 'task/GetBdHistoryInfoList',
+            type: 'maintenancelist/GetStopCemsHistoryList',
             payload: {
-                pageIndex: pageIndex,
-                pageSize: pageSize,
-                TypeID: typeID,
-                DGIMN: DGIMN,
-                BeginTime: moment(BeginTime).format('YYYY-MM-DD 00:00:00'),
-                EndTime: moment(EndTime).format('YYYY-MM-DD 23:59:59'),
             }
         });
     };
 
     _handleDateChange = (date, dateString) => {
+        const condition={
+            beginTime: dateString[0],
+            endTime: dateString[1],
+            pageIndex:1
+        }
+        this.ChangeModelState(condition);
         this.setState(
             {
                 rangeDate: date,
-                BeginTime: dateString[0],
-                EndTime: dateString[1]
             }
         );
-        this.GetHistoryRecord(this.props.pageIndex, this.props.pageSize, this.state.DGIMN, this.state.typeID, dateString[0], dateString[1]);
+        this.GetHistoryRecord();
     };
 
     onShowSizeChange = (pageIndex, pageSize) => {
-        this.GetHistoryRecord(pageIndex, pageSize, this.state.DGIMN, this.state.typeID, this.state.BeginTime, this.state.EndTime);
+        const condition={
+            pageIndex,
+            pageSize
+        }
+        this.ChangeModelState(condition);
+        this.GetHistoryRecord();
     }
 
     onChange = (pageIndex, pageSize) => {
-        this.GetHistoryRecord(pageIndex, pageSize, this.state.DGIMN, this.state.typeID, this.state.BeginTime, this.state.EndTime);
+        const condition={
+            pageIndex,
+            pageSize
+        }
+        this.ChangeModelState(condition);
+        this.GetHistoryRecord();
     }
 
     seeDetail = (record) => {
-        this.props.dispatch(routerRedux.push(`/PatrolForm/BdTestRecord/${this.state.DGIMN}/${this.props.match.params.viewtype}/qcontrollist/BdHistoryInfoHistoryRecords/${record.TaskID}`));
+        this.props.dispatch(routerRedux.push(`/PatrolForm/StopCemsRecord/${this.props.DGIMN}/${this.props.viewtype}/operationlist/StopCemsHistoryList/${record.TaskID}`));
+    }
+
+    ChangeModelState=(condition)=>{
+        this.props.dispatch({
+            type: 'maintenancelist/updateState',
+            payload: {...condition}
+        });
     }
 
     render() {
-        const dataSource = this.props.BdHistoryInfoList === null ? null : this.props.BdHistoryInfoList;
+        const dataSource = this.props.StopCemsHistoryList === null ? [] : this.props.StopCemsHistoryList;
         const columns = [{
-            title: '操作人',
+            title: '校准人',
             width: '20%',
             dataIndex: 'CreateUserID',
             key: 'CreateUserID'
         }, {
-            title: '评价结果',
-            width: '49%',
-            dataIndex: 'DealingSituations',
-            key: 'DealingSituations',
+            title: '停机时长(小时)',
+            width: '45%',
+            dataIndex: 'StopHour',
+            key: 'StopHour',
             render: (text, record) => {
+                var resu = [];
                 if (text !== undefined) {
-                    var content = text.split(',');
-                    var resu = [];
-                    content.map((item, key) => {
-                        item = item.replace('(', '  ');
-                        item = item.replace(')', '');
-                        resu.push(
-                            <Tag key={key} style={{ marginBottom: 1.5, marginTop: 1.5 }} color="#108ee9">{item}</Tag>
-                        );
-                    });
+                    resu.push(
+                        <Tag key={text} style={{ marginBottom: 1.5, marginTop: 1.5 }} color="#108ee9">{text}</Tag>
+                    );
                 }
                 return resu;
             }
@@ -119,7 +136,7 @@ export default class BdHistoryInfoHistoryRecords extends Component {
                 } > 详细 </a>;
             }
         }];
-        if (this.props.isloading) {
+        if (this.props.loading) {
             return (<Spin
                 style={{
                     width: '100%',
@@ -137,8 +154,8 @@ export default class BdHistoryInfoHistoryRecords extends Component {
                     <div className={styles.conditionDiv}>
                         <Row gutter={8}>
                             <Col span={3} >
-                                记录时间：
-                                </Col>
+                                <label className={styles.conditionLabel}>记录时间：</label>
+                            </Col>
                             <Col span={21} >
                                 <RangePicker_ style={{ width: 350 }} onChange={this._handleDateChange} format={'YYYY-MM-DD'} dateValue={this.state.rangeDate} />
                             </Col>
@@ -148,7 +165,7 @@ export default class BdHistoryInfoHistoryRecords extends Component {
                     <Table
                         rowKey={(record, index) => `complete${index}`}
                         size="middle"
-                        scroll={{ y: 'calc(100vh - 465px)' }}
+                        scroll={{ y: this.props.height }}
                         loading={this.props.loading}
                         className={styles.dataTable}
                         columns={columns}
@@ -166,7 +183,7 @@ export default class BdHistoryInfoHistoryRecords extends Component {
                         pagination={{
                             showSizeChanger: true,
                             showQuickJumper: true,
-                            'total': this.props.BdHistoryInfoListCount,
+                            'total': this.props.HistoryStopCemsListHistoryRecordsCount,
                             'pageSize': this.props.pageSize,
                             'current': this.props.pageIndex,
                             onChange: this.onChange,
@@ -179,3 +196,4 @@ export default class BdHistoryInfoHistoryRecords extends Component {
         );
     }
 }
+export default StopCemsHistoryListContent;

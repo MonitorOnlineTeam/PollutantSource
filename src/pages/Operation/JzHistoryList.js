@@ -1,18 +1,19 @@
-
 import React, { Component } from 'react';
+import styles from './index.less';
 import {
+    Button,
+    Input,
     Card,
     Row,
     Col,
     Table,
     Form,
-    Spin,
-    Tag
+    Select, Modal, message, Tag, Radio, Checkbox,
+    Spin
 } from 'antd';
 import { connect } from 'dva';
 import moment from 'moment';
 import RangePicker_ from '../../components/PointDetail/RangePicker_';
-import styles from './index.less';
 import { routerRedux } from 'dva/router';
 import SearchInput from '../../components/OverView/SearchInput';
 import TreeStatus from '../../components/OverView/TreeStatus';
@@ -20,32 +21,31 @@ import TreeCard from '../../components/OverView/TreeCard';
 import TreeCardContent from '../../components/OverView/TreeCardContent';
 import MonitorContent from '../../components/MonitorContent/index';
 
+const pageIndex = 1;
+const pageSize = 10;
 @connect(({ task, overview, loading }) => ({
-    loading: loading.effects['task/GetHistoryInspectionHistoryRecords'],
-    HistoryInspectionHistoryRecordList: task.HistoryInspectionHistoryRecordList,
-    HistoryInspectionHistoryRecordListCount: task.total,
-    pageIndex: task.pageIndex,
-    pageSize: task.pageSize,
+    loading: loading.effects['task/GetJzHistoryRecord'],
+    JzHistoryRecord: task.JzHistoryRecord,
+    RecordCount: task.RecordCount,
     datalist: overview.data,
     pollutantTypeloading: loading.effects['overview/getPollutantTypeList'],
     treedataloading: loading.effects['overview/querydatalist'],
     pollutantTypelist: overview.pollutantTypelist,
     DGIMN: task.DGIMN,
 }))
-/*
-页面：CEMS日常巡检记录表(历史记录)
-*/
-export default class InspectionHistoryRecords extends Component {
+export default class JzHistoryRecords extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            rangeDate: [moment(moment(new Date()).subtract(3, 'month').format('YYYY-MM-DD 00:00:00')), moment(moment(new Date()).format('YYYY-MM-DD 23:59:59'))], // 最近七天
+            rangeDate: [moment(moment(new Date()).subtract(3, 'month').format('YYYY-MM-DD 00:00:00')), moment(moment(new Date()).format('YYYY-MM-DD 23:59:59'))],
+            pageIndex: pageIndex,
+            pageSize: pageSize,
             BeginTime: moment().subtract(3, 'month').format('YYYY-MM-DD 00:00:00'),
             EndTime: moment().format('YYYY-MM-DD 23:59:59'),
             pollutantTypeCode: "2",
-            value: [],
         };
     }
+
     componentDidMount() {
         const { dispatch } = this.props;
         var getDGIMN = localStorage.getItem('DGIMN')
@@ -57,7 +57,7 @@ export default class InspectionHistoryRecords extends Component {
             payload: {
                 map: true,
                 pollutantTypes: this.state.pollutantTypeCode,
-                InspectionHistoryRecords: true,
+                JzHistoryRecords: true,
                 pageIndex: this.props.pageIndex,
                 pageSize: this.props.pageSize,
                 BeginTime: this.state.rangeDate[0].format('YYYY-MM-DD 00:00:00'),
@@ -68,13 +68,13 @@ export default class InspectionHistoryRecords extends Component {
 
     }
 
-    GetHistoryRecord = (pageIndex, pageSize, DGIMN, BeginTime, EndTime) => {
+    GetHistoryRecord = (pageIndex, pageSize, dgimn, BeginTime, EndTime) => {
         this.props.dispatch({
-            type: 'task/GetHistoryInspectionHistoryRecords',
+            type: 'task/GetJzHistoryRecord',
             payload: {
                 pageIndex: pageIndex,
                 pageSize: pageSize,
-                DGIMN: DGIMN,
+                DGIMN: dgimn,
                 BeginTime: moment(BeginTime).format('YYYY-MM-DD 00:00:00'),
                 EndTime: moment(EndTime).format('YYYY-MM-DD 23:59:59'),
             }
@@ -89,7 +89,7 @@ export default class InspectionHistoryRecords extends Component {
                 EndTime: dateString[1]
             }
         );
-        this.GetHistoryRecord(this.props.pageIndex, this.props.pageSize, this.props.DGIMN, dateString[0], dateString[1]);
+        this.GetHistoryRecord(pageIndex, pageSize, this.props.DGIMN, dateString[0], dateString[1]);
     };
 
     onShowSizeChange = (pageIndex, pageSize) => {
@@ -100,25 +100,9 @@ export default class InspectionHistoryRecords extends Component {
         this.GetHistoryRecord(pageIndex, pageSize, this.props.DGIMN, this.state.BeginTime, this.state.EndTime);
     }
 
-    seeDetail = (record) => {
+    seeDetail = (Record) => {
         localStorage.setItem('DGIMN', this.props.DGIMN);
-        this.props.dispatch({
-            type: 'task/GetPatrolTypeIdbyTaskId',
-            payload: {
-                TaskID: record.TaskID,
-                callback: (typeId) => {
-                    if (typeId === 5) {
-                        this.props.dispatch(routerRedux.push(`/PatrolForm/completeextraction/${this.props.DGIMN}/menu/intelligentOperation/wqcqfinspectionhistoryrecords/${record.TaskID}`));
-                    }
-                    else if (typeId === 6) {
-                        this.props.dispatch(routerRedux.push(`/PatrolForm/dilutionsampling/${this.props.DGIMN}/menu/intelligentOperation/xscyfinspectionhistoryrecords/${record.TaskID}`));
-                    }
-                    else {
-                        this.props.dispatch(routerRedux.push(`/PatrolForm/directmeasurement/${this.props.DGIMN}/menu/intelligentOperation/zzclfinspectionhistoryrecords/${record.TaskID}`));
-                    }
-                }
-            }
-        });
+        this.props.dispatch(routerRedux.push(`/PatrolForm/JzRecord/${this.props.DGIMN}/menu/qualityControlOperation/JzHistoryRecords/${Record.TaskID}`));
     }
     //查询
     onSerach = (value) => {
@@ -150,7 +134,7 @@ export default class InspectionHistoryRecords extends Component {
                 map: true,
                 pollutantTypes: pollutantTypeCode,
                 pointName: searchName,
-                InspectionHistoryRecords: true,
+                JzHistoryRecords: true,
                 pageIndex: this.props.pageIndex,
                 pageSize: this.props.pageSize,
                 BeginTime: this.state.rangeDate[0].format('YYYY-MM-DD 00:00:00'),
@@ -164,7 +148,7 @@ export default class InspectionHistoryRecords extends Component {
                         });
                         if (existdata == undefined) {
                             this.props.dispatch({
-                                type: 'task/GetHistoryInspectionHistoryRecords',
+                                type: 'task/GetJzHistoryRecord',
                                 payload: {
                                     pageIndex: this.props.pageIndex,
                                     pageSize: this.props.pageSize,
@@ -176,7 +160,7 @@ export default class InspectionHistoryRecords extends Component {
                         }
                         else {
                             this.props.dispatch({
-                                type: 'task/GetHistoryInspectionHistoryRecords',
+                                type: 'task/GetJzHistoryRecord',
                                 payload: {
                                     pageIndex: this.props.pageIndex,
                                     pageSize: this.props.pageSize,
@@ -198,11 +182,12 @@ export default class InspectionHistoryRecords extends Component {
     };
     render() {
         const { pollutantTypelist, treedataloading, datalist, pollutantTypeloading } = this.props;
+        const SCREEN_HEIGHT = document.querySelector('body').offsetHeight - 150;
         var dataSource = [];
         var spining = true;
         if (!this.props.treedataloading && !this.props.pollutantTypeloading && !this.props.loading) {
             spining = this.props.loading;
-            dataSource = this.props.HistoryInspectionHistoryRecordList === null ? null : this.props.HistoryInspectionHistoryRecordList;
+            dataSource = this.props.JzHistoryRecord;
         }
         const columns = [{
             title: '校准人',
@@ -210,23 +195,23 @@ export default class InspectionHistoryRecords extends Component {
             dataIndex: 'CreateUserID',
             key: 'CreateUserID'
         }, {
-            title: '异常情况处理',
+            title: '分析仪校准是否正常',
             width: '45%',
             dataIndex: 'Content',
             key: 'Content',
-            render: (text, record) => {
+            render: (text, Record) => {
                 if (text !== undefined) {
-                    var content = text.split(',');
+                    var content = text.split('),');
                     var resu = [];
                     content.map((item, key) => {
-                        item = item.replace('(', '  ');
-                        item = item.replace(')', '');
-                        if (item !== '') {
-                            resu.push(
-                                <Tag key={key} style={{ marginBottom: 1.5, marginTop: 1.5 }} color="#108ee9">{item}</Tag>
-                            );
+                        // item = item.replace('(',' - ');
+                        // item = item.replace(')','');
+                        if (key !== content.length - 1) {
+                            item = item + ')';
                         }
-
+                        resu.push(
+                            <Tag key={key} style={{ marginBottom: 1.5, marginTop: 1.5 }} color="#108ee9">{item}</Tag>
+                        );
                     });
                 }
                 return resu;
@@ -235,16 +220,15 @@ export default class InspectionHistoryRecords extends Component {
             title: '记录时间',
             dataIndex: 'CreateTime',
             width: '20%',
-            key: 'CreateTime',
-            sorter: (a, b) => Date.parse(a.CreateTime) - Date.parse(b.CreateTime),
+            key: 'CreateTime'
         }, {
             title: '详细',
             dataIndex: 'TaskID',
             width: '15%',
             key: 'TaskID',
-            render: (text, record) => {
+            render: (text, Record) => {
                 return <a onClick={
-                    () => this.seeDetail(record)
+                    () => this.seeDetail(Record)
                 } > 详细 </a>;
             }
         }];
@@ -264,83 +248,82 @@ export default class InspectionHistoryRecords extends Component {
             <MonitorContent {...this.props} breadCrumbList={
                 [
                     { Name: '首页', Url: '/' },
-                    { Name: '智能运维', Url: '' },
-                    { Name: '巡检记录', Url: '' }
+                    { Name: '智能质控', Url: '' },
+                    { Name: '零点量程偏移与校准记录表', Url: '' }
                 ]
             }>
-            <div className={styles.cardTitle}>
-                <Row>
-                    <Col>
-                        <div style={{
-                            width: 450,
-                            position: 'absolute',
-                            borderRadius: 10
-                        }}
-                        >
-                            <div style={{ marginLeft: 5, marginTop: 5 }}>
-                                <div><SearchInput
-                                    onSerach={this.onSerach}
-                                    style={{ marginTop: 5, marginBottom: 5, width: 400 }} searchName="排口名称" /></div>
-                                <div style={{ marginTop: 5 }}>
-                                    <TreeCardContent style={{ overflow: 'auto', width: 400, background: '#fff' }}
-                                        getHeight='calc(100vh - 200px)'
-                                        pollutantTypeloading={pollutantTypeloading}
-                                        getStatusImg={this.getStatusImg} isloading={treedataloading}
-                                        treeCilck={this.treeCilck} treedatalist={datalist} PollutantType={this.state.pollutantTypeCode} ifSelect={true} />
+                <div className={styles.cardTitle}>
+                    <Row>
+                        <Col>
+                            <div style={{
+                                width: 450,
+                                position: 'absolute',
+                                borderRadius: 10
+                            }}
+                            >
+                                <div style={{ marginLeft: 5, marginTop: 5 }}>
+                                    <div><SearchInput
+                                        onSerach={this.onSerach}
+                                        style={{ marginTop: 5, marginBottom: 5, width: 400 }} searchName="排口名称" /></div>
+                                    <div style={{ marginTop: 5 }}>
+                                        <TreeCardContent style={{ overflow: 'auto', width: 400, background: '#fff' }}
+                                            getHeight='calc(100vh - 200px)'
+                                            pollutantTypeloading={pollutantTypeloading}
+                                            getStatusImg={this.getStatusImg} isloading={treedataloading}
+                                            treeCilck={this.treeCilck} treedatalist={datalist} PollutantType={this.state.pollutantTypeCode} ifSelect={true} />
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </Col>
-                    <Col style={{ width: document.body.clientWidth - 470, height: 'calc(100vh - 150px)', float: 'right' }}>
-                        <div style={{ marginRight: 10, marginTop: 10 }}>
-                            <Card bordered={false} style={{ height: 'calc(100vh - 150px)' }}>
-                                <div className={styles.conditionDiv}>
-                                    <Row gutter={8}>
-                                        <Col span={3} >
-                                            <label className={styles.conditionLabel}>记录时间：</label>
-                                        </Col>
-                                        <Col span={21} >
-                                            <RangePicker_ style={{ width: 350 }} onChange={this._handleDateChange} format={'YYYY-MM-DD'} dateValue={this.state.rangeDate} />
-                                        </Col>
-
-                                    </Row>
-                                </div>
-                                <Table
-                                    rowKey={(record, index) => `complete${index}`}
-                                    size="middle"
-                                    scroll={{ y: 'calc(100vh - 400px)' }}
-                                    loading={spining}
-                                    className={styles.dataTable}
-                                    columns={columns}
-                                    dataSource={dataSource}
-                                    rowClassName={
-                                        (record, index, indent) => {
-                                            if (index === 0) {
-                                                return;
-                                            }
-                                            if (index % 2 !== 0) {
-                                                return 'light';
+                        </Col>
+                        <Col style={{ width: document.body.clientWidth - 470, height: 'calc(100vh - 150px)', float: 'right' }}>
+                            <div style={{ marginRight: 10, marginTop: 10 }}>
+                                <Card bordered={false} style={{ height: 'calc(100vh - 150px)' }}>
+                                    <div className={styles.conditionDiv}>
+                                        <Row gutter={8}>
+                                            <Col span={3} >
+                                                <label className={styles.conditionLabel}>记录时间：</label>
+                                            </Col>
+                                            <Col span={21} >
+                                                <RangePicker_ style={{ width: 350 }} onChange={this._handleDateChange} format={'YYYY-MM-DD'} dateValue={this.state.rangeDate} />
+                                            </Col>
+                                        </Row>
+                                    </div>
+                                    <Table
+                                        rowKey={(record, index) => `complete${index}`}
+                                        size="middle"
+                                        scroll={{ y: 'calc(100vh - 400px)' }}
+                                        loading={spining}
+                                        className={styles.dataTable}
+                                        columns={columns}
+                                        dataSource={dataSource}
+                                        rowClassName={
+                                            (record, index, indent) => {
+                                                if (index === 0) {
+                                                    return;
+                                                }
+                                                if (index % 2 !== 0) {
+                                                    return 'light';
+                                                }
                                             }
                                         }
-                                    }
-                                    pagination={{
-                                        showSizeChanger: true,
-                                        showQuickJumper: true,
-                                        'total': this.props.HistoryInspectionHistoryRecordListCount,
-                                        'pageSize': this.props.pageSize,
-                                        'current': this.props.pageIndex,
-                                        onChange: this.onChange,
-                                        onShowSizeChange: this.onShowSizeChange,
-                                        pageSizeOptions: ['10', '20', '30', '40']
-                                    }}
-                                />
-                            </Card>
-                        </div>
-                    </Col>
-                </Row>
-            </div>
+                                        pagination={{
+                                            showSizeChanger: true,
+                                            showQuickJumper: true,
+                                            'total': this.props.RecordCount,
+                                            'pageSize': this.props.pageSize,
+                                            'current': this.props.pageIndex,
+                                            onChange: this.onChange,
+                                            onShowSizeChange: this.onShowSizeChange,
+                                            pageSizeOptions: ['10', '20', '30', '40']
+                                        }}
+                                    />
+                                </Card>
+                            </div>
+                        </Col>
+                    </Row>
+                </div>
             </MonitorContent>
+
         );
     }
 }
-

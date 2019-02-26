@@ -6,7 +6,7 @@ import MonitorContent from '../../components/MonitorContent/index';
 import { routerRedux } from 'dva/router';
 import { MapInteractionCSS } from 'react-map-interaction';
 @connect(({ task, loading }) => ({
-    isloading: loading.effects['task/GetStopCemsDetail'],
+    isloading: loading.effects['task/GetStopCemsRecord'],
     StopCems: task.StopCems
 }))
 export default class AppStopCemsInfo extends Component {
@@ -18,7 +18,7 @@ export default class AppStopCemsInfo extends Component {
 
     componentDidMount() {
         this.props.dispatch({
-            type: 'task/GetStopCemsDetail',
+            type: 'task/GetStopCemsRecord',
             payload: {
                 TaskID: this.props.match.params.TaskID,
                 TypeID: this.props.match.params.TypeID,

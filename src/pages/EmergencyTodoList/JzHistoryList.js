@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import styles from '../EmergencyTodoList/JzHistoryRecords.less';
+import styles from '../EmergencyTodoList/JzHistoryList.less';
 import {
     Button,
     Input,
@@ -18,12 +18,12 @@ import { routerRedux } from 'dva/router';
 
 const pageIndex = 1;
 const pageSize = 10;
-@connect(({ task, loading }) => ({
-    loading: loading.effects['task/GetJzHistoryRecord'],
-    JzHistoryRecord: task.JzHistoryRecord,
-    RecordCount: task.RecordCount
+@connect(({ maintenancelist, loading }) => ({
+    loading: loading.effects['maintenancelist/GetJzHistoryList'],
+    JzHistoryRecord: maintenancelist.JzHistoryList,
+    RecordCount: maintenancelist.total
 }))
-export default class JzHistoryRecords extends Component {
+export default class JzHistoryList extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -43,7 +43,7 @@ export default class JzHistoryRecords extends Component {
 
     GetHistoryRecord = (pageIndex, pageSize, dgimn, typeID, beginTime, endTime) => {
         this.props.dispatch({
-            type: 'task/GetJzHistoryRecord',
+            type: 'maintenancelist/GetJzHistoryList',
             payload: {
                 pageIndex: pageIndex,
                 pageSize: pageSize,
@@ -75,7 +75,7 @@ export default class JzHistoryRecords extends Component {
     }
 
     seeDetail = (Record) => {
-        this.props.dispatch(routerRedux.push(`/PatrolForm/JzRecordInfo/${this.state.DGIMN}/${this.props.match.params.viewtype}/qcontrollist/JzHistoryRecords/${Record.TaskID}`));
+        this.props.dispatch(routerRedux.push(`/PatrolForm/JzRecord/${this.state.DGIMN}/${this.props.match.params.viewtype}/qcontrollist/JzHistoryList/${Record.TaskID}`));
     }
 
     render() {

@@ -1,26 +1,26 @@
 import React, { Component } from 'react';
-import { Button, Icon, Spin, Card } from 'antd';
+import { Table, Button, Icon, Spin, Card } from 'antd';
 import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
-import styles from "./DirectMeasurement.less";
+import styles from "./DilutionSamplingRecord.less";
 import MonitorContent from '../../components/MonitorContent/index';
 
 @connect(({ task, loading }) => ({
-    isloading: loading.effects['task/GetPatrolRecordListPC'],
-    PatrolRecordListPC: task.PatrolRecordListPC
+    isloading: loading.effects['task/GetPatrolRecord'],
+    PatrolRecord: task.PatrolRecord
 }))
 
 /*
-页面：直接测量法CEMS日常巡检记录表
+页面：稀释采样法CEMS日常巡检记录表
 */
 
-class DirectMeasurement extends Component {
+class DilutionSamplingRecord extends Component {
     constructor(props) {
         super(props);
         this.state = {
             listUrl: this.props.match.params.viewtype,
             taskfrom: this.props.match.params.taskfrom,
-            taskID: this.props.match.params.ClfPatrolTaskIds,
+            taskID: this.props.match.params.CyfPatrolTaskIds,
             histroyrecordtype: this.props.match.params.histroyrecordtype,
             DGIMN: this.props.match.params.pointcode
         };
@@ -36,21 +36,21 @@ class DirectMeasurement extends Component {
 
     onChange = () => {
         this.props.dispatch({
-            type: 'task/GetPatrolRecordListPC',
+            type: 'task/GetPatrolRecord',
             payload: {
-                TaskIds: this.props.match.params.ClfPatrolTaskIds,
-                TypeIDs: this.props.match.params.ClfPatrolTypeIDs
+                TaskIds: this.props.match.params.CyfPatrolTaskIds,
+                TypeIDs: this.props.match.params.CyfPatrolTypeIDs
             },
         });
     }
 
     enterTaskDetail = () => {
         if (this.state.taskfrom === 'ywdsjlist') { //运维大事记
-            this.props.dispatch(routerRedux.push(`/TaskDetail/emergencydetailinfo/${this.state.listUrl}/${this.state.taskfrom}/${this.state.taskID}/${this.props.match.params.pointcode}`));
+            this.props.dispatch(routerRedux.push(`/TaskDetail/emergencydetailinfolayout/${this.state.listUrl}/${this.state.taskfrom}/${this.state.taskID}/${this.props.match.params.pointcode}`));
         } else if (this.state.taskfrom === 'qcontrollist') { //质控记录
-            this.props.dispatch(routerRedux.push(`/TaskDetail/emergencydetailinfo/${this.state.listUrl}/${this.state.taskfrom}-${this.state.histroyrecordtype}/${this.state.taskID}/${this.props.match.params.pointcode}`));
+            this.props.dispatch(routerRedux.push(`/TaskDetail/emergencydetailinfolayout/${this.state.listUrl}/${this.state.taskfrom}-${this.state.histroyrecordtype}/${this.state.taskID}/${this.props.match.params.pointcode}`));
         } else { //其他
-            this.props.dispatch(routerRedux.push(`/TaskDetail/emergencydetailinfo/${this.state.listUrl}/nop/${this.state.taskID}/${this.props.match.params.pointcode}`));
+            this.props.dispatch(routerRedux.push(`/TaskDetail/emergencydetailinfolayout/${this.state.listUrl}/nop/${this.state.taskID}/${this.props.match.params.pointcode}`));
         }
     }
 
@@ -212,7 +212,7 @@ class DirectMeasurement extends Component {
         }
         if (taskfrom === 'ywdsjlist') { //运维大事记
             rtnVal.push({ Name: '运维大事记', Url: `/pointdetail/${DGIMN}/${listUrl}/${taskfrom}` });
-            rtnVal.push({ Name: '任务详情', Url: `/TaskDetail/emergencydetailinfo/${listUrl}/${taskfrom}/${taskID}/${DGIMN}` });
+            rtnVal.push({ Name: '任务详情', Url: `/TaskDetail/emergencydetailinfolayout/${listUrl}/${taskfrom}/${taskID}/${DGIMN}` });
         } else if (taskfrom === 'qcontrollist') { //质控记录
             rtnVal.push({ Name: '质控记录', Url: `/pointdetail/${DGIMN}/${listUrl}/${taskfrom}/${histroyrecordtype}` });
         } else if (taskfrom === 'operationlist') { //运维记录
@@ -222,27 +222,29 @@ class DirectMeasurement extends Component {
         } else if (taskfrom === 'operationywdsjlist') { //运维大事记
             rtnVal.push({ Name: '智能运维', Url: `` });
             rtnVal.push({ Name: '运维大事记', Url: `/operation/ywdsjlist` });
-            rtnVal.push({ Name: '任务详情', Url: `/TaskDetail/emergencydetailinfo/undefined/operationywdsjlist/${taskID}/${DGIMN}` });
-        }else if (taskfrom === 'OperationCalendar') { //运维日历
+            rtnVal.push({ Name: '任务详情', Url: `/TaskDetail/emergencydetailinfolayout/undefined/operationywdsjlist/${taskID}/${DGIMN}` });
+        } else if (taskfrom === 'OperationCalendar') { //运维日历
             rtnVal.push({ Name: '智能运维', Url: `` });
             rtnVal.push({ Name: '运维日历', Url: `/operation/OperationCalendar` });
-            rtnVal.push({ Name: '任务详情', Url: `/TaskDetail/emergencydetailinfo/undefined/OperationCalendar/${taskID}/${DGIMN}` });
+            rtnVal.push({ Name: '任务详情', Url: `/TaskDetail/emergencydetailinfolayout/undefined/OperationCalendar/${taskID}/${DGIMN}` });
         } else { //其他
-            rtnVal.push({ Name: '任务详情', Url: `/TaskDetail/emergencydetailinfo/${listUrl}/nop/${taskID}/${DGIMN}` });
+            rtnVal.push({ Name: '任务详情', Url: `/TaskDetail/emergencydetailinfolayout/${listUrl}/nop/${taskID}/${DGIMN}` });
         }
         if (listUrl !== 'menu') {
             rtnVal.push({ Name: '日常巡检记录表', Url: '' });
         }
         if (listUrl === 'menu') {
-            rtnVal.push({ Name: '巡检记录表', Url: `/operation/InspectionHistoryRecords` });
+            rtnVal.push({ Name: '巡检记录', Url: `/operation/InspectionHistoryList` });
+            rtnVal.push({ Name: '巡检记录表', Url: `` });
         }
         return rtnVal;
     }
 
+
     render() {
         const SCREEN_HEIGHT = document.querySelector('body').offsetHeight - 250;
-        const DataLength = this.props.PatrolRecordListPC.length;
-        const Repair = DataLength === 0 ? null : this.props.PatrolRecordListPC[0];
+        const DataLength = this.props.PatrolRecord.length;
+        const Repair = DataLength === 0 ? null : this.props.PatrolRecord[0];
         let EnterpriseName = null;
         let PointPosition = null;
         let Record = null;
@@ -269,6 +271,18 @@ class DirectMeasurement extends Component {
             KlwCemsCode = DataLength === 0 ? null : Repair.Record[0].Content.KlwCemsCode;
             KlwCemsEquipmentManufacturer = DataLength === 0 ? null : Repair.Record[0].Content.KlwCemsEquipmentManufacturer;
         }
+        if (this.props.isloading) {
+            return (<Spin
+                style={{
+                    width: '100%',
+                    height: 'calc(100vh/2)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                }}
+                size="large"
+            />);
+        }
         return (
             <MonitorContent
                 {...this.props}
@@ -280,18 +294,18 @@ class DirectMeasurement extends Component {
                         <p>
                             <Button type="primary" ghost={true} style={{ float: "left", marginRight: 20 }} onClick={this.enterTaskDetail}>
                                 <Icon type="file-text" />任务单
-                             </Button>
+                            </Button>
                             <Button
                                 style={{ float: "right", marginRight: 30 }}
                                 onClick={() => {
                                     this.props.history.goBack(-1);
                                 }}
                             ><Icon type="left" />退回
-                             </Button>
+                            </Button>
                         </p>}
                 >
                     <div className={styles.FormDiv} style={{ height: SCREEN_HEIGHT }}>
-                        <div className={styles.FormName}>直接测量法CEMS日常巡检记录表</div>
+                        <div className={styles.FormName}>稀释采样法CEMS日常巡检记录表</div>
                         <table className={styles.FormTable}>
                             <tbody>
                                 <tr>
@@ -331,7 +345,7 @@ class DirectMeasurement extends Component {
                                 <tr>
                                     <td style={{ width: '18%', height: '50px', textAlign: 'center', fontSize: '14px' }}>
                                         异常情况处理
-                                     </td>
+                                    </td>
                                     <td colSpan="3" style={{ textAlign: 'center', fontSize: '14px' }}>
                                         {ExceptionHandling}
                                     </td>
@@ -356,4 +370,4 @@ class DirectMeasurement extends Component {
         );
     }
 }
-export default DirectMeasurement;
+export default DilutionSamplingRecord;

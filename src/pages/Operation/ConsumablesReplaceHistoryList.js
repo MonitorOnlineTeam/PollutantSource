@@ -1,32 +1,39 @@
 import React, { Component } from 'react';
-import { Form, Card, Row, Col, Icon, Spin, Button } from 'antd';
-import RangePicker_ from '../../components/PointDetail/RangePicker_';
+import {
+    Card,
+    Row,
+    Col,
+    Table,
+    Form,
+    Spin,
+    Tag
+} from 'antd';
 import { connect } from 'dva';
+import MonitorContent from '../../components/MonitorContent/index';
 import { routerRedux } from 'dva/router';
+import styles from './index.less';
 import SearchInput from '../../components/OverView/SearchInput';
 import TreeStatus from '../../components/OverView/TreeStatus';
 import TreeCard from '../../components/OverView/TreeCard';
 import TreeCardContent from '../../components/OverView/TreeCardContent';
-import MonitorContent from '../../components/MonitorContent/index';
-import Ywdsjlistss from './Ywdsjlist.less';
-import YwdsjlistContent from '../PointDetail/YwdsjlistContent';
-import moment from 'moment';
+import ConsumablesReplaceHistoryListContent from '../EmergencyTodoList/ConsumablesReplaceHistoryListContent';
 import { EnumPollutantTypeCode } from '../../utils/enum';
 
-@connect(({ tasklist, overview, loading }) => ({
+@connect(({ overview, loading }) => ({
     datalist: overview.data,
     pollutantTypeloading: loading.effects['overview/getPollutantTypeList'],
-    treedataloading: loading.effects['overview/querydatalist'],
-    pollutantTypelist: overview.pollutantTypelist
+    treedataloading: loading.effects['overview/querydatalist']
 }))
-export default class Ywdsjlist extends Component {
+/*
+页面：易耗品历史记录
+*/
+export default class ConsumablesReplaceHistoryList extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            pollutantTypeCode: EnumPollutantTypeCode.GAS,
+            pollutantTypeCode: EnumPollutantTypeCode.GAS
         };
     }
-
     componentDidMount() {
         const { dispatch } = this.props;
         var getDGIMN = localStorage.getItem('DGIMN')
@@ -37,10 +44,10 @@ export default class Ywdsjlist extends Component {
             type: 'overview/querydatalist',
             payload: {
                 map: true,
-                pollutantTypes: this.state.pollutantTypeCode,
-                DGIMN: getDGIMN
+                pollutantTypes: this.state.pollutantTypeCode
             }
         });
+
     }
 
     //查询
@@ -63,7 +70,7 @@ export default class Ywdsjlist extends Component {
     }
     //重新加载
     searchData = (pollutantTypeCode, searchName) => {
-        var getDGIMN = localStorage.getItem('DGIMN');
+        var getDGIMN = localStorage.getItem('DGIMN')
         if (getDGIMN === null) {
             getDGIMN = '[object Object]';
         }
@@ -73,7 +80,7 @@ export default class Ywdsjlist extends Component {
                 map: true,
                 pollutantTypes: pollutantTypeCode,
                 pointName: searchName,
-                RepairHistoryRecords: true,
+                CounterControlCommandHistoryRecords: true,
                 pageIndex: this.props.pageIndex,
                 pageSize: this.props.pageSize,
                 BeginTime: this.state.rangeDate[0].format('YYYY-MM-DD 00:00:00'),
@@ -81,37 +88,45 @@ export default class Ywdsjlist extends Component {
                 DGIMN: getDGIMN,
                 search: true,
                 callback: (data) => {
-                   
                 }
             },
         });
     }
-
-    treeCilck = (row, key) => {
+    treeCilck = (row) => {
         this.props.dispatch({
-            type: 'tasklist/updateState',
+            type: 'maintenancelist/updateState',
             payload: {DGIMN:row.DGIMN}
         });
         localStorage.setItem('DGIMN', row.DGIMN);
         this.props.dispatch({
-            type: 'tasklist/GetYwdsj',
+            type: 'maintenancelist/GetConsumablesReplaceHistoryList',
             payload: {
-                isLoadMoreOpt: false
             }
         });
+    
     };
-
     render() {
-        const { pollutantTypelist, treedataloading, datalist, pollutantTypeloading } = this.props;
+        if (this.props.treedataloading && this.props.pollutantTypeloading) {
+            return (<Spin
+                style={{
+                    width: '100%',
+                    height: 'calc(100vh/2)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                }}
+                size="large"
+            />);
+        }
         return (
             <MonitorContent {...this.props} breadCrumbList={
                 [
                     { Name: '首页', Url: '/' },
                     { Name: '智能运维', Url: '' },
-                    { Name: '运维大事记', Url: '' }
+                    { Name: '易耗品更换记录', Url: '' }
                 ]
             }>
-                <div className={Ywdsjlistss.cardTitle}>
+                <div className={styles.cardTitle}>
                     <Row>
                         <Col>
                             <div style={{
@@ -127,15 +142,15 @@ export default class Ywdsjlist extends Component {
                                     <div style={{ marginTop: 5 }}>
                                         <TreeCardContent style={{ overflow: 'auto', width: 400, background: '#fff' }}
                                             getHeight='calc(100vh - 200px)'
-                                            pollutantTypeloading={pollutantTypeloading}
-                                            getStatusImg={this.getStatusImg} isloading={treedataloading}
-                                            treeCilck={this.treeCilck} treedatalist={datalist} PollutantType={this.state.pollutantTypeCode} ifSelect={true} />
+                                            pollutantTypeloading={this.props.pollutantTypeloading}
+                                            getStatusImg={this.getStatusImg} isloading={this.props.treedataloading}
+                                            treeCilck={this.treeCilck} treedatalist={this.props.datalist} PollutantType={this.state.pollutantTypeCode} ifSelect={true} />
                                     </div>
                                 </div>
                             </div>
                         </Col>
-                        <Col style={{ width: document.body.clientWidth - 470, height: 'calc(100vh - 150px)', float: 'right',marginTop:'10px' }}>
-                            <YwdsjlistContent  pointcode={localStorage.getItem('DGIMN')} taskfrom="operationywdsjlist" viewtype="no" height="calc(100vh - 248px)"/>
+                        <Col style={{ width: document.body.clientWidth - 470, height: 'calc(100vh - 150px)', float: 'right' }}>
+                        <ConsumablesReplaceHistoryListContent  pointcode={localStorage.getItem('DGIMN')} viewtype="no" height="calc(100vh - 360px)"/>
                         </Col>
                     </Row>
                 </div>

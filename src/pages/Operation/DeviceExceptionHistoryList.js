@@ -5,8 +5,7 @@ import {
     Col,
     Table,
     Form,
-    Spin,
-    Tag
+    Spin
 } from 'antd';
 import { connect } from 'dva';
 import moment from 'moment';
@@ -17,13 +16,12 @@ import SearchInput from '../../components/OverView/SearchInput';
 import TreeStatus from '../../components/OverView/TreeStatus';
 import TreeCard from '../../components/OverView/TreeCard';
 import TreeCardContent from '../../components/OverView/TreeCardContent';
-import { DEFAULT_ECDH_CURVE } from 'tls';
 import MonitorContent from '../../components/MonitorContent/index';
 
 @connect(({ task, overview, loading }) => ({
-    loading: loading.effects['task/GetHistoryStandardGasRepalceRecordList'],
-    HistoryStandardGasRepalceRecordList: task.HistoryStandardGasRepalceRecordList,
-    HistoryStandardGasRepalceRecordListCount: task.total,
+    loading: loading.effects['task/GetDeviceExceptionList'],
+    HistoryDeviceExceptionList: task.List,
+    HistoryDeviceExceptionListCount: task.total,
     pageIndex: task.pageIndex,
     pageSize: task.pageSize,
     datalist: overview.data,
@@ -33,9 +31,9 @@ import MonitorContent from '../../components/MonitorContent/index';
     DGIMN: task.DGIMN,
 }))
 /*
-页面：标准气体历史记录
+页面：异常历史记录
 */
-export default class StandardGasHistoryRecords extends Component {
+export default class DeviceExceptionListHistoryRecords extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -56,7 +54,7 @@ export default class StandardGasHistoryRecords extends Component {
             payload: {
                 map: true,
                 pollutantTypes: this.state.pollutantTypeCode,
-                StandardGasHistoryRecords: true,
+                DeviceExceptionListHistoryRecords: true,
                 pageIndex: this.props.pageIndex,
                 pageSize: this.props.pageSize,
                 BeginTime: this.state.rangeDate[0].format('YYYY-MM-DD 00:00:00'),
@@ -65,10 +63,12 @@ export default class StandardGasHistoryRecords extends Component {
             }
         });
 
+
     }
+
     GetHistoryRecord = (pageIndex, pageSize, DGIMN, BeginTime, EndTime) => {
         this.props.dispatch({
-            type: 'task/GetHistoryStandardGasRepalceRecordList',
+            type: 'task/GetDeviceExceptionList',
             payload: {
                 pageIndex: pageIndex,
                 pageSize: pageSize,
@@ -100,7 +100,7 @@ export default class StandardGasHistoryRecords extends Component {
 
     seeDetail = (record) => {
         localStorage.setItem('DGIMN', this.props.DGIMN);
-        this.props.dispatch(routerRedux.push(`/PatrolForm/StandardGasRepalceRecord/${this.props.DGIMN}/menu/intelligentOperation/StandardGasHistoryRecords/${record.TaskID}`));
+        this.props.dispatch(routerRedux.push(`/PatrolForm/DeviceExceptionRecord/${this.props.DGIMN}/menu/qualityControlOperation/DeviceExceptionListHistoryRecords/${record.TaskID}`));
     }
     //查询
     onSerach = (value) => {
@@ -132,7 +132,7 @@ export default class StandardGasHistoryRecords extends Component {
                 map: true,
                 pollutantTypes: pollutantTypeCode,
                 pointName: searchName,
-                StandardGasHistoryRecords: true,
+                DeviceExceptionListHistoryRecords: true,
                 pageIndex: this.props.pageIndex,
                 pageSize: this.props.pageSize,
                 BeginTime: this.state.rangeDate[0].format('YYYY-MM-DD 00:00:00'),
@@ -146,7 +146,7 @@ export default class StandardGasHistoryRecords extends Component {
                         });
                         if (existdata == undefined) {
                             this.props.dispatch({
-                                type: 'task/GetHistoryStandardGasRepalceRecordList',
+                                type: 'task/GetDeviceExceptionList',
                                 payload: {
                                     pageIndex: this.props.pageIndex,
                                     pageSize: this.props.pageSize,
@@ -158,7 +158,7 @@ export default class StandardGasHistoryRecords extends Component {
                         }
                         else {
                             this.props.dispatch({
-                                type: 'task/GetHistoryStandardGasRepalceRecordList',
+                                type: 'task/GetDeviceExceptionList',
                                 payload: {
                                     pageIndex: this.props.pageIndex,
                                     pageSize: this.props.pageSize,
@@ -184,37 +184,28 @@ export default class StandardGasHistoryRecords extends Component {
         var spining = true;
         if (!this.props.treedataloading && !this.props.pollutantTypeloading && !this.props.loading) {
             spining = this.props.loading;
-            dataSource = this.props.HistoryStandardGasRepalceRecordList === null ? null : this.props.HistoryStandardGasRepalceRecordList;
+            dataSource = this.props.HistoryDeviceExceptionList === null ? null : this.props.HistoryDeviceExceptionList;
         }
         const columns = [{
             title: '校准人',
-            width: '20%',
+            width: '13%',
             dataIndex: 'CreateUserID',
             key: 'CreateUserID'
         }, {
-            title: '标准物质名称（名称-有效期）',
-            width: '45%',
-            dataIndex: 'Content',
-            key: 'Content',
-            render: (text, record) => {
-                if (text !== undefined) {
-                    var content = text.split(',');
-                    var resu = [];
-                    content.map((item, key) => {
-                        if (text.indexOf('()') === '-1') {
-                            item = item.replace('(', ' - ');
-                            item = item.replace(')', '');
-                        }
-                        else {
-                            item = item.replace('()', '');
-                        }
-                        resu.push(
-                            <Tag key={key} style={{ marginBottom: 1.5, marginTop: 1.5 }} color="#108ee9">{item}</Tag>
-                        );
-                    });
-                }
-                return resu;
-            }
+            title: '异常状况',
+            width: '19%',
+            dataIndex: 'ExceptionStatus',
+            key: 'ExceptionStatus'
+        }, {
+            title: '异常原因',
+            width: '19%',
+            dataIndex: 'ExceptionReason',
+            key: 'ExceptionReason'
+        }, {
+            title: '处理情况',
+            width: '19%',
+            dataIndex: 'DealingSituations',
+            key: 'DealingSituations'
         }, {
             title: '记录时间',
             dataIndex: 'CreateTime',
@@ -224,7 +215,7 @@ export default class StandardGasHistoryRecords extends Component {
         }, {
             title: '详细',
             dataIndex: 'TaskID',
-            width: '15%',
+            width: '10%',
             key: 'TaskID',
             render: (text, record) => {
                 return <a onClick={
@@ -232,12 +223,24 @@ export default class StandardGasHistoryRecords extends Component {
                 } > 详细 </a>;
             }
         }];
+        if (this.props.isloading) {
+            return (<Spin
+                style={{
+                    width: '100%',
+                    height: 'calc(100vh/2)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                }}
+                size="large"
+            />);
+        }
         return (
             <MonitorContent {...this.props} breadCrumbList={
                 [
                     { Name: '首页', Url: '/' },
-                    { Name: '智能运维', Url: '' },
-                    { Name: '标气更换记录', Url: '' }
+                    { Name: '智能质控', Url: '' },
+                    { Name: '设备数据异常记录表', Url: '' }
                 ]
             }>
                 <div className={styles.cardTitle}>
@@ -269,8 +272,8 @@ export default class StandardGasHistoryRecords extends Component {
                                     <div className={styles.conditionDiv}>
                                         <Row gutter={8}>
                                             <Col span={3} >
-                                                <label className={styles.conditionLabel}>记录时间：</label>
-                                            </Col>
+                                                记录时间：
+                                                    </Col>
                                             <Col span={21} >
                                                 <RangePicker_ style={{ width: 350 }} onChange={this._handleDateChange} format={'YYYY-MM-DD'} dateValue={this.state.rangeDate} />
                                             </Col>
@@ -297,7 +300,7 @@ export default class StandardGasHistoryRecords extends Component {
                                         pagination={{
                                             showSizeChanger: true,
                                             showQuickJumper: true,
-                                            'total': this.props.HistoryStandardGasRepalceRecordListCount,
+                                            'total': this.props.HistoryDeviceExceptionListCount,
                                             'pageSize': this.props.pageSize,
                                             'current': this.props.pageIndex,
                                             onChange: this.onChange,
@@ -311,6 +314,8 @@ export default class StandardGasHistoryRecords extends Component {
                     </Row>
                 </div>
             </MonitorContent>
+
+
         );
     }
 }

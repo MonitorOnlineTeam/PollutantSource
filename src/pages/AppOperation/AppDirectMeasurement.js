@@ -6,7 +6,7 @@ import { MapInteractionCSS } from 'react-map-interaction';
 import styles from "./ProductionRecord.less";
 
 @connect(({ task, loading }) => ({
-    isloading: loading.effects['task/GetPatrolRecordListPC'],
+    isloading: loading.effects['task/GetPatrolRecord'],
     PatrolRecordListPC: task.PatrolRecordListPC
 }))
 
@@ -31,7 +31,7 @@ class AppDirectMeasurement extends Component {
 
     onChange = () => {
         this.props.dispatch({
-            type: 'task/GetPatrolRecordListPC',
+            type: 'task/GetPatrolRecord',
             payload: {
                 TaskIds: this.props.match.params.TaskID,
                 TypeIDs: this.props.match.params.TypeID,

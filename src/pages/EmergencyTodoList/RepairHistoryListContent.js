@@ -10,97 +10,124 @@ import {
 } from 'antd';
 import { connect } from 'dva';
 import moment from 'moment';
-import RangePicker_ from '../../components/PointDetail/RangePicker_';
 import { routerRedux } from 'dva/router';
-import styles from './CounterControlCommandHistoryRecords.less';
+import RangePicker_ from '../../components/PointDetail/RangePicker_';
+import styles from './RepairHistoryListContent.less';
 
-@connect(({ task, loading }) => ({
-    loading: loading.effects['task/GetHistoryConsumablesReplaceRecord'],
-    HistoryConsumablesReplaceRecord: task.HistoryConsumablesReplaceRecordList,
-    HistoryConsumablesReplaceRecordCount: task.total,
-    pageIndex: task.pageIndex,
-    pageSize: task.pageSize,
+@connect(({ maintenancelist, loading }) => ({
+    loading: loading.effects['maintenancelist/GetRepairHistoryList'],
+    HistoryRepairHistoryRecods: maintenancelist.RepairHistoryList,
+    HistoryRepairHistoryRecodsCount: maintenancelist.total,
+    pageIndex: maintenancelist.pageIndex,
+    pageSize: maintenancelist.pageSize,
+    beginTime:maintenancelist.beginTime, //开始时间
+    endTime:maintenancelist.endTime, //结束时间
+    DGIMN:maintenancelist.DGIMN
 }))
 /*
-页面：易耗品历史记录
+页面：维修历史记录
 */
-export default class CounterControlCommandHistoryRecords extends Component {
+class RepairHistoryListContent extends Component {
     constructor(props) {
         super(props);
         this.state = {
             rangeDate: [moment(moment(new Date()).subtract(3, 'month').format('YYYY-MM-DD 00:00:00')), moment(moment(new Date()).format('YYYY-MM-DD 23:59:59'))], // 最近七天
-            BeginTime: moment().subtract(3, 'month').format('YYYY-MM-DD 00:00:00'),
-            EndTime: moment().format('YYYY-MM-DD 23:59:59'),
-            DGIMN: this.props.match.params.pointcode,
-            typeID: this.props.match.params.TypeID,
-            loading: true,
         };
     }
+
     componentDidMount() {
-        this.GetHistoryRecord(this.props.pageIndex, this.props.pageSize, this.state.DGIMN, this.state.typeID, this.state.BeginTime, this.state.EndTime);
+        const condition={
+            pageIndex: 1,
+            pageSize: 10,
+            beginTime:moment().subtract(3, 'month').format('YYYY-MM-DD 00:00:00'), //运维大事记开始时间
+            endTime:moment().format('YYYY-MM-DD 23:59:59'), //运维大事记结束时间
+            DGIMN: this.props.pointcode
+        };
+        this.ChangeModelState(condition);
+        this.GetHistoryRecord();
     }
-    GetHistoryRecord = (pageIndex, pageSize, DGIMN, typeID, BeginTime, EndTime) => {
+
+    GetHistoryRecord = () => {
         this.props.dispatch({
-            type: 'task/GetHistoryConsumablesReplaceRecord',
+            type: 'maintenancelist/GetRepairHistoryList',
             payload: {
-                pageIndex: pageIndex,
-                pageSize: pageSize,
-                TypeID: typeID,
-                DGIMN: DGIMN,
-                BeginTime: moment(BeginTime).format('YYYY-MM-DD 00:00:00'),
-                EndTime: moment(EndTime).format('YYYY-MM-DD 23:59:59'),
             }
         });
     };
 
     _handleDateChange = (date, dateString) => {
+        const condition={
+            beginTime: dateString[0],
+            endTime: dateString[1],
+            pageIndex:1
+        };
+        this.ChangeModelState(condition);
         this.setState(
             {
-                rangeDate: date,
-                BeginTime: dateString[0],
-                EndTime: dateString[1]
+                rangeDate: date
             }
         );
-        this.GetHistoryRecord(this.props.pageIndex, this.props.pageSize, this.state.DGIMN, this.state.typeID, dateString[0], dateString[1]);
+        this.GetHistoryRecord();
     };
 
     onShowSizeChange = (pageIndex, pageSize) => {
-        this.GetHistoryRecord(pageIndex, pageSize, this.state.DGIMN, this.state.typeID, this.state.BeginTime, this.state.EndTime);
+        const condition={
+            pageIndex,
+            pageSize
+        };
+        this.ChangeModelState(condition);
+        this.GetHistoryRecord();
     }
 
     onChange = (pageIndex, pageSize) => {
-        this.GetHistoryRecord(pageIndex, pageSize, this.state.DGIMN, this.state.typeID, this.state.BeginTime, this.state.EndTime);
+        const condition={
+            pageIndex,
+            pageSize
+        };
+        this.ChangeModelState(condition);
+        this.GetHistoryRecord();
     }
 
     seeDetail = (record) => {
-        this.props.dispatch(routerRedux.push(`/PatrolForm/ConsumablesReplaceRecord/${this.state.DGIMN}/${this.props.match.params.viewtype}/operationlist/CounterControlCommandHistoryRecords/${record.TaskID}`));
+        debugger;
+        if(this.props.operation===undefined){
+            this.props.dispatch(routerRedux.push(`/PatrolForm/RepairRecord/${this.props.DGIMN}/${this.props.viewtype}/operationlist/RepairHistoryList/${record.TaskID}`));
+        }else{
+            this.props.dispatch(routerRedux.push(`/PatrolForm/RepairRecord/${this.props.DGIMN}/${this.props.operation}/RepairHistoryList/${record.TaskID}`));
+        }
+        
+    }
+
+    ChangeModelState=(condition)=>{
+        this.props.dispatch({
+            type: 'maintenancelist/updateState',
+            payload: {...condition}
+        });
     }
 
     render() {
-        const dataSource = this.props.HistoryConsumablesReplaceRecord === null ? null : this.props.HistoryConsumablesReplaceRecord;
+        const dataSource = this.props.HistoryRepairHistoryRecods === null ? null : this.props.HistoryRepairHistoryRecods;
         const columns = [{
             title: '校准人',
             width: '20%',
             dataIndex: 'CreateUserID',
-            key: 'CreateUserID',
-            align: 'center'
+            key: 'CreateUserID'
         }, {
-            title: '易耗品（数量）',
+            title: '维修项目',
             width: '45%',
-            dataIndex: 'Content',
-            key: 'Content',
+            dataIndex: 'RecordItem',
+            key: 'RecordItem',
             render: (text, record) => {
                 if (text !== undefined) {
-                    var content = text.split(',');
+                    let content = text.split(',');
                     var resu = [];
                     content.map((item, key) => {
-                        item = item.replace('(', '  ');
-                        item = item.replace(')', '');
                         resu.push(
                             <Tag key={key} style={{ marginBottom: 1.5, marginTop: 1.5 }} color="#108ee9">{item}</Tag>
                         );
                     });
                 }
+
                 return resu;
             }
         }, {
@@ -114,13 +141,11 @@ export default class CounterControlCommandHistoryRecords extends Component {
             dataIndex: 'TaskID',
             width: '15%',
             key: 'TaskID',
-            render: (text, record) => {
-                return <a onClick={
+            render: (text, record) => <a onClick={
                     () => this.seeDetail(record)
-                } > 详细 </a>;
-            }
+                } > 详细 </a>
         }];
-        if (this.props.isloading) {
+        if (this.props.loading) {
             return (<Spin
                 style={{
                     width: '100%',
@@ -137,24 +162,25 @@ export default class CounterControlCommandHistoryRecords extends Component {
                 <Card bordered={false}>
                     <div className={styles.conditionDiv}>
                         <Row gutter={8}>
-                            <Col span={3} >
-                                记录时间：
-                                </Col>
-                            <Col span={21} >
-                                <RangePicker_ style={{ width: 350 }} onChange={this._handleDateChange} format={'YYYY-MM-DD'} dateValue={this.state.rangeDate} />
+                            <Col span={3}>
+                                <label className={styles.conditionLabel}>记录时间：</label>
                             </Col>
+                            <Col span={21}>
+                                <RangePicker_ style={{ width: 350 }} onChange={this._handleDateChange} format="YYYY-MM-DD" dateValue={this.state.rangeDate} />
+                            </Col>
+
                         </Row>
                     </div>
                     <Table
                         rowKey={(record, index) => `complete${index}`}
                         size="middle"
-                        scroll={{ y: 'calc(100vh - 465px)' }}
+                        scroll={{ y: this.props.height }}
                         loading={this.props.loading}
                         className={styles.dataTable}
                         columns={columns}
                         dataSource={dataSource}
                         rowClassName={
-                            (record, index, indent) => {
+                            (record, index) => {
                                 if (index === 0) {
                                     return;
                                 }
@@ -166,7 +192,7 @@ export default class CounterControlCommandHistoryRecords extends Component {
                         pagination={{
                             showSizeChanger: true,
                             showQuickJumper: true,
-                            'total': this.props.HistoryConsumablesReplaceRecordCount,
+                            'total': this.props.HistoryRepairHistoryRecodsCount,
                             'pageSize': this.props.pageSize,
                             'current': this.props.pageIndex,
                             onChange: this.onChange,
@@ -179,3 +205,4 @@ export default class CounterControlCommandHistoryRecords extends Component {
         );
     }
 }
+export default RepairHistoryListContent;

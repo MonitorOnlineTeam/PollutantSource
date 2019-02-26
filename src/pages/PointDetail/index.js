@@ -45,8 +45,8 @@ class PointDetail extends Component {
                 { key: 'operationlist', tab: '运维记录' },
             ],
             recordType: [
-                'RepairHistoryRecods',
-                'JzHistoryRecords'
+                'RepairHistoryList',
+                'JzHistoryList'
             ],
             modalVisible: false,
             loadingCard: true,
