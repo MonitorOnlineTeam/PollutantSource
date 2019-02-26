@@ -332,7 +332,7 @@ class PointDetail extends Component {
         //判断当前排口污染物类型那个
         let routerPath='';
         if(pointInfo && pointInfo.pollutantType) {
-            if(pointInfo.pollutantType === "1") {
+            if(pointInfo.pollutantType === 1) {
                 routerPath=`/pointdetail/${match.params.pointcode}/${match.params.viewtype}/dataquery`;
                 tablist= [
                     { key: 'dataquery', tab: '数据查询' },

@@ -32,6 +32,7 @@ export const pageUrl = {
         /**统计排口状态 */
         statisticsPointStatus:'/api/rest/PollutantSourceApi/PWorkbench/GetStatisticsPointStatus',
     },
+    changeMyMessageStatus:'/api/rest/PollutantSourceApi/PWorkbench/SetMyMessageStatus',
     EnterpriseManager:{
         getEnterprise:'/api/rest/PollutantSourceApi/UserInfoApi/GetEnterprise',
         getEnterprisePageList:'/api/rest/PollutantSourceApi/UserInfoApi/GetEnterprisePageList',
