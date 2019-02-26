@@ -148,6 +148,7 @@ export async function editstandardlibrary(params) {
 export async function editstandardlibrarypollutant(params) {
     const body = {
         Key: params.Guid,
+        StandardLibraryID: params.StandardLibraryID,
         PollutantCode: params.PollutantCode,
         AlarmType: params.AlarmType,
         UpperLimit: params.UpperLimit,

@@ -31,7 +31,7 @@ class TreeCard extends Component {
         if (pollutantTypelist) {
             pollutantTypelist.map(item => {
                 res.push(<TabPane tab={item.pollutantTypeName} key={item.pollutantTypeCode}>
-                    <TreeCardContent />
+                    {/* <TreeCardContent /> */}
                 </TabPane>);
             });
         }

@@ -7,6 +7,7 @@ import {
     Card,
     Table,
     Switch,
+    message
 } from 'antd';
 import moment from 'moment';
 import RangePicker_ from '../../components/PointDetail/RangePicker_';
@@ -59,10 +60,47 @@ class DataQuery extends Component {
     }
 
     _handleDateChange = (date, dateString) => {
-        this.setState({ rangeDate: date, current: 1 });
-        const pollutantCode = this.state.pollutantCode ? this.state.pollutantCode : this.getpropspollutantcode();
-        const pollutantName = this.state.pollutantName ? this.state.pollutantName : this.getpropspollutantname();
-        this.reloaddatalist(pollutantCode, this.state.dataType, this.state.current, this.state.pageSize, date[0], date[1], pollutantName);
+        if(date)
+        {
+            const {dataType}=this.state;
+            if(dataType=="realtime")
+            {
+               if(date[1].add(-7,'day')>date[0]) 
+               {
+                  message.info('实时数据时间间隔不能超过7天');
+                  return ;
+               }
+            }
+            if(dataType=="minute")
+            {
+               if(date[1].add(-1,'month')>date[0]) 
+               {
+                  message.info('分钟数据时间间隔不能超过1个月');
+                  return ;
+               }
+            }
+            if(dataType=="hour")
+            {
+               if(date[1].add(-6,'month')>date[0]) 
+               {
+                  message.info('小时数据时间间隔不能超过6个月');
+                  return ;
+               }
+            }
+            if(dataType=="day")
+            {
+               if(date[1].add(-12,'month')>date[0]) 
+               {
+                  message.info('日数据时间间隔不能超过1年个月');
+                  return ;
+               }
+            }
+             
+            this.setState({ rangeDate: date, current: 1 });
+            const pollutantCode = this.state.pollutantCode ? this.state.pollutantCode : this.getpropspollutantcode();
+            const pollutantName = this.state.pollutantName ? this.state.pollutantName : this.getpropspollutantname();
+            this.reloaddatalist(pollutantCode, this.state.dataType, this.state.current, this.state.pageSize, date[0], date[1], pollutantName);
+        }
     };
 
     // 图表转换

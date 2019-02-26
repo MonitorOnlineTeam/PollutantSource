@@ -4,6 +4,7 @@ import { loadPollutantType, GetAlarmNotices } from '../services/api';
 import {mymessagelist} from '../services/userlist';
 import * as service from '../dvapack/websocket/mywebsocket';
 import {EnumPropellingAlarmSourceType} from '../utils/enum';
+import {setMyMessageStatus} from '../services/workbenchapi';
 
 export default Model.extend({
     namespace: 'global',
@@ -54,8 +55,8 @@ export default Model.extend({
                             sontype:"over",
                             //组件里根据这个分组
                             type: 'alarm',
-                            //排序从1到2000
-                            orderby:index+1,
+                            //排序从0到2999
+                            orderby:1000+index,
                             key:`over_${item.DGIMNs}`,
                             title:`${item.PointName}报警${item.AlarmCount}次`,
                             description:`${item.PollutantNames}从${item.FirstTime}发生了${item.AlarmCount}次超标报警`,
@@ -74,8 +75,8 @@ export default Model.extend({
                             sontype:"warn",
                             //组件里根据这个分组
                             type: 'alarm',
-                            //排序从2001到3000
-                            orderby:2001+index,
+                            //排序从3000到4999
+                            orderby:4000+index,
                             key:`warn_${item.DGIMNs}`,
                             title:`${item.PointName}发生了预警`,
                             description:`${discription}`,
@@ -94,8 +95,8 @@ export default Model.extend({
                             sontype:"exception",
                             //组件里根据这个分组
                             type: 'alarm',
-                            //排序从3001到5000
-                            orderby:3001+index,
+                            //排序从5000到9999
+                            orderby:6000+index,
                             key:`exception_${item.DGIMNs}`,
                             title:`${item.PointName}报警${item.AlarmCount}次`,
                             description:`从${item.FirstAlarmTime}至${item.LastAlarmTime}发生了${item.AlarmCount}次异常报警`,
@@ -111,17 +112,16 @@ export default Model.extend({
                     id:`advise_${item.DGIMN}`,
                     pointname:`${item.PointName}`,
                     DGIMN:`${item.DGIMN}`,
+                    pushid:`${item.ID}`,
                     msgtitle: item.MsgTitle,
                     msg:item.Msg,
-                    pushtime:item.PushTime,
-                    pushusername:item.PushUserName,
                     isview:item.IsView,
-                    sontype:item.PushType,
+                    sontype:`advise_${item.PushType}`,
                     params:item.Col1,
                     //组件里根据这个分组
                     type: 'advise',
-                    //排序从5001到9000
-                    orderby:5001+index,
+                    //排序从10000到19999
+                    orderby:11000+index,
                     key:`advise_${item.DGIMN}_${item.ID}`,
                     title:`${item.MsgTitle}`,
                     description:`${item.Msg}`,
@@ -149,8 +149,24 @@ export default Model.extend({
                 payload: count,
             });
         },
-        * changeAdvises({payload}, {put, call, select}) {
-            const {message} = payload;
+        /**
+         * 修改消息状态
+         * @param {传递参数} 传递参数
+         */
+        * setMyMessageStatus({ payload }, { call, update,select }) {
+            const response = yield call(setMyMessageStatus, {...payload});
+            if(response.requstresult === "1"){
+                const notices = yield select(state => state.global.notices);
+                const count = yield select(state => state.global.currentUserNoticeCnt.unreadCount);
+                let newnotices=notices.filter(t=>t.pushid!==payload.MsgIds[0]);
+                yield update({
+                    notices:newnotices,
+                    currentUserNoticeCnt:{
+                        notifyCount:count - 1,
+                        unreadCount:count - 1
+                    }
+                });
+            }
         },
     },
 
@@ -193,6 +209,7 @@ export default Model.extend({
             data.AlarmType=parseInt(data.AlarmType);
             if(!notices.find(t=>t.id.includes(`over_${data.DGIMN}`))&&data.AlarmType===EnumPropellingAlarmSourceType.DataOver) {
                 newnotices=notices;
+                let minOrderby = Math.min(...notices.filter(t=>t.sontype==="over").map((o) => o.orderby));
                 newnotices.push({
                     id:`over_${data.DGIMN}`,
                     pointname: data.PointName,
@@ -203,14 +220,15 @@ export default Model.extend({
                     sontype:"over",
                     //组件里根据这个分组
                     type: 'alarm',
-                    //排序从1到2000
-                    orderby:0,
+                    //排序从0到2999
+                    orderby:minOrderby-1,
                     key:`over_${data.DGIMN}`,
                     title:`${data.PointName}报警${data.AlarmCount}次`,
                     description:`${data.PollutantName}从${data.FirstOverTime}发生了${data.AlarmCount}次超标报警`,
                 });
             }else if(!notices.find(t=>t.id.includes(`warn_${data.DGIMN}`))&&data.AlarmType===EnumPropellingAlarmSourceType.DataOverWarning) {
                 newnotices=notices;
+                let minOrderby = Math.min(...notices.filter(t=>t.sontype==="warn").map((o) => o.orderby));
                 newnotices.push({
                     id:`warn_${data.DGIMN}`,
                     pointname: data.PointName,
@@ -219,8 +237,8 @@ export default Model.extend({
                     sontype:"warn",
                     //组件里根据这个分组
                     type: 'alarm',
-                    //排序从2001到3000
-                    orderby:2001,
+                    //排序从3000到4999
+                    orderby:minOrderby-1,
                     key:`warn_${data.DGIMN}`,
                     title:`${data.PointName}发生了预警`,
                     description:``,
@@ -230,6 +248,7 @@ export default Model.extend({
                 data.AlarmType===EnumPropellingAlarmSourceType.DataLogicErr||
                 data.AlarmType===EnumPropellingAlarmSourceType.DYSTATEALARM)) {
                 newnotices=notices;
+                let minOrderby = Math.min(...notices.filter(t=>t.sontype==="exception").map((o) => o.orderby));
                 newnotices.push({
                     id:`exception_${data.DGIMN}`,
                     pointname: data.PointName,
@@ -240,8 +259,8 @@ export default Model.extend({
                     sontype:"exception",
                     //组件里根据这个分组
                     type: 'alarm',
-                    //排序从3001到5000
-                    orderby:3001,
+                    //排序从5000到9999
+                    orderby:minOrderby-1,
                     key:`exception_${data.DGIMN}`,
                     title:`${data.PointName}报警${data.AlarmCount}次`,
                     description:`从${data.FirstOverTime}至${data.AlarmTime}发生了${data.AlarmCount}次异常报警`,
@@ -289,6 +308,40 @@ export default Model.extend({
                     return newnotice;
                 });
             }
+            return {
+                ...state,
+                notices: newnotices,
+                currentUserNoticeCnt:{
+                    notifyCount:count,
+                    unreadCount:count
+                }
+            };
+        },
+        changeAdvises(state,{payload}) {
+            const {message} = payload;
+            const {Message:item}=message;
+            const {notices} = state;
+            let count = state.currentUserNoticeCnt.unreadCount;
+            let newnotices=notices;
+            let minOrderby = Math.min(...notices.filter(t=>t.type==="advise").map((o) => o.orderby));
+            newnotices.push({
+                id:`advise_${item.DGIMN}`,
+                pointname:`${item.PointName}`,
+                DGIMN:`${item.DGIMN}`,
+                pushid:`${item.PushID}`,
+                msgtitle: item.Title,
+                msg:item.Message,
+                isview:item.IsView,
+                sontype:`advise_${item.NoticeType}`,
+                params:item.Col1,
+                //组件里根据这个分组
+                type: 'advise',
+                //排序从10000到19999
+                orderby:minOrderby-1,
+                key:`advise_${item.DGIMN}_${item.PushID}`,
+                title:`${item.Title}`,
+                description:`${item.Message}`,
+            });
             return {
                 ...state,
                 notices: newnotices,
@@ -361,12 +414,12 @@ export default Model.extend({
                             payload: {message:obj.Message},
                         });
                         break;
-                    // case 'Notice':
-                    //     dispatch({
-                    //         type: 'changeAdvises',
-                    //         payload: {message:obj.Message},
-                    //     });
-                    //     break;
+                    case 'Notice':
+                        dispatch({
+                            type: 'changeAdvises',
+                            payload: {message:obj.Message},
+                        });
+                        break;
                     default:
                         break;
                 }

@@ -396,7 +396,6 @@ export default Model.extend({
                     }
                 });
             }
-
         },
         //获取工作台所有方法
         * getAllMethods({ payload }, { call, put, update, select }) {

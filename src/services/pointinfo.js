@@ -34,7 +34,8 @@ export async function addpoint(params) {
         Sort: params.Sort,
         Address: params.Address,
         OutputType: params.OutputType,
-        OperationerId: params.OperationerId
+        OperationerId: params.OperationerId,
+        DevicePassword:params.DevicePassword||''
     };
 
     const result = post('/api/rest/PollutantSourceApi/PPointAndData/AddPoint', body, null);
@@ -88,7 +89,8 @@ export async function editpoint(params) {
         Sort: params.Sort,
         Address: params.Address,
         OutputType: params.OutputType,
-        OperationerId: params.OperationerId
+        OperationerId: params.OperationerId,
+        DevicePassword:params.DevicePassword||''
     };
     const result = post('/api/rest/PollutantSourceApi/PPointAndData/EditPoint', body, null);
     return result === null ? {

@@ -11,7 +11,7 @@ import {
     Select,
     Button,
     Card,
-    Divider,Spin
+    Divider, Spin
 } from 'antd';
 import {
     connect
@@ -23,7 +23,7 @@ import MonitorContent from '../../components/MonitorContent/index';
 
 const FormItem = Form.Item;
 const RadioGroup = Radio.Group;
-const {Option} = Select;
+const { Option } = Select;
 
 const { TextArea } = Input;
 const children = [];
@@ -34,7 +34,7 @@ for (let i = 0; i < 21; i++) {
     loading,
     userinfo
 }) => ({
-    isloading:loading.effects['userinfo/getuser'],
+    isloading: loading.effects['userinfo/getuser'],
     reason: userinfo.reason,
     requstresult: userinfo.requstresult,
     editUser: userinfo.editUser
@@ -44,7 +44,7 @@ class AddUser extends Component {
 
 
     componentWillMount() {
-        const {dispatch,match:{params:{UserId}}}=this.props;
+        const { dispatch, match: { params: { UserId } } } = this.props;
         if (UserId !== 'null') {
             dispatch({
                 type: 'userinfo/getuser',
@@ -74,110 +74,110 @@ class AddUser extends Component {
         }
     }
 
- handleSubmit = (e) => {
-     e.preventDefault();
-     let flag = true;
-     const {dispatch,form,match:{params:{UserId}},requstresult}=this.props;
-     form.validateFieldsAndScroll((err, values) => {
-         let {User_Account:UserAccount} = values;
-         const that = this;
-         if (UserId === 'null') {
-             dispatch({
-                 type: 'userinfo/isexistenceuser',
-                 payload: {
-                     UserAccount,
-                     callback: () => {
-                         if (that.props.reason === '1') {
-                             flag = false;
-                             that.props.form.setFields({ // 设置验证返回错误
-                                 User_Account: {
-                                     value: UserAccount,
-                                     errors: [new Error('登录名已存在，请重新填写')],
-                                 },
-                             });
-                         } else {
-                             flag = true;
-                             that.props.form.setFields({ // 设置验证返回错误
-                                 User_Account: {
-                                     value: UserAccount,
-                                     errors: null,
-                                 },
-                             });
-                         }
-                         if (!err && flag === true) {
-                             that.props.dispatch({
-                                 type: 'userinfo/adduser',
-                                 payload: {
-                                     UserAccount: values.User_Account,
-                                     UserName: values.User_Name,
-                                     UserSex: values.User_Sex,
-                                     Email: values.Email === undefined ? '' : values.Email,
-                                     Phone: values.Phone === undefined ? '' : values.Phone,
-                                     Title: values.Title === undefined ? '' : values.Title,
-                                     UserOrderby: values.User_Orderby,
-                                     SendPush:  values.SendPush === undefined ? '': values.SendPush.join(','),
-                                     AlarmType: values.AlarmType === undefined ? '' : values.AlarmType,
-                                     AlarmTime: values.AlarmTime === undefined ? '' : values.AlarmTime.join(','),
-                                     UserRemark: values.User_Remark === undefined ? '' : values.User_Remark,
-                                     DeleteMark: values.DeleteMark === true ? 1 : 2,
-                                     RolesId: values.Roles_Name,
-                                     callback: () => {
-                                         if (requstresult === '1') {
-                                             this.success();
-                                         } else {
-                                             message.error('错误');
-                                         }
-                                     }
-                                 },
+    handleSubmit = (e) => {
+        e.preventDefault();
+        let flag = true;
+        const { dispatch, form, match: { params: { UserId } }, requstresult } = this.props;
+        form.validateFieldsAndScroll((err, values) => {
+            let { User_Account: UserAccount } = values;
+            const that = this;
+            if (UserId === 'null') {
+                dispatch({
+                    type: 'userinfo/isexistenceuser',
+                    payload: {
+                        UserAccount,
+                        callback: () => {
+                            if (that.props.reason === '1') {
+                                flag = false;
+                                that.props.form.setFields({ // 设置验证返回错误
+                                    User_Account: {
+                                        value: UserAccount,
+                                        errors: [new Error('登录名已存在，请重新填写')],
+                                    },
+                                });
+                            } else {
+                                flag = true;
+                                that.props.form.setFields({ // 设置验证返回错误
+                                    User_Account: {
+                                        value: UserAccount,
+                                        errors: null,
+                                    },
+                                });
+                            }
+                            if (!err && flag === true) {
+                                that.props.dispatch({
+                                    type: 'userinfo/adduser',
+                                    payload: {
+                                        UserAccount: values.User_Account,
+                                        UserName: values.User_Name,
+                                        UserSex: values.User_Sex,
+                                        Email: values.Email === undefined ? '' : values.Email,
+                                        Phone: values.Phone === undefined ? '' : values.Phone,
+                                        Title: values.Title === undefined ? '' : values.Title,
+                                        UserOrderby: values.User_Orderby,
+                                        SendPush: values.SendPush === undefined ? '' : values.SendPush.join(','),
+                                        AlarmType: values.AlarmType === undefined ? '' : values.AlarmType,
+                                        AlarmTime: values.AlarmTime === undefined ? '' : values.AlarmTime.join(','),
+                                        UserRemark: values.User_Remark === undefined ? '' : values.User_Remark,
+                                        DeleteMark: values.DeleteMark === true ? 1 : 2,
+                                        RolesId: values.Roles_Name,
+                                        callback: () => {
+                                            if (requstresult === '1') {
+                                                this.success();
+                                            } else {
+                                                message.error('错误');
+                                            }
+                                        }
+                                    },
 
-                             });
-                         }
-                     }
-                 },
-             });
-         } else if (!err && flag === true) {
-             that.props.dispatch({
-                 type: 'userinfo/edituser',
-                 payload: {
-                     UserId: UserId,
-                     UserAccount: values.User_Account,
-                     UserName: values.User_Name,
-                     UserSex: values.User_Sex,
-                     Email: values.Email === undefined ? '' : values.Email,
-                     Phone: values.Phone === undefined ? '' : values.Phone,
-                     Title: values.Title === undefined ? '' : values.Title,
-                     UserOrderby: values.User_Orderby,
-                     SendPush: values.SendPush === undefined ? '' : values.SendPush.join(','),
-                     AlarmType: values.AlarmType === undefined ? '' : values.AlarmType,
-                     AlarmTime: values.AlarmTime === undefined ? '' : values.AlarmTime.join(','),
-                     UserRemark: values.User_Remark === undefined ? '' : values.User_Remark,
-                     DeleteMark: values.DeleteMark === true ? 1 : 2,
-                     RolesId: values.Roles_Name,
-                     callback: () => {
-                         if (requstresult === '1') {
-                             this.success();
-                         } else {
-                             message.error('错误');
-                         }
-                     }
-                 },
-             });
-         }
-     });
- }
+                                });
+                            }
+                        }
+                    },
+                });
+            } else if (!err && flag === true) {
+                that.props.dispatch({
+                    type: 'userinfo/edituser',
+                    payload: {
+                        UserId: UserId,
+                        UserAccount: values.User_Account,
+                        UserName: values.User_Name,
+                        UserSex: values.User_Sex,
+                        Email: values.Email === undefined ? '' : values.Email,
+                        Phone: values.Phone === undefined ? '' : values.Phone,
+                        Title: values.Title === undefined ? '' : values.Title,
+                        UserOrderby: values.User_Orderby,
+                        SendPush: values.SendPush === undefined ? '' : values.SendPush.join(','),
+                        AlarmType: values.AlarmType === undefined ? '' : values.AlarmType,
+                        AlarmTime: values.AlarmTime === undefined ? '' : values.AlarmTime.join(','),
+                        UserRemark: values.User_Remark === undefined ? '' : values.User_Remark,
+                        DeleteMark: values.DeleteMark === true ? 1 : 2,
+                        RolesId: values.Roles_Name,
+                        callback: () => {
+                            if (requstresult === '1') {
+                                this.success();
+                            } else {
+                                message.error('错误');
+                            }
+                        }
+                    },
+                });
+            }
+        });
+    }
 
- success = () => {
-     const {dispatch,match:{params:{UserId}}}=this.props;
-     let index = dispatch(routerRedux.push(`/sysmanage/Userinfo`));
-     if (UserId !== 'null') {
-         message.success('修改成功', 3).then(() => index);
-     } else {
-         message.success('新增成功', 3).then(() => index);
-     }
- };
+    success = () => {
+        const { dispatch, match: { params: { UserId } } } = this.props;
+        let index = dispatch(routerRedux.push(`/sysmanage/Userinfo`));
+        if (UserId !== 'null') {
+            message.success('修改成功', 3).then(() => index);
+        } else {
+            message.success('新增成功', 3).then(() => index);
+        }
+    };
 
     IsExistence = (rule, value, callback) => {
-        const {dispatch,requstresult,reason}=this.props;
+        const { dispatch, requstresult, reason } = this.props;
         dispatch({
             type: 'userinfo/isexistenceuser',
             payload: {
@@ -197,45 +197,47 @@ class AddUser extends Component {
     }
 
     render() {
-        const {dispatch,form,match,isloading,editUser}=this.props;
+        const { dispatch, form, match, isloading, editUser } = this.props;
         const { getFieldDecorator } = form;
-        const {UserId}=match.params;
+        const { UserId } = match.params;
         // const UserId = this.props.match.params.UserId;
-        if(isloading) {
+        if (isloading) {
             return (<Spin
-                style={{ width: '100%',
+                style={{
+                    width: '100%',
                     height: 'calc(100vh/2)',
                     display: 'flex',
                     alignItems: 'center',
-                    justifyContent: 'center' }}
+                    justifyContent: 'center'
+                }}
                 size="large"
             />);
         }
 
         const {
-            User_Name:UserName=null,
-            User_Account:UserAccount,
-            User_Sex:UserSex,
+            User_Name: UserName = null,
+            User_Account: UserAccount,
+            User_Sex: UserSex,
             DeleteMark,
             Email,
             Phone,
             Title,
-            User_Orderby:UserOrderby,
+            User_Orderby: UserOrderby,
             AlarmType,
             SendPush,
             AlarmTime,
-            Roles_Name:RolesName,
-            User_Remark:UserRemark
-        } = editUser === null || UserId==="null" ? {} : editUser;
+            Roles_Name: RolesName,
+            User_Remark: UserRemark
+        } = editUser === null || UserId === "null" ? {} : editUser;
         return (
             <MonitorContent
                 {...this.props}
                 breadCrumbList={
                     [
-                        {Name:'首页',Url:'/'},
-                        {Name:'系统管理',Url:''},
-                        {Name:'用户管理',Url:'/sysmanage/Userinfo'},
-                        {Name:'用户维护',Url:''}
+                        { Name: '首页', Url: '/' },
+                        { Name: '系统管理', Url: '' },
+                        { Name: '用户管理', Url: '/sysmanage/Userinfo' },
+                        { Name: '用户维护', Url: '' }
                     ]
                 }
             >
@@ -276,8 +278,8 @@ class AddUser extends Component {
                                                     message: '请输入登录名称!'
                                                 }
                                                 ]
-                                            })(<Input placeholder="登录名称" disabled={UserId!=='null'} />
-                                        )}
+                                            })(<Input placeholder="登录名称" disabled={UserId !== 'null'} />
+                                            )}
                                     </FormItem>
                                 </Col>
                             </Row>
@@ -311,7 +313,7 @@ class AddUser extends Component {
                                                 initialValue: DeleteMark,
                                                 valuePropName: 'checked',
                                             })(<Switch checkedChildren="启用" unCheckedChildren="禁用" />
-                                        )}
+                                            )}
                                     </FormItem>
                                 </Col>
                             </Row>
@@ -329,7 +331,7 @@ class AddUser extends Component {
                                                 initialValue: Email,
                                                 rules: [{ type: 'email', message: '请输入正确的邮箱!' }]
                                             })(<Input placeholder="E-mail" />
-                                        )}
+                                            )}
                                     </FormItem>
                                 </Col>
                                 <Col span={12}>
@@ -343,7 +345,7 @@ class AddUser extends Component {
                                                 initialValue: Phone,
                                                 rules: [{ pattern: /^1\d{10}$/, message: '请输入正确的手机号!' }]
                                             })(<Input placeholder="手机号" />
-                                        )}
+                                            )}
                                     </FormItem>
                                 </Col>
                             </Row>
@@ -387,7 +389,7 @@ class AddUser extends Component {
                                         label="报警类型"
                                     >
                                         {getFieldDecorator('AlarmType', {
-                                            initialValue: AlarmType || undefined
+                                            initialValue: AlarmType === '0' ? undefined : AlarmType || undefined
                                         })(
                                             <Select placeholder="请选择">
                                                 <Option value="1">实时报警</Option>
@@ -473,20 +475,20 @@ class AddUser extends Component {
                                         {getFieldDecorator('User_Remark', {
                                             initialValue: UserRemark,
                                         })(
-                                            <TextArea rows={4} style={{width: '100%'}} />
+                                            <TextArea rows={4} style={{ width: '100%' }} />
                                         )}
                                     </FormItem>
                                 </Col>
                                 <Col span={12} />
                             </Row>
-                            <Divider orientation="right" style={{border:'1px dashed #FFFFFF'}}>
-                                <Col span={24} style={{textAlign: 'center'}}>
+                            <Divider orientation="right" style={{ border: '1px dashed #FFFFFF' }}>
+                                <Col span={24} style={{ textAlign: 'center' }}>
                                     <Button
                                         type="primary"
                                         htmlType="submit"
                                         className="login-form-button"
                                     >
-                          保存
+                                        保存
                                     </Button><Divider type="vertical" />
                                     <Button
                                         type="dashed"
@@ -494,7 +496,7 @@ class AddUser extends Component {
                                             () => dispatch(routerRedux.push(`/sysmanage/userinfo`))
                                         }
                                     >
-                          返回
+                                        返回
                                     </Button>
                                 </Col>
                             </Divider>

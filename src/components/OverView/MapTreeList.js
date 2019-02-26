@@ -4,7 +4,7 @@ import { connect } from 'dva';
 import moment from 'moment';
 import styles from './MapTreeList.less';
 import { mainpoll } from '../../config';
-
+import {getPointStatusImg} from '../../utils/getStatusImg';
 const Search = Input.Search;
 const TabPane = Tabs.TabPane;
 @connect(({ loading, overview }) => ({
@@ -44,17 +44,6 @@ class MapTreeList extends Component {
         return res;
     }
 
-    //获取状态图片
-    getStatusImg=(value) => {
-        if (value === 0) {
-            return <img style={{width:15}} src="/gisunline.png" />;
-        } if (value === 1) {
-            return <img style={{width:15}} src="/gisnormal.png" />;
-        } if (value === 2) {
-            return <img style={{width:15}} src="/gisover.png" />;
-        }
-        return <img style={{width:15}} src="/gisexception.png" />;
-    }
 
     //组装搜索树的数据
     getTreeDatalist = () => {
@@ -88,7 +77,7 @@ class MapTreeList extends Component {
                     >
                         <div key={key+'1'} className={styles.cardtopspan}>
                             <span className={styles.statusimg}>
-                                {this.getStatusImg(item.status)}
+                                {getPointStatusImg(item.status,item.stop)}
                             </span>
                             <span className={styles.pointName}>
                                 {item.pointName}
@@ -99,18 +88,7 @@ class MapTreeList extends Component {
                         <div key={key+'2'} className={styles.cardbottomspan}><span className={styles.tsdiv}>
                             传输有效率 {item.transmissionEffectiveRate}
                         </span>
-                            {
-                            item.scene ? <span className={styles.operation}>运维中</span> : ''
-                        }
-                            {
-                            item.warning ? <span className={styles.warning}>预警中</span> : ''
-                        }
-                            {
-                            item.fault ? <span className={styles.fault}>故障中</span> : ''
-                        }
-                            {
-                            item.status == 4 ? <span className={styles.stop}>停产中</span> : ''
-                        }
+                          { this.getpointStatus(item)}
                         </div>
                     </div>);
                 }
@@ -118,6 +96,29 @@ class MapTreeList extends Component {
         } else {
             res = (<div style={{ textAlign: 'center', height: 70, background: '#fff' }}>暂无数据</div>);
         }
+        return res;
+    }
+
+    getpointStatus=(item)=>{
+        let res=[];
+         if(item.stop)
+         {
+            res.push(<span className={styles.stop}>停产中</span>)
+         }
+         else{
+             if(item.scene)
+             {
+                res.push(<span className={styles.operation}>运维中</span>)
+             }
+             if(item.warning)
+             {
+                res.push(<span className={styles.warning}>预警中</span>)
+             }
+             if(item.fault)
+             {
+                res.push(<span className={styles.fault}>故障中</span>)
+             }
+         }
         return res;
     }
 
@@ -151,8 +152,9 @@ class MapTreeList extends Component {
                   dgimn: row.DGIMN,
                   pollutantCodes: defaultpollutantCode,
                   pollutantName: defaultpollutantName,
-                  endTime: moment(new Date()).add('hour', -1).format('YYYY-MM-DD HH:00:00'),
-                  beginTime: moment(new Date()).add('hour', -24).format('YYYY-MM-DD HH:00:00'),
+                  endTime: moment(new Date()).format('YYYY-MM-DD HH:00:00'),
+                  beginTime: moment(new Date()).add('hour', -23).format('YYYY-MM-DD HH:00:00'),
+                  stop:row.stop
               }
           });
 

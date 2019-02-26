@@ -1,7 +1,7 @@
 // import liraries
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import { Modal, Breadcrumb, Popconfirm,Tabs, Icon, Select, Button, Card, Spin, Row, Col, Divider, Tag, Input, Form, Radio, Alert } from 'antd';
+import { Modal, Tabs, Icon, Button, Card, Spin, Row, Col, Divider, Tag, Input, Form, Radio, Alert } from 'antd';
 import moment from 'moment';
 import Cookie from 'js-cookie';
 import router from 'umi/router';
@@ -9,19 +9,16 @@ import Redirect from 'umi/redirect';
 import Link from 'umi/link';
 import { routerRedux } from 'dva/router';
 import styles from './index.less';
-import { getRoutes } from '../../utils/utils';
-import UrgentDispatch from '../../components/OverView/UrgentDispatch';
 import PdButton from '../../components/OverView/PdButton';
-
+import {getPointStatusImg} from '../../utils/getStatusImg';
 const RadioGroup = Radio.Group;
 const { TabPane } = Tabs;
-const Option = Select.Option;
-const Search = Input.Search;
-const { Meta } = Card;
+const { Search } = Input.Search;
 
 
 @connect(({ points, loading, overview }) => ({
     pointInfo: points.selectpoint,
+    tablist:points.tablist||[],
     loadingModel: loading.effects['overview/querydatalist'],
     isloading: loading.effects['points/querysinglepointinfo'],
     pointList: overview.data,
@@ -34,20 +31,6 @@ class PointDetail extends Component {
         this.menus = props.menuData;
 
         this.state = {
-            tablist: [
-                { key: 'processflowdiagram', tab: '工艺流程图' },
-                { key: 'dataquery', tab: '数据查询' },
-                { key: 'alarmrecord', tab: '报警记录' },
-                { key: 'realvideo', tab: '实时视频' },
-                { key: 'hisvideo', tab: '历史视频' },
-                { key: 'ywdsjlist', tab: '运维大事记' },
-                { key: 'qcontrollist', tab: '质控记录' },
-                { key: 'operationlist', tab: '运维记录' },
-            ],
-            recordType: [
-                'RepairHistoryList',
-                'JzHistoryList'
-            ],
             modalVisible: false,
             loadingCard: true,
             pointList: null,
@@ -59,6 +42,17 @@ class PointDetail extends Component {
         };
     }
 
+    componentWillMount = () => {
+        const {dispatch,match}=this.props;
+        dispatch({
+            type: 'points/updateVideoMenu',
+            payload: {
+                DGIMN: match.params.pointcode,
+            }
+        });
+    }
+
+
     componentDidMount() {
         this.props.dispatch({
             type: 'points/querysinglepointinfo',
@@ -68,17 +62,6 @@ class PointDetail extends Component {
                 isfirst:true
             }
         });
-        // this.props.dispatch({
-        //     type: 'overview/querydatalist',
-        //     payload: {
-        //         time: moment(new Date()).add(-1, 'hour').format('YYYY-MM-DD HH:00:00')
-        //     }
-        // });
-        // this.props.dispatch({
-        //     type: 'overview/getPollutantTypeList',
-        //     payload: {
-        //     }
-        // });
     }
 
 
@@ -150,28 +133,33 @@ class PointDetail extends Component {
         //rtnVal.push(this.props.dataTemp.filter(todo=>todo.DGIMN===this.props.pointInfo.DGIMN)[0]);
         //let selectedPoint=this.props.dataTemp.filter(todo=>todo.DGIMN===this.props.pointInfo.DGIMN)[0];
         this.props.dataTemp.map((item, key) => {
-            let status = <img src="/gisexception.png" width="15" />;
-            if (item.status === 0) {
-                status = <img src="/gisunline.png" width="15" />;
-            } if (item.status === 1) {
-                status = <img src="/gisnormal.png" width="15" />;
-            } if (item.status === 2) {
-                status = <img src="/gisover.png" width="15" />;
-            }
+            // let status = <img src="/gisexception.png" width="15" />;
+            // if (item.status === 0) {
+            //     status = <img src="/gisunline.png" width="15" />;
+            // } if (item.status === 1) {
+            //     status = <img src="/gisnormal.png" width="15" />;
+            // } if (item.status === 2) {
+            //     status = <img src="/gisover.png" width="15" />;
+            // }
+            let status=getPointStatusImg(item.status,item.stop);
+
             let optStatus=[];//TODO:排口运维状态不确定 故障：#119f9d
-            if(item.scene) {
-                optStatus.push(<li key={0}><Tag className={styles.operation}>运维中</Tag></li>);
-            }
-            if(item.warning) {
-                optStatus.push(<li key={1}><Tag className={styles.warning}>预警中</Tag></li>);
-            }
-            if(item.fault) {
-                optStatus.push(<li key={2}><Tag className={styles.fault}>故障中</Tag></li>);
-            }
-            if(status===4) {
+
+            if(item.stop) {
                 optStatus.push(<li key={3}><Tag className={styles.stop}>停产中</Tag></li>);
             }
-
+            else
+            {
+                if(item.scene) {
+                    optStatus.push(<li key={0}><Tag className={styles.operation}>运维中</Tag></li>);
+                }
+                if(item.warning) {
+                    optStatus.push(<li key={1}><Tag className={styles.warning}>预警中</Tag></li>);
+                }
+                if(item.fault) {
+                    optStatus.push(<li key={2}><Tag className={styles.fault}>故障中</Tag></li>);
+                }
+            }
             // if (key === 0) {
             //     item = this.props.dataTemp.filter(todo => todo.DGIMN === this.props.pointInfo.DGIMN)[0];
             //     if (!item) {
@@ -253,32 +241,37 @@ class PointDetail extends Component {
         if (pointInfo.length === 0)
             return null;
         let {status,pollutantTypeCode,DGIMN,existTask,scene,warning,fault,stop} = pointInfo[0];
-        let statusText = <span><img src="/gisexception.png" width="11" style={{ marginBottom: 3, marginRight: 5 }} /><span>异常</span></span>;
-        if (status === 0) {
-            statusText = <span><img src="/gisunline.png" width="11" style={{ marginBottom: 3, marginRight: 5 }} /><span>离线</span></span>;
-        } if (status === 1) {
-            statusText = <span><img src="/gisnormal.png" width="11" style={{ marginBottom: 3, marginRight: 5 }} /><span>正常</span></span>;
-        } if (status === 2) {
-            statusText = <span><img src="/gisover.png" width="11" style={{ marginBottom: 3, marginRight: 5 }} /><span>超标</span></span>;
-        }
+
+        let statusText=getPointStatusImg(status,stop);
+        // let statusText = <span><img src="/gisexception.png" width="11" style={{ marginBottom: 3, marginRight: 5 }} /><span>异常</span></span>;
+        // if (status === 0) {
+        //     statusText = <span><img src="/gisunline.png" width="11" style={{ marginBottom: 3, marginRight: 5 }} /><span>离线</span></span>;
+        // } if (status === 1) {
+        //     statusText = <span><img src="/gisnormal.png" width="11" style={{ marginBottom: 3, marginRight: 5 }} /><span>正常</span></span>;
+        // } if (status === 2) {
+        //     statusText = <span><img src="/gisover.png" width="11" style={{ marginBottom: 3, marginRight: 5 }} /><span>超标</span></span>;
+        // }
         let pollutantTypeText = <span><Icon type="fire" style={{ color: 'rgb(238,162,15)', marginBottom: 3, marginRight: 5 }} /><span>废气</span></span>;
-        if (pollutantTypeCode === "1") {
+        if (pollutantTypeCode == 1) {
             pollutantTypeText = <span><Icon type="fire" style={{ color: 'rgb(238,162,15)', marginBottom: 3, marginRight: 5 }} /><span>废水</span></span>;
         }
         let existTaskText=[];
-        if(scene) {
-            existTaskText.push(<span key={0}><Divider type="vertical" /><span><Icon type="user" className={styles.operationcolor} style={{marginBottom:3,marginRight:5 }} /><span>运维中</span></span></span>);
-        }
-        if(warning) {
-            existTaskText.push(<span key={1}><Divider type="vertical" /><Icon type="bell" className={styles.warningcolor} style={{ color: 'red',marginBottom:3,marginRight:5 }} /><span>预警</span></span>);
-        }
-        if(fault) {
-            existTaskText.push(<span key={2}><Divider type="vertical" /><Icon type="tool" className={styles.faultcolor} style={{ color: 'rgb(212,197,123)',marginBottom:3,marginRight:5 }} /><span>故障</span></span>);
-        }
+
         if(stop) {
             existTaskText.push (<span key={3}><Divider type="vertical" /><Icon type="tool" className={styles.stopcolor} style={{ color: 'rgb(212,197,123)',marginBottom:3,marginRight:5 }} /><span>停产</span></span>);
         }
-
+        else
+        {
+            if(scene) {
+                existTaskText.push(<span key={0}><Divider type="vertical" /><span><Icon type="user" className={styles.operationcolor} style={{marginBottom:3,marginRight:5 }} /><span>运维中</span></span></span>);
+            }
+            if(warning) {
+                existTaskText.push(<span key={1}><Divider type="vertical" /><Icon type="bell" className={styles.warningcolor} style={{ color: 'red',marginBottom:3,marginRight:5 }} /><span>预警</span></span>);
+            }
+            if(fault) {
+                existTaskText.push(<span key={2}><Divider type="vertical" /><Icon type="tool" className={styles.faultcolor} style={{ color: 'rgb(212,197,123)',marginBottom:3,marginRight:5 }} /><span>故障</span></span>);
+            }
+        }
         return (
             <span style={{ marginLeft: 20, fontSize: 12 }}>
                 {statusText}
@@ -333,14 +326,14 @@ class PointDetail extends Component {
     }
 
     render() {
-        const { match, routerData, location, children, pointInfo, selectpoint } = this.props;
-        let {tablist,pollutantTypeKey}=this.state;
+        let { match, location, children, pointInfo, tablist } = this.props;
+        let {pollutantTypeKey}=this.state;
         const viewType=`pointInfo@${match.params.viewtype}`;
         //判断当前排口污染物类型那个
         let routerPath='';
         if(pointInfo && pointInfo.pollutantType) {
-            if(pointInfo.pollutantType=="1") {
-                routerPath=`/pointdetail/${this.props.match.params.pointcode}/${this.props.match.params.viewtype}/dataquery`;
+            if(pointInfo.pollutantType === 1) {
+                routerPath=`/pointdetail/${match.params.pointcode}/${match.params.viewtype}/dataquery`;
                 tablist= [
                     { key: 'dataquery', tab: '数据查询' },
                     { key: 'alarmrecord', tab: '报警记录' },
@@ -415,7 +408,6 @@ class PointDetail extends Component {
                         className={styles.tabs}
                         activeKey={activeKey}
                         onChange={(key) => {
-                            const { match } = this.props;
                             router.push(`${match.url}/${key}`);
                         }}
                     >
@@ -432,7 +424,7 @@ class PointDetail extends Component {
                     footer={[]}
                 >
                     <Form layout="inline" style={{ marginBottom: 10 }}>
-                        <Search
+                        <Input.Search
                             placeholder="请输入排口关键字"
                             defaultValue={this.state.searchName}
                             onSearch={(value) => {
@@ -478,9 +470,9 @@ class PointDetail extends Component {
                             <Radio.Button key={2} value="0"><img src="../../../gisunline.png" width="15" /> 离线</Radio.Button>
                             <Radio.Button key={3} value="3"><img src="../../../gisexception.png" width="15" /> 异常</Radio.Button>
                         </Radio.Group>
-                        <RadioGroup style={{ marginRight: 20,float: 'right',marginTop:3}} onChange={this.onPollutantChange} defaultValue={pollutantTypeKey}>
+                        <Radio.Group style={{ marginRight: 20,float: 'right',marginTop:3}} onChange={this.onPollutantChange} defaultValue={pollutantTypeKey}>
                             {this.getPollutantDoc()}
-                        </RadioGroup>
+                        </Radio.Group>
                     </Form>
                     <div style={{ height: 'calc(100vh - 340px)' }} className={styles.pointModal}>
                         <Row gutter={48}>

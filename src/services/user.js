@@ -1,6 +1,6 @@
 import request from '../utils/request';
 import { pageUrl } from '../utils/common';
-import { post } from '../dvapack/request';
+import { post,authorpost     } from '../dvapack/request';
 
 export async function query() {
     return request('/api/users');
@@ -67,4 +67,13 @@ export async function getMenuData(params) {
     const result = await post(pageUrl.Menu, body, null, body.user_id);
     // ;
     return result === null ? { data: null } : result;
+}
+// 获取二维码ip
+export async function getip() {
+    const body = {
+    };
+    const result = authorpost('/api/rest/PollutantSourceApi/PUserLogin/GetNetIPAndPort?authorCode=48f3889c-af8d-401f-ada2-c383031af92d', body, null);
+    return result === null ? {
+        data: null
+    } : result;
 }

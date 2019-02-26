@@ -96,6 +96,17 @@ export async function getAllPointOverDataList(params) {
 }
 
 /**
+ * 【修改消息状态】修改消息状态
+ * @params {}
+ */
+export async function setMyMessageStatus(params) {
+    const result = post(pageUrl.changeMyMessageStatus, params||{}, null);
+    return result === null ? {
+        data: null
+    } : result;
+}
+
+/**
  * 【超标排口】获取当前超标排口
  * @params {}
  */

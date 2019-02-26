@@ -86,6 +86,7 @@ class AddStandardLibraryPollutant extends Component {
                       type: 'standardlibrary/editstandardlibrarypollutant',
                       payload: {
                           Guid:this.state.Id,
+                          StandardLibraryID: pid,
                           PollutantCode: values.PollutantCode,
                           AlarmType: values.AlarmType,
                           UpperLimit: values.UpperLimit,

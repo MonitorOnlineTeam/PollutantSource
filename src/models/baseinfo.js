@@ -64,11 +64,24 @@ export default Model.extend({
                 subjectionRelationlist,
             });
         },
+        *loadentdata({
+            payload
+        },{
+            call,update
+        }){
+            const entbaseinfo = yield call(querypolluntantentinfolist, { parentID: enterpriceid });
+            yield update({ entbaseinfo: entbaseinfo });
+        },
         * queryeditent({
             payload,
-        }, { call, update }) {
+        }, { call, put,take }) {
             const requstresult = yield call(queryentedit, {parentID: enterpriceid, ...payload});
             if (requstresult) {
+            yield put({
+                type:'loadentdata',
+                payload:payload
+            })
+            yield take('loadentdata/@@end');
                 message.info('操作成功');
             } else {
                 message.info('操作失败');
@@ -76,10 +89,15 @@ export default Model.extend({
         },
         * queryuploadent({
             payload,
-        }, { call, update }) {
+        }, { call, put,take }) {
             const requstresult = yield call(queryupload, {
                 ...payload});
             if (requstresult) {
+                yield put({
+                    type:'loadentdata',
+                    payload:payload
+                })
+                yield take('loadentdata/@@end');
                 message.info('操作成功');
             } else {
                 message.info('操作失败');
@@ -87,10 +105,15 @@ export default Model.extend({
         },
         * querydeleteimg({
             payload,
-        }, { call, update }) {
+        }, { call, put,take }) {
             const requstresult = yield call(querydeleteimg, {
                 ...payload});
             if (requstresult) {
+                yield put({
+                    type:'loadentdata',
+                    payload:payload
+                })
+                yield take('loadentdata/@@end');
                 message.info('操作成功');
             } else {
                 message.info('操作失败');

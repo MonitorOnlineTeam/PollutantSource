@@ -33,6 +33,13 @@ export default class AddManualUpload extends Component {
         this.props.onRef(this);
         this.GetAllPollutantTypes();
         this.SelectHandleChange();
+             //获取绑定下拉污染物
+             this.props.dispatch({
+                type: 'manualupload/GetUnitByPollutant',
+                payload: {
+                    pollutantCode: ""
+                }
+            });
     }
     GetAllPollutantTypes = () => {
         this.props.dispatch({
@@ -54,11 +61,12 @@ export default class AddManualUpload extends Component {
     }
     //根据污染物编号获取单位
     pollutantChange = (value) => {
+        var pCode=value.split('--')
         //获取绑定下拉污染物
         this.props.dispatch({
             type: 'manualupload/GetUnitByPollutant',
             payload: {
-                pollutantCode: value
+                pollutantCode: pCode[0]
             }
         });
     }
@@ -69,8 +77,8 @@ export default class AddManualUpload extends Component {
                 this.props.dispatch({
                     type: 'manualupload/AddUploadFiles',
                     payload: {
-                        pollutantCode: values.pollutantCode,
-                        monitorTime: values.monitorTime,
+                        pollutantCode: values.pollutantCode.split('--')[0],
+                        monitorTime: moment(values.monitorTime.format("YYYY-MM-DD HH:mm:ss")),
                         avgValue: values.avgValue,
                         DGIMN: values.DGIMN,
                         callback: (reason) => {
@@ -82,6 +90,12 @@ export default class AddManualUpload extends Component {
             } else {
             }
         });
+    }
+    handleFocus = () => {
+        console.log('focus');
+    }
+    handleBlur = () => {
+        console.log('blur');
     }
     render() {
         const { getFieldDecorator } = this.props.form;
@@ -104,7 +118,7 @@ export default class AddManualUpload extends Component {
                                 {...formItemLayout}
                                 label={'污染物种类'}>
                                 {getFieldDecorator('pollutantType', {
-                                    initialValue: this.props.PollutantTypesList.length !== 0 ? this.props.PollutantTypesList[0].PollutantTypeName:null
+                                    initialValue: this.props.PollutantTypesList.length !== 0 ? this.props.PollutantTypesList[0].PollutantTypeName : null
                                 })(
                                     <Select
                                         value={2}
@@ -120,12 +134,22 @@ export default class AddManualUpload extends Component {
                                 {...formItemLayout}
                                 label={'污染物名称'}>
                                 {getFieldDecorator('pollutantCode', {
+                                       rules: [{
+                                        required: true,
+                                        message: '请选择污染物名称',
+                                    }],
                                 })(
                                     <Select
+                                        showSearch
+                                        style={{ width: 200 }}
                                         placeholder="请选择污染物名称"
+                                        optionFilterProp="children"
+                                        onFocus={this.handleFocus}
+                                        onBlur={this.handleBlur}
+                                        filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
                                         onChange={this.pollutantChange}
                                     >
-                                        {this.props.addselectdata !== null ? this.props.addselectdata.map(item => <Option key={item.PollutantCode}>{item.PollutantName}</Option>) : null}
+                                        {this.props.addselectdata !== null ? this.props.addselectdata.map(item => <Option key={item.PollutantCode + '--' + item.PollutantName}>{item.PollutantName}</Option>) : null}
                                     </Select>
                                 )}
                             </FormItem>
@@ -135,8 +159,12 @@ export default class AddManualUpload extends Component {
                         <Col xs={2} sm={6} md={12} lg={12} xl={12} xxl={12}>
                             <FormItem
                                 {...formItemLayout}
-                                label={'检测时间'}>
+                                label={'监测时间'}>
                                 {getFieldDecorator('monitorTime', {
+                                       rules: [{
+                                        required: true,
+                                        message: '请输入监测时间',
+                                    }],
                                 })(
                                     <DatePicker showTime format="YYYY-MM-DD HH:mm:ss" />
                                 )}
@@ -149,11 +177,11 @@ export default class AddManualUpload extends Component {
                                 {getFieldDecorator('avgValue', {
                                     rules: [{
                                         required: true,
-                                        message: '浓度',
+                                        message: '请输入浓度',
                                     }],
                                 })(
 
-                                    <Input placeholder="请输入浓度" onkeyup="value=value.replace(/[^\-?\d.]/g,'')" addonAfter={this.props.unit} />
+                                    <Input type="number" style={{ width: 200 }} placeholder="请输入浓度" addonAfter={this.props.unit} />
 
 
                                 )}

@@ -10,6 +10,7 @@ import Update from '../../components/ManualUpload/UpdateManualUpload';
 import { routerRedux } from 'dva/router';
 import styles from './ManualUpload.less';
 import TreeCardContent from '../../components/OverView/TreeCardContent';
+import SearchInput from '../../components/OverView/SearchInput';
 
 const confirm = Modal.confirm;
 const Option = Select.Option;
@@ -42,7 +43,7 @@ export default class ManualUpload extends Component {
             PollutantType: null,
             SelectHandleChange: [],
             visible: false,
-            TabsSelect: null,  //树下拉key
+            TabsSelect: '2',  //树下拉key
             pointName: null,
             pollutantTypeCode: "2",
             footer: <div>
@@ -112,18 +113,9 @@ export default class ManualUpload extends Component {
         this.props.dispatch({
             type: 'overview/getPollutantTypeList',
             payload: {
-            }
-        });
-        var getDGIMN = localStorage.getItem('DGIMN')
-        if (getDGIMN === null) {
-            getDGIMN = '[object Object]';
-        }
-        //点位列表
-        this.props.dispatch({
-            type: 'overview/querydatalist',
-            payload: {
+                RunState: this.state.TabsSelect,
                 pollutantTypes: this.state.pollutantTypeCode,
-                change:true, //当页面刷新时的条件
+                change: true, //当页面刷新时的条件
                 map: true, manualUpload: true,
                 pageIndex: this.props.pageIndex,
                 pageSize: this.props.pageSize,
@@ -133,6 +125,26 @@ export default class ManualUpload extends Component {
                 DGIMN: getDGIMN,
             }
         });
+        var getDGIMN = localStorage.getItem('DGIMN')
+        if (getDGIMN === null) {
+            getDGIMN = '[object Object]';
+        }
+        // //点位列表
+        // this.props.dispatch({
+        //     type: 'overview/querydatalist',
+        //     payload: {
+        //         RunState: this.state.TabsSelect,
+        //         pollutantTypes: this.state.pollutantTypeCode,
+        //         change: true, //当页面刷新时的条件
+        //         map: true, manualUpload: true,
+        //         pageIndex: this.props.pageIndex,
+        //         pageSize: this.props.pageSize,
+        //         BeginTime: this.state.rangeDate[0].format('YYYY-MM-DD 00:00:00'),
+        //         EndTime: this.state.rangeDate[1].format('YYYY-MM-DD 23:59:59'),
+        //         pollutantCode: this.state.SelectHandleChange,
+        //         DGIMN: getDGIMN,
+        //     }
+        // });
 
     }
     getStatusImg = (value) => {
@@ -164,14 +176,21 @@ export default class ManualUpload extends Component {
         this.GetManualSupplementList(this.props.DGIMN, this.state.SelectHandleChange, date[0].format('YYYY-MM-DD 00:00:00'), date[1].format('YYYY-MM-DD 23:59:59'), this.props.pageIndex, this.props.pageSize)
     };
     SelectHandleChange = (value) => {
-        this.setState({ SelectHandleChange: value })
-        this.GetManualSupplementList(this.props.DGIMN, value, this.state.rangeDate[0].format('YYYY-MM-DD 00:00:00'), this.state.rangeDate[1].format('YYYY-MM-DD 23:59:59'), this.props.pageIndex, this.props.pageSize)
+        var pName = [];
+        value.map((item) => {
+            var code = item.split('--')[0];
+            if (code !== undefined) {
+                pName.push(code)
+            }
+        })
+        this.setState({ SelectHandleChange: pName })
+        this.GetManualSupplementList(this.props.DGIMN, pName, this.state.rangeDate[0].format('YYYY-MM-DD 00:00:00'), this.state.rangeDate[1].format('YYYY-MM-DD 23:59:59'), this.props.pageIndex, this.props.pageSize)
     }
     SelectOptions = () => {
         const rtnVal = [];
         if (this.props.selectdata.length !== 0) {
             this.props.selectdata.map((item, key) => {
-                rtnVal.push(<Option key={item.PollutantCode}>{item.PollutantName}</Option>);
+                rtnVal.push(<Option key={item.PollutantCode + '--' + item.PollutantName}>{item.PollutantName}</Option>);
             });
         }
         return rtnVal;
@@ -282,43 +301,43 @@ export default class ManualUpload extends Component {
             },
         });
     }
-    changeTabList = (value) => {
-        var getDGIMN = localStorage.getItem('DGIMN')
-        if (getDGIMN === null) {
-            getDGIMN = '[object Object]';
-        }
-        this.setState({ TabsSelect: value })
-        //点位列表
-        this.props.dispatch({
-            type: 'overview/querydatalist',
-            payload: {
-                pointName: this.state.pointName,
-                RunState: value,
-                pollutantTypes: this.state.pollutantTypeCode,
-                map: true, manualUpload: true,
-                pageIndex: this.props.pageIndex,
-                pageSize: this.props.pageSize,
-                BeginTime: this.state.rangeDate[0].format('YYYY-MM-DD 00:00:00'),
-                EndTime: this.state.rangeDate[1].format('YYYY-MM-DD 23:59:59'),
-                pollutantCode: this.state.SelectHandleChange,
-                DGIMN: getDGIMN,
-                search: true,
-                callback: (data) => {
-                    if (data !== null) {
-                        const existdata = data.find((value, index, arr) => {
-                            return value.DGIMN == getDGIMN
-                        });
-                        if (existdata === undefined) {
-                            this.GetManualSupplementList('1', this.state.SelectHandleChange, this.state.rangeDate[0].format('YYYY-MM-DD 00:00:00'), this.state.rangeDate[1].format('YYYY-MM-DD 23:59:59'), this.props.pageIndex, this.props.pageSize, this.state.pointName);
-                        }
-                        else {
-                            this.GetManualSupplementList(getDGIMN, this.state.SelectHandleChange, this.state.rangeDate[0].format('YYYY-MM-DD 00:00:00'), this.state.rangeDate[1].format('YYYY-MM-DD 23:59:59'), this.props.pageIndex, this.props.pageSize, this.state.pointName);
-                        }
-                    }
-                }
-            }
-        });
-    }
+    // changeTabList = (value) => {
+    //     var getDGIMN = localStorage.getItem('DGIMN')
+    //     if (getDGIMN === null) {
+    //         getDGIMN = '[object Object]';
+    //     }
+    //     this.setState({ TabsSelect: value })
+    //     //点位列表
+    //     this.props.dispatch({
+    //         type: 'overview/querydatalist',
+    //         payload: {
+    //             pointName: this.state.pointName,
+    //             RunState: value,
+    //             pollutantTypes: this.state.pollutantTypeCode,
+    //             map: true, manualUpload: true,
+    //             pageIndex: this.props.pageIndex,
+    //             pageSize: this.props.pageSize,
+    //             BeginTime: this.state.rangeDate[0].format('YYYY-MM-DD 00:00:00'),
+    //             EndTime: this.state.rangeDate[1].format('YYYY-MM-DD 23:59:59'),
+    //             pollutantCode: this.state.SelectHandleChange,
+    //             DGIMN: getDGIMN,
+    //             search: true,
+    //             callback: (data) => {
+    //                 if (data !== null) {
+    //                     const existdata = data.find((value, index, arr) => {
+    //                         return value.DGIMN == getDGIMN
+    //                     });
+    //                     if (existdata === undefined) {
+    //                         this.GetManualSupplementList('1', this.state.SelectHandleChange, this.state.rangeDate[0].format('YYYY-MM-DD 00:00:00'), this.state.rangeDate[1].format('YYYY-MM-DD 23:59:59'), this.props.pageIndex, this.props.pageSize, this.state.pointName);
+    //                     }
+    //                     else {
+    //                         this.GetManualSupplementList(getDGIMN, this.state.SelectHandleChange, this.state.rangeDate[0].format('YYYY-MM-DD 00:00:00'), this.state.rangeDate[1].format('YYYY-MM-DD 23:59:59'), this.props.pageIndex, this.props.pageSize, this.state.pointName);
+    //                     }
+    //                 }
+    //             }
+    //         }
+    //     });
+    // }
     searchPointbyPointName = (value) => {
         this.setState({
             pointName: value
@@ -331,7 +350,7 @@ export default class ManualUpload extends Component {
         this.props.dispatch({
             type: 'overview/querydatalist',
             payload: {
-                pointType: this.state.TabsSelect,
+                RunState: this.state.TabsSelect,
                 pollutantTypes: this.state.pollutantTypeCode,
                 pointName: value,
                 map: true, manualUpload: true,
@@ -405,7 +424,12 @@ export default class ManualUpload extends Component {
                 dataIndex: 'StandardSituation',
                 align: 'left',
                 width: '10%',
-                key: 'StandardSituation'
+                key: 'StandardSituation',
+                render: (text, record, index) => (
+                    <span>
+                        {text === 0 ? "达标" : "超标"}
+                    </span>
+                ),
             }, {
                 title: '超标倍数',
                 dataIndex: 'OverTimes',
@@ -462,7 +486,7 @@ export default class ManualUpload extends Component {
                             }}
                             >
                                 <div style={{ marginBottom: 8, marginTop: 8 }}>
-                                    <Select
+                                    {/* <Select
                                         placeholder="监测点类型"
                                         style={{ width: 190 }}
                                         onChange={this.changeTabList}
@@ -475,7 +499,10 @@ export default class ManualUpload extends Component {
                                         onSearch={
                                             this.searchPointbyPointName
                                         }
-                                        style={{ width: 190 }} />
+                                        style={{ width: 190 }} /> */}
+                                   <SearchInput
+                                        onSerach={this.searchPointbyPointName}
+                                        style={{ marginTop: 5, marginBottom: 5, width: 400 }} searchName="排口名称" />
                                 </div>
                                 <div>
                                     <div style={{ marginTop: 5 }}>
@@ -485,18 +512,11 @@ export default class ManualUpload extends Component {
                                                 marginTop: 5,
                                                 background: '#fff',
                                             }}
-                                            pollutantTypeloading={pollutantTypeloading}
-                                            getHeight={'calc(100vh - 255px)'} getStatusImg={this.getStatusImg}
                                             getNowPollutantType={this.getNowPollutantType}
-                                            PollutantType={pollutantType} treedatalist={datalist}
-                                            pollutantTypelist={pollutantTypelist}
-                                            tabkey={this.state.pollutantTypeCode}
                                         />
                                         <TreeCardContent style={{ overflow: 'auto', width: 400, background: '#fff' }}
-                                            getHeight='calc(100vh - 255px)'
-                                            // pollutantTypeloading={pollutantTypeloading}
-                                            // getStatusImg={this.getStatusImg} isloading={treedataloading}
-                                            treeCilck={this.treeCilck} treedatalist={datalist} PollutantType={pollutantType} ifSelect={true} />
+                                            getHeight='calc(100vh - 275px)'
+                                            treeCilck={this.treeCilck} PollutantType={pollutantType} ifSelect={true} />
                                     </div>
                                 </div>
                             </div>
@@ -514,6 +534,7 @@ export default class ManualUpload extends Component {
                                                     mode="multiple"
                                                     style={{ width: '90%' }}
                                                     placeholder="请选择污染物"
+                                                    filterOption={true}
                                                     onChange={this.SelectHandleChange}
                                                 >
                                                     {this.SelectOptions()}

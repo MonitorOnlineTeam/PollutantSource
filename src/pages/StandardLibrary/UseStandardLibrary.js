@@ -211,28 +211,14 @@ class UseStandardLibrary extends Component {
                 key: 'AbnormalUpperLimit',
                 width: '10%',
                 align: 'center',
-                render: (text, record) => {
-                    if (text === 0) {
-                        return "-" ;
-                    }
-
-                    return text;
-
-                }
+                render: (text, record) => text
             }, {
                 title: '检出下限',
                 dataIndex: 'AbnormalLowerLimit',
                 key: 'AbnormalLowerLimit',
                 width: '10%',
                 align: 'center',
-                render: (text, record) => {
-                    if (text === 0) {
-                        return "-";
-                    }
-
-                    return text;
-
-                }
+                render: (text, record) => text
             },
             {
                 title: '报警上限',
