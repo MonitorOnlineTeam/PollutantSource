@@ -7,7 +7,7 @@ const FormItem = Form.Item;
 @connect(({urgentdispatch,loading}) => ({
     operationUserInfo:urgentdispatch.operationUserInfo,
     existTask:urgentdispatch.existTask,
-    loading:loading.effects['urgentdispatch/queryoperationInfo'],
+    loading:loading.effects['overview/addtaskinfo'],
 }))
 ///紧急派单
 class UrgentDispatch extends Component {
