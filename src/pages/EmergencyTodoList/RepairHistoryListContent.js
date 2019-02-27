@@ -89,7 +89,6 @@ class RepairHistoryListContent extends Component {
     }
 
     seeDetail = (record) => {
-        debugger;
         if(this.props.operation===undefined){
             this.props.dispatch(routerRedux.push(`/PatrolForm/RepairRecord/${this.props.DGIMN}/${this.props.viewtype}/operationlist/RepairHistoryList/${record.TaskID}`));
         }else{

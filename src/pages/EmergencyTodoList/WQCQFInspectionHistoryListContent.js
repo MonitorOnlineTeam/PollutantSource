@@ -96,23 +96,21 @@ class WQCQFInspectionHistoryListContent extends Component {
             payload: {
                 TaskID: record.TaskID,
                 callback: (typeId) => {
-                    // if (typeId === 5) {
-                    //     this.props.dispatch(routerRedux.push(`/PatrolForm/completeextraction/${this.props.DGIMN}/menu/intelligentOperation/wqcqfinspectionhistoryrecords/${record.TaskID}`));
-                    // }
-                    // else if (typeId === 6) {
-                    //     this.props.dispatch(routerRedux.push(`/PatrolForm/dilutionsampling/${this.props.DGIMN}/menu/intelligentOperation/xscyfinspectionhistoryrecords/${record.TaskID}`));
-                    // }
-                    // else {
-                    //     this.props.dispatch(routerRedux.push(`/PatrolForm/directmeasurement/${this.props.DGIMN}/menu/intelligentOperation/zzclfinspectionhistoryrecords/${record.TaskID}`));
-                    // }
-                    if(typeId==EnumPsOperationForm.CqfPatrol){
-                        this.props.dispatch(routerRedux.push(`/PatrolForm/CompleteExtractionRecord/${this.props.DGIMN}/${this.props.viewtype}/operationlist/WQCQFInspectionHistoryList/${record.TaskID}`));
+                    if(this.props.operation===undefined){
+                        if(typeId==EnumPsOperationForm.CqfPatrol){
+                            this.props.dispatch(routerRedux.push(`/PatrolForm/CompleteExtractionRecord/${this.props.DGIMN}/${this.props.viewtype}/operationlist/WQCQFInspectionHistoryList/${record.TaskID}`));
+                        }else if(typeId==EnumPsOperationForm.CyfPatrol){
+                            this.props.dispatch(routerRedux.push(`/PatrolForm/DilutionSamplingRecord/${this.props.DGIMN}/${this.props.viewtype}/operationlist/WQCQFInspectionHistoryList/${record.TaskID}`));
+                        }else if(typeId==EnumPsOperationForm.ClfPatrol){
+                            this.props.dispatch(routerRedux.push(`/PatrolForm/DirectMeasurementRecord/${this.props.DGIMN}/${this.props.viewtype}/operationlist/WQCQFInspectionHistoryList/${record.TaskID}`));
+                        }
+                    }else if(typeId==EnumPsOperationForm.CqfPatrol){
+                        this.props.dispatch(routerRedux.push(`/PatrolForm/CompleteExtractionRecord/${this.props.DGIMN}/${this.props.operation}/WQCQFInspectionHistoryList/${record.TaskID}`));
                     }else if(typeId==EnumPsOperationForm.CyfPatrol){
-                        this.props.dispatch(routerRedux.push(`/PatrolForm/DilutionSamplingRecord/${this.props.DGIMN}/${this.props.viewtype}/operationlist/WQCQFInspectionHistoryList/${record.TaskID}`));
+                        this.props.dispatch(routerRedux.push(`/PatrolForm/DilutionSamplingRecord/${this.props.DGIMN}/${this.props.operation}/WQCQFInspectionHistoryList/${record.TaskID}`));
                     }else if(typeId==EnumPsOperationForm.ClfPatrol){
-                        this.props.dispatch(routerRedux.push(`/PatrolForm/DirectMeasurementRecord/${this.props.DGIMN}/${this.props.viewtype}/operationlist/WQCQFInspectionHistoryList/${record.TaskID}`));
+                        this.props.dispatch(routerRedux.push(`/PatrolForm/DirectMeasurementRecord/${this.props.DGIMN}/${this.props.operation}/WQCQFInspectionHistoryList/${record.TaskID}`));
                     }
-                    
                 }
             }
         });
@@ -168,7 +166,8 @@ class WQCQFInspectionHistoryListContent extends Component {
             key: 'TaskID',
             render: (text, record) => <a onClick={
                 () => this.seeDetail(record)
-            }> 详细 
+            }
+            > 详细
                                       </a>
         }];
         if (this.props.loading) {

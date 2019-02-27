@@ -88,7 +88,11 @@ class ConsumablesReplaceHistoryList extends Component {
     }
 
     seeDetail = (record) => {
-        this.props.dispatch(routerRedux.push(`/PatrolForm/ConsumablesReplaceRecord/${this.props.DGIMN}/${this.props.viewtype}/operationlist/ConsumablesReplaceHistoryList/${record.TaskID}`));
+        if(this.props.operation===undefined){
+            this.props.dispatch(routerRedux.push(`/PatrolForm/ConsumablesReplaceRecord/${this.props.DGIMN}/${this.props.viewtype}/operationlist/ConsumablesReplaceHistoryList/${record.TaskID}`));
+        }else{
+            this.props.dispatch(routerRedux.push(`/PatrolForm/ConsumablesReplaceRecord/${this.props.DGIMN}/${this.props.operation}/ConsumablesReplaceHistoryList/${record.TaskID}`));
+        }
     }
 
     ChangeModelState=(condition)=>{

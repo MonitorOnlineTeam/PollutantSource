@@ -1,36 +1,36 @@
 import React, { Component } from 'react';
+import styles from '../EmergencyTodoList/JzHistoryListContent.less';
 import {
+    Button,
+    Input,
     Card,
     Row,
     Col,
     Table,
-    Spin,
-    Tag
+    Form,
+    Select, Modal, message, Tag, Radio, Checkbox,
+    Spin
 } from 'antd';
 import { connect } from 'dva';
 import moment from 'moment';
-import { routerRedux } from 'dva/router';
 import RangePicker_ from '../../components/PointDetail/RangePicker_';
-import styles from './StandardGasRepalceHistoryList.less';
+import { routerRedux } from 'dva/router';
 
 @connect(({ maintenancelist, loading }) => ({
-    loading: loading.effects['maintenancelist/GetStandardGasRepalceHistoryList'],
-    HistoryStandardGasRepalceRecordList: maintenancelist.StandardGasRepalceHistoryList,
-    HistoryStandardGasRepalceRecordListCount: maintenancelist.total,
+    loading: loading.effects['maintenancelist/GetJzHistoryList'],
+    JzHistoryRecord: maintenancelist.JzHistoryList,
+    RecordCount: maintenancelist.total,
     pageIndex: maintenancelist.pageIndex,
     pageSize: maintenancelist.pageSize,
     beginTime:maintenancelist.beginTime, //开始时间
     endTime:maintenancelist.endTime, //结束时间
     DGIMN:maintenancelist.DGIMN
 }))
-/*
-页面：标准气体历史记录
-*/
-class StandardGasRepalceHistoryListContent extends Component {
+class JzHistoryListContent extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            rangeDate: [moment(moment(new Date()).subtract(3, 'month').format('YYYY-MM-DD 00:00:00')), moment(moment(new Date()).format('YYYY-MM-DD 23:59:59'))], // 最近3月
+            rangeDate: [moment(moment(new Date()).subtract(3, 'month').format('YYYY-MM-DD 00:00:00')), moment(moment(new Date()).format('YYYY-MM-DD 23:59:59'))]
         };
     }
 
@@ -48,7 +48,7 @@ class StandardGasRepalceHistoryListContent extends Component {
 
     GetHistoryRecord = () => {
         this.props.dispatch({
-            type: 'maintenancelist/GetStandardGasRepalceHistoryList',
+            type: 'maintenancelist/GetJzHistoryList',
             payload: {
             }
         });
@@ -87,11 +87,11 @@ class StandardGasRepalceHistoryListContent extends Component {
         this.GetHistoryRecord();
     }
 
-    seeDetail = (record) => {
+    seeDetail = (Record) => {
         if(this.props.operation===undefined){
-            this.props.dispatch(routerRedux.push(`/PatrolForm/StandardGasRepalceRecord/${this.props.DGIMN}/${this.props.viewtype}/operationlist/StandardGasRepalceHistoryList/${record.TaskID}`));
+            this.props.dispatch(routerRedux.push(`/PatrolForm/JzRecord/${this.props.DGIMN}/${this.props.viewtype}/operationlist/JzHistoryList/${record.TaskID}`));
         }else{
-            this.props.dispatch(routerRedux.push(`/PatrolForm/StandardGasRepalceRecord/${this.props.DGIMN}/${this.props.operation}/StandardGasRepalceHistoryList/${record.TaskID}`));
+            this.props.dispatch(routerRedux.push(`/PatrolForm/JzRecord/${this.props.DGIMN}/${this.props.operation}/JzHistoryList/${record.TaskID}`));
         }
     }
 
@@ -103,27 +103,27 @@ class StandardGasRepalceHistoryListContent extends Component {
     }
 
     render() {
-        const dataSource = this.props.HistoryStandardGasRepalceRecordList === [] ? [] : this.props.HistoryStandardGasRepalceRecordList;
+        const SCREEN_HEIGHT = document.querySelector('body').offsetHeight - 150;
+        const dataSource = this.props.JzHistoryRecord;
         const columns = [{
             title: '校准人',
             width: '20%',
             dataIndex: 'CreateUserID',
             key: 'CreateUserID'
         }, {
-            title: '标准物质名称（名称-有效期）',
+            title: '分析仪校准是否正常',
             width: '45%',
             dataIndex: 'Content',
             key: 'Content',
-            render: (text, record) => {
+            render: (text, Record) => {
                 if (text !== undefined) {
-                    let content = text.split(',');
+                    var content = text.split('),');
                     var resu = [];
                     content.map((item, key) => {
-                        if (text.indexOf('()') === '-1') {
-                            item = item.replace('(', ' - ');
-                            item = item.replace(')', '');
-                        } else {
-                            item = item.replace('()', '');
+                        // item = item.replace('(',' - ');
+                        // item = item.replace(')','');
+                        if (key !== content.length - 1) {
+                            item = item + ')';
                         }
                         resu.push(
                             <Tag key={key} style={{ marginBottom: 1.5, marginTop: 1.5 }} color="#108ee9">{item}</Tag>
@@ -136,18 +136,17 @@ class StandardGasRepalceHistoryListContent extends Component {
             title: '记录时间',
             dataIndex: 'CreateTime',
             width: '20%',
-            key: 'CreateTime',
-            sorter: (a, b) => Date.parse(a.CreateTime) - Date.parse(b.CreateTime),
+            key: 'CreateTime'
         }, {
             title: '详细',
             dataIndex: 'TaskID',
             width: '15%',
             key: 'TaskID',
-            render: (text, record) => <a onClick={
-                () => this.seeDetail(record)
+            render: (text, Record) => {
+                return <a onClick={
+                    () => this.seeDetail(Record)
+                } > 详细 </a>;
             }
-            > 详细
-            </a>
         }];
         if (this.props.loading) {
             return (<Spin
@@ -166,11 +165,11 @@ class StandardGasRepalceHistoryListContent extends Component {
                 <Card bordered={false}>
                     <div className={styles.conditionDiv}>
                         <Row gutter={8}>
-                            <Col span={3}>
+                            <Col span={3} >
                                 <label className={styles.conditionLabel}>记录时间：</label>
                             </Col>
-                            <Col span={21}>
-                                <RangePicker_ style={{ width: 350 }} onChange={this._handleDateChange} format="YYYY-MM-DD" dateValue={this.state.rangeDate} />
+                            <Col span={21} >
+                                <RangePicker_ style={{ width: 350 }} onChange={this._handleDateChange} format={'YYYY-MM-DD'} dateValue={this.state.rangeDate} />
                             </Col>
 
                         </Row>
@@ -196,7 +195,7 @@ class StandardGasRepalceHistoryListContent extends Component {
                         pagination={{
                             showSizeChanger: true,
                             showQuickJumper: true,
-                            'total': this.props.HistoryStandardGasRepalceRecordListCount,
+                            'total': this.props.RecordCount,
                             'pageSize': this.props.pageSize,
                             'current': this.props.pageIndex,
                             onChange: this.onChange,
@@ -209,4 +208,4 @@ class StandardGasRepalceHistoryListContent extends Component {
         );
     }
 }
-export default StandardGasRepalceHistoryListContent;
+export default JzHistoryListContent;

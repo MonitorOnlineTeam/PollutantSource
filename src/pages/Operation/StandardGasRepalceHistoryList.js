@@ -149,7 +149,7 @@ export default class StandardGasRepalceHistoryList extends Component {
                             </div>
                         </Col>
                         <Col style={{ width: document.body.clientWidth - 470, height: 'calc(100vh - 150px)', float: 'right' }}>
-                        <StandardGasRepalceHistoryListContent  pointcode={localStorage.getItem('DGIMN')} viewtype="no" height="calc(100vh - 360px)"/>
+                        <StandardGasRepalceHistoryListContent  pointcode={localStorage.getItem('DGIMN')} viewtype="no" height="calc(100vh - 360px)" operation="menu/intelligentOperation"/>
                         </Col>
                     </Row>
                 </div>
