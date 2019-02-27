@@ -446,7 +446,6 @@ export async function queryoverdatalist(params) {
         pageIndex: params.pageIndex,
         pageSize: params.pageSize
     };
-    debugger;
     const result = await post('/api/rest/PollutantSourceApi/OverData/GetOnePointOverDataList', body, null);
     return result === null ? { data: null } : result;
 }

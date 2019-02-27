@@ -71,7 +71,8 @@ class index extends Component {
                 0, 0
             ],
             visible: false,
-            pointName: null
+            pointName: null,
+            radioDefaultValue:"2"
         };
         this.mapEvents = {
             created(m) {
@@ -664,6 +665,7 @@ treeCilck = (row) => {
          });
          this.setState({
              visible:false,
+             radioDefaultValue: value
          });
      }
 
@@ -931,7 +933,7 @@ treeCilck = (row) => {
                              zIndex:100
                          }}
                      >
-                         <Radio.Group defaultValue="2" buttonStyle="solid" size="small" onChange={this.onRadioChange}>
+                         <Radio.Group defaultValue={this.state.radioDefaultValue} buttonStyle="solid" size="small" onChange={this.onRadioChange}>
                              <RadioButton value="2">废气</RadioButton>
                              <RadioButton value="1">废水</RadioButton>
                          </Radio.Group>
