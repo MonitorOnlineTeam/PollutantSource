@@ -199,7 +199,6 @@ export default class EquipmentOperatingRate extends Component {
                 width: '10%',
                 align: 'center',
                 render: (text, record) => {
-                    console.log(`/pointdetail/${record.DGIMN}/ywdsjlist/${this.props.beginTime}/${this.props.endTime}`);
                     return (
                         <a onClick={
                             () => this.props.dispatch(routerRedux.push(`/pointdetail/${record.DGIMN}/equipmentoperatingrate/ywdsjlist`))

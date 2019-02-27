@@ -316,11 +316,13 @@ class PointDetail extends Component {
 
     }
 
-    getBackButton=()=>{
+    getBackButton=()=>{debugger;
         const viewtype= this.props.match.params.viewtype;
         let backpath=`/overview/${viewtype}`;
         if(viewtype==="pointinfo"){
             backpath=`/sysmanage/${viewtype}`;
+        }else if(viewtype==="equipmentoperatingrate"){
+            backpath=`/qualitycontrol/${viewtype}`;
         }
         return(<Link to={backpath}><Icon type="left" />返回</Link>);
     }
