@@ -71,6 +71,9 @@ export default class DeviceExceptionRecord extends Component {
             case 'pointinfo': //排口管理
                 rtnVal.push({ Name: '排口管理', Url: `/sysmanage/${listUrl}` });
                 break;
+            case 'equipmentoperatingrate': //设备运转率
+                rtnVal.push({ Name: '设备运转率', Url: `/qualitycontrol/${listUrl}` });
+                break;
             default:
                 break;
         }
