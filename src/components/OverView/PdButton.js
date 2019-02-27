@@ -8,7 +8,8 @@ import UrgentDispatch from './UrgentDispatch';
     operationUserInfo:urgentdispatch.operationUserInfo,
     existTask:urgentdispatch.existTask,
     loading:loading.effects['urgentdispatch/queryoperationInfo'],
-    dgimn:urgentdispatch.dgimn
+    dgimn:urgentdispatch.dgimn,
+    paloading:loading.effects['overview/addtaskinfo'],
 }))
 class PdButton extends Component {
      constructor(props)
@@ -189,7 +190,7 @@ class PdButton extends Component {
 
     render() {
         //如果没有值的话，会从后台加载数据
-        const {operationUserInfo,dgimn,viewType,loading,pointName}=this.props;
+        const {operationUserInfo,dgimn,viewType,paloading,pointName}=this.props;
         //组件传值的话优先采用传入的值
         let {id,name,tel,pname,DGIMN}=this.props;
           
@@ -201,33 +202,17 @@ class PdButton extends Component {
            pname=pointName;
            DGIMN=dgimn;
         }
-    //    let res='';
-        // if(loading)
-        // {
-        //     return'';
-        // }
-        // if(!DGIMN)
-        // {
-        //     return'';
-        // }
-        // //数据一览
-        // else if(viewType==="datalist")
-        // {
-        //     res= (
-        //         <div>
-        //          {this.getbutton()}
-        //         </div>
-        //     );
-        // }
-        // //地图一览
-        // else if(viewType==="mapview")
-        // {
-        //     res= (
-        //         <div>
-        //          {this.getbutton()}
-        //         </div>
-        //     );
-        // }
+        if(paloading)
+        {
+            return (<Spin
+                style={{
+                    width: '100%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                }}
+            />);
+        }
         
         return (<span>
           {this.getbutton()}
