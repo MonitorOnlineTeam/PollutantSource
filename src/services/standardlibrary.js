@@ -215,6 +215,16 @@ export async function usepoint(params) {
         data: null
     } : result;
 }
+// 应用到所有排口
+export async function useallDGIMNbyid(params) {
+    const body = {
+        StandardLibraryID: params.StandardLibraryID
+    };
+    const result = post('/api/rest/PollutantSourceApi/StandardLibrary/UseAllPoint', body, null);
+    return result === null ? {
+        data: null
+    } : result;
+}
 // 是否应用当前污染物
 export async function isusepollutant(params) {
     const body = {

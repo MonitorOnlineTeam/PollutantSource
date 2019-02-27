@@ -65,28 +65,33 @@ class AlarmRecord extends Component {
         this.setState({
             rangeDate: date,
             current: 1
+        },()=>{
+            this.reloaddatalist(this.state.pollutantCode, this.state.current, this.state.pageSize, date[0], date[1]);
         });
-        this.reloaddatalist(this.state.pollutantCode, this.state.current, this.state.pageSize, date[0], date[1]);
+
     };
 
       // 污染物
       _handlePollutantChange=(value, selectedOptions) => {
-          if(value==-1)
-          {
-            value=null;
+          if(value==-1) {
+              value=null;
           }
           this.setState({
               pollutantCode: value,
               current: 1
+          },()=>{
+              this.reloaddatalist(value, this.state.current, this.state.pageSize, this.state.rangeDate[0], this.state.rangeDate[1]);
           });
-          this.reloaddatalist(value, this.state.current, this.state.pageSize, this.state.rangeDate[0], this.state.rangeDate[1]);
+
       };
 
       pageIndexChange=(page, pageSize) => {
           this.setState({
               current: page,
+          },()=>{
+              this.reloaddatalist(this.state.pollutantCode, page, this.state.pageSize, this.state.rangeDate[0], this.state.rangeDate[1]);
           });
-          this.reloaddatalist(this.state.pollutantCode, page, this.state.pageSize, this.state.rangeDate[0], this.state.rangeDate[1]);
+
       }
 
       reloaddatalist=(pollutantCode, pageIndex, pageSize, beginTime, endTime) => {
@@ -114,9 +119,12 @@ class AlarmRecord extends Component {
                   //参数改变让页面刷新
                   DGIMN:nextProps.DGIMN,
                   firsttime:nextProps.firsttime,
-                  lasttime:nextProps.lasttime
+                  lasttime:nextProps.lasttime,
+                  current: 1,
+                  pollutantCode:null
               },()=>{
                   this._querylist(nextProps.DGIMN);
+
               });
 
           }

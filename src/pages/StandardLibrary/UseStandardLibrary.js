@@ -98,7 +98,6 @@ class UseStandardLibrary extends Component {
     };
 
     renderStandardList = () => {
-        debugger;
         console.log(this.props.list);
         const rtnVal = [];
         const that = this;
@@ -161,7 +160,7 @@ class UseStandardLibrary extends Component {
                 {
                     <Col key={`${key }2`} span={12}><span className={styles.pollutantName}>{item.PollutantName}:</span></Col>
                 }   <Col key={`${key }3`} span={12}><span className={styles.UpperLimit}>{item.UpperLimit}-{item.LowerLimit}</span></Col>
-                        </div>);
+            </div>);
         });
         return rtnVal;
     }
@@ -284,7 +283,7 @@ class UseStandardLibrary extends Component {
                                 ><Icon type="exclamation-circle" />  未监测
                                 </a>
                             </Button>
-                               </span>;
+                        </span>;
                     }
                     return <span> <Button color="blue"> <a
                         title="单击从监测中移除"
@@ -292,9 +291,9 @@ class UseStandardLibrary extends Component {
                             () => this.IsEnabled(0, record)
                         }
                     ><Icon type="setting" spin={true} /> 监测中
-                    </a>
-                                  </Button>
-                           </span>;
+                                                        </a>
+                    </Button>
+                    </span>;
                 }
             },
             {
@@ -312,7 +311,7 @@ class UseStandardLibrary extends Component {
                             })
                         }
                         > 编辑
-                        </a>;
+                               </a>;
                     }
                     return <a style={{ color: '#D1D1D1' }}> 编辑 </a>;
                 }
