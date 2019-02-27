@@ -437,7 +437,6 @@ export async function queryhistorydatalist(params) {
 }
 // 获取单排口超标数据
 export async function queryoverdatalist(params) {
-    console.log(params.beginTime);
     const body = {
         DGIMN: params.dgimn,
         pollutantCode: params.pollutantCode,
