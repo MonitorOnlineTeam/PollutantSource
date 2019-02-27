@@ -1,3 +1,4 @@
+import moment from 'moment';
 import {getTimeDistance} from '../utils/utils';
 import { Model } from '../dvapack';
 import { loadPollutantType, GetAlarmNotices } from '../services/api';
