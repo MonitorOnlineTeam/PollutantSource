@@ -4,7 +4,7 @@ import {
 import {
     getlist, enableordisable, deletestandardlibrarybyid, addstandardlibrary, addstandardlibrarypollutant, uploadfiles, getStandardlibrarybyid, deletefiles
     , editstandardlibrary, getpollutantlist, getstandardlibrarypollutantlist, deletestandardlibrarypollutantbyid, editstandardlibrarypollutant, getStandardlibrarypollutantbyid
-    , getstandardlibraryfiles, getuselist, getpollutantbydgimn, usepoint, isusepollutant, getmonitorpointpollutant, editmonitorpointPollutant
+    , getstandardlibraryfiles, getuselist, getpollutantbydgimn, usepoint, isusepollutant, getmonitorpointpollutant, editmonitorpointPollutant, useallDGIMNbyid
 } from '../services/standardlibrary';
 
 export default Model.extend({
@@ -261,6 +261,24 @@ export default Model.extend({
                     Name,
                     Type
                 },
+            });
+            callback();
+        },
+        * useallDGIMNbyid({
+            payload: {
+                StandardLibraryID,
+                callback
+            }
+        }, {
+            call,
+            put,
+            update,
+        }) {
+            const result = yield call(useallDGIMNbyid, {
+                StandardLibraryID: StandardLibraryID,
+            });
+            yield update({
+                requstresult: result.requstresult,
             });
             callback();
         },
