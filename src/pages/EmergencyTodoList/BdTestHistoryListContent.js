@@ -89,7 +89,7 @@ class BdTestHistoryListContent extends Component {
 
     seeDetail = (record) => {
         if(this.props.operation===undefined){
-            this.props.dispatch(routerRedux.push(`/PatrolForm/BdTestRecord/${this.props.DGIMN}/${this.props.viewtype}/operationlist/BdTestHistoryList/${record.TaskID}`));
+            this.props.dispatch(routerRedux.push(`/PatrolForm/BdTestRecord/${this.props.DGIMN}/${this.props.viewtype}/qcontrollist/BdTestHistoryList/${record.TaskID}`));
         }else{
             this.props.dispatch(routerRedux.push(`/PatrolForm/BdTestRecord/${this.props.DGIMN}/${this.props.operation}/BdTestHistoryList/${record.TaskID}`));
         }

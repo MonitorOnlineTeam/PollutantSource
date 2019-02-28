@@ -166,6 +166,7 @@ export default class JzRecord extends Component {
         let taskfrom = this.state.taskfrom;
         let histroyrecordtype = this.state.histroyrecordtype;
         rtnVal.push({ Name: '首页', Url: '/' });
+        debugger;
         switch (listUrl) {
             case 'datalistview':    //数据一栏
                 rtnVal.push({ Name: '数据一览', Url: `/overview/${listUrl}` });

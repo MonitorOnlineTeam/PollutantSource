@@ -31,17 +31,29 @@ export default Model.extend({
         // 获取校准历史记录
         * GetJzHistoryList({
             payload,
-        }, { call, update }) {
-            const DataInfo = yield call(GetJzHistoryList, payload);
+        }, { call, update,select }) {
+            const {pageIndex,pageSize,beginTime,endTime,DGIMN} = yield select(_ => _.maintenancelist);
+            let body = {
+                pageIndex,
+                pageSize,
+                beginTime,
+                endTime,
+                DGIMN
+            };
+            const DataInfo = yield call(GetJzHistoryList, body);
             if (DataInfo !== null && DataInfo.requstresult == EnumRequstResult.Success) {
                 if (DataInfo.data !== null) {
-                    yield update({ JzHistoryList: DataInfo.data, total: DataInfo.total, DGIMN: payload.DGIMN });
+                    yield update({
+                        requstresult: DataInfo.requstresult,
+                        JzHistoryList: DataInfo.data,
+                        total: DataInfo.total
+                    });
                 }
             } else {
                 yield update({
-                    JzHistoryList: null,
-                    total: 0,
-                    DGIMN: payload.DGIMN
+                    requstresult: DataInfo.requstresult,
+                    JzHistoryList: [],
+                    total: DataInfo.total
                 });
             }
         },
@@ -215,24 +227,26 @@ export default Model.extend({
             update,
             select
         }) {
-            const DataInfo = yield call(GetDeviceExceptionHistoryList, payload);
+            const {pageIndex,pageSize,beginTime,endTime,DGIMN} = yield select(_ => _.maintenancelist);
+            let body = {
+                pageIndex,
+                pageSize,
+                beginTime,
+                endTime,
+                DGIMN
+            };
+            const DataInfo = yield call(GetDeviceExceptionHistoryList, body);
             if (DataInfo !== null && DataInfo.requstresult == EnumRequstResult.Success) {
                 yield update({
                     requstresult: DataInfo.requstresult,
                     DeviceExceptionHistroyList: DataInfo.data,
                     total: DataInfo.total,
-                    pageIndex: payload.pageIndex,
-                    pageSize: payload.pageSize,
-                    DGIMN: payload.DGIMN,
                 });
             } else {
                 yield update({
                     requstresult: DataInfo.requstresult,
                     DeviceExceptionHistroyList: [],
                     total: DataInfo.total,
-                    pageIndex: payload.pageIndex,
-                    pageSize: payload.pageSize,
-                    DGIMN: payload.DGIMN,
                 });
             }
         },
@@ -243,25 +257,28 @@ export default Model.extend({
         }, {
             call,
             update,
+            select
         }) {
-            const DataInfo = yield call(GetBdTestHistoryList, payload);
+            const {pageIndex,pageSize,beginTime,endTime,DGIMN} = yield select(_ => _.maintenancelist);
+            let body = {
+                pageIndex,
+                pageSize,
+                beginTime,
+                endTime,
+                DGIMN
+            };
+            const DataInfo = yield call(GetBdTestHistoryList, body);
             if (DataInfo !== null && DataInfo.requstresult == EnumRequstResult.Success) {
                 yield update({
                     requstresult: DataInfo.requstresult,
                     BdTestHistoryList: DataInfo.data,
-                    total: DataInfo.total,
-                    pageIndex: payload.pageIndex,
-                    pageSize: payload.pageSize,
-                    DGIMN: payload.DGIMN,
+                    total: DataInfo.total
                 });
             } else {
                 yield update({
                     requstresult: DataInfo.requstresult,
                     BdTestHistoryList: [],
-                    total: DataInfo.total,
-                    pageIndex: payload.pageIndex,
-                    pageSize: payload.pageSize,
-                    DGIMN: payload.DGIMN,
+                    total: DataInfo.total
                 });
             }
         }

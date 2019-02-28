@@ -87,9 +87,9 @@ class JzHistoryListContent extends Component {
         this.GetHistoryRecord();
     }
 
-    seeDetail = (Record) => {
+    seeDetail = (record) => {
         if(this.props.operation===undefined){
-            this.props.dispatch(routerRedux.push(`/PatrolForm/JzRecord/${this.props.DGIMN}/${this.props.viewtype}/operationlist/JzHistoryList/${record.TaskID}`));
+            this.props.dispatch(routerRedux.push(`/PatrolForm/JzRecord/${this.props.DGIMN}/${this.props.viewtype}/qcontrollist/JzHistoryList/${record.TaskID}`));
         }else{
             this.props.dispatch(routerRedux.push(`/PatrolForm/JzRecord/${this.props.DGIMN}/${this.props.operation}/JzHistoryList/${record.TaskID}`));
         }

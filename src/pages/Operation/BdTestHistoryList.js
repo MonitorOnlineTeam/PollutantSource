@@ -141,9 +141,9 @@ export default class BdTestHistoryList extends Component {
                                 <div style={{ marginTop: 5 }}>
                                     <TreeCardContent style={{ overflow: 'auto', width: 400, background: '#fff' }}
                                         getHeight='calc(100vh - 200px)'
-                                        pollutantTypeloading={pollutantTypeloading}
-                                        getStatusImg={this.getStatusImg} isloading={treedataloading}
-                                        treeCilck={this.treeCilck} treedatalist={datalist} PollutantType={this.state.pollutantTypeCode} ifSelect={true} />
+                                        pollutantTypeloading={this.props.pollutantTypeloading}
+                                        getStatusImg={this.getStatusImg} isloading={this.props.treedataloading}
+                                        treeCilck={this.treeCilck} treedatalist={this.props.datalist} PollutantType={this.state.pollutantTypeCode} ifSelect={true} />
                                 </div>
                             </div>
                         </div>
