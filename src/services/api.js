@@ -523,10 +523,10 @@ export async function addtaskinfo(params) {
     const result = await post('/api/rest/PollutantSourceApi/PTaskProcessing/AddTask', body, null);
     return result === null ? { data: null } : result.requstresult;
 }
-//催办
+//督办
 export async function queryurge(params) {
     const body = {
-        NoticeTitle: '通知',
+        NoticeTitle: '督办',
         ToUserId: params.personId,
         //1是督办
         NoticeType: 1,

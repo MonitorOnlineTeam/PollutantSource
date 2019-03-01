@@ -551,7 +551,7 @@ class EmergencyDetailInfo extends Component {
                 <Modal
                     visible={this.state.cdvisible}
                     onCancel={this.cdClose}
-                    onOk={() => this.cdOk(TaskID)}
+                    onOk={() => this.cdOk(this.props.TaskID)}
                     title="打回说明"
                 >
                     <Form className="login-form">
