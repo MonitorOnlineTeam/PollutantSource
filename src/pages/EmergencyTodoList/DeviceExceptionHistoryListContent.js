@@ -88,7 +88,7 @@ class DeviceExceptionHistoryListContent extends Component {
 
     seeDetail = (record) => {
         if(this.props.operation===undefined){
-            this.props.dispatch(routerRedux.push(`/PatrolForm/DeviceExceptionRecord/${this.props.DGIMN}/${this.props.viewtype}/operationlist/DeviceExceptionHistoryList/${record.TaskID}`));
+            this.props.dispatch(routerRedux.push(`/PatrolForm/DeviceExceptionRecord/${this.props.DGIMN}/${this.props.viewtype}/qcontrollist/DeviceExceptionHistoryList/${record.TaskID}`));
         }else{
             this.props.dispatch(routerRedux.push(`/PatrolForm/DeviceExceptionRecord/${this.props.DGIMN}/${this.props.operation}/DeviceExceptionHistoryList/${record.TaskID}`));
         }

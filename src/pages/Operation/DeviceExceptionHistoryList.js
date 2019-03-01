@@ -8,8 +8,6 @@ import {
     Spin
 } from 'antd';
 import { connect } from 'dva';
-import moment from 'moment';
-import RangePicker_ from '../../components/PointDetail/RangePicker_';
 import styles from './index.less';
 import { routerRedux } from 'dva/router';
 import SearchInput from '../../components/OverView/SearchInput';
@@ -17,18 +15,13 @@ import TreeStatus from '../../components/OverView/TreeStatus';
 import TreeCard from '../../components/OverView/TreeCard';
 import TreeCardContent from '../../components/OverView/TreeCardContent';
 import MonitorContent from '../../components/MonitorContent/index';
+import DeviceExceptionHistoryListContent from '../EmergencyTodoList/DeviceExceptionHistoryListContent';
+import { EnumPollutantTypeCode } from '../../utils/enum';
 
-@connect(({ task, overview, loading }) => ({
-    loading: loading.effects['task/GetDeviceExceptionList'],
-    HistoryDeviceExceptionList: task.List,
-    HistoryDeviceExceptionListCount: task.total,
-    pageIndex: task.pageIndex,
-    pageSize: task.pageSize,
+@connect(({ overview, loading }) => ({
     datalist: overview.data,
     pollutantTypeloading: loading.effects['overview/getPollutantTypeList'],
     treedataloading: loading.effects['overview/querydatalist'],
-    pollutantTypelist: overview.pollutantTypelist,
-    DGIMN: task.DGIMN,
 }))
 /*
 页面：异常历史记录
@@ -37,10 +30,7 @@ export default class DeviceExceptionListHistoryRecords extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            rangeDate: [moment(moment(new Date()).subtract(3, 'month').format('YYYY-MM-DD 00:00:00')), moment(moment(new Date()).format('YYYY-MM-DD 23:59:59'))], // 最近七天
-            BeginTime: moment().subtract(3, 'month').format('YYYY-MM-DD 00:00:00'),
-            EndTime: moment().format('YYYY-MM-DD 23:59:59'),
-            pollutantTypeCode: "2",
+            pollutantTypeCode: EnumPollutantTypeCode.GAS
         };
     }
     componentDidMount() {
@@ -53,55 +43,13 @@ export default class DeviceExceptionListHistoryRecords extends Component {
             type: 'overview/querydatalist',
             payload: {
                 map: true,
-                pollutantTypes: this.state.pollutantTypeCode,
-                DeviceExceptionListHistoryRecords: true,
-                pageIndex: this.props.pageIndex,
-                pageSize: this.props.pageSize,
-                BeginTime: this.state.rangeDate[0].format('YYYY-MM-DD 00:00:00'),
-                EndTime: this.state.rangeDate[1].format('YYYY-MM-DD 23:59:59'),
-                DGIMN: getDGIMN,
+                pollutantTypes: this.state.pollutantTypeCode
             }
         });
 
 
     }
 
-    GetHistoryRecord = (pageIndex, pageSize, DGIMN, BeginTime, EndTime) => {
-        this.props.dispatch({
-            type: 'task/GetDeviceExceptionList',
-            payload: {
-                pageIndex: pageIndex,
-                pageSize: pageSize,
-                DGIMN: DGIMN,
-                BeginTime: moment(BeginTime).format('YYYY-MM-DD 00:00:00'),
-                EndTime: moment(EndTime).format('YYYY-MM-DD 23:59:59'),
-            }
-        });
-    };
-
-    _handleDateChange = (date, dateString) => {
-        this.setState(
-            {
-                rangeDate: date,
-                BeginTime: dateString[0],
-                EndTime: dateString[1]
-            }
-        );
-        this.GetHistoryRecord(this.props.pageIndex, this.props.pageSize, this.props.DGIMN, dateString[0], dateString[1]);
-    };
-
-    onShowSizeChange = (pageIndex, pageSize) => {
-        this.GetHistoryRecord(pageIndex, pageSize, this.props.DGIMN, this.state.BeginTime, this.state.EndTime);
-    }
-
-    onChange = (pageIndex, pageSize) => {
-        this.GetHistoryRecord(pageIndex, pageSize, this.props.DGIMN, this.state.BeginTime, this.state.EndTime);
-    }
-
-    seeDetail = (record) => {
-        localStorage.setItem('DGIMN', this.props.DGIMN);
-        this.props.dispatch(routerRedux.push(`/PatrolForm/DeviceExceptionRecord/${this.props.DGIMN}/menu/qualityControlOperation/DeviceExceptionListHistoryRecords/${record.TaskID}`));
-    }
     //查询
     onSerach = (value) => {
         this.setState({
@@ -140,90 +88,24 @@ export default class DeviceExceptionListHistoryRecords extends Component {
                 DGIMN: getDGIMN,
                 search: true,
                 callback: (data) => {
-                    if (data !== null) {
-                        const existdata = data.find((value, index, arr) => {
-                            return value.DGIMN == getDGIMN
-                        });
-                        if (existdata == undefined) {
-                            this.props.dispatch({
-                                type: 'task/GetDeviceExceptionList',
-                                payload: {
-                                    pageIndex: this.props.pageIndex,
-                                    pageSize: this.props.pageSize,
-                                    DGIMN: null,
-                                    BeginTime: this.state.BeginTime,
-                                    EndTime: this.state.EndTime,
-                                }
-                            });
-                        }
-                        else {
-                            this.props.dispatch({
-                                type: 'task/GetDeviceExceptionList',
-                                payload: {
-                                    pageIndex: this.props.pageIndex,
-                                    pageSize: this.props.pageSize,
-                                    DGIMN: getDGIMN,
-                                    BeginTime: this.state.BeginTime,
-                                    EndTime: this.state.EndTime,
-                                }
-                            });
-                        }
-                    }
-
                 }
             },
         });
     }
     treeCilck = (row) => {
+        this.props.dispatch({
+            type: 'maintenancelist/updateState',
+            payload: {DGIMN:row.DGIMN}
+        });
         localStorage.setItem('DGIMN', row.DGIMN);
-        this.GetHistoryRecord(this.props.pageIndex, this.props.pageSize, row.DGIMN, this.state.BeginTime, this.state.EndTime);
+        this.props.dispatch({
+            type: 'maintenancelist/GetDeviceExceptionHistoryList',
+            payload: {
+            }
+        });
     };
     render() {
-        const { pollutantTypelist, treedataloading, datalist, pollutantTypeloading } = this.props;
-        var dataSource = [];
-        var spining = true;
-        if (!this.props.treedataloading && !this.props.pollutantTypeloading && !this.props.loading) {
-            spining = this.props.loading;
-            dataSource = this.props.HistoryDeviceExceptionList === null ? null : this.props.HistoryDeviceExceptionList;
-        }
-        const columns = [{
-            title: '校准人',
-            width: '13%',
-            dataIndex: 'CreateUserID',
-            key: 'CreateUserID'
-        }, {
-            title: '异常状况',
-            width: '19%',
-            dataIndex: 'ExceptionStatus',
-            key: 'ExceptionStatus'
-        }, {
-            title: '异常原因',
-            width: '19%',
-            dataIndex: 'ExceptionReason',
-            key: 'ExceptionReason'
-        }, {
-            title: '处理情况',
-            width: '19%',
-            dataIndex: 'DealingSituations',
-            key: 'DealingSituations'
-        }, {
-            title: '记录时间',
-            dataIndex: 'CreateTime',
-            width: '20%',
-            key: 'CreateTime',
-            sorter: (a, b) => Date.parse(a.CreateTime) - Date.parse(b.CreateTime),
-        }, {
-            title: '详细',
-            dataIndex: 'TaskID',
-            width: '10%',
-            key: 'TaskID',
-            render: (text, record) => {
-                return <a onClick={
-                    () => this.seeDetail(record)
-                } > 详细 </a>;
-            }
-        }];
-        if (this.props.isloading) {
+        if (this.props.treedataloading && this.props.pollutantTypeloading) {
             return (<Spin
                 style={{
                     width: '100%',
@@ -259,57 +141,15 @@ export default class DeviceExceptionListHistoryRecords extends Component {
                                     <div style={{ marginTop: 5 }}>
                                         <TreeCardContent style={{ overflow: 'auto', width: 400, background: '#fff' }}
                                             getHeight='calc(100vh - 200px)'
-                                            pollutantTypeloading={pollutantTypeloading}
-                                            getStatusImg={this.getStatusImg} isloading={treedataloading}
-                                            treeCilck={this.treeCilck} treedatalist={datalist} PollutantType={this.state.pollutantTypeCode} ifSelect={true} />
+                                            pollutantTypeloading={this.props.pollutantTypeloading}
+                                            getStatusImg={this.getStatusImg} isloading={this.props.treedataloading}
+                                            treeCilck={this.treeCilck} treedatalist={this.props.datalist} PollutantType={this.state.pollutantTypeCode} ifSelect={true} />
                                     </div>
                                 </div>
                             </div>
                         </Col>
                         <Col style={{ width: document.body.clientWidth - 470, height: 'calc(100vh - 150px)', float: 'right' }}>
-                            <div style={{ marginRight: 10, marginTop: 10 }}>
-                                <Card bordered={false} style={{ height: 'calc(100vh - 150px)' }}>
-                                    <div className={styles.conditionDiv}>
-                                        <Row gutter={8}>
-                                            <Col span={3} >
-                                                记录时间：
-                                                    </Col>
-                                            <Col span={21} >
-                                                <RangePicker_ style={{ width: 350 }} onChange={this._handleDateChange} format={'YYYY-MM-DD'} dateValue={this.state.rangeDate} />
-                                            </Col>
-                                        </Row>
-                                    </div>
-                                    <Table
-                                        rowKey={(record, index) => `complete${index}`}
-                                        size="middle"
-                                        scroll={{ y: 'calc(100vh - 400px)' }}
-                                        loading={spining}
-                                        className={styles.dataTable}
-                                        columns={columns}
-                                        dataSource={dataSource}
-                                        rowClassName={
-                                            (record, index, indent) => {
-                                                if (index === 0) {
-                                                    return;
-                                                }
-                                                if (index % 2 !== 0) {
-                                                    return 'light';
-                                                }
-                                            }
-                                        }
-                                        pagination={{
-                                            showSizeChanger: true,
-                                            showQuickJumper: true,
-                                            'total': this.props.HistoryDeviceExceptionListCount,
-                                            'pageSize': this.props.pageSize,
-                                            'current': this.props.pageIndex,
-                                            onChange: this.onChange,
-                                            onShowSizeChange: this.onShowSizeChange,
-                                            pageSizeOptions: ['10', '20', '30', '40']
-                                        }}
-                                    />
-                                </Card>
-                            </div>
+                        <DeviceExceptionHistoryListContent  pointcode={localStorage.getItem('DGIMN')} viewtype="no" height="calc(100vh - 360px)" operation="menu/intelligentOperation"/>
                         </Col>
                     </Row>
                 </div>
