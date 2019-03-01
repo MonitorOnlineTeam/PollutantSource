@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { Form, Icon, Input, Button, Row, Col, Spin, Modal, TreeSelect, Select, Carousel, Layout,Divider ,Popconfirm} from 'antd';
+import { Form, Icon, Input, Button, Row, Col, Spin, Modal, TreeSelect, Select, Carousel, Layout,Divider,message ,Popconfirm} from 'antd';
 import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
 import { Map, Polygon } from 'react-amap';
@@ -76,116 +76,125 @@ class index extends PureComponent {
                 //_thismap.setZoomAndCenter(13, [centerlongitude, centerlatitude]);
             }
         };
-
-        const _this = this;
-        this.startedit = () => {
-            if (_this.state.isedit) {
-                this.setState({
-                    isedit: false,
-                    buttontext: '保存',
-                    className:styles.Input
-                });
-            } else {
-                const allvalue = this.props.form.getFieldsValue();
-
-                this.props.dispatch({
-                    type: 'baseinfo/queryeditent',
-                    payload: {
-                        ...allvalue,
-                        subjection: _this.state.subjection,
-                        registration: _this.state.registration,
-                        pollutionsources: _this.state.pollutionsources,
-                        unit: _this.state.unit,
-                        concern: this.state.concern,
-                        industry: _this.state.industry,
-                        area: _this.state.area,
-                        className:styles.Input,
-                        polygon:this.state.polygon
-                    },
-                });
-                this.setState({
-                    isedit: true,
-                    buttontext: '编辑',
-                    className:styles.editInput
-                });
-            }
-        };
-        this.endedit = () => {
-            this.setState({
-                isedit: true,
-                buttontext: '编辑',
-                className:styles.editInput
-            });
-        };
-
-        this.showModal = () => {
-            this.props.dispatch(routerRedux.push('/sysmanage/emissionpermits'));
-        };
-        this.hideModal = () => {
-            this.setState({
-                visible: false,
-            });
-        };
-        this.imgshowModal = () => {
-            this.setState({
-                imgvisible: true,
-            });
-        };
-        this.imghideModal = () => {
-            this.setState({
-                imgvisible: false,
-            });
-        };
-
-        this.path = [
-            [
-                { longitude: 110, latitude: 30 },
-                { longitude: 115, latitude: 30 },
-                { longitude: 120, latitude: 20 },
-                { longitude: 110, latitude: 20 },
-
-            ], [
-                { longitude: 113, latitude: 28 },
-                { longitude: 118, latitude: 22 },
-                { longitude: 112, latitude: 22 }
-            ]
-        ];
-        this.subjection = (value) => {
-            this.setState({
-                subjection: value
-            });
-        };
-        this.registration = (value) => {
-            this.setState({
-                registration: value
-            });
-        };
-        this.pollutionsources = (value) => {
-            this.setState({
-                pollutionsources: value
-            });
-        };
-        this.unit = (value) => {
-            this.setState({
-                unit: value
-            });
-        };
-        this.concern = (value) => {
-            this.setState({
-                concern: value
-            });
-        };
-        this.industry = (value) => {
-            this.setState({
-                industry: value
-            });
-        };
-        this.area = (value) => {
-            this.setState({
-                industry: value
-            });
-        };
     }
+
+    startedit = () => {
+        if (this.state.isedit) {
+            this.setState({
+                isedit: false,
+                buttontext: '保存',
+                className:styles.Input
+            });
+        } else {
+            const allvalue = this.props.form.getFieldsValue();
+            this.props.form.validateFields(
+                (err) => {
+                  if (!err) {
+                    this.props.dispatch({
+                        type: 'baseinfo/queryeditent',
+                        payload: {
+                            ...allvalue,
+                            subjection: this.state.subjection,
+                            registration: this.state.registration,
+                            pollutionsources: this.state.pollutionsources,
+                            unit: this.state.unit,
+                            concern: this.state.concern,
+                            industry: this.state.industry,
+                            area: this.state.area,
+                            className:styles.Input,
+                            polygon:this.state.polygon
+                        },
+                    });
+                    this.setState({
+                        isedit: true,
+                        buttontext: '编辑',
+                        className:styles.editInput
+                    });
+                  }
+                  else
+                  {
+                      alert(0)
+                  }
+                },
+              );
+        }
+    };
+   endedit = () => {
+        this.setState({
+            isedit: true,
+            buttontext: '编辑',
+            className:styles.editInput
+        });
+    };
+
+  showModal = () => {
+        this.props.dispatch(routerRedux.push('/sysmanage/emissionpermits'));
+    };
+   hideModal = () => {
+        this.setState({
+            visible: false,
+        });
+    };
+    imgshowModal = () => {
+        this.setState({
+            imgvisible: true,
+        });
+    };
+  imghideModal = () => {
+        this.setState({
+            imgvisible: false,
+        });
+    };
+
+  path = [
+        [
+            { longitude: 110, latitude: 30 },
+            { longitude: 115, latitude: 30 },
+            { longitude: 120, latitude: 20 },
+            { longitude: 110, latitude: 20 },
+
+        ], [
+            { longitude: 113, latitude: 28 },
+            { longitude: 118, latitude: 22 },
+            { longitude: 112, latitude: 22 }
+        ]
+    ];
+   subjection = (value) => {
+        this.setState({
+            subjection: value
+        });
+    };
+   registration = (value) => {
+        this.setState({
+            registration: value
+        });
+    };
+   pollutionsources = (value) => {
+        this.setState({
+            pollutionsources: value
+        });
+    };
+   unit = (value) => {
+        this.setState({
+            unit: value
+        });
+    };
+ concern = (value) => {
+        this.setState({
+            concern: value
+        });
+    };
+   industry = (value) => {
+        this.setState({
+            industry: value
+        });
+    };
+    area = (value) => {
+        this.setState({
+            industry: value
+        });
+    };
+
     showEditCoordinate=()=>{
             this.setState({
                 Mapvisible:true
@@ -200,6 +209,7 @@ class index extends PureComponent {
     //回调
     GetData() {
         console.log(this.child.props.form);
+        alert();
         this.setState({
             polygon:this.child.props.form.getFieldValue('polygon'),
             longitude:this.child.props.form.getFieldValue('longitude'),
@@ -258,7 +268,6 @@ class index extends PureComponent {
             lat=latitude;
             log=longitude
         }
-        console.log(allcoo);
         const formItemLayout = {
             labelCol: {
               xs: { span: 8 },
@@ -365,7 +374,8 @@ class index extends PureComponent {
                                         {getFieldDecorator('entallname', {
                                             initialValue: baseinfo ? baseinfo.name : '',
                                             rules: [{
-                                                required: true, message: '  ',
+                                                required: true,
+                                                 message: '请输入企业名称',
                                             }],
                                         })(
                                             <Input
@@ -379,6 +389,7 @@ class index extends PureComponent {
                                             initialValue: baseinfo ? baseinfo.abbreviation : '',
                                             rules: [{
                                                 required: true, 
+                                                message: '请输入企业简称',
                                             }],
                                         })(
                                             <Input style={{ width: 300 }}
@@ -392,6 +403,7 @@ class index extends PureComponent {
                                             initialValue: baseinfo ? baseinfo.regionCode : '',
                                             rules: [{
                                                 required: true,
+                                                message: '请输入行政区',
                                             }],
                                         })(
                                             <TreeSelect
@@ -498,9 +510,10 @@ class index extends PureComponent {
                                  
                                     <FormItem style={{width:'400px'}} {...formItemLayout} label="经纬度" >
                                         {getFieldDecorator('latlon', {
-                                            initialValue: (log) + ' , ' + (lat),
+                                            initialValue:(log && lat)?  (log) + ' , ' + (lat):'',
                                             rules: [{
                                                 required: true,
+                                                message: '请输入企业名称',
                                             }],
                                         })(
                                             <Input
