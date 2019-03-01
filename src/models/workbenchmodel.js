@@ -202,27 +202,36 @@ export default Model.extend({
                 endTime: networkeRateList.endTime,
                 NetSort: networkeRateList.NetSort
             };
+          
             const response = yield call(getRateStatistics, body);
+            if(response && response.requstresult==="1" &&  response.data)
+            {
+                yield update({
+                    rateStatistics: {
+                        ...rateStatistics,
+                        ...{
+                            model: response.data,
+                            pageIndex: payload.pageIndex || 1,
+                            total: response.total
+                        }
+                    },
+                })
+            }
             const realtimeresponse = yield call(getRealTimeNetWorkingRateForPointsPageList, realtimebody);
-            yield update({
-                rateStatistics: {
-                    ...rateStatistics,
-                    ...{
-                        model: response.data,
-                        pageIndex: payload.pageIndex || 1,
-                        total: response.total
+            if(realtimeresponse && realtimeresponse.requstresult==="1" && realtimeresponse.data)
+            {
+                yield update({ 
+                    networkeRateList: {
+                        ...networkeRateList,
+                        ...{
+                            tableDatas: realtimeresponse.data,
+                            pageIndex: payload.pageIndex || 1,
+                            total: realtimeresponse.total,
+                            NetSort: networkeRateList.NetSort
+                        }
                     }
-                },
-                networkeRateList: {
-                    ...networkeRateList,
-                    ...{
-                        tableDatas: realtimeresponse.data,
-                        pageIndex: payload.pageIndex || 1,
-                        total: realtimeresponse.total,
-                        NetSort: networkeRateList.NetSort
-                    }
-                }
-            });
+                });
+            }
         },
         // /**
         //  * 获取排口的联网率数据列表

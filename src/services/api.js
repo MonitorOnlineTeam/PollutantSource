@@ -450,11 +450,11 @@ export async function queryoverdatalist(params) {
 }
 // 获取工艺流程图信息
 export async function queryprocesschart(params) {
-    const body = {
-        DGIMN: params.dgimn,
-    };
-    const result = await post('/api/rest/PollutantSourceApi/DataList/GetRealTimeAndParams', body, null);
-    return result === null ? { data: null } : result.data;
+    // const body = {
+    //     DGIMN: params.dgimn,
+    // };
+    // const result = await post('/api/rest/PollutantSourceApi/DataList/GetRealTimeAndParams', body, null);
+    // return result === null ? { data: null } : result.data;
 }
 // 获取数据一览表头
 export async function querypollutanttypecode(params) {

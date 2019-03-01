@@ -37,7 +37,7 @@ export default Model.extend({
             const res = yield call(GetAlarmNotices, {beginTime:today[0].format("YYYY-MM-DD HH:mm:ss"),endTime:today[1].format("YYYY-MM-DD HH:mm:ss")});
             let notices = [];
             let count = 0;
-            if (res) {
+            if (res && res.data && res.requstresult==="1") {
                 const resdata=JSON.parse(res.data);
                 if (resdata) {
                     let dataovers=resdata.overs;
@@ -108,7 +108,7 @@ export default Model.extend({
             }
             //通知消息,未读消息
             const res2 = yield call(mymessagelist,{isView:false});
-            if(res2&&res2.data!==null){
+            if(res2 && res2.data){
                 let advises=res2.data.map((item,index)=>({
                     id:`advise_${item.DGIMN}`,
                     pointname:`${item.PointName}`,

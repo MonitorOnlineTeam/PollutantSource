@@ -52,16 +52,21 @@ export default Model.extend({
             //     avgnormaltime=avgnormaltime/response.total;
             //     avgstoptime=avgstoptime/response.total
             // }
-            yield update({
-                // avgstoptime,
-                // avgnormaltime,
-                // avgworktime,
-                tableDatas: response.data,
-                total: response.total,
-                pageIndex: payload.pageIndex || 1,
-            });
-            const tableDatasNew = yield select(state => state.equipmentoperatingrate.tableDatas);
-            console.log('new', tableDatasNew);
+
+            if(response && response.data && response.requstresult==="1")
+            {
+                yield update({
+                    // avgstoptime,
+                    // avgnormaltime,
+                    // avgworktime,
+                    tableDatas: response.data,
+                    total: response.total,
+                    pageIndex: payload.pageIndex || 1,
+                });
+                const tableDatasNew = yield select(state => state.equipmentoperatingrate.tableDatas);
+                console.log('new', tableDatasNew);
+            }
+          
         },
     },
 });

@@ -9,8 +9,7 @@ import {
 } from 'antd';
 
 @connect(({ points, loading }) => ({
-    isloading: loading.effects['points/queryprocesschart'],
-    flows: points.processchart,
+    isloading: loading.effects['points/queryrealparam'],
     pointInfo: points.selectpoint,
     operationInfo: points.operationInfo,
     stateInfo: points.stateInfo,
@@ -29,32 +28,18 @@ export default class GyProcessPic extends Component {
         };
     }
     componentWillMount() {
-        this.props.dispatch({
-            type: 'points/queryprocesschart',
-            payload: {
-                dgimn: this.props.DGIMN // this.props.pointInfo.DGIMN
-            }
-        });
+        // this.props.dispatch({
+        //     type: 'points/queryprocesschart',
+        //     payload: {
+        //         dgimn: this.props.DGIMN // this.props.pointInfo.DGIMN
+        //     }
+        // });
         this.props.dispatch({
             type: 'points/queryrealparam',
             payload: {
                 dgimn: this.props.DGIMN// sgjt001003
             }
         });
-    }
-
-    // 获取状态
-    getstatus = () => {
-        let res = <span style={{ color: '#A8A6A5' }}>离线</span>;
-        if (this.props.flows) {
-            switch (this.props.flows.status) {
-                case 0: res = <span style={{ color: '#A8A6A5' }}>离线</span>; break;
-                case 1:
-                case 2: res = <span style={{ color: '#79C403' }}>正常</span>; break;
-                case 3: res = <span style={{ color: '#FADE00' }}>异常</span>; break;
-            }
-        }
-        return res;
     }
 
     getparamdata = (pollutantCode) => {
@@ -140,7 +125,7 @@ export default class GyProcessPic extends Component {
 
     render() {
         const { scale, translation } = this.state;
-        const { flows, isloading,
+        const { isloading,
             operationInfo, stateInfo, paramsInfo, dataInfo, paramstatusInfo } = this.props;
         //运行状态
         const cemsStatus = this.getSystemStatus(stateInfo, 'i12103');
@@ -174,7 +159,7 @@ export default class GyProcessPic extends Component {
                             <div style={{ width: '100px', height: '20px', position: 'relative', left: '635px', top: '152px', fontWeight: '700', fontSize: '10px' }}>制冷温度：{this.getregistValue(paramstatusInfo, 'i33002', '°C')}</div>
                             <div style={{ width: '100px', height: '20px', position: 'relative', left: '720px', top: '172px', fontWeight: '700', fontSize: '10px' }}> </div>
                             <div style={{ width: '90px', height: '20px', position: 'relative', left: '890px', top: '160px', fontWeight: '700', fontSize: '10px' }}>下次更换时间：{this.getregistValue(operationInfo, '取样泵')}</div>
-                            <div style={{ width: '100px', height: '20px', position: 'relative', left: '890px', top: '182px', fontWeight: '700', fontSize: '10px' }}><span className={!flows ? styles.AlarmCommon : (flows.Status !== '0' ? styles.shine_red : styles.AlarmCommon)}>{flows ? '' : flows.SdAlarm}</span></div>
+                            <div style={{ width: '100px', height: '20px', position: 'relative', left: '890px', top: '182px', fontWeight: '700', fontSize: '10px' }}><span></span></div>
                             <div style={{ width: '100px', height: '20px', position: 'relative', left: '1070px', top: '225px', fontWeight: '700', fontSize: '10px' }}>下次更换时间：{this.getregistValue(operationInfo, '过滤器')}</div>
                             <div style={{ width: '100px', height: '20px', position: 'relative', left: '860px', top: '240px', fontWeight: '700', fontSize: '10px' }}>下次更换时间：{this.getregistValue(operationInfo, '蠕动泵')}</div>
                             <div style={{ width: '120px', height: '20px', position: 'relative', left: '720px', top: '275px', fontWeight: '700', fontSize: '10px' }}>滤芯下次更换时间：{this.getregistValue(operationInfo, '调节阀滤芯')}</div>
@@ -186,9 +171,7 @@ export default class GyProcessPic extends Component {
                             <div className={jzfStatus == "1" ? styles.shine_red : ''} style={{ width: '120px', height: '20px', position: 'relative', left: '527px', top: '-30px', fontWeight: '700', fontSize: '10px' }}>截止阀状态：{this.getStatusName(stateInfo, 'i12104')}</div>
                             <div style={{ width: '120px', height: '20px', position: 'relative', left: '207px', top: '-145px', fontWeight: '700', fontSize: '10px' }}>压差：{this.getStatusName(stateInfo, '压差')}</div>
                             <div className={ptgStatus == "1" ? styles.shine_red : ''} style={{ width: '120px', height: '20px', position: 'relative', left: '207px', top: '-145px', fontWeight: '700', fontSize: '10px' }}>皮托管吹扫：{this.getStatusName(stateInfo, 'i12106')}</div>
-                            {/* <div style={{width: '120px', height: '20px', position: 'relative', left: '378px', top: '400px', fontWeight: '700', fontSize: '10px'}}>状态：<span className={flows ? styles.AlarmCommon : (flows.Status !== '0' ? styles.shine_red : styles.AlarmCommon)}>{flows ? '' : flows.QtFxy}</span></div>
-                            <div style={{width: '120px', height: '20px', position: 'relative', left: '893px', top: '380px', fontWeight: '700', fontSize: '10px'}}>状态：<span className={flows ? styles.AlarmCommon : (flows.Status !== '0' ? styles.shine_red : styles.AlarmCommon)}>{flows ? '' : flows.YqcsFxy}</span></div>
-                            <div style={{width: '120px', height: '20px', position: 'relative', left: '1395px', top: '360px', fontWeight: '700', fontSize: '10px'}}>状态：<span className={flows ? styles.AlarmCommon : (flows.Status !== '0' ? styles.shine_red : styles.AlarmCommon)}>{flows ? '' : flows.YcFxy}</span></div> */}
+                        
                             <div className={styles.cardcss} style={{ height: '320px', position: 'relative', top: '350px', fontWeight: '700', fontSize: '10px' }}>
                                 <div style={{ width: '450px', position: 'absolute', top: '10px', left: '25px', fontWeight: '700', fontSize: '10px' }}>
 

@@ -159,7 +159,7 @@ class MonitoringReport extends Component {
             address = null;
             height = 70;
         }
-
+         
         return (
             <div>
                 <iframe className={styles.if} style={{ border: 0, width: "100%", height: height }} src={address} />
