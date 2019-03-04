@@ -37,7 +37,7 @@ class TreeCardContent extends Component {
 
 
     getTreeDatalist = () => {
-        const { isloading, treedatalist, PollutantType } = this.props;
+        const { isloading, treedatalist, PollutantType,noselect } = this.props;
         let res = [];
         let pollutantType=this.props.PollutantType;
 
@@ -51,7 +51,7 @@ class TreeCardContent extends Component {
                             selectDgimn:item.DGIMN
                         });
                     }}
-                    className={item.DGIMN===this.state.selectDgimn?styles.cardDivClick:styles.cardDiv}
+                    className={(item.DGIMN===this.state.selectDgimn && !noselect)?styles.cardDivClick:styles.cardDiv}
                 >
                     <div key={key} className={styles.cardtopspan}>
                         <span className={styles.statusimg}>
@@ -63,9 +63,13 @@ class TreeCardContent extends Component {
                                 类型：{item.pollutantType ? item.pollutantType : '废气'}
                         </span>
                     </div>
-                    <div key={key+1} className={styles.cardbottomspan}><span className={styles.tsdiv}>
-                            传输有效率 {item.transmissionEffectiveRate}
-                    </span>
+                    <div key={key+1} className={styles.cardbottomspan}>
+                    {
+                        pollutantType==1?<span className={styles.tsdiv}></span>: <span className={styles.tsdiv}>
+                             传输有效率 {item.transmissionEffectiveRate}
+                          </span>
+                    }
+                   
                     {
                         item.scene ? <span className={styles.operation}>运维中</span> : ''
                     }

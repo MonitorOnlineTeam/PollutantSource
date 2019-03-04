@@ -232,6 +232,12 @@ export default Model.extend({
                     }
                 });
             }
+            else
+            {
+                
+            }
+
+
         },
         // /**
         //  * 获取排口的联网率数据列表

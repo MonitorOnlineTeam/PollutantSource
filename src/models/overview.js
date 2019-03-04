@@ -381,7 +381,7 @@ export default Model.extend({
             if (payload.ProcessFlowDiagram) {
                 if (data && data[0]) {
                     if (!payload.search) {
-                        if (payload.DGIMN === '[object Object]') {
+                        if (!payload.DGIMN) {
                             localStorage.setItem('DGIMN', data[0].DGIMN);
                         }
                         yield put({
