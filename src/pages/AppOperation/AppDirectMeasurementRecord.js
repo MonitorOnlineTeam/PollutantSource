@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import "react-image-lightbox/style.css";
 import { MapInteractionCSS } from 'react-map-interaction';
-import StopCemsRecordContent from '../EmergencyTodoList/StopCemsRecordContent';
+import DirectMeasurementRecordContent from '../EmergencyTodoList/DirectMeasurementRecordContent';
 
-export default class AppStopCemsInfo extends Component {
+export default class AppDirectMeasurementRecord extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -14,7 +14,7 @@ export default class AppStopCemsInfo extends Component {
         const {match}=this.props;
         return (
             <MapInteractionCSS>
-                <StopCemsRecordContent {...match.params} />
+                <DirectMeasurementRecordContent {...match.params} />
             </MapInteractionCSS>
         );
     }

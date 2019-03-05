@@ -30,7 +30,7 @@ class DeviceExceptionRecordContent extends Component {
     render() {
         const SCREEN_HEIGHT = document.querySelector('body').offsetHeight - 250;
         const Record = this.props.ExceptionRecord!==null?this.props.ExceptionRecord.Record:null;
-        const Content=Content!==null?Content:null;
+        const Content=Record!==null?Record.Content:null;
         let SignContent =Record!==null?Record.SignContent === null ? null : `data:image/jpeg;base64,${Record.SignContent}`:null;
         if (this.props.isloading) {
             return (<Spin

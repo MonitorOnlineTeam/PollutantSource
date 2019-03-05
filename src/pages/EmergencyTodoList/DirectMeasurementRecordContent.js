@@ -25,7 +25,7 @@ class DirectMeasurementRecordContent extends Component {
         this.props.dispatch({
             type: 'task/GetPatrolRecord',
             payload: {
-                TaskID: this.props.match.params.TaskID
+                TaskID: this.props.TaskID
             },
         });
         this.setState({

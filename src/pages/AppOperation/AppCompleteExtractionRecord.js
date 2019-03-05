@@ -3,7 +3,7 @@ import "react-image-lightbox/style.css";
 import { MapInteractionCSS } from 'react-map-interaction';
 import CompleteExtractionRecordContent from '../EmergencyTodoList/CompleteExtractionRecordContent';
 
-export default class AppCompleteExtraction extends Component {
+export default class AppCompleteExtractionRecord extends Component {
     constructor(props) {
         super(props);
         this.state = {
