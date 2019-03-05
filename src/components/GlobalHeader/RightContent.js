@@ -59,7 +59,7 @@ export default class GlobalHeaderRight extends PureComponent {
                 newNotice.title = (
                     <Popover trigger="click" content={
                         <div>
-                            <PdButton DGIMN={newNotice.DGIMN} viewType="datalist" />
+                            <PdButton sendpush={true} DGIMN={newNotice.DGIMN} viewType="datalist" />
                         </div>
                     }>
                         <span style={{ cursor: 'pointer' }}>
@@ -70,7 +70,7 @@ export default class GlobalHeaderRight extends PureComponent {
                 newNotice.description = (
                     <Popover trigger="click" content={
                         <div>
-                            <PdButton DGIMN={newNotice.DGIMN} viewType="datalist" />
+                            <PdButton sendpush={true} DGIMN={newNotice.DGIMN} viewType="datalist" />
                         </div>
                     }>
                         <span style={{ cursor: 'pointer' }}>

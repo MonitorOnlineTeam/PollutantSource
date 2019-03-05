@@ -66,7 +66,26 @@ class PdButton extends Component {
 
      //判断是派单还是督办按钮
      getbutton=()=>{
-        let { operationUserInfo,existTask,DGIMN,dgimn,viewType,id,name,tel,exist }=this.props;
+        let { operationUserInfo,existTask,DGIMN,dgimn,viewType,id,name,tel,exist,pollutantTypeCode,sendpush }=this.props;
+        if(sendpush)
+        {
+           if(operationUserInfo==null)
+           {
+               return '';
+           }
+           else
+           {
+              if(operationUserInfo.pollutantTypeCode==1)
+              {
+                  return '';
+              }
+           }
+        }
+
+        if(pollutantTypeCode==1)
+        {
+            return '';
+        }
         if(!DGIMN)
         {
             DGIMN=dgimn;
