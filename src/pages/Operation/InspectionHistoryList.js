@@ -45,6 +45,8 @@ export default class InspectionHistoryList extends Component {
             payload: {
                 map: true,
                 pollutantTypes: this.state.pollutantTypeCode,
+                InspectionHistoryRecord:true,
+                DGIMN: getDGIMN,
             }
         });
     }

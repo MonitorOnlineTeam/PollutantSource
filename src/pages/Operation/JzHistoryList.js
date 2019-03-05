@@ -43,7 +43,9 @@ export default class JzHistoryList extends Component {
             type: 'overview/querydatalist',
             payload: {
                 map: true,
-                pollutantTypes: this.state.pollutantTypeCode
+                pollutantTypes: this.state.pollutantTypeCode,
+                JzHistoryRecord:true,
+                DGIMN: getDGIMN,
             }
         });
     }

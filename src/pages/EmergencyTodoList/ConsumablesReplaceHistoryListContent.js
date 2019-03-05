@@ -48,7 +48,7 @@ class ConsumablesReplaceHistoryList extends Component {
 
     GetHistoryRecord = () => {
         this.props.dispatch({
-            type: 'maintenancelist/GetRepairHistoryList',
+            type: 'maintenancelist/GetConsumablesReplaceHistoryList',
             payload: {
             }
         });

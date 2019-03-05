@@ -45,6 +45,8 @@ export default class StandardGasRepalceHistoryList extends Component {
             payload: {
                 map: true,
                 pollutantTypes: this.state.pollutantTypeCode,
+                StandardGasHistoryRecords:true,
+                DGIMN: getDGIMN,
             }
         });
     }

@@ -43,6 +43,8 @@ export default class StopCemsHistoryList extends Component {
             payload: {
                 map: true,
                 pollutantTypes: this.state.pollutantTypeCode,
+                StopCemsListHistoryRecords:true,
+                DGIMN: getDGIMN,
             }
         });
 
