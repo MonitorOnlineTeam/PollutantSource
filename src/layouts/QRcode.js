@@ -37,6 +37,7 @@ export default class QRcode extends Component {
                 location = this.props.getIPList.androidInnerAddress
             }
             else {
+                //否则读取对应的ip地址（一般为外网地址）
                 location = window.location.protocol + "//" + window.location.host + this.props.getIPList.relativePath
             }
             //读取ios地址
