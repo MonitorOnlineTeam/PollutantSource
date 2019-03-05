@@ -57,8 +57,8 @@ class RepairHistoryListContent extends Component {
 
     _handleDateChange = (date, dateString) => {
         const condition={
-            beginTime: dateString[0],
-            endTime: dateString[1],
+            beginTime: date[0].format("YYYY-MM-DD HH:mm:ss"),
+            endTime: date[1].format("YYYY-MM-DD HH:mm:ss"),
             pageIndex:1
         };
         this.ChangeModelState(condition);
