@@ -11,7 +11,7 @@ import { connect } from 'dva';
 import moment from 'moment';
 import { routerRedux } from 'dva/router';
 import RangePicker_ from '../../components/PointDetail/RangePicker_';
-import styles from './StandardGasRepalceHistoryList.less';
+import styles from './StandardGasRepalceHistoryListContent.less';
 
 @connect(({ maintenancelist, loading }) => ({
     loading: loading.effects['maintenancelist/GetStandardGasRepalceHistoryList'],

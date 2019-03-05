@@ -10,36 +10,56 @@ import {
 } from '../services/taskapi';
 import { Model } from '../dvapack';
 import { EnumRequstResult } from '../utils/enum';
+import { GetAlarmResponseList } from '../services/AlarmResponseApi';
 
 export default Model.extend({
     namespace: 'task',
     state: {
         TaskRecord: null,//任务详情
         JzRecord: null,//校准记录
-        PatrolRecord: [],//日常例行运维记录
+        PatrolRecord: null,//日常例行运维记录
         StopCemsRecord: null,//停机记录
         RepairRecord: null,//维修记录
         ExceptionRecord: null,//设备异常记录
         BdRecord: null,//比对监测记录
-        ConsumablesReplaceRecord:[],//易耗品更换记录
-        StandardGasRepalceRecord:[],//标气更换记录
-        RecordTypes: []//运维表单类型
+        ConsumablesReplaceRecord:null,//易耗品更换记录
+        StandardGasRepalceRecord:null,//标气更换记录
+        RecordTypes: [],//运维表单类型
+        AlarmResponseList:[]
     },
 
     effects: {
         // 任务记录
         * GetTaskRecord({
             payload,
-        }, { call, update }) {
+        }, { call, update,put,select,take }) {
             const taskInfo = yield call(GetTaskRecord, payload);
             if (taskInfo !== null && taskInfo.requstresult == EnumRequstResult.Success) {
-                yield update({
-                    TaskRecord: taskInfo
-                });
-            }else{
-                yield update({
-                    TaskRecord: null
-                });
+                if(taskInfo.data.length>0){
+                    yield put({
+                        type: 'GetAlarmResponseList',
+                        payload: {
+                            DGIMN: payload.DGIMN,
+                            TaskID: payload.TaskID
+                        },
+                    });
+                    yield take('GetAlarmResponseList/@@end');
+                    const {AlarmResponseList} = yield select(_ => _.task);
+                    if(AlarmResponseList.length>0){
+                        taskInfo.data[0].AlarmList=AlarmResponseList;
+                        yield update({
+                            TaskRecord: taskInfo
+                        });
+                    }else{
+                        yield update({
+                            TaskRecord: taskInfo
+                        });
+                    }
+                }else{
+                    yield update({
+                        TaskRecord: []
+                    });
+                }
             }
         },
         // 校准记录
@@ -70,15 +90,12 @@ export default Model.extend({
         },
         // 易耗品更换记录
         * GetConsumablesReplaceRecord({
-            payload: {
-                TaskIds,
-                TypeIDs
-            }
+            payload
         }, {
             call,
             update,
         }) {
-            const DataInfo = yield call(GetConsumablesReplaceRecord, { TaskIds: TaskIds, TypeIDs: TypeIDs });
+            const DataInfo = yield call(GetConsumablesReplaceRecord, payload);
             if (DataInfo !== null && DataInfo.requstresult == EnumRequstResult.Success) {
                 yield update({
                     requstresult: DataInfo.requstresult,
@@ -87,7 +104,7 @@ export default Model.extend({
             } else {
                 yield update({
                     requstresult: DataInfo.requstresult,
-                    ConsumablesReplaceRecord: [],
+                    ConsumablesReplaceRecord: null,
                 });
             }
         },
@@ -108,7 +125,7 @@ export default Model.extend({
             } else {
                 yield update({
                     requstresult: DataInfo.requstresult,
-                    StandardGasRepalceRecord: [],
+                    StandardGasRepalceRecord: null,
                 });
             }
         },
@@ -129,7 +146,7 @@ export default Model.extend({
             } else {
                 yield update({
                     requstresult: DataInfo.requstresult,
-                    PatrolRecord: [],
+                    PatrolRecord: null,
                 });
             }
         },
@@ -213,7 +230,21 @@ export default Model.extend({
         }, { call }) {
             const DataInfo = yield call(GetPatrolType, payload);
             payload.callback(DataInfo.data);
+        },
+
+        //获取报警响应列表
+        * GetAlarmResponseList({
+            payload,
+        }, { call,update }) {
+            const DataInfo = yield call(GetAlarmResponseList, payload);
+            if (DataInfo !== null && DataInfo.requstresult == EnumRequstResult.Success) {
+                if (DataInfo.data !== null) {
+                    yield update({ AlarmResponseList: DataInfo.data });
+                }else{
+                    yield update({ AlarmResponseList: [] });
+                }
+
+            }
         }
     },
-
 });

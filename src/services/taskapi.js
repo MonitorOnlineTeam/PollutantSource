@@ -58,7 +58,7 @@ export async function GetJzHistoryList(params) {
 // 根据任务id和类型id获取易耗品列表
 export async function GetConsumablesReplaceRecord(params) {
     const body = {
-        TaskID: params.TaskIds,
+        TaskID: params.TaskID,
         TypeID: params.TypeIDs
     };
     const result =await authorpost('/api/rest/PollutantSourceApi/PTaskForm/GetConsumablesReplaceRecordList?authorCode=48f3889c-af8d-401f-ada2-c383031af92d', body, null);
@@ -84,8 +84,7 @@ export async function GetConsumablesReplaceHistoryList(params) {
 // 根据任务id和类型id获取标气列表
 export async function GetStandardGasReplaceRecord(params) {
     const body = {
-        TaskID: params.TaskIds,
-        TypeID: params.TypeIDs
+        TaskID: params.TaskID
     };
     const result = await authorpost('/api/rest/PollutantSourceApi/PTaskForm/GetStandardGasRepalceRecordList?authorCode=48f3889c-af8d-401f-ada2-c383031af92d', body, null);
     return result === null ? {
