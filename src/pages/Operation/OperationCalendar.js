@@ -48,9 +48,6 @@ export default class OperationCalendar extends Component {
     componentDidMount() {
         const { dispatch } = this.props;
         var getDGIMN = localStorage.getItem('DGIMN')
-        if (getDGIMN === null) {
-            getDGIMN = '[object Object]';
-        }
         dispatch({
             type: 'overview/querydatalist',
             payload: {
@@ -92,9 +89,6 @@ export default class OperationCalendar extends Component {
     //重新加载
     searchData = (pollutantTypeCode, searchName) => {
         var getDGIMN = localStorage.getItem('DGIMN')
-        if (getDGIMN === null) {
-            getDGIMN = '[object Object]';
-        }
         this.props.dispatch({
             type: 'overview/querydatalist',
             payload: {
