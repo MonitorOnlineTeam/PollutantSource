@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import "react-image-lightbox/style.css";
 import { MapInteractionCSS } from 'react-map-interaction';
-import DeviceExceptionRecordContent from '../EmergencyTodoList/DeviceExceptionRecordContent';
+import JzRecordContent from '../EmergencyTodoList/JzRecordContent';
 
-export default class AppDeviceExceptionDetail extends Component {
+export default class AppJzRecord extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -14,7 +14,7 @@ export default class AppDeviceExceptionDetail extends Component {
         const {match}=this.props;
         return (
             <MapInteractionCSS>
-                <DeviceExceptionRecordContent {...match.params} />
+                <JzRecordContent {...match.params} />
             </MapInteractionCSS>
         );
     }

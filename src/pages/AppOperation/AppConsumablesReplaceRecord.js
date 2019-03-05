@@ -3,7 +3,7 @@ import "react-image-lightbox/style.css";
 import { MapInteractionCSS } from 'react-map-interaction';
 import ConsumablesReplaceRecordContent from '../EmergencyTodoList/ConsumablesReplaceRecordContent';
 
-export default class AppDeviceExceptionDetail extends Component {
+export default class AppConsumablesReplaceRecord extends Component {
     constructor(props) {
         super(props);
         this.state = {
