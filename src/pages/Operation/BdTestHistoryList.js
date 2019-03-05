@@ -43,7 +43,9 @@ export default class BdTestHistoryList extends Component {
             type: 'overview/querydatalist',
             payload: {
                 map: true,
-                pollutantTypes: this.state.pollutantTypeCode
+                pollutantTypes: this.state.pollutantTypeCode,
+                BdHistoryInfoHistoryRecord:true,
+                DGIMN: getDGIMN,
             }
         });
     }

@@ -112,8 +112,8 @@ export default Model.extend({
             // endTime: '2018-12-28 21:00:00',
         },
         OperationCalendar: {
-            beginTime: moment().format('YYYY-01-01 00:00:00'),//'2018-12-01 00:00:00',//moment().format('YYYY-MM-DD HH:mm:ss'),
-            endTime: moment().format('YYYY-MM-DD HH:mm:ss'),//'2019-01-01 00:00:00',//moment().format('YYYY-MM-DD HH:mm:ss'),
+            beginTime: moment().format('YYYY-01-01 00:00:00'),
+            endTime: moment().format('YYYY-MM-DD HH:mm:ss'),
             tableDatas: [],
             tempTableDatas: [],
             pageIndex: 1,
@@ -232,12 +232,6 @@ export default Model.extend({
                     }
                 });
             }
-            else
-            {
-                
-            }
-
-
         },
         // /**
         //  * 获取排口的联网率数据列表
@@ -303,6 +297,7 @@ export default Model.extend({
                 endTime: allPointOverDataList.endTime,
                 pageSize: allPointOverDataList.pageSize,
                 pageIndex: allPointOverDataList.pageIndex,
+                PollutantType:"2"
             };
             const response = yield call(getAllPointOverDataList, body);
             yield update({

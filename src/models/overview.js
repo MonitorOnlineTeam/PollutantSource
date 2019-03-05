@@ -138,7 +138,7 @@ export default Model.extend({
                             localStorage.setItem('DGIMN', data[0].DGIMN);
                         }
                         yield put({
-                            type: 'task/GetHistoryRepairDetail',
+                            type: 'maintenancelist/GetRepairHistoryList',
                             payload: {
                                 ...payload,
                                 DGIMN: payload.DGIMN === null ? data[0].DGIMN : payload.DGIMN,
@@ -149,7 +149,7 @@ export default Model.extend({
 
                 } else {
                     yield put({
-                        type: 'task/GetHistoryRepairDetail',
+                        type: 'maintenancelist/GetRepairHistoryList',
                         payload: {
                             ...payload,
                             DGIMN: null
@@ -165,7 +165,7 @@ export default Model.extend({
                             localStorage.setItem('DGIMN', data[0].DGIMN);
                         }
                         yield put({
-                            type: 'task/GetHistoryStopCemsList',
+                            type: 'maintenancelist/GetStopCemsHistoryList',
                             payload: {
                                 ...payload,
                                 DGIMN: payload.DGIMN === null ? data[0].DGIMN : payload.DGIMN,
@@ -176,7 +176,7 @@ export default Model.extend({
 
                 } else {
                     yield put({
-                        type: 'task/GetHistoryStopCemsList',
+                        type: 'maintenancelist/GetStopCemsHistoryList',
                         payload: {
                             ...payload,
                             DGIMN: null
@@ -192,7 +192,7 @@ export default Model.extend({
                             localStorage.setItem('DGIMN', data[0].DGIMN);
                         }
                         yield put({
-                            type: 'task/GetHistoryConsumablesReplaceRecord',
+                            type: 'maintenancelist/GetConsumablesReplaceHistoryList',
                             payload: {
                                 ...payload,
                                 DGIMN: payload.DGIMN === null ? data[0].DGIMN : payload.DGIMN,
@@ -203,7 +203,7 @@ export default Model.extend({
 
                 } else {
                     yield put({
-                        type: 'task/GetHistoryConsumablesReplaceRecord',
+                        type: 'maintenancelist/GetConsumablesReplaceHistoryList',
                         payload: {
                             ...payload,
                             DGIMN: null
@@ -219,7 +219,7 @@ export default Model.extend({
                             localStorage.setItem('DGIMN', data[0].DGIMN);
                         }
                         yield put({
-                            type: 'task/GetHistoryStandardGasRepalceRecordList',
+                            type: 'maintenancelist/GetStandardGasRepalceHistoryList',
                             payload: {
                                 ...payload,
                                 DGIMN: payload.DGIMN === null ? data[0].DGIMN : payload.DGIMN,
@@ -230,7 +230,7 @@ export default Model.extend({
 
                 } else {
                     yield put({
-                        type: 'task/GetHistoryStandardGasRepalceRecordList',
+                        type: 'maintenancelist/GetStandardGasRepalceHistoryList',
                         payload: {
                             ...payload,
                             DGIMN: null
@@ -240,14 +240,14 @@ export default Model.extend({
             }
 
             //菜单-巡检记录
-            if (payload.InspectionHistoryRecords) {
+            if (payload.InspectionHistoryRecord) {
                 if (data && data[0]) {
                     if (!payload.search) {
                         if (!payload.DGIMN) {
                             localStorage.setItem('DGIMN', data[0].DGIMN);
                         }
                         yield put({
-                            type: 'task/GetHistoryInspectionHistoryRecords',
+                            type: 'maintenancelist/GetInspectionHistoryList',
                             payload: {
                                 ...payload,
                                 DGIMN: payload.DGIMN === null ? data[0].DGIMN : payload.DGIMN,
@@ -258,7 +258,7 @@ export default Model.extend({
 
                 } else {
                     yield put({
-                        type: 'task/GetHistoryInspectionHistoryRecords',
+                        type: 'maintenancelist/GetInspectionHistoryList',
                         payload: {
                             ...payload,
                             DGIMN: null
@@ -267,14 +267,14 @@ export default Model.extend({
                 }
             }
             //菜单-校准记录
-            if (payload.JzHistoryRecords) {
+            if (payload.JzHistoryRecord) {
                 if (data && data[0]) {
                     if (!payload.search) {
                         if (!payload.DGIMN) {
                             localStorage.setItem('DGIMN', data[0].DGIMN);
                         }
                         yield put({
-                            type: 'task/GetJzHistoryRecord',
+                            type: 'maintenancelist/GetJzHistoryList',
                             payload: {
                                 ...payload,
                                 DGIMN: payload.DGIMN === null ? data[0].DGIMN : payload.DGIMN,
@@ -285,7 +285,7 @@ export default Model.extend({
 
                 } else {
                     yield put({
-                        type: 'task/GetJzHistoryRecord',
+                        type: 'maintenancelist/GetJzHistoryList',
                         payload: {
                             ...payload,
                             DGIMN: null
@@ -294,14 +294,14 @@ export default Model.extend({
                 }
             }
             //菜单-检验测试记录
-            if (payload.BdHistoryInfoHistoryRecords) {
+            if (payload.BdHistoryInfoHistoryRecord) {
                 if (data && data[0]) {
                     if (!payload.search) {
                         if (!payload.DGIMN) {
                             localStorage.setItem('DGIMN', data[0].DGIMN);
                         }
                         yield put({
-                            type: 'task/GetBdHistoryInfoList',
+                            type: 'maintenancelist/GetBdTestHistoryList',
                             payload: {
                                 ...payload,
                                 DGIMN: payload.DGIMN === null ? data[0].DGIMN : payload.DGIMN,
@@ -312,7 +312,7 @@ export default Model.extend({
 
                 } else {
                     yield put({
-                        type: 'task/GetBdHistoryInfoList',
+                        type: 'maintenancelist/GetBdTestHistoryList',
                         payload: {
                             ...payload,
                             DGIMN: null
@@ -322,14 +322,14 @@ export default Model.extend({
             }
 
             //菜单-异常记录
-            if (payload.DeviceExceptionListHistoryRecords) {
+            if (payload.DeviceExceptionListHistoryRecord) {
                 if (data && data[0]) {
                     if (!payload.search) {
                         if (!payload.DGIMN) {
                             localStorage.setItem('DGIMN', data[0].DGIMN);
                         }
                         yield put({
-                            type: 'task/GetDeviceExceptionList',
+                            type: 'maintenancelist/GetDeviceExceptionHistoryList',
                             payload: {
                                 ...payload,
                                 DGIMN: payload.DGIMN === null ? data[0].DGIMN : payload.DGIMN,
@@ -340,7 +340,7 @@ export default Model.extend({
 
                 } else {
                     yield put({
-                        type: 'task/GetDeviceExceptionList',
+                        type: 'maintenancelist/GetDeviceExceptionHistoryList',
                         payload: {
                             ...payload,
                             DGIMN: null
@@ -351,27 +351,26 @@ export default Model.extend({
 
             //菜单-运维大事记
             if (payload.Ywdsjlist) {
-
                 if (data && data[0]) {
                     if (!payload.search) {
                         if (!payload.DGIMN) {
                             localStorage.setItem('DGIMN', data[0].DGIMN);
                         }
                         yield put({
-                            type: 'task/GetYwdsj',
+                            type: 'tasklist/GetYwdsj',
                             payload: {
                                 ...payload,
-                                DGIMNs: payload.DGIMN === null ? data[0].DGIMN : payload.DGIMN,
+                                DGIMN: payload.DGIMN === null ? data[0].DGIMN : payload.DGIMN,
                                 data: data
                             }
                         });
                     }
                 } else {
                     yield put({
-                        type: 'task/GetYwdsj',
+                        type: 'tasklist/GetYwdsj',
                         payload: {
                             ...payload,
-                            DGIMNs: null
+                            DGIMN: null
                         }
                     });
                 }
@@ -385,7 +384,7 @@ export default Model.extend({
                             localStorage.setItem('DGIMN', data[0].DGIMN);
                         }
                         yield put({
-                            type: 'points/queryprocesschart',
+                            type: 'points/queryrealparam',
                             payload: {
                                 dgimn: payload.DGIMN === null ? data[0].DGIMN : payload.DGIMN,
                             }
@@ -394,7 +393,7 @@ export default Model.extend({
 
                 } else {
                     yield put({
-                        type: 'points/queryprocesschart',
+                        type: 'points/queryrealparam',
                         payload: {
                             dgimn: null
                         }

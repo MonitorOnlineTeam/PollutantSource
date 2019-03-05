@@ -43,6 +43,8 @@ export default class RepairHistoryList extends Component {
             payload: {
                 map: true,
                 pollutantTypes: this.state.pollutantTypeCode,
+                RepairHistoryList:true,
+                DGIMN: getDGIMN,
             }
         });
 
