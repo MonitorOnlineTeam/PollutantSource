@@ -93,7 +93,7 @@ export default Model.extend({
                 if (data && data[0]) {
                     if (!payload.search) {
                         let dgimns = '';
-                        if (!payload.DGIMN) {
+                        if (!payload.DGIMN || payload.DGIMN==='[object Object]') {
                             localStorage.setItem('DGIMN', data[0].DGIMN);
                             dgimns = data[0].DGIMN;
                         } else if (payload.change) {
