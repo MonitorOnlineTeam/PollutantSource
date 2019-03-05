@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { Table, Radio, Card, TimePicker, Icon, Button, Spin, Popover, Badge, Divider,Popconfirm } from 'antd';
 import { connect } from 'dva';
-import PdPopconfirm from './PdPopconfirm';
 import { routerRedux } from 'dva/router';
+import PdPopconfirm from './PdPopconfirm';
 import UrgentDispatch from './UrgentDispatch';
+
 @connect(({urgentdispatch,loading}) => ({
     operationUserInfo:urgentdispatch.operationUserInfo,
     existTask:urgentdispatch.existTask,
@@ -12,46 +13,42 @@ import UrgentDispatch from './UrgentDispatch';
     paloading:loading.effects['overview/addtaskinfo'],
 }))
 class PdButton extends Component {
-     constructor(props)
-     {
-         super(props);
-         this.state={
+    constructor(props) {
+        super(props);
+        this.state={
             pdvisible:false
-         }
-     }
+        };
+    }
 
 
        //督办
        urge = () => {
-        let {operationUserInfo,dgimn,existTask,DGIMN,dispatch,id}=this.props; 
-        if(!id && operationUserInfo && operationUserInfo.operationUserID)
-        {
-            id=operationUserInfo.operationUserID;
-            DGIMN=dgimn;
-        }
-        if(id && DGIMN)
-        {
-            dispatch({
-                type: 'overview/queryurge',
-                payload: {
-                    personId: id,
-                    DGIMN: DGIMN
-                }
-             });
-        }
-      }
-       
+           let {operationUserInfo,dgimn,existTask,DGIMN,dispatch,id}=this.props;
+           if(!id && operationUserInfo && operationUserInfo.operationUserID) {
+               id=operationUserInfo.operationUserID;
+               DGIMN=dgimn;
+           }
+           if(id && DGIMN) {
+               dispatch({
+                   type: 'overview/queryurge',
+                   payload: {
+                       personId: id,
+                       DGIMN: DGIMN
+                   }
+               });
+           }
+       }
+
        //跳转到添加运维人员界面
        addoperationInfo=()=>{
-            const {DGIMN,dgimn,dispatch,viewtype,pollutantTypeCode}=this.props;  
+           const {DGIMN,dgimn,dispatch,viewtype,pollutantTypeCode}=this.props;
 
-            if(!DGIMN)
-            {
-                DGIMN=dgimn;
-            }
-            dispatch(routerRedux.push(`/sysmanage/pointdetail/${DGIMN}/${pollutantTypeCode}/${viewtype}`));
-        }
-    
+           if(!DGIMN) {
+               DGIMN=dgimn;
+           }
+           dispatch(routerRedux.push(`/sysmanage/pointdetail/${DGIMN}/${pollutantTypeCode}/${viewtype}`));
+       }
+
     //派单窗口关闭
     onCancel = () => {
         this.setState({
@@ -60,17 +57,35 @@ class PdButton extends Component {
     }
 
     pdshow=(id)=>{
-       if(id)
-       {
+        if(id) {
             this.setState({
                 pdvisible: true,
             });
-       }
+        }
     }
 
      //判断是派单还是督办按钮
      getbutton=()=>{
-        let { operationUserInfo,existTask,DGIMN,dgimn,viewType,id,name,tel,exist }=this.props;
+        let { operationUserInfo,existTask,DGIMN,dgimn,viewType,id,name,tel,exist,pollutantTypeCode,sendpush }=this.props;
+        if(sendpush)
+        {
+           if(operationUserInfo==null)
+           {
+               return '';
+           }
+           else
+           {
+              if(operationUserInfo.pollutantTypeCode==1)
+              {
+                  return '';
+              }
+           }
+        }
+
+        if(pollutantTypeCode==1)
+        {
+            return '';
+        }
         if(!DGIMN)
         {
             DGIMN=dgimn;
@@ -103,7 +118,7 @@ class PdButton extends Component {
                 </PdPopconfirm>)
               }
               //地图一览
-              else if(viewType=="mapview")
+              if(viewType=="mapview")
               {
                 return (
                     <PdPopconfirm  operationUserID={id} addoperationInfo={()=>this.addoperationInfo()} >
@@ -153,7 +168,7 @@ class PdButton extends Component {
                 )
             }
              //地图一览
-             else if(viewType=="mapview")
+             if(viewType=="mapview")
              {
                return(<PdPopconfirm operationUserID={id} addoperationInfo={()=>this.addoperationInfo()} >
                 <span onClick={()=>this.pdshow(id)} style={{cursor: 'pointer'}}>
@@ -188,46 +203,44 @@ class PdButton extends Component {
         }
     }
 
-    render() {
-        //如果没有值的话，会从后台加载数据
-        const {operationUserInfo,dgimn,viewType,paloading,pointName}=this.props;
-        //组件传值的话优先采用传入的值
-        let {id,name,tel,pname,DGIMN}=this.props;
-          
-        if(!id && operationUserInfo)
-        {
-           id=operationUserInfo.operationUserID;
-           name=operationUserInfo.operationUserName;
-           tel=operationUserInfo.operationtel;
-           pname=pointName;
-           DGIMN=dgimn;
-        }
-        if(paloading)
-        {
-            return (<Spin
-                style={{
-                    width: '100%',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center'
-                }}
-            />);
-        }
-        
-        return (<span>
-          {this.getbutton()}
-          <UrgentDispatch
-                        onCancel={this.onCancel}
-                        visible={this.state.pdvisible}
-                        operationUserID={id}
-                        DGIMN={DGIMN}
-                        pointName={pname}
-                        operationUserName={name}
-                        operationtel={tel}
-                        reloadData={() => this.props.reloadData()}
-                    /> 
-        </span>);
-    }
+     render() {
+         //如果没有值的话，会从后台加载数据
+         const {operationUserInfo,dgimn,viewType,paloading,pointName}=this.props;
+         //组件传值的话优先采用传入的值
+         let {id,name,tel,pname,DGIMN}=this.props;
+
+         if(!id && operationUserInfo) {
+             id=operationUserInfo.operationUserID;
+             name=operationUserInfo.operationUserName;
+             tel=operationUserInfo.operationtel;
+             pname=pointName;
+             DGIMN=dgimn;
+         }
+         if(paloading) {
+             return (<Spin
+                 style={{
+                     width: '100%',
+                     display: 'flex',
+                     alignItems: 'center',
+                     justifyContent: 'center'
+                 }}
+             />);
+         }
+
+         return (<span>
+             {this.getbutton()}
+             <UrgentDispatch
+                 onCancel={this.onCancel}
+                 visible={this.state.pdvisible}
+                 operationUserID={id}
+                 DGIMN={DGIMN}
+                 pointName={pname}
+                 operationUserName={name}
+                 operationtel={tel}
+                 reloadData={() => this.props.reloadData()}
+             />
+                 </span>);
+     }
 }
 
 export default PdButton;

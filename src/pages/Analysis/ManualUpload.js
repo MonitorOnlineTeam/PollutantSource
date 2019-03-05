@@ -234,8 +234,31 @@ export default class ManualUpload extends Component {
     onRef1 = (ref) => {
         this.child = ref;
     }
+    addData = () => {
+        console.log(this.props.DGIMN)
+        debugger
+        if (this.props.DGIMN !== "1" && this.props.DGIMN != null && this.props.DGIMN != undefined) {
+            this.setState({
+                visible: true,
+                type: 'add',
+                title: '添加数据' + '-' + this.props.pointName,
+                width: 1000,
+                footer: <div>
+                    <Button key="back" onClick={this.onCancel}>取消</Button>
+                    <Button key="submit" type="primary" onClick={this.AddData}>
+                        确定
+            </Button>
+                </div>
+            });
+        }
+        else {
+            message.info("请先选择监测点！")
+        }
+
+    }
     // 添加数据
     AddData = () => {
+        debugger
         this.child.handleSubmit();
         this.GetManualSupplementList(this.props.DGIMN, this.state.SelectHandleChange, this.state.rangeDate[0].format('YYYY-MM-DD 00:00:00'), this.state.rangeDate[1].format('YYYY-MM-DD 23:59:59'), this.props.pageIndex, this.props.pageSize);
     }
@@ -283,6 +306,7 @@ export default class ManualUpload extends Component {
     }
     //重新加载
     reloadData = (pollutantTypeCode, pointName) => {
+        debugger
         var getDGIMN = '[object Object]'
         this.props.dispatch({
             type: 'overview/querydatalist',
@@ -500,7 +524,7 @@ export default class ManualUpload extends Component {
                                             this.searchPointbyPointName
                                         }
                                         style={{ width: 190 }} /> */}
-                                   <SearchInput
+                                    <SearchInput
                                         onSerach={this.searchPointbyPointName}
                                         style={{ marginTop: 5, marginBottom: 5, width: 400 }} searchName="排口名称" />
                                 </div>
@@ -560,20 +584,7 @@ export default class ManualUpload extends Component {
                                             </Col>
                                             <Col span={2} style={{ textAlign: 'center' }} >
                                                 <Button
-                                                    onClick={() => {
-                                                        this.setState({
-                                                            visible: true,
-                                                            type: 'add',
-                                                            title: '添加数据' + '-' + this.props.pointName,
-                                                            width: 1000,
-                                                            footer: <div>
-                                                                <Button key="back" onClick={this.onCancel}>取消</Button>
-                                                                <Button key="submit" type="primary" onClick={this.AddData}>
-                                                                    确定
-                                                        </Button>
-                                                            </div>
-                                                        });
-                                                    }}
+                                                    onClick={this.addData}
                                                 >
                                                     添加
                                              </Button>

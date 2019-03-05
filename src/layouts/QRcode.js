@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { Input, Select, InputNumber, Button, Upload, DatePicker, Row, Col, Radio, message, Icon } from 'antd';
+import { Input, Select, InputNumber, Button, Upload, DatePicker, Row, Col, Radio, message, Icon, Spin } from 'antd';
 import { connect } from 'dva';
 import styles from './QRcode.less'
 @connect(({ login, loading }) => ({
+    isloading: loading.effects['login/getip'],
     getIPList: login.getIPList
 }))
 /*
@@ -28,7 +29,6 @@ export default class QRcode extends Component {
     render() {
         var React = require('react');
         var QRCode = require('qrcode.react');
-        debugger
         var location = window.location.host;
         var iosPath = "";
         if (this.props.getIPList.length !== 0) {
@@ -37,10 +37,23 @@ export default class QRcode extends Component {
                 location = this.props.getIPList.androidInnerAddress
             }
             else {
-                location = window.location.protocol + "//" + window.location.host + relativePath
+                //否则读取对应的ip地址（一般为外网地址）
+                location = window.location.protocol + "//" + window.location.host + this.props.getIPList.relativePath
             }
             //读取ios地址
             iosPath = this.props.getIPList.getIsoNetIP
+        }
+        if (this.props.isloading) {
+            return (<Spin
+                style={{
+                    width: '100%',
+                    height: 'calc(100vh/2)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                }}
+                size="large"
+            />);
         }
         return (
             <div className={styles.divs}>

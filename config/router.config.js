@@ -117,15 +117,15 @@ export default [
             /* 维修记录 */
             { path: '/patrolForm/repairrecord/:pointcode/:viewtype/:taskfrom/:histroyrecordtype/:TaskID', component: './EmergencyTodoList/RepairRecord' },
             /* 易耗品记录 */
-            { path: '/patrolform/consumablesreplacerecord/:pointcode/:viewtype/:taskfrom/:histroyrecordtype/:TaskIds', component: './EmergencyTodoList/ConsumablesReplaceRecord' },
+            { path: '/patrolform/consumablesreplacerecord/:pointcode/:viewtype/:taskfrom/:histroyrecordtype/:TaskID', component: './EmergencyTodoList/ConsumablesReplaceRecord' },
             /* 标气更换记录 */
-            { path: '/patrolform/standardgasrepalcerecord/:pointcode/:viewtype/:taskfrom/:histroyrecordtype/:StandardGasTaskIds', component: './EmergencyTodoList/StandardGasRepalceRecord' },
+            { path: '/patrolform/standardgasrepalcerecord/:pointcode/:viewtype/:taskfrom/:histroyrecordtype/:TaskID', component: './EmergencyTodoList/StandardGasRepalceRecord' },
             /* 完全抽取法CEMS记录 */
             { path: '/patrolform/completeextractionrecord/:pointcode/:viewtype/:taskfrom/:histroyrecordtype/:TaskID', component: './EmergencyTodoList/CompleteExtractionRecord' },
             /* 稀释采样法CEMS记录 */
-            { path: '/patrolform/dilutionsamplingrecord/:pointcode/:viewtype/:taskfrom/:histroyrecordtype/:CyfPatrolTaskIds', component: './EmergencyTodoList/DilutionSamplingRecord' },
+            { path: '/patrolform/dilutionsamplingrecord/:pointcode/:viewtype/:taskfrom/:histroyrecordtype/:TaskID', component: './EmergencyTodoList/DilutionSamplingRecord' },
             /* 直接测量法CEMS记录 */
-            { path: '/patrolform/directmeasurementrecord/:pointcode/:viewtype/:taskfrom/:histroyrecordtype/:ClfPatrolTaskIds', component: './EmergencyTodoList/DirectMeasurementRecord' },
+            { path: '/patrolform/directmeasurementrecord/:pointcode/:viewtype/:taskfrom/:histroyrecordtype/:TaskID', component: './EmergencyTodoList/DirectMeasurementRecord' },
             /* 校准记录 */
             { path: '/patrolform/jzrecord/:pointcode/:viewtype/:taskfrom/:histroyrecordtype/:TaskID/', component: './EmergencyTodoList/JzRecord' },
             /* 比对监测记录 */

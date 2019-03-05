@@ -1,4 +1,5 @@
 import { post,authorpost } from '../dvapack/request';
+import { EnumRejectFlag } from '../utils/enum';
 // 污染源运维的相关接口
 export async function GetTaskRecord(params) {
     const body = {
@@ -57,7 +58,7 @@ export async function GetJzHistoryList(params) {
 // 根据任务id和类型id获取易耗品列表
 export async function GetConsumablesReplaceRecord(params) {
     const body = {
-        TaskID: params.TaskIds,
+        TaskID: params.TaskID,
         TypeID: params.TypeIDs
     };
     const result =await authorpost('/api/rest/PollutantSourceApi/PTaskForm/GetConsumablesReplaceRecordList?authorCode=48f3889c-af8d-401f-ada2-c383031af92d', body, null);
@@ -83,8 +84,7 @@ export async function GetConsumablesReplaceHistoryList(params) {
 // 根据任务id和类型id获取标气列表
 export async function GetStandardGasReplaceRecord(params) {
     const body = {
-        TaskID: params.TaskIds,
-        TypeID: params.TypeIDs
+        TaskID: params.TaskID
     };
     const result = await authorpost('/api/rest/PollutantSourceApi/PTaskForm/GetStandardGasRepalceRecordList?authorCode=48f3889c-af8d-401f-ada2-c383031af92d', body, null);
     return result === null ? {
@@ -236,12 +236,12 @@ export async function GetBdTestRecord(params) {
     const result = await authorpost('/api/rest/PollutantSourceApi/PTaskForm/GetBdRecord?authorCode=48f3889c-af8d-401f-ada2-c383031af92d', body, null);
     return result === null ? { data: null } : result;
 }
-// 撤单
+// 打回
 export async function RevokeTask(params) {
     const body = {
         taskID: params.taskID,
         revokeReason: params.revokeReason,
-        rejectFlag: 1,
+        rejectFlag: EnumRejectFlag.Repulse,
         revokeUserId: params.userID
     };
     const result = await post('/api/rest/PollutantSourceApi/PTaskProcessing/PostRevokeTask', body, null);
