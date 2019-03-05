@@ -112,7 +112,7 @@ export default Model.extend({
             // endTime: '2018-12-28 21:00:00',
         },
         OperationCalendar: {
-            beginTime: moment().format('YYYY-01-01 00:00:00'),//'2018-12-01 00:00:00',//moment().format('YYYY-MM-DD HH:mm:ss'),
+            beginTime: moment().add(-3, 'months').format("YYYY-MM-01 00:00:00"),//'2018-12-01 00:00:00',//moment().format('YYYY-MM-DD HH:mm:ss'),
             endTime: moment().format('YYYY-MM-DD HH:mm:ss'),//'2019-01-01 00:00:00',//moment().format('YYYY-MM-DD HH:mm:ss'),
             tableDatas: [],
             tempTableDatas: [],
@@ -232,12 +232,6 @@ export default Model.extend({
                     }
                 });
             }
-            else
-            {
-                
-            }
-
-
         },
         // /**
         //  * 获取排口的联网率数据列表
@@ -303,6 +297,7 @@ export default Model.extend({
                 endTime: allPointOverDataList.endTime,
                 pageSize: allPointOverDataList.pageSize,
                 pageIndex: allPointOverDataList.pageIndex,
+                PollutantType:"2"
             };
             const response = yield call(getAllPointOverDataList, body);
             yield update({
@@ -385,16 +380,7 @@ export default Model.extend({
         //菜单-运维日历
         * getOperationCalendarData({ payload }, { call, put, update, select }) {
             const { OperationCalendar } = yield select(state => state.workbenchmodel);
-            let body = {
-                beginTime: OperationCalendar.beginTime,
-                endTime: OperationCalendar.endTime,
-                pageSize: OperationCalendar.pageSize,
-                pageIndex: OperationCalendar.pageIndex,
-                IsQueryAllUser: true,
-                IsPaging: false,
-                DGIMNs:payload.DGIMNs
-            };
-            const response = yield call(getOperationHistoryRecordPageList, body);
+            const response = yield call(getOperationHistoryRecordPageList, payload);
             if (response.data !== null) {
                 yield update({
                     OperationCalendar: {
