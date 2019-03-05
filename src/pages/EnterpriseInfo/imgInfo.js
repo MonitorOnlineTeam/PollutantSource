@@ -30,11 +30,8 @@ class imgInfo extends Component {
 
     //图片删除
     handleChange = ({fileList, file}) => {
-        console.log(file);
         if (file.status === 'done') {
-
         } else if (file.status === 'removed') {
-            console.log(file);
             this.props.dispatch({
                 type: 'baseinfo/querydeleteimg',
                 payload: {
@@ -104,12 +101,11 @@ class imgInfo extends Component {
         const uploadButton = (
             <div>
                 <Icon type="plus" />
-                <div className="ant-upload-text">Upload</div>
+                <div className="ant-upload-text">上传图片</div>
             </div>);
         return (
             <div className="clearfix">
                 <Upload
-                    //  action="//src/"
                     listType="picture-card"
                     fileList={fileList}
                     onPreview={this.handlePreview}

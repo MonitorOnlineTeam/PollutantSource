@@ -60,7 +60,7 @@ class ExceptionAlarm extends PureComponent {
                 <div style={{marginTop:43}}>
                 <PdButton DGIMN={item.DGIMNs} id={item.OperationUserTel}
                  pname={item.PointName}  reloadData={() => this.renderExceptionAlarmList()}
-                exist={item.State} name={item.OperationUserName} tel={item.OperationUserTel} viewType="workbench"/>
+                exist={item.State} pollutantTypeCode={item.PollutantTypeCode} name={item.OperationUserName} tel={item.OperationUserTel} viewType="workbench"/>
                 </div>
             }
             // if (item.State==="0") {

@@ -18,7 +18,7 @@ import TreeCardContent from '../../components/OverView/TreeCardContent';
 import MonitorContent from '../../components/MonitorContent/index';
 import { EnumPollutantTypeCode } from '../../utils/enum';
 import StopCemsHistoryListContent from '../EmergencyTodoList/StopCemsHistoryListContent';
-
+import moment from 'moment';
 @connect(({ overview, loading }) => ({
     datalist: overview.data,
     pollutantTypeloading: loading.effects['overview/getPollutantTypeList'],
@@ -31,15 +31,13 @@ export default class StopCemsHistoryList extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            pollutantTypeCode: EnumPollutantTypeCode.GAS
+            pollutantTypeCode: EnumPollutantTypeCode.GAS,
+            rangeDate: [moment(moment(new Date()).subtract(3, 'month').format('YYYY-MM-DD 00:00:00')), moment(moment(new Date()).format('YYYY-MM-DD 23:59:59'))], // 最近3月
         };
     }
     componentDidMount() {
         const { dispatch } = this.props;
         var getDGIMN = localStorage.getItem('DGIMN')
-        if (getDGIMN === null) {
-            getDGIMN = '[object Object]';
-        }
         dispatch({
             type: 'overview/querydatalist',
             payload: {
@@ -71,9 +69,6 @@ export default class StopCemsHistoryList extends Component {
     //重新加载
     searchData = (pollutantTypeCode, searchName) => {
         var getDGIMN = localStorage.getItem('DGIMN')
-        if (getDGIMN === null) {
-            getDGIMN = '[object Object]';
-        }
         this.props.dispatch({
             type: 'overview/querydatalist',
             payload: {

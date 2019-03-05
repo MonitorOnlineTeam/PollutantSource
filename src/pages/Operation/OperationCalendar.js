@@ -48,9 +48,6 @@ export default class OperationCalendar extends Component {
     componentDidMount() {
         const { dispatch } = this.props;
         var getDGIMN = localStorage.getItem('DGIMN')
-        if (getDGIMN === null) {
-            getDGIMN = '[object Object]';
-        }
         dispatch({
             type: 'overview/querydatalist',
             payload: {
@@ -92,9 +89,6 @@ export default class OperationCalendar extends Component {
     //重新加载
     searchData = (pollutantTypeCode, searchName) => {
         var getDGIMN = localStorage.getItem('DGIMN')
-        if (getDGIMN === null) {
-            getDGIMN = '[object Object]';
-        }
         this.props.dispatch({
             type: 'overview/querydatalist',
             payload: {
@@ -130,6 +124,15 @@ export default class OperationCalendar extends Component {
         localStorage.setItem('DGIMN', row.DGIMN);
         this.GetData(row.DGIMN);
     };
+    /**
+   * 更新model中的state
+   */
+    updateState = (payload) => {
+        this.props.dispatch({
+            type: 'workbenchmodel/updateState',
+            payload: payload,
+        });
+    }
     //日历日显示内容
     dateCellRender = (value) => {
         let exceptionlistData = [];
@@ -216,17 +219,50 @@ export default class OperationCalendar extends Component {
         );
     }
     dateSelect = (date) => {
+        let dateValue = date;
         //过滤，没有数据不弹出对话框
-        const data = this.state.dateType === 'month' ? this.props.operation.tempTableDatas.filter(m => moment(m.CreateTime).format('YYYY-MM-DD') === date.format("YYYY-MM-DD")) : this.props.operation.tempTableDatas.filter(m => moment(m.CreateTime).format('YYYY-MM') === date.format("YYYY-MM"))
+        const data = this.state.dateType === 'month' ? this.props.operation.tempTableDatas.filter(m => moment(m.CreateTime).format('YYYY-MM-DD') === date.format("YYYY-MM-DD")) : this.props.operation.tempTableDatas.filter(m => moment(m.CreateTime).format('YYYY-MM') === date.format("YYYY-MM"));
         if (data.length != 0) {
             this.setState({
                 visible: true,
-                dateValue: date,
             });
+        }
+        this.setState({
+            dateValue: dateValue
+        });
+        if (date < moment()) {
+            if (moment(this.props.operation.beginTime) < date && moment(this.props.operation.endTime) > date) {
+            }
+            else {
+                this.getdataByDateTime(date);
+ 
+            }
         }
     }
     onPanelChange = (date, datestring) => {
-        this.setState({ dateType: datestring })
+        this.setState({ dateType: datestring, dateValue: date })
+        debugger
+        if (date < moment()) {
+            if (moment(this.props.operation.beginTime) < date && moment(this.props.operation.endTime) > date) {
+            }
+            else {
+                this.getdataByDateTime(date);
+            }
+        }
+    }
+    getdataByDateTime=(date)=>{
+        let begintimes = date.format('YYYY-01-01 00:00:00');
+        let endtimes = moment(begintimes).add(1, 'years').format('YYYY-01-01 00:00:00');
+        this.updateState({
+            OperationCalendar: {
+                ...this.props.operation,
+                ...{
+                    beginTime: begintimes,
+                    endTime: endtimes,
+                }
+            }
+        });
+        this.GetData(localStorage.getItem('DGIMN'));
     }
     handleOk = (e) => {
         this.setState({
@@ -299,7 +335,7 @@ export default class OperationCalendar extends Component {
                                     <Card bordered={false} style={{ height: 'calc(100vh - 150px)', overflow: 'auto' }}>
                                         <div>
                                             {
-                                                <Calendar dateCellRender={this.dateCellRender} monthCellRender={this.monthCellRender} onSelect={this.dateSelect} onPanelChange={this.onPanelChange} />
+                                                <Calendar value={this.state.dateValue} dateCellRender={this.dateCellRender} monthCellRender={this.monthCellRender} onSelect={this.dateSelect} onPanelChange={this.onPanelChange} />
                                             }
                                         </div>
                                     </Card>

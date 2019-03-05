@@ -16,7 +16,8 @@ class PollutantTypeRadio extends Component {
         dispatch({
             type: 'overview/updateState',
             payload: {
-                selectpollutantTypeCode: value
+                selectpollutantTypeCode: value,
+                selectpoint:null
             },
         });
         this.props.dispatch({
@@ -27,7 +28,6 @@ class PollutantTypeRadio extends Component {
                 pointName: searchName
             },
         });
-
     }
 
     render() {
