@@ -36,6 +36,7 @@ const plugins = [
     regionlist: baseinfo.regionlist,
     industryTypelist: baseinfo.industryTypelist,
     isloading:loading.effects['baseinfo/queryentdetail'],
+    formloading:loading.effects['baseinfo/loadentdata'],
     attentionDegreelist: baseinfo.attentionDegreelist,
     unitTypelist: baseinfo.unitTypelist,
     pSScalelist: baseinfo.pSScalelist,
@@ -120,11 +121,16 @@ class index extends PureComponent {
         }
     };
    endedit = () => {
-        this.setState({
-            isedit: true,
-            buttontext: '编辑',
-            className:styles.editInput
-        });
+    this.setState({
+        isedit: true,
+        buttontext: '编辑',
+        className:styles.editInput
+    });
+        this.props.dispatch({
+            type:'baseinfo/loadentdata',
+            payload:{}
+        })
+       
     };
 
   showModal = () => {
@@ -208,8 +214,6 @@ class index extends PureComponent {
 
     //回调
     GetData() {
-        console.log(this.child.props.form);
-        alert();
         this.setState({
             polygon:this.child.props.form.getFieldValue('polygon'),
             longitude:this.child.props.form.getFieldValue('longitude'),
@@ -238,11 +242,264 @@ class index extends PureComponent {
         }
         return res;
     }
-
-    render() {
+    loadForm=(baseinfo)=>{
         const { getFieldDecorator } = this.props.form;
+        const {longitude,latitude}=this.state;
+        let log;
+        let lat;
+        if (baseinfo) {
+            log=baseinfo.longitude;
+            lat=baseinfo.latitude;
+        }
+       
+        if(longitude && latitude)
+        {
+            lat=latitude;
+            log=longitude
+        }
+        const formItemLayout = {
+            labelCol: {
+              xs: { span: 8 },
+              sm: { span: 8 },
+            },
+            wrapperCol: {
+              xs: { span: 8 },
+              sm: { span: 8 },
+            },
+          };
+        if(this.props.formloading)
+        {
+              return (<Spin
+                  style={{ width: '100%',
+                      height: 'calc(100vh/2)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center' }}
+                  size="large"
+              />);
+        }else{
+            return(<Form layout="inline" onSubmit={this.handleSubmit} className={this.state.className} style={{ display:'flex',flexDirection:'row',flexWrap:'wrap',alignItems:'center',justifyContent:'space-between'}}>
+            <FormItem style={{width:'400px'}}   {...formItemLayout} label="企业名称"  >
+                            {getFieldDecorator('entallname', {
+                                initialValue: baseinfo ? baseinfo.name : '',
+                                rules: [{
+                                    required: true,
+                                     message: '请输入企业名称',
+                                }],
+                            })(
+                                <Input
+                                    style={{ width:300 }}
+                                    disabled={this.state.isedit} />
+
+                            )}
+                        </FormItem>
+                        <FormItem style={{width:'400px'}} {...formItemLayout} label="企业简称" >
+                            {getFieldDecorator('enteasyname', {
+                                initialValue: baseinfo ? baseinfo.abbreviation : '',
+                                rules: [{
+                                    required: true, 
+                                    message: '请输入企业简称',
+                                }],
+                            })(
+                                <Input style={{ width: 300 }}
+
+                                    disabled={this.state.isedit} />
+                            )}
+                        </FormItem>
+                        <FormItem style={{width:'400px'}} {...formItemLayout} label="行政区" >
+
+                            {getFieldDecorator('area', {
+                                initialValue: baseinfo ? baseinfo.regionCode : '',
+                                rules: [{
+                                    required: true,
+                                    message: '请输入行政区',
+                                }],
+                            })(
+                                <TreeSelect
+                                    style={{ width: 300}}
+                                    dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+                                    treeData={this.props.regionlist}
+                                    treeDefaultExpandAll={true}
+                                    disabled={this.state.isedit}
+                                    onChange={this.area}
+                                />
+                            )}
+                        </FormItem>
+                        <Divider dashed style={{border:'1px dashed #FFFFFF'}} />
+                        <FormItem style={{width:'400px'}} {...formItemLayout} label="所属行业" >
+                            {getFieldDecorator('industry', {
+                                initialValue: baseinfo ? baseinfo.industryTypeName : '',
+                            })(
+                                <Select style={{ width: 300 }} disabled={this.state.isedit} onChange={this.industry}>
+                                    {this.props.industryTypelist.map((item, key) => {
+                                        return (<Option key={item.IndustryTypeCode}>{item.IndustryTypeName}</Option>);
+                                    })
+                                    }
+                                </Select>
+                            )}
+                        </FormItem>
+                        <FormItem style={{width:'400px'}} {...formItemLayout} label="地址" >
+                            {getFieldDecorator('adress', {
+                                initialValue: baseinfo ? baseinfo.address : '',
+                            })(
+                                <Input
+                                    style={{ width: 300, }}
+
+                                    disabled={this.state.isedit} />
+                            )}
+                        </FormItem>
+                        <FormItem style={{width:'400px'}} {...formItemLayout} label="关注程度" >
+                            {getFieldDecorator('concern', {
+                                initialValue: baseinfo ? baseinfo.attentionName : '',
+                            })(
+                                <Select style={{ width: 300 }} disabled={this.state.isedit} onChange={this.concern}>
+                                    {this.props.attentionDegreelist.map((item, key) => {
+                                        return (<Option key={item.AttentionCode}>{item.AttentionName}</Option>);
+                                    })
+                                    }
+                                </Select>
+                            )}
+                        </FormItem>
+                        <Divider dashed />
+                        <FormItem style={{width:'400px'}} {...formItemLayout} label="法人编号" >
+                            {getFieldDecorator('personnum', {
+                                initialValue: baseinfo ? baseinfo.corporationCode : '',
+                            })(
+                                <Input
+                                    style={{ width: 300 }}
+
+                                    disabled={this.state.isedit} />
+                            )}
+                        </FormItem>
+                        <FormItem style={{width:'400px'}} {...formItemLayout} label="法人" >
+                            {getFieldDecorator('personname', {
+                                initialValue: baseinfo ? baseinfo.corporationName : '',
+                            })(
+                                <Input
+                                    style={{ width: 300 }}
+
+                                    disabled={this.state.isedit} />
+                            )}
+                        </FormItem>
+                        <FormItem style={{width:'400px'}} {...formItemLayout} label="单位类型" >
+                            {getFieldDecorator('unit', {
+                                initialValue: baseinfo ? baseinfo.UnitTypeName : '',
+                            })(
+                                <Select style={{ width: 300 }} disabled={this.state.isedit} onChange={this.unit} >
+                                    {this.props.unitTypelist.map((item, key) => {
+                                        return (<Option key={item.UnitTypeCode}>{item.UnitTypeName}</Option>);
+                                    })
+                                    }
+                                </Select>
+                            )}
+                        </FormItem>
+                        <Divider dashed style={{border:'1px dashed #FFFFFF'}} />
+                        <FormItem style={{width:'400px'}} {...formItemLayout} label="排口数量" >
+                            {getFieldDecorator('outputnum', {
+                                initialValue: 30,
+                            })(
+                                <Input
+                                    style={{ width: 300 }}
+
+                                    disabled={this.state.isedit} />
+                            )}
+                        </FormItem>
+                        <FormItem style={{width:'400px'}} {...formItemLayout} label="污染源规模" >
+                            {getFieldDecorator('pollutionsources', {
+                                initialValue: baseinfo ? baseinfo.PSScaleName : '',
+                            })(
+                                <Select style={{ width: 300 }} disabled={this.state.isedit} onChange={this.pollutionsources} >
+                                    {this.props.pSScalelist.map((item, key) => {
+                                        return (<Option key={item.PSScaleCode}>{item.PSScaleName}</Option>);
+                                    })
+                                    }
+                                </Select>
+                            )}
+                        </FormItem>
+                     
+                        <FormItem style={{width:'400px'}} {...formItemLayout} label="经纬度" >
+                            {getFieldDecorator('latlon', {
+                                initialValue:(log && lat)?  (log) + ' , ' + (lat):'',
+                                rules: [{
+                                    required: true,
+                                    message: '请输入企业名称',
+                                }],
+                            })(
+                                <Input
+                                    style={{ width: 300 }}
+
+                                    disabled={this.state.isedit} />
+                            )}
+                        </FormItem>
+                        <Divider dashed />
+                        <FormItem style={{width:'400px'}} {...formItemLayout} label="主要污染物" >
+                            {getFieldDecorator('contaminants', {
+                            })(
+                                <Input
+                                    style={{ width: 300 }}
+
+                                    disabled={this.state.isedit} />
+                            )}
+                        </FormItem>
+                        <FormItem style={{width:'400px'}} {...formItemLayout} label="注册类型" >
+                            {getFieldDecorator('registration', {
+                                initialValue: baseinfo ? baseinfo.registTypeName : '',
+                            })(
+                                <Select style={{ width: 300 }} disabled={this.state.isedit} onChange={this.registration}>
+                                    {this.props.registTypelist.map((item, key) => {
+                                        return (<Option key={item.RegistTypeCode}>{item.RegistTypeName}</Option>);
+                                    })
+                                    }
+                                </Select>
+                            )}
+                        </FormItem>
+                        <FormItem style={{width:'400px'}} {...formItemLayout} label="窑炉数量" >
+                            {getFieldDecorator('kilnnum', {
+                            })(
+                                <Input
+                                    style={{ width: 300 }}
+
+                                    disabled={this.state.isedit} />
+                            )}
+                        </FormItem>
+                        <Divider dashed style={{border:'1px dashed #FFFFFF'}} />
+                        <FormItem style={{width:'400px'}} {...formItemLayout} label="环保负责人" >
+                            {getFieldDecorator('chargeman', {
+                                initialValue: baseinfo ? baseinfo.environmentPrincipal : '',
+                            })(
+                                <Input
+                                    style={{ width: 300 }}
+
+                                    disabled={this.state.isedit} />
+                            )}
+                        </FormItem>
+                        <FormItem style={{width:'400px'}} {...formItemLayout} label="办公电话" >
+                            {getFieldDecorator('phone', {
+                                initialValue: baseinfo ? baseinfo.officePhone : '',
+                            })(
+                                <Input
+                                    style={{ width: 300 }}
+                                    disabled={this.state.isedit} />
+                            )}
+                        </FormItem>
+                        <FormItem style={{width:'400px'}} {...formItemLayout} label="隶属关系">
+                            {getFieldDecorator('subjection', {
+                                initialValue: baseinfo ? baseinfo.subjectionRelationName : '',
+                            })(
+                                <Select style={{ width: 300 }} disabled={this.state.isedit} onChange={this.subjection}>
+                                    {this.props.subjectionRelationlist.map((item, key) => {
+                                        return (<Option key={item.SubjectionRelationCode}>{item.SubjectionRelationName}</Option>);
+                                    })
+                                    }
+                                </Select>
+                            )}
+                        </FormItem>
+                 
+            </Form>);
+        }
+    }
+    render() {
         const {polygon,longitude,latitude}=this.state;
-        const { effects } = this.props;
         const baseinfo = this.props.baseinfo[0];
         let allcoo;
         let polygonChange;
@@ -268,16 +525,6 @@ class index extends PureComponent {
             lat=latitude;
             log=longitude
         }
-        const formItemLayout = {
-            labelCol: {
-              xs: { span: 8 },
-              sm: { span: 8 },
-            },
-            wrapperCol: {
-              xs: { span: 8 },
-              sm: { span: 8 },
-            },
-          };
           if(this.props.isloading)
           {
             return (<Spin
@@ -289,6 +536,7 @@ class index extends PureComponent {
                 size="large"
             />);
           }
+          
         return (
             <MonitorContent {...this.props} breadCrumbList={
                 [
@@ -331,8 +579,6 @@ class index extends PureComponent {
                                     height: "285px",
                                     borderRadius: "12px"
                                 }}>
-
-                              
                                     <Map resizeEnable={true}
                                     mapStyle={'fresh'}
                                         events={this.mapEvents}
@@ -369,224 +615,10 @@ class index extends PureComponent {
 
 
                          </Divider>
-                        <Form layout="inline" onSubmit={this.handleSubmit} className={this.state.className} style={{ display:'flex',flexDirection:'row',flexWrap:'wrap',alignItems:'center',justifyContent:'space-between'}}>
-                        <FormItem style={{width:'400px'}}   {...formItemLayout} label="企业名称"  >
-                                        {getFieldDecorator('entallname', {
-                                            initialValue: baseinfo ? baseinfo.name : '',
-                                            rules: [{
-                                                required: true,
-                                                 message: '请输入企业名称',
-                                            }],
-                                        })(
-                                            <Input
-                                                style={{ width:300 }}
-                                                disabled={this.state.isedit} />
-            
-                                        )}
-                                    </FormItem>
-                                    <FormItem style={{width:'400px'}} {...formItemLayout} label="企业简称" >
-                                        {getFieldDecorator('enteasyname', {
-                                            initialValue: baseinfo ? baseinfo.abbreviation : '',
-                                            rules: [{
-                                                required: true, 
-                                                message: '请输入企业简称',
-                                            }],
-                                        })(
-                                            <Input style={{ width: 300 }}
-
-                                                disabled={this.state.isedit} />
-                                        )}
-                                    </FormItem>
-                                    <FormItem style={{width:'400px'}} {...formItemLayout} label="行政区" >
-
-                                        {getFieldDecorator('area', {
-                                            initialValue: baseinfo ? baseinfo.regionCode : '',
-                                            rules: [{
-                                                required: true,
-                                                message: '请输入行政区',
-                                            }],
-                                        })(
-                                            <TreeSelect
-                                                style={{ width: 300}}
-                                                dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
-                                                treeData={this.props.regionlist}
-                                                treeDefaultExpandAll={true}
-                                                disabled={this.state.isedit}
-                                                onChange={this.area}
-                                            />
-                                        )}
-                                    </FormItem>
-                                    <Divider dashed style={{border:'1px dashed #FFFFFF'}} />
-                                    <FormItem style={{width:'400px'}} {...formItemLayout} label="所属行业" >
-                                        {getFieldDecorator('industry', {
-                                            initialValue: baseinfo ? baseinfo.industryTypeName : '',
-                                        })(
-                                            <Select style={{ width: 300 }} disabled={this.state.isedit} onChange={this.industry}>
-                                                {this.props.industryTypelist.map((item, key) => {
-                                                    return (<Option key={item.IndustryTypeCode}>{item.IndustryTypeName}</Option>);
-                                                })
-                                                }
-                                            </Select>
-                                        )}
-                                    </FormItem>
-                                    <FormItem style={{width:'400px'}} {...formItemLayout} label="地址" >
-                                        {getFieldDecorator('adress', {
-                                            initialValue: baseinfo ? baseinfo.address : '',
-                                        })(
-                                            <Input
-                                                style={{ width: 300, }}
-
-                                                disabled={this.state.isedit} />
-                                        )}
-                                    </FormItem>
-                                    <FormItem style={{width:'400px'}} {...formItemLayout} label="关注程度" >
-                                        {getFieldDecorator('concern', {
-                                            initialValue: baseinfo ? baseinfo.attentionName : '',
-                                        })(
-                                            <Select style={{ width: 300 }} disabled={this.state.isedit} onChange={this.concern}>
-                                                {this.props.attentionDegreelist.map((item, key) => {
-                                                    return (<Option key={item.AttentionCode}>{item.AttentionName}</Option>);
-                                                })
-                                                }
-                                            </Select>
-                                        )}
-                                    </FormItem>
-                                    <Divider dashed />
-                                    <FormItem style={{width:'400px'}} {...formItemLayout} label="法人编号" >
-                                        {getFieldDecorator('personnum', {
-                                            initialValue: baseinfo ? baseinfo.corporationCode : '',
-                                        })(
-                                            <Input
-                                                style={{ width: 300 }}
-
-                                                disabled={this.state.isedit} />
-                                        )}
-                                    </FormItem>
-                                    <FormItem style={{width:'400px'}} {...formItemLayout} label="法人" >
-                                        {getFieldDecorator('personname', {
-                                            initialValue: baseinfo ? baseinfo.corporationName : '',
-                                        })(
-                                            <Input
-                                                style={{ width: 300 }}
-
-                                                disabled={this.state.isedit} />
-                                        )}
-                                    </FormItem>
-                                    <FormItem style={{width:'400px'}} {...formItemLayout} label="单位类型" >
-                                        {getFieldDecorator('unit', {
-                                            initialValue: baseinfo ? baseinfo.UnitTypeName : '',
-                                        })(
-                                            <Select style={{ width: 300 }} disabled={this.state.isedit} onChange={this.unit} >
-                                                {this.props.unitTypelist.map((item, key) => {
-                                                    return (<Option key={item.UnitTypeCode}>{item.UnitTypeName}</Option>);
-                                                })
-                                                }
-                                            </Select>
-                                        )}
-                                    </FormItem>
-                                    <Divider dashed style={{border:'1px dashed #FFFFFF'}} />
-                                    <FormItem style={{width:'400px'}} {...formItemLayout} label="排口数量" >
-                                        {getFieldDecorator('outputnum', {
-                                            initialValue: 30,
-                                        })(
-                                            <Input
-                                                style={{ width: 300 }}
-
-                                                disabled={this.state.isedit} />
-                                        )}
-                                    </FormItem>
-                                    <FormItem style={{width:'400px'}} {...formItemLayout} label="污染源规模" >
-                                        {getFieldDecorator('pollutionsources', {
-                                            initialValue: baseinfo ? baseinfo.PSScaleName : '',
-                                        })(
-                                            <Select style={{ width: 300 }} disabled={this.state.isedit} onChange={this.pollutionsources} >
-                                                {this.props.pSScalelist.map((item, key) => {
-                                                    return (<Option key={item.PSScaleCode}>{item.PSScaleName}</Option>);
-                                                })
-                                                }
-                                            </Select>
-                                        )}
-                                    </FormItem>
-                                 
-                                    <FormItem style={{width:'400px'}} {...formItemLayout} label="经纬度" >
-                                        {getFieldDecorator('latlon', {
-                                            initialValue:(log && lat)?  (log) + ' , ' + (lat):'',
-                                            rules: [{
-                                                required: true,
-                                                message: '请输入企业名称',
-                                            }],
-                                        })(
-                                            <Input
-                                                style={{ width: 300 }}
-
-                                                disabled={this.state.isedit} />
-                                        )}
-                                    </FormItem>
-                                    <Divider dashed />
-                                    <FormItem style={{width:'400px'}} {...formItemLayout} label="主要污染物" >
-                                        {getFieldDecorator('contaminants', {
-                                        })(
-                                            <Input
-                                                style={{ width: 300 }}
-
-                                                disabled={this.state.isedit} />
-                                        )}
-                                    </FormItem>
-                                    <FormItem style={{width:'400px'}} {...formItemLayout} label="注册类型" >
-                                        {getFieldDecorator('registration', {
-                                            initialValue: baseinfo ? baseinfo.registTypeName : '',
-                                        })(
-                                            <Select style={{ width: 300 }} disabled={this.state.isedit} onChange={this.registration}>
-                                                {this.props.registTypelist.map((item, key) => {
-                                                    return (<Option key={item.RegistTypeCode}>{item.RegistTypeName}</Option>);
-                                                })
-                                                }
-                                            </Select>
-                                        )}
-                                    </FormItem>
-                                    <FormItem style={{width:'400px'}} {...formItemLayout} label="窑炉数量" >
-                                        {getFieldDecorator('kilnnum', {
-                                        })(
-                                            <Input
-                                                style={{ width: 300 }}
-
-                                                disabled={this.state.isedit} />
-                                        )}
-                                    </FormItem>
-                                    <Divider dashed style={{border:'1px dashed #FFFFFF'}} />
-                                    <FormItem style={{width:'400px'}} {...formItemLayout} label="环保负责人" >
-                                        {getFieldDecorator('chargeman', {
-                                            initialValue: baseinfo ? baseinfo.environmentPrincipal : '',
-                                        })(
-                                            <Input
-                                                style={{ width: 300 }}
-
-                                                disabled={this.state.isedit} />
-                                        )}
-                                    </FormItem>
-                                    <FormItem style={{width:'400px'}} {...formItemLayout} label="办公电话" >
-                                        {getFieldDecorator('phone', {
-                                            initialValue: baseinfo ? baseinfo.officePhone : '',
-                                        })(
-                                            <Input
-                                                style={{ width: 300 }}
-                                                disabled={this.state.isedit} />
-                                        )}
-                                    </FormItem>
-                                    <FormItem style={{width:'400px'}} {...formItemLayout} label="隶属关系">
-                                        {getFieldDecorator('subjection', {
-                                            initialValue: baseinfo ? baseinfo.subjectionRelationName : '',
-                                        })(
-                                            <Select style={{ width: 300 }} disabled={this.state.isedit} onChange={this.subjection}>
-                                                {this.props.subjectionRelationlist.map((item, key) => {
-                                                    return (<Option key={item.SubjectionRelationCode}>{item.SubjectionRelationName}</Option>);
-                                                })
-                                                }
-                                            </Select>
-                                        )}
-                                    </FormItem>
-                             
-                        </Form>
+                         {
+                             this.loadForm(baseinfo)
+                         }
+                        
                         <Modal
                             visible={this.state.Mapvisible}
                             title='编辑位置信息'
