@@ -43,7 +43,9 @@ export default class ConsumablesReplaceHistoryList extends Component {
             type: 'overview/querydatalist',
             payload: {
                 map: true,
-                pollutantTypes: this.state.pollutantTypeCode
+                pollutantTypes: this.state.pollutantTypeCode,
+                CounterControlCommandHistoryRecords:true,
+                DGIMN: getDGIMN,
             }
         });
     }
