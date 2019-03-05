@@ -5,6 +5,9 @@ import moment from 'moment';
 import styles from './MapTreeList.less';
 import { mainpoll } from '../../config';
 import {getPointStatusImg} from '../../utils/getStatusImg';
+import PointTree from '../../components/OverView/TreeCardContent';
+
+
 const Search = Input.Search;
 const TabPane = Tabs.TabPane;
 @connect(({ loading, overview }) => ({
@@ -29,98 +32,6 @@ class MapTreeList extends Component {
         };
     }
 
-
-    //填充污染物类型
-    getPollutantDoc = () => {
-        const { pollutantTypelist } = this.props;
-        let res = [];
-        if (pollutantTypelist) {
-            pollutantTypelist.map((item,key) => {
-                res.push(<TabPane key={key} tab={item.pollutantTypeName} key={item.pollutantTypeCode}>
-                    {/* <TreeCardContent /> */}
-                         </TabPane>);
-            });
-        }
-        return res;
-    }
-
-
-    //组装搜索树的数据
-    getTreeDatalist = () => {
-        const { loading,datalist } = this.props;
-        let res = [];
-        let pollutantTypeCode=this.props.pollutantTypeCode;
-        if(loading) {
-            return(<Spin
-                style={{ width: '100%',
-                    height: 'calc(100vh/2)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center' }}
-                size="large"
-            />);
-        }
-        if (datalist) {
-            datalist.map((item, key) => {
-                let treecardcss = styles.cardDiv;
-                if (item.pollutantTypeCode === parseInt(pollutantTypeCode)) {
-                    if (this.props.ifSelect) {
-                        if (item.DGIMN === localStorage.getItem('DGIMN')) {
-                            treecardcss = styles.cardDivClick;
-                        }
-                    }
-                    res.push(<div key={key}
-                        onClick={() => {
-                            this.treeCilck(item, key);
-                        }}
-                        className={treecardcss}
-                    >
-                        <div key={key+'1'} className={styles.cardtopspan}>
-                            <span className={styles.statusimg}>
-                                {getPointStatusImg(item.status,item.stop)}
-                            </span>
-                            <span className={styles.pointName}>
-                                {item.pointName}
-                            </span><span className={styles.pollutantType}>
-                                类型：{item.pollutantType ? item.pollutantType : '废气'}
-                            </span>
-                        </div>
-                        <div key={key+'2'} className={styles.cardbottomspan}><span className={styles.tsdiv}>
-                            传输有效率 {item.transmissionEffectiveRate}
-                        </span>
-                          { this.getpointStatus(item)}
-                        </div>
-                    </div>);
-                }
-            });
-        } else {
-            res = (<div style={{ textAlign: 'center', height: 70, background: '#fff' }}>暂无数据</div>);
-        }
-        return res;
-    }
-
-    getpointStatus=(item)=>{
-        let res=[];
-         if(item.stop)
-         {
-            res.push(<span className={styles.stop}>停产中</span>)
-         }
-         else{
-             if(item.scene)
-             {
-                res.push(<span className={styles.operation}>运维中</span>)
-             }
-             if(item.warning)
-             {
-                res.push(<span className={styles.warning}>预警中</span>)
-             }
-             if(item.fault)
-             {
-                res.push(<span className={styles.fault}>故障中</span>)
-             }
-         }
-        return res;
-    }
 
     //获取当期数据的时间
     getTimeImgSpan=()=>{
@@ -220,7 +131,7 @@ class MapTreeList extends Component {
 
      render() {
          const {maploading,pollutantTypeCode}=this.props;
-         console.log(pollutantTypeCode);
+  
          if(maploading) {
              return '';
          }
@@ -250,20 +161,13 @@ class MapTreeList extends Component {
                          <span><img style={{width:15}} src="/gisover.png" />超标</span>
                          <span><img style={{width:15}} src="/gisexception.png" />异常</span>
                      </div>
-                     {/* <div style={{borderBottom: '1px solid #EBEBEB'}} />
-                     <div style={{marginLeft: 120, marginTop: 3}}>
-                         {this.getTimeImgSpan()}
-                     </div> */}
                  </div>
 
                  <div>
                      <div className={styles.treelist} style={{ width: '400px',marginTop: 5,background:'#fff' }}>
-                         {/* <Tabs className={styles.tab} defaultActiveKey={pollutantTypeCode} onChange={this.getNowPollutantType}>
-                             {this.getPollutantDoc()}
-                         </Tabs> */}
-                         <div style={{ overflow:'auto',width:400,background:'#fff', height:'calc(100vh - 290px)' }}>
-                             {this.getTreeDatalist()}
-                         </div>
+                        <PointTree noselect={true} style={{ overflow: 'auto', width: 400, background: '#fff' }} getHeight='calc(100vh - 290px)' 
+                           treeCilck={this.treeCilck} PollutantType={pollutantTypeCode}
+                        />
                      </div>
                  </div>
              </div>
