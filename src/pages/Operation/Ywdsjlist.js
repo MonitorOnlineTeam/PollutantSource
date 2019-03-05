@@ -64,9 +64,7 @@ export default class Ywdsjlist extends Component {
     //重新加载
     searchData = (pollutantTypeCode, searchName) => {
         var getDGIMN = localStorage.getItem('DGIMN');
-        if (getDGIMN === null) {
-            getDGIMN = '[object Object]';
-        }
+
         this.props.dispatch({
             type: 'overview/querydatalist',
             payload: {

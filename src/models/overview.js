@@ -93,7 +93,7 @@ export default Model.extend({
                 if (data && data[0]) {
                     if (!payload.search) {
                         let dgimns = '';
-                        if (payload.DGIMN === '[object Object]') {
+                        if (!payload.DGIMN || payload.DGIMN==='[object Object]') {
                             localStorage.setItem('DGIMN', data[0].DGIMN);
                             dgimns = data[0].DGIMN;
                         } else if (payload.change) {
@@ -134,14 +134,14 @@ export default Model.extend({
             if (payload.RepairHistoryList) {
                 if (data && data[0]) {
                     if (!payload.search) {
-                        if (payload.DGIMN === '[object Object]') {
+                        if (!payload.DGIMN) {
                             localStorage.setItem('DGIMN', data[0].DGIMN);
                         }
                         yield put({
                             type: 'task/GetHistoryRepairDetail',
                             payload: {
                                 ...payload,
-                                DGIMN: payload.DGIMN === '[object Object]' ? data[0].DGIMN : payload.DGIMN,
+                                DGIMN: payload.DGIMN === null ? data[0].DGIMN : payload.DGIMN,
                                 data: data
                             }
                         });
@@ -161,14 +161,14 @@ export default Model.extend({
             if (payload.StopCemsListHistoryRecords) {
                 if (data && data[0]) {
                     if (!payload.search) {
-                        if (payload.DGIMN === '[object Object]') {
+                        if (!payload.DGIMN) {
                             localStorage.setItem('DGIMN', data[0].DGIMN);
                         }
                         yield put({
                             type: 'task/GetHistoryStopCemsList',
                             payload: {
                                 ...payload,
-                                DGIMN: payload.DGIMN === '[object Object]' ? data[0].DGIMN : payload.DGIMN,
+                                DGIMN: payload.DGIMN === null ? data[0].DGIMN : payload.DGIMN,
                                 data: data
                             }
                         });
@@ -188,14 +188,14 @@ export default Model.extend({
             if (payload.CounterControlCommandHistoryRecords) {
                 if (data && data[0]) {
                     if (!payload.search) {
-                        if (payload.DGIMN === '[object Object]') {
+                        if (!payload.DGIMN) {
                             localStorage.setItem('DGIMN', data[0].DGIMN);
                         }
                         yield put({
                             type: 'task/GetHistoryConsumablesReplaceRecord',
                             payload: {
                                 ...payload,
-                                DGIMN: payload.DGIMN === '[object Object]' ? data[0].DGIMN : payload.DGIMN,
+                                DGIMN: payload.DGIMN === null ? data[0].DGIMN : payload.DGIMN,
                                 data: data
                             }
                         });
@@ -215,14 +215,14 @@ export default Model.extend({
             if (payload.StandardGasHistoryRecords) {
                 if (data && data[0]) {
                     if (!payload.search) {
-                        if (payload.DGIMN === '[object Object]') {
+                        if (!payload.DGIMN) {
                             localStorage.setItem('DGIMN', data[0].DGIMN);
                         }
                         yield put({
                             type: 'task/GetHistoryStandardGasRepalceRecordList',
                             payload: {
                                 ...payload,
-                                DGIMN: payload.DGIMN === '[object Object]' ? data[0].DGIMN : payload.DGIMN,
+                                DGIMN: payload.DGIMN === null ? data[0].DGIMN : payload.DGIMN,
                                 data: data
                             }
                         });
@@ -243,14 +243,14 @@ export default Model.extend({
             if (payload.InspectionHistoryRecords) {
                 if (data && data[0]) {
                     if (!payload.search) {
-                        if (payload.DGIMN === '[object Object]') {
+                        if (!payload.DGIMN) {
                             localStorage.setItem('DGIMN', data[0].DGIMN);
                         }
                         yield put({
                             type: 'task/GetHistoryInspectionHistoryRecords',
                             payload: {
                                 ...payload,
-                                DGIMN: payload.DGIMN === '[object Object]' ? data[0].DGIMN : payload.DGIMN,
+                                DGIMN: payload.DGIMN === null ? data[0].DGIMN : payload.DGIMN,
                                 data: data
                             }
                         });
@@ -270,14 +270,14 @@ export default Model.extend({
             if (payload.JzHistoryRecords) {
                 if (data && data[0]) {
                     if (!payload.search) {
-                        if (payload.DGIMN === '[object Object]') {
+                        if (!payload.DGIMN) {
                             localStorage.setItem('DGIMN', data[0].DGIMN);
                         }
                         yield put({
                             type: 'task/GetJzHistoryRecord',
                             payload: {
                                 ...payload,
-                                DGIMN: payload.DGIMN === '[object Object]' ? data[0].DGIMN : payload.DGIMN,
+                                DGIMN: payload.DGIMN === null ? data[0].DGIMN : payload.DGIMN,
                                 data: data
                             }
                         });
@@ -297,14 +297,14 @@ export default Model.extend({
             if (payload.BdHistoryInfoHistoryRecords) {
                 if (data && data[0]) {
                     if (!payload.search) {
-                        if (payload.DGIMN === '[object Object]') {
+                        if (!payload.DGIMN) {
                             localStorage.setItem('DGIMN', data[0].DGIMN);
                         }
                         yield put({
                             type: 'task/GetBdHistoryInfoList',
                             payload: {
                                 ...payload,
-                                DGIMN: payload.DGIMN === '[object Object]' ? data[0].DGIMN : payload.DGIMN,
+                                DGIMN: payload.DGIMN === null ? data[0].DGIMN : payload.DGIMN,
                                 data: data
                             }
                         });
@@ -325,14 +325,14 @@ export default Model.extend({
             if (payload.DeviceExceptionListHistoryRecords) {
                 if (data && data[0]) {
                     if (!payload.search) {
-                        if (payload.DGIMN === '[object Object]') {
+                        if (!payload.DGIMN) {
                             localStorage.setItem('DGIMN', data[0].DGIMN);
                         }
                         yield put({
                             type: 'task/GetDeviceExceptionList',
                             payload: {
                                 ...payload,
-                                DGIMN: payload.DGIMN === '[object Object]' ? data[0].DGIMN : payload.DGIMN,
+                                DGIMN: payload.DGIMN === null ? data[0].DGIMN : payload.DGIMN,
                                 data: data
                             }
                         });
@@ -354,14 +354,14 @@ export default Model.extend({
 
                 if (data && data[0]) {
                     if (!payload.search) {
-                        if (payload.DGIMN === '[object Object]') {
+                        if (!payload.DGIMN) {
                             localStorage.setItem('DGIMN', data[0].DGIMN);
                         }
                         yield put({
                             type: 'task/GetYwdsj',
                             payload: {
                                 ...payload,
-                                DGIMNs: payload.DGIMN === '[object Object]' ? data[0].DGIMN : payload.DGIMN,
+                                DGIMNs: payload.DGIMN === null ? data[0].DGIMN : payload.DGIMN,
                                 data: data
                             }
                         });
@@ -387,7 +387,7 @@ export default Model.extend({
                         yield put({
                             type: 'points/queryprocesschart',
                             payload: {
-                                dgimn: payload.DGIMN === '[object Object]' ? data[0].DGIMN : payload.DGIMN,
+                                dgimn: payload.DGIMN === null ? data[0].DGIMN : payload.DGIMN,
                             }
                         });
                     }
@@ -406,14 +406,14 @@ export default Model.extend({
             if (payload.OperationCalendar) {
                 if (data && data[0]) {
                     if (!payload.search) {
-                        if (payload.DGIMN === '[object Object]') {
+                        if (!payload.DGIMN) {
                             localStorage.setItem('DGIMN', data[0].DGIMN);
                         }
                         yield put({
                             type: 'workbenchmodel/getOperationCalendarData',
                             payload: {
                                 IsQueryAllUser: true,
-                                DGIMNs: payload.DGIMN === '[object Object]' ? data[0].DGIMN : payload.DGIMN,
+                                DGIMNs: payload.DGIMN === null ? data[0].DGIMN : payload.DGIMN,
                                 beginTime: payload.beginTime,
                                 endTime: payload.endTime,
                             }

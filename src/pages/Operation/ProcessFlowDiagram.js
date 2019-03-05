@@ -48,9 +48,6 @@ export default class ProcessFlowDiagram extends Component {
     componentDidMount() {
         const { dispatch } = this.props;
         var getDGIMN = localStorage.getItem('DGIMN')
-        if (getDGIMN === null) {
-            getDGIMN = '[object Object]';
-        }
         dispatch({
             type: 'overview/querydatalist',
             payload: {
