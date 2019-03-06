@@ -466,6 +466,7 @@ export async function querypollutanttypecode(params) {
 }
 // 获取数据一览数据
 export async function querydatalist(params) {
+    debugger;
     let body = {
         time: params.time,
         pointType: params.pointType,

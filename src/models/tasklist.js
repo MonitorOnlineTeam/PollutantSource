@@ -36,7 +36,6 @@ export default Model.extend({
                 DGIMN,
                 ...payload
             };
-
             const DataInfo = yield call(GetYwdsj,body);
             if (DataInfo !== null && DataInfo.requstresult == EnumRequstResult.Success) {
                 const isLoadMoreOpt = payload.isLoadMoreOpt; // 是否是加载更多操作

@@ -130,17 +130,7 @@ class PointDetail extends Component {
      */
     renderPointList = () => {
         const rtnVal = [];
-        //rtnVal.push(this.props.dataTemp.filter(todo=>todo.DGIMN===this.props.pointInfo.DGIMN)[0]);
-        //let selectedPoint=this.props.dataTemp.filter(todo=>todo.DGIMN===this.props.pointInfo.DGIMN)[0];
         this.props.dataTemp.map((item, key) => {
-            // let status = <img src="/gisexception.png" width="15" />;
-            // if (item.status === 0) {
-            //     status = <img src="/gisunline.png" width="15" />;
-            // } if (item.status === 1) {
-            //     status = <img src="/gisnormal.png" width="15" />;
-            // } if (item.status === 2) {
-            //     status = <img src="/gisover.png" width="15" />;
-            // }
             let status=getPointStatusImg(item.status,item.stop);
 
             let optStatus=[];//TODO:排口运维状态不确定 故障：#119f9d
@@ -160,28 +150,18 @@ class PointDetail extends Component {
                     optStatus.push(<li key={2}><Tag className={styles.fault}>故障中</Tag></li>);
                 }
             }
-            // if (key === 0) {
-            //     item = this.props.dataTemp.filter(todo => todo.DGIMN === this.props.pointInfo.DGIMN)[0];
-            //     if (!item) {
-            //         return false;
-            //     }
-            // } else if (item.DGIMN === this.props.pointInfo.DGIMN)
-            //     return false;
-
             rtnVal.push(
                 <div key={item.DGIMN}>
                     <Col xs={12} sm={12} md={6} lg={6} xl={6}>
                         <Card
                             style={{ cursor: 'pointer', border: `${item.DGIMN === this.props.pointInfo.DGIMN ? '1px solid #81c2ff' : '1px solid #fff'}` }}
                             onClick={() => {
-
                                 this.clickCard(item);
                             }}
                             bordered={false}
                             loading={this.state.loadingCard}
                         >
                             <div className={styles.cardContent}>
-                                {/* <p><Badge style={{ backgroundColor: 'rgb(255,198,0)' }} dot={true}/><span className={styles.pointName}>{item.pointName}</span></p> */}
                                 <p>{status}<span className={styles.pointName}>{item.pointName}</span></p>
                                 <p className={styles.TEF}>传输有效率<span>{item.transmissionEffectiveRate || '-'}</span></p>
                                 <p className={styles.TEF}>类型：<span>{item.pollutantType}</span></p>
@@ -401,6 +381,7 @@ class PointDetail extends Component {
                         reloadData={() => this.Refresh()}
                         exist={pointInfo.existTask}
                         name={pointInfo.operationUserName}
+                        pollutantTypeCode={pointInfo.pollutantType}
                         tel={pointInfo.operationtel}
                         viewType={viewType}
                     />

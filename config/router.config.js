@@ -16,25 +16,25 @@ export default [
         component: '../layouts/BlankLayout',
         routes: [
             /* 维修记录 */
-            { path: '/appoperation/apprepairrecorddetail/:TaskID/:TypeID', component: './AppOperation/AppRepairRecordDetail' },
+            { path: '/appoperation/apprepairrecord/:TaskID/:TypeID', component: './AppOperation/AppRepairRecord' },
             /* 停机记录 */
-            { path: '/appoperation/appstopcemsinfo/:TaskID/:TypeID', component: './AppOperation/AppStopCemsInfo' },
+            { path: '/appoperation/appstopcemsrecord/:TaskID/:TypeID', component: './AppOperation/AppStopCemsRecord' },
             /* 易耗品更换记录 */
             { path: '/appoperation/appconsumablesreplacerecord/:TaskID/:TypeID', component: './AppOperation/AppConsumablesReplaceRecord' },
             /* 标气更换记录 */
             { path: '/appoperation/appstandardgasrepalcerecord/:TaskID/:TypeID', component: './AppOperation/AppStandardGasRepalceRecord' },
             /* 完全抽取法CEMS巡检记录表 */
-            { path: '/appoperation/appcompleteextraction/:TaskID/:TypeID', component: './AppOperation/AppCompleteExtraction' },
+            { path: '/appoperation/appcompleteextractionrecord/:TaskID/:TypeID', component: './AppOperation/AppCompleteExtractionRecord' },
             /* 稀释采样法CEMS巡检记录表 */
-            { path: '/appoperation/appdilutionsampling/:TaskID/:TypeID', component: './AppOperation/AppDilutionSampling' },
+            { path: '/appoperation/appdilutionsamplingrecord/:TaskID/:TypeID', component: './AppOperation/AppDilutionSamplingRecord' },
             /* 直接测量法CEMS巡检记录表 */
-            { path: '/appoperation/appdirectmeasurement/:TaskID/:TypeID', component: './AppOperation/AppDirectMeasurement' },
+            { path: '/appoperation/appdirectmeasurementrecord/:TaskID/:TypeID', component: './AppOperation/AppDirectMeasurementRecord' },
             /* CEMS零点量程漂移与校准记录表记录表 */
-            { path: '/appoperation/appjzrecordinfo/:TaskID/:TypeID', component: './AppOperation/AppJzRecordInfo' },
+            { path: '/appoperation/appjzrecord/:TaskID/:TypeID', component: './AppOperation/AppJzRecord' },
             /* CEMS校验测试记录 */
             { path: '/appoperation/appbdtestrecord/:TaskID/:TypeID', component: './AppOperation/AppBdTestRecord' },
             /* CEMS设备异常记录表 */
-            { path: '/appoperation/appdeviceexceptiondetail/:TaskID/:TypeID', component: './AppOperation/AppDeviceExceptionDetail' },
+            { path: '/appoperation/appdeviceexceptionrecord/:TaskID/:TypeID', component: './AppOperation/AppDeviceExceptionRecord' },
         ],
     },
     // app
@@ -117,15 +117,15 @@ export default [
             /* 维修记录 */
             { path: '/patrolForm/repairrecord/:pointcode/:viewtype/:taskfrom/:histroyrecordtype/:TaskID', component: './EmergencyTodoList/RepairRecord' },
             /* 易耗品记录 */
-            { path: '/patrolform/consumablesreplacerecord/:pointcode/:viewtype/:taskfrom/:histroyrecordtype/:TaskIds', component: './EmergencyTodoList/ConsumablesReplaceRecord' },
+            { path: '/patrolform/consumablesreplacerecord/:pointcode/:viewtype/:taskfrom/:histroyrecordtype/:TaskID', component: './EmergencyTodoList/ConsumablesReplaceRecord' },
             /* 标气更换记录 */
-            { path: '/patrolform/standardgasrepalcerecord/:pointcode/:viewtype/:taskfrom/:histroyrecordtype/:StandardGasTaskIds', component: './EmergencyTodoList/StandardGasRepalceRecord' },
+            { path: '/patrolform/standardgasrepalcerecord/:pointcode/:viewtype/:taskfrom/:histroyrecordtype/:TaskID', component: './EmergencyTodoList/StandardGasRepalceRecord' },
             /* 完全抽取法CEMS记录 */
             { path: '/patrolform/completeextractionrecord/:pointcode/:viewtype/:taskfrom/:histroyrecordtype/:TaskID', component: './EmergencyTodoList/CompleteExtractionRecord' },
             /* 稀释采样法CEMS记录 */
-            { path: '/patrolform/dilutionsamplingrecord/:pointcode/:viewtype/:taskfrom/:histroyrecordtype/:CyfPatrolTaskIds', component: './EmergencyTodoList/DilutionSamplingRecord' },
+            { path: '/patrolform/dilutionsamplingrecord/:pointcode/:viewtype/:taskfrom/:histroyrecordtype/:TaskID', component: './EmergencyTodoList/DilutionSamplingRecord' },
             /* 直接测量法CEMS记录 */
-            { path: '/patrolform/directmeasurementrecord/:pointcode/:viewtype/:taskfrom/:histroyrecordtype/:ClfPatrolTaskIds', component: './EmergencyTodoList/DirectMeasurementRecord' },
+            { path: '/patrolform/directmeasurementrecord/:pointcode/:viewtype/:taskfrom/:histroyrecordtype/:TaskID', component: './EmergencyTodoList/DirectMeasurementRecord' },
             /* 校准记录 */
             { path: '/patrolform/jzrecord/:pointcode/:viewtype/:taskfrom/:histroyrecordtype/:TaskID/', component: './EmergencyTodoList/JzRecord' },
             /* 比对监测记录 */

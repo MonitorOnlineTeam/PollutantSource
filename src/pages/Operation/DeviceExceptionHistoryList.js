@@ -42,7 +42,10 @@ export default class DeviceExceptionListHistoryRecords extends Component {
             type: 'overview/querydatalist',
             payload: {
                 map: true,
-                pollutantTypes: this.state.pollutantTypeCode
+                pollutantTypes: this.state.pollutantTypeCode,
+                DeviceExceptionListHistoryRecord: true,
+                DGIMN: getDGIMN,
+
             }
         });
 
@@ -73,16 +76,8 @@ export default class DeviceExceptionListHistoryRecords extends Component {
         this.props.dispatch({
             type: 'overview/querydatalist',
             payload: {
-                map: true,
                 pollutantTypes: pollutantTypeCode,
                 pointName: searchName,
-                DeviceExceptionListHistoryRecords: true,
-                pageIndex: this.props.pageIndex,
-                pageSize: this.props.pageSize,
-                BeginTime: this.state.rangeDate[0].format('YYYY-MM-DD 00:00:00'),
-                EndTime: this.state.rangeDate[1].format('YYYY-MM-DD 23:59:59'),
-                DGIMN: getDGIMN,
-                search: true,
                 callback: (data) => {
                 }
             },
@@ -91,7 +86,7 @@ export default class DeviceExceptionListHistoryRecords extends Component {
     treeCilck = (row) => {
         this.props.dispatch({
             type: 'maintenancelist/updateState',
-            payload: {DGIMN:row.DGIMN}
+            payload: { DGIMN: row.DGIMN }
         });
         localStorage.setItem('DGIMN', row.DGIMN);
         this.props.dispatch({
@@ -145,7 +140,7 @@ export default class DeviceExceptionListHistoryRecords extends Component {
                             </div>
                         </Col>
                         <Col style={{ width: document.body.clientWidth - 470, height: 'calc(100vh - 150px)', float: 'right' }}>
-                        <DeviceExceptionHistoryListContent  pointcode={localStorage.getItem('DGIMN')} viewtype="no" height="calc(100vh - 360px)" operation="menu/intelligentOperation"/>
+                            <DeviceExceptionHistoryListContent pointcode={localStorage.getItem('DGIMN')} viewtype="no" height="calc(100vh - 360px)" operation="menu/intelligentOperation" />
                         </Col>
                     </Row>
                 </div>

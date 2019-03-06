@@ -29,7 +29,6 @@ export default class QRcode extends Component {
     render() {
         var React = require('react');
         var QRCode = require('qrcode.react');
-        debugger
         var location = window.location.host;
         var iosPath = "";
         if (this.props.getIPList.length !== 0) {
@@ -38,7 +37,8 @@ export default class QRcode extends Component {
                 location = this.props.getIPList.androidInnerAddress
             }
             else {
-                location = window.location.protocol + "//" + window.location.host + relativePath
+                //否则读取对应的ip地址（一般为外网地址）
+                location = window.location.protocol + "//" + window.location.host + this.props.getIPList.relativePath
             }
             //读取ios地址
             iosPath = this.props.getIPList.getIsoNetIP

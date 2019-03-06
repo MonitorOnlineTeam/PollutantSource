@@ -1,5 +1,5 @@
 .FormTable {
-    width:100%;
+    width:70%;
     border-collapse: collapse;/* 边框合并属性  */
     font-size: 15px;
     margin:auto;
@@ -15,16 +15,16 @@
         font-weight:bold !important;
         border: 1px solid #ccc;
         font-weight: normal;
-        // display: table-cell;
+        display: table-cell;
         vertical-align: inherit;
         line-height: 25px;
         height: 25px;
-        // white-space: nowrap;
+        white-space: nowrap;
     }
 
     .FormTable>tbody>tr>td {
         border: 1px solid #ccc;
-        // display: table-cell;
+        display: table-cell;
         vertical-align: inherit;
         text-align: left;
         padding-left: 9px;
@@ -35,6 +35,8 @@
     .FormDiv{
         width:100%;
         margin:auto;
+        overflow-x:hidden;
+        overflow-y: scroll; 
         background-color: #fff;
     }
 
@@ -43,6 +45,7 @@
         height: 30px;
         line-height: 30px;
         margin: 0 auto;
+        font-weight: bold;
     }
 
     .FormName{
@@ -74,13 +77,3 @@
         margin: 0 auto;
         text-align: center;
           }
-          .FormTableBottom {
-            width:100%;
-            // border-collapse: collapse;/* 边框合并属性  */
-            font-size: 10px;
-            margin:auto;
-            //background-color: #fff;
-            margin-top:5px;
-            margin-bottom: 5px;
-        }
-  

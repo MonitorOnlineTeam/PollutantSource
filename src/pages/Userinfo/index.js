@@ -15,10 +15,11 @@ import NewDataFilter from '../Userinfo/DataFilterNew';
 import EnterpriseDataFilter from '../../components/UserInfo/EnterpriseDataFilter';
 import { routerRedux } from 'dva/router';
 import { connect } from 'dva';
+import config from '../../config';
 const Option = Select.Option;
 const Search = Input.Search;
 const confirm = Modal.confirm;
-
+const { isMultiEnterprise } = config;
 @connect(({ loading, userinfo }) => ({
     ...loading,
     list: userinfo.list,
@@ -155,7 +156,8 @@ export default class UserList extends Component {
         }
     }
     render() {
-        const {isMultiEnterprise}=this.props;
+        //const {isMultiEnterprise}=this.props;
+        //debugger;
         const dataMenu=(id,userName,roleName) => (
             <Menu onClick={(e) => {
                 this.onMenu.bind()(e.key, id,userName,roleName);

@@ -292,7 +292,7 @@ class dataList extends PureComponent {
             </Button>
         </li>
       <PdButton DGIMN={record.DGIMN} id={record.operationUserID} pname={record.pointName}  reloadData={() => this.Refresh()}
-       exist={record.existTask} name={record.operationUserName} tel={record.operationtel} viewType="datalist"/>
+       exist={record.existTask}  pollutantTypeCode={record.pollutantTypeCode}  name={record.operationUserName} tel={record.operationtel} viewType="datalist"/>
     </div>)
 
        

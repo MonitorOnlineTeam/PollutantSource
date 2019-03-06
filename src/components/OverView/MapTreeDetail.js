@@ -198,7 +198,9 @@ class MapTreeDetail extends Component {
                             <span style={{float: 'right',marginRight: 10}}>
                                 <span onClick={this.stationClick} style={{marginRight: 15, cursor: 'pointer'}}><img style={{width: 15, marginRight: 6, marginBottom: 4}} src="/home.png" />进入站房</span>
                                 <span style={{float:"right"}}><PdButton DGIMN={selectpoint.DGIMN} id={selectpoint.operationUserID} pname={selectpoint.pointName}  reloadData={() => this.Refresh()}
-                                exist={selectpoint.existTask} name={selectpoint.operationUserName} tel={selectpoint.operationtel} viewType="mapview"/>
+                                exist={selectpoint.existTask}
+                                pollutantTypeCode={selectpoint.pollutantTypeCode}
+                                name={selectpoint.operationUserName} tel={selectpoint.operationtel} viewType="mapview"/>
                                </span>  {/* {this.getbutton()} */}
                             </span>
                             <div style={{clear:'both'}}></div>
