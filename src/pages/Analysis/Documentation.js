@@ -10,7 +10,7 @@ import moment from 'moment';
 import { connect } from 'dva';
 import MonitorContent from '../../components/MonitorContent/index';
 import styles from './MonitoringReport.less';
-import { imgaddress } from '../../config';
+import { documentationaddress } from '../../config';
 
 @connect(({ loading, analysisdata }) => ({
     documentationList: analysisdata.documentationList,
@@ -56,7 +56,7 @@ class Documentation extends Component {
                 reportname = documentationList[0];
             }
         }
-        let address = imgaddress + reportname;
+        let address = documentationaddress + reportname;
         let height = 'calc(100vh - 259px)';
         if (!reportname) {
             address = null;
