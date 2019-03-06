@@ -12,22 +12,23 @@ module.exports = {
     iconFontJS: '/iconfont.js',
     CORS: [],
     openPages: ['/login'],
-    enterpriceid:'51216eae-8f11-4578-ad63-5127f78f6cca',
-    isMultiEnterprise:false,
+    enterpriceid: '51216eae-8f11-4578-ad63-5127f78f6cca',
+    isMultiEnterprise: false,
     apiPrefix: '/mock',
     webSocketPushURL: '172.16.4.200:40006',
-    //年度检测报告
-    imgaddress: 'http://172.16.12.152:8011/api/upload/report/pdf/year/',
+    imgaddress: 'http://172.16.12.152:8011/api/upload/',
+    //年度检测报告路径
+    annualmonitoringreportaddress: 'http://172.16.12.152:8066/api/upload/report/pdf/year/',
     //使用文档路径
-    documentationaddress: 'http://172.16.12.152:8011/api/upload/documentation/',
+    documentationaddress: 'http://172.16.12.152:8066/api/upload/documentation/',
     //实时视频地址
-    realtimevideourl:'http://172.16.12.152:8011/Video/MonitorLinkCamera/RealtimeCameraReact',
+    realtimevideourl: 'http://172.16.12.152:8011/Video/MonitorLinkCamera/RealtimeCameraReact',
     //历史视频地址
-    hisvideourl:'http://172.16.12.152:8011/Video/MonitorLinkCamera/HistoryCameraReact',
+    hisvideourl: 'http://172.16.12.152:8011/Video/MonitorLinkCamera/HistoryCameraReact',
     //设备运转率标准%
-    RunningRate:90,
+    RunningRate: 90,
     //传输有效率标准%
-    TransmissionEffectiveRate:90,
+    TransmissionEffectiveRate: 90,
     mainpollutantInfo: [{
         pollutantCode: '01',
         pollutantName: '烟尘',
@@ -71,19 +72,19 @@ module.exports = {
     // }
     // ],
 
-    mainpoll:[
+    mainpoll: [
         {
-            pollutantCode:1,
-            zspollutant:false,
-            unit:'mg/L',
+            pollutantCode: 1,
+            zspollutant: false,
+            unit: 'mg/L',
             //是否有传输有效率
-            csyxl:false,
+            csyxl: false,
             pollutantInfo: [
-            //     {
-            //     pollutantCode: '001',
-            //     pollutantName: 'pH值',
-            //     unit: ''
-            // },
+                //     {
+                //     pollutantCode: '001',
+                //     pollutantName: 'pH值',
+                //     unit: ''
+                // },
                 {
                     pollutantCode: '011',
                     pollutantName: 'COD',
@@ -96,11 +97,11 @@ module.exports = {
             ],
         },
         {
-            pollutantCode:2,
-            zspollutant:true,
-            unit:'mg/m³',
+            pollutantCode: 2,
+            zspollutant: true,
+            unit: 'mg/m³',
             //是否有传输有效率
-            csyxl:true,
+            csyxl: true,
             pollutantInfo: [{
                 pollutantCode: '01',
                 pollutantName: '烟尘',
@@ -123,6 +124,6 @@ module.exports = {
             ],
         }
     ],
-    summaryPolluntantCode:'zs01,zs02,zs03',
+    summaryPolluntantCode: 'zs01,zs02,zs03',
 
 };
