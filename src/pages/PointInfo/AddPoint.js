@@ -210,12 +210,9 @@ class AddPoint extends Component {
                index=dispatch(routerRedux.push('/overview/mapview'));
            } else if(viewMap=="datalist") {
                index=dispatch(routerRedux.push('/overview/datalistview'));
-           }
-           else if(viewMap=="workbench")
-           {
-               index=dispatch(routerRedux.push(`/workbench`));           
-           }
-           else if(viewMap.indexOf("pointInfo")>-1) {
+           } else if(viewMap=="workbench") {
+               index=dispatch(routerRedux.push(`/workbench`));
+           } else if(viewMap.indexOf("pointInfo")>-1) {
                const backviewType=viewMap.split('@')[1];
                const key=this.props.match.params.DGIMN;
                index=dispatch(routerRedux.push(`/pointdetail/${key}/${backviewType}`));
@@ -571,7 +568,7 @@ class AddPoint extends Component {
                                  > {
                                          getFieldDecorator('RunState',
                                              {
-                                                 initialValue: RunState===1,
+                                                 initialValue: RunState===undefined||RunState===1,
                                                  valuePropName: 'checked',
                                              }
                                          )(

@@ -30,7 +30,7 @@ import styles from './KBM.less';
 const RadioGroup = Radio.Group;
 const Search = Input.Search;
 const confirm = Modal.confirm;
-
+import { imgaddress } from '../../config';
 @connect(({
     loading,
     administration
@@ -177,7 +177,7 @@ export default class KBM extends Component {
             //     window.open('../upload/' + name + fileName[fileName.length - 1])
             // }
             // else {
-            window.open('../upload/' + name + 'pdf')
+            window.open(imgaddress + name + 'pdf')
             // }
         }
         else {

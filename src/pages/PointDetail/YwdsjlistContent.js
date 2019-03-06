@@ -41,7 +41,6 @@ class YwdsjlistContent extends Component {
             DGIMN: this.props.pointcode == null ? "1" : this.props.pointcode
         };
         this.ChangeModelState(condition);
-        this.GetYwdsj(false);
     }
 
     GetYwdsj = (isLoadMoreOpt) => {
@@ -119,7 +118,7 @@ class YwdsjlistContent extends Component {
             data.map((item, key) => {
                 rtnVal.push(<Timeline.Item key={key} dot={<div className={Ywdsjlistss.DateLoad} />}>
                     <p className={Ywdsjlistss.taskDate}>{item.NodeDate}</p>
-                </Timeline.Item>);
+                            </Timeline.Item>);
                 item.NodeList.map((item1, key1) => {
                     if (item1.TaskType == EnumPatrolTaskType.PatrolTask) { //巡检任务
                         if(item1.TaskStatus==EnumOperationTaskStatus.WaitFor){
@@ -279,7 +278,7 @@ class YwdsjlistContent extends Component {
                             onClick={this.EnterIconLoading}
                         >
                             加载更多
-                                                                                       </Button> : ''}
+                        </Button> : ''}
                     </div>}
             </Card>
         );

@@ -40,6 +40,8 @@ class AddStandardLibraryPollutant extends Component {
             StandardLibraryID: null,
             btndisabled: false,
             flag: false,
+            upper:false,
+            low:false
         };
     }
 
@@ -179,6 +181,37 @@ class AddStandardLibraryPollutant extends Component {
      });
  }
 
+ alarmTypeChange=(type)=>{
+     if(type==0)
+     {
+        this.setState({
+            upper:false,
+            low:false
+        })
+     }
+     else if(type==1)
+     {
+         this.setState({
+             upper:true,
+             low:false
+         })
+     }
+     else if(type==2)
+     {
+        this.setState({
+            upper:false,
+            low:true
+        })
+     }
+     else if(type==3)
+     {
+        this.setState({
+            upper:true,
+            low:true
+        })
+     }
+ }
+
  continue=(e) => {
      this.setState({
          flag: true,
@@ -206,6 +239,8 @@ class AddStandardLibraryPollutant extends Component {
           LowerLimit,
       } = editstandardlibrarypollutant === null || Id === "null" ? {} : editstandardlibrarypollutant;
       const { getFieldDecorator } = this.props.form;
+
+      const {low,upper}=this.state;
       return (
           <Card bordered={false}>
               <Form onSubmit={this.handleSubmit}>
@@ -253,7 +288,7 @@ class AddStandardLibraryPollutant extends Component {
                                           ]
                                       }
                                   )(
-                                      <Select placeholder="请选择报警类型">
+                                      <Select onChange={this.alarmTypeChange} placeholder="请选择报警类型">
                                           <Option value="0">无报警</Option>
                                           <Option value="1">上限报警</Option>
                                           <Option value="2">下限报警</Option>
@@ -274,7 +309,7 @@ class AddStandardLibraryPollutant extends Component {
                                       {
                                           initialValue: UpperLimit === 0 ? 0 : UpperLimit,
                                           rules: [{
-                                              required: true,
+                                              required: upper,
                                               message: '请输入上限!'
                                           },
                                           ]
@@ -292,7 +327,7 @@ class AddStandardLibraryPollutant extends Component {
                                       {
                                           initialValue: LowerLimit === 0 ? 0 : LowerLimit,
                                           rules: [{
-                                              required: true,
+                                              required: low,
                                               message: '请输入下限!'
                                           },
                                           ]
