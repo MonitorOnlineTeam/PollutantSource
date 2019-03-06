@@ -237,7 +237,7 @@ render() {
                                     {getFieldDecorator('AbnormalUpperLimit',
                                         {
                                             initialValue: 0,
-                                        })(<InputNumber min={0} max={10000} step={1} />
+                                        })(<InputNumber min={-10000} max={100000} step={1} />
                                     )}
                                 </FormItem>
                             </Col>
@@ -250,7 +250,7 @@ render() {
                                     {getFieldDecorator('AbnormalLowerLimit',
                                         {
                                             initialValue: 0,
-                                        })(<InputNumber min={0} max={10000} step={1} />
+                                        })(<InputNumber min={-10000} max={10000} step={1} />
                                     )}
                                 </FormItem>
                             </Col>
