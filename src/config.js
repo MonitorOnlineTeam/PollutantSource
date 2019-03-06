@@ -16,7 +16,7 @@ module.exports = {
     isMultiEnterprise:false,
     apiPrefix: '/mock',
     webSocketPushURL: '172.16.4.200:40006',
-    imgaddress: 'http://172.16.12.152:8011/api/upload/',
+    imgaddress: 'http://172.16.12.152:8011/api/upload/report/pdf/year/',
     //实时视频地址
     realtimevideourl:'http://172.16.12.152:8011/Video/MonitorLinkCamera/RealtimeCameraReact',
     //历史视频地址
