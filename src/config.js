@@ -18,9 +18,9 @@ module.exports = {
     webSocketPushURL: '172.16.4.200:40006',
     imgaddress: 'http://172.16.12.152:8011/api/upload/',
     //年度检测报告路径
-    annualmonitoringreportaddress: 'http://172.16.12.152:8066/api/upload/report/pdf/year/',
+    annualmonitoringreportaddress: 'http://172.16.12.152:8011/api/upload/report/pdf/year/',
     //使用文档路径
-    documentationaddress: 'http://172.16.12.152:8066/api/upload/documentation/',
+    documentationaddress: 'http://172.16.12.152:8011/api/upload/documentation/',
     //实时视频地址
     realtimevideourl: 'http://172.16.12.152:8011/Video/MonitorLinkCamera/RealtimeCameraReact',
     //历史视频地址
