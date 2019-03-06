@@ -37,7 +37,7 @@ class EnterpriseDataFilter extends Component {
     componentWillMount() {
         this.getEnterprisePageList();
         this.getEnterpriseDataRoles();
-        this.getMock();
+        // this.getMock();
     }
 
 updateState = (payload) => {
@@ -54,8 +54,8 @@ setEnterpriseDataRole=(payload)=>{
         type: pageUrl.setEnterpriseDataRole,
         payload: {
             ...payload,
-            callback:()=>{
-                if(isSuccessEntRole) {
+            callback:(item)=>{
+                if(item.IsSuccess) {
                     message.success("操作成功");
                     this.getEnterpriseDataRoles();
                 }

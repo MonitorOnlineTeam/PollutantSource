@@ -83,7 +83,8 @@ class EmergencyDetailInfo extends Component {
         this.props.dispatch({
             type: 'task/GetTaskRecord',
             payload: {
-                TaskID: this.props.TaskID
+                TaskID: this.props.TaskID,
+                DGIMN:this.props.DGIMN
             }
         });
     }
@@ -373,7 +374,7 @@ class EmergencyDetailInfo extends Component {
             RecordTypeInfo = this.props.taskInfo.data[0].TaskFormList;
             if (this.props.taskInfo.data[0].AlarmList !== null && this.props.taskInfo.data[0].AlarmList.length > 0) {
                 this.props.taskInfo.data[0].AlarmList.map((item) => {
-                    if (AlarmList.length < 5) {
+                    if (item!=null) {
                         AlarmList.push({
                             key: item.key,
                             BeginAlarmTime: item.FirstTime,

@@ -43,6 +43,8 @@ export default class RepairHistoryList extends Component {
             payload: {
                 map: true,
                 pollutantTypes: this.state.pollutantTypeCode,
+                RepairHistoryList:true,
+                DGIMN: getDGIMN,
             }
         });
 
@@ -72,16 +74,8 @@ export default class RepairHistoryList extends Component {
         this.props.dispatch({
             type: 'overview/querydatalist',
             payload: {
-                map: true,
                 pollutantTypes: pollutantTypeCode,
                 pointName: searchName,
-                RepairHistoryRecords: true,
-                pageIndex: this.props.pageIndex,
-                pageSize: this.props.pageSize,
-                BeginTime: this.state.rangeDate[0].format('YYYY-MM-DD 00:00:00'),
-                EndTime: this.state.rangeDate[1].format('YYYY-MM-DD 23:59:59'),
-                DGIMN: getDGIMN,
-                search: true,
                 callback: (data) => {
                 }
             },

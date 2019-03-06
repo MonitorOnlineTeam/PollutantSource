@@ -16,7 +16,7 @@ import { readFileSync } from 'fs';
 import MonitorContent from '../../components/MonitorContent/index';
 import styles from './MonitoringReport.less';
 import RangePicker_ from '../../components/PointDetail/RangePicker_';
-import { imgaddress } from '../../config';
+import { annualmonitoringreportaddress } from '../../config';
 
 const RadioGroup = Radio.Group;
 const { RangePicker } = DatePicker;
@@ -153,7 +153,7 @@ class MonitoringReport extends Component {
             }
         }
 
-        let address = imgaddress + reportname;
+        let address = annualmonitoringreportaddress + reportname;
         let height = 'calc(100vh - 259px)';
         if (!reportname) {
             address = null;
@@ -166,7 +166,6 @@ class MonitoringReport extends Component {
                 {address ? <div /> : <div style={{ textAlign: 'center' }}>暂无数据</div>}
             </div>
         );
-
     }
 
     getreportlist = () => {

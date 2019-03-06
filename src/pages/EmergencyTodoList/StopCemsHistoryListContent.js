@@ -10,9 +10,9 @@ import {
 } from 'antd';
 import { connect } from 'dva';
 import moment from 'moment';
+import { routerRedux } from 'dva/router';
 import RangePicker_ from '../../components/PointDetail/RangePicker_';
 import styles from './StopCemsHistoryListContent.less';
-import { routerRedux } from 'dva/router';
 
 @connect(({ maintenancelist, loading }) => ({
     loading: loading.effects['maintenancelist/GetStopCemsHistoryList'],
@@ -20,9 +20,9 @@ import { routerRedux } from 'dva/router';
     HistoryStopCemsListHistoryRecordsCount: maintenancelist.total,
     pageIndex: maintenancelist.pageIndex,
     pageSize: maintenancelist.pageSize,
-    beginTime:maintenancelist.beginTime,    //开始时间
-    endTime:maintenancelist.endTime,      //结束时间
-    DGIMN:maintenancelist.DGIMN
+    beginTime: maintenancelist.beginTime, //开始时间
+    endTime: maintenancelist.endTime, //结束时间
+    DGIMN: maintenancelist.DGIMN
 }))
 /*
 页面：停机历史记录
@@ -34,12 +34,13 @@ class StopCemsHistoryListContent extends Component {
             rangeDate: [moment(moment(new Date()).subtract(3, 'month').format('YYYY-MM-DD 00:00:00')), moment(moment(new Date()).format('YYYY-MM-DD 23:59:59'))], // 最近3月
         };
     }
+
     componentDidMount() {
-        const condition={
+        const condition = {
             pageIndex: 1,
             pageSize: 10,
-            beginTime:moment().subtract(3, 'month').format('YYYY-MM-DD 00:00:00'), //运维大事记开始时间
-            endTime:moment().format('YYYY-MM-DD 23:59:59'), //运维大事记结束时间
+            beginTime: moment().subtract(3, 'month').format('YYYY-MM-DD 00:00:00'), //运维大事记开始时间
+            endTime: moment().format('YYYY-MM-DD 23:59:59'), //运维大事记结束时间
             DGIMN: this.props.pointcode
         };
         this.ChangeModelState(condition);
@@ -55,11 +56,11 @@ class StopCemsHistoryListContent extends Component {
     };
 
     _handleDateChange = (date, dateString) => {
-        const condition={
-            beginTime: dateString[0],
-            endTime: dateString[1],
-            pageIndex:1
-        }
+        const condition = {
+            beginTime: date[0].format("YYYY-MM-DD HH:mm:ss"),
+            endTime: date[1].format("YYYY-MM-DD HH:mm:ss"),
+            pageIndex: 1
+        };
         this.ChangeModelState(condition);
         this.setState(
             {
@@ -70,35 +71,35 @@ class StopCemsHistoryListContent extends Component {
     };
 
     onShowSizeChange = (pageIndex, pageSize) => {
-        const condition={
+        const condition = {
             pageIndex,
             pageSize
-        }
+        };
         this.ChangeModelState(condition);
         this.GetHistoryRecord();
     }
 
     onChange = (pageIndex, pageSize) => {
-        const condition={
+        const condition = {
             pageIndex,
             pageSize
-        }
+        };
         this.ChangeModelState(condition);
         this.GetHistoryRecord();
     }
 
     seeDetail = (record) => {
-        if(this.props.operation===undefined){
+        if (this.props.operation === undefined) {
             this.props.dispatch(routerRedux.push(`/PatrolForm/StopCemsRecord/${this.props.DGIMN}/${this.props.viewtype}/operationlist/StopCemsHistoryList/${record.TaskID}`));
-        }else{
+        } else {
             this.props.dispatch(routerRedux.push(`/PatrolForm/StopCemsRecord/${this.props.DGIMN}/${this.props.operation}/StopCemsHistoryList/${record.TaskID}`));
         }
     }
 
-    ChangeModelState=(condition)=>{
+    ChangeModelState = (condition) => {
         this.props.dispatch({
             type: 'maintenancelist/updateState',
-            payload: {...condition}
+            payload: { ...condition }
         });
     }
 
@@ -115,7 +116,7 @@ class StopCemsHistoryListContent extends Component {
             dataIndex: 'StopHour',
             key: 'StopHour',
             render: (text, record) => {
-                var resu = [];
+                let resu = [];
                 if (text !== undefined) {
                     resu.push(
                         <Tag key={text} style={{ marginBottom: 1.5, marginTop: 1.5 }} color="#108ee9">{text}</Tag>
@@ -134,11 +135,10 @@ class StopCemsHistoryListContent extends Component {
             dataIndex: 'TaskID',
             width: '15%',
             key: 'TaskID',
-            render: (text, record) => {
-                return <a onClick={
-                    () => this.seeDetail(record)
-                } > 详细 </a>;
-            }
+            render: (text, record) => <a onClick={
+                () => this.seeDetail(record)
+            }> 详细
+                                      </a>
         }];
         if (this.props.loading) {
             return (<Spin
@@ -157,11 +157,11 @@ class StopCemsHistoryListContent extends Component {
                 <Card bordered={false}>
                     <div className={styles.conditionDiv}>
                         <Row gutter={8}>
-                            <Col span={3} >
+                            <Col span={3}>
                                 <label className={styles.conditionLabel}>记录时间：</label>
                             </Col>
-                            <Col span={21} >
-                                <RangePicker_ style={{ width: 350 }} onChange={this._handleDateChange} format={'YYYY-MM-DD'} dateValue={this.state.rangeDate} />
+                            <Col span={21}>
+                                <RangePicker_ style={{ width: 350 }} onChange={this._handleDateChange} format="YYYY-MM-DD" dateValue={this.state.rangeDate} />
                             </Col>
 
                         </Row>

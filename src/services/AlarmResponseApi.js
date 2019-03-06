@@ -66,3 +66,20 @@ export async function getSinglePointDaysAlarmResponseStatistics(params) {
         data: null
     } : result;
 }
+
+/**
+ * 异常报警响应列表
+ * @params {"DGIMNs":"sgjt001003","TaskId":""}
+ */
+export async function GetAlarmResponseList(params) {
+    const body = {
+        DGIMNs: params.DGIMN,
+        TaskId: params.TaskID
+    };
+
+    const result = post('/api/rest/PollutantSourceApi/PWorkbench/GetAlarmResponseList', body, null);
+
+    return result === null ? {
+        data: null
+    } : result;
+}

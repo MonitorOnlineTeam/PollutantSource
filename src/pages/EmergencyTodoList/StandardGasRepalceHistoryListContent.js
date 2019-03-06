@@ -11,7 +11,7 @@ import { connect } from 'dva';
 import moment from 'moment';
 import { routerRedux } from 'dva/router';
 import RangePicker_ from '../../components/PointDetail/RangePicker_';
-import styles from './StandardGasRepalceHistoryList.less';
+import styles from './StandardGasRepalceHistoryListContent.less';
 
 @connect(({ maintenancelist, loading }) => ({
     loading: loading.effects['maintenancelist/GetStandardGasRepalceHistoryList'],
@@ -56,8 +56,8 @@ class StandardGasRepalceHistoryListContent extends Component {
 
     _handleDateChange = (date, dateString) => {
         const condition={
-            beginTime: dateString[0],
-            endTime: dateString[1],
+            beginTime: date[0].format("YYYY-MM-DD HH:mm:ss"),
+            endTime: date[1].format("YYYY-MM-DD HH:mm:ss"),
             pageIndex:1
         };
         this.ChangeModelState(condition);

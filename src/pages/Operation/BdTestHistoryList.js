@@ -43,7 +43,9 @@ export default class BdTestHistoryList extends Component {
             type: 'overview/querydatalist',
             payload: {
                 map: true,
-                pollutantTypes: this.state.pollutantTypeCode
+                pollutantTypes: this.state.pollutantTypeCode,
+                BdHistoryInfoHistoryRecord:true,
+                DGIMN: getDGIMN,
             }
         });
     }
@@ -72,16 +74,8 @@ export default class BdTestHistoryList extends Component {
         this.props.dispatch({
             type: 'overview/querydatalist',
             payload: {
-                map: true,
                 pollutantTypes: pollutantTypeCode,
                 pointName: searchName,
-                BdHistoryInfoHistoryRecords: true,
-                pageIndex: this.props.pageIndex,
-                pageSize: this.props.pageSize,
-                BeginTime: this.state.rangeDate[0].format('YYYY-MM-DD 00:00:00'),
-                EndTime: this.state.rangeDate[1].format('YYYY-MM-DD 23:59:59'),
-                DGIMN: getDGIMN,
-                search: true,
                 callback: (data) => {
                 }
             },
