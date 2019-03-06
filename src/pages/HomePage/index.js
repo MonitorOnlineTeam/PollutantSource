@@ -699,15 +699,16 @@ treeCilck = (row) => {
          } = this.props.allMonthEmissionsByPollutant;
          // 91%(0.5/0.6)
          let ycLink;
-         if (ycAnalData.length !== 0) {
+         debugger;
+         if (ycAnalData &&  ycAnalData.length !== 0) {
              ycLink = `${Math.abs(ycAnalData.linkFlag.toFixed(2))}%(${ycAnalData.monthSum.toFixed(2)}/${ycAnalData.flag.toFixed(2)})`;
          }
          let dyhwLink;
-         if (dyhwAnalData.length !== 0) {
+         if (dyhwAnalData && dyhwAnalData.length !== 0) {
              dyhwLink = `${Math.abs(dyhwAnalData.linkFlag.toFixed(2))}%(${dyhwAnalData.monthSum.toFixed(2)}/${dyhwAnalData.flag.toFixed(2)})`;
          }
          let eyhlLink;
-         if (eyhlAnalData.length !== 0) {
+         if (eyhlAnalData && eyhlAnalData.length !== 0) {
              eyhlLink = `${Math.abs(eyhlAnalData.linkFlag.toFixed(2))}%(${eyhlAnalData.monthSum.toFixed(2)}/${eyhlAnalData.flag.toFixed(2)})`;
          }
          const {

@@ -376,7 +376,13 @@ class AddStandardLibrary extends Component {
             key: 'UpperLimit',
             width: '10%',
             align: 'center',
-            render: (text, record) => text
+            render: (text, record) => {
+                if(record.AlarmType==2 || record.AlarmType===0)
+                {
+                    return '-';
+                }
+                return text;
+            }
         },
         {
             title: '下限',
@@ -384,7 +390,13 @@ class AddStandardLibrary extends Component {
             key: 'LowerLimit',
             width: '10%',
             align: 'center',
-            render: (text, record) => text
+            render: (text, record) => {
+                if(record.AlarmType===1 || record.AlarmType===0)
+                {
+                    return '-';
+                }
+                return text;
+            }
         },
         {
             title: '报警类型',
