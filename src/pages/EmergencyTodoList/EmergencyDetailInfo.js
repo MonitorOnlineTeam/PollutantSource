@@ -25,6 +25,7 @@ let SCREEN_HEIGHT = document.querySelector('body').offsetHeight - 250;
 @connect(({ task,loading }) => ({
     isloading: loading.effects['task/GetTaskRecord'],
     taskInfo: task.TaskRecord,
+    alarmList:[]
 }))
 class EmergencyDetailInfo extends Component {
     constructor(props) {
@@ -39,7 +40,10 @@ class EmergencyDetailInfo extends Component {
             photoIndex: 0,
             //参数改变让页面刷新
             DGIMN:DGIMN,
-            TaskID:TaskID
+            TaskID:TaskID,
+            moreAlarmList:null,
+            visible:false,
+            alarmType:null
         };
     }
 
@@ -91,124 +95,38 @@ class EmergencyDetailInfo extends Component {
 
     renderItem = (data, taskID) => {
         const rtnVal = [];
-        let taskfrom = this.props.taskfrom||'';
-        if (taskfrom.indexOf("qcontrollist") > -1) {
-            taskfrom = taskfrom.split('-')[0];
-        }
-
-
         data.map((item, key) => {
             if (item.FormMainID !== null) {
                 switch (item.ID) {
                     case EnumPsOperationForm.Repair:
-                        rtnVal.push(<p key={key} style={{ marginBottom: 0 }}><Button
-                            style={{ marginBottom: '5px' }}
-                            icon="check-circle-o"
-                            onClick={() => {
-                                this.props.dispatch(routerRedux.push(`/PatrolForm/RepairRecord/${this.props.DGIMN}/${this.props.viewtype}/${taskfrom}/nop/${taskID}`));
-                            }}
-                        >{item.CnName}
-                        </Button>
-                        </p>);
+                        this.GoToForm(taskID,item.CnName,"RepairRecord",rtnVal,key);
                         break;
                     case EnumPsOperationForm.StopMachine:
-                        rtnVal.push(<p key={key} style={{ marginBottom: 0 }}><Button
-                            style={{ marginBottom: '5px' }}
-                            icon="check-circle-o"
-                            onClick={() => {
-                                this.props.dispatch(routerRedux.push(`/PatrolForm/StopCemsRecord/${this.props.DGIMN}/${this.props.viewtype}/${taskfrom}/nop/${taskID}`));
-                            }}
-                        >{item.CnName}
-                        </Button>
-                        </p>);
+                        this.GoToForm(taskID,item.CnName,"StopCemsRecord",rtnVal,key);
                         break;
                     case EnumPsOperationForm.YhpReplace:
-                        rtnVal.push(<p key={key} style={{ marginBottom: 0 }}><Button
-                            style={{ marginBottom: '5px' }}
-                            icon="check-circle-o"
-                            onClick={() => {
-                                this.props.dispatch(routerRedux.push(`/PatrolForm/ConsumablesReplaceRecord/${this.props.DGIMN}/${this.props.viewtype}/${taskfrom}/nop/${taskID}`));
-                            }}
-                        >{item.CnName}
-                        </Button>
-                        </p>);
+                        this.GoToForm(taskID,item.CnName,"ConsumablesReplaceRecord",rtnVal,key);
                         break;
                     case EnumPsOperationForm.StandardGasReplace:
-                        rtnVal.push(<p key={key} style={{ marginBottom: 0 }}><Button
-                            style={{ marginBottom: '5px' }}
-                            icon="check-circle-o"
-                            onClick={() => {
-                                this.props.dispatch(routerRedux.push(`/PatrolForm/StandardGasRepalceRecord/${this.props.DGIMN}/${this.props.viewtype}/${taskfrom}/nop/${taskID}`));
-                            }}
-                        >{item.CnName}
-                        </Button>
-                        </p>);
+                        this.GoToForm(taskID,item.CnName,"StandardGasRepalceRecord",rtnVal,key);
                         break;
                     case EnumPsOperationForm.CqfPatrol:
-                        rtnVal.push(<p key={key} style={{ marginBottom: 0 }}><Button
-                            style={{ marginBottom: '5px' }}
-                            icon="check-circle-o"
-                            onClick={() => {
-                                this.props.dispatch(routerRedux.push(`/PatrolForm/CompleteExtractionRecord/${this.props.DGIMN}/${this.props.viewtype}/${taskfrom}/nop/${taskID}`));
-                            }}
-                        >{item.CnName}
-                        </Button>
-                        </p>);
+                        this.GoToForm(taskID,item.CnName,"CompleteExtractionRecord",rtnVal,key);
                         break;
                     case EnumPsOperationForm.CyfPatrol:
-                        rtnVal.push(<p key={key} style={{ marginBottom: 0 }}><Button
-                            style={{ marginBottom: '5px' }}
-                            icon="check-circle-o"
-                            onClick={() => {
-                                this.props.dispatch(routerRedux.push(`/PatrolForm/DilutionSamplingRecord/${this.props.DGIMN}/${this.props.viewtype}/${taskfrom}/nop/${taskID}`));
-                            }}
-                        >{item.CnName}
-                        </Button>
-                        </p>);
+                        this.GoToForm(taskID,item.CnName,"DilutionSamplingRecord",rtnVal,key);
                         break;
                     case EnumPsOperationForm.ClfPatrol:
-                        rtnVal.push(<p key={key} style={{ marginBottom: 0 }}><Button
-                            style={{ marginBottom: '5px' }}
-                            icon="check-circle-o"
-                            onClick={() => {
-                                this.props.dispatch(routerRedux.push(`/PatrolForm/DirectMeasurementRecord/${this.props.DGIMN}/${this.props.viewtype}/${taskfrom}/nop/${taskID}`));
-                            }}
-                        >{item.CnName}
-                        </Button>
-                        </p>);
+                        this.GoToForm(taskID,item.CnName,"DirectMeasurementRecord",rtnVal,key);
                         break;
                     case EnumPsOperationForm.CheckRecord:
-                        rtnVal.push(<p key={key} style={{ marginBottom: 0 }}><Button
-                            style={{ marginBottom: '5px' }}
-                            icon="check-circle-o"
-                            onClick={() => {
-                                this.props.dispatch(routerRedux.push(`/PatrolForm/JzRecord/${this.props.DGIMN}/${this.props.viewtype}/${taskfrom}/nop/${taskID}`));
-                            }}
-                        >{item.CnName}
-                        </Button>
-                        </p>);
+                        this.GoToForm(taskID,item.CnName,"JzRecord",rtnVal,key);
                         break;
                     case EnumPsOperationForm.TestRecord:
-                        rtnVal.push(<p key={key} style={{ marginBottom: 0 }}><Button
-                            style={{ marginBottom: '5px' }}
-                            icon="check-circle-o"
-                            onClick={() => {
-                                this.props.dispatch(routerRedux.push(`/PatrolForm/BdTestRecord/${this.props.DGIMN}/${this.props.viewtype}/${taskfrom}/nop/${taskID}`));
-                            }}
-                        >{item.CnName}
-                        </Button>
-                        </p>);
+                        this.GoToForm(taskID,item.CnName,"BdTestRecord",rtnVal,key);
                         break;
                     case EnumPsOperationForm.DataException:
-                        rtnVal.push(<p key={key} style={{ marginBottom: 0 }}><Button
-                            style={{ marginBottom: '5px' }}
-                            icon="check-circle-o"
-                            onClick={() => {
-                                this.props.dispatch(routerRedux.push(`/PatrolForm/DeviceExceptionRecord/${this.props.DGIMN}/${this.props.viewtype}/${taskfrom}/nop/${taskID}`));
-                            }}
-                        >{item.CnName}
-                        </Button>
-                        </p>);
+                        this.GoToForm(taskID,item.CnName,"DeviceExceptionRecord",rtnVal,key);
                         break;
                     default:
                         break;
@@ -216,6 +134,22 @@ class EmergencyDetailInfo extends Component {
             }
         });
         return rtnVal;
+    }
+
+    GoToForm=(taskID,cnName,recordType,rtnVal,key)=>{
+        let taskfrom = this.props.taskfrom||'';
+        if (taskfrom.indexOf("qcontrollist") > -1) {
+            taskfrom = taskfrom.split('-')[0];
+        }
+        rtnVal.push(<p key={key} style={{ marginBottom: 0 }}><Button
+            style={{ marginBottom: '5px' }}
+            icon="check-circle-o"
+            onClick={() => {
+                this.props.dispatch(routerRedux.push(`/PatrolForm/${recordType}/${this.props.DGIMN}/${this.props.viewtype}/${taskfrom}/nop/${taskID}`));
+            }}
+        >{cnName}
+        </Button>
+        </p>);
     }
 
     //获取撤单按钮
@@ -346,6 +280,15 @@ class EmergencyDetailInfo extends Component {
         );
     }
 
+    GetAlarmInfo=(AlarmList,type)=>{
+        const alarmList=AlarmList.filter(item =>item.MsgTypeText===type);
+        this.setState({
+            moreAlarmList:alarmList,
+            typeName:type,
+            visible:true
+        });
+    }
+
     render() {
         const { photoIndex } = this.state;
         const { getFieldDecorator } = this.props.form;
@@ -372,15 +315,23 @@ class EmergencyDetailInfo extends Component {
             Attachments = this.props.taskInfo.data[0].Attachments;
             TaskLogList = this.props.taskInfo.data[0].TaskLogList;
             RecordTypeInfo = this.props.taskInfo.data[0].TaskFormList;
-            if (this.props.taskInfo.data[0].AlarmList !== null && this.props.taskInfo.data[0].AlarmList.length > 0) {
-                this.props.taskInfo.data[0].AlarmList.map((item) => {
-                    if (item!=null) {
+            if(this.props.taskInfo.data[0].AlarmList.length>0){
+                this.props.taskInfo.data[0].AlarmList[0].map((item)=>{
+                    if (item!==null) {
+                        let AlarmType="";
+                        let AlarmCount=0;
+                        item.MsgTypeList.map((item)=>{
+                            AlarmType+=`${item.MsgTypeText},`;
+                            AlarmCount+=item.AlarmCount;
+                        });
                         AlarmList.push({
-                            key: item.key,
-                            BeginAlarmTime: item.FirstTime,
-                            AlarmTime: item.AlarmTime,
-                            AlarmMsg: item.AlarmMsg,
-                            AlarmCount: item.AlarmCount
+                            key: item.AlarmSourceType,
+                            FirstAlarmTime: item.FirstAlarmTime,
+                            LastAlarmTime: item.LastAlarmTime,
+                            AlarmMsg: AlarmType!==""?AlarmType.substring(0,AlarmType.lastIndexOf(',')):AlarmType,
+                            AlarmCount: AlarmCount,
+                            MsgTypeList:item.MsgTypeList,
+                            AlarmType:item.AlarmSourceTypeText
                         });
                     }
                 });
@@ -419,18 +370,49 @@ class EmergencyDetailInfo extends Component {
         const columns = [{
             title: '开始报警时间',
             width: '20%',
-            dataIndex: 'BeginAlarmTime',
-            key: 'BeginAlarmTime',
+            dataIndex: 'FirstAlarmTime',
+            key: 'FirstAlarmTime',
         }, {
             title: '最后一次报警时间',
             width: '20%',
-            dataIndex: 'AlarmTime',
-            key: 'AlarmTime',
+            dataIndex: 'LastAlarmTime',
+            key: 'LastAlarmTime',
         }, {
-            title: '报警信息',
+            title: '报警类型',
+            width: '10%',
+            dataIndex: 'AlarmType',
+            key: 'AlarmType',
+        }, {
+            title: '异常类型',
             dataIndex: 'AlarmMsg',
-            width: '45%',
+            width: '35%',
             key: 'AlarmMsg',
+            render: (text, row, index) => {
+                if(text!==null&&text!=="") {
+                    let types=[];
+                    text.split(',').map((item)=>{
+                        const dot=types.length+1<text.split(',').length?"，":"";
+                        types.push(<span><a
+                            href="javascript:;"
+                            onClick={
+                                ()=>{
+                                    const alarmList=row.MsgTypeList.filter(i =>i.MsgTypeText===item);
+                                    this.setState({
+                                        moreAlarmList:alarmList,
+                                        alarmType:row.AlarmType,
+                                        visible:true
+                                    });
+                                }
+                            }
+                        >{item}
+                                         </a>{dot}
+                        </span>);
+                    });
+                    return {
+                        children: types
+                    };
+                }
+            },
         }, {
             title: '报警次数',
             dataIndex: 'AlarmCount',
@@ -487,17 +469,7 @@ class EmergencyDetailInfo extends Component {
                             {
                                 (isExistTask?this.props.taskInfo.data[0].TaskType:null) === EnumPatrolTaskType.PatrolTask ? null : AlarmList.length === 0 ? null : (<Divider style={{ marginBottom: 20 }} />)
                             }
-                            {
-                                (isExistTask?this.props.taskInfo.data[0].TaskType:null) === EnumPatrolTaskType.PatrolTask ? null : AlarmList.length === 0 ? null :
-                                <div style={{ marginBottom: '10px', textAlign: 'right' }}> <a onClick={() => {
-                                        this.setState({
-                                            visible: true
-                                        });
-                                    }}
-                                    >查看更多>>
-                                    </a>
-                                    </div>
-                            }
+
                             {
 
                                 (isExistTask?this.props.taskInfo.data[0].TaskType:null) === EnumPatrolTaskType.PatrolTask ? null : AlarmList.length === 0 ? null :
@@ -590,13 +562,13 @@ class EmergencyDetailInfo extends Component {
 
                 <Modal
                     footer={null}
-                    title="报警记录"
+                    title={this.state.alarmType}
                     width="70%"
                     height="70%"
                     visible={this.state.visible}
                     onCancel={this.handleCancel}
                 >
-                    <AlarmDetails data={isExistTask?this.props.taskInfo.data[0].AlarmList:[]} />
+                    <AlarmDetails data={isExistTask?this.state.moreAlarmList:[]} />
                 </Modal>
             </div>
         );
