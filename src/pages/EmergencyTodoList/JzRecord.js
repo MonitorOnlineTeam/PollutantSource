@@ -13,7 +13,7 @@ class JzRecord extends Component {
         };
     }
 
-    enterTaskDetail = () => {debugger;
+    enterTaskDetail = () => {
         if (this.props.match.params.taskfrom === 'ywdsjlist') {    //运维大事记
             this.props.dispatch(routerRedux.push(`/TaskDetail/emergencydetailinfolayout/${this.props.match.params.viewtype}/${this.props.match.params.taskfrom}/${this.props.match.params.TaskID}/${this.props.match.params.pointcode}`));
         } else if (this.props.match.params.taskfrom === 'qcontrollist') {    //质控记录

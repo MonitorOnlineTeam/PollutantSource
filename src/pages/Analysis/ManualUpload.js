@@ -236,7 +236,6 @@ export default class ManualUpload extends Component {
     }
     addData = () => {
         console.log(this.props.DGIMN)
-        debugger
         if (this.props.DGIMN !== "1" && this.props.DGIMN != null && this.props.DGIMN != undefined) {
             this.setState({
                 visible: true,
@@ -258,7 +257,6 @@ export default class ManualUpload extends Component {
     }
     // 添加数据
     AddData = () => {
-        debugger
         this.child.handleSubmit();
         this.GetManualSupplementList(this.props.DGIMN, this.state.SelectHandleChange, this.state.rangeDate[0].format('YYYY-MM-DD 00:00:00'), this.state.rangeDate[1].format('YYYY-MM-DD 23:59:59'), this.props.pageIndex, this.props.pageSize);
     }
@@ -306,7 +304,6 @@ export default class ManualUpload extends Component {
     }
     //重新加载
     reloadData = (pollutantTypeCode, pointName) => {
-        debugger
         var getDGIMN = '[object Object]'
         this.props.dispatch({
             type: 'overview/querydatalist',

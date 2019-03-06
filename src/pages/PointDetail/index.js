@@ -296,7 +296,7 @@ class PointDetail extends Component {
 
     }
 
-    getBackButton=()=>{debugger;
+    getBackButton=()=>{
         const viewtype= this.props.match.params.viewtype;
         let backpath=`/overview/${viewtype}`;
         if(viewtype==="pointinfo"){

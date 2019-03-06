@@ -15,7 +15,7 @@ import styles from './ConsumablesReplaceHistoryListContent.less';
 
 @connect(({ maintenancelist, loading }) => ({
     loading: loading.effects['maintenancelist/GetConsumablesReplaceHistoryList'],
-    HistoryConsumablesReplaceRecordList: maintenancelist.HistoryConsumablesReplaceRecordList,
+    HistoryConsumablesReplaceRecordList: maintenancelist.ConsumablesReplaceHistoryList,
     HistoryConsumablesReplaceRecordCount: maintenancelist.total,
     pageIndex: maintenancelist.pageIndex,
     pageSize: maintenancelist.pageSize,
@@ -43,7 +43,9 @@ class ConsumablesReplaceHistoryList extends Component {
             DGIMN: this.props.pointcode
         };
         this.ChangeModelState(condition);
-        this.GetHistoryRecord();
+        if(this.props.operation!=="menu/intelligentOperation"){
+            this.GetHistoryRecord();
+        }
     }
 
     GetHistoryRecord = () => {
@@ -144,7 +146,7 @@ class ConsumablesReplaceHistoryList extends Component {
                 () => this.seeDetail(record)
             }
             > 详细
-                                      </a>
+            </a>
         }];
         if (this.props.loading) {
             return (<Spin

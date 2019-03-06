@@ -138,7 +138,7 @@ export default class ConsumablesReplaceHistoryList extends Component {
                                 </div>
                             </div>
                         </Col>
-                        <Col style={{ width: document.body.clientWidth - 470, height: 'calc(100vh - 150px)', float: 'right' }}>
+                        <Col style={{ width: document.body.clientWidth - 470, height: 'calc(100vh - 150px)', float: 'right',marginTop:'11px' }}>
                         <ConsumablesReplaceHistoryListContent  pointcode={localStorage.getItem('DGIMN')} viewtype="no" height="calc(100vh - 360px)" operation="menu/intelligentOperation"/>
                         </Col>
                     </Row>

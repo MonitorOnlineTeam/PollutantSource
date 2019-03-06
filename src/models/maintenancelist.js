@@ -161,7 +161,7 @@ export default Model.extend({
             } else {
                 yield update({
                     requstresult: DataInfo.requstresult,
-                    InspectionHistoryList: [], 
+                    InspectionHistoryList: null,
                     total: DataInfo.total,
                 });
             }

@@ -109,8 +109,7 @@ export async function GetStandardGasRepalceHistoryList(params) {
 // 根据任务id和类型id获取巡检记录表（不通于手机端PC单独做接口)
 export async function GetPatrolRecord(params) {
     const body = {
-        TaskID: params.TaskIds,
-        TypeID: params.TypeIDs
+        TaskID: params.TaskID
     };
     const result = authorpost('/api/rest/PollutantSourceApi/PTaskForm/GetPatrolRecordListPC?authorCode=48f3889c-af8d-401f-ada2-c383031af92d', body, null);
     return result === null ? {

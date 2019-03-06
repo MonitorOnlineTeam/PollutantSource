@@ -424,7 +424,6 @@ export default Model.extend({
          * @param {操作} 操作项
          */
         * getEnterpriseDataRoles({ payload }, { call, put, update, select }) {
-            //debugger;
             const response = yield call(getEnterpriseDataRoles, {...payload});
             yield update({
                 isSuccess: response.IsSuccess,

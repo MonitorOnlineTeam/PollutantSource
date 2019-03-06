@@ -40,7 +40,11 @@ class YwdsjlistContent extends Component {
             IsAlarmTimeout: false, //是否报警响应超时
             DGIMN: this.props.pointcode == null ? "1" : this.props.pointcode
         };
+
         this.ChangeModelState(condition);
+        if(this.props.taskfrom!=="operationywdsjlist"){
+            this.GetYwdsj(false);
+        }
     }
 
     GetYwdsj = (isLoadMoreOpt) => {

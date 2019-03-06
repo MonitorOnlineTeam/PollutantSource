@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import styles from '../EmergencyTodoList/JzHistoryListContent.less';
 import {
     Button,
     Input,
@@ -15,6 +14,7 @@ import { connect } from 'dva';
 import moment from 'moment';
 import RangePicker_ from '../../components/PointDetail/RangePicker_';
 import { routerRedux } from 'dva/router';
+import styles from '../EmergencyTodoList/JzHistoryListContent.less';
 
 @connect(({ maintenancelist, loading }) => ({
     loading: loading.effects['maintenancelist/GetJzHistoryList'],
@@ -43,7 +43,9 @@ class JzHistoryListContent extends Component {
             DGIMN: this.props.pointcode
         };
         this.ChangeModelState(condition);
-        this.GetHistoryRecord();
+        if(this.props.operation!=="menu/intelligentOperation"){
+            this.GetHistoryRecord();
+        }
     }
 
     GetHistoryRecord = () => {
@@ -117,13 +119,13 @@ class JzHistoryListContent extends Component {
             key: 'Content',
             render: (text, Record) => {
                 if (text !== undefined) {
-                    var content = text.split('),');
+                    let content = text.split('),');
                     var resu = [];
                     content.map((item, key) => {
                         // item = item.replace('(',' - ');
                         // item = item.replace(')','');
                         if (key !== content.length - 1) {
-                            item = item + ')';
+                            item += ')';
                         }
                         resu.push(
                             <Tag key={key} style={{ marginBottom: 1.5, marginTop: 1.5 }} color="#108ee9">{item}</Tag>
@@ -142,11 +144,9 @@ class JzHistoryListContent extends Component {
             dataIndex: 'TaskID',
             width: '15%',
             key: 'TaskID',
-            render: (text, Record) => {
-                return <a onClick={
+            render: (text, Record) => <a onClick={
                     () => this.seeDetail(Record)
-                } > 详细 </a>;
-            }
+                } > 详细 </a>
         }];
         if (this.props.loading) {
             return (<Spin
@@ -165,11 +165,11 @@ class JzHistoryListContent extends Component {
                 <Card bordered={false}>
                     <div className={styles.conditionDiv}>
                         <Row gutter={8}>
-                            <Col span={3} >
+                            <Col span={3}>
                                 <label className={styles.conditionLabel}>记录时间：</label>
                             </Col>
-                            <Col span={21} >
-                                <RangePicker_ style={{ width: 350 }} onChange={this._handleDateChange} format={'YYYY-MM-DD'} dateValue={this.state.rangeDate} />
+                            <Col span={21}>
+                                <RangePicker_ style={{ width: 350 }} onChange={this._handleDateChange} format="YYYY-MM-DD" dateValue={this.state.rangeDate} />
                             </Col>
 
                         </Row>

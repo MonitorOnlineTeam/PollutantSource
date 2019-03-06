@@ -31,7 +31,6 @@ class RepairRecordContent extends Component {
     renderItem = (Repair) => {
         const rtnVal = [];
         if (Repair !== null) {
-            debugger;
             if (Repair.Code !== null && Repair.Code.length > 0) {
                 Repair.Code.map((item, index) => {
                     rtnVal.push(

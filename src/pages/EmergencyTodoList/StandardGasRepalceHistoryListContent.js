@@ -43,7 +43,9 @@ class StandardGasRepalceHistoryListContent extends Component {
             DGIMN: this.props.pointcode
         };
         this.ChangeModelState(condition);
-        this.GetHistoryRecord();
+        if(this.props.operation!=="menu/intelligentOperation"){
+            this.GetHistoryRecord();
+        }
     }
 
     GetHistoryRecord = () => {
@@ -147,7 +149,7 @@ class StandardGasRepalceHistoryListContent extends Component {
                 () => this.seeDetail(record)
             }
             > 详细
-            </a>
+                                      </a>
         }];
         if (this.props.loading) {
             return (<Spin
