@@ -68,11 +68,10 @@ class ConsumablesReplaceRecord extends Component {
     }
 
     render() {
-        const SCREEN_HEIGHT = document.querySelector('body').offsetHeight - 250;
+        const SCREEN_HEIGHT=this.props.scrolly==="none"?{overflowY:'none'}:{height:document.querySelector('body').offsetHeight - 250};
         const Record=this.props.ConsumablesReplaceRecord!==null?this.props.ConsumablesReplaceRecord.Record:null;
         const Content=Record!==null?Record.Content:null;
         const SignContent =Record!==null?Record.SignContent === null ? null : `data:image/jpeg;base64,${Record.SignContent}`:null;
-
         const DeviceName = 'CEMS'; //设备名称
         if (this.state.isloading) {
             return (<Spin
@@ -87,7 +86,7 @@ class ConsumablesReplaceRecord extends Component {
             />);
         }
         return (
-            <div className={styles.FormDiv} style={{ height: SCREEN_HEIGHT }}>
+            <div className={styles.FormDiv} style={SCREEN_HEIGHT}>
                 <div className={styles.FormName}>易耗品更换记录表</div>
                 <div className={styles.HeadDiv} style={{ fontWeight: 'bold' }}>企业名称：{Content!==null ? Content.EnterpriseName:null}</div>
                 <table

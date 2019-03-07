@@ -14,7 +14,7 @@ export default class AppJzRecord extends Component {
         const {match}=this.props;
         return (
             <MapInteractionCSS>
-                <JzRecordContent {...match.params} />
+                <JzRecordContent {...match.params} scrolly="none" />
             </MapInteractionCSS>
         );
     }
