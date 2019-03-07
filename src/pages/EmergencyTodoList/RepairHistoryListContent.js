@@ -44,7 +44,9 @@ class RepairHistoryListContent extends Component {
             DGIMN: this.props.pointcode
         };
         this.ChangeModelState(condition);
-        this.GetHistoryRecord();
+        if(this.props.operation!=="menu/intelligentOperation"){
+            this.GetHistoryRecord();
+        }
     }
 
     GetHistoryRecord = () => {

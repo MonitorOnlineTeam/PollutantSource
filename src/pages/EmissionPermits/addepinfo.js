@@ -168,7 +168,6 @@ class addepinfo extends PureComponent {
     };
 
  handleSubmit = (e) => {
-     debugger;
      e.preventDefault();
      let flag = true;
      const {
@@ -192,7 +191,6 @@ class addepinfo extends PureComponent {
                          Files: that.state.fileList,
                          Data: that.state.time,
                          callback: () => {
-                             debugger;
                              if (this.props.Addrequstresult === '1') {
                                  message.success('添加成功！', 0.5).then(() => this.props.closemodal());
                              } else {

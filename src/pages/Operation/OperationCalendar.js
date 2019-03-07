@@ -241,7 +241,6 @@ export default class OperationCalendar extends Component {
     }
     onPanelChange = (date, datestring) => {
         this.setState({ dateType: datestring, dateValue: date })
-        debugger
         if (date < moment()) {
             if (moment(this.props.operation.beginTime) < date && moment(this.props.operation.endTime) > date) {
             }

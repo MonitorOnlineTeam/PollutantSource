@@ -38,38 +38,21 @@ class CompleteExtractionRecordContent extends Component {
     }
 
     renderItem = (Repair) => {
-        const rtnVal = [];
         const remark = [];
         let childIDarray = [];
         let flag = 0;
         if (Repair !== null) {
-            if (Repair.Record.length !== 0) {
+            if (Repair.Content!== null) {
                 remark.push(
-                    Repair.Record[0].Content.Remark1
-                );
-                remark.push(
-                    Repair.Record[0].Content.Remark2
-                );
-                remark.push(
-                    Repair.Record[0].Content.Remark3
-                );
-                remark.push(
-                    Repair.Record[0].Content.Remark4
-                );
-                remark.push(
-                    Repair.Record[0].Content.Remark5
-                );
-                remark.push(
-                    Repair.Record[0].Content.Remark6
-                );
-                remark.push(
-                    Repair.Record[0].Content.Remark6
+                    Repair.Content.Remark1,Repair.Content.Remark2,Repair.Content.Remark3,
+                    Repair.Content.Remark4,Repair.Content.Remark5,Repair.Content.Remark6,
+                    Repair.Content.Remark7
                 );
             }
 
             const rtnValChild = [];
-            if (Repair.Record[0].RecordList !== null && Repair.Record[0].RecordList.length > 0) {
-                Repair.Record[0].RecordList.map((items, index) => {
+            if (Repair.RecordList !== null && Repair.RecordList.length > 0) {
+                Repair.RecordList.map((items, index) => {
                     if (items.count !== 0) {
                         rtnValChild.push(
                             <tr key={index}>
@@ -88,7 +71,7 @@ class CompleteExtractionRecordContent extends Component {
                             </tr>
                         );
                     } else {
-                        Repair.Record[0].RecordList.map((itemss, indexs) => {
+                        Repair.RecordList.map((itemss, indexs) => {
                             if (itemss.parentId === items.parentId) {
                                 if (itemss.count === 0) {
                                     if (childIDarray !== null) {
@@ -223,7 +206,7 @@ class CompleteExtractionRecordContent extends Component {
                             <td style={{ width: '20%', height: '50px', textAlign: 'center', fontSize: '14px' }}>备注</td>
                         </tr>
                         {
-                            this.renderItem(this.props.PatrolRecord)
+                            this.renderItem(Record)
                         }
                         <tr>
                             <td style={{ width: '18%', height: '50px', textAlign: 'center', fontSize: '14px' }}>

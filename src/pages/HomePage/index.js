@@ -699,7 +699,6 @@ treeCilck = (row) => {
          } = this.props.allMonthEmissionsByPollutant;
          // 91%(0.5/0.6)
          let ycLink;
-         debugger;
          if (ycAnalData &&  ycAnalData.length !== 0) {
              ycLink = `${Math.abs(ycAnalData.linkFlag.toFixed(2))}%(${ycAnalData.monthSum.toFixed(2)}/${ycAnalData.flag.toFixed(2)})`;
          }

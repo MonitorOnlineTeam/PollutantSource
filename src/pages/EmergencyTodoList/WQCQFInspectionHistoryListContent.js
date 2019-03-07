@@ -5,7 +5,6 @@ import {
     Row,
     Col,
     Table,
-    Form,
     Spin,
     Tag
 } from 'antd';
@@ -33,7 +32,7 @@ class WQCQFInspectionHistoryListContent extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            DGIMN: this.props.pointcode
+            rangeDate: [moment(moment(new Date()).subtract(3, 'month').format('YYYY-MM-DD 00:00:00')), moment(moment(new Date()).format('YYYY-MM-DD 23:59:59'))], // 最近3月
         };
     }
 
@@ -46,7 +45,9 @@ class WQCQFInspectionHistoryListContent extends Component {
             DGIMN: this.props.pointcode
         };
         this.ChangeModelState(condition);
-        this.GetHistoryRecord();
+        if(this.props.operation!=="menu/intelligentOperation"){
+            this.GetHistoryRecord();
+        }
     }
 
     GetHistoryRecord = () => {

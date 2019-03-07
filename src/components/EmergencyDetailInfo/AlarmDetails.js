@@ -13,41 +13,20 @@ export default class AlarmDetails extends Component {
         };
     }
     render() {
+        const data=this.props.data;
         var AlarmList=[];
         if (this.props.data !== null && this.props.data.length > 0) {
-            this.props.data.map((item) => {
+            this.props.data[0].AlarmMsgList.map((item) => {
                     AlarmList.push({
-                        key: item.key,
-                        BeginAlarmTime: item.FirstTime,
-                        AlarmTime: item.AlarmTime,
-                        AlarmMsg: item.AlarmMsg,
-                        AlarmCount: item.AlarmCount
+                        AlarmMsg: item
                     });
             });
         }
         const columns = [{
-            title: '开始报警时间',
-            width: '20%',
-            dataIndex: 'BeginAlarmTime',
-            key: 'BeginAlarmTime',
-            sorter: (a, b) => Date.parse(a.BeginAlarmTime) - Date.parse(b.BeginAlarmTime),
-        }, {
-            title: '最后一次报警时间',
-            width: '20%',
-            dataIndex: 'AlarmTime',
-            key: 'AlarmTime',
-            // sorter: (a, b) => Date.parse(a.AlarmTime) - Date.parse(b.AlarmTime),
-        }, {
             title: '报警信息',
             dataIndex: 'AlarmMsg',
             width: '45%',
             key: 'AlarmMsg',
-        }, {
-            title: '报警次数',
-            dataIndex: 'AlarmCount',
-            width: '15%',
-            key: 'AlarmCount',
-            sorter: (a, b) => a.AlarmCount - b.AlarmCount,
         }];
         return (
             <div style={{width:'95%',margin:'auto'}}>

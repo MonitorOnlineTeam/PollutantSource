@@ -88,7 +88,6 @@ submitEnterprise =(params)=>{
         this.updateState({
             isSuccess:false
         });
-        debugger;
         this.props.dispatch({
             type: params.EntCode?pageUrl.editEnterprise:pageUrl.addEnterprise,
             payload: {

@@ -73,7 +73,6 @@ class RealTimeWarningModal extends Component {
  * 智能监控_显示预警详情弹窗口
  */
     showModal = (name, mn, pollutantCode, pollutantName, SuggestValue) => {
-        debugger;
         this.getPollutantList(mn);
         this.updateState({
             SuggestValue: SuggestValue,
