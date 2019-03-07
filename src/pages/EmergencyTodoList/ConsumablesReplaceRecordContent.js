@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Icon, Spin, Tag, Card } from 'antd';
+import { Spin } from 'antd';
 import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
 import styles from "./ConsumablesReplaceRecordContent.less";
@@ -95,36 +95,36 @@ class ConsumablesReplaceRecord extends Component {
                 >
                     <tbody>
                         <tr>
-                            <td style={{ width: '12%', height: '50px', textAlign: 'center', fontSize: '14px' }}>
+                            <td style={{ width: '12%',minWidth: 100, height: '50px', textAlign: 'center', fontSize: '14px' }}>
                                         设备名称
                             </td>
-                            <td style={{ width: '16%', textAlign: 'center', fontSize: '14px' }}>
+                            <td style={{ width: '16%',minWidth: 150, textAlign: 'center', fontSize: '14px' }}>
                                 {DeviceName}
                             </td>
-                            <td style={{ width: '13%', height: '50px', textAlign: 'center', fontSize: '14px' }}>
+                            <td style={{ width: '13%',minWidth: 100, height: '50px', textAlign: 'center', fontSize: '14px' }}>
                                         规格型号
                             </td>
-                            <td style={{ width: '13%', textAlign: 'center', fontSize: '14px' }}>
+                            <td style={{ width: '13%',minWidth: 100, textAlign: 'center', fontSize: '14px' }}>
                                 {Content !== null ? Content.Code:null}
                             </td>
-                            <td style={{ width: '12%', height: '50px', textAlign: 'center', fontSize: '14px' }}>
+                            <td style={{ width: '12%',minWidth: 100, height: '50px', textAlign: 'center', fontSize: '14px' }}>
                                         设备编号
                             </td>
-                            <td colSpan="2" style={{ width: '30%', textAlign: 'center', fontSize: '14px' }}>
+                            <td colSpan="2" style={{ width: '30%',minWidth: 200, textAlign: 'center', fontSize: '14px' }}>
                                 {Content !== null ?Content.EquipmentCode:null}
                             </td>
                         </tr>
                         <tr>
-                            <td colSpan="2" style={{ width: '18%', height: '50px', textAlign: 'center', fontSize: '14px' }}>
+                            <td colSpan="2" style={{ width: '18%',minWidth: 250, height: '50px', textAlign: 'center', fontSize: '14px' }}>
                                         维护管理单位
                             </td>
-                            <td colSpan="2" style={{ textAlign: 'center', fontSize: '14px' }}>
+                            <td colSpan="2" style={{ textAlign: 'center', fontSize: '14px',minWidth: 200 }}>
                                 {Content !== null ?Content.MaintenanceManagementUnit:null}
                             </td>
-                            <td colSpan="2" style={{ width: '18%', height: '50px', textAlign: 'center', fontSize: '14px' }}>
+                            <td colSpan="2" style={{ width: '18%', height: '50px', textAlign: 'center', fontSize: '14px',minWidth: 250 }}>
                                         安装地点
                             </td>
-                            <td style={{ textAlign: 'center', fontSize: '14px' }}>
+                            <td style={{ textAlign: 'center', fontSize: '14px',minWidth: 250 }}>
                                 {Content !== null ?Content.PointPosition:null}
                             </td>
                         </tr>
@@ -178,7 +178,7 @@ class ConsumablesReplaceRecord extends Component {
                 <table className={styles.FormTable}>
                     <tbody>
                         <tr>
-                            <td style={{ width: '87%', height: '50px', textAlign: 'right', border: '0', fontWeight: 'bold' }}>负责人签名：</td>
+                            <td style={{ width: '87%', height: '50px', textAlign: 'right', border: '0', fontWeight: 'bold',minWidth: 750 }}>负责人签名：</td>
                             <td style={{ width: '13%', height: '50px', border: '0' }}>
                                 {
                                     SignContent === null ? null : <img style={{ width: '80%', height: '110%' }} src={SignContent} />
@@ -186,8 +186,8 @@ class ConsumablesReplaceRecord extends Component {
                             </td>
                         </tr>
                         <tr>
-                            <td style={{ width: '87%', height: '50px', textAlign: 'right', border: '0', fontWeight: 'bold' }}>签名时间：</td>
-                            <td style={{ width: '13%', height: '50px', border: '0' }}>{Record !== null ?Record.SignTime:null}</td>
+                            <td style={{ width: '87%', height: '50px', textAlign: 'right', border: '0', fontWeight: 'bold',minWidth: 750 }}>签名时间：</td>
+                            <td style={{ width: '13%', height: '50px', border: '0',minWidth: 150 }}>{Record !== null ?Record.SignTime:null}</td>
                         </tr>
                     </tbody>
                 </table>

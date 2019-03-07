@@ -37,15 +37,15 @@ class JzRecordContent extends Component {
                         rtnVal.push(<table key={key} className={styles.FormTable}>
                             <tbody>
                                 <tr>
-                                    <td colSpan="7" style={{ height: '30px', fontWeight: 'bold' }}>{item}分析仪校准</td>
+                                    <td colSpan="7" style={{ height: '30px', fontWeight: 'bold', minWidth: 150 }}>{item}分析仪校准</td>
                                 </tr>
                                 <tr>
-                                    <td style={{ width: '16%', height: '30px' }}>分析仪原理</td>
-                                    <td colSpan="2">{rd[0].FxyYl}</td>
-                                    <td style={{ width: '14%', height: '30px' }}>分析仪量程</td>
-                                    <td style={{ width: '14%', height: '30px' }}>{rd[0].FxyLc}</td>
-                                    <td style={{ width: '14%', height: '30px' }}>计量单位</td>
-                                    <td style={{ width: '14%', height: '30px' }}>{rd[0].JlUnit}</td>
+                                    <td style={{ width: '16%', height: '30px', minWidth: 150 }}>分析仪原理</td>
+                                    <td style={{ width: '14%', height: '30px', minWidth: 150 }} colSpan="2">{rd[0].FxyYl}</td>
+                                    <td style={{ width: '14%', height: '30px', minWidth: 150 }}>分析仪量程</td>
+                                    <td style={{ width: '14%', height: '30px', minWidth: 150 }}>{rd[0].FxyLc}</td>
+                                    <td style={{ width: '14%', height: '30px', minWidth: 150 }}>计量单位</td>
+                                    <td style={{ width: '14%', height: '30px', minWidth: 150 }}>{rd[0].JlUnit}</td>
                                 </tr>
                                 <tr>
                                     <td rowSpan="2" style={{ width: '16%', height: '30px' }}>零点漂移校准</td>
@@ -168,22 +168,22 @@ class JzRecordContent extends Component {
                 <table className={styles.FormTable}>
                     <tbody>
                         <tr>
-                            <td style={{ width: '18%', height: '30px', textAlign: 'left' }}>
+                            <td style={{ width: '18%', height: '30px', textAlign: 'left',minWidth: 150 }}>
                                         气态污染物CEMS设备生产商
                             </td>
-                            <td style={{ width: '16%', height: '30px' }}>
+                            <td style={{ width: '16%', height: '30px' , minWidth: 150}}>
                                 {Content!==null?Content.GasCemsEquipmentManufacturer:null}
                             </td>
-                            <td>
+                            <td style={{ width: '18%', height: '30px', minWidth: 150 }}>
                                         气态污染物CEMS设备规格型号
                             </td>
-                            <td style={{ width: '18%', height: '30px' }}>
+                            <td style={{ width: '18%', height: '30px', minWidth: 150 }}>
                                 {Content!==null?Content.GasCemsCode:null}
                             </td>
-                            <td>
+                            <td style={{ width: '18%', height: '30px', minWidth: 150 }}>
                                         校准日期
                             </td>
-                            <td style={{ width: '16%', height: '30px' }}>
+                            <td style={{ width: '16%', height: '30px', minWidth: 150 }}>
                                 {Content!==null?Content.AdjustDate:null}
                             </td>
                         </tr>
@@ -229,22 +229,22 @@ class JzRecordContent extends Component {
                 <table className={styles.FormTable} style={{ border: '0' }}>
                     <tbody>
                         <tr>
-                            <td style={{ width: '25%', height: '30px' }}>校准人：</td>
-                            <td style={{ width: '25%', height: '30px' }}>{Record!==null?Record.CreateUserID:null }</td>
-                            <td style={{ width: '25%', height: '30px' }}>校准结束时间：</td>
-                            <td style={{ width: '25%', height: '30px' }}>{Content!==null?Content.AdjustEndTime:null}</td>
+                            <td style={{ width: '25%', height: '30px', minWidth: 225 }}>校准人：</td>
+                            <td style={{ width: '25%', height: '30px', minWidth: 225 }}>{Record!==null?Record.CreateUserID:null }</td>
+                            <td style={{ width: '25%', height: '30px', minWidth: 225 }}>校准结束时间：</td>
+                            <td style={{ width: '25%', height: '30px', minWidth: 225 }}>{Content!==null?Content.AdjustEndTime:null}</td>
                         </tr>
                     </tbody>
                 </table>
                 <table className={styles.FormTable}>
                     <tbody>
                         <tr>
-                            <td style={{ width: '87%', height: '50px', textAlign: 'right', border: '0', fontWeight: 'bold' }}>负责人签名：</td>
+                            <td style={{ width: '87%', height: '50px', textAlign: 'right', border: '0', fontWeight: 'bold', minWidth: 800 }}>负责人签名：</td>
                             <td style={{ width: '13%', height: '50px', border: '0' }}>{SignContent === null ? null : <img style={{ width: '80%', height: '110%' }} src={SignContent} />}</td>
                         </tr>
                         <tr>
-                            <td style={{ width: '87%', height: '50px', textAlign: 'right', border: '0', fontWeight: 'bold' }}>签名时间：</td>
-                            <td style={{ width: '13%', height: '50px', border: '0' }}>{Record!==null?Record.SignTime:null}</td>
+                            <td style={{ width: '87%', height: '50px', textAlign: 'right', border: '0', fontWeight: 'bold', minWidth: 800 }}>签名时间：</td>
+                            <td style={{ width: '13%', height: '50px', border: '0', minWidth: 150 }}>{Record!==null?Record.SignTime:null}</td>
                         </tr>
                     </tbody>
                 </table>

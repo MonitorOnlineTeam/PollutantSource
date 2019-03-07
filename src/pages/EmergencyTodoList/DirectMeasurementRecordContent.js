@@ -157,24 +157,24 @@ class DirectMeasurementRecordContent extends Component {
                 <table className={styles.FormTable}>
                     <tbody>
                         <tr>
-                            <td style={{ width: '50%', height: '50px', textAlign: 'left', fontSize: '14px', fontWeight: 'bold', border: 0 }}>企业名称：{Content!==null?Content.EnterpriseName:null}</td>
-                            <td style={{ width: '50%', height: '50px', textAlign: 'left', fontSize: '14px', fontWeight: 'bold', border: 0 }}> 巡检日期：{Content!==null?Content.PatrolDate:null}</td>
+                            <td style={{ width: '50%', height: '50px', textAlign: 'left', fontSize: '14px', fontWeight: 'bold', border: 0, minWidth: 450 }}>企业名称：{Content!==null?Content.EnterpriseName:null}</td>
+                            <td style={{ width: '50%', height: '50px', textAlign: 'left', fontSize: '14px', fontWeight: 'bold', border: 0, minWidth: 500 }}> 巡检日期：{Content!==null?Content.PatrolDate:null}</td>
                         </tr>
                     </tbody>
                 </table>
                 <table className={styles.FormTable}>
                     <tbody>
                         <tr>
-                            <td style={{ width: '50%', height: '50px', textAlign: 'left', fontSize: '14px' }}>{Content!==null?Content.GasCemsEquipmentManufacturer:null}</td>
-                            <td style={{ width: '50%', height: '50px', textAlign: 'left', fontSize: '14px' }}>{Content!==null?Content.GasCemsCode:null}</td>
+                            <td style={{ width: '50%', height: '50px', textAlign: 'left', fontSize: '14px',minWidth: 450 }}>{Content!==null?Content.GasCemsEquipmentManufacturer:null}</td>
+                            <td style={{ width: '50%', height: '50px', textAlign: 'left', fontSize: '14px', minWidth: 500 }}>{Content!==null?Content.GasCemsCode:null}</td>
                         </tr>
                         <tr>
-                            <td style={{ width: '50%', height: '50px', textAlign: 'left', fontSize: '14px' }}>{Content!==null?Content.KlwCemsEquipmentManufacturer:null}</td>
-                            <td style={{ width: '50%', height: '50px', textAlign: 'left', fontSize: '14px' }}>{Content!==null?Content.KlwCemsCode:null}</td>
+                            <td style={{ width: '50%', height: '50px', textAlign: 'left', fontSize: '14px',minWidth: 450 }}>{Content!==null?Content.KlwCemsEquipmentManufacturer:null}</td>
+                            <td style={{ width: '50%', height: '50px', textAlign: 'left', fontSize: '14px', minWidth: 500 }}>{Content!==null?Content.KlwCemsCode:null}</td>
                         </tr>
                         <tr>
-                            <td style={{ width: '50%', height: '50px', textAlign: 'left', fontSize: '14px' }}>{Content!==null?Content.PointPosition:null}</td>
-                            <td style={{ width: '50%', height: '50px', textAlign: 'left', fontSize: '14px' }}>{Content!==null?Content.MaintenanceManagementUnit:null}</td>
+                            <td style={{ width: '50%', height: '50px', textAlign: 'left', fontSize: '14px',minWidth: 450 }}>{Content!==null?Content.PointPosition:null}</td>
+                            <td style={{ width: '50%', height: '50px', textAlign: 'left', fontSize: '14px', minWidth: 500 }}>{Content!==null?Content.MaintenanceManagementUnit:null}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -203,7 +203,7 @@ class DirectMeasurementRecordContent extends Component {
                 <table className={styles.FormTable}>
                     <tbody>
                         <tr>
-                            <td style={{ width: '87%', height: '50px', textAlign: 'right', border: '0', fontWeight: 'bold' }}>负责人签名：</td>
+                            <td style={{ width: '87%', height: '50px', textAlign: 'right', border: '0', fontWeight: 'bold', minWidth: 800 }}>负责人签名：</td>
                             <td style={{ width: '13%', height: '50px', border: '0' }}>
                                 {
                                     SignContent === null ? null : <img style={{ width: '80%', height: '110%' }} src={SignContent} />
@@ -211,8 +211,8 @@ class DirectMeasurementRecordContent extends Component {
                             </td>
                         </tr>
                         <tr>
-                            <td style={{ width: '87%', height: '50px', textAlign: 'right', border: '0', fontWeight: 'bold' }}>签名时间：</td>
-                            <td style={{ width: '13%', height: '50px', border: '0' }}>{Record!==null?Record.SignTime:null}</td>
+                            <td style={{ width: '87%', height: '50px', textAlign: 'right', border: '0', fontWeight: 'bold', minWidth: 800 }}>签名时间：</td>
+                            <td style={{ width: '13%', height: '50px', border: '0', minWidth: 150 }}>{Record!==null?Record.SignTime:null}</td>
                         </tr>
                     </tbody>
                 </table>
