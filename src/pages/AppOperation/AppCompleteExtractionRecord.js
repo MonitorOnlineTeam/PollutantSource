@@ -14,7 +14,7 @@ export default class AppCompleteExtractionRecord extends Component {
         const {match}=this.props;
         return (
             <MapInteractionCSS>
-                <CompleteExtractionRecordContent {...match.params} />
+                <CompleteExtractionRecordContent {...match.params} scrolly="none"/>
             </MapInteractionCSS>
         );
     }

@@ -14,7 +14,7 @@ export default class AppBdTestRecord extends Component {
         const {match}=this.props;
         return (
             <MapInteractionCSS>
-                <BdTestRecordContent {...match.params} />
+                <BdTestRecordContent {...match.params} scrolly="none"/>
             </MapInteractionCSS>
         );
     }

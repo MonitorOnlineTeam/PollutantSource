@@ -38,7 +38,7 @@ class BdTestRecordContent extends Component {
             <td style={{ width: '20%',minWidth: 200 }} className={styles.tdTitle}>制造商</td>
             <td style={{ width: '20%',minWidth: 200 }} className={styles.tdTitle}>测试项目</td>
             <td style={{ width: '20%',minWidth: 200 }} className={styles.tdTitle}>测量原理</td>
-        </tr>);
+                    </tr>);
         if (record !== null && record !== undefined) {
             record.map((item, key) => {
                 rtnVal.push(
@@ -129,7 +129,7 @@ class BdTestRecordContent extends Component {
                 rtnVal.push(<td key="0" rowSpan="2" style={{ width: '10%' }}>
                     <Checkbox checked={sltValue2}>相对误差</Checkbox><br />
                     <Checkbox checked={sltValue3}>绝对误差</Checkbox>
-                            </td>);
+                </td>);
                 break;
             case 'SO2':
                 rtnVal.push(
@@ -151,19 +151,19 @@ class BdTestRecordContent extends Component {
                 rtnVal.push(<td key="3" rowSpan="2" style={{ width: '10%' }}>
                     <Checkbox checked={sltValue1}>相对准确度</Checkbox><br />
                     <Checkbox checked={sltValue3}>绝对误差</Checkbox>
-                            </td>);
+                </td>);
                 break;
             case '流速':
                 rtnVal.push(<td key="4" rowSpan="2" style={{ width: '10%' }}>
                     <Checkbox checked={sltValue2}>相对误差</Checkbox><br />
                     <Checkbox checked={sltValue3}>绝对误差</Checkbox>
-                            </td>);
+                </td>);
                 break;
             case '湿度':
                 rtnVal.push(<td key="5" rowSpan="2" style={{ width: '10%' }}>
                     <Checkbox checked={sltValue2}>相对误差</Checkbox><br />
                     <Checkbox checked={sltValue3}>绝对误差</Checkbox>
-                            </td>);
+                </td>);
                 break;
             default:
                 break;
@@ -190,7 +190,7 @@ class BdTestRecordContent extends Component {
                     <td><Checkbox checked={sltValue1}>μmol/mol</Checkbox>
                         <Checkbox checked={sltValue2}>mg/m3</Checkbox>
                     </td>
-                            </tr>
+                </tr>
                 );
                 break;
             case 'NOX':
@@ -201,7 +201,7 @@ class BdTestRecordContent extends Component {
                     <td><Checkbox checked={sltValue1}>μmol/mol</Checkbox>
                         <Checkbox checked={sltValue2}>mg/m3</Checkbox>
                     </td>
-                            </tr>);
+                </tr>);
                 break;
             default:
                 break;
@@ -217,7 +217,7 @@ class BdTestRecordContent extends Component {
             <td style={{ width: '33%' }} className={styles.tdTitle}>标准气体名称</td>
             <td style={{ width: '33%' }} className={styles.tdTitle}>浓度值</td>
             <td style={{ width: '34%' }} className={styles.tdTitle}>生产厂商名称</td>
-                    </tr>);
+        </tr>);
         if (record !== null && record !== undefined) {
             record.map((item, key) => {
                 rtnVal.push(
@@ -248,7 +248,7 @@ class BdTestRecordContent extends Component {
             <td style={{ width: '25%' }} className={styles.tdTitle}>测试设备生产商</td>
             <td style={{ width: '25%' }} className={styles.tdTitle}>测试设备型号</td>
             <td style={{ width: '25%' }} className={styles.tdTitle}>方法依据</td>
-                    </tr>);
+        </tr>);
         if (record !== null && record !== undefined) {
             record.map((item, key) => {
                 rtnVal.push(
@@ -274,7 +274,7 @@ class BdTestRecordContent extends Component {
     }
 
     render() {
-        const SCREEN_HEIGHT = document.querySelector('body').offsetHeight - 250;
+        const SCREEN_HEIGHT=this.props.scrolly==="none"?{overflowY:'none'}:{height:document.querySelector('body').offsetHeight - 250};
         const Record=this.props.BdRecord!==null?this.props.BdRecord.Record:null;
         const Content=Record!==null?Record.Content:null;
         let SignContent =Record!==null?Record.SignContent === null ? null : `data:image/jpeg;base64,${Record.SignContent}`:null;
@@ -291,7 +291,7 @@ class BdTestRecordContent extends Component {
             />);
         }
         return (
-            <div className={styles.FormDiv} style={{ height: SCREEN_HEIGHT }}>
+            <div className={styles.FormDiv} style={SCREEN_HEIGHT}>
                 <div className={styles.FormName}>CEMS校验测试记录</div>
                 <div className={styles.HeadDiv} style={{ fontWeight: 'bold' }}>企业名称：{Content!==null?Content.EnterpriseName:null}</div>
                 <table className={styles.FormTable}>

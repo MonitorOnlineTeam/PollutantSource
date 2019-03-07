@@ -14,7 +14,7 @@ export default class AppConsumablesReplaceRecord extends Component {
         const {match}=this.props;
         return (
             <MapInteractionCSS>
-                <ConsumablesReplaceRecordContent {...match.params} />
+                <ConsumablesReplaceRecordContent {...match.params} scrolly="none"/>
             </MapInteractionCSS>
         );
     }

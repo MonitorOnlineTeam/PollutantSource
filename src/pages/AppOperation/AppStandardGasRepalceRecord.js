@@ -14,7 +14,7 @@ export default class AppStandardGasRepalceRecord extends Component {
         const {match}=this.props;
         return (
             <MapInteractionCSS>
-                <StandardGasRepalceRecordContent {...match.params} />
+                <StandardGasRepalceRecordContent {...match.params} scrolly="none" />
             </MapInteractionCSS>
         );
     }

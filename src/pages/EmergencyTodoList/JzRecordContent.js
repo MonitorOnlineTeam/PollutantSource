@@ -141,7 +141,7 @@ class JzRecordContent extends Component {
     }
 
     render() {
-        const SCREEN_HEIGHT = document.querySelector('body').offsetHeight - 250;
+        const SCREEN_HEIGHT=this.props.scrolly==="none"?{overflowY:'none'}:{height:document.querySelector('body').offsetHeight - 250};
         const Record=this.props.JzRecord!==null?this.props.JzRecord.Record:null;
         const Content=Record!==null?Record.Content:null;
         const Code=this.props.JzRecord!==null?this.props.JzRecord.Code:null;
@@ -160,7 +160,7 @@ class JzRecordContent extends Component {
         }
 
         return (
-            <div className={styles.FormDiv} style={{ height: SCREEN_HEIGHT }}>
+            <div className={styles.FormDiv} style={SCREEN_HEIGHT}>
                 <div className={styles.FormName}>CEMS零点量程漂移与校准记录表</div>
                 <div className={styles.HeadDiv} style={{ fontWeight: 'bold' }}>企业名称：
                     {Content!==null?Content.EnterpriseName:null}

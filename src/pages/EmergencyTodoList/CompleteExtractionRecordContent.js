@@ -149,7 +149,7 @@ class CompleteExtractionRecordContent extends Component {
     }
 
     render() {
-        const SCREEN_HEIGHT = document.querySelector('body').offsetHeight - 250;
+        const SCREEN_HEIGHT=this.props.scrolly==="none"?{overflowY:'none'}:{height:document.querySelector('body').offsetHeight - 250};
         const Record=this.props.PatrolRecord!==null?this.props.PatrolRecord.Record:null;
         const Content=Record!==null?Record.Content:null;
         let SignContent =Record!==null?Record.SignContent === null ? null : `data:image/jpeg;base64,${Record.SignContent}`:null;
@@ -167,7 +167,7 @@ class CompleteExtractionRecordContent extends Component {
             />);
         }
         return (
-            <div className={styles.FormDiv} style={{ height: SCREEN_HEIGHT }}>
+            <div className={styles.FormDiv} style={SCREEN_HEIGHT}>
                 <div className={styles.FormName}>完全抽取法CEMS日常巡检记录表</div>
                 <table className={styles.FormTable}>
                     <tbody>
