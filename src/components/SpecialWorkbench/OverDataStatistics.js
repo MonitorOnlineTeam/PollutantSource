@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
-import { Row, Col, Card, List, Tabs, Divider, Modal, Table ,Spin} from 'antd';
+import { Row, Col, Card, List, Tabs, Divider, Modal, Table ,Spin,Icon} from 'antd';
 import { connect } from 'dva';
 import moment from 'moment';
 import ReactEcharts from 'echarts-for-react';
-import styles from './OverDataStatistics.less';
+import styles from './ExceptionAlarm.less';
+import AlarmRecordModal from '../../components/GlobalHeader/AlarmRecordModal';
+import { SSL_OP_NETSCAPE_CA_DN_BUG } from 'constants';
 
 const pageUrl = {
     updateState: 'workbenchmodel/updateState',
@@ -23,137 +25,54 @@ class OverDataStatistics extends Component {
         super(props);
         this.state = {};
     }
-
-    /**
-      * 更新model中的state
-      */
-    updateState = (payload) => {
-        this.props.dispatch({
-            type: pageUrl.updateState,
-            payload: payload,
-        });
+/**
+ * 智能质控_渲染异常报警数据列表
+ */
+renderOverDataStatisticsList = () => {
+    let listData = [];
+    const { allPointOverDataList } = this.props;
+    let res=[];
+    return (
+        <List
+            itemLayout="vertical"
+            dataSource={allPointOverDataList.tableDatas}
+            renderItem={(item,key) => (
+                <List.Item
+                    key={key}
+                    actions={[]}
+                    extra={item.extra}
+                    style={{cursor:'pointer'}}
+                    onClick={()=> this.childAlarm.showModal(item.FirstTime, item.LastTime, item.DGIMNs, item.PointName)}
+                >
+                    <List.Item.Meta
+                        title={<a href={item.href}>{item.PointName}</a>}
+                    />
+             <div className={styles.warningsData}>  {item.PollutantNames}从{item.FirstTime}发生了{item.AlarmCount}次报警。</div>
+                </List.Item>
+            )}
+        />);
+}
+    onRefAlarm = (ref) => {
+        this.childAlarm = ref;
     }
-
-    getOption =() =>{
-
-        let option = {
-            //color:['','',''],
-            tooltip : {
-                trigger: 'axis',
-                axisPointer : { // 坐标轴指示器，坐标轴触发有效
-                    type : 'shadow' // 默认为直线，可选为：'line' | 'shadow'
-                }
-            },
-            legend: {
-                data: []
-            },
-            grid: {
-                left: '3%',
-                right: '8%',
-                bottom: '3%',
-                containLabel: true
-            },
-            xAxis:  {
-                type: 'value',
-                name:'次'
-            },
-            yAxis: {
-                type: 'category',
-                data: []
-            },
-            dataZoom: [
-                {
-                    show: true,
-                   
-                    yAxisIndex: 0,
-                    // filterMode: 'empty',
-                    // width: 30,
-                    
-                    height: '50%',
-                    showDataShadow: true,
-                    left: '93%'
-                },
-                {
-                    show:true,
-                    type:'inside',
-                    // start:20,
-                    yAxisIndex: 0
-                    // type:'inside'
-                }
-            ],
-            series: []
-        };
-
-        const { allPointOverDataList } = this.props;
-        //console.log('allPointOverDataList',allPointOverDataList);
-
-        // legend
-        if(allPointOverDataList.tableDatas.length>0) {
-            if(allPointOverDataList.tableDatas[0].ALLOverPollutantNames.length>0) {
-                option.legend.data=allPointOverDataList.tableDatas[0].ALLOverPollutantNames;
-            }
-        }
-        // series
-        option.legend.data.map((item)=>{
-            option.series.push({
-                name: item,
-                type: 'bar',
-                stack: '总量',
-                barWidth:30,
-                label: {
-                    normal: {
-                        show: true,
-                        position: 'insideRight'
-                    }
-                },
-                data: []
-            });
-        });
-
-        allPointOverDataList.tableDatas.map((item,key)=>{
-
-            option.yAxis.data.push(item.PointName);
-
-            option.series.map((s,skey) =>{
-                let $thisValue=item.DataOvers.filter(m=>m.PollutantName===s.name);
-                if($thisValue.length>0) {
-                    s.data.push($thisValue[0].AlarmCount);
-                }else {
-                    s.data.push('-');
-                }
-
-            });
-        });
-
-        return option;
-    }
+     
 
     render() {
+        const {loadingDataOver} =this.props;
         return (
             <div>
-                <div>
-                    <Card
-                        title="报警汇总"
-                        style={{ marginBottom: 10 }}
-                        bordered={false}
-                        loading={this.props.loadingDataOver}
-                    >
-                        <Card.Grid style={{ width: '100%', height: 425, paddingTop: 15, overflow: 'auto' }}>
-                            <ReactEcharts
-                                // loadingOption={this.props.loadingRateStatistics}
-                                option={this.getOption()}
-                                style={{ minHeight: '350px' }}
-                                className="echarts-for-echarts"
-                                theme="macarons"
-                            />
-                            {/* <div style={{ height: 400, overflow: 'auto' }}>
-                                {
-                                    this.renderAllPointOverDataList()
-                                }
-                            </div> */}
-                        </Card.Grid>
-                    </Card>
-                </div>
+                <Card
+                    title="今日报警信息"
+                    style={{ marginBottom: 10 }}
+                    bordered={false}
+                    className={styles.exceptionAlarm}
+                   loading={this.props.loadingDataOver}
+                >
+                    <Card.Grid style={{ width: '100%', height: 425, overflow: 'auto' }} key="1">
+                        {this.renderOverDataStatisticsList()}
+                    </Card.Grid>
+                </Card>
+                <AlarmRecordModal  {...this.props} onRef={this.onRefAlarm} />
             </div>
         );
     }
