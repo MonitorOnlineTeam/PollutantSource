@@ -122,7 +122,7 @@ class DeviceExceptionRecordContent extends Component {
                         </tr>
                         <tr>
                             <td style={{ width: '87%', height: '50px', textAlign: 'right', border: '0', fontWeight: 'bold' }}>签名时间：</td>
-                            <td style={{ width: '13%', height: '50px', border: '0' }}>{Record!==null?Record.SignTime:null}</td>
+                            <td style={{ width: '13%', height: '50px', border: '0',minWidth: 120 }}>{Record!==null?Record.SignTime:null}</td>
                         </tr>
                     </tbody>
                 </table>
