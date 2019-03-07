@@ -156,7 +156,14 @@ class AlarmRecord extends Component {
               title: '超标值',
               dataIndex: 'overValue',
               width:width,
-              key: 'overValue'
+              key: 'overValue',
+              render: (text,record)=>{
+                 if(record.unit)
+                 {
+                     return text+"("+record.unit+")";
+                 }
+                 return text;
+              }
           }, {
               title: '标准值',
               dataIndex: 'standardValue',

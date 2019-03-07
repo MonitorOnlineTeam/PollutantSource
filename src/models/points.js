@@ -606,7 +606,7 @@ export default Model.extend({
                 res.data.map((item, key) => {
                     reslist = reslist.concat({
                         ...item,
-                        overValue: `${item.value }(${ item.unit })`,
+                        overValue: item.value,
                         key: key
                     });
                 });

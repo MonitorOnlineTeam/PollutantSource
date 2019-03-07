@@ -211,7 +211,6 @@ class AddStandardLibraryPollutant extends Component {
         })
      }
  }
-
  continue=(e) => {
      this.setState({
          flag: true,
@@ -225,7 +224,6 @@ class AddStandardLibraryPollutant extends Component {
       });
       this.handleSubmit(e);
   }
-
   render() {
       const {
           Id,
@@ -239,8 +237,32 @@ class AddStandardLibraryPollutant extends Component {
           LowerLimit,
       } = editstandardlibrarypollutant === null || Id === "null" ? {} : editstandardlibrarypollutant;
       const { getFieldDecorator } = this.props.form;
+      let {low,upper}=this.state;
+      if(AlarmType)
+      {
+          if(AlarmType==0)
+          {
+            low=false;
+            upper=false;
+          }
+          else if(AlarmType==1)
+          {
+            low=false;
+            upper=true;
+          }
+          else if(AlarmType==2)
+          {
+            low=true;
+            upper=false;
+          }
+          else if(AlarmType==3)
+          {
+            low=true;
+            upper=true;
+          }
+      }
 
-      const {low,upper}=this.state;
+
       return (
           <Card bordered={false}>
               <Form onSubmit={this.handleSubmit}>
