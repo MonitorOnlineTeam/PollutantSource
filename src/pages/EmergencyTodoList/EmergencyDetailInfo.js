@@ -22,15 +22,15 @@ const Step = Steps.Step;
 let SCREEN_HEIGHT = document.querySelector('body').offsetHeight - 250;
 
 @Form.create()
-@connect(({ task,loading }) => ({
+@connect(({ task, loading }) => ({
     isloading: loading.effects['task/GetTaskRecord'],
     taskInfo: task.TaskRecord,
-    alarmList:[]
+    alarmList: []
 }))
 class EmergencyDetailInfo extends Component {
     constructor(props) {
         super(props);
-        const {DGIMN,TaskID}=this.props;
+        const { DGIMN, TaskID } = this.props;
 
         this.state = {
             previewVisible: false,
@@ -39,26 +39,26 @@ class EmergencyDetailInfo extends Component {
             // uid: null,
             photoIndex: 0,
             //参数改变让页面刷新
-            DGIMN:DGIMN,
-            TaskID:TaskID,
-            moreAlarmList:null,
-            visible:false,
-            alarmType:null
+            DGIMN: DGIMN,
+            TaskID: TaskID,
+            moreAlarmList: null,
+            visible: false,
+            alarmType: null
         };
     }
 
-    componentDidMount=()=> {
+    componentDidMount = () => {
         this.reloaddata();
     }
 
-    componentWillReceiveProps(nextProps){
-        const {DGIMN,TaskID} = this.props;
+    componentWillReceiveProps(nextProps) {
+        const { DGIMN, TaskID } = this.props;
         //如果传入参数有变化，则重新加载数据
-        if(nextProps.DGIMN !== DGIMN||nextProps.TaskID !== TaskID){
+        if (nextProps.DGIMN !== DGIMN || nextProps.TaskID !== TaskID) {
             this.setState({
                 //参数改变让页面刷新
-                DGIMN:nextProps.DGIMN,
-                TaskID:nextProps.TaskID
+                DGIMN: nextProps.DGIMN,
+                TaskID: nextProps.TaskID
             });
             this.reloaddata();
         }
@@ -88,7 +88,7 @@ class EmergencyDetailInfo extends Component {
             type: 'task/GetTaskRecord',
             payload: {
                 TaskID: this.props.TaskID,
-                DGIMN:this.props.DGIMN
+                DGIMN: this.props.DGIMN
             }
         });
     }
@@ -99,34 +99,34 @@ class EmergencyDetailInfo extends Component {
             if (item.FormMainID !== null) {
                 switch (item.ID) {
                     case EnumPsOperationForm.Repair:
-                        this.GoToForm(taskID,item.CnName,"RepairRecord",rtnVal,key);
+                        this.GoToForm(taskID, item.CnName, "RepairRecord", rtnVal, key);
                         break;
                     case EnumPsOperationForm.StopMachine:
-                        this.GoToForm(taskID,item.CnName,"StopCemsRecord",rtnVal,key);
+                        this.GoToForm(taskID, item.CnName, "StopCemsRecord", rtnVal, key);
                         break;
                     case EnumPsOperationForm.YhpReplace:
-                        this.GoToForm(taskID,item.CnName,"ConsumablesReplaceRecord",rtnVal,key);
+                        this.GoToForm(taskID, item.CnName, "ConsumablesReplaceRecord", rtnVal, key);
                         break;
                     case EnumPsOperationForm.StandardGasReplace:
-                        this.GoToForm(taskID,item.CnName,"StandardGasRepalceRecord",rtnVal,key);
+                        this.GoToForm(taskID, item.CnName, "StandardGasRepalceRecord", rtnVal, key);
                         break;
                     case EnumPsOperationForm.CqfPatrol:
-                        this.GoToForm(taskID,item.CnName,"CompleteExtractionRecord",rtnVal,key);
+                        this.GoToForm(taskID, item.CnName, "CompleteExtractionRecord", rtnVal, key);
                         break;
                     case EnumPsOperationForm.CyfPatrol:
-                        this.GoToForm(taskID,item.CnName,"DilutionSamplingRecord",rtnVal,key);
+                        this.GoToForm(taskID, item.CnName, "DilutionSamplingRecord", rtnVal, key);
                         break;
                     case EnumPsOperationForm.ClfPatrol:
-                        this.GoToForm(taskID,item.CnName,"DirectMeasurementRecord",rtnVal,key);
+                        this.GoToForm(taskID, item.CnName, "DirectMeasurementRecord", rtnVal, key);
                         break;
                     case EnumPsOperationForm.CheckRecord:
-                        this.GoToForm(taskID,item.CnName,"JzRecord",rtnVal,key);
+                        this.GoToForm(taskID, item.CnName, "JzRecord", rtnVal, key);
                         break;
                     case EnumPsOperationForm.TestRecord:
-                        this.GoToForm(taskID,item.CnName,"BdTestRecord",rtnVal,key);
+                        this.GoToForm(taskID, item.CnName, "BdTestRecord", rtnVal, key);
                         break;
                     case EnumPsOperationForm.DataException:
-                        this.GoToForm(taskID,item.CnName,"DeviceExceptionRecord",rtnVal,key);
+                        this.GoToForm(taskID, item.CnName, "DeviceExceptionRecord", rtnVal, key);
                         break;
                     default:
                         break;
@@ -136,8 +136,8 @@ class EmergencyDetailInfo extends Component {
         return rtnVal;
     }
 
-    GoToForm=(taskID,cnName,recordType,rtnVal,key)=>{
-        let taskfrom = this.props.taskfrom||'';
+    GoToForm = (taskID, cnName, recordType, rtnVal, key) => {
+        let taskfrom = this.props.taskfrom || '';
         if (taskfrom.indexOf("qcontrollist") > -1) {
             taskfrom = taskfrom.split('-')[0];
         }
@@ -148,8 +148,8 @@ class EmergencyDetailInfo extends Component {
                 this.props.dispatch(routerRedux.push(`/PatrolForm/${recordType}/${this.props.DGIMN}/${this.props.viewtype}/${taskfrom}/nop/${taskID}`));
             }}
         >{cnName}
-        </Button>
-        </p>);
+                                                             </Button>
+                    </p>);
     }
 
     //获取撤单按钮
@@ -196,21 +196,13 @@ class EmergencyDetailInfo extends Component {
     TaskLogList = (TaskLogList) => {
         let returnStepList = [];
         TaskLogList.map((item) => {
-
             returnStepList.push(
                 <Step
                     status="finish"
                     title={item.TaskStatusText}
                     description={this.description(item)}
-                    icon={<Icon type={item.TaskStatusText == '待执行' ? 'minus-circle' :
-                        item.TaskStatusText == '进行中' ? 'clock-circle' :
-                            item.TaskStatusText == '已完成' ? 'check-circle' :
-                                item.TaskStatusText == '待审核' ? 'exclamation-circle' :
-                                    item.TaskStatusText == '审核通过' ? 'clock-circle' :
-                                        item.TaskStatusText == '驳回' ? 'close-circle' :
-                                            item.TaskStatusText == '待调整' ? 'warning' :
-                                                item.TaskStatusText == '已调整' ? 'check-square' :
-                                                    'schedule'
+                    icon={<Icon type={
+                        this.showIcon(item.TaskStatusText)
                     }
                     />}
                 />
@@ -218,6 +210,22 @@ class EmergencyDetailInfo extends Component {
         });
         return returnStepList;
     }
+
+    //图标
+    showIcon = (TaskStatusText) => {
+        switch (TaskStatusText) {
+            case '待执行': return 'minus-circle';
+            case '进行中': return 'clock-circle';
+            case '已完成': return 'check-circle';
+            case '待审核': return 'exclamation-circle';
+            case "审核通过": return 'check-square';
+            case "驳回": return 'close-circle';
+            case "待调整": return 'warning';
+            case "已调整": return 'check-square';
+            default: return 'schedule';
+        }
+    }
+
 
     //步骤条描述
     description = (item) => {
@@ -264,14 +272,14 @@ class EmergencyDetailInfo extends Component {
     }
 
     getGoBack = () => {
-        const {history,goback} = this.props;
-        if(goback === "none"){
+        const { history, goback } = this.props;
+        if (goback === "none") {
             SCREEN_HEIGHT = document.querySelector('body').offsetHeight - 500;
             return (<span />);
         }
         return (
             <Button
-                style={{ float: "right", marginRight: 30}}
+                style={{ float: "right", marginRight: 30 }}
                 onClick={() => {
                     history.goBack(-1);
                 }}
@@ -280,12 +288,12 @@ class EmergencyDetailInfo extends Component {
         );
     }
 
-    GetAlarmInfo=(AlarmList,type)=>{
-        const alarmList=AlarmList.filter(item =>item.MsgTypeText===type);
+    GetAlarmInfo = (AlarmList, type) => {
+        const alarmList = AlarmList.filter(item => item.MsgTypeText === type);
         this.setState({
-            moreAlarmList:alarmList,
-            typeName:type,
-            visible:true
+            moreAlarmList: alarmList,
+            typeName: type,
+            visible: true
         });
     }
 
@@ -306,7 +314,7 @@ class EmergencyDetailInfo extends Component {
             );
         }
         //是否存在任务信息
-        const isExistTask=this.props.taskInfo.requstresult == EnumRequstResult.Success&&this.props.taskInfo.data !== null&&this.props.taskInfo.data.length>0;
+        const isExistTask = this.props.taskInfo.requstresult == EnumRequstResult.Success && this.props.taskInfo.data !== null && this.props.taskInfo.data.length > 0;
         let AlarmList = []; // 报警记录
         let Attachments = ''; // 附件
         let TaskLogList = []; // 任务日志列表
@@ -315,23 +323,23 @@ class EmergencyDetailInfo extends Component {
             Attachments = this.props.taskInfo.data[0].Attachments;
             TaskLogList = this.props.taskInfo.data[0].TaskLogList;
             RecordTypeInfo = this.props.taskInfo.data[0].TaskFormList;
-            if(this.props.taskInfo.data[0].AlarmList.length>0){
-                this.props.taskInfo.data[0].AlarmList[0].map((item)=>{
-                    if (item!==null) {
-                        let AlarmType="";
-                        let AlarmCount=0;
-                        item.MsgTypeList.map((item)=>{
-                            AlarmType+=`${item.MsgTypeText},`;
-                            AlarmCount+=item.AlarmCount;
+            if (this.props.taskInfo.data[0].AlarmList.length > 0) {
+                this.props.taskInfo.data[0].AlarmList[0].map((item) => {
+                    if (item !== null) {
+                        let AlarmType = "";
+                        let AlarmCount = 0;
+                        item.MsgTypeList.map((item) => {
+                            AlarmType += `${item.MsgTypeText},`;
+                            AlarmCount += item.AlarmCount;
                         });
                         AlarmList.push({
                             key: item.AlarmSourceType,
                             FirstAlarmTime: item.FirstAlarmTime,
                             LastAlarmTime: item.LastAlarmTime,
-                            AlarmMsg: AlarmType!==""?AlarmType.substring(0,AlarmType.lastIndexOf(',')):AlarmType,
+                            AlarmMsg: AlarmType !== "" ? AlarmType.substring(0, AlarmType.lastIndexOf(',')) : AlarmType,
                             AlarmCount: AlarmCount,
-                            MsgTypeList:item.MsgTypeList,
-                            AlarmType:item.AlarmSourceTypeText
+                            MsgTypeList: item.MsgTypeList,
+                            AlarmType: item.AlarmSourceTypeText
                         });
                     }
                 });
@@ -388,25 +396,25 @@ class EmergencyDetailInfo extends Component {
             width: '35%',
             key: 'AlarmMsg',
             render: (text, row, index) => {
-                if(text!==null&&text!=="") {
-                    let types=[];
-                    text.split(',').map((item)=>{
-                        const dot=types.length+1<text.split(',').length?"，":"";
+                if (text !== null && text !== "") {
+                    let types = [];
+                    text.split(',').map((item) => {
+                        const dot = types.length + 1 < text.split(',').length ? "，" : "";
                         types.push(<span><a
                             href="javascript:;"
                             onClick={
-                                ()=>{
-                                    const alarmList=row.MsgTypeList.filter(i =>i.MsgTypeText===item);
+                                () => {
+                                    const alarmList = row.MsgTypeList.filter(i => i.MsgTypeText === item);
                                     this.setState({
-                                        moreAlarmList:alarmList,
-                                        alarmType:row.AlarmType,
-                                        visible:true
+                                        moreAlarmList: alarmList,
+                                        alarmType: row.AlarmType,
+                                        visible: true
                                     });
                                 }
                             }
                         >{item}
                                          </a>{dot}
-                        </span>);
+                                   </span>);
                     });
                     return {
                         children: types
@@ -424,7 +432,7 @@ class EmergencyDetailInfo extends Component {
             listType: 'picture-card',
             fileList: [...fileList]
         };
-        const {isloading} = this.props;
+        const { isloading } = this.props;
         if (isloading) {
             return (<Spin
                 style={{
@@ -444,7 +452,7 @@ class EmergencyDetailInfo extends Component {
                     title={<span style={{ fontWeight: '900' }}>任务详情</span>}
                     extra={
                         <div>
-                            <span style={{ marginRight: 20 }}>{this.getCancelOrderButton(isExistTask?this.props.taskInfo.data[0].CreateTime:null, isExistTask?this.props.taskInfo.data[0].TaskStatus:null)}</span>
+                            <span style={{ marginRight: 20 }}>{this.getCancelOrderButton(isExistTask ? this.props.taskInfo.data[0].CreateTime : null, isExistTask ? this.props.taskInfo.data[0].TaskStatus : null)}</span>
                             {this.getGoBack()}
                         </div>}
                 >
@@ -452,34 +460,34 @@ class EmergencyDetailInfo extends Component {
                     <div style={{ height: SCREEN_HEIGHT }} className={styles.ExceptionDetailDiv}>
                         <Card title={<span style={{ fontWeight: '600' }}>基本信息</span>}>
                             <DescriptionList className={styles.headerList} size="large" col="3">
-                                <Description term="任务单号">{isExistTask?this.props.taskInfo.data[0].TaskCode:null}</Description>
-                                <Description term="排口">{isExistTask?this.props.taskInfo.data[0].PointName:null}</Description>
-                                <Description term="企业">{isExistTask?this.props.taskInfo.data[0].EnterpriseName:null}</Description>
+                                <Description term="任务单号">{isExistTask ? this.props.taskInfo.data[0].TaskCode : null}</Description>
+                                <Description term="排口">{isExistTask ? this.props.taskInfo.data[0].PointName : null}</Description>
+                                <Description term="企业">{isExistTask ? this.props.taskInfo.data[0].EnterpriseName : null}</Description>
                             </DescriptionList>
                             <DescriptionList style={{ marginTop: 20 }} className={styles.headerList} size="large" col="3">
-                                <Description term="任务来源">{isExistTask?this.props.taskInfo.data[0].TaskFromText:null}</Description>
-                                <Description term="紧急程度"><div style={{ color: 'red' }}>{isExistTask?this.props.taskInfo.data[0].EmergencyStatusText:null}</div></Description>
-                                <Description term="任务状态"> <div style={{ color: '#32CD32' }}>{isExistTask?this.props.taskInfo.data[0].TaskStatusText:null}</div></Description>
-                                <Description term="任务内容">{isExistTask?this.props.taskInfo.data[0].TaskDescription:null}</Description>
+                                <Description term="任务来源">{isExistTask ? this.props.taskInfo.data[0].TaskFromText : null}</Description>
+                                <Description term="紧急程度"><div style={{ color: 'red' }}>{isExistTask ? this.props.taskInfo.data[0].EmergencyStatusText : null}</div></Description>
+                                <Description term="任务状态"> <div style={{ color: '#32CD32' }}>{isExistTask ? this.props.taskInfo.data[0].TaskStatusText : null}</div></Description>
+                                <Description term="任务内容">{isExistTask ? this.props.taskInfo.data[0].TaskDescription : null}</Description>
                             </DescriptionList>
                             <DescriptionList style={{ marginTop: 20 }} className={styles.headerList} size="large" col="3">
-                                <Description term="运维人">{isExistTask?this.props.taskInfo.data[0].OperationsUserName:null}</Description>
-                                <Description term="创建时间">{isExistTask?this.props.taskInfo.data[0].CreateTime:null}</Description>
+                                <Description term="运维人">{isExistTask ? this.props.taskInfo.data[0].OperationsUserName : null}</Description>
+                                <Description term="创建时间">{isExistTask ? this.props.taskInfo.data[0].CreateTime : null}</Description>
                             </DescriptionList>
                             {
-                                (isExistTask?this.props.taskInfo.data[0].TaskType:null) === EnumPatrolTaskType.PatrolTask ? null : AlarmList.length === 0 ? null : (<Divider style={{ marginBottom: 20 }} />)
+                                (isExistTask ? this.props.taskInfo.data[0].TaskType : null) === EnumPatrolTaskType.PatrolTask ? null : AlarmList.length === 0 ? null : (<Divider style={{ marginBottom: 20 }} />)
                             }
 
                             {
 
-                                (isExistTask?this.props.taskInfo.data[0].TaskType:null) === EnumPatrolTaskType.PatrolTask ? null : AlarmList.length === 0 ? null :
+                                (isExistTask ? this.props.taskInfo.data[0].TaskType : null) === EnumPatrolTaskType.PatrolTask ? null : AlarmList.length === 0 ? null :
                                 <Table rowKey={(record, index) => `complete${index}`} style={{ backgroundColor: 'white' }} bordered={false} dataSource={AlarmList} pagination={false} columns={columns} />
                             }
                         </Card>
                         <Card title={<span style={{ fontWeight: '900' }}>处理说明</span>} style={{ marginTop: 20 }}>
                             <DescriptionList className={styles.headerList} size="large" col="1">
                                 <Description>
-                                    <TextArea rows={8} style={{ width: '600px' }} value={isExistTask?this.props.taskInfo.data[0].Remark:null} />
+                                    <TextArea rows={8} style={{ width: '600px' }} value={isExistTask ? this.props.taskInfo.data[0].Remark : null} />
                                 </Description>
                             </DescriptionList>
                         </Card>
@@ -487,16 +495,16 @@ class EmergencyDetailInfo extends Component {
                             <DescriptionList className={styles.headerList} size="large" col="1">
                                 <Description>
                                     {
-                                        this.renderItem(RecordTypeInfo, isExistTask?this.props.taskInfo.data[0].TaskID:null)
+                                        this.renderItem(RecordTypeInfo, isExistTask ? this.props.taskInfo.data[0].TaskID : null)
                                     }
                                 </Description>
                             </DescriptionList>
                             <DescriptionList style={{ marginTop: 20 }} className={styles.headerList} size="large" col="2">
                                 <Description term="处理人">
-                                    {isExistTask?this.props.taskInfo.data[0].OperationsUserName:null}
+                                    {isExistTask ? this.props.taskInfo.data[0].OperationsUserName : null}
                                 </Description>
                                 <Description term="处理时间">
-                                    {isExistTask?this.props.taskInfo.data[0].CompleteTime:null}
+                                    {isExistTask ? this.props.taskInfo.data[0].CompleteTime : null}
                                 </Description>
                             </DescriptionList>
                         </Card>
@@ -568,7 +576,7 @@ class EmergencyDetailInfo extends Component {
                     visible={this.state.visible}
                     onCancel={this.handleCancel}
                 >
-                    <AlarmDetails data={isExistTask?this.state.moreAlarmList:[]} />
+                    <AlarmDetails data={isExistTask ? this.state.moreAlarmList : []} />
                 </Modal>
             </div>
         );
