@@ -119,6 +119,7 @@ class YwdsjlistContent extends Component {
             const rtnVal = [];
             let value = null;
             let valueName = null;
+            let exceptionTypeText=``;
             data.map((item, key) => {
                 rtnVal.push(<Timeline.Item key={key} dot={<div className={Ywdsjlistss.DateLoad} />}>
                     <p className={Ywdsjlistss.taskDate}>{item.NodeDate}</p>
@@ -127,6 +128,7 @@ class YwdsjlistContent extends Component {
                     if (item1.TaskType == EnumPatrolTaskType.PatrolTask) { //巡检任务
                         if(item1.TaskStatus==EnumOperationTaskStatus.WaitFor){
                             value=`例行任务于${item1.CreateTime}被创建，待执行`;
+                           
                             rtnVal.push(
                                 <Timeline.Item key={`${key1 }2${ key}`} dot={<img style={{width: '38px', height: '38px'}} src="/patrol.png" />}>
                                     <p className={Ywdsjlistss.taskDetail}>{value}</p>
@@ -180,6 +182,9 @@ class YwdsjlistContent extends Component {
                             rtnVal.push(
                                 <Timeline.Item key={`${key1 }3${ key}`} dot={<img style={{width: '38px', height: '38px'}} src="/emergeny.png" />}>
                                     <p className={Ywdsjlistss.taskDetail}>{value}</p>
+                                    {
+                                       item1.ExceptionTypeText?<div style={{height:'30px',lineHeight:'30px'}}><img style={{width:'18px',height:'18px',marginBottom:'4px',marginLeft:'20px',marginRight:'5px'}} src="/alarm_small.png"/>{item.ExceptionTypeText}</div>:''
+                                    }
                                     <div
                                         className={Ywdsjlistss.seeDetail}
                                         onClick={() => {
@@ -196,6 +201,9 @@ class YwdsjlistContent extends Component {
                             rtnVal.push(
                                 <Timeline.Item key={`${key1 }3${ key}`} dot={<img style={{width: '38px', height: '38px'}} src="/emergeny.png" />}>
                                     <p className={Ywdsjlistss.taskDetail}>{value}<span style={{color: '#40B0F5', marginRight: '10px'}}>{valueName}</span></p>
+                                    {
+                                       item1.ExceptionTypeText?<div style={{height:'30px',lineHeight:'30px'}}><img style={{width:'18px',height:'18px',marginBottom:'4px',marginLeft:'20px',marginRight:'5px'}} src="/alarm_small.png"/>{item1.ExceptionTypeText}</div>:''
+                                    }
                                     <div
                                         className={Ywdsjlistss.seeDetail}
                                         onClick={() => {
@@ -212,6 +220,9 @@ class YwdsjlistContent extends Component {
                             rtnVal.push(
                                 <Timeline.Item key={`${key1 }3${ key}`} dot={<img style={{width: '38px', height: '38px'}} src="/emergeny.png" />}>
                                     <p className={Ywdsjlistss.taskDetail}><span style={{color: '#40B0F5', marginRight: '10px'}}>{valueName}</span>{value}</p>
+                                    {
+                                       item1.ExceptionTypeText?<div style={{height:'30px',lineHeight:'30px'}}><img style={{width:'18px',height:'18px',marginBottom:'4px',marginLeft:'20px',marginRight:'5px'}} src="/alarm_small.png"/>{item1.ExceptionTypeText}</div>:''
+                                    }
                                     <div
                                         className={Ywdsjlistss.seeDetail}
                                         onClick={() => {
