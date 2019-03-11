@@ -232,7 +232,7 @@ export default class StandardLibrary extends Component {
             width: '20%',
             align: 'center',
             render: (text, record) => (<Fragment >
-                <Popconfirm placement="left" title="确定要将此标准应用到所有排口吗？" onConfirm={() => this.confirm(record.key)} okText="是" cancelText="否">
+                <Popconfirm placement="left" title="确定要将此标准应用到所有排口吗？" onConfirm={() => this.useAllDGIMN(record.key)} okText="是" cancelText="否">
                     <a href="#" > 应用到排口 </a>
                 </Popconfirm>
                  <Divider type="vertical" />
