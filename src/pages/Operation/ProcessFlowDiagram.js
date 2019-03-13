@@ -20,6 +20,7 @@ import { routerRedux } from 'dva/router';
 import style from '../../components/PointDetail/DataList.less';
 import { MapInteractionCSS } from 'react-map-interaction';
 import { pollutantInfo, zspollutantInfo } from '../../config';
+import { EnumPollutantTypeCode } from '../../utils/enum';
 
 @connect(({ overview, points, loading }) => ({
     datalist: overview.data,
@@ -48,22 +49,22 @@ export default class ProcessFlowDiagram extends Component {
     componentDidMount() {
         const { dispatch } = this.props;
         var getDGIMN = localStorage.getItem('DGIMN')
+        this.updateState({
+            treeDataParameter: {
+                ...this.props.treeDataParameter,
+                ...{
+                    map: true,
+                    pollutantTypes: EnumPollutantTypeCode.GAS,
+                    ProcessFlowDiagram: true,
+                    DGIMN: getDGIMN,
+                }
+            }
+        });
         dispatch({
             type: 'overview/querydatalist',
             payload: {
-                map: true,
-                pollutantTypes: this.state.pollutantTypeCode,
-                ProcessFlowDiagram: true,
-                DGIMN: getDGIMN,
             }
         });
-      
-        // dispatch({
-        //     type: 'points/queryrealparam',
-        //     payload: {
-        //         dgimn: getDGIMN
-        //     }
-        // });
     }
     getStatusImg = (value) => {
         if (value === 0) {
@@ -86,44 +87,63 @@ export default class ProcessFlowDiagram extends Component {
     //重新加载
     searchData = (pollutantTypeCode, searchName) => {
         var getDGIMN = localStorage.getItem('DGIMN')
-        if (getDGIMN === null) {
-         //   getDGIMN = '[object Object]';
-        }
+        this.updateState({
+            treeDataParameter: {
+                ...this.props.treeDataParameter,
+                ...{
+                    map: true,
+                    pollutantTypes: pollutantTypeCode,
+                    ProcessFlowDiagram: true,
+                    DGIMN: getDGIMN,
+                    pointName: searchName,
+                    search: true,
+                }
+            }
+        });
         this.props.dispatch({
             type: 'overview/querydatalist',
             payload: {
-                map: true,
-                pollutantTypes: pollutantTypeCode,
-                ProcessFlowDiagram: true,
-                pointName: searchName,
-                DGIMN: getDGIMN,
-                search: true,
+                // map: true,
+                // pollutantTypes: pollutantTypeCode,
+                // ProcessFlowDiagram: true,
+                // pointName: searchName,
+                // DGIMN: getDGIMN,
+                // search: true,
                 callback: (data) => {
-                    if (data !== null) {
-                        const existdata = data.find((value, index, arr) => {
-                            return value.DGIMN == getDGIMN
-                        });
-                        if (existdata == undefined) {
-                      
-                            this.props.dispatch({
-                                type: 'points/queryrealparam',
-                                payload: {
-                                    dgimn: "1"
-                                }
-                            });
-                        }
-                        else {
-                            this.props.dispatch({
-                                type: 'points/queryrealparam',
-                                payload: {
-                                    dgimn: getDGIMN
-                                }
-                            });
-                        }
-                    }
+                    // if (data !== null) {
+                    //     const existdata = data.find((value, index, arr) => {
+                    //         return value.DGIMN == getDGIMN
+                    //     });
+                    //     if (existdata == undefined) {
+
+                    //         this.props.dispatch({
+                    //             type: 'points/queryrealparam',
+                    //             payload: {
+                    //                 dgimn: "1"
+                    //             }
+                    //         });
+                    //     }
+                    //     else {
+                    //         this.props.dispatch({
+                    //             type: 'points/queryrealparam',
+                    //             payload: {
+                    //                 dgimn: getDGIMN
+                    //             }
+                    //         });
+                    //     }
+                    // }
 
                 }
             },
+        });
+    }
+    /**
+ * 更新model中的state
+*/
+    updateState = (payload) => {
+        this.props.dispatch({
+            type: 'overview/updateState',
+            payload: payload,
         });
     }
     treeCilck = (row, key) => {
@@ -217,7 +237,7 @@ export default class ProcessFlowDiagram extends Component {
         return '0';
     }
     render() {
-        const {  loading, operationInfo, stateInfo, paramsInfo, dataInfo, paramstatusInfo, pollutantTypelist, treedataloading, datalist, pollutantTypeloading } = this.props;
+        const { loading, operationInfo, stateInfo, paramsInfo, dataInfo, paramstatusInfo, pollutantTypelist, treedataloading, datalist, pollutantTypeloading } = this.props;
         const { match } = this.props;
         let DGIMN = localStorage.getItem('DGIMN')
         const { scale, translation } = this.state;
@@ -259,7 +279,7 @@ export default class ProcessFlowDiagram extends Component {
                         <Col style={{ width: document.body.clientWidth - 470, float: 'right' }}>
                             <Card bordered={false} style={{ height: 'calc(100vh - 150px)', overflow: 'hidden', marginRight: 10, marginTop: 10 }}>
                                 <div className={style.GyProcessPic} style={{ height: 'calc(100vh - 225px)' }}>
-                                         <GyPic DGIMN={DGIMN} />              
+                                    <GyPic DGIMN={DGIMN} />
                                     }
                             </div>
                             </Card>

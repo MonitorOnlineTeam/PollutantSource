@@ -39,13 +39,19 @@ export default class BdTestHistoryList extends Component {
     componentDidMount() {
         const { dispatch } = this.props;
         var getDGIMN = localStorage.getItem('DGIMN')
+        this.updateState({
+            treeDataParameter: {
+                ...this.props.treeDataParameter,
+                ...{
+                    pollutantTypes: EnumPollutantTypeCode.GAS,
+                    BdHistoryInfoHistoryList: true,
+                    DGIMN: getDGIMN,
+                }
+            }
+        });
         dispatch({
             type: 'overview/querydatalist',
             payload: {
-                map: true,
-                pollutantTypes: this.state.pollutantTypeCode,
-                BdHistoryInfoHistoryRecord:true,
-                DGIMN: getDGIMN,
             }
         });
     }
@@ -71,20 +77,39 @@ export default class BdTestHistoryList extends Component {
     //重新加载
     searchData = (pollutantTypeCode, searchName) => {
         var getDGIMN = localStorage.getItem('DGIMN')
+        this.updateState({
+            treeDataParameter: {
+                ...this.props.treeDataParameter,
+                ...{
+                    pollutantTypes: pollutantTypeCode,
+                    pointName: searchName,
+                    BdHistoryInfoHistoryList:false
+                }
+            }
+        });
         this.props.dispatch({
             type: 'overview/querydatalist',
             payload: {
-                pollutantTypes: pollutantTypeCode,
-                pointName: searchName,
-                callback: (data) => {
-                }
+                // pollutantTypes: pollutantTypeCode,
+                // pointName: searchName,
+                // callback: (data) => {
+                // }
             },
+        });
+    }
+    /**
+* 更新model中的state
+*/
+    updateState = (payload) => {
+        this.props.dispatch({
+            type: 'overview/updateState',
+            payload: payload,
         });
     }
     treeCilck = (row) => {
         this.props.dispatch({
             type: 'maintenancelist/updateState',
-            payload: {DGIMN:row.DGIMN}
+            payload: { DGIMN: row.DGIMN }
         });
         localStorage.setItem('DGIMN', row.DGIMN);
         this.props.dispatch({
@@ -115,34 +140,34 @@ export default class BdTestHistoryList extends Component {
                     { Name: '校验测试记录', Url: '' }
                 ]
             }>
-            <div className={styles.cardTitle}>
-                <Row>
-                    <Col>
-                        <div style={{
-                            width: 450,
-                            position: 'absolute',
-                            borderRadius: 10
-                        }}
-                        >
-                            <div style={{ marginLeft: 5, marginTop: 5 }}>
-                                <div><SearchInput
-                                    onSerach={this.onSerach}
-                                    style={{ marginTop: 5, marginBottom: 5, width: 400 }} searchName="排口名称" /></div>
-                                <div style={{ marginTop: 5 }}>
-                                    <TreeCardContent style={{ overflow: 'auto', width: 400, background: '#fff' }}
-                                        getHeight='calc(100vh - 200px)'
-                                        pollutantTypeloading={this.props.pollutantTypeloading}
-                                        getStatusImg={this.getStatusImg} isloading={this.props.treedataloading}
-                                        treeCilck={this.treeCilck} treedatalist={this.props.datalist} PollutantType={this.state.pollutantTypeCode} ifSelect={true} />
+                <div className={styles.cardTitle}>
+                    <Row>
+                        <Col>
+                            <div style={{
+                                width: 450,
+                                position: 'absolute',
+                                borderRadius: 10
+                            }}
+                            >
+                                <div style={{ marginLeft: 5, marginTop: 5 }}>
+                                    <div><SearchInput
+                                        onSerach={this.onSerach}
+                                        style={{ marginTop: 5, marginBottom: 5, width: 400 }} searchName="排口名称" /></div>
+                                    <div style={{ marginTop: 5 }}>
+                                        <TreeCardContent style={{ overflow: 'auto', width: 400, background: '#fff' }}
+                                            getHeight='calc(100vh - 200px)'
+                                            pollutantTypeloading={this.props.pollutantTypeloading}
+                                            getStatusImg={this.getStatusImg} isloading={this.props.treedataloading}
+                                            treeCilck={this.treeCilck} treedatalist={this.props.datalist} PollutantType={this.state.pollutantTypeCode} ifSelect={true} />
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </Col>
-                    <Col style={{ width: document.body.clientWidth - 470, height: 'calc(100vh - 150px)', float: 'right',marginTop:'11px' }}>
-                    <BdTestHistoryListContent  pointcode={localStorage.getItem('DGIMN')} viewtype="no" height="calc(100vh - 360px)" operation="menu/intelligentOperation"/>
-                    </Col>
-                </Row>
-            </div>
+                        </Col>
+                        <Col style={{ width: document.body.clientWidth - 470, height: 'calc(100vh - 150px)', float: 'right', marginTop: '11px' }}>
+                            <BdTestHistoryListContent pointcode={localStorage.getItem('DGIMN')} viewtype="no" height="calc(100vh - 360px)" operation="menu/intelligentOperation" />
+                        </Col>
+                    </Row>
+                </div>
             </MonitorContent>
         );
     }

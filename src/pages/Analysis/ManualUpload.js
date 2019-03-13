@@ -129,22 +129,6 @@ export default class ManualUpload extends Component {
         if (getDGIMN === null) {
             getDGIMN = '[object Object]';
         }
-        // //点位列表
-        // this.props.dispatch({
-        //     type: 'overview/querydatalist',
-        //     payload: {
-        //         RunState: this.state.TabsSelect,
-        //         pollutantTypes: this.state.pollutantTypeCode,
-        //         change: true, //当页面刷新时的条件
-        //         map: true, manualUpload: true,
-        //         pageIndex: this.props.pageIndex,
-        //         pageSize: this.props.pageSize,
-        //         BeginTime: this.state.rangeDate[0].format('YYYY-MM-DD 00:00:00'),
-        //         EndTime: this.state.rangeDate[1].format('YYYY-MM-DD 23:59:59'),
-        //         pollutantCode: this.state.SelectHandleChange,
-        //         DGIMN: getDGIMN,
-        //     }
-        // });
 
     }
     getStatusImg = (value) => {
@@ -322,43 +306,6 @@ export default class ManualUpload extends Component {
             },
         });
     }
-    // changeTabList = (value) => {
-    //     var getDGIMN = localStorage.getItem('DGIMN')
-    //     if (getDGIMN === null) {
-    //         getDGIMN = '[object Object]';
-    //     }
-    //     this.setState({ TabsSelect: value })
-    //     //点位列表
-    //     this.props.dispatch({
-    //         type: 'overview/querydatalist',
-    //         payload: {
-    //             pointName: this.state.pointName,
-    //             RunState: value,
-    //             pollutantTypes: this.state.pollutantTypeCode,
-    //             map: true, manualUpload: true,
-    //             pageIndex: this.props.pageIndex,
-    //             pageSize: this.props.pageSize,
-    //             BeginTime: this.state.rangeDate[0].format('YYYY-MM-DD 00:00:00'),
-    //             EndTime: this.state.rangeDate[1].format('YYYY-MM-DD 23:59:59'),
-    //             pollutantCode: this.state.SelectHandleChange,
-    //             DGIMN: getDGIMN,
-    //             search: true,
-    //             callback: (data) => {
-    //                 if (data !== null) {
-    //                     const existdata = data.find((value, index, arr) => {
-    //                         return value.DGIMN == getDGIMN
-    //                     });
-    //                     if (existdata === undefined) {
-    //                         this.GetManualSupplementList('1', this.state.SelectHandleChange, this.state.rangeDate[0].format('YYYY-MM-DD 00:00:00'), this.state.rangeDate[1].format('YYYY-MM-DD 23:59:59'), this.props.pageIndex, this.props.pageSize, this.state.pointName);
-    //                     }
-    //                     else {
-    //                         this.GetManualSupplementList(getDGIMN, this.state.SelectHandleChange, this.state.rangeDate[0].format('YYYY-MM-DD 00:00:00'), this.state.rangeDate[1].format('YYYY-MM-DD 23:59:59'), this.props.pageIndex, this.props.pageSize, this.state.pointName);
-    //                     }
-    //                 }
-    //             }
-    //         }
-    //     });
-    // }
     searchPointbyPointName = (value) => {
         this.setState({
             pointName: value
@@ -507,20 +454,6 @@ export default class ManualUpload extends Component {
                             }}
                             >
                                 <div style={{ marginBottom: 8, marginTop: 8 }}>
-                                    {/* <Select
-                                        placeholder="监测点类型"
-                                        style={{ width: 190 }}
-                                        onChange={this.changeTabList}
-                                    >
-                                        <Option value="2">手动</Option>
-                                        <Option value="1">自动</Option>
-                                    </Select>
-                                    <Divider type="vertical" />
-                                    <Search placeholder="排口名称"
-                                        onSearch={
-                                            this.searchPointbyPointName
-                                        }
-                                        style={{ width: 190 }} /> */}
                                     <SearchInput
                                         onSerach={this.searchPointbyPointName}
                                         style={{ marginTop: 5, marginBottom: 5, width: 400 }} searchName="排口名称" />

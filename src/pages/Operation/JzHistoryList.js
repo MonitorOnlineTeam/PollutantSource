@@ -39,13 +39,19 @@ export default class JzHistoryList extends Component {
     componentDidMount() {
         const { dispatch } = this.props;
         var getDGIMN = localStorage.getItem('DGIMN')
+        this.updateState({
+            treeDataParameter: {
+                ...this.props.treeDataParameter,
+                ...{
+                    pollutantTypes: EnumPollutantTypeCode.GAS,
+                    JzHistoryList: true,
+                    DGIMN: getDGIMN,
+                }
+            }
+        });
         dispatch({
             type: 'overview/querydatalist',
             payload: {
-                map: true,
-                pollutantTypes: this.state.pollutantTypeCode,
-                JzHistoryRecord:true,
-                DGIMN: getDGIMN,
             }
         });
     }
@@ -71,20 +77,39 @@ export default class JzHistoryList extends Component {
     //重新加载
     searchData = (pollutantTypeCode, searchName) => {
         var getDGIMN = localStorage.getItem('DGIMN')
+        this.updateState({
+            treeDataParameter: {
+                ...this.props.treeDataParameter,
+                ...{
+                    pollutantTypes: pollutantTypeCode,
+                    pointName: searchName,
+                    JzHistoryList:false
+                }
+            }
+        });
         this.props.dispatch({
             type: 'overview/querydatalist',
             payload: {
-                pollutantTypes: pollutantTypeCode,
-                pointName: searchName,
+                // pollutantTypes: pollutantTypeCode,
+                // pointName: searchName,
                 callback: (data) => {
                 }
             },
         });
     }
+    /**
+ * 更新model中的state
+*/
+    updateState = (payload) => {
+        this.props.dispatch({
+            type: 'overview/updateState',
+            payload: payload,
+        });
+    }
     treeCilck = (row) => {
         this.props.dispatch({
             type: 'maintenancelist/updateState',
-            payload: {DGIMN:row.DGIMN}
+            payload: { DGIMN: row.DGIMN }
         });
         localStorage.setItem('DGIMN', row.DGIMN);
         this.props.dispatch({
@@ -138,8 +163,8 @@ export default class JzHistoryList extends Component {
                                 </div>
                             </div>
                         </Col>
-                        <Col style={{ width: document.body.clientWidth - 470, height: 'calc(100vh - 150px)', float: 'right' ,marginTop:'11px'}}>
-                        <JzHistoryListContent  pointcode={localStorage.getItem('DGIMN')} viewtype="no" height="calc(100vh - 360px)" operation="menu/intelligentOperation"/>
+                        <Col style={{ width: document.body.clientWidth - 470, height: 'calc(100vh - 150px)', float: 'right', marginTop: '11px' }}>
+                            <JzHistoryListContent pointcode={localStorage.getItem('DGIMN')} viewtype="no" height="calc(100vh - 360px)" operation="menu/intelligentOperation" />
                         </Col>
                     </Row>
                 </div>

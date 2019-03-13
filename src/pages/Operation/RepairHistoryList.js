@@ -22,7 +22,8 @@ import moment from 'moment';
 @connect(({ overview, loading }) => ({
     datalist: overview.data,
     pollutantTypeloading: loading.effects['overview/getPollutantTypeList'],
-    treedataloading: loading.effects['overview/querydatalist']
+    treedataloading: loading.effects['overview/querydatalist'],
+    treeDataParameter: overview.treeDataParameter,
 }))
 /*
 页面：维修历史记录
@@ -31,23 +32,26 @@ export default class RepairHistoryList extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            pollutantTypeCode: EnumPollutantTypeCode.GAS,
             rangeDate: [moment(moment(new Date()).subtract(3, 'month').format('YYYY-MM-DD 00:00:00')), moment(moment(new Date()).format('YYYY-MM-DD 23:59:59'))], // 最近3月
         };
     }
     componentDidMount() {
         const { dispatch } = this.props;
         var getDGIMN = localStorage.getItem('DGIMN')
-        dispatch({
-            type: 'overview/querydatalist',
-            payload: {
-                map: true,
-                pollutantTypes: this.state.pollutantTypeCode,
-                RepairHistoryList:true,
-                DGIMN: getDGIMN,
+        this.updateState({
+            treeDataParameter: {
+                ...this.props.treeDataParameter,
+                ...{
+                    pollutantTypes: EnumPollutantTypeCode.GAS,
+                    RepairHistoryList: true,
+                    DGIMN: getDGIMN,
+                }
             }
         });
-
+        dispatch({
+            type: 'overview/querydatalist',
+            payload: {},
+        });
     }
 
     //查询
@@ -55,8 +59,7 @@ export default class RepairHistoryList extends Component {
         this.setState({
             searchName: value
         })
-        const { pollutantTypeCode } = this.state;
-        this.searchData(pollutantTypeCode, value);
+        this.searchData(EnumPollutantTypeCode.GAS, value);
     }
     getStatusImg = (value) => {
         if (value === 0) {
@@ -70,21 +73,35 @@ export default class RepairHistoryList extends Component {
     }
     //重新加载
     searchData = (pollutantTypeCode, searchName) => {
-        var getDGIMN = localStorage.getItem('DGIMN')
+        // var getDGIMN = localStorage.getItem('DGIMN')
+        this.updateState({
+            treeDataParameter: {
+                ...this.props.treeDataParameter,
+                ...{
+                    pollutantTypes: pollutantTypeCode,
+                    pointName: searchName,
+                    RepairHistoryList:false
+                }
+            }
+        });
         this.props.dispatch({
             type: 'overview/querydatalist',
-            payload: {
-                pollutantTypes: pollutantTypeCode,
-                pointName: searchName,
-                callback: (data) => {
-                }
-            },
+            payload: {},
+        });
+    }
+    /**
+     * 更新model中的state
+    */
+    updateState = (payload) => {
+        this.props.dispatch({
+            type: 'overview/updateState',
+            payload: payload,
         });
     }
     treeCilck = (row, key) => {
         this.props.dispatch({
             type: 'maintenancelist/updateState',
-            payload: {DGIMN:row.DGIMN}
+            payload: { DGIMN: row.DGIMN }
         });
         localStorage.setItem('DGIMN', row.DGIMN);
         this.props.dispatch({
@@ -114,34 +131,34 @@ export default class RepairHistoryList extends Component {
                     { Name: '维修记录表', Url: '' }
                 ]
             }>
-            <div className={styles.cardTitle}>
-                <Row>
-                    <Col>
-                        <div style={{
-                            width: 450,
-                            position: 'absolute',
-                            borderRadius: 10
-                        }}
-                        >
-                            <div style={{ marginLeft: 5, marginTop: 5 }}>
-                                <div><SearchInput
-                                    onSerach={this.onSerach}
-                                    style={{ marginTop: 5, marginBottom: 5, width: 400 }} searchName="排口名称" /></div>
-                                <div style={{ marginTop: 5 }}>
-                                    <TreeCardContent style={{ overflow: 'auto', width: 400, background: '#fff' }}
-                                        getHeight='calc(100vh - 200px)'
-                                        pollutantTypeloading={this.props.pollutantTypeloading}
-                                        getStatusImg={this.getStatusImg} isloading={this.props.treedataloading}
-                                        treeCilck={this.treeCilck} treedatalist={this.props.datalist} PollutantType={this.state.pollutantTypeCode} ifSelect={true} />
+                <div className={styles.cardTitle}>
+                    <Row>
+                        <Col>
+                            <div style={{
+                                width: 450,
+                                position: 'absolute',
+                                borderRadius: 10
+                            }}
+                            >
+                                <div style={{ marginLeft: 5, marginTop: 5 }}>
+                                    <div><SearchInput
+                                        onSerach={this.onSerach}
+                                        style={{ marginTop: 5, marginBottom: 5, width: 400 }} searchName="排口名称" /></div>
+                                    <div style={{ marginTop: 5 }}>
+                                        <TreeCardContent style={{ overflow: 'auto', width: 400, background: '#fff' }}
+                                            getHeight='calc(100vh - 200px)'
+                                            pollutantTypeloading={this.props.pollutantTypeloading}
+                                            getStatusImg={this.getStatusImg} isloading={this.props.treedataloading}
+                                            treeCilck={this.treeCilck} treedatalist={this.props.datalist} PollutantType={this.state.pollutantTypeCode} ifSelect={true} />
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </Col>
-                    <Col style={{ width: document.body.clientWidth - 470, height: 'calc(100vh - 150px)', float: 'right',marginTop:'11px' }}>
-                    <RepairHistoryListContent  pointcode={localStorage.getItem('DGIMN')} viewtype="no" height="calc(100vh - 360px)" operation="menu/intelligentOperation"/>
-                    </Col>
-                </Row>
-            </div>
+                        </Col>
+                        <Col style={{ width: document.body.clientWidth - 470, height: 'calc(100vh - 150px)', float: 'right', marginTop: '11px' }}>
+                            <RepairHistoryListContent pointcode={localStorage.getItem('DGIMN')} viewtype="no" height="calc(100vh - 360px)" operation="menu/intelligentOperation" />
+                        </Col>
+                    </Row>
+                </div>
             </MonitorContent>
         );
     }

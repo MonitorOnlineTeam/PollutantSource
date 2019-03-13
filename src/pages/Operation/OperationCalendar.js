@@ -22,6 +22,7 @@ import TreeStatus from '../../components/OverView/TreeStatus';
 import TreeCard from '../../components/OverView/TreeCard';
 import TreeCardContent from '../../components/OverView/TreeCardContent';
 import MonitorContent from '../../components/MonitorContent/index';
+import { EnumPollutantTypeCode } from '../../utils/enum';
 
 @connect(({ task, overview, workbenchmodel, loading }) => ({
     loading: loading.effects['workbenchmodel/getOperationCalendarData'],
@@ -38,7 +39,6 @@ export default class OperationCalendar extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            pollutantTypeCode: "2",
             defaultDateValue: moment(),
             dateValue: moment(),
             dateType: 'month',
@@ -48,13 +48,20 @@ export default class OperationCalendar extends Component {
     componentDidMount() {
         const { dispatch } = this.props;
         var getDGIMN = localStorage.getItem('DGIMN')
+        this.updateState({
+            treeDataParameter: {
+                ...this.props.treeDataParameter,
+                ...{
+                    map: true,
+                    pollutantTypes: EnumPollutantTypeCode.GAS,
+                    OperationCalendar: true,
+                    DGIMN: getDGIMN,
+                }
+            }
+        });
         dispatch({
             type: 'overview/querydatalist',
             payload: {
-                map: true,
-                pollutantTypes: this.state.pollutantTypeCode,
-                OperationCalendar: true,
-                DGIMN: getDGIMN,
             }
         });
     }
@@ -89,15 +96,22 @@ export default class OperationCalendar extends Component {
     //重新加载
     searchData = (pollutantTypeCode, searchName) => {
         var getDGIMN = localStorage.getItem('DGIMN')
+        this.updateState({
+            treeDataParameter: {
+                ...this.props.treeDataParameter,
+                ...{
+                    map: true,
+                    pollutantTypes: pollutantTypeCode,
+                    OperationCalendar: true,
+                    DGIMN: getDGIMN,
+                    pointName: searchName,
+                    search: true,
+                }
+            }
+        });
         this.props.dispatch({
             type: 'overview/querydatalist',
             payload: {
-                map: true,
-                pollutantTypes: pollutantTypeCode,
-                pointName: searchName,
-                OperationCalendar: true,
-                DGIMN: getDGIMN,
-                search: true,
                 callback: (data) => {
                     if (data !== null) {
                         const existdata = data.find((value, index, arr) => {
@@ -125,11 +139,11 @@ export default class OperationCalendar extends Component {
         this.GetData(row.DGIMN);
     };
     /**
-   * 更新model中的state
-   */
+* 更新model中的state
+*/
     updateState = (payload) => {
         this.props.dispatch({
-            type: 'workbenchmodel/updateState',
+            type: 'overview/updateState',
             payload: payload,
         });
     }
@@ -235,7 +249,7 @@ export default class OperationCalendar extends Component {
             }
             else {
                 this.getdataByDateTime(date);
- 
+
             }
         }
     }
@@ -249,7 +263,7 @@ export default class OperationCalendar extends Component {
             }
         }
     }
-    getdataByDateTime=(date)=>{
+    getdataByDateTime = (date) => {
         let begintimes = date.format('YYYY-01-01 00:00:00');
         let endtimes = moment(begintimes).add(1, 'years').format('YYYY-01-01 00:00:00');
         this.updateState({
@@ -277,23 +291,10 @@ export default class OperationCalendar extends Component {
     render() {
         const { pollutantTypelist, treedataloading, datalist, pollutantTypeloading } = this.props;
         const { detailed, statusImg, selectpoint, pointName } = this.state;
-        var dataSource = [];
         var spining = true;
+        debugger
         if (!this.props.treedataloading && !this.props.pollutantTypeloading && !this.props.loading) {
             spining = this.props.loading;
-            dataSource = this.props.HistoryRepairHistoryRecods === null ? null : this.props.HistoryRepairHistoryRecods;
-        }
-        if (this.props.isloading) {
-            return (<Spin
-                style={{
-                    width: '100%',
-                    height: 'calc(100vh/2)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center'
-                }}
-                size="large"
-            />);
         }
         return (
             <MonitorContent {...this.props} breadCrumbList={

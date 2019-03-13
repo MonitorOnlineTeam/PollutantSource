@@ -22,22 +22,13 @@ const RadioGroup = Radio.Group;
 const { RangePicker } = DatePicker;
 
 @connect(({ loading, analysisdata }) => ({
-    reportlist: analysisdata.reportlist,
     loading: loading.effects['analysisdata/queryreportlist'],
+    queryreportParameters: analysisdata.queryreportParameters,
 }))
 class MonitoringReport extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            mode: ['year', 'year'],
-            rangeDate: [moment(moment(new Date()).format('YYYY-01-01')).add(-1, 'year').add(8, 'hours'), moment(new Date()).add(8, 'hours')],
-            radiovalue: 'year',
-            format: 'YYYY',
-            reportname: null,
-            numPages: null,
-            pageNumber: 1,
-            isfirst: true,
-            catchDate: []
         };
     }
 
@@ -45,121 +36,124 @@ class MonitoringReport extends Component {
         this.props.dispatch({
             type: 'analysisdata/queryreportlist',
             payload: {
-                beginTime: this.state.rangeDate[0],
-                endTime: this.state.rangeDate[1]
             }
         });
     }
-
+    /**
+     * 更新model中的state
+    */
+    updateState = (payload) => {
+        this.props.dispatch({
+            type: 'analysisdata/updateState',
+            payload: payload,
+        });
+    }
     handlePanelChange = (value, mode) => {
         if (value) {
-            this.setState({
-                rangeDate: value,
-                mode: ['year', 'year'],
+            this.updateState({
+                queryreportParameters: {
+                    ...this.props.queryreportParameters,
+                    ...{
+                        rangeDate: value
+                    }
+                }
             });
         }
     }
 
     onOpenChange = (status) => {
-        let { catchDate, rangeDate } = this.state;
-        let { dispatch } = this.props;
-        //日期窗口关闭是触发事件
+        let { queryreportParameters, dispatch } = this.props;
+        //日期窗口关闭时触发事件
         if (!status) {
-            if (rangeDate[0] > rangeDate[1]) {
-                this.setState({ rangeDate: [moment(moment(new Date()).format('YYYY-01-01')).add(-1, 'year').add(8, 'hours'), moment(new Date()).add(8, 'hours')] });
+            if (queryreportParameters.rangeDate[0] > queryreportParameters.rangeDate[1]) {
+                this.updateState({
+                    queryreportParameters: {
+                        ...this.props.queryreportParameters,
+                        ...{
+                            rangeDate: [moment(moment(new Date()).format('YYYY-01-01')).add(-1, 'year').add(8, 'hours'), moment(new Date()).add(8, 'hours')]
+                        }
+                    }
+                });
                 message.error('开始时间不能大于结束时间！');
-            } else if (catchDate.length === 0) {
-                if (rangeDate[0].format('YYYY-01-01') !== moment(moment(new Date()).format('YYYY-01-01')).add(-1, 'year') && rangeDate[1].format('YYYY-01-01') !== moment(new Date()).format('YYYY-01-01')) {
+            } else if (queryreportParameters.length === 0) {
+                if (queryreportParameters.rangeDate[0].format('YYYY-01-01') !== moment(moment(new Date()).format('YYYY-01-01')).add(-1, 'year') && queryreportParameters.rangeDate[1].format('YYYY-01-01') !== moment(new Date()).format('YYYY-01-01')) {
+                    this.updateState({
+                        queryreportParameters: {
+                            ...this.props.queryreportParameters,
+                            ...{
+                                catchDate: [queryreportParameters.rangeDate[0], queryreportParameters.rangeDate[1]]
+                            }
+                        }
+                    });
                     dispatch({
                         type: 'analysisdata/queryreportlist',
                         payload: {
-                            beginTime: rangeDate[0],
-                            endTime: rangeDate[1]
                         }
                     });
                 }
-                this.setState({ catchDate: [rangeDate[0], rangeDate[1]] });
-            } else if (rangeDate[0] !== catchDate[0] && rangeDate[1] !== catchDate[1]) {
+
+            } else if (queryreportParameters.rangeDate[0] !== queryreportParameters.catchDate[0] && queryreportParameters.rangeDate[1] !== queryreportParameters.catchDate[1]) {
+                this.updateState({
+                    queryreportParameters: {
+                        ...this.props.queryreportParameters,
+                        ...{
+                            catchDate: [queryreportParameters.rangeDate[0], queryreportParameters.rangeDate[1]]
+                        }
+                    }
+                });
                 dispatch({
                     type: 'analysisdata/queryreportlist',
                     payload: {
-                        beginTime: rangeDate[0],
-                        endTime: rangeDate[1]
                     }
                 });
-                this.setState({ catchDate: [rangeDate[0], rangeDate[1]] });
+
             }
         }
     }
-
-    radioChange = (value) => {
-        const radiovalue = value.target.value;
-        let format;
-        let mode;
-        switch (radiovalue) {
-            case 1:
-                format = 'YYYY';
-                mode = ['year', 'year'];
-                break;
-            case 2:
-                format = 'YYYY-MM';
-                mode = ['month', 'month'];
-                break;
-            case 3:
-                format = 'YYYY-MM';
-                mode = ['month', 'month'];
-                break;
-        }
-        this.setState(
-            {
-                reportname: null,
-                radiovalue,
-                format,
-                mode,
-                isfirst: true
-            }
-        );
-    }
-
+    //展示右侧PDF文件内容
     showPdf = (reportname) => {
-        this.setState({
-            reportname,
-            isfirst: false
+        this.updateState({
+            queryreportParameters: {
+                ...this.props.queryreportParameters,
+                ...{
+                    reportname: reportname,
+                    isfirst: false
+                }
+            }
         });
     }
 
     getshowpdf = () => {
-        let { isfirst, reportname, radiovalue } = this.state;
-        const { reportlist } = this.props;
-        if (isfirst) {
-            if (reportlist) {
-                switch (radiovalue) {
+        const { queryreportParameters } = this.props;
+        if (queryreportParameters.isfirst) {
+            if (queryreportParameters.reportlist) {
+                switch (queryreportParameters.radiovalue) {
                     case 'year':
-                        if (reportlist.yearlist)
-                            reportname = reportlist.yearlist[0];
+                        if (queryreportParameters.reportlist.yearlist)
+                            queryreportParameters.reportname = queryreportParameters.reportlist.yearlist[0];
                         break;
                     case 'season':
-                        if (reportlist.seasonlist)
-                            reportname = reportlist.seasonlist[0];
+                        if (queryreportParameters.reportlist.seasonlist)
+                            queryreportParameters.reportname = queryreportParameters.reportlist.seasonlist[0];
                         break;
                     case 'month':
-                        if (reportlist.monthlist)
-                            reportname = reportlist.monthlist[0];
+                        if (queryreportParameters.reportlist.monthlist)
+                            queryreportParameters.reportname = queryreportParameters.reportlist.monthlist[0];
                         break;
                     default:
-                        reportname = null;
+                        queryreportParameters.reportname = null;
                         break;
                 }
             }
         }
 
-        let address = annualmonitoringreportaddress + reportname;
+        let address = annualmonitoringreportaddress + queryreportParameters.reportname;
         let height = 'calc(100vh - 259px)';
-        if (!reportname) {
+        if (!queryreportParameters.reportname) {
             address = null;
             height = 70;
         }
-         
+
         return (
             <div>
                 <iframe className={styles.if} style={{ border: 0, width: "100%", height: height }} src={address} />
@@ -169,8 +163,9 @@ class MonitoringReport extends Component {
     }
 
     getreportlist = () => {
-        const list = this.props.reportlist;
-        const type = this.state.radiovalue;
+        const { queryreportParameters } = this.props
+        const list = queryreportParameters.reportlist;
+        const type = queryreportParameters.radiovalue;
         let res = [];
         if (list) {
             if (type == "year" && list.yearlist) {
@@ -201,8 +196,7 @@ class MonitoringReport extends Component {
     }
 
     render() {
-        const { rangeDate, mode, radiovalue, format } = this.state;
-        const { loading, children } = this.props;
+        const { loading, queryreportParameters } = this.props;
         if (this.props.loading) {
             return (<Spin
                 style={{
@@ -231,16 +225,11 @@ class MonitoringReport extends Component {
                         title="自行监测年度报告"
                         extra={
                             <div>
-                                {/* <span>报表类型：</span><RadioGroup value={radiovalue} onChange={this.radioChange}>
-                                    <Radio value="year">年报</Radio>
-                                    <Radio value="season">季报</Radio>
-                                    <Radio value="month">月报</Radio>
-                                </RadioGroup> */}
                                 <RangePicker
                                     style={{ width: 250, marginLeft: 40, textAlign: 'center' }}
-                                    format={format}
-                                    value={rangeDate}
-                                    mode={mode}
+                                    format={queryreportParameters.format}
+                                    value={queryreportParameters.rangeDate}
+                                    mode={queryreportParameters.mode}
                                     onPanelChange={this.handlePanelChange}
                                     onOpenChange={this.onOpenChange}
                                     showTime={true}

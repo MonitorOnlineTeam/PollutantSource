@@ -11,25 +11,18 @@ import MonitorContent from '../../components/MonitorContent/index';
 const confirm = Modal.confirm;
 @connect(({ loading, videolist }) => ({
     ...loading,
-    list: videolist.list,
-    total: videolist.total,
-    pageSize: videolist.pageSize,
-    pageIndex: videolist.pageIndex,
+    videoListParameters: videolist.videoListParameters,
     requstresult: videolist.requstresult,
 }))
 export default class VideoList extends Component {
     constructor(props) {
         super(props);
-
         this.state = {
-            rangeDate: [moment('2018-06-23 00:00:00'), moment('2018-06-25 00:00:00')],
             visible: false,
-            attentionvisible: false,
             type: 'add',
             title: '填写入库单',
             width: 400,
-            expandForm: false,
-            loading: true,
+            data:null,
             pointName: this.props.match.params.pointname,
             footer: <div>
                 <Button key="back" onClick={this.handleCancel}>Return</Button>,
@@ -40,25 +33,39 @@ export default class VideoList extends Component {
         };
     }
 
-    componentWillMount() {
+    componentDidMount() {
         this.onChange();
     }
     onChange = () => {
+        this.updateState({
+            videoListParameters: {
+                ...this.props.videoListParameters,
+                ...{
+                    DGIMN: this.props.match.params.pointcode,
+                    pointName: this.props.match.params.pointname,
+                }
+            }
+        });
         this.props.dispatch({
             type: 'videolist/fetchuserlist',
             payload: {
-                DGIMN: this.props.match.params.pointcode,
             },
         });
-
+    }
+    /**
+   * 更新model中的state
+  */
+    updateState = (payload) => {
+        this.props.dispatch({
+            type: 'analysisdata/updateState',
+            payload: payload,
+        });
     }
     onRef1 = (ref) => {
         this.child = ref;
     }
     onCancel = () => {
-        this.setState({
-            visible: false
-        });
+        this.setState({ visible: false })
         this.onChange();
     }
     // 添加
@@ -82,10 +89,11 @@ export default class VideoList extends Component {
         });
     };
     deleteVideoInfobyIndex = (record) => {
+        const { videoListParameters } = this.props;
         this.props.dispatch({
             type: 'videolist/deleteVideoInfo',
             payload: {
-                DGIMN: this.props.match.params.pointcode,
+                DGIMN: videoListParameters.DGIMN,
                 VedioCamera_ID: record.VedioCamera_ID,
                 VedioDevice_ID: record.VedioDevice_ID,
                 CameraMonitorID: record.CameraMonitorID,
@@ -101,20 +109,8 @@ export default class VideoList extends Component {
             },
         });
     }
-    //加这个有什么意义吗？
-    info() {
-        Modal.info({
-            title: 'This is a notification message',
-            content: (
-                <div>
-                    <p>some messages...some messages...</p>
-                    <p>some messages...some messages...</p>
-                </div>
-            ),
-            onOk() { },
-        });
-    }
     render() {
+        const { videoListParameters } = this.props;
         const columns = [
             { title: '设备名称', dataIndex: 'VedioDevice_Name', key: 'VedioDevice_Name', width: '10%' },
             { title: '相机名称', dataIndex: 'VedioCamera_Name', key: 'VedioCamera_Name', width: '10%' },
@@ -141,7 +137,7 @@ export default class VideoList extends Component {
                         }}>详情</a>
                         <Divider type="vertical" />
                         <a onClick={() => {
-                            this.setState({
+                               this.setState({
                                 visible: true,
                                 type: 'update',
                                 title: '编辑视频信息',
@@ -174,7 +170,7 @@ export default class VideoList extends Component {
                 ]
             }>
                 <div className={styles.cardTitle}>
-                    <Card bordered={false} title={this.props.match.params.pointname} style={{ width: '100%' }}>
+                    <Card bordered={false} title={videoListParameters.pointname} style={{ width: '100%' }}>
                         <Form layout="inline" style={{ marginBottom: 10 }}>
                             <Row gutter={8} >
                                 <Col span={24} >
@@ -200,23 +196,12 @@ export default class VideoList extends Component {
                         </Form>
                         <Table
                             columns={columns}
-                            dataSource={this.props.list}
                             pagination={false}
+                            dataSource={videoListParameters.list}
                             rowKey="VedioCamera_ID"
-                            onRow={(record, index) => {
-                                return {
-                                    onClick: (a, b, c) => {
-                                        this.setState({
-                                            item: record,
-                                            selectedRowKeys: record.VedioCamera_ID
-                                        });
-                                    }, // 点击行
-                                    onMouseEnter: () => { }, // 鼠标移入行
-                                };
-                            }}
                             loading={this.props.effects['videolist/fetchuserlist']}
                             className={styles.dataTable}
-                            size="small"// small middle
+                            size="middle"
                             scroll={{ y: 'calc(100vh - 330px)' }}
                             rowClassName={
                                 (record, index, indent) => {
@@ -229,7 +214,7 @@ export default class VideoList extends Component {
                                 }
                             }
                         />
-                        <Modal
+                     <Modal
                             footer={this.state.footer}
                             destroyOnClose="true"
                             visible={this.state.visible}
@@ -237,7 +222,7 @@ export default class VideoList extends Component {
                             width={this.state.width}
                             onCancel={this.onCancel}>
                             {
-                                this.state.type === 'add' ? <Add onCancels={this.onCancel} dgimn={this.props.match.params.pointcode} name={this.state.pointName} onRef={this.onRef1} /> : this.state.type === 'update' ? <Update onCancels={this.onCancel} dgimn={this.state.DGIMN} item={this.state.data} onRef={this.onRef1} /> : <InfoList onCancels={this.onCancel} dgimn={this.state.DGIMN} item={this.state.data} onRef={this.onRef1} />
+                                this.state.type === 'add' ? <Add onCancels={this.onCancel} dgimn={videoListParameters.DGIMN} name={videoListParameters.pointName} onRef={this.onRef1} /> : this.state.type === 'update' ? <Update onCancels={this.onCancel} dgimn={videoListParameters.DGIMN} item={this.state.data} onRef={this.onRef1} /> : <InfoList onCancels={this.onCancel} dgimn={videoListParameters.DGIMN} item={this.state.data} onRef={this.onRef1} />
                             }
 
                         </Modal>

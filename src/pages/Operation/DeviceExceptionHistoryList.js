@@ -38,14 +38,19 @@ export default class DeviceExceptionListHistoryRecords extends Component {
     componentDidMount() {
         const { dispatch } = this.props;
         var getDGIMN = localStorage.getItem('DGIMN')
+        this.updateState({
+            treeDataParameter: {
+                ...this.props.treeDataParameter,
+                ...{
+                    pollutantTypes: EnumPollutantTypeCode.GAS,
+                    DeviceExceptionListHistoryList: true,
+                    DGIMN: getDGIMN,
+                }
+            }
+        });
         dispatch({
             type: 'overview/querydatalist',
             payload: {
-                map: true,
-                pollutantTypes: this.state.pollutantTypeCode,
-                DeviceExceptionListHistoryRecord: true,
-                DGIMN: getDGIMN,
-
             }
         });
 
@@ -73,14 +78,33 @@ export default class DeviceExceptionListHistoryRecords extends Component {
     //重新加载
     searchData = (pollutantTypeCode, searchName) => {
         var getDGIMN = localStorage.getItem('DGIMN')
+        this.updateState({
+            treeDataParameter: {
+                ...this.props.treeDataParameter,
+                ...{
+                    pollutantTypes: pollutantTypeCode,
+                    pointName: searchName,
+                    DeviceExceptionListHistoryList:false
+                }
+            }
+        });
         this.props.dispatch({
             type: 'overview/querydatalist',
             payload: {
-                pollutantTypes: pollutantTypeCode,
-                pointName: searchName,
+                // pollutantTypes: pollutantTypeCode,
+                // pointName: searchName,
                 callback: (data) => {
                 }
             },
+        });
+    }
+    /**
+* 更新model中的state
+*/
+    updateState = (payload) => {
+        this.props.dispatch({
+            type: 'overview/updateState',
+            payload: payload,
         });
     }
     treeCilck = (row) => {
@@ -139,7 +163,7 @@ export default class DeviceExceptionListHistoryRecords extends Component {
                                 </div>
                             </div>
                         </Col>
-                        <Col style={{ width: document.body.clientWidth - 470, height: 'calc(100vh - 150px)', float: 'right' ,marginTop:'11px'}}>
+                        <Col style={{ width: document.body.clientWidth - 470, height: 'calc(100vh - 150px)', float: 'right', marginTop: '11px' }}>
                             <DeviceExceptionHistoryListContent pointcode={localStorage.getItem('DGIMN')} viewtype="no" height="calc(100vh - 360px)" operation="menu/intelligentOperation" />
                         </Col>
                     </Row>

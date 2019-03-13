@@ -547,8 +547,6 @@ export async function queryreportlist(params) {
 //获取使用文档列表
 export async function GetDocumentationList(params) {
     const body = {
-        beginTime: params.beginTime,
-        endTime: params.endTime,
     };
     const result = await post('/api/rest/PollutantSourceApi/Documentation/GetDocumentationList', body, null);
     return result === null ? { data: null } : result.data;

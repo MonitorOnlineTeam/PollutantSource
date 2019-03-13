@@ -30,13 +30,19 @@ export default class Ywdsjlist extends Component {
     componentDidMount() {
         const { dispatch } = this.props;
         var getDGIMN = localStorage.getItem('DGIMN')
+        this.updateState({
+            treeDataParameter: {
+                ...this.props.treeDataParameter,
+                ...{
+                    pollutantTypes: EnumPollutantTypeCode.GAS,
+                    Ywdsjlist: true,
+                    DGIMN: getDGIMN,
+                }
+            }
+        });
         dispatch({
             type: 'overview/querydatalist',
             payload: {
-                map: true,
-                pollutantTypes: this.state.pollutantTypeCode,
-                Ywdsjlist:true,
-                DGIMN: getDGIMN
             }
         });
     }
@@ -62,7 +68,17 @@ export default class Ywdsjlist extends Component {
     //重新加载
     searchData = (pollutantTypeCode, searchName) => {
         var getDGIMN = localStorage.getItem('DGIMN');
-
+        this.updateState({
+            treeDataParameter: {
+                ...this.props.treeDataParameter,
+                ...{
+                    pollutantTypes: pollutantTypeCode,
+                    search: true,
+                    pointName: searchName,
+                    Ywdsjlist: true,
+                }
+            }
+        });
         this.props.dispatch({
             type: 'overview/querydatalist',
             payload: {
@@ -70,16 +86,24 @@ export default class Ywdsjlist extends Component {
                 pointName: searchName,
                 search: true,
                 callback: (data) => {
-                   
+
                 }
             },
         });
     }
-
+    /**
+     * 更新model中的state
+    */
+    updateState = (payload) => {
+        this.props.dispatch({
+            type: 'overview/updateState',
+            payload: payload,
+        });
+    }
     treeCilck = (row, key) => {
         this.props.dispatch({
             type: 'tasklist/updateState',
-            payload: {DGIMN:row.DGIMN}
+            payload: { DGIMN: row.DGIMN }
         });
         localStorage.setItem('DGIMN', row.DGIMN);
         this.props.dispatch({
@@ -123,8 +147,8 @@ export default class Ywdsjlist extends Component {
                                 </div>
                             </div>
                         </Col>
-                        <Col style={{ width: document.body.clientWidth - 470, height: 'calc(100vh - 150px)', float: 'right',marginTop:'10px' }}>
-                            <YwdsjlistContent  pointcode={localStorage.getItem('DGIMN')} taskfrom="operationywdsjlist" viewtype="no" height="calc(100vh - 248px)"/>
+                        <Col style={{ width: document.body.clientWidth - 470, height: 'calc(100vh - 150px)', float: 'right', marginTop: '10px' }}>
+                            <YwdsjlistContent pointcode={localStorage.getItem('DGIMN')} taskfrom="operationywdsjlist" viewtype="no" height="calc(100vh - 248px)" />
                         </Col>
                     </Row>
                 </div>
