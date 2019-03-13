@@ -21,9 +21,12 @@ const TabPane = Tabs.TabPane;
     maploading:loading.effects['overview/queryentdetail'],
 
     //默认污染物类型
-    pollutantTypeCode:overview.selectpollutantTypeCode
+    selectpollutantTypeCode:overview.selectpollutantTypeCode,
+    //数据一览后台参数
+    dataOverview:overview.dataOverview,
+    mapdetailParams:overview.mapdetailParams,
+    
 }))
-
 class MapTreeList extends Component {
     constructor(props) {
         super(props);
@@ -31,8 +34,6 @@ class MapTreeList extends Component {
             searchName:null
         };
     }
-
-
     //获取当期数据的时间
     getTimeImgSpan=()=>{
         const {datalist}=this.props;
@@ -46,92 +47,60 @@ class MapTreeList extends Component {
             );
         }
     }
-
       //树的点击事件
       treeCilck = (row) => {
-          const { dispatch } = this.props;
-          const pollutantInfoList=mainpoll.find(value=>value.pollutantCode==row.pollutantTypeCode);
+          const { dispatch,mapdetailParams,selectpollutantTypeCode } = this.props;
+          debugger;
+          const pollutantInfoList=mainpoll.find(value=>value.pollutantCode==selectpollutantTypeCode);
           const defaultpollutantCode=pollutantInfoList.pollutantInfo[0].pollutantCode;
           const defaultpollutantName=pollutantInfoList.pollutantInfo[0].pollutantName;
           dispatch({
-              type: 'overview/querydetailpollutant',
-              payload: {
-                  dataType: 'HourData',
-                  dgimn: row.DGIMN,
-                  pollutantTypeCode:row.pollutantTypeCode,
-                  datatype: 'hour',
-                  dgimn: row.DGIMN,
-                  pollutantCodes: defaultpollutantCode,
-                  pollutantName: defaultpollutantName,
-                  endTime: moment(new Date()).format('YYYY-MM-DD HH:00:00'),
-                  beginTime: moment(new Date()).add('hour', -23).format('YYYY-MM-DD HH:00:00'),
-                  stop:row.stop
-              }
-          });
-
-
+            type:'overview/updateState',
+            payload:{
+                    selectpoint:row,
+                    selectpollutantTypeCode:`${row.pollutantTypeCode}`,
+                    mapdetailParams:{
+                        ...mapdetailParams,
+                        pollutantCode:defaultpollutantCode,
+                        pollutantName:defaultpollutantName
+                    }
+            }
+          })
           this.setState({
-              visible: true,
-              position: {
-                  latitude: row.latitude,
-                  longitude: row.longitude,
-              },
-              selectpoint: row,
-              detailed: true,
-              pointName: row.pointName,
-          });
-
-          dispatch({
-              type: 'overview/updateState',
-              payload: {
-                  selectpoint: row,
-                  selectpollutantTypeCode:`${row.pollutantTypeCode}`
-              },
+            visible: true,
+            pointName:row.pointName,
+            position: {
+                latitude: row.latitude,
+                longitude: row.longitude,
+            },
           });
       };
 
-
-      //当前选中的污染物类型
-      getNowPollutantType=(key)=>{
-          const {dispatch}=this.props;
-          dispatch({
-              type: 'overview/updateState',
-              payload: {
-                  selectpollutantTypeCode:`${key}`
-              },
-          });
-          const {searchName}=this.state;
-          this.reloadData(key,searchName);
-      }
-
     //搜索框查询
     onSerach=(value)=>{
-        const {dispatch}=this.props;
-        dispatch({
-            type: 'overview/updateState',
-            payload: {
-                searchName:value
-            },
-        });
-        const {pollutantTypeCode}=this.props;
-        this.reloadData(pollutantTypeCode,value);
+        const {dispatch,dataOverview}=this.props;
+        dataOverview.pointName=value;
+        this.reloadData(dataOverview);
     }
 
      //重新加载
-     reloadData=(pollutantTypeCode,searchName)=>{
+     reloadData=(dataOverview)=>{
+         const {dispatch}=this.props;
+         dispatch({
+            type:'overview/updateState',
+            payload:{
+                dataOverview:dataOverview
+            } 
+         })
          this.props.dispatch({
              type: 'overview/querydatalist',
              payload: {
                  map: true,
-                 pollutantTypes:pollutantTypeCode,
-                 pointName:searchName
              },
          });
      }
-
      render() {
-         const {maploading,pollutantTypeCode}=this.props;
-  
+         const {maploading,selectpollutantTypeCode}=this.props;
          if(maploading) {
              return '';
          }
@@ -166,7 +135,7 @@ class MapTreeList extends Component {
                  <div>
                      <div className={styles.treelist} style={{ width: '400px',marginTop: 5,background:'#fff' }}>
                         <PointTree noselect={true} style={{ overflow: 'auto', width: 400, background: '#fff' }} getHeight='calc(100vh - 290px)' 
-                           treeCilck={this.treeCilck} PollutantType={pollutantTypeCode}
+                           treeCilck={this.treeCilck} PollutantType={selectpollutantTypeCode}
                         />
                      </div>
                  </div>
