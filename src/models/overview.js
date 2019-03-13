@@ -10,22 +10,22 @@ import {
 } from 'antd';
 import { mainpollutantInfo, mainpoll, enterpriceid } from "../config";
 import {
-    querypollutanttypecode, querydatalist, querylastestdatalist,
-    queryhistorydatalist, querypollutantlist, addtaskinfo, queryurge, getPollutantTypeList,
+      addtaskinfo,  
     querypolluntantentinfolist
 } from '../services/api';
-// import { mainpollutantInfo, mainpoll } from "../config";
+import {
+    querypollutanttypecode,getPollutantTypeList,
+    querydatalist,querylastestdatalist,queryhistorydatalist,
+    querypollutantlist
+} from '../services/overviewApi';
 import { Model } from '../dvapack';
-// import {
-//     querypollutanttypecode, querydatalist, querylastestdatalist,
-//     queryhistorydatalist, querypollutantlist, addtaskinfo, queryurge, getPollutantTypeList
-// } from '../services/api';
+ 
 
 export default Model.extend({
     namespace: 'overview',
     state: {
-        columns: [],
-        data: [],
+       
+        
         dataTemp: [],
         lastestdata: [],
         mainpcol: [],
@@ -41,23 +41,43 @@ export default Model.extend({
         pollutantTypelist: null,
         entbaseinfo: [],
         selectpoint: null,
-
         onlypollutantList: [],
-
+        searchName: null,
         selectpollutantTypeCode: 2,
-        searchName: null
+        //数据一览表头
+        columns: [],
+        data: [],
+        //数据一览的参数
+        dataOverview:{
+            selectStatus:null,
+            time: moment(new Date()).add(-1, 'hour'),
+            terate:null,
+            pointName:null
+        },
+        mapdetailParams:{
+            dataType: 'HourData',
+            datatype: 'hour',
+            isAsc:true,
+            endTime: moment(new Date()).format('YYYY-MM-DD HH:00:00'),
+            beginTime: moment(new Date()).add('hour', -23).format('YYYY-MM-DD HH:00:00'),
+            pollutantCode:null,
+            pollutantName:null
+        }
+
     },
     effects: {
         * querypollutanttypecode({
             payload,
-        }, { call, update, put, take }) {
+        }, { call, update, put, take,select }) {
             let gwidth = 300 + 140 + 70;
-            const data = yield call(querypollutanttypecode, payload);
+            const {dataOverview,selectpollutantTypeCode}=yield select(a=>a.overview);
+            const body = {
+                pollutantTypes: selectpollutantTypeCode,
+            };
+            const data = yield call(querypollutanttypecode, body);
             yield put({
                 type: 'getPollutantTypeList',
                 payload: {
-                    ...payload,
-                    pollutantTypes: payload.pollutantCode
                 },
             });
             yield take('getPollutantTypeList/@@end');
@@ -68,8 +88,16 @@ export default Model.extend({
         },
         * querydatalist({
             payload,
-        }, { call, update, put, take, select }) {
-            const data = yield call(querydatalist, payload);
+        }, { call, update, put, select }) {
+            const {dataOverview,selectpollutantTypeCode}=yield select(a=>a.overview); 
+            const body={
+                time: dataOverview.time,
+                pollutantTypes:selectpollutantTypeCode,
+                pointName: dataOverview.pointName,
+                status: dataOverview.selectStatus,
+                terate: dataOverview.terate,
+            }
+            const data = yield call(querydatalist, body);
             if (payload.map && data) {
                 data.map((item) => {
                     item.position = {
@@ -502,8 +530,10 @@ export default Model.extend({
         },
         * querydetailpollutant({
             payload,
-        }, { call, update, put, take }) {
-            const pollutantInfoList = mainpoll.find(value => value.pollutantCode == payload.pollutantTypeCode);
+        }, { call, update, put, take,select }) {
+
+            const {selectpoint,selectpollutantTypeCode,mapdetailParams}=yield select(a=>a.overview);
+            const pollutantInfoList = mainpoll.find(value => value.pollutantCode == selectpollutantTypeCode);
             // 地图详细表格列头
             let detailpcol = [{
                 title: '因子',
@@ -516,7 +546,7 @@ export default Model.extend({
                 key: 'pollutantCode',
                 align: 'center',
                 render: (value, record, index) => {
-                    if(payload.stop)
+                    if(selectpoint.stop)
                     {
                         return "停产"
                     }
@@ -560,7 +590,7 @@ export default Model.extend({
                     key: 'zspollutantCode',
                     align: 'center',
                     render: (value, record, index) => {
-                        if(payload.stop)
+                        if(selectpoint.stop)
                         {
                             return "停产"
                         }
@@ -600,7 +630,12 @@ export default Model.extend({
 
             let detaildata = [];
             let detailtime = null;
-            const res = yield call(querylastestdatalist, payload);
+            const body = {
+                dataType: mapdetailParams.dataType,
+                DGIMNs: selectpoint.DGIMN,
+                isLastest: true
+            };
+            const res = yield call(querylastestdatalist, body);
             if (res.data && res.data[0]) {
                 detailtime = res.data[0].MonitorTime;
                 pollutantInfoList.pollutantInfo.map(item => {
@@ -617,9 +652,7 @@ export default Model.extend({
                         },
                     );
                 });
-
             }
-
             yield update({
                 detailtime,
                 detaildata,
@@ -635,10 +668,21 @@ export default Model.extend({
             yield take('queryoptionDataOnClick/@@end');
         },
         * queryoptionDataOnClick({ payload }, {
-            call, update
+            call, update,select
         }) {
-            const resultlist = yield call(queryhistorydatalist, { ...payload });
-            const pollutantlist = yield call(querypollutantlist, { ...payload });
+            const {mapdetailParams,selectpoint,selectpollutantTypeCode}=yield select(a=>a.overview);
+            const body = {
+                DGIMNs: selectpoint.DGIMN,
+                datatype: mapdetailParams.datatype,
+                beginTime: mapdetailParams.beginTime,
+                endTime: mapdetailParams.endTime,
+                isAsc:mapdetailParams.isAsc
+            };
+            const pollutantparams = {
+                DGIMNs: selectpoint.DGIMN
+            };
+            const resultlist = yield call(queryhistorydatalist, body);
+            const pollutantlist = yield call(querypollutantlist,pollutantparams);
             let seriesdata = [];
             let zsseriesdata = [];
             let xData = [];
@@ -646,8 +690,8 @@ export default Model.extend({
                 resultlist.data.map(item => {
                     const time = moment(item.MonitorTime).hour();
                     xData = xData.concat(time);
-                    seriesdata = seriesdata.concat(item[payload.pollutantCodes]);
-                    zsseriesdata = zsseriesdata.concat(item[`zs${payload.pollutantCodes}`]);
+                    seriesdata = seriesdata.concat(item[mapdetailParams.pollutantCode]);
+                    zsseriesdata = zsseriesdata.concat(item[`zs${mapdetailParams.pollutantCode}`]);
                 });
             }
             //污染物标准线的组织;
@@ -656,8 +700,8 @@ export default Model.extend({
             let markLine = {};
             let zsmarkLine = {};
             if (pollutantlist) {
-                polluntinfo = pollutantlist.find((value, index, arr) => value.pollutantCode === payload.pollutantCodes);
-                zspolluntinfo = pollutantlist.find((value, index, arr) => value.pollutantCode === `zs${payload.pollutantCodes}`);
+                polluntinfo = pollutantlist.find((value, index, arr) => value.pollutantCode === mapdetailParams.pollutantCode);
+                zspolluntinfo = pollutantlist.find((value, index, arr) => value.pollutantCode === `zs${mapdetailParams.pollutantCode}`);
             }
             if (polluntinfo && polluntinfo.standardValue) {
                 markLine = {
@@ -687,10 +731,10 @@ export default Model.extend({
             if ((!seriesdata[0] && seriesdata[0]!=0) && (!zsseriesdata[0] && zsseriesdata[0]!=0)) {
                 existdata = false;
             }
-            const pollutantInfoList = mainpoll.find(value => value.pollutantCode == payload.pollutantTypeCode);
-            let legend = [payload.pollutantName];
+            const pollutantInfoList = mainpoll.find(value => value.pollutantCode == selectpollutantTypeCode);
+            let legend = [mapdetailParams.pollutantName];
             if (pollutantInfoList.zspollutant) {
-                legend.push(`折算${payload.pollutantName}`);
+                legend.push(`折算${mapdetailParams.pollutantName}`);
             }
             const option = {
                 legend: {
@@ -728,7 +772,7 @@ export default Model.extend({
                 },
                 series: [{
                     type: 'line',
-                    name: payload.pollutantName,
+                    name: mapdetailParams.pollutantName,
                     data: seriesdata,
                     markLine: markLine,
                     itemStyle: {
@@ -742,7 +786,7 @@ export default Model.extend({
                 },
                 {
                     type: 'line',
-                    name: `折算${payload.pollutantName}`,
+                    name: `折算${mapdetailParams.pollutantName}`,
                     data: zsseriesdata,
                     markLine: zsmarkLine,
                     itemStyle: {
@@ -760,31 +804,11 @@ export default Model.extend({
             yield update({
                 chartdata: option,
                 existdata,
-                pollutantName: payload.pollutantName,
+                pollutantName: mapdetailParams.pollutantName,
             });
         },
-        //紧急派单
-        * addtaskinfo({
-            payload,
-        }, { call, update }) {
-            const res = yield call(addtaskinfo, payload);
-            if (res == 1) {
-                message.success('派单成功!');
-            } else {
-                message.error('派单失败!');
-            }
-        },
-        //催办
-        * queryurge({
-            payload
-        }, { call, update }) {
-            const res = yield call(queryurge, payload);
-            if (res == 1) {
-                message.success('催办成功!');
-            } else {
-                message.error('催办失败!');
-            }
-        },
+     
+       
         //获取系统污染物类型
         * getPollutantTypeList({
             payload
@@ -821,21 +845,5 @@ export default Model.extend({
             });
             yield take('getPollutantTypeList/@@end');
         },
-        // //获取系统污染物类型（无接口关联）
-        // * getPollutantTypeListOnly({
-        //     payload
-        // }, { call, update }) {
-        //     const res = yield call(getPollutantTypeList, payload);
-        //     if (res) {
-        //         yield update({
-        //             onlypollutantList: res
-        //         });
-        //     }
-        //     else {
-        //         yield update({
-        //             onlypollutantList: null
-        //         });
-        //     }
-        // },
     }
 });

@@ -10,7 +10,7 @@ import UrgentDispatch from './UrgentDispatch';
     existTask:urgentdispatch.existTask,
     loading:loading.effects['urgentdispatch/queryoperationInfo'],
     dgimn:urgentdispatch.dgimn,
-    paloading:loading.effects['overview/addtaskinfo'],
+    paloading:loading.effects['urgentdispatch/addtaskinfo'],
 }))
 class PdButton extends Component {
     constructor(props) {
@@ -30,7 +30,7 @@ class PdButton extends Component {
            }
            if(id && DGIMN) {
                dispatch({
-                   type: 'overview/queryurge',
+                   type: 'urgentdispatch/queryurge',
                    payload: {
                        personId: id,
                        DGIMN: DGIMN

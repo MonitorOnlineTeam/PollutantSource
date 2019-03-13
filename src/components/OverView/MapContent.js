@@ -7,6 +7,7 @@ import {
 } from 'antd';
 import { amapKey,mainpoll } from '../../config';
 import {getPointStatusImg} from '../../utils/getStatusImg';
+import { debug } from 'util';
 
 
 //地图工具
@@ -32,7 +33,9 @@ let _thismap=null;
     maploading:loading.effects['overview/queryentdetail'],
     //选中的点
     selectpoint:overview.selectpoint,
-    pollutantTypeCode:overview.selectpollutantTypeCode
+    dataOverview:overview.mapOverview,
+    mapdetailParams:overview.mapdetailParams,
+    selectpollutantTypeCode:overview.selectpollutantTypeCode
 }))
 //地图（地图一览）
 class MapContent extends Component {
@@ -50,9 +53,21 @@ class MapContent extends Component {
     //初始化
     componentWillMount(){
         const {dispatch,pollutantTypeCode}=this.props;
+        const dataOverview={
+            selectStatus:null,
+            time: moment(new Date()).add(-1, 'hour'),
+            terate:null,
+            pointName:null
+        } 
+        dispatch({
+            type:'overview/updateState',
+            payload:{
+                dataOverview:dataOverview
+            }
+        })
         dispatch({
             type: 'overview/queryentdetail',
-            payload:{ map: true,pollutantTypes:pollutantTypeCode }
+            payload:{ map: true }
         });
     }
 
@@ -64,7 +79,6 @@ class MapContent extends Component {
         zoomchange: (value) => {
         },
         complete: () => {
-            // _thismap.setZoomAndCenter(13, [centerlongitude, centerlatitude]);
         }
     };
 
@@ -77,40 +91,30 @@ class MapContent extends Component {
     };
 
     treeCilck = (row) => {
-        const { dispatch,pollutantTypeCode } = this.props;
-
-        const pollutantInfoList=mainpoll.find(value=>value.pollutantCode==pollutantTypeCode);
+        const { dispatch,selectpollutantTypeCode,mapdetailParams } = this.props;
+        const pollutantInfoList=mainpoll.find(value=>value.pollutantCode==selectpollutantTypeCode);
         //第一次加载时加载第一个污染物
         const defaultpollutantCode=pollutantInfoList.pollutantInfo[0].pollutantCode;
         const defaultpollutantName=pollutantInfoList.pollutantInfo[0].pollutantName;
-        //加载首要污染物Table
+        
         dispatch({
-            type: 'overview/querydetailpollutant',
-            payload: {
-                dataType: 'HourData',
-                dgimn: row.DGIMN,
-                pollutantTypeCode:pollutantTypeCode,
-                datatype: 'hour',
-                pollutantCodes: defaultpollutantCode,
-                pollutantName: defaultpollutantName,
-                endTime: moment(new Date()).format('YYYY-MM-DD HH:00:00'),
-                beginTime: moment(new Date()).add('hour', -23).format('YYYY-MM-DD HH:00:00'),
-                stop:row.stop
+            type:'overview/updateState',
+            payload:{
+                    selectpoint:row,
+                    selectpollutantTypeCode:`${row.pollutantTypeCode}`,
+                    mapdetailParams:{
+                        ...mapdetailParams,
+                        pollutantCode:defaultpollutantCode,
+                        pollutantName:defaultpollutantName
+                    }
             }
-        });
+        })
         this.setState({
             visible: true,
             pointName:row.pointName,
             position: {
                 latitude: row.latitude,
                 longitude: row.longitude,
-            },
-        });
-        dispatch({
-            type: 'overview/updateState',
-            payload: {
-                selectpoint: row,
-                selectpollutantTypeCode:`${row.pollutantTypeCode}`
             },
         });
         _thismap.setZoomAndCenter(15, [row.longitude, row.latitude]);

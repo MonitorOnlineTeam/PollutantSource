@@ -7,7 +7,7 @@ const FormItem = Form.Item;
 @connect(({urgentdispatch,loading}) => ({
     operationUserInfo:urgentdispatch.operationUserInfo,
     existTask:urgentdispatch.existTask,
-    loading:loading.effects['overview/addtaskinfo'],
+    loading:loading.effects['urgentdispatch/addtaskinfo'],
 }))
 ///紧急派单
 class UrgentDispatch extends Component {
@@ -23,7 +23,7 @@ class UrgentDispatch extends Component {
     onSubmit=()=>{
         const {DGIMN,operationUserInfo}=this.props;
             this.props.dispatch({
-                type:'overview/addtaskinfo',
+                type:'urgentdispatch/addtaskinfo',
                 payload:{
                     dgimn: DGIMN,
                     personId:operationUserInfo.operationUserID,

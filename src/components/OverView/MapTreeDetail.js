@@ -20,6 +20,8 @@ import {getPointStatusImg} from '../../utils/getStatusImg';
     chartdata: overview.chartdata,
     existdata: overview.existdata,
     pollutantName: overview.pollutantName,
+    mapdetailParams:overview.mapdetailParams,
+    dataOverview:overview.dataOverview
 }))
 
 class MapTreeDetail extends Component {
@@ -27,40 +29,58 @@ class MapTreeDetail extends Component {
      {
          super(props);
      } 
+
+     componentWillMount(){
+         //加载首要污染物Table
+        this.props.dispatch({
+            type: 'overview/querydetailpollutant',
+            payload: {
+            }
+        });
+     }
     //主要污染物table点击事件(获取图表信息)
     detialTreeClick = (row) => {
-        const { selectpoint } =this.props;
-        this.props.dispatch({
+        let { mapdetailParams,dispatch } =this.props;
+        
+        mapdetailParams={
+            ...mapdetailParams,
+            pollutantCode:row.pcode,
+            pollutantName:row.pollutantName,
+        }
+        dispatch({
+            type: 'overview/updateState',
+            payload: {
+                mapdetailParams:mapdetailParams
+            }
+        });
+
+        dispatch({
             type: 'overview/queryoptionDataOnClick',
             payload: {
-                datatype: 'hour',
-                pollutantName: row.pollutantName,
-                pollutantTypeCode:selectpoint.pollutantTypeCode,
-                dgimn: row.dgimn,
-                pollutantCodes: row.pcode,
-                endTime: (moment(new Date())).format('YYYY-MM-DD HH:00:00'),
-                beginTime: (moment(new Date()).add('hour', -23)).format('YYYY-MM-DD HH:00:00'),
-                isAsc:true
             }
         });
     }
 
     //返回按钮
     backTreeList = () => {
-        const { selectpoint } =this.props;
-        this.props.dispatch({
+        const { dispatch,dataOverview } =this.props;
+        dispatch({
+            type: 'overview/updateState',
+            payload: {
+                selectpoint:null,
+                dataOverview:{
+                   ...dataOverview,
+                   pointName:null
+                }
+            },
+        });
+        dispatch({
             type: 'overview/querydatalist',
             payload: {
                 map: true,
-                pollutantTypes:selectpoint.pollutantTypeCode,
             },
         });
-        this.props.dispatch({
-            type: 'overview/updateState',
-            payload: {
-                selectpoint:null
-            },
-        });
+      
     }
 
 
@@ -96,8 +116,6 @@ class MapTreeDetail extends Component {
                 type: 'overview/querydatalist',
                 payload: {
                     map: true,
-                    pollutantTypes:selectpoint.pollutantTypeCode,
-                    pointName:searchName
                 },
             });
           
@@ -105,8 +123,8 @@ class MapTreeDetail extends Component {
 
       //进入站房
       stationClick = () => {
-        const {selectpoint}=this.props;
-        let viewtype='mapview';
+         const {selectpoint}=this.props;
+         let viewtype='mapview';
          this.props.dispatch(routerRedux.push(`/pointdetail/${selectpoint.DGIMN}/${viewtype}`));
      };
 

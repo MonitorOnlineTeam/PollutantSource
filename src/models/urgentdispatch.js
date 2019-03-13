@@ -1,13 +1,18 @@
 import { Model } from '../dvapack';
 import { queryoperationInfo,queryoperationTaskInfo
 } from '../services/api';
+import { queryurge,addtaskinfo
+} from '../services/urgentdispatchApi';
+import {
+    message
+} from 'antd';
 
 export default Model.extend({
     namespace: 'urgentdispatch',
     state: {
         operationUserInfo: null,
         existTask:null,
-        dgimn:null
+        dgimn:null,
     },
     effects: {
         * queryoperationInfo({
@@ -37,6 +42,7 @@ export default Model.extend({
             }
            
         },
+        
         * queryoperationTaskInfo({
             payload     
         }, {
@@ -54,5 +60,41 @@ export default Model.extend({
                 });
             }
         },
-    },
+          //催办
+          * queryurge({
+            payload
+        }, { call }) {
+            const body = {
+                NoticeTitle: '督办',
+                ToUserId: payload.personId,
+                //1是督办
+                NoticeType: 1,
+                DGIMN: payload.DGIMN
+            };
+            const res = yield call(queryurge, body);
+            if (res == 1) {
+                message.success('催办成功!');
+            } else {
+                message.error('催办失败!');
+            }
+        },
+       //紧急派单
+           * addtaskinfo({
+            payload,
+         }, { call }) {
+            const body = {
+                DGIMNs: payload.dgimn,
+                taskType: 2,
+                taskFrom: 3,
+                operationsUserId: payload.personId,
+                remark: payload.remark
+            };
+            const res = yield call(addtaskinfo, body);
+            if (res == 1) {
+                message.success('派单成功!');
+            } else {
+                message.error('派单失败!');
+            }
+        },
+    }
 });
