@@ -52,7 +52,7 @@ class UrgentDispatch extends Component {
     
 
     render() {
-        const {operationUserInfo,loading}=this.props;
+        const {operationUserInfo,loading,pointName}=this.props;
         const { getFieldDecorator } = this.props.form;
         const formItemLayout = {
             labelCol: {
@@ -65,7 +65,7 @@ class UrgentDispatch extends Component {
         return (
             <div>
                 <Modal
-                    title={ operationUserInfo?operationUserInfo.pointName:'' }
+                    title={ pointName?pointName:(operationUserInfo?operationUserInfo.pointName:'') }
                     visible={this.props.visible}
                     onOk={this.onSubmit}
                     destroyOnClose={true}

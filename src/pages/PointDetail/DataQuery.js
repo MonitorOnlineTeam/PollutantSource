@@ -30,23 +30,18 @@ modify by
     datatable: points.datatable,
     total: points.total,
     dataloading: loading.effects['points/queryhistorydatalist'],
-    tablewidth: points.tablewidth
+    tablewidth: points.tablewidth,
+    historyparams:points.historyparams
 }))
 class DataQuery extends Component {
     constructor(props) {
         super(props);
         // 默认值
-        const defaultValue = {
-            formats: 'YYYY-MM-DD HH:mm:ss',
-            dataType: 'realtime',
-            current: 1,
-            pageSize: 15,
-            rangeDate: [moment(new Date()).add(-60, 'minutes'), moment(new Date())],
-        };
         this.state = {
-            ...defaultValue,
             displayType: 'chart',
-            displayName: '查看数据'
+            displayName: '查看数据',
+            rangeDate:[moment(new Date()).add(-60, 'minutes'), moment(new Date())],
+            format:'YYYY-MM-DD HH:mm:ss'
         };
     }
 
@@ -62,44 +57,46 @@ class DataQuery extends Component {
     _handleDateChange = (date, dateString) => {
         if(date)
         {
-            const {dataType}=this.state;
-            if(dataType=="realtime")
+            let {historyparams}=this.props;
+            //判断
+            switch(historyparams.dataType)
             {
-               if(date[1].add(-7,'day')>date[0]) 
-               {
-                  message.info('实时数据时间间隔不能超过7天');
-                  return ;
-               }
+                case "realtime":
+                    if(date[1].add(-7,'day')>date[0]) 
+                    {
+                    message.info('实时数据时间间隔不能超过7天');
+                    return ;
+                    }
+                    break;
+                case "minute":
+                    if(date[1].add(-1,'month')>date[0]) 
+                    {
+                    message.info('分钟数据时间间隔不能超过1个月');
+                    return ;
+                    }
+                    break;
+                case "hour":
+                    if(date[1].add(-6,'month')>date[0]) 
+                    {
+                    message.info('小时数据时间间隔不能超过6个月');
+                    return ;
+                    }
+                    break;
+               case "day":
+                    if(date[1].add(-12,'month')>date[0]) 
+                    {
+                       message.info('日数据时间间隔不能超过1年个月');
+                       return ;
+                    }
+               break;
             }
-            if(dataType=="minute")
-            {
-               if(date[1].add(-1,'month')>date[0]) 
-               {
-                  message.info('分钟数据时间间隔不能超过1个月');
-                  return ;
-               }
+            this.setState({ rangeDate: date});
+            historyparams={
+                ...historyparams,
+                beginTime:date[0].format('YYYY-MM-DD HH:mm:ss'),
+                endTime:date[1].format('YYYY-MM-DD HH:mm:ss'),
             }
-            if(dataType=="hour")
-            {
-               if(date[1].add(-6,'month')>date[0]) 
-               {
-                  message.info('小时数据时间间隔不能超过6个月');
-                  return ;
-               }
-            }
-            if(dataType=="day")
-            {
-               if(date[1].add(-12,'month')>date[0]) 
-               {
-                  message.info('日数据时间间隔不能超过1年个月');
-                  return ;
-               }
-            }
-             
-            this.setState({ rangeDate: date, current: 1 });
-            const pollutantCode = this.state.pollutantCode ? this.state.pollutantCode : this.getpropspollutantcode();
-            const pollutantName = this.state.pollutantName ? this.state.pollutantName : this.getpropspollutantname();
-            this.reloaddatalist(pollutantCode, this.state.dataType, this.state.current, this.state.pageSize, date[0], date[1], pollutantName);
+            this.reloaddatalist(historyparams);
         }
     };
 
@@ -122,6 +119,7 @@ class DataQuery extends Component {
         let formats;
         let beginTime = moment(new Date()).add(-60, 'minutes');
         let endTime = moment(new Date());
+        let {historyparams}=this.props;
         switch (e.target.value) {
             case 'realtime':
                 beginTime = moment(new Date()).add(-60, 'minutes');
@@ -141,36 +139,30 @@ class DataQuery extends Component {
                 break;
         }
         this.setState({
-            formats: formats,
-            dataType: e.target.value,
             rangeDate: [beginTime, endTime],
-            current: 1
+            format:formats
         });
-        const pollutantCode = this.state.pollutantCode ? this.state.pollutantCode : this.getpropspollutantcode();
-        const pollutantName = this.state.pollutantName ? this.state.pollutantName : this.getpropspollutantname();
-        this.reloaddatalist(pollutantCode, e.target.value, this.state.current, this.state.pageSize, beginTime, endTime, pollutantName);
+        historyparams={
+            ...historyparams,
+            beginTime:beginTime.format('YYYY-MM-DD HH:mm:ss'),
+            endTime:endTime.format('YYYY-MM-DD HH:mm:ss'),
+            datatype:e.target.value
+        }
+        this.reloaddatalist(historyparams);
     }
 
     // 污染物
     handlePollutantChange = (value, selectedOptions) => {
-        this.setState({
-            pollutantCode: value,
-            pollutantName: selectedOptions.props.children,
-            current: 1
-        });
-        this.reloaddatalist(value, this.state.dataType, this.state.current, this.state.pageSize, this.state.rangeDate[0], this.state.rangeDate[1], selectedOptions.props.children);
+        let {historyparams}=this.props;
+        historyparams={
+            ...historyparams,
+            payloadpollutantCode:value,
+            payloadpollutantName:selectedOptions.props.children
+        }
+        this.reloaddatalist(historyparams);
     };
 
-    pageIndexChange = (page, pageSize) => {
-        this.setState({
-            current: page,
-        });
-        const pollutantCode = this.state.pollutantCode ? this.state.pollutantCode : this.getpropspollutantcode();
-        const pollutantName = this.state.pollutantName ? this.state.pollutantName : this.getpropspollutantname();
-        this.reloaddatalist(pollutantCode, this.state.dataType, page, pageSize, this.state.rangeDate[0], this.state.rangeDate[1], pollutantName);
-    }
-
-    ///获取
+    ///获取第一个污染物
     getpropspollutantcode = () => {
         if (this.props.pollutantlist[0]) {
             return this.props.pollutantlist[0].pollutantCode;
@@ -178,30 +170,18 @@ class DataQuery extends Component {
         return null;
     }
 
-    getpropspollutantname = () => {
-        if (this.props.pollutantlist[0]) {
-            return this.props.pollutantlist[0].pollutantName;
-        }
-        return null;
-    }
-
-    //后台请求数据
-    reloaddatalist = (pollutantCode, datatype, pageIndex, pageSize, beginTime, endTime, pollutantName) => {
-        if (this.state.displayType === 'chart' || this.state.displayType === 'table') {
-            pageSize = 0;
-            pageIndex = 0;
-        }
-        this.props.dispatch({
+    //后台请求数据  
+    reloaddatalist = (historyparams) => {
+        let {dispatch}=this.props;
+        dispatch({
+            type:'points/updateState',
+            payload:{
+                historyparams:historyparams
+            }
+        })
+        dispatch({
             type: 'points/queryhistorydatalist',
             payload: {
-                pollutantCode: pollutantCode,
-                datatype: datatype,
-                dgimn: this.props.selectpoint.DGIMN,
-                pageIndex: pageIndex,
-                pageSize: pageSize,
-                beginTime: beginTime.format('YYYY-MM-DD HH:mm:ss'),
-                endTime: endTime.format('YYYY-MM-DD HH:mm:ss'),
-                pollutantName: pollutantName,
             }
         });
     }
@@ -255,10 +235,7 @@ class DataQuery extends Component {
                 }
             }
             pagination={{
-                'total': this.props.total,
-                'pageSize': this.state.pageSize,
-                'current': this.state.current,
-                onChange: this.pageIndexChange
+                'pageSize': 15,
             }}
         />);
 
@@ -278,10 +255,7 @@ class DataQuery extends Component {
             />);
         }
         return '';
-
-
     }
-
     render() {
         //初始化等待
         if (this.props.isloading) {
