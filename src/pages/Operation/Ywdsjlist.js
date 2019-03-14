@@ -4,90 +4,46 @@ import RangePicker_ from '../../components/PointDetail/RangePicker_';
 import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
 import SearchInput from '../../components/OverView/SearchInput';
-import TreeStatus from '../../components/OverView/TreeStatus';
-import TreeCard from '../../components/OverView/TreeCard';
 import TreeCardContent from '../../components/OverView/TreeCardContent';
 import MonitorContent from '../../components/MonitorContent/index';
 import Ywdsjlistss from './Ywdsjlist.less';
 import YwdsjlistContent from '../PointDetail/YwdsjlistContent';
-import moment from 'moment';
 import { EnumPollutantTypeCode } from '../../utils/enum';
 
-@connect(({ tasklist, overview, loading }) => ({
+@connect(({overview, loading }) => ({
     datalist: overview.data,
     pollutantTypeloading: loading.effects['overview/getPollutantTypeList'],
     treedataloading: loading.effects['overview/querydatalist'],
-    pollutantTypelist: overview.pollutantTypelist
+    pollutantTypelist: overview.pollutantTypelist,
+    dataOne: overview.dataOne,
+    dataOverview: overview.dataOverview,
 }))
 export default class Ywdsjlist extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            pollutantTypeCode: EnumPollutantTypeCode.GAS,
         };
     }
-
     componentDidMount() {
-        const { dispatch } = this.props;
-        var getDGIMN = localStorage.getItem('DGIMN')
-        this.updateState({
-            treeDataParameter: {
-                ...this.props.treeDataParameter,
-                ...{
-                    pollutantTypes: EnumPollutantTypeCode.GAS,
-                    Ywdsjlist: true,
-                    DGIMN: getDGIMN,
-                }
-            }
-        });
-        dispatch({
-            type: 'overview/querydatalist',
-            payload: {
-            }
-        });
     }
 
     //查询
     onSerach = (value) => {
-        this.setState({
-            searchName: value
-        })
-        const { pollutantTypeCode } = this.state;
-        this.searchData(pollutantTypeCode, value);
-    }
-    getStatusImg = (value) => {
-        if (value === 0) {
-            return <img style={{ width: 15 }} src="/gisunline.png" />;
-        } if (value === 1) {
-            return <img style={{ width: 15 }} src="/gisnormal.png" />;
-        } if (value === 2) {
-            return <img style={{ width: 15 }} src="/gisover.png" />;
-        }
-        return <img style={{ width: 15 }} src="/gisexception.png" />;
+        this.searchData(value);
     }
     //重新加载
-    searchData = (pollutantTypeCode, searchName) => {
-        var getDGIMN = localStorage.getItem('DGIMN');
+    searchData = (searchName) => {
         this.updateState({
-            treeDataParameter: {
-                ...this.props.treeDataParameter,
+            dataOverview: {
+                ...this.props.dataOverview,
                 ...{
-                    pollutantTypes: pollutantTypeCode,
-                    search: true,
                     pointName: searchName,
-                    Ywdsjlist: true,
                 }
             }
         });
         this.props.dispatch({
             type: 'overview/querydatalist',
             payload: {
-                pollutantTypes: pollutantTypeCode,
-                pointName: searchName,
-                search: true,
-                callback: (data) => {
-
-                }
             },
         });
     }
@@ -105,7 +61,6 @@ export default class Ywdsjlist extends Component {
             type: 'tasklist/updateState',
             payload: { DGIMN: row.DGIMN }
         });
-        localStorage.setItem('DGIMN', row.DGIMN);
         this.props.dispatch({
             type: 'tasklist/GetYwdsj',
             payload: {
@@ -115,7 +70,7 @@ export default class Ywdsjlist extends Component {
     };
 
     render() {
-        const { pollutantTypelist, treedataloading, datalist, pollutantTypeloading } = this.props;
+        const { treedataloading, datalist, pollutantTypeloading } = this.props;
         return (
             <MonitorContent {...this.props} breadCrumbList={
                 [
@@ -142,13 +97,16 @@ export default class Ywdsjlist extends Component {
                                             getHeight='calc(100vh - 200px)'
                                             pollutantTypeloading={pollutantTypeloading}
                                             getStatusImg={this.getStatusImg} isloading={treedataloading}
-                                            treeCilck={this.treeCilck} treedatalist={datalist} PollutantType={this.state.pollutantTypeCode} ifSelect={true} />
+                                            treeCilck={this.treeCilck} treedatalist={datalist} PollutantType={EnumPollutantTypeCode.GAS} flag={'tasklist'} ifSelect={true} />
                                     </div>
                                 </div>
                             </div>
                         </Col>
                         <Col style={{ width: document.body.clientWidth - 470, height: 'calc(100vh - 150px)', float: 'right', marginTop: '10px' }}>
-                            <YwdsjlistContent pointcode={localStorage.getItem('DGIMN')} taskfrom="operationywdsjlist" viewtype="no" height="calc(100vh - 248px)" />
+                            {
+                                this.props.dataOne === null ? null : <YwdsjlistContent pointcode={this.props.dataOne} taskfrom="operationywdsjlist" viewtype="no" height="calc(100vh - 248px)" />
+                            }
+
                         </Col>
                     </Row>
                 </div>

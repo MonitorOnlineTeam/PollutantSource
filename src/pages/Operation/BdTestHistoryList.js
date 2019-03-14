@@ -13,17 +13,16 @@ import MonitorContent from '../../components/MonitorContent/index';
 import styles from './index.less';
 import { routerRedux } from 'dva/router';
 import SearchInput from '../../components/OverView/SearchInput';
-import TreeStatus from '../../components/OverView/TreeStatus';
-import TreeCard from '../../components/OverView/TreeCard';
 import TreeCardContent from '../../components/OverView/TreeCardContent';
 import BdTestHistoryListContent from '../EmergencyTodoList/BdTestHistoryListContent';
 import { EnumPollutantTypeCode } from '../../utils/enum';
-import moment from 'moment';
 
 @connect(({ overview, loading }) => ({
     datalist: overview.data,
     pollutantTypeloading: loading.effects['overview/getPollutantTypeList'],
     treedataloading: loading.effects['overview/querydatalist'],
+    dataOverview: overview.dataOverview,
+    dataOne: overview.dataOne,
 }))
 /*
 页面：校验测试历史记录
@@ -32,68 +31,28 @@ export default class BdTestHistoryList extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            pollutantTypeCode: EnumPollutantTypeCode.GAS,
-            rangeDate: [moment(moment(new Date()).subtract(3, 'month').format('YYYY-MM-DD 00:00:00')), moment(moment(new Date()).format('YYYY-MM-DD 23:59:59'))], // 最近3月
         };
     }
     componentDidMount() {
-        const { dispatch } = this.props;
-        var getDGIMN = localStorage.getItem('DGIMN')
-        this.updateState({
-            treeDataParameter: {
-                ...this.props.treeDataParameter,
-                ...{
-                    pollutantTypes: EnumPollutantTypeCode.GAS,
-                    BdHistoryInfoHistoryList: true,
-                    DGIMN: getDGIMN,
-                }
-            }
-        });
-        dispatch({
-            type: 'overview/querydatalist',
-            payload: {
-            }
-        });
     }
 
     //查询
     onSerach = (value) => {
-        this.setState({
-            searchName: value
-        })
-        const { pollutantTypeCode } = this.state;
-        this.searchData(pollutantTypeCode, value);
-    }
-    getStatusImg = (value) => {
-        if (value === 0) {
-            return <img style={{ width: 15 }} src="/gisunline.png" />;
-        } if (value === 1) {
-            return <img style={{ width: 15 }} src="/gisnormal.png" />;
-        } if (value === 2) {
-            return <img style={{ width: 15 }} src="/gisover.png" />;
-        }
-        return <img style={{ width: 15 }} src="/gisexception.png" />;
+        this.searchData(value);
     }
     //重新加载
-    searchData = (pollutantTypeCode, searchName) => {
-        var getDGIMN = localStorage.getItem('DGIMN')
+    searchData = (searchName) => {
         this.updateState({
-            treeDataParameter: {
-                ...this.props.treeDataParameter,
+            dataOverview: {
+                ...this.props.dataOverview,
                 ...{
-                    pollutantTypes: pollutantTypeCode,
                     pointName: searchName,
-                    BdHistoryInfoHistoryList:false
                 }
             }
         });
         this.props.dispatch({
             type: 'overview/querydatalist',
             payload: {
-                // pollutantTypes: pollutantTypeCode,
-                // pointName: searchName,
-                // callback: (data) => {
-                // }
             },
         });
     }
@@ -111,7 +70,6 @@ export default class BdTestHistoryList extends Component {
             type: 'maintenancelist/updateState',
             payload: { DGIMN: row.DGIMN }
         });
-        localStorage.setItem('DGIMN', row.DGIMN);
         this.props.dispatch({
             type: 'maintenancelist/GetBdTestHistoryList',
             payload: {
@@ -158,13 +116,15 @@ export default class BdTestHistoryList extends Component {
                                             getHeight='calc(100vh - 200px)'
                                             pollutantTypeloading={this.props.pollutantTypeloading}
                                             getStatusImg={this.getStatusImg} isloading={this.props.treedataloading}
-                                            treeCilck={this.treeCilck} treedatalist={this.props.datalist} PollutantType={this.state.pollutantTypeCode} ifSelect={true} />
+                                            treeCilck={this.treeCilck} treedatalist={this.props.datalist} PollutantType={EnumPollutantTypeCode.GAS} ifSelect={true} />
                                     </div>
                                 </div>
                             </div>
                         </Col>
                         <Col style={{ width: document.body.clientWidth - 470, height: 'calc(100vh - 150px)', float: 'right', marginTop: '11px' }}>
-                            <BdTestHistoryListContent pointcode={localStorage.getItem('DGIMN')} viewtype="no" height="calc(100vh - 360px)" operation="menu/intelligentOperation" />
+                            {
+                                this.props.dataOne === null ? null : <BdTestHistoryListContent pointcode={this.props.dataOne} viewtype="no" height="calc(100vh - 360px)" operation="menu/intelligentOperation" />
+                            }
                         </Col>
                     </Row>
                 </div>

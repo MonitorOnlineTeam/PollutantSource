@@ -62,6 +62,7 @@ export default Model.extend({
         stateNameInfo:null,
         paramNameInfo:null,
         paramstatusInfo:null,
+        DGIMN:'',
     },
     effects: {
         * querypointdetail({

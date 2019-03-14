@@ -19,9 +19,9 @@ import styles from './StandardGasRepalceHistoryListContent.less';
     HistoryStandardGasRepalceRecordListCount: maintenancelist.total,
     pageIndex: maintenancelist.pageIndex,
     pageSize: maintenancelist.pageSize,
-    beginTime:maintenancelist.beginTime, //开始时间
-    endTime:maintenancelist.endTime, //结束时间
-    DGIMN:maintenancelist.DGIMN
+    beginTime: maintenancelist.beginTime, //开始时间
+    endTime: maintenancelist.endTime, //结束时间
+    DGIMN: maintenancelist.DGIMN
 }))
 /*
 页面：标准气体历史记录
@@ -35,17 +35,17 @@ class StandardGasRepalceHistoryListContent extends Component {
     }
 
     componentDidMount() {
-        const condition={
+        const condition = {
             pageIndex: 1,
             pageSize: 10,
-            beginTime:moment().subtract(3, 'month').format('YYYY-MM-DD 00:00:00'), //运维大事记开始时间
-            endTime:moment().format('YYYY-MM-DD 23:59:59'), //运维大事记结束时间
+            beginTime: moment().subtract(3, 'month').format('YYYY-MM-DD 00:00:00'), //运维大事记开始时间
+            endTime: moment().format('YYYY-MM-DD 23:59:59'), //运维大事记结束时间
             DGIMN: this.props.pointcode
         };
         this.ChangeModelState(condition);
-        if(this.props.operation!=="menu/intelligentOperation"){
-            this.GetHistoryRecord();
-        }
+        // if(this.props.operation!=="menu/intelligentOperation"){
+        this.GetHistoryRecord();
+        // }
     }
 
     GetHistoryRecord = () => {
@@ -57,10 +57,10 @@ class StandardGasRepalceHistoryListContent extends Component {
     };
 
     _handleDateChange = (date, dateString) => {
-        const condition={
+        const condition = {
             beginTime: date[0].format("YYYY-MM-DD HH:mm:ss"),
             endTime: date[1].format("YYYY-MM-DD HH:mm:ss"),
-            pageIndex:1
+            pageIndex: 1
         };
         this.ChangeModelState(condition);
         this.setState(
@@ -72,7 +72,7 @@ class StandardGasRepalceHistoryListContent extends Component {
     };
 
     onShowSizeChange = (pageIndex, pageSize) => {
-        const condition={
+        const condition = {
             pageIndex,
             pageSize
         };
@@ -81,7 +81,7 @@ class StandardGasRepalceHistoryListContent extends Component {
     }
 
     onChange = (pageIndex, pageSize) => {
-        const condition={
+        const condition = {
             pageIndex,
             pageSize
         };
@@ -90,17 +90,17 @@ class StandardGasRepalceHistoryListContent extends Component {
     }
 
     seeDetail = (record) => {
-        if(this.props.operation===undefined){
+        if (this.props.operation === undefined) {
             this.props.dispatch(routerRedux.push(`/PatrolForm/StandardGasRepalceRecord/${this.props.DGIMN}/${this.props.viewtype}/operationlist/StandardGasRepalceHistoryList/${record.TaskID}`));
-        }else{
+        } else {
             this.props.dispatch(routerRedux.push(`/PatrolForm/StandardGasRepalceRecord/${this.props.DGIMN}/${this.props.operation}/StandardGasRepalceHistoryList/${record.TaskID}`));
         }
     }
 
-    ChangeModelState=(condition)=>{
+    ChangeModelState = (condition) => {
         this.props.dispatch({
             type: 'maintenancelist/updateState',
-            payload: {...condition}
+            payload: { ...condition }
         });
     }
 
