@@ -10,7 +10,6 @@ import {
 } from 'antd';
 import { mainpollutantInfo, mainpoll, enterpriceid } from "../config";
 import {
-      addtaskinfo,  
     querypolluntantentinfolist
 } from '../services/api';
 import {

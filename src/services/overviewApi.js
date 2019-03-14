@@ -69,13 +69,7 @@ export async function queryhistorydatalist(params) {
 /**
  * 【智能监控】获取排口下的污染物
  * @params {
-        "datatype": "hour",
-        "DGIMNs": "31011500000002",
-        "isAsc": true,
-        "pageIndex":1,
-        "pageSize":10,
-        "beginTime":"2019-3-8 00:00:00",
-        "endTime":"2019-3-9 00:00:00"
+          "DGIMNs": "31011500000002"
     }
  */
 export async function querypollutantlist(params) {
