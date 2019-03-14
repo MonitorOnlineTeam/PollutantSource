@@ -1,5 +1,6 @@
 import { Model } from '../dvapack';
 import { } from '../services/videodata';
+import moment from 'moment';
 import { uploadfiles, GetPollutantByPoint, GetManualSupplementList, getUploadTemplate, GetAllPollutantTypes, addGetPollutantByPoint, AddUploadFiles, GetUnitByPollutant, DeleteUploadFiles, UpdateManualSupplementData, getPollutantTypeList } from '../services/manualuploadapi';
 
 export default Model.extend({
@@ -8,8 +9,6 @@ export default Model.extend({
         editUser: null,
         requstresult: null,
         total: 0,
-        pageIndex: 1,
-        pageSize: 10,
         reason: null,
         selectdata: [],
         uploaddatalist: [],
@@ -20,6 +19,18 @@ export default Model.extend({
         DGIMN: null,
         pointName: null,
         polltuantTypeList: [],
+        //手工数据上传参数
+        manualUploadParameters: {
+            DGIMN: '',
+            pollutantCode: [],
+            BeginTime: moment().subtract(3, 'month').format('YYYY-MM-DD 00:00:00'),
+            EndTime: moment().format('YYYY-MM-DD 23:59:59'),
+            pageIndex: 1,
+            pageSize: 10,
+            pointName: '',
+            PollutantType: '2'
+        }
+
     },
     effects: {
         //上传附件
@@ -45,6 +56,7 @@ export default Model.extend({
             update,
         }) {
             const result = yield call(GetPollutantByPoint, payload);
+            debugger
             if (result.data.length !== 0) {
                 yield update({
                     selectdata: result.data,
@@ -86,38 +98,44 @@ export default Model.extend({
             call,
             put,
             update,
+            select,
         }) {
-            const result = yield call(GetManualSupplementList, payload);
+            const { manualUploadParameters } = yield select(a => a.manualupload);
+            const body = {
+                DGIMN: manualUploadParameters.DGIMN,
+                pollutantCode: manualUploadParameters.pollutantCode,
+                BeginTime: manualUploadParameters.BeginTime,
+                EndTime: manualUploadParameters.EndTime,
+                pageIndex: manualUploadParameters.pageIndex,
+                pageSize: manualUploadParameters.pageSize,
+                pointName: manualUploadParameters.pointName,
+                PollutantType: manualUploadParameters.PollutantType,
+            }
+            const result = yield call(GetManualSupplementList, body);
+            debugger
             if (result.data !== null) {
                 if (result.data.length !== 0) {
-
-                    if (payload.DGIMN) {
+                    //根据MN号码获取所对应的污染物信息
+                    if (body.DGIMN) {
                         yield put({
                             type: 'GetPollutantByPoint',
                             payload: {
-                                DGIMN: payload.DGIMN
+                                DGIMN: body.DGIMN
                             }
                         });
                     }
+                    debugger
                     yield update({
                         uploaddatalist: result.data,
                         reason: result.reason,
-                        pageIndex: payload.pageIndex,
-                        pageSize: payload.pageSize,
                         total: result.total,
-                        DGIMN: payload.DGIMN,
-                        pointName: payload.pointName
                     });
                 }
                 else {
                     yield update({
                         uploaddatalist: null,
                         reason: result.reason,
-                        pageIndex: payload.pageIndex,
-                        pageSize: payload.pageSize,
                         total: result.total,
-                        DGIMN: payload.DGIMN,
-                        pointName: payload.pointName
                     });
                 }
             }
@@ -125,11 +143,7 @@ export default Model.extend({
                 yield update({
                     uploaddatalist: null,
                     reason: result.reason,
-                    pageIndex: payload.pageIndex,
-                    pageSize: payload.pageSize,
                     total: result.total,
-                    DGIMN: payload.DGIMN,
-                    pointName: payload.pointName
                 });
             }
         },

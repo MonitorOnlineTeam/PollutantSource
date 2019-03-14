@@ -5,7 +5,7 @@ import {
 import { connect } from 'dva';
 import styles from './Tree.less';
 
-@connect(({ loading, overview, maintenancelist, workbenchmodel, tasklist, points }) => ({
+@connect(({ loading, overview, maintenancelist, workbenchmodel, tasklist, points,manualupload }) => ({
     //点位数据信息
     treedatalist: overview.data,
     //加载数据
@@ -15,6 +15,8 @@ import styles from './Tree.less';
     OperationCalendar: workbenchmodel.OperationCalendar,
     tasklist: tasklist.DGIMN,
     ProcessFlowDiagram: points.DGIMN,
+    manualupload:manualupload.manualUploadParameters, //手工数据上传
+    dataOverview: overview.dataOverview,
 }))
 
 class TreeCardContent extends Component {
@@ -25,12 +27,26 @@ class TreeCardContent extends Component {
     }
 
     componentWillMount() {
+        if(this.props.runState!==undefined)
+        {
+            this.overViewUpdateState({
+                RunState:this.props.runState
+            });
+        }
         this.props.dispatch({
             type: 'overview/querydatalist',
             payload: {},
         });
     }
-
+   /**
+    * 更新model(Overview)中的state
+   */
+  overViewUpdateState = (payload) => {
+    this.props.dispatch({
+        type: 'overview/updateState',
+        payload: payload,
+    });
+}
     getStatusImg = (value) => {
         if (value === 0) {
             return <img style={{ width: 15 }} src="/gisunline.png" />;
@@ -47,6 +63,7 @@ class TreeCardContent extends Component {
             case 'OperationCalendar': return this.props.OperationCalendar.DGIMNs;
             case 'tasklist': return this.props.tasklist;
             case 'ProcessFlowDiagram': return this.props.ProcessFlowDiagram;
+            case 'ManualUpload': return this.props.manualupload.DGIMN;
             default: return this.props.DGIMN;
         }
     }

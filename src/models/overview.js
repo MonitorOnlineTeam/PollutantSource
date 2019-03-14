@@ -42,6 +42,7 @@ export default Model.extend({
         selectpoint: null,
         onlypollutantList: [],
         selectpollutantTypeCode: 2,
+        RunState: '1',//手工数据上传参数
         //数据一览表头
         columns: [],
         data: [],
@@ -87,13 +88,14 @@ export default Model.extend({
         * querydatalist({
             payload,
         }, { call, update, put, select }) {
-            const { dataOverview, selectpollutantTypeCode } = yield select(a => a.overview);
+            const { dataOverview, selectpollutantTypeCode ,RunState} = yield select(a => a.overview);
             const body = {
                 time: dataOverview.time,
                 pollutantTypes: selectpollutantTypeCode,
                 pointName: dataOverview.pointName,
                 status: dataOverview.selectStatus,
                 terate: dataOverview.terate,
+                RunState: RunState
             }
             const data = yield call(querydatalist, body);
             if (payload.map && data) {
@@ -112,54 +114,10 @@ export default Model.extend({
                     selectpoint: newpoint
                 });
             }
-
-
-            //手工上传
-            if (payload.manualUpload) {
-                if (data && data[0]) {
-                    if (!payload.search) {
-                        let dgimns = '';
-                        if (!payload.DGIMN || payload.DGIMN === '[object Object]') {
-                            localStorage.setItem('DGIMN', data[0].DGIMN);
-                            dgimns = data[0].DGIMN;
-                        } else if (payload.change) {
-                            localStorage.setItem('DGIMN', data[0].DGIMN);
-                            dgimns = data[0].DGIMN;
-                        } else {
-                            dgimns = payload.DGIMN;
-                        }
-                        yield put({
-                            type: 'manualupload/GetManualSupplementList',
-                            payload: {
-                                ...payload,
-                                DGIMN: dgimns,
-                                pointName: data[0].pointName
-                            }
-                        });
-                        //获取绑定下拉污染物
-                        yield put({
-                            type: 'manualupload/GetPollutantByPoint',
-                            payload: {
-                                DGIMN: dgimns,
-                                PollutantType: payload.pollutantTypeCode
-                            }
-                        });
-                    }
-                } else {
-                    //知道有问题但是手机端调用这个接口是不传参数返回所有的值，
-                    //所以，在这里将MN号码给了一个不可能查询到的值，让返回列表为空，因为点表为空
-                    yield put({
-                        type: 'manualupload/GetManualSupplementList',
-                        payload: {
-                            DGIMN: "1"
-                        }
-                    });
-                }
-            }
             yield update({ data });
             yield update({ dataTemp: data });
-            yield update({ dataOne: data[0].DGIMN });
 
+            yield update({ dataOne: data == null ? '0' : data[0].DGIMN });
             if (payload.callback === undefined) {
             } else {
                 payload.callback(data);
