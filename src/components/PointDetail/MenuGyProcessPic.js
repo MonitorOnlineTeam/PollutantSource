@@ -9,7 +9,7 @@ import {
 } from 'antd';
 
 @connect(({ points, loading }) => ({
-    isloading: loading.effects['points/queryprocesschart'],
+    isloading: loading.effects['points/queryrealparam'],
     flows: points.processchart,
     pointInfo: points.selectpoint,
     operationInfo: points.operationInfo,
@@ -29,12 +29,7 @@ export default class MenuGyProcessPic extends Component {
         };
     }
     componentWillMount() {
-        this.props.dispatch({
-            type: 'points/queryprocesschart',
-            payload: {
-                dgimn: this.props.pointInfo.DGIMN // this.props.pointInfo.DGIMN
-            }
-        });
+     
         this.props.dispatch({
             type: 'points/queryrealparam',
             payload: {

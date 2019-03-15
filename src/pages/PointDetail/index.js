@@ -41,7 +41,6 @@ class PointDetail extends Component {
             pollutantTypeKey:0
         };
     }
-
     componentWillMount = () => {
         const {dispatch,match}=this.props;
         dispatch({
@@ -51,23 +50,19 @@ class PointDetail extends Component {
             }
         });
     }
-
-
     componentDidMount() {
         this.props.dispatch({
             type: 'points/querysinglepointinfo',
             payload: {
                 dgimn: this.props.match.params.pointcode,
-                time: moment(new Date()).add(-1, 'hour').format('YYYY-MM-DD HH:00:00'),
-                isfirst:true
+                isfirst:true,
+                isAll:true
             }
         });
     }
 
 
     openModal = (params) => {
-        // console.log(this.props.pointList);
-        // console.log(this.props.pointList);
         this.setState({
             modalVisible: true,
             loadingCard: false,
@@ -107,7 +102,6 @@ class PointDetail extends Component {
             router.push(newUrl);
         }
         //TODO:如果地址不正确，需要跳转到错误页面吗？ 吴建伟
-
     }
 
         //填充污染物类型
@@ -223,14 +217,6 @@ class PointDetail extends Component {
         let {status,pollutantTypeCode,DGIMN,existTask,scene,warning,fault,stop} = pointInfo[0];
 
         let statusText=getPointStatusImg(status,stop);
-        // let statusText = <span><img src="/gisexception.png" width="11" style={{ marginBottom: 3, marginRight: 5 }} /><span>异常</span></span>;
-        // if (status === 0) {
-        //     statusText = <span><img src="/gisunline.png" width="11" style={{ marginBottom: 3, marginRight: 5 }} /><span>离线</span></span>;
-        // } if (status === 1) {
-        //     statusText = <span><img src="/gisnormal.png" width="11" style={{ marginBottom: 3, marginRight: 5 }} /><span>正常</span></span>;
-        // } if (status === 2) {
-        //     statusText = <span><img src="/gisover.png" width="11" style={{ marginBottom: 3, marginRight: 5 }} /><span>超标</span></span>;
-        // }
         let pollutantTypeText = <span><Icon type="fire" style={{ color: 'rgb(238,162,15)', marginBottom: 3, marginRight: 5 }} /><span>废气</span></span>;
         if (pollutantTypeCode == 1) {
             pollutantTypeText = <span><Icon type="fire" style={{ color: 'rgb(238,162,15)', marginBottom: 3, marginRight: 5 }} /><span>废水</span></span>;
@@ -370,10 +356,7 @@ class PointDetail extends Component {
                     {
                         this.renderPointStatus()
                     }
-
-
                     <Button style={{ float: "right", marginRight: 30, top: -5 }}>{this.getBackButton()}</Button>
-
                     <PdButton
                         DGIMN={pointInfo.DGIMN}
                         id={pointInfo.operationUserID}
@@ -424,7 +407,6 @@ class PointDetail extends Component {
                                         },
                                     });
                                     this.setState({
-                                        // pointList: this.props.pointList.filter(todo=>todo.pointName.indexOf(value)>-1),
                                         status: '',
                                         searchName: value
                                     });

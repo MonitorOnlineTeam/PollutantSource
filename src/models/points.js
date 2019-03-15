@@ -1,10 +1,7 @@
 import moment from 'moment';
 import React from 'react';
 import { Icon, Popover, Badge } from 'antd';
-import { 
-    queryoverdatalist, queryprocesschart, querysinglepointinfo,
-    queryrealparam } from '../services/api';
-
+import {queryoverdatalist,querysinglepointinfo,queryrealparam} from '../services/pointApi'
     import {querypollutantlist,queryhistorydatalist}from '../services/overviewApi';
 import {getList} from '../services/videodata';
 import { Model } from '../dvapack';
@@ -49,6 +46,14 @@ export default Model.extend({
             endTime:null,
             payloadpollutantCode:null, 
             payloadpollutantName:null,
+        },
+        overdataparams:{
+            DGIMN: null,
+            pollutantCode: null,
+            beginTime: moment(new Date()).add(-1, 'month').format('YYYY-MM-DD HH:mm:ss'),
+            endTime: moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),
+            pageIndex: 1,
+            pageSize: 15
         }
     },
     effects: {
@@ -67,7 +72,6 @@ export default Model.extend({
                     pollutantName: result[0].pollutantName,
                     pollutantInfo: result[0]
                 };
-
                 //如果请求的是超标数据
                 if(payload.overdata) {
                     yield put({
@@ -82,7 +86,6 @@ export default Model.extend({
                     });
                     yield take('queryhistorydatalist/@@end');
                 }
-
             } else {
                 yield update({ pollutantlist: [],datalist: null, chartdata: null, columns: null, datatable: null, total: 0 });
             }
@@ -246,8 +249,15 @@ export default Model.extend({
         },
         * queryoverdatalist({
             payload
-        }, {call, update}) {
-            const res = yield call(queryoverdatalist, {...payload});
+        }, {call, update,select}) {
+            debugger;
+            let {overdataparams}=yield select(a=>a.points);
+            if(payload.dgimn)
+            {
+                overdataparams.DGIMN=payload.dgimn;
+            }
+            const res = yield call(queryoverdatalist, overdataparams);
+
             if (res.data) {
                 let reslist = [];
                 res.data.map((item, key) => {
@@ -262,22 +272,18 @@ export default Model.extend({
                 yield update({ overdata: [], overtotal: 0 });
             }
         },
-        * queryprocesschart({
-            payload
-        }, {call, update}) {
-            const res = yield call(queryprocesschart, {...payload});
-            yield update({ processchart: res });
-        },
         * querysinglepointinfo({
             payload
         }, {call, update,put,take}) {
-            const res = yield call(querysinglepointinfo, {...payload});
+            const body={
+                DGIMNs:payload.dgimn
+            }
+            const res = yield call(querysinglepointinfo, body);
             if(res) {
                 yield update({ selectpoint: res[0] });
             } else {
                 yield update({ selectpoint: null });
             }
-
             if(payload.isfirst) {
                 yield put({
                     type:'overview/getPollutantTypeList',
@@ -292,7 +298,10 @@ export default Model.extend({
         * queryrealparam({
             payload
         }, {call, update}) {
-            const res = yield call(queryrealparam, {...payload});
+            const body={
+                DGIMN:payload.dgimn
+            }
+            const res = yield call(queryrealparam, body);
             if(res) {
                 yield update({
                     operationInfo:res.operationInfo,
