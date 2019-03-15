@@ -25,7 +25,6 @@ import {
 import MonitorContent from '../../components/MonitorContent/index';
 import AddStandardGas from '../../components/Administration/AddStandardGas';
 import styles from './index.less';
-
 const Search = Input.Search;
 const confirm = Modal.confirm;
 
@@ -34,10 +33,8 @@ const confirm = Modal.confirm;
     administration
 }) => ({
     loading:loading.effects['administration/GetStandardGasList'],
-    list: administration.standardgas,
-    total: administration.total,
-    pageIndex:administration.pageIndex,
-    pageSize:administration.pageSize,
+    
+    standardgasparam:administration.standardgasparam
 }))
 export default class StandardGas extends Component {
     constructor(props) {
@@ -53,27 +50,35 @@ export default class StandardGas extends Component {
     }
     //初始化
     componentWillMount() {
-        const {gasName,code}=this.state;
-        const {pageIndex, pageSize }=this.props;
-        this.reloaddata(gasName,code,pageIndex,pageSize);
+        this.reloaddata();
     }
     //页码变化
     onChange = (pageIndex, pageSize) => {
-        const {gasName,code}=this.state;
-         this.reloaddata(gasName,code,pageIndex,pageSize);
+         let {standardgasparam}=this.props;
+         standardgasparam={
+             ...standardgasparam,
+             pageIndex:pageIndex,
+             pageSize:pageSize
+         }
+         this.reloaddata(standardgasparam);
     }
     //重新加载数据
-    reloaddata=(gasName,code,pageIndex,pageSize)=>{
-      this.props.dispatch({
-          type:'administration/GetStandardGasList',
-          payload:{
-          
-            code:code,
-            gasName:gasName,
-            pageIndex: pageIndex,
-            pageSize: pageSize 
-          }
-      })
+    reloaddata=(standardgasparam)=>{
+        const {dispatch}=this.props;
+        if(standardgasparam)
+        {
+            dispatch({
+                type:"administration/updateState",
+                payload:{
+                    standardgasparam:standardgasparam
+                }
+            })
+        }
+         dispatch({
+            type:'administration/GetStandardGasList',
+            payload:{
+            }
+        })
     }
     //删除数据
     deletepoint=(row)=>{
@@ -87,15 +92,13 @@ export default class StandardGas extends Component {
     }
     //搜索列表
     serachName=(value)=>{
-        const {code}=this.state;
-        const {pageIndex, pageSize,dispatch }=this.props;
-        this.setState({
-            gasName:value
-        });
-        this.reloaddata(value,code,pageIndex,pageSize);
+        let {standardgasparam}=this.props;
+        standardgasparam={
+            ...standardgasparam,
+            GasName:value
+        }
+        this.reloaddata(standardgasparam);
     }
-
-
     //关闭modal
     onCancel = () => {
         this.setState({
@@ -117,7 +120,6 @@ export default class StandardGas extends Component {
     }
 
  render() {
-
      const menu = (id,name) => (
          <Menu onClick={(e) => {
              this.onMenu.bind()(e.key,id,name);
@@ -128,8 +130,7 @@ export default class StandardGas extends Component {
              <Menu.Item key="4"><Icon type="home" />进入排口</Menu.Item>
          </Menu>
      );
-     const {pageSize,pageIndex,total,list}=this.props;
-     console.log(list);
+     const {standardgasparam}=this.props;
      const columns = [{
                         title: '标气名称',
                         dataIndex: 'StandardGasName',
@@ -193,7 +194,7 @@ export default class StandardGas extends Component {
                          className={styles.dataTable}
                          rowKey="ID"
                          dataSource={
-                            this.props.list
+                            standardgasparam.data
                         }
                          size="small" 
                          scroll={{ y: 'calc(100vh - 330px)' }}
@@ -212,9 +213,9 @@ export default class StandardGas extends Component {
                                  showSizeChanger: true,
                                  showQuickJumper: true,
                                  size: 'small',
-                                 'total': total,
-                                 'pageSize': pageSize,
-                                 'current': pageIndex,
+                                 'total': standardgasparam.total,
+                                 'pageSize': standardgasparam.pageSize,
+                                 'current': standardgasparam.pageIndex,
                                  onChange: this.onChange,
                                  onShowSizeChange: this.onChange,
                                  pageSizeOptions: ['20', '30', '40', '50']

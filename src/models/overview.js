@@ -11,7 +11,7 @@ import {
 import { mainpollutantInfo, mainpoll, enterpriceid } from "../config";
 import {
     querypolluntantentinfolist
-} from '../services/api';
+} from '../services/entApi';
 import {
     querypollutanttypecode, getPollutantTypeList,
     querydatalist, querylastestdatalist, queryhistorydatalist,
@@ -99,6 +99,11 @@ export default Model.extend({
                 pointName: dataOverview.pointName,
                 status: dataOverview.selectStatus,
                 terate: dataOverview.terate,
+            }
+            
+            if(payload.isAll)
+            {
+                body={};
             }
             const data = yield call(querydatalist, body);
             if (payload.map && data) {
@@ -521,7 +526,8 @@ export default Model.extend({
         * queryentdetail({
             payload,
         }, { call, update, put, take }) {
-            const entbaseinfo = yield call(querypolluntantentinfolist, { parentID: enterpriceid });
+            const body= {parentIDs:enterpriceid};
+            const entbaseinfo = yield call(querypolluntantentinfolist,body);
             yield update({ entbaseinfo: entbaseinfo });
             yield put({
                 type: 'getPollutantTypeList',

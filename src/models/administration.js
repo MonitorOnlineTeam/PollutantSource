@@ -15,7 +15,6 @@ import {
     EditKBM, IfExists, GetUrlByID,
 } from '../services/AdministrationApi';
 
-
 export default Model.extend({
     namespace: 'administration',
     state: {
@@ -30,27 +29,59 @@ export default Model.extend({
         total: 0,
         pageIndex: 1,
         pageSize: 20,
+        sparepartsparam:{
+            pageIndex:1,
+            parttype:null,
+            pageSize:20,
+            partName:null,
+            data:[],
+            total:0
+        },
+        standardgasparam:{
+            pageIndex:1,
+            pageSize:20,
+            GasName:null,
+            data:[],
+            total:0
+        },
+        cbfftestequipmentparam:{
+            pageIndex:1,
+            pageSize:20,
+            TestItemName:null,
+            data:[],
+            total:0,
+        },
         KBMParameters: {
             Name: null,
         }
     },
     effects: {
         * GetSparePartList({ payload }, { call, put, update, select }) {
-            const result = yield GetSparePartList(payload);
+            const {sparepartsparam}=yield select(a=>a.administration);
+            const body = {
+                PartType: sparepartsparam.parttype,
+                PartName: sparepartsparam.partName,
+                pageIndex: sparepartsparam.pageIndex,
+                pageSize: sparepartsparam.pageSize
+            };
+            const result = yield call (GetSparePartList,body);
             if (result) {
                 yield update({
-                    spareparts: result.data,
-                    total: result.total,
-                    pageIndex: payload.pageIndex,
-                    pageSize: payload.pageSize,
-                });
-            } else {
+                    sparepartsparam:{
+                        ...sparepartsparam,
+                        data:result.data,
+                        total:result.total
+                    }
+                })
+            } else
+            {
                 yield update({
-                    spareparts: null,
-                    total: 0,
-                    pageIndex: payload.pageIndex,
-                    pageSize: payload.pageSize,
-                });
+                    sparepartsparam:{
+                        ...sparepartsparam,
+                        data:null,
+                        total:0
+                    }
+                })
             }
 
         },
@@ -84,27 +115,27 @@ export default Model.extend({
                 message.error('操作失败');
             }
         },
-
-
         ///标气
         * GetStandardGasList({ payload }, { call, put, update, select }) {
-            const result = yield GetStandardGasList(payload);
+            const {standardgasparam}=yield select(a=>a.administration);
+            const result = yield call(GetStandardGasList,standardgasparam);
             if (result) {
                 yield update({
-                    standardgas: result.data,
-                    total: result.total,
-                    pageIndex: payload.pageIndex,
-                    pageSize: payload.pageSize,
+                    standardgasparam:{
+                        ...standardgasparam,
+                        data:result.data,
+                        total:result.total
+                    }
                 });
             } else {
                 yield update({
-                    standardgas: null,
-                    total: 0,
-                    pageIndex: payload.pageIndex,
-                    pageSize: payload.pageSize,
+                    standardgasparam:{
+                        ...standardgasparam,
+                        data:null,
+                        total:0
+                    }   
                 });
             }
-
         },
         * AddOrUpdateStandardGas({ payload }, { call, put, update, select }) {
             const result = yield AddOrUpdateStandardGas(payload);
@@ -140,20 +171,25 @@ export default Model.extend({
 
         ///手持设备
         * GetCbFfTestEquipmentList({ payload }, { call, put, update, select }) {
-            const result = yield GetCbFfTestEquipmentList(payload);
+
+            const {cbfftestequipmentparam}=yield select(a=>a.administration);
+            debugger;
+            const result = yield call(GetCbFfTestEquipmentList,cbfftestequipmentparam);
             if (result) {
                 yield update({
-                    CbFfTestEquipment: result.data,
-                    total: result.total,
-                    pageIndex: payload.pageIndex,
-                    pageSize: payload.pageSize,
+                    cbfftestequipmentparam:{
+                        ...cbfftestequipmentparam,
+                        data:result.data,
+                        total:result.total
+                    }
                 });
             } else {
                 yield update({
-                    CbFfTestEquipment: null,
-                    total: 0,
-                    pageIndex: payload.pageIndex,
-                    pageSize: payload.pageSize,
+                    cbfftestequipmentparam:{
+                        ...cbfftestequipmentparam,
+                        data:null,
+                        total:0
+                    }
                 });
             }
 

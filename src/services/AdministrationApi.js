@@ -12,12 +12,11 @@ import { post, upload } from '../dvapack/request';
 export async function GetSparePartList(params) {
     const body = {
         PartType: params.parttype == "0" ? null : params.parttype,
-        Code: params.code,
         PartName: params.partName,
         pageIndex: params.pageIndex,
         pageSize: params.pageSize
     };
-    const result = post('/api/rest/PollutantSourceApi/PTaskForm/GetSparePartList', body, null);
+    const result = post('/api/rest/PollutantSourceApi/PTaskForm/GetSparePartList', params, null);
     return result === null ? {
         data: null
     } : result;
@@ -74,12 +73,7 @@ export async function DeleteSparePartsRecord(params) {
  *  获取标气列表信息
  */
 export async function GetStandardGasList(params) {
-    const body = {
-        GasName: params.gasName,
-        pageIndex: params.pageIndex,
-        pageSize: params.pageSize
-    };
-    const result = post('/api/rest/PollutantSourceApi/PTaskForm/GetStandardGasList', body, null);
+    const result = post('/api/rest/PollutantSourceApi/PTaskForm/GetStandardGasList', params, null);
     return result === null ? {
         data: null
     } : result;
@@ -137,15 +131,7 @@ export async function DelStandardGas(params) {
  *  获取手持设备列表信息
  */
 export async function GetCbFfTestEquipmentList(params) {
-    const body = {
-        TestItemName: params.testItemName,
-        pageIndex: params.pageIndex,
-        pageSize: params.pageSize,
-        Code: params.code,
-        TestMethod: params.testMethod,
-        Manufacturer: params.manufacturer
-    };
-    const result = post('/api/rest/PollutantSourceApi/PTaskForm/GetCbFfTestEquipmentList', body, null);
+    const result = post('/api/rest/PollutantSourceApi/PTaskForm/GetCbFfTestEquipmentList', params, null);
     return result === null ? {
         data: null
     } : result;

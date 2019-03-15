@@ -88,6 +88,7 @@ class index extends PureComponent {
             });
         } else {
             const allvalue = this.props.form.getFieldsValue();
+            debugger;
             this.props.form.validateFields(
                 (err) => {
                   if (!err) {

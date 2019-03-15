@@ -22,6 +22,7 @@ const FormItem = Form.Item;
     data: points.overdata,
     total: points.overtotal,
     selectpoint: points.selectpoint,
+    overdataparams:points.overdataparams
 }))
 
 class AlarmRecord extends Component {
@@ -42,91 +43,85 @@ class AlarmRecord extends Component {
     }
 
     componentDidMount = () => {
-        this._querylist(this.props.DGIMN);
-    }
-
-    _querylist = (dgimn) => {
-        let {dispatch,selectpoint} = this.props;
-        let DGIMN = dgimn || selectpoint.DGIMN;
+        let {dispatch}=this.props;
         dispatch({
-            type: 'points/querypollutantlist',
-            payload: {
-                dgimn: DGIMN,
-                beginTime: this.state.rangeDate[0],
-                endTime: this.state.rangeDate[1],
-                pageIndex: this.state.current,
-                pageSize: this.state.pageSize,
-                overdata: true
+            type:'points/querypollutantlist',
+            payload:{
+                overdata: true,
+                dgimn: this.props.selectpoint.DGIMN,
             }
-        });
+        })
     }
-
+    //时间更改
     _handleDateChange=(date, dateString) => {
+        let {overdataparams}=this.props;
+        overdataparams={
+            ...overdataparams,
+            beginTime:date[0],
+            endTime:date[1],
+            pageIndex:1,
+        }
         this.setState({
-            rangeDate: date,
-            current: 1
-        },()=>{
-            this.reloaddatalist(this.state.pollutantCode, this.state.current, this.state.pageSize, date[0], date[1]);
-        });
-
+            rangeDate:date
+        })
+        this.reloaddatalist(overdataparams);
     };
 
-      // 污染物
+      // 污染物更改
       _handlePollutantChange=(value, selectedOptions) => {
+          let {overdataparams}=this.props;
           if(value==-1) {
               value=null;
           }
-          this.setState({
-              pollutantCode: value,
-              current: 1
-          },()=>{
-              this.reloaddatalist(value, this.state.current, this.state.pageSize, this.state.rangeDate[0], this.state.rangeDate[1]);
-          });
+          overdataparams={
+              ...overdataparams,
+              pollutantCode:value,
+              pageIndex:1
+          }
+          this.reloaddatalist(overdataparams);
+     
 
       };
 
+      //分页
       pageIndexChange=(page, pageSize) => {
-          this.setState({
-              current: page,
-          },()=>{
-              this.reloaddatalist(this.state.pollutantCode, page, this.state.pageSize, this.state.rangeDate[0], this.state.rangeDate[1]);
-          });
-
+         let {overdataparams}=this.props;
+         overdataparams.pageIndex=page;
+         this.reloaddatalist(overdataparams);
       }
 
-      reloaddatalist=(pollutantCode, pageIndex, pageSize, beginTime, endTime) => {
-          let dgimn = this.props.DGIMN || this.props.selectpoint.DGIMN;
-          this.props.dispatch({
+      //刷新数据
+      reloaddatalist=(overdataparams) => {
+        const {dispatch}=this.props;
+        dispatch({
+            type:'points/updateState',
+            payload:{
+                overdataparams:overdataparams
+            }
+        })
+        dispatch({
               type: 'points/queryoverdatalist',
               payload: {
-                  dgimn: dgimn,
-                  pollutantCode: pollutantCode,
-                  beginTime: beginTime,
-                  endTime: endTime,
-                  pageIndex: pageIndex,
-                  pageSize: pageSize
               }
           });
       }
-
       componentWillReceiveProps = (nextProps) => {
-
           const {DGIMN,lasttime,firsttime}=this.props;
           //如果传入参数有变化，则重新加载数据
-          if (nextProps.DGIMN !== DGIMN || moment(nextProps.lasttime).format('yyyy-MM-dd HH:mm:ss') !== moment(lasttime).format('yyyy-MM-dd HH:mm:ss') || moment(nextProps.firsttime).format('yyyy-MM-dd HH:mm:ss') !== moment(firsttime).format('yyyy-MM-dd HH:mm:ss')) {
+          if (nextProps.DGIMN !== DGIMN || moment(nextProps.lasttime).format('yyyy-MM-dd HH:mm:ss') 
+          !== moment(lasttime).format('yyyy-MM-dd HH:mm:ss') ||
+           moment(nextProps.firsttime).format('yyyy-MM-dd HH:mm:ss') !== moment(firsttime).format('yyyy-MM-dd HH:mm:ss')) {
+              let {overdataparams}=this.props;
+              overdataparams={
+                  ...overdataparams,
+                  DGIMN:nextProps.DGIMN ,
+                  beginTime:nextProps.beginTime,
+                  endTime:nextProps.endTime
+              }
               this.setState({
                   rangeDate: [nextProps.firsttime, nextProps.lasttime],
-                  //参数改变让页面刷新
-                  DGIMN:nextProps.DGIMN,
-                  firsttime:nextProps.firsttime,
-                  lasttime:nextProps.lasttime,
-                  current: 1,
-                  pollutantCode:null
-              },()=>{
-                  this._querylist(nextProps.DGIMN);
-
-              });
-
+              })
+            this.reloaddatalist(overdataparams);
           }
       }
 
@@ -176,8 +171,8 @@ class AlarmRecord extends Component {
               width:width,
               key: 'overMul'
           }];
-
-          if(this.props.isloading) {
+           const {isloading,overdataparams}=this.props;
+          if(isloading) {
               return (<Spin
                   style={{ width: '100%',
                       height: 'calc(100vh/2)',
@@ -223,8 +218,8 @@ class AlarmRecord extends Component {
                               }
                               pagination={{
                                   'total': this.props.total,
-                                  'pageSize': this.state.pageSize,
-                                  'current': this.state.current,
+                                  'pageSize': overdataparams.pageSize,
+                                  'current':overdataparams.pageIndex,
                                   onChange: this.pageIndexChange
                               }}
                           />
