@@ -34,6 +34,7 @@ class DeviceExceptionHistoryListContent extends Component {
     }
 
     componentDidMount() {
+        debugger
         const condition = {
             pageIndex: 1,
             pageSize: 10,
@@ -44,7 +45,6 @@ class DeviceExceptionHistoryListContent extends Component {
         this.ChangeModelState(condition);
         this.GetHistoryRecord();
     }
-
     GetHistoryRecord = () => {
         this.props.dispatch({
             type: 'maintenancelist/GetDeviceExceptionHistoryList',

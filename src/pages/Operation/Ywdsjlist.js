@@ -10,7 +10,7 @@ import Ywdsjlistss from './Ywdsjlist.less';
 import YwdsjlistContent from '../PointDetail/YwdsjlistContent';
 import { EnumPollutantTypeCode } from '../../utils/enum';
 
-@connect(({overview, loading }) => ({
+@connect(({ overview, loading }) => ({
     datalist: overview.data,
     pollutantTypeloading: loading.effects['overview/getPollutantTypeList'],
     treedataloading: loading.effects['overview/querydatalist'],
@@ -24,9 +24,18 @@ export default class Ywdsjlist extends Component {
         this.state = {
         };
     }
-    componentDidMount() {
+    componentWillMount() {
+        this.updateState({
+            dataOne:null,
+            selectpollutantTypeCode: '2',
+            dataOverview: {
+                ...this.props.dataOverview,
+                ...{
+                    pointName: null,
+                }
+            }
+        });
     }
-
     //查询
     onSerach = (value) => {
         this.searchData(value);

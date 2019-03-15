@@ -36,7 +36,17 @@ export default class OperationCalendar extends Component {
         this.state = {
         };
     }
-    componentDidMount() {
+    componentWillMount() {
+        this.updateState({
+            dataOne:null,
+            selectpollutantTypeCode: '2',
+            dataOverview: {
+                ...this.props.dataOverview,
+                ...{
+                    pointName: null,
+                }
+            }
+        });
     }
 
     //查询
@@ -46,6 +56,7 @@ export default class OperationCalendar extends Component {
     //重新加载
     searchData = (searchName) => {
         this.updateState({
+            selectpollutantTypeCode: '2',
             dataOverview: {
                 ...this.props.dataOverview,
                 ...{
@@ -56,32 +67,32 @@ export default class OperationCalendar extends Component {
         this.props.dispatch({
             type: 'overview/querydatalist',
             payload: {
-                callback: (data) => {
-                    if (data !== null) {
-                        const existdata = data.find((value, index, arr) => {
-                            return value.DGIMN == this.props.dataOne
-                        });
-                        if (existdata == undefined) {
-                            this.GetData('1');
-                        }
-                        else {
-                            this.updateStateOperation({
-                                OperationCalendar: {
-                                    ...this.props.OperationCalendar,
-                                    ...{
-                                        IsQueryAllUser: true,
-                                        DGIMNs: this.props.dataOne,
-                                    }
-                                }
-                            });
-                            this.props.dispatch({
-                                type: 'workbenchmodel/getOperationCalendarData',
-                                payload: {
-                                }
-                            });
-                        }
-                    }
-                }
+                // callback: (data) => {
+                //     if (data !== null) {
+                //         const existdata = data.find((value, index, arr) => {
+                //             return value.DGIMN == this.props.dataOne
+                //         });
+                //         if (existdata == undefined) {
+                //             this.GetData('1');
+                //         }
+                //         else {
+                //             this.updateStateOperation({
+                //                 OperationCalendar: {
+                //                     ...this.props.OperationCalendar,
+                //                     ...{
+                //                         IsQueryAllUser: true,
+                //                         DGIMNs: this.props.dataOne,
+                //                     }
+                //                 }
+                //             });
+                //             this.props.dispatch({
+                //                 type: 'workbenchmodel/getOperationCalendarData',
+                //                 payload: {
+                //                 }
+                //             });
+                //         }
+                //     }
+                // }
             },
         });
     }

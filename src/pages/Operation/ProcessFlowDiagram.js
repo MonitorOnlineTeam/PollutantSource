@@ -33,7 +33,17 @@ export default class ProcessFlowDiagram extends Component {
         this.state = {
         };
     }
-    componentDidMount() {
+    componentWillMount() {
+        this.updateState({
+            dataOne:null,
+            selectpollutantTypeCode:'2',
+            dataOverview: {
+                ...this.props.dataOverview,
+                ...{
+                    pointName: null,
+                }
+            }
+        });
     }
     //查询
     onSerach = (value) => {

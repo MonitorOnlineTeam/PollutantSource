@@ -21,6 +21,7 @@ export default Model.extend({
         polltuantTypeList: [],
         //手工数据上传参数
         manualUploadParameters: {
+            DGIMNs: '',
             DGIMN: '',
             pollutantCode: [],
             BeginTime: moment().subtract(3, 'month').format('YYYY-MM-DD 00:00:00'),
@@ -56,7 +57,6 @@ export default Model.extend({
             update,
         }) {
             const result = yield call(GetPollutantByPoint, payload);
-            debugger
             if (result.data.length !== 0) {
                 yield update({
                     selectdata: result.data,
@@ -112,7 +112,6 @@ export default Model.extend({
                 PollutantType: manualUploadParameters.PollutantType,
             }
             const result = yield call(GetManualSupplementList, body);
-            debugger
             if (result.data !== null) {
                 if (result.data.length !== 0) {
                     //根据MN号码获取所对应的污染物信息
@@ -124,7 +123,6 @@ export default Model.extend({
                             }
                         });
                     }
-                    debugger
                     yield update({
                         uploaddatalist: result.data,
                         reason: result.reason,

@@ -33,7 +33,17 @@ export default class JzHistoryList extends Component {
         };
     }
 
-    componentDidMount() {
+    componentWillMount() {
+        this.updateState({
+            dataOne:null,
+            selectpollutantTypeCode: '2',
+            dataOverview: {
+                ...this.props.dataOverview,
+                ...{
+                    pointName: null,
+                }
+            }
+        });
     }
 
     //查询
