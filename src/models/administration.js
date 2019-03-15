@@ -50,6 +50,9 @@ export default Model.extend({
             TestItemName:null,
             data:[],
             total:0,
+        },
+        KBMParameters: {
+            Name: null,
         }
     },
     effects: {
@@ -277,20 +280,18 @@ export default Model.extend({
             select
         }) {
             const result = yield call(uploadfiles, payload);
-            if(result!==null)
-            {
+            if (result !== null) {
                 yield update({
                     requstresult: result.requstresult,
                     reason: result.reason
                 });
             }
-            else
-            {
+            else {
                 yield update({
                     reason: '上传失败!'
                 });
             }
-            payload.callback(result===null?'0': result.requstresult);
+            payload.callback(result === null ? '0' : result.requstresult);
         },
 
         //添加知识库

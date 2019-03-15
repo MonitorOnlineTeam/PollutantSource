@@ -114,11 +114,14 @@ export default Model.extend({
         OperationCalendar: {
             beginTime: moment().format('YYYY-01-01 00:00:00'),
             endTime: moment().format('YYYY-MM-DD HH:mm:ss'),
-            tableDatas: [],
             tempTableDatas: [],
             pageIndex: 1,
             pageSize: 6,
             total: 0,
+            DGIMNs: '',
+            IsQueryAllUser: false,
+            dateValue: moment(),
+            dateType: 'month',
         },
         entbaseinfo: [],
     },
@@ -202,10 +205,9 @@ export default Model.extend({
                 endTime: networkeRateList.endTime,
                 NetSort: networkeRateList.NetSort
             };
-          
+
             const response = yield call(getRateStatistics, body);
-            if(response && response.requstresult==="1" &&  response.data)
-            {
+            if (response && response.requstresult === "1" && response.data) {
                 yield update({
                     rateStatistics: {
                         ...rateStatistics,
@@ -218,9 +220,8 @@ export default Model.extend({
                 })
             }
             const realtimeresponse = yield call(getRealTimeNetWorkingRateForPointsPageList, realtimebody);
-            if(realtimeresponse && realtimeresponse.requstresult==="1" && realtimeresponse.data)
-            {
-                yield update({ 
+            if (realtimeresponse && realtimeresponse.requstresult === "1" && realtimeresponse.data) {
+                yield update({
                     networkeRateList: {
                         ...networkeRateList,
                         ...{
@@ -297,7 +298,7 @@ export default Model.extend({
                 endTime: allPointOverDataList.endTime,
                 pageSize: allPointOverDataList.pageSize,
                 pageIndex: allPointOverDataList.pageIndex,
-                PollutantType:"2"
+                PollutantType: "2"
             };
             const response = yield call(getAllPointOverDataList, body);
             yield update({
@@ -385,9 +386,8 @@ export default Model.extend({
                 endTime: OperationCalendar.endTime,
                 pageSize: OperationCalendar.pageSize,
                 pageIndex: OperationCalendar.pageIndex,
-                IsQueryAllUser: true,
-                IsPaging: false,
-                DGIMNs:payload.DGIMNs
+                DGIMNs: OperationCalendar.DGIMNs,
+                IsQueryAllUser: OperationCalendar.IsQueryAllUser,
             };
             const response = yield call(getOperationHistoryRecordPageList, body);
             if (response.data !== null) {
@@ -395,9 +395,7 @@ export default Model.extend({
                     OperationCalendar: {
                         ...OperationCalendar,
                         ...{
-                            tableDatas: response.data,
                             tempTableDatas: response.data,
-                            pageIndex: payload.pageIndex || 1,
                             total: response.total
                         }
                     }
@@ -407,9 +405,7 @@ export default Model.extend({
                     OperationCalendar: {
                         ...OperationCalendar,
                         ...{
-                            tableDatas: null,
-                            tempTableDatas: null,
-                            pageIndex: payload.pageIndex || 1,
+                            tempTableDatas: [],
                             total: response.total
                         }
                     }
@@ -488,13 +484,13 @@ export default Model.extend({
                         //  let resdata=warningDetailsDatas;
 
                         let resdata = JSON.parse(JSON.stringify(warningDetailsDatas));
-                        const chartDatas= array.concat(warningDetailsDatas.chartDatas);
-                        resdata.chartDatas=chartDatas;
+                        const chartDatas = array.concat(warningDetailsDatas.chartDatas);
+                        resdata.chartDatas = chartDatas;
                         //resdata["change"]=true;
 
                         return {
                             ...state,
-                            warningDetailsDatas:resdata,
+                            warningDetailsDatas: resdata,
                         };
                     }
 

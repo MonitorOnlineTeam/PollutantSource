@@ -5,26 +5,48 @@ import {
 import { connect } from 'dva';
 import styles from './Tree.less';
 
-@connect(({ loading, overview }) => ({
+@connect(({ loading, overview, maintenancelist, workbenchmodel, tasklist, points,manualupload }) => ({
     //点位数据信息
     treedatalist: overview.data,
     //加载数据
-    isloading: loading.effects['overview/querydatalist']
+    isloading: loading.effects['overview/querydatalist'],
+    dataOne: overview.dataOne,
+    DGIMN: maintenancelist.DGIMN, //点击的MN号码（不点击默认加载第一个）
+    OperationCalendar: workbenchmodel.OperationCalendar,
+    tasklist: tasklist.DGIMN,
+    ProcessFlowDiagram: points.DGIMN,
+    manualupload:manualupload.manualUploadParameters, //手工数据上传
+    dataOverview: overview.dataOverview,
 }))
 
 class TreeCardContent extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            selectDgimn: localStorage.getItem('DGIMN'),
-            boolen: 0   //判断是否时初次加载时的标识（0为为赋值，1为已赋值）
         };
     }
 
     componentWillMount() {
-
+        if(this.props.runState!==undefined)
+        {
+            this.overViewUpdateState({
+                RunState:this.props.runState
+            });
+        }
+        this.props.dispatch({
+            type: 'overview/querydatalist',
+            payload: {},
+        });
     }
-
+   /**
+    * 更新model(Overview)中的state
+   */
+  overViewUpdateState = (payload) => {
+    this.props.dispatch({
+        type: 'overview/updateState',
+        payload: payload,
+    });
+}
     getStatusImg = (value) => {
         if (value === 0) {
             return <img style={{ width: 15 }} src="/gisunline.png" />;
@@ -35,28 +57,30 @@ class TreeCardContent extends Component {
         }
         return <img style={{ width: 15 }} src="/gisexception.png" />;
     }
-
-
+    //此标识区分背景颜色，因为默认MN号码不在一个model中
+    flag = (flags) => {
+        switch (flags) {
+            case 'OperationCalendar': return this.props.OperationCalendar.DGIMNs;
+            case 'tasklist': return this.props.tasklist;
+            case 'ProcessFlowDiagram': return this.props.ProcessFlowDiagram;
+            case 'ManualUpload': return this.props.manualupload.DGIMN;
+            default: return this.props.DGIMN;
+        }
+    }
     getTreeDatalist = () => {
         const { isloading, treedatalist, PollutantType, noselect } = this.props;
+        var flag = this.flag(this.props.flag);
         let res = [];
         let pollutantType = this.props.PollutantType;
         if (treedatalist) {
             if (treedatalist.length !== 0) {
-                //如果是初次加载则赋予selectDgimn缓存中的MN号，缓存中的MN号码已经由初次加载的父页面拿到（董晓云修改）
-                if (this.state.boolen === 0) {
-                    this.setDGIMN();
-                }
                 this.props.treedatalist.map((item, key) => {
                     res.push(<div
                         key={key}
                         onClick={() => {
                             this.props.treeCilck(item, key);
-                            this.setState({
-                                selectDgimn: item.DGIMN
-                            });
                         }}
-                        className={(item.DGIMN === this.state.selectDgimn && !noselect) ? styles.cardDivClick : styles.cardDiv}
+                        className={(item.DGIMN === flag && !noselect) ? styles.cardDivClick : styles.cardDiv}
                     >
                         <div key={key} className={styles.cardtopspan}>
                             <span className={styles.statusimg}>
@@ -96,12 +120,6 @@ class TreeCardContent extends Component {
             res = (<div style={{ textAlign: 'center', height: 70, background: '#fff' }}>暂无数据</div>);
         }
         return res;
-    }
-    setDGIMN = () => {
-        this.setState({
-            selectDgimn: localStorage.getItem('DGIMN'),
-            boolen: 1
-        });
     }
     render() {
         if (this.props.isloading) {

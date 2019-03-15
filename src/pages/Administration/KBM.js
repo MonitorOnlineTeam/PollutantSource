@@ -186,14 +186,30 @@ export default class KBM extends Component {
     }
     //重新加载数据
     reloaddata = (Name, pageIndex, pageSize) => {
+        this.updateState({
+            pageIndex: pageIndex,
+            pageSize: pageSize,
+            KBMParameters: {
+                ...this.props.KBMParameters,
+                ...{
+                    Name: Name,
+                }
+            }
+        });
         this.props.dispatch({
             type: 'administration/GetKBMList',
             payload: {
-                Name: Name,
-                pageIndex: pageIndex,
-                pageSize: pageSize
             }
         })
+    }
+    /**
+* 更新model中的state
+*/
+    updateState = (payload) => {
+        this.props.dispatch({
+            type: 'administration/updateState',
+            payload: payload,
+        });
     }
     render() {
         const menu = (id, name) => (

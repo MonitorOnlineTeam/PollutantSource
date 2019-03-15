@@ -12,7 +12,7 @@ add by cg 18.12.17
 */
 
 @connect(({videolist}) => ({
-    realtimevideofullurl:videolist.realtimevideofullurl,
+    realtimevideofullurl:videolist.videoListParameters.realtimevideofullurl,
 }))
 class RealVideo extends Component {
     constructor(props) {
@@ -44,6 +44,8 @@ class RealVideo extends Component {
 
    render() {
        const {realtimevideofullurl}=this.props;
+       console.log(realtimevideofullurl)
+       debugger
        if(!realtimevideofullurl){
            return (<Spin
                style={{ width: '100%',

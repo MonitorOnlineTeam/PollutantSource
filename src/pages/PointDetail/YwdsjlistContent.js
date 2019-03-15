@@ -42,9 +42,9 @@ class YwdsjlistContent extends Component {
         };
 
         this.ChangeModelState(condition);
-        if(this.props.taskfrom!=="operationywdsjlist"){
-            this.GetYwdsj(false);
-        }
+        // if(this.props.taskfrom!=="operationywdsjlist"){
+        this.GetYwdsj(false);
+        // }
     }
 
     GetYwdsj = (isLoadMoreOpt) => {
@@ -119,18 +119,18 @@ class YwdsjlistContent extends Component {
             const rtnVal = [];
             let value = null;
             let valueName = null;
-            let exceptionTypeText=``;
+            let exceptionTypeText = ``;
             data.map((item, key) => {
                 rtnVal.push(<Timeline.Item key={key} dot={<div className={Ywdsjlistss.DateLoad} />}>
                     <p className={Ywdsjlistss.taskDate}>{item.NodeDate}</p>
-                            </Timeline.Item>);
+                </Timeline.Item>);
                 item.NodeList.map((item1, key1) => {
                     if (item1.TaskType == EnumPatrolTaskType.PatrolTask) { //巡检任务
-                        if(item1.TaskStatus==EnumOperationTaskStatus.WaitFor){
-                            value=`例行任务于${item1.CreateTime}被创建，待执行`;
-                           
+                        if (item1.TaskStatus == EnumOperationTaskStatus.WaitFor) {
+                            value = `例行任务于${item1.CreateTime}被创建，待执行`;
+
                             rtnVal.push(
-                                <Timeline.Item key={`${key1 }2${ key}`} dot={<img style={{width: '38px', height: '38px'}} src="/patrol.png" />}>
+                                <Timeline.Item key={`${key1}2${key}`} dot={<img style={{ width: '38px', height: '38px' }} src="/patrol.png" />}>
                                     <p className={Ywdsjlistss.taskDetail}>{value}</p>
                                     <div
                                         className={Ywdsjlistss.seeDetail}
@@ -142,12 +142,12 @@ class YwdsjlistContent extends Component {
                                     </div>
                                 </Timeline.Item>
                             );
-                        }else if(item1.TaskStatus == EnumOperationTaskStatus.Underway){
-                            value=`例行任务于${item1.CreateTime}被创建，正在执行中，执行人：`;
-                            valueName=`${item1.OperationsUserName}`;
+                        } else if (item1.TaskStatus == EnumOperationTaskStatus.Underway) {
+                            value = `例行任务于${item1.CreateTime}被创建，正在执行中，执行人：`;
+                            valueName = `${item1.OperationsUserName}`;
                             rtnVal.push(
-                                <Timeline.Item key={`${key1 }2${ key}`} dot={<img style={{width: '38px', height: '38px'}} src="/patrol.png" />}>
-                                    <p className={Ywdsjlistss.taskDetail}>{value}<span style={{color: '#40B0F5', marginRight: '10px'}}>{valueName}</span></p>
+                                <Timeline.Item key={`${key1}2${key}`} dot={<img style={{ width: '38px', height: '38px' }} src="/patrol.png" />}>
+                                    <p className={Ywdsjlistss.taskDetail}>{value}<span style={{ color: '#40B0F5', marginRight: '10px' }}>{valueName}</span></p>
                                     <div
                                         className={Ywdsjlistss.seeDetail}
                                         onClick={() => {
@@ -163,8 +163,8 @@ class YwdsjlistContent extends Component {
                             value = `于${item1.CompleteTime}完成例行任务`;
                             valueName = `${item1.OperationsUserName}`;
                             rtnVal.push(
-                                <Timeline.Item key={`${key1 }2${ key}`} dot={<img style={{width: '38px', height: '38px'}} src="/patrol.png" />}>
-                                    <p className={Ywdsjlistss.taskDetail}><span style={{color: '#40B0F5', marginRight: '10px'}}>{valueName}</span>{value}</p>
+                                <Timeline.Item key={`${key1}2${key}`} dot={<img style={{ width: '38px', height: '38px' }} src="/patrol.png" />}>
+                                    <p className={Ywdsjlistss.taskDetail}><span style={{ color: '#40B0F5', marginRight: '10px' }}>{valueName}</span>{value}</p>
                                     <div
                                         className={Ywdsjlistss.seeDetail}
                                         onClick={() => {
@@ -177,13 +177,13 @@ class YwdsjlistContent extends Component {
                             );
                         }
                     } else if (item1.TaskType == EnumPatrolTaskType.ExceptionTask) { //应急任务
-                        if(item1.TaskStatus==EnumOperationTaskStatus.WaitFor){
-                            value=`应急任务于${item1.CreateTime}被创建，待执行，执行人：`;
+                        if (item1.TaskStatus == EnumOperationTaskStatus.WaitFor) {
+                            value = `应急任务于${item1.CreateTime}被创建，待执行，执行人：`;
                             rtnVal.push(
-                                <Timeline.Item key={`${key1 }3${ key}`} dot={<img style={{width: '38px', height: '38px'}} src="/emergeny.png" />}>
+                                <Timeline.Item key={`${key1}3${key}`} dot={<img style={{ width: '38px', height: '38px' }} src="/emergeny.png" />}>
                                     <p className={Ywdsjlistss.taskDetail}>{value}</p>
                                     {
-                                       item1.ExceptionTypeText?<div style={{height:'30px',lineHeight:'30px'}}><img style={{width:'18px',height:'18px',marginBottom:'4px',marginLeft:'20px',marginRight:'5px'}} src="/alarm_small.png"/>{item.ExceptionTypeText}</div>:''
+                                        item1.ExceptionTypeText ? <div style={{ height: '30px', lineHeight: '30px' }}><img style={{ width: '18px', height: '18px', marginBottom: '4px', marginLeft: '20px', marginRight: '5px' }} src="/alarm_small.png" />{item.ExceptionTypeText}</div> : ''
                                     }
                                     <div
                                         className={Ywdsjlistss.seeDetail}
@@ -191,18 +191,18 @@ class YwdsjlistContent extends Component {
                                             this.props.dispatch(routerRedux.push(`/TaskDetail/emergencydetailinfolayout/${this.props.viewtype}/${this.props.taskfrom}/${item1.ID}/${this.props.DGIMN}`));
                                         }}
                                     >
-                                            查看详情
+                                        查看详情
                                     </div>
                                 </Timeline.Item>
                             );
-                        }else if(item1.TaskStatus == EnumOperationTaskStatus.Underway){
-                            value=`应急任务于${item1.CreateTime}被创建，正在执行中，执行人：`;
-                            valueName=`${item1.OperationsUserName}`;
+                        } else if (item1.TaskStatus == EnumOperationTaskStatus.Underway) {
+                            value = `应急任务于${item1.CreateTime}被创建，正在执行中，执行人：`;
+                            valueName = `${item1.OperationsUserName}`;
                             rtnVal.push(
-                                <Timeline.Item key={`${key1 }3${ key}`} dot={<img style={{width: '38px', height: '38px'}} src="/emergeny.png" />}>
-                                    <p className={Ywdsjlistss.taskDetail}>{value}<span style={{color: '#40B0F5', marginRight: '10px'}}>{valueName}</span></p>
+                                <Timeline.Item key={`${key1}3${key}`} dot={<img style={{ width: '38px', height: '38px' }} src="/emergeny.png" />}>
+                                    <p className={Ywdsjlistss.taskDetail}>{value}<span style={{ color: '#40B0F5', marginRight: '10px' }}>{valueName}</span></p>
                                     {
-                                       item1.ExceptionTypeText?<div style={{height:'30px',lineHeight:'30px'}}><img style={{width:'18px',height:'18px',marginBottom:'4px',marginLeft:'20px',marginRight:'5px'}} src="/alarm_small.png"/>{item1.ExceptionTypeText}</div>:''
+                                        item1.ExceptionTypeText ? <div style={{ height: '30px', lineHeight: '30px' }}><img style={{ width: '18px', height: '18px', marginBottom: '4px', marginLeft: '20px', marginRight: '5px' }} src="/alarm_small.png" />{item1.ExceptionTypeText}</div> : ''
                                     }
                                     <div
                                         className={Ywdsjlistss.seeDetail}
@@ -210,18 +210,18 @@ class YwdsjlistContent extends Component {
                                             this.props.dispatch(routerRedux.push(`/TaskDetail/emergencydetailinfolayout/${this.props.viewtype}/${this.props.taskfrom}/${item1.ID}/${this.props.DGIMN}`));
                                         }}
                                     >
-                                            查看详情
+                                        查看详情
                                     </div>
                                 </Timeline.Item>
                             );
-                        }else if(item1.TaskStatus == EnumOperationTaskStatus.Completed){
+                        } else if (item1.TaskStatus == EnumOperationTaskStatus.Completed) {
                             value = `于${item1.CompleteTime}完成应急任务`;
                             valueName = `${item1.OperationsUserName}`;
                             rtnVal.push(
-                                <Timeline.Item key={`${key1 }3${ key}`} dot={<img style={{width: '38px', height: '38px'}} src="/emergeny.png" />}>
-                                    <p className={Ywdsjlistss.taskDetail}><span style={{color: '#40B0F5', marginRight: '10px'}}>{valueName}</span>{value}</p>
+                                <Timeline.Item key={`${key1}3${key}`} dot={<img style={{ width: '38px', height: '38px' }} src="/emergeny.png" />}>
+                                    <p className={Ywdsjlistss.taskDetail}><span style={{ color: '#40B0F5', marginRight: '10px' }}>{valueName}</span>{value}</p>
                                     {
-                                       item1.ExceptionTypeText?<div style={{height:'30px',lineHeight:'30px'}}><img style={{width:'18px',height:'18px',marginBottom:'4px',marginLeft:'20px',marginRight:'5px'}} src="/alarm_small.png"/>{item1.ExceptionTypeText}</div>:''
+                                        item1.ExceptionTypeText ? <div style={{ height: '30px', lineHeight: '30px' }}><img style={{ width: '18px', height: '18px', marginBottom: '4px', marginLeft: '20px', marginRight: '5px' }} src="/alarm_small.png" />{item1.ExceptionTypeText}</div> : ''
                                     }
                                     <div
                                         className={Ywdsjlistss.seeDetail}
@@ -229,7 +229,7 @@ class YwdsjlistContent extends Component {
                                             this.props.dispatch(routerRedux.push(`/TaskDetail/emergencydetailinfolayout/${this.props.viewtype}/${this.props.taskfrom}/${item1.ID}/${this.props.DGIMN}`));
                                         }}
                                     >
-                                            查看详情
+                                        查看详情
                                     </div>
                                 </Timeline.Item>
                             );
@@ -239,7 +239,7 @@ class YwdsjlistContent extends Component {
                         let valueName2 = `${item1.OperationsUserName}`;
                         let value3 = `${item1.Remark === null ? '' : item1.Remark}`;
                         rtnVal.push(
-                            <Timeline.Item key={`${key1 }4${ key}`} dot={<img style={{ width: '38px', height: '38px' }} src="/alarmpic.png" />}>
+                            <Timeline.Item key={`${key1}4${key}`} dot={<img style={{ width: '38px', height: '38px' }} src="/alarmpic.png" />}>
                                 <p className={Ywdsjlistss.taskDetail}><span style={{ color: '#40B0F5', marginRight: '10px' }}>{valueName2}</span>{value2}</p>
                                 <p className={Ywdsjlistss.pLoad}>{value3}</p>
                             </Timeline.Item>
