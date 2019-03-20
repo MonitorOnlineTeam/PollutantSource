@@ -2,10 +2,14 @@ import {
     Model
 } from '../dvapack';
 import {
-    getList, deleteuser, enableduser, isexistenceuser, adduser, getuser, edituser, userDgimnDataFilter, editpersonaluser, getmypielist,mymessagelist,
+    getList, deleteuser, enableduser, isexistenceuser, adduser, getuser, edituser, editpersonaluser, getmypielist,mymessagelist,
     setEnterpriseDataRole,getEnterpriseDataRoles
 } from '../services/userlist';
-
+/*
+用户管理相关接口
+add by xpy
+modify by
+*/
 export default Model.extend({
     namespace: 'userinfo',
 
@@ -31,41 +35,26 @@ export default Model.extend({
             history
         }) {
             history.listen((location) => {
-                // if (location.pathname === '/monitor/sysmanage/userinfo') {
-                //     // 初始化testId的值为10
-                //     dispatch({
-                //         type: 'fetchuserlist',
-                //         payload: {
-
-                //         },
-                //     });
-                // }
             });
         },
     },
+
     effects: {
+        /*获取用户列表**/
         * fetchuserlist({
-            payload: {
-                pageIndex,
-                pageSize,
-                UserAccount,
-                DeleteMark,
-            }
+            payload
         }, {
             call,
-            put,
             update,
-            select
         }) {
-            const result = yield call(getList, {pageIndex: pageIndex, pageSize: pageSize, UserAccount: UserAccount, DeleteMark: DeleteMark});
-
+            const result = yield call(getList, {...payload});
             if (result.requstresult === '1') {
                 yield update({
                     requstresult: result.requstresult,
                     list: result.data,
                     total: result.total,
-                    pageIndex: pageIndex,
-                    pageSize: pageSize
+                    pageIndex: payload.pageIndex,
+                    pageSize: payload.pageSize
                 });
             } else {
                 yield update({
@@ -77,22 +66,16 @@ export default Model.extend({
                 });
             }
         },
+        /*删除用户**/
         * deleteuser({
-            payload: {
-                UserId,
-                pageIndex,
-                pageSize,
-                UserAccount,
-                DeleteMark,
-                callback
-            }
+            payload
         }, {
             call,
             put,
             update,
         }) {
             const result = yield call(deleteuser, {
-                UserId: UserId,
+                UserId: payload.UserId,
             });
             yield update({
                 requstresult: result.requstresult,
@@ -100,32 +83,25 @@ export default Model.extend({
             yield put({
                 type: 'fetchuserlist',
                 payload:{
-                    pageIndex,
-                    pageSize,
-                    UserAccount,
-                    DeleteMark,
+                    pageIndex: payload.pageIndex,
+                    pageSize: payload.pageSize,
+                    UserAccount: payload.UserAccount,
+                    DeleteMark: payload.DeleteMark,
                 }
             });
-            callback();
+            payload.callback();
         },
+        /*开启或禁用用户**/
         * enableduser({
-            payload: {
-                UserId,
-                Enalbe,
-                pageIndex,
-                pageSize,
-                UserAccount,
-                DeleteMark
-            }
+            payload
         }, {
             call,
             put,
             update,
-            select
         }) {
             const result = yield call(enableduser, {
-                UserId: UserId,
-                Enalbe: Enalbe,
+                UserId: payload.UserId,
+                Enalbe: payload.Enalbe,
             });
             yield update({
                 requstresult: result.requstresult,
@@ -133,233 +109,102 @@ export default Model.extend({
             yield put({
                 type: 'fetchuserlist',
                 payload: {
-                    pageIndex,
-                    pageSize,
-                    UserAccount,
-                    DeleteMark
+                    pageIndex: payload.pageIndex,
+                    pageSize: payload.pageSize,
+                    UserAccount: payload.UserAccount,
+                    DeleteMark: payload.DeleteMark
                 },
             });
         },
+        /*验证用户名是否存在**/
         * isexistenceuser({
-            payload: {
-                UserAccount,
-                callback,
-            }
+            payload
         }, {
             call,
-            put,
             update,
-            select
         }) {
             const result = yield call(isexistenceuser, {
-                UserAccount: UserAccount,
+                UserAccount: payload.UserAccount,
             });
             yield update({
                 requstresult: result.requstresult,
                 reason: result.reason
             });
-            callback();
+            payload.callback();
         },
+        /*添加用户**/
         * adduser({
-            payload: {
-                UserAccount,
-                UserName,
-                UserSex,
-                Email,
-                Phone,
-                Title,
-                UserOrderby,
-                SendPush,
-                AlarmType,
-                AlarmTime,
-                UserRemark,
-                DeleteMark,
-                RolesId,
-                callback
-            }
+            payload
         }, {
             call,
-            put,
             update,
-            select
         }) {
             const result = yield call(adduser, {
-                UserAccount: UserAccount,
-                UserName: UserName,
-                UserSex: UserSex,
-                Email: Email,
-                Phone: Phone,
-                Title: Title,
-                UserOrderby: UserOrderby,
-                SendPush: SendPush,
-                AlarmType: AlarmType,
-                AlarmTime: AlarmTime,
-                UserRemark: UserRemark,
-                DeleteMark: DeleteMark,
-                RolesId: RolesId
+                ...payload
             });
             yield update({
                 requstresult: result.requstresult,
                 reason: result.reason
             });
-            callback();
+            payload.callback();
         },
+        /*获取单个用户实体**/
         * getuser({
-            payload: {
-                UserId,
-                callback
-            }
+            payload
         }, {
             call,
-            put,
             update,
-            select
         }) {
             const result = yield call(getuser, {
-                UserId: UserId
+                ...payload
             });
             yield update({
                 requstresult: result.requstresult,
                 editUser: result.data[0]
             });
-            callback();
+            payload.callback();
         },
+        /*编辑用户**/
         * edituser({
-            payload: {
-                UserId,
-                UserAccount,
-                UserName,
-                UserSex,
-                Email,
-                Phone,
-                Title,
-                UserOrderby,
-                SendPush,
-                AlarmType,
-                AlarmTime,
-                UserRemark,
-                DeleteMark,
-                RolesId,
-                callback
-            }
+            payload
         }, {
             call,
-            put,
             update,
-            select
         }) {
             const result = yield call(edituser, {
-                UserId: UserId,
-                UserAccount: UserAccount,
-                UserName: UserName,
-                UserSex: UserSex,
-                Email: Email,
-                Phone: Phone,
-                Title: Title,
-                UserOrderby: UserOrderby,
-                SendPush: SendPush,
-                AlarmType: AlarmType,
-                AlarmTime: AlarmTime,
-                UserRemark: UserRemark,
-                DeleteMark: DeleteMark,
-                RolesId: RolesId
+                ...payload
             });
             yield update({
                 requstresult: result.requstresult,
                 reason: result.reason
             });
-            callback();
+            payload.callback();
         },
+        /*个人设置编辑信息**/
         * editpersonaluser({
-            payload: {
-                UserId,
-                UserName,
-                UserSex,
-                Email,
-                Phone,
-                SendPush,
-                AlarmType,
-                AlarmTime,
-                callback
-            }
+            payload
         }, {
             call,
-            put,
             update,
-            select
         }) {
             const result = yield call(editpersonaluser, {
-                UserId: UserId,
-                UserName: UserName,
-                UserSex: UserSex,
-                Email: Email,
-                Phone: Phone,
-                SendPush: SendPush,
-                AlarmType: AlarmType,
-                AlarmTime: AlarmTime,
+                ...payload
             });
             yield update({
                 requstresult: result.requstresult,
                 reason: result.reason
             });
-            callback();
+            payload.callback();
         },
-        * userDgimnDataFilter({
-            payload: {
-                UserId,
-                TestKey,
-                pageIndex,
-                pageSize,
-            }
-        }, {
-            call,
-            put,
-            update,
-            select
-        }) {
-            const result = yield call(userDgimnDataFilter, {
-                UserId: UserId,
-                TestKey: TestKey,
-                pageIndex: pageIndex,
-                pageSize: pageSize,
-            });
-
-            if (result.requstresult === '1') {
-                yield update({
-                    requstresult: result.requstresult,
-                    list: result.data,
-                    total: result.total,
-                    pageIndex: pageIndex,
-                    pageSize: pageSize
-                });
-            } else {
-                yield update({
-                    requstresult: result.requstresult,
-                    list: [],
-                    total: 0,
-                    pageIndex: null,
-                    pageSize: null
-                });
-            }
-        },
+        /*个人设置我的派单列表**/
         * getmypielist({
-            payload: {
-                pageIndex,
-                pageSize,
-                beginTime,
-                endTime
-            }
+            payload
         }, {
             call,
-            put,
             update,
-            select
         }) {
             const result = yield call(getmypielist, {
-                pageIndex: pageIndex,
-                pageSize: pageSize,
-                beginTime: beginTime,
-                endTime: endTime
+                ...payload
             });
 
             if (result.requstresult === '1') {
@@ -367,8 +212,8 @@ export default Model.extend({
                     requstresult: result.requstresult,
                     mypielist: result.data,
                     total: result.total,
-                    pageIndex: pageIndex,
-                    pageSize: pageSize
+                    pageIndex: payload.pageIndex,
+                    pageSize: payload.pageSize
                 });
             } else {
                 yield update({
@@ -380,24 +225,15 @@ export default Model.extend({
                 });
             }
         },
+        /*个人设置我的消息列表**/
         * mymessagelist({
-            payload: {
-                pageIndex,
-                pageSize,
-                beginTime,
-                endTime
-            }
+            payload
         }, {
             call,
-            put,
             update,
-            select
         }) {
             const result = yield call(mymessagelist, {
-                pageIndex: pageIndex,
-                pageSize: pageSize,
-                beginTime: beginTime,
-                endTime: endTime
+                ...payload
             });
 
             if (result.requstresult === '1') {
@@ -405,8 +241,8 @@ export default Model.extend({
                     requstresult: result.requstresult,
                     mymessagelist: result.data,
                     total: result.total,
-                    pageIndex: pageIndex,
-                    pageSize: pageSize
+                    pageIndex: payload.pageIndex,
+                    pageSize: payload.pageSize
                 });
             } else {
                 yield update({

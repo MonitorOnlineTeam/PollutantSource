@@ -7,7 +7,11 @@ import {
     , getanalyzersysmn,getanalyzerbymn
 } from '../services/pointinfo';
 import { EnumRequstResult } from '../utils/enum';
-
+/*
+排口管理相关接口
+add by xpy
+modify by
+*/
 export default Model.extend({
     namespace: 'pointinfo',
 
@@ -51,44 +55,27 @@ export default Model.extend({
             history
         }) {
             history.listen((location) => {
-                // if (location.pathname === '/monitor/sysmanage/userinfo') {
-                //     // 初始化testId的值为10
-                //     dispatch({
-                //         type: 'fetchuserlist',
-                //         payload: {
-
-                //         },
-                //     });
-                // }
             });
         },
     },
     effects: {
+        /*获取当前登陆人的排口列表**/
         * getpointlist({
-            payload: {
-                pageIndex,
-                pageSize,
-                DGIMNs
-            }
+            payload
         }, {
             call,
-            put,
             update,
-            select
         }) {
             const result = yield call(getpointlist, {
-                pageIndex: pageIndex,
-                pageSize: pageSize,
-                DGIMNs: DGIMNs
+                ...payload
             });
-
             if (result.requstresult === '1') {
                 yield update({
                     requstresult: result.requstresult,
                     list: result.data,
                     total: result.total,
-                    pageIndex: pageIndex,
-                    pageSize: pageSize
+                    pageIndex: payload.pageIndex,
+                    pageSize: payload.pageSize
                 });
             } else {
                 yield update({
@@ -100,69 +87,28 @@ export default Model.extend({
                 });
             }
         },
+        /*添加排口**/
         * addpoint({
-            payload: {
-                DGIMN,
-                PointName,
-                PointType,
-                PollutantType,
-                IsSj,
-                RunState,
-                Coordinate,
-                OutPutWhitherCode,
-                Linkman,
-                Col3,
-                GasOutputTypeCode,
-                OutputDiameter,
-                OutputHigh,
-                Sort,
-                Address,
-                OutputType,
-                OperationerId,
-                DevicePassword,
-                callback
-            }
+            payload
         }, {
             call,
-            put,
             update,
-            select
         }) {
             const result = yield call(addpoint, {
-                DGIMN: DGIMN,
-                PointName: PointName,
-                PointType: PointType,
-                PollutantType: PollutantType,
-                IsSj: IsSj,
-                RunState: RunState,
-                Coordinate: Coordinate,
-                OutPutWhitherCode: OutPutWhitherCode,
-                Linkman: Linkman,
-                Col3: Col3,
-                GasOutputTypeCode: GasOutputTypeCode,
-                OutputDiameter: OutputDiameter,
-                OutputHigh: OutputHigh,
-                Sort: Sort,
-                Address: Address,
-                OutputType: OutputType,
-                OperationerId: OperationerId,
-                DevicePassword:DevicePassword
+                ...payload
             });
             yield update({
                 requstresult: result.requstresult,
                 reason: result.reason,
             });
-            callback();
+            payload.callback();
         },
+        /*获取运维人**/
         * getoperationsuserList({
-            payload: {
-                callback
-            }
+            payload
         }, {
             call,
-            put,
             update,
-            select
         }) {
             const result = yield call(getoperationsuserList, {
             });
@@ -177,17 +123,14 @@ export default Model.extend({
                     userlist: [],
                 });
             }
-            callback();
+            payload.callback();
         },
+        /*获取环保专工**/
         * getspecialworkeruserList({
-            payload: {
-                callback
-            }
+            payload
         }, {
             call,
-            put,
             update,
-            select
         }) {
             const result = yield call(getspecialworkeruserList, {});
             if (result.requstresult === '1') {
@@ -201,17 +144,14 @@ export default Model.extend({
                     swuserlist: [],
                 });
             }
-            callback();
+            payload.callback();
         },
+        /*获取污染物类型**/
         * getpollutanttypelist({
-            payload: {
-                callback
-            }
+            payload
         }, {
             call,
-            put,
             update,
-            select
         }) {
             const result = yield call(getpollutanttypelist, {
             });
@@ -226,17 +166,14 @@ export default Model.extend({
                     pollutanttypelist: [],
                 });
             }
-            callback();
+            payload.callback();
         },
+        /**获取气排口类型 */
         * getgasoutputtypelist({
-            payload: {
-                callback
-            }
+            payload
         }, {
             call,
-            put,
             update,
-            select
         }) {
             const result = yield call(getgasoutputtypelist, {
             });
@@ -251,99 +188,51 @@ export default Model.extend({
                     gasoutputtypelist: [],
                 });
             }
-            callback();
+            payload.callback();
         },
+        /**获取单个排口实体 */
         * getpoint({
-            payload: {
-                DGIMN,
-                callback
-            }
+            payload
         }, {
             call,
-            put,
             update,
-            select
         }) {
 
             const result = yield call(getpoint, {
-                DGIMN: DGIMN
+                ...payload
             });
             yield update({
                 requstresult: result.requstresult,
                 editpoint: result.data[0]
             });
-            callback();
+            payload.callback();
         },
+        /**编辑排口 */
         * editpoint({
-            payload: {
-                DGIMN,
-                PointName,
-                PointType,
-                PollutantType,
-                IsSj,
-                RunState,
-                Coordinate,
-                OutPutWhitherCode,
-                Linkman,
-                Col3,
-                GasOutputTypeCode,
-                OutputDiameter,
-                OutputHigh,
-                Sort,
-                Address,
-                OutputType,
-                OperationerId,
-                DevicePassword,
-                callback
-            }
+            payload
         }, {
             call,
-            put,
             update,
-            select
         }) {
             const result = yield call(editpoint, {
-                DGIMN: DGIMN,
-                PointName: PointName,
-                PointType: PointType,
-                PollutantType: PollutantType,
-                IsSj: IsSj,
-                RunState: RunState,
-                Coordinate: Coordinate,
-                OutPutWhitherCode: OutPutWhitherCode,
-                Linkman: Linkman,
-                Col3: Col3,
-                GasOutputTypeCode: GasOutputTypeCode,
-                OutputDiameter: OutputDiameter,
-                OutputHigh: OutputHigh,
-                Sort: Sort,
-                Address: Address,
-                OutputType: OutputType,
-                OperationerId: OperationerId,
-                DevicePassword:DevicePassword
+                ...payload
             });
             yield update({
                 requstresult: result.requstresult,
                 reason: result.reason,
             });
-            callback();
+            payload.callback();
         },
+        /**删除排口 */
         * deletepoint({
-            payload: {
-                DGIMN,
-                DGIMNs,
-                pageIndex,
-                pageSize,
-                callback
-            }
+            payload
         }, {
             call,
             put,
             update,
-            select
         }) {
             const result = yield call(deletepoint, {
-                DGIMN: DGIMN
+                DGIMN: payload.DGIMN
             });
             yield update({
                 requstresult: result.requstresult,
@@ -352,25 +241,23 @@ export default Model.extend({
             yield put({
                 type: 'getpointlist',
                 payload: {
-                    pageIndex,
-                    pageSize,
-                    DGIMNs,
+                    ...payload
                 },
             });
-            callback();
+            payload.callback();
         },
+        /* 获取排口CEMS监测子系统主表**/
         * getanalyzersys({
-            payload: {
-                DGIMN,
-            }
+            payload
         }, {
             call,
             update,
         }) {
+
             const DataInfo = yield call(getanalyzersys, {
-                DGIMN: DGIMN
+                ...payload
             });
-            if (DataInfo !== null&& DataInfo.requstresult == EnumRequstResult.Success) {
+            if (DataInfo !== null&& DataInfo.requstresult ==="1") {
                 if (DataInfo.data !== null) {
                     yield update({
                         AnalyzerSys: DataInfo.data
@@ -383,104 +270,76 @@ export default Model.extend({
             }
 
         },
+        /**添加排口CEMS监测子系统主表*/
         * addalyzersys({
-            payload: {
-                DGIMN,
-                Manufacturer,
-                ManufacturerCode,
-                Type,
-                callback
-            }
+            payload
         }, {
             call,
-            put,
             update,
-            select
         }) {
             const result = yield call(addalyzersys, {
-                DGIMN: DGIMN,
-                Manufacturer: Manufacturer,
-                ManufacturerCode: ManufacturerCode,
-                Type: Type,
+                ...payload
             });
             yield update({
                 addalyzersys_requstresult: result.requstresult,
                 reason: result.reason,
             });
-            callback();
+            payload.callback();
         },
+        /**获取排口CEMS监测子系统实体*/
         * getanalyzersysmnmodel({
-            payload: {
-                ID,
-                callback
-            }
+            payload
         }, {
             call,
-            put,
             update,
         }) {
             const result = yield call(getanalyzersysmnmodel, {
-                ID: ID
+                ...payload
             });
             yield update({
                 getanalyzersysmnmodel_requstresult: result.requstresult,
                 editAnalyzerSys: result.data[0],
             });
-            callback();
+            payload.callback();
         },
+        /**编辑排口CEMS监测子系统主表*/
         * editalyzersys({
-            payload: {
-                ID,
-                Manufacturer,
-                ManufacturerCode,
-                callback
-            }
+            payload
         }, {
             call,
-            put,
             update,
-            select
         }) {
             const result = yield call(editalyzersys, {
-                ID: ID,
-                Manufacturer: Manufacturer,
-                ManufacturerCode: ManufacturerCode,
+                ...payload
             });
             yield update({
                 editalyzersys_requstresult: result.requstresult,
                 reason: result.reason,
             });
-            callback();
+            payload.callback();
         },
+        /**删除排口CEMS监测子系统主表*/
         * deletealyzersys({
-            payload: {
-                ID,
-                callback
-            }
+            payload
         }, {
             call,
-            put,
             update,
-            select
         }) {
             const result = yield call(deletealyzersys, {
-                ID: ID,
+                ...payload
             });
             yield update({
                 deletealyzersys_requstresult: result.requstresult,
                 reason: result.reason,
             });
-            callback();
+            payload.callback();
         },
+        /**获取测试项目 */
         * getcomponent({
-            payload: {
-                callback
-            }
+            payload
         }, {
             call,
-            put,
             update,
-            select
         }) {
             const result = yield call(getcomponent, {
             });
@@ -490,65 +349,33 @@ export default Model.extend({
                 reason: result.reason,
                 component: result.data,
             });
-            callback();
+            payload.callback();
         },
+        /**添加排口CEMS监测子系统子表*/
         * addalyzerchild({
-            payload: {
-                DGIMN,
-                Name,
-                DeviceModel,
-                Manufacturer,
-                ManufacturerAbbreviation,
-                TestComponent,
-                AnalyzerPrinciple,
-                AnalyzerRangeMin,
-                MeasurementUnit,
-                Slope,
-                Intercept,
-                AnalyzerSys_Id,
-                AnalyzerRangeMax,
-                callback
-            }
+            payload
         }, {
             call,
-            put,
             update,
-            select
         }) {
             const result = yield call(addalyzerchild, {
-                DGIMN: DGIMN,
-                Name: Name,
-                DeviceModel: DeviceModel,
-                Manufacturer: Manufacturer,
-                ManufacturerAbbreviation: ManufacturerAbbreviation,
-                TestComponent: TestComponent,
-                AnalyzerPrinciple: AnalyzerPrinciple,
-                AnalyzerRangeMin: AnalyzerRangeMin,
-                MeasurementUnit: MeasurementUnit,
-                Slope: Slope,
-                Intercept: Intercept,
-                AnalyzerSys_Id: AnalyzerSys_Id,
-                AnalyzerRangeMax: AnalyzerRangeMax,
+                ...payload
             });
             yield update({
                 addalyzerchild_requstresult: result.requstresult,
                 reason: result.reason,
             });
-            callback();
+            payload.callback();
         },
+        /**获取排口CEMS监测子系统主表下所有子表的数据*/
         * getanalyzerchild({
-            payload: {
-                ID,
-                callback
-            }
+            payload
         }, {
             call,
-            put,
             update,
-            select
         }) {
             const result = yield call(getanalyzerchild, {
-                ID: ID,
+                ...payload
             });
             yield update({
 
@@ -556,90 +383,54 @@ export default Model.extend({
                 reason: result.reason,
                 analyzerchild: result.data,
             });
-            callback();
+            payload.callback();
         },
+        /**获取排口CEMS监测子系统子表实体*/
         * getanalyzerchildmodel({
-            payload: {
-                ID,
-                callback
-            }
+            payload
         }, {
             call,
-            put,
             update,
-            select
         }) {
             const result = yield call(getanalyzerchildmodel, {
-                ID: ID,
+                ...payload
             });
             yield update({
                 getanalyzerchildmodel_requstresult: result.requstresult,
                 reason: result.reason,
                 editalyzersyschild: result.data[0],
             });
-            callback();
+            payload.callback();
         },
+        /**删除排口CEMS监测子系统子表*/
         * deletealyzerchild({
-            payload: {
-                ID,
-                callback
-            }
+            payload
         }, {
             call,
-            put,
             update,
-            select
         }) {
-            const result = yield call(deletealyzerchild, {
-                ID: ID,
-            });
+            const result = yield call(deletealyzerchild,payload);
             yield update({
                 deletealyzerchild_requstresult: result.requstresult,
                 reason: result.reason,
             });
-            callback();
+            payload.callback();
         },
+        /**编辑排口CEMS监测子系统子表*/
         * editalyzerchild({
-            payload: {
-                ID,
-                Name,
-                DeviceModel,
-                Manufacturer,
-                ManufacturerAbbreviation,
-                TestComponent,
-                AnalyzerPrinciple,
-                AnalyzerRangeMin,
-                MeasurementUnit,
-                Slope,
-                Intercept,
-                AnalyzerRangeMax,
-                callback
-            }
+            payload
         }, {
             call,
-            put,
             update,
-            select
         }) {
             const result = yield call(editalyzerchild, {
-                ID,
-                Name: Name,
-                DeviceModel: DeviceModel,
-                Manufacturer: Manufacturer,
-                ManufacturerAbbreviation: ManufacturerAbbreviation,
-                TestComponent: TestComponent,
-                AnalyzerPrinciple: AnalyzerPrinciple,
-                AnalyzerRangeMin: AnalyzerRangeMin,
-                MeasurementUnit: MeasurementUnit,
-                Slope: Slope,
-                Intercept: Intercept,
-                AnalyzerRangeMax: AnalyzerRangeMax,
+                ...payload
             });
             yield update({
                 editalyzerchild_requstresult: result.requstresult,
                 reason: result.reason,
             });
-            callback();
+            payload.callback();
         },
         * getmaininstrumentName({
             payload: {

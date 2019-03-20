@@ -27,46 +27,27 @@ export default Model.extend({
             history
         }) {
             history.listen((location) => {
-                // if (location.pathname === '/monitor/sysmanage/userinfo') {
-                //     // 初始化testId的值为10
-                //     dispatch({
-                //         type: 'fetchuserlist',
-                //         payload: {
-
-                //         },
-                //     });
-                // }
             });
         },
     },
     effects: {
+        /*获取当前登陆人的排口列表**/
         * userDgimnDataFilter({
-            payload: {
-                UserId,
-                TestKey,
-                pageIndex,
-                pageSize,
-                callback,
-            }
+            payload
         }, {
             call,
-            put,
             update,
-            select
         }) {
             const result = yield call(userDgimnDataFilter, {
-                UserId: UserId,
-                TestKey: TestKey,
-                pageIndex: pageIndex,
-                pageSize: pageSize,
+                ...payload
             });
             if (result.requstresult === '1') {
                 yield update({
                     requstresult: result.requstresult,
                     list: result.data,
                     total: result.total,
-                    pageIndex: pageIndex === undefined ? 1 : pageIndex,
-                    pageSize: pageSize === undefined ? 10 : pageSize,
+                    pageIndex: payload.pageIndex === undefined ? 1 : payload.pageIndex,
+                    pageSize: payload.pageSize === undefined ? 10 : payload.pageSize,
                     ischecked: result.data[0].IsCheck.split(','),
                     alldgimn: result.data[0].AllDgimn.split(','),
                     yichangDgimn: result.data[0].yCheck.split(','),
@@ -82,82 +63,52 @@ export default Model.extend({
                     pageSize: null
                 });
             }
-            callback();
+            payload.callback();
         },
+        /*把当前所有排口权限 添加/移除 当前登陆人**/
         * addAllDgimnDataFilter({
-            payload: {
-                UserId,
-                DGIMNS,
-                cbyj,
-                sjcb,
-                sjyc,
-                callback
-            }
+            payload
         }, {
             call,
-            put,
             update,
-            select
         }) {
             const result = yield call(addAllDgimnDataFilter, {
-                UserId: UserId,
-                DGIMNS: DGIMNS,
-                cbyj: cbyj,
-                sjcb: sjcb,
-                sjyc: sjyc,
+                ...payload
             });
             yield update({
                 requstresult: result.requstresult,
             });
-            callback();
+            payload.callback();
         },
+        /*把当前排口权限 添加/移除 当前登陆人**/
         * addDgimnDataFilter({
-            payload: {
-                UserId,
-                DGIMNS,
-                callback
-            }
+            payload
         }, {
             call,
-            put,
             update,
-            select
         }) {
             const result = yield call(addDgimnDataFilter, {
-                UserId: UserId,
-                DGIMNS: DGIMNS,
+                ...payload
             });
             yield update({
                 requstresult: result.requstresult,
             });
-            callback();
+            payload.callback();
         },
+        /*添加通知权限**/
         * addalarmlinkmandgimncode({
-            payload: {
-                UserId,
-                DGIMNS,
-                cbyj,
-                sjcb,
-                sjyc,
-                callback
-            }
+            payload
         }, {
             call,
-            put,
             update,
-            select
         }) {
             const result = yield call(addalarmlinkmandgimncode, {
-                UserId: UserId,
-                DGIMNS: DGIMNS,
-                cbyj:cbyj,
-                sjcb:sjcb,
-                sjyc:sjyc,
+                ...payload
             });
             yield update({
                 requstresult: result.requstresult,
             });
-            callback();
+            payload.callback();
         },
     },
     reducers: {

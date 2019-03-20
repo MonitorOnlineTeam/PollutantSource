@@ -66,6 +66,8 @@ export default class pointview extends Component {
             ChildId: null,
             PollutantType: null,
             pointstatus: 0,
+            RunStateName:null,
+            Col3Name:null,
         };
     }
     componentWillMount() {
@@ -97,6 +99,8 @@ export default class pointview extends Component {
                             OperationerName: this.props.editpoint.OperationerName,
                             PollutantType: this.props.editpoint.pollutantType === 1 ? "none" : "block",
                             pointstatus: this.props.editpoint.pointstatus,
+                            RunStateName: this.props.editpoint.RunStateName,
+                            Col3Name: this.props.editpoint.Col3Name,
                         });
                     }
                 },
@@ -208,6 +212,9 @@ export default class pointview extends Component {
         if (this.state.pointstatus === 3) {
             status.push(<Badge className={styles.pintview} status="warning" text="异常" />);
         }
+        if (this.state.pointstatus === 4) {
+            status.push(<Badge className={styles.pintview} status="default" text="停产" />);
+        }
         rtnVal.push(<div style={{ backgroundColor: '#1890FF', width: 5, lineHeight: 1 }}>
             <span style={{ marginLeft: 10 }}>排口基本信息</span>
             <span style={{ marginLeft: 10 }} className='status'>{status}</span>
@@ -220,7 +227,7 @@ export default class pointview extends Component {
             title: '监测仪器名称',
             dataIndex: 'Name',
             key: 'Name',
-            width: '20%',
+            width: '30%',
             align: 'left',
             render: (text, record) => {
                 return text;
@@ -229,7 +236,7 @@ export default class pointview extends Component {
             title: '监测项目',
             dataIndex: 'TestComponent',
             key: 'TestComponent',
-            width: '20%',
+            width: '30%',
             align: 'center',
             render: (text, record) => {
                 return text;
@@ -256,26 +263,6 @@ export default class pointview extends Component {
             }
         },
         {
-            title: '斜率',
-            dataIndex: 'Slope',
-            key: 'Slope',
-            width: '10%',
-            align: 'center',
-            render: (text, record) => {
-                return text;
-            }
-        },
-        {
-            title: '截距',
-            dataIndex: 'Intercept',
-            key: 'Intercept',
-            width: '10%',
-            align: 'center',
-            render: (text, record) => {
-                return text;
-            }
-        },
-        {
             title: '操作',
             width: '20%',
             align: 'center',
@@ -285,7 +272,8 @@ export default class pointview extends Component {
                         MSCVisitable: true,
                         width: '60%',
                         title: '编辑',
-                        ChildId: record.ID
+                        ChildId: record.ID,
+                        ID: record.AnalyzerSys_Id
                     })
                 } > 编辑 </a>  <Divider type="vertical" />
                 <Popconfirm placement="left"
@@ -396,6 +384,8 @@ export default class pointview extends Component {
                                 <Description term="经度">{this.state.longitude}</Description>
                                 <Description term="纬度">{this.state.latitude}</Description>
                                 <Description term="运维人">{this.state.OperationerName}</Description>
+                                <Description term="上传数据类型">{this.state.RunStateName}</Description>
+                                <Description term="日常巡查表单类型">{this.state.Col3Name}</Description>
                             </DescriptionList>
                             <Divider />
                             <DescriptionList size="large" col="1" style={{ marginLeft: 10 }}>
