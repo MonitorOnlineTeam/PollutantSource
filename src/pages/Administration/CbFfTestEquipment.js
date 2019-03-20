@@ -35,15 +35,11 @@ const confirm = Modal.confirm;
     administration
 }) => ({
     loading:loading.effects['administration/GetCbFfTestEquipmentList'],
-    list: administration.CbFfTestEquipment,
-    total: administration.total,
-    pageIndex:administration.pageIndex,
-    pageSize:administration.pageSize,
+    cbfftestequipmentparam:administration.cbfftestequipmentparam
 }))
 export default class CbFfTestEquipment extends Component {
     constructor(props) {
         super(props);
-
         this.state = {
             code:null,
             testItemName:null,
@@ -54,24 +50,33 @@ export default class CbFfTestEquipment extends Component {
     }
     //初始化
     componentWillMount() {
-        const {testItemName,code}=this.state;
-        const {pageIndex, pageSize }=this.props;
-        this.reloaddata(testItemName,code,pageIndex,pageSize);
+        this.reloaddata();
     }
     //页码变化
     onChange = (pageIndex, pageSize) => {
-        const {testItemName,code}=this.state;
-         this.reloaddata(testItemName,code,pageIndex,pageSize);
+         let {cbfftestequipmentparam}=this.props;
+         cbfftestequipmentparam={
+             ...cbfftestequipmentparam,
+             pageIndex:pageIndex,
+             pageSize:pageSize
+         }
+         this.reloaddata(cbfftestequipmentparam);
     }
     //重新加载数据
-    reloaddata=(testItemName,code,pageIndex,pageSize)=>{
+    reloaddata=(cbfftestequipmentparam)=>{
+      const {dispatch}=this.props;  
+      if(cbfftestequipmentparam)
+      {
+          dispatch({
+              type:"administration/updateState",
+              payload:{
+                cbfftestequipmentparam:cbfftestequipmentparam
+              }
+          })
+      }
       this.props.dispatch({
           type:'administration/GetCbFfTestEquipmentList',
           payload:{
-            code:code,
-            testItemName:testItemName,
-            pageIndex: pageIndex,
-            pageSize: pageSize 
           }
       })
     }
@@ -87,15 +92,14 @@ export default class CbFfTestEquipment extends Component {
     }
     //按照名字搜索
     serachName=(value)=>{
-        
-        const {code}=this.state;
-        const {pageIndex, pageSize,dispatch }=this.props;
-        this.setState({
-            testItemName:value
-        });
-        this.reloaddata(value,code,pageIndex,pageSize);
+        let{cbfftestequipmentparam}=this.props;
+        cbfftestequipmentparam={
+           ...cbfftestequipmentparam,
+           TestItemName:value,
+       }
+       debugger;
+        this.reloaddata(cbfftestequipmentparam);
     }
- 
 
     //关闭modal
     onCancel = () => {
@@ -118,8 +122,7 @@ export default class CbFfTestEquipment extends Component {
     }
 
  render() {
-     const {pageSize,pageIndex,total,list}=this.props;
-     console.log(list)
+     const {cbfftestequipmentparam}=this.props;
      const columns = [{
                         title: '测试项目',
                         dataIndex: 'TestItemName',
@@ -190,7 +193,7 @@ export default class CbFfTestEquipment extends Component {
                          className={styles.dataTable}
                          rowKey="ID"
                          dataSource={
-                            this.props.list
+                            cbfftestequipmentparam.data
                         }
                          size="small" 
                          scroll={{ y: 'calc(100vh - 330px)' }}
@@ -209,9 +212,9 @@ export default class CbFfTestEquipment extends Component {
                                  showSizeChanger: true,
                                  showQuickJumper: true,
                                  size: 'small',
-                                 'total': total,
-                                 'pageSize': pageSize,
-                                 'current': pageIndex,
+                                 'total': cbfftestequipmentparam.total,
+                                 'pageSize': cbfftestequipmentparam.pageSize,
+                                 'current': cbfftestequipmentparam.pageIndex,
                                  onChange: this.onChange,
                                  onShowSizeChange: this.onChange,
                                  pageSizeOptions: ['20', '30', '40', '50']

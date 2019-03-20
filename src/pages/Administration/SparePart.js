@@ -35,15 +35,15 @@ const confirm = Modal.confirm;
     administration
 }) => ({
     loading:loading.effects['administration/GetSparePartList'],
-    list: administration.spareparts,
-    total: administration.total,
-    pageIndex:administration.pageIndex,
-    pageSize:administration.pageSize,
+    // list: administration.spareparts,
+    // total: administration.total,
+    // pageIndex:administration.pageIndex,
+    // pageSize:administration.pageSize,
+    sparepartsparam:administration.sparepartsparam
 }))
 export default class SparePart extends Component {
     constructor(props) {
         super(props);
-
         this.state = {
             parttype:"0",
             code:null,
@@ -55,25 +55,33 @@ export default class SparePart extends Component {
     }
     //初始化
     componentWillMount() {
-        const {partName,code,parttype}=this.state;
-        const {pageIndex, pageSize }=this.props;
-        this.reloaddata(partName,code,parttype,pageIndex,pageSize);
+        this.reloaddata();
     }
     //页码变化
     onChange = (pageIndex, pageSize) => {
-        const {partName,code,parttype}=this.state;
-         this.reloaddata(partName,code,parttype,pageIndex,pageSize);
+         let {sparepartsparam}=this.props;
+         sparepartsparam={
+             ...sparepartsparam,
+             pageIndex:pageIndex,
+             pageSize:pageSize
+         }
+         this.reloaddata(sparepartsparam);
     }
     //重新加载数据
-    reloaddata=(partName,code,parttype,pageIndex,pageSize)=>{
-      this.props.dispatch({
+    reloaddata=(sparepartsparam)=>{
+      const {dispatch}=this.props;
+      if(sparepartsparam)
+      {
+          dispatch({
+             type:"administration/updateState",
+             payload:{
+                sparepartsparam:sparepartsparam
+             }
+          })
+      }
+     dispatch({
           type:'administration/GetSparePartList',
           payload:{
-            parttype:parttype,
-            code:code,
-            partName:partName,
-            pageIndex: pageIndex,
-            pageSize: pageSize 
           }
       })
     }
@@ -89,22 +97,21 @@ export default class SparePart extends Component {
     }
     //按照名字搜索
     serachName=(value)=>{
-        
-        const {code,parttype}=this.state;
-        const {pageIndex, pageSize,dispatch }=this.props;
-        this.setState({
+        let {sparepartsparam}=this.props;
+        sparepartsparam={
+            ...sparepartsparam,
             partName:value
-        });
-        this.reloaddata(value,code,parttype,pageIndex,pageSize);
+        }
+        this.reloaddata(sparepartsparam);
     }
     //类型搜索
     onRadioChange=(value)=>{
-        const {partName,code}=this.state;
-        const {pageIndex, pageSize,dispatch }=this.props;
-       this.setState({
-          parttype:value.target.value
-       })
-       this.reloaddata(partName,code,value.target.value,pageIndex,pageSize);
+        let {sparepartsparam}=this.props;
+        sparepartsparam={
+            ...sparepartsparam,
+            parttype:value
+        }
+        this.reloaddata(sparepartsparam);
     }
 
     //关闭modal
@@ -138,7 +145,7 @@ export default class SparePart extends Component {
              <Menu.Item key="4"><Icon type="home" />进入排口</Menu.Item>
          </Menu>
      );
-     const {pageSize,pageIndex,total}=this.props;
+     const {sparepartsparam}=this.props;
      const { parttype }=this.state;
      const columns = [{
                         title: '备件名称',
@@ -225,7 +232,7 @@ export default class SparePart extends Component {
                          className={styles.dataTable}
                          rowKey="ID"
                          dataSource={
-                            this.props.list
+                            sparepartsparam.data
                         }
                          size="small" 
                          scroll={{ y: 'calc(100vh - 330px)' }}
@@ -244,9 +251,9 @@ export default class SparePart extends Component {
                                  showSizeChanger: true,
                                  showQuickJumper: true,
                                  size: 'small',
-                                 'total': total,
-                                 'pageSize': pageSize,
-                                 'current': pageIndex,
+                                 'total': sparepartsparam.total,
+                                 'pageSize': sparepartsparam.pageSize,
+                                 'current': sparepartsparam.pageIndex,
                                  onChange: this.onChange,
                                  onShowSizeChange: this.onChange,
                                  pageSizeOptions: ['20', '30', '40', '50']

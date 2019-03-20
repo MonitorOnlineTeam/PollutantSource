@@ -6,26 +6,28 @@ import { connect } from 'dva';
     overview
 }) => ({
     pollutantTypelist: overview.pollutantTypelist,
-    searchName: overview.searchName,
-    selectpollutantTypeCode: overview.selectpollutantTypeCode
+    selectpollutantTypeCode: overview.selectpollutantTypeCode,
+    dataOverview:overview.dataOverview
 }))
 class PollutantTypeRadio extends Component {
     onChange = (e) => {
-        const { dispatch, searchName } = this.props;
+        let { dispatch, dataOverview } = this.props;
         const value = e.target.value;
         dispatch({
             type: 'overview/updateState',
             payload: {
                 selectpollutantTypeCode: value,
-                selectpoint:null
+                selectpoint:null,
+                // dataOverview:{
+                //     ...dataOverview,
+                //     pointName:null
+                // }
             },
         });
         this.props.dispatch({
             type: 'overview/querydatalist',
             payload: {
                 map: true,
-                pollutantTypes: value,
-                pointName: searchName
             },
         });
     }

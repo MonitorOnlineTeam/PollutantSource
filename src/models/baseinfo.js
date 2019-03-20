@@ -2,24 +2,17 @@ import React from 'react';
 import moment from 'moment';
 import { Icon, message } from 'antd';
 import { Model } from '../dvapack';
-import { querypolluntantentinfolist,
-    queryregionlist,
-    queryindustrytypelist,
-    queryattentiondegreelist,
-    queryunittypelist,
-    queryPSScalelist,
-    queryregisttypelist,
-    queryentedit,
-    querysubjectionrelationlist,
-    queryupload,
-    querydeleteimg,
+import {  
     queryeeplist,
     addPDPermit,
     querydelep,
     getPDPermitById,
     editPDPermit,
 } from '../services/api';
+import {querypolluntantentinfolist,queryregionlist,queryindustrytypelist,queryattentiondegreelist,
+    queryunittypelist,queryPSScalelist,queryregisttypelist,queryentedit,querysubjectionrelationlist,queryupload,querydeleteimg }from '../services/entApi';
 import {enterpriceid} from '../config';
+
 
 export default Model.extend({
     namespace: 'baseinfo',
@@ -46,7 +39,10 @@ export default Model.extend({
         * queryentdetail({
             payload,
         }, { call, update }) {
-            const entbaseinfo = yield call(querypolluntantentinfolist, { parentID: enterpriceid });
+            const body={
+                parentIDs:enterpriceid
+            };
+            const entbaseinfo = yield call(querypolluntantentinfolist, body);
             const regionlist = yield call(queryregionlist, {recursionNum: 3});
             const industryTypelist = yield call(queryindustrytypelist);
             const attentionDegreelist = yield call(queryattentiondegreelist);
@@ -69,7 +65,8 @@ export default Model.extend({
         },{
             call,update
         }){
-            const entbaseinfo = yield call(querypolluntantentinfolist, { parentID: enterpriceid });
+            const body= {parentIDs:enterpriceid}
+            const entbaseinfo = yield call(querypolluntantentinfolist, body);
             yield update({ entbaseinfo: entbaseinfo });
         },
         * queryeditent({

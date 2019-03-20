@@ -29,6 +29,10 @@ export default class GyProcessPic extends Component {
     }
     componentWillMount() {
         this.props.dispatch({
+            type: 'points/updateState',
+            payload: { DGIMN: this.props.DGIMN }
+        });
+        this.props.dispatch({
             type: 'points/queryrealparam',
             payload: {
                 dgimn: this.props.DGIMN
@@ -165,7 +169,7 @@ export default class GyProcessPic extends Component {
                             <div className={jzfStatus == "1" ? styles.shine_red : ''} style={{ width: '120px', height: '20px', position: 'relative', left: '527px', top: '-30px', fontWeight: '700', fontSize: '10px' }}>截止阀状态：{this.getStatusName(stateInfo, 'i12104')}</div>
                             <div style={{ width: '120px', height: '20px', position: 'relative', left: '207px', top: '-145px', fontWeight: '700', fontSize: '10px' }}>压差：{this.getStatusName(stateInfo, '压差')}</div>
                             <div className={ptgStatus == "1" ? styles.shine_red : ''} style={{ width: '120px', height: '20px', position: 'relative', left: '207px', top: '-145px', fontWeight: '700', fontSize: '10px' }}>皮托管吹扫：{this.getStatusName(stateInfo, 'i12106')}</div>
-                        
+
                             <div className={styles.cardcss} style={{ height: '320px', position: 'relative', top: '350px', fontWeight: '700', fontSize: '10px' }}>
                                 <div style={{ width: '450px', position: 'absolute', top: '10px', left: '25px', fontWeight: '700', fontSize: '10px' }}>
 

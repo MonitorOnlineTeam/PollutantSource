@@ -22,6 +22,12 @@ class TreeCard extends Component {
     }
 
     componentDidMount() {
+        //获取污染物类型
+        this.props.dispatch({
+            type: 'overview/getPollutantTypeList',
+            payload: {
+            }
+        });
     }
 
     //填充污染物类型

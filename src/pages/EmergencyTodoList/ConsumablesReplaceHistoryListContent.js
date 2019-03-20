@@ -43,9 +43,9 @@ class ConsumablesReplaceHistoryList extends Component {
             DGIMN: this.props.pointcode
         };
         this.ChangeModelState(condition);
-        if(this.props.operation!=="menu/intelligentOperation"){
+        // if(this.props.operation!=="menu/intelligentOperation"){
             this.GetHistoryRecord();
-        }
+        // }
     }
 
     GetHistoryRecord = () => {

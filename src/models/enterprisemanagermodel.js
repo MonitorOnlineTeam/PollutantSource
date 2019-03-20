@@ -13,7 +13,7 @@ import {
     deleteEnterprise,
     getAllPointQRCoderZip
 } from '../services/EnterpriseManagerApi';
-import { queryattentiondegreelist,queryregionlist } from '../services/api';
+import {queryattentiondegreelist,queryregionlist}from '../services/entApi';
 import { enterpriceid } from '../config';
 
 export default Model.extend({

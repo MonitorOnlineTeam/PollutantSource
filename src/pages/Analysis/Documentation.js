@@ -13,7 +13,7 @@ import styles from './MonitoringReport.less';
 import { documentationaddress } from '../../config';
 
 @connect(({ loading, analysisdata }) => ({
-    documentationList: analysisdata.documentationList,
+    documentationParameters: analysisdata.documentationParameters,
     loading: loading.effects['analysisdata/GetDocumentationList'],
 }))
 
@@ -25,8 +25,6 @@ class Documentation extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            reportname: null,
-            isfirst: true,
         };
     }
 
@@ -35,30 +33,40 @@ class Documentation extends Component {
         dispatch({
             type: 'analysisdata/GetDocumentationList',
             payload: {
-                beginTime: null,
-                endTime: null
             }
         });
     }
-
-    showPdf = (reportname) => {
-        this.setState({
-            reportname,
-            isfirst: false
+    /**
+       * 更新model中的state
+      */
+    updateState = (payload) => {
+        this.props.dispatch({
+            type: 'analysisdata/updateState',
+            payload: payload,
         });
     }
-
+    showPdf = (reportname) => {
+        this.updateState({
+            documentationParameters: {
+                ...this.props.documentationParameters,
+                ...{
+                    reportname: reportname,
+                    isfirst: false,
+                }
+            }
+        });
+    }
+    //右侧文档内容
     getshowpdf = () => {
-        let { isfirst, reportname } = this.state;
-        const { documentationList } = this.props;
-        if (isfirst) {
-            if (documentationList) {
-                reportname = documentationList[0];
+        const { documentationParameters } = this.props;
+        if (documentationParameters.isfirst) {
+            if (documentationParameters.documentationList) {
+                documentationParameters.reportname = documentationParameters.documentationList[0];
             }
         }
-        let address = documentationaddress + reportname;
+        let address = documentationaddress + documentationParameters.reportname;
         let height = 'calc(100vh - 259px)';
-        if (!reportname) {
+        if (!documentationParameters.reportname) {
             address = null;
             height = 70;
         }
@@ -69,10 +77,10 @@ class Documentation extends Component {
             </div>
         );
     }
-
+    //文档列表
     getdocumentationList = () => {
-        let { documentationList } = this.props;
-        const list = documentationList;
+        const { documentationParameters } = this.props;
+        const list = documentationParameters.documentationList;
         let res = [];
         if (list.length !== 0) {
             list.map((item, key) => {

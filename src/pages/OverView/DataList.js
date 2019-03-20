@@ -15,215 +15,80 @@ const RadioGroup = Radio.Group;
     gwidth: overview.gwidth,
     isloading: loading.effects['overview/querypollutanttypecode'],
     pollutantTypelist: overview.pollutantTypelist,
-    selectpollutantTypeCode:overview.selectpollutantTypeCode
+    selectpollutantTypeCode:overview.selectpollutantTypeCode,
+    dataOverview:overview.dataOverview
 }))
 class dataList extends PureComponent {
     constructor(props) {
         super(props);
-        this.state = {
-            time: moment(new Date()).add(-1, 'hour'),
-            normal: false,
-            over: false,
-            underline: false,
-            exception: false,
-            selectStatus: null,
-            status: null,
-            operationStatus: null,
-            terate: null,
-            warning: null,
-            selectpoint: null,
-
-        };
     }
-
-    //页面初始化
+    /**页面初始化 */
     componentDidMount() {
-        const {selectpollutantTypeCode,dispatch}=this.props;
+        const {dispatch}=this.props;
         dispatch({
             type: 'overview/querypollutanttypecode',
             payload: {
-                pollutantCode: selectpollutantTypeCode,
-                time: this.state.time.format('YYYY-MM-DD HH:00:00'),
             }
         });
     }
-
-    //加载数据
-    reloadData = (time, status, operationStatus, terate, warning) => {
-        this.props.dispatch({
+   /**加载数据 */
+    reloadData = (dataOverview) => {
+        const {dispatch}=this.props;
+        dispatch({
+            type:'overview/updateState',
+            payload:{
+                //更新条件变量
+                dataOverview:dataOverview
+            }
+        })
+        dispatch({
             type: 'overview/querydatalist',
             payload: {
-                time: time.format('YYYY-MM-DD HH:00:00'),
-                status: status,
-                operationStatus: operationStatus,
-                pollutantTypes:this.props.selectpollutantTypeCode,
-                terate: terate,
-                warning: warning
             }
         });
     }
 
-    //直接刷新（带数据）
+    /**刷新页面 */
     Refresh = () => {
-        const { status, operationStatus, terate, warning, time } = this.state;
-        this.reloadData(time, status, operationStatus, terate, warning);
+        const {dataOverview}=this.props;
+        this.reloadData(dataOverview);
     }
 
-    //时间更改
+    /**时间框更改 */
     pickerChange = (time, timeString) => {
-
         if (time) {
-            this.setState({
-                time
-            });
-            const { status, operationStatus, terate, warning } = this.state;
-            this.reloadData(time, status, operationStatus, terate, warning);
+            let {dataOverview}=this.props;
+            dataOverview.time=time
+            this.reloadData(dataOverview);
         }
     }
 
 
-    //状态搜索
+    /**状态更改 */
     statusChange = (value) => {
-        const { selectStatus } = this.state;
-        let status = null;
-        switch (value) {
-            case 'normal':
-                if (value == selectStatus) {
-                    this.setState({
-                        normal: false,
-                        over: false,
-                        underline: false,
-                        exception: false,
-                        selectStatus: null,
-                        status: null
-
-                    });
-                    status = null;
-                } else {
-                    this.setState({
-                        normal: true,
-                        over: false,
-                        underline: false,
-                        exception: false,
-                        selectStatus: value,
-                        status: 1
-                    });
-                    status = 1;
-                }
-                break;
-            case 'over':
-                if (value == selectStatus) {
-                    this.setState({
-                        normal: false,
-                        over: false,
-                        underline: false,
-                        exception: false,
-                        selectStatus: null,
-                        status: null
-                    });
-                    status = null;
-                } else {
-                    this.setState({
-                        normal: false,
-                        over: true,
-                        underline: false,
-                        exception: false,
-                        selectStatus: value,
-                        status: 2
-                    });
-                    status = 2;
-                }
-                break;
-            case 'underline':
-                if (value == selectStatus) {
-                    this.setState({
-                        normal: false,
-                        over: false,
-                        underline: false,
-                        exception: false,
-                        selectStatus: null,
-                        status: null
-                    });
-                    status = null;
-                } else {
-                    this.setState({
-                        normal: false,
-                        over: false,
-                        underline: true,
-                        exception: false,
-                        selectStatus: value,
-                        status: 0
-                    });
-                    status = 0;
-                }
-                break;
-            case 'exception':
-                if (value == selectStatus) {
-                    this.setState({
-                        normal: false,
-                        over: false,
-                        underline: false,
-                        exception: false,
-                        selectStatus: null,
-                        status: null
-                    });
-                    status = null;
-                } else {
-                    this.setState({
-                        normal: false,
-                        over: false,
-                        underline: false,
-                        exception: true,
-                        selectStatus: value,
-                        status: 3
-                    });
-                    status = 3;
-                }
-                break;
+        let {dataOverview}=this.props; 
+        if(value===dataOverview.selectStatus)
+        {
+            dataOverview.selectStatus=null
         }
-        const { time, operationStatus, terate, warning } = this.state;
-        this.reloadData(time, status, operationStatus, terate, warning);
+        else
+        {
+            dataOverview.selectStatus=value
+        }
+        this.reloadData(dataOverview);
     }
-
-    //搜索传输有效率不足的排口
+    /**传输有效率不足搜索 */
     terateSearch = () => {
-        const { terate } = this.state;
-        let terateValue = null;
-        if (terate) {
-            this.setState({
-                terate: null
-            });
-            terateValue = null;
+        let {dataOverview}=this.props; 
+        if (dataOverview.terate) {
+            dataOverview.terate=null;
         } else {
-            this.setState({
-                terate: 1
-            });
-            terateValue = 1;
+            dataOverview.terate=1;
         }
-        const { time, operationStatus, warning, status } = this.state;
-        this.reloadData(time, status, operationStatus, terateValue, warning);
+        this.reloadData(dataOverview);
     }
 
-    //是否有运维人员在现场
-    operationSearch = () => {
-        const { operationStatus } = this.state;
-        let operationValue = null;
-        if (operationStatus) {
-            this.setState({
-                operationStatus: null
-            });
-            operationValue = null;
-        } else {
-            this.setState({
-                operationStatus: 1
-            });
-            operationValue = 1;
-        }
-        const { time, warning, status, terate } = this.state;
-        this.reloadData(time, status, operationValue, terate, warning);
-    }
-
-    //填充污染物类型
+    /**填充污染物类型 */
     getPollutantDoc = () => {
         const { pollutantTypelist } = this.props;
         let res = [];
@@ -231,56 +96,48 @@ class dataList extends PureComponent {
             pollutantTypelist.map((item,key)=>{
                 res.push( <Radio.Button key={key} value={item.pollutantTypeCode}>{item.pollutantTypeName}</Radio.Button>);
             });
-
-            // pollutantTypelist.map((item,key) => {
-            //     res.push(<Radio key={key} value={item.pollutantTypeCode}>{item.pollutantTypeName}</Radio>);
-            // });
         }
         return res;
     }
 
-    //获取传输有效率的图例（废水没有传输有效率）
+    /**获取传输有效率的图例（废水没有传输有效率） */
     getcsyxlButton=()=>{
+       const {terate}=this.props.dataOverview;
        const {selectpollutantTypeCode}=this.props;
        if(selectpollutantTypeCode==2)
        {
-           return  <span onClick={this.terateSearch} className={this.state.terate ? styles.selectStatus : styles.statusButton} 
+           return  <span onClick={this.terateSearch} className={terate ? styles.selectStatus : styles.statusButton} 
            style={{ marginRight: 20 }}><span style={{ fontSize: 16, color: '#ffca00' }}>■</span> 传输有效率不达标</span>
        }
        return '';
     }
 
-    //污染物类型选择
+    /**污染物类型选择 */
     onPollutantChange = (e) => {
-        this.setState({
-
-            normal: false,
-            over: false,
-            underline: false,
-            exception: false,
-            selectStatus: null,
-            status: null,
-            operationStatus: null,
-            terate: null,
-            warning: null
-        });
+        
         const {dispatch}=this.props;
-
+        const dataOverview={
+            selectStatus:null,
+            time: moment(new Date()).add(-1, 'hour'),
+            terate:null,
+            pointName:null
+        }
         dispatch({
-            type: 'overview/updateState',
-            payload: {
+            type:'overview/updateState',
+            payload:{
+                //更新条件变量
+                dataOverview:dataOverview,
                 selectpollutantTypeCode:e.target.value
-            },
-        });
+            }
+        })
         dispatch({
             type: 'overview/querypollutanttypecode',
             payload: {
-                pollutantCode: e.target.value,
-                time: this.state.time.format('YYYY-MM-DD HH:00:00'),
+                 
             }
         });
     } 
-    //获取详情按钮
+    /**获取详情按钮 */
     gerpointButton = (record) => (<div>
         <li style={{ listStyle: 'none', marginBottom: 5 }}>
             <Button onClick={() => {
@@ -297,11 +154,10 @@ class dataList extends PureComponent {
 
        
         render() {
-            const { normal, over, underline, exception, terate, operationStatus } = this.state;
+            const {selectStatus,terate,time}=this.props.dataOverview;
             let {selectpollutantTypeCode}=this.props;
             selectpollutantTypeCode=parseInt(selectpollutantTypeCode);
             const coldata = this.props.columnsdata;
-            const { selectpoint } = this.state;
             let { gwidth } = this.props;
             let fixed = false;
             if (coldata[0]) {
@@ -441,7 +297,6 @@ class dataList extends PureComponent {
                     style={{ width: '100%', height: 'calc(100vh - 65px)' }}
                     className={styles.standardList}
                 >
-              
                     <Card
                         bordered={false}
                         className={styles.cardextra}
@@ -452,7 +307,7 @@ class dataList extends PureComponent {
                         }
                         extra={
                             <div>
-                                <TimePicker onChange={this.pickerChange} style={{ width: 150, marginRight: 20, float: 'left' }} defaultValue={this.state.time} format="HH:00:00" />
+                                <TimePicker onChange={this.pickerChange} style={{ width: 150, marginRight: 20, float: 'left' }} defaultValue={time} format="HH:00:00" />
 
                                 <Radio.Group style={{ marginLeft: 50, float: 'left' }} onChange={this.onPollutantChange} defaultValue={selectpollutantTypeCode}>
                                     {this.getPollutantDoc()}
@@ -461,15 +316,11 @@ class dataList extends PureComponent {
                                 <div style={{ width: 'calc(100vw - 220px)', marginLeft: 60 }}>
                                     <AListRadio style={{ float: 'right' }} dvalue="b" />
                                     <div style={{ float: 'right', marginTop: 3 }}>
-                                        {/* <span onClick={this.operationSearch} className={operationStatus?styles.selectStatus:styles.statusButton} style={{ marginRight: 10 }}>
-                                <Icon type="user" style={{ color: '#3B91FF' }} /> 运维中</span> */}
-                                        
-                                        {/* <span onClick={this.terateSearch} className={terate ? styles.selectStatus : styles.statusButton} style={{ marginRight: 20 }}><span style={{ fontSize: 16, color: '#ffca00' }}>■</span> 传输有效率不达标</span> */}
                                         {this.getcsyxlButton()}
-                                        <span onClick={() => this.statusChange('normal')} className={normal ? styles.selectStatus : styles.statusButton}><img className={styles.statusButtonImg} src="../../../gisnormal.png" />正常</span>
-                                        <span onClick={() => this.statusChange('over')} className={over ? styles.selectStatus : styles.statusButton}><img className={styles.statusButtonImg} src="../../../gisover.png" />超标</span>
-                                        <span onClick={() => this.statusChange('underline')} className={underline ? styles.selectStatus : styles.statusButton}><img className={styles.statusButtonImg} src="../../../gisunline.png" />离线</span>
-                                        <span onClick={() => this.statusChange('exception')} className={exception ? styles.selectStatus : styles.statusButton}><img className={styles.statusButtonImg} src="../../../gisexception.png" />异常</span>
+                                        <span onClick={() => this.statusChange(1)} className={selectStatus===1 ? styles.selectStatus : styles.statusButton}><img className={styles.statusButtonImg} src="../../../gisnormal.png" />正常</span>
+                                        <span onClick={() => this.statusChange(2)} className={selectStatus===2 ? styles.selectStatus : styles.statusButton}><img className={styles.statusButtonImg} src="../../../gisover.png" />超标</span>
+                                        <span onClick={() => this.statusChange(0)} className={selectStatus===0 ? styles.selectStatus : styles.statusButton}><img className={styles.statusButtonImg} src="../../../gisunline.png" />离线</span>
+                                        <span onClick={() => this.statusChange(3)} className={selectStatus===3 ? styles.selectStatus : styles.statusButton}><img className={styles.statusButtonImg} src="../../../gisexception.png" />异常</span>
                                     </div>
 
                                 </div>

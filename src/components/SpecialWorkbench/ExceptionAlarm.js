@@ -39,7 +39,6 @@ class ExceptionAlarm extends PureComponent {
             "逻辑异常": "volcano",
             "状态异常": "orange"
         };
-        const text='没有关联运维人,是否前去关联?';
         listData = exceptionAlarm.tableDatas.map((item,key) => {
 
             console.log(item);

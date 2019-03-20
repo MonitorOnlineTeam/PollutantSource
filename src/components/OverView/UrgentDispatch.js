@@ -7,7 +7,7 @@ const FormItem = Form.Item;
 @connect(({urgentdispatch,loading}) => ({
     operationUserInfo:urgentdispatch.operationUserInfo,
     existTask:urgentdispatch.existTask,
-    loading:loading.effects['overview/addtaskinfo'],
+    loading:loading.effects['urgentdispatch/addtaskinfo'],
 }))
 ///紧急派单
 class UrgentDispatch extends Component {
@@ -23,7 +23,7 @@ class UrgentDispatch extends Component {
     onSubmit=()=>{
         const {DGIMN,operationUserInfo}=this.props;
             this.props.dispatch({
-                type:'overview/addtaskinfo',
+                type:'urgentdispatch/addtaskinfo',
                 payload:{
                     dgimn: DGIMN,
                     personId:operationUserInfo.operationUserID,
@@ -52,7 +52,7 @@ class UrgentDispatch extends Component {
     
 
     render() {
-        const {operationUserInfo,loading}=this.props;
+        const {operationUserInfo,loading,pointName}=this.props;
         const { getFieldDecorator } = this.props.form;
         const formItemLayout = {
             labelCol: {
@@ -65,7 +65,7 @@ class UrgentDispatch extends Component {
         return (
             <div>
                 <Modal
-                    title={ operationUserInfo?operationUserInfo.pointName:'' }
+                    title={ pointName?pointName:(operationUserInfo?operationUserInfo.pointName:'') }
                     visible={this.props.visible}
                     onOk={this.onSubmit}
                     destroyOnClose={true}
