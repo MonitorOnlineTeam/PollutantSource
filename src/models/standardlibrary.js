@@ -6,10 +6,13 @@ import {
     , editstandardlibrary, getpollutantlist, getstandardlibrarypollutantlist, deletestandardlibrarypollutantbyid, editstandardlibrarypollutant, getStandardlibrarypollutantbyid
     , getstandardlibraryfiles, getuselist, getpollutantbydgimn, usepoint, isusepollutant, getmonitorpointpollutant, editmonitorpointPollutant, useallDGIMNbyid
 } from '../services/standardlibrary';
-
+/*
+标准库相关接口
+add by xpy
+modify by
+*/
 export default Model.extend({
     namespace: 'standardlibrary',
-
     state: {
         requstresult: null,
         list: [],
@@ -35,37 +38,19 @@ export default Model.extend({
             history
         }) {
             history.listen((location) => {
-                // if (location.pathname === '/monitor/sysmanage/userinfo') {
-                //     // 初始化testId的值为10
-                //     dispatch({
-                //         type: 'fetchuserlist',
-                //         payload: {
-
-                //         },
-                //     });
-                // }
             });
         },
     },
     effects: {
+        /**获取标准库列表 */
         * getlist({
-            payload: {
-                pageIndex,
-                pageSize,
-                Name,
-                Type
-            }
+            payload
         }, {
             call,
-            put,
             update,
-            select
         }) {
             const result = yield call(getlist, {
-                pageIndex: pageIndex,
-                pageSize: pageSize,
-                Name: Name,
-                Type: Type
+                ...payload
             });
 
             if (result.requstresult === '1') {
@@ -73,8 +58,8 @@ export default Model.extend({
                     requstresult: result.requstresult,
                     list: result.data,
                     total: result.total,
-                    pageIndex: pageIndex,
-                    pageSize: pageSize
+                    pageIndex: payload.pageIndex,
+                    pageSize: payload.pageSize
                 });
             } else {
                 yield update({
@@ -86,18 +71,15 @@ export default Model.extend({
                 });
             }
         },
+        /**查询单个排口下污染物列表 */
         * getpollutantbydgimn({
-            payload: {
-                DGIMN,
-            }
+            payload
         }, {
             call,
-            put,
             update,
-            select
         }) {
             const result = yield call(getpollutantbydgimn, {
-                DGIMN: DGIMN,
+                ...payload
             });
             if (result.requstresult === '1') {
                 yield update({
@@ -111,30 +93,23 @@ export default Model.extend({
                 });
             }
         },
+        /**获取排口种中监测标准的标准库列表 */
         * getuselist({
-            payload: {
-                pageIndex,
-                pageSize,
-                DGIMN
-            }
+            payload
         }, {
             call,
-            put,
             update,
-            select
         }) {
             const result = yield call(getuselist, {
-                pageIndex: pageIndex,
-                pageSize: pageSize,
-                DGIMN: DGIMN,
+                ...payload
             });
             if (result.requstresult === '1') {
                 yield update({
                     requstresult: result.requstresult,
                     uselist: result.data,
                     total: result.total,
-                    pageIndex: pageIndex,
-                    pageSize: pageSize
+                    pageIndex: payload.pageIndex,
+                    pageSize: payload.pageSize
                 });
             } else {
                 yield update({
@@ -146,18 +121,15 @@ export default Model.extend({
                 });
             }
         },
+        /**标准库污染物列表 */
         * getstandardlibrarypollutantlist({
-            payload: {
-                StandardLibraryID
-            }
+            payload
         }, {
             call,
-            put,
             update,
-            select
         }) {
             const result = yield call(getstandardlibrarypollutantlist, {
-                StandardLibraryID: StandardLibraryID,
+                ...payload
             });
 
             if (result.requstresult === '1') {
@@ -172,24 +144,16 @@ export default Model.extend({
                 });
             }
         },
+        /**启用禁用标准 */
         * enableordisable({
-            payload: {
-                StandardLibraryID,
-                Enalbe,
-                pageIndex,
-                pageSize,
-                Name,
-                Type
-            }
+            payload
         }, {
             call,
             put,
             update,
-            select
         }) {
             const result = yield call(enableordisable, {
-                StandardLibraryID: StandardLibraryID,
-                Enalbe: Enalbe
+                ...payload
             });
             yield update({
                 requstresult: result.requstresult,
@@ -198,27 +162,20 @@ export default Model.extend({
             yield put({
                 type: 'getlist',
                 payload: {
-                    pageIndex,
-                    pageSize,
-                    Name,
-                    Type
+                    ...payload
                 },
             });
         },
+        /**应用到单个排口 */
         * usepoint({
-            payload: {
-                StandardLibraryID,
-                DGIMN,
-            }
+            payload
         }, {
             call,
             put,
             update,
-            select
         }) {
             const result = yield call(usepoint, {
-                StandardLibraryID: StandardLibraryID,
-                DGIMN: DGIMN
+                ...payload
             });
             yield update({
                 requstresult: result.requstresult,
@@ -227,27 +184,20 @@ export default Model.extend({
             yield put({
                 type: 'getpollutantbydgimn',
                 payload: {
-                    DGIMN: DGIMN,
+                    ...payload
                 },
             });
         },
+        /**删除标准库主表 */
         * deletestandardlibrarybyid({
-            payload: {
-                StandardLibraryID,
-                pageIndex,
-                pageSize,
-                Name,
-                Type,
-                callback
-            }
+            payload
         }, {
             call,
             put,
             update,
-            select
         }) {
             const result = yield call(deletestandardlibrarybyid, {
-                StandardLibraryID: StandardLibraryID,
+                ...payload
             });
             yield update({
                 requstresult: result.requstresult,
@@ -256,46 +206,36 @@ export default Model.extend({
             yield put({
                 type: 'getlist',
                 payload: {
-                    pageIndex,
-                    pageSize,
-                    Name,
-                    Type
+                    ...payload
                 },
             });
-            callback();
+            payload.callback();
         },
+        /**应用到所有排口 */
         * useallDGIMNbyid({
-            payload: {
-                StandardLibraryID,
-                callback
-            }
+            payload
         }, {
             call,
-            put,
             update,
         }) {
             const result = yield call(useallDGIMNbyid, {
-                StandardLibraryID: StandardLibraryID,
+                ...payload
             });
             yield update({
                 requstresult: result.requstresult,
             });
-            callback();
+            payload.callback();
         },
+        /** 删除标准库子表*/
         * deletestandardlibrarypollutantbyid({
-            payload: {
-                StandardLibraryID,
-                Id,
-                callback
-            }
+            payload
         }, {
             call,
             put,
             update,
-            select
         }) {
             const result = yield call(deletestandardlibrarypollutantbyid, {
-                Id: Id,
+                ...payload
             });
             yield update({
                 requstresult: result.requstresult,
@@ -304,270 +244,186 @@ export default Model.extend({
             yield put({
                 type: 'getstandardlibrarypollutantlist',
                 payload: {
-                    StandardLibraryID,
+                    ...payload,
                 },
             });
-            callback();
+            payload.callback();
         },
+        /**添加标准库主表 */
         * addstandardlibrary({
-            payload: {
-                Name,
-                Type,
-                IsUsed,
-                Files,
-                PollutantType,
-                callback,
-            }
+            payload
         }, {
             call,
-            put,
             update,
-            select
         }) {
             const result = yield call(addstandardlibrary, {
-                Name: Name,
-                Type: Type,
-                IsUsed: IsUsed,
-                PollutantType: PollutantType,
-                Files: Files,
+                ...payload
             });
             yield update({
                 StandardLibraryID: result.data,
                 requstresult: result.requstresult,
                 reason: result.reason
             });
-            callback();
+            payload.callback();
         },
+        /**添加标准库子表 */
         * addstandardlibrarypollutant({
-            payload: {
-                StandardLibraryID,
-                PollutantCode,
-                AlarmType,
-                UpperLimit,
-                LowerLimit,
-                callback,
-            }
+            payload
         }, {
             call,
-            put,
             update,
-            select
         }) {
             const result = yield call(addstandardlibrarypollutant, {
-                StandardLibraryID: StandardLibraryID,
-                PollutantCode: PollutantCode,
-                AlarmType: AlarmType,
-                UpperLimit: UpperLimit,
-                LowerLimit: LowerLimit,
+                ...payload
             });
             yield update({
                 requstresult: result.requstresult,
                 reason: result.reason
             });
-            callback();
+            payload.callback();
         },
+        /**编辑标准库主表 */
         * editstandardlibrary({
-            payload: {
-                StandardLibraryID,
-                Name,
-                Type,
-                IsUsed,
-                Files,
-                PollutantType,
-                callback,
-            }
+            payload
         }, {
             call,
-            put,
             update,
-            select
         }) {
             const result = yield call(editstandardlibrary, {
-                StandardLibraryID: StandardLibraryID,
-                Name: Name,
-                Type: Type,
-                IsUsed: IsUsed,
-                PollutantType: PollutantType,
-                Files: Files,
+                ...payload
             });
             yield update({
                 requstresult: result.requstresult,
                 reason: result.reason
             });
-            callback();
+            payload.callback();
         },
+        /**编辑标准库子表 */
         * editstandardlibrarypollutant({
-            payload: {
-                Guid,
-                StandardLibraryID,
-                PollutantCode,
-                AlarmType,
-                UpperLimit,
-                LowerLimit,
-                callback,
-            }
+            payload
         }, {
             call,
-            put,
             update,
-            select
         }) {
             const result = yield call(editstandardlibrarypollutant, {
-                Guid: Guid,
-                StandardLibraryID: StandardLibraryID,
-                PollutantCode: PollutantCode,
-                AlarmType: AlarmType,
-                UpperLimit: UpperLimit,
-                LowerLimit: LowerLimit,
+                ...payload
             });
             yield update({
                 requstresult: result.requstresult,
                 reason: result.reason
             });
-            callback();
+            payload.callback();
         },
+        /**上传附件 */
         * uploadfiles({
-            payload: {
-                file,
-                fileName,
-                callback,
-            }
+            payload
         }, {
             call,
-            put,
             update,
-            select
         }) {
             const result = yield call(uploadfiles, {
-                file: file,
-                fileName: fileName,
+                ...payload
             });
             yield update({
                 requstresult: result.requstresult,
                 reason: result.reason
             });
-            callback();
+            payload.callback();
         },
+        /**删除附件 */
         * deletefiles({
-            payload: {
-                guid,
-                callback,
-            }
+            payload
         }, {
             call,
-            put,
             update,
-            select
         }) {
             const result = yield call(deletefiles, {
-                guid: guid,
+                ...payload
             });
             yield update({
                 requstresult: result.requstresult,
                 reason: result.reason
             });
-            callback();
+            payload.callback();
         },
+        /**获取标准库主表实体 */
         * getStandardlibrarybyid({
-            payload: {
-                StandardLibraryID,
-                callback
-            }
+            payload
         }, {
             call,
-            put,
             update,
-            select
         }) {
             const result = yield call(getStandardlibrarybyid, {
-                StandardLibraryID: StandardLibraryID,
+                ...payload
             });
             yield update({
                 editstandardlibrary: result.data[0],
                 requstresult: result.requstresult,
                 reason: result.reason
             });
-            callback();
+            payload.callback();
         },
+        /**获取标准库子表实体 */
         * getStandardlibrarypollutantbyid({
-            payload: {
-                Guid,
-                callback
-            }
+            payload
         }, {
             call,
-            put,
             update,
-            select
         }) {
             const result = yield call(getStandardlibrarypollutantbyid, {
-                Guid: Guid,
+                ...payload
             });
             yield update({
                 editstandardlibrarypollutant: result.data[0],
                 requstresult: result.requstresult,
                 reason: result.reason
             });
-            callback();
+            payload.callback();
         },
+        /**获取所有污染物 */
         * getpollutantlist({
-            payload: {
-                StandardLibraryID,
-                callback
-            }
+            payload
         }, {
             call,
-            put,
             update,
-            select
         }) {
             const result = yield call(getpollutantlist, {
-                StandardLibraryID: StandardLibraryID,
+                ...payload
             });
             yield update({
                 PollutantList: result.data,
                 requstresult: result.requstresult,
                 reason: result.reason
             });
-            callback();
+            payload.callback();
         },
+        /**获取所有附件 */
         * getstandardlibraryfiles({
-            payload: {
-                StandardLibraryID,
-                callback
-            }
+            payload
         }, {
             call,
-            put,
             update,
-            select
         }) {
             const result = yield call(getstandardlibraryfiles, {
-                StandardLibraryID: StandardLibraryID
+                ...payload
             });
             yield update({
                 fileslist: result.data,
                 requstresult: result.requstresult,
                 reason: result.reason
             });
-            callback();
+            payload.callback();
         },
+        /**是否把当前污染物设置未检测中或取消监测中 */
         * isusepollutant({
-            payload: {
-                DGIMN,
-                PollutantCode,
-                Enalbe
-            }
+            payload
         }, {
             call,
             put,
             update,
-            select
         }) {
             const result = yield call(isusepollutant, {
-                DGIMN: DGIMN,
-                PollutantCode: PollutantCode,
-                Enalbe: Enalbe,
+                ...payload
             });
             yield update({
                 requstresult: result.requstresult,
@@ -576,68 +432,37 @@ export default Model.extend({
             yield put({
                 type: 'getpollutantbydgimn',
                 payload: {
-                    DGIMN,
+                    ...payload
                 },
             });
         },
+        /**根据排口和污染物编号查询实体 */
         * getmonitorpointpollutant({
-            payload: {
-                DGIMN,
-                PollutantCode,
-                callback
-            }
+            payload
         }, {
             call,
-            put,
             update,
-            select
         }) {
             const result = yield call(getmonitorpointpollutant, {
-                DGIMN: DGIMN,
-                PollutantCode: PollutantCode,
+                ...payload
             });
             yield update({
                 editpollutant: result.data[0],
                 requstresult: result.requstresult,
                 reason: result.reason
             });
-            callback();
+            payload.callback();
         },
+        /**排口-设置监测标准-编辑污染物 */
         * editmonitorpointPollutant({
-            payload: {
-                DGIMN,
-                PollutantCode,
-                AlarmType,
-                LowerLimit,
-                UpperLimit,
-                AbnormalUpperLimit,
-                AbnormalLowerLimit,
-                AlarmDescription,
-                AlarmContinuityCount,
-                OverrunContinuityCount,
-                ZeroContinuityCount,
-                SerialContinuityCount,
-                callback
-            }
+            payload
         }, {
             call,
             put,
             update,
-            select
         }) {
             const result = yield call(editmonitorpointPollutant, {
-                DGIMN: DGIMN,
-                PollutantCode: PollutantCode,
-                AlarmType: AlarmType,
-                LowerLimit: LowerLimit,
-                UpperLimit: UpperLimit,
-                AbnormalUpperLimit: AbnormalUpperLimit,
-                AbnormalLowerLimit: AbnormalLowerLimit,
-                AlarmDescription: AlarmDescription,
-                AlarmContinuityCount: AlarmContinuityCount,
-                OverrunContinuityCount: OverrunContinuityCount,
-                ZeroContinuityCount: ZeroContinuityCount,
-                SerialContinuityCount: SerialContinuityCount,
+                ...payload
             });
             yield update({
                 requstresult: result.requstresult,
@@ -646,10 +471,10 @@ export default Model.extend({
             yield put({
                 type: 'getpollutantbydgimn',
                 payload: {
-                    DGIMN,
+                    ...payload
                 },
             });
-            callback();
+            payload.callback();
         },
     },
     reducers: {

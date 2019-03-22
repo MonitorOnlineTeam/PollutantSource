@@ -227,6 +227,7 @@ export async function deletealyzerchild(params) {
 export async function editalyzerchild(params) {
     const body = {
         ID:params.ID,
+        AnalyzerSys_Id: params.AnalyzerSys_Id,
         Name: params.Name,
         DeviceModel: params.DeviceModel,
         Manufacturer: params.Manufacturer,

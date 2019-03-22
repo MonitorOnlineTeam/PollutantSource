@@ -29,7 +29,8 @@ const Option = Select.Option;
     editstandardlibrarypollutant: standardlibrary.editstandardlibrarypollutant,
 }))
 @Form.create()
-class AddStandardLibraryPollutant extends Component {
+class
+AddStandardLibraryPollutant extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -45,113 +46,103 @@ class AddStandardLibraryPollutant extends Component {
         };
     }
 
-      handleSubmit = (e) => {
-          e.preventDefault();
-          let flag = true;
-          this.props.form.validateFieldsAndScroll((err, values) => {
-              const that = this;
-              const pid = this.props.pid;
-              if (this.state.Id === null) {
-                  if (!err && flag === true) {
-                      that.props.dispatch({
-                          type: 'standardlibrary/addstandardlibrarypollutant',
-                          payload: {
-                              StandardLibraryID: pid,
-                              PollutantCode: values.PollutantCode,
-                              AlarmType: values.AlarmType,
-                              UpperLimit: values.UpperLimit,
-                              LowerLimit: values.LowerLimit,
-                              callback: () => {
-                                  if (this.props.requstresult === '1') {
-                                      this.props.dispatch({
-                                          type: 'standardlibrary/getstandardlibrarypollutantlist',
-                                          payload: {
-                                              StandardLibraryID: pid,
-                                          },
-                                      });
-                                      if (this.state.flag === false) {
-                                          this.props.getlist();
-                                      } else {
-                                          setTimeout(this.props.form.resetFields, 500);
-                                      }
-                                  } else {
-                                      message.error(this.props.reason);
-                                  }
-                              }
-                          },
-                      });
-                  } else {
+    componentWillMount() {
+        this.setState({
+            StandardLibraryID: this.props.pid
+        });
+        this.props.onRef(this);
+        const Id = this.props.Id;
+        debugger;
+        if (Id !== null) {
+            this.setState({
+                Id: Id,
+                btndisabled: true,
+            });
+            this.props.dispatch({
+                type: 'standardlibrary/getStandardlibrarypollutantbyid',
+                payload: {
+                    Guid: Id,
+                    callback: () => {
+                    }
+                },
+            });
+        }
+        this.GetPollutantList(this.props.pid);
+    }
 
-                  }
-              } else if (!err && flag === true) {
-                  that.props.dispatch({
-                      type: 'standardlibrary/editstandardlibrarypollutant',
-                      payload: {
-                          Guid:this.state.Id,
-                          StandardLibraryID: pid,
-                          PollutantCode: values.PollutantCode,
-                          AlarmType: values.AlarmType,
-                          UpperLimit: values.UpperLimit,
-                          LowerLimit: values.LowerLimit,
-                          callback: () => {
-                              if (this.props.requstresult === '1') {
-                                  this.props.dispatch({
-                                      type: 'standardlibrary/getstandardlibrarypollutantlist',
-                                      payload: {
-                                          StandardLibraryID: pid,
-                                      },
-                                  });
-                                  this.props.getlist();
-                              } else {
-                                  message.error(this.props.reason);
-                              }
-                          }
-                      },
-                  });
-              } else {
+handleSubmit = (e) => {
+    e.preventDefault();
+    let flag = true;
+    this.props.form.validateFieldsAndScroll((err, values) => {
+        const that = this;
+        const pid = this.props.pid;
+        if (this.state.Id === null) {
+            if (!err && flag === true) {
+                that.props.dispatch({
+                    type: 'standardlibrary/addstandardlibrarypollutant',
+                    payload: {
+                        StandardLibraryID: pid,
+                        PollutantCode: values.PollutantCode,
+                        AlarmType: values.AlarmType,
+                        UpperLimit: values.UpperLimit,
+                        LowerLimit: values.LowerLimit,
+                        callback: () => {
+                            if (this.props.requstresult === '1') {
+                                this.props.dispatch({
+                                    type: 'standardlibrary/getstandardlibrarypollutantlist',
+                                    payload: {
+                                        StandardLibraryID: pid,
+                                    },
+                                });
+                                if (this.state.flag === false) {
+                                    this.props.getlist();
+                                } else {
+                                    setTimeout(this.props.form.resetFields, 500);
+                                }
+                            } else {
+                                message.error(this.props.reason);
+                            }
+                        }
+                    },
+                });
+            }
+        } else if (!err && flag === true) {
+            that.props.dispatch({
+                type: 'standardlibrary/editstandardlibrarypollutant',
+                payload: {
+                    Guid: this.state.Id,
+                    StandardLibraryID: pid,
+                    PollutantCode: values.PollutantCode,
+                    AlarmType: values.AlarmType,
+                    UpperLimit: values.UpperLimit,
+                    LowerLimit: values.LowerLimit,
+                    callback: () => {
+                        if (this.props.requstresult === '1') {
+                            this.props.dispatch({
+                                type: 'standardlibrary/getstandardlibrarypollutantlist',
+                                payload: {
+                                    StandardLibraryID: pid,
+                                },
+                            });
+                            this.props.getlist();
+                        } else {
+                            message.error(this.props.reason);
+                        }
+                    }
+                },
+            });
+        }
+    });
+};
 
-              }
-          });
-      };
-
- success = (Id) => {
-     //  let index = this.props.dispatch(routerRedux.push(`/sysmanage/Userinfo`));
-     //  if (this.state.UserId !== null) {
-     //      message.success('修改成功', 3).then(() => index);
-     //  } else {
-     //      message.success('新增成功', 3).then(() => index);
-     //  }
-     if (Id != null) {
-         this.setState({
-             Id: Id
-         });
-     }
-     message.success('保存成功', 3);
- };
-
- componentWillMount() {
-     this.setState({
-         StandardLibraryID: this.props.pid
-     });
-     this.props.onRef(this);
-     const Id = this.props.Id;
-     console.log(Id);
-     if (Id !== "null") {
-         this.setState({
-             Id: Id,
-             btndisabled: true,
-         });
-         this.props.dispatch({
-             type: 'standardlibrary/getStandardlibrarypollutantbyid',
-             payload: {
-                 Guid: Id,
-                 callback: () => {
-                 }
-             },
-         });
-     }
-     this.GetPollutantList(this.props.pid);
- }
+success = (Id) => {
+    if (Id != null) {
+        this.setState({
+            Id: Id
+        });
+    }
+    message.success('保存成功', 3);
+};
 
  GetPollutantList = (pid) => {
      this.props.dispatch({
@@ -182,35 +173,29 @@ class AddStandardLibraryPollutant extends Component {
  }
 
  alarmTypeChange=(type)=>{
-     if(type==0)
-     {
-        this.setState({
-            upper:false,
-            low:false
-        })
-     }
-     else if(type==1)
-     {
+     if(type==0) {
+         this.setState({
+             upper:false,
+             low:false
+         });
+     } else if(type==1) {
          this.setState({
              upper:true,
              low:false
-         })
-     }
-     else if(type==2)
-     {
-        this.setState({
-            upper:false,
-            low:true
-        })
-     }
-     else if(type==3)
-     {
-        this.setState({
-            upper:true,
-            low:true
-        })
+         });
+     } else if(type==2) {
+         this.setState({
+             upper:false,
+             low:true
+         });
+     } else if(type==3) {
+         this.setState({
+             upper:true,
+             low:true
+         });
      }
  }
+
  continue=(e) => {
      this.setState({
          flag: true,
@@ -224,6 +209,7 @@ class AddStandardLibraryPollutant extends Component {
       });
       this.handleSubmit(e);
   }
+
   render() {
       const {
           Id,
@@ -235,30 +221,22 @@ class AddStandardLibraryPollutant extends Component {
           AlarmType,
           UpperLimit,
           LowerLimit,
-      } = editstandardlibrarypollutant === null || Id === "null" ? {} : editstandardlibrarypollutant;
+      } = editstandardlibrarypollutant === null || Id === null ? {} : editstandardlibrarypollutant;
       const { getFieldDecorator } = this.props.form;
       let {low,upper}=this.state;
-      if(AlarmType)
-      {
-          if(AlarmType==0)
-          {
-            low=false;
-            upper=false;
-          }
-          else if(AlarmType==1)
-          {
-            low=false;
-            upper=true;
-          }
-          else if(AlarmType==2)
-          {
-            low=true;
-            upper=false;
-          }
-          else if(AlarmType==3)
-          {
-            low=true;
-            upper=true;
+      if(AlarmType) {
+          if(AlarmType==0) {
+              low=false;
+              upper=false;
+          } else if(AlarmType==1) {
+              low=false;
+              upper=true;
+          } else if(AlarmType==2) {
+              low=true;
+              upper=false;
+          } else if(AlarmType==3) {
+              low=true;
+              upper=true;
           }
       }
 
