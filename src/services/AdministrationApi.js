@@ -45,7 +45,7 @@ export async function AddOrUpdateSpareParts(params) {
         Code: params.code,
         PartName: params.partName,
         ID: params.id,
-        Unit:params.unit
+        Unit: params.unit
     };
     const result = post('/api/rest/PollutantSourceApi/PTaskForm/AddOrUpdateSpareParts', body, null);
     return result === null ? {
@@ -101,7 +101,7 @@ export async function AddOrUpdateStandardGas(params) {
         Manufacturer: params.manufacturer,
         StandardGasName: params.gasName,
         ID: params.id,
-        Unit:params.unit
+        Unit: params.unit
     };
     const result = post('/api/rest/PollutantSourceApi/PTaskForm/AddOrUpdateStandardGas', body, null);
     return result === null ? {
@@ -282,7 +282,7 @@ export async function DeleteFilse(params) {
 //修改附件
 export async function EditKBM(params) {
     const body = {
-        ID:params.ID,
+        ID: params.ID,
         Name: params.Name,
         RepositoryType: params.RepositoryType,
         DirectoryType: params.DirectoryType,
@@ -300,6 +300,31 @@ export async function IfExists(params) {
         uid: params.uid
     };
     const result = upload('/api/rest/PollutantSourceApi/KBM/IfExists', body, null);
+    return result === null ? {
+        data: null
+    } : result;
+}
+
+//获取意见反馈列表
+export async function GetFeedbackList(params) {
+    const body = {
+        pageIndex: params.pageIndex,
+        pageSize: params.pageSize,
+    };
+    const result = upload('/api/rest/PollutantSourceApi/UserInfoApi/GetFeedBackList', body, null);
+    return result === null ? {
+        data: null
+    } : result;
+}
+
+//删除意见反馈信息
+export async function DeleteFeedBackByID(params) {
+    const body = {
+        ID: params.ID,
+    };
+    debugger
+    const result = upload('/api/rest/PollutantSourceApi/UserInfoApi/DeleteFeedBackByID', body, null);
+    debugger
     return result === null ? {
         data: null
     } : result;
