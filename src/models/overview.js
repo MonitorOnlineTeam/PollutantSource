@@ -91,22 +91,26 @@ export default Model.extend({
         },
         * querydatalist({
             payload,
-        }, { call, update, put, take, select }) {
-            const { dataOverview, selectpollutantTypeCode, RunState } = yield select(a => a.overview);
-            const body = {
+        }, { call, update, put, select }) {
+            const { dataOverview, selectpollutantTypeCode ,RunState} = yield select(a => a.overview);
+
+            let body = {
                 time: dataOverview.time,
                 pollutantTypes: selectpollutantTypeCode,
                 pointName: dataOverview.pointName,
                 status: dataOverview.selectStatus,
                 terate: dataOverview.terate,
             }
-            
+            if(body.time)
+            {
+                body.time=body.time.format('YYYY-MM-DD HH:00:00');
+            }
             if(payload.isAll)
             {
                 body={};
             }
             const data = yield call(querydatalist, body);
-            if (payload.map && data) {
+            if (data) {
                 data.map((item) => {
                     item.position = {
                         'longitude': item.longitude,

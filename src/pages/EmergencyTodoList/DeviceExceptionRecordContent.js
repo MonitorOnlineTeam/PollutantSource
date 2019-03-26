@@ -28,8 +28,10 @@ class DeviceExceptionRecordContent extends Component {
     }
 
     render() {
+        const {pointName}=this.props;
         const SCREEN_HEIGHT=this.props.scrolly==="none"?{overflowY:'none'}:{height:document.querySelector('body').offsetHeight - 250};
         const Record = this.props.ExceptionRecord!==null?this.props.ExceptionRecord.Record:null;
+        debugger;
         const Content=Record!==null?Record.Content:null;
         let SignContent =Record!==null?Record.SignContent === null ? null : `data:image/jpeg;base64,${Record.SignContent}`:null;
         if (this.props.isloading) {
@@ -54,7 +56,7 @@ class DeviceExceptionRecordContent extends Component {
                                         站点名称
                             </td>
                             <td style={{ width: '30%', height: '50px', textAlign: 'center', fontSize: '14px' }}>
-                                {Content!==null?Content.DGIMN:null}
+                                {pointName}
                             </td>
                             <td style={{ width: '20%', height: '50px', textAlign: 'center', fontSize: '14px' }}>
                                         设备名称

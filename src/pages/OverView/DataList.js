@@ -58,7 +58,7 @@ class dataList extends PureComponent {
     pickerChange = (time, timeString) => {
         if (time) {
             let {dataOverview}=this.props;
-            dataOverview.time=time
+            dataOverview.time=time;
             this.reloadData(dataOverview);
         }
     }

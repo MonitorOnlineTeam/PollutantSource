@@ -40,7 +40,6 @@ export default class QControllist extends Component {
         const rType = this.props.RecordTypes;
         const { match, routerData, children } = this.props;
         const activeKey = location.pathname.replace(`${match.url}/`, '');
-        console.log(activeKey);
         const newtablist = this.state.tablist.filter((item) => {
             const index = this.props.RecordTypes.findIndex((itm) => {
                 return itm.TypeName == item.key;

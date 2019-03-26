@@ -37,6 +37,7 @@ export default class FilesList extends Component {
         document.getElementById('ifile').src = url;
     }
     click = (returnName) => {
+        debugger;
         window.open(returnName)
     }
     downloadFile = (returnName) => {

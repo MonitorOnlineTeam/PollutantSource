@@ -143,7 +143,7 @@ class MapContent extends Component {
   }
 
   render() {
-      const {maploading,baseModel,selectpoint}=this.props;
+      let {maploading,baseModel,selectpoint,datalist}=this.props;
       const baseinfo = baseModel[0];
       //地图中心
       let mapCenter;
@@ -193,7 +193,7 @@ class MapContent extends Component {
                   this.getpolygon(allcoo)
               }
               <Markers
-                  markers={this.props.datalist}
+                  markers={datalist}
                   events={this.markersEvents}
                   render={(extData) => {
                       if(extData.stop)

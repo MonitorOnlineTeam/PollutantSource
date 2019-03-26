@@ -290,6 +290,10 @@ class PointDetail extends Component {
         }else if(viewtype==="equipmentoperatingrate"){
             backpath=`/qualitycontrol/${viewtype}`;
         }
+        else if(viewtype==='homepage')
+        {
+            backpath=`/homepage`;
+        }
         return(<Link to={backpath}><Icon type="left" />返回</Link>);
     }
 

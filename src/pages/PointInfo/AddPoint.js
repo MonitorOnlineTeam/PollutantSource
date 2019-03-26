@@ -225,6 +225,16 @@ class AddPoint extends Component {
            }
        }
 
+       getloglat=(log,lat)=>{
+          if(log && lat)
+          {
+              return log+","+lat;
+          }
+          return '';
+       }
+       
+
+
        handleSubmit = (e) => {
            e.preventDefault();
            let flag = true;
@@ -705,7 +715,7 @@ class AddPoint extends Component {
                                      label="排口坐标"
                                  > {
                                          getFieldDecorator('Coordinate', {
-                                             initialValue: `${longitude===undefined?centerlongitude:longitude},${latitude===undefined?centerlatitude:latitude}`,
+                                             initialValue:this.getloglat(),
                                              rules: [{
                                                  required: true,
                                                  message: '请输入排口坐标!'

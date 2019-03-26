@@ -7,6 +7,7 @@ import {
     Radio,
 } from 'antd';
 import ReactEcharts from 'echarts-for-react';
+import { routerRedux } from 'dva/router';
 import {
     connect
 } from 'dva';
@@ -590,6 +591,27 @@ class index extends Component {
          return option;
      }
 
+     getProgress=(tcData)=>{
+        let percentage=100;
+        if(tcData && (tcData.CompletedTaskSum!=0 || tcData.NoCompletedTaskSum!=0 ) )
+        {
+            percentage=tcData.CompletedTaskSum/(tcData.CompletedTaskSum+tcData.NoCompletedTaskSum)*100;
+        }
+
+        return(
+            <Progress
+            percent={100}
+            successPercent={percentage}
+            strokeColor="red"
+            showInfo={false}
+            strokeWidth={10}
+            />
+        )
+     }
+
+
+
+
      /**地图 */
      getpolygon = (polygonChange) => {
          let res = [];
@@ -636,18 +658,22 @@ class index extends Component {
         };
 
 treeCilck = (row) => {
-    const {
-        dispatch,
-    } = this.props;
-    this.setState({
-        visible: true,
-        pointName: row.pointName,
-        position: {
-            latitude: row.latitude,
-            longitude: row.longitude,
-        },
-    });
-    _thismap.setZoomAndCenter(15, [row.longitude, row.latitude]);
+    // const {
+    //     dispatch,
+    // } = this.props;
+    // this.setState({
+    //     visible: true,
+    //     pointName: row.pointName,
+    //     position: {
+    //         latitude: row.latitude,
+    //         longitude: row.longitude,
+    //     },
+    // });
+    // _thismap.setZoomAndCenter(15, [row.longitude, row.latitude]);
+    let viewtype = 'homepage';
+    this.props.dispatch(routerRedux.push(`/pointdetail/${row.DGIMN}/${viewtype}`));
+
+
 };
 
      /**污染物类型切换 */
@@ -872,13 +898,7 @@ treeCilck = (row) => {
                                      <div className={Adapt.divo}>
                                          <div className={Adapt.divl} />
                                          <div className={Adapt.divm}>
-                                             <Progress
-                                                 percent={100}
-                                                 successPercent={tcData.CompletedTaskSum}
-                                                 strokeColor="red"
-                                                 showInfo={false}
-                                                 strokeWidth={10}
-                                             />
+                                            {this.getProgress(tcData)}
                                          </div>
                                          <div className={Adapt.divr} />
                                      </div>

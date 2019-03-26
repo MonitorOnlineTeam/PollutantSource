@@ -5,12 +5,25 @@ import { routerRedux } from 'dva/router';
 import MonitorContent from '../../components/MonitorContent/index';
 import DeviceExceptionRecordContent from './DeviceExceptionRecordContent';
 
-@connect()
+@connect(({points})=>({
+    selectpoint:points.selectpoint
+}))
 class DeviceExceptionRecord extends Component {
     constructor(props) {
         super(props);
         this.state = {
         };
+    }
+
+    componentWillMount(){
+        const {dispatch,match}=this.props;
+        dispatch({
+            type:'points/querysinglepointinfo',
+            payload:{
+                dgimn:match.params.pointcode
+            }
+        })
+
     }
 
     enterTaskDetail = () => {
@@ -26,6 +39,7 @@ class DeviceExceptionRecord extends Component {
     //生成面包屑
     renderBreadCrumb = () => {
         const rtnVal = [];
+        debugger;
         let listUrl = this.props.match.params.viewtype;
         let taskID = this.props.match.params.TaskID;
         let DGIMN = this.props.match.params.pointcode;
@@ -83,6 +97,7 @@ class DeviceExceptionRecord extends Component {
     }
 
     render() {
+        const {selectpoint}=this.props;
         return (
             <div>
                 <MonitorContent {...this.props} breadCrumbList={this.renderBreadCrumb()}>
@@ -102,7 +117,7 @@ class DeviceExceptionRecord extends Component {
                                 </Button>
                             </p>}
                     >
-                        <DeviceExceptionRecordContent TaskID={this.props.match.params.TaskID} />
+                        <DeviceExceptionRecordContent pointName={selectpoint?selectpoint.pointName:''} TaskID={this.props.match.params.TaskID} />
                     </Card>
                 </MonitorContent>
             </div>

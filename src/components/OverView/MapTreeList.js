@@ -30,10 +30,13 @@ const TabPane = Tabs.TabPane;
 class MapTreeList extends Component {
     constructor(props) {
         super(props);
-        this.state={
-            searchName:null
-        };
     }
+
+    // componentWillMount(){
+    //     this.props.dispatch({
+
+    //     })
+    // }
     //获取当期数据的时间
     getTimeImgSpan=()=>{
         const {datalist}=this.props;

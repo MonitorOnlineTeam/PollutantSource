@@ -16,7 +16,9 @@ import Header from './Header';
 import Context from './MenuContext';
 import PageLoading from '@/components/PageLoading';
 import SiderMenu from '@/components/SiderMenu';
-import {getUser} from '../utils/authority';
+import {getUser,ggid} from '../utils/authority';
+import Cookie from 'js-cookie';
+
 
 import styles from './BasicLayout.less';
 
@@ -141,7 +143,39 @@ class BasicLayout extends React.PureComponent {
       }
       return <SettingDrawer />;
   };
-
+  renderContent=()=>{
+   
+    if(getUser())
+    {
+        const usertoken=Cookie.get('token');
+        const user = JSON.parse(usertoken);
+        if(user.User_Remark===ggid)
+        {
+            return(
+                <div>
+                    <Redirect to='/homepage' />
+                    {
+                        this.props.children
+                    }
+                </div>
+            );
+        }
+        else
+        {
+            return(
+                <div>
+                    <Redirect to='/workbench' />
+                    {
+                        this.props.children
+                    }
+                </div>
+            );
+        }
+   
+    }else{
+        return(<Redirect to="/user/login" />);
+    }
+  }
   render() {
       const {
           navTheme,
@@ -180,7 +214,9 @@ class BasicLayout extends React.PureComponent {
                       {...this.props}
                   />
                   <Content className={styles.content} style={contentStyle}>
-                      {getUser()?children:<Redirect to="/user/login" />}
+                        {
+                            this.renderContent()
+                        }
                   </Content>
 
               </Layout>
@@ -207,6 +243,7 @@ export default connect(({ global, setting, menu }) => ({
     collapsed: global.collapsed,
     layout: setting.layout,
     breadcrumbNameMap: menu.breadcrumbNameMap,
+    url:global.url,
     ...setting,
 }))(props => (
     <Media query="(max-width: 599px)">

@@ -41,9 +41,9 @@ class RealTimeWarning extends Component {
                                     <div key={key} className={styles.warningsData} onClick={(e) => this.showModal(items.PointName, items.DGIMNs, item.PollutantCode, item.PollutantName, item.SuggestValue)}>
                                         {item.PollutantName}
                                         <Divider type="vertical" style={{ backgroundColor: '#b3b3b3' }} />
-                                        超标预警值为{item.AlarmValue}ug/m3
+                                        超标预警值为{item.AlarmValue}{item.Unit}
                                         <Divider type="vertical" style={{ backgroundColor: '#b3b3b3' }} />
-                                        建议浓度为{item.SuggestValue}ug/m3
+                                        建议浓度为{item.SuggestValue}{item.Unit}
                                         <span style={{ float: 'right' }}>{item.AlarmOverTime}</span>
                                     </div>
                                 </div>

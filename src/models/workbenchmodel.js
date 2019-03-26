@@ -169,6 +169,7 @@ export default Model.extend({
                 endTime: exceptionAlarm.endTime,
                 pageSize: exceptionAlarm.pageSize,
                 pageIndex: exceptionAlarm.pageIndex,
+                PollutantType:2
                 // IsQueryAllUser:true,
                 // IsPaging:false
                 //operationUserId:'766f911d-5e41-4bbf-b705-add427a16e77'
