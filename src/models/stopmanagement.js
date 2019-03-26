@@ -4,6 +4,7 @@ import {
 import {
     getlist, getlistbyid, deletebyid, addoutputstop, uploadfiles, deletefiles, outputstoptimechecked, getoutputstopfiles
 } from '../services/stopmanagement';
+
 export default Model.extend({
     namespace: 'stopmanagement',
 
@@ -24,43 +25,19 @@ export default Model.extend({
             history
         }) {
             history.listen((location) => {
-                // if (location.pathname === '/monitor/sysmanage/userinfo') {
-                //     // 初始化testId的值为10
-                //     dispatch({
-                //         type: 'fetchuserlist',
-                //         payload: {
-
-                //         },
-                //     });
-                // }
             });
         },
     },
     effects: {
+        /**获取停产列表 */
         * getlist({
-            payload: {
-                pageIndex,
-                pageSize,
-                StopHours,
-                RecordUserName,
-                DGIMN,
-                Data,
-                datatype
-            }
+            payload
         }, {
             call,
-            put,
             update,
-            select
         }) {
             const result = yield call(getlist, {
-                pageIndex: pageIndex,
-                pageSize: pageSize,
-                StopHours: StopHours,
-                RecordUserName: RecordUserName,
-                DGIMN: DGIMN,
-                Data: Data,
-                datatype: datatype,
+                ...payload
             });
 
             if (result.requstresult === '1') {
@@ -68,8 +45,8 @@ export default Model.extend({
                     requstresult: result.requstresult,
                     list: result.data,
                     total: result.total,
-                    pageIndex: pageIndex,
-                    pageSize: pageSize
+                    pageIndex: payload.pageIndex,
+                    pageSize: payload.pageSize
                 });
             } else {
                 yield update({
@@ -81,25 +58,16 @@ export default Model.extend({
                 });
             }
         },
+        /**添加停产信息 */
         * addoutputstop({
-            payload: {
-                DGIMN,
-                Data,
-                StopDescription,
-                Files,
-                callback,
-            }
+            payload
         }, {
             call,
             put,
             update,
-            select
         }) {
             const result = yield call(addoutputstop, {
-                DGIMN: DGIMN,
-                Data: Data,
-                StopDescription: StopDescription,
-                Files: Files,
+                ...payload
             });
             yield update({
                 requstresult: result.requstresult,
@@ -108,13 +76,7 @@ export default Model.extend({
             yield put({
                 type: 'getlist',
                 payload: {
-                    StopHours: '',
-                    RecordUserName: '',
-                    Data: '',
-                    datatype: '',
-                    pageIndex: 1,
-                    pageSize: 10,
-                    DGIMN: DGIMN,
+                    ...payload
                 },
             });
             callback();

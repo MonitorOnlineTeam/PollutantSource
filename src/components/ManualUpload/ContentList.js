@@ -83,6 +83,7 @@ export default class ContentList extends Component {
         };
     }
     componentDidMount() {
+        debugger
         this.updateState({
             manualUploadParameters: {
                 ...this.props.manualUploadParameters,
@@ -97,6 +98,7 @@ export default class ContentList extends Component {
             }
         });
     }
+
     /**
       * 更新model中的state
      */

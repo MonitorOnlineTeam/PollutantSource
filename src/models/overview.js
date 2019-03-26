@@ -18,13 +18,12 @@ import {
     querypollutantlist
 } from '../services/overviewApi';
 import { Model } from '../dvapack';
+import { isNullOrUndefined } from 'util';
 
 
 export default Model.extend({
     namespace: 'overview',
     state: {
-
-
         dataTemp: [],
         lastestdata: [],
         mainpcol: [],
@@ -42,7 +41,6 @@ export default Model.extend({
         selectpoint: null,
         onlypollutantList: [],
         selectpollutantTypeCode: 2,
-        RunState: '1',//手工数据上传参数
         //数据一览表头
         columns: [],
         data: [],
@@ -62,6 +60,12 @@ export default Model.extend({
             beginTime: moment(new Date()).add('hour', -23).format('YYYY-MM-DD HH:00:00'),
             pollutantCode: null,
             pollutantName: null
+        },
+        upLoadParameters: {
+            manualUploaddataOne: null,
+            pointName: null,
+            pollutantTypes: '2',
+            RunState: '2',
         }
     },
     effects: {
@@ -96,7 +100,6 @@ export default Model.extend({
                 pointName: dataOverview.pointName,
                 status: dataOverview.selectStatus,
                 terate: dataOverview.terate,
-                RunState: RunState
             }
             if(body.time)
             {
@@ -125,12 +128,38 @@ export default Model.extend({
             }
             yield update({ data });
             yield update({ dataTemp: data });
-
             yield update({ dataOne: data == null ? '0' : data[0].DGIMN });
             if (payload.callback === undefined) {
             } else {
                 payload.callback(data);
             }
+        },
+        //手工数据上传数据列表（单独独立）
+        * manualUploadQuerydatalist({
+            payload,
+        }, { call, update, put, take, select }) {
+            const { upLoadParameters } = yield select(a => a.overview);
+            const body = {
+                pollutantTypes: upLoadParameters.pollutantTypes,
+                pointName: upLoadParameters.pointName,
+                RunState: upLoadParameters.RunState,
+            }
+            const data = yield call(querydatalist, body);
+            if (data) {
+                yield update({ data });
+                yield update({ dataTemp: data });
+            }
+            else {
+                yield update({ data: null });
+            }
+            yield update({
+                upLoadParameters: {
+                    ...upLoadParameters,
+                    ...{
+                        manualUploaddataOne: data == null ? '0' : data[0].DGIMN
+                    }
+                }
+            });
         },
         * querylastestdatalist({
             payload,
@@ -484,13 +513,13 @@ export default Model.extend({
                 yield update({
                     pollutantTypelist: res
                 });
-                yield put({
-                    type: 'querydatalist',
-                    payload: {
-                        ...payload,
-                    },
-                });
-                yield take('querydatalist/@@end');
+                // yield put({
+                //     type: 'querydatalist',
+                //     payload: {
+                //         ...payload,
+                //     },
+                // });
+                // yield take('querydatalist/@@end');
             } else {
                 yield update({
                     pollutantTypelist: null

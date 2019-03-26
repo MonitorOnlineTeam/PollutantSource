@@ -390,6 +390,7 @@ export default Model.extend({
                 DGIMNs: OperationCalendar.DGIMNs,
                 IsQueryAllUser: OperationCalendar.IsQueryAllUser,
             };
+            debugger
             const response = yield call(getOperationHistoryRecordPageList, body);
             if (response.data !== null) {
                 yield update({

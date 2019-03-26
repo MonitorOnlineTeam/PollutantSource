@@ -17,7 +17,6 @@ class AlarmRecordModal extends Component {
     }
 
   showModal = (firsttime,lasttime,DGIMN,alarmTitle) => {
-      alert(1)
       this.setState({
           alarmTitle:alarmTitle,
           visibleAlarmModal: true,
@@ -28,7 +27,6 @@ class AlarmRecordModal extends Component {
   }
 
   componentDidMount = () => {
-    alert(2)
       const {onRef}=this.props;
       onRef(this);
   }

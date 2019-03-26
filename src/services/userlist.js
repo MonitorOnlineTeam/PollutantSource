@@ -1,10 +1,10 @@
 
+import { async } from 'q';
 import request from '../utils/request';
 import {
     post
 }
     from '../dvapack/request';
-import { async } from 'q';
 import {pageUrl} from '../utils/common';
 // 用户列表
 export async function getList(params) {
@@ -184,7 +184,7 @@ export async function setEnterpriseDataRole(params){
 
 /**
  * 【用户管理】获取已授权的企业
- * @params {"UserId":"766f911d-5e41-4bbf-b705-add427a16e77"}  
+ * @params {"UserId":"766f911d-5e41-4bbf-b705-add427a16e77"}
  */
 export async function getEnterpriseDataRoles(params){
     const result = post(pageUrl.UserManager.getEnterpriseDataRoles, params, null);

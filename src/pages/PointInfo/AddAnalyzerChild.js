@@ -26,6 +26,9 @@ const Option = Select.Option;
      pointinfo
 }) => ({
     ...loading,
+    Isloading: loading.effects['pointinfo/getanalyzerchildmodel'],
+    Isloading1: loading.effects['pointinfo/getcomponent'],
+    Isloading2: loading.effects['pointinfo/getmaininstrumentName'],
     reason: pointinfo.reason,
     component: pointinfo.component,
     getcomponent_requstresult: pointinfo.getcomponent_requstresult,
@@ -159,6 +162,7 @@ export default class AddAnalyzerChild extends Component {
                       type: 'pointinfo/editalyzerchild',
                       payload: {
                         ID:this.state.ID,
+                        AnalyzerSys_Id: this.state.AnalyzerSys_Id,
                         Name: values.Name,
                         DeviceModel: values.DeviceModel,
                         Manufacturer: values.Manufacturer,
@@ -189,7 +193,10 @@ export default class AddAnalyzerChild extends Component {
          return (
              <div>
               <Form onSubmit={this.handleSubmit} >
-                 <Card >
+                 < Card loading = {
+                   this.props.Isloading
+                 || this.props.Isloading1 ||this.props.Isloading2
+                 } >
                      <Row gutter={48} >
                          <Col span={12} >
                                  <FormItem
@@ -263,7 +270,7 @@ export default class AddAnalyzerChild extends Component {
                              } </FormItem>
                      </Col>
                      </Row>
-                     <Row gutter={48} >
+                     <Row gutter={48} style={{display:"none"}} >
                          <Col span={12} >
                              <FormItem labelCol={{span: 8}}
                                  wrapperCol={{span: 12}}

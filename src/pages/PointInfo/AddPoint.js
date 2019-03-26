@@ -31,6 +31,10 @@ import MonitorContent from '../../components/MonitorContent/index';
 import Division from '../../components/Layout/Division';
 
 import ModalMap from "./ModalMap";
+import {
+    centerlongitude,
+    centerlatitude
+} from '../../config';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -157,7 +161,7 @@ class AddPoint extends Component {
                             > {
                                     `${user.User_Name }(${ user.User_Account })`
                                 }
-                                                               </Option>)
+                            </Option>)
                         );
                     } else {
                         message.error('请添加环保专工');
@@ -324,8 +328,6 @@ class AddPoint extends Component {
          };
          const {editpoint,isloading}=this.props;
          const {getFieldDecorator} = this.props.form;
-
-
          if(isloading) {
              return (<Spin
                  style={{ width: '100%',
@@ -357,8 +359,6 @@ class AddPoint extends Component {
              Col3,
              DevicePassword
          } = editpoint === null || this.props.match.params.DGIMN ==="null" ? {} : editpoint;
-
-
          return (
              <MonitorContent
                  {...this.props}

@@ -62,7 +62,7 @@ export default class Content extends Component {
             this.setState({
                 DGIMN: DGIMN
             }, () => {
-                this.onChange();
+                this.onChange(this.props.pageIndex, this.props.pageSize);
             });
         }
     }
@@ -79,9 +79,9 @@ export default class Content extends Component {
             type: 'stopmanagement/getlist',
             payload: {
                 pageIndex: pageIndex === undefined ? 1 : pageIndex,
-                pageSize: pageSize === undefined ? 20 : pageSize,
+                pageSize: pageSize === undefined ? 10 : pageSize,
                 DGIMN: this.state.DGIMN,
-                Data: this.state.rangeDate,
+                Data: this.state.rangeDate.join(','),
                 RecordUserName: this.state.RecordUserName,
                 StopHours: this.state.duration, //时长
                 datatype: this.state.datatype,//类型 天或小时
@@ -93,7 +93,7 @@ export default class Content extends Component {
             type: 'stopmanagement/getlist',
             payload: {
                 pageIndex: pageIndex === undefined ? 1 : pageIndex,
-                pageSize: pageSize === undefined ? 20 : pageSize,
+                pageSize: pageSize === undefined ? 10 : pageSize,
                 DGIMN: this.state.DGIMN,
                 Data: this.state.rangeDate.join(','),
                 RecordUserName: this.state.RecordUserName,
@@ -107,7 +107,7 @@ export default class Content extends Component {
             type: 'stopmanagement/deletebyid',
             payload: {
                 pageIndex: this.props.pageIndex === undefined ? 1 : this.props.pageIndex,
-                pageSize: this.props.pageSize === undefined ? 20 : this.props.pageSize,
+                pageSize: this.props.pageSize === undefined ? 10 : this.props.pageSize,
                 DGIMN: this.state.DGIMN,
                 Data: this.state.rangeDate.join(','),
                 RecordUserName: this.state.RecordUserName,
@@ -305,7 +305,7 @@ export default class Content extends Component {
                                 'current': this.props.pageIndex,
                                 onChange: this.onChange,
                                 onShowSizeChange: this.onShowSizeChange,
-                                pageSizeOptions: ['20', '30', '40', '50']
+                                pageSizeOptions: ['10','20', '30', '40', '50']
                             }}
                             rowClassName={
                                 (record, index, indent) => {

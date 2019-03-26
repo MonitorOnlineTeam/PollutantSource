@@ -5,17 +5,18 @@ import {
 import { connect } from 'dva';
 import styles from './Tree.less';
 
-@connect(({ loading, overview, maintenancelist, workbenchmodel, tasklist, points,manualupload }) => ({
+@connect(({ loading, overview, maintenancelist, workbenchmodel, tasklist, points, manualupload }) => ({
     //点位数据信息
     treedatalist: overview.data,
     //加载数据
     isloading: loading.effects['overview/querydatalist'],
-    dataOne: overview.dataOne,
+    manualUploadisloading: loading.effects['overview/manualUploadQuerydatalist'],
+
     DGIMN: maintenancelist.DGIMN, //点击的MN号码（不点击默认加载第一个）
     OperationCalendar: workbenchmodel.OperationCalendar,
     tasklist: tasklist.DGIMN,
     ProcessFlowDiagram: points.DGIMN,
-    manualupload:manualupload.manualUploadParameters, //手工数据上传
+    manualupload: manualupload.manualUploadParameters, //手工数据上传
     dataOverview: overview.dataOverview,
 }))
 
@@ -27,26 +28,31 @@ class TreeCardContent extends Component {
     }
 
     componentWillMount() {
-        if(this.props.runState!==undefined)
-        {
-            this.overViewUpdateState({
-                RunState:this.props.runState
+        if (this.props.runState !== undefined) {
+            this.props.dispatch({
+                type: 'overview/manualUploadQuerydatalist',
+                payload: {
+                },
             });
         }
+        else {
+            this.props.dispatch({
+                type: 'overview/querydatalist',
+                payload: {
+                },
+            });
+        }
+
+    }
+    /**
+     * 更新model(Overview)中的state
+    */
+    overViewUpdateState = (payload) => {
         this.props.dispatch({
-            type: 'overview/querydatalist',
-            payload: {},
+            type: 'overview/updateState',
+            payload: payload,
         });
     }
-   /**
-    * 更新model(Overview)中的state
-   */
-  overViewUpdateState = (payload) => {
-    this.props.dispatch({
-        type: 'overview/updateState',
-        payload: payload,
-    });
-}
     getStatusImg = (value) => {
         if (value === 0) {
             return <img style={{ width: 15 }} src="/gisunline.png" />;
@@ -122,7 +128,7 @@ class TreeCardContent extends Component {
         return res;
     }
     render() {
-        if (this.props.isloading) {
+        if (this.props.isloading || this.props.manualUploadisloading) {
             return (
                 <div style={{
                     width: '400px',

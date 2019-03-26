@@ -12,7 +12,7 @@ import {
     GetStandardGasList, GetOneStandardGas, AddOrUpdateStandardGas, DelStandardGas,
     DelCbFfTestEquipment, AddOrUpdateCbFfTestEquipment, GetOneCbFfTestEquipment, GetCbFfTestEquipmentList,
     GetKBMList, GetKBMType, GetFileType, uploadfiles, AddKBM, DeleteKBM, GetKBMDetailByID, DeleteFilse,
-    EditKBM, IfExists, GetUrlByID,
+    EditKBM, IfExists, GetUrlByID, GetFeedbackList, DeleteFeedBackByID
 } from '../services/AdministrationApi';
 
 export default Model.extend({
@@ -29,57 +29,65 @@ export default Model.extend({
         total: 0,
         pageIndex: 1,
         pageSize: 20,
-        sparepartsparam:{
-            pageIndex:1,
-            parttype:null,
-            pageSize:20,
-            partName:null,
-            data:[],
-            total:0
+        sparepartsparam: {
+            pageIndex: 1,
+            parttype: null,
+            pageSize: 20,
+            partName: null,
+            data: [],
+            total: 0
         },
-        standardgasparam:{
-            pageIndex:1,
-            pageSize:20,
-            GasName:null,
-            data:[],
-            total:0
+        standardgasparam: {
+            pageIndex: 1,
+            pageSize: 20,
+            GasName: null,
+            data: [],
+            total: 0
         },
-        cbfftestequipmentparam:{
-            pageIndex:1,
-            pageSize:20,
-            TestItemName:null,
-            data:[],
-            total:0,
+        cbfftestequipmentparam: {
+            pageIndex: 1,
+            pageSize: 20,
+            TestItemName: null,
+            data: [],
+            total: 0,
         },
         KBMParameters: {
             Name: null,
+        },
+        FeedbackParameters: {
+            pageIndex: 1,
+            pageSize: 10,
+            User_ID: '',
+            data: [],
+            total: 0,
+            DataOne:null,
         }
     },
     effects: {
         * GetSparePartList({ payload }, { call, put, update, select }) {
-            const {sparepartsparam}=yield select(a=>a.administration);
+            const { sparepartsparam } = yield select(a => a.administration);
             const body = {
                 PartType: sparepartsparam.parttype,
                 PartName: sparepartsparam.partName,
                 pageIndex: sparepartsparam.pageIndex,
                 pageSize: sparepartsparam.pageSize
             };
-            const result = yield call (GetSparePartList,body);
+            const result = yield call(GetSparePartList, body);
+            debugger
             if (result) {
                 yield update({
-                    sparepartsparam:{
+                    sparepartsparam: {
                         ...sparepartsparam,
-                        data:result.data,
-                        total:result.total
+                        data: result.data,
+                        total: result.total
                     }
                 })
-            } else
-            {
+            } else {
                 yield update({
-                    sparepartsparam:{
+                    sparepartsparam: {
                         ...sparepartsparam,
-                        data:null,
-                        total:0
+                        data: null,
+                        total: 0
                     }
                 })
             }
@@ -117,23 +125,23 @@ export default Model.extend({
         },
         ///标气
         * GetStandardGasList({ payload }, { call, put, update, select }) {
-            const {standardgasparam}=yield select(a=>a.administration);
-            const result = yield call(GetStandardGasList,standardgasparam);
+            const { standardgasparam } = yield select(a => a.administration);
+            const result = yield call(GetStandardGasList, standardgasparam);
             if (result) {
                 yield update({
-                    standardgasparam:{
+                    standardgasparam: {
                         ...standardgasparam,
-                        data:result.data,
-                        total:result.total
+                        data: result.data,
+                        total: result.total
                     }
                 });
             } else {
                 yield update({
-                    standardgasparam:{
+                    standardgasparam: {
                         ...standardgasparam,
-                        data:null,
-                        total:0
-                    }   
+                        data: null,
+                        total: 0
+                    }
                 });
             }
         },
@@ -172,23 +180,23 @@ export default Model.extend({
         ///手持设备
         * GetCbFfTestEquipmentList({ payload }, { call, put, update, select }) {
 
-            const {cbfftestequipmentparam}=yield select(a=>a.administration);
+            const { cbfftestequipmentparam } = yield select(a => a.administration);
             debugger;
-            const result = yield call(GetCbFfTestEquipmentList,cbfftestequipmentparam);
+            const result = yield call(GetCbFfTestEquipmentList, cbfftestequipmentparam);
             if (result) {
                 yield update({
-                    cbfftestequipmentparam:{
+                    cbfftestequipmentparam: {
                         ...cbfftestequipmentparam,
-                        data:result.data,
-                        total:result.total
+                        data: result.data,
+                        total: result.total
                     }
                 });
             } else {
                 yield update({
-                    cbfftestequipmentparam:{
+                    cbfftestequipmentparam: {
                         ...cbfftestequipmentparam,
-                        data:null,
-                        total:0
+                        data: null,
+                        total: 0
                     }
                 });
             }
@@ -400,5 +408,54 @@ export default Model.extend({
             });
             payload.callback(result.requstresult);
         },
+        //根据用户获取意见反馈列表
+        * GetFeedbackList({ payload }, { call, put, update, select }) {
+            const { FeedbackParameters } = yield select(a => a.administration);
+            const body = {
+                pageIndex: FeedbackParameters.pageIndex,
+                pageSize: FeedbackParameters.pageSize,
+            };
+            const result = yield call(GetFeedbackList, body);
+            debugger
+            if (result.Data !== null) {
+                if (result.Data.length !== 0) {
+                    yield update({
+                        FeedbackParameters: {
+                            ...FeedbackParameters,
+                            data: result.Data,
+                            total: result.Total
+                        }
+                    })
+                }
+                else {
+                    yield update({
+                        FeedbackParameters: {
+                            ...FeedbackParameters,
+                            data: [],
+                            total: 0
+                        }
+                    })
+                }
+
+            } else {
+                yield update({
+                    FeedbackParameters: {
+                        ...FeedbackParameters,
+                        data: [],
+                        total: 0
+                    }
+                })
+            }
+
+        },
+        //删除意见反馈信息
+        * DeleteFeedBackByID({ payload }, { call, put, update, select }) {
+            debugger
+            const result = yield call(DeleteFeedBackByID, payload);
+            debugger
+            payload.callback(result.IsSuccess);
+
+        },
+
     },
 });

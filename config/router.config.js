@@ -213,7 +213,8 @@ export default [
             { path: '/sysmanage/cbfftestequipment', component: './Administration/CbFfTestEquipment' },
             /* 系统管理-知识库管理 */
             { path: '/sysmanage/KBM', component: './Administration/KBM' },
-
+            /* 系统管理-意见反馈 */
+            { path: '/sysmanage/feedback', component: './Administration/FeedBack' },
             /* 用户基本信息管理-标准库管理 */
             { path: '/sysmanage/usestandardlibrary/:DGIMN/:PointName', component: './StandardLibrary/UseStandardLibrary' },
             /* 用户基本信息管理-停产管理 */

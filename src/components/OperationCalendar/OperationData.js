@@ -46,6 +46,7 @@ export default class OperationData extends Component {
     }
     //查询数据
     GetData = () => {
+        debugger
         this.updateState({
             OperationCalendar: {
                 ...this.props.OperationCalendar,
@@ -77,7 +78,7 @@ export default class OperationData extends Component {
         var returnResult = [];
         let operationingday = null;
         let thisData = this.props.OperationCalendar.tempTableDatas.filter(m => moment(m.CreateTime).format('YYYY-MM-DD') === value.format("YYYY-MM-DD"));
-        if (!this.props.treedataloading && !this.props.pollutantTypeloading && !this.props.loading) {
+        if (!this.props.loading) {
             if (thisData && thisData.length > 0) {
                 let ExceptionTypeText = thisData.filter(m => m.ExceptionTypeText !== "");
                 if (ExceptionTypeText && ExceptionTypeText.length > 0) {
@@ -223,9 +224,9 @@ export default class OperationData extends Component {
         });
     }
     render() {
-        const { treedataloading, pollutantTypeloading, OperationCalendar } = this.props;
+        const { OperationCalendar } = this.props;
         var spining = true;
-        if (!this.props.treedataloading && !this.props.pollutantTypeloading && !this.props.loading) {
+        if (!this.props.loading) {
             spining = this.props.loading;
         }
         return (

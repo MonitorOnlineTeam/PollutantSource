@@ -9,15 +9,9 @@ import TreeCardContent from '../../components/OverView/TreeCardContent';
 import SearchInput from '../../components/OverView/SearchInput';
 import ContentList from '../../components/ManualUpload/ContentList';
 
-@connect(({ manualupload, overview, loading }) => ({
-    loading: loading.effects['manualupload/GetManualSupplementList'],
-    treedataloading: loading.effects['overview/querydatalist'],
-    datalist: overview.data,
-    pageIndex: manualupload.pageIndex,
-    pageSize: manualupload.pageSize,
-    dataOne: overview.dataOne,
+@connect(({ manualupload, overview }) => ({
     manualUploadParameters: manualupload.manualUploadParameters,//参数
-    dataOverview: overview.dataOverview,
+    upLoadParameters: overview.upLoadParameters,
 }))
 @Form.create()
 export default class ManualUpload extends Component {
@@ -27,7 +21,7 @@ export default class ManualUpload extends Component {
         this.state = {
         };
     }
-    componentDidMount() {
+    componentWillMount() {
     }
 
     treeCilck = (row) => {
@@ -36,7 +30,6 @@ export default class ManualUpload extends Component {
                 ...this.props.manualUploadParameters,
                 ...{
                     DGIMN: row.DGIMN,
-                    
                 }
             }
         });
@@ -64,7 +57,6 @@ export default class ManualUpload extends Component {
     * 更新model(Overview)中的state
    */
     overViewUpdateState = (payload) => {
-        debugger
         this.props.dispatch({
             type: 'overview/updateState',
             payload: payload,
@@ -77,21 +69,23 @@ export default class ManualUpload extends Component {
     //重新加载
     reloadData = (pollutantTypeCode) => {
         this.overViewUpdateState({
-            selectpollutantTypeCode:pollutantTypeCode,
-            RunState:'2'
+            upLoadParameters: {
+                ...this.props.upLoadParameters,
+                ...{
+                    pollutantTypes: pollutantTypeCode,
+                }
+            }
         });
         this.props.dispatch({
-            type: 'overview/querydatalist',
+            type: 'overview/manualUploadQuerydatalist',
             payload: {
-                
             },
         });
     }
     searchPointbyPointName = (value) => {
         this.overViewUpdateState({
-            RunState:'2',
-            dataOverview: {
-                ...this.props.dataOverview,
+            upLoadParameters: {
+                ...this.props.upLoadParameters,
                 ...{
                     pointName: value,
                 }
@@ -99,7 +93,7 @@ export default class ManualUpload extends Component {
         });
         //点位列表
         this.props.dispatch({
-            type: 'overview/querydatalist',
+            type: 'overview/manualUploadQuerydatalist',
             payload: {
                 // callback: (data) => {
                 //     if (data != null) {
@@ -146,7 +140,7 @@ export default class ManualUpload extends Component {
         });
     }
     render() {
-        const { treedataloading, datalist, manualUploadParameters } = this.props;
+        const {upLoadParameters} = this.props;
         return (
             <MonitorContent {...this.props} breadCrumbList={
                 [
@@ -183,14 +177,14 @@ export default class ManualUpload extends Component {
                                         />
                                         <TreeCardContent style={{ overflow: 'auto', width: 400, background: '#fff' }}
                                             getHeight='calc(100vh - 275px)'
-                                            treeCilck={this.treeCilck} PollutantType={manualUploadParameters.PollutantType} runState={'2'} flag={'ManualUpload'} ifSelect={true} />
+                                            treeCilck={this.treeCilck} PollutantType={upLoadParameters.PollutantType} runState={'2'} flag={'ManualUpload'} ifSelect={true} />
                                     </div>
                                 </div>
                             </div>
                         </Col>
                         <Col style={{ width: document.body.clientWidth - 475, height: 'calc(100vh - 150px)', float: 'right' }}>
                             {
-                                this.props.dataOne === null ? null : <ContentList DGIMN={this.props.dataOne} />
+                                upLoadParameters.manualUploaddataOne === null ? null : <ContentList DGIMN={upLoadParameters.manualUploaddataOne} />
                             }
                         </Col>
                     </Row>

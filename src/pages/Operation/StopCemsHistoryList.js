@@ -32,7 +32,17 @@ export default class StopCemsHistoryList extends Component {
         super(props);
         this.state = {};
     }
-    componentDidMount() {
+    componentWillMount() {
+        this.updateState({
+            dataOne:null,
+            selectpollutantTypeCode:'2',
+            dataOverview: {
+                ...this.props.dataOverview,
+                ...{
+                    pointName: null,
+                }
+            }
+        });
     }
 
     //查询
