@@ -516,7 +516,7 @@ class index extends Component {
                  i++;
              });
              xAxisData = dyhwdate;
-             color = ['#FACB33'];
+             color = ['#03b3ff'];
 
          } else{
              SurplusDisplacement = dyhwAnalData.length !== 0 ? dyhwAnalData.Remainder.toFixed(2) : 0;
@@ -852,6 +852,7 @@ treeCilck = (row) => {
                              </div>
 
                          </div>
+                         <div className={Adapt.leftContainer}>
                          {/* LEFT@2 */}
                          <div className={Adapt.LeftLayout2}>
                              <div className={Adapt.divsecond}>
@@ -922,6 +923,7 @@ treeCilck = (row) => {
 
                                  </div>
                              </div>
+                         </div>
                          </div>
                      </div>
                      {/**中间污染物类型*/}

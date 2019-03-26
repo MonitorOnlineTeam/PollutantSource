@@ -12,14 +12,15 @@
 
 .ant-progress-success-bg, .ant-progress-bg{
 
-    background:#0edaad !important;  
+    background:#0edaad !important;
 }
 @media screen and (max-width: 1920px) {
 // 左模块1
 .LeftLayout1
-{       
+{
     background:@LayoutBackground;
-    height:17%;
+    // height:17%;
+    height:20%;
     border:@LayoutColor;
     margin-Top:2%;
     margin:auto 0 ;
@@ -28,20 +29,21 @@
 .LeftLayout2
 {
     background:@LayoutBackground;
-    height:11%;
+    // height:11%;
+    height:105px;
 	border:@LayoutColor;
 	margin-Top:2%;
-    
+
 }
 
 //左模块2样式
 .divsecond{
     width: 100%;
     height: 22%;
-  
+
      .divson1{
           font-size: 15px;
-         
+
           width: 100%;
           padding: 14px 53px 0px 49px;
           color: white;
@@ -70,7 +72,7 @@
            }
           .padd
           {
-           padding: 0px 20px 0px 20px; 
+           padding: 0px 20px 0px 20px;
            width: 12px;
            height: 20px;
            background:url(/add.png) no-repeat center center;
@@ -83,7 +85,7 @@
           }
           .pdeduct
           {
-           padding: 0px 20px 0px 20px; 
+           padding: 0px 20px 0px 20px;
            width: 12px;
            height: 18px;
            background:url(/deduct.png) no-repeat center center;
@@ -92,14 +94,15 @@
   }
 //左模块3
 .LeftLayout3
-{ 
+{
 	background: @LayoutBackground;
-	height:49%;
+  //height:49%;
+  height: calc(100% - 105px - 2%);
 	border:@LayoutColor;
     margin-Top:2%;
     overflow:hidden auto;
 
-  
+
     &::-webkit-scrollbar-track-piece{
         -webkit-border-radius:0;
        }
@@ -108,7 +111,7 @@
         height:9px;
        }
        &::-webkit-scrollbar-track{
-                
+
         border-radius: 10px;
         background-color:@scrollbar-track-color;
     }
@@ -127,8 +130,8 @@
 }
 //左模块3样式
 .divfirt{
-    
-  
+
+
     width: 100%;
     height: 20px;
     margin:10px 0px 0px 10px;
@@ -140,7 +143,7 @@
           font-weight: bold;
           border-left: 18px solid #EFB314;
           padding-left: 10px;
-  
+
           color: white;
         }
       }
@@ -149,7 +152,7 @@
 .divyw{
     height:120px;
     margin:5px 0px 0px 30px;
- 
+
     .divyws{
          margin: auto 0;
         color: #adceec;
@@ -194,7 +197,7 @@
           color: #adceec;
         }
       }
-  
+
   }
 
   .s1{
@@ -233,7 +236,7 @@
     border-left: 12px solid #3CCAFC;
     padding-left: 5px;
     margin-bottom: 13px;
- 
+
     color: #3CCAFC;
   }
   .s5{
@@ -253,10 +256,10 @@
     border-left: 12px solid #EECC2C;
     padding-left: 5px;
     margin-bottom: 13px;
-   
+
     color: #EECC2C;
-  }    
-  
+  }
+
 
 //右模块1
 .RightLayout1{
@@ -264,11 +267,14 @@
     background:@LayoutBackground;
     height:20%;
     border:@LayoutColor;
- 
+
+}
+.leftContainer{
+  height:65.7%;
 }
 //右模块2
 .RightLayout2{
-  
+
     overflow:auto ;
     background:@LayoutBackground;
     height:65.7%;
@@ -286,7 +292,7 @@
         height:9px;
        }
        &::-webkit-scrollbar-track{
-                
+
         border-radius: 10px;
         background-color:@scrollbar-track-color;
     }
@@ -366,20 +372,20 @@ padding: 16px;
    text-align: left;
     width: 50%;
     float: left
-    
+
 }
 .ColRight{
     text-align: right;
     width: 50%;
     float: left;
-    
+
 }
 .RowOut{
     position: relative;
     left:159px;
     top: -108px;
     width: 110px;
-        height: 110px; 
+        height: 110px;
         border-radius: 150px;
         background: #40ccdd;
         border:6px solid #001529;
@@ -409,7 +415,7 @@ color: #001529;
 }
 .SO2{
 
-     .Situation(#ffcc44);
+     .Situation(#03b3ff);
 }
 
 .Situation(@color,@title:#FFF){
@@ -424,7 +430,7 @@ color: #001529;
    padding: 10px;
   font-weight: 500;
   color:@title;
-  
+
  }
 .divtitle i{
     font-style: normal;
@@ -444,24 +450,24 @@ font-size: 18px;
 @1600:{
     .LeftLayout1{
         width: 418px;
-        height: 152px;
+        // height: 152px;
+        height: 145px;
         }
         .LeftLayout2{
             width: 418px;
             height:105px;
-    
+
         }
         .LeftLayout3{
             width: 418px;
-            height: 257px;
-    
+            // height: 257px;
         }
         .Echarts1920{
             display:block;
-    
+
         }
         .Echarts1600{
-        
+
             display:none;
         }
         .divyw{
@@ -471,8 +477,8 @@ font-size: 18px;
         .RightLayout1{
             height: 145px;
         }
-        
-        .RightLayout2{
+
+        .RightLayout2,.leftContainer{
             height: 68.1%;
         }
         .RowElement{
@@ -489,7 +495,7 @@ font-size: 18px;
                  width: 50%;
                  float: left;
                  line-height: 10px;
-                 
+
              }
              .ColRight{
                  text-align: right;
@@ -498,7 +504,7 @@ font-size: 18px;
                  line-height: 10px;
              }
              .RowOut{
-           
+
                 width: 95px;
                 height: 95px;
                 border-radius: 150px;
@@ -507,8 +513,8 @@ font-size: 18px;
                 position: relative;
                 left:164px;
                 top: -88px;
-                
-            } 
+
+            }
 
             .divl{
                 width: 20px;
@@ -524,24 +530,24 @@ font-size: 18px;
                 height: 18px;
                 background:url(/yq.png) no-repeat center center;
                   }
-                
+
 
 };
 //高度
 @media screen and (max-height:900px){
-  
+
 	@1600();
-    
+
     }
     @media screen  and(max-width: 1600px) {
         @1600();
-        
-    
+
+
     }
 
 @media screen and (max-height:900px) and(max-width: 1600px) {
     @1600();
-	
+
 
 }
 
