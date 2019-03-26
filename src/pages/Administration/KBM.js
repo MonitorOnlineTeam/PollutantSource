@@ -158,7 +158,7 @@ export default class KBM extends Component {
             row,
         });
     }
-    //下载文件
+    //查看预览文件
     showFile = (record) => {
         if (record.FileName !== "") {
             const fileName = record.FileName.split('.');
@@ -181,6 +181,18 @@ export default class KBM extends Component {
             // }
         }
         else {
+            message.error('未上传文件')
+        }
+    }
+    // 下载文件
+    downLoadFile = (record) => {
+        if (record.FileName !== "") {
+            let a = document.createElement('a');
+            a.href = `/upload/${record.FileSrc}`;
+            a.download='';
+            document.body.appendChild(a);
+            a.click();
+        }else{
             message.error('未上传文件')
         }
     }
@@ -247,10 +259,17 @@ export default class KBM extends Component {
             dataIndex: 'Directory',
             key: 'Directory',
             width: '14%',
+            align: 'center',
             render: (text, record) => {
-                return <Button type="primary" shape="circle" icon="download" size={'small'} id={record.key} onClick={() => {
-                    this.showFile(record);
-                }} />;
+                return (
+                <div>
+                    <Button style={{marginRight: 10}} type="primary" shape="circle" icon="eye" size={'small'} onClick={() => {
+                        this.showFile(record);
+                    }} />
+                    <Button type="primary" shape="circle" icon="download" size={'small'} id={record.key} onClick={() => {
+                        this.downLoadFile(record);
+                    }} />
+                </div>);
             }
         },
         {
