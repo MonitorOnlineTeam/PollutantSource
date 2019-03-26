@@ -11,6 +11,7 @@ import UrgentDispatch from './UrgentDispatch';
     loading:loading.effects['urgentdispatch/queryoperationInfo'],
     dgimn:urgentdispatch.dgimn,
     paloading:loading.effects['urgentdispatch/addtaskinfo'],
+    superviseloading:loading.effects['urgentdispatch/queryurge'],
 }))
 class PdButton extends Component {
     constructor(props) {
@@ -66,7 +67,7 @@ class PdButton extends Component {
 
      //判断是派单还是督办按钮
      getbutton=()=>{
-        let { operationUserInfo,existTask,DGIMN,dgimn,viewType,id,name,tel,exist,pollutantTypeCode,sendpush }=this.props;
+        let { operationUserInfo,existTask,DGIMN,dgimn,viewType,id,name,tel,exist,pollutantTypeCode,sendpush,superviseloading,paloading }=this.props;
         if(sendpush)
         {
            if(operationUserInfo==null)
@@ -103,57 +104,69 @@ class PdButton extends Component {
                 id=operationUserInfo.operationUserID;
             }
             if(exist && exist!=0) {
-              //数据一览
-              if(viewType=="datalist")
-              {
-                return(<PdPopconfirm operationUserID={id} addoperationInfo={()=>this.addoperationInfo()} >
-                <li style={{ listStyle: 'none' }}>
-                  <Button onClick={() => this.urge()}><Icon
-                    type="phone"
-                      style={{ color: '#3C9FDA', marginRight: 5 }}
-                     theme="filled"
-                />督办
-                 </Button>
-               </li>
-                </PdPopconfirm>)
-              }
-              //地图一览
-              if(viewType=="mapview")
-              {
-                return (
-                    <PdPopconfirm  operationUserID={id} addoperationInfo={()=>this.addoperationInfo()} >
-                    <span onClick={() => this.urge()} style={{cursor: 'pointer'}}>
-                       <img style={{width: 15, marginRight: 6, marginBottom: 4}}
-                        src="/alarm.png" />督办</span>
-                     </PdPopconfirm>
-                     )
-              }
-              //进入站房中
-              else if(viewType.indexOf("pointInfo@")>-1)
-              {
-                  return(
-                    <PdPopconfirm  operationUserID={id} addoperationInfo={()=>this.addoperationInfo()} >
-                    <Button onClick={() => this.urge()} type="primary" ghost={true} 
-                    style={{ float: "right", marginRight: 30, top: -5 }}><Icon type="bell" />督办</Button>
-                   </PdPopconfirm>
-                  )
-              }
-                 //工作台
-                 else if(viewType=="workbench")
-                 {
-                     return(
-                       <PdPopconfirm  operationUserID={id} addoperationInfo={()=>this.addoperationInfo()} >
-                        <Button
-                                onClick={()=>{
-                                    this.urge();
-                                }}
-                              style={{width:100,border:'none',backgroundColor:'rgb(74,210,187)'}}
-                                type="primary"
-                             >督办
-                        </Button>
-                      </PdPopconfirm>
-                     )
-                 }
+                if(superviseloading || paloading)
+                {
+                    return (<Spin
+                        style={{
+                            width: '100%',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center'
+                        }}
+                    />)
+                }
+                //数据一览
+                if(viewType=="datalist")
+                {
+                    return(<PdPopconfirm operationUserID={id} addoperationInfo={()=>this.addoperationInfo()} >
+                    <li style={{ listStyle: 'none' }}>
+                    <Button onClick={() => this.urge()}><Icon
+                        type="phone"
+                        style={{ color: '#3C9FDA', marginRight: 5 }}
+                        theme="filled"
+                    />督办
+                    </Button>
+                </li>
+                    </PdPopconfirm>)
+                }
+                //地图一览
+                if(viewType=="mapview")
+                {
+                    return (
+                        <PdPopconfirm  operationUserID={id} addoperationInfo={()=>this.addoperationInfo()} >
+                        <span onClick={() => this.urge()} style={{cursor: 'pointer'}}>
+                        <img style={{width: 15, marginRight: 6, marginBottom: 4}}
+                            src="/alarm.png" />督办</span>
+                        </PdPopconfirm>
+                        )
+                }
+                //进入站房中
+                else if(viewType.indexOf("pointInfo@")>-1)
+                {
+                    return(
+                        <PdPopconfirm  operationUserID={id} addoperationInfo={()=>this.addoperationInfo()} >
+                        <Button onClick={() => this.urge()} type="primary" ghost={true} 
+                        style={{ float: "right", marginRight: 30, top: -5 }}><Icon type="bell" />督办</Button>
+                    </PdPopconfirm>
+                    )
+                }
+                    //工作台
+                    else if(viewType=="workbench")
+                    {
+                        return(
+                        <PdPopconfirm  operationUserID={id} addoperationInfo={()=>this.addoperationInfo()} >
+                            <Button
+                                    onClick={()=>{
+                                        this.urge();
+                                    }}
+                                style={{width:100,border:'none',backgroundColor:'rgb(74,210,187)'}}
+                                    type="primary"
+                                >督办
+                            </Button>
+                        </PdPopconfirm>
+                        )
+                    }
+                 
             }
             //数据一览
             if(viewType=="datalist")

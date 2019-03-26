@@ -38,6 +38,7 @@ class AMapModule extends React.Component {
                 if (window.AMap) {
                     const {lat, lng, getMapAddress,getMapPoint} = _this.props;
                     const latlngxy = [!lng || lng === 'undefined' || lng === '0' ? 116.397428 : lng, !lat || lat === 'undefined' || lat === '0' ? 39.90923 : lat];// 默认北京天安门
+                   
                     map = new window.AMap.Map('allmap', {
                         resizeEnable: true,
                         center: latlngxy,
@@ -54,12 +55,23 @@ class AMapModule extends React.Component {
                     map.setLang(mapLang);
 
                     // 在新中心点添加 marker
-                    marker = new window.AMap.Marker({
-                        map: map,
-                        position: latlngxy
-                    });
+                    if(lat && log)
+                    {
+                        marker = new window.AMap.Marker({
+                            map: map,
+                            position: latlngxy
+                        });
+                    }
+                 
 
                     map.on('click', (e) => {
+                        if(!marker)
+                        {
+                            marker = new window.AMap.Marker({
+                                map: map,
+                                position: e.lnglat
+                            });
+                        }
                         marker.setPosition(e.lnglat);
                         window.AMap.service('AMap.Geocoder', () => { // 回调函数
                             // 实例化Geocoder

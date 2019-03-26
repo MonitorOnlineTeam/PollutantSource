@@ -41,7 +41,8 @@ class AddStandardLibraryPollutant extends Component {
             btndisabled: false,
             flag: false,
             upper:false,
-            low:false
+            low:false,
+            unit:''
         };
     }
 
@@ -160,11 +161,13 @@ class AddStandardLibraryPollutant extends Component {
              StandardLibraryID: pid,
              callback: () => {
                  if (this.props.requstresult === '1') {
+                     debugger;
                      this.props.PollutantList.map(plist =>
                          this.state.PollutantList.push(<Option
                              key={
                                  plist.PollutantCode
                              }
+                             exparam={plist.Unit}
                              value={
                                  plist.PollutantCode
                              }
@@ -179,6 +182,14 @@ class AddStandardLibraryPollutant extends Component {
              }
          },
      });
+ }
+
+ pollutantChange=(value,e)=>{
+     debugger;
+     console.log(e.props.exparam);
+     this.setState({
+         unit:e.props.exparam
+     }) 
  }
 
  alarmTypeChange=(type)=>{
@@ -230,6 +241,7 @@ class AddStandardLibraryPollutant extends Component {
           match,
           editstandardlibrarypollutant
       } = this.props;
+      const {unit}=this.state;
       const {
           PollutantCode,
           AlarmType,
@@ -286,6 +298,7 @@ class AddStandardLibraryPollutant extends Component {
                                           loading={this.props.effects['standardlibrary/getpollutantlist']}
                                           optionFilterProp="children"
                                           showSearch={true}
+                                          onChange={this.pollutantChange}
                                           style={{ width: '100%' }}
                                           placeholder="请选择污染物"
                                       >
@@ -335,7 +348,7 @@ class AddStandardLibraryPollutant extends Component {
                                               message: '请输入上限!'
                                           },
                                           ]
-                                      })(<InputNumber min={0} max={10000} step={0.1} />
+                                      })(<span><InputNumber addonAfter={unit} min={0} max={10000} step={0.1} />{unit}</span>
                                   )}
                               </FormItem>
                           </Col>
@@ -353,7 +366,7 @@ class AddStandardLibraryPollutant extends Component {
                                               message: '请输入下限!'
                                           },
                                           ]
-                                      })(<InputNumber min={0} max={10000} step={0.1} />
+                                      })(<span><InputNumber a  min={0} max={10000} step={0.1} />{unit}</span>
                                   )}
                               </FormItem>
                           </Col>

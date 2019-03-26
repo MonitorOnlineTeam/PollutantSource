@@ -47,6 +47,7 @@ export default Model.extend({
             endTime:null,
             payloadpollutantCode:null, 
             payloadpollutantName:null,
+            isAsc:true
         },
         overdataparams:{
             DGIMN: null,

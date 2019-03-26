@@ -154,6 +154,7 @@ export default class ContentList extends Component {
             type: 'manualupload/getUploadTemplate',
             payload: {
                 callback: (data) => {
+                    debugger;
                     window.location.href = data
                 }
             }

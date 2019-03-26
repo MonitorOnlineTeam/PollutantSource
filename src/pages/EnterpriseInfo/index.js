@@ -435,6 +435,7 @@ class index extends PureComponent {
                         <Divider dashed />
                         <FormItem style={{width:'400px'}} {...formItemLayout} label="主要污染物" >
                             {getFieldDecorator('contaminants', {
+                                initialValue: baseinfo ? baseinfo.MainPollutantInfo : '',
                             })(
                                 <Input
                                     style={{ width: 300 }}
@@ -456,10 +457,10 @@ class index extends PureComponent {
                         </FormItem>
                         <FormItem style={{width:'400px'}} {...formItemLayout} label="窑炉数量" >
                             {getFieldDecorator('kilnnum', {
+                                 initialValue: baseinfo ? baseinfo.KilnCount : '',
                             })(
                                 <Input
                                     style={{ width: 300 }}
-
                                     disabled={this.state.isedit} />
                             )}
                         </FormItem>
@@ -499,6 +500,18 @@ class index extends PureComponent {
             </Form>);
         }
     }
+    //加载图片
+    loadImg=(baseinfo)=>{
+         let imgarray=[];
+         if(baseinfo)
+         {
+            baseinfo.imgNamelist.map(item => {
+                imgarray.push (<ImgCommon key={item.imgname} style={{ width: 363, height: 285, borderradius: 12 }}  imageUrl={imgaddress + item.imgname} />);
+            })
+         }
+         return imgarray;
+    }
+
     render() {
         const {polygon,longitude,latitude}=this.state;
         const baseinfo = this.props.baseinfo[0];
@@ -555,11 +568,7 @@ class index extends PureComponent {
                                 <div className={styles.PhotoMapTitle}>照片</div>
                                 <div className={styles.antCss} >
                                     <Carousel autoplay={true} >
-                                        {
-                                            baseinfo ? baseinfo.imgNamelist.map(item => {
-                                                return (<ImgCommon key={item.imgname} style={{ width: 363, height: 285, borderradius: 12 }}  imageUrl={imgaddress + item.imgname} />);
-                                            }) : ''
-                                        }
+                                       {this.loadImg(baseinfo)}
                                     </Carousel>
                                     <Button onClick={this.imgshowModal} className={styles.PhotoDetails} >图片管理</Button>
                                     <Modal

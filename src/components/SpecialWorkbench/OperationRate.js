@@ -92,7 +92,7 @@ class OperationRate extends PureComponent {
                     type: 'pie',
                     radius: ['50%', '70%'],
                     avoidLabelOverlap: false,
-
+                    center: ['60%', '60%'],
                     itemStyle: {
                         normal: {
                             label: {

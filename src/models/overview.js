@@ -89,7 +89,8 @@ export default Model.extend({
             payload,
         }, { call, update, put, select }) {
             const { dataOverview, selectpollutantTypeCode ,RunState} = yield select(a => a.overview);
-            const body = {
+
+            let body = {
                 time: dataOverview.time,
                 pollutantTypes: selectpollutantTypeCode,
                 pointName: dataOverview.pointName,
@@ -97,13 +98,16 @@ export default Model.extend({
                 terate: dataOverview.terate,
                 RunState: RunState
             }
-            
+            if(body.time)
+            {
+                body.time=body.time.format('YYYY-MM-DD HH:00:00');
+            }
             if(payload.isAll)
             {
                 body={};
             }
             const data = yield call(querydatalist, body);
-            if (payload.map && data) {
+            if (data) {
                 data.map((item) => {
                     item.position = {
                         'longitude': item.longitude,

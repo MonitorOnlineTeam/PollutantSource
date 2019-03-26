@@ -103,7 +103,9 @@ export async function queryentedit(params) {
         registTypeCode: params.registration,
         subjectionRelationCode: params.subjection,
         unitTypeCode: params.unit,
-        polygon: params.polygon
+        polygon: params.polygon,
+        kilnCount:params.kilnnum,
+        mainPollutantInfo:params.contaminants
     };
     const result = await post('/api/rest/PollutantSourceApi/PPointAndData/EditEnt', body, null);
     return result === null ? { data: null } : result.requstresult;

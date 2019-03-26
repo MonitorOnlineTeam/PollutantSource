@@ -62,7 +62,7 @@ renderOverDataStatisticsList = () => {
         return (
             <div>
                 <Card
-                    title="今日报警信息"
+                    title="报警信息"
                     style={{ marginBottom: 10 }}
                     bordered={false}
                     className={styles.exceptionAlarm}

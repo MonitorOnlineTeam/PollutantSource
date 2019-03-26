@@ -53,7 +53,7 @@ class ExceptionAlarm extends PureComponent {
             //未响应，按钮是派单;响应了超过4个小时是督办
             let btnDiv = '';
 
-            if(hour>=4 || item.State==="0")
+            if(hour>=4 || item.State=="0")
             {
                 btnDiv= 
                 <div style={{marginTop:43}}>

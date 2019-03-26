@@ -28,3 +28,6 @@ export function setAuthority(authority) {
   const proAuthority = typeof authority === 'string' ? [authority] : authority;
   return localStorage.setItem('antd-pro-authority', JSON.stringify(proAuthority));
 }
+
+//高管id
+export const ggid='adae6f9a-396f-44b0-baf4-39e2f1d9fa9f';
