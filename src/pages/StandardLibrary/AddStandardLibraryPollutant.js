@@ -53,7 +53,6 @@ AddStandardLibraryPollutant extends Component {
         });
         this.props.onRef(this);
         const Id = this.props.Id;
-        debugger;
         if (Id !== null) {
             this.setState({
                 Id: Id,
@@ -89,6 +88,7 @@ handleSubmit = (e) => {
                         LowerLimit: values.LowerLimit,
                         callback: () => {
                             if (this.props.requstresult === '1') {
+                                message.success('添加成功！');
                                 this.props.dispatch({
                                     type: 'standardlibrary/getstandardlibrarypollutantlist',
                                     payload: {
@@ -119,6 +119,7 @@ handleSubmit = (e) => {
                     LowerLimit: values.LowerLimit,
                     callback: () => {
                         if (this.props.requstresult === '1') {
+                            message.success('添加成功！');
                             this.props.dispatch({
                                 type: 'standardlibrary/getstandardlibrarypollutantlist',
                                 payload: {
@@ -152,7 +153,6 @@ success = (Id) => {
              StandardLibraryID: pid,
              callback: () => {
                  if (this.props.requstresult === '1') {
-                     debugger;
                      this.props.PollutantList.map(plist =>
                          this.state.PollutantList.push(<Option
                              key={
@@ -176,11 +176,9 @@ success = (Id) => {
  }
 
  pollutantChange=(value,e)=>{
-     debugger;
-     console.log(e.props.exparam);
      this.setState({
          unit:e.props.exparam
-     }) 
+     })
  }
 
  alarmTypeChange=(type)=>{
@@ -326,8 +324,9 @@ success = (Id) => {
                                               message: '请输入上限!'
                                           },
                                           ]
-                                      })(<span><InputNumber addonAfter={unit} min={0} max={10000} step={0.1} />{unit}</span>
+                                      })(<InputNumber addonAfter={unit} min={0} max={10000} step={0.1} />
                                   )}
+                                  <span>{unit}</span>
                               </FormItem>
                           </Col>
                           <Col span={12}>
@@ -344,8 +343,9 @@ success = (Id) => {
                                               message: '请输入下限!'
                                           },
                                           ]
-                                      })(<span><InputNumber a  min={0} max={10000} step={0.1} />{unit}</span>
+                                      })(<InputNumber min={0} max={10000} step={0.1} />
                                   )}
+                                  <span>{unit}</span>
                               </FormItem>
                           </Col>
                       </Row>

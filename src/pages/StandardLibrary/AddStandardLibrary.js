@@ -234,12 +234,17 @@ class AddStandardLibrary extends Component {
     };
 
     success = (StandardLibraryID) => {
+        let messageInfo = '保存成功';
         if (StandardLibraryID != null) {
             this.setState({
-                StandardLibraryID: StandardLibraryID
+                StandardLibraryID: StandardLibraryID,
+                Mvisible: true,
+                title: '添加污染物',
+                width: 800
             });
+            messageInfo = '保存成功，请添加污染物';
         }
-        message.success('保存成功', 3);
+        message.success(messageInfo, 3);
     };
 
     onRef1 = (ref) => {
@@ -255,7 +260,6 @@ class AddStandardLibrary extends Component {
                 payload: {
                     StandardLibraryID: StandardLibraryID,
                     callback: () => {
-                        console.log(this.props.editstandardlibrary);
                         if (this.props.requstresult === '1') {
                             this.setState({
                                 fileList: this.props.editstandardlibrary.Filelist,
@@ -468,7 +472,7 @@ class AddStandardLibrary extends Component {
                 }
             >
                 <div className={styles.upload}>
-                    <Card bordered={false} title="标准库维护">
+                    <Card bordered={false} title="标准库基础信息">
                         <Form onSubmit={this.handleSubmit}>
                             <Card bordered={false}>
                                 <Row gutter={48}>
@@ -593,51 +597,54 @@ class AddStandardLibrary extends Component {
                                     </Col>
                                 </Row>
                                 <Row gutter={48}>
-                                    <Divider orientation="right" style={{ border: '1px dashed #FFFFFF' }}>
-
-
                                         <Col span={24} style={{ textAlign: 'center' }}>
-                                            <Button
-                                                type="primary"
-                                                onClick={() => {
-                                                    if (this.state.StandardLibraryID === null) {
-                                                        message.error('请先添加标准库！');
-                                                    } else {
-                                                        this.setState({
-                                                            Id:null,
-                                                            Mvisible: true,
-                                                            title: '添加污染物',
-                                                            width: 800
-                                                        });
+                                            {
+                                                this.props.match.params.StandardLibraryID === 'null' && 
+                                                <span style={{float: 'left'}}>
+                                                    <Icon type="info-circle" />
+                                                    <span className={styles.matters}>注意：此处为添加标准库，请保存完成后，继续添加污染物！</span>
+                                                </span>
+                                            }
+                                            <div style={{float: 'right'}}>
+                                                <Button
+                                                    type="primary"
+                                                    htmlType="submit"
+                                                >
+                                                    保存
+                                                </Button>
+                                                <Divider type="vertical" />
+                                                <Button
+                                                    type="dashed"
+                                                    onClick={
+                                                        () => this.props.dispatch(routerRedux.push(`/sysmanage/StandardLibrary`))
                                                     }
-                                                }}
-                                            >添加污染物
-                                            </Button>
-                                            <Divider type="vertical" />
-                                            <Button
-                                                type="primary"
-                                                htmlType="submit"
-                                            >
-                                                保存
-                                            </Button>
-                                            <Divider type="vertical" />
-                                            <Button
-                                                type="dashed"
-                                                onClick={
-                                                    () => this.props.dispatch(routerRedux.push(`/sysmanage/StandardLibrary`))
-                                                }
-                                            >
-                                                返回
-                                            </Button>
+                                                >
+                                                    返回
+                                                </Button>
+                                            </div>
                                         </Col>
-                                    </Divider>
                                 </Row>
                             </Card>
-
                         </Form>
-                        <Divider dashed={true} />
-                        <Card bordered={false} style={{ marginTop: 10 }}>
-
+                    </Card>
+                    <Card bordered={false} title="污染物维护" style={{ margin: '8px 0' }}>
+                            <Button
+                                className={styles.btnAddContaminant}
+                                type="primary"
+                                onClick={() => {
+                                    if (this.state.StandardLibraryID === null) {
+                                        message.error('请先添加标准库！');
+                                    } else {
+                                        this.setState({
+                                            Id:null,
+                                            Mvisible: true,
+                                            title: '添加污染物',
+                                            width: 800
+                                        });
+                                    }
+                                }}
+                                >添加污染物
+                            </Button>
                             <Table
                                 loading={this.props.effects['standardlibrary/getstandardlibrarypollutantlist']}
                                 columns={columns}
@@ -646,27 +653,25 @@ class AddStandardLibrary extends Component {
                                 size="small"
                                 scroll={{ y: 'calc(100vh - 80px)' }}
                             />
-                        </Card>
-                        <Modal
-                            visible={this.state.Mvisible}
-                            title={this.state.title}
-                            width={this.state.width}
-                            destroyOnClose={true}// 清除上次数据
-                            footer={false}
-                            onCancel={
-                                () => {
-                                    this.setState({
-                                        Mvisible: false
-                                    });
+                            <Modal
+                                visible={this.state.Mvisible}
+                                title={this.state.title}
+                                width={this.state.width}
+                                destroyOnClose={true}// 清除上次数据
+                                footer={false}
+                                onCancel={
+                                    () => {
+                                        this.setState({
+                                            Mvisible: false
+                                        });
+                                    }
                                 }
-                            }
-                        >
-                            {
-                                <AddPollutant pid={this.state.StandardLibraryID} onRef={this.onRef1} getlist={this.ChildGetList} Id={this.state.Id} />
-                            }
-                        </Modal>
-
-                    </Card>
+                            >
+                                {
+                                    <AddPollutant pid={this.state.StandardLibraryID} onRef={this.onRef1} getlist={this.ChildGetList} Id={this.state.Id} />
+                                }
+                            </Modal>
+                        </Card>
                 </div>
             </MonitorContent>
         );
