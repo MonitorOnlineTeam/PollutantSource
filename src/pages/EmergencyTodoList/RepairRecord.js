@@ -4,6 +4,7 @@ import { connect } from 'dva';
 import MonitorContent from '../../components/MonitorContent/index';
 import { routerRedux } from 'dva/router';
 import RepairRecordContent from './RepairRecordContent';
+import { debug } from 'util';
 
 @connect()
 class RepairRecord extends Component {
@@ -17,7 +18,7 @@ class RepairRecord extends Component {
         if (this.props.match.params.taskfrom === 'ywdsjlist') {    //运维大事记
             this.props.dispatch(routerRedux.push(`/TaskDetail/emergencydetailinfolayout/${this.props.match.params.viewtype}/${this.props.match.params.taskfrom}/${this.props.match.params.TaskID}/${this.props.match.params.pointcode}`));
         } else if (this.props.match.params.taskfrom === 'qcontrollist') {    //质控记录
-            this.props.dispatch(routerRedux.push(`/TaskDetail/emergencydetailinfolayout/${this.props.match.params.viewtype}/${this.props.match.params.taskfrom}-${this.state.histroyrecordtype}/${this.props.match.params.TaskID}/${this.props.match.params.pointcode}`));
+            this.props.dispatch(routerRedux.push(`/TaskDetail/emergencydetailinfolayout/${this.props.match.params.viewtype}/${this.props.match.params.taskfrom}-${this.props.match.params.histroyrecordtype}/${this.props.match.params.TaskID}/${this.props.match.params.pointcode}`));
         } else {    //其他
             this.props.dispatch(routerRedux.push(`/TaskDetail/emergencydetailinfolayout/${this.props.match.params.viewtype}/nop/${this.props.match.params.TaskID}/${this.props.match.params.pointcode}`));
         }
@@ -25,12 +26,13 @@ class RepairRecord extends Component {
 
     //生成面包屑
     renderBreadCrumb = () => {
+        debugger;
         const rtnVal = [];
         let listUrl = this.props.match.params.viewtype;
         let taskID = this.props.match.params.TaskID;
         let DGIMN = this.props.match.params.pointcode;
         let taskfrom = this.props.match.params.taskfrom;
-        let histroyrecordtype = this.state.histroyrecordtype;
+        let histroyrecordtype = this.props.match.params.histroyrecordtype;
         rtnVal.push({ Name: '首页', Url: '/' });
         switch (listUrl) {
             case 'datalistview':    //数据一栏

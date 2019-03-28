@@ -2,7 +2,9 @@ import { Icon, Popover, Badge } from 'antd';
 import React from 'react';
 import { Model } from '../dvapack';
 import { getList, deleteVideoInfo, gethistoryVideoList, updateVideoInfos, addVideoInfo, getAlarmHistory, updateAlarmHistory } from '../services/videodata';
-import { querypollutantlist, queryhistorydatalist } from '../services/api';
+ 
+import {querypollutantlist} from '../services/overviewApi';
+import { queryhistorydatalist } from '../services/overviewApi';
 import config from '../config';
 
 export default Model.extend({
@@ -153,7 +155,11 @@ export default Model.extend({
             });
         },
         * querypollutantlist({ payload }, { call, update }) {
-            const res = yield call(querypollutantlist, { ...payload });
+
+            const body={
+                DGIMNs:payload.dgimn
+            }
+            const res = yield call(querypollutantlist, body);
             let pollutants = [];
             pollutants.push({ title: "监测时间", dataIndex: "MonitorTime", key: "MonitorTime", align: 'center', width: '200px' });
             if (res.length > 0) {
@@ -215,7 +221,10 @@ export default Model.extend({
             yield update({ realdata: realdata });
         },
         * querypollutantlisthis({ payload }, { call, update }) {
-            const res = yield call(querypollutantlist, { ...payload });
+            const body={
+                DGIMNs:payload.dgimn
+            }
+            const res = yield call(querypollutantlist, body);
             let pollutants = [];
             pollutants.push({ title: "监测时间", dataIndex: "MonitorTime", key: "MonitorTime", align: 'center', width: '200px' });
             if (res.length > 0) {

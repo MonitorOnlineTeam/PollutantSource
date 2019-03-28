@@ -19,7 +19,10 @@ import {
     getOverPoints,
     getStatisticsPointStatus
 } from '../services/workbenchapi';
-import { querypolluntantentinfolist, queryhistorydatalist } from '../services/api';
+import {
+    querypolluntantentinfolist
+} from '../services/entApi';
+import { queryhistorydatalist } from '../services/overviewApi';
 import { enterpriceid } from '../config';
 
 export default Model.extend({
@@ -360,16 +363,15 @@ export default Model.extend({
          */
         * getRealTimeWarningDatas({ payload }, { call, put, update, select }) {
             const { warningDetailsDatas } = yield select(state => state.workbenchmodel);
-            let body = {
-                dgimn: warningDetailsDatas.DGIMNs,
-                // pollutantCodes: params.pollutantCode,
-                datatype: 'realtime',//minute
+            const body = {
+                DGIMNs: warningDetailsDatas.DGIMNs,
+                datatype: 'realtime',
+                beginTime: warningDetailsDatas.beginTime,
+                endTime: warningDetailsDatas.endTime,
                 pageIndex: warningDetailsDatas.pageIndex,
                 pageSize: warningDetailsDatas.pageSize,
-                beginTime: warningDetailsDatas.beginTime,
-                endTime: warningDetailsDatas.endTime
             };
-            const response = yield call(queryhistorydatalist, { ...body });
+            const response = yield call(queryhistorydatalist, body);
             yield update({
                 warningDetailsDatas: {
                     ...warningDetailsDatas,

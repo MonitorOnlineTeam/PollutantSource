@@ -36,7 +36,7 @@ class RealVideoData extends Component {
         dispatch({
             type:'videolist/queryhistorydatalist',
             payload:{
-                dgimn: match.params.pointcode,
+                DGIMNs: match.params.pointcode,
                 datatype: 'realtime',
                 pageIndex: 1,
                 pageSize: 20,

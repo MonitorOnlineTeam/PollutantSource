@@ -422,6 +422,9 @@ class addepinfo extends PureComponent {
                                     />
                                 </Upload>
                             </FormItem>
+                            <div style={{ textAlign: 'right', color: 'red' }}>
+                                        上传格式(PDF、TXT、常用图片格式等)
+                                    </div>
                         </Col>
                     </Row>
                     <Row gutter={48}>

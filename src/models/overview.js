@@ -144,7 +144,10 @@ export default Model.extend({
                 pointName: upLoadParameters.pointName,
                 RunState: upLoadParameters.RunState,
             }
+
+             
             const data = yield call(querydatalist, body);
+           
             if (data) {
                 yield update({ data });
                 yield update({ dataTemp: data });
@@ -513,13 +516,13 @@ export default Model.extend({
                 yield update({
                     pollutantTypelist: res
                 });
-                // yield put({
-                //     type: 'querydatalist',
-                //     payload: {
-                //         ...payload,
-                //     },
-                // });
-                // yield take('querydatalist/@@end');
+                yield put({
+                    type: 'querydatalist',
+                    payload: {
+                        ...payload,
+                    },
+                });
+                yield take('querydatalist/@@end');
             } else {
                 yield update({
                     pollutantTypelist: null
