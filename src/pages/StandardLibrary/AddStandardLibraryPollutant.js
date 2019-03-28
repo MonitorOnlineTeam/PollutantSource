@@ -153,6 +153,13 @@ success = (Id) => {
              StandardLibraryID: pid,
              callback: () => {
                  if (this.props.requstresult === '1') {
+                     // 编辑时获取单位
+                     if(this.props.Id && this.props.editstandardlibrarypollutant){
+                        const selectedUnitArr = this.props.PollutantList.filter(item => item.PollutantCode === this.props.editstandardlibrarypollutant.PollutantCode);
+                        this.setState({
+                            unit: selectedUnitArr[0].Unit
+                        })
+                     }
                      this.props.PollutantList.map(plist =>
                          this.state.PollutantList.push(<Option
                              key={
