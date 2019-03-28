@@ -45,7 +45,7 @@ export default Model.extend({
             pageSize:null,
             beginTime:null,
             endTime:null,
-            payloadpollutantCode:null, 
+            payloadpollutantCode:null,
             payloadpollutantName:null,
             isAsc:true
         },
@@ -92,7 +92,7 @@ export default Model.extend({
                 yield update({ pollutantlist: [],datalist: null, chartdata: null, columns: null, datatable: null, total: 0 });
             }
         },
-        * queryhistorydatalist({ 
+        * queryhistorydatalist({
             payload
         }, {select, call, update}) {
             let { pollutantlist,historyparams } = yield select(_ => _.points);
@@ -252,13 +252,14 @@ export default Model.extend({
         * queryoverdatalist({
             payload
         }, {call, update,select}) {
-            debugger;
             let {overdataparams}=yield select(a=>a.points);
-            if(payload.dgimn)
-            {
-                overdataparams.DGIMN=payload.dgimn;
+            let postData = {
+                ...overdataparams,
+                DGIMN: payload.dgimn ? payload.dgimn : overdataparams.DGIMN,
+                beginTime: payload.beginTime ? payload.beginTime : overdataparams.beginTime,
+                endTime: payload.endTime ? payload.endTime : overdataparams.endTime
             }
-            const res = yield call(queryoverdatalist, overdataparams);
+            const res = yield call(queryoverdatalist, postData);
 
             if (res.data) {
                 let reslist = [];

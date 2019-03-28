@@ -12,6 +12,7 @@ import { Card,
 import {connect} from 'dva';
 import PollutantSelect from '../../components/PointDetail/PollutantSelect';
 import RangePicker_ from '../../components/PointDetail/RangePicker_';
+import { formatMoment } from '@/utils/utils'
 import styles from './index.less';
 
 const FormItem = Form.Item;
@@ -43,12 +44,14 @@ class AlarmRecord extends Component {
     }
 
     componentDidMount = () => {
-        let {dispatch}=this.props;
+        let {dispatch, DGIMN, firsttime, lasttime} = this.props;
         dispatch({
             type:'points/querypollutantlist',
             payload:{
                 overdata: true,
-                dgimn: this.props.selectpoint.DGIMN,
+                dgimn: DGIMN,
+                beginTime: moment(firsttime).format('YYYY-MM-DD HH:mm:ss'),
+                endTime: moment(lasttime).format('YYYY-MM-DD HH:mm:ss')
             }
         })
     }
@@ -57,8 +60,9 @@ class AlarmRecord extends Component {
         let {overdataparams}=this.props;
         overdataparams={
             ...overdataparams,
-            beginTime:date[0],
-            endTime:date[1],
+            DGIMN: this.props.DGIMN,
+            beginTime: date[0] && formatMoment(date[0]),
+            endTime: date[0] && formatMoment(date[1]),
             pageIndex:1,
         }
         this.setState({
@@ -79,7 +83,7 @@ class AlarmRecord extends Component {
               pageIndex:1
           }
           this.reloaddatalist(overdataparams);
-     
+
 
       };
 
@@ -108,20 +112,21 @@ class AlarmRecord extends Component {
       componentWillReceiveProps = (nextProps) => {
           const {DGIMN,lasttime,firsttime}=this.props;
           //如果传入参数有变化，则重新加载数据
-          if (nextProps.DGIMN !== DGIMN || moment(nextProps.lasttime).format('yyyy-MM-dd HH:mm:ss') 
+          if (nextProps.DGIMN !== DGIMN || moment(nextProps.lasttime).format('yyyy-MM-dd HH:mm:ss')
           !== moment(lasttime).format('yyyy-MM-dd HH:mm:ss') ||
            moment(nextProps.firsttime).format('yyyy-MM-dd HH:mm:ss') !== moment(firsttime).format('yyyy-MM-dd HH:mm:ss')) {
               let {overdataparams}=this.props;
-              overdataparams={
+              let overdataparamsState={
                   ...overdataparams,
                   DGIMN:nextProps.DGIMN ,
-                  beginTime:nextProps.beginTime,
-                  endTime:nextProps.endTime
+                  beginTime:moment(nextProps.firsttime).format('YYYY-MM-DD HH:mm:ss'),
+                  endTime:moment(nextProps.lasttime).format('YYYY-MM-DD HH:mm:ss')
               }
               this.setState({
                   rangeDate: [nextProps.firsttime, nextProps.lasttime],
+                  overdataparams: overdataparamsState
               })
-            this.reloaddatalist(overdataparams);
+            this.reloaddatalist(overdataparamsState);
           }
       }
 
