@@ -197,3 +197,12 @@ export function formatWan(val) {
 export function isAntdPro() {
     return window.location.hostname === 'preview.pro.ant.design';
 }
+
+/**
+ *  格式化moment对象，返回字符串
+ * @param {moment} mmt monent对象
+ * @param {String} formatType 格式
+ */
+export function formatMoment(mmt , formatType = "YYYY-MM-DD HH:mm:ss") {
+    return mmt ? moment(mmt).format(formatType) : null;
+}
