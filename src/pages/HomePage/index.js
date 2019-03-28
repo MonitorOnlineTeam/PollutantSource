@@ -363,7 +363,7 @@ class index extends Component {
         const {aaData}=this.props.AlarmAnalysis;
         const TheMonth = this.state.TheMonth;
         const retVal=[];
-        retVal.push(<div>
+        retVal.push(<div className={Adapt.monthWaringContainer}>
             <div className={Adapt.s1}>{TheMonth}月异常报警及响应情况</div>
             <div className={Adapt.s2}>两小时内响应({aaData.LessThan2Hour})次</div>
             <div className={Adapt.s3}>{aaData.LessThan2Hourlink>0?`环比上升${aaData.LessThan2Hourlink}%`:`环比下降${Math.abs(aaData.LessThan2Hourlink)}%`}</div>
@@ -517,7 +517,7 @@ class index extends Component {
                  i++;
              });
              xAxisData = dyhwdate;
-             color = ['#FACB33'];
+             color = ['#03b3ff'];
 
          } else{
              SurplusDisplacement = dyhwAnalData.length !== 0 ? dyhwAnalData.Remainder.toFixed(2) : 0;
@@ -878,6 +878,7 @@ treeCilck = (row) => {
                              </div>
 
                          </div>
+                         <div className={Adapt.leftContainer}>
                          {/* LEFT@2 */}
                          <div className={Adapt.LeftLayout2}>
                              <div className={Adapt.divsecond}>
@@ -942,6 +943,7 @@ treeCilck = (row) => {
 
                                  </div>
                              </div>
+                         </div>
                          </div>
                      </div>
                      {/**中间污染物类型*/}

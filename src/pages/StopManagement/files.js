@@ -4,8 +4,9 @@ import {
     Icon,
     Row,
     Col,
+    Card
 } from 'antd';
-
+const ButtonGroup = Button.Group;
 
 export default class files extends Component {
     constructor(props) {
@@ -16,6 +17,14 @@ export default class files extends Component {
 
     click = (returnName) => {
         window.open(`/upload/${returnName}`);
+    }
+
+    downloadFile = (returnName) => {
+        let a = document.createElement('a');
+        a.href = `/upload/${returnName}`;
+        a.download='';
+        document.body.appendChild(a);
+        a.click();
     }
 
     renderStandardList = () => {
@@ -37,12 +46,20 @@ export default class files extends Component {
                         }
                     }
                     returnName = `${name}pdf`;
-                    rtnVal.push(<Col onClick={() => this.click(returnName)} span={4} align="center">
+                    rtnVal.push(<Col span={8} align="center">
+                    <Card>
                         <Button type="primary" size="large" style={{ width: 100, height: 100 }}>
                             <Icon type={item.FileType} style={{ fontSize: 60 }} />
                         </Button>
                         <br />
-                        <a title={`点击下载文件-${item.FileName}`}>{item.SubFileName}</a>
+                        <div style={{ margin: "4px 0"}}>
+                            <a style={{fontSize: 14}} title={`点击下载文件-${item.FileName}`}>{item.SubFileName}</a>
+                        </div>
+                        <ButtonGroup>
+                            <Button size="small" onClick={() => this.click(returnName)} style={{width: 50}} icon="eye" />
+                            <Button size="small" onClick={() => this.downloadFile(returnName)} style={{width: 50}} icon="download" />
+                        </ButtonGroup>
+                        </Card>
                     </Col>);
                 });
             }

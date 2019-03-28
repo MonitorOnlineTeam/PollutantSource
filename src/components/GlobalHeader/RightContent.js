@@ -181,7 +181,8 @@ export default class GlobalHeaderRight extends PureComponent {
             console.log('enter', value); // eslint-disable-line
                   }}
               /> */}
-                <Tooltip title={formatMessage({ id: 'component.globalHeader.help' })}>
+                {/* 隐藏使用手册 */}
+                {/* <Tooltip title={formatMessage({ id: 'component.globalHeader.help' })}>
                     <a
                         target="_blank"
                         onClick={()=>{
@@ -191,9 +192,8 @@ export default class GlobalHeaderRight extends PureComponent {
                         className={styles.action}
                     >
                         <Icon style={{height:'32%'}} type="file-pdf" />
-                        {/* <Icon type="question-circle-o" />  */}
                     </a>
-                </Tooltip>
+                </Tooltip> */}
                 <NoticeIcon
                     className={styles.action}
                     count={currentUserNoticeCnt.unreadCount}

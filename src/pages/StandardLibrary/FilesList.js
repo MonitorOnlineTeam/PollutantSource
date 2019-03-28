@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import {
-    List, Card, Icon,
+    List, Card, Icon, Button
 } from 'antd';
 import {
     connect
 } from 'dva';
 const { Meta } = Card;
+const ButtonGroup = Button.Group;
 @connect(({
     loading,
     standardlibrary
@@ -38,6 +39,13 @@ export default class FilesList extends Component {
     click = (returnName) => {
         debugger;
         window.open(returnName)
+    }
+    downloadFile = (returnName) => {
+        let a = document.createElement('a');
+        a.href = `/upload/${returnName}`;
+        a.download='';
+        document.body.appendChild(a);
+        a.click();
     }
     render() {
         return (
@@ -87,6 +95,10 @@ export default class FilesList extends Component {
                                     <Meta
                                         description={item.FileName}
                                     />
+                                    <ButtonGroup style={{width: '100%', marginTop: 10}}>
+                                        <Button size="small" onClick={() => this.click(returnName)} style={{width: '50%'}} icon="eye" />
+                                        <Button size="small" style={{width: '50%'}} onClick={() => this.downloadFile(returnName)} icon="download" />
+                                    </ButtonGroup>
                                 </Card>
                             </List.Item>
                             );
