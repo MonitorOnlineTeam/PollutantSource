@@ -26,6 +26,7 @@ class TreeCard extends Component {
         this.props.dispatch({
             type: 'overview/getPollutantTypeList',
             payload: {
+                treeCard:true
             }
         });
     }

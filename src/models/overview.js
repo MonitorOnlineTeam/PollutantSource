@@ -512,17 +512,21 @@ export default Model.extend({
             payload
         }, { call, update, put, take }) {
             const res = yield call(getPollutantTypeList, payload);
-            if (res) {
+            if (res ) {
                 yield update({
                     pollutantTypelist: res
                 });
-                yield put({
+                if(!payload.treeCard)
+                {
+                    yield put({
                     type: 'querydatalist',
                     payload: {
                         ...payload,
                     },
                 });
                 yield take('querydatalist/@@end');
+                }
+               
             } else {
                 yield update({
                     pollutantTypelist: null

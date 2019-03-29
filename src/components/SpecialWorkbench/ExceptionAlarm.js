@@ -25,6 +25,15 @@ class ExceptionAlarm extends PureComponent {
 
  
 
+
+    reload=()=>{
+        const {dispatch}=this.props;
+        dispatch({
+            type:"workbenchmodel/getExceptionAlarmData",
+            payload: {}
+        })
+    }
+
     /**
  * 智能质控_渲染异常报警数据列表
  */
@@ -58,7 +67,7 @@ class ExceptionAlarm extends PureComponent {
                 btnDiv= 
                 <div style={{marginTop:43}}>
                 <PdButton DGIMN={item.DGIMNs} id={item.OperationUserTel}
-                 pname={item.PointName}  reloadData={() => this.renderExceptionAlarmList()}
+                 pname={item.PointName}  reloadData={() => this.reload()}
                 exist={item.State} pollutantTypeCode={item.PollutantTypeCode} name={item.OperationUserName} tel={item.OperationUserTel} viewType="workbench"/>
                 </div>
             }
