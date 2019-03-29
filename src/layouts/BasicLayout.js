@@ -147,30 +147,33 @@ class BasicLayout extends React.PureComponent {
    
     if(getUser())
     {
-        const usertoken=Cookie.get('token');
-        const user = JSON.parse(usertoken);
-        if(user.User_Remark===ggid)
-        {
-            return(
-                <div>
-                    <Redirect to='/homepage' />
-                    {
-                        this.props.children
-                    }
-                </div>
-            );
-        }
-        else
-        {
-            return(
-                <div>
-                    <Redirect to='/workbench' />
-                    {
-                        this.props.children
-                    }
-                </div>
-            );
-        }
+        // const usertoken=Cookie.get('token');
+        // const user = JSON.parse(usertoken);
+             return(<div>
+                       { this.props.children}
+                </div>)
+        // if(user.User_Remark===ggid)
+        // {
+        //     return(
+        //         <div>
+        //             <Redirect to='/homepage' />
+        //             {
+        //                 this.props.children
+        //             }
+        //         </div>
+        //     );
+        // }
+        // else
+        // {
+        //     return(
+        //         <div>
+        //             <Redirect to='/homepage' />
+        //             {
+        //                 this.props.children
+        //             }
+        //         </div>
+        //     );
+        // }
    
     }else{
         return(<Redirect to="/user/login" />);

@@ -27,7 +27,8 @@ class UrgentDispatch extends Component {
                 payload:{
                     dgimn: DGIMN,
                     personId:operationUserInfo.operationUserID,
-                    remark:this.props.form.getFieldValue('remark')
+                    remark:this.props.form.getFieldValue('remark'),
+                    
                 }
             })
             if(this.props.reloadData)
