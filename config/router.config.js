@@ -42,7 +42,7 @@ export default [
         path: '/',
         component: '../layouts/BasicLayout',
         routes: [
-            // { path: '/', redirect: '/workbench' },
+             { path: '/', redirect: '/homepage' },
             /* 主页 */
             {
                 path: '/homepage', component: './HomePage',
