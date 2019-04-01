@@ -493,7 +493,7 @@ class index extends Component {
                  if (Number.parseInt(TheMonth) <i) {
                      seriesData.push({value:outed.toFixed(2),itemStyle: {normal: {color: '#051732',barBorderColor: 'tomato',barBorderWidth:1,barBorderRadius:0,borderType:"dotted"}}});
                  }else{
-                     seriesData.push(ele);
+                    seriesData.push(ele == 0 ? {value: ele,itemStyle: {normal: {color: '#051732',barBorderColor: 'tomato',barBorderWidth:1,barBorderRadius:0,borderType:"dotted"}}} : ele);
                  }
                  i++;
              });
@@ -512,7 +512,7 @@ class index extends Component {
                  if (Number.parseInt(TheMonth) <i) {
                      seriesData.push({value:outed.toFixed(2),itemStyle: {normal: {color: '#051732',barBorderColor: 'tomato',barBorderWidth:1,barBorderRadius:0,borderType:"dotted"}}});
                  }else{
-                     seriesData.push(ele);
+                     seriesData.push(ele == 0 ? {value: ele,itemStyle: {normal: {color: '#051732',barBorderColor: 'tomato',barBorderWidth:1,barBorderRadius:0,borderType:"dotted"}}} : ele);
                  }
                  i++;
              });
@@ -532,7 +532,7 @@ class index extends Component {
                  if (Number.parseInt(TheMonth) <i) {
                      seriesData.push({value:outed.toFixed(2),itemStyle: {normal: {color: '#051732',barBorderColor: 'tomato',barBorderWidth:1,barBorderRadius:0,borderType:"dotted"}}});
                  }else{
-                     seriesData.push(ele);
+                    seriesData.push(ele == 0 ? {value:ele,itemStyle: {normal: {color: '#051732',barBorderColor: 'tomato',barBorderWidth:1,barBorderRadius:0,borderType:"dotted"}}}: ele);
                  }
                  i++;
              });
