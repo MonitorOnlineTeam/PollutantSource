@@ -44,7 +44,17 @@ class AlarmRecord extends Component {
     }
 
     componentDidMount = () => {
-        let {dispatch, DGIMN, firsttime, lasttime} = this.props;
+        let {dispatch, DGIMN, firsttime, lasttime,overdataparams} = this.props;
+        overdataparams={
+             ...overdataparams,
+             DGIMN:DGIMN
+        }
+        dispatch({
+            type:'points/updateState',
+            payload:{
+                overdataparams:overdataparams
+            }
+        })
         dispatch({
             type:'points/querypollutantlist',
             payload:{
@@ -91,6 +101,7 @@ class AlarmRecord extends Component {
       pageIndexChange=(page, pageSize) => {
          let {overdataparams}=this.props;
          overdataparams.pageIndex=page;
+         debugger;
          this.reloaddatalist(overdataparams);
       }
 

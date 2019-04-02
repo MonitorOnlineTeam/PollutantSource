@@ -107,7 +107,7 @@ class ConsumablesReplaceHistoryList extends Component {
     render() {
         const dataSource = this.props.HistoryConsumablesReplaceRecordList === null ? null : this.props.HistoryConsumablesReplaceRecordList;
         const columns = [{
-            title: '校准人',
+            title: '运维人',
             width: '20%',
             dataIndex: 'CreateUserID',
             key: 'CreateUserID',

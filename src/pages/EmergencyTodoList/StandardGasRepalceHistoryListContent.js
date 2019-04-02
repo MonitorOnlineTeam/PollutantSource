@@ -107,7 +107,7 @@ class StandardGasRepalceHistoryListContent extends Component {
     render() {
         const dataSource = this.props.HistoryStandardGasRepalceRecordList === [] ? [] : this.props.HistoryStandardGasRepalceRecordList;
         const columns = [{
-            title: '校准人',
+            title: '运维人',
             width: '20%',
             dataIndex: 'CreateUserID',
             key: 'CreateUserID'

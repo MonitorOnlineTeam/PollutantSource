@@ -177,14 +177,14 @@ export default class ManualUpload extends Component {
                                         />
                                         <TreeCardContent style={{ overflow: 'auto', width: 400, background: '#fff' }}
                                             getHeight='calc(100vh - 275px)'
-                                            treeCilck={this.treeCilck} PollutantType={upLoadParameters.PollutantType} runState={'2'} flag={'ManualUpload'} ifSelect={true} />
+                                            treeCilck={this.treeCilck} PollutantType={upLoadParameters.pollutantTypes} runState={'2'} flag={'ManualUpload'} ifSelect={true} />
                                     </div>
                                 </div>
                             </div>
                         </Col>
                         <Col style={{ width: document.body.clientWidth - 475, height: 'calc(100vh - 150px)', float: 'right' }}>
                             {
-                                upLoadParameters.manualUploaddataOne === null ? null : <ContentList DGIMN={upLoadParameters.manualUploaddataOne} />
+                                upLoadParameters.manualUploaddataOne === null ? null : <ContentList PollutantType={upLoadParameters.pollutantTypes}  DGIMN={upLoadParameters.manualUploaddataOne} />
                             }
                         </Col>
                     </Row>

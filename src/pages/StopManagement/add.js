@@ -164,8 +164,9 @@ export default class add extends Component {
                         DGIMN: this.state.DGIMN,
                         Data: this.state.rangeDate.join(','),
                         callback: () => {
-                            if (that.props.reason === '0') {
+                            if (that.props.reason == 0) {
                                 flag = false;
+
                                 that.props.form.setFields({ // 设置验证返回错误
                                     realtime: {
                                         value: realtime,
@@ -194,6 +195,7 @@ export default class add extends Component {
                                                 message.success('添加成功').then(() => {
                                                     that.props.cancel();
                                                 });
+                                                this.props.onCancels();
                                             } else {
                                                 message.error(that.props.reason);
                                             }
@@ -204,7 +206,6 @@ export default class add extends Component {
                         }
                     },
                 });
-                this.props.onCancels();
             }
         });
     };

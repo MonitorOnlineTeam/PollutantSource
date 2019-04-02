@@ -166,6 +166,20 @@ export default class pointlist extends Component {
          }
      },
      {
+        title: '上传数据类型',
+        dataIndex: 'runState',
+        key: 'runState',
+        width: '10%',
+        align: 'center',
+        render: (text, record) => {
+            console.log(text);
+            if (text === 1) {
+                return <span > 自动 </span>;
+            }
+            return <span >手动 </span>;
+        }
+    },
+     {
          title: '污染物类型',
          dataIndex: 'pollutantTypeName',
          key: 'pollutantTypeName',

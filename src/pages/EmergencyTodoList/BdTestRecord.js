@@ -28,7 +28,7 @@ class BdTestRecord extends Component {
         const rtnVal = [];
         let listUrl = this.props.match.params.viewtype;
         let taskID = this.props.match.params.TaskID;
-        let DGIMN = this.props.match.params.DGIMN;
+        let DGIMN = this.props.match.params.pointcode;
         let taskfrom = this.props.match.params.taskfrom;
         let histroyrecordtype = this.props.match.params.histroyrecordtype;
         rtnVal.push({ Name: '首页', Url: '/' });

@@ -104,7 +104,7 @@ class DeviceExceptionHistoryListContent extends Component {
     render() {
         const dataSource = this.props.HistoryDeviceExceptionList === null ? null : this.props.HistoryDeviceExceptionList;
         const columns = [{
-            title: '校准人',
+            title: '运维人',
             width: '13%',
             dataIndex: 'CreateUserID',
             key: 'CreateUserID'

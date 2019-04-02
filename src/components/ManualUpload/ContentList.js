@@ -83,7 +83,7 @@ export default class ContentList extends Component {
         };
     }
     componentDidMount() {
-        debugger
+       
         this.updateState({
             manualUploadParameters: {
                 ...this.props.manualUploadParameters,
@@ -152,11 +152,15 @@ export default class ContentList extends Component {
     //创建并获取模板
     Template = () => {
         //获取模板地址
-        this.props.dispatch({
+        debugger;
+      
+        const {dispatch,PollutantType}=this.props;
+        console.log(PollutantType);
+        dispatch({
             type: 'manualupload/getUploadTemplate',
             payload: {
+                PollutantType:PollutantType,
                 callback: (data) => {
-                    debugger;
                     window.location.href = data
                 }
             }
@@ -377,7 +381,6 @@ export default class ContentList extends Component {
                             </Col>
                             <Col span={4} style={{ textAlign: 'center' }} >
                                 <Upload
-
                                     action='.doc,.docx'
                                     customRequest={this.addimg}
                                     fileList={this.state.fileList}
