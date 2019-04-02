@@ -10,24 +10,45 @@
     }
 }
 
+.statuslistContainer{
+    width: 400px;
+    background: #fff;
+    margin-top:5px;
+    padding-bottom: 15px;
+    padding: 10px 30px;
+    & > span {
+        width: 25%;
+    }
+}
 .statuslist{
-    padding: 15px 0 0 60px
- }
- 
- .statuslist span{
-    margin-right: 15px;
- }
- .statuslist img{
-  margin: 0 7px 5px 0
+    // padding: 15px 0 0 60px
+    padding: 12px 0 0 30px;
  }
 
- 
- 
+
+.statuslist span{
+   margin-right: 15px;
+}
+
+.statuslist span:first-child{
+    margin-right: 8px;
+ }
+
+ .statuslist img{
+  margin: 0 7px 5px 1px;
+ }
+
+ .gasStatuslist img{
+    margin: 0 3px 5px 0;
+   }
+
+
+
 .treelist{
     background:#fff;
     //overflow: hidden;
  }
- 
+
  .treeoverflow{
      overflow: auto;
  }
@@ -38,9 +59,9 @@
   //  margin-bottom: 6px;
      background:#fff;
      border:1px solid #f0f2f5;
-    // box-shadow:rgba(136, 136, 136, 0.41) 4px 3px 9px;   
+    // box-shadow:rgba(136, 136, 136, 0.41) 4px 3px 9px;
  }
- 
+
  .cardDivClick{
      cursor: pointer;
     // width: 400px;
@@ -48,7 +69,7 @@
    //  margin-bottom: 6px;
      background: #D8D3D3;
      border:1px solid #D8D3D3;
-   // box-shadow:rgba(136, 136, 136, 0.41) 4px 3px 9px;  
+   // box-shadow:rgba(136, 136, 136, 0.41) 4px 3px 9px;
  }
  .cardDiv:hover{
      cursor: pointer;
@@ -57,7 +78,7 @@
    //  margin-bottom: 6px;
      background:#f7f7f7;
      border:1px solid #f0f2f5;
-   // box-shadow:rgba(136, 136, 136, 0.41) 4px 3px 9px;   
+   // box-shadow:rgba(136, 136, 136, 0.41) 4px 3px 9px;
  }
  // .cardDiv:active{
  //     cursor: pointer;
@@ -88,8 +109,8 @@
  .tsdiv{
      font-size: 14px;
  }
- 
- 
+
+
  .tab :global{
      .ant-tabs-tab {
          padding: 12px 76px;
@@ -105,7 +126,7 @@
     margin-right: 10px;
     font-size: 12px;
  }
- 
+
  //停产中
  .stop{
      padding: 3px 7px 3px 7px;
@@ -126,7 +147,7 @@
      margin-right: 10px;
      font-size: 12px;
   }
-  //预警中  
+  //预警中
   .warning{
      padding: 3px 7px 3px 7px;
      background: #ff6565;

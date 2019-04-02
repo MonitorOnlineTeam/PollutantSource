@@ -58,11 +58,11 @@ class MapContent extends Component {
             time: moment(new Date()).add(-1, 'hour'),
             terate:null,
             pointName:null
-        } 
+        }
         dispatch({
             type:'overview/updateState',
             payload:{
-                dataOverview:dataOverview
+                dataOverview:dataOverview,
             }
         })
         dispatch({
@@ -96,12 +96,12 @@ class MapContent extends Component {
         //第一次加载时加载第一个污染物
         const defaultpollutantCode=pollutantInfoList.pollutantInfo[0].pollutantCode;
         const defaultpollutantName=pollutantInfoList.pollutantInfo[0].pollutantName;
-        
+
         dispatch({
             type:'overview/updateState',
             payload:{
                     selectpoint:row,
-                    selectpollutantTypeCode:`${row.pollutantTypeCode}`,
+                    // selectpollutantTypeCode:`${row.pollutantTypeCode}`,
                     mapdetailParams:{
                         ...mapdetailParams,
                         pollutantCode:defaultpollutantCode,
@@ -200,7 +200,7 @@ class MapContent extends Component {
                       {
                         return  <img style={{width:25}} src="/stopstatus.png" />;
                       }
-                      return getPointStatusImg(extData.status,extData.stop);
+                      return getPointStatusImg(extData.status,extData.stop,extData.pollutantTypeCode);
                   }}
               />
               <InfoWindow

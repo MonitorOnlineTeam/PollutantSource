@@ -34,15 +34,22 @@ class PollutantTypeRadio extends Component {
 
     render() {
         let { pollutantTypelist, selectpollutantTypeCode } = this.props;
-        selectpollutantTypeCode=parseInt(selectpollutantTypeCode);
+        selectpollutantTypeCode = selectpollutantTypeCode ? parseInt(selectpollutantTypeCode) : '';
         if (!pollutantTypelist) {
             return '';
         }
+        const typeList = [
+            {
+                pollutantTypeCode: '',
+                pollutantTypeName: '全部'
+            },
+            ...pollutantTypelist,
+        ]
         return (
             <div>
                 <Radio.Group onChange={this.onChange} defaultValue={selectpollutantTypeCode}>
                     {
-                        pollutantTypelist.map((item, key) => (<Radio.Button key={key} value={item.pollutantTypeCode}>{item.pollutantTypeName}</Radio.Button>))
+                        typeList.map((item, key) => (<Radio.Button key={key} value={item.pollutantTypeCode}>{item.pollutantTypeName}</Radio.Button>))
                     }
                 </Radio.Group>
             </div>

@@ -13,6 +13,7 @@ import {
 } from 'dva';
 import { Map, Polygon,Markers,InfoWindow } from 'react-amap';
 import moment from 'moment';
+import {getPointStatusImg} from '@/utils/getStatusImg';
 import config from '../../config';
 import styles from './index.less';
 import Adapt from './Adapt.less';
@@ -73,7 +74,7 @@ class index extends Component {
             ],
             visible: false,
             pointName: null,
-            radioDefaultValue:"2"
+            radioDefaultValue:""
         };
         this.mapEvents = {
             created(m) {
@@ -98,6 +99,7 @@ class index extends Component {
         this.getRateStatisticsByEnt();
         this.getStatisticsPointStatus();
         this.getAllMonthEmissionsByPollutant();
+
     }
 
     handleScroll=()=>{
@@ -132,7 +134,7 @@ class index extends Component {
              type: pageUrl.getdatalist,
              payload: {
                  map: true,
-                 pollutantTypes:'2'
+                 pollutantTypes:''
              },
          });
      }
@@ -956,6 +958,7 @@ treeCilck = (row) => {
                          }}
                      >
                          <Radio.Group defaultValue={this.state.radioDefaultValue} buttonStyle="solid" size="small" onChange={this.onRadioChange}>
+                             <RadioButton value="">全部</RadioButton>
                              <RadioButton value="2">废气</RadioButton>
                              <RadioButton value="1">废水</RadioButton>
                          </Radio.Group>
@@ -1079,16 +1082,9 @@ treeCilck = (row) => {
                          markers={this.props.datalist}
                          events={this.markersEvents}
                          className={this.state.special}
-                         render={(extData) => {
-                             if (extData.status === 0) {
-                                 return <img style={{width:15}} src="/gisunline.png" />;
-                             } if (extData.status === 1) {
-                                 return <img style={{width:15}} src="/gisnormal.png" />;
-                             } if (extData.status === 2) {
-                                 return <img style={{width:15}} src="/gisover.png" />;
-                             }
-                             return <img style={{width:15}} src="/gisexception.png" />;
-                         }}
+                        render = {(extData) => {
+                            return getPointStatusImg(extData.status, extData.stop, extData.pollutantTypeCode);
+                        }}
                      />
                      {
                          this.getpolygon(polygonChange)

@@ -30,6 +30,14 @@ class dataList extends PureComponent {
             payload: {
             }
         });
+
+        // 由于数据一览没有全部，初始化为废气
+        !!!this.props.selectpollutantTypeCode && dispatch({
+            type:'overview/updateState',
+            payload:{
+                selectpollutantTypeCode: 2
+            }
+        })
     }
    /**加载数据 */
     reloadData = (dataOverview) => {

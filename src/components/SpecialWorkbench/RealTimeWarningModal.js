@@ -230,7 +230,8 @@ class RealTimeWarningModal extends Component {
             },
             yAxis: {
                 type: 'value',
-                name: 'ug/m³',
+                // name: 'ug/m³',
+                name: selectPllutantInfo ? selectPllutantInfo.unit : '',
                 axisLabel: {
                     formatter: '{value}'
                 }
