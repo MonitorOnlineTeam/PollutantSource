@@ -40,7 +40,7 @@ export default Model.extend({
         entbaseinfo: [],
         selectpoint: null,
         onlypollutantList: [],
-        selectpollutantTypeCode: 2,
+        selectpollutantTypeCode: '',
         //数据一览表头
         columns: [],
         data: [],
@@ -100,6 +100,7 @@ export default Model.extend({
                 pointName: dataOverview.pointName,
                 status: dataOverview.selectStatus,
                 terate: dataOverview.terate,
+                ...payload
             }
             if(body.time)
             {
@@ -145,9 +146,9 @@ export default Model.extend({
                 RunState: upLoadParameters.RunState,
             }
 
-             
+
             const data = yield call(querydatalist, body);
-           
+
             if (data) {
                 yield update({ data });
                 yield update({ dataTemp: data });
@@ -441,7 +442,6 @@ export default Model.extend({
                 tooltip: {
                     trigger: 'axis',
                     formatter: function (params, ticket, callback) {
-                        console.log(params);
                         let res = `${params[0].axisValue}时<br/>`;
                         params.map(item => {
                             res += `${item.seriesName}:${item.value}<br />`;
@@ -526,7 +526,7 @@ export default Model.extend({
                 });
                 yield take('querydatalist/@@end');
                 }
-               
+
             } else {
                 yield update({
                     pollutantTypelist: null

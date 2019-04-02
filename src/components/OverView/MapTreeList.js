@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Spin,Input,Tabs } from 'antd';
+import { Spin,Input,Tabs, Badge } from 'antd';
 import { connect } from 'dva';
 import moment from 'moment';
 import styles from './MapTreeList.less';
@@ -25,7 +25,7 @@ const TabPane = Tabs.TabPane;
     //数据一览后台参数
     dataOverview:overview.dataOverview,
     mapdetailParams:overview.mapdetailParams,
-    
+
 }))
 class MapTreeList extends Component {
     constructor(props) {
@@ -53,15 +53,14 @@ class MapTreeList extends Component {
       //树的点击事件
       treeCilck = (row) => {
           const { dispatch,mapdetailParams,selectpollutantTypeCode } = this.props;
-          debugger;
-          const pollutantInfoList=mainpoll.find(value=>value.pollutantCode==selectpollutantTypeCode);
+          const pollutantInfoList=mainpoll.find(value=>value.pollutantCode==selectpollutantTypeCode || row.pollutantTypeCode);
           const defaultpollutantCode=pollutantInfoList.pollutantInfo[0].pollutantCode;
           const defaultpollutantName=pollutantInfoList.pollutantInfo[0].pollutantName;
           dispatch({
             type:'overview/updateState',
             payload:{
                     selectpoint:row,
-                    selectpollutantTypeCode:`${row.pollutantTypeCode}`,
+                    // selectpollutantTypeCode:`${row.pollutantTypeCode}`,
                     mapdetailParams:{
                         ...mapdetailParams,
                         pollutantCode:defaultpollutantCode,
@@ -93,7 +92,7 @@ class MapTreeList extends Component {
             type:'overview/updateState',
             payload:{
                 dataOverview:dataOverview
-            } 
+            }
          })
          this.props.dispatch({
              type: 'overview/querydatalist',
@@ -120,24 +119,17 @@ class MapTreeList extends Component {
                      />
                  </div>
 
-                 <div style={{
-                     width: 400,
-                     height: 48,
-                     background: '#fff',
-                     marginTop:5
-                 }}
+                 <div className={styles.statuslistContainer}
                  >
-                     <div className={styles.statuslist}>
-                         <span><img style={{width:15}} src="/gisunline.png" />离线</span>
-                         <span><img style={{width:15}} src="/gisnormal.png" />在线</span>
-                         <span><img style={{width:15}} src="/gisover.png" />超标</span>
-                         <span><img style={{width:15}} src="/gisexception.png" />异常</span>
-                     </div>
+                    <Badge status="default" text="离线" />
+                    <Badge status="success" text="在线" />
+                    <Badge status="error" text="超标" />
+                    <Badge status="warning" text="异常" />
                  </div>
 
                  <div>
                      <div className={styles.treelist} style={{ width: '400px',marginTop: 5,background:'#fff' }}>
-                        <PointTree noselect={true} style={{ overflow: 'auto', width: 400, background: '#fff' }} getHeight='calc(100vh - 250px)' 
+                        <PointTree noselect={true} style={{ overflow: 'auto', width: 400, background: '#fff' }} getHeight='calc(100vh - 250px)'
                            treeCilck={this.treeCilck} PollutantType={selectpollutantTypeCode}
                         />
                      </div>
