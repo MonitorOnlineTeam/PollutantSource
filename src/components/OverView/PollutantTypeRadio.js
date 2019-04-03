@@ -18,13 +18,9 @@ class PollutantTypeRadio extends Component {
             payload: {
                 selectpollutantTypeCode: value,
                 selectpoint:null,
-                // dataOverview:{
-                //     ...dataOverview,
-                //     pointName:null
-                // }
             },
         });
-        this.props.dispatch({
+        dispatch({
             type: 'overview/querydatalist',
             payload: {
                 map: true,

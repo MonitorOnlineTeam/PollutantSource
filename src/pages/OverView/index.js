@@ -75,12 +75,8 @@ class OverViewMap extends PureComponent {
                 </div>
                 <div style={{
                     position: 'absolute',
-                    /* top: 90, */
-                    /* left: 700, */
-                    /* right: 16, */
-                    /* bottom: 140, */
-                    top: 124,
-                    left: 500,
+                    bottom: 50,
+                    right: 100,
                     zIndex:100,
                     background: "#fff",
                     zIndex:1,

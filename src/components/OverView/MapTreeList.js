@@ -129,7 +129,7 @@ class MapTreeList extends Component {
 
                  <div>
                      <div className={styles.treelist} style={{ width: '400px',marginTop: 5,background:'#fff' }}>
-                        <PointTree noselect={true} style={{ overflow: 'auto', width: 400, background: '#fff' }} getHeight='calc(100vh - 250px)'
+                        <PointTree noselect={true} style={{ overflow: 'auto', width: 400, background: '#fff' }} getHeight='calc(100vh - 200px)'
                            treeCilck={this.treeCilck} PollutantType={selectpollutantTypeCode}
                         />
                      </div>

@@ -1,49 +1,47 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
 import styles from './MapTreeList.less'
+import { debug } from 'util';
 
 @connect(({ overview }) => ({
   selectpollutantTypeCode: overview.selectpollutantTypeCode,
+  pollutantTypelist: overview.pollutantTypelist,
 }))
 class StatusList extends Component {
+
+  getStatusList=()=>{
+      const {pollutantTypelist}=this.props;
+      console.log(pollutantTypelist);
+      if(pollutantTypelist)
+      {
+        let list=[];
+        pollutantTypelist.map(item=>{
+            if(item.pollutantTypeCode===1)
+            {
+                list.push(<div><img style={{width:15,marginLeft:4,marginRight:9}} src="/lablegis.png" />废水</div>)          
+            }
+            if(item.pollutantTypeCode===2)
+            {
+              list.push(<div><img style={{width:20}} src="/lablegas.png" />废气</div>)    
+            }
+            if(item.pollutantTypeCode===10)
+            {
+              list.push(<div><img style={{width:20}} src="/lablevoc.png" />Voc</div>)    
+            }
+            if(item.pollutantTypeCode===8)
+            {
+              list.push(<div><img style={{width:15,marginLeft:4,marginRight:9}} src="/labledust.png" />小型站</div>)    
+            }
+        })
+        return <div className={styles.statuslist}>{list}</div>;
+      }
+      return null;
+       
+  }
+
   render() {
     return (
-      this.props.selectpollutantTypeCode === "" ?
-        <div>
-          <div className={`${styles.statuslist} ${styles.gasStatuslist}`}>
-            <span>废气：</span>
-            <span><img style={{ width: 20 }} src="/gas@unline.png" />离线</span>
-            <span><img style={{ width: 20 }} src="/gas@normal.png" />在线</span>
-            <span><img style={{ width: 20 }} src="/gas@over.png" />超标</span>
-            <span><img style={{ width: 20 }} src="/gas@exception.png" />异常</span>
-          </div>
-          <div className={styles.statuslist}>
-            <span>废水：</span>
-            <span><img style={{ width: 15 }} src="/gisunline.png" />离线</span>
-            <span><img style={{ width: 15 }} src="/gisnormal.png" />在线</span>
-            <span><img style={{ width: 15 }} src="/gisover.png" />超标</span>
-            <span><img style={{ width: 15 }} src="/gisexception.png" />异常</span>
-          </div>
-        </div> :
-        this.props.selectpollutantTypeCode === 2 ?
-          <div>
-            <div className={`${styles.statuslist} ${styles.gasStatuslist}`}>
-              <span>废气：</span>
-              <span><img style={{ width: 20 }} src="/gas@unline.png" />离线</span>
-              <span><img style={{ width: 20 }} src="/gas@normal.png" />在线</span>
-              <span><img style={{ width: 20 }} src="/gas@over.png" />超标</span>
-              <span><img style={{ width: 20 }} src="/gas@exception.png" />异常</span>
-            </div>
-          </div> :
-          <div>
-            <div className={styles.statuslist}>
-              <span>废水：</span>
-              <span><img style={{ width: 15 }} src="/gisunline.png" />离线</span>
-              <span><img style={{ width: 15 }} src="/gisnormal.png" />在线</span>
-              <span><img style={{ width: 15 }} src="/gisover.png" />超标</span>
-              <span><img style={{ width: 15 }} src="/gisexception.png" />异常</span>
-            </div>
-          </div>
+      this.getStatusList()
     )
   }
 

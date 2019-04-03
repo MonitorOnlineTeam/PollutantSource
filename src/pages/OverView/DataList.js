@@ -25,11 +25,7 @@ class dataList extends PureComponent {
     /**页面初始化 */
     componentDidMount() {
         const {dispatch}=this.props;
-        dispatch({
-            type: 'overview/querypollutanttypecode',
-            payload: {
-            }
-        });
+       
 
         // 由于数据一览没有全部，初始化为废气
         !!!this.props.selectpollutantTypeCode && dispatch({
@@ -38,6 +34,11 @@ class dataList extends PureComponent {
                 selectpollutantTypeCode: 2
             }
         })
+        dispatch({
+            type: 'overview/querypollutanttypecode',
+            payload: {
+            }
+        });
     }
    /**加载数据 */
     reloadData = (dataOverview) => {
