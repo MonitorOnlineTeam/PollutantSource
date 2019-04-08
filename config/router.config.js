@@ -168,7 +168,7 @@ export default [
             /* 报警及时响应统计分析 */
             { path: '/analysis/alarmresponse', component: './Analysis/AlarmResponse' },
 
-            /* 报警排口分析 */
+            /* 报警监测点分析 */
             { path: '/analysis/overpointlist', component: './Analysis/OverPointList' },
             /* 自行监测报告 */
             {
@@ -190,12 +190,12 @@ export default [
             { path: '/sysmanage/EnterpriseManager', component: './EnterpriseInfo/EnterpriseManager' },
             /* 排污许可证 */
             { path: '/sysmanage/emissionpermits', component: './EmissionPermits' },
-            /* 排口信息管理 */
+            /* 监测点信息管理 */
             { path: '/sysmanage/pointinfo', component: './PointInfo' },
 
-            /* 排口信息管理=排口管理 */
+            /* 监测点信息管理=监测点管理 */
             { path: '/sysmanage/pointdetail/:DGIMN/:PollutantType/:Add', component: './PointInfo/AddPoint' },
-            /* 排口信息管理=排口管理 */
+            /* 监测点信息管理=监测点管理 */
             { path: '/sysmanage/pointdetail/:DGIMN/:Name/:PollutantType/:Add', component: './PointInfo/PointView' },
             /* 用户基本信息管理 */
             { path: '/sysmanage/userinfo', component: './Userinfo' },

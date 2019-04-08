@@ -7,7 +7,7 @@ import styles from './DataList.less';
 import AListRadio from '../../components/OverView/AListRadio';
 import PdButton from '../../components/OverView/PdButton';
 import {getPointStatusImg} from '../../utils/getStatusImg';
-
+import {formatPollutantPopover} from '../../utils/utils';
 const RadioGroup = Radio.Group;
 @connect(({ loading, overview }) => ({
     columnsdata: overview.columns,
@@ -183,7 +183,7 @@ class dataList extends PureComponent {
                     return getPointStatusImg(record.status,record.stop);
                 },
             }, {
-                title: '排口',
+                title: '监测点',
                 dataIndex: 'pointName',
                 key: 'pointName',
                 width: 300,
@@ -255,36 +255,7 @@ class dataList extends PureComponent {
                         {
                             return "停产";
                         }
-                        const additional = record[`${item.field}_params`];
-                        if (additional) {
-                            const additionalInfo = additional.split('§');
-                            if (additionalInfo[0] === 'IsOver') {
-                                const content = (<div>
-                                    <div style={{ marginBottom: 10 }}>
-                                        <Icon style={{ color: '#ff0000', fontSize: 25, marginRight: 10 }} type="warning" />
-                                        <span style={{ fontWeight: 'Bold', fontSize: 16 }}>数据超标</span>
-                                    </div>
-                                    <li style={{ listStyle: 'none', marginBottom: 10 }}>
-                                        <Badge status="success" text={`标准值：${additionalInfo[2]}`} />
-                                    </li>
-                                    <li style={{ listStyle: 'none', marginBottom: 10 }}>
-                                        <Badge status="error" text={`超标倍数：${additionalInfo[3]}`} />
-                                    </li>
-                                                 </div>);
-                                return (<Popover content={content}><span style={{ color: '#ff0000', cursor: 'pointer' }}>{value || (value === 0 ? 0 : '-')}</span></Popover>);
-                            }
-                            const content = (<div>
-                                <div style={{ marginBottom: 10 }}>
-                                    <Icon style={{ color: '#ff0000', fontSize: 25, marginRight: 10 }} type="close-circle" />
-                                    <span style={{ fontWeight: 'Bold', fontSize: 16 }}>数据异常</span>
-                                </div>
-                                <li style={{ listStyle: 'none', marginBottom: 10 }}>
-                                    <Badge status="warning" text={`异常原因：${additionalInfo[2]}`} />
-                                </li>
-                                             </div>);
-                            return (<Popover content={content}><span style={{ color: '#F3AC00', cursor: 'pointer' }}>{value || (value === 0 ? 0 : '-')}</span></Popover>);
-                        }
-                        return value || (value === 0 ? 0 : '-');
+                        return formatPollutantPopover(record,value,record[`${item.field}_params`]);
                     }
 
                 });

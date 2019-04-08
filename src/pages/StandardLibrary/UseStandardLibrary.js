@@ -133,7 +133,7 @@ class UseStandardLibrary extends Component {
                                         <Col key={`${key }11`} span={3}>  <Divider type="vertical" />
                                         </Col>
                                         <Col key={`${key }12`} span={9}>
-                                            <Popconfirm placement="left" title="确定要此标准下所有污染物应用到此排口下吗？" onConfirm={() => that.UseALL(item.key)} okText="是" cancelText="否">
+                                            <Popconfirm placement="left" title="确定要此标准下所有污染物应用到此监测点下吗？" onConfirm={() => that.UseALL(item.key)} okText="是" cancelText="否">
                                                 <a
                                                     key={`${key }13`}
                                                     className={styles.a}
@@ -324,7 +324,7 @@ class UseStandardLibrary extends Component {
                     [
                         { Name: '首页', Url: '/' },
                         { Name: '系统管理', Url: '' },
-                        { Name: '排口列表', Url: '/sysmanage/pointinfo' },
+                        { Name: '监测点列表', Url: '/sysmanage/pointinfo' },
                         { Name: '设置标准', Url: '' }
                     ]
                 }

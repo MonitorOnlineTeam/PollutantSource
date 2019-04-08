@@ -71,7 +71,7 @@ export default Model.extend({
                 });
             }
         },
-        /**查询单个排口下污染物列表 */
+        /**查询单个监测点下污染物列表 */
         * getpollutantbydgimn({
             payload
         }, {
@@ -93,7 +93,7 @@ export default Model.extend({
                 });
             }
         },
-        /**获取排口种中监测标准的标准库列表 */
+        /**获取监测点种中监测标准的标准库列表 */
         * getuselist({
             payload
         }, {
@@ -166,7 +166,7 @@ export default Model.extend({
                 },
             });
         },
-        /**应用到单个排口 */
+        /**应用到单个监测点 */
         * usepoint({
             payload
         }, {
@@ -211,7 +211,7 @@ export default Model.extend({
             });
             payload.callback();
         },
-        /**应用到所有排口 */
+        /**应用到所有监测点 */
         * useallDGIMNbyid({
             payload
         }, {
@@ -436,7 +436,7 @@ export default Model.extend({
                 },
             });
         },
-        /**根据排口和污染物编号查询实体 */
+        /**根据监测点和污染物编号查询实体 */
         * getmonitorpointpollutant({
             payload
         }, {
@@ -453,7 +453,7 @@ export default Model.extend({
             });
             payload.callback();
         },
-        /**排口-设置监测标准-编辑污染物 */
+        /**监测点-设置监测标准-编辑污染物 */
         * editmonitorpointPollutant({
             payload
         }, {

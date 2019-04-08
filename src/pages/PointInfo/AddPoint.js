@@ -122,8 +122,9 @@ class AddPoint extends Component {
      }
 
  setPollutantType = (type) => {
+     debugger;
      this.setState({
-         PollutantType: type === "1" ? "none" : "block"
+         PollutantType: type == 2 ? "block" : "none"
      });
  }
 
@@ -446,9 +447,8 @@ class AddPoint extends Component {
                                                  style={{ width:200 }}
                                                  placeholder="请选择"
                                                  onChange={(value,op)=>{
-
                                                      this.setState({
-                                                         PollutantType:value===1?"none":"block"
+                                                         PollutantType:value===2?"block":"none"
 
                                                      });
                                                  }}

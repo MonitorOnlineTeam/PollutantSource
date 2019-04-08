@@ -239,7 +239,7 @@ export default Model.extend({
             }
         },
         // /**
-        //  * 获取排口的联网率数据列表
+        //  * 获取监测点的联网率数据列表
         //  * @param {传递参数} 传递参数
         //  * @param {操作} 操作项
         //  */
@@ -291,7 +291,7 @@ export default Model.extend({
             });
         },
         /**
-         * 获取所有排口超标数据
+         * 获取所有监测点超标数据
          * @param {传递参数} 传递参数
          * @param {操作} 操作项
          */
@@ -317,7 +317,7 @@ export default Model.extend({
             });
         },
         /**
-         * 获取所有超标排口
+         * 获取所有超标监测点
          * @param {传递参数} 传递参数
          * @param {操作} 操作项
          */
@@ -338,7 +338,7 @@ export default Model.extend({
             });
         },
         /**
-         * 获取排口状态
+         * 获取监测点状态
          * @param {传递参数} 传递参数
          * @param {操作} 操作项
          */

@@ -58,8 +58,8 @@ class StandardGasRepalceRecord extends Component {
             case 'workbench': //工作台
                 rtnVal.push({ Name: '工作台', Url: `/${listUrl}` });
                 break;
-            case 'pointinfo': //排口管理
-                rtnVal.push({ Name: '排口管理', Url: `/sysmanage/${listUrl}` });
+            case 'pointinfo': //监测点管理
+                rtnVal.push({ Name: '监测点管理', Url: `/sysmanage/${listUrl}` });
                 break;
             case 'equipmentoperatingrate': //设备运转率
                 rtnVal.push({ Name: '设备运转率', Url: `/qualitycontrol/${listUrl}` });

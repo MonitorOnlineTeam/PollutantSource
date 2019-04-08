@@ -395,7 +395,7 @@ class index extends PureComponent {
                             )}
                         </FormItem>
                         <Divider dashed style={{border:'1px dashed #FFFFFF'}} />
-                        <FormItem style={{width:'400px'}} {...formItemLayout} label="排口数量" >
+                        <FormItem style={{width:'400px'}} {...formItemLayout} label="监测点数量" >
                             {getFieldDecorator('outputnum', {
                                 initialValue: 30,
                             })(

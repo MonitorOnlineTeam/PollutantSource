@@ -111,7 +111,7 @@ class MapTreeList extends Component {
                  <div>
                      <Search
                          className={styles.search}
-                         placeholder="请输入排口名称进行查询"
+                         placeholder="请输入监测点名称进行查询"
                          enterButton="查询"
                          size="large"
                          style={{width:400}}

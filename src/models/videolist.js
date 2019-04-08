@@ -6,7 +6,7 @@ import { getList, deleteVideoInfo, gethistoryVideoList, updateVideoInfos, addVid
 import {querypollutantlist} from '../services/overviewApi';
 import { queryhistorydatalist } from '../services/overviewApi';
 import config from '../config';
-
+import {formatPollutantPopover} from '../utils/utils';
 export default Model.extend({
     namespace: 'videolist',
     state: {
@@ -170,40 +170,7 @@ export default Model.extend({
                         key: item.pollutantCode,
                         align: 'center',
                         render: (value, record, index) => {
-                            const additional = record[`${item.pollutantCode}_params`];
-                            if (additional) {
-                                const additionalInfo = additional.split('§');
-                                if (additionalInfo[0] === 'IsOver') {
-                                    const content = (
-                                        <div>
-                                            <div style={{ marginBottom: 10 }}>
-                                                <Icon style={{ color: '#ff0000', fontSize: 25, marginRight: 10 }} type="warning" />
-                                                <span style={{ fontWeight: 'Bold', fontSize: 16 }}>数据超标</span>
-                                            </div>
-                                            <li style={{ listStyle: 'none', marginBottom: 10 }}>
-                                                <Badge status="success" text={`标准值：${additionalInfo[2]}`} />
-                                            </li>
-                                            <li style={{ listStyle: 'none', marginBottom: 10 }}>
-                                                <Badge status="error" text={`超标倍数：${additionalInfo[3]}`} />
-                                            </li>
-                                        </div>
-                                    );
-                                    return (<Popover content={content}><span style={{ color: '#ff0000', cursor: 'pointer' }}>{value || (value === 0 ? 0 : '-')}</span></Popover>);
-                                }
-                                const content = (
-                                    <div>
-                                        <div style={{ marginBottom: 10 }}>
-                                            <Icon style={{ color: '#ff0000', fontSize: 25, marginRight: 10 }} type="close-circle" />
-                                            <span style={{ fontWeight: 'Bold', fontSize: 16 }}>数据异常</span>
-                                        </div>
-                                        <li style={{ listStyle: 'none', marginBottom: 10 }}>
-                                            <Badge status="warning" text={`异常原因：${additionalInfo[2]}`} />
-                                        </li>
-                                    </div>
-                                );
-                                return (<Popover content={content}><span style={{ color: '#F3AC00', cursor: 'pointer' }}>{value || (value === 0 ? 0 : '-')}</span></Popover>);
-                            }
-                            return value || (value === 0 ? 0 : '-');
+                            return formatPollutantPopover(value,record[`${item.pollutantCode}_params`]);
                         }
                     });
                 });
@@ -235,43 +202,7 @@ export default Model.extend({
                         key: item.pollutantCode,
                         align: 'center',
                         render: (value, record, index) => {
-                            const additional = record[`${item.pollutantCode}_params`];
-                            if (additional) {
-                                const additionalInfo = additional.split('§');
-                                if (additionalInfo[0] === 'IsOver') {
-                                    const content =
-                                        (
-                                            <div>
-                                                <div style={{ marginBottom: 10 }}>
-                                                    <Icon style={{ color: '#ff0000', fontSize: 25, marginRight: 10 }} type="warning" />
-                                                    <span style={{ fontWeight: 'Bold', fontSize: 16 }}>数据超标</span>
-                                                </div>
-                                                <li style={{ listStyle: 'none', marginBottom: 10 }}>
-                                                    <Badge status="success" text={`标准值：${additionalInfo[2]}`} />
-                                                </li>
-                                                <li style={{ listStyle: 'none', marginBottom: 10 }}>
-                                                    <Badge status="error" text={`超标倍数：${additionalInfo[3]}`} />
-                                                </li>
-                                            </div>
-                                        );
-                                    return (
-                                        <Popover content={content}><span style={{ color: '#ff0000', cursor: 'pointer' }}>{value || (value === 0 ? 0 : '-')}</span></Popover>
-                                    );
-                                }
-                                const content = (
-                                    <div>
-                                        <div style={{ marginBottom: 10 }}>
-                                            <Icon style={{ color: '#ff0000', fontSize: 25, marginRight: 10 }} type="close-circle" />
-                                            <span style={{ fontWeight: 'Bold', fontSize: 16 }}>数据异常</span>
-                                        </div>
-                                        <li style={{ listStyle: 'none', marginBottom: 10 }}>
-                                            <Badge status="warning" text={`异常原因：${additionalInfo[2]}`} />
-                                        </li>
-                                    </div>
-                                );
-                                return (<Popover content={content}><span style={{ color: '#F3AC00', cursor: 'pointer' }}>{value || (value === 0 ? 0 : '-')}</span></Popover>);
-                            }
-                            return value || (value === 0 ? 0 : '-');
+                            return formatPollutantPopover(value,record[`${item.pollutantCode}_params`]);
                         }
                     });
                 });

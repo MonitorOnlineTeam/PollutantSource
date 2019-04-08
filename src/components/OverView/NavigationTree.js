@@ -84,7 +84,7 @@ class NavigationTree extends Component {
                 align: 'center'
             },
             {
-                title: '排口',
+                title: '监测点',
                 width: '30%',
                 dataIndex: 'PointName',
                 align: 'center'
@@ -112,7 +112,7 @@ class NavigationTree extends Component {
                     <Radio.Button value="d"><Icon type="dashboard" className={styles.radiobtnimg} />质控</Radio.Button>
                 </Radio.Group>
                 <Input.Search
-                    placeholder="请输入排口名称、企业名称、设备编号进行搜索"
+                    placeholder="请输入监测点名称、企业名称、设备编号进行搜索"
                     onSearch={(value) => {
                         this.props.TreeSearch(value);
                     }}

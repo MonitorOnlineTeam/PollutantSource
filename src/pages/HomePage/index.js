@@ -32,6 +32,7 @@ const pageUrl = {
     getTaskCount: 'homepage/getTaskCount',
     getAlarmAnalysis: 'homepage/getAlarmAnalysis',
     getAllMonthEmissionsByPollutant: 'homepage/getAllMonthEmissionsByPollutant',
+    getAllPollutantTypelist:'overview/getPollutantTypeList',
 };
 const { RunningRate,TransmissionEffectiveRate,amapKey } = config;
 const {enterpriceid}=config;
@@ -53,6 +54,7 @@ let _thismap;
     loadingAlarmAnalysis: loading.effects[pageUrl.getAlarmAnalysis],
     loadingStatisticsPointStatus: loading.effects[pageUrl.getStatisticsPointStatus],
     loadingAllMonthEmissionsByPollutant: loading.effects[pageUrl.getAllMonthEmissionsByPollutant],
+    loadingAllPollutantTypelist:loading.effects[pageUrl.getAllPollutantTypelist],
     RateStatisticsByEnt: homepage.RateStatisticsByEnt,
     TaskCount: homepage.TaskCount,
     ExceptionProcessing: homepage.ExceptionProcessing,
@@ -61,6 +63,7 @@ let _thismap;
     allMonthEmissionsByPollutant: homepage.AllMonthEmissionsByPollutant,
     baseinfo: baseinfo.entbaseinfo,
     datalist: overview.data,
+    pollutantTypelist: overview.pollutantTypelist,
 }))
 class index extends Component {
     constructor(props) {
@@ -99,13 +102,21 @@ class index extends Component {
         this.getRateStatisticsByEnt();
         this.getStatisticsPointStatus();
         this.getAllMonthEmissionsByPollutant();
-
+        this.getpollutantTypelist();
+    }
+    getpollutantTypelist=()=>{
+        const {dispatch} = this.props;
+        dispatch({
+            type: pageUrl.getAllPollutantTypelist,
+            payload: {
+                treeCard:true
+            },
+        });
     }
 
     handleScroll=()=>{
         this.setState({
             screenWidth:window.screen.width===1600?50:70
-
         });
         this.getoperation();
     }
@@ -611,8 +622,20 @@ class index extends Component {
         )
      }
 
-
-
+     /**渲染污染物列表 */
+     renderpollutantTypelist=()=>{
+        const {pollutantTypelist}=this.props;
+        let res=[];
+        if(pollutantTypelist)
+        {
+            res.push(<RadioButton value="">全部</RadioButton>);
+            pollutantTypelist.map((item,key)=>{
+                res.push(<RadioButton key={key} value={item.pollutantTypeCode}>{item.pollutantTypeName}</RadioButton>)
+            })
+        }
+        return res;
+    }
+     
 
      /**地图 */
      getpolygon = (polygonChange) => {
@@ -958,9 +981,7 @@ treeCilck = (row) => {
                          }}
                      >
                          <Radio.Group defaultValue={this.state.radioDefaultValue} buttonStyle="solid" size="small" onChange={this.onRadioChange}>
-                             <RadioButton value="">全部</RadioButton>
-                             <RadioButton value="2">废气</RadioButton>
-                             <RadioButton value="1">废水</RadioButton>
+                            {this.renderpollutantTypelist()}
                          </Radio.Group>
                      </div>
                      <div style={

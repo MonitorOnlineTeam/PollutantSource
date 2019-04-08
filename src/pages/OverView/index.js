@@ -48,8 +48,6 @@ class OverViewMap extends PureComponent {
                     {
                         this.getTreeList()
                     }
-
-
                 </div>
 
                 <MapContent />

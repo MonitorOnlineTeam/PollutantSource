@@ -33,7 +33,7 @@ export default class Details extends Component {
     render() {
         const columns = [
             {
-                title: '排口名称',
+                title: '监测点名称',
                 dataIndex: 'PointName',
                 key:'PointName',
                 render: (text, record) => {

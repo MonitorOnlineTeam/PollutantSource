@@ -8,7 +8,7 @@ import {
 } from '../services/pointinfo';
 import { EnumRequstResult } from '../utils/enum';
 /*
-排口管理相关接口
+监测点管理相关接口
 add by xpy
 modify by
 */
@@ -59,7 +59,7 @@ export default Model.extend({
         },
     },
     effects: {
-        /*获取当前登陆人的排口列表**/
+        /*获取当前登陆人的监测点列表**/
         * getpointlist({
             payload
         }, {
@@ -87,7 +87,7 @@ export default Model.extend({
                 });
             }
         },
-        /*添加排口**/
+        /*添加监测点**/
         * addpoint({
             payload
         }, {
@@ -168,7 +168,7 @@ export default Model.extend({
             }
             payload.callback();
         },
-        /**获取气排口类型 */
+        /**获取气监测点类型 */
         * getgasoutputtypelist({
             payload
         }, {
@@ -190,7 +190,7 @@ export default Model.extend({
             }
             payload.callback();
         },
-        /**获取单个排口实体 */
+        /**获取单个监测点实体 */
         * getpoint({
             payload
         }, {
@@ -207,7 +207,7 @@ export default Model.extend({
             });
             payload.callback();
         },
-        /**编辑排口 */
+        /**编辑监测点 */
         * editpoint({
             payload
         }, {
@@ -223,7 +223,7 @@ export default Model.extend({
             });
             payload.callback();
         },
-        /**删除排口 */
+        /**删除监测点 */
         * deletepoint({
             payload
         }, {
@@ -246,7 +246,7 @@ export default Model.extend({
             });
             payload.callback();
         },
-        /* 获取排口CEMS监测子系统主表**/
+        /* 获取监测点CEMS监测子系统主表**/
         * getanalyzersys({
             payload
         }, {
@@ -270,7 +270,7 @@ export default Model.extend({
             }
 
         },
-        /**添加排口CEMS监测子系统主表*/
+        /**添加监测点CEMS监测子系统主表*/
         * addalyzersys({
             payload
         }, {
@@ -286,7 +286,7 @@ export default Model.extend({
             });
             payload.callback();
         },
-        /**获取排口CEMS监测子系统实体*/
+        /**获取监测点CEMS监测子系统实体*/
         * getanalyzersysmnmodel({
             payload
         }, {
@@ -302,7 +302,7 @@ export default Model.extend({
             });
             payload.callback();
         },
-        /**编辑排口CEMS监测子系统主表*/
+        /**编辑监测点CEMS监测子系统主表*/
         * editalyzersys({
             payload
         }, {
@@ -318,7 +318,7 @@ export default Model.extend({
             });
             payload.callback();
         },
-        /**删除排口CEMS监测子系统主表*/
+        /**删除监测点CEMS监测子系统主表*/
         * deletealyzersys({
             payload
         }, {
@@ -351,7 +351,7 @@ export default Model.extend({
             });
             payload.callback();
         },
-        /**添加排口CEMS监测子系统子表*/
+        /**添加监测点CEMS监测子系统子表*/
         * addalyzerchild({
             payload
         }, {
@@ -367,7 +367,7 @@ export default Model.extend({
             });
             payload.callback();
         },
-        /**获取排口CEMS监测子系统主表下所有子表的数据*/
+        /**获取监测点CEMS监测子系统主表下所有子表的数据*/
         * getanalyzerchild({
             payload
         }, {
@@ -385,7 +385,7 @@ export default Model.extend({
             });
             payload.callback();
         },
-        /**获取排口CEMS监测子系统子表实体*/
+        /**获取监测点CEMS监测子系统子表实体*/
         * getanalyzerchildmodel({
             payload
         }, {
@@ -402,7 +402,7 @@ export default Model.extend({
             });
             payload.callback();
         },
-        /**删除排口CEMS监测子系统子表*/
+        /**删除监测点CEMS监测子系统子表*/
         * deletealyzerchild({
             payload
         }, {
@@ -416,7 +416,7 @@ export default Model.extend({
             });
             payload.callback();
         },
-        /**编辑排口CEMS监测子系统子表*/
+        /**编辑监测点CEMS监测子系统子表*/
         * editalyzerchild({
             payload
         }, {

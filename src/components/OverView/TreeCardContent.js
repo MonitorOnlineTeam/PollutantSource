@@ -87,7 +87,7 @@ class TreeCardContent extends Component {
                             <span className={styles.pointName}>
                                 {item.pointName}
                             </span><span className={styles.pollutantType}>
-                                类型：{item.pollutantType ? item.pollutantType : '废气'}
+                                {item.pollutantType ? item.pollutantType : '废气'}
                             </span>
                         </div>
                         <div key={key + 1} className={styles.cardbottomspan}>

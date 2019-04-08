@@ -97,6 +97,34 @@ module.exports = {
             ],
         },
         {
+            pollutantCode: 10,
+            zspollutant: false,
+            unit: 'mg/m³',
+            //是否有传输有效率
+            csyxl: false,
+            pollutantInfo: [
+                {
+                    pollutantCode: '200',
+                    pollutantName: 'VOCS',
+                    unit: 'mg/m³'
+                } 
+            ],
+        },
+        {
+            pollutantCode: 12,
+            zspollutant: false,
+            unit: 'mg/m³',
+            //是否有传输有效率
+            csyxl: false,
+            pollutantInfo: [
+                {
+                    pollutantCode: 'a34002',
+                    pollutantName: 'PM10',
+                    unit: 'mg/m³'
+                } 
+            ],
+        },
+        {
             pollutantCode: 2,
             zspollutant: true,
             unit: 'mg/m³',

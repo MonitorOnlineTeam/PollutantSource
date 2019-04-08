@@ -232,8 +232,8 @@ export default class StandardLibrary extends Component {
             width: '20%',
             align: 'center',
             render: (text, record) => (<Fragment >
-                <Popconfirm placement="left" title="是否应用到当前所有排口？" onConfirm={() => this.useAllDGIMN(record.key)} okText="是" cancelText="否">
-                    <a href="#" > 应用到排口 </a>
+                <Popconfirm placement="left" title="是否应用到当前所有监测点？" onConfirm={() => this.useAllDGIMN(record.key)} okText="是" cancelText="否">
+                    <a href="#" > 应用到监测点 </a>
                 </Popconfirm>
                  <Divider type="vertical" />
                 <a onClick={
