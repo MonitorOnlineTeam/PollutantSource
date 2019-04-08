@@ -255,7 +255,7 @@ class dataList extends PureComponent {
                         {
                             return "停产";
                         }
-                        return formatPollutantPopover(record,value,record[`${item.field}_params`]);
+                        return formatPollutantPopover(value,record[`${item.field}_params`]);
                     }
 
                 });
