@@ -111,7 +111,7 @@ class ConsumablesReplaceHistoryList extends Component {
             width: '20%',
             dataIndex: 'CreateUserID',
             key: 'CreateUserID',
-            align: 'center'
+            align: 'left'
         }, {
             title: '易耗品（数量）',
             width: '45%',

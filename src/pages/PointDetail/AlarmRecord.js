@@ -47,7 +47,9 @@ class AlarmRecord extends Component {
         let {dispatch, DGIMN, firsttime, lasttime,overdataparams} = this.props;
         overdataparams={
              ...overdataparams,
-             DGIMN:DGIMN
+             DGIMN:DGIMN,
+             beginTime: moment(firsttime).format('YYYY-MM-DD HH:mm:ss'),
+             endTime: moment(lasttime).format('YYYY-MM-DD HH:mm:ss')
         }
         dispatch({
             type:'points/updateState',

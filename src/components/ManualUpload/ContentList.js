@@ -11,6 +11,7 @@ import { routerRedux } from 'dva/router';
 import styles from './ContentList.less';
 import TreeCardContent from '../../components/OverView/TreeCardContent';
 import SearchInput from '../../components/OverView/SearchInput';
+import {downloadFile}from '../../utils/utils';
 
 const confirm = Modal.confirm;
 const Option = Select.Option;
@@ -161,11 +162,13 @@ export default class ContentList extends Component {
             payload: {
                 PollutantType:PollutantType,
                 callback: (data) => {
-                    window.location.href = data
+                     downloadFile(data);
+                    //window.location.href = data
                 }
             }
         });
     }
+
     //分页等改变事件
     onChange = (pageIndex, pageSize) => {
         this.updateState({
