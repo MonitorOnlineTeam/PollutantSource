@@ -105,14 +105,14 @@ class RealTimeNetWorkingRate extends PureComponent {
                 key:'RateValue',
                 width:'40%',
                 render: (text, record) => {
-                    if (text === 100)
-                        return `${(parseFloat(text) * 100).toFixed(2)}%`;
+                    // if (text === 100)
+                    //     return `${(parseFloat(text) * 100).toFixed(2)}%`;
                     return <span style={{ color: 'red' }}>离线</span>;
                 }
             }];
-
+        const tableData = this.props.networkeRateList.tableDatas.filter(data => data.RateValue!==1 );
         return <Table rowKey={(record, index) => `complete${index}`} loading={this.props.loadingRateStatistics}
-         columns={columns} dataSource={this.props.networkeRateList.tableDatas.slice(0, 3)} size="small" pagination={false} />;
+         columns={columns} dataSource={tableData} size="small" pagination={false} />;
     }
 
     render() {
