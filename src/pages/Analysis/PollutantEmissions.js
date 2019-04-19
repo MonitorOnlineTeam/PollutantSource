@@ -266,7 +266,7 @@ export default class PollutantEmissions extends Component {
                 }
             },
             {
-                title: (<span style={{ fontWeight: 'bold' }}>排放量(g)</span>),
+                title: (<span style={{ fontWeight: 'bold' }}>排放量(mg/m³)</span>),
                 dataIndex: 'Emissions',
                 key: 'Emissions',
                 align: 'left',
@@ -301,7 +301,7 @@ export default class PollutantEmissions extends Component {
                 }
             },
             {
-                title: (<span style={{ fontWeight: 'bold' }}>排放量(g)</span>),
+                title: (<span style={{ fontWeight: 'bold' }}>排放量(mg/m³)</span>),
                 dataIndex: 'Emissions',
                 key: 'Emissions',
                 align: 'left',

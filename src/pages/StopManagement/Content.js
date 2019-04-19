@@ -251,7 +251,7 @@ export default class Content extends Component {
                 [
                     { Name: '首页', Url: '/' },
                     { Name: '系统管理', Url: '' },
-                    { Name: '监测点管理', Url: '/sysmanage/pointinfo' },
+                    { Name: '排口管理', Url: '/sysmanage/pointinfo' },
                     { Name: '停产管理', Url: '' }
                 ]
             }>
