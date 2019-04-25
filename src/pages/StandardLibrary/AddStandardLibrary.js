@@ -87,7 +87,7 @@ class AddStandardLibrary extends Component {
                     });
                     let reader = new FileReader();
                     reader.readAsDataURL(file);
-                    reader.onloadend = function() {
+                    reader.onloadend = function () {
                         let base64 = reader.result; // base64就是图片的转换的结果
                         const attachId = _this.uuid();
                         _this.props.dispatch({
@@ -234,16 +234,18 @@ class AddStandardLibrary extends Component {
     };
 
     success = (StandardLibraryID) => {
-        let messageInfo = '保存成功';
+        // let messageInfo = '保存成功';
         if (StandardLibraryID != null) {
             this.setState({
                 StandardLibraryID: StandardLibraryID,
-                Mvisible: true,
-                title: '添加污染物',
-                width: 800
             });
-            messageInfo = '保存成功，请添加污染物';
         }
+        this.setState({
+            Mvisible: true,
+            title: '添加污染物',
+            width: 800
+        })
+        let messageInfo = '保存成功，请添加污染物';
         message.success(messageInfo, 3);
     };
 
@@ -253,7 +255,7 @@ class AddStandardLibrary extends Component {
 
     componentWillMount() {
         const StandardLibraryID = this.props.match.params.StandardLibraryID;
-        if (StandardLibraryID!=='null'){
+        if (StandardLibraryID !== 'null') {
 
             this.props.dispatch({
                 type: 'standardlibrary/getStandardlibrarybyid',
@@ -291,7 +293,7 @@ class AddStandardLibrary extends Component {
                             > {
                                     p.pollutantTypeName
                                 }
-                                                           </Option>)
+                            </Option>)
                         );
                     } else {
                         message.error('请添加污染物类型');
@@ -381,8 +383,7 @@ class AddStandardLibrary extends Component {
             width: '10%',
             align: 'center',
             render: (text, record) => {
-                if(record.AlarmType==2 || record.AlarmType===0)
-                {
+                if (record.AlarmType == 2 || record.AlarmType === 0) {
                     return '-';
                 }
                 return text;
@@ -395,8 +396,7 @@ class AddStandardLibrary extends Component {
             width: '10%',
             align: 'center',
             render: (text, record) => {
-                if(record.AlarmType===1 || record.AlarmType===0)
-                {
+                if (record.AlarmType === 1 || record.AlarmType === 0) {
                     return '-';
                 }
                 return text;
@@ -441,7 +441,7 @@ class AddStandardLibrary extends Component {
                 <Popconfirm placement="left" title="确定要删除此标准下所有数据吗？" onConfirm={() => this.confirm(record.key)} okText="是" cancelText="否">
                     <a href="#"> 删除 </a>
                 </Popconfirm>
-                                       </Fragment>
+            </Fragment>
             ),
         },
         ];
@@ -562,7 +562,7 @@ class AddStandardLibrary extends Component {
                                                     initialValue: IsUsed,
                                                     valuePropName: 'checked',
                                                 })(<Switch checkedChildren="启用" unCheckedChildren="禁用" />
-                                            )}
+                                                )}
                                         </FormItem>
                                     </Col>
                                 </Row>
@@ -597,81 +597,81 @@ class AddStandardLibrary extends Component {
                                     </Col>
                                 </Row>
                                 <Row gutter={48}>
-                                        <Col span={24} style={{ textAlign: 'center' }}>
-                                            {
-                                                this.props.match.params.StandardLibraryID === 'null' && 
-                                                <span style={{float: 'left'}}>
-                                                    <Icon type="info-circle" />
-                                                    <span className={styles.matters}>注意：此处为添加标准库，请保存完成后，继续添加污染物！</span>
-                                                </span>
-                                            }
-                                            <div style={{float: 'right'}}>
-                                                <Button
-                                                    type="primary"
-                                                    htmlType="submit"
-                                                >
-                                                    保存
+                                    <Col span={24} style={{ textAlign: 'center' }}>
+                                        {
+                                            // this.props.match.params.StandardLibraryID === 'null' &&
+                                            <span style={{ float: 'left' }}>
+                                                <Icon type="info-circle" />
+                                                <span className={styles.matters}>注意：此处为添加标准库，请保存完成后，继续添加污染物！</span>
+                                            </span>
+                                        }
+                                        <div style={{ float: 'right' }}>
+                                            <Button
+                                                type="primary"
+                                                htmlType="submit"
+                                            >
+                                                保存
                                                 </Button>
-                                                <Divider type="vertical" />
-                                                <Button
-                                                    type="dashed"
-                                                    onClick={
-                                                        () => this.props.dispatch(routerRedux.push(`/sysmanage/StandardLibrary`))
-                                                    }
-                                                >
-                                                    返回
+                                            <Divider type="vertical" />
+                                            <Button
+                                                type="dashed"
+                                                onClick={
+                                                    () => this.props.dispatch(routerRedux.push(`/sysmanage/StandardLibrary`))
+                                                }
+                                            >
+                                                返回
                                                 </Button>
-                                            </div>
-                                        </Col>
+                                        </div>
+                                    </Col>
                                 </Row>
                             </Card>
                         </Form>
                     </Card>
                     <Card bordered={false} title="污染物维护" style={{ margin: '8px 0' }}>
-                            <Button
-                                className={styles.btnAddContaminant}
-                                type="primary"
-                                onClick={() => {
-                                    if (this.state.StandardLibraryID === null) {
-                                        message.error('请先添加标准库！');
-                                    } else {
-                                        this.setState({
-                                            Id:null,
-                                            Mvisible: true,
-                                            title: '添加污染物',
-                                            width: 800
-                                        });
-                                    }
-                                }}
-                                >添加污染物
+                        <Button
+                            className={styles.btnAddContaminant}
+                            type="primary"
+                            onClick={() => {
+                                if (this.state.StandardLibraryID === null) {
+                                    message.error('请先添加标准库！');
+                                } else {
+                                    this.setState({
+                                        Id: null,
+                                        Mvisible: true,
+                                        title: '添加污染物',
+                                        width: 800
+                                    });
+                                }
+                            }}
+                        >添加污染物
                             </Button>
-                            <Table
-                                loading={this.props.effects['standardlibrary/getstandardlibrarypollutantlist']}
-                                columns={columns}
-                                dataSource={this.state.StandardLibraryID !== null ? this.props.standardlibrarypollutant : null}
-                                pagination={true}
-                                size="small"
-                                scroll={{ y: 'calc(100vh - 80px)' }}
-                            />
-                            <Modal
-                                visible={this.state.Mvisible}
-                                title={this.state.title}
-                                width={this.state.width}
-                                destroyOnClose={true}// 清除上次数据
-                                footer={false}
-                                onCancel={
-                                    () => {
-                                        this.setState({
-                                            Mvisible: false
-                                        });
-                                    }
+                        <Table
+                            loading={this.props.effects['standardlibrary/getstandardlibrarypollutantlist']}
+                            columns={columns}
+                            dataSource={this.state.StandardLibraryID !== null ? this.props.standardlibrarypollutant : null}
+                            pagination={true}
+                            size="small"
+                            scroll={{ y: 'calc(100vh - 80px)' }}
+                        />
+                        <Modal
+                            visible={this.state.Mvisible}
+                            title={this.state.title}
+                            width={this.state.width}
+                            destroyOnClose={true}// 清除上次数据
+                            footer={false}
+                            onCancel={
+                                () => {
+                                    this.setState({
+                                        Mvisible: false
+                                    });
                                 }
-                            >
-                                {
-                                    <AddPollutant pid={this.state.StandardLibraryID} onRef={this.onRef1} getlist={this.ChildGetList} Id={this.state.Id} />
-                                }
-                            </Modal>
-                        </Card>
+                            }
+                        >
+                            {
+                                <AddPollutant pid={this.state.StandardLibraryID} onRef={this.onRef1} getlist={this.ChildGetList} Id={this.state.Id} />
+                            }
+                        </Modal>
+                    </Card>
                 </div>
             </MonitorContent>
         );
