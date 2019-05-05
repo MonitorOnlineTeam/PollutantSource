@@ -19,6 +19,7 @@ export default Model.extend({
     },
     effects: {
         * login({ payload }, { call, put, select }) {
+        
             const MsgId = yield select(state => state.login.MsgId);
             if (payload.type === 'mobile') {
                 if (!MsgId) {

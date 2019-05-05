@@ -42,7 +42,7 @@ export default [
         path: '/',
         component: '../layouts/BasicLayout',
         routes: [
-            //  { path: '/', redirect: '/homepage' },
+            { path: '/', redirect: './sysmanage/autoformmanager' },
             /* 主页 */
             {
                 path: '/homepage', component: './HomePage',
@@ -224,6 +224,9 @@ export default [
 
             /* 标准库管理 */
             { path: '/sysmanage/standardlibrary', component: './StandardLibrary' },
+
+            /* 系统管理-AutoForm */
+            { path: '/sysmanage/autoformmanager', component: './autoformmanager' },
 
             /* 标准库管理-维护 */
             { path: '/sysmanage/standardlibrarydetail/:StandardLibraryID', component: './StandardLibrary/AddStandardLibrary' },
