@@ -76,3 +76,14 @@ export async function querypollutantlist(params) {
     const result = await post('/api/rest/PollutantSourceApi/PPointAndData/GetPollutantListByDgimn', params, null);
     return result === null ? { data: null } : result.data;
 }
+
+/**
+ * 【智能监控】获取排口下的污染物
+ * @params {
+          "entName": "首钢京唐钢铁联合有限责任公司"
+    }
+ */
+export async function querygetentdatalist(params) {
+    const result = await post('/api/rest/PollutantSourceApi/DataList/GetEntDataList', params, null);
+    return result === null ? { data: null } : result.data;
+}

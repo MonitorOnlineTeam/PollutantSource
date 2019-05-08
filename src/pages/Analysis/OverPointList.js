@@ -6,12 +6,13 @@ import MonitorContent from '../../components/MonitorContent/index';
 import {routerRedux} from 'dva/router';
 import { connect } from 'dva';
 import AlarmRecordModal from '../../components/GlobalHeader/AlarmRecordModal';
-import {summaryPolluntantCode} from '../../config';
+import {onlyOneEnt} from '../../config';
 const { RangePicker } = DatePicker;
-
+const Serach = Input.Search;
 
 @connect(({ loading,  analysisdata }) => ({
     overdatalist: analysisdata.overdatalist,
+    overdataParameters:analysisdata.overdataParameters,
     loading:loading.effects['analysisdata/queryalloverdatalist'],
 }))
 
@@ -24,10 +25,10 @@ class OverPointList extends Component {
         };
     }
     componentDidMount() {
-        this.props.dispatch({
+        const {dispatch}=this.props;
+        dispatch({
             type: 'analysisdata/queryalloverdatalist',
             payload: {
-                summaryPolluntantCode:summaryPolluntantCode
             }
         });
     }
@@ -41,17 +42,32 @@ class OverPointList extends Component {
                     mode[1] === 'date' ? 'month' : mode[1],
                 ],
             });
-            this.props.dispatch({
-                type: 'analysisdata/queryalloverdatalist',
-                payload: {
-                    beginTime:value[0],
-                    endTime:value[1],
-                    summaryPolluntantCode:summaryPolluntantCode
-                }
-            });    
+            let {overdataParameters}=this.props;
+            overdataParameters={
+                ...overdataParameters,
+                begintime:value[0],
+                endtime:value[1]
+            }
+            this.reloaddata(overdataParameters);
         }
-       
     }
+
+    //刷新数据
+    reloaddata=(overdataParameters)=>{
+        const {dispatch}=this.props;
+        dispatch({
+            type:'analysisdata/updateState',
+            payload:{
+                overdataParameters:overdataParameters
+            }
+        })
+        dispatch({
+            type: 'analysisdata/queryalloverdatalist',
+            payload: {
+            }
+        });    
+    }
+
     //最小超标倍数
     overDataMinChange=(e)=>{
         this.setState({
@@ -119,7 +135,7 @@ class OverPointList extends Component {
                     <Col key={item.pointName} span={8} >
                     <div className={styles.cardcss}>
                         <div className={styles.cardtitle}> 
-                            <img style={{width: 20, marginRight: 10, marginBottom: 4}} src='/star.png' />  <span>{item.pointName}</span>
+                            <img style={{width: 20, marginRight: 10, marginBottom: 4}} src='/star.png' />  <span>{onlyOneEnt?"":item.abbreviation+"-"}{item.pointName}</span>
                             <span  className={styles.timetitle} > <img style={{width: 15, marginRight: 10, marginBottom: 4}} src="/treetime.png" />
                             <span> 最新超标时间：{item.lastTime} </span>
                             </span>
@@ -158,6 +174,16 @@ class OverPointList extends Component {
         return res;
     }
    }
+
+   OnSerach=(value)=>{
+       let {overdataParameters}=this.props;
+       overdataParameters={
+           ...overdataParameters,
+           entName:value
+       }
+       this.reloaddata(overdataParameters);
+   }
+
     render() {
         const { rangeDate, mode } = this.state;
         return (
@@ -174,6 +200,10 @@ class OverPointList extends Component {
                 extra={
                     <div>
                 
+                  <Serach
+                  placeholder="请输入企业名称进行搜索"
+                  onSearch={this.OnSerach}
+                  style={{width:300}}/>
                   <RangePicker
                      style={{width: 250,marginLeft:40,textAlgin:'left'}}
                      format="YYYY-MM"
