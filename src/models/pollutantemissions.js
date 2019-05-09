@@ -40,7 +40,7 @@ export default Model.extend({
         * getChartData({ payload }, { call, put, update, select }) {
             const { beginTime, endTime, pageSize, pollutantCodes } = yield select(state => state.pollutantemissions);
             let body = {
-                enterpriseCodes:(payload.entcode!="null" && payload.entcode!="0")?[payload.entcode]:null,
+                enterpriseCodes:(payload.entcode!="null" && payload.entcode!="0" && payload.entcode)?[payload.entcode]:null,
                 beginTime: beginTime,
                 endTime: endTime,
                 pageSize: pageSize,
@@ -89,7 +89,7 @@ export default Model.extend({
         * getPointsData({ payload }, { call, put, update, select }) {
             const { clickDate, pageIndex, pageSize, pollutantCodes, emissionsSort } = yield select(state => state.pollutantemissions);
             let body = {
-                enterpriseCodes:(payload.entcode!="null" && payload.entcode!="0")?[payload.entcode]:null,
+                enterpriseCodes:(payload.entcode!="null" && payload.entcode!="0" && payload.entcode)?[payload.entcode]:null,
                 monthTime: clickDate,
                 pageIndex: pageIndex,
                 pageSize: pageSize,
@@ -128,7 +128,7 @@ export default Model.extend({
         * getPointDaysData({ payload }, { call, put, update, select }) {
             const { clickDate, pageIndex, pageSize, pollutantCodes, emissionsSort, queryDGIMNs } = yield select(state => state.pollutantemissions);
             let body = {
-                enterpriseCodes:(payload.entcode!="null" && payload.entcode!="0")?[payload.entcode]:null,
+                enterpriseCodes:(payload.entcode!="null" && payload.entcode!="0" && payload.entcode)?[payload.entcode]:null,
                 monthTime: clickDate,
                 pageIndex: pageIndex,
                 pageSize: pageSize,

@@ -14,6 +14,7 @@ export async function getAlarmResponseAllMonthStatistics(params) {
     const body = {
         beginTime: params.beginTime,
         endTime: params.endTime,
+        enterpriseCodes:params.enterpriseCodes,
         // EORSort: params.EORSort,
         pageIndex: params.pageIndex || 1,
         pageSize: params.pageSize || 20
@@ -33,6 +34,7 @@ export async function getAlarmResponseAllMonthStatistics(params) {
 export async function getSingleMonthAllPointAlarmResponseStatistics(params) {
     const body = {
         monthTime: params.monthTime,
+        enterpriseCodes:params.enterpriseCodes,
         sort2: params.sort2 || '',
         sort8: params.sort8 || '',
         pageIndex: params.pageIndex || 1,
@@ -47,12 +49,34 @@ export async function getSingleMonthAllPointAlarmResponseStatistics(params) {
 }
 
 /**
+ * 【报警及时响应】根据月份获取所有企业报警及时响应数据
+ * @params {"monthTime":"2018-11-01 00:00:00"}
+ */
+export async function getSingleMonthAllEntAlarmResponseStatistics(params) {
+    const body = {
+        monthTime: params.monthTime,
+        sort2: params.sort2 || '',
+        sort8: params.sort8 || '',
+        pageIndex: params.pageIndex || 1,
+        pageSize: params.pageSize || 20
+    };
+
+    const result = post('/api/rest/PollutantSourceApi/DataStatistics/GetSingleMonthAllEntAlarmResponseStatistics', body, null);
+
+    return result === null ? {
+        data: null
+    } : result;
+}
+
+
+/**
  * 【报警及时响应】根据月份、排口获取单个排口每一天所有报警及时响应数据
  * @params {"DGIMNs":"sgjt001003","monthTime":"2018-12-01 00:00:00"}
  */
 export async function getSinglePointDaysAlarmResponseStatistics(params) {
     const body = {
         monthTime: params.monthTime,
+        enterpriseCodes:params.enterpriseCodes,
         DGIMNs: params.DGIMNs,
         sort2: params.sort2 || '',
         sort8: params.sort8 || '',

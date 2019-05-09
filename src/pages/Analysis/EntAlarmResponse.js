@@ -16,12 +16,12 @@ import styles from './index.less';
 import ReactEcharts from 'echarts-for-react';
 import MonitorContent from '../../components/MonitorContent/index';
 import { connect } from 'dva';
+import Link from 'umi/link';
 const Option = Select.Option;
 const pageUrl = {
     updateState: 'alarmresponse/updateState',
     getChartData: 'alarmresponse/getChartData',
-    getPointsData: 'alarmresponse/getPointsData',
-    getPointDaysData: 'alarmresponse/getPointDaysData'
+    getEntsData: 'alarmresponse/getEntsData',
 };
 const dateChildren = [];
 const dateYear = moment().get('year');
@@ -32,8 +32,8 @@ for (let i = dateYear; i > dateYear - 10; --i) {
     loading,
     alarmresponse
 }) => ({
-    loadingPointsTable: loading.effects[pageUrl.getPointsData],
-    loadingDays: loading.effects[pageUrl.getPointDaysData],
+    loadingPointsTable: loading.effects[pageUrl.getEntsData],
+ 
     total: alarmresponse.total,
     pageSize: alarmresponse.pageSize,
     pageIndex: alarmresponse.pageIndex,
@@ -43,7 +43,7 @@ for (let i = dateYear; i > dateYear - 10; --i) {
     xAxisData: alarmresponse.xAxisData,
     seriesData2: alarmresponse.seriesData2,
     seriesData8: alarmresponse.seriesData8,
-    pointsTableData: alarmresponse.pointsTableData,
+    entTableData: alarmresponse.entTableData,
     pointDaysTableData: alarmresponse.pointDaysTableData
 }))
 export default class EntAlarmResponse extends Component {
@@ -78,21 +78,13 @@ export default class EntAlarmResponse extends Component {
     // 更新所有排口列表数据
     getPointsTableData = (pageIndex) => {
         this.props.dispatch({
-            type: pageUrl.getPointsData,
+            type: pageUrl.getEntsData,
             payload: {
                 pageIndex: pageIndex,
             },
         });
     }
-    // 更新弹窗列表数据
-    getPointDaysTableData = (pageIndex) => {
-        this.props.dispatch({
-            type: pageUrl.getPointDaysData,
-            payload: {
-                pageIndex: pageIndex,
-            },
-        });
-    }
+ 
     handleTableChange = (pagination, filters, sorter) => {
         if (sorter.order) {
             this.updateState({
@@ -139,7 +131,7 @@ export default class EntAlarmResponse extends Component {
                 endTime: endTime,
                 selectedDate: `${Year}-${Month}-01 00:00:00`,
                 clickDate: `${Year}-${Month}-01 00:00:00`,
-                pointsTableData: []
+                entTableData: []
             });
         } else {
             this.updateState({
@@ -147,7 +139,7 @@ export default class EntAlarmResponse extends Component {
                 endTime: endTime,
                 selectedDate: `${value}-01-01 00:00:00`,
                 clickDate: `${value}-01-01 00:00:00`,
-                pointsTableData: []
+                entTableData: []
             });
         }
         this.getChartData();
@@ -249,16 +241,14 @@ export default class EntAlarmResponse extends Component {
     render() {
         const columnsPoints = [
             {
-                title: (<span style={{ fontWeight: 'bold' }}>排口名称</span>),
-                dataIndex: 'PointName',
-                key: 'PointName',
+                title: (<span style={{ fontWeight: 'bold' }}>企业名称</span>),
+                dataIndex: 'EntName',
+                key: 'EntName',
                 width: '50%',
                 align: 'left',
                 render: (text, record) => {
                     return (
-                        <a onClick={
-                            () => this.showModal(record)
-                        } > {text} </a>
+                        <Link to={`/analysis/pointalarmresponse/${record.EntCode}/${record.EntName}`}> {text} </Link>
                     );
                 }
             },
@@ -285,51 +275,7 @@ export default class EntAlarmResponse extends Component {
                 }
             }
         ];
-
-        const columnsDays = [
-            {
-                title: (<span style={{ fontWeight: 'bold' }}>排口名称</span>),
-                dataIndex: 'PointName',
-                key: 'PointName',
-                width: '25%',
-                align: 'left',
-                render: (text, record) => {
-                    return text;
-                }
-            },
-            {
-                title: (<span style={{ fontWeight: 'bold' }}>时间</span>),
-                dataIndex: 'AlarmResponseTime',
-                key: 'AlarmResponseTime',
-                align: 'left',
-                width: '25%',
-                render: (text, record) => {
-                    return text;
-                }
-            },
-            {
-                title: (<span style={{ fontWeight: 'bold' }}>2小时内</span>),
-                dataIndex: 'LessThan2Hour',
-                key: 'LessThan2Hour',
-                align: 'left',
-                width: '25%',
-                sorter: true,
-                render: (text, record) => {
-                    return text;
-                }
-            },
-            {
-                title: (<span style={{ fontWeight: 'bold' }}>超8小时</span>),
-                dataIndex: 'GreaterThan8Hour',
-                key: 'GreaterThan8Hour',
-                align: 'left',
-                width: '25%',
-                sorter: true,
-                render: (text, record) => {
-                    return text;
-                }
-            }
-        ];
+       
         return (
             <MonitorContent {...this.props} breadCrumbList={
                 [
@@ -378,7 +324,7 @@ export default class EntAlarmResponse extends Component {
                                     columns={columnsPoints}
                                     onChange={this.handleTableChange}
                                     size="small"// small middle
-                                    dataSource={this.props.pointsTableData}
+                                    dataSource={this.props.entTableData}
                                     scroll={{ y: 'calc(100vh - 390px)' }}
                                     pagination={{
                                         showSizeChanger: true,
