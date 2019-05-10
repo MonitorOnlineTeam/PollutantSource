@@ -16,13 +16,12 @@ import styles from './index.less';
 import ReactEcharts from 'echarts-for-react';
 import MonitorContent from '../../components/MonitorContent/index';
 import { connect } from 'dva';
-import {onlyOneEnt} from '../../config'
+import Link from 'umi/link';
 const Option = Select.Option;
 const pageUrl = {
     updateState: 'alarmresponse/updateState',
     getChartData: 'alarmresponse/getChartData',
-    getPointsData: 'alarmresponse/getPointsData',
-    getPointDaysData: 'alarmresponse/getPointDaysData'
+    getEntsData: 'alarmresponse/getEntsData',
 };
 const dateChildren = [];
 const dateYear = moment().get('year');
@@ -33,8 +32,8 @@ for (let i = dateYear; i > dateYear - 10; --i) {
     loading,
     alarmresponse
 }) => ({
-    loadingPointsTable: loading.effects[pageUrl.getPointsData],
-    loadingDays: loading.effects[pageUrl.getPointDaysData],
+    loadingPointsTable: loading.effects[pageUrl.getEntsData],
+ 
     total: alarmresponse.total,
     pageSize: alarmresponse.pageSize,
     pageIndex: alarmresponse.pageIndex,
@@ -44,10 +43,10 @@ for (let i = dateYear; i > dateYear - 10; --i) {
     xAxisData: alarmresponse.xAxisData,
     seriesData2: alarmresponse.seriesData2,
     seriesData8: alarmresponse.seriesData8,
-    pointsTableData: alarmresponse.pointsTableData,
+    entTableData: alarmresponse.entTableData,
     pointDaysTableData: alarmresponse.pointDaysTableData
 }))
-export default class AlarmResponse extends Component {
+export default class EntAlarmResponse extends Component {
     constructor(props) {
         super(props);
 
@@ -69,37 +68,23 @@ export default class AlarmResponse extends Component {
     }
     // 更新图表数据
     getChartData = (pageIndex) => {
-        const {entcode}=this.props.match.params;
         this.props.dispatch({
             type: pageUrl.getChartData,
             payload: {
-                entcode:entcode,
                 pageIndex: pageIndex,
             },
         });
     }
     // 更新所有排口列表数据
     getPointsTableData = (pageIndex) => {
-        const {entcode}=this.props.match.params;
         this.props.dispatch({
-            type: pageUrl.getPointsData,
+            type: pageUrl.getEntsData,
             payload: {
-                entcode:entcode,
                 pageIndex: pageIndex,
             },
         });
     }
-    // 更新弹窗列表数据
-    getPointDaysTableData = (pageIndex) => {
-        const {entcode}=this.props.match.params;
-        this.props.dispatch({
-            type: pageUrl.getPointDaysData,
-            payload: {
-                entcode:entcode,
-                pageIndex: pageIndex,
-            },
-        });
-    }
+ 
     handleTableChange = (pagination, filters, sorter) => {
         if (sorter.order) {
             this.updateState({
@@ -116,12 +101,7 @@ export default class AlarmResponse extends Component {
                 pageSize: pagination.pageSize
             });
         }
-
-        if (this.state.modalVisible) {
-            this.getPointDaysTableData(pagination.current);
-        } else {
-            this.getPointsTableData(pagination.current);
-        }
+       this.getPointsTableData(pagination.current);
     }
     onDateChange = (value, dateString) => {
         let endTime = moment(dateString).add(1, 'months').add(-1, 'days').format('YYYY-MM-DD HH:mm:ss');
@@ -151,7 +131,7 @@ export default class AlarmResponse extends Component {
                 endTime: endTime,
                 selectedDate: `${Year}-${Month}-01 00:00:00`,
                 clickDate: `${Year}-${Month}-01 00:00:00`,
-                pointsTableData: []
+                entTableData: []
             });
         } else {
             this.updateState({
@@ -159,23 +139,11 @@ export default class AlarmResponse extends Component {
                 endTime: endTime,
                 selectedDate: `${value}-01-01 00:00:00`,
                 clickDate: `${value}-01-01 00:00:00`,
-                pointsTableData: []
+                entTableData: []
             });
         }
         this.getChartData();
         this.getPointsTableData(1);
-    }
-    showModal = (params) => {
-        this.setState({
-            modalVisible: true,
-            pointName: params.PointName
-        });
-        this.updateState({
-            queryDGIMNs: params.DGIMNs,
-            pointDaysTableData: []
-
-        });
-        this.getPointDaysTableData(1);
     }
     handleModalOk = (e) => {
         console.log(e);
@@ -270,45 +238,17 @@ export default class AlarmResponse extends Component {
         };
         return option;
     }
-
-
-
     render() {
-
-        const entName=this.props.match.params.entname;
-        let tableTitle="";
-        let Crumbs=[  
-                      { Name: '首页', Url: '/' },
-                      { Name: '智能分析', Url: '' }
-                   ]
-        if(onlyOneEnt)
-        {
-            tableTitle=`${moment(this.props.clickDate).format('YYYY-MM')}月响应情况`
-            Crumbs=Crumbs.concat(
-               { Name: '月度排放量分析', Url: '' }
-            )
-        }
-        else
-        {
-            tableTitle=`${moment(this.props.clickDate).format('YYYY-MM')}月响应情况(${entName})`
-            Crumbs=Crumbs.concat(
-                { Name: '企业月度排放量分析', Url: '/analysis/alarmresponse' },
-                { Name: '排口月度排放量分析', Url: '' }
-             )
-        }
-
         const columnsPoints = [
             {
-                title: (<span style={{ fontWeight: 'bold' }}>排口名称</span>),
-                dataIndex: 'PointName',
-                key: 'PointName',
+                title: (<span style={{ fontWeight: 'bold' }}>企业名称</span>),
+                dataIndex: 'EntName',
+                key: 'EntName',
                 width: '50%',
                 align: 'left',
                 render: (text, record) => {
                     return (
-                        <a onClick={
-                            () => this.showModal(record)
-                        } > {text} </a>
+                        <Link to={`/analysis/pointalarmresponse/${record.EntCode}/${record.EntName}`}> {text} </Link>
                     );
                 }
             },
@@ -335,60 +275,18 @@ export default class AlarmResponse extends Component {
                 }
             }
         ];
-
-        const columnsDays = [
-            {
-                title: (<span style={{ fontWeight: 'bold' }}>排口名称</span>),
-                dataIndex: 'PointName',
-                key: 'PointName',
-                width: '25%',
-                align: 'left',
-                render: (text, record) => {
-                    return text;
-                }
-            },
-            {
-                title: (<span style={{ fontWeight: 'bold' }}>时间</span>),
-                dataIndex: 'AlarmResponseTime',
-                key: 'AlarmResponseTime',
-                align: 'left',
-                width: '25%',
-                render: (text, record) => {
-                    return text;
-                }
-            },
-            {
-                title: (<span style={{ fontWeight: 'bold' }}>2小时内</span>),
-                dataIndex: 'LessThan2Hour',
-                key: 'LessThan2Hour',
-                align: 'left',
-                width: '25%',
-                sorter: true,
-                render: (text, record) => {
-                    return text;
-                }
-            },
-            {
-                title: (<span style={{ fontWeight: 'bold' }}>超8小时</span>),
-                dataIndex: 'GreaterThan8Hour',
-                key: 'GreaterThan8Hour',
-                align: 'left',
-                width: '25%',
-                sorter: true,
-                render: (text, record) => {
-                    return text;
-                }
-            }
-        ];
-
+       
         return (
             <MonitorContent {...this.props} breadCrumbList={
-                Crumbs
+                [
+                    { Name: '首页', Url: '/' },
+                    { Name: '智能分析', Url: '' },
+                    { Name: '企业报警及时响应情况', Url: '' }
+                ]
             }>
                 <div className={styles.cardTitle} >
                     <Card
-                        // type="inner"
-                        title="报警及时响应统计"
+                        title="企业报警及时响应统计"
                         extra={
                             <span style={{ color: '#b3b3b3' }}>
                                 时间选择：
@@ -417,7 +315,7 @@ export default class AlarmResponse extends Component {
                                 style={{ marginTop: 16 }}
                                 // type="inner"
                                 bordered={false}
-                                title={tableTitle}>
+                                title={`${moment(this.props.clickDate).format('YYYY-MM')}月响应情况`}>
                                 <Table
                                     rowKey={(record, index) => `complete${index}`}
                                     style={{}}
@@ -426,7 +324,7 @@ export default class AlarmResponse extends Component {
                                     columns={columnsPoints}
                                     onChange={this.handleTableChange}
                                     size="small"// small middle
-                                    dataSource={this.props.pointsTableData}
+                                    dataSource={this.props.entTableData}
                                     scroll={{ y: 'calc(100vh - 390px)' }}
                                     pagination={{
                                         showSizeChanger: true,
@@ -441,34 +339,7 @@ export default class AlarmResponse extends Component {
                             </Card>
 
                         </Row>
-                        <Modal
-                            title={`${moment(this.props.clickDate).format('YYYY-MM')}月-${this.state.pointName}`}
-                            width="50%"
-                            visible={this.state.modalVisible}
-                            onOk={this.handleModalOk}
-                            onCancel={this.handleModalCancel}
-                            destroyOnClose={true}
-                        >
-                            <Table
-                                rowKey={(record, index) => `complete${index}`}
-                                style={{ marginTop: 16 }} className={styles.dataTable}
-                                loading={this.props.loadingDays}
-                                columns={columnsDays}
-                                onChange={this.handleTableChange}
-                                size="small"// small middle
-                                dataSource={this.props.pointDaysTableData}
-                                scroll={{ y: 500 }}
-                                pagination={{
-                                    showSizeChanger: true,
-                                    showQuickJumper: true,
-                                    sorter: true,
-                                    'total': this.props.total,
-                                    'pageSize': this.props.pageSize,
-                                    'current': this.props.pageIndex,
-                                    pageSizeOptions: ['10', '20', '30', '40', '50']
-                                }}
-                            />
-                        </Modal>
+                    
                     </Card>
                 </div>
             </MonitorContent>

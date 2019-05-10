@@ -333,7 +333,13 @@ class RealTimeWarningModal extends Component {
                 dataIndex: `${selectedPollutantCode}_StandardValue`,
                 width: '20%',
                 align: 'center',
-                render: (text, record) => selectPllutantInfo.standardValueStr,
+                render: (text, record) => {
+                    if(selectPllutantInfo)
+                    {
+                        return selectPllutantInfo.standardValueStr;
+                    }
+                    return null;
+                }
             },
             {
                 key:`${selectedPollutantCode}_SuggestValue`,

@@ -112,7 +112,7 @@ class RealTimeNetWorkingRate extends PureComponent {
             }];
         const tableData = this.props.networkeRateList.tableDatas.filter(data => data.RateValue!==1 );
         return <Table rowKey={(record, index) => `complete${index}`} loading={this.props.loadingRateStatistics}
-         columns={columns} dataSource={tableData} size="small" pagination={false} />;
+         columns={columns} dataSource={tableData.slice(0, 3)} size="small" pagination={false} />;
     }
 
     render() {

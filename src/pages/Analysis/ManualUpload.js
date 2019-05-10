@@ -141,6 +141,7 @@ export default class ManualUpload extends Component {
     }
     render() {
         const {upLoadParameters} = this.props;
+        console.log(upLoadParameters);
         return (
             <MonitorContent {...this.props} breadCrumbList={
                 [

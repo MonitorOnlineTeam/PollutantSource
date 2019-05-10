@@ -1,6 +1,7 @@
 import { queryalloverdatalist, queryreportlist, GetDocumentationList } from '../services/api';
 import { Model } from '../dvapack';
 import moment from 'moment';
+import {summaryPolluntantCode} from '../config';
 export default Model.extend({
     namespace: 'analysisdata',
     state: {
@@ -23,12 +24,21 @@ export default Model.extend({
             isfirst: true,
             documentationList: [],
         },
+        //超标报警分析参数
+        overdataParameters:{
+            pollutantCodeList:summaryPolluntantCode,
+            beginTime:null,
+            endTime:null,
+            entName:null
+        }
+
     },
     effects: {
         * queryalloverdatalist({
             payload,
-        }, { call, update }) {
-            const overdatalist = yield call(queryalloverdatalist, payload);
+        }, { call, update,select }) {
+            const {overdataParameters}=yield select(i=>i.analysisdata);
+            const overdatalist = yield call(queryalloverdatalist, overdataParameters);
             yield update({ overdatalist });
         },
         * queryreportlist({

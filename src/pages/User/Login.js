@@ -108,7 +108,7 @@ export default class Login extends Component {
                               )}
                           </FormItem>
                       </TabPane>
-                      <TabPane tab="手机号登录" key="mobile">
+                      {/* <TabPane tab="手机号登录" key="mobile">
                           {
                               login.status === 'error'
                 && login.type === 'mobile'
@@ -157,7 +157,7 @@ export default class Login extends Component {
                                   </Col>
                               </Row>
                           </FormItem>
-                      </TabPane>
+                      </TabPane> */}
                   </Tabs>
                   <FormItem className={styles.additional}>
                       {getFieldDecorator('remember', {

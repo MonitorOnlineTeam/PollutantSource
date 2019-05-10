@@ -29,6 +29,7 @@ let _thismap=null;
     datalist: overview.data,
     //企业的信息
     baseModel: overview.entbaseinfo,
+    selectent:overview.selectent,
     //加载所以初始化显示的信息
     maploading:loading.effects['overview/queryentdetail'],
     //选中的点
@@ -143,8 +144,19 @@ class MapContent extends Component {
   }
 
   render() {
-      let {maploading,baseModel,selectpoint,datalist}=this.props;
-      const baseinfo = baseModel[0];
+    if(maploading) {
+        return(<Spin
+            style={{ width: '100%',
+                height: 'calc(100vh/2)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center' }}
+            size="large"
+        />);
+    }
+      let {maploading,baseModel,selectpoint,datalist,selectent}=this.props;
+      debugger;
+      const baseinfo = selectent?selectent:baseModel;
       //地图中心
       let mapCenter;
       //厂界坐标
@@ -169,16 +181,7 @@ class MapContent extends Component {
           zoom=12;
           pointvisible=false;
       }
-      if(maploading) {
-          return(<Spin
-              style={{ width: '100%',
-                  height: 'calc(100vh/2)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center' }}
-              size="large"
-          />);
-      }
+     
       return (
           <Map
               events={this.mapEvents}

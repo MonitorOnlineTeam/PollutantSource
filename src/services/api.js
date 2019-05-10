@@ -306,13 +306,7 @@ export async function getPDPermitById(params) {
 
 // 获取企业超标排口汇总数据
 export async function queryalloverdatalist(params) {
-    const body = {
-        DGIMNs: params.dgimn,
-        beginTime: params.beginTime,
-        endTime: params.endTime,
-        pollutantCodeList: params.summaryPolluntantCode
-    };
-    const result = await post('/api/rest/PollutantSourceApi/OverData/GetAllPointOverDataList', body, null);
+    const result = await post('/api/rest/PollutantSourceApi/OverData/GetAllPointOverDataList', params, null);
     return result === null ? { data: null } : result.data;
 }
 
