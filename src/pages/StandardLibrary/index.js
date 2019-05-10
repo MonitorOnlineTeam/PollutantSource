@@ -229,7 +229,7 @@ export default class StandardLibrary extends Component {
         },
         {
             title: '操作',
-            width: '20%',
+            width: '26%',
             align: 'center',
             render: (text, record) => (<Fragment >
                 <Popconfirm placement="left" title="是否应用到当前所有监测点？" onConfirm={() => this.useAllDGIMN(record.key)} okText="是" cancelText="否">
@@ -237,8 +237,11 @@ export default class StandardLibrary extends Component {
                 </Popconfirm>
                  <Divider type="vertical" />
                 <a onClick={
-                    () => this.props.dispatch(routerRedux.push(`/sysmanage/StandardLibraryDetail/${record.key}`))
+                    () => this.props.dispatch(routerRedux.push(`/sysmanage/StandardLibraryEdit/${record.key}`))
                 } > 编辑 </a> <Divider type="vertical" />
+                <a onClick={
+                    () => this.props.dispatch(routerRedux.push(`/sysmanage/StandardLibraryDetail/${record.key}`))
+                } > 详情 </a> <Divider type="vertical" />
                 <Popconfirm placement="left" title="确定要删除此标准吗？" onConfirm={() => this.confirm(record.key)} okText="是" cancelText="否">
                     <a href="#" > 删除 </a>
                 </Popconfirm>
@@ -277,7 +280,7 @@ export default class StandardLibrary extends Component {
                                     }}style={{ width: 200 }} />
                                     <Button type="primary" style={{marginLeft:5}}
                                     onClick={() => {
-                                        this.props.dispatch(routerRedux.push(`/sysmanage/StandardLibraryDetail/null`));
+                                        this.props.dispatch(routerRedux.push(`/sysmanage/StandardLibrary/add`));
                                     }}>添加</Button>
                                      <Radio.Group defaultValue="0"  style={{marginLeft:5}} onChange={(e) => {
                                         console.log(e.target.value);

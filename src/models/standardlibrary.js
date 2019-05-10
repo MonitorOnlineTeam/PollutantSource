@@ -361,7 +361,7 @@ export default Model.extend({
                 requstresult: result.requstresult,
                 reason: result.reason
             });
-            payload.callback();
+            payload.callback && payload.callback();
         },
         /**获取标准库子表实体 */
         * getStandardlibrarypollutantbyid({
@@ -378,7 +378,7 @@ export default Model.extend({
                 requstresult: result.requstresult,
                 reason: result.reason
             });
-            payload.callback();
+            payload.callback && payload.callback();
         },
         /**获取所有污染物 */
         * getpollutantlist({

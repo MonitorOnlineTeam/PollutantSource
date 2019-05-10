@@ -101,7 +101,7 @@ export default Model.extend({
                 requstresult: result.requstresult,
                 reason: result.reason,
             });
-            payload.callback();
+            payload.callback && payload.callback();
         },
         /*获取运维人**/
         * getoperationsuserList({
@@ -123,7 +123,7 @@ export default Model.extend({
                     userlist: [],
                 });
             }
-            payload.callback();
+            payload.callback && payload.callback();
         },
         /*获取环保专工**/
         * getspecialworkeruserList({
@@ -144,7 +144,7 @@ export default Model.extend({
                     swuserlist: [],
                 });
             }
-            payload.callback();
+            payload.callback && payload.callback();
         },
         /*获取污染物类型**/
         * getpollutanttypelist({
@@ -166,7 +166,7 @@ export default Model.extend({
                     pollutanttypelist: [],
                 });
             }
-            payload.callback();
+            payload.callback && payload.callback();
         },
         /**获取气监测点类型 */
         * getgasoutputtypelist({
@@ -188,7 +188,7 @@ export default Model.extend({
                     gasoutputtypelist: [],
                 });
             }
-            payload.callback();
+            payload.callback && payload.callback();
         },
         /**获取单个监测点实体 */
         * getpoint({
@@ -205,7 +205,7 @@ export default Model.extend({
                 requstresult: result.requstresult,
                 editpoint: result.data[0]
             });
-            payload.callback();
+            payload.callback && payload.callback();
         },
         /**编辑监测点 */
         * editpoint({
@@ -221,7 +221,7 @@ export default Model.extend({
                 requstresult: result.requstresult,
                 reason: result.reason,
             });
-            payload.callback();
+            payload.callback && payload.callback();
         },
         /**删除监测点 */
         * deletepoint({
@@ -244,7 +244,7 @@ export default Model.extend({
                     ...payload
                 },
             });
-            payload.callback();
+            payload.callback && payload.callback();
         },
         /* 获取监测点CEMS监测子系统主表**/
         * getanalyzersys({
@@ -284,7 +284,7 @@ export default Model.extend({
                 addalyzersys_requstresult: result.requstresult,
                 reason: result.reason,
             });
-            payload.callback();
+            payload.callback && payload.callback();
         },
         /**获取监测点CEMS监测子系统实体*/
         * getanalyzersysmnmodel({
@@ -300,7 +300,7 @@ export default Model.extend({
                 getanalyzersysmnmodel_requstresult: result.requstresult,
                 editAnalyzerSys: result.data[0],
             });
-            payload.callback();
+            payload.callback && payload.callback();
         },
         /**编辑监测点CEMS监测子系统主表*/
         * editalyzersys({
@@ -332,7 +332,7 @@ export default Model.extend({
                 deletealyzersys_requstresult: result.requstresult,
                 reason: result.reason,
             });
-            payload.callback();
+            payload.callback && payload.callback();
         },
         /**获取测试项目 */
         * getcomponent({
@@ -349,7 +349,7 @@ export default Model.extend({
                 reason: result.reason,
                 component: result.data,
             });
-            payload.callback();
+            payload.callback && payload.callback();
         },
         /**添加监测点CEMS监测子系统子表*/
         * addalyzerchild({
@@ -365,7 +365,7 @@ export default Model.extend({
                 addalyzerchild_requstresult: result.requstresult,
                 reason: result.reason,
             });
-            payload.callback();
+            payload.callback && payload.callback();
         },
         /**获取监测点CEMS监测子系统主表下所有子表的数据*/
         * getanalyzerchild({
@@ -383,7 +383,7 @@ export default Model.extend({
                 reason: result.reason,
                 analyzerchild: result.data,
             });
-            payload.callback();
+            payload.callback && payload.callback();
         },
         /**获取监测点CEMS监测子系统子表实体*/
         * getanalyzerchildmodel({
@@ -400,7 +400,7 @@ export default Model.extend({
                 reason: result.reason,
                 editalyzersyschild: result.data[0],
             });
-            payload.callback();
+            payload.callback && payload.callback();
         },
         /**删除监测点CEMS监测子系统子表*/
         * deletealyzerchild({
@@ -414,7 +414,7 @@ export default Model.extend({
                 deletealyzerchild_requstresult: result.requstresult,
                 reason: result.reason,
             });
-            payload.callback();
+            payload.callback && payload.callback();
         },
         /**编辑监测点CEMS监测子系统子表*/
         * editalyzerchild({
@@ -430,7 +430,7 @@ export default Model.extend({
                 editalyzerchild_requstresult: result.requstresult,
                 reason: result.reason,
             });
-            payload.callback();
+            payload.callback && payload.callback();
         },
         * getmaininstrumentName({
             payload: {
