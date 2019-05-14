@@ -3,57 +3,54 @@ export function getPointStatusImg(status, stop, type = 1) {
         return '';
     }
 
-    let imgSrc, imgWidth;
+    let imgSrc; let imgWidth;
     if (type === 1) {
         imgWidth = 15;
         imgSrc = "/gisunline.png";
         if (status === 1) {
-            imgSrc = "/gisnormal.png"
+            imgSrc = "/gisnormal.png";
         }
         if (status === 2) {
-            imgSrc = "/gisover.png"
+            imgSrc = "/gisover.png";
         }
         if (status === 3) {
-            imgSrc = "/gisexception.png"
+            imgSrc = "/gisexception.png";
         }
     } else if(type === 2) {
         imgWidth = 20;
         imgSrc = "/gas@unline.png";
         if (status === 1) {
-            imgSrc = "/gas@normal.png"
+            imgSrc = "/gas@normal.png";
         }
         if (status === 2) {
-            imgSrc = "/gas@over.png"
+            imgSrc = "/gas@over.png";
         }
         if (status === 3) {
-            imgSrc = "/gas@exception.png"
+            imgSrc = "/gas@exception.png";
         }
-    }
-    else if(type === 10) {
+    } else if(type === 10) {
         imgWidth = 20;
         imgSrc = "/vocunline.png";
         if (status === 1) {
-            imgSrc = "/vocnormal.png"
+            imgSrc = "/vocnormal.png";
         }
         if (status === 2) {
-            imgSrc = "/vocover.png"
+            imgSrc = "/vocover.png";
         }
         if (status === 3) {
-            imgSrc = "/vocexception.png"
+            imgSrc = "/vocexception.png";
         }
-    }
-    else if(type === 12)
-    {
+    } else if(type === 12) {
         imgWidth = 20;
         imgSrc = "/dustunline.png";
         if (status === 1) {
-            imgSrc = "/dustnormal.png"
+            imgSrc = "/dustnormal.png";
         }
         if (status === 2) {
-            imgSrc = "/dustover.png"
+            imgSrc = "/dustover.png";
         }
         if (status === 3) {
-            imgSrc = "/dustexception.png"
+            imgSrc = "/dustexception.png";
         }
     }
     return <img style={{ width: imgWidth }} src={imgSrc} />;

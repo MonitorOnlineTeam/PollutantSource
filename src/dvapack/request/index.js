@@ -1,5 +1,7 @@
 import Cookie from 'js-cookie';
 import { notification } from 'antd';
+import router from 'umi/router';
+import { async } from 'q';
 
 const codeMessage = {
     200: '服务器成功返回请求的数据',
@@ -18,6 +20,105 @@ const codeMessage = {
     503: '服务不可用，服务器暂时过载或维护',
     504: '网关超时',
 };
+
+
+export function getCookie(name) {
+    const reg = new RegExp(`(^| )${ name }=([^;]*)(;|$)`);
+    const arr = document.cookie.match(reg);
+    if (arr) {
+        return decodeURIComponent(arr[2]);
+    }
+    return null;
+}
+
+export function getAuthHeader(ssoToken) {
+    return {
+        headers: {
+            'Accept': 'application/json',
+            'Authorization': `Bearer ${ssoToken}`,
+            'Content-Type': 'application/json',
+        },
+    };
+}
+
+const checkStatus = response => {
+    if (response.status >= 200 && response.status < 300) {
+        return response;
+    }
+    const errortext = codeMessage[response.status] || response.statusText;
+    notification.error({
+        message: `请求错误 ${response.status}`,//: ${response.url}
+        description: errortext,
+    });
+    const error = new Error(errortext);
+    error.name = response.status;
+    error.response = response;
+    throw error;
+};
+
+function parseJSON(response) {
+    return response.json();
+}
+
+async function requestNew(url, options) {
+    const ssoToken = `${getCookie('ssoToken')}`;
+    const authHeader = getAuthHeader(ssoToken);
+
+    const resp =await fetch(url, { ...options, ...authHeader })
+        .then(checkStatus)
+        .then(parseJSON)
+        .then((data) => ({ data }))
+        .catch(e => {
+            const status = e.name;
+            if (status === 401) {
+                // @HACK
+                /* eslint-disable no-underscore-dangle */
+                // window.g_app._store.dispatch({
+                //     type: 'user/login',
+                // });
+                router.push('user/login');
+                return;
+            }
+            // environment should not be used
+            if (status === 403) {
+                router.push('/exception/403');
+                return;
+            }
+            if (status <= 504 && status >= 500) {
+                router.push('/exception/500');
+                return;
+            }
+            if (status >= 404 && status < 422) {
+                router.push('/exception/404');
+            }
+        });
+
+    return (resp&&resp.data) || {IsSuccess:false,Datas:null,Message:"服务器内部错误"};
+}
+
+export async function getNew(url, params) {
+
+    if (params) {
+        const paramsArray = [];
+        Object.keys(params).forEach(key => paramsArray.push(`${key}=${params[key]}`));
+
+        if (url.indexOf('?') === -1) {
+            if (url.search(/\?/) === -1) {
+                url += `?${paramsArray.join('&')}`;
+            } else {
+                url += `&${paramsArray.join('&')}`;
+            }
+        } else {
+            url += `&${paramsArray.join('&')}`;
+        }
+    }
+    return requestNew(url, {method: 'GET'});
+}
+
+export async function postNew(url, params) {
+    return requestNew(url, {method: 'POST',body: JSON.stringify(params)});
+}
+
 
 async function geturl(url, tooken) {
     const usertoken = Cookie.get('token');

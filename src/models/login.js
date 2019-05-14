@@ -2,6 +2,7 @@ import Cookie from 'js-cookie';
 import router from 'umi/router';
 import { message } from 'antd';
 import { fakeAccountLogin, sendCaptcha, getip } from '../services/user';
+import { systemLogin, postAutoFromDataDelete,getListPager } from '../services/autoformapi';
 import { Model } from '../dvapack';
 
 const delay = (timeout) => new Promise(resolve => {
@@ -19,7 +20,10 @@ export default Model.extend({
     },
     effects: {
         * login({ payload }, { call, put, select }) {
-        
+           
+            const response1 = yield call(systemLogin);
+            const resss= yield call(postAutoFromDataDelete);
+            debugger;
             const MsgId = yield select(state => state.login.MsgId);
             if (payload.type === 'mobile') {
                 if (!MsgId) {
@@ -40,7 +44,7 @@ export default Model.extend({
             if (response.requstresult === '1') {
                 Cookie.set('token', response.data);
                 try {
-                    const ws = window.ws;
+                    const {ws} = window;
                     ws.send(response.data.User_Account);
                 } catch (error) {
 

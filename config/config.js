@@ -81,7 +81,7 @@ export default {
     // },
     "proxy": {
         "/api": {
-            "target": "http://172.16.12.152:8066/api",
+            "target": "http://localhost:52198",
             "changeOrigin": true,
             "pathRewrite": { "^/api": "" }
         },
