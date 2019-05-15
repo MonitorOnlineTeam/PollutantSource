@@ -65,6 +65,7 @@ export default Model.extend({
         },{
             call,update
         }){
+            debugger
             const body= {parentIDs:enterpriceid}
             const entbaseinfo = yield call(querypolluntantentinfolist, body);
             yield update({ entbaseinfo: entbaseinfo });
@@ -94,7 +95,12 @@ export default Model.extend({
                     type:'loadentdata',
                     payload:payload
                 })
+                yield put({
+                    type:'basicinfo/GetEnterpriseModel',
+                    payload:payload
+                })
                 yield take('loadentdata/@@end');
+                yield take('basicinfo/GetEnterpriseModel/@@end');
                 message.info('操作成功');
             } else {
                 message.info('操作失败');
@@ -110,7 +116,12 @@ export default Model.extend({
                     type:'loadentdata',
                     payload:payload
                 })
+                yield put({
+                    type:'basicinfo/GetEnterpriseModel',
+                    payload:payload
+                })
                 yield take('loadentdata/@@end');
+                yield take('basicinfo/GetEnterpriseModel/@@end');
                 message.info('操作成功');
             } else {
                 message.info('操作失败');

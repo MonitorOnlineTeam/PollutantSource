@@ -7,7 +7,6 @@ import { post, get } from '../dvapack/request';
     }
  */
 export async function querypolluntantentinfolist(params) {
-   
     const result = await post('/api/rest/PollutantSourceApi/PPointAndData/GetTargetList', params, null);
     return result === null ? { data: null } : result.data;
 }
@@ -61,7 +60,7 @@ export async function queryPSScalelist() {
     const body = {
     };
     const result = await post('/api/rest/PollutantSourceApi/PPointAndData/PSScaleList', body, null);
-    return result === null ? { data: null } : result.data;
+    return result === null ? { data: null } : result.data; 
 }
 
 /**注册类型码表
@@ -81,6 +80,15 @@ export async function querysubjectionrelationlist() {
     const result = await post('/api/rest/PollutantSourceApi/PPointAndData/SubjectionRelationList', body, null);
     return result === null ? { data: null } : result.data;
 }
+/**污染源类别码表
+ *  */ 
+export async function querypsClasslist() {
+    const body = {
+    };
+    const result = await post('/api/rest/PollutantSourceApi/PPointAndData/querypsClasslist', body, null);
+    return result === null ? { data: null } : result.data;
+}
+
 
 /**编辑企业信息 
  * */ 

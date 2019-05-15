@@ -502,7 +502,7 @@ class index extends PureComponent {
     }
     //加载图片
     loadImg=(baseinfo)=>{
-         let imgarray=[];
+         let imgarray=[]; 
          if(baseinfo)
          {
             baseinfo.imgNamelist.map(item => {
