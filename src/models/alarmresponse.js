@@ -5,7 +5,8 @@
  */
 
 import { Model } from '../dvapack';
-import { getAlarmResponseAllMonthStatistics, getSingleMonthAllPointAlarmResponseStatistics, getSinglePointDaysAlarmResponseStatistics } from '../services/AlarmResponseApi';
+import { getAlarmResponseAllMonthStatistics, getSingleMonthAllPointAlarmResponseStatistics, getSinglePointDaysAlarmResponseStatistics,
+    getSingleMonthAllEntAlarmResponseStatistics } from '../services/AlarmResponseApi';
 import moment from 'moment';
 
 export default Model.extend({
@@ -21,6 +22,7 @@ export default Model.extend({
         seriesData2: [],
         seriesData8: [],
         pointsTableData: [],
+        entTableData:[],
         pointDaysTableData: [],
         sort2: '',
         sort8: '',
@@ -34,9 +36,11 @@ export default Model.extend({
             let body = {
                 beginTime: beginTime,
                 endTime: endTime,
+                enterpriseCodes:(payload.entcode && payload.entcode!="null" && payload.entcode!="0")?[payload.entcode]:null,
             };
             const response = yield call(getAlarmResponseAllMonthStatistics, body);
 
+            
             if (response.data) {
                 let XAxisData = [];
                 let SeriesData2 = [];
@@ -53,7 +57,6 @@ export default Model.extend({
                     seriesData8: SeriesData8
                 });
             }
-            console.log('new', response);
         },
         * getPointsData({ payload }, { call, put, update, select }) {
             const { clickDate, pageIndex, pageSize, sort2, sort8 } = yield select(state => state.alarmresponse);
@@ -61,6 +64,7 @@ export default Model.extend({
                 monthTime: clickDate,
                 pageIndex: pageIndex,
                 pageSize: pageSize,
+                enterpriseCodes:(payload.entcode && payload.entcode!="null" && payload.entcode!="0")?[payload.entcode]:null,
                 sort2: sort2,
                 sort8: sort8
             };
@@ -75,6 +79,24 @@ export default Model.extend({
             const pointsTableData = yield select(state => state.alarmresponse.pointsTableData);
             console.log('new', pointsTableData);
         },
+        * getEntsData({ payload }, { call, put, update, select }) {
+            const { clickDate, pageIndex, pageSize, sort2, sort8 } = yield select(state => state.alarmresponse);
+            let body = {
+                monthTime: clickDate,
+                pageIndex: pageIndex,
+                pageSize: pageSize,
+                sort2: sort2,
+                sort8: sort8
+            };
+            const response = yield call(getSingleMonthAllEntAlarmResponseStatistics, body);
+
+            if (response.data) {
+                yield update({
+                    entTableData: response.data,
+                    total: response.total,
+                });
+            }
+        },
         * getPointDaysData({ payload }, { call, put, update, select }) {
             const { clickDate, pageIndex, pageSize, sort2, sort8, queryDGIMNs } = yield select(state => state.alarmresponse);
             let body = {
@@ -84,6 +106,7 @@ export default Model.extend({
                 DGIMNs: queryDGIMNs,
                 sort2: sort2,
                 sort8: sort8,
+                enterpriseCodes:(payload.entcode && payload.entcode!="null" && payload.entcode!="0")?[payload.entcode]:null,
             };
             const response = yield call(getSinglePointDaysAlarmResponseStatistics, body);
 

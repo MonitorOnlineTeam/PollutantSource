@@ -21,12 +21,13 @@ import MonitorContent from '../../components/MonitorContent/index';
 import styles from './index.less';
 import { connect } from 'dva';
 import { number } from 'prop-types';
-import {onlyOneEnt} from '../../config'
+import Link from 'umi/link';
+
 const { MonthPicker } = DatePicker;
 const monthFormat = 'YYYY-MM';
 const pageUrl = {
     updateState: 'equipmentoperatingrate/updateState',
-    getData: 'equipmentoperatingrate/getData'
+    getData: 'equipmentoperatingrate/getEntData'
 };
 @connect(({
     loading,
@@ -38,7 +39,7 @@ const pageUrl = {
     endTime: equipmentoperatingrate.endTime,
     pageSize: equipmentoperatingrate.pageSize,
     pageIndex: equipmentoperatingrate.pageIndex,
-    tableDatas: equipmentoperatingrate.tableDatas,
+    tableDatas: equipmentoperatingrate.enttableDatas,
     // //平均停产时间
     // avgstoptime:equipmentoperatingrate.avgstoptime,
     // //平均正常运转时间
@@ -46,7 +47,7 @@ const pageUrl = {
     // //平均生产
     // avgworktime:equipmentoperatingrate.avgworktime,
 }))
-export default class EquipmentOperatingRate extends Component {
+export default class EntEquipmentOperatingRate extends Component {
     constructor(props) {
         super(props);
 
@@ -65,12 +66,10 @@ export default class EquipmentOperatingRate extends Component {
         });
     }
     getTableData = (pageIndex) => {
-        const {entcode}=this.props.match.params;
         this.props.dispatch({
             type: pageUrl.getData,
             payload: {
                 pageIndex: pageIndex,
-                entcode:entcode
             },
         });
     }
@@ -104,12 +103,11 @@ export default class EquipmentOperatingRate extends Component {
     }
     render() {
         const { avgstoptime, avgnormaltime, avgworktime } = this.props;
-        const {entcode,entname}=this.props.match.params;
         const columns = [
             {
-                title: (<span style={{ fontWeight: 'bold' }}>排口名称</span>),
-                dataIndex: 'PointName',
-                key: 'PointName',
+                title: (<span style={{ fontWeight: 'bold' }}>企业名称</span>),
+                dataIndex: 'EnterpriseName',
+                key: 'EnterpriseName',
                 width: '20%',
                 align: 'left',
                 backgroundColor: 'red',
@@ -118,66 +116,18 @@ export default class EquipmentOperatingRate extends Component {
                 }
             },
             {
-                title: (<span style={{ fontWeight: 'bold' }}>正常运转时间</span>),
-                dataIndex: 'NormalRunTime',
-                key: 'NormalRunTime',
-                width: '20%',
-                align: 'left',
-                render: (text, record) => {
-                    if (record.AvgNormalRunTime <= text) {
-                        return <span className={styles.normaldata}>{text}</span>;
-                    }
-                    const content = (<span><Icon type="warning" style={{ color: '#EEC900' }} />平均值{record.AvgNormalRunTime}</span>)
-                    return (<Popover content={content} trigger="hover">
-                        <span className={styles.avgtext}>   <Badge className={styles.warningdata} status="warning" />{text}
-                        </span> </Popover>);
-                }
-            },
-            {
-                title: (<span style={{ fontWeight: 'bold' }}>生产时间</span>),
-                dataIndex: 'ProducesTime',
-                key: 'ProducesTime',
-                width: '15%',
-                align: 'left',
-                render: (text, record) => {
-                    if (record.AvgProducesTime <= text) {
-                        return <span className={styles.normaldata}>{text}</span>;
-                    }
-                    const content = (<span><Icon type="warning" style={{ color: '#EEC900' }} />平均值{record.AvgProducesTime}</span>)
-                    return (<Popover content={content} trigger="hover">
-                        <span className={styles.avgtext}><Badge className={styles.warningdata} status="warning" /> {text}
-                        </span> </Popover>);
-                }
-            },
-            {
-                title: (<span style={{ fontWeight: 'bold' }}>停产时间</span>),
-                dataIndex: 'StopProductionTime',
-                key: 'StopProductionTime',
-                width: '15%',
-                align: 'left',
-                render: (text, record) => {
-                    if (record.AvgStopProductionTime <= text) {
-                        return <span className={styles.normaldata}>{text}</span>;
-                    }
-                    const content = (<span><Icon type="warning" style={{ color: '#EEC900' }} />平均值{record.AvgStopProductionTime}</span>)
-                    return (<Popover content={content} trigger="hover">
-                        <span className={styles.avgtext}><Badge className={styles.warningdata} status="warning" /> {text}
-                        </span> </Popover>);
-                }
-            },
-            {
                 title: (<span style={{ fontWeight: 'bold' }}>运转率</span>),
                 dataIndex: 'RunningRate',
                 key: 'RunningRate',
-                width: '20%',
-                align: 'left',
+                align: 'center',
+                width:'40%',
                 sorter: true,
                 render: (text, record) => {
                     // 红色：#f5222d 绿色：#52c41a
                     const percent = (parseFloat(text) * 100).toFixed(2);
                     console.log(percent);
                     if (percent >= 90) {
-                        return (<div style={{ width: 200 }}>
+                        return (<div>
                             <Progress
                                 successPercent={percent}
                                 percent={percent-0}
@@ -185,7 +135,7 @@ export default class EquipmentOperatingRate extends Component {
                             />
                         </div>);
                     }
-                    return (<div style={{ width: 200 }}>
+                    return (<div>
                         <Progress
                             successPercent={0}
                             percent={percent-0}
@@ -204,51 +154,22 @@ export default class EquipmentOperatingRate extends Component {
                 align: 'center',
                 render: (text, record) => {
                     return (
-                        <a onClick={
-                            () => {
-                                this.props.dispatch({
-                                    type:pageUrl.updateState,
-                                    payload:{
-                                        entcode:entcode,
-                                        entname:entname
-                                    }
-                                })
-                                this.props.dispatch(routerRedux.push(`/pointdetail/${record.DGIMN}/pointequipmentoperatingrate/ywdsjlist`))}
-                        } > 查看运维 </a>
+                        <Link to={`/qualitycontrol/pointequipmentoperatingrate/${record.EnterpriseCode}/${record.EnterpriseName}`}> 查看详情 </Link>
                     );
                 }
             }
         ];
-
-        const entName=this.props.match.params.entname;
-        let tableTitle="";
-        let Crumbs=[  
-                      { Name: '首页', Url: '/' },
-                      { Name: '智能质控', Url: '' }
-                   ]
-        if(onlyOneEnt)
-        {
-            tableTitle=`设备运转率列表`
-            Crumbs=Crumbs.concat(
-               { Name: '设备运转率', Url: '' }
-            )
-        }
-        else
-        {
-            tableTitle=`设备运转率列表(${entName})`
-            Crumbs=Crumbs.concat(
-                { Name: '企业设备运转率', Url: '/qualitycontrol/equipmentoperatingrate' },
-                { Name: '排口设备运转率', Url: '' }
-             )
-        }
-
         return (
             <MonitorContent {...this.props} breadCrumbList={
-                Crumbs
+                [
+                    { Name: '首页', Url: '/' },
+                    { Name: '智能质控', Url: '' },
+                    { Name: '设备运转率', Url: '' }
+                ]
             }>
                 <Row className={styles.cardTitle}>
                     <Card
-                        title={tableTitle}
+                        title="设备运转率列表"
                         extra={
                             <span style={{ color: '#b3b3b3' }}>
                                 时间选择：
@@ -278,7 +199,6 @@ export default class EquipmentOperatingRate extends Component {
                                         marginLeft: 100,
                                         marginRight: 3
                                     }} /><span style={{ cursor: 'pointer' }}> 排口设备运转率未达标</span>
-                                    <Badge style={{ marginLeft: 100, marginBottom: 4 }} status="warning" /><span style={{ cursor: 'pointer' }}> 未达到平均值</span>
                                 </div>
                             </Col>
                         </Row>

@@ -89,6 +89,7 @@ handleSubmit = (e) => {
                         callback: () => {
                             if (this.props.requstresult === '1') {
                                 message.success('添加成功！');
+                                this.props.onOK && this.props.onOK();
                                 this.props.dispatch({
                                     type: 'standardlibrary/getstandardlibrarypollutantlist',
                                     payload: {

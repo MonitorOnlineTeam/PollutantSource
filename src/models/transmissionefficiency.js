@@ -5,7 +5,7 @@
  */
 
 import { Model } from '../dvapack';
-import { getMonthsTransmissionEfficiency } from '../services/TransmissionEfficiencyApi';
+import { getMonthsTransmissionEfficiency,getEntMonthsTransmissionEfficiency } from '../services/TransmissionEfficiencyApi';
 import moment from 'moment';
 
 export default Model.extend({
@@ -16,7 +16,8 @@ export default Model.extend({
         tableDatas: [],
         beginTime: moment().format('YYYY-MM-01 HH:mm:ss'),
         endTime: moment().format('YYYY-MM-DD HH:mm:ss'),
-        transmissionEffectiveRate: 'ascend'
+        transmissionEffectiveRate: 'ascend',
+        enttableDatas:[]
     },
     subscriptions: {
     },
@@ -24,9 +25,7 @@ export default Model.extend({
         * getData({payload}, { call, put, update, select }) {
             const {beginTime, endTime, pageSize, transmissionEffectiveRate} = yield select(state => state.transmissionefficiency);
             let body = {
-                // 'DGIMNs': ['sgjt001003', 'sgjt001004'],
-                // 'beginTime': '2018-11-01 00:00:00',
-                // 'endTime': '2018-11-30 00:00:00'
+                enterpriseCodes:(payload.entcode && payload.entcode!="null" && payload.entcode!="0")?[payload.entcode]:null,
                 beginTime: beginTime,
                 endTime: endTime,
                 pageSize: pageSize,
@@ -39,8 +38,23 @@ export default Model.extend({
                 total: response.total,
                 pageIndex: payload.pageIndex || 1,
             });
-            const tableDatasNew = yield select(state => state.transmissionefficiency.tableDatas);
-            console.log('new', tableDatasNew);
         },
+        * getEntData({payload}, { call, put, update, select }) {
+            const {beginTime, endTime, pageSize, transmissionEffectiveRate} = yield select(state => state.transmissionefficiency);
+            let body = {
+                beginTime: beginTime,
+                endTime: endTime,
+                pageSize: pageSize,
+                TERSort: transmissionEffectiveRate,
+                pageIndex: payload.pageIndex,
+            };
+            const response = yield call(getEntMonthsTransmissionEfficiency, body);
+            yield update({
+                enttableDatas: response.data,
+                total: response.total,
+                pageIndex: payload.pageIndex || 1,
+            });
+        },
+
     },
 });

@@ -19,12 +19,12 @@ import moment from 'moment';
 import styles from './index.less';
 import MonitorContent from '../../components/MonitorContent/index';
 import { connect } from 'dva';
-import {onlyOneEnt} from '../../config';
+import Link from 'umi/link';
 const { MonthPicker } = DatePicker;
 const monthFormat = 'YYYY-MM';
 const pageUrl = {
     updateState: 'transmissionefficiency/updateState',
-    getData: 'transmissionefficiency/getData'
+    getData: 'transmissionefficiency/getEntData'
 };
 @connect(({
     loading,
@@ -34,9 +34,9 @@ const pageUrl = {
     total: transmissionefficiency.total,
     pageSize: transmissionefficiency.pageSize,
     pageIndex: transmissionefficiency.pageIndex,
-    tableDatas: transmissionefficiency.tableDatas,
+    tableDatas: transmissionefficiency.enttableDatas,
 }))
-export default class TransmissionEfficiency extends Component {
+export default class EntTransmissionEfficiency extends Component {
     constructor(props) {
         super(props);
 
@@ -55,11 +55,9 @@ export default class TransmissionEfficiency extends Component {
         });
     }
     getTableData = (pageIndex) => {
-        const {entcode}=this.props.match.params;
         this.props.dispatch({
             type: pageUrl.getData,
             payload: {
-                entcode:entcode,
                 pageIndex: pageIndex,
             },
         });
@@ -104,9 +102,9 @@ export default class TransmissionEfficiency extends Component {
     render() {
         const columns = [
             {
-                title: (<span style={{ fontWeight: 'bold' }}>排口名称</span>),
-                dataIndex: 'PointName',
-                key: 'PointName',
+                title: (<span style={{ fontWeight: 'bold' }}>企业名称</span>),
+                dataIndex: 'EnterpriseName',
+                key: 'EnterpriseName',
                 width: '20%',
                 align: 'left',
                 render: (text, record) => {
@@ -114,58 +112,10 @@ export default class TransmissionEfficiency extends Component {
                 }
             },
             {
-                title: (<span style={{ fontWeight: 'bold' }}>应传个数</span>),
-                dataIndex: 'ShouldNumber',
-                key: 'ShouldNumber',
-                width: '10%',
-                align: 'left',
-                // render: (text, record) => {
-                //     if (record.AvgShouldNumber <= text) {
-                //         return <span className={styles.normaldata}>{text}</span>;
-                //     }
-                //     const content = (<span><Icon type="warning" style={{ color: '#EEC900' }} />平均值{record.AvgShouldNumber}</span>)
-                //     return (<Popover content={content} trigger="hover">
-                //         <span className={styles.avgtext}> <Badge className={styles.warningdata} status="warning" />{text}
-                //         </span> </Popover>);
-                // }·
-            },
-            {
-                title: (<span style={{ fontWeight: 'bold' }}>实传个数</span>),
-                dataIndex: 'TransmissionNumber',
-                key: 'TransmissionNumber',
-                width: '10%',
-                align: 'left',
-                render: (text, record) => {
-                    if (record.AvgTransmissionNumber <= text) {
-                        return <span className={styles.normaldata}>{text}</span>;
-                    }
-                    const content = (<span><Icon type="warning" style={{ color: '#EEC900' }} />平均值{record.AvgTransmissionNumber}</span>)
-                    return (<Popover content={content} trigger="hover">
-                        <span className={styles.avgtext}> <Badge className={styles.warningdata} status="warning" />{text}
-                        </span> </Popover>);
-                }
-            },
-            {
-                title: (<span style={{ fontWeight: 'bold' }}>有效个数</span>),
-                dataIndex: 'EffectiveNumber',
-                key: 'EffectiveNumber',
-                width: '13.3%',
-                align: 'left',
-                render: (text, record) => {
-                    if (record.AvgEffectiveNumber <= text) {
-                        return <span className={styles.normaldata}>{text}</span>;
-                    }
-                    const content = (<span><Icon type="warning" style={{ color: '#EEC900' }} />平均值{record.AvgEffectiveNumber}</span>)
-                    return (<Popover content={content} trigger="hover">
-                        <span className={styles.avgtext}><Badge className={styles.warningdata} status="warning" />{text}
-                        </span> </Popover>);
-                }
-            },
-            {
                 title: (<span style={{ fontWeight: 'bold' }}>传输率</span>),
                 dataIndex: 'TransmissionRate',
                 key: 'TransmissionRate',
-                width: '13.3%',
+                width: '15%',
                 align: 'left',
                 render: (text, record) => {
                     if (record.AvgTransmissionRate <= text) {
@@ -181,7 +131,7 @@ export default class TransmissionEfficiency extends Component {
                 title: (<span style={{ fontWeight: 'bold' }}>有效率</span>),
                 dataIndex: 'EffectiveRate',
                 key: 'EffectiveRate',
-                width: '13.3%',
+                width: '15%',
                 align: 'left',
                 sorter: (a, b) => a.EffectiveRate - b.EffectiveRate,
                 render: (text, record) => {
@@ -199,14 +149,14 @@ export default class TransmissionEfficiency extends Component {
                 dataIndex: 'TransmissionEffectiveRate',
                 key: 'TransmissionEffectiveRate',
                 // width: '250px',
-                width: '20%',
+                width: '30%',
                 // align: 'center',
                 sorter: true,
                 render: (text, record) => {
                     // 红色：#f5222d 绿色：#52c41a
                     const percent = (parseFloat(text) * 100).toFixed(2);
                     if (percent >= 90) {
-                        return (<div style={{ width: 200 }}>
+                        return (<div>
                             <Progress
                                 successPercent={percent}
                                 percent={percent - 0}
@@ -214,7 +164,7 @@ export default class TransmissionEfficiency extends Component {
                             />
                         </div>);
                     }
-                    return (<div style={{ width: 200 }}>
+                    return (<div>
                         <Progress
                             successPercent={0}
                             percent={percent - 0}
@@ -225,36 +175,30 @@ export default class TransmissionEfficiency extends Component {
                     </div>);
                 }
             },
+            {
+                title: (<span style={{ fontWeight: 'bold' }}>操作</span>),
+                dataIndex: 'opt',
+                key: 'opt',
+                width: '10%',
+                align: 'center',
+                render: (text, record) => {
+                    return (
+                        <Link to={`/qualitycontrol/pointtransmissionefficiency/${record.EnterpriseCode}/${record.EnterpriseName}`}> 查看详情 </Link>
+                    );
+                }
+            }
         ];
-        const entName=this.props.match.params.entname;
-        let tableTitle="";
-        let Crumbs=[  
-                      { Name: '首页', Url: '/' },
-                      { Name: '智能质控', Url: '' }
-                   ]
-        if(onlyOneEnt)
-        {
-            tableTitle=`传输有效率列表`
-            Crumbs=Crumbs.concat(
-               { Name: '传输有效率', Url: '' }
-            )
-        }
-        else
-        {
-            tableTitle=`传输有效率列表(${entName})`
-            Crumbs=Crumbs.concat(
-                { Name: '企业传输有效率', Url: '/qualitycontrol/transmissionefficiency' },
-                { Name: '排口传输有效率', Url: '' }
-             )
-        }
-
         return (
             <MonitorContent {...this.props} breadCrumbList={
-                Crumbs
+                [
+                    { Name: '首页', Url: '/' },
+                    { Name: '智能质控', Url: '' },
+                    { Name: '传输有效率', Url: '' }
+                ]
             }>
                 <Row className={styles.cardTitle}>
                     <Card
-                        title={tableTitle}
+                        title="传输有效率列表"
                         bordered={false}
                         extra={
                             <span style={{ color: '#b3b3b3' }}>
@@ -285,7 +229,6 @@ export default class TransmissionEfficiency extends Component {
                                         marginLeft: 100,
                                         marginRight: 3
                                     }} /><span style={{ cursor: 'pointer' }}> 排口传输有效率未达标</span>
-                                    <Badge style={{ marginLeft: 100, marginBottom: 4 }} status="warning" /><span style={{ cursor: 'pointer' }}> 未达到平均值</span>
                                 </div>
                             </Col>
                         </Row>

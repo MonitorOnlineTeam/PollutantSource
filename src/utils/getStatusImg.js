@@ -1,4 +1,4 @@
-export function getPointStatusImg(status, stop, type = 1) {
+export function getPointStatusImg(status, stop, type = 1,width) {
     if (stop) {
         return '';
     }
@@ -55,6 +55,10 @@ export function getPointStatusImg(status, stop, type = 1) {
         if (status === 3) {
             imgSrc = "/dustexception.png"
         }
+    }
+    if(width)
+    {
+        imgWidth=width;
     }
     return <img style={{ width: imgWidth }} src={imgSrc} />;
 }

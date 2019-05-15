@@ -42,7 +42,7 @@ export default [
         path: '/',
         component: '../layouts/BasicLayout',
         routes: [
-            //  { path: '/', redirect: '/homepage' },
+      //    { path: '/', redirect: '/homepage' },
             /* 主页 */
             {
                 path: '/homepage', component: './HomePage',
@@ -55,6 +55,8 @@ export default [
             { path: '/overview/datalistview', component: './OverView/DataList' },
             /* 地图一览 */
             { path: '/overview/mapview', component: './OverView/index' },
+            /* 监控地图 */
+            { path: '/overview/mapentview', component: './OverView/EntMapIndex' },
             /* 点位详情 */
             {
                 path: '/pointdetail/:pointcode/:viewtype', component: './PointDetail', routes: [
@@ -160,13 +162,26 @@ export default [
 
 
             /* 传输有效率 */
-            { path: '/qualitycontrol/transmissionefficiency', component: './QualityControl/TransmissionEfficiency' },
+            { path: '/qualitycontrol/transmissionefficiency', component: './QualityControl/TransmissionEfficiencyCommon' },
+
+            /* 传输有效率 */
+            { path: '/qualitycontrol/pointtransmissionefficiency/:entcode/:entname', component: './QualityControl/TransmissionEfficiency' },
+
             /* 设备运转率 */
-            { path: '/qualitycontrol/equipmentoperatingrate', component: './QualityControl/EquipmentOperatingRate' },
-            /* 月度排放量分析 */
-            { path: '/analysis/pollutantemissions', component: './Analysis/PollutantEmissions' },
-            /* 报警及时响应统计分析 */
-            { path: '/analysis/alarmresponse', component: './Analysis/AlarmResponse' },
+            { path: '/qualitycontrol/equipmentoperatingrate', component: './QualityControl/EquipmentOperatingRateCommon' },
+            /* 排口设备运转率 */
+            { path: '/qualitycontrol/pointequipmentoperatingrate/:entcode/:entname', component: './QualityControl/EquipmentOperatingRate' },
+            /* 月度企业排放量分析 */
+            { path: '/analysis/pollutantemissions', component: './Analysis/PollutantEmissionsCommon' },
+
+            /* 月度企业排放量分析 */
+            { path: '/analysis/pollutantemissionspoint/:entcode/:entname', component: './Analysis/PollutantEmissions' },
+
+            /* 企业报警及时响应统计分析 */
+            { path: '/analysis/alarmresponse', component: './Analysis/AlarmResponseCommon' },
+
+            /* 排口报警及时响应统计分析 */
+            { path: '/analysis/pointalarmresponse/:entcode/:entname', component: './Analysis/AlarmResponse' },
 
             /* 报警监测点分析 */
             { path: '/analysis/overpointlist', component: './Analysis/OverPointList' },
@@ -228,9 +243,13 @@ export default [
 
             /* 标准库管理 */
             { path: '/sysmanage/standardlibrary', component: './StandardLibrary' },
-
+            
+            /* 标准库管理-添加 */
+            { path: '/sysmanage/standardlibrary/add', component: './StandardLibrary/AddStandardLibrary' },
             /* 标准库管理-维护 */
-            { path: '/sysmanage/standardlibrarydetail/:StandardLibraryID', component: './StandardLibrary/AddStandardLibrary' },
+            { path: '/sysmanage/standardlibraryedit/:StandardLibraryID', component: './StandardLibrary/EditStandardLibrary' },
+            /* 标准库管理-维护 */
+            { path: '/sysmanage/StandardLibraryDetail/:StandardLibraryID', component: './StandardLibrary/StandardLibraryDetail' },
             /* 个人设置-维护 */
             {
                 path: '/account/settings',

@@ -12,6 +12,7 @@ import {post} from '../dvapack/request';
  */
 export async function getEquipmentOperatingRateForPoints(params) {
     const body = {
+        enterpriseCodes:params.enterpriseCodes,
         DGIMNs: params.DGIMNs,
         beginTime: params.beginTime,
         endTime: params.endTime,
@@ -21,6 +22,28 @@ export async function getEquipmentOperatingRateForPoints(params) {
     };
 
     const result = post('/api/rest/PollutantSourceApi/DataStatistics/GetEquipmentOperatingRateForPoints', body, null);
+
+    return result === null ? {
+        data: null
+    } : result;
+}
+
+
+/**
+ * 【设备运转率】获取一个或多个设备运转率（不传MN则查询所有设备）
+ * @params {"DGIMNs": ["sgjt001003","sgjt001004"],"beginTime":"2018-11-01 00:00:00","endTime":"2018-11-30 00:00:00"}
+ */
+export async function getEntEquipmentOperatingRateForPoints(params) {
+    const body = {
+        
+        beginTime: params.beginTime,
+        endTime: params.endTime,
+        EORSort: params.EORSort,
+        pageIndex: params.pageIndex || 1,
+        pageSize: params.pageSize || 15
+    };
+
+    const result = post('/api/rest/PollutantSourceApi/DataStatistics/GetEquipmentOperatingRateForEnterprises', body, null);
 
     return result === null ? {
         data: null

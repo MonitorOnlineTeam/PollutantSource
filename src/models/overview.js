@@ -8,14 +8,15 @@ import {
     Divider,
     message
 } from 'antd';
-import { mainpollutantInfo, mainpoll, enterpriceid } from "../config";
+import { mainpollutantInfo, mainpoll, enterpriceid,onlyOneEnt } from "../config";
 import {
     querypolluntantentinfolist
 } from '../services/entApi';
 import {
     querypollutanttypecode, getPollutantTypeList,
     querydatalist, querylastestdatalist, queryhistorydatalist,
-    querypollutantlist
+    querypollutantlist,
+    querygetentdatalist
 } from '../services/overviewApi';
 import { Model } from '../dvapack';
 import { isNullOrUndefined } from 'util';
@@ -38,7 +39,8 @@ export default Model.extend({
         detailtime: null,
         addtaskstatus: false,
         pollutantTypelist: null,
-        entbaseinfo: [],
+        entbaseinfo: null,
+        selectent:null,
         selectpoint: null,
         onlypollutantList: [],
         selectpollutantTypeCode: '',
@@ -46,12 +48,14 @@ export default Model.extend({
         columns: [],
         data: [],
         dataOne: null,//如果有点信息去第一个数据的MN号码
+        entlist:[],
         //数据一览的参数
         dataOverview: {
             selectStatus: null,
             time: moment(new Date()).add(-1, 'hour'),
             terate: null,
             pointName: null,
+            entName:null
         },
         mapdetailParams: {
             dataType: 'HourData',
@@ -73,7 +77,12 @@ export default Model.extend({
         * querypollutanttypecode({
             payload,
         }, { call, update, put, take, select }) {
+
             let gwidth = 300 + 140 + 70;
+            if(!onlyOneEnt)
+            {
+                gwidth=gwidth+300;
+            }
             const { dataOverview, selectpollutantTypeCode } = yield select(a => a.overview);
             const body = {
                 pollutantTypes: selectpollutantTypeCode,
@@ -93,14 +102,17 @@ export default Model.extend({
         * querydatalist({
             payload,
         }, { call, update, put, select }) {
-            const { dataOverview, selectpollutantTypeCode ,RunState} = yield select(a => a.overview);
-
+            //
+            const { dataOverview, selectpollutantTypeCode ,RunState,entbaseinfo} = yield select(a => a.overview);
+     
             let body = {
                 time: dataOverview.time,
                 pollutantTypes: selectpollutantTypeCode,
                 pointName: dataOverview.pointName,
                 status: dataOverview.selectStatus,
                 terate: dataOverview.terate,
+                entName:dataOverview.entName,
+                entCode:entbaseinfo==null?null: entbaseinfo.entCode,
                 ...payload
             }
             if(body.time)
@@ -141,15 +153,13 @@ export default Model.extend({
             payload,
         }, { call, update, put, take, select }) {
             const { upLoadParameters } = yield select(a => a.overview);
+            debugger;
             const body = {
                 pollutantTypes: upLoadParameters.pollutantTypes,
                 pointName: upLoadParameters.pointName,
                 RunState: upLoadParameters.RunState,
             }
-
-
             const data = yield call(querydatalist, body);
-
             if (data) {
                 yield update({ data });
                 yield update({ dataTemp: data });
@@ -160,9 +170,8 @@ export default Model.extend({
             yield update({
                 upLoadParameters: {
                     ...upLoadParameters,
-                    ...{
-                        manualUploaddataOne: data == null ? '0' : data[0].DGIMN
-                    }
+                    manualUploaddataOne: data == null ? '0' : data[0].DGIMN
+                   
                 }
             });
         },
@@ -477,7 +486,6 @@ export default Model.extend({
             payload
         }, { call, update, put, take }) {
             const res = yield call(getPollutantTypeList, payload);
-            console.log(res);
             if (res ) {
                 yield update({
                     pollutantTypelist: res
@@ -505,7 +513,14 @@ export default Model.extend({
         }, { call, update, put, take }) {
             const body= {parentIDs:enterpriceid};
             const entbaseinfo = yield call(querypolluntantentinfolist,body);
-            yield update({ entbaseinfo: entbaseinfo });
+            if(entbaseinfo)
+            {
+                yield update({ entbaseinfo: entbaseinfo[0] });
+            }
+            else
+            {
+                yield update({ entbaseinfo: null });
+            }
             yield put({
                 type: 'getPollutantTypeList',
                 payload: {
@@ -513,6 +528,13 @@ export default Model.extend({
                 },
             });
             yield take('getPollutantTypeList/@@end');
+        },
+        * querygetentdatalist({
+            payload,
+        }, { call, update, put, take }) {
+            const body = {entName:payload.entName};
+            const entlist = yield call(querygetentdatalist,body);
+            yield update({ entlist });
         },
     }
 });

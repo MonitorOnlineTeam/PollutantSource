@@ -5,6 +5,8 @@ import {
 import { connect } from 'dva';
 import {getPointStatusImg} from '../../utils/getStatusImg';
 import styles from './Tree.less';
+import {onlyOneEnt} from '../../config';
+
 
 @connect(({ loading, overview, maintenancelist, workbenchmodel, tasklist, points, manualupload }) => ({
     //点位数据信息
@@ -12,7 +14,6 @@ import styles from './Tree.less';
     //加载数据
     isloading: loading.effects['overview/querydatalist'],
     manualUploadisloading: loading.effects['overview/manualUploadQuerydatalist'],
-
     DGIMN: maintenancelist.DGIMN, //点击的MN号码（不点击默认加载第一个）
     OperationCalendar: workbenchmodel.OperationCalendar,
     tasklist: tasklist.DGIMN,
@@ -29,19 +30,23 @@ class TreeCardContent extends Component {
     }
 
     componentWillMount() {
-        if (this.props.runState !== undefined) {
-            this.props.dispatch({
+        const {runState,already,dispatch}=this.props;
+        if ( runState !== undefined) {
+            dispatch({
                 type: 'overview/manualUploadQuerydatalist',
                 payload: {
                 },
             });
         }
         else {
-            this.props.dispatch({
-                type: 'overview/querydatalist',
-                payload: {
-                },
-            });
+            if(!already)
+            {
+                 dispatch({
+                    type: 'overview/querydatalist',
+                    payload: {
+                    },
+                });
+            }
         }
 
     }
@@ -65,6 +70,10 @@ class TreeCardContent extends Component {
             default: return this.props.DGIMN;
         }
     }
+    
+  
+    
+
     getTreeDatalist = () => {
         const { isloading, treedatalist, PollutantType, noselect } = this.props;
         var flag = this.flag(this.props.flag);
@@ -85,7 +94,7 @@ class TreeCardContent extends Component {
                                 { getPointStatusImg(item.status, false, item.pollutantTypeCode) }
                             </span>
                             <span className={styles.pointName}>
-                                {item.pointName}
+                                 { onlyOneEnt?"":item.abbreviation+"-"}{item.pointName}
                             </span><span className={styles.pollutantType}>
                                 {item.pollutantType ? item.pollutantType : '废气'}
                             </span>

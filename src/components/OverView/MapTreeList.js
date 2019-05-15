@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
-import { Spin,Input,Tabs, Badge } from 'antd';
+import { Spin,Input,Tabs, Badge, Button } from 'antd';
 import { connect } from 'dva';
 import moment from 'moment';
 import styles from './MapTreeList.less';
 import { mainpoll } from '../../config';
 import {getPointStatusImg} from '../../utils/getStatusImg';
 import PointTree from '../../components/OverView/TreeCardContent';
+import {onlyOneEnt} from '../../config';
 
 
 const Search = Input.Search;
@@ -101,8 +102,17 @@ class MapTreeList extends Component {
              },
          });
      }
+     backbutton=()=>{
+         this.props.dispatch({
+             type:"overview/updateState",
+             payload:{
+                entbaseinfo:null,
+                selectent:null
+             }
+         })
+     }
      render() {
-         const {maploading,selectpollutantTypeCode}=this.props;
+         const {maploading,selectpollutantTypeCode,isback}=this.props;
          if(maploading) {
              return '';
          }
@@ -125,11 +135,12 @@ class MapTreeList extends Component {
                     <Badge status="success" text="在线" />
                     <Badge status="error" text="超标" />
                     <Badge status="warning" text="异常" />
+                   { !isback?'':<Button onClick={this.backbutton} className={styles.backbutton}>返回</Button>}
                  </div>
-
+                 
                  <div>
                      <div className={styles.treelist} style={{ width: '400px',marginTop: 5,background:'#fff' }}>
-                        <PointTree noselect={true} style={{ overflow: 'auto', width: 400, background: '#fff' }} getHeight='calc(100vh - 200px)'
+                        <PointTree noselect={true} style={{ overflow: 'auto', width: 400, background: '#fff' }} already={true} getHeight='calc(100vh - 200px)'
                            treeCilck={this.treeCilck} PollutantType={selectpollutantTypeCode}
                         />
                      </div>

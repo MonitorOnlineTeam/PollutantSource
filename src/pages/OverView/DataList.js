@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
-import { Table, Radio, Card, TimePicker, Icon, Button, Spin, Popover, Badge, Divider,Popconfirm } from 'antd';
+import { Table, Radio, Card, TimePicker, Icon, Button, Spin, Popover, Badge, Divider,Popconfirm,Input } from 'antd';
 import moment from 'moment';
 import { routerRedux } from 'dva/router';
 import styles from './DataList.less';
@@ -8,6 +8,8 @@ import AListRadio from '../../components/OverView/AListRadio';
 import PdButton from '../../components/OverView/PdButton';
 import {getPointStatusImg} from '../../utils/getStatusImg';
 import {formatPollutantPopover} from '../../utils/utils';
+import {onlyOneEnt} from '../../config';
+
 const RadioGroup = Radio.Group;
 @connect(({ loading, overview }) => ({
     columnsdata: overview.columns,
@@ -161,6 +163,19 @@ class dataList extends PureComponent {
        exist={record.existTask}  pollutantTypeCode={record.pollutantTypeCode}  name={record.operationUserName} tel={record.operationtel} viewType="datalist"/>
     </div>)
 
+    entOnSearch=(value)=>{
+        let {dataOverview}=this.props; 
+        dataOverview.entName=value;
+        this.reloadData(dataOverview);
+    }
+
+    renderEntSearch=()=>{
+        if(onlyOneEnt)
+        {
+            return "";
+        }
+        return (<Input.Search style={{width:300 ,marginRight: 50}} onSearch={this.entOnSearch} placeholder="请输入企业名称进行搜索" />);
+    }
        
         render() {
             const {selectStatus,terate,time}=this.props.dataOverview;
@@ -182,7 +197,19 @@ class dataList extends PureComponent {
                 render: (value, record, index) => {
                     return getPointStatusImg(record.status,record.stop);
                 },
-            }, {
+            }
+            ];
+            if(!onlyOneEnt)
+            {
+                columns=columns.concat({
+                        title: '企业名称',
+                        dataIndex: 'entName',
+                        key: 'entName',
+                        width: 300,
+                        fixed: fixed,
+                })
+            }
+            columns=columns.concat({
                 title: '监测点',
                 dataIndex: 'pointName',
                 key: 'pointName',
@@ -211,11 +238,8 @@ class dataList extends PureComponent {
                             {lable}
                         </span>
                             </Popover>);
-                },
-            },
-
-            ];
-
+                }
+            })
             let csyxl = 0;
             if (selectpollutantTypeCode == 2) {
                 csyxl = 140;
@@ -240,7 +264,12 @@ class dataList extends PureComponent {
             const scroll = document.body.scrollWidth - 40;
             if (gwidth < scroll && coldata[0]) {
                 gwidth = scroll;
-                colwidth = (scroll - (300 + csyxl + 70)) / coldata.length;
+                let oneent=600;
+                if(onlyOneEnt)
+                {
+                    oneent=300;
+                }
+                colwidth = (scroll - (oneent + csyxl + 70)) / coldata.length;
             }
 
             const res = coldata[0] ? coldata.map((item, key) => {
@@ -293,9 +322,11 @@ class dataList extends PureComponent {
                                     {this.getPollutantDoc()}
                                 </Radio.Group>
 
+                             
                                 <div style={{ width: 'calc(100vw - 220px)', marginLeft: 60 }}>
                                     <AListRadio style={{ float: 'right' }} dvalue="b" />
                                     <div style={{ float: 'right', marginTop: 3 }}>
+                                    {this.renderEntSearch()}
                                         {this.getcsyxlButton()}
                                         <span onClick={() => this.statusChange(1)} className={selectStatus===1 ? styles.selectStatus : styles.statusButton}><img className={styles.statusButtonImg} src="../../../gisnormal.png" />正常</span>
                                         <span onClick={() => this.statusChange(2)} className={selectStatus===2 ? styles.selectStatus : styles.statusButton}><img className={styles.statusButtonImg} src="../../../gisover.png" />超标</span>
