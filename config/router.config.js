@@ -239,9 +239,13 @@ export default [
 
             /* 标准库管理 */
             { path: '/sysmanage/standardlibrary', component: './StandardLibrary' },
-
+            
+            /* 标准库管理-添加 */
+            { path: '/sysmanage/standardlibrary/add', component: './StandardLibrary/AddStandardLibrary' },
             /* 标准库管理-维护 */
-            { path: '/sysmanage/standardlibrarydetail/:StandardLibraryID', component: './StandardLibrary/AddStandardLibrary' },
+            { path: '/sysmanage/standardlibraryedit/:StandardLibraryID', component: './StandardLibrary/EditStandardLibrary' },
+            /* 标准库管理-维护 */
+            { path: '/sysmanage/StandardLibraryDetail/:StandardLibraryID', component: './StandardLibrary/StandardLibraryDetail' },
             /* 个人设置-维护 */
             {
                 path: '/account/settings',
