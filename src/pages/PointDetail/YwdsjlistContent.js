@@ -6,10 +6,9 @@ import { routerRedux } from 'dva/router';
 import RangePicker_ from '../../components/PointDetail/RangePicker_';
 import Ywdsjlistss from './Ywdsjlist.less';
 import { EnumPatrolTaskType, EnumOperationTaskStatus } from '../../utils/enum';
-
 const RadioButton = Radio.Button;
 const RadioGroup = Radio.Group;
-@connect(({ tasklist, loading }) => ({
+@connect(({ tasklist, loading, equipmentoperatingrate }) => ({
     isloading: loading.effects['tasklist/GetYwdsj'],
     taskLists: tasklist.taskLists,
     isOver: tasklist.isOver,
@@ -18,7 +17,8 @@ const RadioGroup = Radio.Group;
     beginTime: tasklist.beginTime, //运维大事记开始时间
     endTime: tasklist.endTime, //运维大事记结束时间
     IsAlarmTimeout: tasklist.IsAlarmTimeout, //是否报警响应超时
-    DGIMN: tasklist.DGIMN
+    DGIMN: tasklist.DGIMN,
+   
 }))
 class YwdsjlistContent extends Component {
     constructor(props) {

@@ -164,12 +164,18 @@ class dataList extends PureComponent {
     </div>)
 
     entOnSearch=(value)=>{
-        debugger;
         let {dataOverview}=this.props; 
         dataOverview.entName=value;
         this.reloadData(dataOverview);
     }
 
+    renderEntSearch=()=>{
+        if(onlyOneEnt)
+        {
+            return "";
+        }
+        return (<Input.Search style={{width:300 ,marginRight: 50}} onSearch={this.entOnSearch} placeholder="请输入企业名称进行搜索" />);
+    }
        
         render() {
             const {selectStatus,terate,time}=this.props.dataOverview;
@@ -320,7 +326,7 @@ class dataList extends PureComponent {
                                 <div style={{ width: 'calc(100vw - 220px)', marginLeft: 60 }}>
                                     <AListRadio style={{ float: 'right' }} dvalue="b" />
                                     <div style={{ float: 'right', marginTop: 3 }}>
-                                    <Input.Search style={{width:300 ,marginRight: 50}} onSearch={this.entOnSearch} placeholder="请输入企业名称进行搜索" />
+                                    {this.renderEntSearch()}
                                         {this.getcsyxlButton()}
                                         <span onClick={() => this.statusChange(1)} className={selectStatus===1 ? styles.selectStatus : styles.statusButton}><img className={styles.statusButtonImg} src="../../../gisnormal.png" />正常</span>
                                         <span onClick={() => this.statusChange(2)} className={selectStatus===2 ? styles.selectStatus : styles.statusButton}><img className={styles.statusButtonImg} src="../../../gisover.png" />超标</span>

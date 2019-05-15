@@ -156,8 +156,6 @@ export default class UserList extends Component {
         }
     }
     render() {
-        //const {isMultiEnterprise}=this.props;
-        //debugger;
         const dataMenu=(id,userName,roleName) => (
             <Menu onClick={(e) => {
                 this.onMenu.bind()(e.key, id,userName,roleName);

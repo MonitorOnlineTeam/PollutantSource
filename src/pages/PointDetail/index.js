@@ -11,19 +11,22 @@ import { routerRedux } from 'dva/router';
 import styles from './index.less';
 import PdButton from '../../components/OverView/PdButton';
 import {getPointStatusImg} from '../../utils/getStatusImg';
+import {onlyOneEnt} from '../../config';
 const RadioGroup = Radio.Group;
 const { TabPane } = Tabs;
 const { Search } = Input.Search;
 
 
-@connect(({ points, loading, overview }) => ({
+@connect(({ points, loading, overview,equipmentoperatingrate }) => ({
     pointInfo: points.selectpoint,
     tablist:points.tablist||[],
     loadingModel: loading.effects['overview/querydatalist'],
     isloading: loading.effects['points/querysinglepointinfo'],
     pointList: overview.data,
     dataTemp: overview.dataTemp,
-    pollutantTypelist:overview.pollutantTypelist
+    pollutantTypelist:overview.pollutantTypelist,
+    entcode:equipmentoperatingrate.entcode,
+    entname:equipmentoperatingrate.entname
 }))
 class PointDetail extends Component {
     constructor(props) {
@@ -144,9 +147,18 @@ class PointDetail extends Component {
                     optStatus.push(<li key={2}><Tag className={styles.fault}>故障中</Tag></li>);
                 }
             }
+
+            let pointName=item.pointName;
+            let xl=6;
+            if(!onlyOneEnt)
+            {
+             
+                pointName=`(${item.abbreviation})`+item.pointName;
+                xl=8
+            }
             rtnVal.push(
                 <div key={item.DGIMN}>
-                    <Col xs={12} sm={12} md={6} lg={6} xl={6}>
+                    <Col  xl={xl}>
                         <Card
                             style={{ cursor: 'pointer', border: `${item.DGIMN === this.props.pointInfo.DGIMN ? '1px solid #81c2ff' : '1px solid #fff'}` }}
                             onClick={() => {
@@ -156,7 +168,7 @@ class PointDetail extends Component {
                             loading={this.state.loadingCard}
                         >
                             <div className={styles.cardContent}>
-                                <p>{status}<span className={styles.pointName}>{item.pointName}</span></p>
+                                <p>{status}<span className={styles.pointName}>{pointName}</span></p>
                                 <p className={styles.TEF}>传输有效率<span>{item.transmissionEffectiveRate || '-'}</span></p>
                                 <p className={styles.TEF}>类型：<span>{item.pollutantType}</span></p>
                             </div>
@@ -284,11 +296,12 @@ class PointDetail extends Component {
 
     getBackButton=()=>{
         const viewtype= this.props.match.params.viewtype;
+        const {entcode,entname}=this.props;
         let backpath=`/overview/${viewtype}`;
         if(viewtype==="pointinfo"){
             backpath=`/sysmanage/${viewtype}`;
-        }else if(viewtype==="equipmentoperatingrate"){
-            backpath=`/qualitycontrol/${viewtype}`;
+        }else if(viewtype==="pointequipmentoperatingrate"){
+            backpath=`/qualitycontrol/${viewtype}/${entcode}/${entname}`;
         }
         else if(viewtype==='homepage')
         {
@@ -400,7 +413,9 @@ class PointDetail extends Component {
                             onSearch={(value) => {
                                 if (value) {
 
-                                    let polist=this.props.pointList.filter(todo=>todo.pointName.indexOf(value)>-1);
+                                    let polist=this.props.pointList.filter(todo=>todo.pointName.indexOf(value)>-1 ||
+                                    todo.entName.indexOf(value)>-1
+                                    || todo.abbreviation.indexOf(value)>-1);
                                     if(pollutantTypeKey!==0) {
                                         polist=polist.filter(todo=>todo.pollutantTypeCode==pollutantTypeKey);
                                     }

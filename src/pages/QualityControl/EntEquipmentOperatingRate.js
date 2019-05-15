@@ -21,11 +21,13 @@ import MonitorContent from '../../components/MonitorContent/index';
 import styles from './index.less';
 import { connect } from 'dva';
 import { number } from 'prop-types';
+import Link from 'umi/link';
+
 const { MonthPicker } = DatePicker;
 const monthFormat = 'YYYY-MM';
 const pageUrl = {
     updateState: 'equipmentoperatingrate/updateState',
-    getData: 'equipmentoperatingrate/getData'
+    getData: 'equipmentoperatingrate/getEntData'
 };
 @connect(({
     loading,
@@ -37,7 +39,7 @@ const pageUrl = {
     endTime: equipmentoperatingrate.endTime,
     pageSize: equipmentoperatingrate.pageSize,
     pageIndex: equipmentoperatingrate.pageIndex,
-    tableDatas: equipmentoperatingrate.tableDatas,
+    tableDatas: equipmentoperatingrate.enttableDatas,
     // //平均停产时间
     // avgstoptime:equipmentoperatingrate.avgstoptime,
     // //平均正常运转时间
@@ -104,8 +106,8 @@ export default class EntEquipmentOperatingRate extends Component {
         const columns = [
             {
                 title: (<span style={{ fontWeight: 'bold' }}>企业名称</span>),
-                dataIndex: 'PointName',
-                key: 'PointName',
+                dataIndex: 'EnterpriseName',
+                key: 'EnterpriseName',
                 width: '20%',
                 align: 'left',
                 backgroundColor: 'red',
@@ -117,15 +119,15 @@ export default class EntEquipmentOperatingRate extends Component {
                 title: (<span style={{ fontWeight: 'bold' }}>运转率</span>),
                 dataIndex: 'RunningRate',
                 key: 'RunningRate',
-                width: '20%',
-                align: 'left',
+                align: 'center',
+                width:'40%',
                 sorter: true,
                 render: (text, record) => {
                     // 红色：#f5222d 绿色：#52c41a
                     const percent = (parseFloat(text) * 100).toFixed(2);
                     console.log(percent);
                     if (percent >= 90) {
-                        return (<div style={{ width: 200 }}>
+                        return (<div>
                             <Progress
                                 successPercent={percent}
                                 percent={percent-0}
@@ -133,7 +135,7 @@ export default class EntEquipmentOperatingRate extends Component {
                             />
                         </div>);
                     }
-                    return (<div style={{ width: 200 }}>
+                    return (<div>
                         <Progress
                             successPercent={0}
                             percent={percent-0}
@@ -152,9 +154,7 @@ export default class EntEquipmentOperatingRate extends Component {
                 align: 'center',
                 render: (text, record) => {
                     return (
-                        <a onClick={
-                            () => this.props.dispatch(routerRedux.push(`/pointdetail/${record.DGIMN}/equipmentoperatingrate/ywdsjlist`))
-                        } > 查看运维 </a>
+                        <Link to={`/qualitycontrol/pointequipmentoperatingrate/${record.EnterpriseCode}/${record.EnterpriseName}`}> 查看详情 </Link>
                     );
                 }
             }
@@ -199,7 +199,6 @@ export default class EntEquipmentOperatingRate extends Component {
                                         marginLeft: 100,
                                         marginRight: 3
                                     }} /><span style={{ cursor: 'pointer' }}> 排口设备运转率未达标</span>
-                                    <Badge style={{ marginLeft: 100, marginBottom: 4 }} status="warning" /><span style={{ cursor: 'pointer' }}> 未达到平均值</span>
                                 </div>
                             </Col>
                         </Row>

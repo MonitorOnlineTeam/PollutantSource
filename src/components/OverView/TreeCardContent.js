@@ -75,7 +75,7 @@ class TreeCardContent extends Component {
     
 
     getTreeDatalist = () => {
-        const { isloading, treedatalist, PollutantType, noselect,onlyOneEnt } = this.props;
+        const { isloading, treedatalist, PollutantType, noselect } = this.props;
         var flag = this.flag(this.props.flag);
         let res = [];
         let pollutantType = this.props.PollutantType;

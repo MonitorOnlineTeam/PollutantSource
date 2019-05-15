@@ -148,13 +148,13 @@ class OverPointList extends Component {
                                 <div style={{clear:'both'}}></div>
                             </div>
                             <div className={styles.factor}> 
-                            <span style={{width:105}} className={styles.spancontent}>二氧化硫 : {zs02p?zs02p.Count:'-'}次</span>
+                            <span style={{width:105}} className={styles.spancontent}>SO2 : {zs02p?zs02p.Count:'-'}次</span>
                                 <span style={{width:180}} className={styles.spancontent}>超标倍数 : {zs02p?(zs02p.MinMultiple+'-'+ zs02p.MaxMultiple):'-'}</span>
                                 <span className={styles.spancontent}>最新浓度:{zs02p?(zs02p.lastValue):'-'}</span>
                                 <div style={{clear:'both'}}></div>
                             </div>
                             <div className={styles.factorlast}> 
-                            <span style={{width:105}} className={styles.spancontent}>氮氧化物 : {zs03p?zs03p.Count:'-'}次</span>
+                            <span style={{width:105}} className={styles.spancontent}>NOx : {zs03p?zs03p.Count:'-'}次</span>
                                 <span style={{width:180}} className={styles.spancontent}>超标倍数 : {zs03p?(zs03p.MinMultiple+'-'+ zs03p.MaxMultiple):'-'}</span>
                                 <span className={styles.spancontent}>最新浓度 : {zs03p?(zs03p.lastValue):'-'}</span>
                                 <div style={{clear:'both'}}></div>

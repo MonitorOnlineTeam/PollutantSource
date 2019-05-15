@@ -15,12 +15,34 @@ export async function getMonthsTransmissionEfficiency(params) {
         DGIMNs: params.DGIMNs,
         beginTime: params.beginTime,
         endTime: params.endTime,
+        enterpriseCodes:params.enterpriseCodes,
         TERSort: params.TERSort,
         pageIndex: params.pageIndex || 1,
         pageSize: params.pageSize || 15
     };
 
     const result = post('/api/rest/PollutantSourceApi/DataStatistics/GetTransmissionEfficiencyForPoints', body, null);
+
+    return result === null ? {
+        data: null
+    } : result;
+}
+
+/**
+ * 【传输有效率】获取一个或多个排口传输有效率等等
+ * @params {"DGIMNs": ["sgjt001003","sgjt001004"],"beginTime":"2018-11-01 00:00:00","endTime":"2018-11-30 00:00:00"}
+ */
+export async function getEntMonthsTransmissionEfficiency(params) {
+    const body = {
+        DGIMNs: params.DGIMNs,
+        beginTime: params.beginTime,
+        endTime: params.endTime,
+        TERSort: params.TERSort,
+        pageIndex: params.pageIndex || 1,
+        pageSize: params.pageSize || 15
+    };
+
+    const result = post('/api/rest/PollutantSourceApi/DataStatistics/GetTransmissionEfficiencyForEnterprises', body, null);
 
     return result === null ? {
         data: null
