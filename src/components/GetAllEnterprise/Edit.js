@@ -98,6 +98,7 @@ class edit extends PureComponent {
         const { dispatch, match: { params: { ID } } } = this.props;
         this.getEnterpriseModel();
         var EntCode = this.props.match.params.ID;
+   
         if (ID !== 'null') {
             dispatch({
                 type: pageUrl.getEnterpriseModel,
@@ -121,8 +122,21 @@ class edit extends PureComponent {
                 },
             });
         }
+        else {
+            this.updateState({
+                EnterpriseModel:[],
+            });
+        }
     }
-
+    /**
+* 更新model中的state
+*/
+    updateState = (payload) => {
+        this.props.dispatch({
+            type: 'basicinfo/updateState',
+            payload: payload,
+        });
+    }
     loaddata = (par) => {
         const { dispatch } = this.props;
         var EntCode = par;
@@ -308,7 +322,7 @@ class edit extends PureComponent {
                     }
                 });
             } else {
-                debugger
+            
                 form.validateFieldsAndScroll((err) => {
                     if (!err) {
                         if (this.state.TargetRegionCode === "") {
@@ -435,7 +449,7 @@ class edit extends PureComponent {
         let res = [];
         if (polygonChange) {
             let arr = eval(polygonChange);
-            debugger
+         
             for (let i = 0; i < arr.length; i++) {
                 res.push(<Polygon
                     key={i}
@@ -450,7 +464,7 @@ class edit extends PureComponent {
                 />);
             }
         }
-        debugger
+       
         return res;
     }
 
@@ -552,14 +566,7 @@ class edit extends PureComponent {
                     </FormItem>
                     <Divider dashed={true} style={{ border: '1px dashed #FFFFFF' }} />
                     <FormItem style={{ width: '400px' }} {...formItemLayout} label="行政区">
-
                         {getFieldDecorator('TargetRegionCode', {
-                            initialValue: baseinfo == null || baseinfo == undefined || baseinfo.length === 0 ? '' : baseinfo.TargetCorporationName,
-                            rules: [{
-                                required: true,
-                                message: '请输入法人编号',
-                            }],
-
                         })(
                             <EnterpriseMultiSelect
                                 width="300px"
@@ -881,6 +888,7 @@ class edit extends PureComponent {
         } = match.params;
         //   const baseinfo = EnterpriseModel === null || ID === "null" ? null : EnterpriseModel;
         const baseinfo = EnterpriseModel.length === 0 || EnterpriseModel === undefined ? null : EnterpriseModel;
+      
         let polygonChange;
         let log;
         let lat;

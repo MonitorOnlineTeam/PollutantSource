@@ -45,6 +45,15 @@ class GetAllEnterprise extends Component {
 
     componentWillMount() {
         const { EnterpriseManageList } = this.props;
+        this.updateState({
+            EnterpriseManageList: {
+                ...this.props.EnterpriseManageList,
+                ...{
+                    RegionCode: null,
+                    EntName: null,
+                }
+            }
+        });
         this.onChange();
     }
 
@@ -156,7 +165,7 @@ class GetAllEnterprise extends Component {
                 <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
                     <Col md={8} sm={24}>
                         <FormItem {...this.formLayout} label="行政区" style={{ width: '100%' }}>
-                            <EnterpriseMultiSelect width="100%" minWidth="250px" getRegionCode={this.getRegionCode} RegionCode="" DefaultValue={null} />
+                            <EnterpriseMultiSelect width="250px" minWidth="250px" getRegionCode={this.getRegionCode} RegionCode="" DefaultValue={null} />
                         </FormItem>
                     </Col>
                     <Col md={8} sm={24}>
@@ -424,9 +433,9 @@ class GetAllEnterprise extends Component {
                         </Popconfirm>
                         <Divider type="vertical" />
                         <a onClick={
-                            () =>{
+                            () => {
                                 this.props.dispatch(routerRedux.push(`/sysmanage/pointinfo/${record.TargetCode}/${record.TargetName}`))
-                        }}
+                            }}
                         > 关联排口
                         </a>
                     </Fragment>,

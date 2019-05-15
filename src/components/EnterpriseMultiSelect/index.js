@@ -24,6 +24,7 @@ class index extends Component {
         super(props);
         this.state = {
             RegionCode: this.props.RegionCode === null ? "" : this.props.RegionCode,
+            Cascaderval: null,
         };
     }
 
@@ -51,19 +52,26 @@ class index extends Component {
     };
 
     onChange = (value, selectedOptions) => {
+        this.setState({
+            Cascaderval: value
+        });
         this.props.getRegionCode(value);
     }
 
     render() {
+
         const { width, minWidth, RegionArr, DefaultValue, disabled } = this.props;
         let val;
+
         if (DefaultValue !== null && DefaultValue !== undefined) {
+
             val = DefaultValue.split(',');
         }
         return (
             <div style={{ margin: 0, width: width, minWidth: minWidth }}>
                 <Cascader
                     options={RegionArr}
+                    value={this.state.Cascaderval ? this.state.Cascaderval : (DefaultValue === null ? [] : val)}
                     defaultValue={DefaultValue === null ? [] : val}
                     loadData={
                         this.loadData

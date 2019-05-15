@@ -74,7 +74,6 @@ export default Model.extend({
         }) {
             // const { EnterpriseManageList } = yield select(state => state.basicinfo);
             const { EnterpriseManageList } = yield select(a => a.basicinfo);
-debugger
             let body = {
                 pageIndex: EnterpriseManageList.pageIndex,
                 pageSize: EnterpriseManageList.pageSize,
