@@ -36,6 +36,8 @@ export default Model.extend({
             pageSize: 10,
             pageIndex: 1,
             total: 0,
+            RegionCode: null,
+            EntName: null,
         },
         EnterpriseModel: [],
         industryTypelist: [],
@@ -70,12 +72,16 @@ export default Model.extend({
             update,
             select,
         }) {
-            const {
-                EnterpriseManageList
-            } = yield select(state => state.basicinfo);
-            const result = yield call(GetEnterpriseManageList, {
-                ...payload
-            });
+            // const { EnterpriseManageList } = yield select(state => state.basicinfo);
+            const { EnterpriseManageList } = yield select(a => a.basicinfo);
+debugger
+            let body = {
+                pageIndex: EnterpriseManageList.pageIndex,
+                pageSize: EnterpriseManageList.pageSize,
+                regionCode: EnterpriseManageList.RegionCode,
+                name: EnterpriseManageList.EntName,
+            }
+            const result = yield call(GetEnterpriseManageList, body);
             yield update({
                 EnterpriseManageList: {
                     ...EnterpriseManageList,
@@ -84,8 +90,6 @@ export default Model.extend({
                         requstresult: result.requstresult,
                         reason: result.reason,
                         total: result.total,
-                        pageIndex: payload.pageIndex,
-                        pageSize: payload.pageSize
                     }
                 }
             });

@@ -18,10 +18,11 @@ export async function GetEnterpriseManageList(params) {
     const body = {
         pageIndex: params.pageIndex,
         pageSize: params.pageSize,
-        code: params.RegionCode,
-        name:params.EntName,
+        regionCode: params.regionCode,
+        name:params.name,
     };
-    const result = post('/api/rest/PollutantSourceApi/PEnt/GetEntList', body, null);
+    debugger
+    const result = post('/api/rest/PollutantSourceApi/PPointAndData/GetEntList', body, null);
     return result === null ? {
         data: null
     } : result;
