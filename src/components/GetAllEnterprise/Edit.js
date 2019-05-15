@@ -77,6 +77,7 @@ class edit extends PureComponent {
             TargetPSClassCodes: "", //污染源类别
             Province: "", //行政区
             EntCode: null,
+            TargetRegionCode: "",
         };
 
         this.mapEvents = {
@@ -94,7 +95,6 @@ class edit extends PureComponent {
 
     /**初始化加载 */
     componentWillMount() {
-        debugger
         const { dispatch, match: { params: { ID } } } = this.props;
         this.getEnterpriseModel();
         var EntCode = this.props.match.params.ID;
@@ -113,7 +113,8 @@ class edit extends PureComponent {
                                 TargetPSClassCode: this.props.EnterpriseModel.TargetPSClassCode,
                                 TargetSubjectionRelationCode: this.props.EnterpriseModel.TargetSubjectionRelationCode,
                                 TargetPSClassCodes: this.props.EnterpriseModel.TargetPSClassCodes,
-                                Province: this.props.EnterpriseModel.Province,
+                                TargetRegionCode: this.props.EnterpriseModel.TargetRegionCode,
+
                             });
                         }
                     }
@@ -154,11 +155,11 @@ class edit extends PureComponent {
             //     str += `${value},`;
             // });
             this.setState({
-                Province: str,
+                TargetRegionCode: str,
             });
         } else {
             this.setState({
-                Province: "",
+                TargetRegionCode: "",
             });
         }
     }
@@ -202,7 +203,7 @@ class edit extends PureComponent {
             <ImgInfo imagelist={ImgList !== null && ImgList !== "" && ImgList !== undefined && ImgList.length !== 0 ? ImgList : ''}
                 uuid={baseinfo !== null && baseinfo !== "" && baseinfo !== undefined ? baseinfo.TargetPhoto : ''}
                 TargetCode={ID === "null" ? (baseinfo ? baseinfo.TargetCode : "") : ID}
-                path={'/BasicInfo/enterprisemanageedit/' + ID === "null" ? (baseinfo ? baseinfo.TargetCode : "") : ID} />
+                path={'/BasicInfo/enterprisemanageedit/' + ID === "null" ? (baseinfo ? baseinfo.TargetCode : "") : ID + "/" + null} />
         )
 
     }
@@ -256,7 +257,7 @@ class edit extends PureComponent {
         } else {
             const allvalue = form.getFieldsValue();
             if (ID === "null") {
-                form.validateFields((err) => {
+                form.validateFieldsAndScroll((err) => {
                     if (!err) {
                         dispatch({
                             type: pageUrl.addEnterpriseManage,
@@ -264,7 +265,7 @@ class edit extends PureComponent {
                                 EntName: allvalue.TargetName, //企业名称
                                 CorporationCode: allvalue.TargetCorporationCode,//法人编号
                                 CorporationName: allvalue.TargetCorporationName,//法人名称
-                                RegionCode: this.state.Province,//行政区
+                                RegionCode: this.state.TargetRegionCode,//行政区
                                 EntAddress: allvalue.TargetEntAddress,//企业地址
                                 AttentionCode: this.state.TargetAttentionCode,//关注程度
                                 RegistTypeCode: this.state.TargetRegistTypeCode,//注册类型
@@ -307,54 +308,73 @@ class edit extends PureComponent {
                     }
                 });
             } else {
-                form.validateFields((err) => {
+                debugger
+                form.validateFieldsAndScroll((err) => {
                     if (!err) {
-                        dispatch({
-                            type: pageUrl.updateEnterpriseManage,
-                            payload: {
-                                EntCode: ID,
-                                EntName: allvalue.TargetName, //企业名称
-                                CorporationCode: allvalue.TargetCorporationCode,//法人编号
-                                CorporationName: allvalue.TargetCorporationName,//法人名称
-                                RegionCode: this.state.Province,//行政区
-                                EntAddress: allvalue.TargetEntAddress,//企业地址
-                                AttentionCode: this.state.TargetAttentionCode,//关注程度
-                                RegistTypeCode: this.state.TargetRegistTypeCode,//注册类型
-                                UnitTypeCode: this.state.TargetUnitTypeCode,//单位类型
-                                PSScaleCode: this.state.TargetPSClassCode,//污染源规模
-                                SubjectionRelationCode: this.state.TargetSubjectionRelationCode,//隶属关系
-                                PSEnvironmentDept: allvalue.AbbreviTargetPSEnvironmentDeptation,//环保部门
-                                EnvironmentPrincipal: allvalue.TargetEnvironmentPrincipal,//环保负责人
-                                EnvironmentMans: allvalue.TargetEnvironmentMans,//专职环保人员
-                                RunDate: allvalue.TargetRunDate !== "" ? allvalue.TargetRunDate.format('YYYY-MM-DD HH:mm:ss') : null,//运行时间
-                                OfficePhone: allvalue.TargetOfficePhone, //办公电话
-                                Fax: allvalue.TargetFax,//传真
-                                MobilePhone: allvalue.TargetMobilePhone,//移动电话
-                                AreaCode: allvalue.TargetAreaCode,//管辖区域
-                                PSClassCode: this.state.TargetPSClassCodes,//污染源类别
-                                Linkman: allvalue.TargetLinkman,//关联人
-                                TotalArea: allvalue.TargetTotalArea,//占地面积
-                                Comment: allvalue.TargetComment,//备注
-                                Longitude: allvalue.LongitudeLatitude.split(',')[0],//经度
-                                Latitude: allvalue.LongitudeLatitude.split(',')[1],//经度
-                                CoordinateSet: allvalue.TargetCoordinateSet,//厂界
+                        if (this.state.TargetRegionCode === "") {
+                            this.props.form.setFields({ // 设置验证返回错误
+                                TargetRegionCode: {
+                                    value: allvalue.TargetRegionCode,
+                                    errors: [new Error('请输入行政区')],
+                                },
+                            });
+                        }
+                        else {
+                            this.props.form.setFields({ // 设置验证返回错误
+                                TargetRegionCode: {
+                                    value: allvalue.TargetRegionCode,
+                                    //  errors: [new Error('')],
+                                },
+                            });
+                            dispatch({
+                                type: pageUrl.updateEnterpriseManage,
+                                payload: {
+                                    EntCode: ID,
+                                    EntName: allvalue.TargetName, //企业名称
+                                    CorporationCode: allvalue.TargetCorporationCode,//法人编号
+                                    CorporationName: allvalue.TargetCorporationName,//法人名称
+                                    RegionCode: this.state.TargetRegionCode,//行政区
+                                    EntAddress: allvalue.TargetEntAddress,//企业地址
+                                    AttentionCode: this.state.TargetAttentionCode,//关注程度
+                                    RegistTypeCode: this.state.TargetRegistTypeCode,//注册类型
+                                    UnitTypeCode: this.state.TargetUnitTypeCode,//单位类型
+                                    PSScaleCode: this.state.TargetPSClassCode,//污染源规模
+                                    SubjectionRelationCode: this.state.TargetSubjectionRelationCode,//隶属关系
+                                    PSEnvironmentDept: allvalue.AbbreviTargetPSEnvironmentDeptation,//环保部门
+                                    EnvironmentPrincipal: allvalue.TargetEnvironmentPrincipal,//环保负责人
+                                    EnvironmentMans: allvalue.TargetEnvironmentMans,//专职环保人员
+                                    RunDate: allvalue.TargetRunDate !== "" ? allvalue.TargetRunDate.format('YYYY-MM-DD HH:mm:ss') : null,//运行时间
+                                    OfficePhone: allvalue.TargetOfficePhone, //办公电话
+                                    Fax: allvalue.TargetFax,//传真
+                                    MobilePhone: allvalue.TargetMobilePhone,//移动电话
+                                    AreaCode: allvalue.TargetAreaCode,//管辖区域
+                                    PSClassCode: this.state.TargetPSClassCodes,//污染源类别
+                                    Linkman: allvalue.TargetLinkman,//关联人
+                                    TotalArea: allvalue.TargetTotalArea,//占地面积
+                                    Comment: allvalue.TargetComment,//备注
+                                    Longitude: allvalue.LongitudeLatitude.split(',')[0],//经度
+                                    Latitude: allvalue.LongitudeLatitude.split(',')[1],//经度
+                                    CoordinateSet: allvalue.TargetCoordinateSet,//厂界
 
-                                callback: (result) => {
-                                    if (result.requstresult === '1') {
-                                        this.setState({
-                                            isedit: true,
-                                            buttontext: '编辑',
-                                            className: styles.editInput
-                                        }, () => {
-                                            message.success("修改成功！").then(() => dispatch(routerRedux.push(`/BasicInfo/enterprisemanageedit/${result.reason}`)));
-                                        });
-                                    } else {
-                                        message.err(result.reason);
+                                    callback: (result) => {
+                                        if (result.requstresult === '1') {
+                                            this.setState({
+                                                isedit: true,
+                                                buttontext: '编辑',
+                                                className: styles.editInput
+                                            }, () => {
+                                                message.success("修改成功！").then(() => dispatch(routerRedux.push(`/BasicInfo/enterprisemanageedit/${result.reason}/${null}`)));
+                                            });
+                                        } else {
+                                            message.err(result.reason);
 
+                                        }
                                     }
-                                }
-                            },
-                        });
+                                },
+                            });
+                        }
+
+
                     }
                 });
             }
@@ -364,10 +384,6 @@ class edit extends PureComponent {
     /**返回 */
     back = () => {
         this.props.dispatch(routerRedux.push(`/sysmanage/entoperation`));
-    };
-
-    showModal = () => {
-        this.props.dispatch(routerRedux.push('/sysmanage/emissionpermits'));
     };
 
     hideModal = () => {
@@ -409,7 +425,6 @@ class edit extends PureComponent {
             longitude: this.child.props.form.getFieldValue('longitude'),
             latitude: this.child.props.form.getFieldValue('latitude')
         });
-        debugger
         this.props.form.setFieldsValue({
             LongitudeLatitude: `${this.child.props.form.getFieldValue('longitude')},${this.child.props.form.getFieldValue('latitude')}`,
             TargetCoordinateSet: `${this.child.props.form.getFieldValue('polygon')}` === "null" ? null : `${this.child.props.form.getFieldValue('polygon')}`,
@@ -420,6 +435,7 @@ class edit extends PureComponent {
         let res = [];
         if (polygonChange) {
             let arr = eval(polygonChange);
+            debugger
             for (let i = 0; i < arr.length; i++) {
                 res.push(<Polygon
                     key={i}
@@ -434,6 +450,7 @@ class edit extends PureComponent {
                 />);
             }
         }
+        debugger
         return res;
     }
 
@@ -536,12 +553,13 @@ class edit extends PureComponent {
                     <Divider dashed={true} style={{ border: '1px dashed #FFFFFF' }} />
                     <FormItem style={{ width: '400px' }} {...formItemLayout} label="行政区">
 
-                        {getFieldDecorator('TargetCorporationName', {
+                        {getFieldDecorator('TargetRegionCode', {
                             initialValue: baseinfo == null || baseinfo == undefined || baseinfo.length === 0 ? '' : baseinfo.TargetCorporationName,
                             rules: [{
                                 required: true,
-                                message: '请输入行政区',
+                                message: '请输入法人编号',
                             }],
+
                         })(
                             <EnterpriseMultiSelect
                                 width="300px"
@@ -691,7 +709,7 @@ class edit extends PureComponent {
                             {
                                 initialValue: baseinfo == null || baseinfo == undefined || baseinfo.length === 0 ? '' : baseinfo.TargetRunDate === null ? '' : moment(baseinfo.TargetRunDate),
                             })(
-                                <DatePicker />
+                                <DatePicker disabled={isedit} />
                             )}
                     </FormItem>
 
@@ -841,6 +859,10 @@ class edit extends PureComponent {
                     <FormItem style={{ width: '400px' }} {...formItemLayout} label="厂界">
                         {getFieldDecorator('TargetCoordinateSet', {
                             initialValue: baseinfo == null || baseinfo == undefined || baseinfo.length === 0 ? '' : baseinfo.TargetCoordinateSet,
+                            rules: [{
+                                required: true,
+                                message: '请输入厂界',
+                            }],
                         })(
                             <TextArea style={{ width: 300 }} readOnly={true} placeholder={'请点击编辑厂界'} rows={4} />
                         )}
@@ -858,11 +880,7 @@ class edit extends PureComponent {
             ID
         } = match.params;
         //   const baseinfo = EnterpriseModel === null || ID === "null" ? null : EnterpriseModel;
-        debugger
         const baseinfo = EnterpriseModel.length === 0 || EnterpriseModel === undefined ? null : EnterpriseModel;
-        console.log(baseinfo);
-        console.log(EnterpriseModel);
-        // let allcoo;
         let polygonChange;
         let log;
         let lat;
@@ -938,7 +956,9 @@ class edit extends PureComponent {
                                 <Carousel autoplay={true} >
                                     {this.loadImg(baseinfo)}
                                 </Carousel>
-                                <Button onClick={this.imgshowModal} className={styles.PhotoDetails} >图片管理</Button>
+                                {
+                                    this.props.match.params.Detail === "detail" ? '' : <Button onClick={this.imgshowModal} className={styles.PhotoDetails} >图片管理</Button>
+                                }
                                 <Modal
                                     title="照片管理"
                                     visible={this.state.imgvisible}
@@ -984,8 +1004,9 @@ class edit extends PureComponent {
                     {/* 表单 */}
 
                     <Divider orientation="right">
-
-                        <Button onClick={this.startedit} type="primary" className={styles.button}><Icon type="edit" />{this.state.buttontext}</Button>
+                        {
+                            this.props.match.params.Detail === "detail" ? '' : <Button onClick={this.startedit} type="primary" className={styles.button}><Icon type="edit" />{this.state.buttontext}</Button>
+                        }
                         {
                             this.state.isedit ? '' : <Button style={{ marginLeft: 10 }} className={styles.button} onClick={this.showEditCoordinate}><Icon type="schedule" />编辑厂界</Button>
                         }

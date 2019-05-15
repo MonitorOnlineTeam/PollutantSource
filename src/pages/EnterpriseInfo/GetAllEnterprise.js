@@ -17,7 +17,7 @@ import { connect } from 'dva';
 import MonitorContent from '../../components/MonitorContent/index';
 import EnterpriseMultiSelect from '../../components/EnterpriseMultiSelect/index';
 import styles from './EnterpriseManager.less';
-
+const Search = Input.Search;
 const FormItem = Form.Item;
 /*
 页面：基本管理-企业管理
@@ -39,48 +39,24 @@ const pageUrl = {
 class GetAllEnterprise extends Component {
     constructor(props) {
         super(props);
-
         this.state = {
-            RegionCode: "",
-            EntName: "",
         };
     }
 
     componentWillMount() {
         const { EnterpriseManageList } = this.props;
-        this.onChange(EnterpriseManageList.pageIndex, EnterpriseManageList.pageSize);
+        this.onChange();
     }
 
     /**分页--加载列表 */
-    onChange = (pageIndex, pageSize) => {
+    onChange = () => {
         const { dispatch } = this.props;
         dispatch({
             type: pageUrl.getEnterpriseManageList,
             payload: {
-                pageIndex: pageIndex,
-                pageSize: pageSize,
-                RegionCode: this.state.RegionCode,
-                EntName: this.state.EntName,
             },
         });
     }
-
-    // /**项目管理--启用或结束项目 */
-    // operationproject = (ID) => {
-    //     this.props.dispatch({
-    //         type: pageUrl.operationproject,
-    //         payload: {
-    //             ID: ID,
-    //             pageIndex: this.props.EnterpriseManageList.pageIndex,
-    //             pageSize: this.props.EnterpriseManageList.pageSize,
-    //             callback: (result) => {
-    //                 if (result.requstresult === '0') {
-    //                     message.error(result.reason);
-    //                 }
-    //             }
-    //         },
-    //     });
-    // };
 
     /**项目管理--删除项目 */
     deleteEnterprise = (ID) => {
@@ -95,9 +71,8 @@ class GetAllEnterprise extends Component {
                     if (result.requstresult === '0') {
                         message.error(result.reason);
                     }
-                    else
-                    {
-                        message.success('删除成功'); 
+                    else {
+                        message.success('删除成功');
 
                     }
                 }
@@ -105,36 +80,73 @@ class GetAllEnterprise extends Component {
         });
         this.onChange(EnterpriseManageList.pageIndex, EnterpriseManageList.pageSize);
     };
-
+    onPageChange = (pageIndex, pageSize) => {
+        this.updateState({
+            EnterpriseManageList: {
+                ...this.props.EnterpriseManageList,
+                ...{
+                    pageIndex: pageIndex,
+                    pageSize: pageSize,
+                }
+            }
+        });
+        this.onChange();
+    }
     /**行政区 */
     getRegionCode = (val) => {
         let str = "";
-        if (val.length > 0) {
-            val.forEach((value, index) => {
-                str += `${value},`;
+        if (val.length > 2) {
+            str = val[2];
+            this.updateState({
+                EnterpriseManageList: {
+                    ...this.props.EnterpriseManageList,
+                    ...{
+                        RegionCode: str,
+                    }
+                }
             });
-            this.setState({
-                RegionCode: str,
-            });
-        } else {
-            this.setState({
-                RegionCode: "",
-            });
+            this.onChange();
         }
-    }
+        if (val.length === 0) {
+            this.updateState({
+                EnterpriseManageList: {
+                    ...this.props.EnterpriseManageList,
+                    ...{
+                        RegionCode: null,
+                    }
+                }
+            });
+            this.onChange();
+        }
 
-    /**企业名称 */
+    }
+    /**企业名称搜索 */
     getentname = (e) => {
-        this.setState({
-            EntName: e.target.value,
+        this.updateState({
+            EnterpriseManageList: {
+                ...this.props.EnterpriseManageList,
+                ...{
+                    EntName: e,
+                }
+            }
+        });
+        this.onChange();
+    }
+    /**
+* 更新model中的state
+*/
+    updateState = (payload) => {
+        this.props.dispatch({
+            type: 'basicinfo/updateState',
+            payload: payload,
         });
     }
+    // /**搜索 */
+    // handleSearch = () => {
+    //     const { EnterpriseManageList } = this.props;
 
-    /**搜索 */
-    handleSearch = () => {
-        const { EnterpriseManageList } = this.props;
-        this.onChange(EnterpriseManageList.pageIndex, EnterpriseManageList.pageSize);
-    }
+    //     this.onChange(EnterpriseManageList.pageIndex, EnterpriseManageList.pageSize);
+    // }
 
     /**基本查询条件 */
     renderSimpleForm() {
@@ -149,17 +161,21 @@ class GetAllEnterprise extends Component {
                     </Col>
                     <Col md={8} sm={24}>
                         <FormItem {...this.formLayout} label="企业名称" style={{ width: '100%' }}>
-                            <Input placeholder="请输入" onChange={this.getentname} style={{ width: '100%', minWidth: 150 }} />
+                            <Search placeholder="名称"
+                                onSearch={this.getentname}
+                                style={{ width: 200 }} />
+                            {/* <Input placeholder="请输入" onChange={this.getentname} style={{ width: '100%', minWidth: 150 }} /> */}
                         </FormItem>
                     </Col>
                     <Col md={8} sm={24}>
-                        <Button onClick={this.handleSearch} type="primary" htmlType="submit">
+                        {/* <Button onClick={this.handleSearch} type="primary" htmlType="submit">
                             查询
-                        </Button>
+                        </Button> */}
                         <Button
+                            type="primary"
                             style={{ marginLeft: 8 }}
                             onClick={() => {
-                                dispatch(routerRedux.push(`/BasicInfo/enterprisemanageedit/null`));
+                                dispatch(routerRedux.push(`/BasicInfo/enterprisemanageedit/null/null`));
                             }}
                         >
                             添加
@@ -392,13 +408,13 @@ class GetAllEnterprise extends Component {
                 render: (text, record) =>
                     <Fragment>
                         <a onClick={
-                            () => this.props.dispatch(routerRedux.push(`/BasicInfo/enterpriseinfo/${record.TargetCode}`))
+                            () => this.props.dispatch(routerRedux.push(`/BasicInfo/enterprisemanageedit/${record.TargetCode}/${"detail"}`))
                         }
                         > 详情
                         </a>
                         <Divider type="vertical" />
                         <a onClick={
-                            () => this.props.dispatch(routerRedux.push(`/BasicInfo/enterprisemanageedit/${record.TargetCode}`))
+                            () => this.props.dispatch(routerRedux.push(`/BasicInfo/enterprisemanageedit/${record.TargetCode}/${null}`))
                         }
                         > 编辑
                         </a>
@@ -438,7 +454,7 @@ class GetAllEnterprise extends Component {
                             className={styles.dataTable}
                             size="middle"// small middle
                             dataSource={EnterpriseManageList.requstresult === '1' ? EnterpriseManageList.Data : null}
-                            scroll={{x:'1800px', y: 'calc(100vh - 340px)' }}
+                            scroll={{ x: '1800px', y: 'calc(100vh - 340px)' }}
                             rowClassName={
                                 (record, index, indent) => {
                                     if (index === 0) {
@@ -455,8 +471,8 @@ class GetAllEnterprise extends Component {
                                 'total': EnterpriseManageList.total,
                                 'pageSize': EnterpriseManageList.pageSize,
                                 'current': EnterpriseManageList.pageIndex,
-                                onChange: this.onChange,
-                                onShowSizeChange: this.onChange,
+                                onChange: this.onPageChange,
+                                onShowSizeChange: this.onPageChange,
                                 pageSizeOptions: ['10', '20', '30', '40']
                             }}
                         />
