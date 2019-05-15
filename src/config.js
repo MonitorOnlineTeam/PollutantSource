@@ -10,7 +10,7 @@ module.exports = {
     logo: '/logo.png',
     iconFontCSS: '/iconfont.css',
     iconFontJS: '/iconfont.js',
-    onlyOneEnt:true,
+    onlyOneEnt:false,
     CORS: [],
     openPages: ['/login'],
     enterpriceid: '51216eae-8f11-4578-ad63-5127f78f6cca',

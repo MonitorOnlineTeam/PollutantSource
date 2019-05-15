@@ -10,10 +10,12 @@ import EditPollutant from "./EditPollutant";
 import PollutantView from "./PollutantView";
 import styles from './index.less';
 import MonitorContent from '../../components/MonitorContent/index';
-
-@connect(({ loading, standardlibrary }) => ({
+import {onlyOneEnt} from '../../config'
+@connect(({ loading, standardlibrary,basicinfo }) => ({
     ...loading,
     list: standardlibrary.uselist,
+    entName:basicinfo.entName,
+    entCode:basicinfo.entCode,
     total: standardlibrary.total,
     pageSize: standardlibrary.pageSize,
     pageIndex: standardlibrary.pageIndex,
@@ -317,16 +319,32 @@ class UseStandardLibrary extends Component {
                 }
             },
         ];
+
+        let Crumbs=[  
+            { Name: '首页', Url: '/' },
+            { Name: '系统管理', Url: '' },
+         ]
+        if(onlyOneEnt)
+        {
+          Crumbs=Crumbs.concat(
+            { Name: '排口管理', Url: '/sysmanage/pointinfo' },
+            { Name: '设置标准', Url: '' }
+           )
+        }
+        else
+        {
+        const {entName,entCode}=this.props;
+        Crumbs=Crumbs.concat(
+            { Name: '企业管理', Url: '/sysmanage/entoperation' },
+            { Name: `排口管理(${entName})`, Url: `/sysmanage/pointinfo/${entCode}/${entName}` },
+            { Name: '设置标准', Url: '' }
+         )
+        }
         return (
             <MonitorContent
                 {...this.props}
                 breadCrumbList={
-                    [
-                        { Name: '首页', Url: '/' },
-                        { Name: '系统管理', Url: '' },
-                        { Name: '排口管理', Url: '/sysmanage/pointinfo' },
-                        { Name: '设置标准', Url: '' }
-                    ]
+                    Crumbs
                 }
                 className={styles.antCss}
             >

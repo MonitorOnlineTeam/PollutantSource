@@ -200,7 +200,7 @@ export default [
                 path: '/selfmonitor/documentation', component: './Analysis/Documentation'
             },
             /* 基本信息管理 */
-            { path: '/sysmanage/entoperation', component: './EnterpriseInfo/GetAllEnterprise' },
+            { path: '/sysmanage/entoperation', component: './EnterpriseInfo/EntCommon' },
             /* 基本信息管理(所有企业修改、添加) */
             { path: '/BasicInfo/enterprisemanageedit/:ID', component: '../components/GetAllEnterprise/Edit' },
             /* 基本信息管理(所有企业,详情) */
@@ -211,6 +211,9 @@ export default [
             { path: '/sysmanage/emissionpermits', component: './EmissionPermits' },
             /* 监测点信息管理 */
             { path: '/sysmanage/pointinfo', component: './PointInfo' },
+
+
+            { path: '/sysmanage/pointinfo/:entcode/:entname', component: './PointInfo' },
 
             /* 监测点信息管理=监测点管理 */
             { path: '/sysmanage/pointdetail/:DGIMN/:PollutantType/:Add', component: './PointInfo/AddPoint' },

@@ -408,8 +408,9 @@ class GetAllEnterprise extends Component {
                         </Popconfirm>
                         <Divider type="vertical" />
                         <a onClick={
-                            () => this.props.dispatch(routerRedux.push(`/BasicInfo/enterprisemanage/PointInfo/${record.EntCode}/${record.EntName}`))
-                        }
+                            () =>{
+                                this.props.dispatch(routerRedux.push(`/sysmanage/pointinfo/${record.TargetCode}/${record.TargetName}`))
+                        }}
                         > 关联排口
                         </a>
                     </Fragment>,

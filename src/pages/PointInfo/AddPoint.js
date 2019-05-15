@@ -20,6 +20,7 @@ import {
 import {
     connect
 } from 'dva';
+import {onlyOneEnt} from '../../config'
 import {
     routerRedux
 } from 'dva/router';
@@ -41,7 +42,8 @@ const Option = Select.Option;
 const Search = Input.Search;
 @connect(({
     loading,
-    pointinfo
+    pointinfo,
+    basicinfo
 }) => ({
     ...loading,
     isloading: loading.effects['pointinfo/getpoint'],
@@ -57,6 +59,8 @@ const Search = Input.Search;
     swuserlist: pointinfo.swuserlist,
     gasoutputtypelist: pointinfo.gasoutputtypelist,
     pollutanttypelist: pointinfo.pollutanttypelist,
+    entName:basicinfo.entName,
+    entCode:basicinfo.entCode
 }))
 @Form.create()
 class AddPoint extends Component {
@@ -222,7 +226,16 @@ class AddPoint extends Component {
                const key=this.props.match.params.DGIMN;
                index=dispatch(routerRedux.push(`/pointdetail/${key}/${backviewType}`));
            } else{
-               index = dispatch(routerRedux.push(`/sysmanage/PointInfo`));
+               if(onlyOneEnt)
+               {
+                  index = dispatch(routerRedux.push(`/sysmanage/PointInfo/`));
+               }
+               else
+               {
+                   const{entCode,entName}=this.props;
+                  index = dispatch(routerRedux.push(`/sysmanage/PointInfo/${entCode}/${entName}`));
+               }
+         
            }
        }
 
@@ -360,16 +373,38 @@ class AddPoint extends Component {
              Col3,
              DevicePassword
          } = editpoint === null || this.props.match.params.DGIMN ==="null" ? {} : editpoint;
+
+         let Crumbs=[  
+            { Name: '首页', Url: '/' },
+            { Name: '系统管理', Url: '' },
+         ]
+         if(onlyOneEnt)
+          {
+          Crumbs=Crumbs.concat(
+            { Name: '排口管理', Url: '/sysmanage/pointinfo' },
+            { Name: '排口维护', Url: '' }
+           )
+           }
+            else
+            {
+            let {entName,entCode}=this.props;
+  
+            if(entName)
+            {
+                entName=`(${entName})`
+            }
+            Crumbs=Crumbs.concat(
+                { Name: '企业管理', Url: '/sysmanage/entoperation' },
+                { Name: `排口管理${entName}`, Url: `/sysmanage/pointinfo/${entCode}/${entName}` },
+                { Name: '排口维护', Url: '' }
+            )
+            }
+
          return (
              <MonitorContent
                  {...this.props}
                  breadCrumbList={
-                     [
-                         {Name:'首页',Url:'/'},
-                         {Name:'系统管理',Url:''},
-                         {Name:'排口管理',Url:'/sysmanage/pointinfo'},
-                         {Name:'排口维护',Url:''}
-                     ]
+                    Crumbs
                  }
              >
                  <Card

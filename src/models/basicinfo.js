@@ -45,6 +45,8 @@ export default Model.extend({
         registTypelist: [],
         subjectionRelationlist: [],
         psClasslist: [],
+        entName:null,
+        entCode:null
     },
     subscriptions: {
         setup({

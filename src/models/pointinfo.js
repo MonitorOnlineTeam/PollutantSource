@@ -7,6 +7,7 @@ import {
     , getanalyzersysmn,getanalyzerbymn
 } from '../services/pointinfo';
 import { EnumRequstResult } from '../utils/enum';
+import {onlyOneEnt,enterpriceid} from '../config';
 /*
 监测点管理相关接口
 add by xpy
@@ -65,9 +66,17 @@ export default Model.extend({
         }, {
             call,
             update,
+            select
         }) {
+            let entCodedata=enterpriceid;
+            if(!onlyOneEnt)
+            {
+                const { entCode } = yield select(state => state.basicinfo);
+                entCodedata=entCode;
+            }
             const result = yield call(getpointlist, {
-                ...payload
+                ...payload,
+                entCode:entCodedata
             });
             if (result.requstresult === '1') {
                 yield update({
@@ -93,9 +102,17 @@ export default Model.extend({
         }, {
             call,
             update,
+            select
         }) {
+            let entCodedata=enterpriceid;
+            if(!onlyOneEnt)
+            {
+                const { entCode } = yield select(state => state.basicinfo);
+                entCodedata= entCode;
+            }
             const result = yield call(addpoint, {
-                ...payload
+                ...payload,
+                entCode:entCodedata
             });
             yield update({
                 requstresult: result.requstresult,
@@ -238,10 +255,12 @@ export default Model.extend({
                 requstresult: result.requstresult,
                 reason: result.reason,
             });
+           
             yield put({
                 type: 'getpointlist',
                 payload: {
-                    ...payload
+                    ...payload,
+                  
                 },
             });
             payload.callback && payload.callback();

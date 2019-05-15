@@ -18,12 +18,14 @@ import AddAnalyzerChild from '../PointInfo/AddAnalyzerChild';
 import ViewAnalyzerChild from '../PointInfo/ViewAnalyzerChild';
 import styles from './index.less';
 import { EnumPollutantTypeCode } from '../../utils/enum';
+import {onlyOneEnt} from '../../config'
 const {
     Description
 } = DescriptionList;
 @connect(({
     loading,
-    pointinfo
+    pointinfo,
+    basicinfo
 }) => ({
     ...loading,
     pointloading: loading.effects['pointinfo/getpoint'],
@@ -35,7 +37,9 @@ const {
     deletealyzersys_requstresult: pointinfo.deletealyzersys_requstresult,
     analyzerchild: pointinfo.analyzerchild,
     deletealyzerchild_requstresult: pointinfo.deletealyzerchild_requstresult,
-    Analyzers:pointinfo.Analyzers
+    Analyzers:pointinfo.Analyzers,
+    entName:basicinfo.entName,
+    entCode:basicinfo.entCode
 }))
 export default class pointview extends Component {
     constructor(props) {
@@ -192,7 +196,18 @@ export default class pointview extends Component {
         const rtnVal = [];
         rtnVal.push(<Button type="dashed"
             onClick={
-                () => this.props.dispatch(routerRedux.push(`/sysmanage/PointInfo`))
+                () => {
+                    if(onlyOneEnt)
+                    {
+                        this.props.dispatch(routerRedux.push(`/sysmanage/PointInfo`))
+                    }
+                    else
+                    {
+                        const {entCode,entName}=this.props;
+                        this.props.dispatch(routerRedux.push(`/sysmanage/PointInfo/${entCode}/${entName}`))
+                    }
+                    }
+                   
             } style={{ width: '200' }} >
             返回 </Button>);
         return rtnVal;
@@ -216,7 +231,7 @@ export default class pointview extends Component {
             status.push(<Badge className={styles.pintview} status="default" text="停产" />);
         }
         rtnVal.push(<div style={{ backgroundColor: '#1890FF', width: 5, lineHeight: 1 }}>
-            <span style={{ marginLeft: 10 }}>监测点基本信息</span>
+            <span style={{ marginLeft: 10 }}>排口基本信息</span>
             <span style={{ marginLeft: 10 }} className='status'>{status}</span>
         </div>);
         return rtnVal;
@@ -359,28 +374,43 @@ export default class pointview extends Component {
                 size="large"
             />);
         }
-
+        let Crumbs=[  
+            { Name: '首页', Url: '/' },
+            { Name: '系统管理', Url: '' },
+         ]
+        if(onlyOneEnt)
+        {
+          Crumbs=Crumbs.concat(
+            { Name: '排口管理', Url: '/sysmanage/pointinfo' },
+            { Name: '排口详情', Url: '' }
+           )
+        }
+        else
+        {
+        const {entName,entCode}=this.props;
+        Crumbs=Crumbs.concat(
+            { Name: '企业管理', Url: '/sysmanage/entoperation' },
+            { Name: `排口管理(${entName})`, Url: `/sysmanage/pointinfo/${entCode}/${entName}` },
+            { Name: '排口详情', Url: '' }
+         )
+        }
         return (
             <MonitorContent {...this.props} breadCrumbList={
-                [
-                    { Name: '首页', Url: '/' },
-                    { Name: '监测点管理', Url: '/sysmanage/pointinfo' },
-                    { Name: '监测点详情', Url: '' }
-                ]
+                Crumbs
             }>
                 <div style={{ marginTop: 10, marginLeft: 30, marginBottom: 10, marginRight: 30 }}>
                     <Card title={this.pointinfo()} loading={this.props.pointloading} extra={this.backbtn()}>
                         <Card.Grid style={gridStyle}>
                             <DescriptionList size="small" col="4" gutter="10" style={{ marginLeft: 10 }} >
-                                <Description term="监测点编号">{this.state.DGIMN}</Description>
-                                <Description term="监测点名称" >{this.state.pointName}</Description>
+                                <Description term="排口编号">{this.state.DGIMN}</Description>
+                                <Description term="排口名称" >{this.state.pointName}</Description>
                                 <Description term="排放类型" style={{ display: this.state.PollutantType }}>{this.state.OutputType}</Description>
                                 <Description term="是否烧结" style={{ display: this.state.PollutantType }}>{this.state.IsSjName}</Description>
-                                <Description term="监测点类型">{this.state.PointType}</Description>
+                                <Description term="排口类型">{this.state.PointType}</Description>
                                 <Description term="污染物类型">{this.state.pollutantTypeName}</Description>
                                 <Description term="负责人">{this.state.linkman}</Description>
-                                <Description term="监测点直径" style={{ display: this.state.PollutantType }}>{this.state.OutputDiameter}</Description>
-                                <Description term="监测点高度" style={{ display: this.state.PollutantType }}>{this.state.OutputHigh}</Description>
+                                <Description term="排口直径" style={{ display: this.state.PollutantType }}>{this.state.OutputDiameter}</Description>
+                                <Description term="排口高度" style={{ display: this.state.PollutantType }}>{this.state.OutputHigh}</Description>
                                 <Description term="经度">{this.state.longitude}</Description>
                                 <Description term="纬度">{this.state.latitude}</Description>
                                 <Description term="运维人">{this.state.OperationerName}</Description>
@@ -389,8 +419,8 @@ export default class pointview extends Component {
                             </DescriptionList>
                             <Divider />
                             <DescriptionList size="large" col="1" style={{ marginLeft: 10 }}>
-                                <Description term="监测点排放类型" style={{ display: this.state.PollutantType === "none" ? "block" : "none" }}> {this.state.OutPutWhither} </Description>
-                                <Description term="监测点地址" > {this.state.Address} </Description>
+                                <Description term="排口排放类型" style={{ display: this.state.PollutantType === "none" ? "block" : "none" }}> {this.state.OutPutWhither} </Description>
+                                <Description term="排口地址" > {this.state.Address} </Description>
                             </DescriptionList>
                         </Card.Grid>
                     </Card>

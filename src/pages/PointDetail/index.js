@@ -17,7 +17,8 @@ const { TabPane } = Tabs;
 const { Search } = Input.Search;
 
 
-@connect(({ points, loading, overview,equipmentoperatingrate }) => ({
+@connect(({ points, loading, overview,equipmentoperatingrate,basicinfo }) => ({
+
     pointInfo: points.selectpoint,
     tablist:points.tablist||[],
     loadingModel: loading.effects['overview/querydatalist'],
@@ -26,7 +27,9 @@ const { Search } = Input.Search;
     dataTemp: overview.dataTemp,
     pollutantTypelist:overview.pollutantTypelist,
     entcode:equipmentoperatingrate.entcode,
-    entname:equipmentoperatingrate.entname
+    entname:equipmentoperatingrate.entname,
+    pointentName:basicinfo.entName,
+    pointentCode:basicinfo.entCode
 }))
 class PointDetail extends Component {
     constructor(props) {
@@ -296,10 +299,10 @@ class PointDetail extends Component {
 
     getBackButton=()=>{
         const viewtype= this.props.match.params.viewtype;
-        const {entcode,entname}=this.props;
+        const {entcode,entname,pointentCode,pointentName}=this.props;
         let backpath=`/overview/${viewtype}`;
         if(viewtype==="pointinfo"){
-            backpath=`/sysmanage/${viewtype}`;
+            backpath=`/sysmanage/${viewtype}/${pointentCode}/${pointentName}`;
         }else if(viewtype==="pointequipmentoperatingrate"){
             backpath=`/qualitycontrol/${viewtype}/${entcode}/${entname}`;
         }

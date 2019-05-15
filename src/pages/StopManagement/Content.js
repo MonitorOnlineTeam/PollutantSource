@@ -21,12 +21,13 @@ import RangePicker_ from '../../components/PointDetail/RangePicker_';
 import MonitorContent from '../../components/MonitorContent/index';
 import styles from './index.less';
 import { connect } from 'dva';
+import {onlyOneEnt} from '../../config'
 const Search = Input.Search;
 /*
 页面：停产管理
 描述：停产情况维护，需要上传附件。描述清楚是勒令停产还是企业减少产能。（自动打标）依据恢复生产动作
 */
-@connect(({ loading, stopmanagement }) => ({
+@connect(({ loading, stopmanagement,basicinfo }) => ({
     ...loading,
     list: stopmanagement.list,
     total: stopmanagement.total,
@@ -34,6 +35,8 @@ const Search = Input.Search;
     pageIndex: stopmanagement.pageIndex,
     requstresult: stopmanagement.requstresult,
     fileslist: stopmanagement.fileslist,
+    entName:basicinfo.entName,
+    entCode:basicinfo.entCode,
 }))
 @Form.create()
 export default class Content extends Component {
@@ -246,14 +249,30 @@ export default class Content extends Component {
             ),
         }
         ];
+        let Crumbs=[  
+            { Name: '首页', Url: '/' },
+            { Name: '系统管理', Url: '' },
+         ]
+        if(onlyOneEnt)
+        {
+          Crumbs=Crumbs.concat(
+            { Name: '排口管理', Url: '/sysmanage/pointinfo' },
+            { Name: '停产管理', Url: '' }
+           )
+        }
+        else
+        {
+        const {entName,entCode}=this.props;
+        Crumbs=Crumbs.concat(
+            { Name: '企业管理', Url: '/sysmanage/entoperation' },
+            { Name: `排口管理(${entName})`, Url: `/sysmanage/pointinfo/${entCode}/${entName}` },
+            { Name: '停产管理', Url: '' }
+         )
+        }
+
         return (
             <MonitorContent {...this.props} breadCrumbList={
-                [
-                    { Name: '首页', Url: '/' },
-                    { Name: '系统管理', Url: '' },
-                    { Name: '排口管理', Url: '/sysmanage/pointinfo' },
-                    { Name: '停产管理', Url: '' }
-                ]
+                Crumbs
             }>
                 <div className={styles.cardTitle}>
                     <Card bordered={false} title={this.props.match.params.PointName} style={{ width: '100%' }}>
