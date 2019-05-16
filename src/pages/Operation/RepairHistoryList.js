@@ -102,7 +102,6 @@ export default class RepairHistoryList extends Component {
         return (
             <MonitorContent {...this.props} breadCrumbList={
                 [
-                    { Name: '首页', Url: '/' },
                     { Name: '智能运维', Url: '' },
                     { Name: '维修记录表', Url: '' }
                 ]

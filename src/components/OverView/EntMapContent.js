@@ -57,18 +57,7 @@ class EntMapContent extends Component {
             _thismap.setFitView();
         }
     };
-
-    //地图点位点击
-    markersEvents = {
-        click: (MapsOption, marker) => {
-            const itemdata = marker.F.extData;
-            this.treeCilck(itemdata);
-        }
-    };
-
-    treeCilck = (row) => {
-         
-    };
+     
 
     polygonEvents={
         click:(e)=>{
@@ -113,7 +102,8 @@ class EntMapContent extends Component {
         {
             entlist.map((item,key)=>{
              const pointposition=[item.longitude,item.latitude];
-             res.push( <InfoWindow
+             res.push(
+                  <InfoWindow
                 position={pointposition}
                 visible={true}
                 key={key}
@@ -132,7 +122,8 @@ class EntMapContent extends Component {
       dispatch({
           type:'overview/updateState',
           payload:{
-            selectent:ent
+            selectent:ent,
+            entbaseinfo:ent
           }
       }) 
       dispatch({

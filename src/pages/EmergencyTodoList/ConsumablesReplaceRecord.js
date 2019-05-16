@@ -34,7 +34,7 @@ class ConsumablesReplaceRecord extends Component {
         const DGIMN = this.props.match.params.pointcode;
         const taskfrom = this.props.match.params.taskfrom;
         const histroyrecordtype = this.props.match.params.histroyrecordtype;
-        rtnVal.push({ Name: '首页', Url: '/' });
+      //  rtnVal.push({ Name: '首页', Url: '/' });
         switch (listUrl) {
             case 'datalistview': //数据一栏
                 rtnVal.push({ Name: '数据一览', Url: `/overview/${listUrl}` });

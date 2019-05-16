@@ -136,7 +136,6 @@ export default class OperationCalendar extends Component {
         return (
             <MonitorContent {...this.props} breadCrumbList={
                 [
-                    { Name: '首页', Url: '/' },
                     { Name: '智能运维', Url: '' },
                     { Name: '运维日历', Url: '' }
                 ]

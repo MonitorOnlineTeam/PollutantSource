@@ -223,7 +223,6 @@ export default class EquipmentOperatingRate extends Component {
         const entName=this.props.match.params.entname;
         let tableTitle="";
         let Crumbs=[  
-                      { Name: '首页', Url: '/' },
                       { Name: '智能质控', Url: '' }
                    ]
         if(onlyOneEnt)

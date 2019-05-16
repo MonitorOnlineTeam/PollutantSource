@@ -101,7 +101,6 @@ export default class DeviceExceptionListHistoryRecords extends Component {
         return (
             <MonitorContent {...this.props} breadCrumbList={
                 [
-                    { Name: '首页', Url: '/' },
                     { Name: '智能质控', Url: '' },
                     { Name: '设备数据异常记录表', Url: '' }
                 ]

@@ -23,6 +23,7 @@ class EntTreeList extends Component {
         dispatch({
             type:'overview/updateState',
             payload:{
+                entbaseinfo:ent,
                 selectent:ent
             }
         }) 
