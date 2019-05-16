@@ -2,7 +2,7 @@ import Cookie from 'js-cookie';
 import router from 'umi/router';
 import { message } from 'antd';
 import { fakeAccountLogin, sendCaptcha, getip } from '../services/user';
-import { systemLogin, postAutoFromDataDelete,getListPager } from '../services/autoformapi';
+import { systemLogin, postAutoFromDataDelete,getPageConfigInfo } from '../services/autoformapi';
 import { Model } from '../dvapack';
 
 const delay = (timeout) => new Promise(resolve => {
@@ -22,7 +22,7 @@ export default Model.extend({
         * login({ payload }, { call, put, select }) {
            
             const response1 = yield call(systemLogin);
-            const resss= yield call(postAutoFromDataDelete);
+            const resss= yield call(getPageConfigInfo);
             debugger;
             const MsgId = yield select(state => state.login.MsgId);
             if (payload.type === 'mobile') {

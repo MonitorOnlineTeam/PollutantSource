@@ -46,6 +46,23 @@ export async function getConditions() {
 }
 
 /**
+ * 【AutoForm】获取页面配置信息
+ * @params {"configId": "TestCommonPoint"}
+ */
+export async function getPageConfigInfo() {
+    const params = {
+        configId: "TestCommonPoint"
+    };
+    const defaults = {
+        PageIndex:1,
+        PageSize:200
+    };
+    const body=Object.assign(defaults,params);
+    const result = await getNew('/api/rest/PollutantSourceApi/AutoFormDataApi/GetPageConfigInfo',body, null);
+    return result;
+}
+
+/**
  * 【AutoForm】获取页面高级查询表单
  * @params {"configId": "TestCommonPoint"}
  */
