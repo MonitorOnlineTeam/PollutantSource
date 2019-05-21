@@ -2,7 +2,7 @@
  * @Author: Jiaqi 
  * @Date: 2019-05-07 16:03:14 
  * @Last Modified by: Jiaqi
- * @Last Modified time: 2019-05-21 16:50:34
+ * @Last Modified time: 2019-05-21 17:12:49
  * @desc: 搜索容器组件
  * @props {string} formChangeActionType formAction
  * @props {store object} searchFormState formState对象
@@ -96,7 +96,7 @@ class SearchWrapper extends Component {
       type: 'autoForm/updateState',
       payload: {
         searchForm: {
-          ...this.props.searchForm,
+          // ...this.props.searchForm,
           current: 1,
           pageSize: 10
         }
