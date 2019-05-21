@@ -18,7 +18,8 @@ export async function getEquipmentOperatingRateForPoints(params) {
         endTime: params.endTime,
         EORSort: params.EORSort,
         pageIndex: params.pageIndex || 1,
-        pageSize: params.pageSize || 15
+        pageSize: params.pageSize || 15,
+        enterpriseCodes:params.entCode,
     };
 
     const result = post('/api/rest/PollutantSourceApi/DataStatistics/GetEquipmentOperatingRateForPoints', body, null);

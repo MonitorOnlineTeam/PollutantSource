@@ -4,7 +4,7 @@
  * 创建时间：2018.12.07
  */
 
-import {post} from '../dvapack/request';
+import { post } from '../dvapack/request';
 
 /**
  * 【传输有效率】获取一个或多个排口传输有效率等等
@@ -15,10 +15,11 @@ export async function getMonthsTransmissionEfficiency(params) {
         DGIMNs: params.DGIMNs,
         beginTime: params.beginTime,
         endTime: params.endTime,
-        enterpriseCodes:params.enterpriseCodes,
+        enterpriseCodes: params.enterpriseCodes,
         TERSort: params.TERSort,
         pageIndex: params.pageIndex || 1,
-        pageSize: params.pageSize || 15
+        pageSize: params.pageSize || 15,
+        enterpriseCodes: params.entCode,
     };
 
     const result = post('/api/rest/PollutantSourceApi/DataStatistics/GetTransmissionEfficiencyForPoints', body, null);

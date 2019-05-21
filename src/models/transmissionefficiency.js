@@ -17,13 +17,15 @@ export default Model.extend({
         beginTime: moment().format('YYYY-MM-01 HH:mm:ss'),
         endTime: moment().format('YYYY-MM-DD HH:mm:ss'),
         transmissionEffectiveRate: 'ascend',
-        enttableDatas:[]
+        enttableDatas:[],
+        entCode: null,
     },
     subscriptions: {
     },
     effects: {
         * getData({payload}, { call, put, update, select }) {
             const {beginTime, endTime, pageSize, transmissionEffectiveRate} = yield select(state => state.transmissionefficiency);
+            const { entCode } = yield select(state => state.equipmentoperatingrate);
             let body = {
                 enterpriseCodes:(payload.entcode && payload.entcode!="null" && payload.entcode!="0")?[payload.entcode]:null,
                 beginTime: beginTime,
@@ -31,6 +33,7 @@ export default Model.extend({
                 pageSize: pageSize,
                 TERSort: transmissionEffectiveRate,
                 pageIndex: payload.pageIndex,
+                entCode: entCode
             };
             const response = yield call(getMonthsTransmissionEfficiency, body);
             yield update({

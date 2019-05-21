@@ -19,13 +19,15 @@ export default Model.extend({
         EORSort: 'ascend',
         enttableDatas:[],
         entcode:null,
-        entname:null
+        entname:null,
+        entCode: null,
     },
     subscriptions: {
     },
     effects: {
         * getData({payload}, { call, put, update, select }) {
             const {beginTime, endTime, pageSize, EORSort} = yield select(state => state.equipmentoperatingrate);
+            const { entCode } = yield select(state => state.equipmentoperatingrate);
             let body = {
                 enterpriseCodes:(payload.entcode && payload.entcode!="null" && payload.entcode!="0")?[payload.entcode]:null,
                 beginTime: beginTime,
@@ -33,6 +35,7 @@ export default Model.extend({
                 pageSize: pageSize,
                 EORSort: EORSort,
                 pageIndex: payload.pageIndex,
+                entCode: entCode
             };
             const response = yield call(getEquipmentOperatingRateForPoints, body);
             if(response && response.data && response.requstresult==="1")

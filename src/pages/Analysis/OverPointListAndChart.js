@@ -35,12 +35,11 @@ class OverPointListAndChart extends Component {
         };
     }
     componentWillMount() {
-        var entCode = "51216eae-8f11-4578-ad63-5127f78f6cca"; //一会修改
         this.updateState({
             overdataParameters: {
                 ...this.props.overdataParameters,
                 ...{
-                    entCode: entCode,
+                    entCode: this.props.match.params.entcode,
                 }
             }
         });
