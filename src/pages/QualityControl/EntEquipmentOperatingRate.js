@@ -164,7 +164,7 @@ export default class EntEquipmentOperatingRate extends Component {
                 [
                     { Name: '首页', Url: '/' },
                     { Name: '智能质控', Url: '' },
-                    { Name: '设备运转率', Url: '' }
+                    { Name: '企业设备运转率', Url: '' }
                 ]
             }>
                 <Row className={styles.cardTitle}>

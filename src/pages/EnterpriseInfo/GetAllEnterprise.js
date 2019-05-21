@@ -16,7 +16,7 @@ import { routerRedux } from 'dva/router';
 import { connect } from 'dva';
 import MonitorContent from '../../components/MonitorContent/index';
 import EnterpriseMultiSelect from '../../components/EnterpriseMultiSelect/index';
-import styles from './EnterpriseManager.less';
+import styles from './GetAllEnterprise.less';
 const Search = Input.Search;
 const FormItem = Form.Item;
 /*
@@ -67,7 +67,7 @@ class GetAllEnterprise extends Component {
         });
     }
 
-    /**项目管理--删除项目 */
+    /**删除企业信息 */
     deleteEnterprise = (ID) => {
         const { dispatch, EnterpriseManageList } = this.props;
         dispatch({
@@ -82,13 +82,14 @@ class GetAllEnterprise extends Component {
                     }
                     else {
                         message.success('删除成功');
-
+                        this.onChange(EnterpriseManageList.pageIndex, EnterpriseManageList.pageSize);
                     }
                 }
             },
         });
-        this.onChange(EnterpriseManageList.pageIndex, EnterpriseManageList.pageSize);
     };
+
+    //页码改变事件
     onPageChange = (pageIndex, pageSize) => {
         this.updateState({
             EnterpriseManageList: {
@@ -101,7 +102,7 @@ class GetAllEnterprise extends Component {
         });
         this.onChange();
     }
-    /**行政区 */
+    /**行政区选择事件 */
     getRegionCode = (val) => {
         let str = "";
         if (val.length > 2) {
@@ -150,12 +151,6 @@ class GetAllEnterprise extends Component {
             payload: payload,
         });
     }
-    // /**搜索 */
-    // handleSearch = () => {
-    //     const { EnterpriseManageList } = this.props;
-
-    //     this.onChange(EnterpriseManageList.pageIndex, EnterpriseManageList.pageSize);
-    // }
 
     /**基本查询条件 */
     renderSimpleForm() {
@@ -173,13 +168,9 @@ class GetAllEnterprise extends Component {
                             <Search placeholder="名称"
                                 onSearch={this.getentname}
                                 style={{ width: 200 }} />
-                            {/* <Input placeholder="请输入" onChange={this.getentname} style={{ width: '100%', minWidth: 150 }} /> */}
                         </FormItem>
                     </Col>
                     <Col md={8} sm={24}>
-                        {/* <Button onClick={this.handleSearch} type="primary" htmlType="submit">
-                            查询
-                        </Button> */}
                         <Button
                             type="primary"
                             style={{ marginLeft: 8 }}
@@ -216,7 +207,7 @@ class GetAllEnterprise extends Component {
                 key: 'TargetName',
                 width: '14%',
                 align: 'left',
-                // sorter: (a, b) => a.EntName.length - b.EntName.length,
+                fixed: 'left',
             },
             {
                 title: '法人编号',
@@ -412,8 +403,9 @@ class GetAllEnterprise extends Component {
             // },
             {
                 title: '操作',
-                width: '15%',
+                width: '400px',
                 align: 'left',
+                fixed: 'right',
                 render: (text, record) =>
                     <Fragment>
                         <a onClick={
@@ -436,7 +428,7 @@ class GetAllEnterprise extends Component {
                             () => {
                                 this.props.dispatch(routerRedux.push(`/sysmanage/pointinfo/${record.TargetCode}/${record.TargetName}`))
                             }}
-                        > 关联排口
+                        > 管理排口
                         </a>
                     </Fragment>,
             },
@@ -462,7 +454,7 @@ class GetAllEnterprise extends Component {
                             columns={columns}
                             rowKey="EntCode"
                             className={styles.dataTable}
-                            size="middle"// small middle
+                            size="middle"
                             dataSource={EnterpriseManageList.requstresult === '1' ? EnterpriseManageList.Data : null}
                             scroll={{ x: '1800px', y: 'calc(100vh - 340px)' }}
                             rowClassName={

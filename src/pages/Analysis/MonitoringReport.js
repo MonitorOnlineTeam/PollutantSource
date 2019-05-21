@@ -7,7 +7,8 @@ import {
     Spin,
     Row,
     Col,
-    message
+    message,
+    Select,
 } from 'antd';
 import moment from 'moment';
 import { routerRedux } from 'dva/router';
@@ -20,6 +21,7 @@ import { annualmonitoringreportaddress } from '../../config';
 
 const RadioGroup = Radio.Group;
 const { RangePicker } = DatePicker;
+const Option = Select.Option;
 
 @connect(({ loading, analysisdata }) => ({
     loading: loading.effects['analysisdata/queryreportlist'],
@@ -61,6 +63,11 @@ class MonitoringReport extends Component {
         }
     }
 
+    //选择企业事件
+    EnterpriseonChange=(value)=>{
+        console.log(value)
+        debugger
+    }
     onOpenChange = (status) => {
         let { queryreportParameters, dispatch } = this.props;
         //日期窗口关闭时触发事件
@@ -225,6 +232,23 @@ class MonitoringReport extends Component {
                         title="自行监测年度报告"
                         extra={
                             <div>
+                                <Select
+                                    showSearch
+                                    style={{ width: 250 }}
+                                    placeholder="请选择企业"
+                                    optionFilterProp="children"
+                                    onChange={this.EnterpriseonChange}
+                                    // onFocus={onFocus}
+                                    // onBlur={onBlur}
+                                    // onSearch={onSearch}
+                                    filterOption={(input, option) =>
+                                        option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                                    }
+                                >
+                                    <Option value="jack">Jack</Option>
+                                    <Option value="lucy">Lucy</Option>
+                                    <Option value="tom">Tom</Option>
+                                </Select>
                                 <RangePicker
                                     style={{ width: 250, marginLeft: 40, textAlign: 'center' }}
                                     format={queryreportParameters.format}

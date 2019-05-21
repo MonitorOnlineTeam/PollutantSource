@@ -108,7 +108,6 @@ export default Model.extend({
                 ID: payload.ID,
             });
             if (result.requstresult === '1') {
-                //?
                 yield put({
                     type: 'GetProjectManageList',
                     payload: {
@@ -134,7 +133,6 @@ export default Model.extend({
             const body = {
                 EntCode: payload.EntCode
             };
-            debugger
             const result = yield call(GetEnterpriseModel, body);
             yield update({
                 EnterpriseModel: result.data,
@@ -183,7 +181,6 @@ export default Model.extend({
         }, {
             call,
         }) {
-            debugger
             const result = yield call(AddEnterpriseManage, {
                 ...payload
             });

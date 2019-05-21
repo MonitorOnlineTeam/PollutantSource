@@ -25,7 +25,7 @@ const plugins = [
     'Scale', {
         name: 'ToolBar',
         options: {
-            visible: true, // 不设置该属性默认就是 true
+            visible: true,
             onCreated(ins) {
             }
         }
@@ -79,7 +79,6 @@ class edit extends PureComponent {
             EntCode: null,
             TargetRegionCode: "",
         };
-
         this.mapEvents = {
             created(m) {
                 _thismap = m;
@@ -88,7 +87,6 @@ class edit extends PureComponent {
 
             },
             complete: () => {
-                //_thismap.setZoomAndCenter(13, [centerlongitude, centerlatitude]);
             }
         };
     }
@@ -98,7 +96,6 @@ class edit extends PureComponent {
         const { dispatch, match: { params: { ID } } } = this.props;
         this.getEnterpriseModel();
         var EntCode = this.props.match.params.ID;
-   
         if (ID !== 'null') {
             dispatch({
                 type: pageUrl.getEnterpriseModel,
@@ -115,7 +112,6 @@ class edit extends PureComponent {
                                 TargetSubjectionRelationCode: this.props.EnterpriseModel.TargetSubjectionRelationCode,
                                 TargetPSClassCodes: this.props.EnterpriseModel.TargetPSClassCodes,
                                 TargetRegionCode: this.props.EnterpriseModel.TargetRegionCode,
-
                             });
                         }
                     }
@@ -124,7 +120,7 @@ class edit extends PureComponent {
         }
         else {
             this.updateState({
-                EnterpriseModel:[],
+                EnterpriseModel: [],
             });
         }
     }
@@ -137,6 +133,7 @@ class edit extends PureComponent {
             payload: payload,
         });
     }
+    //添加成功更新model
     loaddata = (par) => {
         const { dispatch } = this.props;
         var EntCode = par;
@@ -177,7 +174,7 @@ class edit extends PureComponent {
             });
         }
     }
-    //加载图片
+    //加载图片列表
     loadImg = (baseinfo) => {
         let imgarray = [];
         if (baseinfo !== null) {
@@ -187,12 +184,11 @@ class edit extends PureComponent {
                         imgarray.push(<ImgCommon key={item} style={{ width: 363, height: 285, borderradius: 12 }} imageUrl={imgaddress + item} />);
                     })
                 }
-
             }
         }
-
         return imgarray;
     }
+    //点击事件
     imgshowModal = () => {
         const { EnterpriseModel } = this.props;
         if (this.props.match.params.ID === "null" && EnterpriseModel.TargetCode === null) {
@@ -203,8 +199,8 @@ class edit extends PureComponent {
                 imgvisible: true,
             });
         }
-
     };
+    //图片列表取消事件
     imghideModal = () => {
         this.setState({
             imgvisible: false,
@@ -221,6 +217,7 @@ class edit extends PureComponent {
         )
 
     }
+    //编辑取消事件
     endedit = () => {
         this.setState({
             isedit: true,
@@ -301,6 +298,7 @@ class edit extends PureComponent {
                                 Longitude: allvalue.LongitudeLatitude.split(',')[0],//经度
                                 Latitude: allvalue.LongitudeLatitude.split(',')[1],//经度
                                 CoordinateSet: allvalue.TargetCoordinateSet,//厂界
+                                Abbreviation: allvalue.TargetAbbreviation,//企业简称
                                 Photo: 'f' + new Date().getTime() + Math.random() * 100 / 100,
                                 callback: (result) => {
                                     if (result.requstresult === '1') {
@@ -322,7 +320,6 @@ class edit extends PureComponent {
                     }
                 });
             } else {
-            
                 form.validateFieldsAndScroll((err) => {
                     if (!err) {
                         if (this.state.TargetRegionCode === "") {
@@ -337,7 +334,6 @@ class edit extends PureComponent {
                             this.props.form.setFields({ // 设置验证返回错误
                                 TargetRegionCode: {
                                     value: allvalue.TargetRegionCode,
-                                    //  errors: [new Error('')],
                                 },
                             });
                             dispatch({
@@ -369,7 +365,7 @@ class edit extends PureComponent {
                                     Longitude: allvalue.LongitudeLatitude.split(',')[0],//经度
                                     Latitude: allvalue.LongitudeLatitude.split(',')[1],//经度
                                     CoordinateSet: allvalue.TargetCoordinateSet,//厂界
-
+                                    Abbreviation: allvalue.TargetAbbreviation,//企业简称
                                     callback: (result) => {
                                         if (result.requstresult === '1') {
                                             this.setState({
@@ -381,29 +377,20 @@ class edit extends PureComponent {
                                             });
                                         } else {
                                             message.err(result.reason);
-
                                         }
                                     }
                                 },
                             });
                         }
-
-
                     }
                 });
             }
         }
     };
 
-    /**返回 */
+    /**返回到企业列表 */
     back = () => {
         this.props.dispatch(routerRedux.push(`/sysmanage/entoperation`));
-    };
-
-    hideModal = () => {
-        this.setState({
-            visible: false,
-        });
     };
 
     path = [
@@ -420,19 +407,14 @@ class edit extends PureComponent {
         ]
     ];
 
+    //编辑厂界弹出编辑厂界组件
     showEditCoordinate = () => {
         this.setState({
             Mapvisible: true
         });
     }
 
-    // mapitem = (polygon) => {
-    //     this.setState({
-    //         polygon
-    //     });
-    // }
-
-    //回调
+    //回调将厂界位置返回到编辑界面
     GetData() {
         this.setState({
             polygon: this.child.props.form.getFieldValue('polygon'),
@@ -449,7 +431,6 @@ class edit extends PureComponent {
         let res = [];
         if (polygonChange) {
             let arr = eval(polygonChange);
-         
             for (let i = 0; i < arr.length; i++) {
                 res.push(<Polygon
                     key={i}
@@ -464,16 +445,21 @@ class edit extends PureComponent {
                 />);
             }
         }
-       
+
         return res;
     }
 
+    //编辑页面
     loadForm = (baseinfo) => {
         const { getFieldDecorator } = this.props.form;
         const { longitude, latitude, isedit } = this.state;
         const { subjectionRelationlist, pSScalelist, registTypelist, unitTypelist, attentionDegreelist, industryTypelist, psClasslist } = this.props;
         let log;
         let lat;
+        let isExists = true;
+        if (baseinfo) {
+            isExists = false;
+        }
         if (baseinfo) {
             log = baseinfo.Longitude;
             lat = baseinfo.Latitude;
@@ -521,7 +507,7 @@ class edit extends PureComponent {
                 <Form layout="inline" className={this.state.className} style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between' }}>
                     <FormItem style={{ width: '400px' }} {...formItemLayout} label="企业名称">
                         {getFieldDecorator('TargetName', {
-                            initialValue: baseinfo == null || baseinfo == undefined || baseinfo.length === 0 ? '' : baseinfo.TargetName,
+                            initialValue: isExists ? '' : baseinfo.TargetName,
                             rules: [{
                                 required: true,
                                 message: "请输入企业名称"
@@ -531,12 +517,11 @@ class edit extends PureComponent {
                                 style={{ width: 300 }}
                                 readOnly={isedit}
                             />
-
                         )}
                     </FormItem>
                     <FormItem style={{ width: '400px' }} {...formItemLayout} label="法人编号">
                         {getFieldDecorator('TargetCorporationCode', {
-                            initialValue: baseinfo == null || baseinfo == undefined || baseinfo.length === 0 ? '' : baseinfo.TargetCorporationCode,
+                            initialValue: isExists ? '' : baseinfo.TargetCorporationCode,
                             rules: [{
                                 required: true,
                                 message: '请输入法人编号',
@@ -551,7 +536,7 @@ class edit extends PureComponent {
                     </FormItem>
                     <FormItem style={{ width: '400px' }} {...formItemLayout} label="法人名称">
                         {getFieldDecorator('TargetCorporationName', {
-                            initialValue: baseinfo == null || baseinfo == undefined || baseinfo.length === 0 ? '' : baseinfo.TargetCorporationName,
+                            initialValue: isExists ? '' : baseinfo.TargetCorporationName,
                             rules: [{
                                 required: true,
                                 message: '请输入法人名称',
@@ -565,29 +550,13 @@ class edit extends PureComponent {
                         )}
                     </FormItem>
                     <Divider dashed={true} style={{ border: '1px dashed #FFFFFF' }} />
-                    <FormItem style={{ width: '400px' }} {...formItemLayout} label="行政区">
-                        {getFieldDecorator('TargetRegionCode', {
-                        })(
-                            <EnterpriseMultiSelect
-                                width="300px"
-                                minWidth="300px"
-                                getRegionCode={
-                                    this.getRegionCode
-                                }
-                                RegionCode={baseinfo == null || baseinfo == undefined || baseinfo.length === 0 ? '' : baseinfo.Province}
-                                DefaultValue={baseinfo == null || baseinfo == undefined || baseinfo.length === 0 ? null : baseinfo.RegionList}
-                                disabled={isedit}
-                            />
-                        )}
-
-                    </FormItem>
                     <FormItem style={{ width: '400px' }} {...formItemLayout} label="企业地址">
                         {getFieldDecorator('TargetEntAddress', {
                             rules: [{
                                 required: true,
                                 message: '请输入企业地址',
                             }],
-                            initialValue: baseinfo == null || baseinfo == undefined || baseinfo.length === 0 ? '' : baseinfo.TargetEntAddress,
+                            initialValue: isExists ? '' : baseinfo.TargetEntAddress,
                         })(
                             <Input
                                 style={{ width: 300 }}
@@ -595,38 +564,23 @@ class edit extends PureComponent {
                             />
                         )}
                     </FormItem>
-                    <FormItem style={{ width: '400px' }} {...formItemLayout} label="关注程度">
-                        {getFieldDecorator('TargetAttentionCode', {
-                            initialValue: baseinfo == null || baseinfo == undefined || baseinfo.length === 0 ? null : baseinfo.TargetAttentionName,
+                    <FormItem style={{ width: '400px' }} {...formItemLayout} label="企业简称">
+                        {getFieldDecorator('TargetAbbreviation', {
                             rules: [{
                                 required: true,
-                                message: "请输入关注程度"
+                                message: '请输入企业简称',
                             }],
+                            initialValue: isExists ? '' : baseinfo.TargetAbbreviation,
                         })(
-                            <Select style={{ width: 300 }} disabled={isedit} onChange={this.TargetAttentionCode}>
-                                {attentionDegreelist.length !== 0 ?
-                                    attentionDegreelist.map(item => <Option key={item.AttentionCode}>{item.AttentionName}</Option>) : null}
-                            </Select>
-                        )}
-                    </FormItem>
-                    <Divider dashed />
-                    <FormItem style={{ width: '400px' }} {...formItemLayout} label="注册类型">
-                        {getFieldDecorator('TargetRegistTypeCode', {
-                            initialValue: baseinfo == null || baseinfo == undefined || baseinfo.length === 0 || baseinfo.TargetRegistTypeName === 0 ? '' : baseinfo.TargetRegistTypeName,
-                            rules: [{
-                                required: true,
-                                message: "请输入注册类型"
-                            }],
-                        })(
-                            <Select style={{ width: 300 }} disabled={isedit} onChange={this.TargetRegistTypeCode}>
-                                {registTypelist.map((item, key) => (<Option key={item.RegistTypeCode} value={item.RegistTypeCode}>{item.RegistTypeName}</Option>))
-                                }
-                            </Select>
+                            <Input
+                                style={{ width: 300 }}
+                                readOnly={isedit}
+                            />
                         )}
                     </FormItem>
                     <FormItem style={{ width: '400px' }} {...formItemLayout} label="单位类型">
                         {getFieldDecorator('TargetUnitTypeCode', {
-                            initialValue: baseinfo == null || baseinfo == undefined || baseinfo.length === 0 || baseinfo.TargetUnitTypeName === 0 ? '' : baseinfo.TargetUnitTypeName,
+                            initialValue: isExists || baseinfo.TargetUnitTypeName === 0 ? '' : baseinfo.TargetUnitTypeName,
                             rules: [{
                                 required: true,
                                 message: "请输入单位类型"
@@ -638,24 +592,54 @@ class edit extends PureComponent {
                             </Select>
                         )}
                     </FormItem>
-                    <FormItem style={{ width: '400px' }} {...formItemLayout} label="污染源规模">
-                        {getFieldDecorator('TargetPSClassCode', {
-                            initialValue: baseinfo == null || baseinfo == undefined || baseinfo.length === 0 ? '' : baseinfo.TargetPSScaleName,
+                    <Divider dashed />
+                    <FormItem style={{ width: '400px' }} {...formItemLayout} label="关注程度">
+                        {getFieldDecorator('TargetAttentionCode', {
+                            initialValue: isExists ? null : baseinfo.TargetAttentionName,
                             rules: [{
                                 required: true,
-                                message: "请输入污染源规模"
+                                message: "请输入关注程度"
                             }],
                         })(
-                            <Select style={{ width: 300 }} disabled={isedit} onChange={this.TargetPSClassCode}>
-                                {pSScalelist.map((item, key) => (<Option key={item.PSScaleCode} value={item.PSScaleCode}>{item.PSScaleName}</Option>))
+                            <Select style={{ width: 300 }} disabled={isedit} onChange={this.TargetAttentionCode}>
+                                {attentionDegreelist.length !== 0 ?
+                                    attentionDegreelist.map(item => <Option key={item.AttentionCode}>{item.AttentionName}</Option>) : null}
+                            </Select>
+                        )}
+                    </FormItem>
+                    <FormItem style={{ width: '400px' }} {...formItemLayout} label="注册类型">
+                        {getFieldDecorator('TargetRegistTypeCode', {
+                            initialValue: isExists || baseinfo.TargetRegistTypeName === 0 ? '' : baseinfo.TargetRegistTypeName,
+                            rules: [{
+                                required: true,
+                                message: "请输入注册类型"
+                            }],
+                        })(
+                            <Select style={{ width: 300 }} disabled={isedit} onChange={this.TargetRegistTypeCode}>
+                                {registTypelist.map((item, key) => (<Option key={item.RegistTypeCode} value={item.RegistTypeCode}>{item.RegistTypeName}</Option>))
                                 }
                             </Select>
+                        )}
+                    </FormItem>
+                    <FormItem style={{ width: '400px' }} {...formItemLayout} label="企业行政区">
+                        {getFieldDecorator('TargetRegionCode', {
+                        })(
+                            <EnterpriseMultiSelect
+                                width="300px"
+                                minWidth="300px"
+                                getRegionCode={
+                                    this.getRegionCode
+                                }
+                                RegionCode={isExists ? '' : baseinfo.Province}
+                                DefaultValue={isExists ? null : baseinfo.RegionList}
+                                disabled={isedit}
+                            />
                         )}
                     </FormItem>
                     <Divider dashed={true} style={{ border: '1px dashed #FFFFFF' }} />
                     <FormItem style={{ width: '400px' }} {...formItemLayout} label="隶属关系">
                         {getFieldDecorator('TargetSubjectionRelationCode', {
-                            initialValue: baseinfo == null || baseinfo == undefined || baseinfo.length === 0 || baseinfo.TargetSubjectionRelationName === 0 ? '' : baseinfo.TargetSubjectionRelationName,
+                            initialValue: isExists || baseinfo.TargetSubjectionRelationName === 0 ? '' : baseinfo.TargetSubjectionRelationName,
                             rules: [{
                                 required: true,
                                 message: "请输入隶属关系"
@@ -663,6 +647,31 @@ class edit extends PureComponent {
                         })(
                             <Select style={{ width: 300 }} disabled={isedit} onChange={this.TargetSubjectionRelationCode}>
                                 {subjectionRelationlist.map((item, key) => (<Option key={item.SubjectionRelationCode} value={item.SubjectionRelationCode}>{item.SubjectionRelationName}</Option>))
+                                }
+                            </Select>
+                        )}
+                    </FormItem>
+                    <FormItem style={{ width: '400px' }} {...formItemLayout} label="环保部门">
+                        {getFieldDecorator('AbbreviTargetPSEnvironmentDeptation', {
+                            initialValue: isExists ? '' : baseinfo.TargetPSEnvironmentDept,
+                        })(
+                            <Input
+                                style={{ width: 300 }}
+
+                                readOnly={isedit}
+                            />
+                        )}
+                    </FormItem>
+                    <FormItem style={{ width: '400px' }} {...formItemLayout} label="污染源规模">
+                        {getFieldDecorator('TargetPSClassCode', {
+                            initialValue: isExists ? '' : baseinfo.TargetPSScaleName,
+                            rules: [{
+                                required: true,
+                                message: "请输入污染源规模"
+                            }],
+                        })(
+                            <Select style={{ width: 300 }} disabled={isedit} onChange={this.TargetPSClassCode}>
+                                {pSScalelist.map((item, key) => (<Option key={item.PSScaleCode} value={item.PSScaleCode}>{item.PSScaleName}</Option>))
                                 }
                             </Select>
                         )}
@@ -677,52 +686,10 @@ class edit extends PureComponent {
                             </Select>
                         )}
                     </FormItem> */}
-                    <FormItem style={{ width: '400px' }} {...formItemLayout} label="环保部门">
-                        {getFieldDecorator('AbbreviTargetPSEnvironmentDeptation', {
-                            initialValue: baseinfo == null || baseinfo == undefined || baseinfo.length === 0 ? '' : baseinfo.TargetPSEnvironmentDept,
-                        })(
-                            <Input
-                                style={{ width: 300 }}
-
-                                readOnly={isedit}
-                            />
-                        )}
-                    </FormItem>
-
-                    <FormItem style={{ width: '400px' }} {...formItemLayout} label="环保负责人">
-                        {getFieldDecorator('TargetEnvironmentPrincipal', {
-                            initialValue: baseinfo == null || baseinfo == undefined || baseinfo.length === 0 ? '' : baseinfo.TargetEnvironmentPrincipal,
-                        })(
-                            <Input
-                                style={{ width: 300 }}
-
-                                readOnly={isedit}
-                            />
-                        )}
-                    </FormItem>
                     <Divider dashed />
-                    <FormItem style={{ width: '400px' }} {...formItemLayout} label="专职环保人员">
-                        {getFieldDecorator('TargetEnvironmentMans', {
-                            initialValue: baseinfo == null || baseinfo == undefined || baseinfo.length === 0 ? '' : baseinfo.TargetEnvironmentMans,
-                        })(
-                            <Input
-                                style={{ width: 300 }}
-                                readOnly={isedit}
-                            />
-                        )}
-                    </FormItem>
-                    <FormItem style={{ width: '400px' }} {...formItemLayout} label="运行时间">
-                        {getFieldDecorator('TargetRunDate',
-                            {
-                                initialValue: baseinfo == null || baseinfo == undefined || baseinfo.length === 0 ? '' : baseinfo.TargetRunDate === null ? '' : moment(baseinfo.TargetRunDate),
-                            })(
-                                <DatePicker disabled={isedit} />
-                            )}
-                    </FormItem>
-
                     <FormItem style={{ width: '400px' }} {...formItemLayout} label="办公电话">
                         {getFieldDecorator('TargetOfficePhone', {
-                            initialValue: baseinfo == null || baseinfo == undefined || baseinfo.length === 0 ? '' : baseinfo.TargetOfficePhone,
+                            initialValue: isExists ? '' : baseinfo.TargetOfficePhone,
                             rules: [{
                                 pattern: /^((0\d{2,3})-)(\d{7,8})(-(\d{3,}))?$/,
                                 message: '请输入办公电话',
@@ -734,24 +701,9 @@ class edit extends PureComponent {
                             />
                         )}
                     </FormItem>
-                    <Divider dashed={true} style={{ border: '1px dashed #FFFFFF' }} />
-                    <FormItem style={{ width: '400px' }} {...formItemLayout} label="传真">
-                        {getFieldDecorator('TargetFax', {
-                            initialValue: baseinfo == null || baseinfo == undefined || baseinfo.length === 0 ? '' : baseinfo.TargetFax,
-                            rules: [{
-                                pattern: /^(\d{3,4}-)?\d{7,8}$/,
-                                message: '请输入传真',
-                            }],
-                        })(
-                            <Input
-                                style={{ width: 300 }}
-                                readOnly={isedit}
-                            />
-                        )}
-                    </FormItem>
                     <FormItem style={{ width: '400px' }} {...formItemLayout} label="移动电话">
                         {getFieldDecorator('TargetMobilePhone', {
-                            initialValue: baseinfo == null || baseinfo == undefined || baseinfo.length === 0 ? '' : baseinfo.TargetMobilePhone,
+                            initialValue: isExists ? '' : baseinfo.TargetMobilePhone,
                             rules: [{
                                 pattern: /^[1][3,4,5,7,8][0-9]{9}$/,
                                 message: '请输入移动电话',
@@ -763,21 +715,9 @@ class edit extends PureComponent {
                             />
                         )}
                     </FormItem>
-
-                    <FormItem style={{ width: '400px' }} {...formItemLayout} label="管辖区域">
-                        {getFieldDecorator('TargetAreaCode', {
-                            initialValue: baseinfo == null || baseinfo == undefined || baseinfo.length === 0 ? '' : baseinfo.TargetAreaCode,
-                        })(
-                            <Input
-                                style={{ width: 300 }}
-                                readOnly={isedit}
-                            />
-                        )}
-                    </FormItem>
-                    <Divider dashed />
                     <FormItem style={{ width: '400px' }} {...formItemLayout} label="污染源类别">
                         {getFieldDecorator('TargetPSClassCodes', {
-                            initialValue: baseinfo == null || baseinfo == undefined || baseinfo.length === 0 ? '' : baseinfo.TargetPSClassName,
+                            initialValue: isExists ? '' : baseinfo.TargetPSClassName,
                             rules: [{
                                 required: true,
                                 message: "请输入污染源类别"
@@ -789,9 +729,54 @@ class edit extends PureComponent {
                             </Select>
                         )}
                     </FormItem>
-                    <FormItem style={{ width: '400px' }} {...formItemLayout} label="联系人">
+                    <Divider dashed={true} style={{ border: '1px dashed #FFFFFF' }} />
+                    <FormItem style={{ width: '400px' }} {...formItemLayout} label="运行时间">
+                        {getFieldDecorator('TargetRunDate',
+                            {
+                                initialValue: isExists ? '' : baseinfo.TargetRunDate === null ? '' : moment(baseinfo.TargetRunDate),
+                            })(
+                                <DatePicker disabled={isedit} />
+                            )}
+                    </FormItem>
+                    <FormItem style={{ width: '400px' }} {...formItemLayout} label="企业传真">
+                        {getFieldDecorator('TargetFax', {
+                            initialValue: isExists ? '' : baseinfo.TargetFax,
+                            rules: [{
+                                pattern: /^(\d{3,4}-)?\d{7,8}$/,
+                                message: '请输入传真',
+                            }],
+                        })(
+                            <Input
+                                style={{ width: 300 }}
+                                readOnly={isedit}
+                            />
+                        )}
+                    </FormItem>
+                    <FormItem style={{ width: '400px' }} {...formItemLayout} label="环保负责人">
+                        {getFieldDecorator('TargetEnvironmentPrincipal', {
+                            initialValue: isExists ? '' : baseinfo.TargetEnvironmentPrincipal,
+                        })(
+                            <Input
+                                style={{ width: 300 }}
+
+                                readOnly={isedit}
+                            />
+                        )}
+                    </FormItem>
+                    <Divider dashed />
+                    <FormItem style={{ width: '400px' }} {...formItemLayout} label="管辖区域">
+                        {getFieldDecorator('TargetAreaCode', {
+                            initialValue: isExists ? '' : baseinfo.TargetAreaCode,
+                        })(
+                            <Input
+                                style={{ width: 300 }}
+                                readOnly={isedit}
+                            />
+                        )}
+                    </FormItem>
+                    <FormItem style={{ width: '400px' }} {...formItemLayout} label="联系人员">
                         {getFieldDecorator('TargetLinkman', {
-                            initialValue: baseinfo == null || baseinfo == undefined || baseinfo.length === 0 ? '' : baseinfo.TargetLinkman,
+                            initialValue: isExists ? '' : baseinfo.TargetLinkman,
                         })(
                             <Input
                                 style={{ width: 300 }}
@@ -800,20 +785,29 @@ class edit extends PureComponent {
                         )}
                     </FormItem>
 
+                    <FormItem style={{ width: '400px' }} {...formItemLayout} label="专职环保人员">
+                        {getFieldDecorator('TargetEnvironmentMans', {
+                            initialValue: isExists ? '' : baseinfo.TargetEnvironmentMans,
+                        })(
+                            <Input
+                                style={{ width: 300 }}
+                                readOnly={isedit}
+                            />
+                        )}
+                    </FormItem>
+                    <Divider dashed={true} style={{ border: '1px dashed #FFFFFF' }} />
                     <FormItem style={{ width: '400px' }} {...formItemLayout} label="占地面积">
                         {getFieldDecorator('TargetTotalArea', {
-                            initialValue: baseinfo == null || baseinfo == undefined || baseinfo.length === 0 ? '' : baseinfo.TargetTotalArea,
+                            initialValue: isExists ? '' : baseinfo.TargetTotalArea,
                         })(
                             <Input
                                 style={{ width: 300 }}
                                 readOnly={isedit}
                                 addonAfter={'平方公里'}
                             />
-
-
                         )}
                     </FormItem>
-                    <Divider dashed={true} style={{ border: '1px dashed #FFFFFF' }} />
+
                     {/* <FormItem style={{ width: '400px' }} {...formItemLayout} label="状态">
                         {getFieldDecorator('TargetStatus', {
                             initialValue: baseinfo ? baseinfo.TargetStatus : '',
@@ -836,21 +830,20 @@ class edit extends PureComponent {
                                 <DatePicker />
                             )}
                     </FormItem> */}
-
-                    <FormItem style={{ width: '400px' }} {...formItemLayout} label="备注">
-                        {getFieldDecorator('TargetComment', {
-                            initialValue: baseinfo == null || baseinfo == undefined || baseinfo.length === 0 ? '' : baseinfo.TargetComment,
+                    <FormItem style={{ width: '400px' }} {...formItemLayout} label="企业厂界">
+                        {getFieldDecorator('TargetCoordinateSet', {
+                            initialValue: isExists ? '' : baseinfo.TargetCoordinateSet,
+                            rules: [{
+                                required: true,
+                                message: '请输入厂界',
+                            }],
                         })(
-                            <Input
-                                style={{ width: 300 }}
-                                readOnly={isedit}
-                            />
+                            <TextArea style={{ width: 300 }} readOnly={true} placeholder={'请点击编辑厂界'} rows={4} />
                         )}
                     </FormItem>
-
-                    <FormItem style={{ width: '400px' }} {...formItemLayout} label="经纬度">
+                    <FormItem style={{ width: '400px' }} {...formItemLayout} label="企业经纬度">
                         {getFieldDecorator('LongitudeLatitude', {
-                            initialValue: baseinfo == null || baseinfo == undefined || baseinfo.length === 0 ? '' : baseinfo.TargetLongitude + ',' + baseinfo.TargetLatitude,
+                            initialValue: isExists ? '' : baseinfo.TargetLongitude + ',' + baseinfo.TargetLatitude,
                             rules: [{
                                 required: true,
                                 message: "请输入经纬度"
@@ -863,15 +856,15 @@ class edit extends PureComponent {
                             />
                         )}
                     </FormItem>
-                    <FormItem style={{ width: '400px' }} {...formItemLayout} label="厂界">
-                        {getFieldDecorator('TargetCoordinateSet', {
-                            initialValue: baseinfo == null || baseinfo == undefined || baseinfo.length === 0 ? '' : baseinfo.TargetCoordinateSet,
-                            rules: [{
-                                required: true,
-                                message: '请输入厂界',
-                            }],
+                    <Divider dashed />
+                    <FormItem style={{ width: '400px' }} {...formItemLayout} label="企业备注">
+                        {getFieldDecorator('TargetComment', {
+                            initialValue: isExists ? '' : baseinfo.TargetComment,
                         })(
-                            <TextArea style={{ width: 300 }} readOnly={true} placeholder={'请点击编辑厂界'} rows={4} />
+                            <Input
+                                style={{ width: 300 }}
+                                readOnly={isedit}
+                            />
                         )}
                     </FormItem>
                 </Form>
@@ -886,9 +879,7 @@ class edit extends PureComponent {
         const {
             ID
         } = match.params;
-        //   const baseinfo = EnterpriseModel === null || ID === "null" ? null : EnterpriseModel;
         const baseinfo = EnterpriseModel.length === 0 || EnterpriseModel === undefined ? null : EnterpriseModel;
-      
         let polygonChange;
         let log;
         let lat;
@@ -898,7 +889,6 @@ class edit extends PureComponent {
             if (baseinfo.length !== 0) {
                 const { TargetCoordinateSet } = baseinfo;
                 polygonChange = TargetCoordinateSet;
-                // allcoo = eval(CoordinateSet);
                 log = baseinfo.TargetLongitude === undefined ? 0 : baseinfo.TargetLongitude;
                 lat = baseinfo.TargetLatitude === undefined ? 0 : baseinfo.TargetLatitude;
                 mapCenter = {
@@ -916,7 +906,6 @@ class edit extends PureComponent {
 
         if (polygon) {
             polygonChange = polygon;
-            // allcoo = eval(polygon);
         }
         if (longitude && latitude) {
             mapCenter = { longitude: longitude, latitude: latitude };
@@ -928,19 +917,6 @@ class edit extends PureComponent {
             lat = 39.90867;
             log = 116.397385;
         }
-        // if (isloading) {
-        //     return (<Spin
-        //         style={{
-        //             width: '100%',
-        //             height: 'calc(100vh/2)',
-        //             display: 'flex',
-        //             alignItems: 'center',
-        //             justifyContent: 'center'
-        //         }}
-        //         size="large"
-        //     />);
-        // }
-
         return (
             <MonitorContent
                 {...this.props}
@@ -978,7 +954,6 @@ class edit extends PureComponent {
                                         this.photoList(ImgList, baseinfo)
                                     }
                                 </Modal>
-
                             </div></Col>
                         <Col xs={{ span: 9, offset: 0 }} style={{}}>
                             <div style={{
@@ -1068,7 +1043,6 @@ class edit extends PureComponent {
                     <div style={{ textAlign: "center" }} />
                 </Content>
             </MonitorContent>
-
         );
     }
 }

@@ -21,7 +21,6 @@ export async function GetEnterpriseManageList(params) {
         regionCode: params.regionCode,
         name:params.name,
     };
-    debugger
     const result = post('/api/rest/PollutantSourceApi/PPointAndData/GetEntList', body, null);
     return result === null ? {
         data: null
@@ -35,7 +34,6 @@ export async function deleteEnterprise(params) {
     const body = {
         parentIDs: params.ID,
     };
-    debugger
     const result = post('/api/rest/PollutantSourceApi/PPointAndData/DelEnterprise', body, null);
     return result === null ? {
         data: null
@@ -88,6 +86,7 @@ export async function AddEnterpriseManage(params) {
         Longitude: params.Longitude,
         Latitude: params.Latitude,
         CoordinateSet: params.CoordinateSet,
+        Abbreviation: params.Abbreviation,
         Photo:params.Photo,
     };
     const result = post('/api/rest/PollutantSourceApi/PPointAndData/AddEnterprise', body, null);
@@ -128,8 +127,8 @@ export async function UpdateEnterpriseManage(params) {
         Longitude: params.Longitude,
         Latitude: params.Latitude,
         CoordinateSet: params.CoordinateSet,
+        Abbreviation: params.Abbreviation,
     };
-    debugger
     const result = post('/api/rest/PollutantSourceApi/PPointAndData/UpdateEnterprise', body, null);
     return result === null ? {
         data: null

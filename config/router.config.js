@@ -42,7 +42,7 @@ export default [
         path: '/',
         component: '../layouts/BasicLayout',
         routes: [
-      //    { path: '/', redirect: '/homepage' },
+            //    { path: '/', redirect: '/homepage' },
             /* 主页 */
             {
                 path: '/homepage', component: './HomePage',
@@ -182,9 +182,16 @@ export default [
 
             /* 排口报警及时响应统计分析 */
             { path: '/analysis/pointalarmresponse/:entcode/:entname', component: './Analysis/AlarmResponse' },
+            
+            /* 超标排口分析（第一版选项卡格式的，目前注释，页面存在） */
+            // { path: '/analysis/overpointlist', component: './Analysis/OverPointList' },
 
-            /* 报警监测点分析 */
-            { path: '/analysis/overpointlist', component: './Analysis/OverPointList' },
+            /* 超标企业分析（第二版图表格式） */
+            { path: '/analysis/overresponse', component: './Analysis/OverResponseCommon' },
+
+             /* 超标排口分析（第二版图表格式） */
+             { path: '/analysis/overpointlist/:entcode/:entname', component: './Analysis/OverPointListAndChart' },
+
             /* 自行监测报告 */
             {
                 path: '/selfmonitor/selfmonitorreport', component: './Analysis/MonitoringReport'
@@ -244,7 +251,7 @@ export default [
 
             /* 标准库管理 */
             { path: '/sysmanage/standardlibrary', component: './StandardLibrary' },
-            
+
             /* 标准库管理-添加 */
             { path: '/sysmanage/standardlibrary/add', component: './StandardLibrary/AddStandardLibrary' },
             /* 标准库管理-维护 */

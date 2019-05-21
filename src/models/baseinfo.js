@@ -65,7 +65,6 @@ export default Model.extend({
         },{
             call,update
         }){
-            debugger
             const body= {parentIDs:enterpriceid}
             const entbaseinfo = yield call(querypolluntantentinfolist, body);
             yield update({ entbaseinfo: entbaseinfo });

@@ -309,30 +309,16 @@ export async function queryalloverdatalist(params) {
     const result = await post('/api/rest/PollutantSourceApi/OverData/GetAllPointOverDataList', params, null);
     return result === null ? { data: null } : result.data;
 }
-
-
-// 获取超标排口汇总列表数据(二版)
+// 获取企业超标排口汇总列表数据(二版)
 export async function queryalloverdatalists(params) {
     const result = await post('/api/rest/PollutantSourceApi/OverData/GetAllPointOverDataLists', params, null);
     return result === null ? { data: null } : result.data;
 }
-// 获取超标排口汇总图表数据(二版)
+// 获取企业超标排口汇总图表数据(二版)
 export async function queryalloverdataChart(params) {
     const result = await post('/api/rest/PollutantSourceApi/OverData/queryalloverdataChart', params, null);
     return result === null ? { data: null } : result.data;
 }
-
-// 获取企超标企业汇总列表数据(二版)
-export async function GetAllEntpriseOverDataLists(params) {
-    const result = await post('/api/rest/PollutantSourceApi/OverData/GetAllEntpriseOverDataLists', params, null);
-    return result === null ? { data: null } : result.data;
-}
-// 获取超标企业汇总图表数据(二版)
-export async function EntpriseOverdataChart(params) {
-    const result = await post('/api/rest/PollutantSourceApi/OverData/EntpriseOverdataChart', params, null);
-    return result === null ? { data: null } : result.data;
-}
-
 
 //获取监测报告列表
 export async function queryreportlist(params) {

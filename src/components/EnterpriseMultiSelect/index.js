@@ -23,16 +23,20 @@ class index extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            RegionCode: this.props.RegionCode === null ? "" : this.props.RegionCode,
             Cascaderval: null,
         };
     }
 
     componentWillMount() {
+        let val;
+        const { DefaultValue } = this.props;
+        if (DefaultValue !== null && DefaultValue !== undefined) {
+            val = DefaultValue.split(',');
+        }
         this.props.dispatch({
             type: 'region/GetRegions',
             payload: {
-                RegionCode: this.state.RegionCode
+                RegionCode: val ? val[0] : "",
             }
         });
     }
@@ -48,7 +52,7 @@ class index extends Component {
                     RegionCode: targetOption.value
                 }
             });
-        }, 1000);
+        }, 1500);
     };
 
     onChange = (value, selectedOptions) => {
@@ -59,10 +63,8 @@ class index extends Component {
     }
 
     render() {
-
         const { width, minWidth, RegionArr, DefaultValue, disabled } = this.props;
         let val;
-
         if (DefaultValue !== null && DefaultValue !== undefined) {
 
             val = DefaultValue.split(',');

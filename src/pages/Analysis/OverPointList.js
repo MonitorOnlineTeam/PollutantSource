@@ -199,7 +199,6 @@ class OverPointList extends Component {
                 title="超标排口分析"
                 extra={
                     <div>
-                
                   <Serach
                   placeholder="请输入企业名称进行搜索"
                   onSearch={this.OnSerach}
