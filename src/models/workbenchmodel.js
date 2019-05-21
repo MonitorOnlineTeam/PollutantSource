@@ -344,7 +344,9 @@ export default Model.extend({
          */
         * getStatisticsPointStatus({ payload }, { call, put, update, select }) {
             const { statisticsPointStatus } = yield select(state => state.workbenchmodel);
-            let body = {};
+            let body = {
+                entCode:payload.entCode
+            };
             const response = yield call(getStatisticsPointStatus, body);
             yield update({
                 statisticsPointStatus: {

@@ -9,6 +9,7 @@ import PdButton from '../../components/OverView/PdButton';
 import {getPointStatusImg} from '../../utils/getStatusImg';
 import {formatPollutantPopover} from '../../utils/utils';
 import {onlyOneEnt} from '../../config';
+import Link from 'umi/link';
 
 const RadioGroup = Radio.Group;
 @connect(({ loading, overview }) => ({
@@ -169,6 +170,16 @@ class dataList extends PureComponent {
         this.reloadData(dataOverview);
     }
 
+    toHomePage=(selectent)=>{
+        const {dispatch}=this.props;
+        dispatch({
+           type:"homepage/updateState",
+           payload:{
+              entCode:selectent.entCode,
+           }
+       })
+    }
+
     renderEntSearch=()=>{
         if(onlyOneEnt)
         {
@@ -207,6 +218,9 @@ class dataList extends PureComponent {
                         key: 'entName',
                         width: 300,
                         fixed: fixed,
+                        render: (value, record, index) => {
+                            return <span onClick={()=>this.toHomePage(record)}><Link to="/homepage">{value}</Link></span>
+                        }
                 })
             }
             columns=columns.concat({

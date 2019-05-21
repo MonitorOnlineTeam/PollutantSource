@@ -104,7 +104,10 @@ export default Model.extend({
         }, { call, update, put, select }) {
             const { dataOverview, selectpollutantTypeCode ,RunState,selectent,entbaseinfo} = yield select(a => a.overview);
             let entCode=selectent?selectent.entCode:(entbaseinfo?entbaseinfo.entCode:null);
-            debugger;
+            if(payload.entCode)
+            {
+                entCode=payload.entCode;
+            }
             let body = {
                 time: dataOverview.time,
                 pollutantTypes: selectpollutantTypeCode,

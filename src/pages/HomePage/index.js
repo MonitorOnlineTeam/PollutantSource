@@ -64,6 +64,7 @@ let _thismap;
     baseinfo: baseinfo.entbaseinfo,
     datalist: overview.data,
     pollutantTypelist: overview.pollutantTypelist,
+    entCode:homepage.entCode
 }))
 class index extends Component {
     constructor(props) {
@@ -125,11 +126,11 @@ class index extends Component {
      *  企业基本信息
      */
      getbaseinfo = () => {
-         const {dispatch} = this.props;
+         const {dispatch,entCode} = this.props;
          dispatch({
              type: pageUrl.getbaseinfo,
              payload: {
-                 parentID: enterpriceid,
+                 entCode:entCode
              },
          });
      }
@@ -139,13 +140,15 @@ class index extends Component {
       */
      getpointdatalist = () => {
          const {
-             dispatch
+             dispatch,
+             entCode
          } = this.props;
          dispatch({
              type: pageUrl.getdatalist,
              payload: {
                  map: true,
-                 pollutantTypes:''
+                 pollutantTypes:'',
+                 entCode:entCode
              },
          });
      }
@@ -155,12 +158,13 @@ class index extends Component {
          */
         getStatisticsPointStatus = () => {
             const {
-                dispatch
+                dispatch,
+                entCode
             } = this.props;
             dispatch({
                 type: pageUrl.getStatisticsPointStatus,
                 payload: {
-
+                    entCode:entCode
                 },
             });
         }
@@ -169,11 +173,11 @@ class index extends Component {
      * 智能质控_率的统计_更新数据
      */
     getRateStatisticsByEnt = () => {
-        const {dispatch} = this.props;
+        const {dispatch,entCode} = this.props;
         dispatch({
             type: pageUrl.getRateStatisticsByEnt,
             payload: {
-
+                entCode:entCode
             },
         });
     }
@@ -183,12 +187,13 @@ class index extends Component {
      */
     getExceptionProcessing = () => {
         const {
-            dispatch
+            dispatch,
+            entCode
         } = this.props;
         dispatch({
             type: pageUrl.getExceptionProcessing,
             payload: {
-
+                entCode:entCode
             },
         });
     }
@@ -229,12 +234,13 @@ class index extends Component {
      */
     getTaskCount = () => {
         const {
-            dispatch
+            dispatch,
+            entCode
         } = this.props;
         dispatch({
             type: pageUrl.getTaskCount,
             payload: {
-
+                entCode:entCode
             },
         });
     }
@@ -359,12 +365,13 @@ class index extends Component {
      */
     getAlarmAnalysis = () => {
         const {
-            dispatch
+            dispatch,
+            entCode
         } = this.props;
         dispatch({
             type: pageUrl.getAlarmAnalysis,
             payload: {
-
+                entCode:entCode
             },
         });
     }
@@ -448,12 +455,13 @@ class index extends Component {
       */
      getAllMonthEmissionsByPollutant = () => {
          const {
-             dispatch
+             dispatch,
+             entCode
          } = this.props;
          dispatch({
              type: pageUrl.getAllMonthEmissionsByPollutant,
              payload: {
-
+                entCode:entCode
              },
          });
      }
@@ -705,13 +713,15 @@ treeCilck = (row) => {
      onRadioChange=(e)=>{
          const value = e.target.value;
          const {
-             dispatch
+             dispatch,
+             entCode
          } = this.props;
          dispatch({
              type: pageUrl.getdatalist,
              payload: {
                  map: true,
-                 pollutantTypes: value
+                 pollutantTypes: value,
+                 entCode:entCode
              },
          });
          this.setState({

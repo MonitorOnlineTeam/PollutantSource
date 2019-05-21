@@ -48,18 +48,30 @@ class EntTreeList extends Component {
        let res=[];
        if(entlist && entlist.length !== 0)
        {
+        
+
          entlist.map((item,key)=>{
+            let csyxlcolor="";
+            if(item.transmissionEffectiveRate<90)
+            {
+                csyxlcolor=entstyles.unqualified;
+            }
+            let sbyzlcolor="";
+            if(item.equipmentOperatingRate<90)
+            {
+                sbyzlcolor=entstyles.unqualified;
+            }
             res.push(<div onClick={()=>this.entClick(item)} className={entstyles.miancard}>
-                <div style={{float:'left',marginRight:10}}> <img style={{width:105,height:72}} src='../../../entwry.jpg'/> </div>
+                {/* <div style={{float:'left',marginRight:10}}> <img style={{width:105,height:72}} src='../../../entwry.jpg'/> </div> */}
                 <div className={entstyles.card}>
-                <div><Icon className={entstyles.icon} type="bank" theme="twoTone" /><span>{item.entName}({item.count})</span></div>
-                <div><span style={{color:'red'}}><Icon className={entstyles.icon} type="interation" theme="twoTone" />传输有效率: 80%</span>
-                <span> <Icon  style={{marginLeft:5}} type="tool" theme="twoTone" /> 设备运转率: 90%</span></div>
+                <div style={{fontSize:16,paddingLeft:10}}><Icon className={entstyles.icon} type="bank" theme="twoTone" /><span>{item.entName}({item.count})</span></div>
+                <div style={{paddingLeft:30,marginTop:8}}><span className={csyxlcolor}><Icon className={entstyles.icon} type="interation" theme="twoTone" />传输有效率: {item.transmissionEffectiveRate}</span>
+                <span className={sbyzlcolor}> <Icon  style={{marginLeft:30}} type="tool" theme="twoTone" /> 设备运转率: {item.equipmentOperatingRate}</span></div>
                 <div className={entstyles.statusImg}>
-                     <span>{getPointStatusImg(1,null,1,12)}</span>正常: {item.onLine}
-                     <span>{getPointStatusImg(0,null,1,12)}</span>离线: {item.offLine}
-                     <span>{getPointStatusImg(2,null,1,12)}</span>超标: {item.over}
-                     <span>{getPointStatusImg(3,null,1,12)}</span>异常: {item.exception}
+                     <span>{getPointStatusImg(1,null,1,12)}正常: {item.onLine}</span>
+                     <span>{getPointStatusImg(0,null,1,12)}离线: {item.offLine}</span>
+                     <span>{getPointStatusImg(2,null,1,12)}超标: {item.over}</span>
+                     <span>{getPointStatusImg(3,null,1,12)}异常: {item.exception}</span>
                 </div>
                 </div>
             </div>)

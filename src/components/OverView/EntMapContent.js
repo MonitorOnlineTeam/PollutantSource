@@ -9,7 +9,17 @@ import { amapKey,mainpoll } from '../../config';
 import {getPointStatusImg} from '../../utils/getStatusImg';
 import { debug } from 'util';
 
-
+const MarkerLayoutStyle={
+    minWidth:200,
+    position:'absolute',
+    backgroundColor:'white',
+    height:50,
+    top:-55,
+    left:-63,
+    textAlign:'center',
+    borderRadius:'10%',
+    lineHeight:'50px'
+};
 //地图工具
 const plugins = [
     'MapType',
@@ -116,6 +126,29 @@ class EntMapContent extends Component {
         }
         return res;
   }
+  getMarkers=()=>{
+    const {entlist}=this.props;
+    if(entlist && entlist.length>0)
+    {
+        entlist.map(item=>{
+            item.position={
+                latitude:item.latitude,
+                longitude:item.longitude
+            }
+        })
+      return(<Markers
+            markers={entlist}
+            events={this.markersEvents}
+            render={(extData) => {
+             return(this.renderMarkerLayout(extData))
+          }}
+        />)
+    }
+  }
+
+  renderMarkerLayout(extData){
+      return <div style={{position:'absolute'}}><div style={MarkerLayoutStyle}>{extData.entName}</div><img style={{width:20}} src="../../entimg.png"/></div>;
+  }
 
   entClick=(ent)=>{
       const {dispatch}=this.props;
@@ -152,8 +185,10 @@ class EntMapContent extends Component {
               amapkey={amapKey}
               plugins={plugins}
           >
-          {this.getpolygon()}
-          {this.getInfoWindows()}
+          {this.getMarkers()}
+          {/* {this.getpolygon()} */}
+
+          {/* {this.getInfoWindows()} */}
 
           </Map>
       );

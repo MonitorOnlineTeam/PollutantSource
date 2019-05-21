@@ -122,7 +122,10 @@ export async function getOverPoints(params) {
  * @params {}
  */
 export async function getStatisticsPointStatus(params) {
-    const result = post(pageUrl.workbench.statisticsPointStatus, params||{}, null);
+    const body={
+        entCode:params.entCode
+    }
+    const result = post(pageUrl.workbench.statisticsPointStatus, body, null);
     return result === null ? {
         data: null
     } : result;

@@ -40,7 +40,7 @@ export default Model.extend({
             payload,
         }, { call, update }) {
             const body={
-                parentIDs:enterpriceid
+                parentIDs:payload.entCode?payload.entCode:enterpriceid
             };
             const entbaseinfo = yield call(querypolluntantentinfolist, body);
             const regionlist = yield call(queryregionlist, {recursionNum: 3});
