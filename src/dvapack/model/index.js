@@ -11,28 +11,28 @@ const getDefaultModel = () => ({
         loading: false,
         confirmLoading: false,
         /**AutoForm 基本属性 */
-        conditionBase:{},//AutoForm默认搜索条件区域表单
-        dataTablesBase:[]
+        conditionBase: {},//AutoForm默认搜索条件区域表单
+        dataTablesBase: []
         /**AutoForm 基本属性 */
     },
     subscriptions: {},
     effects: {
-        * baseAdd({payload }, {call, put,select}){
+        * baseAdd({ payload }, { call, put, select }) {
             console.log("baseAdd");
         },
-        * baseDelete({payload}, {call, update}) {
+        * baseDelete({ payload }, { call, update }) {
             console.log("baseDelete");
         },
-        * baseUpdate({payload},{call,update}){
+        * baseUpdate({ payload }, { call, update }) {
             console.log("baseUpdate");
         },
-        * baseGetData({payload},{call,update}){
+        * baseGetData({ payload }, { call, update }) {
             console.log("baseGetData");
         }
 
     },
     reducers: {
-        updateState(state, {payload}) {//这里的state是当前总的state，这里的payload包含了上面传递的参数和type
+        updateState(state, { payload }) {//这里的state是当前总的state，这里的payload包含了上面传递的参数和type
             return {
                 ...state,
                 ...payload
@@ -125,14 +125,14 @@ const enhanceEffects = (effects = {}) => {
     Object
         .keys(effects)
         .forEach((key) => {
-            wrappedEffects[key] = function * (action, sagaEffects) {
+            wrappedEffects[key] = function* (action, sagaEffects) {
                 const extraSagaEffects = {
                     ...sagaEffects,
                     put: createPutEffect(sagaEffects),
                     update: createUpdateEffect(sagaEffects),
-                    callWithLoading: createExtraCall(sagaEffects, {loading: true}),
-                    callWithConfirmLoading: createExtraCall(sagaEffects, {confirmLoading: true}),
-                    callWithSpinning: createExtraCall(sagaEffects, {spinning: true}),
+                    callWithLoading: createExtraCall(sagaEffects, { loading: true }),
+                    callWithConfirmLoading: createExtraCall(sagaEffects, { confirmLoading: true }),
+                    callWithSpinning: createExtraCall(sagaEffects, { spinning: true }),
                     callWithMessage: createExtraCall(sagaEffects),
                     callWithExtra: (serviceFn, args, config) => {
                         createExtraCall(sagaEffects, config)(serviceFn, args, config);
@@ -146,8 +146,8 @@ const enhanceEffects = (effects = {}) => {
     return wrappedEffects;
 
     function createPutEffect(sagaEffects) {
-        const {put} = sagaEffects;
-        return function * putEffect(type, payload) {
+        const { put } = sagaEffects;
+        return function* putEffect(type, payload) {
             let action = {
                 type,
                 payload
@@ -160,16 +160,16 @@ const enhanceEffects = (effects = {}) => {
     }
 
     function createUpdateEffect(sagaEffects) {
-        const {put} = sagaEffects;
-        return function * updateEffect(payload) {
-            yield put({type: 'updateState', payload});
+        const { put } = sagaEffects;
+        return function* updateEffect(payload) {
+            yield put({ type: 'updateState', payload });
         };
     }
 
 
     function createExtraCall(sagaEffects, config = {}) {
         const { put, call } = sagaEffects;
-        return function * extraCallEffect(serviceFn, args, payloadupdate, message = {}) {
+        return function* extraCallEffect(serviceFn, args, payloadupdate, message = {}) {
             let result;
             const { loading, confirmLoading, spinning } = config;
             const { successMsg, errorMsg, key } = message;
@@ -181,7 +181,7 @@ const enhanceEffects = (effects = {}) => {
             } catch (e) {
                 errorMsg && Modal.error({ title: errorMsg });
                 throw e;
-            } finally {}
+            } finally { }
 
             return result;
         };
@@ -201,7 +201,7 @@ function extend(defaults, properties) {
     }
 
     const model = defaults || getDefaultModel();
- 
+
     const modelAssignKeys = ['state', 'subscriptions', 'effects', 'reducers'];
     const { namespace } = properties;
 
