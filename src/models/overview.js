@@ -102,9 +102,12 @@ export default Model.extend({
         * querydatalist({
             payload,
         }, { call, update, put, select }) {
-            //
-            const { dataOverview, selectpollutantTypeCode ,RunState,entbaseinfo} = yield select(a => a.overview);
-     
+            const { dataOverview, selectpollutantTypeCode ,RunState,selectent,entbaseinfo} = yield select(a => a.overview);
+            let entCode=selectent?selectent.entCode:(entbaseinfo?entbaseinfo.entCode:null);
+            if(payload.entCode)
+            {
+                entCode=payload.entCode;
+            }
             let body = {
                 time: dataOverview.time,
                 pollutantTypes: selectpollutantTypeCode,
@@ -112,7 +115,7 @@ export default Model.extend({
                 status: dataOverview.selectStatus,
                 terate: dataOverview.terate,
                 entName:dataOverview.entName,
-                entCode:entbaseinfo==null?null: entbaseinfo.entCode,
+                entCode:entCode,
                 ...payload
             }
             if(body.time)

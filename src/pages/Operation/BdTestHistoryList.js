@@ -103,7 +103,6 @@ export default class BdTestHistoryList extends Component {
         return (
             <MonitorContent {...this.props} breadCrumbList={
                 [
-                    { Name: '首页', Url: '/' },
                     { Name: '智能质控', Url: '' },
                     { Name: '校验测试记录', Url: '' }
                 ]

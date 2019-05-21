@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Spin,Input,Tabs, Badge, Button } from 'antd';
+import { Spin,Input,Tabs, Badge, Button,Icon } from 'antd';
 import { connect } from 'dva';
 import moment from 'moment';
 import styles from './MapTreeList.less';
@@ -7,6 +7,7 @@ import { mainpoll } from '../../config';
 import {getPointStatusImg} from '../../utils/getStatusImg';
 import PointTree from '../../components/OverView/TreeCardContent';
 import {onlyOneEnt} from '../../config';
+import Link from 'umi/link';
 
 
 const Search = Input.Search;
@@ -25,8 +26,10 @@ const TabPane = Tabs.TabPane;
     selectpollutantTypeCode:overview.selectpollutantTypeCode,
     //数据一览后台参数
     dataOverview:overview.dataOverview,
+    
     mapdetailParams:overview.mapdetailParams,
-
+    //选中的企业
+    selectent:overview.selectent
 }))
 class MapTreeList extends Component {
     constructor(props) {
@@ -111,6 +114,77 @@ class MapTreeList extends Component {
              }
          })
      }
+     toHomePage=()=>{
+         const {selectent,dispatch}=this.props;
+         dispatch({
+            type:"homepage/updateState",
+            payload:{
+               entCode:selectent.entCode,
+            }
+        })
+     }
+
+     getSearch=()=>{
+         if(onlyOneEnt)
+         {
+             let res=[];
+             res.push(<div>
+                <Search
+                    className={styles.search}
+                    placeholder="请输入监测点名称进行查询"
+                    enterButton="查询"
+                    size="large"
+                    style={{width:400}}
+                    onSearch={value => this.onSerach(value)}
+                />
+            </div>)
+            res.push(<div className={styles.statuslistContainer}
+                >
+                   <Badge status="default" text="离线" />
+                   <Badge status="success" text="在线" />
+                   <Badge status="error" text="超标" />
+                   <Badge status="warning" text="异常" />
+                </div>)
+             return res;
+         }
+         else
+         {
+            const {selectent}=this.props;
+            return( 
+
+                <div style={{
+                    width: 400,
+                    // height: 125,
+                    background: '#fff',
+                    borderRadius: 7,
+                    boxShadow: 'rgba(136, 136, 136, 0.41) 4px 3px 9px'
+                }}>
+                    <div style={{fontSize: 16, marginLeft: 15, paddingTop: 15}}>
+                        <span style={{position: 'relative',top: -2,marginRight: 2}}><Icon type="home" theme="twoTone" /></span>
+                         {selectent.entName}
+                        <Button onClick={this.backbutton} className={styles.backButton}>返回</Button>
+                    </div>
+                    <div style={{borderBottom: '1px solid #EBEBEB',marginTop: 6}} />
+                    <div style={{marginLeft: 15, marginTop: 10,paddingBottom: 10}}>
+                        <span className={styles.statuslistContainerent}>
+                            <Badge status="default" text="离线" />
+                            <Badge status="success" text="在线" />
+                            <Badge status="error" text="超标" />
+                            <Badge status="warning" text="异常" />
+                        </span>
+                        <span style={{float: 'right',marginRight: 10}}>
+                            <span onClick={this.toHomePage} style={{marginRight: 15, cursor: 'pointer'}}><img style={{width: 15, marginRight: 6, marginBottom: 4}} src="/home.png" /><Link to='/homepage'>企业看板</Link></span>
+                            <span style={{float:"right"}}> 
+                           </span>  
+                        </span>
+                        <div style={{clear:'both'}}></div>
+                    </div>
+                </div>
+
+            )
+         }
+     }
+
      render() {
          const {maploading,selectpollutantTypeCode,isback}=this.props;
          if(maploading) {
@@ -118,7 +192,7 @@ class MapTreeList extends Component {
          }
          return (
              <div style={{ marginLeft: 10, marginTop: 10 }}>
-                 <div>
+                 {/* <div>
                      <Search
                          className={styles.search}
                          placeholder="请输入监测点名称进行查询"
@@ -127,16 +201,16 @@ class MapTreeList extends Component {
                          style={{width:400}}
                          onSearch={value => this.onSerach(value)}
                      />
-                 </div>
-
-                 <div className={styles.statuslistContainer}
+                 </div> */}
+                 {this.getSearch()}
+                 {/* <div className={styles.statuslistContainer}
                  >
                     <Badge status="default" text="离线" />
                     <Badge status="success" text="在线" />
                     <Badge status="error" text="超标" />
                     <Badge status="warning" text="异常" />
                    { !isback?'':<Button onClick={this.backbutton} className={styles.backbutton}>返回</Button>}
-                 </div>
+                 </div> */}
                  
                  <div>
                      <div className={styles.treelist} style={{ width: '400px',marginTop: 5,background:'#fff' }}>

@@ -246,7 +246,6 @@ class EnterpriseManager extends Component {
                 {...this.props}
                 breadCrumbList={
                     [
-                        {Name:'首页',Url:'/'},
                         {Name:'系统管理',Url:''},
                         {Name:'企业管理',Url:''}
                     ]

@@ -162,7 +162,6 @@ export default class EntEquipmentOperatingRate extends Component {
         return (
             <MonitorContent {...this.props} breadCrumbList={
                 [
-                    { Name: '首页', Url: '/' },
                     { Name: '智能质控', Url: '' },
                     { Name: '企业设备运转率', Url: '' }
                 ]

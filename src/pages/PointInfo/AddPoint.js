@@ -375,7 +375,6 @@ class AddPoint extends Component {
          } = editpoint === null || this.props.match.params.DGIMN ==="null" ? {} : editpoint;
 
          let Crumbs=[  
-            { Name: '首页', Url: '/' },
             { Name: '系统管理', Url: '' },
          ]
          if(onlyOneEnt)

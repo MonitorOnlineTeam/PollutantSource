@@ -465,7 +465,6 @@ class EditStandardLibrary extends Component {
                 {...this.props}
                 breadCrumbList={
                     [
-                        { Name: '首页', Url: '/' },
                         { Name: '系统管理', Url: '' },
                         { Name: '标准库管理', Url: '/sysmanage/standardlibrary' },
                         { Name: '标准库维护', Url: '' }

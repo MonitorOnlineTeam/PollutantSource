@@ -83,7 +83,6 @@ export default class Ywdsjlist extends Component {
         return (
             <MonitorContent {...this.props} breadCrumbList={
                 [
-                    { Name: '首页', Url: '/' },
                     { Name: '智能运维', Url: '' },
                     { Name: '运维大事记', Url: '' }
                 ]

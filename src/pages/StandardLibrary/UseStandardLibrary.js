@@ -321,7 +321,6 @@ class UseStandardLibrary extends Component {
         ];
 
         let Crumbs=[  
-            { Name: '首页', Url: '/' },
             { Name: '系统管理', Url: '' },
          ]
         if(onlyOneEnt)

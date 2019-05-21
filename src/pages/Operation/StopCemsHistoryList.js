@@ -101,7 +101,6 @@ export default class StopCemsHistoryList extends Component {
         return (
             <MonitorContent {...this.props} breadCrumbList={
                 [
-                    { Name: '首页', Url: '/' },
                     { Name: '智能运维', Url: '' },
                     { Name: '停机记录表', Url: '' }
                 ]

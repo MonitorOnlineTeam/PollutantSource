@@ -221,7 +221,6 @@ class MonitoringReport extends Component {
                 {...this.props}
                 breadCrumbList={
                     [
-                        { Name: '首页', Url: '/' },
                         { Name: '智能分析', Url: '' },
                         { Name: '自行监测年度报告', Url: '' }
                     ]

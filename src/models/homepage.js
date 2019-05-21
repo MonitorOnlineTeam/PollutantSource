@@ -13,6 +13,7 @@ export default Model.extend({
         requstresult: null,
         loading: false,
         reason: null,
+        entCode:null,
         RateStatisticsByEnt: {
             beginTime: moment().format('YYYY-MM-01 HH:mm:ss'),
             endTime: moment().format('YYYY-MM-DD HH:mm:ss'),
@@ -77,6 +78,7 @@ export default Model.extend({
             let body = {
                 beginTime: RateStatisticsByEnt.beginTime,
                 endTime: RateStatisticsByEnt.endTime,
+                entCode:payload.entCode
             };
             const response = yield call(GetRateStatisticsByEnt, body);
             yield update({
@@ -105,6 +107,7 @@ export default Model.extend({
             let body = {
                 beginTime: ExceptionProcessing.beginTime,
                 endTime: ExceptionProcessing.endTime,
+                entCode:payload.entCode
             };
             const response = yield call(GetExceptionProcessing, body);
             yield update({
@@ -161,6 +164,7 @@ export default Model.extend({
             let body = {
                 beginTime: AlarmAnalysis.beginTime,
                 endTime: AlarmAnalysis.endTime,
+                entCode:payload.entCode
             };
             const response = yield call(GetAlarmAnalysis, body);
             yield update({
@@ -190,6 +194,7 @@ export default Model.extend({
                 beginTime: AllMonthEmissionsByPollutant.beginTime,
                 endTime: AllMonthEmissionsByPollutant.endTime,
                 pollutantCode: AllMonthEmissionsByPollutant.pollutantCode,
+                entCode:payload.entCode
             };
             const response = yield call(GetAllMonthEmissionsByPollutant, body);
             let ycdate = [];

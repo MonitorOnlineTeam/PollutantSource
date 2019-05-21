@@ -922,7 +922,6 @@ class edit extends PureComponent {
                 {...this.props}
                 breadCrumbList={
                     [
-                        { Name: '首页', Url: '/' },
                         { Name: '系统管理', Url: '' },
                         { Name: '企业管理', Url: '/BasicInfo/enterprisemanage' },
                         { Name: '企业维护', Url: '' }

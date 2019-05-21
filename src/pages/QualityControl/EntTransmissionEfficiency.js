@@ -191,7 +191,6 @@ export default class EntTransmissionEfficiency extends Component {
         return (
             <MonitorContent {...this.props} breadCrumbList={
                 [
-                    { Name: '首页', Url: '/' },
                     { Name: '智能质控', Url: '' },
                     { Name: '传输有效率', Url: '' }
                 ]

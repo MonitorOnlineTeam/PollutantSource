@@ -144,7 +144,6 @@ export default class ManualUpload extends Component {
         return (
             <MonitorContent {...this.props} breadCrumbList={
                 [
-                    { Name: '首页', Url: '/' },
                     { Name: '自行监控', Url: '' },
                     { Name: '手工数据上传', Url: '' }
                 ]

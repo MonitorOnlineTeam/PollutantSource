@@ -102,7 +102,6 @@ export default class InspectionHistoryList extends Component {
         return (
             <MonitorContent {...this.props} breadCrumbList={
                 [
-                    { Name: '首页', Url: '/' },
                     { Name: '智能运维', Url: '' },
                     { Name: '巡检记录', Url: '' }
                 ]

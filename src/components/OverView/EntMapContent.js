@@ -9,7 +9,17 @@ import { amapKey,mainpoll } from '../../config';
 import {getPointStatusImg} from '../../utils/getStatusImg';
 import { debug } from 'util';
 
-
+const MarkerLayoutStyle={
+    minWidth:200,
+    position:'absolute',
+    backgroundColor:'white',
+    height:50,
+    top:-55,
+    left:-63,
+    textAlign:'center',
+    borderRadius:'10%',
+    lineHeight:'50px'
+};
 //地图工具
 const plugins = [
     'MapType',
@@ -57,18 +67,7 @@ class EntMapContent extends Component {
             _thismap.setFitView();
         }
     };
-
-    //地图点位点击
-    markersEvents = {
-        click: (MapsOption, marker) => {
-            const itemdata = marker.F.extData;
-            this.treeCilck(itemdata);
-        }
-    };
-
-    treeCilck = (row) => {
-         
-    };
+     
 
     polygonEvents={
         click:(e)=>{
@@ -113,7 +112,8 @@ class EntMapContent extends Component {
         {
             entlist.map((item,key)=>{
              const pointposition=[item.longitude,item.latitude];
-             res.push( <InfoWindow
+             res.push(
+                  <InfoWindow
                 position={pointposition}
                 visible={true}
                 key={key}
@@ -126,13 +126,37 @@ class EntMapContent extends Component {
         }
         return res;
   }
+  getMarkers=()=>{
+    const {entlist}=this.props;
+    if(entlist && entlist.length>0)
+    {
+        entlist.map(item=>{
+            item.position={
+                latitude:item.latitude,
+                longitude:item.longitude
+            }
+        })
+      return(<Markers
+            markers={entlist}
+            events={this.markersEvents}
+            render={(extData) => {
+             return(this.renderMarkerLayout(extData))
+          }}
+        />)
+    }
+  }
+
+  renderMarkerLayout(extData){
+      return <div style={{position:'absolute'}}><div style={MarkerLayoutStyle}>{extData.entName}</div><img style={{width:20}} src="../../entimg.png"/></div>;
+  }
 
   entClick=(ent)=>{
       const {dispatch}=this.props;
       dispatch({
           type:'overview/updateState',
           payload:{
-            selectent:ent
+            selectent:ent,
+            entbaseinfo:ent
           }
       }) 
       dispatch({
@@ -161,8 +185,10 @@ class EntMapContent extends Component {
               amapkey={amapKey}
               plugins={plugins}
           >
-          {this.getpolygon()}
-          {this.getInfoWindows()}
+          {this.getMarkers()}
+          {/* {this.getpolygon()} */}
+
+          {/* {this.getInfoWindows()} */}
 
           </Map>
       );

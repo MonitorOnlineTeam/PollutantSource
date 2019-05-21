@@ -438,7 +438,6 @@ class GetAllEnterprise extends Component {
                 {...this.props}
                 breadCrumbList={
                     [
-                        { Name: '首页', Url: '/' },
                         { Name: '基本信息', Url: '' },
                         { Name: '企业管理', Url: '' }
                     ]

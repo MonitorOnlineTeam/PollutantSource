@@ -320,7 +320,6 @@ export default class PollutantEmissions extends Component {
 
         let tableTitle="";
         let Crumbs=[  
-                      { Name: '首页', Url: '/' },
                       { Name: '智能分析', Url: '' }
                    ]
         if(onlyOneEnt)

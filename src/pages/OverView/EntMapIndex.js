@@ -51,6 +51,7 @@ class EntMapIndex extends PureComponent {
 
 
     render() {
+        const {selectent}=this.props;
         return(
             <div
                 style={{
@@ -81,7 +82,8 @@ class EntMapIndex extends PureComponent {
                     zIndex:100
                 }}
                 >
-               <PollutantTypeRadio />
+               {selectent?<PollutantTypeRadio />:""}
+             
                 </div>
                 <div
                     style={{
@@ -104,7 +106,7 @@ class EntMapIndex extends PureComponent {
                     borderRadius: 4,
                     border: "1px solid #d9d9d9"
                 }}>
-                <StatusList />
+                {selectent? <StatusList />:""}
                 </div>
 
             </div>

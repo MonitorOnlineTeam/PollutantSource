@@ -189,7 +189,6 @@ class OverPointList extends Component {
         return (
             <MonitorContent {...this.props} breadCrumbList={
                 [
-                    {Name:'首页',Url:'/'},  
                     {Name:'智能分析',Url:''},
                     {Name:'超标排口分析',Url:''}  
                 ]

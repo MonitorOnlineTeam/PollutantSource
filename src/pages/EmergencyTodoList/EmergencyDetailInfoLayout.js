@@ -15,7 +15,7 @@ class EmergencyDetailInfoLayout extends Component {
     renderBreadCrumb = () => {
         const rtnVal = [];
         const params = this.props.match.params;
-        rtnVal.push({ Name: '首页', Url: '/' });
+        //rtnVal.push({ Name: '首页', Url: '/' });
         switch (params.viewtype) {
             case 'datalistview': //数据一栏
                 rtnVal.push({ Name: '数据一览', Url: `/overview/${params.viewtype}` });
