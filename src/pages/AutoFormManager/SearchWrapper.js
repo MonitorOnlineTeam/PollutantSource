@@ -2,7 +2,7 @@
  * @Author: Jiaqi 
  * @Date: 2019-05-07 16:03:14 
  * @Last Modified by: Jiaqi
- * @Last Modified time: 2019-05-21 17:12:49
+ * @Last Modified time: 2019-05-22 14:49:48
  * @desc: 搜索容器组件
  * @props {string} formChangeActionType formAction
  * @props {store object} searchFormState formState对象
@@ -173,7 +173,8 @@ class SearchWrapper extends Component {
           {
             this._renderFormItem()
           }
-          <Col offset={2} md={6} sm={24} style={{ marginTop: 6 }}>
+          {/* <Col offset={2} md={6} sm={24} style={{ marginTop: 6 }}> */}
+          <Col md={6} sm={24} style={{ marginTop: 6 }}>
             <Button type="primary" onClick={this.onSubmitForm.bind(this.props.form)}>
               查询
                   </Button>

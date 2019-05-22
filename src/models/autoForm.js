@@ -2,7 +2,7 @@
  * @Author: Jiaqi 
  * @Date: 2019-05-16 15:13:59 
  * @Last Modified by: Jiaqi
- * @Last Modified time: 2019-05-22 14:07:35
+ * @Last Modified time: 2019-05-22 14:49:10
  */
 import {
   Model
@@ -106,19 +106,20 @@ export default Model.extend({
 
         // console.log('columns=', columns)
         let whereList = {};
-        let searchConditions = result.Datas.CfgField.map(item => {
+        let searchConditions = result.Datas.CfgField.filter(itm => itm.DF_ISQUERY === 1).map(item => {
           whereList[item.FullFieldNameVerticalBar] = item.DF_CONDITION
           return {
             type: item.DF_CONTROL_TYPE,
             labelText: item.DF_NAME_CN,
             fieldName: item.FullFieldNameVerticalBar,
-            value: item.ENUM_NAME && JSON.parse(item.ENUM_NAME),
+            value: item.ENUM_NAME ? JSON.parse(item.ENUM_NAME) : [],
             placeholder: item.DF_TOOLTIP,
             configId: item.DT_CONFIG_ID,
             where: item.DF_CONDITION
           }
         }
         )
+        console.log('searchConditions=', searchConditions)
         // console.log('whereList=',whereList)
         // yield update({
         //   searchConfigItems: {
