@@ -2,7 +2,7 @@
  * @Author: Jiaqi 
  * @Date: 2019-05-16 15:13:59 
  * @Last Modified by: Jiaqi
- * @Last Modified time: 2019-05-21 16:05:25
+ * @Last Modified time: 2019-05-22 14:07:35
  */
 import {
   Model
@@ -50,18 +50,18 @@ export default Model.extend({
           group.push(groupItem)
         }
       }
+
       const postData = {
-        ConditionWhere: {
-          "rel": "$and",
-          "group": [{
-            "rel": "$and",
-            group
-          }]
-        },
         pageIndex: state.searchForm.current,
         pageSize: state.searchForm.pageSize
       };
-
+      group.length ? postData.ConditionWhere = JSON.stringify({
+        "rel": "$and",
+        "group": [{
+          "rel": "$and",
+          group
+        }]
+      }) : ''
 
       console.log('group==', group)
       console.log('postData=', postData)
@@ -81,6 +81,10 @@ export default Model.extend({
           tableInfo: {
             ...state.tableInfo,
             dataSource: result.Datas.DataSource,
+          },
+          searchForm: {
+            ...state.searchForm,
+            total: result.Total
           }
         })
       }

@@ -66,16 +66,19 @@ export async function getPageConfigInfo() {
  * 【AutoForm】获取页面高级查询表单
  * @params {"configId": "TestCommonPoint"}
  */
-export async function getListPager() {
-    const params = {
-        configId: "TestCommonPoint"
+export async function getListPager(params) {
+    const postData = {
+        configId: "TestCommonPoint",
+        ...params,
+        // ConditionWhere: JSON.stringify(params.ConditionWhere),
     };
-    const defaults = {
-        PageIndex:1,
-        PageSize:200
-    };
-    const body=Object.assign(defaults,params);
-    const result = await getNew('/api/rest/PollutantSourceApi/AutoFormDataApi/GetListPager',body, null);
+    // const defaults = {
+    //     PageIndex:1,
+    //     PageSize:200
+    // };
+    // const body=Object.assign(param,params);
+    // console.log('params=',body)
+    const result = await getNew('/api/rest/PollutantSourceApi/AutoFormDataApi/GetListPager',postData, null);
     return result;
 }
 

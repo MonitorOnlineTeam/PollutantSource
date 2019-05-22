@@ -26,7 +26,9 @@ const DEFAULT_WIDTH = 150;
 class SdlTable extends PureComponent {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      selectedRowKeys: []
+    };
     this._SELF_ = { btnEl: [] };
 
     this.loadDataSource = this.loadDataSource.bind(this);
@@ -60,6 +62,11 @@ class SdlTable extends PureComponent {
     }, 0);
   }
 
+  onSelectChange = selectedRowKeys => {
+    console.log('selectedRowKeys changed: ', selectedRowKeys);
+    this.setState({ selectedRowKeys });
+  };
+
   _renderHandleButtons() {
     const { opreationButtons, columns } = this.props;
     this._SELF_.btnEl = [];
@@ -70,7 +77,24 @@ class SdlTable extends PureComponent {
           return <Button key={btn.DISPLAYBUTTON} type="primary">添加</Button>
           break;
         case "alldel":
-          return <Button key={btn.DISPLAYBUTTON} type="primary">删除</Button>
+          return <Button
+            disabled={this.state.selectedRowKeys.length <= 0}
+            key={btn.DISPLAYBUTTON}
+            type="primary"
+            onClick={() => {
+              confirm({
+                title: '是否删除?',
+                content: '确认是否删除',
+                onOk() {
+                  console.log('OK');
+                },
+                onCancel() {
+                  console.log('Cancel');
+                },
+              });
+            }}
+          >删除
+            </Button>
           break;
         case "print":
           return <Button key={btn.DISPLAYBUTTON} type="primary">打印</Button>
@@ -97,6 +121,7 @@ class SdlTable extends PureComponent {
   }
 
   render() {
+    const { loading, selectedRowKeys } = this.state;
     const { columns, tableInfo: { dataSource }, searchForm } = this.props;
     // 计算长度
     let _columns = columns.map(col => {
@@ -159,6 +184,11 @@ class SdlTable extends PureComponent {
       return prev + curr;
     }, 0)
 
+    const rowSelection = {
+      selectedRowKeys,
+      onChange: this.onSelectChange,
+    };
+
     return (
       <Fragment>
         <Row className={styles.buttonWrapper}>
@@ -183,6 +213,7 @@ class SdlTable extends PureComponent {
               }
             }
           }
+          rowSelection={rowSelection}
           pagination={{
             showSizeChanger: true,
             showQuickJumper: true,
