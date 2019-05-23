@@ -164,7 +164,11 @@ class BasicLayout extends React.PureComponent {
         {
             return(
                 <div>
-                    <Redirect to='/workbench' />
+                    {/* <Redirect to='/workbench' />
+                    {
+                        this.props.children
+                    } */}
+                    <Redirect />
                     {
                         this.props.children
                     }

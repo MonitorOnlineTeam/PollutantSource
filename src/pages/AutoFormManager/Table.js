@@ -11,6 +11,7 @@ import {
 } from 'antd';
 import { connect } from 'dva';
 import styles from './index.less';
+import { routerRedux } from 'dva/router';
 const confirm = Modal.confirm;
 
 // 默认长度
@@ -75,7 +76,7 @@ class SdlTable extends PureComponent {
     return opreationButtons ? opreationButtons.map(btn => {
       switch (btn.DISPLAYBUTTON) {
         case "add":
-          return <Button key={btn.DISPLAYBUTTON} type="primary">添加</Button>
+          return <Button key={btn.DISPLAYBUTTON} type="primary" onClick={() => { this.props.dispatch(routerRedux.push(`/AutoFormManager/AutoFormAdd/TestCommonPoint`))}}>添加</Button>
           break;
         case "alldel":
           return <Button

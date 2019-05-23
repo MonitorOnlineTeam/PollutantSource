@@ -7,6 +7,7 @@
 
 import Cookie from 'js-cookie';
 import {postNew,getNew} from '../dvapack/request';
+import { async } from 'q';
 
 /**
  * 【AutoForm】系统登录
@@ -49,15 +50,16 @@ export async function getConditions() {
  * 【AutoForm】获取页面配置信息
  * @params {"configId": "TestCommonPoint"}
  */
-export async function getPageConfigInfo() {
-    const params = {
-        configId: "TestCommonPoint"
+export async function getPageConfigInfo(params) {
+    let param ={
+        configId: "TestCommonPoint",
+        ...params
     };
     const defaults = {
         PageIndex:1,
         PageSize:200
     };
-    const body=Object.assign(defaults,params);
+    const body=Object.assign(defaults,param);
     const result = await getNew('/api/rest/PollutantSourceApi/AutoFormDataApi/GetPageConfigInfo',body, null);
     return result;
 }
@@ -139,5 +141,13 @@ export async function postAutoFromDataDelete(params) {
     // const defaults = {};
     // const body=Object.assign(defaults,params);
     const result = await postNew('/api/rest/PollutantSourceApi/AutoFormDataApi/PostAutoFromDataDelete',params, null);
+    return result;
+}
+/**
+ * 【AutoForm】数据添加
+ * @params {"configId": "TestCommonPoint",FormData:'{name:1,code:"123"}'}
+ */
+export async function postAutoFromDataAdd(params){
+    const result = await postNew('/api/rest/PollutantSourceApi/AutoFormDataApi/PostAutoFromDataAdd',params, null);
     return result;
 }
