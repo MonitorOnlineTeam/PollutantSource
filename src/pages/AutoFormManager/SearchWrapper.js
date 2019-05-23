@@ -2,7 +2,7 @@
  * @Author: Jiaqi 
  * @Date: 2019-05-07 16:03:14 
  * @Last Modified by: Jiaqi
- * @Last Modified time: 2019-05-22 14:49:48
+ * @Last Modified time: 2019-05-22 16:36:51
  * @desc: 搜索容器组件
  * @props {string} formChangeActionType formAction
  * @props {store object} searchFormState formState对象
@@ -24,6 +24,9 @@ import {
   Select, Modal, Tag, Divider, Dropdown, Icon, Menu, Popconfirm, message, DatePicker, InputNumber
 } from 'antd';
 import { connect } from 'dva';
+import SearchSelect from './SearchSelect';
+import TimelineItem from 'antd/lib/timeline/TimelineItem';
+
 const Option = Select.Option;
 const Search = Input.Search;
 const confirm = Modal.confirm;
@@ -70,7 +73,6 @@ class SearchWrapper extends Component {
       inputPlaceholder: "请输入",
       selectPlaceholder: "请选择",
     }
-    // console.log('props==', this.props)
     this._resetForm = this._resetForm.bind(this);
     this._renderFormItem = this._renderFormItem.bind(this);
     this.onSubmitForm = this.onSubmitForm.bind(this);
@@ -114,7 +116,7 @@ class SearchWrapper extends Component {
     const { dispatch, form: { getFieldDecorator } } = this.props;
     const { formLayout, inputPlaceholder, selectPlaceholder } = this._SELF_;
     let element = '';
-    return this.props.formItemList.map((item,index) => {
+    return this.props.formItemList.map((item, index) => {
       let placeholder = item.placeholder;
       const fieldName = item.fieldName;
       const labelText = item.labelText;
@@ -138,20 +140,27 @@ class SearchWrapper extends Component {
           placeholder = placeholder || selectPlaceholder;
           const mode = 'multiple' || 'tags';
           element = (
-            <Select
-              allowClear
-              showSearch
-              placeholder={placeholder}
-              optionFilterProp="children"
+            <SearchSelect
+              configId={item.configId}
+              itemName={item.configDataItemName}
+              itemValue={item.configDataItemValue}
               mode={mode}
-              filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
             >
-              {
-                item.value.map(option => {
-                  return <Option key={option.key} value={option.key}>{option.value}</Option>
-                })
-              }
-            </Select>
+            </SearchSelect>
+            // <Select
+            //   allowClear
+            //   showSearch
+            //   placeholder={placeholder}
+            //   optionFilterProp="children"
+            //   mode={mode}
+            //   filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
+            // >
+            //   {
+            //     item.value.map(option => {
+            //       return <Option key={option.key} value={option.key}>{option.value}</Option>
+            //     })
+            //   }
+            // </Select>
           )
       }
       return (

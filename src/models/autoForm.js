@@ -2,12 +2,13 @@
  * @Author: Jiaqi 
  * @Date: 2019-05-16 15:13:59 
  * @Last Modified by: Jiaqi
- * @Last Modified time: 2019-05-22 14:49:10
+ * @Last Modified time: 2019-05-22 17:11:51
  */
 import {
   Model
 } from '../dvapack';
 import * as services from '../services/autoformapi'
+import { message } from 'antd';
 
 export default Model.extend({
   namespace: 'autoForm',
@@ -28,7 +29,8 @@ export default Model.extend({
     },
     configIdList: {},
     opreationButtons: [],
-    whereList: {}
+    whereList: {},
+    keys: [], // 主键
   },
   effects: {
     // 获取数据
@@ -89,6 +91,20 @@ export default Model.extend({
         })
       }
     },
+    // 根据configId 获取数据
+    * getConfigIdList({ payload }, { call, update, select }) {
+      let state = yield select(state => state.autoForm);
+      const result = yield call(services.getListPager, { ...payload });
+      if (result.IsSuccess) {
+        yield update({
+          configIdList: {
+            ...state.configIdList,
+            [payload.configId]: result.Datas.DataSource
+          }
+        })
+      }
+    },
+    //FOREIGN_DF_NAME /// FOREIGN_DF_ID
     // 获取页面配置项
     * getPageConfig({ payload }, { call, put, update, select }) {
       const result = yield call(services.getPageConfigInfo, { ...payload });
@@ -104,7 +120,7 @@ export default Model.extend({
         }
         )
 
-        // console.log('columns=', columns)
+
         let whereList = {};
         let searchConditions = result.Datas.CfgField.filter(itm => itm.DF_ISQUERY === 1).map(item => {
           whereList[item.FullFieldNameVerticalBar] = item.DF_CONDITION
@@ -115,18 +131,17 @@ export default Model.extend({
             value: item.ENUM_NAME ? JSON.parse(item.ENUM_NAME) : [],
             placeholder: item.DF_TOOLTIP,
             configId: item.DT_CONFIG_ID,
-            where: item.DF_CONDITION
+            where: item.DF_CONDITION,
+            configId: item.FOREIGH_DT_CONFIGID,
+            configDataItemName: item.FOREIGN_DF_NAME,
+            configDataItemValue: item.FOREIGN_DF_ID,
           }
-        }
-        )
-        console.log('searchConditions=', searchConditions)
-        // console.log('whereList=',whereList)
-        // yield update({
-        //   searchConfigItems: {
-        //     searchConditions: result.Datas.SearchConditions
-        //   },
-        //   columns: result.Datas.ColumnFields,
-        // })
+        })
+
+        // 主键
+        let keys = result.Datas.Keys.map(item => item.FullFieldName);
+        console.log('keys=', keys)
+
         let state = yield select(state => state.autoForm);
         yield update({
           searchConfigItems: {
@@ -137,7 +152,18 @@ export default Model.extend({
             columns
           },
           opreationButtons: result.Datas.OpreationButtons,
-          whereList
+          whereList,
+          keys
+        })
+      }
+    },
+
+    * del({payload}, {call, update, put}) {
+      const result = yield call(services.postAutoFromDataDelete, { ...payload });
+      if (result.IsSuccess) {
+        message.success('删除成功！');
+        yield put({
+          type: 'getAutoFormData'
         })
       }
     }

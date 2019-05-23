@@ -128,15 +128,16 @@ export async function getFormData() {
  * 【AutoForm】数据删除（支持批量）
  * @params {"configId": "TestCommonPoint"}
  */
-export async function postAutoFromDataDelete() {
-    const params = {
-        configId: "TestCommonPoint",
-        FormData:JSON.stringify({
-            "dbo.T_Bas_CommonPoint.PointCode":"54AC5E32-EBF5-457A-B9C1-9CD019F9EBD8,58F72760-E01E-461F-9EC4-6396DCAFDD9D",
-        })
-    };
-    const defaults = {};
-    const body=Object.assign(defaults,params);
-    const result = await postNew('/api/rest/PollutantSourceApi/AutoFormDataApi/PostAutoFromDataDelete',body, null);
+export async function postAutoFromDataDelete(params) {
+    // const params = {
+    //     configId: "TestCommonPoint",
+    //     FormData:JSON.stringify({
+    //         "dbo.T_Bas_CommonPoint.PointCode":"54AC5E32-EBF5-457A-B9C1-9CD019F9EBD8,58F72760-E01E-461F-9EC4-6396DCAFDD9D",
+    //         "dbo.T_Bas_CommonPoint.PointName": ""
+    //     })
+    // };
+    // const defaults = {};
+    // const body=Object.assign(defaults,params);
+    const result = await postNew('/api/rest/PollutantSourceApi/AutoFormDataApi/PostAutoFromDataDelete',params, null);
     return result;
 }

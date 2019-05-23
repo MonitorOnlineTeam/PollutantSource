@@ -20,7 +20,8 @@ const DEFAULT_WIDTH = 150;
   loading: loading.effects['autoForm/getAutoFormData'],
   searchForm: autoForm.searchForm,
   tableInfo: autoForm.tableInfo,
-  opreationButtons: autoForm.opreationButtons
+  opreationButtons: autoForm.opreationButtons,
+  keys: autoForm.keys
 }))
 
 class SdlTable extends PureComponent {
@@ -68,7 +69,7 @@ class SdlTable extends PureComponent {
   };
 
   _renderHandleButtons() {
-    const { opreationButtons, columns } = this.props;
+    const { opreationButtons, columns, keys } = this.props;
     this._SELF_.btnEl = [];
     const { btnEl } = this._SELF_;
     return opreationButtons ? opreationButtons.map(btn => {
@@ -86,7 +87,6 @@ class SdlTable extends PureComponent {
                 title: '是否删除?',
                 content: '确认是否删除',
                 onOk() {
-                  console.log('OK');
                 },
                 onCancel() {
                   console.log('Cancel');
@@ -122,7 +122,7 @@ class SdlTable extends PureComponent {
 
   render() {
     const { loading, selectedRowKeys } = this.state;
-    const { columns, tableInfo: { dataSource }, searchForm } = this.props;
+    const { columns, tableInfo: { dataSource }, searchForm, keys, dispatch } = this.props;
     // 计算长度
     let _columns = columns.map(col => {
       return col.width ? { width: DEFAULT_WIDTH, ...col } : { ...col, width: DEFAULT_WIDTH }
@@ -161,7 +161,18 @@ class SdlTable extends PureComponent {
                         title: '是否删除?',
                         content: '确认是否删除',
                         onOk() {
-                          console.log('OK');
+                          let postData = {};
+                          keys.map(item => {
+                            if(record[item]){
+                              postData[item] = record[item]
+                            }
+                          })
+                          dispatch({
+                            type: "autoForm/del",
+                            payload: {
+                              ...postData
+                            }
+                          })
                         },
                         onCancel() {
                           console.log('Cancel');
@@ -188,7 +199,7 @@ class SdlTable extends PureComponent {
       selectedRowKeys,
       onChange: this.onSelectChange,
     };
-
+    console.log('dataSource==',dataSource)
     return (
       <Fragment>
         <Row className={styles.buttonWrapper}>
@@ -197,7 +208,7 @@ class SdlTable extends PureComponent {
           }
         </Row>
         <Table
-          rowKey={(record, index) => (record.rn)}
+          rowKey={(record, index) => (record["dbo.T_Bas_CommonPoint.PointCode"])}
           size="middle"
           loading={this.props.loading}
           className={styles.dataTable}
