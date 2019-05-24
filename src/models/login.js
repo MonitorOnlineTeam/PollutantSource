@@ -23,7 +23,7 @@ export default Model.extend({
            
             const response1 = yield call(systemLogin);
             const resss= yield call(getPageConfigInfo);
-            debugger;
+            // debugger;
             const MsgId = yield select(state => state.login.MsgId);
             if (payload.type === 'mobile') {
                 if (!MsgId) {

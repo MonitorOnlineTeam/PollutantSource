@@ -111,12 +111,13 @@ export default Model.extend({
         * getPageConfig({ payload }, { call, put, update, select }) {
             const result = yield call(services.getPageConfigInfo, { ...payload });
             if (result.IsSuccess) {
-                let columns = result.Datas.ColumnFields.map((item, index) => ({
+                let columns = result.Datas.ColumnFields.filter(itm => itm.FOREIGH_DT_CONFIGID === "").map((item, index) => ({
                     title: item.DF_NAME_CN,
                     dataIndex: item.FullFieldName,
                     key: item.FullFieldNameVerticalBar,
                     align: 'center',
-                    width: item.DF_WIDTH
+                    width: item.DF_WIDTH,
+                    fixed: result.Datas.FixedFields.filter(m=>m.FullFieldName===item.FullFieldName).length>0?'left':''
                 })
                 );
 

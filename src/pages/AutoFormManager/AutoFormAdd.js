@@ -125,7 +125,7 @@ class AutoFormAdd extends Component {
                     );
             }
             return (
-                <Form.Item {...formLayout} label={labelText}>
+                <FormItem {...formLayout} label={labelText}>
                     {getFieldDecorator(`${fieldName }`, {
                         rules: [
                             {
@@ -134,7 +134,7 @@ class AutoFormAdd extends Component {
                             },
                         ],
                     })(element)}
-                </Form.Item>
+                </FormItem>
 
             );
         });
@@ -158,20 +158,21 @@ class AutoFormAdd extends Component {
             }
             >
                 <Card bordered={false}>
-                    <Form onSubmit={this.onSubmitForm} hideRequiredMark={true} style={{ marginTop: 8 }}>
-
+                    <Form onSubmit={this.onSubmitForm} hideRequiredMark={false} style={{ marginTop: 8 }}>
                         {
                             this._renderFormItem()
                         }
 
-                        <Form.Item {...submitFormLayout} style={{ marginTop: 32 }}>
+                        <FormItem {...submitFormLayout} style={{ marginTop: 32 }}>
                             <Button type="primary" htmlType="submit">
               保存
                             </Button>
-                            <Button style={{ marginLeft: 8 }} onClick={()=>{ this.props.dispatch(routerRedux.push(`/sysmanage/autoformmanager`));}}>
+                            <Button style={{ marginLeft: 8 }} onClick={()=>{
+ this.props.dispatch(routerRedux.push(`/sysmanage/autoformmanager`));
+}}>
               返回
                             </Button>
-                        </Form.Item>
+                        </FormItem>
                     </Form>
                 </Card>
             </MonitorContent>
