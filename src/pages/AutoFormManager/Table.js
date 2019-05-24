@@ -160,7 +160,11 @@ class SdlTable extends PureComponent {
                               }
                               if (item.type === "view") {
                                   return (<Fragment key={item.type}>
-                                      <a>详情</a>
+                                      <a onClick={
+                                          () => dispatch(routerRedux.push(`/AutoFormManager/AutoFormView/TestCommonPoint`))
+                                      }
+                                      >详情
+                                      </a>
                                       {
                                           this._SELF_.btnEl.length - 1 !== index && <Divider type="vertical" />
                                       }
