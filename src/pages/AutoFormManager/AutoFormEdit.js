@@ -1,9 +1,9 @@
 /*
- * @desc: AutoForm添加公共页面
+ * @desc: AutoForm编辑公共页面
  * @Author: JianWei
- * @Date: 2019-5-23 10:34:29
+ * @Date: 2019-5-24 15:28:31
  * @Last Modified by: JianWei
- * @Last Modified time: 2019-5-23 10:34:34
+ * @Last Modified time: 2019年5月24日15:28:35
  */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
@@ -29,7 +29,7 @@ const FormItem = Form.Item;
     searchForm: autoForm.searchForm,
 }))
 @Form.create()
-class AutoFormAdd extends Component {
+class AutoFormEdit extends Component {
     constructor(props) {
         super(props);
         this.state = {};
@@ -72,7 +72,7 @@ class AutoFormAdd extends Component {
             if (!err) {
                 //console.log('Received values of form: ', values);
                 dispatch({
-                    type: 'autoForm/add',
+                    type: 'autoForm/edit',
                     payload: {
                         configId: configId,
                         FormData:{
@@ -111,13 +111,11 @@ class AutoFormAdd extends Component {
                 case '下拉列表框':
                     validator=`${selectPlaceholder}`;
                     placeholder = placeholder || selectPlaceholder;
-                    let mode='';
                     element = (
                         <SearchSelect
                             configId={item.configId}
                             itemName={item.configDataItemName}
                             itemValue={item.configDataItemValue}
-                            mode={mode}
                         />
                     );
                     break;
@@ -169,7 +167,7 @@ class AutoFormAdd extends Component {
                     { Name: '首页', Url: '/' },
                     { Name: '系统管理', Url: '' },
                     { Name: 'AutoForm', Url: '/sysmanage/autoformmanager' },
-                    { Name: '添加', Url: '' }
+                    { Name: '编辑', Url: '' }
                 ]
             }
             >
@@ -200,7 +198,7 @@ class AutoFormAdd extends Component {
 }
 
 
-AutoFormAdd.propTypes = {
+AutoFormEdit.propTypes = {
     // placeholder
     placeholder: PropTypes.string,
     // mode
@@ -213,4 +211,4 @@ AutoFormAdd.propTypes = {
     itemValue: PropTypes.string.isRequired,
 };
 
-export default AutoFormAdd;
+export default AutoFormEdit;

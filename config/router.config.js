@@ -230,6 +230,8 @@ export default [
             { path: '/sysmanage/autoformmanager/:configId', component: './autoformmanager' },
             /* 系统管理-AutoForm添加页面 */
             { path: '/autoformmanager/autoformadd/:configId', component: './autoformmanager/autoformadd' },
+            /* 系统管理-AutoForm编辑页面 */
+            { path: '/autoformmanager/autoformedit/:configId', component: './autoformmanager/autoformedit' },
 
             /* 标准库管理-维护 */
             { path: '/sysmanage/standardlibrarydetail/:StandardLibraryID', component: './StandardLibrary/AddStandardLibrary' },
