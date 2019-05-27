@@ -137,7 +137,7 @@ class MapTreeDetail extends Component {
          else{
              if(item.scene)
              {
-                res.push(<span className={styles.operation}>运维中</span>)
+                // res.push(<span className={styles.operation}>运维中</span>)
              }
              if(item.warning)
              {

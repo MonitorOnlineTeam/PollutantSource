@@ -30,6 +30,7 @@ export default Model.extend({
         attentionOptions:[],
         regionList:[],
         zipUrl:''
+        
     },
     subscriptions: {
     },
@@ -79,7 +80,7 @@ export default Model.extend({
             yield update({
                 isSuccess: response.IsSuccess
             });
-            payload.callback();
+            payload.callback(response);
         },
         /**
          * 编辑企业
@@ -91,7 +92,7 @@ export default Model.extend({
             yield update({
                 isSuccess: response.IsSuccess
             });
-            payload.callback();
+            payload.callback(response);
         },
         /**
          * 删除单个企业
@@ -101,9 +102,10 @@ export default Model.extend({
         * deleteEnterprise({ payload }, { call, put, update, select }) {
             const response = yield call(deleteEnterprise, {...payload});
             yield update({
-                isSuccess: response.IsSuccess
+                isSuccess: response.IsSuccess,
+                message:response.Message
             });
-            payload.callback();
+            payload.callback(response);
         },
         /**
          * 根据企业ID，获取所有排口二维码并压缩

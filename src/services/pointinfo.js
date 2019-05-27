@@ -8,7 +8,8 @@ export async function getpointlist(params) {
     const body = {
         pageIndex: params.pageIndex,
         pageSize: params.pageSize,
-        DGIMNs: params.DGIMNs
+        DGIMNs: params.DGIMNs,
+        EntCode:params.EntCode
     };
     const result = post('/api/rest/PollutantSourceApi/PPointAndData/GetPointList', body, null);
     return result === null ? {
@@ -35,7 +36,12 @@ export async function addpoint(params) {
         Address: params.Address,
         OutputType: params.OutputType,
         OperationerId: params.OperationerId,
-        DevicePassword:params.DevicePassword||''
+        DevicePassword:params.DevicePassword||'',
+        EntCode:params.EntCode,
+        Col7:params.Col7,
+        Col8:params.Col8,
+        Col9:params.Col9,
+        Col10:params.Col10
     };
 
     const result = post('/api/rest/PollutantSourceApi/PPointAndData/AddPoint', body, null);
@@ -90,7 +96,11 @@ export async function editpoint(params) {
         Address: params.Address,
         OutputType: params.OutputType,
         OperationerId: params.OperationerId,
-        DevicePassword:params.DevicePassword||''
+        DevicePassword:params.DevicePassword||'',
+        Col7:params.Col7,
+        Col8:params.Col8,
+        Col9:params.Col9,
+        Col10:params.Col10
     };
     const result = post('/api/rest/PollutantSourceApi/PPointAndData/EditPoint', body, null);
     return result === null ? {

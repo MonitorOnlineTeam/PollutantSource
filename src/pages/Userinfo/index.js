@@ -194,47 +194,47 @@ export default class UserList extends Component {
             title: '用户名称',
             dataIndex: 'User_Name',
             key: 'User_Name',
-            width: '10%',
+            width: '15%',
             align: 'center',
             render: (text, record) => {
                 return text;
             }
         },
-        {
-            title: '角色名称',
-            dataIndex: 'Roles_Name',
-            key: 'Roles_Name',
-            width: '10%',
-            align: 'center',
-            render: (text, record) => {
-                return text;
-            }
-        },
+        // {
+        //     title: '角色名称',
+        //     dataIndex: 'Roles_Name',
+        //     key: 'Roles_Name',
+        //     width: '10%',
+        //     align: 'center',
+        //     render: (text, record) => {
+        //         return text;
+        //     }
+        // },
         {
             title: '电话号码',
             dataIndex: 'Phone',
             key: 'Phone',
-            width: '10%',
+            width: '15%',
             align: 'center',
             render: (text, record) => {
                 return text;
             }
         },
-        {
-            title: '推送类型',
-            dataIndex: 'SendPush',
-            key: 'SendPush',
-            width: '20%',
-            align: 'center',
-            render: (text, record) => {
-                return text;
-            }
-        },
+        // {
+        //     title: '推送类型',
+        //     dataIndex: 'SendPush',
+        //     key: 'SendPush',
+        //     width: '20%',
+        //     align: 'center',
+        //     render: (text, record) => {
+        //         return text;
+        //     }
+        // },
         {
             title: '状态',
             dataIndex: 'DeleteMark',
             key: 'DeleteMark',
-            width: '10%',
+            // width: '10%',
             align: 'center',
             render: (text, record) => {
                 if (text === '禁用') {
@@ -299,8 +299,8 @@ export default class UserList extends Component {
         return (
             <MonitorContent {...this.props} breadCrumbList={
                 [
-                    { Name: '首页', Url: '/' },
-                    { Name: '系统管理', Url: '' },
+                    // { Name: '首页', Url: '' },
+                    // { Name: '系统管理', Url: '' },
                     { Name: '用户管理', Url: '' }
                 ]
             }>

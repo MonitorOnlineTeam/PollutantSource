@@ -66,7 +66,7 @@ class UserLayout extends React.PureComponent {
 
         const copyright = (
             <Fragment>
-                Copyright <Icon type="copyright" /> 污染源智能分析平台  2019 SDL | <a
+                Copyright <Icon type="copyright" /> 污染源在线监控微信小程序管理平台  2019 SDL | <a
                     onClick={() => {
                         this.show();
                     }}
@@ -86,7 +86,7 @@ class UserLayout extends React.PureComponent {
                         <div className={styles.header}>
                             <Link to="/">
                                 <img alt="logo" className={styles.logo} src={logo} />
-                                <span className={styles.title}>污染源智能分析平台</span>
+                                <span className={styles.title}>污染源在线监控微信小程序管理平台</span>
                             </Link>
                         </div>
                         <div className={styles.desc}>SDL 一流的污染源监控专家</div>

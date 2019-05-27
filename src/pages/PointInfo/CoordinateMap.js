@@ -55,7 +55,7 @@ class AMapModule extends React.Component {
                     map.setLang(mapLang);
 
                     // 在新中心点添加 marker
-                    if(lat && log)
+                    if(lat && lng)
                     {
                         marker = new window.AMap.Marker({
                             map: map,

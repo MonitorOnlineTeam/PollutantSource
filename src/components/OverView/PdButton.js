@@ -143,12 +143,13 @@ class PdButton extends Component {
                 //进入站房中
                 else if(viewType.indexOf("pointInfo@")>-1)
                 {
-                    return(
-                        <PdPopconfirm  operationUserID={id} addoperationInfo={()=>this.addoperationInfo()} >
-                        <Button onClick={() => this.urge()} type="primary" ghost={true} 
-                        style={{ float: "right", marginRight: 30, top: -5 }}><Icon type="bell" />督办</Button>
-                    </PdPopconfirm>
-                    )
+                    return;
+                    // return(
+                    //     <PdPopconfirm  operationUserID={id} addoperationInfo={()=>this.addoperationInfo()} >
+                    //     <Button onClick={() => this.urge()} type="primary" ghost={true} 
+                    //     style={{ float: "right", marginRight: 30, top: -5 }}><Icon type="bell" />督办</Button>
+                    // </PdPopconfirm>
+                    // )
                 }
                     //工作台
                     else if(viewType=="workbench")
@@ -191,12 +192,13 @@ class PdButton extends Component {
              }
              else if(viewType.indexOf("pointInfo@")>-1)
              {
-                return(<PdPopconfirm  operationUserID={id} addoperationInfo={()=>this.addoperationInfo()} >
-                   <Button onClick={()=>this.pdshow(id)}
-                       type="primary" ghost={true} style={{ float: "right", marginRight: 30, top: -5 }}
-                    ><Icon type="bell" />派单
-                    </Button>
-                 </PdPopconfirm>)
+                 return;
+                // return(<PdPopconfirm  operationUserID={id} addoperationInfo={()=>this.addoperationInfo()} >
+                //    <Button onClick={()=>this.pdshow(id)}
+                //        type="primary" ghost={true} style={{ float: "right", marginRight: 30, top: -5 }}
+                //     ><Icon type="bell" />派单
+                //     </Button>
+                //  </PdPopconfirm>)
          
              }
              //工作台

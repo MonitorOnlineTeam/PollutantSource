@@ -28,10 +28,10 @@ export default class TopNavHeader extends PureComponent {
                   className={`${styles.main} ${contentWidth === 'Fixed' ? styles.wide : ''}`}
               >
                   <div className={styles.left}>
-                      <div className={styles.logo} key="logo" id="logo">
+                      <div className={styles.logo} key="logo" id="logo" style={{width:410}}>
                           {/* <Link to="/homepage"> */}
-                              <img src={logo} alt="logo" />
-                              <h1>污染源智能分析平台</h1>
+                          <img src={logo} alt="logo" />
+                          <h1>污染源在线监控微信小程序管理平台</h1>
                           {/* </Link> */}
                       </div>
                       <div

@@ -66,7 +66,7 @@ export async function adduser(params) {
         AlarmTime: params.AlarmTime,
         User_Remark: params.UserRemark,
         DeleteMark: params.DeleteMark,
-        Roles_Id: params.RolesId
+        Roles_Id: "4122f8b4-9c03-466c-b194-a5116e744fe1"//params.RolesId
     };
     const result = post('/api/rest/PollutantSourceApi/PUserInfo/AddUserInfo', body, null);
     return result === null ? {
@@ -99,7 +99,7 @@ export async function edituser(params) {
         AlarmTime: params.AlarmTime,
         User_Remark: params.UserRemark,
         DeleteMark: params.DeleteMark,
-        Roles_Id: params.RolesId
+        Roles_Id:"4122f8b4-9c03-466c-b194-a5116e744fe1",// params.RolesId
     };
     const result = post('/api/rest/PollutantSourceApi/PUserInfo/EditUserInfo', body, null);
     return result === null ? {

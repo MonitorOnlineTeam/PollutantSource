@@ -194,66 +194,7 @@ export default class GlobalHeaderRight extends PureComponent {
                         <Icon style={{height:'32%'}} type="file-pdf" />
                     </a>
                 </Tooltip> */}
-                <NoticeIcon
-                    className={styles.action}
-                    count={currentUserNoticeCnt.unreadCount}
-                    onItemClick={(item, tabProps) => {
-                        console.log(item, tabProps); // eslint-disable-line
-                        //报警
-                        if (item.type === "alarm") {
-                            if (item.sontype === "warn") {
-                                this.childWarning.showModal(item.pointname, item.DGIMN, item.overwarnings[0].PollutantCode, item.overwarnings[0].PollutantName, item.overwarnings[0].SuggestValue);
-                            }
-                            else if (item.sontype === "over") {
-                                // dispatch(routerRedux.push(`/pointdetail/${item.DGIMN}/alarmrecord/alarmrecord`));
-                                this.childAlarm.showModal(item.firsttime, item.lasttime, item.DGIMN, item.pointname);
-                            }
-                            else if (item.sontype === "exception") {
-                                this.props.dispatch({
-                                    type: 'urgentdispatch/queryoperationInfo',
-                                    payload: {
-                                        dgimn: item.DGIMN
-                                    }
-                                });
-                            }
-                        } else if (item.type === "advise") {
-                            if (item.params) {
-                                const params = JSON.parse(JSON.parse(item.params));
-                                // this.props.dispatch(routerRedux.push(`/workbench`));
-                                // this.props.dispatch(routerRedux.push(`/TaskDetail/emergencydetailinfo/null/ywdsjlist/${params.TaskId}/${item.DGIMN}`));
-                                this.childEmergencyDetailInfo.showModal(item.DGIMN, params.TaskId, item.pointname);
-                            }
-                        }
-                        //修改通知的已读状态
-                        //   this.changeReadState(item, tabProps);
-                    }}
-                    locale={{
-                        emptyText: formatMessage({ id: 'component.noticeIcon.empty' }),
-                        clear: formatMessage({ id: 'component.noticeIcon.clear' }),
-                    }}
-                    onClear={onNoticeClear}
-                    onPopupVisibleChange={onNoticeVisibleChange}
-                    loading={fetchingNotices}
-                    clearClose={false}
-                    showClear={false}
-                >
-                    <NoticeIcon.Tab
-                        count={unreadMsg.alarm}
-                        list={noticeData.alarm}
-                        title={formatMessage({ id: 'component.globalHeader.notification' })}
-                        name="alarm"
-                        emptyText={formatMessage({ id: 'component.globalHeader.notification.empty' })}
-                        emptyImage="https://gw.alipayobjects.com/zos/rmsportal/wAhyIChODzsoKIOBHcBk.svg"
-                    />
-                    <NoticeIcon.Tab
-                        count={unreadMsg.advise}
-                        list={noticeData.advise}
-                        title={formatMessage({ id: 'component.globalHeader.message' })}
-                        name="advise"
-                        emptyText={formatMessage({ id: 'component.globalHeader.message.empty' })}
-                        emptyImage="https://gw.alipayobjects.com/zos/rmsportal/sAuJeJzSKbUmHfBQRzmZ.svg"
-                    />
-                </NoticeIcon>
+              
                 {currentUser ? (
                     <HeaderDropdown overlay={menu}>
                         <span className={`${styles.action} ${styles.account}`}>

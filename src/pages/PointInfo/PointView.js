@@ -68,6 +68,8 @@ export default class pointview extends Component {
             pointstatus: 0,
             RunStateName:null,
             Col3Name:null,
+            Col8Name:null,
+            Col10Name:null
         };
     }
     componentWillMount() {
@@ -101,6 +103,8 @@ export default class pointview extends Component {
                             pointstatus: this.props.editpoint.pointstatus,
                             RunStateName: this.props.editpoint.RunStateName,
                             Col3Name: this.props.editpoint.Col3Name,
+                            Col8Name: this.props.editpoint.Col8,
+                            Col10Name:this.props.editpoint.Col10
                         });
                     }
                 },
@@ -192,7 +196,7 @@ export default class pointview extends Component {
         const rtnVal = [];
         rtnVal.push(<Button type="dashed"
             onClick={
-                () => this.props.dispatch(routerRedux.push(`/sysmanage/PointInfo`))
+                () => this.props.dispatch(routerRedux.push(`/sysmanage/PointInfo/${this.props.match.params.EntCode}`))
             } style={{ width: '200' }} >
             返回 </Button>);
         return rtnVal;
@@ -363,8 +367,9 @@ export default class pointview extends Component {
         return (
             <MonitorContent {...this.props} breadCrumbList={
                 [
-                    { Name: '首页', Url: '/' },
-                    { Name: '排口管理', Url: '/sysmanage/pointinfo' },
+                    // { Name: '首页', Url: '/' },
+                    {Name:'企业管理',Url:'/EnterpriseManager'},
+                    {Name:'排口管理',Url:`/sysmanage/pointinfo/${this.props.match.params.EntCode}`},
                     { Name: '排口详情', Url: '' }
                 ]
             }>
@@ -378,14 +383,14 @@ export default class pointview extends Component {
                                 <Description term="是否烧结" style={{ display: this.state.PollutantType }}>{this.state.IsSjName}</Description>
                                 <Description term="排口类型">{this.state.PointType}</Description>
                                 <Description term="污染物类型">{this.state.pollutantTypeName}</Description>
-                                <Description term="负责人">{this.state.linkman}</Description>
+                                <Description term="环保专工">{this.state.Col10Name}</Description>
                                 <Description term="排口直径" style={{ display: this.state.PollutantType }}>{this.state.OutputDiameter}</Description>
                                 <Description term="排口高度" style={{ display: this.state.PollutantType }}>{this.state.OutputHigh}</Description>
                                 <Description term="经度">{this.state.longitude}</Description>
                                 <Description term="纬度">{this.state.latitude}</Description>
-                                <Description term="运维人">{this.state.OperationerName}</Description>
+                                <Description term="运维人">{this.state.Col8Name}</Description>
                                 <Description term="上传数据类型">{this.state.RunStateName}</Description>
-                                <Description term="日常巡查表单类型">{this.state.Col3Name}</Description>
+                                {/* <Description term="日常巡查表单类型">{this.state.Col3Name}</Description> */}
                             </DescriptionList>
                             <Divider />
                             <DescriptionList size="large" col="1" style={{ marginLeft: 10 }}>
@@ -394,7 +399,7 @@ export default class pointview extends Component {
                             </DescriptionList>
                         </Card.Grid>
                     </Card>
-                        {this.state.PollutantType=== "none"? null:this.renderChildCems()}
+                        {/* {this.state.PollutantType=== "none"? null:this.renderChildCems()}
                         <div className={this.state.AddVisitable ? styles.show : styles.hide} 
                         style={{display: this.state.PollutantType}}>
                             <Card>
@@ -407,7 +412,7 @@ export default class pointview extends Component {
                                     })
                                 }}>添加监测子系统</Button>
                             </Card>
-                        </div>
+                        </div> */}
                 </div>
                 <Modal
                     visible={this.state.MSVisitable}

@@ -108,7 +108,7 @@ export default class Login extends Component {
                               )}
                           </FormItem>
                       </TabPane>
-                      <TabPane tab="手机号登录" key="mobile">
+                      {/* <TabPane tab="手机号登录" key="mobile">
                           {
                               login.status === 'error'
                 && login.type === 'mobile'
@@ -157,7 +157,7 @@ export default class Login extends Component {
                                   </Col>
                               </Row>
                           </FormItem>
-                      </TabPane>
+                      </TabPane> */}
                   </Tabs>
                   <FormItem className={styles.additional}>
                       {getFieldDecorator('remember', {
@@ -166,7 +166,7 @@ export default class Login extends Component {
                       })(
                           <Checkbox className={styles.autoLogin}>自动登录</Checkbox>
                       )}
-                      <a className={styles.forgot} href="">忘记密码</a>
+                      {/* <a className={styles.forgot} href="">忘记密码</a> */}
                       <Button size="large" loading={login.submitting} className={styles.submit} type="primary" htmlType="submit">
               登录
                       </Button>

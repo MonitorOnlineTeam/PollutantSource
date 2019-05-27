@@ -229,7 +229,7 @@ class PointDetail extends Component {
         else
         {
             if(scene) {
-                existTaskText.push(<span key={0}><Divider type="vertical" /><span><Icon type="user" className={styles.operationcolor} style={{marginBottom:3,marginRight:5 }} /><span>运维中</span></span></span>);
+                // existTaskText.push(<span key={0}><Divider type="vertical" /><span><Icon type="user" className={styles.operationcolor} style={{marginBottom:3,marginRight:5 }} /><span>运维中</span></span></span>);
             }
             if(warning) {
                 existTaskText.push(<span key={1}><Divider type="vertical" /><Icon type="bell" className={styles.warningcolor} style={{ color: 'red',marginBottom:3,marginRight:5 }} /><span>预警</span></span>);
@@ -286,7 +286,7 @@ class PointDetail extends Component {
         const viewtype= this.props.match.params.viewtype;
         let backpath=`/overview/${viewtype}`;
         if(viewtype==="pointinfo"){
-            backpath=`/sysmanage/${viewtype}`;
+            backpath=`/sysmanage/${viewtype}/${this.props.match.params.EntCode}`;
         }else if(viewtype==="equipmentoperatingrate"){
             backpath=`/qualitycontrol/${viewtype}`;
         }

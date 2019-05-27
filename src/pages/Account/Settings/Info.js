@@ -33,14 +33,14 @@ export default class Info extends Component {
             key: 'security',
             tab: '安全设置'
         },
-        {
-            key: 'mypielist',
-            tab: '我的派单'
-        },
-        {
-            key: 'mymessagelist',
-            tab: '我的通知'
-        },
+        // {
+        //     key: 'mypielist',
+        //     tab: '我的派单'
+        // },
+        // {
+        //     key: 'mymessagelist',
+        //     tab: '我的通知'
+        // },
         ];
         return (
             <MonitorContent

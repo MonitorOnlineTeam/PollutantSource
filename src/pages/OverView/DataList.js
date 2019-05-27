@@ -194,7 +194,7 @@ class dataList extends PureComponent {
                             lable.push(<span key={2} className={styles.warning}>预警中</span>);
                         }
                         if (record.scene) {
-                            lable.push(<span key={3} className={styles.operation}>运维中</span>);
+                            // lable.push(<span key={3} className={styles.operation}>运维中</span>);
                         }
                     }
                     return (<Popover trigger="click"  content={content}>
