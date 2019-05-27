@@ -271,7 +271,13 @@ export default class Content extends Component {
 
         return (
             <MonitorContent {...this.props} breadCrumbList={
-                Crumbs
+                [
+                    // { Name: '首页', Url: '' },
+                    // { Name: '系统管理', Url: '' },
+                    {Name:'企业管理',Url:'/EnterpriseManager'},
+                    {Name:'排口管理',Url:`/sysmanage/pointinfo/${this.props.match.params.EntCode}`},
+                    { Name: '停产管理', Url: '' }
+                ]
             }>
                 <div className={styles.cardTitle}>
                     <Card bordered={false} title={this.props.match.params.PointName} style={{ width: '100%' }}>

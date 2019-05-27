@@ -101,11 +101,11 @@ class AddPoint extends Component {
             });
         }
 
-        this.getOperationer();
+        //this.getOperationer();
         this.getpollutanttype();
         this.getgasoutputtype();
         this.setPollutantType(type);
-        this.getspecialworkeruserList();
+        //this.getspecialworkeruserList();
     }
 
      onRef1 = (ref) => {
@@ -182,7 +182,7 @@ class AddPoint extends Component {
                payload: {
                    callback: () => {
                        if (this.props.pollutanttypelist_requstresult === '1') {
-                           this.props.pollutanttypelist.map(p =>
+                           this.props.pollutanttypelist.filter(m=>m.pollutantTypeCode===2).map(p =>
                                this.state.PollutantTypes.push(<Option key={p.pollutantTypeCode} value={p.pollutantTypeCode}> {p.pollutantTypeName} </Option>)
                            );
                        } else {
@@ -203,7 +203,7 @@ class AddPoint extends Component {
                                this.state.GasOutputType.push(<Option key={p.GasOutputTypeCode} value={p.GasOutputTypeCode}> {p.GasOutputTypeName} </Option>)
                            );
                        } else {
-                           message.error('请添加气排口类型');
+                           message.error('请添加排口类型');
                        }
                    }
                },
@@ -226,27 +226,16 @@ class AddPoint extends Component {
                const key=this.props.match.params.DGIMN;
                index=dispatch(routerRedux.push(`/pointdetail/${key}/${backviewType}`));
            } else{
-               if(onlyOneEnt)
-               {
-                  index = dispatch(routerRedux.push(`/sysmanage/PointInfo/`));
-               }
-               else
-               {
-                   const{entCode,entName}=this.props;
-                  index = dispatch(routerRedux.push(`/sysmanage/PointInfo/${entCode}/${entName}`));
-               }
-         
+               index = dispatch(routerRedux.push(`/sysmanage/PointInfo/${this.props.match.params.EntCode}`));
            }
        }
 
        getloglat=(log,lat)=>{
-          if(log && lat)
-          {
-              return log+","+lat;
-          }
-          return '';
+           if(log && lat) {
+               return `${log},${lat}`;
+           }
+           return '';
        }
-       
 
 
        handleSubmit = (e) => {
@@ -276,6 +265,11 @@ class AddPoint extends Component {
                                Col3: values.Col3 === undefined ? '' : values.Col3,
                                OperationerId: values.OperationerId,
                                DevicePassword:values.DevicePassword||'',
+                               EntCode:this.props.match.params.EntCode,
+                               Col7:values.Col7,
+                               Col8:values.Col8,
+                               Col9:values.Col9,
+                               Col10:values.Col10,
                                callback: () => {
                                    if (this.props.requstresult === '1') {
                                        this.success();
@@ -307,6 +301,10 @@ class AddPoint extends Component {
                            Col3: values.Col3 === undefined ? '' : values.Col3,
                            OperationerId: values.OperationerId,
                            DevicePassword:values.DevicePassword||'',
+                           Col7:values.Col7,
+                           Col8:values.Col8,
+                           Col9:values.Col9,
+                           Col10:values.Col10,
                            callback: () => {
                                if (this.props.requstresult === '1') {
                                    this.success();
@@ -371,39 +369,24 @@ class AddPoint extends Component {
              longitude ,
              latitude ,
              Col3,
-             DevicePassword
+             DevicePassword,
+             Col7,
+             Col8,
+             Col9,
+             Col10
          } = editpoint === null || this.props.match.params.DGIMN ==="null" ? {} : editpoint;
-
-         let Crumbs=[  
-            { Name: '系统管理', Url: '' },
-         ]
-         if(onlyOneEnt)
-          {
-          Crumbs=Crumbs.concat(
-            { Name: '排口管理', Url: '/sysmanage/pointinfo' },
-            { Name: '排口维护', Url: '' }
-           )
-           }
-            else
-            {
-            let {entName,entCode}=this.props;
-  
-            if(entName)
-            {
-                entName=`(${entName})`
-            }
-            Crumbs=Crumbs.concat(
-                { Name: '企业管理', Url: '/sysmanage/entoperation' },
-                { Name: `排口管理${entName}`, Url: `/sysmanage/pointinfo/${entCode}/${entName}` },
-                { Name: '排口维护', Url: '' }
-            )
-            }
-
+         //  debugger;
          return (
              <MonitorContent
                  {...this.props}
                  breadCrumbList={
-                    Crumbs
+                     [
+                         //  {Name:'首页',Url:''},
+                         //  {Name:'系统管理',Url:''},
+                         {Name:'企业管理',Url:'/EnterpriseManager'},
+                         {Name:'排口管理',Url:`/sysmanage/pointinfo/${this.props.match.params.EntCode}`},
+                         {Name:`${this.props.match.params.DGIMN ==="null" ? "添加排口" : "编辑排口"}`,Url:''}
+                     ]
                  }
              >
                  <Card
@@ -471,6 +454,10 @@ class AddPoint extends Component {
                                          getFieldDecorator('PollutantType',
                                              {
                                                  initialValue: pollutantType===''?undefined:pollutantType,
+                                                 rules: [{
+                                                     required: true,
+                                                     message: '请选择污染物类型!'
+                                                 }]
 
                                              }
                                          )(
@@ -499,6 +486,46 @@ class AddPoint extends Component {
                          </Row>
                          <Row gutter={8}>
                              <Col span={8}>
+                                 <FormItem
+                                     {...formItemLayout}
+
+                                     label="运维人"
+                                 > {
+                                         getFieldDecorator('Col7', {
+                                             initialValue: Col7,
+                                             rules: [{
+                                                 required: false,
+                                                 message: '请输入运维人名称!'
+                                             }]
+                                         })(<Input
+                                             style={{ width:200 }}
+                                             placeholder="请输入运维人名称"
+                                         />
+                                         )
+                                     }
+                                 </FormItem>
+                             </Col>
+                             <Col span={8}>
+                                 <FormItem
+                                     {...formItemLayout}
+
+                                     label="运维人电话"
+                                 > {
+                                         getFieldDecorator('Col8', {
+                                             initialValue: Col8,
+                                             rules: [{
+                                                 required: false,
+                                                 message: '请输入运维人电话!'
+                                             }]
+                                         })(<Input
+                                             style={{ width:200 }}
+                                             placeholder="请输入运维人电话"
+                                         />
+                                         )
+                                     }
+                                 </FormItem>
+                             </Col>
+                             {/*   <Col span={8}>
                                  <FormItem
                                      {...formItemLayout}
                                      labelCol={{ span: 8 }}
@@ -551,7 +578,7 @@ class AddPoint extends Component {
                                          </Select>
                                      )}
                                  </FormItem>
-                             </Col>
+                             </Col> */}
                              <Col span={8} style={{display:this.state.PollutantType}}>
                                  <FormItem
                                      {...formItemLayout}
@@ -578,7 +605,46 @@ class AddPoint extends Component {
                                      }
                                  </FormItem>
                              </Col>
+                             <Col span={8}>
+                                 <FormItem
+                                     {...formItemLayout}
 
+                                     label="环保负责人"
+                                 > {
+                                         getFieldDecorator('Col9', {
+                                             initialValue: Col9,
+                                             rules: [{
+                                                 required: false,
+                                                 message: '请输入环保负责人名称!'
+                                             }]
+                                         })(<Input
+                                             style={{ width:200 }}
+                                             placeholder="请输入环保负责人名称"
+                                         />
+                                         )
+                                     }
+                                 </FormItem>
+                             </Col>
+                             <Col span={8}>
+                                 <FormItem
+                                     {...formItemLayout}
+
+                                     label="环保负责人电话"
+                                 > {
+                                         getFieldDecorator('Col10', {
+                                             initialValue: Col10,
+                                             rules: [{
+                                                 required: false,
+                                                 message: '请输入环保负责人电话!'
+                                             }]
+                                         })(<Input
+                                             style={{ width:200 }}
+                                             placeholder="请输入环保负责人电话"
+                                         />
+                                         )
+                                     }
+                                 </FormItem>
+                             </Col>
                          </Row>
                          <Divider dashed={true} />
                          <Row gutter={8} />
@@ -749,7 +815,7 @@ class AddPoint extends Component {
                                      label="排口坐标"
                                  > {
                                          getFieldDecorator('Coordinate', {
-                                             initialValue:this.getloglat(),
+                                             initialValue:this.getloglat(longitude,latitude),
                                              rules: [{
                                                  required: true,
                                                  message: '请输入排口坐标!'
@@ -774,7 +840,7 @@ class AddPoint extends Component {
                                  </FormItem>
 
                              </Col>
-                             <Col span={8}>
+                             {/* <Col span={8}>
                                  <FormItem
                                      {...formItemLayout}
 
@@ -795,7 +861,7 @@ class AddPoint extends Component {
                                              </Select>)
                                      }
                                  </FormItem>
-                             </Col>
+                             </Col> */}
                              <Col span={8}>
                                  <FormItem
                                      {...formItemLayout}
@@ -823,7 +889,7 @@ class AddPoint extends Component {
                              <Button
                                  type="dashed"
                                  onClick={
-                                     () => this.props.dispatch(routerRedux.push(`/sysmanage/PointInfo`))
+                                     () => this.props.dispatch(routerRedux.push(`/sysmanage/PointInfo/${this.props.match.params.EntCode}`))
                                  }
                              >
                         返回

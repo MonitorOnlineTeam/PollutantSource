@@ -261,8 +261,17 @@ class dataList extends PureComponent {
                     if (record.fault) {
                         lable.push(<span key={1} className={styles.fault}>故障中</span>);
                     }
-                    if (record.warning) {
-                        lable.push(<span key={2} className={styles.warning}>预警中</span>);
+                    else
+                    {
+                        if (record.fault) {
+                            lable.push(<span key={1} className={styles.fault}>故障中</span>);
+                        }
+                        if (record.warning) {
+                            lable.push(<span key={2} className={styles.warning}>预警中</span>);
+                        }
+                        if (record.scene) {
+                            // lable.push(<span key={3} className={styles.operation}>运维中</span>);
+                        }
                     }
                     if (record.scene) {
                         lable.push(<span key={3} className={styles.operation}>运维中</span>);

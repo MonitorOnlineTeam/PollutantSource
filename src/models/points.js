@@ -12,12 +12,12 @@ export default Model.extend({
         tablist: [
             { key: 'processflowdiagram', tab: '工艺流程图' },
             { key: 'dataquery', tab: '数据查询' },
-            { key: 'alarmrecord', tab: '报警记录' },
-            { key: 'realvideo', tab: '实时视频' },
-            { key: 'hisvideo', tab: '历史视频' },
-            { key: 'ywdsjlist', tab: '运维大事记' },
-            { key: 'qcontrollist', tab: '质控记录' },
-            { key: 'operationlist', tab: '运维记录' },
+            { key: 'alarmrecord', tab: '报警记录' }
+            // { key: 'realvideo', tab: '实时视频' },
+            // { key: 'hisvideo', tab: '历史视频' },
+            // { key: 'ywdsjlist', tab: '运维大事记' },
+            // { key: 'qcontrollist', tab: '质控记录' },
+            // { key: 'operationlist', tab: '运维记录' },
         ],
         selectpoint: [],
         pollutantlist: [],

@@ -124,8 +124,6 @@ class AddUser extends Component {
                                         callback: () => {
                                             if (requstresult === '1') {
                                                 this.success();
-                                            } else {
-                                                message.error('错误');
                                             }
                                         }
                                     },
@@ -156,8 +154,6 @@ class AddUser extends Component {
                         callback: () => {
                             if (requstresult === '1') {
                                 this.success();
-                            } else {
-                                message.error('错误');
                             }
                         }
                     },
@@ -168,7 +164,7 @@ class AddUser extends Component {
 
     success = () => {
         const { dispatch, match: { params: { UserId } } } = this.props;
-        let index = dispatch(routerRedux.push(`/sysmanage/Userinfo`));
+        let index = dispatch(routerRedux.push(`/Userinfo`));
         if (UserId !== 'null') {
             message.success('修改成功', 3).then(() => index);
         } else {
@@ -234,9 +230,10 @@ class AddUser extends Component {
                 {...this.props}
                 breadCrumbList={
                     [
-                        { Name: '系统管理', Url: '' },
-                        { Name: '用户管理', Url: '/sysmanage/Userinfo' },
-                        { Name: '用户维护', Url: '' }
+                        // { Name: '首页', Url: '' },
+                        // { Name: '系统管理', Url: '' },
+                        { Name: '用户管理', Url: '/Userinfo' },
+                        { Name: `${UserId==="null"?"添加用户":"编辑用户"}`, Url: '' }
                     ]
                 }
             >
@@ -277,7 +274,7 @@ class AddUser extends Component {
                                                     message: '请输入登录名称!'
                                                 }
                                                 ]
-                                            })(<Input placeholder="登录名称" disabled={UserId !== 'null'} />
+                                            })(<Input placeholder="登录名称" />
                                             )}
                                     </FormItem>
                                 </Col>
@@ -342,7 +339,7 @@ class AddUser extends Component {
                                         {getFieldDecorator('Phone'
                                             , {
                                                 initialValue: Phone,
-                                                rules: [{ pattern: /^1\d{10}$/, message: '请输入正确的手机号!' }]
+                                                rules: [{ pattern: /^1\d{10}$/, message: '请输入正确的手机号!' , required: true}]
                                             })(<Input placeholder="手机号" />
                                             )}
                                     </FormItem>
@@ -380,7 +377,7 @@ class AddUser extends Component {
                                 </Col>
                             </Row>
                             <Divider dashed={true} />
-                            <Row gutter={48}>
+                            {/* <Row gutter={48}>
                                 <Col span={12}>
                                     <FormItem
                                         labelCol={{ span: 8 }}
@@ -416,9 +413,9 @@ class AddUser extends Component {
                                         )}
                                     </FormItem>
                                 </Col>
-                            </Row>
+                            </Row> */}
 
-                            <Row gutter={48}>
+                            {/* <Row gutter={48}>
                                 <Col span={12}>
                                     <FormItem
                                         labelCol={{ span: 8 }}
@@ -462,8 +459,8 @@ class AddUser extends Component {
                                     </FormItem>
 
                                 </Col>
-                            </Row>
-                            <Divider dashed={true} />
+                            </Row> */}
+                            {/* <Divider dashed={true} /> */}
                             <Row gutter={48}>
                                 <Col span={12}>
                                     <FormItem
@@ -492,7 +489,7 @@ class AddUser extends Component {
                                     <Button
                                         type="dashed"
                                         onClick={
-                                            () => dispatch(routerRedux.push(`/sysmanage/userinfo`))
+                                            () => dispatch(routerRedux.push(`/userinfo`))
                                         }
                                     >
                                         返回

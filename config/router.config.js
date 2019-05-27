@@ -42,7 +42,7 @@ export default [
         path: '/',
         component: '../layouts/BasicLayout',
         routes: [
-            //    { path: '/', redirect: '/homepage' },
+            { path: '/', redirect: '/EnterpriseManager' },
             /* 主页 */
             {
                 path: '/homepage', component: './HomePage',
@@ -61,13 +61,13 @@ export default [
             {
                 path: '/pointdetail/:pointcode/:viewtype', component: './PointDetail', routes: [
                     /* 默认 */
-                    { path: '/pointdetail/:pointcode/:viewtype', redirect: '/pointdetail/:pointcode/:viewtype/processflowdiagram' },
+                    { path: '/pointdetail/:pointcode/:viewtype/:EntCode', redirect: '/pointdetail/:pointcode/:viewtype/:EntCode/processflowdiagram' },
                     /* 工艺流程图 */
-                    { path: '/pointdetail/:pointcode/:viewtype/processflowdiagram', component: './PointDetail/ProcessFlowDiagram' },
+                    { path: '/pointdetail/:pointcode/:viewtype/:EntCode/processflowdiagram', component: './PointDetail/ProcessFlowDiagram' },
                     /* 数据查询 */
-                    { path: '/pointdetail/:pointcode/:viewtype/dataquery', component: './PointDetail/DataQuery' },
+                    { path: '/pointdetail/:pointcode/:viewtype/dataquery/:EntCode', component: './PointDetail/DataQuery' },
                     /* 报警数据查询 */
-                    { path: '/pointdetail/:pointcode/:viewtype/alarmrecord', component: './PointDetail/AlarmRecord' },
+                    { path: '/pointdetail/:pointcode/:viewtype/alarmrecord/:EntCode', component: './PointDetail/AlarmRecord' },
                     /* 实时视频 */
                     { path: '/pointdetail/:pointcode/:viewtype/realvideo', component: './PointDetail/RealVideo' },
                     /* 历史视频 */
@@ -211,21 +211,22 @@ export default [
             /* 基本信息管理(所有企业修改、添加) */
             { path: '/BasicInfo/enterprisemanageedit/:ID/:Detail', component: '../components/GetAllEnterprise/Edit' },
             /* 基本信息管理[微信小程序专用] */
-            { path: '/sysmanage/EnterpriseManager', component: './EnterpriseInfo/EnterpriseManager' },
+            { path: '/EnterpriseManager', component: './EnterpriseInfo/EnterpriseManager' },
+            /* 企业管理-添加 */
+            { path: '/EnterpriseManager/:EntCode', component: '../components/EnterpriseInfo/AddEnterprise' },
             /* 排污许可证 */
             { path: '/sysmanage/emissionpermits', component: './EmissionPermits' },
             /* 监测点信息管理 */
             { path: '/sysmanage/pointinfo', component: './PointInfo' },
+            /* 企业管理-【排口管理】- */
+            { path: '/sysmanage/pointinfo/:EntCode', component: './PointInfo' },
 
-
-            { path: '/sysmanage/pointinfo/:entcode/:entname', component: './PointInfo' },
-
-            /* 监测点信息管理=监测点管理 */
-            { path: '/sysmanage/pointdetail/:DGIMN/:PollutantType/:Add', component: './PointInfo/AddPoint' },
-            /* 监测点信息管理=监测点管理 */
-            { path: '/sysmanage/pointdetail/:DGIMN/:Name/:PollutantType/:Add', component: './PointInfo/PointView' },
+            /* 排口信息管理=排口管理 */
+            { path: '/sysmanage/pointdetail/:DGIMN/:PollutantType/:Add/:EntCode', component: './PointInfo/AddPoint' },
+            /* 排口信息管理=排口管理 */
+            { path: '/sysmanage/pointdetail/:DGIMN/:Name/:PollutantType/:Add/:EntCode', component: './PointInfo/PointView' },
             /* 用户基本信息管理 */
-            { path: '/sysmanage/userinfo', component: './Userinfo' },
+            { path: '/userinfo', component: './Userinfo' },
 
             /* 用户基本信息管理-用户基本管理 */
             { path: '/sysmanage/userdetail/:UserId', component: './Userinfo/AddUser' },
@@ -241,13 +242,13 @@ export default [
             /* 系统管理-知识库管理 */
             { path: '/sysmanage/KBM', component: './Administration/KBM' },
             /* 系统管理-意见反馈 */
-            { path: '/sysmanage/feedback', component: './Administration/FeedBack' },
+            { path: '/feedback', component: './Administration/FeedBack' },
             /* 用户基本信息管理-标准库管理 */
-            { path: '/sysmanage/usestandardlibrary/:DGIMN/:PointName', component: './StandardLibrary/UseStandardLibrary' },
+            { path: '/sysmanage/usestandardlibrary/:DGIMN/:PointName/:EntCode', component: './StandardLibrary/UseStandardLibrary' },
             /* 用户基本信息管理-停产管理 */
-            { path: '/sysmanage/stopmanagement/:DGIMN/:PointName', component: './StopManagement/Content' },
+            { path: '/sysmanage/stopmanagement/:DGIMN/:PointName/:EntCode', component: './StopManagement/Content' },
             /* 用户基本信息管理-视频管理 */
-            { path: '/sysmanage/videolists/:pointcode/:pointname', component: './PointInfo/VideoList' },
+            { path: '/sysmanage/videolists/:pointcode/:pointname/:EntCode', component: './PointInfo/VideoList' },
 
             /* 标准库管理 */
             { path: '/sysmanage/standardlibrary', component: './StandardLibrary' },

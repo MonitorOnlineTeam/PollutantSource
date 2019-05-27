@@ -79,7 +79,8 @@ export default class pointlist extends Component {
           payload: {
               pageIndex: pageIndex === undefined ? 1 : pageIndex,
               pageSize: pageSize === undefined ? 20 : pageSize,
-              DGIMNs: this.state.DGIMNs
+              DGIMNs: this.state.DGIMNs,
+              EntCode:this.props.match.params.EntCode
           },
       });
   }
@@ -89,7 +90,8 @@ export default class pointlist extends Component {
           payload: {
               pageIndex: pageIndex === undefined ? 1 : pageIndex,
               pageSize: pageSize === undefined ? 20 : pageSize,
-              DGIMNs: this.state.DGIMNs
+              DGIMNs: this.state.DGIMNs,
+              EntCode:this.props.match.params.EntCode
           },
       });
   }
@@ -105,6 +107,7 @@ export default class pointlist extends Component {
               DGIMNs: this.state.DGIMNs,
               DGIMN: dgimn,
               callback: () => {
+                this.onChange(this.props.pageIndex, this.props.pageSize);
               }
           },
       });
@@ -118,16 +121,16 @@ export default class pointlist extends Component {
  onMenu = (key,id,name) => {
      switch (key) {
          case '1':
-             this.props.dispatch(routerRedux.push(`/sysmanage/usestandardlibrary/${id}/${name}`));
+             this.props.dispatch(routerRedux.push(`/sysmanage/usestandardlibrary/${id}/${name}/${this.props.match.params.EntCode}`));
              break;
          case '2':
-             this.props.dispatch(routerRedux.push(`/sysmanage/stopmanagement/${id}/${name}`));
+             this.props.dispatch(routerRedux.push(`/sysmanage/stopmanagement/${id}/${name}/${this.props.match.params.EntCode}`));
              break;
          case '3':
-             this.props.dispatch(routerRedux.push(`/sysmanage/videolists/${id}/${name}`));
+             this.props.dispatch(routerRedux.push(`/sysmanage/videolists/${id}/${name}/${this.props.match.params.EntCode}`));
              break;
          case '4':
-             this.props.dispatch(routerRedux.push(`/pointdetail/${id}/pointinfo`));
+             this.props.dispatch(routerRedux.push(`/pointdetail/${id}/pointinfo/${this.props.match.params.EntCode}`));
              break;
          default:
              break;
@@ -141,14 +144,14 @@ export default class pointlist extends Component {
              <Menu.Item key="1"><Icon type="bars" />监测标准</Menu.Item>
              <Menu.Item key="2"><Icon type="tool" />停产管理</Menu.Item>
              <Menu.Item key="3"><Icon type="youtube" />视频管理</Menu.Item>
-             <Menu.Item key="4"><Icon type="home" />进入排口</Menu.Item>
+             {/* <Menu.Item key="4"><Icon type="home" />进入排口</Menu.Item> */}
          </Menu>
      );
      const columns = [{
          title: '排口名称',
          dataIndex: 'pointName',
          key: 'pointName',
-         width: '20%',
+         width: '15%',
          align: 'left',
          render: (text, record) => {
              return text;
@@ -158,7 +161,7 @@ export default class pointlist extends Component {
          title: '排口编号',
          dataIndex: 'DGIMN',
          key: 'DGIMN',
-         width: '15%',
+         width: '10%',
          align: 'left',
          render: (text, record) => {
              return text;
@@ -168,7 +171,7 @@ export default class pointlist extends Component {
          title: '排放类型',
          dataIndex: 'OutputType',
          key: 'OutputType',
-         width: '10%',
+         width: '5%',
          align: 'center',
          render: (text, record) => {
              if (text === '出口') {
@@ -204,9 +207,19 @@ export default class pointlist extends Component {
          }
      },
      {
-         title: '责任人',
-         dataIndex: 'linkman',
-         key: 'linkman',
+         title: '环保负责人',
+         dataIndex: 'Col9',
+         key: 'Col9',
+         width: '8%',
+         align: 'center',
+         render: (text, record) => {
+             return text;
+         }
+     },
+     {
+         title: '环保负责人电话',
+         dataIndex: 'Col10',
+         key: 'Col10',
          width: '8%',
          align: 'center',
          render: (text, record) => {
@@ -215,9 +228,19 @@ export default class pointlist extends Component {
      },
      {
          title: '运维人',
-         dataIndex: 'Col2',
-         key: 'Col2',
-         width: '12%',
+         dataIndex: 'Col7',
+         key: 'Col7',
+         width: '8%',
+         align: 'center',
+         render: (text, record) => {
+             return text;
+         }
+     },
+     {
+         title: '运维人电话',
+         dataIndex: 'Col8',
+         key: 'Col8',
+         width: '8%',
          align: 'center',
          render: (text, record) => {
              return text;
@@ -229,11 +252,11 @@ export default class pointlist extends Component {
          align: 'center',
          render: (text, record) => (<Fragment >
              <a onClick={
-                 () =>{  this.props.dispatch(routerRedux.push(`/sysmanage/pointdetail/${record.key}/${record.pollutantType}/${1}`))}
+                 () =>{  this.props.dispatch(routerRedux.push(`/sysmanage/pointdetail/${record.key}/${record.pollutantType}/${1}/${this.props.match.params.EntCode}`))}
              } > 编辑 </a>
              <Divider type="vertical" />
              <a onClick={
-                 () => this.props.dispatch(routerRedux.push(`/sysmanage/pointdetail/${record.key}/${record.pointName}/${record.pollutantType}/${1}`))
+                 () => this.props.dispatch(routerRedux.push(`/sysmanage/pointdetail/${record.key}/${record.pointName}/${record.pollutantType}/${1}/${this.props.match.params.EntCode}`))
              } > 详情 </a>
              <Divider type="vertical" />
              <Popconfirm placement="left" title="确定要删除此排口吗？" onConfirm={() => this.deletepoint(record.key)} okText="是" cancelText="否">
@@ -270,7 +293,12 @@ export default class pointlist extends Component {
      }
      return (
          <MonitorContent {...this.props} breadCrumbList={
-             Crumbs
+                [
+                    // {Name:'首页',Url:''},
+                    // {Name:'系统管理',Url:''},
+                    {Name:'企业管理',Url:'/EnterpriseManager'},
+                    {Name:'排口管理',Url:''}
+                ]
             }>
              <div className={styles.cardTitle}>
                  <Card bordered={false}>
@@ -287,7 +315,8 @@ export default class pointlist extends Component {
                                              payload: {
                                                  pageIndex: 1,
                                                  pageSize: this.props.pageSize,
-                                                 DGIMNs: value
+                                                 DGIMNs: value,
+                                                 EntCode:this.props.match.params.EntCode
                                              },
                                          });
                                      }
@@ -296,7 +325,7 @@ export default class pointlist extends Component {
                                      <Button type="primary" style={{marginLeft:10}}
                                      onClick={
                                          () => {
-                                             this.props.dispatch(routerRedux.push(`/sysmanage/PointDetail/null/null/null`));
+                                             this.props.dispatch(routerRedux.push(`/sysmanage/PointDetail/null/null/null/${this.props.match.params.EntCode}`));
                                          }
                                      } > 添加 </Button>
                              </Col >

@@ -341,11 +341,74 @@ class AddStandardLibrary extends PureComponent {
                 next: true
               })
             }
-          },
-        });
-      }
-    })
-  }
+        },
+        {
+            title: '操作',
+            width: '10%',
+            align: 'center',
+            render: (text, record) => (<Fragment>
+                <a onClick={
+                    () => this.setState({
+                        Mvisible: true,
+                        title: '编辑污染物',
+                        width: 800,
+                        Id: record.key
+                    })
+                }
+                > 编辑
+                </a> <Divider type="vertical" />
+                <Popconfirm placement="left" title="确定要删除此标准下所有数据吗？" onConfirm={() => this.confirm(record.key)} okText="是" cancelText="否">
+                    <a href="#"> 删除 </a>
+                </Popconfirm>
+                                       </Fragment>
+            ),
+        },
+        ];
+        const { getFieldDecorator } = this.props.form;
+        const { isloading } = this.props;
+        if (isloading) {
+            return (<Spin
+                style={{
+                    width: '100%',
+                    height: 'calc(100vh/2)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                }}
+                size="large"
+            />);
+        }
+        return (
+            <MonitorContent
+                {...this.props}
+                breadCrumbList={
+                    [
+                        // { Name: '首页', Url: '' },
+                        // { Name: '系统管理', Url: '' },
+                        { Name: '标准库管理', Url: '/sysmanage/standardlibrary' },
+                        { Name: '标准库维护', Url: '' }
+                    ]
+                }
+            >
+                <div className={styles.upload}>
+                    <Card bordered={false} title="标准库基础信息">
+                        <Form onSubmit={this.handleSubmit}>
+                            <Card bordered={false}>
+                                <Row gutter={48}>
+                                    <Col span={12}>
+                                        <FormItem
+                                            labelCol={{ span: 8 }}
+                                            wrapperCol={{ span: 12 }}
+                                            label="标准库名称"
+                                        >
+                                            {getFieldDecorator('Name'
+                                                , {
+                                                    initialValue: Name,
+                                                    rules: [{
+                                                        required: true,
+                                                        message: '请输入标准库名称!'
+                                                    },
+                                                    ]
 
   onRef1 = (ref) => {
     this.child = ref;

@@ -107,11 +107,16 @@ class EnterpriseManager extends Component {
             type:pageUrl.deleteEnterprise,
             payload:{
                 entCode:row.EntCode,
-                callback:()=>{
-                    if(this.props.isSuccess) {
+                callback:(response)=>{
+                    if(response.IsSuccess) {
                         message.success("操作成功");
                         this.getTableData(1);
+                    }else {
+                        message.error(response.Message);
                     }
+                    // if(this.props.isSuccess) {
+
+                    // }
                 }
             }
         });
@@ -126,14 +131,21 @@ class EnterpriseManager extends Component {
                 callback:(item)=>{
                     if(item&&item.IsSuccess) {
                         message.success("下载成功");
-                        window.location.href=item.Data;
+                        // console.log(item);
+                        // debugger;
+                        // window.location.href=item.Data;
+                        window.open(item.Data, '_blank');
                     }else {
-                        message.success(item.Message||'服务器内部错误！');
+                        message.error(item.Message||'服务器内部错误！');
                     }
                 }
             }
         });
     }
+
+    queryPoint =(row)=>{
+        this.props.dispatch(routerRedux.push(`/sysmanage/pointinfo/${row.EntCode}`));
+    };
 
     //按照名字搜索
     serachName=(value)=>{
@@ -173,14 +185,14 @@ class EnterpriseManager extends Component {
             title: '企业名称',
             dataIndex: 'EntName',
             key: 'EntName',
-            width: '15%',
+            width: 'null',
             align: 'left',
         },
         {
             title: '企业地址',
             dataIndex: 'EntAddress',
             key: 'EntAddress',
-            width: '25%',
+            width: 'null',
             align: 'left',
         },
         {
@@ -210,7 +222,7 @@ class EnterpriseManager extends Component {
             align: 'center',
             render: (text, record) => (<Fragment>
                 <a onClick={
-                    () => this.showModal(record)
+                    () =>this.props.dispatch(routerRedux.push(`/EnterpriseManager/${record.EntCode}`)) //this.showModal(record)
                 }
                 > 编辑
                 </a>
@@ -225,6 +237,14 @@ class EnterpriseManager extends Component {
                     }
                 }
                 > 生成二维码
+                </a>
+                <Divider type="vertical" />
+                <a onClick={
+                    () => {
+                        this.queryPoint(record);
+                    }
+                }
+                > 排口管理
                 </a>
             </Fragment>
             ),
@@ -246,7 +266,8 @@ class EnterpriseManager extends Component {
                 {...this.props}
                 breadCrumbList={
                     [
-                        {Name:'系统管理',Url:''},
+                        // {Name:'首页',Url:''},
+                        // {Name:'系统管理',Url:''},
                         {Name:'企业管理',Url:''}
                     ]
                 }
@@ -264,7 +285,7 @@ class EnterpriseManager extends Component {
                                     <Button
                                         type="primary"
                                         style={{marginLeft:10}}
-                                        onClick={()=>this.showModal(null)}
+                                        onClick={()=>this.props.dispatch(routerRedux.push(`/EnterpriseManager/add`))}//this.showModal(null)}
                                     > 添加
                                     </Button>
                                 </Col>

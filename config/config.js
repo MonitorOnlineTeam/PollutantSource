@@ -81,14 +81,14 @@ export default {
     // },
     "proxy": {
         "/api": {
-            "target": "http://172.16.12.152:8066/api",
+            "target": "https://api.chsdl.net/wxwryapi/",
             "changeOrigin": true,
             "pathRewrite": { "^/api": "" }
         },
         "/upload": {
-            "target": "http://172.16.12.152:8066/api", // 接口的域名
+            "target": "https://api.chsdl.net/wxwryapi/upload", // 接口的域名
             "changeOrigin": true, // 如果接口跨域，需要进行这个参数配置
-            "pathRewrite": { "^/upload/upload": "" } // pathRewrite 来重写地址，将前缀 '/api' 转为 '/'。
+            "pathRewrite": { "^/upload": "" } // pathRewrite 来重写地址，将前缀 '/api' 转为 '/'。
         }
     },
     ignoreMomentLocale: true,

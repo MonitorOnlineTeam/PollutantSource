@@ -62,9 +62,9 @@ class BasicLayout extends React.PureComponent {
 
     componentWillMount = () => {
         const { dispatch } = this.props;
-        dispatch({
-            type: 'global/fetchNotices',
-        });
+        // dispatch({
+        //     type: 'global/fetchNotices',
+        // });
     }
 
     componentDidMount() {

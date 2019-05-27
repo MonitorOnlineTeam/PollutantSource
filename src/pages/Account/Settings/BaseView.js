@@ -194,7 +194,7 @@ class BaseView extends Component {
                                </FormItem>
                            </Col>
                        </Row>
-                       <Row gutter={48}>
+                       {/* <Row gutter={48}>
                            <Col span={8}>
                                <FormItem
                                    label="报警类型"
@@ -209,8 +209,8 @@ class BaseView extends Component {
                                    )}
                                </FormItem>
                            </Col>
-                       </Row>
-                       <Row gutter={48}>
+                       </Row> */}
+                       {/* <Row gutter={48}>
                            <Col span={8}>
                                <FormItem
                                    label="报警时间"
@@ -228,8 +228,8 @@ class BaseView extends Component {
                                    )}
                                </FormItem>
                            </Col>
-                       </Row>
-                       <Row gutter={48}>
+                       </Row> */}
+                       {/* <Row gutter={48}>
                            <Col span={8}>
                                <FormItem
                                    label="推送类型"
@@ -248,7 +248,7 @@ class BaseView extends Component {
                                    )}
                                </FormItem>
                            </Col>
-                       </Row>
+                       </Row> */}
 
 
                        <Divider orientation="right" style={{border:'1px dashed #FFFFFF'}}>
