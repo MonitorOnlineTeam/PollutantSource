@@ -121,7 +121,7 @@ export default class DataFilter extends Component {
                       DGIMNS: arr.join(','),
                       callback: () => {
                           if (this.props.requstresult === '1') {
-                              message.success('关联排口成功', 3).then(() => this.props.complant());
+                              message.success('关联监测点成功', 3).then(() => this.props.complant());
                           } else {
                               message.error('添加失败');
                           }
@@ -129,7 +129,7 @@ export default class DataFilter extends Component {
                   },
               });
           } else {
-              message.error('请选择排口');
+              message.error('请选择监测点');
           }
       }
       render() {
@@ -140,7 +140,7 @@ export default class DataFilter extends Component {
                           <Form layout="inline">
                               <Row gutter={16} >
                                   <Col span={12} >
-                                      <Search placeholder="请输入怕排口名称、DGIMN号进行查询"
+                                      <Search placeholder="请输入怕监测点名称、DGIMN号进行查询"
                                           onSearch={
                                               (value) => {
                                                   this.setState({

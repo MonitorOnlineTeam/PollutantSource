@@ -35,7 +35,7 @@ class CompleteExtractionRecord extends Component {
         let DGIMN = this.props.match.params.pointcode;
         let taskfrom = this.props.match.params.taskfrom;
         let histroyrecordtype = this.props.match.params.histroyrecordtype;
-        rtnVal.push({ Name: '首页', Url: '/' });
+      //  rtnVal.push({ Name: '首页', Url: '/' });
         switch (listUrl) {
             case 'datalistview': //数据一栏
                 rtnVal.push({ Name: '数据一览', Url: `/overview/${listUrl}` });
@@ -49,8 +49,8 @@ class CompleteExtractionRecord extends Component {
             case 'workbench': //工作台
                 rtnVal.push({ Name: '工作台', Url: `/${listUrl}` });
                 break;
-            case 'pointinfo': //排口管理
-                rtnVal.push({ Name: '排口管理', Url: `/sysmanage/${listUrl}` });
+            case 'pointinfo': //监测点管理
+                rtnVal.push({ Name: '监测点管理', Url: `/sysmanage/${listUrl}` });
                 break;
             case 'equipmentoperatingrate': //设备运转率
                 rtnVal.push({ Name: '设备运转率', Url: `/qualitycontrol/${listUrl}` });

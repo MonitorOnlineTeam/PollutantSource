@@ -19,6 +19,7 @@ import moment from 'moment';
 import styles from './index.less';
 import MonitorContent from '../../components/MonitorContent/index';
 import { connect } from 'dva';
+import {onlyOneEnt} from '../../config';
 const { MonthPicker } = DatePicker;
 const monthFormat = 'YYYY-MM';
 const pageUrl = {
@@ -54,9 +55,11 @@ export default class TransmissionEfficiency extends Component {
         });
     }
     getTableData = (pageIndex) => {
+        const {entcode}=this.props.match.params;
         this.props.dispatch({
             type: pageUrl.getData,
             payload: {
+                entcode:entcode,
                 pageIndex: pageIndex,
             },
         });
@@ -223,17 +226,34 @@ export default class TransmissionEfficiency extends Component {
                 }
             },
         ];
+        const entName=this.props.match.params.entname;
+        let tableTitle="";
+        let Crumbs=[  
+                      { Name: '智能质控', Url: '' }
+                   ]
+        if(onlyOneEnt)
+        {
+            tableTitle=`传输有效率列表`
+            Crumbs=Crumbs.concat(
+               { Name: '传输有效率', Url: '' }
+            )
+        }
+        else
+        {
+            tableTitle=`传输有效率列表(${entName})`
+            Crumbs=Crumbs.concat(
+                { Name: '企业传输有效率', Url: '/qualitycontrol/transmissionefficiency' },
+                { Name: '排口传输有效率', Url: '' }
+             )
+        }
+
         return (
             <MonitorContent {...this.props} breadCrumbList={
-                [
-                    { Name: '首页', Url: '/' },
-                    { Name: '智能质控', Url: '' },
-                    { Name: '传输有效率', Url: '' }
-                ]
+                Crumbs
             }>
                 <Row className={styles.cardTitle}>
                     <Card
-                        title="传输有效率列表"
+                        title={tableTitle}
                         bordered={false}
                         extra={
                             <span style={{ color: '#b3b3b3' }}>

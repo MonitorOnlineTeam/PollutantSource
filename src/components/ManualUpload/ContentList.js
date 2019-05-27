@@ -11,6 +11,7 @@ import { routerRedux } from 'dva/router';
 import styles from './ContentList.less';
 import TreeCardContent from '../../components/OverView/TreeCardContent';
 import SearchInput from '../../components/OverView/SearchInput';
+import {downloadFile}from '../../utils/utils';
 
 const confirm = Modal.confirm;
 const Option = Select.Option;
@@ -83,7 +84,7 @@ export default class ContentList extends Component {
         };
     }
     componentDidMount() {
-        debugger
+       
         this.updateState({
             manualUploadParameters: {
                 ...this.props.manualUploadParameters,
@@ -152,16 +153,22 @@ export default class ContentList extends Component {
     //创建并获取模板
     Template = () => {
         //获取模板地址
-        this.props.dispatch({
+        debugger;
+      
+        const {dispatch,PollutantType}=this.props;
+        console.log(PollutantType);
+        dispatch({
             type: 'manualupload/getUploadTemplate',
             payload: {
+                PollutantType:PollutantType,
                 callback: (data) => {
-                    debugger;
-                    window.location.href = data
+                     downloadFile(data);
+                    //window.location.href = data
                 }
             }
         });
     }
+
     //分页等改变事件
     onChange = (pageIndex, pageSize) => {
         this.updateState({
@@ -265,7 +272,7 @@ export default class ContentList extends Component {
     }
 
     render() {
-        const { manualUploadParameters } = this.props;
+        const { manualUploadParameters,DGIMN } = this.props;
         let dateValues = [moment(manualUploadParameters.BeginTime), moment(manualUploadParameters.EndTime)]
         var uploaddata = [];
         if (!this.props.loading) {
@@ -377,7 +384,6 @@ export default class ContentList extends Component {
                             </Col>
                             <Col span={4} style={{ textAlign: 'center' }} >
                                 <Upload
-
                                     action='.doc,.docx'
                                     customRequest={this.addimg}
                                     fileList={this.state.fileList}
@@ -405,7 +411,7 @@ export default class ContentList extends Component {
                     loading={this.props.loading}
                     className={styles.tableCss}
                     columns={columns}
-                    dataSource={uploaddata}
+                    dataSource={DGIMN==='0'?null:uploaddata}
                     size={'middle'}
                     scroll={{ x: '1000px', y: 'calc(100vh - 460px)' }}
                     rowClassName={

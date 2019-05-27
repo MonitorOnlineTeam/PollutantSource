@@ -36,11 +36,12 @@ export default Model.extend({
             call,
             update,
         }) {
+            console.log(payload);
             const result = yield call(getlist, {
                 ...payload
             });
 
-            if (result.requstresult === '1') {
+            if (result.requstresult == 1) {
                 yield update({
                     requstresult: result.requstresult,
                     list: result.data,
@@ -76,10 +77,15 @@ export default Model.extend({
             yield put({
                 type: 'getlist',
                 payload: {
-                    ...payload
+                    DGIMN: payload.DGIMN,
+                    StopHours: 0,
+                    Data: "",
+                    datatype: "0",
+                    pageIndex: 1,
+                    pageSize: 10
                 },
             });
-            callback();
+            payload.callback();
         },
         * getlistbyid({
             payload: {
@@ -136,6 +142,7 @@ export default Model.extend({
                 requstresult: result.requstresult,
                 reason: result.reason,
             });
+         
             yield put({
                 type: 'getlist',
                 payload: {

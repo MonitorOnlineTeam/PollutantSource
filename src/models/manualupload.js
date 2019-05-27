@@ -111,6 +111,7 @@ export default Model.extend({
                 pointName: manualUploadParameters.pointName,
                 PollutantType: manualUploadParameters.PollutantType,
             }
+       
             const result = yield call(GetManualSupplementList, body);
             if (result.data !== null) {
                 if (result.data.length !== 0) {
@@ -123,6 +124,7 @@ export default Model.extend({
                             }
                         });
                     }
+                  
                     yield update({
                         uploaddatalist: result.data,
                         reason: result.reason,
@@ -130,6 +132,7 @@ export default Model.extend({
                     });
                 }
                 else {
+                    
                     yield update({
                         uploaddatalist: null,
                         reason: result.reason,
@@ -152,6 +155,7 @@ export default Model.extend({
             call,
             update,
         }) {
+            console.log(payload);
             const result = yield call(getUploadTemplate, payload);
             if (result.data !== null) {
                 if (result.data.length !== 0) {

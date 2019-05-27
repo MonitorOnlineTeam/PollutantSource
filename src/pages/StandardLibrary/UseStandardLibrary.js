@@ -10,10 +10,12 @@ import EditPollutant from "./EditPollutant";
 import PollutantView from "./PollutantView";
 import styles from './index.less';
 import MonitorContent from '../../components/MonitorContent/index';
-
-@connect(({ loading, standardlibrary }) => ({
+import {onlyOneEnt} from '../../config'
+@connect(({ loading, standardlibrary,basicinfo }) => ({
     ...loading,
     list: standardlibrary.uselist,
+    entName:basicinfo.entName,
+    entCode:basicinfo.entCode,
     total: standardlibrary.total,
     pageSize: standardlibrary.pageSize,
     pageIndex: standardlibrary.pageIndex,
@@ -133,7 +135,7 @@ class UseStandardLibrary extends Component {
                                         <Col key={`${key }11`} span={3}>  <Divider type="vertical" />
                                         </Col>
                                         <Col key={`${key }12`} span={9}>
-                                            <Popconfirm placement="left" title="确定要此标准下所有污染物应用到此排口下吗？" onConfirm={() => that.UseALL(item.key)} okText="是" cancelText="否">
+                                            <Popconfirm placement="left" title="确定要此标准下所有污染物应用到此监测点下吗？" onConfirm={() => that.UseALL(item.key)} okText="是" cancelText="否">
                                                 <a
                                                     key={`${key }13`}
                                                     className={styles.a}
@@ -317,10 +319,31 @@ class UseStandardLibrary extends Component {
                 }
             },
         ];
+
+        let Crumbs=[  
+            { Name: '系统管理', Url: '' },
+         ]
+        if(onlyOneEnt)
+        {
+          Crumbs=Crumbs.concat(
+            { Name: '排口管理', Url: '/sysmanage/pointinfo' },
+            { Name: '设置标准', Url: '' }
+           )
+        }
+        else
+        {
+        const {entName,entCode}=this.props;
+        Crumbs=Crumbs.concat(
+            { Name: '企业管理', Url: '/sysmanage/entoperation' },
+            { Name: `排口管理(${entName})`, Url: `/sysmanage/pointinfo/${entCode}/${entName}` },
+            { Name: '设置标准', Url: '' }
+         )
+        }
         return (
             <MonitorContent
                 {...this.props}
                 breadCrumbList={
+<<<<<<< HEAD
                     [
                         // { Name: '首页', Url: '' },
                         // { Name: '系统管理', Url: '' },
@@ -328,6 +351,9 @@ class UseStandardLibrary extends Component {
                         {Name:'排口管理',Url:`/sysmanage/pointinfo/${this.props.match.params.EntCode}`},
                         { Name: '设置标准', Url: '' }
                     ]
+=======
+                    Crumbs
+>>>>>>> b63cf6e6c72291109fd45a31060210a6e86d6682
                 }
                 className={styles.antCss}
             >

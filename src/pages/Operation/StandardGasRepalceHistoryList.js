@@ -103,7 +103,6 @@ export default class StandardGasRepalceHistoryList extends Component {
         return (
             <MonitorContent {...this.props} breadCrumbList={
                 [
-                    { Name: '首页', Url: '/' },
                     { Name: '智能运维', Url: '' },
                     { Name: '标气更换记录', Url: '' }
                 ]

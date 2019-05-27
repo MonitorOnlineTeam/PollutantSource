@@ -8,17 +8,19 @@ import {
     Divider,
     message
 } from 'antd';
-import { mainpollutantInfo, mainpoll, enterpriceid } from "../config";
+import { mainpollutantInfo, mainpoll, enterpriceid,onlyOneEnt } from "../config";
 import {
     querypolluntantentinfolist
 } from '../services/entApi';
 import {
     querypollutanttypecode, getPollutantTypeList,
     querydatalist, querylastestdatalist, queryhistorydatalist,
-    querypollutantlist
+    querypollutantlist,
+    querygetentdatalist
 } from '../services/overviewApi';
 import { Model } from '../dvapack';
 import { isNullOrUndefined } from 'util';
+import {formatPollutantPopover} from '../utils/utils';
 
 
 export default Model.extend({
@@ -37,20 +39,23 @@ export default Model.extend({
         detailtime: null,
         addtaskstatus: false,
         pollutantTypelist: null,
-        entbaseinfo: [],
+        entbaseinfo: null,
+        selectent:null,
         selectpoint: null,
         onlypollutantList: [],
-        selectpollutantTypeCode: 2,
+        selectpollutantTypeCode: '',
         //数据一览表头
         columns: [],
         data: [],
         dataOne: null,//如果有点信息去第一个数据的MN号码
+        entlist:[],
         //数据一览的参数
         dataOverview: {
             selectStatus: null,
             time: moment(new Date()).add(-1, 'hour'),
             terate: null,
             pointName: null,
+            entName:null
         },
         mapdetailParams: {
             dataType: 'HourData',
@@ -72,7 +77,12 @@ export default Model.extend({
         * querypollutanttypecode({
             payload,
         }, { call, update, put, take, select }) {
+
             let gwidth = 300 + 140 + 70;
+            if(!onlyOneEnt)
+            {
+                gwidth=gwidth+300;
+            }
             const { dataOverview, selectpollutantTypeCode } = yield select(a => a.overview);
             const body = {
                 pollutantTypes: selectpollutantTypeCode,
@@ -92,14 +102,21 @@ export default Model.extend({
         * querydatalist({
             payload,
         }, { call, update, put, select }) {
-            const { dataOverview, selectpollutantTypeCode ,RunState} = yield select(a => a.overview);
-
+            const { dataOverview, selectpollutantTypeCode ,RunState,selectent,entbaseinfo} = yield select(a => a.overview);
+            let entCode=selectent?selectent.entCode:(entbaseinfo?entbaseinfo.entCode:null);
+            if(payload.entCode)
+            {
+                entCode=payload.entCode;
+            }
             let body = {
                 time: dataOverview.time,
                 pollutantTypes: selectpollutantTypeCode,
                 pointName: dataOverview.pointName,
                 status: dataOverview.selectStatus,
                 terate: dataOverview.terate,
+                entName:dataOverview.entName,
+                entCode:entCode,
+                ...payload
             }
             if(body.time)
             {
@@ -139,15 +156,13 @@ export default Model.extend({
             payload,
         }, { call, update, put, take, select }) {
             const { upLoadParameters } = yield select(a => a.overview);
+            debugger;
             const body = {
                 pollutantTypes: upLoadParameters.pollutantTypes,
                 pointName: upLoadParameters.pointName,
                 RunState: upLoadParameters.RunState,
             }
-
-             
             const data = yield call(querydatalist, body);
-           
             if (data) {
                 yield update({ data });
                 yield update({ dataTemp: data });
@@ -158,9 +173,8 @@ export default Model.extend({
             yield update({
                 upLoadParameters: {
                     ...upLoadParameters,
-                    ...{
-                        manualUploaddataOne: data == null ? '0' : data[0].DGIMN
-                    }
+                    manualUploaddataOne: data == null ? '0' : data[0].DGIMN
+                   
                 }
             });
         },
@@ -179,7 +193,7 @@ export default Model.extend({
             payload,
         }, { call, update }) {
             let col = [{
-                title: '排口',
+                title: '监测点',
                 dataIndex: 'pointName',
                 key: 'pointName',
                 width: 110,
@@ -193,36 +207,7 @@ export default Model.extend({
                     key: item.pollutantCode,
                     align: 'center',
                     render: (value, record, index) => {
-                        const additional = record[`${item.field}_params`];
-                        if (additional) {
-                            const additionalInfo = additional.split('§');
-                            if (additionalInfo[0] === 'IsOver') {
-                                const content = (<div>
-                                    <div style={{ marginBottom: 10 }}>
-                                        <Icon style={{ color: '#ff0000', fontSize: 25, marginRight: 10 }} type="warning" />
-                                        <span style={{ fontWeight: 'Bold', fontSize: 16 }}>数据超标</span>
-                                    </div>
-                                    <li style={{ listStyle: 'none', marginBottom: 10 }}>
-                                        <Badge status="success" text={`标准值：${additionalInfo[2]}`} />
-                                    </li>
-                                    <li style={{ listStyle: 'none', marginBottom: 10 }}>
-                                        <Badge status="error" text={`超标倍数：${additionalInfo[3]}`} />
-                                    </li>
-                                </div>);
-                                return (<Popover content={content}><span style={{ color: '#ff0000', cursor: 'pointer' }}>{value || (value === 0 ? 0 : '-')}</span></Popover>);
-                            }
-                            const content = (<div>
-                                <div style={{ marginBottom: 10 }}>
-                                    <Icon style={{ color: '#ff0000', fontSize: 25, marginRight: 10 }} type="close-circle" />
-                                    <span style={{ fontWeight: 'Bold', fontSize: 16 }}>数据异常</span>
-                                </div>
-                                <li style={{ listStyle: 'none', marginBottom: 10 }}>
-                                    <Badge status="warning" text={`异常原因：${additionalInfo[2]}`} />
-                                </li>
-                            </div>);
-                            return (<Popover content={content}><span style={{ color: '#F3AC00', cursor: 'pointer' }}>{value || (value === 0 ? 0 : '-')}</span></Popover>);
-                        }
-                        return value || (value === 0 ? 0 : '-');
+                        return formatPollutantPopover(value,record[`${item.pollutantCode}_params`]);
                     }
                 });
             });
@@ -231,9 +216,33 @@ export default Model.extend({
         * querydetailpollutant({
             payload,
         }, { call, update, put, take, select }) {
+            const { selectpoint, mapdetailParams } = yield select(a => a.overview);
+            let pollutantInfoList= yield call(querypollutanttypecode,{pollutantTypes:selectpoint.pollutantTypeCode});
 
-            const { selectpoint, selectpollutantTypeCode, mapdetailParams } = yield select(a => a.overview);
-            const pollutantInfoList = mainpoll.find(value => value.pollutantCode == selectpollutantTypeCode);
+            //没绑定污染物则不渲染
+            if(!pollutantInfoList || !pollutantInfoList[0])
+            {
+                yield update({
+                    detailtime:null,
+                    detaildata:null,
+                    detailpcol:null,
+                    pollutantName:null,
+                    existdata:false,
+                    mapdetailParams:{
+                        ... mapdetailParams,
+                        pollutantCode:null,
+                        pollutantName:null
+                     }
+                });
+                 return;
+            }
+            pollutantInfoList=pollutantInfoList.filter(value=>value.isMainPollutant==true);
+            yield update({
+                mapdetailParams:{
+               ... mapdetailParams,
+               pollutantCode:pollutantInfoList[0].field,
+               pollutantName:pollutantInfoList[0].name
+            }})
             // 地图详细表格列头
             let detailpcol = [{
                 title: '因子',
@@ -241,50 +250,23 @@ export default Model.extend({
                 key: 'pollutantName',
                 align: 'center',
             }, {
-                title: `浓度(${pollutantInfoList.unit})`,
+                title: `浓度`,
                 dataIndex: 'pollutantCode',
                 key: 'pollutantCode',
                 align: 'center',
                 render: (value, record, index) => {
                     if (selectpoint.stop) {
-                        return "停产"
+                        return "停产";
                     }
-                    const additional = record.pollutantCodeParam;
-                    if (additional) {
-                        const additionalInfo = additional.split('§');
-                        if (additionalInfo[0] === 'IsOver') {
-                            const content = (<div>
-                                <div style={{ marginBottom: 10 }}>
-                                    <Icon style={{ color: '#ff0000', fontSize: 25, marginRight: 10 }} type="warning" />
-                                    <span style={{ fontWeight: 'Bold', fontSize: 16 }}>数据超标</span>
-                                </div>
-                                <li style={{ listStyle: 'none', marginBottom: 10 }}>
-                                    <Badge status="success" text={`标准值：${additionalInfo[2]}`} />
-                                </li>
-                                <li style={{ listStyle: 'none', marginBottom: 10 }}>
-                                    <Badge status="error" text={`超标倍数：${additionalInfo[3]}`} />
-                                </li>
-                            </div>);
-                            return (<Popover content={content}><span style={{ color: '#ff0000', cursor: 'pointer' }}>{value || (value === 0 ? 0 : '-')}</span></Popover>);
-                        }
-                        const content = (<div>
-                            <div style={{ marginBottom: 10 }}>
-                                <Icon style={{ color: '#ff0000', fontSize: 25, marginRight: 10 }} type="close-circle" />
-                                <span style={{ fontWeight: 'Bold', fontSize: 16 }}>数据异常</span>
-                            </div>
-                            <li style={{ listStyle: 'none', marginBottom: 10 }}>
-                                <Badge status="warning" text={`异常原因：${additionalInfo[2]}`} />
-                            </li>
-                        </div>);
-                        return (<Popover content={content}><span style={{ color: '#F3AC00', cursor: 'pointer' }}>{value || (value === 0 ? 0 : '-')}</span></Popover>);
-                    }
-                    return value || (value === 0 ? 0 : '-');
+                   
+                    return formatPollutantPopover(value,record.pollutantCodeParam);
                 }
             }
             ];
-            if (pollutantInfoList.zspollutant) {
+            //只有废气有折算浓度
+            if (selectpoint.pollutantTypeCode==2) {
                 detailpcol = detailpcol.concat({
-                    title: `折算(${pollutantInfoList.unit})`,
+                    title: `折算`,
                     dataIndex: 'zspollutantCode',
                     key: 'zspollutantCode',
                     align: 'center',
@@ -292,36 +274,7 @@ export default Model.extend({
                         if (selectpoint.stop) {
                             return "停产"
                         }
-                        const additional = record.zspollutantCodeParam;
-                        if (additional) {
-                            const additionalInfo = additional.split('§');
-                            if (additionalInfo[0] === 'IsOver') {
-                                const content = (<div>
-                                    <div style={{ marginBottom: 10 }}>
-                                        <Icon style={{ color: '#ff0000', fontSize: 25, marginRight: 10 }} type="warning" />
-                                        <span style={{ fontWeight: 'Bold', fontSize: 16 }}>数据超标</span>
-                                    </div>
-                                    <li style={{ listStyle: 'none', marginBottom: 10 }}>
-                                        <Badge status="success" text={`标准值：${additionalInfo[2]}`} />
-                                    </li>
-                                    <li style={{ listStyle: 'none', marginBottom: 10 }}>
-                                        <Badge status="error" text={`超标倍数：${additionalInfo[3]}`} />
-                                    </li>
-                                </div>);
-                                return (<Popover content={content}><span style={{ color: '#ff0000', cursor: 'pointer' }}>{value || (value === 0 ? 0 : '-')}</span></Popover>);
-                            }
-                            const content = (<div>
-                                <div style={{ marginBottom: 10 }}>
-                                    <Icon style={{ color: '#ff0000', fontSize: 25, marginRight: 10 }} type="close-circle" />
-                                    <span style={{ fontWeight: 'Bold', fontSize: 16 }}>数据异常</span>
-                                </div>
-                                <li style={{ listStyle: 'none', marginBottom: 10 }}>
-                                    <Badge status="warning" text={`异常原因：${additionalInfo[2]}`} />
-                                </li>
-                            </div>);
-                            return (<Popover content={content}><span style={{ color: '#F3AC00', cursor: 'pointer' }}>{value || (value === 0 ? 0 : '-')}</span></Popover>);
-                        }
-                        return value || (value === 0 ? 0 : '-');
+                        return formatPollutantPopover(value,record.zspollutantCodeParam);
                     }
                 });
             }
@@ -336,17 +289,41 @@ export default Model.extend({
             const res = yield call(querylastestdatalist, body);
             if (res.data && res.data[0]) {
                 detailtime = res.data[0].MonitorTime;
-                pollutantInfoList.pollutantInfo.map(item => {
+                pollutantInfoList.map(item => {
+                    let zspollutantCode;
+                    let zspollutantCodeParam;
+                    let pollutantCode;
+                    if(res.data[0][item.field] || res.data[0][item.field] ===0 )
+                    {
+                        pollutantCode=res.data[0][item.field]
+                    }
+                    else
+                    {
+                        pollutantCode='-';
+                    }
+                    
+                    if(selectpoint.pollutantTypeCode==2)
+                    {
+
+                        if(res.data[0][`zs${item.field}`] === 0 || res.data[0][`zs${item.field}`])
+                        {
+                            zspollutantCode=res.data[0][`zs${item.field}`];
+                        }
+                        else
+                        {     
+                            zspollutantCode='-';
+                        }
+                        zspollutantCodeParam=res.data[0][`zs${item.field}_params`]
+                    }
                     detaildata.push(
                         {
-                            pollutantName: item.pollutantName,
-                            pollutantCode: res.data[0][item.pollutantCode] ? res.data[0][item.pollutantCode] : '-',
-                            pollutantCodeParam: res.data[0][`${item.pollutantCode}_params`],
-                            zspollutantCode: pollutantInfoList.zspollutant ? res.data[0][item.zspollutantCode] === 0 || res.data[0][item.zspollutantCode] ?
-                                res.data[0][item.zspollutantCode] : '-' : '-',
-                            zspollutantCodeParam: res.data[0][`${item.zspollutantCode}_params`],
+                            pollutantName: item.name,
+                            pollutantCode: pollutantCode,
+                            pollutantCodeParam: res.data[0][`${item.field}_params`],
+                            zspollutantCode: zspollutantCode,
+                            zspollutantCodeParam: zspollutantCodeParam,
                             dgimn: payload.dgimn,
-                            pcode: item.pollutantCode,
+                            pcode: item.field,
                         },
                     );
                 });
@@ -369,6 +346,7 @@ export default Model.extend({
             call, update, select, take
         }) {
             const { mapdetailParams, selectpoint, selectpollutantTypeCode } = yield select(a => a.overview);
+       
             const body = {
                 DGIMNs: selectpoint.DGIMN,
                 datatype: mapdetailParams.datatype,
@@ -441,7 +419,6 @@ export default Model.extend({
                 tooltip: {
                     trigger: 'axis',
                     formatter: function (params, ticket, callback) {
-                        console.log(params);
                         let res = `${params[0].axisValue}时<br/>`;
                         params.map(item => {
                             res += `${item.seriesName}:${item.value}<br />`;
@@ -526,7 +503,7 @@ export default Model.extend({
                 });
                 yield take('querydatalist/@@end');
                 }
-               
+
             } else {
                 yield update({
                     pollutantTypelist: null
@@ -539,7 +516,14 @@ export default Model.extend({
         }, { call, update, put, take }) {
             const body= {parentIDs:enterpriceid};
             const entbaseinfo = yield call(querypolluntantentinfolist,body);
-            yield update({ entbaseinfo: entbaseinfo });
+            if(entbaseinfo)
+            {
+                yield update({ entbaseinfo: entbaseinfo[0] });
+            }
+            else
+            {
+                yield update({ entbaseinfo: null });
+            }
             yield put({
                 type: 'getPollutantTypeList',
                 payload: {
@@ -547,6 +531,13 @@ export default Model.extend({
                 },
             });
             yield take('getPollutantTypeList/@@end');
+        },
+        * querygetentdatalist({
+            payload,
+        }, { call, update, put, take }) {
+            const body = {entName:payload.entName};
+            const entlist = yield call(querygetentdatalist,body);
+            yield update({ entlist });
         },
     }
 });

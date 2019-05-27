@@ -28,14 +28,9 @@ class UrgentDispatch extends Component {
                     dgimn: DGIMN,
                     personId:operationUserInfo.operationUserID,
                     remark:this.props.form.getFieldValue('remark'),
-                    
+                    reloadData:()=>this.props.reloadData()
                 }
             })
-            if(this.props.reloadData)
-            {
-                //刷新方法
-                this.props.reloadData();
-            }
             this.props.onCancel();
     }
     //获取运维信息文字

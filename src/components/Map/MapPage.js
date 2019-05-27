@@ -34,7 +34,7 @@ export default class MapPage extends Component {
                                         {
                                             initialValue: this.props.address,
                                         }
-                                    )(<Input placeholder="请输入地址" />)
+                                    )(<Input placeholder="请输入地址搜索位置" />)
                                 } </FormItem>
                         </Col>
                         <Col span={12} >
@@ -45,7 +45,7 @@ export default class MapPage extends Component {
                                         {
                                             initialValue: this.props.polygon,
                                         }
-                                    )(<Input placeholder="坐标集合" />)
+                                    )(<Input readOnly={true} placeholder="请在地图中设置坐标集合" />)
                                 } </FormItem>
                         </Col>
                     </Row>
@@ -57,7 +57,7 @@ export default class MapPage extends Component {
                                     getFieldDecorator('longitude',
                                         {
                                             initialValue: this.props.longitude,
-                                        })(<Input placeholder="经度" />)
+                                        })(<Input placeholder="经度(请精确到小数点后六位或者从地图中选择)" />)
                                 } </FormItem>
                         </Col>
                         <Col span={12} >
@@ -67,7 +67,7 @@ export default class MapPage extends Component {
                                     getFieldDecorator('latitude',
                                         {
                                             initialValue: this.props.latitude,
-                                        })(<Input placeholder="纬度" />
+                                        })(<Input placeholder="纬度(请精确到小数点后六位或者从地图中选择)" />
                                     )
                                 } </FormItem>
                         </Col>

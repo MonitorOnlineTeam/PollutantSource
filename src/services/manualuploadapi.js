@@ -54,8 +54,9 @@ export async function GetManualSupplementList(params) {
     } : result;
 }
 // 获取模板地址
-export async function getUploadTemplate() {
+export async function getUploadTemplate(params) {
     const body = {
+        PollutantType:params.PollutantType
     };
     const result = post('/api/rest/PollutantSourceApi/ManualSupplement/UploadTemplate', body, null);
     return result === null ? {

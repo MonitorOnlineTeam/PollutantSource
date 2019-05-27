@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import { Card, Table} from 'antd';
 import ReactEcharts from 'echarts-for-react';
+import Link from 'umi/link';
 import { connect } from 'dva';
 
 const gridStyle = {
@@ -67,9 +68,9 @@ class RealTimeNetWorkingRate extends PureComponent {
                 {
                     name: seriesName,
                     type: 'pie',
-                    radius: ['50%', '70%'],
+                    radius: ['40%', '60%'],
                     avoidLabelOverlap: false,
-                    center: ['60%', '60%'],
+                    center: ['60%', '50%'],
                     itemStyle: {
                         normal: {
                             label: {
@@ -104,22 +105,25 @@ class RealTimeNetWorkingRate extends PureComponent {
                 key:'RateValue',
                 width:'40%',
                 render: (text, record) => {
-                    if (text === 100)
-                        return `${(parseFloat(text) * 100).toFixed(2)}%`;
+                    // if (text === 100)
+                    //     return `${(parseFloat(text) * 100).toFixed(2)}%`;
                     return <span style={{ color: 'red' }}>离线</span>;
                 }
             }];
-
+        const tableData = this.props.networkeRateList.tableDatas.filter(data => data.RateValue!==1 );
         return <Table rowKey={(record, index) => `complete${index}`} loading={this.props.loadingRateStatistics}
-         columns={columns} dataSource={this.props.networkeRateList.tableDatas.slice(0, 3)} size="small" pagination={false} />;
+         columns={columns} dataSource={tableData.slice(0, 3)} size="small" pagination={false} />;
     }
 
     render() {
         return (
-            <Card title="实时联网率" style={{}} extra={<a href="/overview/datalistview">更多&gt;&gt;</a>}>
+            <Card title="实时联网率" style={{}} extra={ 
+            <Link to="/overview/datalistview">
+            <span>更多>></span>
+           </Link>
+            }>
                 <Card.Grid style={gridStyle}>
                     <ReactEcharts
-                        // loadingOption={this.props.loadingRateStatistics}
                         option={this.getOption(1)}
                         style={{ height: '150px', width: '100%' }}
                         className="echarts-for-echarts"

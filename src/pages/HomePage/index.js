@@ -13,6 +13,7 @@ import {
 } from 'dva';
 import { Map, Polygon,Markers,InfoWindow } from 'react-amap';
 import moment from 'moment';
+import {getPointStatusImg} from '@/utils/getStatusImg';
 import config from '../../config';
 import styles from './index.less';
 import Adapt from './Adapt.less';
@@ -31,6 +32,7 @@ const pageUrl = {
     getTaskCount: 'homepage/getTaskCount',
     getAlarmAnalysis: 'homepage/getAlarmAnalysis',
     getAllMonthEmissionsByPollutant: 'homepage/getAllMonthEmissionsByPollutant',
+    getAllPollutantTypelist:'overview/getPollutantTypeList',
 };
 const { RunningRate,TransmissionEffectiveRate,amapKey } = config;
 const {enterpriceid}=config;
@@ -52,6 +54,7 @@ let _thismap;
     loadingAlarmAnalysis: loading.effects[pageUrl.getAlarmAnalysis],
     loadingStatisticsPointStatus: loading.effects[pageUrl.getStatisticsPointStatus],
     loadingAllMonthEmissionsByPollutant: loading.effects[pageUrl.getAllMonthEmissionsByPollutant],
+    loadingAllPollutantTypelist:loading.effects[pageUrl.getAllPollutantTypelist],
     RateStatisticsByEnt: homepage.RateStatisticsByEnt,
     TaskCount: homepage.TaskCount,
     ExceptionProcessing: homepage.ExceptionProcessing,
@@ -60,6 +63,8 @@ let _thismap;
     allMonthEmissionsByPollutant: homepage.AllMonthEmissionsByPollutant,
     baseinfo: baseinfo.entbaseinfo,
     datalist: overview.data,
+    pollutantTypelist: overview.pollutantTypelist,
+    entCode:homepage.entCode
 }))
 class index extends Component {
     constructor(props) {
@@ -73,7 +78,7 @@ class index extends Component {
             ],
             visible: false,
             pointName: null,
-            radioDefaultValue:"2"
+            radioDefaultValue:""
         };
         this.mapEvents = {
             created(m) {
@@ -98,12 +103,21 @@ class index extends Component {
         this.getRateStatisticsByEnt();
         this.getStatisticsPointStatus();
         this.getAllMonthEmissionsByPollutant();
+        this.getpollutantTypelist();
+    }
+    getpollutantTypelist=()=>{
+        const {dispatch} = this.props;
+        dispatch({
+            type: pageUrl.getAllPollutantTypelist,
+            payload: {
+                treeCard:true
+            },
+        });
     }
 
     handleScroll=()=>{
         this.setState({
             screenWidth:window.screen.width===1600?50:70
-
         });
         this.getoperation();
     }
@@ -112,11 +126,11 @@ class index extends Component {
      *  企业基本信息
      */
      getbaseinfo = () => {
-         const {dispatch} = this.props;
+         const {dispatch,entCode} = this.props;
          dispatch({
              type: pageUrl.getbaseinfo,
              payload: {
-                 parentID: enterpriceid,
+                 entCode:entCode
              },
          });
      }
@@ -126,13 +140,15 @@ class index extends Component {
       */
      getpointdatalist = () => {
          const {
-             dispatch
+             dispatch,
+             entCode
          } = this.props;
          dispatch({
              type: pageUrl.getdatalist,
              payload: {
                  map: true,
-                 pollutantTypes:'2'
+                 pollutantTypes:'',
+                 entCode:entCode
              },
          });
      }
@@ -142,12 +158,13 @@ class index extends Component {
          */
         getStatisticsPointStatus = () => {
             const {
-                dispatch
+                dispatch,
+                entCode
             } = this.props;
             dispatch({
                 type: pageUrl.getStatisticsPointStatus,
                 payload: {
-
+                    entCode:entCode
                 },
             });
         }
@@ -156,11 +173,11 @@ class index extends Component {
      * 智能质控_率的统计_更新数据
      */
     getRateStatisticsByEnt = () => {
-        const {dispatch} = this.props;
+        const {dispatch,entCode} = this.props;
         dispatch({
             type: pageUrl.getRateStatisticsByEnt,
             payload: {
-
+                entCode:entCode
             },
         });
     }
@@ -170,12 +187,13 @@ class index extends Component {
      */
     getExceptionProcessing = () => {
         const {
-            dispatch
+            dispatch,
+            entCode
         } = this.props;
         dispatch({
             type: pageUrl.getExceptionProcessing,
             payload: {
-
+                entCode:entCode
             },
         });
     }
@@ -216,12 +234,13 @@ class index extends Component {
      */
     getTaskCount = () => {
         const {
-            dispatch
+            dispatch,
+            entCode
         } = this.props;
         dispatch({
             type: pageUrl.getTaskCount,
             payload: {
-
+                entCode:entCode
             },
         });
     }
@@ -346,12 +365,13 @@ class index extends Component {
      */
     getAlarmAnalysis = () => {
         const {
-            dispatch
+            dispatch,
+            entCode
         } = this.props;
         dispatch({
             type: pageUrl.getAlarmAnalysis,
             payload: {
-
+                entCode:entCode
             },
         });
     }
@@ -435,12 +455,13 @@ class index extends Component {
       */
      getAllMonthEmissionsByPollutant = () => {
          const {
-             dispatch
+             dispatch,
+             entCode
          } = this.props;
          dispatch({
              type: pageUrl.getAllMonthEmissionsByPollutant,
              payload: {
-
+                entCode:entCode
              },
          });
      }
@@ -609,8 +630,20 @@ class index extends Component {
         )
      }
 
-
-
+     /**渲染污染物列表 */
+     renderpollutantTypelist=()=>{
+        const {pollutantTypelist}=this.props;
+        let res=[];
+        if(pollutantTypelist)
+        {
+            res.push(<RadioButton value="">全部</RadioButton>);
+            pollutantTypelist.map((item,key)=>{
+                res.push(<RadioButton key={key} value={item.pollutantTypeCode}>{item.pollutantTypeName}</RadioButton>)
+            })
+        }
+        return res;
+    }
+     
 
      /**地图 */
      getpolygon = (polygonChange) => {
@@ -680,13 +713,15 @@ treeCilck = (row) => {
      onRadioChange=(e)=>{
          const value = e.target.value;
          const {
-             dispatch
+             dispatch,
+             entCode
          } = this.props;
          dispatch({
              type: pageUrl.getdatalist,
              payload: {
                  map: true,
-                 pollutantTypes: value
+                 pollutantTypes: value,
+                 entCode:entCode
              },
          });
          this.setState({
@@ -956,8 +991,7 @@ treeCilck = (row) => {
                          }}
                      >
                          <Radio.Group defaultValue={this.state.radioDefaultValue} buttonStyle="solid" size="small" onChange={this.onRadioChange}>
-                             <RadioButton value="2">废气</RadioButton>
-                             <RadioButton value="1">废水</RadioButton>
+                            {this.renderpollutantTypelist()}
                          </Radio.Group>
                      </div>
                      <div style={
@@ -1079,16 +1113,9 @@ treeCilck = (row) => {
                          markers={this.props.datalist}
                          events={this.markersEvents}
                          className={this.state.special}
-                         render={(extData) => {
-                             if (extData.status === 0) {
-                                 return <img style={{width:15}} src="/gisunline.png" />;
-                             } if (extData.status === 1) {
-                                 return <img style={{width:15}} src="/gisnormal.png" />;
-                             } if (extData.status === 2) {
-                                 return <img style={{width:15}} src="/gisover.png" />;
-                             }
-                             return <img style={{width:15}} src="/gisexception.png" />;
-                         }}
+                        render = {(extData) => {
+                            return getPointStatusImg(extData.status, extData.stop, extData.pollutantTypeCode);
+                        }}
                      />
                      {
                          this.getpolygon(polygonChange)

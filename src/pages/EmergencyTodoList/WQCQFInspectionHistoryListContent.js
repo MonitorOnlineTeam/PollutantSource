@@ -129,7 +129,7 @@ class WQCQFInspectionHistoryListContent extends Component {
     render() {
         const dataSource = this.props.HistoryInspectionHistoryRecordList === [] ? [] : this.props.HistoryInspectionHistoryRecordList;
         const columns = [{
-            title: '校准人',
+            title: '运维人',
             width: '20%',
             dataIndex: 'CreateUserID',
             key: 'CreateUserID'

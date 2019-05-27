@@ -25,6 +25,7 @@ import {
 import {
     connect
 } from 'dva';
+import {onlyOneEnt} from '../../config'
 import MonitorContent from '../../components/MonitorContent/index';
 import styles from './index.less';
 
@@ -33,7 +34,8 @@ const confirm = Modal.confirm;
 
 @connect(({
     loading,
-    pointinfo
+    pointinfo,
+    basicinfo
 }) => ({
     ...loading,
     list: pointinfo.list,
@@ -41,6 +43,8 @@ const confirm = Modal.confirm;
     pageSize: pointinfo.pageSize,
     pageIndex: pointinfo.pageIndex,
     requstresult: pointinfo.requstresult,
+    entName:basicinfo.entName,
+    entCode:basicinfo.entCode
 }))
 export default class pointlist extends Component {
     constructor(props) {
@@ -57,6 +61,16 @@ export default class pointlist extends Component {
         };
     }
     componentWillMount() {
+        if(!onlyOneEnt)
+        {
+            this.props.dispatch({
+                type:'basicinfo/updateState',
+                payload:{
+                    entCode:this.props.match.params.entcode,
+                    entName:this.props.match.params.entname
+                }
+            })
+        }
         this.onChange(this.props.pageIndex, this.props.pageSize);
     }
   onShowSizeChange = (pageIndex, pageSize) => {
@@ -169,6 +183,20 @@ export default class pointlist extends Component {
          }
      },
      {
+        title: '上传数据类型',
+        dataIndex: 'runState',
+        key: 'runState',
+        width: '10%',
+        align: 'center',
+        render: (text, record) => {
+            console.log(text);
+            if (text === 1) {
+                return <span > 自动 </span>;
+            }
+            return <span >手动 </span>;
+        }
+    },
+     {
          title: '污染物类型',
          dataIndex: 'pollutantTypeName',
          key: 'pollutantTypeName',
@@ -246,14 +274,35 @@ export default class pointlist extends Component {
          
      },
      ];
+     let Crumbs=[  
+                   { Name: '系统管理', Url: '' }
+                ]
+     if(onlyOneEnt)
+     {
+         Crumbs=Crumbs.concat(
+            { Name: '排口管理', Url: '' }
+         )
+     }
+     else
+     {
+        const {entName}=this.props;
+         Crumbs=Crumbs.concat(
+             { Name: '企业管理', Url: '/sysmanage/entoperation' },
+             { Name: `排口管理(${entName})`, Url: '' }
+          )
+     }
      return (
          <MonitorContent {...this.props} breadCrumbList={
+<<<<<<< HEAD
                 [
                     // {Name:'首页',Url:''},
                     // {Name:'系统管理',Url:''},
                     {Name:'企业管理',Url:'/EnterpriseManager'},
                     {Name:'排口管理',Url:''}
                 ]
+=======
+             Crumbs
+>>>>>>> b63cf6e6c72291109fd45a31060210a6e86d6682
             }>
              <div className={styles.cardTitle}>
                  <Card bordered={false}>

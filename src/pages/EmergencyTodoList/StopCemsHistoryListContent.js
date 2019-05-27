@@ -108,7 +108,7 @@ class StopCemsHistoryListContent extends Component {
     render() {
         const dataSource = this.props.StopCemsHistoryList === null ? [] : this.props.StopCemsHistoryList;
         const columns = [{
-            title: '校准人',
+            title: '运维人',
             width: '20%',
             dataIndex: 'CreateUserID',
             key: 'CreateUserID'

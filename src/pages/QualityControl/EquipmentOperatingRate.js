@@ -21,6 +21,7 @@ import MonitorContent from '../../components/MonitorContent/index';
 import styles from './index.less';
 import { connect } from 'dva';
 import { number } from 'prop-types';
+import {onlyOneEnt} from '../../config'
 const { MonthPicker } = DatePicker;
 const monthFormat = 'YYYY-MM';
 const pageUrl = {
@@ -64,10 +65,12 @@ export default class EquipmentOperatingRate extends Component {
         });
     }
     getTableData = (pageIndex) => {
+        const {entcode}=this.props.match.params;
         this.props.dispatch({
             type: pageUrl.getData,
             payload: {
                 pageIndex: pageIndex,
+                entcode:entcode
             },
         });
     }
@@ -101,6 +104,7 @@ export default class EquipmentOperatingRate extends Component {
     }
     render() {
         const { avgstoptime, avgnormaltime, avgworktime } = this.props;
+        const {entcode,entname}=this.props.match.params;
         const columns = [
             {
                 title: (<span style={{ fontWeight: 'bold' }}>排口名称</span>),
@@ -201,23 +205,49 @@ export default class EquipmentOperatingRate extends Component {
                 render: (text, record) => {
                     return (
                         <a onClick={
-                            () => this.props.dispatch(routerRedux.push(`/pointdetail/${record.DGIMN}/equipmentoperatingrate/ywdsjlist`))
+                            () => {
+                                this.props.dispatch({
+                                    type:pageUrl.updateState,
+                                    payload:{
+                                        entcode:entcode,
+                                        entname:entname
+                                    }
+                                })
+                                this.props.dispatch(routerRedux.push(`/pointdetail/${record.DGIMN}/pointequipmentoperatingrate/ywdsjlist`))}
                         } > 查看运维 </a>
                     );
                 }
             }
         ];
+
+        const entName=this.props.match.params.entname;
+        let tableTitle="";
+        let Crumbs=[  
+                      { Name: '智能质控', Url: '' }
+                   ]
+        if(onlyOneEnt)
+        {
+            tableTitle=`设备运转率列表`
+            Crumbs=Crumbs.concat(
+               { Name: '设备运转率', Url: '' }
+            )
+        }
+        else
+        {
+            tableTitle=`设备运转率列表(${entName})`
+            Crumbs=Crumbs.concat(
+                { Name: '企业设备运转率', Url: '/qualitycontrol/equipmentoperatingrate' },
+                { Name: '排口设备运转率', Url: '' }
+             )
+        }
+
         return (
             <MonitorContent {...this.props} breadCrumbList={
-                [
-                    { Name: '首页', Url: '/' },
-                    { Name: '智能质控', Url: '' },
-                    { Name: '设备运转率', Url: '' }
-                ]
+                Crumbs
             }>
                 <Row className={styles.cardTitle}>
                     <Card
-                        title="设备运转率列表"
+                        title={tableTitle}
                         extra={
                             <span style={{ color: '#b3b3b3' }}>
                                 时间选择：

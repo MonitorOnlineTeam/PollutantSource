@@ -9,6 +9,7 @@ import {
     connect
 } from 'dva';
 import styles from './index.less';
+import {onlyOneEnt} from '../../config';
 
 const Search = Input.Search;
 @connect(({
@@ -388,9 +389,47 @@ class DataFilterNew extends Component {
           });
       }
 
+         renderentNamelist=(entName,pointName)=>{
+           if(!onlyOneEnt)
+           {
+               return entName+"-"+pointName;
+           }
+           return pointName;
+         }
+
          renderStandardList=() => {
+            if (this.props.listloading) {
+                return ( <Spin
+                    style={
+                        {
+                            width: '100%',
+                            height: 'calc(100vh/2)',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center'
+                        }
+                    }
+                    size="large"
+                /> );
+            }
+            if (this.props.addloading) {
+                return ( <Spin
+                    style={
+                        {
+                            width: '100%',
+                            height: 'calc(100vh/2)',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center'
+                        }
+                    }
+                    size="large"
+                /> );
+            }
+
              const rtnVal = [];
              const that = this;
+
              this.props.list.map((item,key) => {
                  rtnVal.push(
                      <div
@@ -399,9 +438,10 @@ class DataFilterNew extends Component {
                      >
                          <Row gutter={0}>
                              <Col span={18}>
+                                 
                                  <div className={styles.PointName}>
                                      <Row type="flex" justify="space-between">
-                                         <Col span={15}>{item.pointName}</Col>
+                                         <Col span={15}>{this.renderentNamelist(item.abbreviation,item.pointName)}</Col>
                                      </Row>
                                  </div>
                                  <div className={styles.PointView}>
@@ -469,36 +509,14 @@ class DataFilterNew extends Component {
          }
 
          render() {
-             console.log(this.props.listloading);
-             console.log(this.props.addloading);
-             if (this.props.listloading) {
-                 return ( <Spin
-                     style={
-                         {
-                             width: '100%',
-                             height: 'calc(100vh/2)',
-                             display: 'flex',
-                             alignItems: 'center',
-                             justifyContent: 'center'
-                         }
-                     }
-                     size="large"
-                 /> );
+             let placeholder="排口名称、排口编号";
+             if(!onlyOneEnt)
+             {
+                placeholder="企业名称、排口名称";
              }
-             if (this.props.addloading) {
-                 return ( <Spin
-                     style={
-                         {
-                             width: '100%',
-                             height: 'calc(100vh/2)',
-                             display: 'flex',
-                             alignItems: 'center',
-                             justifyContent: 'center'
-                         }
-                     }
-                     size="large"
-                 /> );
-             }
+
+           
+       
              return (
                  <div>
                      <Card>
@@ -506,7 +524,7 @@ class DataFilterNew extends Component {
                              <Row gutter={16}>
                                  <Col span={5}>
                                      <Search
-                                         placeholder="排口名称、排口编号"
+                                         placeholder={placeholder}
                                          style={{ width: 200 }}
                                          onSearch={
                                              (value) => {

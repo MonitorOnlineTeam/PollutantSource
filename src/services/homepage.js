@@ -15,6 +15,7 @@ export async function GetRateStatisticsByEnt(params) {
     const body = {
         beginTime: params.beginTime,
         endTime: params.endTime,
+        entCode:params.entCode
     };
     const result = post('/api/rest/PollutantSourceApi/PHomePage/GetRateStatisticsByEnt', body, null);
     return result === null ? {
@@ -28,6 +29,7 @@ export async function GetExceptionProcessing(params) {
     const body = {
         beginTime: params.beginTime,
         endTime:params.endTime,
+        entCode:params.entCode
     };
     const result = post('/api/rest/PollutantSourceApi/PHomePage/GetExceptionProcessing', body, null);
     return result === null ? {
@@ -54,6 +56,7 @@ export async function GetAlarmAnalysis(params) {
     const body = {
         beginTime: params.beginTime,
         endTime: params.endTime,
+        entCode:params.entCode
     };
     const result = post('/api/rest/PollutantSourceApi/PHomePage/GetAlarmAnalysis', body, null);
     return result === null ? {
@@ -68,6 +71,7 @@ export async function GetAllMonthEmissionsByPollutant(params) {
         beginTime: params.beginTime,
         endTime: params.endTime,
         pollutantCode: params.pollutantCode,
+        entCode:params.entCode
     };
     const result = post('/api/rest/PollutantSourceApi/PHomePage/GetAllMonthEmissionsByPollutant', body, null);
     return result === null ? {

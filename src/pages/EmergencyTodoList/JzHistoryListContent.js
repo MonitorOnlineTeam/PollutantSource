@@ -108,7 +108,7 @@ class JzHistoryListContent extends Component {
         const SCREEN_HEIGHT = document.querySelector('body').offsetHeight - 150;
         const dataSource = this.props.JzHistoryRecord;
         const columns = [{
-            title: '校准人',
+            title: '运维人',
             width: '20%',
             dataIndex: 'CreateUserID',
             key: 'CreateUserID'

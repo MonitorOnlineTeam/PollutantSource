@@ -230,10 +230,16 @@ class AddUser extends Component {
                 {...this.props}
                 breadCrumbList={
                     [
+<<<<<<< HEAD
                         // { Name: '首页', Url: '' },
                         // { Name: '系统管理', Url: '' },
                         { Name: '用户管理', Url: '/Userinfo' },
                         { Name: `${UserId==="null"?"添加用户":"编辑用户"}`, Url: '' }
+=======
+                        { Name: '系统管理', Url: '' },
+                        { Name: '用户管理', Url: '/sysmanage/Userinfo' },
+                        { Name: '用户维护', Url: '' }
+>>>>>>> b63cf6e6c72291109fd45a31060210a6e86d6682
                     ]
                 }
             >

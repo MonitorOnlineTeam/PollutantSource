@@ -7,8 +7,9 @@ import {
     , getanalyzersysmn,getanalyzerbymn
 } from '../services/pointinfo';
 import { EnumRequstResult } from '../utils/enum';
+import {onlyOneEnt,enterpriceid} from '../config';
 /*
-排口管理相关接口
+监测点管理相关接口
 add by xpy
 modify by
 */
@@ -59,15 +60,23 @@ export default Model.extend({
         },
     },
     effects: {
-        /*获取当前登陆人的排口列表**/
+        /*获取当前登陆人的监测点列表**/
         * getpointlist({
             payload
         }, {
             call,
             update,
+            select
         }) {
+            let entCodedata=enterpriceid;
+            if(!onlyOneEnt)
+            {
+                const { entCode } = yield select(state => state.basicinfo);
+                entCodedata=entCode;
+            }
             const result = yield call(getpointlist, {
-                ...payload
+                ...payload,
+                entCode:entCodedata
             });
             if (result.requstresult === '1') {
                 yield update({
@@ -87,21 +96,29 @@ export default Model.extend({
                 });
             }
         },
-        /*添加排口**/
+        /*添加监测点**/
         * addpoint({
             payload
         }, {
             call,
             update,
+            select
         }) {
+            let entCodedata=enterpriceid;
+            if(!onlyOneEnt)
+            {
+                const { entCode } = yield select(state => state.basicinfo);
+                entCodedata= entCode;
+            }
             const result = yield call(addpoint, {
-                ...payload
+                ...payload,
+                entCode:entCodedata
             });
             yield update({
                 requstresult: result.requstresult,
                 reason: result.reason,
             });
-            payload.callback();
+            payload.callback && payload.callback();
         },
         /*获取运维人**/
         * getoperationsuserList({
@@ -123,7 +140,7 @@ export default Model.extend({
                     userlist: [],
                 });
             }
-            payload.callback();
+            payload.callback && payload.callback();
         },
         /*获取环保专工**/
         * getspecialworkeruserList({
@@ -144,7 +161,7 @@ export default Model.extend({
                     swuserlist: [],
                 });
             }
-            payload.callback();
+            payload.callback && payload.callback();
         },
         /*获取污染物类型**/
         * getpollutanttypelist({
@@ -166,9 +183,9 @@ export default Model.extend({
                     pollutanttypelist: [],
                 });
             }
-            payload.callback();
+            payload.callback && payload.callback();
         },
-        /**获取气排口类型 */
+        /**获取气监测点类型 */
         * getgasoutputtypelist({
             payload
         }, {
@@ -188,9 +205,9 @@ export default Model.extend({
                     gasoutputtypelist: [],
                 });
             }
-            payload.callback();
+            payload.callback && payload.callback();
         },
-        /**获取单个排口实体 */
+        /**获取单个监测点实体 */
         * getpoint({
             payload
         }, {
@@ -205,9 +222,9 @@ export default Model.extend({
                 requstresult: result.requstresult,
                 editpoint: result.data[0]
             });
-            payload.callback();
+            payload.callback && payload.callback();
         },
-        /**编辑排口 */
+        /**编辑监测点 */
         * editpoint({
             payload
         }, {
@@ -221,9 +238,9 @@ export default Model.extend({
                 requstresult: result.requstresult,
                 reason: result.reason,
             });
-            payload.callback();
+            payload.callback && payload.callback();
         },
-        /**删除排口 */
+        /**删除监测点 */
         * deletepoint({
             payload
         }, {
@@ -238,15 +255,17 @@ export default Model.extend({
                 requstresult: result.requstresult,
                 reason: result.reason,
             });
+           
             yield put({
                 type: 'getpointlist',
                 payload: {
-                    ...payload
+                    ...payload,
+                  
                 },
             });
-            payload.callback();
+            payload.callback && payload.callback();
         },
-        /* 获取排口CEMS监测子系统主表**/
+        /* 获取监测点CEMS监测子系统主表**/
         * getanalyzersys({
             payload
         }, {
@@ -270,7 +289,7 @@ export default Model.extend({
             }
 
         },
-        /**添加排口CEMS监测子系统主表*/
+        /**添加监测点CEMS监测子系统主表*/
         * addalyzersys({
             payload
         }, {
@@ -284,9 +303,9 @@ export default Model.extend({
                 addalyzersys_requstresult: result.requstresult,
                 reason: result.reason,
             });
-            payload.callback();
+            payload.callback && payload.callback();
         },
-        /**获取排口CEMS监测子系统实体*/
+        /**获取监测点CEMS监测子系统实体*/
         * getanalyzersysmnmodel({
             payload
         }, {
@@ -300,9 +319,9 @@ export default Model.extend({
                 getanalyzersysmnmodel_requstresult: result.requstresult,
                 editAnalyzerSys: result.data[0],
             });
-            payload.callback();
+            payload.callback && payload.callback();
         },
-        /**编辑排口CEMS监测子系统主表*/
+        /**编辑监测点CEMS监测子系统主表*/
         * editalyzersys({
             payload
         }, {
@@ -318,7 +337,7 @@ export default Model.extend({
             });
             payload.callback();
         },
-        /**删除排口CEMS监测子系统主表*/
+        /**删除监测点CEMS监测子系统主表*/
         * deletealyzersys({
             payload
         }, {
@@ -332,7 +351,7 @@ export default Model.extend({
                 deletealyzersys_requstresult: result.requstresult,
                 reason: result.reason,
             });
-            payload.callback();
+            payload.callback && payload.callback();
         },
         /**获取测试项目 */
         * getcomponent({
@@ -349,9 +368,9 @@ export default Model.extend({
                 reason: result.reason,
                 component: result.data,
             });
-            payload.callback();
+            payload.callback && payload.callback();
         },
-        /**添加排口CEMS监测子系统子表*/
+        /**添加监测点CEMS监测子系统子表*/
         * addalyzerchild({
             payload
         }, {
@@ -365,9 +384,9 @@ export default Model.extend({
                 addalyzerchild_requstresult: result.requstresult,
                 reason: result.reason,
             });
-            payload.callback();
+            payload.callback && payload.callback();
         },
-        /**获取排口CEMS监测子系统主表下所有子表的数据*/
+        /**获取监测点CEMS监测子系统主表下所有子表的数据*/
         * getanalyzerchild({
             payload
         }, {
@@ -383,9 +402,9 @@ export default Model.extend({
                 reason: result.reason,
                 analyzerchild: result.data,
             });
-            payload.callback();
+            payload.callback && payload.callback();
         },
-        /**获取排口CEMS监测子系统子表实体*/
+        /**获取监测点CEMS监测子系统子表实体*/
         * getanalyzerchildmodel({
             payload
         }, {
@@ -400,9 +419,9 @@ export default Model.extend({
                 reason: result.reason,
                 editalyzersyschild: result.data[0],
             });
-            payload.callback();
+            payload.callback && payload.callback();
         },
-        /**删除排口CEMS监测子系统子表*/
+        /**删除监测点CEMS监测子系统子表*/
         * deletealyzerchild({
             payload
         }, {
@@ -414,9 +433,9 @@ export default Model.extend({
                 deletealyzerchild_requstresult: result.requstresult,
                 reason: result.reason,
             });
-            payload.callback();
+            payload.callback && payload.callback();
         },
-        /**编辑排口CEMS监测子系统子表*/
+        /**编辑监测点CEMS监测子系统子表*/
         * editalyzerchild({
             payload
         }, {
@@ -430,7 +449,7 @@ export default Model.extend({
                 editalyzerchild_requstresult: result.requstresult,
                 reason: result.reason,
             });
-            payload.callback();
+            payload.callback && payload.callback();
         },
         * getmaininstrumentName({
             payload: {

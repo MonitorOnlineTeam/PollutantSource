@@ -105,7 +105,6 @@ export default class JzHistoryList extends Component {
         return (
             <MonitorContent {...this.props} breadCrumbList={
                 [
-                    { Name: '首页', Url: '/' },
                     { Name: '智能质控', Url: '' },
                     { Name: '零点量程偏移与校准记录表', Url: '' }
                 ]

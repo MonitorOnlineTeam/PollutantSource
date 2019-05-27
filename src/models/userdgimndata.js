@@ -31,7 +31,7 @@ export default Model.extend({
         },
     },
     effects: {
-        /*获取当前登陆人的排口列表**/
+        /*获取当前登陆人的监测点列表**/
         * userDgimnDataFilter({
             payload
         }, {
@@ -65,7 +65,7 @@ export default Model.extend({
             }
             payload.callback();
         },
-        /*把当前所有排口权限 添加/移除 当前登陆人**/
+        /*把当前所有监测点权限 添加/移除 当前登陆人**/
         * addAllDgimnDataFilter({
             payload
         }, {
@@ -80,7 +80,7 @@ export default Model.extend({
             });
             payload.callback();
         },
-        /*把当前排口权限 添加/移除 当前登陆人**/
+        /*把当前监测点权限 添加/移除 当前登陆人**/
         * addDgimnDataFilter({
             payload
         }, {

@@ -168,7 +168,7 @@ export default class Login extends Component {
                       )}
                       {/* <a className={styles.forgot} href="">忘记密码</a> */}
                       <Button size="large" loading={login.submitting} className={styles.submit} type="primary" htmlType="submit">
-              登录
+                          登录
                       </Button>
                   </FormItem>
               </Form>

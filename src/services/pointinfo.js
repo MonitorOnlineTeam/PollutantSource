@@ -6,6 +6,7 @@ import {
 // 排口列表
 export async function getpointlist(params) {
     const body = {
+        entCode:params.entCode,
         pageIndex: params.pageIndex,
         pageSize: params.pageSize,
         DGIMNs: params.DGIMNs,
@@ -19,6 +20,7 @@ export async function getpointlist(params) {
 // 添加排口
 export async function addpoint(params) {
     const body = {
+        entCode:params.entCode,
         DGIMN: params.DGIMN,
         PointName: params.PointName,
         PointType: params.PointType,

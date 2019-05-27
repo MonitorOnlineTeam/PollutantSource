@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import { Card, Table } from 'antd';
 import ReactEcharts from 'echarts-for-react';
 import { connect } from 'dva';
+import Link from 'umi/link';
 
 const gridStyle = {
     width: '50%',
@@ -90,9 +91,9 @@ class OperationRate extends PureComponent {
                 {
                     name: seriesName,
                     type: 'pie',
-                    radius: ['50%', '70%'],
+                    radius: ['40%', '60%'],
                     avoidLabelOverlap: false,
-                    center: ['60%', '60%'],
+                    center: ['60%', '50%'],
                     itemStyle: {
                         normal: {
                             label: {
@@ -142,7 +143,11 @@ class OperationRate extends PureComponent {
             <Card
                 title="当月设备运转率"
                 style={{ marginTop: 10 }}
-                extra={<a href="/qualitycontrol/equipmentoperatingrate">更多&gt;&gt;</a>}
+                extra={ 
+                <Link to="/qualitycontrol/equipmentoperatingrate">
+                <span>更多>></span>
+               </Link>
+            }
             >
                 <Card.Grid style={gridStyle}>
                     <ReactEcharts

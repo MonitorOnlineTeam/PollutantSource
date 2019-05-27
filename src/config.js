@@ -10,6 +10,7 @@ module.exports = {
     logo: '/logo.png',
     iconFontCSS: '/iconfont.css',
     iconFontJS: '/iconfont.js',
+    onlyOneEnt:false,
     CORS: [],
     openPages: ['/login'],
     enterpriceid: '51216eae-8f11-4578-ad63-5127f78f6cca',
@@ -97,6 +98,34 @@ module.exports = {
             ],
         },
         {
+            pollutantCode: 10,
+            zspollutant: false,
+            unit: 'mg/m³',
+            //是否有传输有效率
+            csyxl: false,
+            pollutantInfo: [
+                {
+                    pollutantCode: '200',
+                    pollutantName: 'VOCS',
+                    unit: 'mg/m³'
+                } 
+            ],
+        },
+        {
+            pollutantCode: 12,
+            zspollutant: false,
+            unit: 'mg/m³',
+            //是否有传输有效率
+            csyxl: false,
+            pollutantInfo: [
+                {
+                    pollutantCode: 'a34002',
+                    pollutantName: 'PM10',
+                    unit: 'mg/m³'
+                } 
+            ],
+        },
+        {
             pollutantCode: 2,
             zspollutant: true,
             unit: 'mg/m³',
@@ -120,6 +149,41 @@ module.exports = {
                 zspollutantCode: 'zs03',
                 zspollutantName: '折算NOx',
                 unit: 'mg/m³'
+            }
+            ],
+        },
+        {
+            pollutantCode: "",
+            zspollutant: true,
+            unit: '',
+            csyxl: true,
+            pollutantInfo: [{
+                pollutantCode: '01',
+                pollutantName: '烟尘',
+                zspollutantCode: 'zs01',
+                zspollutantName: '折算烟尘',
+                unit: 'mg/m³'
+            }, {
+                pollutantCode: '02',
+                pollutantName: 'SO2',
+                zspollutantCode: 'zs02',
+                zspollutantName: '折算SO2',
+                unit: 'mg/m³'
+            }, {
+                pollutantCode: '03',
+                pollutantName: 'NOx',
+                zspollutantCode: 'zs03',
+                zspollutantName: '折算NOx',
+                unit: 'mg/m³'
+            },
+            {
+                pollutantCode: '011',
+                pollutantName: 'COD',
+                unit: 'mg/L'
+            }, {
+                pollutantCode: '060',
+                pollutantName: '氨氮',
+                unit: 'mg/L'
             }
             ],
         }

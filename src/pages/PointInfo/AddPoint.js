@@ -20,6 +20,7 @@ import {
 import {
     connect
 } from 'dva';
+import {onlyOneEnt} from '../../config'
 import {
     routerRedux
 } from 'dva/router';
@@ -41,7 +42,8 @@ const Option = Select.Option;
 const Search = Input.Search;
 @connect(({
     loading,
-    pointinfo
+    pointinfo,
+    basicinfo
 }) => ({
     ...loading,
     isloading: loading.effects['pointinfo/getpoint'],
@@ -57,6 +59,8 @@ const Search = Input.Search;
     swuserlist: pointinfo.swuserlist,
     gasoutputtypelist: pointinfo.gasoutputtypelist,
     pollutanttypelist: pointinfo.pollutanttypelist,
+    entName:basicinfo.entName,
+    entCode:basicinfo.entCode
 }))
 @Form.create()
 class AddPoint extends Component {
@@ -122,8 +126,9 @@ class AddPoint extends Component {
      }
 
  setPollutantType = (type) => {
+     debugger;
      this.setState({
-         PollutantType: type === "1" ? "none" : "block"
+         PollutantType: type == 2 ? "block" : "none"
      });
  }
 
@@ -221,7 +226,20 @@ class AddPoint extends Component {
                const key=this.props.match.params.DGIMN;
                index=dispatch(routerRedux.push(`/pointdetail/${key}/${backviewType}`));
            } else{
+<<<<<<< HEAD
                index = dispatch(routerRedux.push(`/sysmanage/PointInfo/${this.props.match.params.EntCode}`));
+=======
+               if(onlyOneEnt)
+               {
+                  index = dispatch(routerRedux.push(`/sysmanage/PointInfo/`));
+               }
+               else
+               {
+                   const{entCode,entName}=this.props;
+                  index = dispatch(routerRedux.push(`/sysmanage/PointInfo/${entCode}/${entName}`));
+               }
+         
+>>>>>>> b63cf6e6c72291109fd45a31060210a6e86d6682
            }
        }
 
@@ -370,11 +388,41 @@ class AddPoint extends Component {
              Col9,
              Col10
          } = editpoint === null || this.props.match.params.DGIMN ==="null" ? {} : editpoint;
+<<<<<<< HEAD
          //  debugger;
+=======
+
+         let Crumbs=[  
+            { Name: '系统管理', Url: '' },
+         ]
+         if(onlyOneEnt)
+          {
+          Crumbs=Crumbs.concat(
+            { Name: '排口管理', Url: '/sysmanage/pointinfo' },
+            { Name: '排口维护', Url: '' }
+           )
+           }
+            else
+            {
+            let {entName,entCode}=this.props;
+  
+            if(entName)
+            {
+                entName=`(${entName})`
+            }
+            Crumbs=Crumbs.concat(
+                { Name: '企业管理', Url: '/sysmanage/entoperation' },
+                { Name: `排口管理${entName}`, Url: `/sysmanage/pointinfo/${entCode}/${entName}` },
+                { Name: '排口维护', Url: '' }
+            )
+            }
+
+>>>>>>> b63cf6e6c72291109fd45a31060210a6e86d6682
          return (
              <MonitorContent
                  {...this.props}
                  breadCrumbList={
+<<<<<<< HEAD
                      [
                          //  {Name:'首页',Url:''},
                          //  {Name:'系统管理',Url:''},
@@ -382,6 +430,9 @@ class AddPoint extends Component {
                          {Name:'排口管理',Url:`/sysmanage/pointinfo/${this.props.match.params.EntCode}`},
                          {Name:`${this.props.match.params.DGIMN ==="null" ? "添加排口" : "编辑排口"}`,Url:''}
                      ]
+=======
+                    Crumbs
+>>>>>>> b63cf6e6c72291109fd45a31060210a6e86d6682
                  }
              >
                  <Card
@@ -463,9 +514,8 @@ class AddPoint extends Component {
                                                  style={{ width:200 }}
                                                  placeholder="请选择"
                                                  onChange={(value,op)=>{
-
                                                      this.setState({
-                                                         PollutantType:value===1?"none":"block"
+                                                         PollutantType:value===2?"block":"none"
 
                                                      });
                                                  }}

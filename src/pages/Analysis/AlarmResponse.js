@@ -16,6 +16,7 @@ import styles from './index.less';
 import ReactEcharts from 'echarts-for-react';
 import MonitorContent from '../../components/MonitorContent/index';
 import { connect } from 'dva';
+import {onlyOneEnt} from '../../config'
 const Option = Select.Option;
 const pageUrl = {
     updateState: 'alarmresponse/updateState',
@@ -68,27 +69,33 @@ export default class AlarmResponse extends Component {
     }
     // 更新图表数据
     getChartData = (pageIndex) => {
+        const {entcode}=this.props.match.params;
         this.props.dispatch({
             type: pageUrl.getChartData,
             payload: {
+                entcode:entcode,
                 pageIndex: pageIndex,
             },
         });
     }
     // 更新所有排口列表数据
     getPointsTableData = (pageIndex) => {
+        const {entcode}=this.props.match.params;
         this.props.dispatch({
             type: pageUrl.getPointsData,
             payload: {
+                entcode:entcode,
                 pageIndex: pageIndex,
             },
         });
     }
     // 更新弹窗列表数据
     getPointDaysTableData = (pageIndex) => {
+        const {entcode}=this.props.match.params;
         this.props.dispatch({
             type: pageUrl.getPointDaysData,
             payload: {
+                entcode:entcode,
                 pageIndex: pageIndex,
             },
         });
@@ -263,7 +270,32 @@ export default class AlarmResponse extends Component {
         };
         return option;
     }
+
+
+
     render() {
+
+        const entName=this.props.match.params.entname;
+        let tableTitle="";
+        let Crumbs=[  
+                      { Name: '智能分析', Url: '' }
+                   ]
+        if(onlyOneEnt)
+        {
+            tableTitle=`${moment(this.props.clickDate).format('YYYY-MM')}月响应情况`
+            Crumbs=Crumbs.concat(
+               { Name: '月度排放量分析', Url: '' }
+            )
+        }
+        else
+        {
+            tableTitle=`${moment(this.props.clickDate).format('YYYY-MM')}月响应情况(${entName})`
+            Crumbs=Crumbs.concat(
+                { Name: '企业月度排放量分析', Url: '/analysis/alarmresponse' },
+                { Name: '排口月度排放量分析', Url: '' }
+             )
+        }
+
         const columnsPoints = [
             {
                 title: (<span style={{ fontWeight: 'bold' }}>排口名称</span>),
@@ -347,13 +379,10 @@ export default class AlarmResponse extends Component {
                 }
             }
         ];
+
         return (
             <MonitorContent {...this.props} breadCrumbList={
-                [
-                    { Name: '首页', Url: '/' },
-                    { Name: '智能分析', Url: '' },
-                    { Name: '报警及时响应情况', Url: '' }
-                ]
+                Crumbs
             }>
                 <div className={styles.cardTitle} >
                     <Card
@@ -387,7 +416,7 @@ export default class AlarmResponse extends Component {
                                 style={{ marginTop: 16 }}
                                 // type="inner"
                                 bordered={false}
-                                title={`${moment(this.props.clickDate).format('YYYY-MM')}月响应情况`}>
+                                title={tableTitle}>
                                 <Table
                                     rowKey={(record, index) => `complete${index}`}
                                     style={{}}

@@ -20,10 +20,8 @@ import styles from './index.less';
 import ReactEcharts from 'echarts-for-react';
 import MonitorContent from '../../components/MonitorContent/index';
 import { connect } from 'dva';
-// import { debug } from 'util';
-// const { MonthPicker } = DatePicker;
 const Option = Select.Option;
-// const monthFormat = 'YYYY';
+import {onlyOneEnt} from '../../config'
 const pageUrl = {
     updateState: 'pollutantemissions/updateState',
     getChartData: 'pollutantemissions/getChartData',
@@ -72,9 +70,11 @@ export default class PollutantEmissions extends Component {
         this.getPointsTableData(1);
     }
     getChartData = () => {
+        const {entcode}=this.props.match.params;
         this.props.dispatch({
             type: pageUrl.getChartData,
             payload: {
+                entcode:entcode
             },
         });
     }
@@ -85,18 +85,22 @@ export default class PollutantEmissions extends Component {
         });
     }
     getPointsTableData = (pageIndex) => {
+        const {entcode}=this.props.match.params;
         this.props.dispatch({
             type: pageUrl.getPointsData,
             payload: {
                 pageIndex: pageIndex,
+                entcode:entcode
             },
         });
     }
     getPointDaysTableData = (pageIndex) => {
+        const {entcode}=this.props.match.params; 
         this.props.dispatch({
             type: pageUrl.getPointDaysData,
             payload: {
                 pageIndex: pageIndex,
+                entcode:entcode
             },
         });
     }
@@ -169,7 +173,6 @@ export default class PollutantEmissions extends Component {
         this.getPointDaysTableData(1);
     }
     handleModalOk = (e) => {
-        console.log(e);
         this.setState({
             modalVisible: false,
         });
@@ -250,6 +253,7 @@ export default class PollutantEmissions extends Component {
         this.getPointsTableData(1);
     }
     render() {
+        const {entcode,entname}=this.props.match.params;
         const columns = [
             {
                 title: (<span style={{ fontWeight: 'bold' }}>排口名称</span>),
@@ -266,7 +270,7 @@ export default class PollutantEmissions extends Component {
                 }
             },
             {
-                title: (<span style={{ fontWeight: 'bold' }}>排放量(g)</span>),
+                title: (<span style={{ fontWeight: 'bold' }}>排放量(mg/m³)</span>),
                 dataIndex: 'Emissions',
                 key: 'Emissions',
                 align: 'left',
@@ -301,7 +305,7 @@ export default class PollutantEmissions extends Component {
                 }
             },
             {
-                title: (<span style={{ fontWeight: 'bold' }}>排放量(g)</span>),
+                title: (<span style={{ fontWeight: 'bold' }}>排放量(mg/m³)</span>),
                 dataIndex: 'Emissions',
                 key: 'Emissions',
                 align: 'left',
@@ -314,13 +318,29 @@ export default class PollutantEmissions extends Component {
             }
         ];
 
+        let tableTitle="";
+        let Crumbs=[  
+                      { Name: '智能分析', Url: '' }
+                   ]
+        if(onlyOneEnt)
+        {
+            tableTitle=`${moment(this.props.clickDate).format('YYYY-MM')}月排放量排口统计`
+            Crumbs=Crumbs.concat(
+               { Name: '月度排放量分析', Url: '' }
+            )
+        }
+        else
+        {
+            tableTitle=`${moment(this.props.clickDate).format('YYYY-MM')}月排放量排口统计(${entname})`
+            Crumbs=Crumbs.concat(
+                { Name: '企业月度排放量分析', Url: '/analysis/pollutantemissions' },
+                { Name: '排口月度排放量分析', Url: '' }
+             )
+        }
+        
         return (
             <MonitorContent {...this.props} breadCrumbList={
-                [
-                    { Name: '首页', Url: '/' },
-                    { Name: '智能分析', Url: '' },
-                    { Name: '月度排放量分析', Url: '' }
-                ]
+                Crumbs
             }>
                 <div className={styles.cardTitle}
                 // style={{
@@ -367,12 +387,11 @@ export default class PollutantEmissions extends Component {
                         <Row style={styles.cardTitle.cardBg}>
 
                             <Card
-                                style={{}}
-                                // type="inner"
                                 bordered={false}
-                                title={`${moment(this.props.clickDate).format('YYYY-MM')}月排放量排口统计`}
+                                title={tableTitle}
                             >
-                                <Table style={{}} className={styles.dataTable}
+                                <Table
+                                    className={styles.dataTable}
                                     rowKey={(record, index) => `complete${index}`}
                                     loading={this.props.loadingTable}
                                     columns={columns}

@@ -33,6 +33,7 @@ export default Model.extend({
         beginTime: '2018-12-01 00:00:00',//moment().format('YYYY-MM-DD HH:mm:ss'),
         endTime: '2019-01-01 00:00:00',//moment().format('YYYY-MM-DD HH:mm:ss'),
         tableDatas: [],
+        entCode: null,
         operation: {
             beginTime: moment().add(-3, 'months').format("YYYY-MM-01 00:00:00"),//'2018-12-01 00:00:00',//moment().format('YYYY-MM-DD HH:mm:ss'),
             endTime: moment().format('YYYY-MM-DD HH:mm:ss'),//'2019-01-01 00:00:00',//moment().format('YYYY-MM-DD HH:mm:ss'),
@@ -138,15 +139,18 @@ export default Model.extend({
          */
         * getOperationData({ payload }, { call, put, update, select }) {
             const { operation } = yield select(state => state.workbenchmodel);
+            const { entCode } = yield select(state => state.workbenchmodel);
             let body = {
                 beginTime: operation.beginTime,
                 endTime: operation.endTime,
                 pageSize: operation.pageSize,
                 pageIndex: operation.pageIndex,
                 IsQueryAllUser: true,
-                IsPaging: false
+                IsPaging: false,
+                entCode: entCode,
                 //operationUserId:'766f911d-5e41-4bbf-b705-add427a16e77'
             };
+            debugger
             const response = yield call(getOperationHistoryRecordPageList, body);
             yield update({
                 operation: {
@@ -167,12 +171,15 @@ export default Model.extend({
          */
         * getExceptionAlarmData({ payload }, { call, put, update, select }) {
             const { exceptionAlarm } = yield select(state => state.workbenchmodel);
+            const { entCode } = yield select(state => state.workbenchmodel);
+            debugger
             let body = {
                 beginTime: exceptionAlarm.beginTime,
                 endTime: exceptionAlarm.endTime,
                 pageSize: exceptionAlarm.pageSize,
                 pageIndex: exceptionAlarm.pageIndex,
-                PollutantType:2
+                PollutantType: 2,
+                entCode: entCode,
                 // IsQueryAllUser:true,
                 // IsPaging:false
                 //operationUserId:'766f911d-5e41-4bbf-b705-add427a16e77'
@@ -200,14 +207,17 @@ export default Model.extend({
 
             const { rateStatistics } = yield select(state => state.workbenchmodel);
             const { networkeRateList } = yield select(state => state.workbenchmodel);
+            const { entCode } = yield select(state => state.workbenchmodel);
             let body = {
                 beginTime: rateStatistics.beginTime,
-                endTime: rateStatistics.endTime
+                endTime: rateStatistics.endTime,
+                entCode: entCode
             };
             let realtimebody = {
                 beginTime: networkeRateList.beginTime,
                 endTime: networkeRateList.endTime,
-                NetSort: networkeRateList.NetSort
+                NetSort: networkeRateList.NetSort,
+                entCode: entCode
             };
 
             const response = yield call(getRateStatistics, body);
@@ -239,7 +249,7 @@ export default Model.extend({
             }
         },
         // /**
-        //  * 获取排口的联网率数据列表
+        //  * 获取监测点的联网率数据列表
         //  * @param {传递参数} 传递参数
         //  * @param {操作} 操作项
         //  */
@@ -271,12 +281,13 @@ export default Model.extend({
          */
         * getDataOverWarningData({ payload }, { call, put, update, select }) {
             const { hourDataOverWarningList } = yield select(state => state.workbenchmodel);
+            const { entCode } = yield select(state => state.workbenchmodel);
             let body = {
                 beginTime: hourDataOverWarningList.beginTime,
                 endTime: hourDataOverWarningList.endTime,
                 pageSize: hourDataOverWarningList.pageSize,
                 pageIndex: hourDataOverWarningList.pageIndex,
-
+                entCode: entCode
             };
             const response = yield call(getDataOverWarningPageList, body);
             yield update({
@@ -291,18 +302,20 @@ export default Model.extend({
             });
         },
         /**
-         * 获取所有排口超标数据
+         * 获取所有监测点超标数据
          * @param {传递参数} 传递参数
          * @param {操作} 操作项
          */
         * getAllPointOverDataList({ payload }, { call, put, update, select }) {
             const { allPointOverDataList } = yield select(state => state.workbenchmodel);
+            const { entCode } = yield select(state => state.workbenchmodel);
             let body = {
                 beginTime: allPointOverDataList.beginTime,
                 endTime: allPointOverDataList.endTime,
                 pageSize: allPointOverDataList.pageSize,
                 pageIndex: allPointOverDataList.pageIndex,
-                PollutantType: "2"
+                PollutantType: "2",
+                entCode: entCode
             };
             const response = yield call(getAllPointOverDataList, body);
             yield update({
@@ -317,7 +330,7 @@ export default Model.extend({
             });
         },
         /**
-         * 获取所有超标排口
+         * 获取所有超标监测点
          * @param {传递参数} 传递参数
          * @param {操作} 操作项
          */
@@ -338,13 +351,16 @@ export default Model.extend({
             });
         },
         /**
-         * 获取排口状态
+         * 获取监测点状态
          * @param {传递参数} 传递参数
          * @param {操作} 操作项
          */
         * getStatisticsPointStatus({ payload }, { call, put, update, select }) {
             const { statisticsPointStatus } = yield select(state => state.workbenchmodel);
-            let body = {};
+            const { entCode } = yield select(state => state.workbenchmodel);
+            let body = {
+                entCode: payload.entCode === undefined || payload.entCode === "" || payload.entCode === null ? entCode : payload.entCode
+            };
             const response = yield call(getStatisticsPointStatus, body);
             yield update({
                 statisticsPointStatus: {
@@ -392,7 +408,6 @@ export default Model.extend({
                 DGIMNs: OperationCalendar.DGIMNs,
                 IsQueryAllUser: OperationCalendar.IsQueryAllUser,
             };
-            debugger
             const response = yield call(getOperationHistoryRecordPageList, body);
             if (response.data !== null) {
                 yield update({

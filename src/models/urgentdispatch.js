@@ -91,7 +91,13 @@ export default Model.extend({
             };
             const res = yield call(addtaskinfo, body);
             if (res == 1) {
-                message.success('派单成功!');
+                message.success('派单成功!');debugger
+
+                if(payload.reloadData)
+                {
+                    //刷新方法
+                    payload.reloadData();   
+                }
             } else {
                 message.error('派单失败!');
             }

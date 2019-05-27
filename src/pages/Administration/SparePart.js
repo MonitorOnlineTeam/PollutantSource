@@ -142,7 +142,7 @@ export default class SparePart extends Component {
              <Menu.Item key="1"><Icon type="bars" />监测标准</Menu.Item>
              <Menu.Item key="2"><Icon type="tool" />停产管理</Menu.Item>
              <Menu.Item key="3"><Icon type="youtube" />视频管理</Menu.Item>
-             <Menu.Item key="4"><Icon type="home" />进入排口</Menu.Item>
+             <Menu.Item key="4"><Icon type="home" />进入监测点</Menu.Item>
          </Menu>
      );
      const {sparepartsparam}=this.props;
@@ -204,7 +204,6 @@ export default class SparePart extends Component {
      return (
          <MonitorContent {...this.props} breadCrumbList={
                 [
-                    {Name:'首页',Url:'/'},
                     {Name:'系统管理',Url:''},
                     {Name:'备品备件管理',Url:''}
                 ]

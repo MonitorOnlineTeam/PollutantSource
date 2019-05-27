@@ -11,6 +11,7 @@ import PointStates from '../../components/SpecialWorkbench/PointStates';
 import RealTimeNetWorkingRate from '../../components/SpecialWorkbench/RealTimeNetWorkingRate';
 import OperationRate from '../../components/SpecialWorkbench/OperationRate';
 import TransmissionEfficiency from '../../components/SpecialWorkbench/TransmissionEfficiency';
+import { onlyOneEnt } from '../../config';
 
 /*
 页面：工作台
@@ -21,13 +22,15 @@ modify by wjw 18.12.24
     workbenchmodel,
 }) => ({
     exceptionAlarm: workbenchmodel.exceptionAlarm,
+    entCode: workbenchmodel.entCode,
 }))
 class SpecialWorkbench extends PureComponent {
     componentWillMount() {
-        this.getAllMethods();
-
+        this.SingleOrMultiEnterprise();
     }
-
+    componentDidMount() {
+        this.getAllMethods();
+    }
     /**
      * 获取所有工作台方法
      */
@@ -37,7 +40,47 @@ class SpecialWorkbench extends PureComponent {
             payload: {},
         });
     }
+    /**
+     * 加载单企业或多企业
+    */
+    SingleOrMultiEnterprise = () => {
+        debugger
+        let EntpriseList = [];
+        const { entCode } = this.props
+        if (!onlyOneEnt) {
+            if (entCode) {
+                EntpriseList.push(entCode)
+                // this.workbenchmodelupdateState({
+                //     entCode: entCode,
+                // });
+                this.equipmentoperatingrateupdateState({
+                    entCode: EntpriseList,
+                });
+                this.transmissionefficiencyupdateState({
+                    entCode: EntpriseList,
+                });
+            }
+        }
 
+    }
+    /*
+     * 更新model中的state
+    */
+    equipmentoperatingrateupdateState = (payload) => {
+        this.props.dispatch({
+            type: 'equipmentoperatingrate/updateState',
+            payload: payload,
+        });
+    }
+    /*
+     * 更新model中的state
+    */
+    transmissionefficiencyupdateState = (payload) => {
+        this.props.dispatch({
+            type: 'transmissionefficiency/updateState',
+            payload: payload,
+        });
+    }
     render() {
         return (
             <div

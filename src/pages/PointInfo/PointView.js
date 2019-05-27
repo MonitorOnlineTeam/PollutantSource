@@ -18,12 +18,14 @@ import AddAnalyzerChild from '../PointInfo/AddAnalyzerChild';
 import ViewAnalyzerChild from '../PointInfo/ViewAnalyzerChild';
 import styles from './index.less';
 import { EnumPollutantTypeCode } from '../../utils/enum';
+import {onlyOneEnt} from '../../config'
 const {
     Description
 } = DescriptionList;
 @connect(({
     loading,
-    pointinfo
+    pointinfo,
+    basicinfo
 }) => ({
     ...loading,
     pointloading: loading.effects['pointinfo/getpoint'],
@@ -35,7 +37,9 @@ const {
     deletealyzersys_requstresult: pointinfo.deletealyzersys_requstresult,
     analyzerchild: pointinfo.analyzerchild,
     deletealyzerchild_requstresult: pointinfo.deletealyzerchild_requstresult,
-    Analyzers:pointinfo.Analyzers
+    Analyzers:pointinfo.Analyzers,
+    entName:basicinfo.entName,
+    entCode:basicinfo.entCode
 }))
 export default class pointview extends Component {
     constructor(props) {
@@ -196,7 +200,22 @@ export default class pointview extends Component {
         const rtnVal = [];
         rtnVal.push(<Button type="dashed"
             onClick={
+<<<<<<< HEAD
                 () => this.props.dispatch(routerRedux.push(`/sysmanage/PointInfo/${this.props.match.params.EntCode}`))
+=======
+                () => {
+                    if(onlyOneEnt)
+                    {
+                        this.props.dispatch(routerRedux.push(`/sysmanage/PointInfo`))
+                    }
+                    else
+                    {
+                        const {entCode,entName}=this.props;
+                        this.props.dispatch(routerRedux.push(`/sysmanage/PointInfo/${entCode}/${entName}`))
+                    }
+                    }
+                   
+>>>>>>> b63cf6e6c72291109fd45a31060210a6e86d6682
             } style={{ width: '200' }} >
             返回 </Button>);
         return rtnVal;
@@ -363,15 +382,37 @@ export default class pointview extends Component {
                 size="large"
             />);
         }
-
+        let Crumbs=[  
+            { Name: '系统管理', Url: '' },
+         ]
+        if(onlyOneEnt)
+        {
+          Crumbs=Crumbs.concat(
+            { Name: '排口管理', Url: '/sysmanage/pointinfo' },
+            { Name: '排口详情', Url: '' }
+           )
+        }
+        else
+        {
+        const {entName,entCode}=this.props;
+        Crumbs=Crumbs.concat(
+            { Name: '企业管理', Url: '/sysmanage/entoperation' },
+            { Name: `排口管理(${entName})`, Url: `/sysmanage/pointinfo/${entCode}/${entName}` },
+            { Name: '排口详情', Url: '' }
+         )
+        }
         return (
             <MonitorContent {...this.props} breadCrumbList={
+<<<<<<< HEAD
                 [
                     // { Name: '首页', Url: '/' },
                     {Name:'企业管理',Url:'/EnterpriseManager'},
                     {Name:'排口管理',Url:`/sysmanage/pointinfo/${this.props.match.params.EntCode}`},
                     { Name: '排口详情', Url: '' }
                 ]
+=======
+                Crumbs
+>>>>>>> b63cf6e6c72291109fd45a31060210a6e86d6682
             }>
                 <div style={{ marginTop: 10, marginLeft: 30, marginBottom: 10, marginRight: 30 }}>
                     <Card title={this.pointinfo()} loading={this.props.pointloading} extra={this.backbtn()}>

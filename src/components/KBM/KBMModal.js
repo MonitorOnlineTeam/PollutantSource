@@ -233,6 +233,7 @@ export default class KBMModal extends Component {
         return FileTypertnVal;
     }
     handleSubmit = (e) => {
+        debugger
         let flag = true;
         this.props.form.validateFieldsAndScroll((err, values) => {
             const that = this;

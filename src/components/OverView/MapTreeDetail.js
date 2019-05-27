@@ -28,7 +28,7 @@ class MapTreeDetail extends Component {
      constructor(props)
      {
          super(props);
-     } 
+     }
 
      componentWillMount(){
          //加载首要污染物Table
@@ -41,7 +41,7 @@ class MapTreeDetail extends Component {
     //主要污染物table点击事件(获取图表信息)
     detialTreeClick = (row) => {
         let { mapdetailParams,dispatch } =this.props;
-        
+
         mapdetailParams={
             ...mapdetailParams,
             pollutantCode:row.pcode,
@@ -80,7 +80,7 @@ class MapTreeDetail extends Component {
                 map: true,
             },
         });
-      
+
     }
 
 
@@ -118,7 +118,7 @@ class MapTreeDetail extends Component {
                     map: true,
                 },
             });
-          
+
       }
 
       //进入站房
@@ -150,7 +150,7 @@ class MapTreeDetail extends Component {
          }
         return res;
     }
-     
+
     getTimeImg=()=>{
        const {detailtime}=this.props;
        if(detailtime)
@@ -169,7 +169,7 @@ class MapTreeDetail extends Component {
         const {detailloading,detailpcol,detaildata,selectpoint,detailtime}=this.props;
         if(detailloading)
         {
-       
+
             return(
             <div style={{height:'calc(100vh - 335px)'}} className={styles.mainDiv}>
             <Spin
@@ -203,8 +203,8 @@ class MapTreeDetail extends Component {
                         boxShadow: 'rgba(136, 136, 136, 0.41) 4px 3px 9px'
                     }}>
                         <div style={{fontSize: 16, marginLeft: 15, paddingTop: 15}}>
-                            <span style={{position: 'relative',top: -2,marginRight: 2}}>{getPointStatusImg(selectpoint.status,selectpoint.stop)}</span>
-                            {selectpoint.pointName} 
+                            <span style={{position: 'relative',top: -2,marginRight: 2}}>{getPointStatusImg(selectpoint.status,selectpoint.stop,selectpoint.pollutantTypeCode)}</span>
+                            {selectpoint.pointName}
                             {this.getpointStatus(selectpoint)}
                             <Button onClick={this.backTreeList} className={styles.backButton}>返回</Button>
                         </div>
@@ -224,7 +224,7 @@ class MapTreeDetail extends Component {
                             <div style={{clear:'both'}}></div>
                         </div>
                     </div>
-                    
+
                     <div style={{ height: 'calc(100vh - 215px)' }}>
                         {pollutantInfoList.csyxl?<div style={{marginTop: 15}}>
                         <div style={{background: '#fff', borderRadius: 10, width: 420, height: 107}}>

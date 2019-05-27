@@ -2,6 +2,12 @@ import moment from 'moment';
 import React from 'react';
 import nzh from 'nzh/cn';
 import { parse, stringify } from 'qs';
+import {
+    Popover,
+    Badge,
+    Icon,
+} from 'antd';
+
 
 export function fixedZero(val) {
     return val * 1 < 10 ? `0${val}` : val;
@@ -205,4 +211,76 @@ export function isAntdPro() {
  */
 export function formatMoment(mmt , formatType = "YYYY-MM-DD HH:mm:ss") {
     return mmt ? moment(mmt).format(formatType) : null;
+}
+/**
+ *格式化数据显示的Popover
+ * @export
+ * @param {*} value 数据值
+ * @param {*} additional 数据的附加信息
+ * @returns
+ */
+export function formatPollutantPopover(value,additional)
+{
+            if (additional) {
+                        const additionalInfo = additional.split('§');
+                        if (additionalInfo[0] === 'IsOver') {
+                            const content = (<div>
+                                <div style={{ marginBottom: 10 }}>
+                                    <Icon style={{ color: '#ff0000', fontSize: 25, marginRight: 10 }} type="warning" />
+                                    <span style={{ fontWeight: 'Bold', fontSize: 16 }}>数据超标</span>
+                                </div>
+                                <li style={{ listStyle: 'none', marginBottom: 10 }}>
+                                    <Badge status="success" text={`标准值：${additionalInfo[2]}`} />
+                                </li>
+                                <li style={{ listStyle: 'none', marginBottom: 10 }}>
+                                    <Badge status="error" text={`超标倍数：${additionalInfo[3]}`} />
+                                </li>
+                            </div>);
+                            return (<Popover content={content}><span style={{ color: '#ff0000', cursor: 'pointer' }}>{value || (value === 0 ? 0 : '-')}</span></Popover>);
+                        }
+                        const content = (<div>
+                            <div style={{ marginBottom: 10 }}>
+                                <Icon style={{ color: '#ff0000', fontSize: 25, marginRight: 10 }} type="close-circle" />
+                                <span style={{ fontWeight: 'Bold', fontSize: 16 }}>数据异常</span>
+                            </div>
+                            <li style={{ listStyle: 'none', marginBottom: 10 }}>
+                                <Badge status="warning" text={`异常原因：${additionalInfo[2]}`} />
+                            </li>
+                        </div>);
+                        return (<Popover content={content}><span style={{ color: '#F3AC00', cursor: 'pointer' }}>{value || (value === 0 ? 0 : '-')}</span></Popover>);
+                    }
+        return value || (value === 0 ? 0 : '-');
+}
+
+//文件下载
+export function downloadFile(sUrl) {
+    //iOS devices do not support downloading. We have to inform user about this.
+    if (/(iP)/g.test(navigator.userAgent)) {
+        alert('Your device does not support files downloading. Please try again in desktop browser.');
+        return false;
+    }
+    //If in Chrome or Safari - download via virtual link click
+    if (true) {
+        //Creating new link node.
+        var link = document.createElement('a');
+        link.href = sUrl;
+        if (link.download !== undefined) {
+            //Set HTML5 download attribute. This will prevent file from opening if supported.
+            var fileName = sUrl.substring(sUrl.lastIndexOf('/') + 1, sUrl.length);
+            link.download = fileName;
+        }
+        //Dispatching click event.
+        if (document.createEvent) {
+            var e = document.createEvent('MouseEvents');
+            e.initEvent('click', true, true);
+            link.dispatchEvent(e);
+            return true;
+        }
+    }
+    // Force file download (whether supported by server).
+    if (sUrl.indexOf('?') === -1) {
+        sUrl += '?download';
+    }
+    window.open(sUrl, '_self');
+    return true;
 }

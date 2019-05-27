@@ -153,7 +153,7 @@ const columns = [
     key: 'type',
   },
   {
-    title: '操作人',
+    title: '运维人',
     dataIndex: 'name',
     key: 'name',
   },

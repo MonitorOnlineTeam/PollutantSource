@@ -347,7 +347,6 @@ export default class RealTimeWarringDetails extends Component {
         return (
             <MonitorContent {...this.props} breadCrumbList={
                 [
-                    {Name:'首页',Url:'/'},
                     {Name:'智能分析',Url:''},
                     {Name:'报警及时响应情况',Url:''}
                 ]

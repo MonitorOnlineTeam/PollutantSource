@@ -229,7 +229,7 @@ class JzRecordContent extends Component {
                 <table className={styles.FormTable} style={{ border: '0' }}>
                     <tbody>
                         <tr>
-                            <td style={{ width: '25%', height: '30px', minWidth: 225 }}>校准人：</td>
+                            <td style={{ width: '25%', height: '30px', minWidth: 225 }}>运维人：</td>
                             <td style={{ width: '25%', height: '30px', minWidth: 225 }}>{Record!==null?Record.CreateUserID:null }</td>
                             <td style={{ width: '25%', height: '30px', minWidth: 225 }}>校准结束时间：</td>
                             <td style={{ width: '25%', height: '30px', minWidth: 225 }}>{Content!==null?Content.AdjustEndTime:null}</td>

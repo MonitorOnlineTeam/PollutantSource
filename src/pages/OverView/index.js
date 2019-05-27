@@ -6,6 +6,8 @@ import MapTreeDetail from '../../components/OverView/MapTreeDetail';
 import MapTreeList from '../../components/OverView/MapTreeList';
 import AListRadio from '../../components/OverView/AListRadio';
 import PollutantTypeRadio from '../../components/OverView/PollutantTypeRadio';
+import StatusList from '../../components/OverView/StatusList';
+
 import styles from './index.less';
 
 @connect(({ overview }) => ({
@@ -46,8 +48,6 @@ class OverViewMap extends PureComponent {
                     {
                         this.getTreeList()
                     }
-
-
                 </div>
 
                 <MapContent />
@@ -71,6 +71,20 @@ class OverViewMap extends PureComponent {
                 >
                     <AListRadio dvalue="a" />
                 </div>
+                <div style={{
+                    position: 'absolute',
+                    bottom: 50,
+                    right: 100,
+                    zIndex:100,
+                    background: "#fff",
+                    zIndex:1,
+                    paddingBottom: 10,
+                    borderRadius: 4,
+                    border: "1px solid #d9d9d9"
+                }}>
+                <StatusList />
+                </div>
+
             </div>
         );
     }

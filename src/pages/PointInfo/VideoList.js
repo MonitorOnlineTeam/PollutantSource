@@ -8,11 +8,14 @@ import { connect } from 'dva';
 import styles from './index.less';
 import moment from 'moment';
 import MonitorContent from '../../components/MonitorContent/index';
+import {onlyOneEnt} from '../../config'
 const confirm = Modal.confirm;
-@connect(({ loading, videolist }) => ({
+@connect(({ loading, videolist,basicinfo }) => ({
     ...loading,
     videoListParameters: videolist.videoListParameters,
     requstresult: videolist.requstresult,
+    entName:basicinfo.entName,
+    entCode:basicinfo.entCode,
 }))
 export default class VideoList extends Component {
     constructor(props) {
@@ -160,8 +163,29 @@ export default class VideoList extends Component {
             }
 
         ];
+
+        let Crumbs=[  
+            { Name: '系统管理', Url: '' },
+         ]
+        if(onlyOneEnt)
+        {
+          Crumbs=Crumbs.concat(
+            { Name: '排口管理', Url: '/sysmanage/pointinfo' },
+            { Name: '视频管理', Url: '' }
+           )
+        }
+        else
+        {
+        const {entName,entCode}=this.props;
+        Crumbs=Crumbs.concat(
+            { Name: '企业管理', Url: '/sysmanage/entoperation' },
+            { Name: `排口管理(${entName})`, Url: `/sysmanage/pointinfo/${entCode}/${entName}` },
+            { Name: '视频管理', Url: '' }
+         )
+        }
         return (
             <MonitorContent {...this.props} breadCrumbList={
+<<<<<<< HEAD
                 [
                     // { Name: '首页', Url: '' },
                     // { Name: '系统管理', Url: '' },
@@ -169,6 +193,9 @@ export default class VideoList extends Component {
                     {Name:'排口管理',Url:`/sysmanage/pointinfo/${this.props.match.params.EntCode}`},
                     { Name: '视频管理', Url: '' }
                 ]
+=======
+                Crumbs
+>>>>>>> b63cf6e6c72291109fd45a31060210a6e86d6682
             }>
                 <div className={styles.cardTitle}>
                     <Card bordered={false} title={videoListParameters.pointname} style={{ width: '100%' }}>

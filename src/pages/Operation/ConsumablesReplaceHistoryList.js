@@ -103,7 +103,6 @@ export default class ConsumablesReplaceHistoryList extends Component {
         return (
             <MonitorContent {...this.props} breadCrumbList={
                 [
-                    { Name: '首页', Url: '/' },
                     { Name: '智能运维', Url: '' },
                     { Name: '易耗品更换记录', Url: '' }
                 ]

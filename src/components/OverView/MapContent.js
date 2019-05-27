@@ -29,6 +29,7 @@ let _thismap=null;
     datalist: overview.data,
     //企业的信息
     baseModel: overview.entbaseinfo,
+    selectent:overview.selectent,
     //加载所以初始化显示的信息
     maploading:loading.effects['overview/queryentdetail'],
     //选中的点
@@ -58,11 +59,11 @@ class MapContent extends Component {
             time: moment(new Date()).add(-1, 'hour'),
             terate:null,
             pointName:null
-        } 
+        }
         dispatch({
             type:'overview/updateState',
             payload:{
-                dataOverview:dataOverview
+                dataOverview:dataOverview,
             }
         })
         dispatch({
@@ -96,12 +97,12 @@ class MapContent extends Component {
         //第一次加载时加载第一个污染物
         const defaultpollutantCode=pollutantInfoList.pollutantInfo[0].pollutantCode;
         const defaultpollutantName=pollutantInfoList.pollutantInfo[0].pollutantName;
-        
+
         dispatch({
             type:'overview/updateState',
             payload:{
                     selectpoint:row,
-                    selectpollutantTypeCode:`${row.pollutantTypeCode}`,
+                    // selectpollutantTypeCode:`${row.pollutantTypeCode}`,
                     mapdetailParams:{
                         ...mapdetailParams,
                         pollutantCode:defaultpollutantCode,
@@ -143,8 +144,19 @@ class MapContent extends Component {
   }
 
   render() {
-      let {maploading,baseModel,selectpoint,datalist}=this.props;
-      const baseinfo = baseModel[0];
+    if(maploading) {
+        return(<Spin
+            style={{ width: '100%',
+                height: 'calc(100vh/2)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center' }}
+            size="large"
+        />);
+    }
+      let {maploading,baseModel,selectpoint,datalist,selectent}=this.props;
+      debugger;
+      const baseinfo = selectent?selectent:baseModel;
       //地图中心
       let mapCenter;
       //厂界坐标
@@ -169,16 +181,7 @@ class MapContent extends Component {
           zoom=12;
           pointvisible=false;
       }
-      if(maploading) {
-          return(<Spin
-              style={{ width: '100%',
-                  height: 'calc(100vh/2)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center' }}
-              size="large"
-          />);
-      }
+     
       return (
           <Map
               events={this.mapEvents}
@@ -200,7 +203,7 @@ class MapContent extends Component {
                       {
                         return  <img style={{width:25}} src="/stopstatus.png" />;
                       }
-                      return getPointStatusImg(extData.status,extData.stop);
+                      return getPointStatusImg(extData.status,extData.stop,extData.pollutantTypeCode);
                   }}
               />
               <InfoWindow

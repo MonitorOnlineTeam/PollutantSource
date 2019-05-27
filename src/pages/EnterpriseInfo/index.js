@@ -395,7 +395,7 @@ class index extends PureComponent {
                             )}
                         </FormItem>
                         <Divider dashed style={{border:'1px dashed #FFFFFF'}} />
-                        <FormItem style={{width:'400px'}} {...formItemLayout} label="排口数量" >
+                        <FormItem style={{width:'400px'}} {...formItemLayout} label="监测点数量" >
                             {getFieldDecorator('outputnum', {
                                 initialValue: 30,
                             })(
@@ -502,7 +502,7 @@ class index extends PureComponent {
     }
     //加载图片
     loadImg=(baseinfo)=>{
-         let imgarray=[];
+         let imgarray=[]; 
          if(baseinfo)
          {
             baseinfo.imgNamelist.map(item => {
@@ -554,8 +554,12 @@ class index extends PureComponent {
         return (
             <MonitorContent {...this.props} breadCrumbList={
                 [
+<<<<<<< HEAD
                     // { Name: '首页', Url: '' },
                     // { Name: '系统管理', Url: '' },
+=======
+                    { Name: '系统管理', Url: '' },
+>>>>>>> b63cf6e6c72291109fd45a31060210a6e86d6682
                     { Name: '企业管理', Url: '' }
                 ]
             }>

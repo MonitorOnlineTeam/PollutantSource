@@ -40,7 +40,7 @@ export default Model.extend({
             payload,
         }, { call, update }) {
             const body={
-                parentIDs:enterpriceid
+                parentIDs:payload.entCode?payload.entCode:enterpriceid
             };
             const entbaseinfo = yield call(querypolluntantentinfolist, body);
             const regionlist = yield call(queryregionlist, {recursionNum: 3});
@@ -94,7 +94,12 @@ export default Model.extend({
                     type:'loadentdata',
                     payload:payload
                 })
+                yield put({
+                    type:'basicinfo/GetEnterpriseModel',
+                    payload:payload
+                })
                 yield take('loadentdata/@@end');
+                yield take('basicinfo/GetEnterpriseModel/@@end');
                 message.info('操作成功');
             } else {
                 message.info('操作失败');
@@ -110,7 +115,12 @@ export default Model.extend({
                     type:'loadentdata',
                     payload:payload
                 })
+                yield put({
+                    type:'basicinfo/GetEnterpriseModel',
+                    payload:payload
+                })
                 yield take('loadentdata/@@end');
+                yield take('basicinfo/GetEnterpriseModel/@@end');
                 message.info('操作成功');
             } else {
                 message.info('操作失败');

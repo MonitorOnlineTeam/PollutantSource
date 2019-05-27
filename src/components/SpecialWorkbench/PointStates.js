@@ -9,7 +9,7 @@ import { connect } from 'dva';
 class PointStates extends PureComponent {
 
     /**
-     * 智能监控_渲染排口所有状态（右侧）
+     * 智能监控_渲染监测点所有状态（右侧）
      */
     renderStatisticsPointStatus = () => {
         const { model } = this.props.statisticsPointStatus;

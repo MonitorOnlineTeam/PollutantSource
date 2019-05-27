@@ -50,7 +50,6 @@ class ExceptionAlarm extends PureComponent {
         };
         listData = exceptionAlarm.tableDatas.map((item,key) => {
 
-            console.log(item);
             //判断报警是否超过4小时
             const seconds = moment().diff(moment(item.FirstAlarmTime), 'minutes');
             const hour = Math.floor(seconds / 60);

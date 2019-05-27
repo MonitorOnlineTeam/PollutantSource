@@ -3,7 +3,7 @@ import {Popconfirm} from 'ant';
 
 class PdTips extends Component {
     render() {
-        const test='该排口未设置排口运维人，是否前去设置';
+        const test='该监测点未设置监测点运维人，是否前去设置';
         const {operationUserID}=this.props;
  
         if(operationUserID)

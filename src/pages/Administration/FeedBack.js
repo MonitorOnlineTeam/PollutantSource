@@ -189,8 +189,12 @@ export default class FeedBack extends Component {
         return (
             <MonitorContent {...this.props} breadCrumbList={
                 [
+<<<<<<< HEAD
                     // { Name: '首页', Url: '' },
                     // { Name: '系统管理', Url: '' },
+=======
+                    { Name: '系统管理', Url: '' },
+>>>>>>> b63cf6e6c72291109fd45a31060210a6e86d6682
                     { Name: '意见反馈', Url: '' }
                 ]
             }>
