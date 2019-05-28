@@ -17,8 +17,11 @@ import {
 } from 'antd';
 import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
+import DescriptionList from '../../components/DescriptionList';
 import MonitorContent from '../../components/MonitorContent/index';
 import SearchSelect from './SearchSelect';
+
+const { Description } = DescriptionList;
 
 const FormItem = Form.Item;
 
@@ -172,21 +175,26 @@ class AutoFormView extends Component {
             }
             >
                 <Card bordered={false}>
-                    <Form onSubmit={this.onSubmitForm} hideRequiredMark={false} style={{ marginTop: 8 }}>
-                        {
-                            this.renderFormItem()
-                        }
-
-                        <FormItem {...submitFormLayout} style={{ marginTop: 32 }}>
-                            <Button
-                                style={{ marginLeft: 8 }}
-                                onClick={()=>{
-                                    dispatch(routerRedux.push(`/sysmanage/autoformmanager`));
-                                }}
-                            >
+                    <DescriptionList size="large" title="详情" style={{ marginBottom: 32 }}>
+                        <Description term="取货单号">1000000000</Description>
+                        <Description term="状态">已取货</Description>
+                        <Description term="销售单号">1234123421</Description>
+                        <Description term="子订单">3214321432</Description>
+                    </DescriptionList>
+                    <Button
+                        style={{ marginLeft: 8 }}
+                        onClick={()=>{
+                            dispatch(routerRedux.push(`/sysmanage/autoformmanager`));
+                        }}
+                    >
               返回
-                            </Button>
-                        </FormItem>
+                    </Button>
+                    <Form onSubmit={this.onSubmitForm} hideRequiredMark={false} style={{ marginTop: 8 }}>
+                        {/* {
+                            this.renderFormItem()
+                        } */}
+
+                        <FormItem {...submitFormLayout} style={{ marginTop: 32 }} />
                     </Form>
                 </Card>
             </MonitorContent>
