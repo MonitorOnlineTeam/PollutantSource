@@ -95,8 +95,9 @@ class AutoFormAdd extends Component {
 
         const {addFormItems, form: { getFieldDecorator } } = this.props;
         const { formLayout, inputPlaceholder, selectPlaceholder } = this._SELF_;
-
-        return addFormItems.map((item) =>{
+        const formItems = addFormItems["TestCommonPoint"] || [];
+        // return addFormItems[configId].map((item) =>{
+        return formItems.map((item) =>{
             let element = '';
             let {placeholder,validator} = item;
             const {fieldName,labelText,required} = item;

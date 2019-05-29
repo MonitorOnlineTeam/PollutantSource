@@ -18,9 +18,11 @@ import { routerRedux } from 'dva/router';
 import { connect } from 'dva';
 import SdlTable from './Table';
 import SearchWrapper from './SearchWrapper';
+const CONFIGID = "TestCommonPoint";
 
 @connect(({ loading, autoForm }) => ({
   loading: loading.effects['autoForm/getPageConfig'],
+  autoForm: autoForm,
   searchConfigItems: autoForm.searchConfigItems,
   // columns: autoForm.columns,
   tableInfo: autoForm.tableInfo,
@@ -43,7 +45,9 @@ export default class AutoFormIndex extends Component {
 
 
   render() {
-    const { searchConfigItems: { searchConditions }, searchForm, tableInfo: { columns } } = this.props;
+    const { searchConfigItems, searchForm, tableInfo  } = this.props;
+    const searchConditions = searchConfigItems[CONFIGID] || []
+    const columns = tableInfo[CONFIGID] ? tableInfo[CONFIGID]["columns"] : [];
     if (this.props.loading) {
       return (<Spin
         style={{
@@ -72,10 +76,12 @@ export default class AutoFormIndex extends Component {
               searchFormState={{
               }}
               onSubmitForm={(form) => this.loadReportList(form)}
+              configId={CONFIGID}
             ></SearchWrapper>
             <SdlTable
               style={{ marginTop: 10 }}
               columns={columns}
+              configId={CONFIGID}
             // dataSource={dataSource}
             />
           </Card>

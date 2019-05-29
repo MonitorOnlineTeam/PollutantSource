@@ -39,11 +39,12 @@ const { RangePicker } = DatePicker;
 @Form.create({
   mapPropsToFields(props) {
     let obj = {};
+    const configIdSearchForm = props.searchForm[props.configId] || [];
     props.formItemList.map(item => {
-      return obj[item.fieldName] = Form.createFormField(props.searchForm[item['fieldName']])
+      return obj[item.fieldName] = Form.createFormField(configIdSearchForm[item['fieldName']])
     })
     return {
-      ...obj
+        ...obj
     }
   },
   onFieldsChange(props, fields, allFields) {
@@ -52,7 +53,10 @@ const { RangePicker } = DatePicker;
       payload: {
         searchForm: {
           ...props.searchForm,
-          ...fields
+          [props.configId]: {
+            ...props.searchForm[props.configId],
+            ...fields
+          }
         }
       }
     })
@@ -73,6 +77,7 @@ class SearchWrapper extends Component {
       inputPlaceholder: "请输入",
       selectPlaceholder: "请选择",
     }
+    // console.log('props==', this.props)
     this._resetForm = this._resetForm.bind(this);
     this._renderFormItem = this._renderFormItem.bind(this);
     this.onSubmitForm = this.onSubmitForm.bind(this);
@@ -184,7 +189,7 @@ class SearchWrapper extends Component {
           }
           {/* <Col offset={2} md={6} sm={24} style={{ marginTop: 6 }}> */}
           <Col md={6} sm={24} style={{ marginTop: 6 }}>
-            <Button type="primary" onClick={this.onSubmitForm.bind(this.props.form)}>
+            <Button type="primary" onClick={this.onSubmitForm}>
               查询
                   </Button>
             <Button style={{ marginLeft: 8 }} onClick={this._resetForm}>
