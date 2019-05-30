@@ -124,7 +124,7 @@ export async function getFormData(params) {
         ...params,
         ...defaults
     };
-    const result = await getNew('/api/rest/PollutantSourceApi/AutoFormDataApi/GetFormData',body, null);
+    const result = await getNew('/api/rest/PollutantSourceApi/AutoFormDataApi/GetFormData',params, null);
     return result;
 }
 
@@ -149,5 +149,14 @@ export async function postAutoFromDataDelete(params) {
  */
 export async function postAutoFromDataAdd(params){
     const result = await postNew('/api/rest/PollutantSourceApi/AutoFormDataApi/PostAutoFromDataAdd',params, null);
+    return result;
+}
+
+/**
+ * 【AutoForm】修改
+ * @params {"configId": "TestCommonPoint",FormData:'{name:1,code:"123"}'}
+ */
+export async function postAutoFromDataUpdate(params){
+    const result = await postNew('/api/rest/PollutantSourceApi/AutoFormDataApi/PostAutoFromDataUpdate',params, null);
     return result;
 }

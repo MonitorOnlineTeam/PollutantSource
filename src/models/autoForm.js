@@ -2,7 +2,7 @@
  * @Author: Jiaqi
  * @Date: 2019-05-16 15:13:59
  * @Last Modified by: Jiaqi
- * @Last Modified time: 2019-05-24 17:09:16
+ * @Last Modified time: 2019-05-30 16:22:38
  */
 import { message } from 'antd';
 import {
@@ -33,7 +33,10 @@ export default Model.extend({
     opreationButtons: [],
     whereList: {},
     keys: [], // 主键
-    addFormItems: []
+    addFormItems: [],
+    editFormData: {}, // 修改数据
+    detailData: {}, // 详情页面数据
+    detailConfigInfo: {}, // 详情页面配置信息
   },
   effects: {
     // 获取数据
@@ -68,7 +71,7 @@ export default Model.extend({
         pageIndex: searchForm.current || 1,
         pageSize: searchForm.pageSize || 10
       };
-      console.log("group=",group)
+      console.log("group=", group)
       group.length ? postData.ConditionWhere = JSON.stringify({
         "rel": "$and",
         "group": [{
@@ -82,7 +85,7 @@ export default Model.extend({
         state = yield select(state => state.autoForm);
         // const configId = payload.configId;
         const configId = "TestCommonPoint";
-       
+
         yield update({
           // configIdList: {
           //   [payload.configId]: result.data
@@ -135,7 +138,7 @@ export default Model.extend({
 
 
         let whereList = {};
-        let searchConditions = result.Datas.CfgField.filter(itm => itm.DF_ISQUERY === 1).map((item,index) => {
+        let searchConditions = result.Datas.CfgField.filter(itm => itm.DF_ISQUERY === 1).map((item, index) => {
           index === 0 ? whereList[configId] = {} : '';
           whereList[result.Datas.ConfigId][item.FullFieldNameVerticalBar] = item.DF_CONDITION;
           return {
@@ -151,7 +154,7 @@ export default Model.extend({
             configDataItemValue: item.FOREIGN_DF_ID,
           };
         });
-        console.log("whereList=",whereList)
+        console.log("whereList=", whereList)
         //添加
         let addFormItems = result.Datas.CfgField.filter(cfg => cfg.DF_ISADD === 1).map(item => ({
           type: item.DF_CONTROL_TYPE,
@@ -170,6 +173,10 @@ export default Model.extend({
 
         // 主键
         let keys = result.Datas.Keys.map(item => item.FullFieldName)
+        // let keys = {
+        //   fullFieldName: result.Datas.Keys.map(item => item.FullFieldName),
+        //   names: result.Datas.Keys.map(item => item.DF_NAME),
+        // }
         // console.log('keys=', keys);
 
         let state = yield select(state => state.autoForm);
@@ -193,7 +200,7 @@ export default Model.extend({
           keys: {
             [configId]: keys
           },
-          addFormItems:{
+          addFormItems: {
             [configId]: addFormItems
           }
         });
@@ -224,19 +231,62 @@ export default Model.extend({
       payload.callback(result);
     },
 
-    * getFormData({ payload }, { call,select, update, put }) {
-      let state = yield select(state => state.autoForm);
-      let postData = {
-        ...state.keys[payload.configId]
-      }
-      console.log('1111=',postData)
-      const result = yield call(services.getFormData, { ...payload });
+    * saveEdit({ payload }, { call, update, put }) {
+
+      const result = yield call(services.postAutoFromDataUpdate, { ...payload, FormData: JSON.stringify(payload.FormData) });
       if (result.IsSuccess) {
-        console.log('result=',result)
+        message.success('修改成功！');
+        // yield put({
+        //   type: 'getAutoFormData'
+        // });
+        payload.callback && payload.callback(result);
       } else {
         message.error(result.Message);
       }
-    }
+    },
+
+    * getFormData({ payload }, { call, select, update, put }) {
+      let state = yield select(state => state.autoForm);
+      console.log('1111=', payload)
+      const result = yield call(services.getFormData, { ...payload });
+      if (result.IsSuccess && result.Datas.length) {
+        yield update({
+          editFormData: {
+            ...state.editFormData,
+            [payload.configId]: result.Datas[0]
+          }
+        })
+      } else {
+        message.error(result.Message);
+      }
+    },
+
+    // 获取详情页面配置
+    * getDetailsConfigInfo({ payload }, { call, select, update, put }) {
+      let state = yield select(state => state.autoForm);
+      const result = yield call(services.getPageConfigInfo, { ...payload });
+      if (result.IsSuccess) {
+
+        let detailFormItems = result.Datas.CfgField.filter(cfg => cfg.DF_ISEDIT === 1).map(item => ({
+          type: item.DF_CONTROL_TYPE,
+          labelText: item.DF_NAME_CN,
+          fieldName: item.DF_NAME,
+          // configId: item.DT_CONFIG_ID,
+          configId: item.FOREIGH_DT_CONFIGID,
+          configDataItemName: item.FOREIGN_DF_NAME,
+          configDataItemValue: item.FOREIGN_DF_ID,
+        }));
+        console.log('detailFormItems=', detailFormItems);
+        yield update({
+          detailConfigInfo: {
+            ...state.detailData,
+            [payload.configId]: detailFormItems
+          }
+        })
+      } else {
+        message.error(result.Message);
+      }
+    },
   },
   reducers: {
     // 保存搜索框数据
