@@ -116,12 +116,14 @@ export async function getAutoFromUpdateView() {
  * 【AutoForm】获取编辑或添加页面表单元素的值
  * @params {"configId": "TestCommonPoint"}
  */
-export async function getFormData() {
-    const params = {
+export async function getFormData(params) {
+    const defaults = {
         configId: "TestCommonPoint"
     };
-    const defaults = {};
-    const body=Object.assign(defaults,params);
+    const body={
+        ...params,
+        ...defaults
+    };
     const result = await getNew('/api/rest/PollutantSourceApi/AutoFormDataApi/GetFormData',body, null);
     return result;
 }
@@ -131,16 +133,14 @@ export async function getFormData() {
  * @params {"configId": "TestCommonPoint"}
  */
 export async function postAutoFromDataDelete(params) {
-    // const params = {
-    //     configId: "TestCommonPoint",
-    //     FormData:JSON.stringify({
-    //         "dbo.T_Bas_CommonPoint.PointCode":"54AC5E32-EBF5-457A-B9C1-9CD019F9EBD8,58F72760-E01E-461F-9EC4-6396DCAFDD9D",
-    //         "dbo.T_Bas_CommonPoint.PointName": ""
-    //     })
-    // };
+    const postData = {
+        configId: "TestCommonPoint",
+        ...params
+    };
     // const defaults = {};
     // const body=Object.assign(defaults,params);
-    const result = await postNew('/api/rest/PollutantSourceApi/AutoFormDataApi/PostAutoFromDataDelete',params, null);
+
+    const result = await postNew('/api/rest/PollutantSourceApi/AutoFormDataApi/PostAutoFromDataDelete',postData, null);
     return result;
 }
 /**

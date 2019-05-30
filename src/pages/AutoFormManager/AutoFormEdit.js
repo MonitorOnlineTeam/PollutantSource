@@ -62,6 +62,14 @@ class AutoFormEdit extends Component {
                 }
             });
         }
+        // 获取数据
+        dispatch({
+            type: 'autoForm/getFormData',
+            payload: {
+                configId: configId
+            }
+        });
+
         //console.log("configIdList===",configId);
     }
 
@@ -95,8 +103,8 @@ class AutoFormEdit extends Component {
 
         const {addFormItems, form: { getFieldDecorator } } = this.props;
         const { formLayout, inputPlaceholder, selectPlaceholder } = this._SELF_;
-
-        return addFormItems.map((item) =>{
+        const formItems = addFormItems["TestCommonPoint"] || [];
+        return formItems.map((item) =>{
             let element = '';
             let {placeholder,validator} = item;
             const {fieldName,labelText,required} = item;
