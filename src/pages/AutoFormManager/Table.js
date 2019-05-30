@@ -71,8 +71,6 @@ class SdlTable extends PureComponent {
   }
 
   onSelectChange = (selectedRowKeys, selectedRows) => {
-    console.log('selectedRowKeys changed: ', selectedRowKeys);
-    console.log('selectedRows changed: ', selectedRows);
     const { keys, configId } = this.props;
     let postData = {};
     keys[configId].map(item => {
@@ -118,9 +116,6 @@ class SdlTable extends PureComponent {
                       ...postData
                     }
                   })
-                },
-                onCancel() {
-                  console.log('Cancel');
                 },
               });
             }}
@@ -170,11 +165,16 @@ class SdlTable extends PureComponent {
                 if (item.type === "edit") {
                   return (
                     <Fragment key={item.type}>
-                      <a onClick={
-                        () => dispatch(routerRedux.push(`/AutoFormManager/AutoFormEdit/TestCommonPoint`))
-                      }
-                      >修改
-                                          </a>
+                      <a onClick={() => {
+                        let postData = {};
+                        keys[configId].map(item => {
+                          if (record[item]) {
+                            postData[item] = record[item]
+                          }
+                        })
+
+                        dispatch(routerRedux.push(`/AutoFormManager/AutoFormEdit/TestCommonPoint/${JSON.stringify(postData)}`))
+                      }}>修改</a>
                       {
                         this._SELF_.btnEl.length - 1 !== index && <Divider type="vertical" />
                       }
@@ -182,11 +182,15 @@ class SdlTable extends PureComponent {
                 }
                 if (item.type === "view") {
                   return (<Fragment key={item.type}>
-                    <a onClick={
-                      () => dispatch(routerRedux.push(`/AutoFormManager/AutoFormView/TestCommonPoint`))
-                    }
-                    >详情
-                                      </a>
+                    <a onClick={() => {
+                      let postData = {};
+                      keys[configId].map(item => {
+                        if (record[item]) {
+                          postData[item] = record[item]
+                        }
+                      })
+                      dispatch(routerRedux.push(`/AutoFormManager/AutoFormView/TestCommonPoint/${JSON.stringify(postData)}`))
+                    }}>详情</a>
                     {
                       this._SELF_.btnEl.length - 1 !== index && <Divider type="vertical" />
                     }
@@ -233,11 +237,6 @@ class SdlTable extends PureComponent {
       selections: true,
       selectedRowKeys,
       onChange: this.onSelectChange,
-      onSelect: (record, selected, selectedRows, nativeEvent) => {
-        // console.log('record=', record)
-        // console.log('selected=', selected)
-        // console.log('selectedRows=', selectedRows)
-      }
     };
     const dataSource = tableInfo[configId] ? tableInfo[configId].dataSource : [];
     // const dataSource = _tabelInfo.dataSource
@@ -250,7 +249,7 @@ class SdlTable extends PureComponent {
         </Row>
         {/* [record["dbo.T_Bas_CommonPoint.PointCode"], record["dbo.T_Bas_CommonPoint.PointName"]] */}
         <Table
-          rowKey={(record, index) => record["dbo.T_Bas_CommonPoint.PointCode"]}
+          rowKey={(record, index) => index}
           size="middle"
           loading={this.props.loading}
           className={styles.dataTable}

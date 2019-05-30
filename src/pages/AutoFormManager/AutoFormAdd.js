@@ -2,8 +2,8 @@
  * @desc: AutoForm添加公共页面
  * @Author: JianWei
  * @Date: 2019-5-23 10:34:29
- * @Last Modified by: JianWei
- * @Last Modified time: 2019-5-23 10:34:34
+ * @Last Modified by: Jiaqi
+ * @Last Modified time: 2019-05-30 16:37:36
  */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
@@ -128,7 +128,7 @@ class AutoFormAdd extends Component {
             }
             if(element) {
                 return (
-                    <FormItem {...formLayout} label={labelText}>
+                    <FormItem key={fieldName} {...formLayout} label={labelText}>
                         {getFieldDecorator(`${fieldName }`, {
                             rules: [
                                 {

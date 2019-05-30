@@ -23,10 +23,11 @@ import SearchSelect from './SearchSelect';
 const FormItem = Form.Item;
 
 @connect(({ loading, autoForm }) => ({
-    loadingConfig:loading.effects['autoForm/getPageConfig'],
-    loadingAdd:loading.effects['autoForm/add'],
+    loadingConfig: loading.effects['autoForm/getPageConfig'],
+    loadingAdd: loading.effects['autoForm/add'],
     addFormItems: autoForm.addFormItems,
-    searchForm: autoForm.searchForm,
+    editFormData: autoForm.editFormData,
+    tableInfo: autoForm.tableInfo
 }))
 @Form.create()
 class AutoFormEdit extends Component {
@@ -53,12 +54,13 @@ class AutoFormEdit extends Component {
     }
 
     componentDidMount() {
-        let { addFormItems,dispatch,match: { params: { configId } } } = this.props;
-        if(!addFormItems||addFormItems.length===0) {
+        let { addFormItems, dispatch, match: { params: { configId, keysParams } } } = this.props;
+        // console.log('keys=', JSON.parse(keys))
+        if (!addFormItems || addFormItems.length === 0) {
             dispatch({
                 type: 'autoForm/getPageConfig',
                 payload: {
-                    configId: configId
+                    configId: configId,
                 }
             });
         }
@@ -66,7 +68,8 @@ class AutoFormEdit extends Component {
         dispatch({
             type: 'autoForm/getFormData',
             payload: {
-                configId: configId
+                configId: configId,
+                ...JSON.parse(keysParams)
             }
         });
 
@@ -75,22 +78,28 @@ class AutoFormEdit extends Component {
 
     onSubmitForm(e) {
         e.preventDefault();
-        let { form,dispatch,match: { params: { configId } } } = this.props;
+        let { form, dispatch, match: { params: { configId, keysParams } } } = this.props;
+
+        // 截取字符串，重新组织主键参数
+        const keys = JSON.parse(keysParams);
+        let primaryKey = {};
+        for(let key in keys){
+            primaryKey[key.split('.').pop().toString()] = keys[key]
+        }
+
         form.validateFields((err, values) => {
             if (!err) {
                 //console.log('Received values of form: ', values);
                 dispatch({
-                    type: 'autoForm/edit',
+                    type: 'autoForm/saveEdit',
                     payload: {
                         configId: configId,
-                        FormData:{
+                        FormData: {
+                            ...primaryKey,
                             ...values
                         },
-                        callback:(res) => {
-                            if(res.IsSuccess) {
-
-                                dispatch(routerRedux.push(`/sysmanage/autoformmanager`));
-                            }
+                        callback: (res) => {
+                            dispatch(routerRedux.push(`/sysmanage/autoformmanager`));
                         }
                     }
                 });
@@ -100,24 +109,24 @@ class AutoFormEdit extends Component {
 
     // 渲染FormItem
     renderFormItem() {
-
-        const {addFormItems, form: { getFieldDecorator } } = this.props;
+        const { addFormItems, form: { getFieldDecorator }, editFormData, match: { params: { configId } } } = this.props;
         const { formLayout, inputPlaceholder, selectPlaceholder } = this._SELF_;
-        const formItems = addFormItems["TestCommonPoint"] || [];
-        return formItems.map((item) =>{
+        const formItems = addFormItems[configId] || [];
+        const formData = editFormData[configId] || {};
+        return formItems.map((item) => {
             let element = '';
-            let {placeholder,validator} = item;
-            const {fieldName,labelText,required} = item;
+            let { placeholder, validator } = item;
+            const { fieldName, labelText, required } = item;
             // 判断类型
             switch (item.type) {
                 case "文本框":
-                    validator=`${inputPlaceholder}`;
+                    validator = `${inputPlaceholder}`;
                     placeholder = placeholder || inputPlaceholder;
 
                     element = <Input placeholder={placeholder} allowClear={true} />;
                     break;
                 case '下拉列表框':
-                    validator=`${selectPlaceholder}`;
+                    validator = `${selectPlaceholder}`;
                     placeholder = placeholder || selectPlaceholder;
                     element = (
                         <SearchSelect
@@ -127,18 +136,19 @@ class AutoFormEdit extends Component {
                         />
                     );
                     break;
-                default :
+                default:
 
                     break;
             }
-            if(element) {
+            if (element) {
                 return (
-                    <FormItem {...formLayout} label={labelText}>
-                        {getFieldDecorator(`${fieldName }`, {
+                    <FormItem key={item.fieldName} {...formLayout} label={labelText}>
+                        {getFieldDecorator(`${fieldName}`, {
+                            initialValue: formData[fieldName],
                             rules: [
                                 {
                                     required: required,
-                                    message: validator+labelText,
+                                    message: validator + labelText,
                                 },
                             ],
                         })(element)}
@@ -156,8 +166,8 @@ class AutoFormEdit extends Component {
                 sm: { span: 10, offset: 7 },
             },
         };
-        let { loadingAdd,loadingConfig,dispatch } = this.props;
-        if (loadingAdd||loadingConfig) {
+        let { loadingAdd, loadingConfig, dispatch } = this.props;
+        if (loadingAdd || loadingConfig) {
             return (<Spin
                 style={{
                     width: '100%',
@@ -187,15 +197,15 @@ class AutoFormEdit extends Component {
 
                         <FormItem {...submitFormLayout} style={{ marginTop: 32 }}>
                             <Button type="primary" htmlType="submit">
-              保存
+                                保存
                             </Button>
                             <Button
                                 style={{ marginLeft: 8 }}
-                                onClick={()=>{
+                                onClick={() => {
                                     dispatch(routerRedux.push(`/sysmanage/autoformmanager`));
                                 }}
                             >
-              返回
+                                返回
                             </Button>
                         </FormItem>
                     </Form>
