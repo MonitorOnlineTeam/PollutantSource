@@ -13,12 +13,13 @@ import {
     Input,
     Button,
     Card,
-    Spin
+    Spin,Icon
 } from 'antd';
 import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
 import MonitorContent from '../../components/MonitorContent/index';
 import SearchSelect from './SearchSelect';
+import MapModal from './MapModal';
 
 const FormItem = Form.Item;
 
@@ -33,7 +34,7 @@ const FormItem = Form.Item;
 class AutoFormEdit extends Component {
     constructor(props) {
         super(props);
-        this.state = {};
+        this.state = {MapVisible:false};
         this._SELF_ = {
             formLayout: props.formLayout || {
                 labelCol: {
@@ -84,7 +85,7 @@ class AutoFormEdit extends Component {
         const keys = JSON.parse(keysParams);
         let primaryKey = {};
         for(let key in keys){
-            primaryKey[key.split('.').pop().toString()] = keys[key]
+            primaryKey[key.split('.').pop().toString()] = keys[key];
         }
 
         form.validateFields((err, values) => {
@@ -136,6 +137,26 @@ class AutoFormEdit extends Component {
                         />
                     );
                     break;
+                case "经度":
+                    validator=`${inputPlaceholder}`;
+                    placeholder = placeholder || inputPlaceholder;
+
+                    element = <Input
+                        suffix={<Icon onClick={()=>this.setState({MapVisible:true})} type="global" style={{ color: '#2db7f5',cursor:'pointer' }} />}
+                        placeholder={placeholder}
+                        allowClear={true}
+                    />;
+                    break;
+                case "纬度":
+                    validator=`${inputPlaceholder}`;
+                    placeholder = placeholder || inputPlaceholder;
+
+                    element = <Input
+                        suffix={<Icon onClick={()=>this.setState({MapVisible:true})} type="global" style={{ color: '#2db7f5',cursor:'pointer' }} />}
+                        placeholder={placeholder}
+                        allowClear={true}
+                    />;
+                    break;
                 default:
 
                     break;
@@ -158,6 +179,19 @@ class AutoFormEdit extends Component {
             }
         });
     }
+
+    setMapVisible=(flag)=>{
+        this.setState({
+            MapVisible:flag
+        });
+    }
+
+    setPoint=(obj)=>{
+        let {form:{setFieldsValue}}=this.props;
+        setFieldsValue({Longitude:obj.Longitude,Latitude:obj.Latitude});
+    }
+
+    getLocation=(name)=>this.props.form.getFieldValue(name)
 
     render() {
         const submitFormLayout = {
@@ -210,6 +244,16 @@ class AutoFormEdit extends Component {
                         </FormItem>
                     </Form>
                 </Card>
+                {
+                    <MapModal
+                        setMapVisible={this.setMapVisible}
+                        MapVisible={this.state.MapVisible}
+                        setPoint={this.setPoint}
+                        longitude={this.getLocation('Longitude')}
+                        latitude={this.getLocation('Latitude')}
+                        activationMarker={true}
+                    />
+                }
             </MonitorContent>
         );
     }

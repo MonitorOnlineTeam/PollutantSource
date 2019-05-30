@@ -182,7 +182,7 @@ class MapContent extends React.Component {
                         that.setState({
                             address:result.regeocode.formattedAddress
                         });
-                        getMapAddress(result.regeocode.formattedAddress);
+                        getMapAddress&&getMapAddress(result.regeocode.formattedAddress);
                     }
                 });
             });
@@ -293,12 +293,16 @@ class MapContent extends React.Component {
   }
 
   render() {
-      const { mapheight } = this.props;
+      const { mapHeight,activationMarker } = this.props;
+      if(activationMarker) {
+          if(map)
+              this.clickMarker();
+      }
       const allcoo=eval(originalPolygon);
       return (
-          <div className={styles.mapContent} style={{height: mapheight || 300}}>
+          <div className={styles.mapContent} style={{height: mapHeight}}>
               <Spin spinning={this.state.status === 0} tip="Loading...">
-                  <div id="allmap" style={{height: mapheight || 300}}>
+                  <div id="allmap" style={{height: mapHeight}}>
                       <div className={styles.mouseTool}>
                           <Button onClick={this.clearMap} className={styles.ClearButton}>清除全部</Button>
                           <Button style={{marginLeft:10}} onClick={this.clickPolygon} className={styles.ClearButton}>设置坐标集合</Button>
@@ -328,7 +332,8 @@ MapContent.defaultProps={
     drawMarker:false,
     markers:[],
     longitude:116.397428,
-    latitude:39.90923
+    latitude:39.90923,
+    mapHeight:300
 };
 
 MapContent.propTypes = {
@@ -342,7 +347,6 @@ MapContent.propTypes = {
     getMapAddress:PropTypes.func,
     drawMarker:PropTypes.bool,
     markers:PropTypes.array
-
 
 };
 
