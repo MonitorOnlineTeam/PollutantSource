@@ -13,12 +13,15 @@ import {
     Input,
     Button,
     Card,
-    Spin,Icon
+    Spin, Icon
 } from 'antd';
 import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
 import MonitorContent from '../../components/MonitorContent/index';
 import SearchSelect from './SearchSelect';
+import SdlCascader from './SdlCascader';
+import SdlRadio from './SdlRadio';
+import SdlCheckbox from './SdlCheckbox';
 import MapModal from './MapModal';
 
 const FormItem = Form.Item;
@@ -34,7 +37,7 @@ const FormItem = Form.Item;
 class AutoFormEdit extends Component {
     constructor(props) {
         super(props);
-        this.state = {MapVisible:false};
+        this.state = { MapVisible: false };
         this._SELF_ = {
             formLayout: props.formLayout || {
                 labelCol: {
@@ -84,7 +87,7 @@ class AutoFormEdit extends Component {
         // 截取字符串，重新组织主键参数
         const keys = JSON.parse(keysParams);
         let primaryKey = {};
-        for(let key in keys){
+        for (let key in keys) {
             primaryKey[key.split('.').pop().toString()] = keys[key];
         }
 
@@ -137,22 +140,49 @@ class AutoFormEdit extends Component {
                         />
                     );
                     break;
+                case "下拉搜索树":
+                    placeholder = placeholder || selectPlaceholder;
+                    element = (
+                        <SdlCascader
+                            itemName={item.configDataItemName}
+                            itemValue={item.configDataItemValue}
+                            data={item.value}
+                            placeholder={placeholder}
+                        />
+                    )
+                    break;
+                case "单选":
+                    element = (
+                        <SdlRadio
+                            data={item.value}
+                            configId={item.configId}
+                        />
+                    )
+                    break;
+                case "多选":
+                    element = (
+                        <SdlCheckbox
+                            data={item.value}
+                            configId={item.configId}
+                        />
+                    )
+                    break;
                 case "经度":
-                    validator=`${inputPlaceholder}`;
+                    validator = `${inputPlaceholder}`;
                     placeholder = placeholder || inputPlaceholder;
 
                     element = <Input
-                        suffix={<Icon onClick={()=>this.setState({MapVisible:true})} type="global" style={{ color: '#2db7f5',cursor:'pointer' }} />}
+                        suffix={<Icon onClick={() => this.setState({ MapVisible: true })} type="global" style={{ color: '#2db7f5', cursor: 'pointer' }} />}
                         placeholder={placeholder}
                         allowClear={true}
                     />;
                     break;
                 case "纬度":
-                    validator=`${inputPlaceholder}`;
+                    validator = `${inputPlaceholder}`;
                     placeholder = placeholder || inputPlaceholder;
 
                     element = <Input
-                        suffix={<Icon onClick={()=>this.setState({MapVisible:true})} type="global" style={{ color: '#2db7f5',cursor:'pointer' }} />}
+                        suffix={<Icon onClick={() => this.setState({ MapVisible: true })} type="global" style={{ color: '#2db7f5', cursor: 'pointer' }} />}
                         placeholder={placeholder}
                         allowClear={true}
                     />;
@@ -180,18 +210,18 @@ class AutoFormEdit extends Component {
         });
     }
 
-    setMapVisible=(flag)=>{
+    setMapVisible = (flag) => {
         this.setState({
-            MapVisible:flag
+            MapVisible: flag
         });
     }
 
-    setPoint=(obj)=>{
-        let {form:{setFieldsValue}}=this.props;
-        setFieldsValue({Longitude:obj.Longitude,Latitude:obj.Latitude});
+    setPoint = (obj) => {
+        let { form: { setFieldsValue } } = this.props;
+        setFieldsValue({ Longitude: obj.Longitude, Latitude: obj.Latitude });
     }
 
-    getLocation=(name)=>this.props.form.getFieldValue(name)
+    getLocation = (name) => this.props.form.getFieldValue(name)
 
     render() {
         const submitFormLayout = {
@@ -236,7 +266,8 @@ class AutoFormEdit extends Component {
                             <Button
                                 style={{ marginLeft: 8 }}
                                 onClick={() => {
-                                    dispatch(routerRedux.push(`/sysmanage/autoformmanager`));
+                                    history.go(-1)
+                                    // dispatch(routerRedux.push(`/sysmanage/autoformmanager`));
                                 }}
                             >
                                 返回
