@@ -3,7 +3,7 @@
  * @Author: JianWei
  * @Date: 2019-5-23 10:34:29
  * @Last Modified by: Jiaqi
- * @Last Modified time: 2019-05-30 16:37:36
+ * @Last Modified time: 2019-05-31 16:56:52
  */
 import React, { Component } from 'react';
 import PropTypes, { object } from 'prop-types';
@@ -19,13 +19,16 @@ import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
 import MonitorContent from '../../components/MonitorContent/index';
 import SearchSelect from './SearchSelect';
+import SdlCascader from './SdlCascader';
+import SdlRadio from './SdlRadio';
+import SdlCheckbox from './SdlCheckbox';
 import MapModal from './MapModal';
 
 const FormItem = Form.Item;
 
 @connect(({ loading, autoForm }) => ({
-    loadingConfig:loading.effects['autoForm/getPageConfig'],
-    loadingAdd:loading.effects['autoForm/add'],
+    loadingConfig: loading.effects['autoForm/getPageConfig'],
+    loadingAdd: loading.effects['autoForm/add'],
     addFormItems: autoForm.addFormItems,
     searchForm: autoForm.searchForm,
 }))
@@ -62,8 +65,8 @@ class AutoFormAdd extends Component {
     }
 
     componentDidMount() {
-        let { addFormItems,dispatch,match: { params: { configId } } } = this.props;
-        if(!addFormItems||addFormItems.length===0) {
+        let { addFormItems, dispatch, match: { params: { configId } } } = this.props;
+        if (!addFormItems || addFormItems.length === 0) {
             dispatch({
                 type: 'autoForm/getPageConfig',
                 payload: {
@@ -76,7 +79,7 @@ class AutoFormAdd extends Component {
 
     onSubmitForm(e) {
         e.preventDefault();
-        let { form,dispatch,match: { params: { configId } } } = this.props;
+        let { form, dispatch, match: { params: { configId } } } = this.props;
         form.validateFields((err, values) => {
             if (!err) {
                 //console.log('Received values of form: ', values);
@@ -84,11 +87,11 @@ class AutoFormAdd extends Component {
                     type: 'autoForm/add',
                     payload: {
                         configId: configId,
-                        FormData:{
+                        FormData: {
                             ...values
                         },
-                        callback:(res) => {
-                            if(res.IsSuccess) {
+                        callback: (res) => {
+                            if (res.IsSuccess) {
 
                                 dispatch(routerRedux.push(`/sysmanage/autoformmanager`));
                             }
@@ -101,27 +104,26 @@ class AutoFormAdd extends Component {
 
     // 渲染FormItem
     renderFormItem() {
-
-        const {addFormItems, form: { getFieldDecorator } } = this.props;
+        const { addFormItems, form: { getFieldDecorator } } = this.props;
         const { formLayout, inputPlaceholder, selectPlaceholder } = this._SELF_;
-        const formItems = addFormItems.TestCommonPoint || [];
+        const formItems = addFormItems["TestCommonPoint"] || [];
         // return addFormItems[configId].map((item) =>{
-        return formItems.map((item) =>{
+        return formItems.map((item) => {
             let element = '';
-            let {placeholder,validator} = item;
-            const {fieldName,labelText,required} = item;
+            let { placeholder, validator } = item;
+            const { fieldName, labelText, required } = item;
             // 判断类型
             switch (item.type) {
                 case "文本框":
-                    validator=`${inputPlaceholder}`;
+                    validator = `${inputPlaceholder}`;
                     placeholder = placeholder || inputPlaceholder;
 
                     element = <Input placeholder={placeholder} allowClear={true} />;
                     break;
                 case '下拉列表框':
-                    validator=`${selectPlaceholder}`;
+                    validator = `${selectPlaceholder}`;
                     placeholder = placeholder || selectPlaceholder;
-                    let mode='';
+                    let mode = '';
                     element = (
                         <SearchSelect
                             configId={item.configId}
@@ -130,6 +132,33 @@ class AutoFormAdd extends Component {
                             mode={mode}
                         />
                     );
+                    break;
+                case "下拉搜索树":
+                    placeholder = placeholder || selectPlaceholder;
+                    element = (
+                        <SdlCascader
+                            itemName={item.configDataItemName}
+                            itemValue={item.configDataItemValue}
+                            data={item.value}
+                            placeholder={placeholder}
+                        />
+                    )
+                    break;
+                case "单选":
+                    element = (
+                        <SdlRadio
+                            data={item.value}
+                            configId={item.configId}
+                        />
+                    )
+                    break;
+                case "多选":
+                    element = (
+                        <SdlCheckbox
+                            data={item.value}
+                            configId={item.configId}
+                        />
+                    )
                     break;
                 case "经度":
                     validator=`${inputPlaceholder}`;
@@ -182,18 +211,18 @@ class AutoFormAdd extends Component {
                         allowClear={true}
                     />;
                     break;
-                default :
+                default:
 
                     break;
             }
-            if(element) {
+            if (element) {
                 return (
                     <FormItem key={fieldName} {...formLayout} label={labelText}>
-                        {getFieldDecorator(`${fieldName }`, {
+                        {getFieldDecorator(`${fieldName}`, {
                             rules: [
                                 {
                                     required: required,
-                                    message: validator+labelText,
+                                    message: validator + labelText,
                                 },
                             ],
                         })(element)}
@@ -240,8 +269,8 @@ class AutoFormAdd extends Component {
                 sm: { span: 10, offset: 7 },
             },
         };
-        let { loadingAdd,loadingConfig,dispatch } = this.props;
-        if (loadingAdd||loadingConfig) {
+        let { loadingAdd, loadingConfig, dispatch } = this.props;
+        if (loadingAdd || loadingConfig) {
             return (<Spin
                 style={{
                     width: '100%',
@@ -271,15 +300,16 @@ class AutoFormAdd extends Component {
 
                         <FormItem {...submitFormLayout} style={{ marginTop: 32 }}>
                             <Button type="primary" htmlType="submit">
-              保存
+                                保存
                             </Button>
                             <Button
                                 style={{ marginLeft: 8 }}
-                                onClick={()=>{
-                                    dispatch(routerRedux.push(`/sysmanage/autoformmanager`));
+                                onClick={() => {
+                                    history.go(-1);
+                                    // dispatch(routerRedux.push(`/sysmanage/autoformmanager`));
                                 }}
                             >
-              返回
+                                返回
                             </Button>
                         </FormItem>
                     </Form>

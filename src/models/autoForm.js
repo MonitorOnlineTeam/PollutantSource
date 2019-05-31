@@ -2,7 +2,7 @@
  * @Author: Jiaqi
  * @Date: 2019-05-16 15:13:59
  * @Last Modified by: Jiaqi
- * @Last Modified time: 2019-05-30 16:22:38
+ * @Last Modified time: 2019-05-31 16:14:45
  */
 import { message } from 'antd';
 import {
@@ -36,29 +36,32 @@ export default Model.extend({
     addFormItems: [],
     editFormData: {}, // 修改数据
     detailData: {}, // 详情页面数据
-    detailConfigInfo: {}, // 详情页面配置信息
+    detailConfigInfo: {}, // 详情页面配置信息,
+    regionList: [], // 联动数据
   },
   effects: {
     // 获取数据
     * getAutoFormData({ payload }, { call, put, update, select }) {
       let state = yield select(state => state.autoForm);
       let group = [];
+      console.log('getAutoFormData=',payload)
+      const configId = payload.configId;
       // const searchForm = state.searchForm[payload.configId]
-      const searchForm = state.searchForm['TestCommonPoint'] ? state.searchForm['TestCommonPoint'] : [];
+      const searchForm = state.searchForm[configId] ? state.searchForm[configId] : [];
       if (searchForm) {
         for (let key in searchForm) {
-          if (searchForm[key].value) {
+          let groupItem = {};
+          if (searchForm[key].value && searchForm[key].value.length) {
             // if(state.searchForm[key]) {
             //   state.searchForm[key]
             // }
-            let groupItem = {};
             groupItem = {
               "Key": key,
               "Value": searchForm[key].value.toString(),
             };
-            for (let whereKey in state.whereList["TestCommonPoint"]) {
+            for (let whereKey in state.whereList[configId]) {
               if (key === whereKey) {
-                groupItem.Where = state.whereList["TestCommonPoint"][whereKey];
+                groupItem.Where = state.whereList[configId][whereKey];
               }
             }
             group.push(groupItem);
@@ -84,7 +87,7 @@ export default Model.extend({
       if (result.IsSuccess) {
         state = yield select(state => state.autoForm);
         // const configId = payload.configId;
-        const configId = "TestCommonPoint";
+        // const configId = "TestCommonPoint";
 
         yield update({
           // configIdList: {
@@ -147,7 +150,6 @@ export default Model.extend({
             fieldName: item.FullFieldNameVerticalBar,
             value: item.ENUM_NAME ? JSON.parse(item.ENUM_NAME) : [],
             placeholder: item.DF_TOOLTIP,
-            configId: item.DT_CONFIG_ID,
             where: item.DF_CONDITION,
             configId: item.FOREIGH_DT_CONFIGID,
             configDataItemName: item.FOREIGN_DF_NAME,
@@ -170,6 +172,8 @@ export default Model.extend({
           required: item.DF_ISNOTNULL === 1,
           validator: item.DF_ISNOTNULL === 1 && (item.DF_TOOLTIP || "")//TODO：正则？
         }));
+
+        console.log('addFormItems=',addFormItems)
 
         // 主键
         let keys = result.Datas.Keys.map(item => item.FullFieldName)
@@ -232,7 +236,6 @@ export default Model.extend({
     },
 
     * saveEdit({ payload }, { call, update, put }) {
-
       const result = yield call(services.postAutoFromDataUpdate, { ...payload, FormData: JSON.stringify(payload.FormData) });
       if (result.IsSuccess) {
         message.success('修改成功！');
@@ -247,7 +250,6 @@ export default Model.extend({
 
     * getFormData({ payload }, { call, select, update, put }) {
       let state = yield select(state => state.autoForm);
-      console.log('1111=', payload)
       const result = yield call(services.getFormData, { ...payload });
       if (result.IsSuccess && result.Datas.length) {
         yield update({
@@ -276,7 +278,6 @@ export default Model.extend({
           configDataItemName: item.FOREIGN_DF_NAME,
           configDataItemValue: item.FOREIGN_DF_ID,
         }));
-        console.log('detailFormItems=', detailFormItems);
         yield update({
           detailConfigInfo: {
             ...state.detailData,
@@ -287,11 +288,20 @@ export default Model.extend({
         message.error(result.Message);
       }
     },
+
+    // 获取联动
+    * getRegions({ payload }, {call, update}) {
+      const result = yield call(services.getRegions, { ...payload });
+      if (result.IsSuccess) {
+        yield update({
+          regionList: result.Datas
+        })
+      }
+    }
   },
   reducers: {
     // 保存搜索框数据
     saveConfigIdList(state, action) {
-      console.log('action=', action)
       return {
         ...state,
         configIdList: {

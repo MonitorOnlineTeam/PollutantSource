@@ -46,7 +46,10 @@ class SdlTable extends PureComponent {
 
   loadDataSource() {
     this.props.dispatch({
-      type: 'autoForm/getAutoFormData'
+      type: 'autoForm/getAutoFormData',
+      payload: {
+        configId: this.props.configId
+      }
     });
   }
 
@@ -92,6 +95,7 @@ class SdlTable extends PureComponent {
         case "add":
           return <Button
             key={btn.DISPLAYBUTTON}
+            icon="plus"
             type="primary"
             onClick={() => {
               dispatch(routerRedux.push(`/AutoFormManager/AutoFormAdd/TestCommonPoint`));
@@ -102,6 +106,7 @@ class SdlTable extends PureComponent {
         case "alldel":
           return <Button
             disabled={this.state.selectedRowKeys.length <= 0}
+            icon="delete"
             key={btn.DISPLAYBUTTON}
             type="primary"
             onClick={() => {
@@ -123,7 +128,7 @@ class SdlTable extends PureComponent {
                          </Button>;
           break;
         case "print":
-          return <Button key={btn.DISPLAYBUTTON} type="primary">打印</Button>;
+          return <Button icon="printer" key={btn.DISPLAYBUTTON} type="primary">打印</Button>;
           break;
         case "edit":
           btnEl.push({
@@ -148,7 +153,8 @@ class SdlTable extends PureComponent {
 
   render() {
     const { loading, selectedRowKeys } = this.state;
-    const { columns, tableInfo, searchForm, keys, dispatch, configId } = this.props;
+    const { tableInfo, searchForm, keys, dispatch, configId } = this.props;
+    const columns = tableInfo[configId] ? tableInfo[configId]["columns"] : [];
     const { pageSize = 10, current = 1, total = 0 } = searchForm[configId] || {}
     // 计算长度
     let _columns = columns.map(col => col.width ? { width: DEFAULT_WIDTH, ...col } : { ...col, width: DEFAULT_WIDTH });

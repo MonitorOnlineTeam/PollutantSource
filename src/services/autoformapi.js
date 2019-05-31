@@ -160,3 +160,13 @@ export async function postAutoFromDataUpdate(params){
     const result = await postNew('/api/rest/PollutantSourceApi/AutoFormDataApi/PostAutoFromDataUpdate',params, null);
     return result;
 }
+
+/**
+ * 【AutoForm】修改
+ * @params {"configId": "TestCommonPoint",FormData:'{name:1,code:"123"}'}
+ */
+export async function getRegions(params){
+    const result = await getNew('/api/rest/PollutantSourceApi/AuthorApi/GetRegions',params, null);
+    return result;
+}
+
