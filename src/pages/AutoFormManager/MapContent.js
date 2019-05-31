@@ -46,23 +46,20 @@ class MapContent extends React.Component {
     componentDidMount() {
         let _this = this;
         function listenerStorage() {
+            originalPolygon=new Array();
             if (window.AMap) {
                 if (window.AMap) {
-                    let {longitude, latitude, getMapAddress,polygon,mapCenter} = _this.props;
+                    let {longitude, latitude, getMapAddress,polygon,mapCenter,EditMarker,
+                        EditPolygon} = _this.props;
                     originalPolygon=polygon;
                     let latlngxy = [];// 默认北京天安门
-
+                    debugger;
                     if(!mapCenter&&mapCenter===0) {
                         mapCenter=[116.397428,39.90923];
                     }
 
                     if(longitude&&latitude) {
-                        latlngxy=[longitude,latitude];
-                        // 在新中心点添加 marker
-                        marker = new window.AMap.Marker({
-                            map: map,
-                            position: latlngxy
-                        });
+                        mapCenter=[longitude,latitude];
                     }
 
                     map = new window.AMap.Map('allmap', {
@@ -80,7 +77,14 @@ class MapContent extends React.Component {
                         mapLang = 'zh_cn';
                     }
                     map.setLang(mapLang);
-
+                    if(longitude&&latitude&&EditMarker) {
+                        latlngxy=[longitude,latitude];
+                        // 在新中心点添加 marker
+                        marker = new window.AMap.Marker({
+                            map: map,
+                            position: latlngxy
+                        });
+                    }
 
                     //加载地图绘制工具
                     map.plugin(['AMap.MouseTool'], () => {
@@ -88,10 +92,14 @@ class MapContent extends React.Component {
                     });
 
                     //默认加载的面
-                    if (originalPolygon) {
+                    if (originalPolygon&&EditPolygon) {
                         let arr = eval(originalPolygon);
+                        let setZoomXY=[];
                         for (let i = 0; i < arr.length; i++) {
-                            const polygon = new window.AMap.Polygon({
+                            if(i===0) {
+                                setZoomXY=[arr[i][0][0],arr[i][0][1]];
+                            }
+                            const polygons = new window.AMap.Polygon({
                                 path: arr[i][0],//设置多边形边界路径
                                 strokeColor: "#FF33FF", //线颜色
                                 strokeOpacity: 0.2, //线透明度
@@ -100,8 +108,13 @@ class MapContent extends React.Component {
                                 fillOpacity: 0.35,//填充透明度
                                 bubble: true
                             });
-                            polygon.setMap(map);
+                            polygons.setMap(map);
                         }
+                        // if(setZoomXY.length>0) {
+                        //     const currentZoom = map.getZoom();
+                        //     map.setZoomAndCenter(currentZoom !== zoomLevel ? currentZoom : zoomLevel, setZoomXY);
+                        // }
+
                     }
                 }
                 _this.setState({
@@ -261,11 +274,12 @@ class MapContent extends React.Component {
   //清除地图
   clearMap=()=>{
       //清空数据
-      const {getMapPolygon,getMapMarker}=this.props;
+      const {getMapPolygon,getMapMarker,EditMarker,
+          EditPolygon }=this.props;
       newpoint=new Array();
       originalPolygon=new Array();
-      getMapPolygon && getMapPolygon(null);
-      getMapMarker && getMapMarker(null);
+      EditPolygon&&getMapPolygon && getMapPolygon(null);
+      EditMarker&&getMapMarker && getMapMarker(null);
       map.clearMap();
       //   this.setState({address:''});
       this.remove();

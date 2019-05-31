@@ -39,7 +39,10 @@ class AutoFormAdd extends Component {
         this.state = {
             MapVisible:false,
             EditMarker:false,
-            EditPolygon:false
+            EditPolygon:false,
+            longitude:0,
+            latitude:0,
+            polygon:[]
         };
         this._SELF_ = {
             formLayout: props.formLayout || {
@@ -198,7 +201,7 @@ class AutoFormAdd extends Component {
                     element = <Input
                         suffix={<Icon
                             onClick={()=>{
-                                this.openMapModal({EditPolygon:true})
+                                this.openMapModal({EditPolygon:true,FieldName:fieldName})
                                 ;
                             }}
                             type="global"
@@ -232,10 +235,14 @@ class AutoFormAdd extends Component {
 
     openMapModal(obj){
         debugger;
+        let {form}=this.props;
         this.setState({
             MapVisible:true,
             EditMarker:obj.EditMarker||false,
-            EditPolygon:obj.EditPolygon||false
+            EditPolygon:obj.EditPolygon||false,
+            polygon:form.getFieldValue(obj.FieldName)||[],
+            longitude:form.getFieldValue("Longitude"),
+            latitude:form.getFieldValue("Latitude")
         });
     }
 
@@ -254,8 +261,6 @@ class AutoFormAdd extends Component {
         let {form:{setFieldsValue}}=this.props;
         setFieldsValue({Col6:obj});
     }
-
-    getFieldValue=(name)=>this.props.form.getFieldValue(name)
 
     render() {
         const submitFormLayout = {
@@ -315,9 +320,9 @@ class AutoFormAdd extends Component {
                         MapVisible={this.state.MapVisible}
                         setPoint={this.setPoint}
                         setMapPolygon={this.setMapPolygon}
-                        polygon={this.getFieldValue('Col6')}
-                        longitude={this.getFieldValue('Longitude')}
-                        latitude={this.getFieldValue('Latitude')}
+                        polygon={this.state.polygon}
+                        longitude={this.state.longitude}
+                        latitude={this.state.latitude}
                         EditMarker={this.state.EditMarker}
                         EditPolygon={this.state.EditPolygon}
                     />
