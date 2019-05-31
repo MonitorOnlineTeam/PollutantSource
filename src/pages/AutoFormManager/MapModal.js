@@ -42,6 +42,13 @@ class MapModal extends Component {
                     Latitude:obj[1]
                 }
             });
+        }else {
+            this.setState({
+                MarkerObje:{
+                    Longitude:'',
+                    Latitude:''
+                }
+            });
         }
     }
 
@@ -50,6 +57,10 @@ class MapModal extends Component {
         if(obj) {
             this.setState({
                 MapPolygon:obj
+            });
+        }else {
+            this.setState({
+                MapPolygon:[]
             });
         }
     }
@@ -76,8 +87,8 @@ class MapModal extends Component {
                     destroyOnClose={true}// 清除上次数据
                     onOk={() => {
                         setMapVisible(false);
-                        setPoint(this.state.MarkerObje);
-                        setMapPolygon(this.state.MapPolygon);
+                        EditMarker&&setPoint({Longitude:longitude,Latitude:latitude});
+                        EditPolygon&&setMapPolygon(polygon);
                     }}
                     onCancel={() => {
                         setMapVisible(false);
@@ -88,9 +99,9 @@ class MapModal extends Component {
                         getMapPolygon={this.getMapPolygon}
                         getMapAddress={this.getMapAddress}
                         mapHeight="calc(100vh - 500px)"
-                        longitude={longitude||116.397428}
-                        latitude={latitude||39.90923}
-                        polygon={polygon}
+                        longitude={longitude||0}
+                        latitude={latitude||0}
+                        polygon={polygon||[]}
                         EditMarker={EditMarker}
                         EditPolygon={EditPolygon}
                     />
