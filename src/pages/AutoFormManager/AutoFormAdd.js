@@ -6,7 +6,7 @@
  * @Last Modified time: 2019-05-30 16:37:36
  */
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import PropTypes, { object } from 'prop-types';
 
 import {
     Form,
@@ -34,7 +34,9 @@ class AutoFormAdd extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            MapVisible:false
+            MapVisible:false,
+            EditMarker:false,
+            EditPolygon:false
         };
         this._SELF_ = {
             formLayout: props.formLayout || {
@@ -53,6 +55,7 @@ class AutoFormAdd extends Component {
         };
         this.renderFormItem = this.renderFormItem.bind(this);
         this.onSubmitForm = this.onSubmitForm.bind(this);
+        this.openMapModal = this.openMapModal.bind(this);
     }
 
     componentDidMount() {
@@ -130,7 +133,14 @@ class AutoFormAdd extends Component {
                     placeholder = placeholder || inputPlaceholder;
 
                     element = <Input
-                        suffix={<Icon onClick={()=>this.setState({MapVisible:true})} type="global" style={{ color: '#2db7f5',cursor:'pointer' }} />}
+                        suffix={<Icon
+                            onClick={()=>{
+                                this.openMapModal({EditMarker:true})
+                                ;
+                            }}
+                            type="global"
+                            style={{ color: '#2db7f5',cursor:'pointer' }}
+                        />}
                         placeholder={placeholder}
                         allowClear={true}
                     />;
@@ -140,7 +150,31 @@ class AutoFormAdd extends Component {
                     placeholder = placeholder || inputPlaceholder;
 
                     element = <Input
-                        suffix={<Icon onClick={()=>this.setState({MapVisible:true})} type="global" style={{ color: '#2db7f5',cursor:'pointer' }} />}
+                        suffix={<Icon
+                            onClick={()=>{
+                                this.openMapModal({EditMarker:true})
+                                ;
+                            }}
+                            type="global"
+                            style={{ color: '#2db7f5',cursor:'pointer' }}
+                        />}
+                        placeholder={placeholder}
+                        allowClear={true}
+                    />;
+                    break;
+                case "坐标集合":
+                    validator=`${inputPlaceholder}`;
+                    placeholder = placeholder || inputPlaceholder;
+
+                    element = <Input
+                        suffix={<Icon
+                            onClick={()=>{
+                                this.openMapModal({EditPolygon:true})
+                                ;
+                            }}
+                            type="global"
+                            style={{ color: '#2db7f5',cursor:'pointer' }}
+                        />}
                         placeholder={placeholder}
                         allowClear={true}
                     />;
@@ -167,6 +201,15 @@ class AutoFormAdd extends Component {
         });
     }
 
+    openMapModal(obj){
+        debugger;
+        this.setState({
+            MapVisible:true,
+            EditMarker:obj.EditMarker||false,
+            EditPolygon:obj.EditPolygon||false
+        });
+    }
+
     setMapVisible=(flag)=>{
         this.setState({
             MapVisible:flag
@@ -178,7 +221,12 @@ class AutoFormAdd extends Component {
         setFieldsValue({Longitude:obj.Longitude,Latitude:obj.Latitude});
     }
 
-    getLocation=(name)=>this.props.form.getFieldValue(name)
+    setMapPolygon=(obj)=>{
+        let {form:{setFieldsValue}}=this.props;
+        setFieldsValue({Col6:obj});
+    }
+
+    getFieldValue=(name)=>this.props.form.getFieldValue(name)
 
     render() {
         const submitFormLayout = {
@@ -236,9 +284,12 @@ class AutoFormAdd extends Component {
                         setMapVisible={this.setMapVisible}
                         MapVisible={this.state.MapVisible}
                         setPoint={this.setPoint}
-                        longitude={this.getLocation('Longitude')}
-                        latitude={this.getLocation('Latitude')}
-                        activationMarker={true}
+                        setMapPolygon={this.setMapPolygon}
+                        polygon={this.getFieldValue('Col6')}
+                        longitude={this.getFieldValue('Longitude')}
+                        latitude={this.getFieldValue('Latitude')}
+                        EditMarker={this.state.EditMarker}
+                        EditPolygon={this.state.EditPolygon}
                     />
                 }
             </MonitorContent>

@@ -48,12 +48,26 @@ class MapContent extends React.Component {
         function listenerStorage() {
             if (window.AMap) {
                 if (window.AMap) {
-                    const {longitude, latitude, getMapAddress,polygon} = _this.props;
+                    let {longitude, latitude, getMapAddress,polygon,mapCenter} = _this.props;
                     originalPolygon=polygon;
-                    const latlngxy = [longitude,latitude];// 默认北京天安门
+                    let latlngxy = [];// 默认北京天安门
+
+                    if(!mapCenter&&mapCenter===0) {
+                        mapCenter=[116.397428,39.90923];
+                    }
+
+                    if(longitude&&latitude) {
+                        latlngxy=[longitude,latitude];
+                        // 在新中心点添加 marker
+                        marker = new window.AMap.Marker({
+                            map: map,
+                            position: latlngxy
+                        });
+                    }
+
                     map = new window.AMap.Map('allmap', {
                         resizeEnable: true,
-                        center: latlngxy,
+                        center: mapCenter,
                         zoom: zoomLevel,
                         // key:"c5cb4ec7ca3ba4618348693dd449002d"
                     });
@@ -67,11 +81,7 @@ class MapContent extends React.Component {
                     }
                     map.setLang(mapLang);
 
-                    // 在新中心点添加 marker
-                    marker = new window.AMap.Marker({
-                        map: map,
-                        position: latlngxy
-                    });
+
                     //加载地图绘制工具
                     map.plugin(['AMap.MouseTool'], () => {
                         mouseTool = new window.AMap.MouseTool(map);
@@ -100,7 +110,7 @@ class MapContent extends React.Component {
             } else {
                 setTimeout(() => {
                     listenerStorage();
-                }, 800);
+                }, 500);
             }
         }
         listenerStorage();
@@ -293,10 +303,15 @@ class MapContent extends React.Component {
   }
 
   render() {
-      const { mapHeight,activationMarker } = this.props;
-      if(activationMarker) {
+      const { mapHeight, EditMarker,
+          EditPolygon } = this.props;
+      if(EditMarker) {
           if(map)
               this.clickMarker();
+      }
+      if(EditPolygon) {
+          if(map)
+              this.clickPolygon();
       }
       const allcoo=eval(originalPolygon);
       return (
@@ -305,8 +320,14 @@ class MapContent extends React.Component {
                   <div id="allmap" style={{height: mapHeight}}>
                       <div className={styles.mouseTool}>
                           <Button onClick={this.clearMap} className={styles.ClearButton}>清除全部</Button>
-                          <Button style={{marginLeft:10}} onClick={this.clickPolygon} className={styles.ClearButton}>设置坐标集合</Button>
-                          <Button style={{marginLeft:10}} onClick={this.clickMarker} className={styles.ClearButton}>设置经纬度</Button>
+                          {
+                              EditMarker&&<Button style={{marginLeft:10}} onClick={this.clickMarker} className={styles.ClearButton}>设置经纬度</Button>
+                          }
+                          {
+                              EditPolygon&&<Button style={{marginLeft:10}} onClick={this.clickPolygon} className={styles.ClearButton}>设置坐标集合</Button>
+                          }
+                          {/* <Button style={{marginLeft:10}} onClick={this.clickPolygon} className={styles.ClearButton}>设置坐标集合</Button>
+                          <Button style={{marginLeft:10}} onClick={this.clickMarker} className={styles.ClearButton}>设置经纬度</Button> */}
                           <Input
                               placeholder="搜索地址"
                               value={this.state.address}
@@ -324,15 +345,10 @@ class MapContent extends React.Component {
 }
 
 MapContent.defaultProps={
-    mapCenter:{
-        longitude:116.397428,
-        latitude:39.90923
-    },
+    mapCenter:[116.397428,39.90923],
     zoom:15,
     drawMarker:false,
     markers:[],
-    longitude:116.397428,
-    latitude:39.90923,
     mapHeight:300
 };
 

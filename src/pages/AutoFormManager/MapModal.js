@@ -22,9 +22,11 @@ class MapModal extends Component {
             MarkerObje:{
                 Longitude:0,
                 Latitude:0
-            }
+            },
+            MapPolygon:[]
         };
         this.getMapMarker=this.getMapMarker.bind(this);
+        this.getMapPolygon=this.getMapPolygon.bind(this);
     }
 
     componentWillMount() {
@@ -41,26 +43,44 @@ class MapModal extends Component {
                 }
             });
         }
+    }
 
-        //this.props.getMapMarker(obj);
+    getMapPolygon(obj){
+        debugger;
+        if(obj) {
+            this.setState({
+                MapPolygon:obj
+            });
+        }
     }
 
     render() {
-        let {longitude,latitude,activationMarker}=this.props;
+        let {
+            longitude,
+            latitude,
+            EditMarker,
+            EditPolygon,
+            setMapVisible,
+            setPoint,
+            MapVisible,
+            setMapPolygon,
+            polygon
+        }=this.props;
         debugger;
         return (
             <div>
                 <Modal
-                    visible={this.props.MapVisible}
+                    visible={MapVisible}
                     title="编辑位置信息"
                     width="70%"
                     destroyOnClose={true}// 清除上次数据
                     onOk={() => {
-                        this.props.setMapVisible(false);
-                        this.props.setPoint(this.state.MarkerObje);
+                        setMapVisible(false);
+                        setPoint(this.state.MarkerObje);
+                        setMapPolygon(this.state.MapPolygon);
                     }}
                     onCancel={() => {
-                        this.props.setMapVisible(false);
+                        setMapVisible(false);
                     }}
                 >
                     <MapContent
@@ -70,7 +90,9 @@ class MapModal extends Component {
                         mapHeight="calc(100vh - 500px)"
                         longitude={longitude||116.397428}
                         latitude={latitude||39.90923}
-                        activationMarker={activationMarker}
+                        polygon={polygon}
+                        EditMarker={EditMarker}
+                        EditPolygon={EditPolygon}
                     />
                 </Modal>
             </div>
