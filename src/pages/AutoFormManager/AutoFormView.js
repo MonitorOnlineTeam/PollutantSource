@@ -3,7 +3,7 @@
  * @Author: Jiaqi 
  * @Date: 2019-05-30 13:59:37 
  * @Last Modified by: Jiaqi
- * @Last Modified time: 2019-05-30 16:33:03
+ * @Last Modified time: 2019-05-31 10:48:14
  */
 
 import React, { Component } from 'react';
@@ -94,13 +94,17 @@ class AutoFormView extends Component {
         showText = formData[item.fieldName]
       }
       return (
-        <Col span={6} key={item.fieldName}>
-          <FormItem
+        <Col span={6} style={{marginBottom: 10}} key={item.fieldName}>
+          {/* <FormItem
             label={item.labelText}
             {...formItemLayout}
           >
             {showText}
-          </FormItem>
+          </FormItem> */}
+          <div className="antd-pro-components-description-list-index-term">{item.labelText}</div>
+          <div className="antd-pro-components-description-list-index-detail">{showText}</div>
+          {/* <lable>：</lable>
+          <span>{showText}</span> */}
         </Col>
       )
     })
@@ -139,7 +143,7 @@ class AutoFormView extends Component {
           ><Icon type="left" />返回
         </Button>
         }>
-          <Row>
+          <Row className="antd-pro-components-description-list-index-descriptionList">
             {this._renderFormItem()}
           </Row>
         </Card>

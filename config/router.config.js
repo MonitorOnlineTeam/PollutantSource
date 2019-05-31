@@ -42,7 +42,7 @@ export default [
         path: '/',
         component: '../layouts/BasicLayout',
         routes: [
-            { path: '/', redirect: './sysmanage/autoformmanager' },
+            { path: '/', redirect: './sysmanage/autoformmanager/TestCommonPoint' },
             /* 主页 */
             {
                 path: '/homepage', component: './HomePage',
