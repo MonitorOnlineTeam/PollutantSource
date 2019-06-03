@@ -31,6 +31,9 @@ class SdlRadio extends Component {
     return (
       <Radio.Group {...this.props}>
         {
+          this.props.all && <Radio key={""} value={null}>全部</Radio>
+        }
+        {
           dataList.map(radio => {
             return <Radio key={radio.key} value={radio.key}>{radio.value}</Radio>
           })

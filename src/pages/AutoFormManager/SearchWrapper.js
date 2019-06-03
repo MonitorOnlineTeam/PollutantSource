@@ -2,7 +2,7 @@
  * @Author: Jiaqi
  * @Date: 2019-05-07 16:03:14
  * @Last Modified by: Jiaqi
- * @Last Modified time: 2019-06-03 14:01:30
+ * @Last Modified time: 2019-06-03 14:16:59
  * @desc: 搜索容器组件
  * @props {string} formChangeActionType formAction
  * @props {store object} searchFormState formState对象
@@ -132,7 +132,6 @@ class SearchWrapper extends Component {
     const { dispatch, form: { getFieldDecorator }, searchConfigItems, configId } = this.props;
     const { formLayout, inputPlaceholder, selectPlaceholder } = this._SELF_;
     const searchConditions = searchConfigItems[configId] || []
-    console.log('searchConditions=', searchConditions)
     let element = '';
     // const len = searchConditions.length;
     // const isHide = len > 2;
@@ -178,7 +177,9 @@ class SearchWrapper extends Component {
             <SdlRadio
               data={item.value}
               configId={item.configId}
+              all={true}
             />
+            
           )
           break;
         case "多选":
