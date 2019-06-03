@@ -1,8 +1,8 @@
 /**
- * @Author: Jiaqi 
- * @Date: 2019-05-07 16:03:14 
+ * @Author: Jiaqi
+ * @Date: 2019-05-07 16:03:14
  * @Last Modified by: Jiaqi
- * @Last Modified time: 2019-05-31 16:55:56
+ * @Last Modified time: 2019-06-03 14:01:30
  * @desc: 搜索容器组件
  * @props {string} formChangeActionType formAction
  * @props {store object} searchFormState formState对象
@@ -134,7 +134,7 @@ class SearchWrapper extends Component {
     const searchConditions = searchConfigItems[configId] || []
     console.log('searchConditions=', searchConditions)
     let element = '';
-    const len = searchConditions.length;
+    // const len = searchConditions.length;
     // const isHide = len > 2;
     return searchConditions.map((item, index) => {
       let isHide = (this.state.expand && index > 1) ? "none" : ""
@@ -159,24 +159,9 @@ class SearchWrapper extends Component {
               mode={mode}
             >
             </SearchSelect>
-
-            // <Select
-            //   allowClear
-            //   showSearch
-            //   placeholder={placeholder}
-            //   optionFilterProp="children"
-            //   mode={mode}
-            //   filterOption={(input, option) => option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}
-            // >
-            //   {
-            //     item.value.map(option => {
-            //       return <Option key={option.key} value={option.key}>{option.value}</Option>
-            //     })
-            //   }
-            // </Select>
           )
           break;
-        case "下拉搜索树":
+        case "多选下拉搜索树":
           placeholder = placeholder || selectPlaceholder;
           element = (
             <SdlCascader
@@ -204,8 +189,12 @@ class SearchWrapper extends Component {
             />
           )
           break;
+        default:
+          element = null;
+          break;
       }
       return (
+        element &&
         <Col style={{ display: isHide }} key={index} md={8} sm={24}>
           <FormItem {...formLayout} label={labelText} style={{ width: '100%' }}>
             {getFieldDecorator(fieldName + '', {})(
@@ -226,6 +215,8 @@ class SearchWrapper extends Component {
 
   render() {
     const { formLayout, inputPlaceholder, selectPlaceholder } = this._SELF_;
+    const { searchConfigItems, configId } = this.props;
+    const searchConditions = searchConfigItems[configId] || []
     return (
       <Form layout="inline" style={{ marginBottom: '10' }}>
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
@@ -233,26 +224,28 @@ class SearchWrapper extends Component {
             this._renderFormItem()
           }
           {/* <Col offset={2} md={6} sm={24} style={{ marginTop: 6 }}> */}
-          <Col md={6} sm={24} style={{ marginTop: 6 }}>
-            <Button type="primary" onClick={this.onSubmitForm}>
-              查询
+          {
+            searchConditions.length ? <Col md={6} sm={24} style={{ marginTop: 6 }}>
+              <Button type="primary" onClick={this.onSubmitForm}>
+                查询
                   </Button>
-            <Button style={{ marginLeft: 8 }} onClick={this._resetForm}>
-              重置
+              <Button style={{ marginLeft: 8 }} onClick={this._resetForm}>
+                重置
                   </Button>
-            {
-              this.state.isShowExpand &&
-              <React.Fragment>
-                {
-                  this.state.expand ? <a style={{ marginLeft: 8 }} onClick={this._handleExpand}>
-                    展开 <Icon type="down" />
-                  </a> : <a style={{ marginLeft: 8 }} onClick={this._handleExpand}>
-                      收起 <Icon type="up" />
-                    </a>
-                }
-              </React.Fragment>
-            }
-          </Col>
+              {
+                this.state.isShowExpand &&
+                <React.Fragment>
+                  {
+                    this.state.expand ? <a style={{ marginLeft: 8 }} onClick={this._handleExpand}>
+                      展开 <Icon type="down" />
+                    </a> : <a style={{ marginLeft: 8 }} onClick={this._handleExpand}>
+                        收起 <Icon type="up" />
+                      </a>
+                  }
+                </React.Fragment>
+              }
+            </Col> : null
+          }
           {/* <Col md={16} sm={24} style={{ margin: '10px 0' }}>
             <Button type="primary" onClick={this.onSubmitForm.bind(this.props.form)}>
               查询

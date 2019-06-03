@@ -53,7 +53,6 @@ class MapContent extends React.Component {
                         EditPolygon} = _this.props;
                     originalPolygon=polygon;
                     let latlngxy = [];// 默认北京天安门
-                    debugger;
                     if(!mapCenter&&mapCenter===0) {
                         mapCenter=[116.397428,39.90923];
                     }
@@ -189,7 +188,6 @@ class MapContent extends React.Component {
         if (marker != null) {
             map.remove(marker);
         }
-        debugger;
         const point=[e.lnglat.getLng(), e.lnglat.getLat()];
         marker = new AMap.Marker({
             map: map,

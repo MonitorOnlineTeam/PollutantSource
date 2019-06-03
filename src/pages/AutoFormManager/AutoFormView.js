@@ -3,7 +3,7 @@
  * @Author: Jiaqi 
  * @Date: 2019-05-30 13:59:37 
  * @Last Modified by: Jiaqi
- * @Last Modified time: 2019-05-31 10:48:14
+ * @Last Modified time: 2019-06-03 14:04:08
  */
 
 import React, { Component } from 'react';
@@ -81,20 +81,20 @@ class AutoFormView extends Component {
     const formConfig = detailConfigInfo[configId] || [];
     const formData = editFormData[configId] || []
     return formConfig.map(item => {
-      
+
       let showText = "";
-      if(item.type === "下拉列表框"){
+      if (item.type === "下拉列表框") {
         showText = <ReturnName
           configId={item.configId}
           itemKey={item.configDataItemValue}
           itemValue={formData[item.fieldName]}
           itemName={item.configDataItemName}
         />
-      }else{
+      } else {
         showText = formData[item.fieldName]
       }
       return (
-        <Col span={6} style={{marginBottom: 10}} key={item.fieldName}>
+        <Col span={6} style={{ marginBottom: 10 }} key={item.fieldName}>
           {/* <FormItem
             label={item.labelText}
             {...formItemLayout}
@@ -111,7 +111,7 @@ class AutoFormView extends Component {
   }
 
   render() {
-    let { loadingData, loadingConfig, dispatch, history } = this.props;
+    let { loadingData, loadingConfig, dispatch, history, configId } = this.props;
     if (loadingData || loadingConfig) {
       return (<Spin
         style={{
@@ -129,7 +129,7 @@ class AutoFormView extends Component {
         [
           { Name: '首页', Url: '/' },
           { Name: '系统管理', Url: '' },
-          { Name: 'AutoForm', Url: '/sysmanage/autoformmanager' },
+          { Name: 'AutoForm', Url: '/sysmanage/autoformmanager/' + configId },
           { Name: '详情', Url: '' }
         ]
       }

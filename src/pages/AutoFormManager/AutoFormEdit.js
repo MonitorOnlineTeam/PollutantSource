@@ -39,12 +39,12 @@ class AutoFormEdit extends Component {
         super(props);
         this.state = { MapVisible: false };
         this.state = {
-            MapVisible:false,
-            EditMarker:false,
-            EditPolygon:false,
-            longitude:0,
-            latitude:0,
-            polygon:[]
+            MapVisible: false,
+            EditMarker: false,
+            EditPolygon: false,
+            longitude: 0,
+            latitude: 0,
+            polygon: []
         };
         this._SELF_ = {
             formLayout: props.formLayout || {
@@ -102,6 +102,10 @@ class AutoFormEdit extends Component {
 
         form.validateFields((err, values) => {
             if (!err) {
+                let FormData = {};
+                for (let key in values) {
+                    FormData[key] = values[key] && values[key].toString()
+                }
                 //console.log('Received values of form: ', values);
                 dispatch({
                     type: 'autoForm/saveEdit',
@@ -109,10 +113,10 @@ class AutoFormEdit extends Component {
                         configId: configId,
                         FormData: {
                             ...primaryKey,
-                            ...values
+                            ...FormData,
                         },
                         callback: (res) => {
-                            dispatch(routerRedux.push(`/sysmanage/autoformmanager`));
+                            history.go(-1)
                         }
                     }
                 });
@@ -130,6 +134,7 @@ class AutoFormEdit extends Component {
             let element = '';
             let { placeholder, validator } = item;
             const { fieldName, labelText, required } = item;
+            let initialValue = formData[fieldName];
             // 判断类型
             switch (item.type) {
                 case "文本框":
@@ -149,7 +154,8 @@ class AutoFormEdit extends Component {
                         />
                     );
                     break;
-                case "下拉搜索树":
+                case "多选下拉搜索树":
+                    initialValue = formData[fieldName] && formData[fieldName].split(',');
                     placeholder = placeholder || selectPlaceholder;
                     element = (
                         <SdlCascader
@@ -182,12 +188,12 @@ class AutoFormEdit extends Component {
 
                     element = <Input
                         suffix={<Icon
-                            onClick={()=>{
-                                this.openMapModal({EditMarker:true})
-                                ;
+                            onClick={() => {
+                                this.openMapModal({ EditMarker: true })
+                                    ;
                             }}
                             type="global"
-                            style={{ color: '#2db7f5',cursor:'pointer' }}
+                            style={{ color: '#2db7f5', cursor: 'pointer' }}
                         />}
                         placeholder={placeholder}
                         allowClear={true}
@@ -199,29 +205,29 @@ class AutoFormEdit extends Component {
 
                     element = <Input
                         suffix={<Icon
-                            onClick={()=>{
-                                this.openMapModal({EditMarker:true})
-                                ;
+                            onClick={() => {
+                                this.openMapModal({ EditMarker: true })
+                                    ;
                             }}
                             type="global"
-                            style={{ color: '#2db7f5',cursor:'pointer' }}
+                            style={{ color: '#2db7f5', cursor: 'pointer' }}
                         />}
                         placeholder={placeholder}
                         allowClear={true}
                     />;
                     break;
                 case "坐标集合":
-                    validator=`${inputPlaceholder}`;
+                    validator = `${inputPlaceholder}`;
                     placeholder = placeholder || inputPlaceholder;
 
                     element = <Input
                         suffix={<Icon
-                            onClick={()=>{
-                                this.openMapModal({EditPolygon:true,FieldName:fieldName})
-                                ;
+                            onClick={() => {
+                                this.openMapModal({ EditPolygon: true, FieldName: fieldName })
+                                    ;
                             }}
                             type="global"
-                            style={{ color: '#2db7f5',cursor:'pointer' }}
+                            style={{ color: '#2db7f5', cursor: 'pointer' }}
                         />}
                         placeholder={placeholder}
                         allowClear={true}
@@ -235,7 +241,7 @@ class AutoFormEdit extends Component {
                 return (
                     <FormItem key={item.fieldName} {...formLayout} label={labelText}>
                         {getFieldDecorator(`${fieldName}`, {
-                            initialValue: formData[fieldName],
+                            initialValue: initialValue,
                             rules: [
                                 {
                                     required: required,
@@ -250,21 +256,19 @@ class AutoFormEdit extends Component {
         });
     }
 
-    setMapVisible = (flag) => {
-    openMapModal(obj){
-        debugger;
-        let {form}=this.props;
+    openMapModal(obj) {
+        let { form } = this.props;
         this.setState({
-            MapVisible:true,
-            EditMarker:obj.EditMarker||false,
-            EditPolygon:obj.EditPolygon||false,
-            polygon:form.getFieldValue(obj.FieldName)||[],
-            longitude:form.getFieldValue("Longitude"),
-            latitude:form.getFieldValue("Latitude")
+            MapVisible: true,
+            EditMarker: obj.EditMarker || false,
+            EditPolygon: obj.EditPolygon || false,
+            polygon: form.getFieldValue(obj.FieldName) || [],
+            longitude: form.getFieldValue("Longitude"),
+            latitude: form.getFieldValue("Latitude")
         });
     }
 
-    setMapVisible=(flag)=>{
+    setMapVisible = (flag) => {
         this.setState({
             MapVisible: flag
         });
@@ -275,9 +279,9 @@ class AutoFormEdit extends Component {
         setFieldsValue({ Longitude: obj.Longitude, Latitude: obj.Latitude });
     }
 
-    setMapPolygon=(obj)=>{
-        let {form:{setFieldsValue}}=this.props;
-        setFieldsValue({Col6:obj});
+    setMapPolygon = (obj) => {
+        let { form: { setFieldsValue } } = this.props;
+        setFieldsValue({ Col6: obj });
     }
 
     render() {
@@ -287,7 +291,7 @@ class AutoFormEdit extends Component {
                 sm: { span: 10, offset: 7 },
             },
         };
-        let { loadingAdd, loadingConfig, dispatch } = this.props;
+        let { loadingAdd, loadingConfig, dispatch, configId } = this.props;
         if (loadingAdd || loadingConfig) {
             return (<Spin
                 style={{
@@ -305,7 +309,7 @@ class AutoFormEdit extends Component {
                 [
                     { Name: '首页', Url: '/' },
                     { Name: '系统管理', Url: '' },
-                    { Name: 'AutoForm', Url: '/sysmanage/autoformmanager' },
+                    { Name: 'AutoForm', Url: '/sysmanage/autoformmanager/' + configId },
                     { Name: '编辑', Url: '' }
                 ]
             }

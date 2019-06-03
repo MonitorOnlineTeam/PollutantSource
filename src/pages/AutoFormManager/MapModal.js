@@ -34,7 +34,6 @@ class MapModal extends Component {
     }
 
     getMapMarker(obj){
-        //debugger;
         if(obj) {
             this.setState({
                 MarkerObje:{
@@ -53,7 +52,6 @@ class MapModal extends Component {
     }
 
     getMapPolygon(obj){
-        debugger;
         if(obj) {
             this.setState({
                 MapPolygon:obj
@@ -77,7 +75,6 @@ class MapModal extends Component {
             setMapPolygon,
             polygon
         }=this.props;
-        debugger;
         return (
             <div>
                 <Modal

@@ -98,7 +98,7 @@ class SdlTable extends PureComponent {
             icon="plus"
             type="primary"
             onClick={() => {
-              dispatch(routerRedux.push(`/AutoFormManager/AutoFormAdd/TestCommonPoint`));
+              dispatch(routerRedux.push(`/AutoFormManager/AutoFormAdd/${configId}`));
             }}
           >添加
                   </Button>;
@@ -179,8 +179,8 @@ class SdlTable extends PureComponent {
                           }
                         })
 
-                        dispatch(routerRedux.push(`/AutoFormManager/AutoFormEdit/TestCommonPoint/${JSON.stringify(postData)}`))
-                      }}>修改</a>
+                        dispatch(routerRedux.push(`/AutoFormManager/AutoFormEdit/${configId}/${JSON.stringify(postData)}`))
+                      }}>编辑</a>
                       {
                         this._SELF_.btnEl.length - 1 !== index && <Divider type="vertical" />
                       }
@@ -195,7 +195,7 @@ class SdlTable extends PureComponent {
                           postData[item] = record[item]
                         }
                       })
-                      dispatch(routerRedux.push(`/AutoFormManager/AutoFormView/TestCommonPoint/${JSON.stringify(postData)}`))
+                      dispatch(routerRedux.push(`/AutoFormManager/AutoFormView/${configId}/${JSON.stringify(postData)}`))
                     }}>详情</a>
                     {
                       this._SELF_.btnEl.length - 1 !== index && <Divider type="vertical" />

@@ -32,7 +32,7 @@ class SdlRadio extends Component {
       <Radio.Group {...this.props}>
         {
           dataList.map(radio => {
-            return <Radio value={radio.key}>{radio.value}</Radio>
+            return <Radio key={radio.key} value={radio.key}>{radio.value}</Radio>
           })
         }
       </Radio.Group>

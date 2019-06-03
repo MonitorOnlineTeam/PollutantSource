@@ -18,7 +18,6 @@ import { routerRedux } from 'dva/router';
 import { connect } from 'dva';
 import SdlTable from './Table';
 import SearchWrapper from './SearchWrapper';
-const CONFIGID = "TestCommonPoint";
 
 @connect(({ loading, autoForm }) => ({
   loading: loading.effects['autoForm/getPageConfig'],
