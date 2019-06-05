@@ -18,7 +18,6 @@ import { routerRedux } from 'dva/router';
 import { connect } from 'dva';
 import SdlTable from './Table';
 import SearchWrapper from './SearchWrapper';
-const CONFIGID = "TestCommonPoint";
 
 @connect(({ loading, autoForm }) => ({
   loading: loading.effects['autoForm/getPageConfig'],
@@ -39,15 +38,18 @@ export default class AutoFormIndex extends Component {
 
   componentDidMount() {
     this.props.dispatch({
-      type: 'autoForm/getPageConfig'
+      type: 'autoForm/getPageConfig',
+      payload: {
+        configId: this.props.match.params.configId
+      }
     })
   }
 
 
   render() {
-    const { searchConfigItems, searchForm, tableInfo  } = this.props;
-    const searchConditions = searchConfigItems[CONFIGID] || []
-    const columns = tableInfo[CONFIGID] ? tableInfo[CONFIGID]["columns"] : [];
+    const { searchConfigItems, searchForm, tableInfo, match: { params: { configId } } } = this.props;
+    const searchConditions = searchConfigItems[configId] || []
+    const columns = tableInfo[configId] ? tableInfo[configId]["columns"] : [];
     if (this.props.loading) {
       return (<Spin
         style={{
@@ -71,17 +73,17 @@ export default class AutoFormIndex extends Component {
         <div className={styles.cardTitle}>
           <Card>
             <SearchWrapper
-              formItemList={searchConditions}
-              formChangeActionType=""
-              searchFormState={{
-              }}
+              // formItemList={searchConditions}
+              // formChangeActionType=""
+              // searchFormState={{
+              // }}
               onSubmitForm={(form) => this.loadReportList(form)}
-              configId={CONFIGID}
+              configId={configId}
             ></SearchWrapper>
             <SdlTable
               style={{ marginTop: 10 }}
-              columns={columns}
-              configId={CONFIGID}
+              // columns={columns}
+              configId={configId}
             // dataSource={dataSource}
             />
           </Card>

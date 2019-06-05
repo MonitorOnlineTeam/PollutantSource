@@ -46,7 +46,10 @@ class SdlTable extends PureComponent {
 
   loadDataSource() {
     this.props.dispatch({
-      type: 'autoForm/getAutoFormData'
+      type: 'autoForm/getAutoFormData',
+      payload: {
+        configId: this.props.configId
+      }
     });
   }
 
@@ -71,8 +74,6 @@ class SdlTable extends PureComponent {
   }
 
   onSelectChange = (selectedRowKeys, selectedRows) => {
-    console.log('selectedRowKeys changed: ', selectedRowKeys);
-    console.log('selectedRows changed: ', selectedRows);
     const { keys, configId } = this.props;
     let postData = {};
     keys[configId].map(item => {
@@ -94,9 +95,10 @@ class SdlTable extends PureComponent {
         case "add":
           return <Button
             key={btn.DISPLAYBUTTON}
+            icon="plus"
             type="primary"
             onClick={() => {
-              dispatch(routerRedux.push(`/AutoFormManager/AutoFormAdd/TestCommonPoint`));
+              dispatch(routerRedux.push(`/AutoFormManager/AutoFormAdd/${configId}`));
             }}
           >添加
                   </Button>;
@@ -104,6 +106,7 @@ class SdlTable extends PureComponent {
         case "alldel":
           return <Button
             disabled={this.state.selectedRowKeys.length <= 0}
+            icon="delete"
             key={btn.DISPLAYBUTTON}
             type="primary"
             onClick={() => {
@@ -115,12 +118,10 @@ class SdlTable extends PureComponent {
                   dispatch({
                     type: "autoForm/del",
                     payload: {
-                      ...postData
+                      configId: configId,
+                      FormData: JSON.stringify(postData)
                     }
                   })
-                },
-                onCancel() {
-                  console.log('Cancel');
                 },
               });
             }}
@@ -128,7 +129,7 @@ class SdlTable extends PureComponent {
                          </Button>;
           break;
         case "print":
-          return <Button key={btn.DISPLAYBUTTON} type="primary">打印</Button>;
+          return <Button icon="printer" key={btn.DISPLAYBUTTON} type="primary">打印</Button>;
           break;
         case "edit":
           btnEl.push({
@@ -153,10 +154,39 @@ class SdlTable extends PureComponent {
 
   render() {
     const { loading, selectedRowKeys } = this.state;
-    const { columns, tableInfo, searchForm, keys, dispatch, configId } = this.props;
+    const { tableInfo, searchForm, keys, dispatch, configId } = this.props;
+    const columns = tableInfo[configId] ? tableInfo[configId]["columns"] : [];
     const { pageSize = 10, current = 1, total = 0 } = searchForm[configId] || {}
+
     // 计算长度
-    let _columns = columns.map(col => col.width ? { width: DEFAULT_WIDTH, ...col } : { ...col, width: DEFAULT_WIDTH });
+    let _columns = columns.map(col => {
+      if (col.title === "文件") {
+        return {
+          ...col,
+          width: 400,
+          render: (text, record) => {
+            const key = col.dataIndex;
+            const fileInfo = record[key] ? record[key].split(";") : [];
+            return (
+              <div>
+                {
+                  fileInfo.map(item => {
+                    const itemList = item.split("|");
+                    return <Fragment>
+                      <a target="_blank" href={`${itemList[itemList.length - 1]}${itemList[0]}`}>{itemList[0]}</a>
+                      <a style={{ marginLeft: 10 }} href={`${itemList.pop()}${itemList[0]}`} download>下载</a>
+                      <br />
+                    </Fragment>
+                  })
+                }
+              </div>
+            )
+          }
+        }
+      }
+      return col.width ? { width: DEFAULT_WIDTH, ...col } : { ...col, width: DEFAULT_WIDTH }
+    });
+
     const buttonsView = this._renderHandleButtons();
     if (this._SELF_.btnEl.length) {
       _columns.push({
@@ -168,13 +198,24 @@ class SdlTable extends PureComponent {
             {
               this._SELF_.btnEl.map((item, index) => {
                 if (item.type === "edit") {
+                  const filterList = columns.filter(itm => itm.title == "文件")[0] || {};
+                  const key = filterList.dataIndex;
+                  const fileInfo = record[key] && record[key].split(";")[0];
+                  const list = fileInfo ? fileInfo.split("|") : [];
+                  const uid = list[list.length - 2] || null;
+                  // const uid = record.
                   return (
                     <Fragment key={item.type}>
-                      <a onClick={
-                        () => dispatch(routerRedux.push(`/AutoFormManager/AutoFormEdit/TestCommonPoint`))
-                      }
-                      >修改
-                                          </a>
+                      <a onClick={() => {
+                        let postData = {};
+                        keys[configId].map(item => {
+                          if (record[item]) {
+                            postData[item] = record[item]
+                          }
+                        })
+
+                        dispatch(routerRedux.push(`/AutoFormManager/AutoFormEdit/${configId}/${JSON.stringify(postData)}/${uid}`))
+                      }}>编辑</a>
                       {
                         this._SELF_.btnEl.length - 1 !== index && <Divider type="vertical" />
                       }
@@ -182,11 +223,15 @@ class SdlTable extends PureComponent {
                 }
                 if (item.type === "view") {
                   return (<Fragment key={item.type}>
-                    <a onClick={
-                      () => dispatch(routerRedux.push(`/AutoFormManager/AutoFormView/TestCommonPoint`))
-                    }
-                    >详情
-                                      </a>
+                    <a onClick={() => {
+                      let postData = {};
+                      keys[configId].map(item => {
+                        if (record[item]) {
+                          postData[item] = record[item]
+                        }
+                      })
+                      dispatch(routerRedux.push(`/AutoFormManager/AutoFormView/${configId}/${JSON.stringify(postData)}`))
+                    }}>详情</a>
                     {
                       this._SELF_.btnEl.length - 1 !== index && <Divider type="vertical" />
                     }
@@ -198,7 +243,8 @@ class SdlTable extends PureComponent {
                       placement="left"
                       title="确认是否删除?"
                       onConfirm={() => {
-                        let postData = {};
+                        let postData = {
+                        };
                         keys[configId].map(item => {
                           if (record[item]) {
                             postData[item] = record[item]
@@ -207,7 +253,8 @@ class SdlTable extends PureComponent {
                         dispatch({
                           type: "autoForm/del",
                           payload: {
-                            ...postData
+                            configId: configId,
+                            FormData: JSON.stringify(postData)
                           }
                         })
                       }}
@@ -233,11 +280,6 @@ class SdlTable extends PureComponent {
       selections: true,
       selectedRowKeys,
       onChange: this.onSelectChange,
-      onSelect: (record, selected, selectedRows, nativeEvent) => {
-        // console.log('record=', record)
-        // console.log('selected=', selected)
-        // console.log('selectedRows=', selectedRows)
-      }
     };
     const dataSource = tableInfo[configId] ? tableInfo[configId].dataSource : [];
     // const dataSource = _tabelInfo.dataSource
@@ -250,7 +292,7 @@ class SdlTable extends PureComponent {
         </Row>
         {/* [record["dbo.T_Bas_CommonPoint.PointCode"], record["dbo.T_Bas_CommonPoint.PointName"]] */}
         <Table
-          rowKey={(record, index) => record["dbo.T_Bas_CommonPoint.PointCode"]}
+          rowKey={(record, index) => index}
           size="middle"
           loading={this.props.loading}
           className={styles.dataTable}

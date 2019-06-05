@@ -6,7 +6,7 @@
  */
 
 import Cookie from 'js-cookie';
-import {postNew,getNew} from '../dvapack/request';
+import { postNew, getNew } from '../dvapack/request';
 import { async } from 'q';
 
 /**
@@ -21,12 +21,12 @@ export async function systemLogin() {
     const defaults = {
         RememberMe: true
     };
-    const body=Object.assign(defaults,params);
+    const body = Object.assign(defaults, params);
     const result = await postNew('/api/rest/PollutantSourceApi/LoginApi/Login', body);
-    if(result.IsSuccess&&result.Datas) {
-        Cookie.set('ssoToken',result.Datas.Ticket);
-    }else {
-        Cookie.set('ssoToken',"");
+    if (result.IsSuccess && result.Datas) {
+        Cookie.set('ssoToken', result.Datas.Ticket);
+    } else {
+        Cookie.set('ssoToken', "");
     }
     return result;
 }
@@ -40,8 +40,8 @@ export async function getConditions() {
         configId: "TestCommonPoint"
     };
     const defaults = {};
-    const body=Object.assign(defaults,params);
-    const result = await getNew('/api/rest/PollutantSourceApi/AutoFormDataApi/GetConditions',body);
+    const body = Object.assign(defaults, params);
+    const result = await getNew('/api/rest/PollutantSourceApi/AutoFormDataApi/GetConditions', body);
     // debugger;
     return result;
 }
@@ -51,16 +51,16 @@ export async function getConditions() {
  * @params {"configId": "TestCommonPoint"}
  */
 export async function getPageConfigInfo(params) {
-    let param ={
+    let param = {
         configId: "TestCommonPoint",
         ...params
     };
     const defaults = {
-        PageIndex:1,
-        PageSize:200
+        PageIndex: 1,
+        PageSize: 200
     };
-    const body=Object.assign(defaults,param);
-    const result = await getNew('/api/rest/PollutantSourceApi/AutoFormDataApi/GetPageConfigInfo',body, null);
+    const body = Object.assign(defaults, param);
+    const result = await getNew('/api/rest/PollutantSourceApi/AutoFormDataApi/GetPageConfigInfo', body, null);
     return result;
 }
 
@@ -80,7 +80,7 @@ export async function getListPager(params) {
     // };
     // const body=Object.assign(param,params);
     // console.log('params=',body)
-    const result = await getNew('/api/rest/PollutantSourceApi/AutoFormDataApi/GetListPager',postData, null);
+    const result = await getNew('/api/rest/PollutantSourceApi/AutoFormDataApi/GetListPager', params, null);
     return result;
 }
 
@@ -93,8 +93,8 @@ export async function getAutoFromAddView() {
         configId: "TestCommonPoint"
     };
     const defaults = {};
-    const body=Object.assign(defaults,params);
-    const result = await getNew('/api/rest/PollutantSourceApi/AutoFormDataApi/GetAutoFromAddView',body, null);
+    const body = Object.assign(defaults, params);
+    const result = await getNew('/api/rest/PollutantSourceApi/AutoFormDataApi/GetAutoFromAddView', body, null);
     return result;
 }
 
@@ -107,8 +107,8 @@ export async function getAutoFromUpdateView() {
         configId: "TestCommonPoint"
     };
     const defaults = {};
-    const body=Object.assign(defaults,params);
-    const result = await getNew('/api/rest/PollutantSourceApi/AutoFormDataApi/GetAutoFromUpdateView',body, null);
+    const body = Object.assign(defaults, params);
+    const result = await getNew('/api/rest/PollutantSourceApi/AutoFormDataApi/GetAutoFromUpdateView', body, null);
     return result;
 }
 
@@ -120,11 +120,11 @@ export async function getFormData(params) {
     const defaults = {
         configId: "TestCommonPoint"
     };
-    const body={
+    const body = {
         ...params,
         ...defaults
     };
-    const result = await getNew('/api/rest/PollutantSourceApi/AutoFormDataApi/GetFormData',body, null);
+    const result = await getNew('/api/rest/PollutantSourceApi/AutoFormDataApi/GetFormData', params, null);
     return result;
 }
 
@@ -140,14 +140,42 @@ export async function postAutoFromDataDelete(params) {
     // const defaults = {};
     // const body=Object.assign(defaults,params);
 
-    const result = await postNew('/api/rest/PollutantSourceApi/AutoFormDataApi/PostAutoFromDataDelete',postData, null);
+    const result = await postNew('/api/rest/PollutantSourceApi/AutoFormDataApi/PostAutoFromDataDelete', params, null);
     return result;
 }
 /**
  * 【AutoForm】数据添加
  * @params {"configId": "TestCommonPoint",FormData:'{name:1,code:"123"}'}
  */
-export async function postAutoFromDataAdd(params){
-    const result = await postNew('/api/rest/PollutantSourceApi/AutoFormDataApi/PostAutoFromDataAdd',params, null);
+export async function postAutoFromDataAdd(params) {
+    const result = await postNew('/api/rest/PollutantSourceApi/AutoFormDataApi/PostAutoFromDataAdd', params, null);
+    return result;
+}
+
+/**
+ * 【AutoForm】修改
+ * @params {"configId": "TestCommonPoint",FormData:'{name:1,code:"123"}'}
+ */
+export async function postAutoFromDataUpdate(params) {
+    const result = await postNew('/api/rest/PollutantSourceApi/AutoFormDataApi/PostAutoFromDataUpdate', params, null);
+    return result;
+}
+
+/**
+ * 【AutoForm】修改
+ * @params {"configId": "TestCommonPoint",FormData:'{name:1,code:"123"}'}
+ */
+export async function getRegions(params) {
+    const result = await getNew('/api/rest/PollutantSourceApi/AuthorApi/GetRegions', params, null);
+    return result;
+}
+
+
+/**
+ * 【AutoForm】获取附件列表
+ * @params {"FileUuid": "String"}
+ */
+export async function getAttachmentList(params) {
+    const result = await postNew('/api/rest/PollutantSourceApi/UploadApi/GetAttachmentList', params, null);
     return result;
 }

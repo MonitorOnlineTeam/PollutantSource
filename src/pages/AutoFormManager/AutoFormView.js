@@ -1,219 +1,155 @@
 /*
- * @desc: AutoForm详情公共页面
- * @Author: JianWei
- * @Date: 2019-5-24 18:28:53
- * @Last Modified by: JianWei
- * @Last Modified time: 2019-5-24 18:28:56
+ * @desc: 详情页面
+ * @Author: Jiaqi 
+ * @Date: 2019-05-30 13:59:37 
+ * @Last Modified by: Jiaqi
+ * @Last Modified time: 2019-06-03 14:07:22
  */
+
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 
 import {
-    Form,
-    Input,
-    Button,
-    Card,
-    Spin
+  Form,
+  Input,
+  Button,
+  Icon,
+  Card,
+  Spin,
+  Row,
+  Col,
 } from 'antd';
 import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
-import DescriptionList from '../../components/DescriptionList';
 import MonitorContent from '../../components/MonitorContent/index';
-import SearchSelect from './SearchSelect';
-
-const { Description } = DescriptionList;
+import ReturnName from './ReturnName'
 
 const FormItem = Form.Item;
 
 @connect(({ loading, autoForm }) => ({
-    loadingConfig:loading.effects['autoForm/getPageConfig'],
-    loadingAdd:loading.effects['autoForm/add'],
-    addFormItems: autoForm.addFormItems,
-    searchForm: autoForm.searchForm,
+  loadingConfig: loading.effects['autoForm/getDetailsConfigInfo'],
+  loadingData: loading.effects['autoForm/getFormData'],
+  detailConfigInfo: autoForm.detailConfigInfo,
+  editFormData: autoForm.editFormData
 }))
-@Form.create()
+// @Form.create()
 class AutoFormView extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {};
-        this._SELF_ = {
-            formLayout: props.formLayout || {
-                labelCol: {
-                    xs: { span: 24 },
-                    sm: { span: 7 },
-                },
-                wrapperCol: {
-                    xs: { span: 24 },
-                    sm: { span: 12 },
-                    md: { span: 10 },
-                },
-            },
-            inputPlaceholder: "请输入",
-            selectPlaceholder: "请选择",
-        };
-        this.renderFormItem = this.renderFormItem.bind(this);
-        this.onSubmitForm = this.onSubmitForm.bind(this);
+  constructor(props) {
+    super(props);
+    this.state = {};
+    this._SELF_ = {
+      formItemLayout: {
+        labelCol: {
+          span: 10,
+        },
+        wrapperCol: {
+          span: 14,
+        },
+      }
     }
+    this._renderFormItem = this._renderFormItem.bind(this);
+  }
 
-    componentDidMount() {
-        let { addFormItems,dispatch,match: { params: { configId } } } = this.props;
-        if(!addFormItems||addFormItems.length===0) {
-            dispatch({
-                type: 'autoForm/getPageConfig',
-                payload: {
-                    configId: configId
-                }
-            });
-        }
-        //console.log("configIdList===",configId);
+  componentDidMount() {
+    let { dispatch, match: { params: { configId, keysParams } }, detailConfigInfo, editFormData } = this.props;
+
+    // 获取页面配置项
+    // if (detailConfigInfo || detailConfigInfo.length === 0) {
+    dispatch({
+      type: 'autoForm/getDetailsConfigInfo',
+      payload: {
+        configId
+      }
+    });
+    // }
+
+    // 获取详情页面数据
+    // if (!editFormData || !editFormData.length) {
+    dispatch({
+      type: 'autoForm/getFormData',
+      payload: {
+        configId,
+        ...JSON.parse(keysParams)
+      }
+    });
+    // }
+
+    // }
+  }
+  _renderFormItem() {
+    const { match: { params: { configId } }, detailConfigInfo, editFormData } = this.props;
+    const { formItemLayout } = this._SELF_;
+    const formConfig = detailConfigInfo[configId] || [];
+    const formData = editFormData[configId] || []
+    return formConfig.map(item => {
+
+      let showText = "";
+      if (item.type === "下拉列表框") {
+        showText = <ReturnName
+          configId={item.configId}
+          itemKey={item.configDataItemValue}
+          itemValue={formData[item.fieldName]}
+          itemName={item.configDataItemName}
+        />
+      } else {
+        showText = formData[item.fieldName]
+      }
+      return (
+        <Col span={6} style={{ marginBottom: 10 }} key={item.fieldName}>
+          {/* <FormItem
+            label={item.labelText}
+            {...formItemLayout}
+          >
+            {showText}
+          </FormItem> */}
+          <div className="antd-pro-components-description-list-index-term">{item.labelText}</div>
+          <div className="antd-pro-components-description-list-index-detail">{showText}</div>
+          {/* <lable>：</lable>
+          <span>{showText}</span> */}
+        </Col>
+      )
+    })
+  }
+
+  render() {
+    let { loadingData, loadingConfig, dispatch, history, match: { params: { configId } } } = this.props;
+    if (loadingData || loadingConfig) {
+      return (<Spin
+        style={{
+          width: '100%',
+          height: 'calc(100vh/2)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center'
+        }}
+        size="large"
+      />);
     }
-
-    onSubmitForm(e) {
-        e.preventDefault();
-        let { form,dispatch,match: { params: { configId } } } = this.props;
-        form.validateFields((err, values) => {
-            if (!err) {
-                //console.log('Received values of form: ', values);
-                dispatch({
-                    type: 'autoForm/edit',
-                    payload: {
-                        configId: configId,
-                        FormData:{
-                            ...values
-                        },
-                        callback:(res) => {
-                            if(res.IsSuccess) {
-
-                                dispatch(routerRedux.push(`/sysmanage/autoformmanager`));
-                            }
-                        }
-                    }
-                });
-            }
-        });
-    }
-
-    // 渲染FormItem
-    renderFormItem() {
-
-        const {addFormItems, form: { getFieldDecorator } } = this.props;
-        const { formLayout, inputPlaceholder, selectPlaceholder } = this._SELF_;
-
-        return addFormItems.map((item) =>{
-            let element = '';
-            let {placeholder,validator} = item;
-            const {fieldName,labelText,required} = item;
-            // 判断类型
-            switch (item.type) {
-                case "文本框":
-                    validator=`${inputPlaceholder}`;
-                    placeholder = placeholder || inputPlaceholder;
-
-                    element = <Input placeholder={placeholder} allowClear={true} />;
-                    break;
-                case '下拉列表框':
-                    validator=`${selectPlaceholder}`;
-                    placeholder = placeholder || selectPlaceholder;
-                    element = (
-                        <SearchSelect
-                            configId={item.configId}
-                            itemName={item.configDataItemName}
-                            itemValue={item.configDataItemValue}
-                        />
-                    );
-                    break;
-                default :
-
-                    break;
-            }
-            if(element) {
-                return (
-                    <FormItem {...formLayout} label={labelText}>
-                        {getFieldDecorator(`${fieldName }`, {
-                            rules: [
-                                {
-                                    required: required,
-                                    message: validator+labelText,
-                                },
-                            ],
-                        })(element)}
-                    </FormItem>
-
-                );
-            }
-        });
-    }
-
-    render() {
-        const submitFormLayout = {
-            wrapperCol: {
-                xs: { span: 24, offset: 0 },
-                sm: { span: 10, offset: 7 },
-            },
-        };
-        let { loadingAdd,loadingConfig,dispatch } = this.props;
-        if (loadingAdd||loadingConfig) {
-            return (<Spin
-                style={{
-                    width: '100%',
-                    height: 'calc(100vh/2)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center'
-                }}
-                size="large"
-            />);
-        }
-        return (
-            <MonitorContent breadCrumbList={
-                [
-                    { Name: '首页', Url: '/' },
-                    { Name: '系统管理', Url: '' },
-                    { Name: 'AutoForm', Url: '/sysmanage/autoformmanager' },
-                    { Name: '详情', Url: '' }
-                ]
-            }
-            >
-                <Card bordered={false}>
-                    <DescriptionList size="large" title="详情" style={{ marginBottom: 32 }}>
-                        <Description term="取货单号">1000000000</Description>
-                        <Description term="状态">已取货</Description>
-                        <Description term="销售单号">1234123421</Description>
-                        <Description term="子订单">3214321432</Description>
-                    </DescriptionList>
-                    <Button
-                        style={{ marginLeft: 8 }}
-                        onClick={()=>{
-                            dispatch(routerRedux.push(`/sysmanage/autoformmanager`));
-                        }}
-                    >
-              返回
-                    </Button>
-                    <Form onSubmit={this.onSubmitForm} hideRequiredMark={false} style={{ marginTop: 8 }}>
-                        {/* {
-                            this.renderFormItem()
-                        } */}
-
-                        <FormItem {...submitFormLayout} style={{ marginTop: 32 }} />
-                    </Form>
-                </Card>
-            </MonitorContent>
-        );
-    }
+    return (
+      <MonitorContent breadCrumbList={
+        [
+          { Name: '首页', Url: '/' },
+          { Name: '系统管理', Url: '' },
+          { Name: 'AutoForm', Url: '/sysmanage/autoformmanager/' + configId },
+          { Name: '详情', Url: '' }
+        ]
+      }
+      >
+        <Card bordered={false} title="详情" extra={
+          <Button
+            style={{ float: "right", marginRight: 10 }}
+            onClick={() => {
+              history.goBack(-1);
+            }}
+          ><Icon type="left" />返回
+        </Button>
+        }>
+          <Row className="antd-pro-components-description-list-index-descriptionList">
+            {this._renderFormItem()}
+          </Row>
+        </Card>
+      </MonitorContent >
+    );
+  }
 }
-
-
-AutoFormView.propTypes = {
-    // placeholder
-    placeholder: PropTypes.string,
-    // mode
-    mode: PropTypes.string,
-    // configId
-    configId: PropTypes.string.isRequired,
-    // itemName
-    itemName: PropTypes.string.isRequired,
-    // itemValue
-    itemValue: PropTypes.string.isRequired,
-};
 
 export default AutoFormView;

@@ -42,7 +42,7 @@ export default [
         path: '/',
         component: '../layouts/BasicLayout',
         routes: [
-            { path: '/', redirect: './sysmanage/autoformmanager' },
+            { path: '/', redirect: './sysmanage/autoformmanager/TestCommonPoint' },
             /* 主页 */
             {
                 path: '/homepage', component: './HomePage',
@@ -231,9 +231,11 @@ export default [
             /* 系统管理-AutoForm添加页面 */
             { path: '/autoformmanager/autoformadd/:configId', component: './autoformmanager/autoformadd' },
             /* 系统管理-AutoForm编辑页面 */
-            { path: '/autoformmanager/autoformedit/:configId', component: './autoformmanager/autoformedit' },
+            { path: '/autoformmanager/autoformedit/:configId/:keysParams/:uid', component: './autoformmanager/autoformedit' },
             /* 系统管理-AutoForm详情页面 */
-            { path: '/autoformmanager/autoformview/:configId', component: './autoformmanager/autoformview' },
+            { path: '/autoformmanager/autoformview/:configId/:keysParams', component: './autoformmanager/autoformview' },
+            // /* 系统管理-AutoForm详情页面 */
+            // { path: '/autoformmanager/upload', component: './autoformmanager/upload' },
 
             /* 标准库管理-维护 */
             { path: '/sysmanage/standardlibrarydetail/:StandardLibraryID', component: './StandardLibrary/AddStandardLibrary' },
