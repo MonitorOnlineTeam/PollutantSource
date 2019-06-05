@@ -152,7 +152,6 @@ export default Model.extend({
                 entCode: entCode,
                 //operationUserId:'766f911d-5e41-4bbf-b705-add427a16e77'
             };
-            debugger
             const response = yield call(getOperationHistoryRecordPageList, body);
             yield update({
                 operation: {
@@ -174,7 +173,6 @@ export default Model.extend({
         * getExceptionAlarmData({ payload }, { call, put, update, select }) {
             const { exceptionAlarm } = yield select(state => state.workbenchmodel);
             const { entCode } = yield select(state => state.workbenchmodel);
-            debugger
             let body = {
                 beginTime: exceptionAlarm.beginTime,
                 endTime: exceptionAlarm.endTime,

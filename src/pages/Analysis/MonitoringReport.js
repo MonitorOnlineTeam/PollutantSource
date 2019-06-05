@@ -18,6 +18,7 @@ import MonitorContent from '../../components/MonitorContent/index';
 import styles from './MonitoringReport.less';
 import RangePicker_ from '../../components/PointDetail/RangePicker_';
 import { annualmonitoringreportaddress } from '../../config';
+import { onlyOneEnt } from '../../config';
 
 const RadioGroup = Radio.Group;
 const { RangePicker } = DatePicker;
@@ -26,6 +27,7 @@ const Option = Select.Option;
 @connect(({ loading, analysisdata }) => ({
     loading: loading.effects['analysisdata/queryreportlist'],
     queryreportParameters: analysisdata.queryreportParameters,
+    enterpriselist: analysisdata.enterpriselist,
 }))
 class MonitoringReport extends Component {
     constructor(props) {
@@ -40,6 +42,13 @@ class MonitoringReport extends Component {
             payload: {
             }
         });
+        if (!onlyOneEnt) {
+            this.props.dispatch({
+                type: 'analysisdata/GetEntpriseList',
+                payload: {
+                }
+            });
+        }
     }
     /**
      * 更新model中的state
@@ -62,16 +71,53 @@ class MonitoringReport extends Component {
             });
         }
     }
-
+    //多企业时加载下拉菜单
+    WhetherLoadSelect = () => {
+        const { enterpriselist } = this.props;
+        let optionList = [];
+        if (!onlyOneEnt) {
+            if (enterpriselist.length !== 0) {
+                enterpriselist.map((item) => {
+                    optionList.push(<Option value={item.EntCode}>{item.EntName}</Option>)
+                })
+            }
+        }
+        return optionList;
+    }
     //选择企业事件
-    EnterpriseonChange=(value)=>{
-        console.log(value)
-        debugger
+    EnterpriseonChange = (value) => {
+        const { dispatch } = this.props;
+        this.updateState({
+            queryreportParameters: {
+                ...this.props.queryreportParameters,
+                ...{
+                    isfirst: true,
+                    entCode: value,
+                    reportname: null, //如果不置空则会导致
+                }
+            }
+        });
+        dispatch({
+            type: 'analysisdata/queryreportlist',
+            payload: {
+            }
+        });
     }
     onOpenChange = (status) => {
         let { queryreportParameters, dispatch } = this.props;
         //日期窗口关闭时触发事件
         if (!status) {
+
+            //将是否选择标签改为默认，因为时间查询的是所有的报表
+            this.updateState({
+                queryreportParameters: {
+                    ...this.props.queryreportParameters,
+                    ...{
+                        isfirst: true
+                    }
+                }
+            });
+
             if (queryreportParameters.rangeDate[0] > queryreportParameters.rangeDate[1]) {
                 this.updateState({
                     queryreportParameters: {
@@ -132,8 +178,8 @@ class MonitoringReport extends Component {
 
     getshowpdf = () => {
         const { queryreportParameters } = this.props;
-        if (queryreportParameters.isfirst) {
-            if (queryreportParameters.reportlist) {
+        if (queryreportParameters.reportlist) {
+            if (queryreportParameters.isfirst) {
                 switch (queryreportParameters.radiovalue) {
                     case 'year':
                         if (queryreportParameters.reportlist.yearlist)
@@ -153,7 +199,9 @@ class MonitoringReport extends Component {
                 }
             }
         }
-
+        else {
+            queryreportParameters.reportname = null;
+        }
         let address = annualmonitoringreportaddress + queryreportParameters.reportname;
         let height = 'calc(100vh - 259px)';
         if (!queryreportParameters.reportname) {
@@ -204,18 +252,18 @@ class MonitoringReport extends Component {
 
     render() {
         const { loading, queryreportParameters } = this.props;
-        if (this.props.loading) {
-            return (<Spin
-                style={{
-                    width: '100%',
-                    height: 'calc(100vh/2)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center'
-                }}
-                size="large"
-            />);
-        }
+        // if (this.props.loading) {
+        //     return (<Spin
+        //         style={{
+        //             width: '100%',
+        //             height: 'calc(100vh/2)',
+        //             display: 'flex',
+        //             alignItems: 'center',
+        //             justifyContent: 'center'
+        //         }}
+        //         size="large"
+        //     />);
+        // }
         return (
             <MonitorContent
                 {...this.props}
@@ -231,23 +279,23 @@ class MonitoringReport extends Component {
                         title="自行监测年度报告"
                         extra={
                             <div>
-                                <Select
-                                    showSearch
-                                    style={{ width: 250 }}
-                                    placeholder="请选择企业"
-                                    optionFilterProp="children"
-                                    onChange={this.EnterpriseonChange}
-                                    // onFocus={onFocus}
-                                    // onBlur={onBlur}
-                                    // onSearch={onSearch}
-                                    filterOption={(input, option) =>
-                                        option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                                    }
-                                >
-                                    <Option value="jack">Jack</Option>
-                                    <Option value="lucy">Lucy</Option>
-                                    <Option value="tom">Tom</Option>
-                                </Select>
+                                {
+                                    onlyOneEnt ? null :
+                                        <Select
+                                            allowClear
+                                            showSearch
+                                            style={{ width: 250 }}
+                                            placeholder="请选择企业"
+                                            optionFilterProp="children"
+                                            onChange={this.EnterpriseonChange}
+                                            filterOption={(input, option) =>
+                                                option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                                            }
+                                        >
+                                            {this.WhetherLoadSelect()}
+                                        </Select>
+                                }
+
                                 <RangePicker
                                     style={{ width: 250, marginLeft: 40, textAlign: 'center' }}
                                     format={queryreportParameters.format}
@@ -263,7 +311,9 @@ class MonitoringReport extends Component {
                         <Row>
                             <Col style={{ float: "left", overflowY: 'scroll', height: 'calc(100vh - 245px)' }}>
                                 <div style={{ width: '400px' }}>
-                                    {this.getreportlist()}
+                                    <Spin style={{ height: 'calc(100vh - 245px)', width: '400px' }} spinning={this.props.loading}>
+                                        {this.getreportlist()}
+                                    </Spin>
                                 </div>
                             </Col>
                             <Col style={{ width: document.body.clientWidth - 550, float: 'left', height: 'calc(100vh - 245px)' }}>

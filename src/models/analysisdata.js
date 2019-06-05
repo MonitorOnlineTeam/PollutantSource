@@ -1,4 +1,4 @@
-import { queryalloverdatalist, queryalloverdatalists, queryreportlist, GetDocumentationList, queryalloverdataChart, GetAllEntpriseOverDataLists, EntpriseOverdataChart } from '../services/api';
+import { queryalloverdatalist, queryalloverdatalists, queryreportlist, GetDocumentationList, queryalloverdataChart, GetAllEntpriseOverDataLists, EntpriseOverdataChart,GetEntpriseList } from '../services/api';
 import { Model } from '../dvapack';
 import moment from 'moment';
 import { summaryPolluntantCode } from '../config';
@@ -7,6 +7,7 @@ export default Model.extend({
     state: {
         overdatalist: [],
         enroverdatalist: [],
+        enterpriselist: [],
         AlarmTime: [],
         Zs01: [],
         Zs02: [],
@@ -25,6 +26,7 @@ export default Model.extend({
             reportname: null,
             isfirst: true,
             radiovalue: 'year',
+            entCode: null,
         },
         //使用文档参数
         documentationParameters: {
@@ -128,6 +130,7 @@ export default Model.extend({
             let body = {
                 beginTime: queryreportParameters.rangeDate[0],
                 endTime: queryreportParameters.rangeDate[1],
+                entCode: queryreportParameters.entCode
             }
             const reportlist = yield call(queryreportlist, body);
             yield update({
@@ -137,6 +140,17 @@ export default Model.extend({
                         reportlist: reportlist
                     }
                 }
+            });
+        },
+        
+        * GetEntpriseList({
+            payload,
+        }, { call, update, put, take, select }) {
+            let body = {
+            }
+            const reportlist = yield call(GetEntpriseList, body);
+            yield update({
+                enterpriselist:reportlist
             });
         },
         * GetDocumentationList({

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import styles from './DataList.less';
 import { MapInteractionCSS } from 'react-map-interaction';
 import { connect } from 'dva';
-import { pollutantInfo, zspollutantInfo } from '../../config';
+import { pollutantInfo, mainpollutantInfo } from '../../config';
 import {
     Spin,
     Card
@@ -41,11 +41,12 @@ export default class GyProcessPic extends Component {
     }
 
     getparamdata = (pollutantCode) => {
+        debugger;
         const { paramsInfo, paramNameInfo } = this.props;
         let res = [];
         if (paramsInfo) {
             paramsInfo.map((item, key) => {
-                if (item.name.indexOf(pollutantCode) > -1) {
+                if (item.name.split('_')[0]==(pollutantCode)) {
                     const nameInfo = paramNameInfo.find(value => {
                         return item.name.indexOf(value.code) > -1;
                     })
@@ -67,7 +68,7 @@ export default class GyProcessPic extends Component {
 
     getrealtimedata = (pollutantCode) => {
         const { dataInfo, paramsInfo } = this.props;
-        const pollutantInfo = zspollutantInfo.find((value, index, arr) => {
+        const pollutantInfo = mainpollutantInfo.find((value, index, arr) => {
             return value.pollutantCode === pollutantCode;
         });
         if (pollutantInfo) {
@@ -173,15 +174,15 @@ export default class GyProcessPic extends Component {
                             <div className={styles.cardcss} style={{ height: '320px', position: 'relative', top: '350px', fontWeight: '700', fontSize: '10px' }}>
                                 <div style={{ width: '450px', position: 'absolute', top: '10px', left: '25px', fontWeight: '700', fontSize: '10px' }}>
 
-                                    {this.getrealtimedata('zs01')}
+                                    {this.getrealtimedata('01')}
                                 </div>
                                 <div style={{ width: '450px', height: '320px', position: 'absolute', left: '525px', top: '10px', fontWeight: '0', fontSize: '10px' }}>
 
-                                    {this.getrealtimedata('zs02')}
+                                    {this.getrealtimedata('02')}
                                 </div>
                                 <div style={{ width: '450px', height: '220px', position: 'absolute', left: '1025px', top: '10px', fontWeight: '700', fontSize: '10px' }}>
 
-                                    {this.getrealtimedata('zs03')}
+                                    {this.getrealtimedata('03')}
                                 </div>
                             </div>
                         </div>

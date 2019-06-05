@@ -339,8 +339,17 @@ export async function queryreportlist(params) {
     const body = {
         beginTime: params.beginTime,
         endTime: params.endTime,
+        entCode: params.entCode,
     };
     const result = await post('/api/rest/PollutantSourceApi/DataList/GetYearDataList', body, null);
+    return result === null ? { data: null } : result.data;
+}
+
+//获取所有企业列表
+export async function GetEntpriseList(params) {
+    const body = {
+    };
+    const result = await post('/api/rest/PollutantSourceApi/DataList/GetEntpriseList', body, null);
     return result === null ? { data: null } : result.data;
 }
 //获取使用文档列表
