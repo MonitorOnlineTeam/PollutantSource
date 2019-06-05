@@ -3,7 +3,7 @@
  * @Author: JianWei
  * @Date: 2019-5-23 10:34:29
  * @Last Modified by: Jiaqi
- * @Last Modified time: 2019-06-04 16:11:18
+ * @Last Modified time: 2019-06-05 15:27:34
  */
 import React, { Component } from 'react';
 import PropTypes, { object } from 'prop-types';
@@ -61,7 +61,8 @@ class AutoFormAdd extends Component {
       },
       inputPlaceholder: "请输入",
       selectPlaceholder: "请选择",
-      uid: cuid()
+      uid: cuid(),
+      configId: props.configId || props.match.params.configId
     };
     this.renderFormItem = this.renderFormItem.bind(this);
     this.onSubmitForm = this.onSubmitForm.bind(this);
@@ -69,7 +70,8 @@ class AutoFormAdd extends Component {
   }
 
   componentDidMount() {
-    let { addFormItems, dispatch, match: { params: { configId } } } = this.props;
+    let { addFormItems, dispatch } = this.props;
+    let { configId } = this._SELF_;
     if (!addFormItems || addFormItems.length === 0) {
       dispatch({
         type: 'autoForm/getPageConfig',
@@ -83,15 +85,15 @@ class AutoFormAdd extends Component {
 
   onSubmitForm(e) {
     e.preventDefault();
-    const { form, dispatch, match: { params: { configId } } } = this.props;
-    const { uid } = this._SELF_;
+    const { form, dispatch } = this.props;
+    const { uid, configId } = this._SELF_;
     form.validateFields((err, values) => {
       if (!err) {
         let FormData = {};
         for (let key in values) {
-          if(values[key] && values[key]["fileList"]) {
+          if (values[key] && values[key]["fileList"]) {
             FormData[key] = uid;
-          }else{
+          } else {
             FormData[key] = values[key] && values[key].toString()
           }
         }
@@ -117,8 +119,8 @@ class AutoFormAdd extends Component {
 
   // 渲染FormItem
   renderFormItem() {
-    const { addFormItems, form: { getFieldDecorator }, match: { params: { configId } } } = this.props;
-    const { formLayout, inputPlaceholder, selectPlaceholder, uid } = this._SELF_;
+    const { addFormItems, form: { getFieldDecorator } } = this.props;
+    const { formLayout, inputPlaceholder, selectPlaceholder, uid, configId } = this._SELF_;
     const formItems = addFormItems[configId] || [];
     // return addFormItems[configId].map((item) =>{
     return formItems.map((item) => {
@@ -263,7 +265,6 @@ class AutoFormAdd extends Component {
   }
 
   openMapModal(obj) {
-    debugger;
     let { form } = this.props;
     this.setState({
       MapVisible: true,
@@ -298,7 +299,8 @@ class AutoFormAdd extends Component {
         sm: { span: 10, offset: 7 },
       },
     };
-    let { loadingAdd, loadingConfig, dispatch, match: { params: { configId } } } = this.props;
+    let { loadingAdd, loadingConfig, dispatch } = this.props;
+    const { uid, configId } = this._SELF_;
     if (loadingAdd || loadingConfig) {
       return (<Spin
         style={{

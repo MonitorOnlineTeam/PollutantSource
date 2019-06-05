@@ -38,17 +38,20 @@ class SdlTable extends PureComponent {
     this.loadDataSource = this.loadDataSource.bind(this);
     this.onTableChange = this.onTableChange.bind(this);
     this._renderHandleButtons = this._renderHandleButtons.bind(this);
+    this._handleTableChange = this._handleTableChange.bind(this);
   }
 
   componentDidMount() {
     this.loadDataSource();
   }
 
-  loadDataSource() {
+  loadDataSource(params) {
     this.props.dispatch({
       type: 'autoForm/getAutoFormData',
       payload: {
-        configId: this.props.configId
+        configId: this.props.configId,
+        searchParams: this.props.searchParams,
+        otherParams: params
       }
     });
   }
@@ -86,8 +89,21 @@ class SdlTable extends PureComponent {
 
   };
 
+  _handleTableChange(pagination, filters, sorter) {
+    console.log('sorter=', sorter)
+    if (sorter.order) {
+      let sorterObj = {
+        IsAsc: sorter.order === "ascend",
+        SortFileds: sorter.field
+      };
+      // sorterObj.IsAsc = sorter.order === "ascend"
+      // sorterObj.SortFileds = sorter.field;
+      this.loadDataSource(sorterObj);
+    }
+  }
+
   _renderHandleButtons() {
-    const { opreationButtons, columns, keys, dispatch } = this.props;
+    const { opreationButtons, keys, dispatch } = this.props;
     this._SELF_.btnEl = [];
     const { btnEl, configId } = this._SELF_;
     return opreationButtons[configId] ? opreationButtons[configId].map(btn => {
@@ -159,7 +175,7 @@ class SdlTable extends PureComponent {
     const { pageSize = 10, current = 1, total = 0 } = searchForm[configId] || {}
 
     // 计算长度
-    let _columns = columns.map(col => {
+    let _columns = (columns || []).map(col => {
       if (col.title === "文件") {
         return {
           ...col,
@@ -308,6 +324,7 @@ class SdlTable extends PureComponent {
               }
             }
           }
+          onChange={this._handleTableChange}
           rowSelection={rowSelection}
           pagination={{
             showSizeChanger: true,

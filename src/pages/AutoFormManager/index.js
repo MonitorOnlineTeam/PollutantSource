@@ -41,6 +41,7 @@ export default class AutoFormIndex extends Component {
     const {match}=this.props;
     this.reloadPage(match.params.configId);
   }
+  
   componentWillReceiveProps(nextProps) {
     if (nextProps.location.pathname != this.props.location.pathname) {
       if(nextProps.match.params.configId!==this.props.routerConfig)
@@ -97,11 +98,25 @@ export default class AutoFormIndex extends Component {
               // }}
               onSubmitForm={(form) => this.loadReportList(form)}
               configId={configId}
+              // loadDataSourceParams={[
+              //   {
+              //     Key: "test",
+              //     Value: false,
+              //     Where: "$like"
+              //   }
+              // ]}
             ></SearchWrapper>
             <SdlTable
               style={{ marginTop: 10 }}
               // columns={columns}
               configId={configId}
+              // loadDataSourceParams={[
+              //   {
+              //     Key: "test",
+              //     Value: false,
+              //     Where: "$like"
+              //   }
+              // ]}
             // dataSource={dataSource}
             />
           </Card>

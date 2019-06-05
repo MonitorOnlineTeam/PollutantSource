@@ -3,7 +3,7 @@
  * @Author: Jiaqi 
  * @Date: 2019-05-30 13:59:37 
  * @Last Modified by: Jiaqi
- * @Last Modified time: 2019-06-03 14:07:22
+ * @Last Modified time: 2019-06-05 17:25:29
  */
 
 import React, { Component } from 'react';
@@ -22,6 +22,8 @@ import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
 import MonitorContent from '../../components/MonitorContent/index';
 import ReturnName from './ReturnName'
+import styles from '../../components/DescriptionList/index.less';
+
 
 const FormItem = Form.Item;
 
@@ -101,8 +103,10 @@ class AutoFormView extends Component {
           >
             {showText}
           </FormItem> */}
-          <div className="antd-pro-components-description-list-index-term">{item.labelText}</div>
-          <div className="antd-pro-components-description-list-index-detail">{showText}</div>
+          <div className={styles.term}>{item.labelText}</div>
+          <div className={styles.detail}>{showText}</div>
+          {/* <div className="antd-pro-components-description-list-index-term">{item.labelText}</div>
+          <div className="antd-pro-components-description-list-index-detail">{showText}</div> */}
           {/* <lable>：</lable>
           <span>{showText}</span> */}
         </Col>
