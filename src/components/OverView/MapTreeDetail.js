@@ -169,7 +169,6 @@ class MapTreeDetail extends Component {
         const {detailloading,detailpcol,detaildata,selectpoint,detailtime}=this.props;
         if(detailloading)
         {
-
             return(
             <div style={{height:'calc(100vh - 335px)'}} className={styles.mainDiv}>
             <Spin

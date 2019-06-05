@@ -30,6 +30,10 @@ class AlarmRecord extends Component {
     constructor(props) {
         super(props);
         let {firsttime,lasttime,DGIMN}=this.props;
+        if(!DGIMN)
+        {
+            DGIMN=this.props.selectpoint.DGIMN;
+        }
         firsttime=firsttime || moment(new Date()).add(-1, 'month');
         lasttime=lasttime || moment(new Date());
         this.state = {
@@ -37,7 +41,6 @@ class AlarmRecord extends Component {
             current: 1,
             pageSize: 15,
             //参数改变让页面刷新
-            DGIMN:DGIMN,
             firsttime:firsttime,
             lasttime:lasttime
         };
@@ -45,6 +48,10 @@ class AlarmRecord extends Component {
 
     componentDidMount = () => {
         let {dispatch, DGIMN, firsttime, lasttime,overdataparams} = this.props;
+        if(!DGIMN)
+        {
+            DGIMN=this.props.selectpoint.DGIMN;
+        }
         overdataparams={
              ...overdataparams,
              DGIMN:DGIMN,
@@ -70,6 +77,10 @@ class AlarmRecord extends Component {
     //时间更改
     _handleDateChange=(date, dateString) => {
         let {overdataparams}=this.props;
+        if(!DGIMN)
+        {
+            DGIMN=this.props.selectpoint.DGIMN;
+        }
         overdataparams={
             ...overdataparams,
             DGIMN: this.props.DGIMN,
