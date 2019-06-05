@@ -2,7 +2,7 @@
  * @Author: Jiaqi
  * @Date: 2019-05-16 15:13:59
  * @Last Modified by: Jiaqi
- * @Last Modified time: 2019-06-03 11:18:16
+ * @Last Modified time: 2019-06-04 17:07:23
  */
 import { message } from 'antd';
 import {
@@ -38,13 +38,13 @@ export default Model.extend({
     detailData: {}, // 详情页面数据
     detailConfigInfo: {}, // 详情页面配置信息,
     regionList: [], // 联动数据
+    fileList: [], // 文件列表
   },
   effects: {
     // 获取数据
     * getAutoFormData({ payload }, { call, put, update, select }) {
       let state = yield select(state => state.autoForm);
       let group = [];
-      console.log('getAutoFormData=',payload)
       const configId = payload.configId;
       // const searchForm = state.searchForm[payload.configId]
       const searchForm = state.searchForm[configId] ? state.searchForm[configId] : [];
@@ -71,6 +71,7 @@ export default Model.extend({
         }
       }
       const postData = {
+        configId: payload.configId,
         pageIndex: searchForm.current || 1,
         pageSize: searchForm.pageSize || 10
       };
@@ -112,12 +113,12 @@ export default Model.extend({
     },
     // 根据configId 获取数据
     * getConfigIdList({ payload }, { call, update, select }) {
-      let state = yield select(state => state.autoForm);
       const result = yield call(services.getListPager, { ...payload });
       if (result.IsSuccess) {
+        let configIdList = yield select(state => state.autoForm.configIdList);
         yield update({
           configIdList: {
-            ...state.configIdList,
+            ...configIdList,
             [payload.configId]: result.Datas.DataSource
           }
         });
@@ -138,7 +139,6 @@ export default Model.extend({
           fixed: result.Datas.FixedFields.filter(m => m.FullFieldName === item.FullFieldName).length > 0 ? 'left' : ''
         })
         );
-
 
         let whereList = {};
         let searchConditions = result.Datas.CfgField.filter(itm => itm.DF_ISQUERY === 1).map((item, index) => {
@@ -173,7 +173,6 @@ export default Model.extend({
           validator: item.DF_ISNOTNULL === 1 && (item.DF_TOOLTIP || "")//TODO：正则？
         }));
 
-        console.log('addFormItems=',addFormItems)
 
         // 主键
         let keys = result.Datas.Keys.map(item => item.FullFieldName)
@@ -216,7 +215,10 @@ export default Model.extend({
       if (result.IsSuccess) {
         message.success('删除成功！');
         yield put({
-          type: 'getAutoFormData'
+          type: 'getAutoFormData',
+          payload: {
+            configId: payload.configId
+          }
         });
       }
     },
@@ -227,7 +229,10 @@ export default Model.extend({
       if (result.IsSuccess) {
         message.success('添加成功！');
         yield put({
-          type: 'getAutoFormData'
+          type: 'getAutoFormData',
+          payload: {
+            configId: payload.configId
+          }
         });
       } else {
         message.error(result.Message);
@@ -290,11 +295,30 @@ export default Model.extend({
     },
 
     // 获取联动
-    * getRegions({ payload }, {call, update}) {
+    * getRegions({ payload }, { call, update }) {
       const result = yield call(services.getRegions, { ...payload });
       if (result.IsSuccess) {
         yield update({
           regionList: result.Datas
+        })
+      }
+    },
+
+    // 获取联动
+    * getAttachmentList({ payload }, { call, update }) {
+      const result = yield call(services.getAttachmentList, { ...payload });
+      if (result.IsSuccess) {
+        let fileList = [];
+        fileList = result.Datas.map((item, index) => {
+          return {
+            uid: index,
+            name: item.FileName,
+            status: "done",
+            url: item.Url
+          }
+        })
+        yield update({
+          fileList
         })
       }
     }

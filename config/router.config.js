@@ -231,7 +231,7 @@ export default [
             /* 系统管理-AutoForm添加页面 */
             { path: '/autoformmanager/autoformadd/:configId', component: './autoformmanager/autoformadd' },
             /* 系统管理-AutoForm编辑页面 */
-            { path: '/autoformmanager/autoformedit/:configId/:keysParams', component: './autoformmanager/autoformedit' },
+            { path: '/autoformmanager/autoformedit/:configId/:keysParams/:uid', component: './autoformmanager/autoformedit' },
             /* 系统管理-AutoForm详情页面 */
             { path: '/autoformmanager/autoformview/:configId/:keysParams', component: './autoformmanager/autoformview' },
             // /* 系统管理-AutoForm详情页面 */

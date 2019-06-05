@@ -3,7 +3,7 @@
  * @Author: Jiaqi 
  * @Date: 2019-05-30 13:59:37 
  * @Last Modified by: Jiaqi
- * @Last Modified time: 2019-06-03 14:04:08
+ * @Last Modified time: 2019-06-03 14:07:22
  */
 
 import React, { Component } from 'react';
@@ -111,7 +111,7 @@ class AutoFormView extends Component {
   }
 
   render() {
-    let { loadingData, loadingConfig, dispatch, history, configId } = this.props;
+    let { loadingData, loadingConfig, dispatch, history, match: { params: { configId } } } = this.props;
     if (loadingData || loadingConfig) {
       return (<Spin
         style={{
