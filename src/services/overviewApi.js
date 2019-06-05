@@ -6,8 +6,8 @@ import { post, get } from '../dvapack/request';
  * @params {}
  */
 export async function getPollutantTypeList(params) {
-    const result = await post('/api/rest/PollutantSourceApi/DataList/GetPollutantTypeList', params, null);
-    return result === null ? { data: null } : result.data;
+    const result = await post('/api/rest/PollutantSourceApi/BaseDataApi/GetPollutantTypeList', params, null);
+    return result === null ? { data: null } : result.Datas;
 }
 
 /**
@@ -15,8 +15,8 @@ export async function getPollutantTypeList(params) {
  * @params {"pollutantTypes":2}
  */
 export async function querypollutanttypecode(params) {
-    const result = await post('/api/rest/PollutantSourceApi/DataList/GetPollutantTypeCode', params, null);
-    return result === null ? { data: null } : result.data;
+    const result = await post('/api/rest/PollutantSourceApi/BaseDataApi/GetPollutantTypeCode', params, null);
+    return result === null ? { data: null } : result.Datas;
 }
 /**
  * 【智能监控】获取数据一览数据
@@ -33,8 +33,8 @@ export async function querypollutanttypecode(params) {
 export async function querydatalist(params) {
     if (params.dgimn)
           params.DGIMNs = params.dgimn;
-    const result = await post('/api/rest/PollutantSourceApi/DataList/AllTypeSummaryList', params, null);
-    return result === null ? { data: null } : result.data;
+    const result = await post('/api/rest/PollutantSourceApi/BaseDataApi/AllTypeSummaryList', params, null);
+    return result === null ? { data: null } : result.Datas;
 }
 
 /**
@@ -46,8 +46,8 @@ export async function querydatalist(params) {
     }
  */
 export async function querylastestdatalist(params) {
-    const result = await post('/api/rest/PollutantSourceApi/DataList/AllTypeSummaryList', params, null);
-    return result === null ? { data: null } : result;
+    const result = await post('/api/rest/PollutantSourceApi/BaseDataApi/AllTypeSummaryList', params, null);
+    return result === null ? { data: null } : result.Datas;
 }
 /**
  * 【智能监控】获取历史数据
@@ -62,7 +62,7 @@ export async function querylastestdatalist(params) {
     }
  */
 export async function queryhistorydatalist(params) {
-    const result = await post('/api/rest/PollutantSourceApi/DataList/GetAllTypeDataList', params, null);
+    const result = await post('/api/rest/PollutantSourceApi/MonDataApi/GetAllTypeDataList', params, null);
     return result === null ? { data: null } : result;
 }
 
@@ -73,6 +73,6 @@ export async function queryhistorydatalist(params) {
     }
  */
 export async function querypollutantlist(params) {
-    const result = await post('/api/rest/PollutantSourceApi/PPointAndData/GetPollutantListByDgimn', params, null);
-    return result === null ? { data: null } : result.data;
+    const result = await post('/api/rest/PollutantSourceApi/BaseDataApi/GetPollutantListByDgimn', params, null);
+    return result === null ? { data: null } : result.Datas;
 }

@@ -92,7 +92,7 @@ export default Model.extend({
         },
         * querydatalist({
             payload,
-        }, { call, update, put, select }) {
+        }, { call, update, select }) {
             const { dataOverview, selectpollutantTypeCode ,RunState} = yield select(a => a.overview);
 
             let body = {
@@ -111,6 +111,7 @@ export default Model.extend({
             {
                 body={};
             }
+            debugger;
             const data = yield call(querydatalist, body);
             if (data) {
                 data.map((item) => {
@@ -130,7 +131,7 @@ export default Model.extend({
             }
             yield update({ data });
             yield update({ dataTemp: data });
-            yield update({ dataOne: data == null ? '0' : data[0].DGIMN });
+            yield update({ dataOne: (data == null || data.length===0) ? '0' : data[0].DGIMN });
             if (payload.callback === undefined) {
             } else {
                 payload.callback(data);
@@ -139,7 +140,7 @@ export default Model.extend({
         //手工数据上传数据列表（单独独立）
         * manualUploadQuerydatalist({
             payload,
-        }, { call, update, put, take, select }) {
+        }, { call, update, select }) {
             const { upLoadParameters } = yield select(a => a.overview);
             const body = {
                 pollutantTypes: upLoadParameters.pollutantTypes,
@@ -206,7 +207,7 @@ export default Model.extend({
         }, { call, update, put, take, select }) {
             const { selectpoint, mapdetailParams } = yield select(a => a.overview);
             let pollutantInfoList= yield call(querypollutanttypecode,{pollutantTypes:selectpoint.pollutantTypeCode});
-
+            pollutantInfoList=pollutantInfoList.filter(value=>value.isMainPollutant==true);
             //没绑定污染物则不渲染
             if(!pollutantInfoList || !pollutantInfoList[0])
             {
@@ -224,7 +225,7 @@ export default Model.extend({
                 });
                  return;
             }
-            pollutantInfoList=pollutantInfoList.filter(value=>value.isMainPollutant==true);
+         
             yield update({
                 mapdetailParams:{
                ... mapdetailParams,
@@ -350,8 +351,8 @@ export default Model.extend({
             let seriesdata = [];
             let zsseriesdata = [];
             let xData = [];
-            if (resultlist && resultlist.data) {
-                resultlist.data.map(item => {
+            if (resultlist && resultlist.Datas) {
+                resultlist.Datas.map(item => {
                     const time = moment(item.MonitorTime).hour();
                     xData = xData.concat(time);
                     seriesdata = seriesdata.concat(item[mapdetailParams.pollutantCode]);
@@ -514,5 +515,23 @@ export default Model.extend({
             });
             yield take('getPollutantTypeList/@@end');
         },
+        // *queryListOfData({payload},{
+        //     put,take
+        // }){
+        //     //请求企业信息
+        //     yield put({
+        //         type:'queryentdetail',
+        //         payload:payload,
+        //     })
+        //     yield take('queryentdetail/@@end');
+        //     //请求
+        //     yield put({
+        //         type: 'getPollutantTypeList',
+        //         payload:payload
+        //     });
+        //     yield take('getPollutantTypeList/@@end');
+        // }
+        
+
     }
 });

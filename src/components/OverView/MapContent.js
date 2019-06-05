@@ -101,7 +101,6 @@ class MapContent extends Component {
             type:'overview/updateState',
             payload:{
                     selectpoint:row,
-                    // selectpollutantTypeCode:`${row.pollutantTypeCode}`,
                     mapdetailParams:{
                         ...mapdetailParams,
                         pollutantCode:defaultpollutantCode,
