@@ -24,6 +24,7 @@ export default Model.extend({
     //   pageSize: 10,
     //   total: 0
     // },
+    routerConfig:"",
     tableInfo: {},
     searchForm: {},
     searchConfigItems: { // 搜索条件配置项
@@ -132,7 +133,7 @@ export default Model.extend({
         const configId = result.Datas.ConfigId;
         let columns = result.Datas.ColumnFields.filter(itm => itm.FOREIGH_DT_CONFIGID === "").map((item, index) => ({
           title: item.DF_NAME_CN,
-          dataIndex: item.FullFieldName,
+          dataIndex: item.DF_FOREIGN_TYPE === 2 ? item.FullFieldName + '_Name' : item.FullFieldName,
           key: item.FullFieldNameVerticalBar,
           align: 'center',
           width: item.DF_WIDTH,
