@@ -5,6 +5,7 @@ import {
     Spin,
     Progress,
     Radio,
+    Button,
 } from 'antd';
 import ReactEcharts from 'echarts-for-react';
 import { routerRedux } from 'dva/router';
@@ -14,9 +15,11 @@ import {
 import { Map, Polygon,Markers,InfoWindow } from 'react-amap';
 import moment from 'moment';
 import {getPointStatusImg} from '@/utils/getStatusImg';
+import {onlyOneEnt} from '../../config';
 import config from '../../config';
 import styles from './index.less';
 import Adapt from './Adapt.less';
+import Link from 'umi/link';
 
 /*
 页面：首页
@@ -33,6 +36,7 @@ const pageUrl = {
     getAlarmAnalysis: 'homepage/getAlarmAnalysis',
     getAllMonthEmissionsByPollutant: 'homepage/getAllMonthEmissionsByPollutant',
     getAllPollutantTypelist:'overview/getPollutantTypeList',
+    
 };
 const { RunningRate,TransmissionEffectiveRate,amapKey } = config;
 const {enterpriceid}=config;
@@ -64,7 +68,8 @@ let _thismap;
     baseinfo: baseinfo.entbaseinfo,
     datalist: overview.data,
     pollutantTypelist: overview.pollutantTypelist,
-    entCode:homepage.entCode
+    entCode:homepage.entCode,
+    wheretopage:homepage.wheretopage
 }))
 class index extends Component {
     constructor(props) {
@@ -644,6 +649,21 @@ class index extends Component {
         return res;
     }
      
+    getBackButton=()=>{
+        const {wheretopage}=this.props;
+        if(!onlyOneEnt)
+        {
+            if(wheretopage=="datalist")
+            {
+                return (<Button type="primary"><Link to="/overview/datalistview">返回</Link></Button>)
+            }
+            else if(wheretopage=="mapview")
+            {
+                return (<Button type="primary"><Link to='/overview/mapview'>返回</Link></Button>)
+            }
+        }
+        
+    }
 
      /**地图 */
      getpolygon = (polygonChange) => {
@@ -994,6 +1014,19 @@ treeCilck = (row) => {
                             {this.renderpollutantTypelist()}
                          </Radio.Group>
                      </div>
+
+                  
+                     <div
+                         style={{
+                             position: 'absolute',
+                             top: '3%',
+                             right: 500,
+                             zIndex:100
+                         }}
+                     >
+                           {this.getBackButton()}
+                     </div>
+
                      <div style={
                          {
                              width: '426px',

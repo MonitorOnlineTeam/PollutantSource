@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {Radio} from 'antd';
 import {routerRedux} from 'dva/router';
 import {connect} from 'dva';
+import {onlyOneEnt} from '../../config';
 
 @connect()
 class AListRadio extends Component {
@@ -10,7 +11,14 @@ class AListRadio extends Component {
         const _this = this;
         this.onchange = (value) => {
             if (value.target.value === 'a') {
-                _this.props.dispatch(routerRedux.push('/overview/mapview'));
+                if(onlyOneEnt)
+                {
+                    _this.props.dispatch(routerRedux.push('/overview/mapview'));
+                }
+                else
+                {
+                    _this.props.dispatch(routerRedux.push('/overview/mapentview'));
+                }
             } else if (value.target.value === 'b') {
                 _this.props.dispatch(routerRedux.push('/overview/datalistview'));
             } else {

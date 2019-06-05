@@ -42,7 +42,7 @@ export default [
         path: '/',
         component: '../layouts/BasicLayout',
         routes: [
-            //    { path: '/', redirect: '/homepage' },
+               { path: '/', redirect: '/overview/datalistview' },
             /* 主页 */
             {
                 path: '/homepage', component: './HomePage',
@@ -50,6 +50,9 @@ export default [
             /* 工作台 */
             {
                 path: '/workbench', component: './SpecialWorkbench',
+            },
+            {
+                path: '/workbench/ent', component: './SpecialWorkbench/EntWorkBench',
             },
             /* 数据一览 */
             { path: '/overview/datalistview', component: './OverView/DataList' },

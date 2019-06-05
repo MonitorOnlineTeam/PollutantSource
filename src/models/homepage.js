@@ -48,6 +48,7 @@ export default Model.extend({
             dyhwdata: [],
             dyhwAnalData: [],
         },
+        wheretopage:null
     },
     subscriptions: {
         setup({

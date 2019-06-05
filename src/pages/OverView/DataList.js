@@ -147,14 +147,7 @@ class dataList extends PureComponent {
         });
     }
     /**获取详情按钮 */
-    gerpointButton = (record) => (<div>
-        <li style={{marginBottom:5}}><Button onClick={() => {
-            this.toHomePage(record)
-        }}
-        ><Icon type="fund" style={{ color: '#3C9FDA', marginRight: 5 }} />
-            企业看板
-            </Button>
-        </li>
+    getPointButton = (record) => (<div>
         <li style={{ listStyle: 'none', marginBottom: 5 }}>
             <Button onClick={() => {
                 let viewtype = 'datalistview';
@@ -162,6 +155,19 @@ class dataList extends PureComponent {
 
             }}
             ><Icon type="book" style={{ color: '#3C9FDA', marginRight: 5 }} /> 进入站房
+            </Button>
+        </li>
+        <PdButton DGIMN={record.DGIMN} id={record.operationUserID} pname={record.pointName} reloadData={() => this.Refresh()}
+            exist={record.existTask} pollutantTypeCode={record.pollutantTypeCode} name={record.operationUserName} tel={record.operationtel} viewType="datalist" />
+    </div>)
+
+    /**获取企业详情列表 */
+    getEntButton = (record) => (<div>
+        <li style={{marginBottom:5}}><Button onClick={() => {
+            this.toHomePage(record)
+        }}
+        ><Icon type="fund" style={{ color: '#3C9FDA', marginRight: 5 }} />
+            企业看板
             </Button>
         </li>
         <li style={{marginBottom:5}}><Button onClick={() => {
@@ -172,9 +178,9 @@ class dataList extends PureComponent {
             工作台
             </Button>
         </li>
-        <PdButton DGIMN={record.DGIMN} id={record.operationUserID} pname={record.pointName} reloadData={() => this.Refresh()}
-            exist={record.existTask} pollutantTypeCode={record.pollutantTypeCode} name={record.operationUserName} tel={record.operationtel} viewType="datalist" />
     </div>)
+
+
 
     entOnSearch = (value) => {
         let { dataOverview } = this.props;
@@ -188,6 +194,7 @@ class dataList extends PureComponent {
             type: "homepage/updateState",
             payload: {
                 entCode: selectent.entCode,
+                wheretopage:'datalist',
             }
         })
         this.props.dispatch(routerRedux.push(`/homepage`));
@@ -199,9 +206,11 @@ class dataList extends PureComponent {
             type: "workbenchmodel/updateState",
             payload: {
                 entCode: record.entCode,
+                entName:record.entName,
+                wheretopage:'datalist',
             }
         })
-        this.props.dispatch(routerRedux.push(`/workbench`));
+        this.props.dispatch(routerRedux.push(`/workbench/ent`));
     }
 
     renderEntSearch = () => {
@@ -241,7 +250,13 @@ class dataList extends PureComponent {
                 width: 300,
                 fixed: fixed,
                 render: (value, record, index) => {
-                    return <span >{value}</span>
+                    const content=this.getEntButton(record);
+                    return (
+                    // <Popover trigger="click" content={content}>
+                    <span onClick={()=>this.toworkbenchmodel(record)} style={{ cursor: 'pointer' }}>{value}
+                    </span>
+                 //  </Popover>
+                );
                 }
             })
         }
@@ -252,7 +267,7 @@ class dataList extends PureComponent {
             width: 300,
             fixed: fixed,
             render: (value, record, index) => {
-                const content = this.gerpointButton(record);
+                const content = this.getPointButton(record);
                 let lable = [];
                 if (record.stop) {
                     lable.push(<span key={4} className={styles.stop}>停产中</span>);

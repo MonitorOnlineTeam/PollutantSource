@@ -36,6 +36,7 @@ import {
     centerlongitude,
     centerlatitude
 } from '../../config';
+// import { NONAME } from 'dns';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -50,6 +51,7 @@ const Search = Input.Search;
     pisloading: loading.effects['pointinfo/getpollutanttypelist'],
     gsloading: loading.effects['pointinfo/getgasoutputtypelist'],
     osloading: loading.effects['pointinfo/getoperationsuserList'],
+    WaterFunctionAreaLoading: loading.effects['pointinfo/getWaterFunctionAreaList'],
     reason: pointinfo.reason,
     requstresult: pointinfo.requstresult,
     gasoutputtypelist_requstresult: pointinfo.gasoutputtypelist_requstresult,
@@ -60,7 +62,9 @@ const Search = Input.Search;
     gasoutputtypelist: pointinfo.gasoutputtypelist,
     pollutanttypelist: pointinfo.pollutanttypelist,
     entName:basicinfo.entName,
-    entCode:basicinfo.entCode
+    entCode:basicinfo.entCode,
+    WaterFunctionAreaList_requstresult: pointinfo.WaterFunctionAreaList_requstresult,
+    WaterFunctionAreaList: pointinfo.WaterFunctionAreaList
 }))
 @Form.create()
 class AddPoint extends Component {
@@ -80,7 +84,9 @@ class AddPoint extends Component {
             DGIMNdisabled: false,
             PollutantTypes: [],
             GasOutputType: [],
+            WaterFunctionArea:[],
             PollutantType:null,
+            WaterAreaFlag:this.props.match.params.PollutantType ? this.props.match.params.PollutantType==='1'?"block":"none":"none",//功能区标示
 
         };
     }
@@ -106,6 +112,7 @@ class AddPoint extends Component {
         this.getgasoutputtype();
         this.setPollutantType(type);
         this.getspecialworkeruserList();
+        this.getWaterFunctionAreaList();
     }
 
      onRef1 = (ref) => {
@@ -126,7 +133,6 @@ class AddPoint extends Component {
      }
 
  setPollutantType = (type) => {
-     debugger;
      this.setState({
          PollutantType: type == 2 ? "block" : "none"
      });
@@ -209,12 +215,30 @@ class AddPoint extends Component {
                },
            });
        }
+       getWaterFunctionAreaList=()=>{
+        this.props.dispatch({
+            type: 'pointinfo/getWaterFunctionAreaList',
+            payload: {
+                callback: () => {
+                    if (this.props.WaterFunctionAreaList_requstresult === '1') {
+                        this.props.WaterFunctionAreaList.map(p =>
+                            this.state.WaterFunctionArea.push(<Option key={p.id} value={p.id}> {p.name} </Option>)
+                        );
+                    } else {
+                        message.error('请添加功能区');
+                    }
+                }
+            },
+        });
+
+       }
 
        //保存后返回的路径
        saveBack=(e)=>{
            const viewMap=this.props.match.params.Add;
            const {dispatch}=this.props;
            let index;
+           debugger
            if(viewMap=="mapview") {
                index=dispatch(routerRedux.push('/overview/mapview'));
            } else if(viewMap=="datalist") {
@@ -232,6 +256,7 @@ class AddPoint extends Component {
                }
                else
                {
+                   debugger
                    const{entCode,entName}=this.props;
                   index = dispatch(routerRedux.push(`/sysmanage/PointInfo/${entCode}/${entName}`));
                }
@@ -240,6 +265,7 @@ class AddPoint extends Component {
        }
 
        getloglat=(log,lat)=>{
+           debugger
           if(log && lat)
           {
               return log+","+lat;
@@ -253,6 +279,7 @@ class AddPoint extends Component {
            e.preventDefault();
            let flag = true;
            this.props.form.validateFieldsAndScroll((err, values) => {
+               debugger
                const that = this;
                if (this.props.match.params.DGIMN === 'null') {
                    if (!err && flag === true) {
@@ -276,6 +303,7 @@ class AddPoint extends Component {
                                Col3: values.Col3 === undefined ? '' : values.Col3,
                                OperationerId: values.OperationerId,
                                DevicePassword:values.DevicePassword||'',
+                               AreaFunctionCode:values.AreaFunctionCode=== undefined ? null : values.AreaFunctionCode,
                                callback: () => {
                                    if (this.props.requstresult === '1') {
                                        this.success();
@@ -287,6 +315,7 @@ class AddPoint extends Component {
                        });
                    }
                } else if (!err && flag === true) {
+                   debugger
                    that.props.dispatch({
                        type: 'pointinfo/editpoint',
                        payload: {
@@ -307,6 +336,7 @@ class AddPoint extends Component {
                            Col3: values.Col3 === undefined ? '' : values.Col3,
                            OperationerId: values.OperationerId,
                            DevicePassword:values.DevicePassword||'',
+                           AreaFunctionCode:values.AreaFunctionCode=== undefined ? null : values.AreaFunctionCode,
                            callback: () => {
                                if (this.props.requstresult === '1') {
                                    this.success();
@@ -371,7 +401,8 @@ class AddPoint extends Component {
              longitude ,
              latitude ,
              Col3,
-             DevicePassword
+             DevicePassword,
+             AreaFunctionCode,
          } = editpoint === null || this.props.match.params.DGIMN ==="null" ? {} : editpoint;
 
          let Crumbs=[  
@@ -482,9 +513,10 @@ class AddPoint extends Component {
                                                  placeholder="请选择"
                                                  onChange={(value,op)=>{
                                                      this.setState({
-                                                         PollutantType:value===2?"block":"none"
-
+                                                         PollutantType:value===2?"block":"none",
+                                                         WaterAreaFlag:value===1?"block":"none",
                                                      });
+                                                     
                                                  }}
 
                                              >
@@ -749,7 +781,7 @@ class AddPoint extends Component {
                                      label="排口坐标"
                                  > {
                                          getFieldDecorator('Coordinate', {
-                                             initialValue:this.getloglat(),
+                                             initialValue:this.getloglat(longitude,latitude),
                                              rules: [{
                                                  required: true,
                                                  message: '请输入排口坐标!'
@@ -774,14 +806,16 @@ class AddPoint extends Component {
                                  </FormItem>
 
                              </Col>
-                             <Col span={8}>
+                             {
+                                 this.state.PollutantType!=="none"?
+                                 <Col span={8}>
                                  <FormItem
                                      {...formItemLayout}
 
                                      label="日常巡查表单类型"
                                  > {
                                          getFieldDecorator('Col3', {
-                                             initialValue: Col3,
+                                             initialValue: Col3?parseInt(Col3): null,
                                              rules: [{
                                                  required: true,
                                                  message: '请输入日常巡查表单类型!'
@@ -796,6 +830,10 @@ class AddPoint extends Component {
                                      }
                                  </FormItem>
                              </Col>
+                             :
+                             null
+                             }
+                  
                              <Col span={8}>
                                  <FormItem
                                      {...formItemLayout}
@@ -813,6 +851,27 @@ class AddPoint extends Component {
                                      }
                                  </FormItem>
                              </Col>
+                             <Col span={8} style={{display:this.state.WaterAreaFlag=="block"?"block":"none"}}>
+                                 <FormItem
+                                     {...formItemLayout}
+                                     label="功能区"
+                                 > {
+                                         getFieldDecorator('AreaFunctionCode', {
+                                             initialValue: AreaFunctionCode,
+                                         })(
+                                            <Select
+                                            loading={this.props.gsloading}
+                                            optionFilterProp="children"
+                                            showSearch={true}
+                                            style={{ width:200 }}
+                                            placeholder="请选择"
+                                        >
+                                            {this.state.WaterFunctionArea}
+                                        </Select>
+                                         )
+                                     }
+                                 </FormItem>
+                             </Col>
                              <Division />
                          </Row>
                          <Divider orientation="right" style={{border:'1px dashed #FFFFFF'}}>
@@ -823,7 +882,7 @@ class AddPoint extends Component {
                              <Button
                                  type="dashed"
                                  onClick={
-                                     () => this.props.dispatch(routerRedux.push(`/sysmanage/PointInfo`))
+                                     () => this.props.dispatch(routerRedux.push(`/sysmanage/PointInfo/${this.props.entCode}/${this.props.entName}`))
                                  }
                              >
                         返回
