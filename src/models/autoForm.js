@@ -2,7 +2,7 @@
  * @Author: Jiaqi
  * @Date: 2019-05-16 15:13:59
  * @Last Modified by: Jiaqi
- * @Last Modified time: 2019-06-04 17:07:23
+ * @Last Modified time: 2019-06-05 16:05:08
  */
 import { message } from 'antd';
 import {
@@ -24,7 +24,7 @@ export default Model.extend({
     //   pageSize: 10,
     //   total: 0
     // },
-    routerConfig:"",
+    routerConfig: "",
     tableInfo: {},
     searchForm: {},
     searchConfigItems: { // 搜索条件配置项
@@ -71,17 +71,26 @@ export default Model.extend({
           }
         }
       }
+      console.log("group=", group)
+
       const postData = {
         configId: payload.configId,
         pageIndex: searchForm.current || 1,
-        pageSize: searchForm.pageSize || 10
+        pageSize: searchForm.pageSize || 10,
+        ...payload.otherParams
       };
-      console.log("group=", group)
-      group.length ? postData.ConditionWhere = JSON.stringify({
+
+      const searchParams = payload.searchParams || [];
+
+      (group.length || searchParams.length) ? postData.ConditionWhere = JSON.stringify({
+      // group.length? postData.ConditionWhere = JSON.stringify({
         "rel": "$and",
         "group": [{
           "rel": "$and",
-          group
+          group: [
+            ...group,
+            ...searchParams
+          ]
         }]
       }) : '';
 
@@ -137,6 +146,7 @@ export default Model.extend({
           key: item.FullFieldNameVerticalBar,
           align: 'center',
           width: item.DF_WIDTH,
+          sorter: item.DF_ISSORT === 0 ? (a, b) => a[item.FullFieldName] - b[item.FullFieldName] : false,
           fixed: result.Datas.FixedFields.filter(m => m.FullFieldName === item.FullFieldName).length > 0 ? 'left' : ''
         })
         );

@@ -2,7 +2,7 @@
  * @Author: Jiaqi
  * @Date: 2019-05-07 16:03:14
  * @Last Modified by: Jiaqi
- * @Last Modified time: 2019-06-03 14:16:59
+ * @Last Modified time: 2019-06-05 15:16:50
  * @desc: 搜索容器组件
  * @props {string} formChangeActionType formAction
  * @props {store object} searchFormState formState对象
@@ -102,7 +102,8 @@ class SearchWrapper extends Component {
     this.props.dispatch({
       type: 'autoForm/getAutoFormData',
       payload: {
-        configId: this.props.configId
+        configId: this.props.configId,
+        searchParams: this.props.searchParams
       }
     })
   }

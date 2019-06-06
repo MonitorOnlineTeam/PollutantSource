@@ -62,6 +62,10 @@ class BasicLayout extends React.PureComponent {
 
     componentWillMount = () => {
         const { dispatch } = this.props;
+        //刚加载页面时获取一下登陆配置
+        dispatch({
+            type: 'login/getLoginInfo',
+        });
         dispatch({
             type: 'global/fetchNotices',
         });
