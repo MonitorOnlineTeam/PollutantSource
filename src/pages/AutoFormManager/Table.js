@@ -209,6 +209,7 @@ class SdlTable extends PureComponent {
         align: "center",
         title: "操作",
         width: 200,
+        fixed:'right',
         render: (text, record) => (
           <div>
             {
