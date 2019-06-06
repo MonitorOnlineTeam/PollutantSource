@@ -21,12 +21,8 @@ class OverViewMap extends PureComponent {
         if(selectpoint) {
             return (<MapTreeDetail />);
         }
-
         return (<MapTreeList />);
-
     }
-
-
     render() {
         return(
             <div
@@ -49,26 +45,11 @@ class OverViewMap extends PureComponent {
                         this.getTreeList()
                     }
                 </div>
-
                 <MapContent />
-                <div
-                style={{
-                    position: 'absolute',
-                    top: 90,
-                    left: 500,
-                    zIndex:100
-                }}
-                >
+                <div style={{position: 'absolute',top: 90,left: 500,zIndex:100}}>
                <PollutantTypeRadio />
                 </div>
-                <div
-                    style={{
-                        position: 'absolute',
-                        top: 90,
-                        right: 100,
-                        zIndex:100
-                    }}
-                >
+                <div style={{position: 'absolute',top: 90,right: 100,zIndex:100}}>
                     <AListRadio dvalue="a" />
                 </div>
                 <div style={{

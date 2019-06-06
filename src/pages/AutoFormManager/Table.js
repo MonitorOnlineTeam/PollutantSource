@@ -38,17 +38,20 @@ class SdlTable extends PureComponent {
     this.loadDataSource = this.loadDataSource.bind(this);
     this.onTableChange = this.onTableChange.bind(this);
     this._renderHandleButtons = this._renderHandleButtons.bind(this);
+    this._handleTableChange = this._handleTableChange.bind(this);
   }
 
   componentDidMount() {
     this.loadDataSource();
   }
 
-  loadDataSource() {
+  loadDataSource(params) {
     this.props.dispatch({
       type: 'autoForm/getAutoFormData',
       payload: {
-        configId: this.props.configId
+        configId: this.props.configId,
+        searchParams: this.props.searchParams,
+        otherParams: params
       }
     });
   }
@@ -86,8 +89,21 @@ class SdlTable extends PureComponent {
 
   };
 
+  _handleTableChange(pagination, filters, sorter) {
+    console.log('sorter=', sorter)
+    if (sorter.order) {
+      let sorterObj = {
+        IsAsc: sorter.order === "ascend",
+        SortFileds: sorter.field
+      };
+      // sorterObj.IsAsc = sorter.order === "ascend"
+      // sorterObj.SortFileds = sorter.field;
+      this.loadDataSource(sorterObj);
+    }
+  }
+
   _renderHandleButtons() {
-    const { opreationButtons, columns, keys, dispatch } = this.props;
+    const { opreationButtons, keys, dispatch } = this.props;
     this._SELF_.btnEl = [];
     const { btnEl, configId } = this._SELF_;
     return opreationButtons[configId] ? opreationButtons[configId].map(btn => {
@@ -118,7 +134,8 @@ class SdlTable extends PureComponent {
                   dispatch({
                     type: "autoForm/del",
                     payload: {
-                      ...postData
+                      configId: configId,
+                      FormData: JSON.stringify(postData)
                     }
                   })
                 },
@@ -156,8 +173,36 @@ class SdlTable extends PureComponent {
     const { tableInfo, searchForm, keys, dispatch, configId } = this.props;
     const columns = tableInfo[configId] ? tableInfo[configId]["columns"] : [];
     const { pageSize = 10, current = 1, total = 0 } = searchForm[configId] || {}
+
     // 计算长度
-    let _columns = columns.map(col => col.width ? { width: DEFAULT_WIDTH, ...col } : { ...col, width: DEFAULT_WIDTH });
+    let _columns = (columns || []).map(col => {
+      if (col.title === "文件") {
+        return {
+          ...col,
+          width: 400,
+          render: (text, record) => {
+            const key = col.dataIndex;
+            const fileInfo = record[key] ? record[key].split(";") : [];
+            return (
+              <div>
+                {
+                  fileInfo.map(item => {
+                    const itemList = item.split("|");
+                    return <Fragment>
+                      <a target="_blank" href={`${itemList[itemList.length - 1]}${itemList[0]}`}>{itemList[0]}</a>
+                      <a style={{ marginLeft: 10 }} href={`${itemList.pop()}${itemList[0]}`} download>下载</a>
+                      <br />
+                    </Fragment>
+                  })
+                }
+              </div>
+            )
+          }
+        }
+      }
+      return col.width ? { width: DEFAULT_WIDTH, ...col } : { ...col, width: DEFAULT_WIDTH }
+    });
+
     const buttonsView = this._renderHandleButtons();
     if (this._SELF_.btnEl.length) {
       _columns.push({
@@ -169,6 +214,12 @@ class SdlTable extends PureComponent {
             {
               this._SELF_.btnEl.map((item, index) => {
                 if (item.type === "edit") {
+                  const filterList = columns.filter(itm => itm.title == "文件")[0] || {};
+                  const key = filterList.dataIndex;
+                  const fileInfo = record[key] && record[key].split(";")[0];
+                  const list = fileInfo ? fileInfo.split("|") : [];
+                  const uid = list[list.length - 2] || null;
+                  // const uid = record.
                   return (
                     <Fragment key={item.type}>
                       <a onClick={() => {
@@ -179,7 +230,7 @@ class SdlTable extends PureComponent {
                           }
                         })
 
-                        dispatch(routerRedux.push(`/AutoFormManager/AutoFormEdit/${configId}/${JSON.stringify(postData)}`))
+                        dispatch(routerRedux.push(`/AutoFormManager/AutoFormEdit/${configId}/${JSON.stringify(postData)}/${uid}`))
                       }}>编辑</a>
                       {
                         this._SELF_.btnEl.length - 1 !== index && <Divider type="vertical" />
@@ -208,7 +259,8 @@ class SdlTable extends PureComponent {
                       placement="left"
                       title="确认是否删除?"
                       onConfirm={() => {
-                        let postData = {};
+                        let postData = {
+                        };
                         keys[configId].map(item => {
                           if (record[item]) {
                             postData[item] = record[item]
@@ -217,7 +269,8 @@ class SdlTable extends PureComponent {
                         dispatch({
                           type: "autoForm/del",
                           payload: {
-                            ...postData
+                            configId: configId,
+                            FormData: JSON.stringify(postData)
                           }
                         })
                       }}
@@ -271,6 +324,7 @@ class SdlTable extends PureComponent {
               }
             }
           }
+          onChange={this._handleTableChange}
           rowSelection={rowSelection}
           pagination={{
             showSizeChanger: true,

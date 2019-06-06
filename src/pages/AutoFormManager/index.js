@@ -25,7 +25,8 @@ import SearchWrapper from './SearchWrapper';
   searchConfigItems: autoForm.searchConfigItems,
   // columns: autoForm.columns,
   tableInfo: autoForm.tableInfo,
-  searchForm: autoForm.searchForm
+  searchForm: autoForm.searchForm,
+  routerConfig:autoForm.routerConfig
 }))
 
 export default class AutoFormIndex extends Component {
@@ -37,14 +38,32 @@ export default class AutoFormIndex extends Component {
   }
 
   componentDidMount() {
-    this.props.dispatch({
+    const {match}=this.props;
+    this.reloadPage(match.params.configId);
+  }
+  
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.location.pathname != this.props.location.pathname) {
+      if(nextProps.match.params.configId!==this.props.routerConfig)
+      this.reloadPage(nextProps.match.params.configId);
+    }
+  }
+
+  reloadPage=(configId)=>{
+    const {dispatch}=this.props;
+    dispatch({
+      type: 'autoForm/updateState',
+      payload: {
+        routerConfig:configId
+      }
+    });
+    dispatch({
       type: 'autoForm/getPageConfig',
       payload: {
-        configId: this.props.match.params.configId
+        configId: configId
       }
     })
   }
-
 
   render() {
     const { searchConfigItems, searchForm, tableInfo, match: { params: { configId } } } = this.props;
@@ -79,11 +98,25 @@ export default class AutoFormIndex extends Component {
               // }}
               onSubmitForm={(form) => this.loadReportList(form)}
               configId={configId}
+              // loadDataSourceParams={[
+              //   {
+              //     Key: "test",
+              //     Value: false,
+              //     Where: "$like"
+              //   }
+              // ]}
             ></SearchWrapper>
             <SdlTable
               style={{ marginTop: 10 }}
               // columns={columns}
               configId={configId}
+              // loadDataSourceParams={[
+              //   {
+              //     Key: "test",
+              //     Value: false,
+              //     Where: "$like"
+              //   }
+              // ]}
             // dataSource={dataSource}
             />
           </Card>

@@ -24,11 +24,11 @@ class dataList extends PureComponent {
     }
     /**页面初始化 */
     componentDidMount() {
-        const {dispatch}=this.props;
+        const {dispatch,selectpollutantTypeCode}=this.props;
        
 
         // 由于数据一览没有全部，初始化为废气
-        !!!this.props.selectpollutantTypeCode && dispatch({
+        !!!selectpollutantTypeCode && dispatch({
             type:'overview/updateState',
             payload:{
                 selectpollutantTypeCode: 2
@@ -160,8 +160,6 @@ class dataList extends PureComponent {
       <PdButton DGIMN={record.DGIMN} id={record.operationUserID} pname={record.pointName}  reloadData={() => this.Refresh()}
        exist={record.existTask}  pollutantTypeCode={record.pollutantTypeCode}  name={record.operationUserName} tel={record.operationtel} viewType="datalist"/>
     </div>)
-
-       
         render() {
             const {selectStatus,terate,time}=this.props.dataOverview;
             let {selectpollutantTypeCode}=this.props;
@@ -211,10 +209,8 @@ class dataList extends PureComponent {
                             {lable}
                         </span>
                             </Popover>);
-                },
-            },
-
-            ];
+                }
+            }];
 
             let csyxl = 0;
             if (selectpollutantTypeCode == 2) {
