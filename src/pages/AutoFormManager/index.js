@@ -26,7 +26,7 @@ import SearchWrapper from './SearchWrapper';
   // columns: autoForm.columns,
   tableInfo: autoForm.tableInfo,
   searchForm: autoForm.searchForm,
-  routerConfig:autoForm.routerConfig
+  routerConfig: autoForm.routerConfig
 }))
 
 export default class AutoFormIndex extends Component {
@@ -38,23 +38,23 @@ export default class AutoFormIndex extends Component {
   }
 
   componentDidMount() {
-    const {match}=this.props;
+    const { match } = this.props;
     this.reloadPage(match.params.configId);
   }
-  
+
   componentWillReceiveProps(nextProps) {
     if (nextProps.location.pathname != this.props.location.pathname) {
-      if(nextProps.match.params.configId!==this.props.routerConfig)
-      this.reloadPage(nextProps.match.params.configId);
+      if (nextProps.match.params.configId !== this.props.routerConfig)
+        this.reloadPage(nextProps.match.params.configId);
     }
   }
 
-  reloadPage=(configId)=>{
-    const {dispatch}=this.props;
+  reloadPage = (configId) => {
+    const { dispatch } = this.props;
     dispatch({
       type: 'autoForm/updateState',
       payload: {
-        routerConfig:configId
+        routerConfig: configId
       }
     });
     dispatch({
@@ -98,27 +98,36 @@ export default class AutoFormIndex extends Component {
               // }}
               onSubmitForm={(form) => this.loadReportList(form)}
               configId={configId}
-              // loadDataSourceParams={[
-              //   {
-              //     Key: "test",
-              //     Value: false,
-              //     Where: "$like"
-              //   }
-              // ]}
+            // loadDataSourceParams={[
+            //   {
+            //     Key: "test",
+            //     Value: false,
+            //     Where: "$like"
+            //   }
+            // ]}
             ></SearchWrapper>
             <SdlTable
               style={{ marginTop: 10 }}
               // columns={columns}
               configId={configId}
-              // loadDataSourceParams={[
-              //   {
-              //     Key: "test",
-              //     Value: false,
-              //     Where: "$like"
-              //   }
-              // ]}
+              rowChange={(key, row) => {
+                this.setState({
+                  key, row
+                })
+              }}
+            // loadDataSourceParams={[
+            //   {
+            //     Key: "test",
+            //     Value: false,
+            //     Where: "$like"
+            //   }
+            // ]}
             // dataSource={dataSource}
-            />
+            >
+              <Button icon="printer" type="primary" onClick={()=>{
+                console.log('state=',this.state)
+              }}>自定义按钮</Button>
+            </SdlTable>
           </Card>
         </div>
       </MonitorContent>
