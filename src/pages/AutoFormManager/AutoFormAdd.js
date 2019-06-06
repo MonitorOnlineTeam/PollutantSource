@@ -3,9 +3,9 @@
  * @Author: JianWei
  * @Date: 2019-5-23 10:34:29
  * @Last Modified by: Jiaqi
- * @Last Modified time: 2019-06-05 15:27:34
+ * @Last Modified time: 2019-06-06 11:46:14
  */
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes, { object } from 'prop-types';
 
 import {
@@ -67,6 +67,7 @@ class AutoFormAdd extends Component {
     this.renderFormItem = this.renderFormItem.bind(this);
     this.onSubmitForm = this.onSubmitForm.bind(this);
     this.openMapModal = this.openMapModal.bind(this);
+    this.renderContent = this.renderContent.bind(this);
   }
 
   componentDidMount() {
@@ -85,7 +86,7 @@ class AutoFormAdd extends Component {
 
   onSubmitForm(e) {
     e.preventDefault();
-    const { form, dispatch } = this.props;
+    const { form, dispatch, successCallback } = this.props;
     const { uid, configId } = this._SELF_;
     form.validateFields((err, values) => {
       if (!err) {
@@ -107,7 +108,7 @@ class AutoFormAdd extends Component {
             },
             callback: (res) => {
               if (res.IsSuccess) {
-                history.go(-1);
+                successCallback ? successCallback() : dispatch(routerRedux.push(`/sysmanage/autoformmanager/${configId}`));
               }
             }
           }
@@ -264,6 +265,49 @@ class AutoFormAdd extends Component {
     });
   }
 
+  renderContent() {
+    const submitFormLayout = {
+      wrapperCol: {
+        xs: { span: 24, offset: 0 },
+        sm: { span: 10, offset: 7 },
+      },
+    };
+    return <Card bordered={false}>
+      <Form onSubmit={this.onSubmitForm} hideRequiredMark={false} style={{ marginTop: 8 }}>
+        {
+          this.renderFormItem()
+        }
+        <FormItem {...submitFormLayout} style={{ marginTop: 32 }}>
+          <Button type="primary" htmlType="submit">
+            保存
+                            </Button>
+          <Button
+            style={{ marginLeft: 8 }}
+            onClick={() => {
+              history.go(-1);
+              // dispatch(routerRedux.push(`/sysmanage/autoformmanager`));
+            }}
+          >
+            返回
+                            </Button>
+        </FormItem>
+      </Form>
+      {
+        <MapModal
+          setMapVisible={this.setMapVisible}
+          MapVisible={this.state.MapVisible}
+          setPoint={this.setPoint}
+          setMapPolygon={this.setMapPolygon}
+          polygon={this.state.polygon}
+          longitude={this.state.longitude}
+          latitude={this.state.latitude}
+          EditMarker={this.state.EditMarker}
+          EditPolygon={this.state.EditPolygon}
+        />
+      }
+    </Card>
+  }
+
   openMapModal(obj) {
     let { form } = this.props;
     this.setState({
@@ -293,13 +337,8 @@ class AutoFormAdd extends Component {
   }
 
   render() {
-    const submitFormLayout = {
-      wrapperCol: {
-        xs: { span: 24, offset: 0 },
-        sm: { span: 10, offset: 7 },
-      },
-    };
-    let { loadingAdd, loadingConfig, dispatch } = this.props;
+
+    let { loadingAdd, loadingConfig, dispatch, breadcrumb } = this.props;
     const { uid, configId } = this._SELF_;
     if (loadingAdd || loadingConfig) {
       return (<Spin
@@ -314,67 +353,41 @@ class AutoFormAdd extends Component {
       />);
     }
     return (
-      <MonitorContent breadCrumbList={
-        [
-          { Name: '首页', Url: '/' },
-          { Name: '系统管理', Url: '' },
-          { Name: 'AutoForm', Url: '/sysmanage/autoformmanager/' + configId },
-          { Name: '添加', Url: '' }
-        ]
-      }
-      >
-        <Card bordered={false}>
-          <Form onSubmit={this.onSubmitForm} hideRequiredMark={false} style={{ marginTop: 8 }}>
-            {
-              this.renderFormItem()
-            }
-
-            <FormItem {...submitFormLayout} style={{ marginTop: 32 }}>
-              <Button type="primary" htmlType="submit">
-                保存
-                            </Button>
-              <Button
-                style={{ marginLeft: 8 }}
-                onClick={() => {
-                  history.go(-1);
-                  // dispatch(routerRedux.push(`/sysmanage/autoformmanager`));
-                }}
-              >
-                返回
-                            </Button>
-            </FormItem>
-          </Form>
-        </Card>
+      <Fragment>
         {
-          <MapModal
-            setMapVisible={this.setMapVisible}
-            MapVisible={this.state.MapVisible}
-            setPoint={this.setPoint}
-            setMapPolygon={this.setMapPolygon}
-            polygon={this.state.polygon}
-            longitude={this.state.longitude}
-            latitude={this.state.latitude}
-            EditMarker={this.state.EditMarker}
-            EditPolygon={this.state.EditPolygon}
-          />
+          breadcrumb ?
+            <MonitorContent breadCrumbList={
+              [
+                { Name: '首页', Url: '/' },
+                { Name: '系统管理', Url: '' },
+                { Name: 'AutoForm', Url: '/sysmanage/autoformmanager/' + configId },
+                { Name: '添加', Url: '' }
+              ]
+            }
+            >
+              {this.renderContent()}
+            </MonitorContent> :
+            <Fragment>
+              {this.renderContent()}
+            </Fragment>
         }
-      </MonitorContent>
+      </Fragment>
     );
   }
 }
 
 
 AutoFormAdd.propTypes = {
-  // placeholder
-  placeholder: PropTypes.string,
-  // mode
-  mode: PropTypes.string,
+  // 请求成功回调
+  successCallback: PropTypes.func,
+  // 是否显示面包屑
+  breadcrumb: PropTypes.bool,
   // configId
   configId: PropTypes.string.isRequired,
-  // itemName
-  itemName: PropTypes.string.isRequired,
-  // itemValue
-  itemValue: PropTypes.string.isRequired,
 };
+
+AutoFormAdd.defaultProps = {
+  breadcrumb: true
+}
 
 export default AutoFormAdd;

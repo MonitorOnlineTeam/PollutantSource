@@ -13,9 +13,10 @@
   <script>
     $(function () {
       $.ajax({
-        url: "/api/rest/PollutantSourceApi/PUserLogin/getLoginInfo?authorCode=48f3889c-af8d-401f-ada2-c383031af92d",
+        url: "/api/rest/PollutantSourceApi/SystemSettingApi/getLoginInfo?authorCode=48f3889c-af8d-401f-ada2-c383031af92d",
         type: 'post',
         success: function (data) {
+          debugger
           data.data.favicon == '1' ?
             document.getElementsByTagName("link")[0].href = '/favicon.ico'
             :

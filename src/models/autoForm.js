@@ -2,7 +2,7 @@
  * @Author: Jiaqi
  * @Date: 2019-05-16 15:13:59
  * @Last Modified by: Jiaqi
- * @Last Modified time: 2019-06-05 16:05:08
+ * @Last Modified time: 2019-06-05 17:39:50
  */
 import { message } from 'antd';
 import {
@@ -146,7 +146,7 @@ export default Model.extend({
           key: item.FullFieldNameVerticalBar,
           align: 'center',
           width: item.DF_WIDTH,
-          sorter: item.DF_ISSORT === 0 ? (a, b) => a[item.FullFieldName] - b[item.FullFieldName] : false,
+          sorter: item.DF_ISSORT === 1 ? (a, b) => a[item.FullFieldName] - b[item.FullFieldName] : false,
           fixed: result.Datas.FixedFields.filter(m => m.FullFieldName === item.FullFieldName).length > 0 ? 'left' : ''
         })
         );

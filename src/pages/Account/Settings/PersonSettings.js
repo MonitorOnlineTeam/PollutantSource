@@ -25,7 +25,9 @@ const Option = Select.Option;
     login,
 }) => ({
     loading: loading.effects['login/getLoginInfo'],
+    pollutantTypeloading: loading.effects['login/getPollutantTypes'],
     getLoginInfoList: login.getLoginInfoList,
+    pollutantTypeList: login.pollutantTypeList,
 }))
 @Form.create()
 class PersonSettings extends Component {
@@ -37,14 +39,30 @@ class PersonSettings extends Component {
         };
     }
 
-    componentWillMount() {
+    componentWillMount = () => {
+        const { dispatch } = this.props;
+        //刚加载页面时获取一下登陆配置
+        dispatch({
+            type: 'login/getPollutantTypes',
+        });
     }
-
+    //获取下拉污染物类型数据
+    SelectOptions = () => {
+        const { pollutantTypeList } = this.props;
+        const rtnVal = [];
+        if (pollutantTypeList.length !== 0) {
+            pollutantTypeList.map((item, key) => {
+                rtnVal.push(<Option key={item.PollutantTypeCode}>{item.PollutantTypeName}</Option>);
+            });
+        }
+        return rtnVal;
+    }
 
     handleSubmit = (e) => {
         e.preventDefault();
         const that = this;
         this.props.form.validateFieldsAndScroll((err, values) => {
+            debugger
             if (!err) {
                 that.props.dispatch({
                     type: 'login/editLoginInfo',
@@ -54,6 +72,7 @@ class PersonSettings extends Component {
                         LoginMainTitle: values.LoginMainTitle,
                         LoginSubtitle: values.LoginSubtitle,
                         LoginFooterMessages: values.LoginFooterMessages,
+                        PollutantTypes: values.PollutantTypes,
                         callback: (requstresult) => {
                             if (requstresult === '1') {
                                 message.success('更新成功！');
@@ -70,7 +89,8 @@ class PersonSettings extends Component {
     render() {
         const {
             form,
-            getLoginInfoList
+            getLoginInfoList,
+            pollutantTypeloading
         } = this.props;
         const {
             getFieldDecorator
@@ -81,6 +101,7 @@ class PersonSettings extends Component {
             LoginMainTitle,
             LoginSubtitle,
             LoginFooterMessages,
+            pTypeList,
         } = getLoginInfoList === null ? {} : getLoginInfoList;
         //表单布局
         const formItemLayout = {
@@ -167,6 +188,26 @@ class PersonSettings extends Component {
                                             initialValue: LoginFooterMessages,
                                         })(
                                             <Input placeholder="说明" />
+                                        )}
+                                </FormItem>
+                            </Col>
+                            <Col span={12}>
+                                <FormItem  {...formItemLayout}
+                                    label="污染物类型配置"
+                                >
+                                    {getFieldDecorator('PollutantTypes',
+                                        {
+                                            initialValue: pTypeList,
+                                        })(
+                                            <Select
+                                                loading={pollutantTypeloading}
+                                                mode="multiple"
+                                                placeholder="污染物类型"
+                                                filterOption={true}
+                                            // onChange={this.SelectHandleChange}
+                                            >
+                                                {this.SelectOptions()}
+                                            </Select>
                                         )}
                                 </FormItem>
                             </Col>

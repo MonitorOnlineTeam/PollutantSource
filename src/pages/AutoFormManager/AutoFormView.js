@@ -3,11 +3,11 @@
  * @Author: Jiaqi 
  * @Date: 2019-05-30 13:59:37 
  * @Last Modified by: Jiaqi
- * @Last Modified time: 2019-06-05 17:25:29
+ * @Last Modified time: 2019-06-06 14:56:40
  */
 
-import React, { Component } from 'react';
-
+import React, { Component, Fragment } from 'react';
+import PropTypes from 'prop-types';
 import {
   Form,
   Input,
@@ -46,14 +46,17 @@ class AutoFormView extends Component {
         wrapperCol: {
           span: 14,
         },
-      }
+      },
+      configId: props.configId || props.match.params.configId,
+      keysParams: props.keysParams || JSON.parse(props.match.params.keysParams),
     }
     this._renderFormItem = this._renderFormItem.bind(this);
+    this.renderContent = this.renderContent.bind(this);
   }
 
   componentDidMount() {
-    let { dispatch, match: { params: { configId, keysParams } }, detailConfigInfo, editFormData } = this.props;
-
+    const { dispatch, detailConfigInfo, editFormData } = this.props;
+    const { configId, keysParams } = this._SELF_;
     // 获取页面配置项
     // if (detailConfigInfo || detailConfigInfo.length === 0) {
     dispatch({
@@ -70,7 +73,7 @@ class AutoFormView extends Component {
       type: 'autoForm/getFormData',
       payload: {
         configId,
-        ...JSON.parse(keysParams)
+        ...keysParams
       }
     });
     // }
@@ -78,8 +81,8 @@ class AutoFormView extends Component {
     // }
   }
   _renderFormItem() {
-    const { match: { params: { configId } }, detailConfigInfo, editFormData } = this.props;
-    const { formItemLayout } = this._SELF_;
+    const { detailConfigInfo, editFormData } = this.props;
+    const { formItemLayout, configId, keysParams } = this._SELF_;
     const formConfig = detailConfigInfo[configId] || [];
     const formData = editFormData[configId] || []
     return formConfig.map(item => {
@@ -114,8 +117,16 @@ class AutoFormView extends Component {
     })
   }
 
+  renderContent() {
+    // return <Row className="antd-pro-components-description-list-index-descriptionList">
+    return <Row className={styles.descriptionList}>
+      {this._renderFormItem()}
+    </Row>
+  }
+
   render() {
-    let { loadingData, loadingConfig, dispatch, history, match: { params: { configId } } } = this.props;
+    const { loadingData, loadingConfig, dispatch, history, breadcrumb } = this.props;
+    const { configId } = this._SELF_;
     if (loadingData || loadingConfig) {
       return (<Spin
         style={{
@@ -129,31 +140,49 @@ class AutoFormView extends Component {
       />);
     }
     return (
-      <MonitorContent breadCrumbList={
-        [
-          { Name: '首页', Url: '/' },
-          { Name: '系统管理', Url: '' },
-          { Name: 'AutoForm', Url: '/sysmanage/autoformmanager/' + configId },
-          { Name: '详情', Url: '' }
-        ]
-      }
-      >
-        <Card bordered={false} title="详情" extra={
-          <Button
-            style={{ float: "right", marginRight: 10 }}
-            onClick={() => {
-              history.goBack(-1);
-            }}
-          ><Icon type="left" />返回
-        </Button>
-        }>
-          <Row className="antd-pro-components-description-list-index-descriptionList">
-            {this._renderFormItem()}
-          </Row>
-        </Card>
-      </MonitorContent >
+      <Fragment>
+        {
+          breadcrumb ? <MonitorContent breadCrumbList={
+            [
+              { Name: '首页', Url: '/' },
+              { Name: '系统管理', Url: '' },
+              { Name: 'AutoForm', Url: '/sysmanage/autoformmanager/' + configId },
+              { Name: '详情', Url: '' }
+            ]
+          }
+          >
+            <Card bordered={false} title="详情" extra={
+              <Button
+                style={{ float: "right", marginRight: 10 }}
+                onClick={() => {
+                  history.goBack(-1);
+                }}
+              ><Icon type="left" />返回
+    </Button>
+            }>
+              {this.renderContent()}</Card>
+          </MonitorContent> : <Fragment>
+              <Card>
+                {this.renderContent()}</Card>
+            </Fragment>
+        }
+      </Fragment>
     );
   }
 }
+
+AutoFormView.propTypes = {
+  // 是否显示面包屑
+  breadcrumb: PropTypes.bool,
+  // configId
+  configId: PropTypes.string.isRequired,
+  // 主键对象
+  keysParams: PropTypes.object.isRequired,
+};
+
+AutoFormView.defaultProps = {
+  breadcrumb: true
+}
+
 
 export default AutoFormView;

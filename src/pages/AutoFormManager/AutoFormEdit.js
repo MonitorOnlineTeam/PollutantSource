@@ -5,7 +5,7 @@
  * @Last Modified by: JianWei
  * @Last Modified time: 2019年5月24日15:28:35
  */
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 
 import {
@@ -47,6 +47,7 @@ class AutoFormEdit extends Component {
       latitude: 0,
       polygon: []
     };
+    console.log('props==', props)
     this._SELF_ = {
       formLayout: props.formLayout || {
         labelCol: {
@@ -61,14 +62,19 @@ class AutoFormEdit extends Component {
       },
       inputPlaceholder: "请输入",
       selectPlaceholder: "请选择",
+      configId: props.configId || props.match.params.configId,
+      keysParams: props.keysParams || JSON.parse(props.match.params.keysParams),
+      uid: props.uid || (props.match && props.match.params.uid) || null
     };
     this.renderFormItem = this.renderFormItem.bind(this);
     this.onSubmitForm = this.onSubmitForm.bind(this);
     this.openMapModal = this.openMapModal.bind(this);
+    this.renderContent = this.renderContent.bind(this);
   }
 
   componentDidMount() {
-    let { addFormItems, dispatch, match: { params: { configId, keysParams } } } = this.props;
+    let { addFormItems, dispatch } = this.props;
+    const { configId, keysParams, uid } = this._SELF_;
     // console.log('keys=', JSON.parse(keys))
     if (!addFormItems || addFormItems.length === 0) {
       dispatch({
@@ -83,7 +89,7 @@ class AutoFormEdit extends Component {
       type: 'autoForm/getFormData',
       payload: {
         configId: configId,
-        ...JSON.parse(keysParams)
+        ...keysParams
       }
     });
 
@@ -92,10 +98,10 @@ class AutoFormEdit extends Component {
 
   onSubmitForm(e) {
     e.preventDefault();
-    let { form, dispatch, match: { params: { configId, keysParams } } } = this.props;
-
+    let { form, dispatch, successCallback } = this.props;
+    const { configId, keysParams, uid } = this._SELF_;
     // 截取字符串，重新组织主键参数
-    const keys = JSON.parse(keysParams);
+    const keys = keysParams;
     let primaryKey = {};
     for (let key in keys) {
       primaryKey[key.split('.').pop().toString()] = keys[key];
@@ -118,7 +124,7 @@ class AutoFormEdit extends Component {
               ...FormData,
             },
             callback: (res) => {
-              history.go(-1)
+              successCallback ? successCallback() : history.go(-1);
             }
           }
         });
@@ -128,8 +134,8 @@ class AutoFormEdit extends Component {
 
   // 渲染FormItem
   renderFormItem() {
-    const { addFormItems, form: { getFieldDecorator }, editFormData, match: { params: { configId, uid } } } = this.props;
-    const { formLayout, inputPlaceholder, selectPlaceholder } = this._SELF_;
+    const { addFormItems, form: { getFieldDecorator }, editFormData } = this.props;
+    const { formLayout, inputPlaceholder, selectPlaceholder, configId, keysParams, uid } = this._SELF_;
     const formItems = addFormItems[configId] || [];
     const formData = editFormData[configId] || {};
     return formItems.map((item) => {
@@ -263,6 +269,50 @@ class AutoFormEdit extends Component {
     });
   }
 
+  renderContent() {
+    const submitFormLayout = {
+      wrapperCol: {
+        xs: { span: 24, offset: 0 },
+        sm: { span: 10, offset: 7 },
+      },
+    };
+    return <Card bordered={false}>
+      <Form onSubmit={this.onSubmitForm} hideRequiredMark={false} style={{ marginTop: 8 }}>
+        {
+          this.renderFormItem()
+        }
+
+        <FormItem {...submitFormLayout} style={{ marginTop: 32 }}>
+          <Button type="primary" htmlType="submit">
+            保存
+                            </Button>
+          <Button
+            style={{ marginLeft: 8 }}
+            onClick={() => {
+              history.go(-1)
+              // dispatch(routerRedux.push(`/sysmanage/autoformmanager`));
+            }}
+          >
+            返回
+                            </Button>
+        </FormItem>
+      </Form>
+      {
+        <MapModal
+          setMapVisible={this.setMapVisible}
+          MapVisible={this.state.MapVisible}
+          setPoint={this.setPoint}
+          setMapPolygon={this.setMapPolygon}
+          polygon={this.state.polygon}
+          longitude={this.state.longitude}
+          latitude={this.state.latitude}
+          EditMarker={this.state.EditMarker}
+          EditPolygon={this.state.EditPolygon}
+        />
+      }
+    </Card>
+  }
+
   openMapModal(obj) {
     let { form } = this.props;
     this.setState({
@@ -292,13 +342,8 @@ class AutoFormEdit extends Component {
   }
 
   render() {
-    const submitFormLayout = {
-      wrapperCol: {
-        xs: { span: 24, offset: 0 },
-        sm: { span: 10, offset: 7 },
-      },
-    };
-    let { loadingAdd, loadingConfig, dispatch, configId } = this.props;
+
+    let { loadingAdd, loadingConfig, dispatch, configId, breadcrumb } = this.props;
     if (loadingAdd || loadingConfig) {
       return (<Spin
         style={{
@@ -312,67 +357,43 @@ class AutoFormEdit extends Component {
       />);
     }
     return (
-      <MonitorContent breadCrumbList={
-        [
-          { Name: '首页', Url: '/' },
-          { Name: '系统管理', Url: '' },
-          { Name: 'AutoForm', Url: '/sysmanage/autoformmanager/' + configId },
-          { Name: '编辑', Url: '' }
-        ]
-      }
-      >
-        <Card bordered={false}>
-          <Form onSubmit={this.onSubmitForm} hideRequiredMark={false} style={{ marginTop: 8 }}>
-            {
-              this.renderFormItem()
-            }
-
-            <FormItem {...submitFormLayout} style={{ marginTop: 32 }}>
-              <Button type="primary" htmlType="submit">
-                保存
-                            </Button>
-              <Button
-                style={{ marginLeft: 8 }}
-                onClick={() => {
-                  history.go(-1)
-                  // dispatch(routerRedux.push(`/sysmanage/autoformmanager`));
-                }}
-              >
-                返回
-                            </Button>
-            </FormItem>
-          </Form>
-        </Card>
+      <Fragment>
         {
-          <MapModal
-            setMapVisible={this.setMapVisible}
-            MapVisible={this.state.MapVisible}
-            setPoint={this.setPoint}
-            setMapPolygon={this.setMapPolygon}
-            polygon={this.state.polygon}
-            longitude={this.state.longitude}
-            latitude={this.state.latitude}
-            EditMarker={this.state.EditMarker}
-            EditPolygon={this.state.EditPolygon}
-          />
+          breadcrumb ?
+            <MonitorContent breadCrumbList={
+              [
+                { Name: '首页', Url: '/' },
+                { Name: '系统管理', Url: '' },
+                { Name: 'AutoForm', Url: '/sysmanage/autoformmanager/' + configId },
+                { Name: '编辑', Url: '' }
+              ]
+            }
+            >
+              {this.renderContent()}
+            </MonitorContent> :
+            <Fragment>
+              {this.renderContent()}
+            </Fragment>
         }
-      </MonitorContent>
+      </Fragment>
     );
   }
 }
 
 
 AutoFormEdit.propTypes = {
-  // placeholder
-  placeholder: PropTypes.string,
-  // mode
-  mode: PropTypes.string,
+  // 请求成功回调
+  successCallback: PropTypes.func,
+  // 是否显示面包屑
+  breadcrumb: PropTypes.bool,
   // configId
   configId: PropTypes.string.isRequired,
-  // itemName
-  itemName: PropTypes.string.isRequired,
-  // itemValue
-  itemValue: PropTypes.string.isRequired,
+  // 主键对象
+  keysParams: PropTypes.object.isRequired,
 };
+
+AutoFormEdit.defaultProps = {
+  breadcrumb: true
+}
 
 export default AutoFormEdit;
