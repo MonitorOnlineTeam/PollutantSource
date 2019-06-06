@@ -31,7 +31,7 @@ const copyright = <div>Copyright <Icon type="copyright" /> 2017 蚂蚁金服体�
 ReactDOM.render(
   <div style={{ background: '#f5f5f5', overflow: 'hidden' }}>
     <div style={{ height: 280 }} />
-    <GlobalFooter links={links} copyright={copyright} />
+      <GlobalFooter links={links} copyright={copyright} />
   </div>
 , mountNode);
 ````

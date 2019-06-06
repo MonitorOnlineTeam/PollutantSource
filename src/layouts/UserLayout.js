@@ -7,10 +7,23 @@ import SelectLang from '@/components/SelectLang';
 import styles from './UserLayout.less';
 import logo from '../../public/sdlicon.png';
 import QRcode from "./QRcode";
+import { connect } from 'dva';
 
+@connect(({
+    login,
+}) => ({
+    getLoginInfoList: login.getLoginInfoList,
+}))
 
 class UserLayout extends React.PureComponent {
 
+    componentWillMount = () => {
+        const { dispatch } = this.props;
+        //刚加载页面时获取一下登陆配置
+        dispatch({
+            type: 'login/getLoginInfo',
+        });
+    }
     // @TODO title
     // getPageTitle() {
     //   const { routerData, location } = this.props;
@@ -38,7 +51,7 @@ class UserLayout extends React.PureComponent {
         this.child = ref;
     }
 
-    show=()=>{
+    show = () => {
         this.setState({
             visible: true,
             width: 800,
@@ -46,6 +59,8 @@ class UserLayout extends React.PureComponent {
     }
 
     render() {
+        const { getLoginInfoList } = this.props;
+       
         const links = [
             {
                 key: 'help',
@@ -66,17 +81,26 @@ class UserLayout extends React.PureComponent {
 
         const copyright = (
             <Fragment>
-                Copyright <Icon type="copyright" /> 污染源智能分析平台  2019 SDL | <a
+                Copyright <Icon type="copyright" />
+                {
+                      getLoginInfoList ?
+                      getLoginInfoList.LoginFooterMessages ?
+                          getLoginInfoList.LoginFooterMessages+' | ' :
+                          '污染源智能分析平台  2019 SDL | '
+                      :
+                      '污染源智能分析平台  2019 SDL | '
+                    }
+                <a
                     onClick={() => {
                         this.show();
                     }}
                 >手机端下载
-                                                                          </a>
+                </a>
             </Fragment>
         );
         const { children } = this.props;
         return (
-        // @TODO <DocumentTitle title={this.getPageTitle()}>
+            // @TODO <DocumentTitle title={this.getPageTitle()}>
             <div className={styles.container}>
                 <div className={styles.lang}>
                     <SelectLang />
@@ -85,15 +109,43 @@ class UserLayout extends React.PureComponent {
                     <div className={styles.top}>
                         <div className={styles.header}>
                             <Link to="/">
-                                <img alt="logo" className={styles.logo} src={logo} />
-                                <span className={styles.title}>污染源智能分析平台</span>
+                                {
+                                    getLoginInfoList ?
+                                        getLoginInfoList.LoginLogo === "1" ?
+                                            <img alt="logo" className={styles.logo} src={logo} />
+                                            :
+                                            null
+                                        :
+                                        <img alt="logo" className={styles.logo} src={logo} />
+                                }
+
+                                <span className={styles.title}>
+                                    {
+                                        getLoginInfoList ?
+                                            getLoginInfoList.LoginMainTitle ?
+                                                getLoginInfoList.LoginMainTitle :
+                                                '污染源智能分析平台'
+                                            :
+                                            '污染源智能分析平台'
+                                    }
+                                </span>
                             </Link>
                         </div>
-                        <div className={styles.desc}>SDL 一流的污染源监控专家</div>
+                        <div className={styles.desc}>
+                        {
+                              getLoginInfoList ?
+                              getLoginInfoList.LoginSubtitle ?
+                                  getLoginInfoList.LoginSubtitle :
+                                  'SDL 一流的污染源监控专家'
+                              :
+                              'SDL 一流的污染源监控专家'
+                        }
+                        </div>
                     </div>
                     {children}
                 </div>
-                <GlobalFooter links={links} copyright={copyright} />
+                <GlobalFooter copyright={copyright} />
+                {/* links={links}  之前是加在上面组控件里面 */}
                 <Modal
                     footer={null}
                     destroyOnClose="true"

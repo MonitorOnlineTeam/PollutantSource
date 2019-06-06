@@ -1,8 +1,8 @@
 import Cookie from 'js-cookie';
 import router from 'umi/router';
 import { message } from 'antd';
-import { fakeAccountLogin, sendCaptcha, getip } from '../services/user';
-import { systemLogin, postAutoFromDataDelete,getPageConfigInfo } from '../services/autoformapi';
+import { fakeAccountLogin, sendCaptcha, getip, getLoginInfo, editLoginInfo } from '../services/user';
+import { systemLogin, postAutoFromDataDelete, getPageConfigInfo } from '../services/autoformapi';
 import { Model } from '../dvapack';
 
 const delay = (timeout) => new Promise(resolve => {
@@ -17,12 +17,13 @@ export default Model.extend({
         second: 10,
         MsgId: '111',
         getIPList: [],
+        getLoginInfoList: [],
     },
     effects: {
         * login({ payload }, { call, put, select }) {
-           
+
             const response1 = yield call(systemLogin);
-            const resss= yield call(getPageConfigInfo);
+            const resss = yield call(getPageConfigInfo);
             // debugger;
             const MsgId = yield select(state => state.login.MsgId);
             if (payload.type === 'mobile') {
@@ -44,7 +45,7 @@ export default Model.extend({
             if (response.requstresult === '1') {
                 Cookie.set('token', response.data);
                 try {
-                    const {ws} = window;
+                    const { ws } = window;
                     ws.send(response.data.User_Account);
                 } catch (error) {
 
@@ -74,6 +75,27 @@ export default Model.extend({
                     });
                 }
             }
+
+        },
+        //获取登陆信息配置
+        * getLoginInfo({ payload }, { put, call, update }) {
+            const loginData = yield call(getLoginInfo, { ...payload });
+            if (loginData !== null) {
+                if (loginData.requstresult === "1") {
+                    yield update({
+                        getLoginInfoList: loginData.data,
+                    });
+                }
+            }
+
+        },
+
+        //修改登陆信息配置
+        * editLoginInfo({ payload }, { put, call, update }) {
+            debugger
+            const loginData = yield call(editLoginInfo, { ...payload });
+            debugger
+            payload.callback(loginData.requstresult)
 
         },
         * getCaptcha({ payload }, { call, put }) {

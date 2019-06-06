@@ -1,6 +1,6 @@
 import request from '../utils/request';
 import { pageUrl } from '../utils/common';
-import { post,authorpost     } from '../dvapack/request';
+import { post, authorpost } from '../dvapack/request';
 
 export async function query() {
     return request('/api/users');
@@ -77,3 +77,27 @@ export async function getip() {
         data: null
     } : result;
 }
+// 获取登陆配置信息
+export async function getLoginInfo() {
+    const body = {
+    };
+    const result = authorpost('/api/rest/PollutantSourceApi/PUserLogin/getLoginInfo?authorCode=48f3889c-af8d-401f-ada2-c383031af92d', body, null);
+    return result === null ? {
+        data: null
+    } : result;
+}
+// 修改登陆配置信息
+export async function editLoginInfo(params) {
+    const body = {
+        favicon: params.favicon,
+        LoginLogo: params.LoginLogo,
+        LoginMainTitle: params.LoginMainTitle,
+        LoginSubtitle: params.LoginSubtitle,
+        LoginFooterMessages: params.LoginFooterMessages,
+    };
+    const result = authorpost('/api/rest/PollutantSourceApi/PUserLogin/editLoginInfo?authorCode=48f3889c-af8d-401f-ada2-c383031af92d', body, null);
+    return result === null ? {
+        data: null
+    } : result;
+}
+

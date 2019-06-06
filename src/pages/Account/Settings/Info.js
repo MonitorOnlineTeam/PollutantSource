@@ -41,6 +41,10 @@ export default class Info extends Component {
             key: 'mymessagelist',
             tab: '我的通知'
         },
+        {
+            key: 'personsettings',
+            tab: '个人设置'
+        },
         ];
         return (
             <MonitorContent

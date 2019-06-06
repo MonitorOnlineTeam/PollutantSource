@@ -265,6 +265,10 @@ export default [
                         path: '/account/settings/mypielist',
                         component: './Account/Settings/MyPieList',
                     },
+                    {
+                        path: '/account/settings/personsettings',
+                        component: './Account/Settings/personsettings',
+                    },
                 ],
             },
 
