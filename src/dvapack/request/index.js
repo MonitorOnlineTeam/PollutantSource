@@ -76,7 +76,7 @@ async function requestNew(url, options) {
                 // window.g_app._store.dispatch({
                 //     type: 'user/login',
                 // });
-                router.push('user/login');
+                router.push('/user/login');
                 return;
             }
             // environment should not be used
