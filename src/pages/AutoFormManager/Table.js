@@ -85,8 +85,7 @@ class SdlTable extends PureComponent {
       // }
     })
     this.setState({ selectedRowKeys, delPostData: postData });
-
-
+    this.props.rowChange && this.props.rowChange(selectedRowKeys, selectedRows)
   };
 
   _handleTableChange(pagination, filters, sorter) {
@@ -304,6 +303,9 @@ class SdlTable extends PureComponent {
         <Row className={styles.buttonWrapper}>
           {
             buttonsView
+          }
+          {
+            this.props.children
           }
         </Row>
         {/* [record["dbo.T_Bas_CommonPoint.PointCode"], record["dbo.T_Bas_CommonPoint.PointName"]] */}
