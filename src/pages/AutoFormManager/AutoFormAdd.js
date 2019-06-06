@@ -263,7 +263,6 @@ class AutoFormAdd extends Component {
   }
 
   openMapModal(obj) {
-    debugger;
     let { form } = this.props;
     this.setState({
       MapVisible: true,

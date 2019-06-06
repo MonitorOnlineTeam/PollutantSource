@@ -318,11 +318,11 @@ class MapContent extends React.Component {
       const { mapHeight, EditMarker,
           EditPolygon } = this.props;
       if(EditMarker) {
-          if(map)
+          if(map&&mouseTool)
               this.clickMarker();
       }
       if(EditPolygon) {
-          if(map)
+          if(map&&mouseTool)
               this.clickPolygon();
       }
       const allcoo=eval(originalPolygon);

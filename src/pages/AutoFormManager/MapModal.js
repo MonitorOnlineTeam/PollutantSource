@@ -34,6 +34,7 @@ class MapModal extends Component {
     }
 
     getMapMarker(obj){
+        debugger
         if(obj) {
             this.setState({
                 MarkerObje:{
@@ -84,7 +85,7 @@ class MapModal extends Component {
                     destroyOnClose={true}// 清除上次数据
                     onOk={() => {
                         setMapVisible(false);
-                        EditMarker&&setPoint({Longitude:longitude,Latitude:latitude});
+                        EditMarker&&setPoint(this.state.MarkerObje);
                         EditPolygon&&setMapPolygon(polygon);
                     }}
                     onCancel={() => {
