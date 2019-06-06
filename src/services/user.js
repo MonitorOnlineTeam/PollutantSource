@@ -86,6 +86,16 @@ export async function getLoginInfo() {
         data: null
     } : result;
 }
+
+// 获取所有污染物类型
+export async function getPollutantTypes() {
+    const body = {
+    };
+    const result = authorpost('/api/rest/PollutantSourceApi/SystemSettingApi/GetAllPollutantTypes?authorCode=48f3889c-af8d-401f-ada2-c383031af92d', body, null);
+    return result === null ? {
+        data: null
+    } : result;
+}
 // 修改登陆配置信息
 export async function editLoginInfo(params) {
     const body = {
@@ -94,6 +104,7 @@ export async function editLoginInfo(params) {
         LoginMainTitle: params.LoginMainTitle,
         LoginSubtitle: params.LoginSubtitle,
         LoginFooterMessages: params.LoginFooterMessages,
+        PollutantTypes: params.PollutantTypes
     };
     const result = authorpost('/api/rest/PollutantSourceApi/SystemSettingApi/editLoginInfo?authorCode=48f3889c-af8d-401f-ada2-c383031af92d', body, null);
     return result === null ? {

@@ -1,7 +1,7 @@
 import Cookie from 'js-cookie';
 import router from 'umi/router';
 import { message } from 'antd';
-import { fakeAccountLogin, sendCaptcha, getip, getLoginInfo, editLoginInfo } from '../services/user';
+import { fakeAccountLogin, sendCaptcha, getip, getLoginInfo, editLoginInfo, getPollutantTypes } from '../services/user';
 import { systemLogin, postAutoFromDataDelete, getPageConfigInfo } from '../services/autoformapi';
 import { Model } from '../dvapack';
 
@@ -18,6 +18,7 @@ export default Model.extend({
         MsgId: '111',
         getIPList: [],
         getLoginInfoList: [],
+        pollutantTypeList: [],
     },
     effects: {
         * login({ payload }, { call, put, select }) {
@@ -84,6 +85,19 @@ export default Model.extend({
                 if (loginData.requstresult === "1") {
                     yield update({
                         getLoginInfoList: loginData.data,
+                    });
+                }
+            }
+
+        },
+
+        //获取所有污染物类型
+        * getPollutantTypes({ payload }, { put, call, update }) {
+            const loginData = yield call(getPollutantTypes, { ...payload });
+            if (loginData !== null) {
+                if (loginData.requstresult === "1") {
+                    yield update({
+                        pollutantTypeList: loginData.data,
                     });
                 }
             }
