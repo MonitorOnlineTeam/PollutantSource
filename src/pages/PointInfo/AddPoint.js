@@ -373,7 +373,6 @@ class AddPoint extends Component {
              Col3,
              DevicePassword
          } = editpoint === null || this.props.match.params.DGIMN ==="null" ? {} : editpoint;
-
          let Crumbs=[  
             { Name: '系统管理', Url: '' },
          ]
@@ -781,7 +780,7 @@ class AddPoint extends Component {
                                      label="日常巡查表单类型"
                                  > {
                                          getFieldDecorator('Col3', {
-                                             initialValue: Col3,
+                                             initialValue:Col3 ? parseInt(Col3) : null ,
                                              rules: [{
                                                  required: true,
                                                  message: '请输入日常巡查表单类型!'
