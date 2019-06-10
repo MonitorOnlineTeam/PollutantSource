@@ -36,6 +36,7 @@ const plugins = [
 let _thismap=null;
 @connect(({ loading, overview }) => ({
     entlist: overview.entlist,
+    selectent:overview.selectent,
     loading:loading.effects['overview/querygetentdatalist'],
 }))
 //监控地图
@@ -47,7 +48,8 @@ class EntMapContent extends Component {
                 0, 0
             ],
             visible:false,
-            pointName:null
+            entName:null,
+
         };
     }
 
@@ -106,25 +108,15 @@ class EntMapContent extends Component {
   }
 
   getInfoWindows=()=>{
-        const {entlist}=this.props;
-        let res=[];
-        if(entlist && entlist.length>0)
-        {
-            entlist.map((item,key)=>{
-             const pointposition=[item.longitude,item.latitude];
-             res.push(
-                  <InfoWindow
-                position={pointposition}
-                visible={true}
-                key={key}
-                isCustom={true}
-                offset={[0, -25]}
-                >
-                {item.entName}
-              </InfoWindow>)
-            })
-        }
-        return res;
+      const {entName,position,visible}=this.state;
+        return(<InfoWindow
+            position={position}
+            visible={visible}
+            isCustom={true}
+            offset={[0, -25]}
+            >
+            {entName}
+          </InfoWindow>)
   }
   getMarkers=()=>{
     const {entlist}=this.props;
@@ -140,11 +132,34 @@ class EntMapContent extends Component {
             markers={entlist}
             events={this.markersEvents}
             render={(extData) => {
-             return(this.renderMarkerLayout(extData))
+            return <img style={{width:20}} src="../../entimg.png"/>
           }}
         />)
     }
   }
+
+    //地图点位点击
+    markersEvents = {
+        click: (MapsOption, marker) => {
+            const itemdata = marker.F.extData;
+            this.entClick(itemdata);
+        },
+        mouseover: (MapsOption, marker) => {
+            const itemdata = marker.F.extData;
+            console.log(itemdata);
+            this.setState({
+                entName:itemdata.abbreviation,
+                position:[itemdata.longitude,itemdata.latitude],
+                visible:true,
+            });
+        },
+        mouseout: (MapsOption, marker) => {
+            const itemdata = marker.F.extData;
+            this.setState({
+                visible:false,
+            });
+        },
+    };
 
   renderMarkerLayout(extData){
       return <div style={{position:'absolute'}}><div style={MarkerLayoutStyle}>{extData.entName}</div><img style={{width:20}} src="../../entimg.png"/></div>;
@@ -188,7 +203,7 @@ class EntMapContent extends Component {
           {this.getMarkers()}
           {/* {this.getpolygon()} */}
 
-          {/* {this.getInfoWindows()} */}
+          {this.getInfoWindows()}
 
           </Map>
       );

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import { Icon,Input,Spin } from 'antd';
+import { Icon,Input,Spin,Badge } from 'antd';
 import styles from './MapTreeList.less';
 import entstyles from './EntTreeList.less';
 import {getPointStatusImg} from '../../utils/getStatusImg';
@@ -63,17 +63,29 @@ class EntTreeList extends Component {
             }
             res.push(<div onClick={()=>this.entClick(item)} className={entstyles.miancard}>
                 {/* <div style={{float:'left',marginRight:10}}> <img style={{width:105,height:72}} src='../../../entwry.jpg'/> </div> */}
-                <div className={entstyles.card}>
+                <div>
+                <div style={{fontSize:15,paddingLeft:5,paddingTop:10}}>{item.entName}({item.count})</div>
+                <div style={{paddingLeft:30,marginTop:13}}><span><Icon className={entstyles.icon} type="interation" theme="twoTone" />传输有效率: {item.transmissionEffectiveRate}</span></div>
+                <div className={entstyles.line} style={{paddingLeft:30,marginTop:8}}><span> <Icon type="tool" theme="twoTone" /> 设备运转率: {item.equipmentOperatingRate}</span></div>
+                <div className={entstyles.statuslistContainer}>
+                    <Badge status="default" text={`离线(${item.onLine})`} />
+                    <Badge status="success" text={`在线(${item.offLine})`} />
+                    <Badge status="error" text={`超标(${item.over})`} />
+                    <Badge status="warning" text={`异常(${item.exception})`} />
+                </div>
+                </div>
+                {/* <div className={entstyles.card}>
                 <div style={{fontSize:16,paddingLeft:10}}><Icon className={entstyles.icon} type="bank" theme="twoTone" /><span>{item.entName}({item.count})</span></div>
+                <div className={entstyles.statuslistContainer}>
+                    <Badge status="default" text={`离线(${item.onLine})`} />
+                    <Badge status="success" text={`在线(${item.offLine})`} />
+                    <Badge status="error" text={`超标(${item.over})`} />
+                    <Badge status="warning" text={`异常(${item.exception})`} />
+                </div>
                 <div style={{paddingLeft:30,marginTop:8}}><span className={csyxlcolor}><Icon className={entstyles.icon} type="interation" theme="twoTone" />传输有效率: {item.transmissionEffectiveRate}</span>
                 <span className={sbyzlcolor}> <Icon  style={{marginLeft:30}} type="tool" theme="twoTone" /> 设备运转率: {item.equipmentOperatingRate}</span></div>
-                <div className={entstyles.statusImg}>
-                     <span>{getPointStatusImg(1,null,1,12)}正常: {item.onLine}</span>
-                     <span>{getPointStatusImg(0,null,1,12)}离线: {item.offLine}</span>
-                     <span>{getPointStatusImg(2,null,1,12)}超标: {item.over}</span>
-                     <span>{getPointStatusImg(3,null,1,12)}异常: {item.exception}</span>
-                </div>
-                </div>
+                </div> */}
+             
             </div>)
         })
        }
@@ -106,7 +118,9 @@ class EntTreeList extends Component {
                      />
                  </div>
                  <div>
-                     <div className={styles.treelist} style={{ width: '400px',marginTop: 5,background:'#fff',height:'calc(100vh - 200px)' }}>
+                     <div 
+                      className={styles.treelist}
+                      style={{ width: '400px',marginTop: 5,background:'#fff',height:'calc(100vh - 200px)' }}>
                             {this.getEntTree()}
                      </div>
                  </div>

@@ -34,6 +34,7 @@ export default Model.extend({
         endTime: '2019-01-01 00:00:00',//moment().format('YYYY-MM-DD HH:mm:ss'),
         tableDatas: [],
         entCode: null,
+        entName:null,
         operation: {
             beginTime: moment().add(-3, 'months').format("YYYY-MM-01 00:00:00"),//'2018-12-01 00:00:00',//moment().format('YYYY-MM-DD HH:mm:ss'),
             endTime: moment().format('YYYY-MM-DD HH:mm:ss'),//'2019-01-01 00:00:00',//moment().format('YYYY-MM-DD HH:mm:ss'),
@@ -128,6 +129,7 @@ export default Model.extend({
             dateType: 'month',
         },
         entbaseinfo: [],
+        wheretopage:null
     },
     subscriptions: {
     },

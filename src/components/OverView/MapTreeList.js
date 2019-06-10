@@ -120,9 +120,25 @@ class MapTreeList extends Component {
             type: "homepage/updateState",
             payload: {
                 entCode: selectent.entCode,
+                wheretopage:'mapview'
             }
         })
     }
+
+       //跳转到工作台
+       toworkbenchmodel = (record) => {
+        const { dispatch,selectent } = this.props;
+        dispatch({
+            type: "workbenchmodel/updateState",
+            payload: {
+                entCode: selectent.entCode,
+                entName:selectent.entName,
+                wheretopage:'mapview',
+            }
+        })
+      //  this.props.dispatch(routerRedux.push(`/workbench`));
+    }
+
 
     getSearch = () => {
         if (onlyOneEnt) {
@@ -148,7 +164,6 @@ class MapTreeList extends Component {
         }
         else {
             const { selectent } = this.props;
-            debugger
             return (
 
                 <div style={{
@@ -172,7 +187,9 @@ class MapTreeList extends Component {
                             <Badge status="warning" text="异常" />
                         </span>
                         <span style={{ float: 'right', marginRight: 10 }}>
-                            <span onClick={this.toHomePage} style={{ marginRight: 15, cursor: 'pointer' }}><img style={{ width: 15, marginRight: 6, marginBottom: 4 }} src="/home.png" /><Link to='/homepage'>企业看板</Link></span>
+                            <span onClick={this.toworkbenchmodel} style={{ marginRight: 15, cursor: 'pointer' }}>
+                            <img style={{ width: 15, marginRight: 6, marginBottom: 4 }} src="/home.png" />
+                            <Link to='/workbench/ent'>企业看板</Link></span>
                             <span style={{ float: "right" }}>
                             </span>
                         </span>
@@ -185,9 +202,16 @@ class MapTreeList extends Component {
     }
 
     render() {
-        const { maploading, selectpollutantTypeCode, isback } = this.props;
+        const { maploading,loading, selectpollutantTypeCode, isback } = this.props;
         if (maploading) {
-            return '';
+            return   <Spin
+            style={{ width: '100%',
+                height: 'calc(100vh/2)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center' }}
+            size="large"
+        />
         }
         return (
             <div style={{ marginLeft: 10, marginTop: 10 }}>

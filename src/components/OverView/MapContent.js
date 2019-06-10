@@ -144,6 +144,7 @@ class MapContent extends Component {
   }
 
   render() {
+    let {maploading,baseModel,selectpoint,datalist,selectent}=this.props;
     if(maploading) {
         return(<Spin
             style={{ width: '100%',
@@ -154,8 +155,7 @@ class MapContent extends Component {
             size="large"
         />);
     }
-      let {maploading,baseModel,selectpoint,datalist,selectent}=this.props;
-      debugger;
+    
       const baseinfo = selectent?selectent:baseModel;
       //地图中心
       let mapCenter;
