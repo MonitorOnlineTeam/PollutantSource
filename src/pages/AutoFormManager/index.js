@@ -126,7 +126,7 @@ export default class AutoFormIndex extends Component {
             >
               <Button icon="printer" type="primary" onClick={()=>{
                 console.log('state=',this.state)
-              }}>自定义按钮</Button>
+              }}>维护点信息</Button>
             </SdlTable>
           </Card>
         </div>
