@@ -124,7 +124,9 @@ class AutoFormEdit extends Component {
               ...FormData,
             },
             callback: (res) => {
-              successCallback ? successCallback() : history.go(-1);
+              if (res.IsSuccess) {
+                successCallback ? successCallback(res) : history.go(-1);
+              }
             }
           }
         });

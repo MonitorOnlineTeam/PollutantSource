@@ -3,7 +3,7 @@
  * @Author: JianWei
  * @Date: 2019-5-23 10:34:29
  * @Last Modified by: Jiaqi
- * @Last Modified time: 2019-06-06 11:46:14
+ * @Last Modified time: 2019-06-11 16:12:55
  */
 import React, { Component, Fragment } from 'react';
 import PropTypes, { object } from 'prop-types';
@@ -108,7 +108,7 @@ class AutoFormAdd extends Component {
             },
             callback: (res) => {
               if (res.IsSuccess) {
-                successCallback ? successCallback() : dispatch(routerRedux.push(`/sysmanage/autoformmanager/${configId}`));
+                successCallback ? successCallback(res) : dispatch(routerRedux.push(`/sysmanage/autoformmanager/${configId}`));
               }
             }
           }

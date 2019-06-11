@@ -2,7 +2,7 @@
  * @Author: Jiaqi
  * @Date: 2019-05-07 16:03:14
  * @Last Modified by: Jiaqi
- * @Last Modified time: 2019-06-05 15:16:50
+ * @Last Modified time: 2019-06-11 11:20:43
  * @desc: 搜索容器组件
  * @props {string} formChangeActionType formAction
  * @props {store object} searchFormState formState对象
@@ -180,7 +180,7 @@ class SearchWrapper extends Component {
               configId={item.configId}
               all={true}
             />
-            
+
           )
           break;
         case "多选":
@@ -248,14 +248,6 @@ class SearchWrapper extends Component {
               }
             </Col> : null
           }
-          {/* <Col md={16} sm={24} style={{ margin: '10px 0' }}>
-            <Button type="primary" onClick={this.onSubmitForm.bind(this.props.form)}>
-              查询
-                  </Button>
-            <Button style={{ marginLeft: 8 }} onClick={this._resetForm}>
-              重置
-                  </Button>
-          </Col> */}
         </Row>
         {/* <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
           <Col md={16} sm={24} style={{ margin: '10px 0' }}>

@@ -117,7 +117,6 @@ class SdlTable extends PureComponent {
             }}
           >添加
                   </Button>;
-          break;
         case "alldel":
           return <Button
             disabled={this.state.selectedRowKeys.length <= 0}
@@ -142,10 +141,8 @@ class SdlTable extends PureComponent {
             }}
           >批量删除
                          </Button>;
-          break;
         case "print":
           return <Button icon="printer" key={btn.DISPLAYBUTTON} type="primary">打印</Button>;
-          break;
         case "edit":
           btnEl.push({
             type: 'edit'
@@ -208,7 +205,7 @@ class SdlTable extends PureComponent {
         align: "center",
         title: "操作",
         width: 200,
-        fixed:'right',
+        fixed: 'right',
         render: (text, record) => (
           <div>
             {
@@ -285,6 +282,14 @@ class SdlTable extends PureComponent {
                 }
               })
             }
+            {
+              React.Children.map(this.props.children, (child, i) => {
+                // if (child.props["data-position"] === "row") {
+                if (child.key === "row") {
+                  return child
+                }
+              })
+            }
           </div>
         )
       });
@@ -299,6 +304,7 @@ class SdlTable extends PureComponent {
     };
     const dataSource = tableInfo[configId] ? tableInfo[configId].dataSource : [];
     // const dataSource = _tabelInfo.dataSource
+
     return (
       <Fragment>
         <Row className={styles.buttonWrapper}>
@@ -306,7 +312,12 @@ class SdlTable extends PureComponent {
             buttonsView
           }
           {
-            this.props.children
+            React.Children.map(this.props.children, (child, i) => {
+              // if (child.props["data-position"] === "top") {
+              if (child.key === "top") {
+                return child
+              }
+            })
           }
         </Row>
         {/* [record["dbo.T_Bas_CommonPoint.PointCode"], record["dbo.T_Bas_CommonPoint.PointName"]] */}

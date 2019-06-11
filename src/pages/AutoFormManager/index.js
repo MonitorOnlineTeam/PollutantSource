@@ -66,7 +66,7 @@ export default class AutoFormIndex extends Component {
   }
 
   render() {
-    const { searchConfigItems, searchForm, tableInfo, match: { params: { configId } } } = this.props;
+    const { searchConfigItems, searchForm, tableInfo, match: { params: { configId } }, dispatch } = this.props;
     const searchConditions = searchConfigItems[configId] || []
     const columns = tableInfo[configId] ? tableInfo[configId]["columns"] : [];
     if (this.props.loading) {
@@ -124,9 +124,16 @@ export default class AutoFormIndex extends Component {
             // ]}
             // dataSource={dataSource}
             >
-              <Button icon="printer" type="primary" onClick={()=>{
-                console.log('state=',this.state)
-              }}>维护点信息</Button>
+              <Fragment key="top">
+                <Button icon="printer" type="primary" onClick={() => {
+                  dispatch(routerRedux.push(`/autoformmanager/test/TestCommonPoint`))
+                  console.log('state=', this.state)
+                }}>维护点信息</Button>
+              </Fragment>
+              {/* <Fragment key="row">
+                <Divider type="vertical" />
+                <a>测试自定义</a>
+              </Fragment> */}
             </SdlTable>
           </Card>
         </div>

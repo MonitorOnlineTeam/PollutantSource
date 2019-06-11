@@ -235,7 +235,7 @@ export default [
             /* 系统管理-AutoForm详情页面 */
             { path: '/autoformmanager/autoformview/:configId/:keysParams', component: './autoformmanager/autoformview' },
             // /* 系统管理-AutoForm详情页面 */
-            { path: '/autoformmanager/test', component: './autoformmanager/Test' },
+            { path: '/autoformmanager/test/:configId', component: './autoformmanager/Test' },
             { path: '/autoformmanager/upload', component: './autoformmanager/Upload' },
 
             /* 标准库管理-维护 */
