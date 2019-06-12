@@ -237,6 +237,10 @@ export default [
             // /* 系统管理-AutoForm详情页面 */
             { path: '/autoformmanager/test/:configId', component: './autoformmanager/Test' },
             { path: '/autoformmanager/upload', component: './autoformmanager/Upload' },
+            /* 系统管理-AutoForm-监控目标 */
+            { path: '/sysmanage/monitortarget', component: './autoformmanager/monitortarget' },
+            { path: '/sysmanage/monitortarget/:configId', component: './autoformmanager/monitortarget' },
+            { path: '/sysmanage/monitortarget/monitorpoint/:configId/:targetId/:targetName', component: './autoformmanager/monitorpoint' },
 
             /* 标准库管理-维护 */
             { path: '/sysmanage/standardlibrarydetail/:StandardLibraryID', component: './StandardLibrary/AddStandardLibrary' },

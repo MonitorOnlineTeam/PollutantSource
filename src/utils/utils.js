@@ -6,6 +6,7 @@ import {
     Popover,
     Badge,
     Icon,
+    message
 } from 'antd';
 
 
@@ -13,20 +14,20 @@ export function fixedZero(val) {
     return val * 1 < 10 ? `0${val}` : val;
 }
 
-export function asc(a,b){
+export function asc(a, b) {
     //数字类型
-    if(typeof a.orderby==="number")
-        return a.orderby-b.orderby;
+    if (typeof a.orderby === "number")
+        return a.orderby - b.orderby;
     //时间类型
-    return a.orderby<b.orderby?1:-1;
+    return a.orderby < b.orderby ? 1 : -1;
 }
 
-export function desc(a,b){
+export function desc(a, b) {
     //数字类型
-    if(typeof a.orderby==="number")
-        return b.orderby-a.orderby;
+    if (typeof a.orderby === "number")
+        return b.orderby - a.orderby;
     //时间类型
-    return b.orderby<a.orderby?1:-1;
+    return b.orderby < a.orderby ? 1 : -1;
 }
 
 export function getTimeDistance(type) {
@@ -98,7 +99,7 @@ export function digitUppercase(n) {
 
 function getRelation(str1, str2) {
     if (str1 === str2) {
-    console.warn('Two path are equal!'); // eslint-disable-line
+        console.warn('Two path are equal!'); // eslint-disable-line
     }
     const arr1 = str1.split('/');
     const arr2 = str2.split('/');
@@ -115,7 +116,7 @@ function getRenderArr(routes) {
     let renderArr = [];
     renderArr.push(routes[0]);
     for (let i = 1; i < routes.length; i += 1) {
-    // 去重
+        // 去重
         renderArr = renderArr.filter(item => getRelation(item, routes[i]) !== 1);
         // 是否包含
         const isAdd = renderArr.every(item => getRelation(item, routes[i]) === 3);
@@ -191,7 +192,7 @@ export function formatWan(val) {
                         marginLeft: 2,
                     }}
                 >
-          万
+                    万
                 </span>
             </span>
         );
@@ -209,7 +210,7 @@ export function isAntdPro() {
  * @param {moment} mmt monent对象
  * @param {String} formatType 格式
  */
-export function formatMoment(mmt , formatType = "YYYY-MM-DD HH:mm:ss") {
+export function formatMoment(mmt, formatType = "YYYY-MM-DD HH:mm:ss") {
     return mmt ? moment(mmt).format(formatType) : null;
 }
 /**
@@ -219,7 +220,7 @@ export function formatMoment(mmt , formatType = "YYYY-MM-DD HH:mm:ss") {
  * @param {*} additional 数据的附加信息
  * @returns
  */
-export function formatPollutantPopover(value,additional) {
+export function formatPollutantPopover(value, additional) {
     if (additional) {
         const additionalInfo = additional.split('§');
         if (additionalInfo[0] === 'IsOver') {
@@ -282,4 +283,31 @@ export function downloadFile(sUrl) {
     }
     window.open(sUrl, '_self');
     return true;
+}
+
+/**
+ * 全局提示
+ * @content 消息内容
+ * @type 消息类型（info|success|warning|error）
+ */
+export function sdlMessage(content,type) {
+    message.config({
+        top: 70,
+        duration: 3,
+        maxCount: 3,
+    });
+    switch (type||'info') {
+        case 'info':
+            message.info(content);
+            break;
+        case 'success':
+            message.success(content);
+            break;
+        case 'warning':
+            message.warning(content);
+            break;
+        case 'error':
+            message.error(content);
+            break;
+    }
 }
