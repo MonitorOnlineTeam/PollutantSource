@@ -3,7 +3,7 @@
  * @Author: JianWei
  * @Date: 2019-5-23 10:34:29
  * @Last Modified by: Jiaqi
- * @Last Modified time: 2019-06-11 16:12:55
+ * @Last Modified time: 2019-06-12 17:35:56
  */
 import React, { Component, Fragment } from 'react';
 import PropTypes, { object } from 'prop-types';
@@ -20,6 +20,7 @@ import {
 import cuid from 'cuid';
 import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
+import { REGEXP, afterDecimalNum } from '@/utils/validator';
 import MonitorContent from '../../components/MonitorContent/index';
 import SearchSelect from './SearchSelect';
 import SdlCascader from './SdlCascader';
@@ -124,7 +125,9 @@ class AutoFormAdd extends Component {
     const { formLayout, inputPlaceholder, selectPlaceholder, uid, configId } = this._SELF_;
     const formItems = addFormItems[configId] || [];
     // return addFormItems[configId].map((item) =>{
+    console.log('formItems=', formItems)
     return formItems.map((item) => {
+      let validate = [];
       let element = '';
       let { placeholder, validator } = item;
       const { fieldName, labelText, required } = item;
@@ -247,6 +250,95 @@ class AutoFormAdd extends Component {
 
           break;
       }
+      validate = item.validate.map(vid => {
+        switch (vid) {
+          case "'number'":
+            return {
+              type: "number",
+              message: '请输入正确的数字',
+            }
+          case "'double'":
+            return {
+              type: "number",
+              message: '请输入正确的数字',
+            }
+          case "'phone'":
+            return {
+              pattern: REGEXP.phone,
+              message: '电话号码格式不正确',
+            }
+          case "'mobile'":
+            return {
+              pattern: REGEXP.mobile,
+              message: '手机号码格式不正确',
+            }
+          case "'email'":
+            return {
+              type: "email",
+              message: '邮箱格式不正确',
+            }
+          case "'fax'":
+            return {
+              pattern: REGEXP.fax,
+              message: '传真格式不正确',
+            }
+          case "'ZIP'":
+            return {
+              pattern: REGEXP.postcode,
+              message: '邮政编码格式不正确',
+            }
+          case "'idcard'":
+            return {
+              pattern: REGEXP.idCard,
+              message: '身份证格式不正确',
+            }
+          case "'loginName'":
+            return {
+              pattern: REGEXP.loginName,
+              message: '只允许汉字、英文字母、数字及下划线',
+            }
+          case "'ip'":
+            return {
+              pattern: REGEXP.ip,
+              message: 'ip格式不正确',
+            }
+          // case "maxLength":
+          //   return {
+          //     pattern: REGEXP.ip,
+          //     message: 'ip格式不正确',
+          //   }
+          default:
+            // if (vid.indexOf("maxLength") > -1) {
+            //   // console.log('vid=', vid)
+            //   // console.log("111=", vid.replace(/[a-zA-Z]/g, '').toArray()[0])
+            //   return {
+            //     max: vid.replace(/[a-zA-Z]/g, '').toArray()[0],
+            //     message: 'The input is not valid E-mail!',
+            //   }
+            // }
+
+            if (vid.indexOf("rangeLength") > -1) {
+              // console.log('rangeLength=', vid)
+              // console.log("111=", vid.replace(/[a-zA-Z]/g, '').split('-')[0])
+              const range = vid.replace(/[a-zA-Z]/g, '').replace(/\'/g, '').replace("-",",");
+              const max = JSON.parse(range)[1];
+              const min = JSON.parse(range)[0];
+              console.log('max=',max,"min=",min)
+              return {
+                max: max,
+                min: min,
+                message: `最少输入${min}位, 最多输入${max}位`,
+              }
+            }
+            return {}
+        }
+        // return {
+        //   type: vid,
+        //   message: 'The input is not valid E-mail!',
+        // }
+      })
+
+      console.log("validate=", validate)
       if (element) {
         return (
           <FormItem key={fieldName} {...formLayout} label={labelText}>
@@ -256,6 +348,7 @@ class AutoFormAdd extends Component {
                   required: required,
                   message: validator + labelText,
                 },
+                ...validate
               ],
             })(element)}
           </FormItem>

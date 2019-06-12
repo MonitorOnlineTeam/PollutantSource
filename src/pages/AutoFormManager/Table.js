@@ -7,7 +7,9 @@ import {
   Col,
   Table,
   Form,
-  Select, Modal, Tag, Divider, Dropdown, Icon, Menu, Popconfirm, message
+  Badge,
+  Progress,
+  Select, Modal, Tag, Divider, Dropdown, Icon, Menu, Popconfirm, message, Upload
 } from 'antd';
 import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
@@ -88,6 +90,18 @@ class SdlTable extends PureComponent {
     this.props.rowChange && this.props.rowChange(selectedRowKeys, selectedRows)
   };
 
+  handleOk = e => {
+    this.setState({
+      visible: false,
+    });
+  };
+
+  handleCancel = e => {
+    this.setState({
+      visible: false,
+    });
+  };
+
   _handleTableChange(pagination, filters, sorter) {
     console.log('sorter=', sorter)
     if (sorter.order) {
@@ -143,6 +157,35 @@ class SdlTable extends PureComponent {
                          </Button>;
         case "print":
           return <Button icon="printer" key={btn.DISPLAYBUTTON} type="primary">打印</Button>;
+        case "exp":
+          return <Button
+            icon="export"
+            key={btn.DISPLAYBUTTON}
+            type="primary"
+            onClick={() => {
+              dispatch({
+                type: 'autoForm/exportDataExcel',
+                payload: {
+                  configId
+                }
+              })
+            }}
+          >
+            导出
+          </Button>;
+        case "imp":
+          return <Button
+            icon="import"
+            key={btn.DISPLAYBUTTON}
+            type="primary"
+            onClick={() => {
+              this.setState({
+                visible: true,
+              })
+            }}
+          >
+            导入
+          </Button>;
         case "edit":
           btnEl.push({
             type: 'edit'
@@ -196,7 +239,21 @@ class SdlTable extends PureComponent {
           }
         }
       }
-      return col.width ? { width: DEFAULT_WIDTH, ...col } : { ...col, width: DEFAULT_WIDTH }
+      return {
+        ...col,
+        width: col.width || DEFAULT_WIDTH,
+        render: (text, record) => {
+          const type = col.formatType;
+          return text && <div>
+            {type === "超链接" && <a>{type}</a>}
+            {type == "小圆点" && <Badge status="warning" text={text} />}
+            {type === "标签" && <Tag>{text}</Tag>}
+            {type === "进度条" && <Progress percent={text} />}
+            {!type && text}
+          </div>
+        }
+      }
+      // return col.width ? { width: DEFAULT_WIDTH, ...col } : { ...col, width: DEFAULT_WIDTH }
     });
 
     const buttonsView = this._renderHandleButtons();
@@ -305,6 +362,26 @@ class SdlTable extends PureComponent {
     const dataSource = tableInfo[configId] ? tableInfo[configId].dataSource : [];
     // const dataSource = _tabelInfo.dataSource
 
+    const props = {
+      name: 'file',
+      multiple: true,
+      action: 'http://172.16.9.52:8095/rest/PollutantSourceApi/AutoFormDataApi/ImportDataExcel',
+      data: {
+        ConfigID: configId,
+      }
+      // onChange(info) {
+      //   const status = info.file.status;
+      //   if (status !== 'uploading') {
+      //     console.log(info.file, info.fileList);
+      //   }
+      //   if (status === 'done') {
+      //     message.success(`${info.file.name} file uploaded successfully.`);
+      //   } else if (status === 'error') {
+      //     message.error(`${info.file.name} file upload failed.`);
+      //   }
+      // },
+    };
+
     return (
       <Fragment>
         <Row className={styles.buttonWrapper}>
@@ -353,6 +430,31 @@ class SdlTable extends PureComponent {
           {...this.props}
           columns={_columns}
         />
+        <Modal
+          title="导入"
+          visible={this.state.visible}
+          onOk={this.handleOk}
+          onCancel={this.handleCancel}
+        >
+          <Row>
+            <Col span={18}>
+              <Upload {...props}>
+                <Button>
+                  <Icon type="upload" /> 请选择文件
+                </Button>
+              </Upload>
+            </Col>
+            <Col span={6} style={{ marginTop: 6 }}>
+              <a onClick={() => {
+                dispatch({
+                  type: 'autoForm/exportTemplet',
+                  payload: {
+                    configId
+                  }
+                })
+              }}>下载导入模板</a></Col>
+          </Row>
+        </Modal>
       </Fragment>
     );
   }

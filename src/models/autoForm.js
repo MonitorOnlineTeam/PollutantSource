@@ -2,7 +2,7 @@
  * @Author: Jiaqi
  * @Date: 2019-05-16 15:13:59
  * @Last Modified by: Jiaqi
- * @Last Modified time: 2019-06-05 17:39:50
+ * @Last Modified time: 2019-06-12 16:29:52
  */
 import { message } from 'antd';
 import {
@@ -147,7 +147,8 @@ export default Model.extend({
           align: 'center',
           width: item.DF_WIDTH,
           sorter: item.DF_ISSORT === 1 ? (a, b) => a[item.FullFieldName] - b[item.FullFieldName] : false,
-          fixed: result.Datas.FixedFields.filter(m => m.FullFieldName === item.FullFieldName).length > 0 ? 'left' : ''
+          fixed: result.Datas.FixedFields.filter(m => m.FullFieldName === item.FullFieldName).length > 0 ? 'left' : '',
+          formatType: item.DF_ISFormat
         })
         );
 
@@ -181,7 +182,8 @@ export default Model.extend({
           configDataItemName: item.FOREIGN_DF_NAME,
           configDataItemValue: item.FOREIGN_DF_ID,
           required: item.DF_ISNOTNULL === 1,
-          validator: item.DF_ISNOTNULL === 1 && (item.DF_TOOLTIP || "")//TODO：正则？
+          validator: item.DF_ISNOTNULL === 1 && (item.DF_TOOLTIP || ""),//TODO：正则？
+          validate: item.DF_VALIDATE ? item.DF_VALIDATE.split(',') : [],
         }));
 
 
@@ -331,6 +333,26 @@ export default Model.extend({
         yield update({
           fileList
         })
+      }
+    },
+
+    // 导出报表
+    * exportDataExcel({ payload }, { call, update }) {
+      const result = yield call(services.exportDataExcel, { ...payload });
+      if (result.IsSuccess) {
+        console.log('suc=', result)
+        result.Datas && window.open(result.Datas)
+      }else{
+        message.error(result.reason)
+      }
+    },
+    // 下载导入模板
+    * exportTemplet({ payload }, { call, update }) {
+      const result = yield call(services.exportTemplet, { ...payload });
+      if (result.IsSuccess) {
+        result.Datas && window.open(result.Datas)
+      } else {
+        message.error(result.Datas)
       }
     }
   },

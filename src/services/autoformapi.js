@@ -179,3 +179,21 @@ export async function getAttachmentList(params) {
     const result = await postNew('/api/rest/PollutantSourceApi/UploadApi/GetAttachmentList', params, null);
     return result;
 }
+
+/**
+ * 【AutoForm】导出
+ * @params {"configId": "String"}
+ */
+export async function exportDataExcel(params) {
+    const result = await postNew('/api/rest/PollutantSourceApi/AutoFormDataApi/ExportDataExcel', params, null);
+    return result;
+}
+
+/**
+ * 【AutoForm】下载导入模板
+ * @params {"configId": "String"}
+ */
+export async function exportTemplet(params) {
+    const result = await postNew('/api/rest/PollutantSourceApi/AutoFormDataApi/ExportTemplet', params, null);
+    return result;
+}
