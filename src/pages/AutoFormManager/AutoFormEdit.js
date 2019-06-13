@@ -163,6 +163,7 @@ class AutoFormEdit extends Component {
               configId={item.configId}
               itemName={item.configDataItemName}
               itemValue={item.configDataItemValue}
+              data={item.value}
             />
           );
           break;
@@ -290,7 +291,7 @@ class AutoFormEdit extends Component {
           return {}
         }
       })
-      console.log(labelText + ":" + JSON.stringify(validate))
+      console.log(labelText + ":", validate)
       if (element) {
         return (
           <FormItem key={item.fieldName} {...formLayout} label={labelText}>

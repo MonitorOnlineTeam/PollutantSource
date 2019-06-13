@@ -16,6 +16,10 @@ export const REGEXP = {
   positiveInteger: /^[0-9]*$/, // 正整数
   loginName: /^\w+$/, // 数字、字母、下划线
   port: /^([0-9]|[1-9]\d{1,3}|[1-5]\d{4}|6[0-4]\d{4}|65[0-4]\d{2}|655[0-2]\d|6553[0-5])$/, // 端口
+  qq: /^[1-9][0-9]{4,}$/,
+  judgeNumber: /^[0-9\-]+$/, // 数字和横杠
+  latitude: /^(\-|\+)?([0-8]?\d{1}\.\d{0,6}|90\.0{0,6}|[0-8]?\d{1}|90)$/, // 纬度
+  longitude: /^(\-|\+)?(((\d|[1-9]\d|1[0-7]\d|0{1,3})\.\d{0,6})|(\d|[1-9]\d|1[0-7]\d|0{1,3})|180\.0{0,6}|180)$/, // 经度
 }
 
 
@@ -92,5 +96,21 @@ export const checkRules = {
   port: {
     pattern: REGEXP.port,
     message: '端口号格式不正确。',
+  },
+  QQ: {
+    pattern: REGEXP.qq,
+    message: 'qq号码格式不正确。',
+  },
+  judgeNumber: {
+    pattern: REGEXP.judgeNumber,
+    message: '输入格式不正确，只能支持数字和横杠。',
+  },
+  isLongitude: {
+    pattern: REGEXP.longitude,
+    message: '经度整数部分为0-180，小数部分为0到6位!',
+  },
+  isLatitude: {
+    pattern: REGEXP.latitude,
+    message: '纬度整数部分为0-90，小数部分为0到6位!',
   }
 }
