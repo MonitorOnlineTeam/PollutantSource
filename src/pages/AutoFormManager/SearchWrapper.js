@@ -2,7 +2,7 @@
  * @Author: Jiaqi
  * @Date: 2019-05-07 16:03:14
  * @Last Modified by: Jiaqi
- * @Last Modified time: 2019-06-11 11:20:43
+ * @Last Modified time: 2019-06-13 14:40:49
  * @desc: 搜索容器组件
  * @props {string} formChangeActionType formAction
  * @props {store object} searchFormState formState对象
@@ -156,6 +156,7 @@ class SearchWrapper extends Component {
               configId={item.configId}
               itemName={item.configDataItemName}
               itemValue={item.configDataItemValue}
+              data={item.value}
               mode={mode}
             >
             </SearchSelect>

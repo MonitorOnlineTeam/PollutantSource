@@ -3,7 +3,7 @@
  * @Author: Jiaqi
  * @Date: 2019-05-22 16:38:14
  * @Last Modified by: Jiaqi
- * @Last Modified time: 2019-06-13 14:26:24
+ * @Last Modified time: 2019-06-13 14:38:46
  */
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
@@ -48,8 +48,10 @@ class SearchSelect extends Component {
         {...this.props}
       >
         {
-         dataSource.map(option => {
-            return <Option key={option[itemValue]} value={`${option[itemValue]}`}>{option[itemName]}</Option>
+          dataSource.map(option => {
+            return data.length ?
+              <Option key={option.key} value={option.value}>{option.value}</Option> :
+              <Option key={option[itemValue]} value={`${option[itemValue]}`}>{option[itemName]}</Option>
           })
         }
       </Select>
@@ -74,7 +76,7 @@ SearchSelect.propTypes = {
 }
 
 
-SearchSelect.defaultProps={
+SearchSelect.defaultProps = {
   data: []
 }
 
