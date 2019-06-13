@@ -74,14 +74,14 @@ class AutoFormAdd extends Component {
   componentDidMount() {
     let { addFormItems, dispatch } = this.props;
     let { configId } = this._SELF_;
-    if (!addFormItems || addFormItems.length === 0) {
+    // if (!addFormItems || addFormItems.length === 0) {
       dispatch({
         type: 'autoForm/getPageConfig',
         payload: {
           configId: configId
         }
       });
-    }
+    // }
     //console.log("configIdList===",configId);
   }
 

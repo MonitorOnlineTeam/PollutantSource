@@ -50,7 +50,7 @@ class SearchSelect extends Component {
         {
           dataSource.map(option => {
             return data.length ?
-              <Option key={option.key} value={option.value}>{option.value}</Option> :
+              <Option key={option.key} value={option.key}>{option.value}</Option> :
               <Option key={option[itemValue]} value={`${option[itemValue]}`}>{option[itemName]}</Option>
           })
         }

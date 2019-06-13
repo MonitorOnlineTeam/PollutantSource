@@ -127,7 +127,7 @@ class SdlTable extends PureComponent {
             icon="plus"
             type="primary"
             onClick={() => {
-              dispatch(routerRedux.push(`/AutoFormManager/AutoFormAdd/${configId}`));
+              this.props.onAdd ? this.props.onAdd() : dispatch(routerRedux.push(`/AutoFormManager/AutoFormAdd/${configId}`));
             }}
           >添加
                   </Button>;

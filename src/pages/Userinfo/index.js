@@ -11,7 +11,8 @@ import {
 } from 'antd';
 import styles from './index.less';
 import MonitorContent from '../../components/MonitorContent/index';
-import NewDataFilter from '../Userinfo/DataFilterNew';
+// import NewDataFilter from '../Userinfo/DataFilterNew';
+import NewDataFilter from '../Userinfo/DataFilterNewByLzp';
 import EnterpriseDataFilter from '../../components/UserInfo/EnterpriseDataFilter';
 import { routerRedux } from 'dva/router';
 import { connect } from 'dva';
