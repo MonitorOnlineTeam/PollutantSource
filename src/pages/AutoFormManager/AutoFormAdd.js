@@ -3,7 +3,7 @@
  * @Author: JianWei
  * @Date: 2019-5-23 10:34:29
  * @Last Modified by: Jiaqi
- * @Last Modified time: 2019-06-12 17:35:56
+ * @Last Modified time: 2019-06-13 11:26:42
  */
 import React, { Component, Fragment } from 'react';
 import PropTypes, { object } from 'prop-types';
@@ -20,7 +20,7 @@ import {
 import cuid from 'cuid';
 import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
-import { REGEXP, afterDecimalNum } from '@/utils/validator';
+import { checkRules } from '@/utils/validator';
 import MonitorContent from '../../components/MonitorContent/index';
 import SearchSelect from './SearchSelect';
 import SdlCascader from './SdlCascader';
@@ -125,7 +125,6 @@ class AutoFormAdd extends Component {
     const { formLayout, inputPlaceholder, selectPlaceholder, uid, configId } = this._SELF_;
     const formItems = addFormItems[configId] || [];
     // return addFormItems[configId].map((item) =>{
-    console.log('formItems=', formItems)
     return formItems.map((item) => {
       let validate = [];
       let element = '';
@@ -250,95 +249,43 @@ class AutoFormAdd extends Component {
 
           break;
       }
+      // 匹配校验规则
       validate = item.validate.map(vid => {
-        switch (vid) {
-          case "'number'":
-            return {
-              type: "number",
-              message: '请输入正确的数字',
-            }
-          case "'double'":
-            return {
-              type: "number",
-              message: '请输入正确的数字',
-            }
-          case "'phone'":
-            return {
-              pattern: REGEXP.phone,
-              message: '电话号码格式不正确',
-            }
-          case "'mobile'":
-            return {
-              pattern: REGEXP.mobile,
-              message: '手机号码格式不正确',
-            }
-          case "'email'":
-            return {
-              type: "email",
-              message: '邮箱格式不正确',
-            }
-          case "'fax'":
-            return {
-              pattern: REGEXP.fax,
-              message: '传真格式不正确',
-            }
-          case "'ZIP'":
-            return {
-              pattern: REGEXP.postcode,
-              message: '邮政编码格式不正确',
-            }
-          case "'idcard'":
-            return {
-              pattern: REGEXP.idCard,
-              message: '身份证格式不正确',
-            }
-          case "'loginName'":
-            return {
-              pattern: REGEXP.loginName,
-              message: '只允许汉字、英文字母、数字及下划线',
-            }
-          case "'ip'":
-            return {
-              pattern: REGEXP.ip,
-              message: 'ip格式不正确',
-            }
-          // case "maxLength":
-          //   return {
-          //     pattern: REGEXP.ip,
-          //     message: 'ip格式不正确',
-          //   }
-          default:
-            // if (vid.indexOf("maxLength") > -1) {
-            //   // console.log('vid=', vid)
-            //   // console.log("111=", vid.replace(/[a-zA-Z]/g, '').toArray()[0])
-            //   return {
-            //     max: vid.replace(/[a-zA-Z]/g, '').toArray()[0],
-            //     message: 'The input is not valid E-mail!',
-            //   }
-            // }
-
-            if (vid.indexOf("rangeLength") > -1) {
-              // console.log('rangeLength=', vid)
-              // console.log("111=", vid.replace(/[a-zA-Z]/g, '').split('-')[0])
-              const range = vid.replace(/[a-zA-Z]/g, '').replace(/\'/g, '').replace("-",",");
-              const max = JSON.parse(range)[1];
-              const min = JSON.parse(range)[0];
-              console.log('max=',max,"min=",min)
-              return {
-                max: max,
-                min: min,
-                message: `最少输入${min}位, 最多输入${max}位`,
-              }
-            }
-            return {}
+        // 最大长度
+        if (vid.indexOf("maxLength") > -1) {
+          const max = vid.replace(/[^\d]/g, '') * 1
+          return {
+            max: max / 1,
+            message: `最多输入${max}位`,
+          }
+        } else if (vid.indexOf("minLength") > -1) { // 最小长度
+          const min = vid.replace(/[^\d]/g, '') * 1
+          return {
+            min: min / 1,
+            message: `最少输入${max}位`,
+          }
+        } else if (vid.indexOf("rangeLength") > -1) { // 最小最大长度限制
+          const range = vid.match(/\d+(,\d+)?/g);
+          const max = range[1];
+          const min = range[0];
+          return {
+            max: max / 1,
+            min: min / 1,
+            message: `最少输入${min}位, 最多输入${max}位。`,
+          }
+        } else if (vid.indexOf("reg") > -1) { // 自定义正则
+          const reg = vid.replace("reg", "");
+          return {
+            pattern: `/${reg}/`,
+            message: "格式错误。",
+          }
+        } else if (checkRules[vid.replace(/\'/g, "")]) {
+          return checkRules[vid.replace(/\'/g, "")]
+        } else {
+          return {}
         }
-        // return {
-        //   type: vid,
-        //   message: 'The input is not valid E-mail!',
-        // }
       })
-
-      console.log("validate=", validate)
+      console.log(labelText + ":" + JSON.stringify(validate))
       if (element) {
         return (
           <FormItem key={fieldName} {...formLayout} label={labelText}>
@@ -352,7 +299,6 @@ class AutoFormAdd extends Component {
               ],
             })(element)}
           </FormItem>
-
         );
       }
     });

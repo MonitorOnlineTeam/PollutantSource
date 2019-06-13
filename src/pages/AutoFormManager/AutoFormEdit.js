@@ -17,6 +17,7 @@ import {
 } from 'antd';
 import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
+import { checkRules } from '@/utils/validator';
 import MonitorContent from '../../components/MonitorContent/index';
 import SearchSelect from './SearchSelect';
 import SdlCascader from './SdlCascader';
@@ -142,6 +143,7 @@ class AutoFormEdit extends Component {
     const formData = editFormData[configId] || {};
     return formItems.map((item) => {
       let element = '';
+      let validate = [];
       let { placeholder, validator } = item;
       const { fieldName, labelText, required } = item;
       let initialValue = formData[fieldName];
@@ -252,6 +254,43 @@ class AutoFormEdit extends Component {
 
           break;
       }
+      // 匹配校验规则
+      validate = item.validate.map(vid => {
+        // 最大长度
+        if (vid.indexOf("maxLength") > -1) {
+          const max = vid.replace(/[^\d]/g, '') * 1
+          return {
+            max: max / 1,
+            message: `最多输入${max}位`,
+          }
+        } else if (vid.indexOf("minLength") > -1) { // 最小长度
+          const min = vid.replace(/[^\d]/g, '') * 1
+          return {
+            min: min / 1,
+            message: `最少输入${max}位`,
+          }
+        } else if (vid.indexOf("rangeLength") > -1) { // 最小最大长度限制
+          const range = vid.match(/\d+(,\d+)?/g);
+          const max = range[1];
+          const min = range[0];
+          return {
+            max: max / 1,
+            min: min / 1,
+            message: `最少输入${min}位, 最多输入${max}位。`,
+          }
+        } else if (vid.indexOf("reg") > -1) { // 自定义正则
+          const reg = vid.replace("reg", "");
+          return {
+            pattern: `/${reg}/`,
+            message: "格式错误。",
+          }
+        } else if (checkRules[vid.replace(/\'/g, "")]) {
+          return checkRules[vid.replace(/\'/g, "")]
+        } else {
+          return {}
+        }
+      })
+      console.log(labelText + ":" + JSON.stringify(validate))
       if (element) {
         return (
           <FormItem key={item.fieldName} {...formLayout} label={labelText}>
@@ -262,6 +301,7 @@ class AutoFormEdit extends Component {
                   required: required,
                   message: validator + labelText,
                 },
+                ...validate
               ],
             })(element)}
           </FormItem>
