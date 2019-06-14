@@ -10,21 +10,12 @@ import PropTypes from 'prop-types';
 
 import {
   Form,
-  Input,
-  Button,
-  Card,
-  Spin, Icon
 } from 'antd';
 import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
 import { checkRules } from '@/utils/validator';
 import MonitorContent from '../../components/MonitorContent/index';
-import SearchSelect from './SearchSelect';
-import SdlCascader from './SdlCascader';
-import SdlRadio from './SdlRadio';
-import SdlCheckbox from './SdlCheckbox';
-import SdlUpload from './SdlUpload'
-import MapModal from './MapModal';
+import SdlForm from "./SdlForm"
 
 const FormItem = Form.Item;
 
@@ -48,7 +39,6 @@ class AutoFormEdit extends Component {
       latitude: 0,
       polygon: []
     };
-    console.log('props==', props)
     this._SELF_ = {
       formLayout: props.formLayout || {
         labelCol: {
@@ -67,34 +57,21 @@ class AutoFormEdit extends Component {
       keysParams: props.keysParams || JSON.parse(props.match.params.keysParams),
       uid: props.uid || (props.match && props.match.params.uid) || null
     };
-    this.renderFormItem = this.renderFormItem.bind(this);
     this.onSubmitForm = this.onSubmitForm.bind(this);
-    this.openMapModal = this.openMapModal.bind(this);
-    this.renderContent = this.renderContent.bind(this);
+    this._renderForm = this._renderForm.bind(this);
   }
 
   componentDidMount() {
     let { addFormItems, dispatch } = this.props;
     const { configId, keysParams, uid } = this._SELF_;
-    // console.log('keys=', JSON.parse(keys))
-    if (!addFormItems || addFormItems.length === 0) {
-      dispatch({
-        type: 'autoForm/getPageConfig',
-        payload: {
-          configId: configId,
-        }
-      });
-    }
-    // 获取数据
-    dispatch({
-      type: 'autoForm/getFormData',
-      payload: {
-        configId: configId,
-        ...keysParams
-      }
-    });
-
-    //console.log("configIdList===",configId);
+    // // 获取数据
+    // dispatch({
+    //   type: 'autoForm/getFormData',
+    //   payload: {
+    //     configId: configId,
+    //     ...keysParams
+    //   }
+    // });
   }
 
   onSubmitForm(e) {
@@ -135,270 +112,21 @@ class AutoFormEdit extends Component {
     });
   }
 
-  // 渲染FormItem
-  renderFormItem() {
-    const { addFormItems, form: { getFieldDecorator }, editFormData } = this.props;
-    const { formLayout, inputPlaceholder, selectPlaceholder, configId, keysParams, uid } = this._SELF_;
-    const formItems = addFormItems[configId] || [];
-    const formData = editFormData[configId] || {};
-    return formItems.map((item) => {
-      let element = '';
-      let validate = [];
-      let { placeholder, validator } = item;
-      const { fieldName, labelText, required } = item;
-      let initialValue = formData[fieldName];
-      // 判断类型
-      switch (item.type) {
-        case "文本框":
-          validator = `${inputPlaceholder}`;
-          placeholder = placeholder || inputPlaceholder;
-
-          element = <Input placeholder={placeholder} allowClear={true} />;
-          break;
-        case '下拉列表框':
-          validator = `${selectPlaceholder}`;
-          placeholder = placeholder || selectPlaceholder;
-          element = (
-            <SearchSelect
-              configId={item.configId}
-              itemName={item.configDataItemName}
-              itemValue={item.configDataItemValue}
-              data={item.value}
-            />
-          );
-          break;
-        case "多选下拉搜索树":
-          initialValue = formData[fieldName] && formData[fieldName].split(',');
-          placeholder = placeholder || selectPlaceholder;
-          element = (
-            <SdlCascader
-              itemName={item.configDataItemName}
-              itemValue={item.configDataItemValue}
-              data={item.value}
-              placeholder={placeholder}
-            />
-          )
-          break;
-        case "单选":
-          element = (
-            <SdlRadio
-              data={item.value}
-              configId={item.configId}
-            />
-          )
-          break;
-        case "多选":
-          element = (
-            <SdlCheckbox
-              data={item.value}
-              configId={item.configId}
-            />
-          )
-          break;
-        case "经度":
-          validator = `${inputPlaceholder}`;
-          placeholder = placeholder || inputPlaceholder;
-
-          element = <Input
-            suffix={<Icon
-              onClick={() => {
-                this.openMapModal({ EditMarker: true })
-                  ;
-              }}
-              type="global"
-              style={{ color: '#2db7f5', cursor: 'pointer' }}
-            />}
-            placeholder={placeholder}
-            allowClear={true}
-          />;
-          break;
-        case "纬度":
-          validator = `${inputPlaceholder}`;
-          placeholder = placeholder || inputPlaceholder;
-
-          element = <Input
-            suffix={<Icon
-              onClick={() => {
-                this.openMapModal({ EditMarker: true })
-                  ;
-              }}
-              type="global"
-              style={{ color: '#2db7f5', cursor: 'pointer' }}
-            />}
-            placeholder={placeholder}
-            allowClear={true}
-          />;
-          break;
-        case "坐标集合":
-          validator = `${inputPlaceholder}`;
-          placeholder = placeholder || inputPlaceholder;
-
-          element = <Input
-            suffix={<Icon
-              onClick={() => {
-                this.openMapModal({ EditPolygon: true, FieldName: fieldName })
-                  ;
-              }}
-              type="global"
-              style={{ color: '#2db7f5', cursor: 'pointer' }}
-            />}
-            placeholder={placeholder}
-            allowClear={true}
-          />;
-          break;
-        case "上传":
-          element = <SdlUpload
-            uid={uid}
-          />
-          break;
-        default:
-
-          break;
-      }
-      // 匹配校验规则
-      validate = item.validate.map(vid => {
-        // 最大长度
-        if (vid.indexOf("maxLength") > -1) {
-          const max = vid.replace(/[^\d]/g, '') * 1
-          return {
-            max: max / 1,
-            message: `最多输入${max}位`,
-          }
-        } else if (vid.indexOf("minLength") > -1) { // 最小长度
-          const min = vid.replace(/[^\d]/g, '') * 1
-          return {
-            min: min / 1,
-            message: `最少输入${max}位`,
-          }
-        } else if (vid.indexOf("rangeLength") > -1) { // 最小最大长度限制
-          const range = vid.match(/\d+(,\d+)?/g);
-          const max = range[1];
-          const min = range[0];
-          return {
-            max: max / 1,
-            min: min / 1,
-            message: `最少输入${min}位, 最多输入${max}位。`,
-          }
-        } else if (vid.indexOf("reg") > -1) { // 自定义正则
-          const reg = vid.replace("reg", "");
-          return {
-            pattern: `/${reg}/`,
-            message: "格式错误。",
-          }
-        } else if (checkRules[vid.replace(/\'/g, "")]) {
-          return checkRules[vid.replace(/\'/g, "")]
-        } else {
-          return {}
-        }
-      })
-      console.log(labelText + ":", validate)
-      if (element) {
-        return (
-          <FormItem key={item.fieldName} {...formLayout} label={labelText}>
-            {getFieldDecorator(`${fieldName}`, {
-              initialValue: initialValue && initialValue + "",
-              rules: [
-                {
-                  required: required,
-                  message: validator + labelText,
-                },
-                ...validate
-              ],
-            })(element)}
-          </FormItem>
-
-        );
-      }
-    });
-  }
-
-  renderContent() {
-    const submitFormLayout = {
-      wrapperCol: {
-        xs: { span: 24, offset: 0 },
-        sm: { span: 10, offset: 7 },
-      },
-    };
-    return <Card bordered={false}>
-      <Form onSubmit={this.onSubmitForm} hideRequiredMark={false} style={{ marginTop: 8 }}>
-        {
-          this.renderFormItem()
-        }
-
-        <FormItem {...submitFormLayout} style={{ marginTop: 32 }}>
-          <Button type="primary" htmlType="submit">
-            保存
-                            </Button>
-          <Button
-            style={{ marginLeft: 8 }}
-            onClick={() => {
-              history.go(-1)
-              // dispatch(routerRedux.push(`/sysmanage/autoformmanager`));
-            }}
-          >
-            返回
-                            </Button>
-        </FormItem>
-      </Form>
-      {
-        <MapModal
-          setMapVisible={this.setMapVisible}
-          MapVisible={this.state.MapVisible}
-          setPoint={this.setPoint}
-          setMapPolygon={this.setMapPolygon}
-          polygon={this.state.polygon}
-          longitude={this.state.longitude}
-          latitude={this.state.latitude}
-          EditMarker={this.state.EditMarker}
-          EditPolygon={this.state.EditPolygon}
-        />
-      }
-    </Card>
-  }
-
-  openMapModal(obj) {
-    let { form } = this.props;
-    this.setState({
-      MapVisible: true,
-      EditMarker: obj.EditMarker || false,
-      EditPolygon: obj.EditPolygon || false,
-      polygon: form.getFieldValue(obj.FieldName) || [],
-      longitude: form.getFieldValue("Longitude"),
-      latitude: form.getFieldValue("Latitude")
-    });
-  }
-
-  setMapVisible = (flag) => {
-    this.setState({
-      MapVisible: flag
-    });
-  }
-
-  setPoint = (obj) => {
-    let { form: { setFieldsValue } } = this.props;
-    setFieldsValue({ Longitude: obj.Longitude, Latitude: obj.Latitude });
-  }
-
-  setMapPolygon = (obj) => {
-    let { form: { setFieldsValue } } = this.props;
-    setFieldsValue({ Col6: obj });
+  _renderForm() {
+    const { configId, keysParams } = this._SELF_;
+    return <SdlForm
+      configId={configId}
+      onSubmitForm={this.onSubmitForm}
+      form={this.props.form}
+      isEdit={true}
+      keysParams={keysParams}
+    ></SdlForm>
   }
 
   render() {
+    const { dispatch, breadcrumb } = this.props;
+    const { configId } = this._SELF_;
 
-    let { loadingAdd, loadingConfig, dispatch, configId, breadcrumb } = this.props;
-    if (loadingAdd || loadingConfig) {
-      return (<Spin
-        style={{
-          width: '100%',
-          height: 'calc(100vh/2)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center'
-        }}
-        size="large"
-      />);
-    }
     return (
       <Fragment>
         {
@@ -412,10 +140,10 @@ class AutoFormEdit extends Component {
               ]
             }
             >
-              {this.renderContent()}
+              {this._renderForm()}
             </MonitorContent> :
             <Fragment>
-              {this.renderContent()}
+              {this._renderForm()}
             </Fragment>
         }
       </Fragment>

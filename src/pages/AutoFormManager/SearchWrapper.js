@@ -2,7 +2,7 @@
  * @Author: Jiaqi
  * @Date: 2019-05-07 16:03:14
  * @Last Modified by: Jiaqi
- * @Last Modified time: 2019-06-13 14:40:49
+ * @Last Modified time: 2019-06-13 15:22:08
  * @desc: 搜索容器组件
  * @props {string} formChangeActionType formAction
  * @props {store object} searchFormState formState对象
@@ -149,8 +149,9 @@ class SearchWrapper extends Component {
           element = <Input placeholder={placeholder} allowClear />
           break;
         case '下拉列表框':
+        case '多选下拉列表':
           placeholder = placeholder || selectPlaceholder;
-          const mode = 'multiple' || 'tags';
+          const mode = item.type === "多选下拉列表" ? 'multiple' : '';
           element = (
             <SearchSelect
               configId={item.configId}
