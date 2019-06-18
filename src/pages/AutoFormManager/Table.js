@@ -257,7 +257,12 @@ class SdlTable extends PureComponent {
     });
 
     const buttonsView = this._renderHandleButtons();
-    if (this._SELF_.btnEl.length) {
+    let rowKey = [];
+    if(this.props.children instanceof Array){
+      rowKey = this.props.children.filter(item=>item.key === "row");
+    }
+    const showHandle = rowKey.length;
+    if (this._SELF_.btnEl.length || showHandle) {
       _columns.push({
         align: "center",
         title: "操作",
