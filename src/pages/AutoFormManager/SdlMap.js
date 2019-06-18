@@ -243,7 +243,8 @@ class SdlMap extends PureComponent {
                     latitude: this.props.latitude,
                     longitude: this.props.longitude
                   },
-                  path: this.props.path && JSON.parse(this.props.path)
+                  path: this.props.path && JSON.parse(this.props.path),
+                  mapCenter: [this.props.longitude, this.props.latitude ]
                 })
               }}
               type="global"
