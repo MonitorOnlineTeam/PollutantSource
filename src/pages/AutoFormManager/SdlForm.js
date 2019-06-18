@@ -29,6 +29,7 @@ import SdlRadio from './SdlRadio';
 import SdlCheckbox from './SdlCheckbox';
 import SdlUpload from './SdlUpload'
 import MapModal from './MapModal';
+import SdlMap from './SdlMap'
 
 const FormItem = Form.Item;
 
@@ -98,7 +99,7 @@ class SdlForm extends Component {
 
   // 渲染FormItem
   renderFormItem() {
-    const { addFormItems, form: { getFieldDecorator }, editFormData } = this.props;
+    const { addFormItems, form: { getFieldDecorator, setFieldsValue, getFieldValue }, editFormData } = this.props;
     const { formLayout, inputPlaceholder, selectPlaceholder, uid, configId, isEdit } = this._SELF_;
     const formItems = addFormItems[configId] || [];
     const formData = isEdit ? editFormData[configId] : {};
@@ -163,51 +164,52 @@ class SdlForm extends Component {
           validator = `${inputPlaceholder}`;
           placeholder = placeholder || inputPlaceholder;
 
-          element = <Input
-            suffix={<Icon
-              onClick={() => {
-                this.openMapModal({ EditMarker: true })
-                  ;
-              }}
-              type="global"
-              style={{ color: '#2db7f5', cursor: 'pointer' }}
-            />}
-            placeholder={placeholder}
-            allowClear={true}
-          />;
+          // element = <Input
+          //   suffix={<Icon
+          //     onClick={() => {
+          //       this.openMapModal({ EditMarker: true })
+          //         ;
+          //     }}
+          //     type="global"
+          //     style={{ color: '#2db7f5', cursor: 'pointer' }}
+          //   />}
+          //   placeholder={placeholder}
+          //   allowClear={true}
+          // />;
+          element = <SdlMap
+            onOk={(map) => {
+              console.log("map=", map)
+              setFieldsValue({ Longitude: map.longitude, Latitude: map.latitude });
+            }}
+            longitude={getFieldValue("Longitude")}
+            latitude={getFieldValue("Latitude")}
+            handleMarker={true}
+          />
           break;
         case "纬度":
           validator = `${inputPlaceholder}`;
           placeholder = placeholder || inputPlaceholder;
 
-          element = <Input
-            suffix={<Icon
-              onClick={() => {
-                this.openMapModal({ EditMarker: true })
-                  ;
-              }}
-              type="global"
-              style={{ color: '#2db7f5', cursor: 'pointer' }}
-            />}
-            placeholder={placeholder}
-            allowClear={true}
-          />;
+          element = <SdlMap
+          onOk={(map) => {
+            console.log("map=", map)
+            setFieldsValue({ Longitude: map.longitude, Latitude: map.latitude });
+          }}
+          longitude={getFieldValue("Longitude")}
+          latitude={getFieldValue("Latitude")}
+          handleMarker={true}
+        />;
           break;
         case "坐标集合":
           validator = `${inputPlaceholder}`;
           placeholder = placeholder || inputPlaceholder;
-
-          element = <Input
-            suffix={<Icon
-              onClick={() => {
-                this.openMapModal({ EditPolygon: true, FieldName: fieldName })
-                  ;
-              }}
-              type="global"
-              style={{ color: '#2db7f5', cursor: 'pointer' }}
-            />}
-            placeholder={placeholder}
-            allowClear={true}
+          element = <SdlMap
+            onOk={(map) => {
+              console.log("map=", map)
+              setFieldsValue({ Col6: JSON.stringify(map.polygon) });
+            }}
+            path={getFieldValue("Col6")}
+            handlePolygon={true}
           />;
           break;
         // case "上传":
@@ -287,7 +289,6 @@ class SdlForm extends Component {
           return {}
         }
       })
-      console.log(labelText + ":", validate)
       if (element) {
         return (
           <FormItem key={fieldName} {...formLayout} label={labelText}>

@@ -34,7 +34,6 @@ class MapModal extends Component {
     }
 
     getMapMarker(obj){
-        debugger
         if(obj) {
             this.setState({
                 MarkerObje:{

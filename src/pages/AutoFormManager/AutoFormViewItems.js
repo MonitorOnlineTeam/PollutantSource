@@ -1,11 +1,3 @@
-/*
- * @desc: 详情页面
- * @Author: Jiaqi 
- * @Date: 2019-05-30 13:59:37 
- * @Last Modified by: Jiaqi
- * @Last Modified time: 2019-06-11 15:54:55
- */
-
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import {
@@ -23,7 +15,6 @@ import { routerRedux } from 'dva/router';
 import MonitorContent from '../../components/MonitorContent/index';
 import ReturnName from './ReturnName'
 import styles from '../../components/DescriptionList/index.less';
-
 
 const FormItem = Form.Item;
 
@@ -48,7 +39,7 @@ class AutoFormViewItems extends Component {
         },
       },
       configId: props.configId || props.match.params.configId,
-      keysParams: props.keysParams || JSON.parse(props.match.params.keysParams),
+      keysParams: props.keysParams,
     }
     this._renderFormItem = this._renderFormItem.bind(this);
     this.renderContent = this.renderContent.bind(this);
@@ -100,25 +91,14 @@ class AutoFormViewItems extends Component {
       }
       return (
         <Col span={6} style={{ marginBottom: 10 }} key={item.fieldName}>
-          {/* <FormItem
-            label={item.labelText}
-            {...formItemLayout}
-          >
-            {showText}
-          </FormItem> */}
           <div className={styles.term}>{item.labelText}</div>
           <div className={styles.detail}>{showText}</div>
-          {/* <div className="antd-pro-components-description-list-index-term">{item.labelText}</div>
-          <div className="antd-pro-components-description-list-index-detail">{showText}</div> */}
-          {/* <lable>：</lable>
-          <span>{showText}</span> */}
         </Col>
       )
     })
   }
 
   renderContent() {
-    // return <Row className="antd-pro-components-description-list-index-descriptionList">
     return <Row className={styles.descriptionList}>
       {this._renderFormItem()}
     </Row>
@@ -141,48 +121,17 @@ class AutoFormViewItems extends Component {
     }
     return (
       <Fragment>
-        {
-          breadcrumb ? <MonitorContent breadCrumbList={
-            [
-              { Name: '首页', Url: '/' },
-              { Name: '系统管理', Url: '' },
-              { Name: 'AutoForm', Url: '/sysmanage/autoformmanager/' + configId },
-              { Name: '详情', Url: '' }
-            ]
-          }
-          >
-            <Card bordered={false} title="详情" extra={
-              <Button
-                style={{ float: "right", marginRight: 10 }}
-                onClick={() => {
-                  history.goBack(-1);
-                }}
-              ><Icon type="left" />返回
-    </Button>
-            }>
-              {this.renderContent()}</Card>
-          </MonitorContent> : <Fragment>
-              <Card>
-                {this.renderContent()}</Card>
-            </Fragment>
-        }
+        {this.renderContent()}
       </Fragment>
     );
   }
 }
 
 AutoFormViewItems.propTypes = {
-  // 是否显示面包屑
-  breadcrumb: PropTypes.bool,
   // configId
   configId: PropTypes.string.isRequired,
   // 主键对象
   keysParams: PropTypes.object.isRequired,
 };
-
-AutoFormViewItems.defaultProps = {
-  breadcrumb: true
-}
-
 
 export default AutoFormViewItems;
