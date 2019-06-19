@@ -229,7 +229,7 @@ class SdlMap extends PureComponent {
 
   render() {
     const { mapVisible } = this.state;
-    const { handleMarker, handlePolygon, mode } = this.props;
+    const { handleMarker, handlePolygon, mode, latitude, longitude } = this.props;
     return (
       <Fragment>
         {
@@ -237,14 +237,18 @@ class SdlMap extends PureComponent {
           <Input
             suffix={<Icon
               onClick={() => {
+                if (latitude && longitude) {
+                  this.setState({
+                    position: {
+                      latitude: latitude,
+                      longitude: longitude
+                    },
+                    mapCenter: [longitude, latitude]
+                  })
+                }
                 this.setState({
                   mapVisible: true,
-                  position: {
-                    latitude: this.props.latitude,
-                    longitude: this.props.longitude
-                  },
                   path: this.props.path && JSON.parse(this.props.path),
-                  mapCenter: [this.props.longitude, this.props.latitude ]
                 })
               }}
               type="global"
