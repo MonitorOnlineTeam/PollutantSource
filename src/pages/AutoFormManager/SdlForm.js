@@ -102,14 +102,15 @@ class SdlForm extends Component {
     const { addFormItems, form: { getFieldDecorator, setFieldsValue, getFieldValue }, editFormData } = this.props;
     const { formLayout, inputPlaceholder, selectPlaceholder, uid, configId, isEdit } = this._SELF_;
     const formItems = addFormItems[configId] || [];
-    const formData = isEdit ? editFormData[configId] : {};
+    const formData = isEdit ? (editFormData[configId] || {}) : {};
     // return addFormItems[configId].map((item) =>{
     return formItems.map((item) => {
       let validate = [];
       let element = '';
       let { placeholder, validator } = item;
       const { fieldName, labelText, required } = item;
-      let initialValue = formData && Object.keys(formData).length && formData[fieldName];
+      // let initialValue = formData && Object.keys(formData).length && formData[fieldName];
+      let initialValue = formData[fieldName];
       // 判断类型
       switch (item.type) {
         case "文本框":
@@ -121,6 +122,7 @@ class SdlForm extends Component {
         case '下拉列表框':
         case '多选下拉列表':
           validator = `${selectPlaceholder}`;
+          initialValue = formData[fieldName] && formData[fieldName].split(",");
           placeholder = placeholder || selectPlaceholder;
           const mode = item.type === "多选下拉列表" ? 'multiple' : '';
           element = (
@@ -135,6 +137,7 @@ class SdlForm extends Component {
           break;
         case "多选下拉搜索树":
           placeholder = placeholder || selectPlaceholder;
+          initialValue = formData[fieldName] && formData[fieldName].split(",");
           element = (
             <SdlCascader
               itemName={item.configDataItemName}
