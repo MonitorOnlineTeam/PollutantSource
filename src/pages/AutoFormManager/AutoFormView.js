@@ -1,7 +1,7 @@
 /*
  * @desc: 详情页面
- * @Author: Jiaqi 
- * @Date: 2019-05-30 13:59:37 
+ * @Author: Jiaqi
+ * @Date: 2019-05-30 13:59:37
  * @Last Modified by: Jiaqi
  * @Last Modified time: 2019-06-14 16:18:18
  */
@@ -41,6 +41,9 @@ class AutoFormView extends Component {
     return <AutoFormViewItems
       configId={configId}
       keysParams={keysParams}
+      // appendDataSource={[
+      //   { label: "追加", value: "text" }
+      // ]}
     />
   }
 
