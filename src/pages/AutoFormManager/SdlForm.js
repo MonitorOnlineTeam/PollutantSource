@@ -245,11 +245,11 @@ class SdlForm extends Component {
                   <Icon type="upload" /> Upload
                 </Button>
               </Upload>
+            } else {
+              element = <SdlUpload
+                uid={uid}
+              />
             }
-          } else {
-            element = <SdlUpload
-              uid={uid}
-            />
           }
           break;
       }

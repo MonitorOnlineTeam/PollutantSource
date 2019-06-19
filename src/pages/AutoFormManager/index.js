@@ -115,7 +115,23 @@ export default class AutoFormIndex extends Component {
                   key, row
                 })
               }}
-            // loadDataSourceParams={[
+              appendHandleRows={row => {
+                return <Fragment>
+                  <Divider type="vertical" />
+                  <a onClick={() => {
+                    console.log('row=', row)
+                  }}>测试</a>
+                </Fragment>
+              }}
+              appendHandleButtons={(selectedRowKeys, selectedRows) => {
+                return <Fragment>
+                  <Button icon="printer" type="primary" onClick={() => {
+                    console.log('selectedRowKeys=', selectedRowKeys);
+                    console.log('selectedRows=', selectedRows);
+                  }}>维护点信息</Button>
+                </Fragment>
+              }}
+            // searchParams={[
             //   {
             //     Key: "test",
             //     Value: false,
@@ -123,18 +139,7 @@ export default class AutoFormIndex extends Component {
             //   }
             // ]}
             // dataSource={dataSource}
-            >
-              <Fragment key="top">
-                <Button icon="printer" type="primary" onClick={() => {
-                  dispatch(routerRedux.push(`/autoformmanager/test/TestCommonPoint`))
-                  console.log('state=', this.state)
-                }}>维护点信息</Button>
-              </Fragment>
-              {/* <Fragment key="row">
-                <Divider type="vertical" />
-                <a>测试自定义</a>
-              </Fragment> */}
-            </SdlTable>
+            />
           </Card>
         </div>
       </MonitorContent>

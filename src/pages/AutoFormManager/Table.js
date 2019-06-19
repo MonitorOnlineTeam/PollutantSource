@@ -86,7 +86,7 @@ class SdlTable extends PureComponent {
       postData[item] = selectedRows.map(row => row[[item]]).toString()
       // }
     })
-    this.setState({ selectedRowKeys, delPostData: postData });
+    this.setState({ selectedRowKeys, selectedRows, delPostData: postData });
     this.props.rowChange && this.props.rowChange(selectedRowKeys, selectedRows)
   };
 
@@ -344,13 +344,16 @@ class SdlTable extends PureComponent {
                 }
               })
             }
-            {
+            {/* {
               React.Children.map(this.props.children, (child, i) => {
                 // if (child.props["data-position"] === "row") {
                 if (child.key === "row") {
                   return child
                 }
               })
+            } */}
+            {
+              this.props.appendHandleRows && this.props.appendHandleRows(record)
             }
           </div>
         )
@@ -393,13 +396,16 @@ class SdlTable extends PureComponent {
           {
             buttonsView
           }
-          {
+          {/* {
             React.Children.map(this.props.children, (child, i) => {
               // if (child.props["data-position"] === "top") {
               if (child.key === "top") {
                 return child
               }
             })
+          } */}
+          {
+            this.props.appendHandleButtons && this.props.appendHandleButtons(this.state.selectedRowKeys, this.state.selectedRows)
           }
         </Row>
         {/* [record["dbo.T_Bas_CommonPoint.PointCode"], record["dbo.T_Bas_CommonPoint.PointName"]] */}
