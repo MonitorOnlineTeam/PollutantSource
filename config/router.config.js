@@ -243,6 +243,7 @@ export default [
             { path: '/sysmanage/monitortarget/monitorpoint/:configId/:targetId/:targetName', component: './autoformmanager/monitorpoint' },
             /* AutoForm用户管理 */
              { path: '/sysmanage/userinfoindex/:configId', component: './Userinfo/UserInfoIndex' },
+             { path: '/sysmanage/userinfoadd', component: './Userinfo/UserInfoAdd' },
             /* 标准库管理-维护 */
             { path: '/sysmanage/standardlibrarydetail/:StandardLibraryID', component: './StandardLibrary/AddStandardLibrary' },
             /* 个人设置-维护 */

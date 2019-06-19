@@ -260,8 +260,11 @@ class SdlTable extends PureComponent {
     let rowKey = [];
     if(this.props.children instanceof Array){
       rowKey = this.props.children.filter(item=>item.key === "row");
+    } else if(this.props.children instanceof Object){
+      rowKey = this.props.children.key === "row" && [this.props.children];
     }
     const showHandle = rowKey.length;
+    console.log("showHandle=",showHandle)
     if (this._SELF_.btnEl.length || showHandle) {
       _columns.push({
         align: "center",

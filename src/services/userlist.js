@@ -83,6 +83,33 @@ export async function getuser(params) {
         data: null
     } : result;
 }
+// 获取部门树
+export async function getdeparttree(params) {
+    const result = post('/api/rest/PollutantSourceApi/AuthorApi/GetDepartmentTree', params, null);
+    return result === null ? {
+        data: null
+    } : result;
+}
+// 获取角色树
+export async function getrolestree(params) {
+    const result = post('/api/rest/PollutantSourceApi/AuthorApi/GetRolesTree', params, null);
+    return result === null ? {
+        data: null
+    } : result;
+}
+// 添加用户的角色和部门
+export async function insertroledep(params) {
+    console.log(params);
+    const body = {
+        User_ID: params.User_ID,
+        Role:params.Roles_ID,
+        Depart:params.UserGroup_ID
+    };
+    const result = post('/api/rest/PollutantSourceApi/AuthorApi/InsertRoleDepForUser', body, null);
+    return result === null ? {
+        data: null
+    } : result;
+}
 // 编辑用户
 export async function edituser(params) {
     const body = {

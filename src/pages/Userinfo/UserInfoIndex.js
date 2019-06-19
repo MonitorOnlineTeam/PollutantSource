@@ -112,8 +112,8 @@ export default class UserInfoIndex extends Component {
                             style={{ marginTop: 10 }}
                             // columns={columns}
                             configId={configId}
-                            onAdd={()=> {
-                               dispatch(routerRedux.push(`/AutoFormManager/AutoFormAdd/UserInfoAdd`))
+                            onAdd={() => {
+                                dispatch(routerRedux.push('/sysmanage/userinfoadd'))
                             }}
                             rowChange={(key, row) => {
                                 this.setState({
@@ -129,10 +129,19 @@ export default class UserInfoIndex extends Component {
                         // ]}
                         // dataSource={dataSource}
                         >
-                            {/* <Fragment key="row">
-                <Divider type="vertical" />
-                <a>测试自定义</a>
-              </Fragment> */}
+                            <Fragment key="row">
+                                <a onClick={()=>{
+                                     dispatch(routerRedux.push('/sysmanage/userinfoadd/121421'))
+                                }}>编辑</a>
+                                <Divider type="vertical" />
+                                <a onClick={()=>{
+                                     dispatch(routerRedux.push('/sysmanage/userinfoadd'))
+                                }}>详情</a>
+                                <Divider type="vertical" />
+                                <a onClick={()=>{
+                                    
+                                }}>删除</a>
+                            </Fragment>
                         </SdlTable>
                     </Card>
                 </div>
