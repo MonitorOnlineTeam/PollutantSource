@@ -3,9 +3,9 @@ import {
 } from '../dvapack';
 import {
     getList, deleteuser, enableduser, isexistenceuser, adduser, getuser, edituser, editpersonaluser, getmypielist, mymessagelist,
-    setEnterpriseDataRole, getEnterpriseDataRoles, getdeparttree, getrolestree, insertroledep
+    setEnterpriseDataRole, getEnterpriseDataRoles, getdeparttree, getrolestree, insertroledep, getrolebyuserid, getdepbyuserid,deluserandroledep
 } from '../services/userlist';
-import { postAutoFromDataAdd } from '../services/autoformapi'
+import { postAutoFromDataAdd, postAutoFromDataUpdate } from '../services/autoformapi'
 import { message } from 'antd';
 /*
 用户管理相关接口
@@ -31,7 +31,11 @@ export default Model.extend({
         DeleteMark: '',
         EnterpriseDataRoles: [],
         DepartTree: [],
-        RolesTree: []
+        RolesTree: [],
+        UserRoles: [],
+        UserDep: [],
+        UserRolesName:'',
+        UserDepName:''
     },
     subscriptions: {
         setup({
@@ -203,6 +207,43 @@ export default Model.extend({
             }
 
         },
+        /*获取当前用户的角色**/
+        * getrolebyuserid({
+            payload
+        }, {
+            call,
+            update,
+        }) {
+            const result = yield call(getrolebyuserid, {
+                ...payload
+            });
+            console.log("666=", result.Datas.map(item => item.ID))
+            if (result.IsSuccess) {
+                yield update({
+                    UserRoles: result.Datas.map(item => item.ID),
+                    UserRolesName:result.Datas.map(item => item.Name).toString()
+                });
+            }
+
+        },
+        /*获取当前用户的部门**/
+        * getdepbyuserid({
+            payload
+        }, {
+            call,
+            update,
+        }) {
+            const result = yield call(getdepbyuserid, {
+                ...payload
+            });
+            if (result.IsSuccess) {
+                yield update({
+                    UserDep: result.Datas.map(item => item.ID),
+                    UserDepName: result.Datas.map(item => item.Name).toString()
+                });
+            }
+
+        },
         * add({ payload }, { call, update, put }) {
             console.log(payload);
             const payloaduser = {
@@ -211,7 +252,7 @@ export default Model.extend({
             };
             const result = yield call(postAutoFromDataAdd, { ...payloaduser });
             if (result.IsSuccess) {
-                console.log("payload=",payload)
+                console.log("payload=", payload)
                 yield put({
                     type: "insertroledep",
                     payload: {
@@ -230,13 +271,13 @@ export default Model.extend({
                 configId: payload.configId,
                 FormData: JSON.stringify(payload.FormData)
             };
-            const result = yield call(postAutoFromDataAdd, { ...payloaduser });
+            const result = yield call(postAutoFromDataUpdate, { ...payloaduser });
             if (result.IsSuccess) {
-                console.log("payload=",payload)
+                console.log("payload=", payload)
                 yield put({
                     type: "insertroledep",
                     payload: {
-                        User_ID: result.Datas,
+                        User_ID: payload.User_ID,
                         Roles_ID: payload.roleID,
                         UserGroup_ID: payload.departID
                     }
@@ -245,7 +286,7 @@ export default Model.extend({
                 // message.error(result.Message);
             }
         },
-        /*编辑用户**/
+        /*添加角色和部门**/
         * insertroledep({
             payload
         }, {
@@ -255,10 +296,35 @@ export default Model.extend({
             const result = yield call(insertroledep, {
                 ...payload
             });
-            if(result.IsSuccess==true)
-            {
+            if (result.IsSuccess == true) {
                 message.success("添加成功");
                 history.go(-1);
+            }
+            // yield update({
+            //     requstresult: result.requstresult,
+            //     reason: result.reason
+            // });
+        },
+        /*删除角色和部门**/
+        * deluserandroledep({
+            payload
+        }, {
+            call,
+            update,
+            put 
+        }) {
+            console.log("payload=",payload)
+            const result = yield call(deluserandroledep, {
+                ...payload
+            });
+            if (result.IsSuccess == true) {
+                message.success("删除成功");
+                yield put({
+                    type:"autoForm/getAutoFormData",
+                    payload:{
+                        configId:"UserInfo"
+                    }
+                })
             }
             // yield update({
             //     requstresult: result.requstresult,

@@ -199,7 +199,8 @@ export default class UserInfoAdd extends Component {
                 breadCrumbList={
                     [
                         { Name: '首页', Url: '/' },
-                        { Name: '个人设置', Url: '' },
+                        { Name: '用户管理', Url: '' },
+                        { Name: '添加用户', Url: '' },
                     ]
                 }
             >

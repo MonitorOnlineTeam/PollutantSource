@@ -9,7 +9,8 @@ import {
     Tree,
     Input,
     Form,
-    message
+    message,
+    
 } from 'antd';
 import { connect } from 'dva';
 import router from 'umi/router';
@@ -32,7 +33,9 @@ const { TreeNode } = Tree;
 
 @connect(({ userinfo, loading }) => ({
     treeData: userinfo.DepartTree,
-    RolesTreeData: userinfo.RolesTree
+    RolesTreeData: userinfo.RolesTree,
+    UserRoles:userinfo.UserRoles,
+    UserDep:userinfo.UserDep
 }))
 @Form.create()
 export default class UserInfoEdit extends Component {
@@ -56,6 +59,7 @@ export default class UserInfoEdit extends Component {
         };
 
         this.postFormDatas = this.postFormDatas.bind(this)
+        this.onSubmitForm = this.onSubmitForm.bind(this)
     }
 
     componentDidMount() {
@@ -67,6 +71,33 @@ export default class UserInfoEdit extends Component {
             type: 'userinfo/getrolestree',
             payload: {}
         })
+        this.props.dispatch({
+            type: 'userinfo/getrolebyuserid',
+            payload: {
+                User_ID: this.props.match.params.userid,
+            }
+        })
+        this.props.dispatch({
+            type: 'userinfo/getdepbyuserid',
+            payload: {
+                User_ID: this.props.match.params.userid,
+            }
+        })
+    }
+
+    componentWillReceiveProps(nextProps){
+        if(this.props.UserRoles !== nextProps.UserRoles){
+            this.setState({
+                checkedKey: nextProps.UserRoles,
+                checkedKeySel:nextProps.UserRoles
+            })
+        }
+        if(this.props.UserDep !== nextProps.UserDep){
+            this.setState({
+                checkedKeys: nextProps.UserDep,
+                checkedKeysSel:nextProps.UserDep
+            })
+        }
     }
 
     onExpand = expandedKeys => {
@@ -102,7 +133,6 @@ export default class UserInfoEdit extends Component {
         });
         this.setState({ checkedKeysSel: leafTree });
     };
-
     onSelects = (selectedKeys, info) => {
         this.setState({ selectedKeys });
     };
@@ -124,8 +154,23 @@ export default class UserInfoEdit extends Component {
         });
 
     onSubmitForm() {
-        const { dispatch, form } = this.props;
+        
+    }
+
+    postFormDatas() {
+        // this.onSubmitForm();
+        const { dispatch, form, RolesTreeData } = this.props;
+        const { leafTreeDatas, checkedKeySel, checkedKeysSel } = this.state;
+        if (checkedKeySel.length == 0) {
+            message.error("角色不能为空");
+            return;
+        }
+        if (checkedKeysSel.length == 0) {
+            message.error("部门不能为空");
+            return;
+        }
         form.validateFields((err, values) => {
+            console.log("11=",values)
             if (!err) {
                 let FormData = {};
                 for (let key in values) {
@@ -135,42 +180,44 @@ export default class UserInfoEdit extends Component {
                         FormData[key] = values[key] && values[key].toString()
                     }
                 }
-                this.setState({
-                    FormDatas: FormData
-                })
+                // this.setState({
+                //     FormDatas: FormData
+                // })
                 console.log('FormData=', FormData);
                 // return;
-
+                dispatch({
+                    type: 'userinfo/edit',
+                    payload: {
+                        configId: 'UserInfoAdd',
+                        User_ID:this.props.match.params.userid,
+                        roleID: this.state.checkedKeySel,
+                        departID: this.state.checkedKeysSel,
+                        FormData: {
+                            "User_ID":this.props.match.params.userid,
+                            ...FormData,
+                            // uid: uid
+                        },
+                    }
+                })
             }
         });
+        
+        // Object.keys(FormDatas).length ? dispatch({
+        //     type: 'userinfo/edit',
+        //     payload: {
+        //         configId: 'UserInfoAdd',
+        //         User_ID:this.props.match.params.userid,
+        //         roleID: this.state.checkedKeySel,
+        //         departID: this.state.checkedKeysSel,
+        //         FormData: {
+        //             "User_ID":this.props.match.params.userid,
+        //             ...FormDatas,
+        //             // uid: uid
+        //         },
+        //     }
+        // }) : message.error("数据为空")
     }
-
-    postFormDatas() {
-        this.onSubmitForm();
-        const { dispatch, form, RolesTreeData } = this.props;
-        const { FormDatas, leafTreeDatas, checkedKeySel, checkedKeysSel } = this.state;
-        if (checkedKeySel.length == 0) {
-            message.error("角色不能为空");
-            return;
-        }
-        if (checkedKeysSel.length == 0) {
-            message.error("部门不能为空");
-            return;
-        }
-        Object.keys(FormDatas).length ? dispatch({
-            type: 'userinfo/edit',
-            payload: {
-                configId: 'UserInfoAdd',
-                roleID: this.state.checkedKeySel,
-                departID: this.state.checkedKeysSel,
-                FormData: {
-                    ...FormDatas,
-                    // uid: uid
-                },
-            }
-        }) : message.error("数据为空")
-    }
-
+      
     render() {
         const { match, routerData, children } = this.props;
         const tablist = [{
@@ -199,7 +246,8 @@ export default class UserInfoEdit extends Component {
                 breadCrumbList={
                     [
                         { Name: '首页', Url: '/' },
-                        { Name: '个人设置', Url: '' },
+                        { Name: '用户管理', Url: '' },
+                        { Name: '编辑用户', Url: '' },
                     ]
                 }
             >
@@ -235,10 +283,11 @@ export default class UserInfoEdit extends Component {
                             <Content style={{ padding: '0 10px' }}>
                                 <Card bordered={false} title="基本信息" style={{ height: 'calc(100vh - 160px)', display: this.state.baseState }}>
                                     <SdlForm
-                                        configId={'UserInfoAdd'}
-                                        onSubmitForm={this.onSubmitForm.bind(this)}
+                                        configId={"UserInfoAdd"}
+                                        onSubmitForm={this.onSubmitForm}
                                         form={this.props.form}
-                                        
+                                        isEdit={true}
+                                        keysParams={{ "dbo.Base_UserInfo.User_ID": this.props.match.params.userid }}
                                     >
                                         {/* <FormItem {...submitFormLayout} style={{ marginTop: 32 }}>
                                             <Button
@@ -265,18 +314,13 @@ export default class UserInfoEdit extends Component {
                                         <Divider orientation="right" style={{ border: '1px dashed #FFFFFF' }}>
                                             <Button
                                                 type="primary"
-                                                htmlType="submit"
+                                              
                                                 onClick={() => {
-                                                    const { dispatch, form } = this.props;
-                                                    form.validateFields((err, values) => {
-                                                        if (!err) {
-                                                            this.setState({
-                                                                activeKey: "roles",
-                                                                baseState: 'none',
-                                                                rolesState: 'block',
-                                                                departState: 'none'
-                                                            })
-                                                        }
+                                                    this.setState({
+                                                        activeKey: "roles",
+                                                        baseState: 'none',
+                                                        rolesState: 'block',
+                                                        departState: 'none'
                                                     })
                                                 }}
                                             >下一步
@@ -296,6 +340,7 @@ export default class UserInfoEdit extends Component {
                                         checkedKeys={this.state.checkedKey}
                                         onSelect={this.onSelect}
                                         selectedKeys={this.state.selectedKey}
+                                        defaultExpandAll={true}
                                     >
                                         {this.renderTreeNodes(this.props.RolesTreeData)}
                                     </Tree>
@@ -324,6 +369,7 @@ export default class UserInfoEdit extends Component {
                                         checkedKeys={this.state.checkedKeys}
                                         onSelect={this.onSelects}
                                         selectedKeys={this.state.selectedKeys}
+                                        defaultExpandAll={true}
                                     >
                                         {this.renderTreeNodes(this.props.treeData)}
                                     </Tree>

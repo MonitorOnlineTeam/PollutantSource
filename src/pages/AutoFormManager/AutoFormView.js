@@ -42,7 +42,8 @@ class AutoFormView extends Component {
       configId={configId}
       keysParams={keysParams}
       // appendDataSource={[
-      //   { label: "追加", value: "text" }
+      //   { label: "追加", value: "text" },
+      //   { label: "追加2", value: "text2" }
       // ]}
     />
   }

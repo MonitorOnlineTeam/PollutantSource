@@ -244,6 +244,8 @@ export default [
             /* AutoForm用户管理 */
              { path: '/sysmanage/userinfoindex/:configId', component: './Userinfo/UserInfoIndex' },
              { path: '/sysmanage/userinfoadd', component: './Userinfo/UserInfoAdd' },
+             { path: '/sysmanage/userinfoedit/:userid', component: './Userinfo/UserInfoEdit' },
+             { path: '/sysmanage/userinfoview/:userid', component: './Userinfo/UserInfoView' },
             /* 标准库管理-维护 */
             { path: '/sysmanage/standardlibrarydetail/:StandardLibraryID', component: './StandardLibrary/AddStandardLibrary' },
             /* 个人设置-维护 */

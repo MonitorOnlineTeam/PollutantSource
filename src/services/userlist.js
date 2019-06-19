@@ -97,6 +97,30 @@ export async function getrolestree(params) {
         data: null
     } : result;
 }
+// 获取当前用户的角色
+export async function getrolebyuserid(params) {
+    const body={
+        User_ID: params.User_ID,
+        Role:null,
+        Depart:null
+    }
+    const result = post('/api/rest/PollutantSourceApi/AuthorApi/GetRoleByUserID', body, null);
+    return result === null ? {
+        data: null
+    } : result;
+}
+// 获取当前用户的部门
+export async function getdepbyuserid(params) {
+    const body={
+        User_ID: params.User_ID,
+        Role:null,
+        Depart:null
+    }
+    const result = post('/api/rest/PollutantSourceApi/AuthorApi/GetDepByUserID', body, null);
+    return result === null ? {
+        data: null
+    } : result;
+}
 // 添加用户的角色和部门
 export async function insertroledep(params) {
     console.log(params);
@@ -129,6 +153,16 @@ export async function edituser(params) {
         Roles_Id: params.RolesId
     };
     const result = post('/api/rest/PollutantSourceApi/PUserInfo/EditUserInfo', body, null);
+    return result === null ? {
+        data: null
+    } : result;
+}
+// 编辑用户
+export async function deluserandroledep(params) {
+    const body = {
+        User_ID: params.User_ID,
+    };
+    const result = post('/api/rest/PollutantSourceApi/AuthorApi/DelUserAndRoleDep', body, null);
     return result === null ? {
         data: null
     } : result;
