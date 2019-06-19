@@ -109,7 +109,7 @@ class SdlForm extends Component {
       let element = '';
       let { placeholder, validator } = item;
       const { fieldName, labelText, required } = item;
-      let initialValue = formData.length && formData[fieldName];
+      let initialValue = formData && Object.keys(formData).length && formData[fieldName];
       // 判断类型
       switch (item.type) {
         case "文本框":
