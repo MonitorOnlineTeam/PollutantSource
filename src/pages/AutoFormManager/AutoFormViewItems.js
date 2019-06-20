@@ -80,16 +80,16 @@ class AutoFormViewItems extends Component {
     return formConfig.map(item => {
 
       let showText = "";
-      if (item.type === "下拉列表框") {
-        showText = <ReturnName
-          configId={item.configId}
-          itemKey={item.configDataItemValue}
-          itemValue={formData[item.fieldName]}
-          itemName={item.configDataItemName}
-        />
-      } else {
+      // if (item.type === "下拉列表框") {
+      //   showText = <ReturnName
+      //     configId={item.configId}
+      //     itemKey={item.configDataItemValue}
+      //     itemValue={formData[item.fieldName]}
+      //     itemName={item.configDataItemName}
+      //   />
+      // } else {
         showText = formData[item.fieldName]
-      }
+      // }
       return (
         <Col span={6} style={{ marginBottom: 10 }} key={item.fieldName}>
           <div className={styles.term}>{item.labelText}</div>
@@ -116,7 +116,7 @@ class AutoFormViewItems extends Component {
     return <Row className={styles.descriptionList}>
       {this._renderFormItem()}
       {this._renderAppendDataSource()}
-      { this.props.children }
+      {this.props.children}
     </Row>
   }
 
