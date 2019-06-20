@@ -14,10 +14,32 @@
   
 /*工艺流程图*/
 .GyProcessPic{
-  width: 100%;
+ // width: 100%;
   overflow-x:hidden;
   overflow-y: scroll; 
   
+}
+
+.overstatus :global{
+  .ant-badge-status-processing
+  {
+      background-color: #E64B49;
+  }
+  .ant-badge-status-processing:after
+  {
+      border: 1px solid #E64B49;
+  }
+}
+
+.normalstatus :global{
+  .ant-badge-status-processing
+  {
+      background-color: #4EC062;
+  }
+  .ant-badge-status-processing:after
+  {
+      border: 1px solid #4EC062;
+  }
 }
 
 .imgBg{
@@ -25,6 +47,13 @@
   background-repeat: no-repeat;
   width: 1504px;
   height: 1034px;
+}
+
+.imgBg1{
+  background: url(../../../public/gylct.png);
+  background-repeat: no-repeat;
+  width: 1285px;
+  height: 660px;
 }
 
 .lasttr{

@@ -141,7 +141,8 @@ class BasicLayout extends React.PureComponent {
       if (process.env.NODE_ENV === 'production' && APP_TYPE !== 'site') {
           return null;
       }
-      return <SettingDrawer />;
+    //   return <SettingDrawer />;
+    return null;
   };
   renderContent=()=>{
    

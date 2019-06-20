@@ -66,7 +66,8 @@ export default [
                     /* 默认 */
                     { path: '/pointdetail/:pointcode/:viewtype', redirect: '/pointdetail/:pointcode/:viewtype/processflowdiagram' },
                     /* 工艺流程图 */
-                    { path: '/pointdetail/:pointcode/:viewtype/processflowdiagram', component: './PointDetail/ProcessFlowDiagram' },
+                 //   { path: '/pointdetail/:pointcode/:viewtype/processflowdiagram', component: './PointDetail/ProcessFlowDiagram' },
+                    { path: '/pointdetail/:pointcode/:viewtype/processflowdiagram', component: './PointDetail/ProcessFlowChart' },
                     /* 数据查询 */
                     { path: '/pointdetail/:pointcode/:viewtype/dataquery', component: './PointDetail/DataQuery' },
                     /* 报警数据查询 */

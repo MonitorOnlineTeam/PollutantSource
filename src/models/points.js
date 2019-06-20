@@ -37,6 +37,7 @@ export default Model.extend({
         stateNameInfo:null,
         paramNameInfo:null,
         paramstatusInfo:null,
+        paramdivInfo:[],
         DGIMN:'',
         historyparams:{
             datatype: "realtime",

@@ -45,7 +45,12 @@ class AlarmRecord extends Component {
 
     componentDidMount = () => {
         let {dispatch, DGIMN, firsttime, lasttime,overdataparams} = this.props;
-        debugger;
+        if(!DGIMN)
+        {
+            DGIMN=this.props.selectpoint?this.props.selectpoint.DGIMN:"";
+        }
+        firsttime=firsttime || moment(new Date()).add(-1, 'month');
+        lasttime=lasttime || moment(new Date());
         overdataparams={
              ...overdataparams,
              DGIMN:DGIMN,
@@ -72,10 +77,14 @@ class AlarmRecord extends Component {
     }
     //时间更改
     _handleDateChange=(date, dateString) => {
-        let {overdataparams}=this.props;
+        let {overdataparams,DGIMN}=this.props;
+        if(!DGIMN)
+        {
+            DGIMN=this.props.selectpoint?this.props.selectpoint.DGIMN:"";
+        }
         overdataparams={
             ...overdataparams,
-            DGIMN: this.props.DGIMN,
+            DGIMN: DGIMN,
             beginTime: date[0] && formatMoment(date[0]),
             endTime: date[0] && formatMoment(date[1]),
             pageIndex:1,
