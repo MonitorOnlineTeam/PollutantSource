@@ -110,7 +110,7 @@ class SdlForm extends Component {
       let { placeholder, validator } = item;
       const { fieldName, labelText, required } = item;
       // let initialValue = formData && Object.keys(formData).length && formData[fieldName];
-      let initialValue = formData[fieldName];
+      let initialValue = formData[fieldName] && formData[fieldName] + "";
       // 判断类型
       switch (item.type) {
         case "文本框":
@@ -122,7 +122,8 @@ class SdlForm extends Component {
         case '下拉列表框':
         case '多选下拉列表':
           validator = `${selectPlaceholder}`;
-          initialValue = formData[fieldName] && formData[fieldName].split(",");
+          initialValue = formData[fieldName] && (formData[fieldName]+"").split(",");
+          console.log("initialValue=",initialValue)
           placeholder = placeholder || selectPlaceholder;
           const mode = item.type === "多选下拉列表" ? 'multiple' : '';
           element = (
@@ -137,7 +138,7 @@ class SdlForm extends Component {
           break;
         case "多选下拉搜索树":
           placeholder = placeholder || selectPlaceholder;
-          initialValue = formData[fieldName] && formData[fieldName].split(",");
+          initialValue = formData[fieldName] && formData[fieldName]+"".split(",");
           element = (
             <SdlCascader
               itemName={item.configDataItemName}
@@ -293,10 +294,11 @@ class SdlForm extends Component {
         }
       })
       if (element) {
+        console.log("initialValue111=",initialValue)
         return (
           <FormItem key={fieldName} {...formLayout} label={labelText}>
             {getFieldDecorator(`${fieldName}`, {
-              initialValue: initialValue && initialValue + "",
+              initialValue: initialValue,
               rules: [
                 {
                   required: required,
