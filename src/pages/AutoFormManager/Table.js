@@ -257,12 +257,15 @@ class SdlTable extends PureComponent {
     });
 
     const buttonsView = this._renderHandleButtons();
-    let rowKey = [];
-    if(this.props.children instanceof Array){
-      rowKey = this.props.children.filter(item=>item.key === "row");
-    }
-    const showHandle = rowKey.length;
-    if (this._SELF_.btnEl.length || showHandle) {
+    // let rowKey = [];
+    // if(this.props.children instanceof Array){
+    //   rowKey = this.props.children.filter(item=>item.key === "row");
+    // } else if(this.props.children instanceof Object){
+    //   rowKey = this.props.children.key === "row" && [this.props.children];
+    // }
+    // const showHandle = rowKey.length;
+    // console.log("showHandle=",showHandle)
+    if (this._SELF_.btnEl.length || this.props.appendHandleRows) {
       _columns.push({
         align: "center",
         title: "操作",

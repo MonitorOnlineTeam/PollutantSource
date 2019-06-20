@@ -100,31 +100,18 @@ class AutoFormAdd extends Component {
         md: { span: 10 },
       },
     }
+
     return <SdlForm
       configId={configId}
       onSubmitForm={this.onSubmitForm}
       form={form}
     >
-      <FormItem key="key" {...formLayout} label="test">
+      {/* <FormItem key="key" {...formLayout} label="test">
         {getFieldDecorator(`test`, {
         })(
           <Input />
         )}
-      </FormItem>
-      <FormItem {...submitFormLayout} style={{ marginTop: 32 }}>
-        <Button type="primary" htmlType="submit">
-          保存
-                </Button>
-        <Button
-          style={{ marginLeft: 8 }}
-          onClick={() => {
-            history.go(-1);
-            // dispatch(routerRedux.push(`/sysmanage/autoformmanager`));
-          }}
-        >
-          返回
-                </Button>
-      </FormItem>
+      </FormItem> */}
     </SdlForm>
   }
 

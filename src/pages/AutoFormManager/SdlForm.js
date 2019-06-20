@@ -15,7 +15,10 @@ import {
   Card,
   Spin,
   Icon,
-  Upload
+  Upload,
+  Row,
+  Col,
+  Divider
 } from 'antd';
 import cuid from 'cuid';
 import { connect } from 'dva';
@@ -38,6 +41,7 @@ const FormItem = Form.Item;
   loadingAdd: loading.effects['autoForm/add'],
   addFormItems: autoForm.addFormItems,
   editFormData: autoForm.editFormData,
+  formItemLayout: autoForm.formLayout
 }))
 
 class SdlForm extends Component {
@@ -53,15 +57,21 @@ class SdlForm extends Component {
     };
     this._SELF_ = {
       formLayout: props.formLayout || {
+        // labelCol: {
+        //   xs: { span: 24 },
+        //   sm: { span: 7 },
+        // },
+        // wrapperCol: {
+        //   xs: { span: 24 },
+        //   sm: { span: 12 },
+        //   md: { span: 10 },
+        // },
         labelCol: {
-          xs: { span: 24 },
-          sm: { span: 7 },
+          span: 8,
         },
         wrapperCol: {
-          xs: { span: 24 },
-          sm: { span: 12 },
-          md: { span: 10 },
-        },
+          span: 14
+        }
       },
       inputPlaceholder: "请输入",
       selectPlaceholder: "请选择",
@@ -71,7 +81,7 @@ class SdlForm extends Component {
       isEdit: props.isEdit
     };
     this.renderFormItem = this.renderFormItem.bind(this);
-    this.openMapModal = this.openMapModal.bind(this);
+    // this.openMapModal = this.openMapModal.bind(this);
     this.renderContent = this.renderContent.bind(this);
   }
 
@@ -102,14 +112,15 @@ class SdlForm extends Component {
     const { addFormItems, form: { getFieldDecorator, setFieldsValue, getFieldValue }, editFormData } = this.props;
     const { formLayout, inputPlaceholder, selectPlaceholder, uid, configId, isEdit } = this._SELF_;
     const formItems = addFormItems[configId] || [];
-    const formData = isEdit ? editFormData[configId] : {};
+    const formData = isEdit ? (editFormData[configId] || {}) : {};
     // return addFormItems[configId].map((item) =>{
-    return formItems.map((item) => {
+    return formItems.map((item, index) => {
       let validate = [];
       let element = '';
       let { placeholder, validator } = item;
       const { fieldName, labelText, required } = item;
-      let initialValue = formData.length && formData[fieldName];
+      // let initialValue = formData && Object.keys(formData).length && formData[fieldName];
+      let initialValue = formData[fieldName] && formData[fieldName] + "";
       // 判断类型
       switch (item.type) {
         case "文本框":
@@ -121,6 +132,8 @@ class SdlForm extends Component {
         case '下拉列表框':
         case '多选下拉列表':
           validator = `${selectPlaceholder}`;
+          initialValue = formData[fieldName] && (formData[fieldName] + "").split(",");
+          console.log("initialValue=", initialValue)
           placeholder = placeholder || selectPlaceholder;
           const mode = item.type === "多选下拉列表" ? 'multiple' : '';
           element = (
@@ -135,6 +148,7 @@ class SdlForm extends Component {
           break;
         case "多选下拉搜索树":
           placeholder = placeholder || selectPlaceholder;
+          initialValue = formData[fieldName] && formData[fieldName] + "".split(",");
           element = (
             <SdlCascader
               itemName={item.configDataItemName}
@@ -191,14 +205,14 @@ class SdlForm extends Component {
           placeholder = placeholder || inputPlaceholder;
 
           element = <SdlMap
-          onOk={(map) => {
-            console.log("map=", map)
-            setFieldsValue({ Longitude: map.longitude, Latitude: map.latitude });
-          }}
-          longitude={getFieldValue("Longitude")}
-          latitude={getFieldValue("Latitude")}
-          handleMarker={true}
-        />;
+            onOk={(map) => {
+              console.log("map=", map)
+              setFieldsValue({ Longitude: map.longitude, Latitude: map.latitude });
+            }}
+            longitude={getFieldValue("Longitude")}
+            latitude={getFieldValue("Latitude")}
+            handleMarker={true}
+          />;
           break;
         case "坐标集合":
           validator = `${inputPlaceholder}`;
@@ -290,19 +304,40 @@ class SdlForm extends Component {
         }
       })
       if (element) {
+        let colSpan = 12;
+        let layout = formLayout;
+        if (this.props.formItemLayout[configId]) {
+          colSpan = this.props.formItemLayout[configId]
+        } else {
+          if (item.colSpan === 1 || item.colSpan === null) {
+            colSpan = 12
+          } else {
+            colSpan = 24;
+            layout = {
+              labelCol: {
+                span: 4,
+              },
+              wrapperCol: {
+                span: 19
+              },
+            }
+          }
+        }
         return (
-          <FormItem key={fieldName} {...formLayout} label={labelText}>
-            {getFieldDecorator(`${fieldName}`, {
-              initialValue: initialValue && initialValue + "",
-              rules: [
-                {
-                  required: required,
-                  message: validator + labelText,
-                },
-                ...validate
-              ],
-            })(element)}
-          </FormItem>
+          <Col span={colSpan}>
+            <FormItem key={fieldName} {...layout} label={labelText}>
+              {getFieldDecorator(`${fieldName}`, {
+                initialValue: initialValue,
+                rules: [
+                  {
+                    required: required,
+                    message: validator + labelText,
+                  },
+                  ...validate
+                ],
+              })(element)}
+            </FormItem>
+          </Col>
         );
       }
     });
@@ -321,12 +356,14 @@ class SdlForm extends Component {
         e.preventDefault();
         onSubmitForm()
       }} hideRequiredMark={false} style={{ marginTop: 8 }}>
-        {
-          this.renderFormItem()
-        }
+        <Row>
+          {
+            this.renderFormItem()
+          }
+        </Row>
         {this.props.children ?
           this.props.children :
-          <FormItem {...submitFormLayout} style={{ marginTop: 32 }}>
+          <Divider orientation="right">
             <Button type="primary" htmlType="submit">保存</Button>
             <Button
               style={{ marginLeft: 8 }}
@@ -334,7 +371,7 @@ class SdlForm extends Component {
                 history.go(-1);
               }}
             >返回</Button>
-          </FormItem>
+          </Divider>
         }
       </Form>
       {
@@ -353,17 +390,17 @@ class SdlForm extends Component {
     </Card>
   }
 
-  openMapModal(obj) {
-    let { form } = this.props;
-    this.setState({
-      MapVisible: true,
-      EditMarker: obj.EditMarker || false,
-      EditPolygon: obj.EditPolygon || false,
-      polygon: form.getFieldValue(obj.FieldName) || [],
-      longitude: form.getFieldValue("Longitude"),
-      latitude: form.getFieldValue("Latitude")
-    });
-  }
+  // openMapModal(obj) {
+  //   let { form } = this.props;
+  //   this.setState({
+  //     MapVisible: true,
+  //     EditMarker: obj.EditMarker || false,
+  //     EditPolygon: obj.EditPolygon || false,
+  //     polygon: form.getFieldValue(obj.FieldName) || [],
+  //     longitude: form.getFieldValue("Longitude"),
+  //     latitude: form.getFieldValue("Latitude")
+  //   });
+  // }
 
   setMapVisible = (flag) => {
     this.setState({

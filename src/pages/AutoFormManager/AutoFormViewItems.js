@@ -42,6 +42,7 @@ class AutoFormViewItems extends Component {
       keysParams: props.keysParams,
     }
     this._renderFormItem = this._renderFormItem.bind(this);
+    this._renderAppendDataSource = this._renderAppendDataSource.bind(this);
     this.renderContent = this.renderContent.bind(this);
   }
 
@@ -79,16 +80,16 @@ class AutoFormViewItems extends Component {
     return formConfig.map(item => {
 
       let showText = "";
-      if (item.type === "下拉列表框") {
-        showText = <ReturnName
-          configId={item.configId}
-          itemKey={item.configDataItemValue}
-          itemValue={formData[item.fieldName]}
-          itemName={item.configDataItemName}
-        />
-      } else {
+      // if (item.type === "下拉列表框") {
+      //   showText = <ReturnName
+      //     configId={item.configId}
+      //     itemKey={item.configDataItemValue}
+      //     itemValue={formData[item.fieldName]}
+      //     itemName={item.configDataItemName}
+      //   />
+      // } else {
         showText = formData[item.fieldName]
-      }
+      // }
       return (
         <Col span={6} style={{ marginBottom: 10 }} key={item.fieldName}>
           <div className={styles.term}>{item.labelText}</div>
@@ -98,9 +99,24 @@ class AutoFormViewItems extends Component {
     })
   }
 
+  // 渲染追加数据源
+  _renderAppendDataSource() {
+    const { appendDataSource } = this.props;
+    return appendDataSource.map((item, index) => {
+      return (
+        <Col span={6} style={{ marginBottom: 10 }} key={index}>
+          <div className={styles.term}>{item.label}</div>
+          <div className={styles.detail}>{item.value}</div>
+        </Col>
+      )
+    })
+  }
+
   renderContent() {
     return <Row className={styles.descriptionList}>
       {this._renderFormItem()}
+      {this._renderAppendDataSource()}
+      {this.props.children}
     </Row>
   }
 
@@ -132,6 +148,13 @@ AutoFormViewItems.propTypes = {
   configId: PropTypes.string.isRequired,
   // 主键对象
   keysParams: PropTypes.object.isRequired,
+  // 附加数据源
+  appendDataSource: PropTypes.array,
 };
+
+AutoFormViewItems.defaultProps = {
+  appendDataSource: []
+}
+
 
 export default AutoFormViewItems;

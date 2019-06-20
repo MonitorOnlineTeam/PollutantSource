@@ -67,6 +67,18 @@ export default class UserInfoIndex extends Component {
             }
         })
     }
+    confirm(userid) {
+        this.props.dispatch({
+            type: 'userinfo/deluserandroledep',
+            payload: {
+                User_ID: userid,
+            }
+        })
+      }
+      
+    cancel(e) {
+        console.log(e);
+      }
     render() {
         const { searchConfigItems, searchForm, tableInfo, match: { params: { configId } }, dispatch } = this.props;
         const searchConditions = searchConfigItems[configId] || []
@@ -112,13 +124,36 @@ export default class UserInfoIndex extends Component {
                             style={{ marginTop: 10 }}
                             // columns={columns}
                             configId={configId}
-                            onAdd={()=> {
-                               dispatch(routerRedux.push(`/AutoFormManager/AutoFormAdd/UserInfoAdd`))
+                            onAdd={() => {
+                                dispatch(routerRedux.push('/sysmanage/userinfoadd'))
                             }}
                             rowChange={(key, row) => {
                                 this.setState({
                                     key, row
                                 })
+                            }}
+                            appendHandleRows={row => {
+                                return <Fragment>
+                                    <a onClick={() => {
+                                        dispatch(routerRedux.push('/sysmanage/userinfoedit/' + row["dbo.Base_UserInfo.User_ID"]))
+                                    }}>编辑</a>
+                                    <Divider type="vertical" />
+                                    <a onClick={() => {
+                                        dispatch(routerRedux.push('/sysmanage/userinfoview/' + row["dbo.Base_UserInfo.User_ID"]))
+                                    }}>详情</a>
+                                    <Divider type="vertical" />
+                                    <Popconfirm
+                                        title="确认要删除吗?"
+                                        onConfirm={()=> {
+                                            this.confirm(row["dbo.Base_UserInfo.User_ID"])
+                                        }}
+                                        onCancel={this.cancel}
+                                        okText="是"
+                                        cancelText="否"
+                                    >
+                                        <a href="#">删除</a>
+                                    </Popconfirm>
+                                </Fragment>
                             }}
                         // loadDataSourceParams={[
                         //   {
@@ -129,10 +164,6 @@ export default class UserInfoIndex extends Component {
                         // ]}
                         // dataSource={dataSource}
                         >
-                            {/* <Fragment key="row">
-                <Divider type="vertical" />
-                <a>测试自定义</a>
-              </Fragment> */}
                         </SdlTable>
                     </Card>
                 </div>
