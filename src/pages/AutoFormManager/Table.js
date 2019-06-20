@@ -35,12 +35,13 @@ class SdlTable extends PureComponent {
       selectedRowKeys: [],
       delPostData: {},
     };
-    this._SELF_ = { btnEl: [], configId: props.configId };
+    this._SELF_ = { btnEl: [], configId: props.configId, moreBtns: [] };
 
     this.loadDataSource = this.loadDataSource.bind(this);
     this.onTableChange = this.onTableChange.bind(this);
     this._renderHandleButtons = this._renderHandleButtons.bind(this);
     this._handleTableChange = this._handleTableChange.bind(this);
+    this.moreClick = this.moreClick.bind(this);
   }
 
   componentDidMount() {
@@ -117,8 +118,8 @@ class SdlTable extends PureComponent {
 
   _renderHandleButtons() {
     const { opreationButtons, keys, dispatch } = this.props;
-    this._SELF_.btnEl = [];
-    const { btnEl, configId } = this._SELF_;
+    this._SELF_.btnEl = []; this._SELF_.moreBtns = [];
+    const { btnEl, configId, moreBtns } = this._SELF_;
     return opreationButtons[configId] ? opreationButtons[configId].map(btn => {
       switch (btn.DISPLAYBUTTON) {
         case "add":
@@ -156,36 +157,42 @@ class SdlTable extends PureComponent {
           >批量删除
                          </Button>;
         case "print":
-          return <Button icon="printer" key={btn.DISPLAYBUTTON} type="primary">打印</Button>;
+          moreBtns.push({ type: "printer", text: "打印" })
+          break;
+        // return <Button icon="printer" key={btn.DISPLAYBUTTON} type="primary">打印</Button>;
         case "exp":
-          return <Button
-            icon="export"
-            key={btn.DISPLAYBUTTON}
-            type="primary"
-            onClick={() => {
-              dispatch({
-                type: 'autoForm/exportDataExcel',
-                payload: {
-                  configId
-                }
-              })
-            }}
-          >
-            导出
-          </Button>;
+          moreBtns.push({ type: "export", text: "导出" })
+          break;
+        //   return <Button
+        //     icon="export"
+        //     key={btn.DISPLAYBUTTON}
+        //     type="primary"
+        //     onClick={() => {
+        //       dispatch({
+        //         type: 'autoForm/exportDataExcel',
+        //         payload: {
+        //           configId
+        //         }
+        //       })
+        //     }}
+        //   >
+        //     导出
+        // </Button>;
         case "imp":
-          return <Button
-            icon="import"
-            key={btn.DISPLAYBUTTON}
-            type="primary"
-            onClick={() => {
-              this.setState({
-                visible: true,
-              })
-            }}
-          >
-            导入
-          </Button>;
+          moreBtns.push({ type: "import", text: "导入" })
+          break;
+        //   return <Button
+        //     icon="import"
+        //     key={btn.DISPLAYBUTTON}
+        //     type="primary"
+        //     onClick={() => {
+        //       this.setState({
+        //         visible: true,
+        //       })
+        //     }}
+        //   >
+        //     导入
+        // </Button>;
         case "edit":
           btnEl.push({
             type: 'edit'
@@ -205,6 +212,35 @@ class SdlTable extends PureComponent {
           break;
       }
     }) : null;
+  }
+
+  // 更多按钮点击
+  moreClick(e) {
+    const { dispatch } = this.props;
+    const { configId } = this._SELF_;
+    switch (e.key) {
+      // 打印
+      case 'printer':
+
+        break;
+      // 导入
+      case 'import':
+        this.setState({
+          visible: true,
+        })
+        break;
+      // 导出
+      case 'export':
+        dispatch({
+          type: 'autoForm/exportDataExcel',
+          payload: {
+            configId
+          }
+        })
+        break;
+      default:
+        break;
+    }
   }
 
   render() {
@@ -392,12 +428,29 @@ class SdlTable extends PureComponent {
       //   }
       // },
     };
-
     return (
       <Fragment>
         <Row className={styles.buttonWrapper}>
+          {buttonsView}
+          {this.props.appendHandleButtons && this.props.appendHandleButtons(this.state.selectedRowKeys, this.state.selectedRows)}
           {
-            buttonsView
+            // 更多操作
+            this._SELF_.moreBtns.length ? <Dropdown overlay={() => {
+              return <Menu onClick={this.moreClick}>
+                {
+                  this._SELF_.moreBtns.map(item => {
+                    return <Menu.Item key={item.type}>
+                      <Icon type={item.type} />
+                      {item.text}
+                    </Menu.Item>
+                  })
+                }
+              </Menu>
+            }}>
+              <Button>
+                更多操作 <Icon type="down" />
+              </Button>
+            </Dropdown> : null
           }
           {/* {
             React.Children.map(this.props.children, (child, i) => {
@@ -407,11 +460,8 @@ class SdlTable extends PureComponent {
               }
             })
           } */}
-          {
-            this.props.appendHandleButtons && this.props.appendHandleButtons(this.state.selectedRowKeys, this.state.selectedRows)
-          }
+
         </Row>
-        {/* [record["dbo.T_Bas_CommonPoint.PointCode"], record["dbo.T_Bas_CommonPoint.PointName"]] */}
         <Table
           rowKey={(record, index) => index}
           size="middle"

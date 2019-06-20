@@ -80,7 +80,7 @@ class SearchWrapper extends Component {
     this._SELF_ = {
       formLayout: props.formLayout || {
         labelCol: { span: 6 },
-        wrapperCol: { span: 15 },
+        wrapperCol: { span: 18 },
       },
       inputPlaceholder: "请输入",
       selectPlaceholder: "请选择",
@@ -199,7 +199,7 @@ class SearchWrapper extends Component {
       }
       return (
         element &&
-        <Col style={{ display: isHide }} key={index} md={8} sm={24}>
+        <Col style={{ display: isHide, marginBottom: 6 }} key={index} md={8} sm={24}>
           <FormItem {...formLayout} label={labelText} style={{ width: '100%' }}>
             {getFieldDecorator(fieldName + '', {})(
               element
@@ -221,15 +221,20 @@ class SearchWrapper extends Component {
     const { formLayout, inputPlaceholder, selectPlaceholder } = this._SELF_;
     const { searchConfigItems, configId } = this.props;
     const searchConditions = searchConfigItems[configId] || []
+    const style = {};
+    if(searchConditions.length % 3 === 0 && !this.state.expand){
+      style.float = "right";
+    }else{
+      style.marginLeft = 20;
+    }
     return (
       <Form layout="inline" style={{ marginBottom: '10' }}>
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
           {
             this._renderFormItem()
           }
-          {/* <Col offset={2} md={6} sm={24} style={{ marginTop: 6 }}> */}
           {
-            searchConditions.length ? <Col md={6} sm={24} style={{ marginTop: 6 }}>
+            searchConditions.length ? <Col style={{ marginTop: 6, ...style}}>
               <Button type="primary" onClick={this.onSubmitForm}>
                 查询
                   </Button>
