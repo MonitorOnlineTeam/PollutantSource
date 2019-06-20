@@ -404,7 +404,6 @@ class AddPoint extends Component {
              DevicePassword,
              AreaFunctionCode,
          } = editpoint === null || this.props.match.params.DGIMN ==="null" ? {} : editpoint;
-
          let Crumbs=[  
             { Name: '系统管理', Url: '' },
          ]
