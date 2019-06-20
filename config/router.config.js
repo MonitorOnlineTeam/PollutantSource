@@ -224,6 +224,9 @@ export default [
 
             /* 标准库管理 */
             { path: '/sysmanage/standardlibrary', component: './StandardLibrary' },
+            /* 萤石云视频管理 */
+            { path: '/sysmanage/ysymanager/:configId/:DGIMN', component: './VedioManager/YsyDeviceIndex' },
+            { path: '/sysmanage/ysycameramanager/:DeviceId/', component: './VedioManager/YsyCameraIndex' },
 
             /* 系统管理-AutoForm */
             { path: '/sysmanage/autoformmanager', component: './autoformmanager' },
@@ -242,7 +245,7 @@ export default [
             { path: '/sysmanage/monitortarget/:configId', component: './autoformmanager/monitortarget' },
             { path: '/sysmanage/monitortarget/monitorpoint/:configId/:targetId/:targetName', component: './autoformmanager/monitorpoint' },
             /* AutoForm用户管理 */
-             { path: '/sysmanage/userinfoindex/:configId', component: './Userinfo/UserInfoIndex' },
+            { path: '/sysmanage/userinfoindex/:configId', component: './Userinfo/UserInfoIndex' },
             /* 标准库管理-维护 */
             { path: '/sysmanage/standardlibrarydetail/:StandardLibraryID', component: './StandardLibrary/AddStandardLibrary' },
             /* 个人设置-维护 */
