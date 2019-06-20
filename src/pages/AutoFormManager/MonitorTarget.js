@@ -20,6 +20,7 @@ import SdlTable from './Table';
 import SearchWrapper from './SearchWrapper';
 import { sdlMessage } from '../../utils/utils';
 
+
 @connect(({ loading, autoForm }) => ({
     loading: loading.effects['autoForm/getPageConfig'],
     autoForm: autoForm,
@@ -39,7 +40,7 @@ export default class MonitorTarget extends Component {
     }
 
     componentDidMount() {
-        const { match } = this.props;
+        const { match,dispatch } = this.props;
         this.reloadPage(match.params.configId);
     }
 
@@ -67,8 +68,7 @@ export default class MonitorTarget extends Component {
         })
     }
 
-    editMonitorInfo = () => {
-        let { key, row } = this.state;
+    editMonitorInfo = (key,row) => {
         const { match } = this.props;
 
         if ((!row || row.length === 0) || row.length > 1) {
@@ -118,6 +118,7 @@ export default class MonitorTarget extends Component {
             }>
                 <div className={styles.cardTitle}>
                     <Card>
+                       
                         <SearchWrapper
                             // formItemList={searchConditions}
                             // formChangeActionType=""
@@ -142,6 +143,15 @@ export default class MonitorTarget extends Component {
                                     key, row
                                 })
                             }}
+                            appendHandleButtons={(selectedRowKeys, selectedRows) => {
+                                return <Fragment>
+                                  <Button icon="printer" type="primary" onClick={() => {
+                                    // console.log('selectedRowKeys=', selectedRowKeys);
+                                    // console.log('selectedRows=', selectedRows);
+                                    this.editMonitorInfo(selectedRowKeys,selectedRows);
+                                  }}>维护点信息</Button>
+                                </Fragment>
+                              }}
                         // loadDataSourceParams={[
                         //   {
                         //     Key: "test",
@@ -151,11 +161,11 @@ export default class MonitorTarget extends Component {
                         // ]}
                         // dataSource={dataSource}
                         >
-                            <Fragment key="top">
+                            {/* <Fragment key="top">
                                 <Button icon="printer" type="primary" onClick={() => {
                                     this.editMonitorInfo();
                                 }}>维护点信息</Button>
-                            </Fragment>
+                            </Fragment> */}
                             {/* <Fragment key="row">
                 <Divider type="vertical" />
                 <a>测试自定义</a>
