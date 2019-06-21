@@ -86,10 +86,10 @@ class SdlForm extends Component {
   }
 
   componentDidMount() {
-    let { addFormItems, dispatch } = this.props;
+    let { addFormItems, dispatch, noLoad } = this.props;
     let { configId, isEdit, keysParams } = this._SELF_;
     // if (!addFormItems || addFormItems.length === 0) {
-    dispatch({
+    !noLoad && dispatch({
       type: 'autoForm/getPageConfig',
       payload: {
         configId: configId
@@ -98,13 +98,13 @@ class SdlForm extends Component {
     // }
 
     // 编辑时获取数据
-    isEdit && dispatch({
+    isEdit && (!noLoad && dispatch({
       type: 'autoForm/getFormData',
       payload: {
         configId: configId,
         ...keysParams
       }
-    });
+    }));
   }
 
   // 渲染FormItem
@@ -421,18 +421,18 @@ class SdlForm extends Component {
   render() {
     let { loadingAdd, loadingConfig, dispatch, breadcrumb } = this.props;
     const { uid, configId } = this._SELF_;
-    if (loadingAdd || loadingConfig) {
-      return (<Spin
-        style={{
-          width: '100%',
-          height: 'calc(100vh/2)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center'
-        }}
-        size="large"
-      />);
-    }
+    // if (loadingAdd || loadingConfig) {
+    //   return (<Spin
+    //     style={{
+    //       width: '100%',
+    //       height: 'calc(100vh/2)',
+    //       display: 'flex',
+    //       alignItems: 'center',
+    //       justifyContent: 'center'
+    //     }}
+    //     size="large"
+    //   />);
+    // }
     return (
       <Fragment>
         {this.renderContent()}

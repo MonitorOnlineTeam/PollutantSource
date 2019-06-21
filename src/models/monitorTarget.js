@@ -39,6 +39,7 @@ export default Model.extend({
                         }
                     ]
                   });
+                  payload.callback&&payload.callback(result[0].pollutantTypeCode);
             }
         }
     },

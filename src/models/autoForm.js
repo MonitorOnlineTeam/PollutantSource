@@ -40,7 +40,6 @@ export default Model.extend({
     detailConfigInfo: {}, // 详情页面配置信息,
     regionList: [], // 联动数据
     fileList: [], // 文件列表
-    formLayout: {}, // 添加编辑布局
   },
   effects: {
     // 获取数据
@@ -84,7 +83,7 @@ export default Model.extend({
       const searchParams = payload.searchParams || [];
 
       (group.length || searchParams.length) ? postData.ConditionWhere = JSON.stringify({
-        // group.length? postData.ConditionWhere = JSON.stringify({
+      // group.length? postData.ConditionWhere = JSON.stringify({
         "rel": "$and",
         "group": [{
           "rel": "$and",
@@ -171,19 +170,7 @@ export default Model.extend({
         });
         console.log("whereList=", whereList)
         //添加
-        const addCfgField = result.Datas.CfgField.filter(cfg => cfg.DF_ISADD === 1);
-        // const colSpanLen = ;
-        let layout = 12;
-        if (addCfgField.filter(item => item.DF_COLSPAN === null).length == addCfgField.length) {
-        // 显示两列
-          layout = 12
-        } else if (addCfgField.filter(item => item.DF_COLSPAN === 1 || item.DF_COLSPAN === 2).length == addCfgField.length) {
-          // 显示一列
-          layout = 24
-        } else {
-          layout = false
-        }
-        let addFormItems = addCfgField.map(item => ({
+        let addFormItems = result.Datas.CfgField.filter(cfg => cfg.DF_ISADD === 1).map(item => ({
           type: item.DF_CONTROL_TYPE,
           labelText: item.DF_NAME_CN,
           fieldName: item.DF_NAME,
@@ -197,7 +184,6 @@ export default Model.extend({
           required: item.DF_ISNOTNULL === 1,
           validator: item.DF_ISNOTNULL === 1 && (item.DF_TOOLTIP || ""),//TODO：正则？
           validate: item.DF_VALIDATE ? item.DF_VALIDATE.split(',') : [],
-          colSpan: item.DF_COLSPAN
         }));
 
 
@@ -215,27 +201,28 @@ export default Model.extend({
         })
         yield update({
           searchConfigItems: {
+            ...state.searchConfigItems,
             [configId]: searchConditions
           },
           tableInfo: {
+            ...state.tableInfo,
             [configId]: {
               ...state.tableInfo[configId],
               columns
             }
           },
           opreationButtons: {
+            ...state.opreationButtons,
             [configId]: result.Datas.OpreationButtons
           },
           whereList,
           keys: {
+            ...state.keys,
             [configId]: keys
           },
           addFormItems: {
+            ...state.addFormItems,
             [configId]: addFormItems
-          },
-          formLayout: {
-            ...state.formLayout,
-            [configId]: layout
           }
         });
       }
@@ -360,7 +347,7 @@ export default Model.extend({
       if (result.IsSuccess) {
         console.log('suc=', result)
         result.Datas && window.open(result.Datas)
-      } else {
+      }else{
         message.error(result.reason)
       }
     },
