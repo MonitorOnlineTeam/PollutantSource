@@ -153,7 +153,7 @@ class BasicLayout extends React.PureComponent {
         {
             return(
                 <div>
-                    <Redirect to='/homepage' />
+                    <Redirect />
                     {
                         this.props.children
                     }
@@ -164,7 +164,7 @@ class BasicLayout extends React.PureComponent {
         {
             return(
                 <div>
-                    <Redirect to='/workbench' />
+                    <Redirect />
                     {
                         this.props.children
                     }
