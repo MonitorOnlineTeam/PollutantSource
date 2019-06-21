@@ -246,6 +246,8 @@ export default [
              { path: '/sysmanage/userinfoadd', component: './Userinfo/UserInfoAdd' },
              { path: '/sysmanage/userinfoedit/:userid', component: './Userinfo/UserInfoEdit' },
              { path: '/sysmanage/userinfoview/:userid', component: './Userinfo/UserInfoView' },
+             /* 角色管理 */
+             { path: '/sysmanage/roleindex/', component: './RoleInfo/RoleIndex' },
             /* 标准库管理-维护 */
             { path: '/sysmanage/standardlibrarydetail/:StandardLibraryID', component: './StandardLibrary/AddStandardLibrary' },
             /* 个人设置-维护 */

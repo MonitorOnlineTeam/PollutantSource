@@ -340,7 +340,6 @@ export default class UserInfoEdit extends Component {
                                         checkedKeys={this.state.checkedKey}
                                         onSelect={this.onSelect}
                                         selectedKeys={this.state.selectedKey}
-                                        defaultExpandAll={true}
                                     >
                                         {this.renderTreeNodes(this.props.RolesTreeData)}
                                     </Tree>
@@ -369,7 +368,6 @@ export default class UserInfoEdit extends Component {
                                         checkedKeys={this.state.checkedKeys}
                                         onSelect={this.onSelects}
                                         selectedKeys={this.state.selectedKeys}
-                                        defaultExpandAll={true}
                                     >
                                         {this.renderTreeNodes(this.props.treeData)}
                                     </Tree>
