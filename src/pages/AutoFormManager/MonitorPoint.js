@@ -24,13 +24,6 @@ import SdlForm from "./SdlForm"
 
 let pointConfigId = '';
 let pointConfigIdEdit = '';
-let pointDataWhere = [
-    {
-        Key: "dbo__T_Cod_MonitorPointBase__BaseCode",
-        Value: '',
-        Where: "$="
-    }
-];
 
 @connect(({ loading, autoForm, monitorTarget }) => ({
     loading: loading.effects['autoForm/getPageConfig'],
@@ -114,10 +107,16 @@ export default class MonitorPoint extends Component {
         dispatch({
             type: 'monitorTarget/updateState',
             payload: {
-                pollutantType: type
+                pollutantType: type,
+                pointDataWhere : [
+                    {
+                        Key: "dbo__T_Cod_MonitorPointBase__BaseCode",
+                        Value: match.params.targetId,
+                        Where: "$="
+                    }
+                ]
             }
         });
-        // console.log("pointConfigId=,,", pointConfigId);
         dispatch({
             type: 'autoForm/getPageConfig',
             payload: {
@@ -128,15 +127,6 @@ export default class MonitorPoint extends Component {
             type: 'autoForm/getPageConfig',
             payload: {
                 configId: pointConfigIdEdit
-            }
-        })
-        pointDataWhere[0].Value = match.params.targetId;
-        // console.log("pointDataWhere=", pointDataWhere);
-        dispatch({
-            type: 'autoForm/getAutoFormData',
-            payload: {
-                configId: pointConfigId,
-                searchParams: pointDataWhere,
             }
         })
     }
@@ -211,12 +201,10 @@ export default class MonitorPoint extends Component {
         });
     }
     render() {
-        const { searchConfigItems, searchForm, tableInfo, match: { params: { targetName, configId } }, dispatch } = this.props;
+        const { searchConfigItems, searchForm, tableInfo, match: { params: { targetName, configId } }, dispatch,pointDataWhere } = this.props;
         const searchConditions = searchConfigItems[pointConfigId] || []
         const columns = tableInfo[pointConfigId] ? tableInfo[pointConfigId]["columns"] : [];
-        // console.log("pointDataWhere=", pointDataWhere.length);
         if (this.props.loading || this.props.otherloading) {
-            // if(!pointDataWhere.length) {
             return (<Spin
                 style={{
                     width: '100%',
@@ -262,7 +250,7 @@ export default class MonitorPoint extends Component {
                             onAdd={() => {
                                 this.showModal()
                             }}
-                            //searchParams={pointDataWhere}
+                            searchParams={pointDataWhere}
                             appendHandleRows={row => {
                                 // console.log("row=", row);
                                 return <Fragment>
