@@ -133,7 +133,6 @@ class SdlForm extends Component {
         case '多选下拉列表':
           validator = `${selectPlaceholder}`;
           initialValue = formData[fieldName] && (formData[fieldName] + "").split(",");
-          console.log("initialValue=", initialValue)
           placeholder = placeholder || selectPlaceholder;
           const mode = item.type === "多选下拉列表" ? 'multiple' : '';
           element = (
@@ -304,6 +303,7 @@ class SdlForm extends Component {
         }
       })
       if (element) {
+        // 布局方式
         let colSpan = 12;
         let layout = formLayout;
         if (this.props.formItemLayout[configId]) {
