@@ -8,6 +8,7 @@ import { message } from 'antd';
 import {
   Model
 } from '../dvapack';
+import moment from 'moment'
 import * as services from '../services/autoformapi';
 
 export default Model.extend({
@@ -40,6 +41,7 @@ export default Model.extend({
     detailConfigInfo: {}, // 详情页面配置信息,
     regionList: [], // 联动数据
     fileList: [], // 文件列表
+    formLayout: {}, // 添加编辑布局
   },
   effects: {
     // 获取数据
@@ -166,11 +168,24 @@ export default Model.extend({
             configId: item.FOREIGH_DT_CONFIGID,
             configDataItemName: item.FOREIGN_DF_NAME,
             configDataItemValue: item.FOREIGN_DF_ID,
+            dateFormat: item.DF_DATEFORMAT
           };
         });
         console.log("whereList=", whereList)
         //添加
-        let addFormItems = result.Datas.CfgField.filter(cfg => cfg.DF_ISADD === 1).map(item => ({
+        const addCfgField = result.Datas.CfgField.filter(cfg => cfg.DF_ISADD === 1);
+        // const colSpanLen = ;
+        let layout = 12;
+        if (addCfgField.filter(item => item.DF_COLSPAN === null).length == addCfgField.length) {
+        // 显示两列
+          layout = 12
+        } else if (addCfgField.filter(item => item.DF_COLSPAN === 1 || item.DF_COLSPAN === 2).length == addCfgField.length) {
+          // 显示一列
+          layout = 24
+        } else {
+          layout = false
+        }
+        let addFormItems = addCfgField.map(item => ({
           type: item.DF_CONTROL_TYPE,
           labelText: item.DF_NAME_CN,
           fieldName: item.DF_NAME,
@@ -184,6 +199,8 @@ export default Model.extend({
           required: item.DF_ISNOTNULL === 1,
           validator: item.DF_ISNOTNULL === 1 && (item.DF_TOOLTIP || ""),//TODO：正则？
           validate: item.DF_VALIDATE ? item.DF_VALIDATE.split(',') : [],
+          colSpan: item.DF_COLSPAN,
+          dateFormat: item.DF_DATEFORMAT
         }));
 
 
@@ -223,6 +240,10 @@ export default Model.extend({
           addFormItems: {
             ...state.addFormItems,
             [configId]: addFormItems
+          },
+          formLayout: {
+            ...state.formLayout,
+            [configId]: layout
           }
         });
       }
@@ -347,7 +368,7 @@ export default Model.extend({
       if (result.IsSuccess) {
         console.log('suc=', result)
         result.Datas && window.open(result.Datas)
-      }else{
+      } else {
         message.error(result.reason)
       }
     },
