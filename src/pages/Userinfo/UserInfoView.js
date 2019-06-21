@@ -53,7 +53,7 @@ class UserInfoView extends Component {
                             <Button
                                 style={{ float: "right", marginRight: 10 }}
                                 onClick={() => {
-                                    history.goBack(-1);
+                                    history.go(-1);
                                 }}
                             ><Icon type="left" />返回
                             </Button>
