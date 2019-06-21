@@ -317,6 +317,7 @@ class UseStandardLibrary extends Component {
                 }
             },
         ];
+        const {match:{params:{configId}}}=this.props;
         return (
             <MonitorContent
                 {...this.props}
@@ -324,6 +325,7 @@ class UseStandardLibrary extends Component {
                     [
                         { Name: '首页', Url: '/' },
                         { Name: '系统管理', Url: '' },
+                        { Name: '监控目标-企业', Url: '/sysmanage/monitortarget/' + configId },
                         { Name: '排口管理', Url: '/sysmanage/pointinfo' },
                         { Name: '设置标准', Url: '' }
                     ]

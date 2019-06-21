@@ -115,22 +115,22 @@ export default class AutoFormIndex extends Component {
                   key, row
                 })
               }}
-              appendHandleRows={row => {
-                return <Fragment>
-                  <Divider type="vertical" />
-                  <a onClick={() => {
-                    console.log('row=', row)
-                  }}>测试</a>
-                </Fragment>
-              }}
-              appendHandleButtons={(selectedRowKeys, selectedRows) => {
-                return <Fragment>
-                  <Button icon="printer" type="primary" onClick={() => {
-                    console.log('selectedRowKeys=', selectedRowKeys);
-                    console.log('selectedRows=', selectedRows);
-                  }}>维护点信息</Button>
-                </Fragment>
-              }}
+              // appendHandleRows={row => {
+              //   return <Fragment>
+              //     <Divider type="vertical" />
+              //     <a onClick={() => {
+              //       console.log('row=', row)
+              //     }}>测试</a>
+              //   </Fragment>
+              // }}
+              // appendHandleButtons={(selectedRowKeys, selectedRows) => {
+              //   return <Fragment>
+              //     <Button icon="printer" type="primary" onClick={() => {
+              //       console.log('selectedRowKeys=', selectedRowKeys);
+              //       console.log('selectedRows=', selectedRows);
+              //     }}>维护点信息</Button>
+              //   </Fragment>
+              // }}
             // searchParams={[
             //   {
             //     Key: "test",

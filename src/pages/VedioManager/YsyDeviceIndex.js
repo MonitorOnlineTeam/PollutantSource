@@ -10,16 +10,13 @@ import {
     Spin,
     Select, Modal, Tag, Divider, Dropdown, Icon, Menu, Popconfirm, message, DatePicker, InputNumber
 } from 'antd';
-import styles from './index.less';
-import MonitorContent from '../../components/MonitorContent/index';
-import NewDataFilter from '../Userinfo/DataFilterNew';
-import EnterpriseDataFilter from '../../components/UserInfo/EnterpriseDataFilter';
 import { routerRedux } from 'dva/router';
 import { connect } from 'dva';
-import SdlTable from './Table';
-import SearchWrapper from './SearchWrapper';
+import styles from './index.less';
+import MonitorContent from '../../components/MonitorContent/index';
+import SdlTable from '../AutoFormManager/Table';
+import SearchWrapper from '../AutoFormManager/SearchWrapper';
 import { sdlMessage } from '../../utils/utils';
-
 
 @connect(({ loading, autoForm }) => ({
     loading: loading.effects['autoForm/getPageConfig'],
@@ -31,7 +28,7 @@ import { sdlMessage } from '../../utils/utils';
     routerConfig: autoForm.routerConfig
 }))
 
-export default class MonitorTarget extends Component {
+class YsyDeviceIndex extends Component {
     constructor(props) {
         super(props);
 
@@ -40,7 +37,7 @@ export default class MonitorTarget extends Component {
     }
 
     componentDidMount() {
-        const { match,dispatch } = this.props;
+        const { match } = this.props;
         this.reloadPage(match.params.configId);
     }
 
@@ -65,10 +62,11 @@ export default class MonitorTarget extends Component {
             payload: {
                 configId: configId
             }
-        })
+        });
     }
 
-    editMonitorInfo = (key,row) => {
+    editMonitorInfo = () => {
+        let { key, row } = this.state;
         const { match } = this.props;
 
         if ((!row || row.length === 0) || row.length > 1) {
@@ -77,25 +75,25 @@ export default class MonitorTarget extends Component {
         }
         debugger;
         //dbo.T_Bas_Enterprise.EntCode
-        const configId = match.params.configId;
+        const {configId} = match.params;
 
         let targetId = '';
         let targetName='';
         switch (match.params.configId) {
             case 'AEnterpriseTest':
                 targetId = row[0]['dbo.T_Bas_Enterprise.EntCode'];
-                targetName=row[0]['dbo.T_Bas_Enterprise.EntName']
+                targetName=row[0]['dbo.T_Bas_Enterprise.EntName'];
                 break;
             default: break;
         }
 
-        this.props.dispatch(routerRedux.push(`/sysmanage/monitortarget/monitorpoint/${match.params.configId}/${targetId}/${targetName}`))
+        this.props.dispatch(routerRedux.push(`/sysmanage/monitortarget/monitorpoint/${match.params.configId}/${targetId}/${targetName}`));
     }
 
     render() {
         const { searchConfigItems, searchForm, tableInfo, match: { params: { configId } }, dispatch } = this.props;
-        const searchConditions = searchConfigItems[configId] || []
-        const columns = tableInfo[configId] ? tableInfo[configId]["columns"] : [];
+        const searchConditions = searchConfigItems[configId] || [];
+        const columns = tableInfo[configId] ? tableInfo[configId].columns : [];
         if (this.props.loading) {
             return (<Spin
                 style={{
@@ -113,12 +111,12 @@ export default class MonitorTarget extends Component {
                 [
                     { Name: '首页', Url: '/' },
                     { Name: '系统管理', Url: '' },
-                    { Name: '监控目标-企业', Url: '' }
+                    { Name: '萤石云视频管理', Url: '' }
                 ]
-            }>
+            }
+            >
                 <div className={styles.cardTitle}>
                     <Card>
-                       
                         <SearchWrapper
                             // formItemList={searchConditions}
                             // formChangeActionType=""
@@ -126,14 +124,7 @@ export default class MonitorTarget extends Component {
                             // }}
                             onSubmitForm={(form) => this.loadReportList(form)}
                             configId={configId}
-                        // loadDataSourceParams={[
-                        //   {
-                        //     Key: "test",
-                        //     Value: false,
-                        //     Where: "$like"
-                        //   }
-                        // ]}
-                        ></SearchWrapper>
+                        />
                         <SdlTable
                             style={{ marginTop: 10 }}
                             // columns={columns}
@@ -141,39 +132,23 @@ export default class MonitorTarget extends Component {
                             rowChange={(key, row) => {
                                 this.setState({
                                     key, row
-                                })
+                                });
                             }}
-                            appendHandleButtons={(selectedRowKeys, selectedRows) => {
-                                return <Fragment>
-                                  <Button icon="printer" type="primary" onClick={() => {
-                                    // console.log('selectedRowKeys=', selectedRowKeys);
-                                    // console.log('selectedRows=', selectedRows);
-                                    this.editMonitorInfo(selectedRowKeys,selectedRows);
-                                  }}>维护点信息</Button>
+                            appendHandleRows={row =>
+                                <Fragment>
+                                    <Divider type="vertical" />
+                                    <a onClick={() => {
+                                        dispatch(routerRedux.push(`/sysmanage/ysycameramanager/${ row["dbo.T_Bas_VideoDevice.VedioDevice_ID"]}`));
+                                    }}
+                                    >添加摄像头
+                                    </a>
                                 </Fragment>
-                              }}
-                        // loadDataSourceParams={[
-                        //   {
-                        //     Key: "test",
-                        //     Value: false,
-                        //     Where: "$like"
-                        //   }
-                        // ]}
-                        // dataSource={dataSource}
-                        >
-                            {/* <Fragment key="top">
-                                <Button icon="printer" type="primary" onClick={() => {
-                                    this.editMonitorInfo();
-                                }}>维护点信息</Button>
-                            </Fragment> */}
-                            {/* <Fragment key="row">
-                <Divider type="vertical" />
-                <a>测试自定义</a>
-              </Fragment> */}
-                        </SdlTable>
+                            }
+                        />
                     </Card>
                 </div>
             </MonitorContent>
         );
     }
 }
+export default YsyDeviceIndex;

@@ -8,7 +8,7 @@ import {
     Table,
     Form,
     Spin,
-    Select, Modal, Tag, Divider, Dropdown, Icon, Menu, Popconfirm, message, DatePicker, InputNumber
+    Select, Modal, Tag, Divider, Dropdown, Icon, Menu, Popconfirm, message, DatePicker, InputNumber,
 } from 'antd';
 import styles from './index.less';
 import MonitorContent from '../../components/MonitorContent/index';
@@ -19,15 +19,18 @@ import { connect } from 'dva';
 import SdlTable from './Table';
 import SearchWrapper from './SearchWrapper';
 import { sdlMessage } from '../../utils/utils';
+import PollutantType from './PollutantType';
 
-@connect(({ loading, autoForm }) => ({
+@connect(({ loading, autoForm, monitorTarget }) => ({
     loading: loading.effects['autoForm/getPageConfig'],
+    otherloading: loading.effects['monitorTarget/getPollutantTypeList'],
     autoForm: autoForm,
     searchConfigItems: autoForm.searchConfigItems,
     // columns: autoForm.columns,
     tableInfo: autoForm.tableInfo,
     searchForm: autoForm.searchForm,
-    routerConfig: autoForm.routerConfig
+    routerConfig: autoForm.routerConfig,
+    pointDataWhere: monitorTarget.pointDataWhere
 }))
 
 export default class MonitorPoint extends Component {
@@ -35,18 +38,24 @@ export default class MonitorPoint extends Component {
         super(props);
 
         this.state = {};
-
     }
 
     componentDidMount() {
-        this.props.dispatch({
+        const { dispatch, match } = this.props;
+        dispatch({
             type: 'autoForm/getPageConfig',
             payload: {
                 configId: 'TestCommonPoint'
             }
         })
-        const { match } = this.props;
-        debugger;
+
+        dispatch({
+            type: 'monitorTarget/getPollutantTypeList',
+            payload: {
+            }
+        })
+
+        // debugger;
         this.reloadPage(match.params.targetId);
     }
 
@@ -76,19 +85,68 @@ export default class MonitorPoint extends Component {
 
     editMonitorInfo = () => {
         let { key, row } = this.state;
-        debugger;
+        // debugger;
         if ((!row || row.length === 0) || row.length > 1) {
             sdlMessage("请选择一行进行操作", 'warning');
             return false;
         }
     }
 
+    handlePollutantTypeChange = (e) => {
+
+        let pointDataWhere = [
+            {
+                Key: "dbo__T_Bas_CommonPoint__PollutantType",
+                Value: `${e}`,
+                Where: "$in"
+            }
+        ];
+
+        this.props.dispatch({
+            type: 'monitorTarget/updateState',
+            payload: {
+                pollutantType: e,
+                pointDataWhere: pointDataWhere
+            }
+        });
+
+        this.props.dispatch({
+            type: 'autoForm/getAutoFormData',
+            payload: {
+                configId: 'TestCommonPoint',
+                searchParams: pointDataWhere,
+            }
+        })
+    }
+
+    onMenu = (key, id, name) => {
+        const {match:{params:{configId}}}=this.props;
+        //match.params
+        switch (key) {
+            case '1':
+                this.props.dispatch(routerRedux.push(`/sysmanage/usestandardlibrary/${id}/${name}/${configId}`));
+                break;
+            case '2':
+                this.props.dispatch(routerRedux.push(`/sysmanage/stopmanagement/${id}/${name}`));
+                break;
+            case '3':
+                this.props.dispatch(routerRedux.push(`/sysmanage/videolists/${id}/${name}`));
+                break;
+            case '4':
+                this.props.dispatch(routerRedux.push(`/pointdetail/${id}/pointinfo`));
+                break;
+            default:
+                break;
+        }
+    }
     render() {
-        const { searchConfigItems, searchForm, tableInfo, match: { params: { configId,targetName } }, dispatch } = this.props;
+        const { searchConfigItems, searchForm, tableInfo, match: { params: { configId, targetName } }, dispatch, pointDataWhere } = this.props;
         const searchConditions = searchConfigItems[configId] || []
         const columns = tableInfo[configId] ? tableInfo[configId]["columns"] : [];
         const pointConfigId = 'TestCommonPoint';
-        if (this.props.loading) {
+        // console.log("pointDataWhere=", pointDataWhere.length);
+        if (this.props.loading || this.props.otherloading) {
+            // if(!pointDataWhere.length) {
             return (<Spin
                 style={{
                     width: '100%',
@@ -100,6 +158,16 @@ export default class MonitorPoint extends Component {
                 size="large"
             />);
         }
+        const menu = (id, name) => (
+            <Menu onClick={(e) => {
+                this.onMenu.bind()(e.key, id, name);
+            }}>
+                <Menu.Item key="1"><Icon type="bars" />监测标准</Menu.Item>
+                <Menu.Item key="2"><Icon type="tool" />停产管理</Menu.Item>
+                <Menu.Item key="3"><Icon type="youtube" />视频管理</Menu.Item>
+                <Menu.Item key="4"><Icon type="home" />进入排口</Menu.Item>
+            </Menu>
+        );
         return (
             <MonitorContent breadCrumbList={
                 [
@@ -110,7 +178,8 @@ export default class MonitorPoint extends Component {
                 ]
             }>
                 <div className={styles.cardTitle}>
-                    <Card title={`${targetName}`}>
+                    <Card title={`${targetName}`} extra={<PollutantType handlePollutantTypeChange={this.handlePollutantTypeChange} />}>
+
                         <SdlTable
                             style={{ marginTop: 10 }}
                             // columns={columns}
@@ -120,27 +189,21 @@ export default class MonitorPoint extends Component {
                                     key, row
                                 })
                             }}
-                        // loadDataSourceParams={[
-                        //   {
-                        //     Key: "test",
-                        //     Value: false,
-                        //     Where: "$like"
-                        //   }
-                        // ]}
-                        // dataSource={dataSource}
-                        >
-                            {/* <Fragment key="top">
-                <Button icon="printer" type="primary" onClick={() => {
-                  //dispatch(routerRedux.push(`/autoformmanager/test/TestCommonPoint`))
-                  this.editMonitorInfo();
-                  console.log('state=', this.state)
-                }}>维护点信息</Button>
-              </Fragment> */}
-                            <Fragment key="row">
-                                <Divider type="vertical" />
-                                <a>更多</a>
-                            </Fragment>
-                        </SdlTable>
+                            searchParams={pointDataWhere}
+                            appendHandleRows={row => {
+                                console.log("row=",row);
+                                return <Fragment>
+                                    <Divider type="vertical" />
+
+                                    <Dropdown overlay={menu(row['dbo.T_Bas_CommonPoint.DGIMN'], row['dbo.T_Bas_CommonPoint.PointName'])} >
+                                        <a>
+                                            更多
+                                        </a>
+                                    </Dropdown>
+
+                                </Fragment>
+                            }}
+                        />
                     </Card>
                 </div>
             </MonitorContent>
