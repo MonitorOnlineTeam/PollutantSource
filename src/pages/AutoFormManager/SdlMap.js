@@ -86,7 +86,6 @@ class SdlMap extends PureComponent {
               latitude: item.lat
             }
           })
-          console.log('polygon=', polygon)
           self.setState({
             polygon: polygon
           })
@@ -143,7 +142,6 @@ class SdlMap extends PureComponent {
         // 实例化Geocoder
         let geocoder = new window.AMap.Geocoder({});
         geocoder.getLocation(obj.target.value, (status, result) => {
-          console.log("status=", status)
           if (status === 'complete' && result.info === 'OK') {
             let latlng = result.geocodes[0].location;
             // 设置缩放级别和中心点

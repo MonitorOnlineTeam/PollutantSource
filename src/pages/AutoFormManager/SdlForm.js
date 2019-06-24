@@ -18,7 +18,8 @@ import {
   Upload,
   Row,
   Col,
-  Divider
+  Divider,
+  DatePicker
 } from 'antd';
 import cuid from 'cuid';
 import { connect } from 'dva';
@@ -33,7 +34,7 @@ import SdlCheckbox from './SdlCheckbox';
 import SdlUpload from './SdlUpload'
 import MapModal from './MapModal';
 import SdlMap from './SdlMap'
-
+const { RangePicker, MonthPicker } = DatePicker;
 const FormItem = Form.Item;
 
 @connect(({ loading, autoForm }) => ({
@@ -86,10 +87,10 @@ class SdlForm extends Component {
   }
 
   componentDidMount() {
-    let { addFormItems, dispatch } = this.props;
+    let { addFormItems, dispatch, noLoad } = this.props;
     let { configId, isEdit, keysParams } = this._SELF_;
     // if (!addFormItems || addFormItems.length === 0) {
-    dispatch({
+    !noLoad && dispatch({
       type: 'autoForm/getPageConfig',
       payload: {
         configId: configId
@@ -98,13 +99,34 @@ class SdlForm extends Component {
     // }
 
     // 编辑时获取数据
-    isEdit && dispatch({
+    isEdit && (!noLoad && dispatch({
       type: 'autoForm/getFormData',
       payload: {
         configId: configId,
         ...keysParams
       }
-    });
+    }));
+  }
+
+  _rtnDateEl = (item) => {
+    const { dateFormat } = item;
+    const format = dateFormat.toUpperCase();
+    if (format === "YYYY-MM" || format === "MM") {
+      // 年月 、 月
+      return <MonthPicker style={{ width: "100%" }} format={format} />
+    } else if (format === "YYYY") {
+      // 年
+      return <DatePicker format={format} style={{ width: "100%" }} />
+      // return <DatePicker
+      //   mode="year"
+      //   onPanelChange={(value, mode) => {
+      //     this.props.form.setFieldsValue({ [item.fieldName]: value })
+      //   }}
+      //   format={format} />
+    } else {
+      // 年-月-日 时:分:秒
+      return <DatePicker showTime format={format} style={{ width: "100%" }} />
+    }
   }
 
   // 渲染FormItem
@@ -133,7 +155,6 @@ class SdlForm extends Component {
         case '多选下拉列表':
           validator = `${selectPlaceholder}`;
           initialValue = formData[fieldName] && (formData[fieldName] + "").split(",");
-          console.log("initialValue=", initialValue)
           placeholder = placeholder || selectPlaceholder;
           const mode = item.type === "多选下拉列表" ? 'multiple' : '';
           element = (
@@ -157,6 +178,9 @@ class SdlForm extends Component {
               placeholder={placeholder}
             />
           )
+          break;
+        case "日期框":
+          element = this._rtnDateEl(item);
           break;
         case "单选":
           element = (
@@ -304,6 +328,7 @@ class SdlForm extends Component {
         }
       })
       if (element) {
+        // 布局方式
         let colSpan = 12;
         let layout = formLayout;
         if (this.props.formItemLayout[configId]) {
@@ -361,8 +386,7 @@ class SdlForm extends Component {
             this.renderFormItem()
           }
         </Row>
-        {this.props.children ?
-          this.props.children :
+        {!this.props.hideBtns &&
           <Divider orientation="right">
             <Button type="primary" htmlType="submit">保存</Button>
             <Button
@@ -421,18 +445,18 @@ class SdlForm extends Component {
   render() {
     let { loadingAdd, loadingConfig, dispatch, breadcrumb } = this.props;
     const { uid, configId } = this._SELF_;
-    if (loadingAdd || loadingConfig) {
-      return (<Spin
-        style={{
-          width: '100%',
-          height: 'calc(100vh/2)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center'
-        }}
-        size="large"
-      />);
-    }
+    // if (loadingAdd || loadingConfig) {
+    //   return (<Spin
+    //     style={{
+    //       width: '100%',
+    //       height: 'calc(100vh/2)',
+    //       display: 'flex',
+    //       alignItems: 'center',
+    //       justifyContent: 'center'
+    //     }}
+    //     size="large"
+    //   />);
+    // }
     return (
       <Fragment>
         {this.renderContent()}
@@ -451,6 +475,8 @@ SdlForm.propTypes = {
   form: PropTypes.object.isRequired,
   // isEdit
   isEdit: PropTypes.bool,
+  // 是否隐藏操作按钮
+  hideBtns: PropTypes.bool,
   // keysParams
   keysParams: function (props, propName, componentName) {
     if (props.isEdit && !props.keysParams) {
@@ -462,7 +488,8 @@ SdlForm.propTypes = {
 };
 
 SdlForm.defaultProps = {
-  isEdit: false
+  isEdit: false,
+  hideBtns: false
 }
 
 export default SdlForm;

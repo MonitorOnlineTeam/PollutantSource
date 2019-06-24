@@ -115,6 +115,9 @@ export default class AutoFormIndex extends Component {
                   key, row
                 })
               }}
+              // onAdd={()=>{
+              //   console.log("点击了添加")
+              // }}
               // appendHandleRows={row => {
               //   return <Fragment>
               //     <Divider type="vertical" />

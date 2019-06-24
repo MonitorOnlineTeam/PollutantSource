@@ -8,6 +8,7 @@ import { message } from 'antd';
 import {
   Model
 } from '../dvapack';
+import moment from 'moment'
 import * as services from '../services/autoformapi';
 
 export default Model.extend({
@@ -50,17 +51,19 @@ export default Model.extend({
       const configId = payload.configId;
       // const searchForm = state.searchForm[payload.configId]
       const searchForm = state.searchForm[configId] ? state.searchForm[configId] : [];
+      console.log("searchForm=", searchForm)
       if (searchForm) {
         for (let key in searchForm) {
           let groupItem = {};
-          if (searchForm[key].value && searchForm[key].value.length) {
-            // if(state.searchForm[key]) {
-            //   state.searchForm[key]
-            // }
+          // if (searchForm[key].value && searchForm[key].value.length || Object.keys(searchForm[key].value).length) {
+          if (searchForm[key].value) {
+            // 是否是moment对象
+            const isMoment = moment.isMoment(searchForm[key].value);
             groupItem = {
               "Key": key,
-              "Value": searchForm[key].value.toString(),
+              "Value": isMoment ? moment(searchForm[key].value).format("YYYY-MM-DD HH:mm:ss") : searchForm[key].value.toString(),
             };
+
             for (let whereKey in state.whereList[configId]) {
               if (key === whereKey) {
                 groupItem.Where = state.whereList[configId][whereKey];
@@ -167,6 +170,7 @@ export default Model.extend({
             configId: item.FOREIGH_DT_CONFIGID,
             configDataItemName: item.FOREIGN_DF_NAME,
             configDataItemValue: item.FOREIGN_DF_ID,
+            dateFormat: item.DF_DATEFORMAT
           };
         });
         console.log("whereList=", whereList)
@@ -175,7 +179,7 @@ export default Model.extend({
         // const colSpanLen = ;
         let layout = 12;
         if (addCfgField.filter(item => item.DF_COLSPAN === null).length == addCfgField.length) {
-        // 显示两列
+          // 显示两列
           layout = 12
         } else if (addCfgField.filter(item => item.DF_COLSPAN === 1 || item.DF_COLSPAN === 2).length == addCfgField.length) {
           // 显示一列
@@ -197,7 +201,8 @@ export default Model.extend({
           required: item.DF_ISNOTNULL === 1,
           validator: item.DF_ISNOTNULL === 1 && (item.DF_TOOLTIP || ""),//TODO：正则？
           validate: item.DF_VALIDATE ? item.DF_VALIDATE.split(',') : [],
-          colSpan: item.DF_COLSPAN
+          colSpan: item.DF_COLSPAN,
+          dateFormat: item.DF_DATEFORMAT
         }));
 
 
@@ -215,22 +220,27 @@ export default Model.extend({
         })
         yield update({
           searchConfigItems: {
+            ...state.searchConfigItems,
             [configId]: searchConditions
           },
           tableInfo: {
+            ...state.tableInfo,
             [configId]: {
               ...state.tableInfo[configId],
               columns
             }
           },
           opreationButtons: {
+            ...state.opreationButtons,
             [configId]: result.Datas.OpreationButtons
           },
           whereList,
           keys: {
+            ...state.keys,
             [configId]: keys
           },
           addFormItems: {
+            ...state.addFormItems,
             [configId]: addFormItems
           },
           formLayout: {

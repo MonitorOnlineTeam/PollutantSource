@@ -31,14 +31,15 @@ export default Model.extend({
                 yield update({
                     pollutantTypelist: result,
                     pollutantType:result[0].pollutantTypeCode,
-                    pointDataWhere:[
-                        {
-                            Key: "dbo__T_Bas_CommonPoint__PollutantType",
-                            Value: `${result[0].pollutantTypeCode}`,
-                            Where: "$in"
-                        }
-                    ]
+                    // pointDataWhere:[
+                    //     {
+                    //         Key: "dbo__T_Bas_CommonPoint__PollutantType",
+                    //         Value: `${result[0].pollutantTypeCode}`,
+                    //         Where: "$in"
+                    //     }
+                    // ]
                   });
+                  payload.callback&&payload.callback(result[0].pollutantTypeCode);
             }
         }
     },

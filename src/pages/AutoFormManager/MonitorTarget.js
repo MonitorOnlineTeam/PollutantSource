@@ -75,7 +75,7 @@ export default class MonitorTarget extends Component {
             sdlMessage("请选择一行进行操作", 'warning');
             return false;
         }
-        debugger;
+        // debugger;
         //dbo.T_Bas_Enterprise.EntCode
         const configId = match.params.configId;
 

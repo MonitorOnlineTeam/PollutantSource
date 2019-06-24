@@ -20,6 +20,10 @@ import SdlTable from './Table';
 import SearchWrapper from './SearchWrapper';
 import { sdlMessage } from '../../utils/utils';
 import PollutantType from './PollutantType';
+import SdlForm from "./SdlForm"
+
+let pointConfigId = '';
+let pointConfigIdEdit = '';
 
 @connect(({ loading, autoForm, monitorTarget }) => ({
     loading: loading.effects['autoForm/getPageConfig'],
@@ -32,55 +36,99 @@ import PollutantType from './PollutantType';
     routerConfig: autoForm.routerConfig,
     pointDataWhere: monitorTarget.pointDataWhere
 }))
-
+@Form.create()
 export default class MonitorPoint extends Component {
     constructor(props) {
         super(props);
-
-        this.state = {};
+        this.state = {
+            pollutantType: 0,
+            visible: false
+        };
     }
 
     componentDidMount() {
+        //1.监控目标ID
+        //2.污染物类型
+        //3.获取监测点数据
         const { dispatch, match } = this.props;
-        dispatch({
-            type: 'autoForm/getPageConfig',
-            payload: {
-                configId: 'TestCommonPoint'
-            }
-        })
 
         dispatch({
             type: 'monitorTarget/getPollutantTypeList',
             payload: {
+                callback: (result) => {
+                    this.setState({
+                        pollutantType: result
+                    });
+                    this.getPageConfig(result);
+                }
             }
         })
-
-        // debugger;
-        this.reloadPage(match.params.targetId);
     }
 
-    componentWillReceiveProps(nextProps) {
-        //debugger;
-        if (nextProps.location.pathname != this.props.location.pathname) {
-            if (nextProps.match.params.configId !== this.props.routerConfig)
-                this.reloadPage(nextProps.match.params.configId);
-        }
-    }
+    getPageConfig = (type) => {
+        this.setState({
+            pollutantType: type
+        });
+        const { dispatch, match } = this.props;
 
-    reloadPage = (configId) => {
-        const { dispatch } = this.props;
-        // dispatch({
-        //   type: 'autoForm/updateState',
-        //   payload: {
-        //     routerConfig: configId
-        //   }
-        // });
-        // dispatch({
-        //   type: 'autoForm/getPageConfig',
-        //   payload: {
-        //     configId: configId
-        //   }
-        // })
+        // 1	废水
+        // 2	废气
+        // 3	噪声
+        // 4	固体废物
+        // 5	环境质量
+        // 6	水质
+        // 8	小型站
+        // 9	恶臭
+        // 10	voc
+        // 11	工况
+        // 12	扬尘
+        // 18	颗粒物
+        // 23	国控
+        // 24	省控
+        // 25	市控
+
+        switch (type) {
+            case 1:
+                //废水
+                pointConfigId = 'WaterOutputNew';
+                pointConfigIdEdit= 'WaterOutput';
+                break;
+            case 2:
+                //废气
+                pointConfigId = 'GasOutputNew';
+                pointConfigIdEdit= 'GasOutput';
+                break;
+            case 3:
+                //噪声
+                break;
+            case 4:
+                break;
+        };
+        dispatch({
+            type: 'monitorTarget/updateState',
+            payload: {
+                pollutantType: type,
+                pointDataWhere : [
+                    {
+                        Key: "dbo__T_Cod_MonitorPointBase__BaseCode",
+                        Value: match.params.targetId,
+                        Where: "$="
+                    }
+                ]
+            }
+        });
+        dispatch({
+            type: 'autoForm/getPageConfig',
+            payload: {
+                configId: pointConfigId
+            }
+        })
+        dispatch({
+            type: 'autoForm/getPageConfig',
+            payload: {
+                configId: pointConfigIdEdit
+            }
+        })
     }
 
     editMonitorInfo = () => {
@@ -92,35 +140,8 @@ export default class MonitorPoint extends Component {
         }
     }
 
-    handlePollutantTypeChange = (e) => {
-
-        let pointDataWhere = [
-            {
-                Key: "dbo__T_Bas_CommonPoint__PollutantType",
-                Value: `${e}`,
-                Where: "$in"
-            }
-        ];
-
-        this.props.dispatch({
-            type: 'monitorTarget/updateState',
-            payload: {
-                pollutantType: e,
-                pointDataWhere: pointDataWhere
-            }
-        });
-
-        this.props.dispatch({
-            type: 'autoForm/getAutoFormData',
-            payload: {
-                configId: 'TestCommonPoint',
-                searchParams: pointDataWhere,
-            }
-        })
-    }
-
     onMenu = (key, id, name) => {
-        const {match:{params:{configId}}}=this.props;
+        const { match: { params: { configId } } } = this.props;
         //match.params
         switch (key) {
             case '1':
@@ -139,14 +160,51 @@ export default class MonitorPoint extends Component {
                 break;
         }
     }
+
+    showModal = () => {
+        this.setState({
+            visible: true,
+        });
+    };
+    handleOk = e => {
+        console.log(e);
+        this.setState({
+            visible: false,
+        });
+    };
+
+    handleCancel = e => {
+        console.log(e);
+        this.setState({
+            visible: false,
+        });
+    };
+    onSubmitForm() {
+        const { dispatch, form } = this.props;
+        form.validateFields((err, values) => {
+            if (!err) {
+                let FormData = {};
+                for (let key in values) {
+                    if (values[key] && values[key]["fileList"]) {
+                        FormData[key] = uid;
+                    } else {
+                        FormData[key] = values[key] && values[key].toString()
+                    }
+                }
+                this.setState({
+                    FormDatas: FormData
+                })
+                console.log('FormData=', FormData);
+                // return;
+
+            }
+        });
+    }
     render() {
-        const { searchConfigItems, searchForm, tableInfo, match: { params: { configId, targetName } }, dispatch, pointDataWhere } = this.props;
-        const searchConditions = searchConfigItems[configId] || []
-        const columns = tableInfo[configId] ? tableInfo[configId]["columns"] : [];
-        const pointConfigId = 'TestCommonPoint';
-        // console.log("pointDataWhere=", pointDataWhere.length);
+        const { searchConfigItems, searchForm, tableInfo, match: { params: { targetName, configId } }, dispatch,pointDataWhere } = this.props;
+        const searchConditions = searchConfigItems[pointConfigId] || []
+        const columns = tableInfo[pointConfigId] ? tableInfo[pointConfigId]["columns"] : [];
         if (this.props.loading || this.props.otherloading) {
-            // if(!pointDataWhere.length) {
             return (<Spin
                 style={{
                     width: '100%',
@@ -178,7 +236,7 @@ export default class MonitorPoint extends Component {
                 ]
             }>
                 <div className={styles.cardTitle}>
-                    <Card title={`${targetName}`} extra={<PollutantType handlePollutantTypeChange={this.handlePollutantTypeChange} />}>
+                    <Card title={`${targetName}`} extra={<PollutantType handlePollutantTypeChange={this.getPageConfig} />}>
 
                         <SdlTable
                             style={{ marginTop: 10 }}
@@ -189,9 +247,12 @@ export default class MonitorPoint extends Component {
                                     key, row
                                 })
                             }}
+                            onAdd={() => {
+                                this.showModal()
+                            }}
                             searchParams={pointDataWhere}
                             appendHandleRows={row => {
-                                console.log("row=",row);
+                                // console.log("row=", row);
                                 return <Fragment>
                                     <Divider type="vertical" />
 
@@ -205,6 +266,26 @@ export default class MonitorPoint extends Component {
                             }}
                         />
                     </Card>
+                    <Modal
+                        title="Basic Modal"
+                        visible={this.state.visible}
+                        onOk={this.handleOk}
+                        onCancel={this.handleCancel}
+                        okButtonProps={{ disabled: true }}
+                        cancelButtonProps={{ disabled: true }}
+                        width='50%'
+                    >
+                        {
+                         console.log("pointConfigIdEdit=",pointConfigIdEdit)   
+                        }
+                        <SdlForm
+                            configId={pointConfigIdEdit}
+                            onSubmitForm={this.onSubmitForm.bind(this)}
+                            form={this.props.form}
+                            noLoad={true}
+
+                        />
+                    </Modal>
                 </div>
             </MonitorContent>
         );
