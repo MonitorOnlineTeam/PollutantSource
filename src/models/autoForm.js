@@ -51,17 +51,19 @@ export default Model.extend({
       const configId = payload.configId;
       // const searchForm = state.searchForm[payload.configId]
       const searchForm = state.searchForm[configId] ? state.searchForm[configId] : [];
+      console.log("searchForm=", searchForm)
       if (searchForm) {
         for (let key in searchForm) {
           let groupItem = {};
-          if (searchForm[key].value && searchForm[key].value.length) {
-            // if(state.searchForm[key]) {
-            //   state.searchForm[key]
-            // }
+          // if (searchForm[key].value && searchForm[key].value.length || Object.keys(searchForm[key].value).length) {
+          if (searchForm[key].value) {
+            // 是否是moment对象
+            const isMoment = moment.isMoment(searchForm[key].value);
             groupItem = {
               "Key": key,
-              "Value": searchForm[key].value.toString(),
+              "Value": isMoment ? moment(searchForm[key].value).format("YYYY-MM-DD HH:mm:ss") : searchForm[key].value.toString(),
             };
+
             for (let whereKey in state.whereList[configId]) {
               if (key === whereKey) {
                 groupItem.Where = state.whereList[configId][whereKey];
@@ -85,7 +87,7 @@ export default Model.extend({
       const searchParams = payload.searchParams || [];
 
       (group.length || searchParams.length) ? postData.ConditionWhere = JSON.stringify({
-      // group.length? postData.ConditionWhere = JSON.stringify({
+        // group.length? postData.ConditionWhere = JSON.stringify({
         "rel": "$and",
         "group": [{
           "rel": "$and",
@@ -177,7 +179,7 @@ export default Model.extend({
         // const colSpanLen = ;
         let layout = 12;
         if (addCfgField.filter(item => item.DF_COLSPAN === null).length == addCfgField.length) {
-        // 显示两列
+          // 显示两列
           layout = 12
         } else if (addCfgField.filter(item => item.DF_COLSPAN === 1 || item.DF_COLSPAN === 2).length == addCfgField.length) {
           // 显示一列
