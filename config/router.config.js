@@ -245,10 +245,12 @@ export default [
             { path: '/sysmanage/monitortarget/:configId', component: './autoformmanager/monitortarget' },
             { path: '/sysmanage/monitortarget/monitorpoint/:configId/:targetId/:targetName', component: './autoformmanager/monitorpoint' },
             /* AutoForm用户管理 */
-            { path: '/sysmanage/userinfoindex/:configId', component: './Userinfo/UserInfoIndex' },
-            { path: '/sysmanage/userinfoadd', component: './Userinfo/UserInfoAdd' },
-            { path: '/sysmanage/userinfoedit/:userid', component: './Userinfo/UserInfoEdit' },
-            { path: '/sysmanage/userinfoview/:userid', component: './Userinfo/UserInfoView' },
+             { path: '/sysmanage/userinfoindex/:configId', component: './Userinfo/UserInfoIndex' },
+             { path: '/sysmanage/userinfoadd', component: './Userinfo/UserInfoAdd' },
+             { path: '/sysmanage/userinfoedit/:userid', component: './Userinfo/UserInfoEdit' },
+             { path: '/sysmanage/userinfoview/:userid', component: './Userinfo/UserInfoView' },
+             /* 角色管理 */
+             { path: '/sysmanage/roleindex/', component: './RoleInfo/RoleIndex' },
             /* 标准库管理-维护 */
             { path: '/sysmanage/standardlibrarydetail/:StandardLibraryID', component: './StandardLibrary/AddStandardLibrary' },
             /* 个人设置-维护 */

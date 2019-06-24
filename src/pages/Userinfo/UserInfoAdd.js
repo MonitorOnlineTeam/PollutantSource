@@ -297,6 +297,7 @@ export default class UserInfoAdd extends Component {
                                         checkedKeys={this.state.checkedKey}
                                         onSelect={this.onSelect}
                                         selectedKeys={this.state.selectedKey}
+                                        autoExpandParent={true}
                                     >
                                         {this.renderTreeNodes(this.props.RolesTreeData)}
                                     </Tree>
@@ -325,6 +326,7 @@ export default class UserInfoAdd extends Component {
                                         checkedKeys={this.state.checkedKeys}
                                         onSelect={this.onSelects}
                                         selectedKeys={this.state.selectedKeys}
+                                        autoExpandParent={true}
                                     >
                                         {this.renderTreeNodes(this.props.treeData)}
                                     </Tree>
