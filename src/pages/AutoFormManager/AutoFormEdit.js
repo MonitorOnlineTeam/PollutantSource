@@ -11,6 +11,7 @@ import PropTypes from 'prop-types';
 import {
   Form,
 } from 'antd';
+import moment from "moment";
 import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
 import { checkRules } from '@/utils/validator';
@@ -74,42 +75,46 @@ class AutoFormEdit extends Component {
     // });
   }
 
-  onSubmitForm(e) {
-    e.preventDefault();
+  onSubmitForm(formData) {
     let { form, dispatch, successCallback } = this.props;
     const { configId, keysParams, uid } = this._SELF_;
-    // 截取字符串，重新组织主键参数
-    const keys = keysParams;
-    let primaryKey = {};
-    for (let key in keys) {
-      primaryKey[key.split('.').pop().toString()] = keys[key];
-    }
+    // // 截取字符串，重新组织主键参数
+    // const keys = keysParams;
+    // let primaryKey = {};
+    // for (let key in keys) {
+    //   primaryKey[key.split('.').pop().toString()] = keys[key];
+    // }
 
-    form.validateFields((err, values) => {
-      if (!err) {
-        let FormData = {};
-        for (let key in values) {
-          if (values[key]) {
-            FormData[key] = values[key].toString()
+    // form.validateFields((err, values) => {
+    //   if (!err) {
+    //     let FormData = {};
+    //     for (let key in values) {
+    //       if (values[key] && values[key]["fileList"]) {
+    //         // 处理附件列表
+    //         FormData[key] = uid;
+    //       } else if (values[key] && moment.isMoment(values[key])) {
+    //         // 格式化moment对象
+    //         FormData[key] = moment(values[key]).format("YYYY-MM-DD HH:mm:ss")
+    //       } else {
+    //         FormData[key] = values[key] && values[key].toString()
+    //       }
+    //     }
+    dispatch({
+      type: 'autoForm/saveEdit',
+      payload: {
+        configId: configId,
+        FormData: {
+          ...formData
+        },
+        callback: (res) => {
+          if (res.IsSuccess) {
+            successCallback ? successCallback(res) : history.go(-1);
           }
         }
-        dispatch({
-          type: 'autoForm/saveEdit',
-          payload: {
-            configId: configId,
-            FormData: {
-              ...primaryKey,
-              ...FormData,
-            },
-            callback: (res) => {
-              if (res.IsSuccess) {
-                successCallback ? successCallback(res) : history.go(-1);
-              }
-            }
-          }
-        });
       }
     });
+    //   }
+    // });
   }
 
   _renderForm() {
