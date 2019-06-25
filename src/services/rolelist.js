@@ -63,3 +63,31 @@ export async function getrolestreeandobj(params) {
         data: null
     } : result;
 }
+// 获取所有用户
+export async function getalluser(params) {
+    const result = postNew('/api/rest/PollutantSourceApi/AuthorApi/GetAllUser', params, null);
+    return result === null ? {
+        data: null
+    } : result;
+}
+// 获取当前角色的用户
+export async function getuserbyroleid(params) {
+    const body={
+        Roles_ID:params.Roles_ID
+    }
+    const result = postNew('/api/rest/PollutantSourceApi/AuthorApi/GetUserByRoleId', body, null);
+    return result === null ? {
+        data: null
+    } : result;
+}
+// 给角色添加用户（可批量）
+export async function insertrolebyuser(params) {
+    const body={
+        Roles_ID:params.Roles_ID,
+        User_ID:params.User_ID
+    }
+    const result = postNew('/api/rest/PollutantSourceApi/AuthorApi/InsertRoleByUser', body, null);
+    return result === null ? {
+        data: null
+    } : result;
+}

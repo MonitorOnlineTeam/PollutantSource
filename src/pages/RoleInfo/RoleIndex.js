@@ -16,27 +16,114 @@ import {
     message,
     Divider,
     Popconfirm,
+    Transfer, Switch, Tag
 } from 'antd';
 import MonitorContent from '../../components/MonitorContent/index';
 import TextArea from 'antd/lib/input/TextArea';
+import difference from 'lodash/difference';
 
-const rowSelection = {
-    onChange: (selectedRowKeys, selectedRows) => {
-        console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
-    },
-    onSelect: (record, selected, selectedRows) => {
-        console.log(record, selected, selectedRows);
-    },
-    onSelectAll: (selected, selectedRows, changeRows) => {
-        console.log(selected, selectedRows, changeRows);
-    },
-};
+
 const TreeNode = TreeSelect.TreeNode;
+// Customize Table Transfer
+const TableTransfer = ({ leftColumns, rightColumns, ...restProps }) => (
+    <Transfer {...restProps} showSelectAll={false}>
+        {({
+            direction,
+            filteredItems,
+            onItemSelectAll,
+            onItemSelect,
+            selectedKeys: listSelectedKeys,
+            disabled: listDisabled,
+        }) => {
+            const columns = direction === 'left' ? leftColumns : rightColumns;
+
+            const rowSelection = {
+                getCheckboxProps: item => ({ disabled: listDisabled || item.disabled }),
+                onSelectAll(selected, selectedRows) {
+                    const treeSelectedKeys = selectedRows
+                        .filter(item => !item.disabled)
+                        .map(({ key }) => key);
+                    const diffKeys = selected
+                        ? difference(treeSelectedKeys, listSelectedKeys)
+                        : difference(listSelectedKeys, treeSelectedKeys);
+                    onItemSelectAll(diffKeys, selected);
+                },
+                onSelect({ key }, selected) {
+                    onItemSelect(key, selected);
+                },
+                selectedRowKeys: listSelectedKeys,
+            };
+
+            return (
+                <Table
+                    rowSelection={rowSelection}
+                    columns={columns}
+                    dataSource={filteredItems}
+                    size="small"
+                    style={{ pointerEvents: listDisabled ? 'none' : null }}
+                    onRow={({ key, disabled: itemDisabled }) => ({
+                        onClick: () => {
+                            if (itemDisabled || listDisabled) return;
+                            onItemSelect(key, !listSelectedKeys.includes(key));
+                        },
+                    })}
+                />
+            );
+        }}
+    </Transfer>
+);
+
+// const mockTags = ['cat', 'dog', 'bird'];
+
+// const mockData = [];
+// for (let i = 0; i < 20; i++) {
+//     mockData.push({
+//         key: i.toString(),
+//         title: `content${i + 1}`,
+//         description: `description of content${i + 1}`,
+//         disabled: i % 4 === 0,
+//         tag: mockTags[i % 3],
+//     });
+// }
+
+// const originTargetKeys = mockData.filter(item => +item.key % 3 > 1).map(item => item.key);
+
+const leftTableColumns = [
+    {
+        dataIndex: 'User_Account',
+        title: '账号',
+    },
+    {
+        dataIndex: 'User_Name',
+        title: '名称',
+    },
+    {
+        dataIndex: 'Phone',
+        title: '手机',
+    },
+];
+const rightTableColumns = [
+
+    {
+        dataIndex: 'User_Account',
+        title: '账号',
+    },
+    {
+        dataIndex: 'User_Name',
+        title: '名称',
+    },
+    {
+        dataIndex: 'Phone',
+        title: '手机',
+    },
+];
 
 @connect(({ roleinfo, loading }) => ({
     RoleInfoTree: roleinfo.RoleInfoTree,
     RoleInfoOne: roleinfo.RoleInfoOne,
     RolesTreeData: roleinfo.RolesTree,
+    AllUser: roleinfo.AllUser,
+    UserByRoleID: roleinfo.UserByRoleID
 }))
 @Form.create()
 
@@ -45,10 +132,16 @@ class RoleIndex extends Component {
         super(props);
         this.state = {
             visible: false,
+            visibleUser: false,
             value: undefined,
             IsEdit: false,
             FormDatas: [],
             Tittle: "添加角色",
+            selectedRowKeys: [],
+            targetKeys: [],
+            allKeys: [],
+            disabled: false,
+            showSearch: true,
             columns: [
                 {
                     title: '角色名称',
@@ -124,7 +217,36 @@ class RoleIndex extends Component {
 
 
     }
+    onChanges = nextTargetKeys => {
+        
+        // if (nextTargetKeys.length == 0) {
+        //     message.error("请至少保留一个角色")
+        //     return
+        // }
+        console.log("nextTargetKeys.length=",nextTargetKeys.length)
+        console.log("this.props.AllUser.length=",this.props.AllUser.length)
+        this.props.dispatch({
+            type: 'roleinfo/insertrolebyuser',
+            payload: {
+                User_ID:nextTargetKeys,
+                Roles_ID:this.state.selectedRowKeys.key,
+            }
+        })
+        this.setState({ targetKeys: nextTargetKeys });
+    };
 
+    onSelect = (record, selected, selectedRows) => {
+        console.log("record=", record.key);
+    }
+    // rowSelection =()=> {
+
+    //     onSelect: (record, selected, selectedRows) => {
+
+    //     },
+    //     onSelectAll: (selected, selectedRows, changeRows) => {
+    //         console.log(selected, selectedRows, changeRows);
+    //     },
+    // };
     componentDidMount() {
         this.props.dispatch({
             type: 'roleinfo/getroleinfobytree',
@@ -143,8 +265,9 @@ class RoleIndex extends Component {
         //     }
         // })
     }
+
     showModal = () => {
-        
+
         this.props.dispatch({
             type: 'roleinfo/getrolestreeandobj',
             payload: {}
@@ -152,14 +275,56 @@ class RoleIndex extends Component {
         this.setState({
             visible: true,
             IsEdit: false,
-            Tittle:"添加角色"
+            Tittle: "添加角色"
         });
     };
-    showModalEdit=()=>{
+    showUserModal = () => {
+        if (this.state.selectedRowKeys.length == 0) {
+            message.error("请选中一行")
+            return
+        }
+        var keys = this.state.selectedRowKeys.key
+        this.props.dispatch({
+            type: 'roleinfo/getalluser',
+            payload: {}
+        })
+        this.props.dispatch({
+            type: 'roleinfo/getuserbyroleid',
+            payload: {
+                Roles_ID: keys.toString()
+            }
+        })
+        // console.log("selectID=",this.props.UserByRoleID)
+        // console.log("filterArr=",this.props.AllUser)
+        const selectId = this.props.UserByRoleID.map(item => item.key)
+        console.log("selectId=", selectId)
+        const filterArr = this.props.AllUser.filter(item => selectId.indexOf(item.key))
+        console.log("filterArr=", filterArr)
+        this.setState({
+            visibleUser: true,
+            targetKeys: selectId,
+            allKeys: filterArr
+        })
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (this.props.UserByRoleID !== nextProps.UserByRoleID) {
+            const selectId = nextProps.UserByRoleID.map(item => item.key)
+            console.log("selectId=", selectId)
+            const filterArr = nextProps.AllUser.filter(item => selectId.indexOf(item.key))
+            console.log("filterArr=", filterArr)
+            this.setState({
+                visibleUser: true,
+                targetKeys: selectId,
+                // allKeys: filterArr
+            })
+        }
+    }
+    showModalEdit = () => {
         this.setState({
             visible: true,
             IsEdit: true,
-            Tittle:"编辑角色"
+            Tittle: "编辑角色"
         });
     }
 
@@ -174,7 +339,8 @@ class RoleIndex extends Component {
     handleCancel = e => {
         this.setState({
             visible: false,
-            IsEdit: false
+            IsEdit: false,
+            visibleUser: false
         });
     };
     handleSubmit = e => {
@@ -217,6 +383,7 @@ class RoleIndex extends Component {
 
     render() {
         const { getFieldDecorator } = this.props.form;
+        const { targetKeys, disabled, showSearch } = this.state;
         const formItemLayout = {
             labelCol: {
                 span: 6
@@ -225,6 +392,15 @@ class RoleIndex extends Component {
                 span: 16
             },
         };
+        const rowRadioSelection = {
+            type: 'radio',
+            columnTitle: "选择",
+            onSelect: (selectedRowKeys, selectedRows) => {
+                this.setState({
+                    selectedRowKeys: selectedRowKeys
+                })
+            },
+        }
         return (
             <Fragment>
                 {
@@ -240,7 +416,11 @@ class RoleIndex extends Component {
                             <Button type="primary"
                                 onClick={this.showModal}
                             >新增</Button>
-                            <Table columns={this.state.columns} rowSelection={rowSelection} dataSource={this.props.RoleInfoTree} />,
+                            <Button
+                                onClick={this.showUserModal}
+                                style={{ marginLeft: "10px" }}
+                            >分配用户</Button>
+                            <Table columns={this.state.columns} rowSelection={rowRadioSelection} dataSource={this.props.RoleInfoTree} />,
                         </Card>
                         <div>
                             <Modal
@@ -305,7 +485,30 @@ class RoleIndex extends Component {
                                     </Form.Item>
                                 </Form>
                             </Modal>
-
+                            <Modal
+                                title={this.state.selectedRowKeys.Roles_Name}
+                                visible={this.state.visibleUser}
+                                onOk={this.handleCancel}
+                                destroyOnClose="true"
+                                onCancel={this.handleCancel}
+                                width={800}
+                            >
+                                <TableTransfer
+                                    rowKey={record => record.User_ID}
+                                    titles={['其余用户', '存在用户']}
+                                    dataSource={this.props.AllUser}
+                                    targetKeys={targetKeys}
+                                    disabled={disabled}
+                                    showSearch={showSearch}
+                                    onChange={this.onChanges}
+                                    filterOption={(inputValue, item) =>
+                                        (item.User_Name && item.User_Name.indexOf(inputValue) !== -1) || (item.User_Account && item.User_Account.indexOf(inputValue) !== -1) || (item.Phone && item.Phone.indexOf(inputValue) !== -1)
+                                    }
+                                    leftColumns={leftTableColumns}
+                                    rightColumns={rightTableColumns}
+                                    style={{ width: "100%" }}
+                                />
+                            </Modal>
                         </div>
                     </MonitorContent>
                 }

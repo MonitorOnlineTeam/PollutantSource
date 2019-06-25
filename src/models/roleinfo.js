@@ -2,7 +2,7 @@ import {
     Model
 } from '../dvapack';
 import {
-    getroleinfobytree, getroleinfobyid, insertroleinfo, delroleinfo, updroleinfo,getrolestreeandobj
+    getroleinfobytree, getroleinfobyid, insertroleinfo, delroleinfo, updroleinfo, getrolestreeandobj, getalluser, getuserbyroleid, insertrolebyuser
 } from '../services/rolelist';
 import { message } from 'antd';
 /*
@@ -16,7 +16,9 @@ export default Model.extend({
     state: {
         RoleInfoTree: [],
         RoleInfoOne: [],
-        RolesTree:[]
+        RolesTree: [],
+        AllUser: [],
+        UserByRoleID: []
     },
     subscriptions: {
         setup({
@@ -114,8 +116,8 @@ export default Model.extend({
             // }
             payload.callback(result);
         },
-         /*获取角色树(带根结点)**/
-         * getrolestreeandobj({
+        /*获取角色树(带根结点)**/
+        * getrolestreeandobj({
             payload
         }, {
             call,
@@ -130,6 +132,51 @@ export default Model.extend({
                 });
             }
 
+        },
+        /*获取所有用户**/
+        * getalluser({
+            payload
+        }, {
+            call,
+            update,
+        }) {
+            const result = yield call(getalluser, {
+                ...payload
+            });
+            if (result.IsSuccess) {
+                yield update({
+                    AllUser: result.Datas
+                });
+            }
+
+        },
+        /*获取当前角色的用户**/
+        * getuserbyroleid({
+            payload
+        }, {
+            call,
+            update,
+        }) {
+            const result = yield call(getuserbyroleid, {
+                ...payload
+            });
+            if (result.IsSuccess) {
+                yield update({
+                    UserByRoleID: result.Datas
+                });
+            }
+
+        },
+        /*给角色添加用户（可批量）**/
+        * insertrolebyuser({
+            payload
+        }, {
+            call,
+            update,
+        }) {
+            const result = yield call(insertrolebyuser, {
+                ...payload
+            });
         },
     },
     reducers: {
