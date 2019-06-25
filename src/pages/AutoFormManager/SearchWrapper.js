@@ -198,8 +198,6 @@ class SearchWrapper extends Component {
           break;
         case "日期框":
           placeholder = placeholder || inputPlaceholder;
-          // console.log('111=', this.props.form.getFieldValue(fieldName))
-          console.log('item=', item)
           element = this._rtnDateEl(item);
           break;
         case "单选":
