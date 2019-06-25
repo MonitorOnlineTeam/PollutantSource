@@ -5,7 +5,7 @@
  * @Last Modified by: Jiaqi
  * @Last Modified time: 2019-06-14 15:35:22
  */
-import React, { Component, Fragment } from 'react';
+import React, { PureComponent, Fragment } from 'react';
 import PropTypes, { object } from 'prop-types';
 
 import {
@@ -46,7 +46,7 @@ const FormItem = Form.Item;
   formItemLayout: autoForm.formLayout
 }))
 
-class SdlForm extends Component {
+class SdlForm extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -399,8 +399,8 @@ class SdlForm extends Component {
             ...primaryKey
           }
         }
-
-        this.props.onSubmitForm(formData);
+        
+        this.props.onSubmitForm && this.props.onSubmitForm(formData);
       }
     });
   }
@@ -424,8 +424,11 @@ class SdlForm extends Component {
             this.renderFormItem()
           }
         </Row>
-        {!this.props.hideBtns &&
-          <Divider orientation="right">
+        {
+          this.props.children && this.props.children
+        }
+        {
+          !this.props.hideBtns && <Divider orientation="right">
             <Button type="primary" htmlType="submit">保存</Button>
             <Button
               style={{ marginLeft: 8 }}
@@ -435,6 +438,18 @@ class SdlForm extends Component {
             >返回</Button>
           </Divider>
         }
+        {/* {(!this.props.hideBtns || this.props.children) ?
+          this.props.children :
+          <Divider orientation="right">
+            <Button type="primary" htmlType="submit">保存</Button>
+            <Button
+              style={{ marginLeft: 8 }}
+              onClick={() => {
+                history.go(-1);
+              }}
+            >返回</Button>
+          </Divider>
+        } */}
       </Form>
       {/* {
         <MapModal
@@ -508,7 +523,7 @@ SdlForm.propTypes = {
   // configId
   configId: PropTypes.string.isRequired,
   // onSubmitForm
-  onSubmitForm: PropTypes.func.isRequired,
+  onSubmitForm: PropTypes.func,
   // form
   form: PropTypes.object.isRequired,
   // isEdit

@@ -287,6 +287,7 @@ export default class UserInfoEdit extends Component {
                                         onSubmitForm={this.onSubmitForm}
                                         form={this.props.form}
                                         isEdit={true}
+                                        hideBtns={true}
                                         keysParams={{ "dbo.Base_UserInfo.User_ID": this.props.match.params.userid }}
                                     >
                                         {/* <FormItem {...submitFormLayout} style={{ marginTop: 32 }}>

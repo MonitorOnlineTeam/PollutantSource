@@ -107,15 +107,10 @@ class AutoFormAdd extends Component {
 
     return <SdlForm
       configId={configId}
+      // hideBtns={true}
       onSubmitForm={this.onSubmitForm}
       form={form}
     >
-      {/* <FormItem key="key" {...formLayout} label="test">
-        {getFieldDecorator(`test`, {
-        })(
-          <Input />
-        )}
-      </FormItem> */}
     </SdlForm>
   }
 
