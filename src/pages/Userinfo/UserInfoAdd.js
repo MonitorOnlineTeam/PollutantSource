@@ -123,26 +123,30 @@ export default class UserInfoAdd extends Component {
             return <TreeNode {...item} />;
         });
 
-    onSubmitForm() {
+    onSubmitForm(formData) {
         const { dispatch, form } = this.props;
-        form.validateFields((err, values) => {
-            if (!err) {
-                let FormData = {};
-                for (let key in values) {
-                    if (values[key] && values[key]["fileList"]) {
-                        FormData[key] = uid;
-                    } else {
-                        FormData[key] = values[key] && values[key].toString()
-                    }
-                }
-                this.setState({
-                    FormDatas: FormData
-                })
-                console.log('FormData=', FormData);
-                // return;
+        // form.validateFields((err, values) => {
+        //     if (!err) {
+        //         let FormData = {};
+        //         for (let key in values) {
+        //             if (values[key] && values[key]["fileList"]) {
+        //                 FormData[key] = uid;
+        //             } else {
+        //                 FormData[key] = values[key] && values[key].toString()
+        //             }
+        //         }
+        //         this.setState({
+        //             FormDatas: FormData
+        //         })
+        //         console.log('FormData=', FormData);
+        //         // return;
 
-            }
-        });
+        //     }
+        // });
+        this.setState({
+            FormDatas: formData
+        })
+        console.log('FormData=', formData);
     }
 
     postFormDatas() {
@@ -239,7 +243,7 @@ export default class UserInfoAdd extends Component {
                                         configId={'UserInfoAdd'}
                                         onSubmitForm={this.onSubmitForm.bind(this)}
                                         form={this.props.form}
-                                        
+                                        hideBtns={true}
                                     >
                                         {/* <FormItem {...submitFormLayout} style={{ marginTop: 32 }}>
                                             <Button
