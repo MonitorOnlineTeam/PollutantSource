@@ -5,7 +5,7 @@
  * @Last Modified by: Jiaqi
  * @Last Modified time: 2019-06-14 15:35:22
  */
-import React, { Component, Fragment } from 'react';
+import React, { PureComponent, Fragment } from 'react';
 import PropTypes, { object } from 'prop-types';
 
 import {
@@ -18,8 +18,10 @@ import {
   Upload,
   Row,
   Col,
-  Divider
+  Divider,
+  DatePicker
 } from 'antd';
+import moment from 'moment';
 import cuid from 'cuid';
 import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
@@ -33,7 +35,7 @@ import SdlCheckbox from './SdlCheckbox';
 import SdlUpload from './SdlUpload'
 import MapModal from './MapModal';
 import SdlMap from './SdlMap'
-
+const { RangePicker, MonthPicker } = DatePicker;
 const FormItem = Form.Item;
 
 @connect(({ loading, autoForm }) => ({
@@ -44,7 +46,7 @@ const FormItem = Form.Item;
   formItemLayout: autoForm.formLayout
 }))
 
-class SdlForm extends Component {
+class SdlForm extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -107,6 +109,28 @@ class SdlForm extends Component {
     }));
   }
 
+  // 处理时间控件
+  _rtnDateEl = (item) => {
+    const { dateFormat } = item;
+    const format = dateFormat.toUpperCase();
+    if (format === "YYYY-MM" || format === "MM") {
+      // 年月 、 月
+      return <MonthPicker style={{ width: "100%" }} format={format} />
+    } else if (format === "YYYY") {
+      // 年
+      return <DatePicker format={format} style={{ width: "100%" }} />
+      // return <DatePicker
+      //   mode="year"
+      //   onPanelChange={(value, mode) => {
+      //     this.props.form.setFieldsValue({ [item.fieldName]: value })
+      //   }}
+      //   format={format} />
+    } else {
+      // 年-月-日 时:分:秒
+      return <DatePicker showTime format={format} style={{ width: "100%" }} />
+    }
+  }
+
   // 渲染FormItem
   renderFormItem() {
     const { addFormItems, form: { getFieldDecorator, setFieldsValue, getFieldValue }, editFormData } = this.props;
@@ -156,6 +180,9 @@ class SdlForm extends Component {
               placeholder={placeholder}
             />
           )
+          break;
+        case "日期框":
+          element = this._rtnDateEl(item);
           break;
         case "单选":
           element = (
@@ -219,9 +246,9 @@ class SdlForm extends Component {
           element = <SdlMap
             onOk={(map) => {
               console.log("map=", map)
-              setFieldsValue({ Col6: JSON.stringify(map.polygon) });
+              setFieldsValue({ [fieldName]: JSON.stringify(map.polygon) });
             }}
-            path={getFieldValue("Col6")}
+            path={getFieldValue(`${fieldName}`)}
             handlePolygon={true}
           />;
           break;
@@ -343,6 +370,41 @@ class SdlForm extends Component {
     });
   }
 
+  _onSubmitForm() {
+    const { form, onSubmitForm } = this.props;
+    const { uid, configId, isEdit, keysParams } = this._SELF_;
+    form.validateFields((err, values) => {
+      if (!err) {
+        let formData = {};
+        for (let key in values) {
+          if (values[key] && values[key]["fileList"]) {
+            // 处理附件列表
+            formData[key] = uid;
+          } else if (values[key] && moment.isMoment(values[key])) {
+            // 格式化moment对象
+            formData[key] = moment(values[key]).format("YYYY-MM-DD HH:mm:ss")
+          } else {
+            formData[key] = values[key] && values[key].toString()
+          }
+        }
+        // 编辑时处理主键
+        if (isEdit) {
+          const keys = keysParams;
+          let primaryKey = {};
+          for (let key in keys) {
+            primaryKey[key.split('.').pop().toString()] = keys[key];
+          }
+          formData = {
+            ...formData,
+            ...primaryKey
+          }
+        }
+        
+        this.props.onSubmitForm && this.props.onSubmitForm(formData);
+      }
+    });
+  }
+
   renderContent() {
     const { onSubmitForm, form } = this.props;
     const submitFormLayout = {
@@ -354,14 +416,29 @@ class SdlForm extends Component {
     return <Card bordered={false}>
       <Form onSubmit={(e) => {
         e.preventDefault();
-        onSubmitForm()
+        this._onSubmitForm();
+        // onSubmitForm()
       }} hideRequiredMark={false} style={{ marginTop: 8 }}>
         <Row>
           {
             this.renderFormItem()
           }
         </Row>
-        {this.props.children ?
+        {
+          this.props.children && this.props.children
+        }
+        {
+          !this.props.hideBtns && <Divider orientation="right">
+            <Button type="primary" htmlType="submit">保存</Button>
+            <Button
+              style={{ marginLeft: 8 }}
+              onClick={() => {
+                history.go(-1);
+              }}
+            >返回</Button>
+          </Divider>
+        }
+        {/* {(!this.props.hideBtns || this.props.children) ?
           this.props.children :
           <Divider orientation="right">
             <Button type="primary" htmlType="submit">保存</Button>
@@ -372,9 +449,9 @@ class SdlForm extends Component {
               }}
             >返回</Button>
           </Divider>
-        }
+        } */}
       </Form>
-      {
+      {/* {
         <MapModal
           setMapVisible={this.setMapVisible}
           MapVisible={this.state.MapVisible}
@@ -386,7 +463,7 @@ class SdlForm extends Component {
           EditMarker={this.state.EditMarker}
           EditPolygon={this.state.EditPolygon}
         />
-      }
+      } */}
     </Card>
   }
 
@@ -402,21 +479,21 @@ class SdlForm extends Component {
   //   });
   // }
 
-  setMapVisible = (flag) => {
-    this.setState({
-      MapVisible: flag
-    });
-  }
+  // setMapVisible = (flag) => {
+  //   this.setState({
+  //     MapVisible: flag
+  //   });
+  // }
 
-  setPoint = (obj) => {
-    let { form: { setFieldsValue } } = this.props;
-    setFieldsValue({ Longitude: obj.Longitude, Latitude: obj.Latitude });
-  }
+  // setPoint = (obj) => {
+  //   let { form: { setFieldsValue } } = this.props;
+  //   setFieldsValue({ Longitude: obj.Longitude, Latitude: obj.Latitude });
+  // }
 
-  setMapPolygon = (obj) => {
-    let { form: { setFieldsValue } } = this.props;
-    setFieldsValue({ Col6: obj });
-  }
+  // setMapPolygon = (obj) => {
+  //   let { form: { setFieldsValue } } = this.props;
+  //   setFieldsValue({ Col6: obj });
+  // }
 
   render() {
     let { loadingAdd, loadingConfig, dispatch, breadcrumb } = this.props;
@@ -446,11 +523,13 @@ SdlForm.propTypes = {
   // configId
   configId: PropTypes.string.isRequired,
   // onSubmitForm
-  onSubmitForm: PropTypes.func.isRequired,
+  onSubmitForm: PropTypes.func,
   // form
   form: PropTypes.object.isRequired,
   // isEdit
   isEdit: PropTypes.bool,
+  // 是否隐藏操作按钮
+  hideBtns: PropTypes.bool,
   // keysParams
   keysParams: function (props, propName, componentName) {
     if (props.isEdit && !props.keysParams) {
@@ -462,7 +541,8 @@ SdlForm.propTypes = {
 };
 
 SdlForm.defaultProps = {
-  isEdit: false
+  isEdit: false,
+  hideBtns: false
 }
 
 export default SdlForm;

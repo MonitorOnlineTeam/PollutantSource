@@ -91,12 +91,12 @@ export default class MonitorPoint extends Component {
             case 1:
                 //废水
                 pointConfigId = 'WaterOutputNew';
-                pointConfigIdEdit= 'WaterOutput';
+                pointConfigIdEdit = 'WaterOutput';
                 break;
             case 2:
                 //废气
                 pointConfigId = 'GasOutputNew';
-                pointConfigIdEdit= 'GasOutput';
+                pointConfigIdEdit = 'GasOutput';
                 break;
             case 3:
                 //噪声
@@ -108,7 +108,7 @@ export default class MonitorPoint extends Component {
             type: 'monitorTarget/updateState',
             payload: {
                 pollutantType: type,
-                pointDataWhere : [
+                pointDataWhere: [
                     {
                         Key: "dbo__T_Cod_MonitorPointBase__BaseCode",
                         Value: match.params.targetId,
@@ -166,8 +166,22 @@ export default class MonitorPoint extends Component {
             visible: true,
         });
     };
-    handleOk = e => {
-        console.log(e);
+    handleAddPoint = e => {
+        this.onSubmitForm();
+        // console.log(e);
+        const { dispatch, match } = this.props;
+        const { FormDatas } = this.state;
+        dispatch({
+            type: 'monitorTarget/addPoint',
+            payload: {
+                configId: pointConfigIdEdit,
+                FormData: FormDatas,
+                callback:((result)=>{
+                       //ddsdfds
+                })    
+            }
+        })
+
         this.setState({
             visible: false,
         });
@@ -201,7 +215,7 @@ export default class MonitorPoint extends Component {
         });
     }
     render() {
-        const { searchConfigItems, searchForm, tableInfo, match: { params: { targetName, configId } }, dispatch,pointDataWhere } = this.props;
+        const { searchConfigItems, searchForm, tableInfo, match: { params: { targetName, configId } }, dispatch, pointDataWhere } = this.props;
         const searchConditions = searchConfigItems[pointConfigId] || []
         const columns = tableInfo[pointConfigId] ? tableInfo[pointConfigId]["columns"] : [];
         if (this.props.loading || this.props.otherloading) {
@@ -267,16 +281,16 @@ export default class MonitorPoint extends Component {
                         />
                     </Card>
                     <Modal
-                        title="Basic Modal"
+                        title="添加监测点"
                         visible={this.state.visible}
-                        onOk={this.handleOk}
+                        onOk={this.handleAddPoint}
                         onCancel={this.handleCancel}
-                        okButtonProps={{ disabled: true }}
-                        cancelButtonProps={{ disabled: true }}
+                        // okButtonProps={{ disabled: true }}
+                        // cancelButtonProps={{ disabled: true }}
                         width='50%'
                     >
                         {
-                         console.log("pointConfigIdEdit=",pointConfigIdEdit)   
+                            console.log("pointConfigIdEdit=", pointConfigIdEdit)
                         }
                         <SdlForm
                             configId={pointConfigIdEdit}
@@ -284,7 +298,9 @@ export default class MonitorPoint extends Component {
                             form={this.props.form}
                             noLoad={true}
 
-                        />
+                        >1
+    
+                        </SdlForm>
                     </Modal>
                 </div>
             </MonitorContent>

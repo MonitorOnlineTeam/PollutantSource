@@ -17,6 +17,7 @@ import {
   Icon,
   Upload
 } from 'antd';
+import moment from "moment";
 import cuid from 'cuid';
 import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
@@ -45,38 +46,41 @@ class AutoFormAdd extends Component {
   componentDidMount() {
   }
 
-  onSubmitForm() {
+  onSubmitForm(formData) {
+    console.log("formData=", formData)
     const { dispatch, successCallback, form } = this.props;
     const { uid, configId } = this._SELF_;
-    form.validateFields((err, values) => {
-      if (!err) {
-        let FormData = {};
-        for (let key in values) {
-          if (values[key] && values[key]["fileList"]) {
-            FormData[key] = uid;
-          } else {
-            FormData[key] = values[key] && values[key].toString()
+    // form.validateFields((err, values) => {
+    //   if (!err) {
+    //     let FormData = {};
+    //     for (let key in values) {
+    //       if (values[key] && values[key]["fileList"]) {
+    //         // 处理附件列表
+    //         FormData[key] = uid;
+    //       } else if (values[key] && moment.isMoment(values[key])) {
+    //         // 格式化moment对象
+    //         FormData[key] = moment(values[key]).format("YYYY-MM-DD HH:mm:ss")
+    //       } else {
+    //         FormData[key] = values[key] && values[key].toString()
+    //       }
+    //     }
+    dispatch({
+      type: 'autoForm/add',
+      payload: {
+        configId: configId,
+        FormData: {
+          ...formData,
+          // uid: uid
+        },
+        callback: (res) => {
+          if (res.IsSuccess) {
+            successCallback ? successCallback(res) : dispatch(routerRedux.push(`/sysmanage/autoformmanager/${configId}`));
           }
         }
-        console.log('FormData=', FormData);
-        // return;
-        dispatch({
-          type: 'autoForm/add',
-          payload: {
-            configId: configId,
-            FormData: {
-              ...FormData,
-              // uid: uid
-            },
-            callback: (res) => {
-              if (res.IsSuccess) {
-                successCallback ? successCallback(res) : dispatch(routerRedux.push(`/sysmanage/autoformmanager/${configId}`));
-              }
-            }
-          }
-        });
       }
     });
+    //   }
+    // });
   }
 
   _renderForm() {
@@ -103,15 +107,10 @@ class AutoFormAdd extends Component {
 
     return <SdlForm
       configId={configId}
+      // hideBtns={true}
       onSubmitForm={this.onSubmitForm}
       form={form}
     >
-      {/* <FormItem key="key" {...formLayout} label="test">
-        {getFieldDecorator(`test`, {
-        })(
-          <Input />
-        )}
-      </FormItem> */}
     </SdlForm>
   }
 

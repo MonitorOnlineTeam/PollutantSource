@@ -43,6 +43,21 @@ export default Model.extend({
             }
         }
     },
+    * addPoint({payload}, { call, put, update, select }){
+        const result = yield call(services.postAutoFromDataAdd, { ...payload, FormData: JSON.stringify(payload.FormData) });
+        if (result.IsSuccess) {
+            //message.success('添加成功！');
+            //添加关联表信息
+            // yield put({
+            //   type: 'getAutoFormData',
+            //   payload: {
+            //     configId: payload.configId
+            //   }
+            // });
+          } else {
+            message.error(result.Message);
+          }
+    }
   },
   reducers: {
     // 保存搜索框数据

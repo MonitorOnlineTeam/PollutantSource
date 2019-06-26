@@ -2,7 +2,7 @@ import {
     Model
 } from '../dvapack';
 import {
-    getroleinfobytree, getroleinfobyid, insertroleinfo, delroleinfo, updroleinfo,
+    getroleinfobytree, getroleinfobyid, insertroleinfo, delroleinfo, updroleinfo, getrolestreeandobj, getalluser, getuserbyroleid, insertrolebyuser
 } from '../services/rolelist';
 import { message } from 'antd';
 /*
@@ -15,7 +15,10 @@ export default Model.extend({
 
     state: {
         RoleInfoTree: [],
-        RoleInfoOne: null,
+        RoleInfoOne: [],
+        RolesTree: [],
+        AllUser: [],
+        UserByRoleID: []
     },
     subscriptions: {
         setup({
@@ -51,9 +54,10 @@ export default Model.extend({
             update,
         }) {
             const result = yield call(getroleinfobyid, {
-                Roles_ID: payload.Roles_ID,
+                ...payload
             });
             if (result.IsSuccess) {
+                debugger
                 yield update({
                     RoleInfoOne: result.Datas
                 });
@@ -70,14 +74,7 @@ export default Model.extend({
             const result = yield call(insertroleinfo, {
                 ...payload
             });
-            if (result.IsSuccess) {
-                message.success("添加成功");
-                yield put({
-                    type: "userinfo/getroleinfobytree",
-                    payload: {
-                    }
-                })
-            }
+            payload.callback(result);
         },
         /*删除角色信息**/
         * delroleinfo({
@@ -89,14 +86,15 @@ export default Model.extend({
             const result = yield call(delroleinfo, {
                 Roles_ID: payload.Roles_ID,
             });
-            if (result.IsSuccess) {
-                message.success("删除成功");
-                yield put({
-                    type: "userinfo/getroleinfobytree",
-                    payload: {
-                    }
-                })
-            }
+            // if (result.IsSuccess) {
+            //     message.success("删除成功");
+            //     yield put({
+            //         type: "roleinfo/getroleinfobytree",
+            //         payload: {
+            //         }
+            //     })
+            // }
+            payload.callback(result);
         },
         /*修改角色信息**/
         * updroleinfo({
@@ -108,14 +106,77 @@ export default Model.extend({
             const result = yield call(updroleinfo, {
                 ...payload
             });
+            // if (result.IsSuccess) {
+            //     message.success("修改成功");
+            //     yield put({
+            //         type: "roleinfo/getroleinfobytree",
+            //         payload: {
+            //         }
+            //     })
+            // }
+            payload.callback(result);
+        },
+        /*获取角色树(带根结点)**/
+        * getrolestreeandobj({
+            payload
+        }, {
+            call,
+            update,
+        }) {
+            const result = yield call(getrolestreeandobj, {
+                ...payload
+            });
             if (result.IsSuccess) {
-                message.success("修改成功");
-                yield put({
-                    type: "userinfo/getroleinfobytree",
-                    payload: {
-                    }
-                })
+                yield update({
+                    RolesTree: result.Datas
+                });
             }
+
+        },
+        /*获取所有用户**/
+        * getalluser({
+            payload
+        }, {
+            call,
+            update,
+        }) {
+            const result = yield call(getalluser, {
+                ...payload
+            });
+            if (result.IsSuccess) {
+                yield update({
+                    AllUser: result.Datas
+                });
+            }
+
+        },
+        /*获取当前角色的用户**/
+        * getuserbyroleid({
+            payload
+        }, {
+            call,
+            update,
+        }) {
+            const result = yield call(getuserbyroleid, {
+                ...payload
+            });
+            if (result.IsSuccess) {
+                yield update({
+                    UserByRoleID: result.Datas
+                });
+            }
+
+        },
+        /*给角色添加用户（可批量）**/
+        * insertrolebyuser({
+            payload
+        }, {
+            call,
+            update,
+        }) {
+            const result = yield call(insertrolebyuser, {
+                ...payload
+            });
         },
     },
     reducers: {

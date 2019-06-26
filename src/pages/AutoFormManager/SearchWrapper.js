@@ -22,21 +22,22 @@ import {
   Spin,
   Radio,
   Checkbox,
+  TimePicker,
   Select, Modal, Tag, Divider, Dropdown, Icon, Menu, Popconfirm, message, DatePicker, InputNumber
 } from 'antd';
 import { connect } from 'dva';
+import moment from 'moment';
 import SearchSelect from './SearchSelect';
 import SdlCascader from './SdlCascader';
 import SdlRadio from './SdlRadio';
 import SdlCheckbox from './SdlCheckbox';
-import TimelineItem from 'antd/lib/timeline/TimelineItem';
 
 const Option = Select.Option;
 const Search = Input.Search;
 const confirm = Modal.confirm;
 const FormItem = Form.Item;
 const InputGroup = Input.Group;
-const { RangePicker } = DatePicker;
+const { RangePicker, MonthPicker } = DatePicker;
 @connect(({ loading, autoForm }) => ({
   searchForm: autoForm.searchForm,
   searchConfigItems: autoForm.searchConfigItems,
@@ -127,6 +128,26 @@ class SearchWrapper extends Component {
     // this.props.resetForm();
   }
 
+  _rtnDateEl = (item) => {
+    const { dateFormat } = item;
+    const format = dateFormat.toUpperCase();
+    if (format === "YYYY-MM" || format === "MM") {
+      // 年月 、 月
+      return <MonthPicker style={{ width: "100%" }} format={format} />
+    } else if (format === "YYYY") {
+      // 年
+      return <DatePicker format={format} style={{ width: "100%" }} />
+      // return <DatePicker
+      //   mode="year"
+      //   onPanelChange={(value, mode) => {
+      //     this.props.form.setFieldsValue({ [item.fieldName]: value })
+      //   }}
+      //   format={format} />
+    } else {
+      // 年-月-日 时:分:秒
+      return <DatePicker showTime format={format} style={{ width: "100%" }} />
+    }
+  }
 
   // 渲染FormItem
   _renderFormItem() {
@@ -175,6 +196,10 @@ class SearchWrapper extends Component {
             />
           )
           break;
+        case "日期框":
+          placeholder = placeholder || inputPlaceholder;
+          element = this._rtnDateEl(item);
+          break;
         case "单选":
           element = (
             <SdlRadio
@@ -182,7 +207,6 @@ class SearchWrapper extends Component {
               configId={item.configId}
               all={true}
             />
-
           )
           break;
         case "多选":
@@ -222,9 +246,9 @@ class SearchWrapper extends Component {
     const { searchConfigItems, configId } = this.props;
     const searchConditions = searchConfigItems[configId] || []
     const style = {};
-    if(searchConditions.length % 3 === 0 && !this.state.expand){
+    if (searchConditions.length % 3 === 0 && !this.state.expand) {
       style.float = "right";
-    }else{
+    } else {
       style.marginLeft = 20;
     }
     return (
@@ -234,7 +258,7 @@ class SearchWrapper extends Component {
             this._renderFormItem()
           }
           {
-            searchConditions.length ? <Col style={{ marginTop: 6, ...style}}>
+            searchConditions.length ? <Col style={{ marginTop: 6, ...style }}>
               <Button type="primary" onClick={this.onSubmitForm}>
                 查询
                   </Button>
