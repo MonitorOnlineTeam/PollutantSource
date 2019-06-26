@@ -19,18 +19,24 @@ class YsyCameraIndex extends Component {
         this.state = {};
     }
 
+    /**初始化加载table配置 */
     componentDidMount() {
-        // const { dispatch } = this.props;
-        // dispatch({
-        //     type: 'autoForm/getPageConfig',
-        //     payload: {
-        //         configId: 'VideoCamera',
-        //         FormData: this.props.DeviceId,
-        //     }
-        // });
+        const { dispatch } = this.props;
+        dispatch({
+            type: 'autoForm/getPageConfig',
+            payload: {
+                configId: 'VideoCamera',
+            }
+        });
     }
 
     render() {
+        const {match}=this.props;
+        const pointDataWhere= [{
+            Key: "dbo__T_Bas_VideoCamera__VedioDevice_ID",
+            Value: match.params.DeviceId,
+            Where: "$="
+        }];
         return (
             <Fragment>
                 {
@@ -68,6 +74,7 @@ class YsyCameraIndex extends Component {
                             <SdlTable
                                 style={{ marginTop: 10 }}
                                 configId="VideoCamera"
+                                searchParams={pointDataWhere}
                                 rowChange={(key, row) => {
                                     this.setState({
                                         key, row
