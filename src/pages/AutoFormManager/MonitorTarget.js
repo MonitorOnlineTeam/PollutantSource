@@ -113,7 +113,7 @@ export default class MonitorTarget extends Component {
                 [
                     { Name: '首页', Url: '/' },
                     { Name: '系统管理', Url: '' },
-                    { Name: '监控目标-企业', Url: '' }
+                    { Name: 'AutoForm企业管理', Url: '' }
                 ]
             }>
                 <div className={styles.cardTitle}>
