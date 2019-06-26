@@ -60,12 +60,12 @@ export default Model.extend({
                 result = yield call(services.postAutoFromDataAdd, { configId: 'monitorpoint', FormData: JSON.stringify(monitorRelFormData) });
                 console.log("monitorRelFormData=", result);
                 if (result.IsSuccess) {
-                    sdlMessage('操作成功！',"success");
+                    sdlMessage('操作成功！', "success");
                 } else {
-                    sdlMessage(result.Message,"error");
+                    sdlMessage(result.Message, "error");
                 }
             } else {
-                sdlMessage(result.Message,"error");
+                sdlMessage(result.Message, "error");
             }
             payload.callback(result);
         },
@@ -74,9 +74,9 @@ export default Model.extend({
             let result = yield call(services.postAutoFromDataUpdate, { ...payload, FormData: JSON.stringify(payload.FormData) });
 
             if (result.IsSuccess) {
-                sdlMessage('操作成功！',"success");
+                sdlMessage('操作成功！', "success");
             } else {
-                sdlMessage(result.Message,"error");
+                sdlMessage(result.Message, "error");
             }
 
             payload.callback(result);
@@ -97,12 +97,12 @@ export default Model.extend({
                 };
                 result = yield call(services.postAutoFromDataDelete, { configId: "monitorpoint", FormData: JSON.stringify(pointRelParam) });
                 if (result.IsSuccess) {
-                    sdlMessage('操作成功！',"success");
+                    sdlMessage('操作成功！', "success");
                 } else {
-                    sdlMessage(result.Message,"error");
+                    sdlMessage(result.Message, "error");
                 }
             } else {
-                sdlMessage(result.Message,"error");
+                sdlMessage(result.Message, "error");
             }
 
             payload.callback(result);

@@ -146,7 +146,7 @@ export default class MonitorPoint extends Component {
     }
 
     onMenu = (key, id, name) => {
-        const { match: { params: { configId,targetId,targetName } } } = this.props;
+        const { match: { params: { configId, targetId, targetName } } } = this.props;
         //match.params
         switch (key) {
             case '1':
@@ -191,52 +191,6 @@ export default class MonitorPoint extends Component {
             });
         }
     };
-    handleAddPoint = e => {
-        this.onSubmitForm();
-        const { dispatch, match, pointDataWhere, form } = this.props;
-
-        form.validateFields((err, values) => {
-            if (!err) {
-                let FormData = {};
-                for (let key in values) {
-                    if (values[key] && values[key]["fileList"]) {
-                        FormData[key] = uid;
-                    } else {
-                        FormData[key] = values[key] && values[key].toString()
-                    }
-                }
-
-                if (!Object.keys(FormData).length) {
-                    sdlMessage("数据为空","error");
-                    //message.error("数据为空");
-                    return false;
-                }
-                dispatch({
-                    type: !isEdit ? 'monitorTarget/addPoint' : 'monitorTarget/editPoint',
-                    payload: {
-                        configId: pointConfigIdEdit,
-                        targetId: match.params.targetId,
-                        FormData: FormData,
-                        callback: ((result) => {
-                            if (result.IsSuccess) {
-                                this.setState({
-                                    visible: false,
-                                });
-                                dispatch({
-                                    type: 'autoForm/getAutoFormData',
-                                    payload: {
-                                        configId: pointConfigId,
-                                        searchParams: pointDataWhere
-                                    }
-                                });
-                            }
-                        })
-                    }
-                })
-
-            }
-        });
-    };
 
     handleCancel = e => {
         this.setState({
@@ -261,7 +215,7 @@ export default class MonitorPoint extends Component {
                 }
 
                 if (!Object.keys(FormData).length) {
-                    sdlMessage("数据为空","error");
+                    sdlMessage("数据为空", "error");
                     return false;
                 }
                 if (this.state.isEdit) {
@@ -294,9 +248,8 @@ export default class MonitorPoint extends Component {
         });
     }
 
-    delPoint(PointCode,DGIMN) {
-        debugger;
-        const { dispatch,match,pointDataWhere } = this.props;
+    delPoint(PointCode, DGIMN) {
+        const { dispatch, match, pointDataWhere } = this.props;
         const { pollutantType } = this.state;
         dispatch({
             type: 'monitorTarget/delPoint',
@@ -304,8 +257,8 @@ export default class MonitorPoint extends Component {
                 configId: pointConfigIdEdit,
                 targetId: match.params.targetId,
                 pollutantType: pollutantType,
-                DGIMN:DGIMN,
-                PointCode:PointCode,
+                DGIMN: DGIMN,
+                PointCode: PointCode,
                 callback: ((result) => {
                     if (result.IsSuccess) {
                         dispatch({
@@ -389,7 +342,7 @@ export default class MonitorPoint extends Component {
                                     <Popconfirm
                                         title="确认要删除吗?"
                                         onConfirm={() => {
-                                            this.delPoint(row["dbo.T_Bas_CommonPoint.PointCode"],row["dbo.T_Bas_CommonPoint.DGIMN"])
+                                            this.delPoint(row["dbo.T_Bas_CommonPoint.PointCode"], row["dbo.T_Bas_CommonPoint.DGIMN"])
                                         }}
                                         onCancel={this.cancel}
                                         okText="是"

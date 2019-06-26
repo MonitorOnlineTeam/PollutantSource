@@ -40,7 +40,7 @@ export default class MonitorTarget extends Component {
     }
 
     componentDidMount() {
-        const { match,dispatch } = this.props;
+        const { match, dispatch } = this.props;
         this.reloadPage(match.params.configId);
     }
 
@@ -68,7 +68,7 @@ export default class MonitorTarget extends Component {
         })
     }
 
-    editMonitorInfo = (key,row) => {
+    editMonitorInfo = (key, row) => {
         const { match } = this.props;
 
         if ((!row || row.length === 0) || row.length > 1) {
@@ -80,11 +80,11 @@ export default class MonitorTarget extends Component {
         const configId = match.params.configId;
 
         let targetId = '';
-        let targetName='';
+        let targetName = '';
         switch (match.params.configId) {
             case 'AEnterpriseTest':
                 targetId = row[0]['dbo.T_Bas_Enterprise.EntCode'];
-                targetName=row[0]['dbo.T_Bas_Enterprise.EntName']
+                targetName = row[0]['dbo.T_Bas_Enterprise.EntName']
                 break;
             default: break;
         }
@@ -118,7 +118,7 @@ export default class MonitorTarget extends Component {
             }>
                 <div className={styles.cardTitle}>
                     <Card>
-                       
+
                         <SearchWrapper
                             // formItemList={searchConditions}
                             // formChangeActionType=""
@@ -145,31 +145,14 @@ export default class MonitorTarget extends Component {
                             }}
                             appendHandleButtons={(selectedRowKeys, selectedRows) => {
                                 return <Fragment>
-                                  <Button icon="printer" type="primary" onClick={() => {
-                                    // console.log('selectedRowKeys=', selectedRowKeys);
-                                    // console.log('selectedRows=', selectedRows);
-                                    this.editMonitorInfo(selectedRowKeys,selectedRows);
-                                  }}>维护点信息</Button>
+                                    <Button icon="printer" type="primary" onClick={() => {
+                                        // console.log('selectedRowKeys=', selectedRowKeys);
+                                        // console.log('selectedRows=', selectedRows);
+                                        this.editMonitorInfo(selectedRowKeys, selectedRows);
+                                    }}>维护点信息</Button>
                                 </Fragment>
-                              }}
-                        // loadDataSourceParams={[
-                        //   {
-                        //     Key: "test",
-                        //     Value: false,
-                        //     Where: "$like"
-                        //   }
-                        // ]}
-                        // dataSource={dataSource}
+                            }}
                         >
-                            {/* <Fragment key="top">
-                                <Button icon="printer" type="primary" onClick={() => {
-                                    this.editMonitorInfo();
-                                }}>维护点信息</Button>
-                            </Fragment> */}
-                            {/* <Fragment key="row">
-                <Divider type="vertical" />
-                <a>测试自定义</a>
-              </Fragment> */}
                         </SdlTable>
                     </Card>
                 </div>
