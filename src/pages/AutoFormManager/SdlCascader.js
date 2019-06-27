@@ -28,8 +28,10 @@ class SdlCascader extends Component {
   render() {
     const { configId, regionList, data, itemValue, itemName } = this.props;
     const options = data.length ? data : regionList;
-    let label = itemName.split('.').pop().toString()
-    let value = itemValue.split('.').pop().toString()
+    const labelArr = itemName.split('.');
+    const valueArr = itemValue.split('.');
+    let label = labelArr.length > 1 ? itemName.split('.').pop().toString() : itemName;
+    let value = valueArr.length > 1 ? itemValue.split('.').pop().toString() : itemValue;
     return (
       <Cascader
         fieldNames={{ label: label, value: value, children: 'children' }}
@@ -54,5 +56,10 @@ class SdlCascader extends Component {
 //   // itemValue
 //   itemValue: PropTypes.string.isRequired,
 // }
+
+SdlCascader.defaultProps = {
+  itemName: "title",
+  itemValue: "value"
+}
 
 export default SdlCascader;
