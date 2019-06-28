@@ -293,15 +293,16 @@ export default class UserInfoAdd extends Component {
                                 <Card bordered={false} title="角色设置" style={{ height: 'calc(100vh - 160px)', display: this.state.rolesState }}>
                                     <Tree
                                         checkable
-                                        checkStrictly={false}
+                                        // checkStrictly={false}
                                         onExpand={this.onExpand}
-                                        expandedKeys={this.state.expandedKeys}
+                                        // expandedKeys={this.state.expandedKeys}
                                         autoExpandParent={this.state.autoExpandParent}
                                         onCheck={this.onCheck}
                                         checkedKeys={this.state.checkedKey}
                                         onSelect={this.onSelect}
                                         selectedKeys={this.state.selectedKey}
-                                        autoExpandParent={true}
+                                        // autoExpandParent={true}
+                                        defaultExpandAll={true}
                                     >
                                         {this.renderTreeNodes(this.props.RolesTreeData)}
                                     </Tree>
@@ -324,13 +325,14 @@ export default class UserInfoAdd extends Component {
                                     <Tree
                                         checkable
                                         onExpand={this.onExpand}
-                                        expandedKeys={this.state.expandedKeys}
+                                        // expandedKeys={this.state.expandedKeys}
                                         autoExpandParent={this.state.autoExpandParent}
                                         onCheck={this.onChecks}
                                         checkedKeys={this.state.checkedKeys}
                                         onSelect={this.onSelects}
                                         selectedKeys={this.state.selectedKeys}
                                         autoExpandParent={true}
+                                        defaultExpandAll={true}
                                     >
                                         {this.renderTreeNodes(this.props.treeData)}
                                     </Tree>

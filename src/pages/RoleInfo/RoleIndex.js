@@ -424,9 +424,9 @@ class RoleIndex extends Component {
                                 onClick={this.showUserModal}
                                 style={{ marginLeft: "10px" }}
                             >分配用户</Button>
-                            <Table columns={this.state.columns} rowSelection={rowRadioSelection} dataSource={this.props.RoleInfoTree} />,
+                            <Table defaultExpandAllRows={true} columns={this.state.columns} rowSelection={rowRadioSelection} dataSource={this.props.RoleInfoTree} />,
                         </Card>
-                        <div>
+                        <div> 
                             <Modal
                                 title={this.state.Tittle}
                                 visible={this.state.visible}
