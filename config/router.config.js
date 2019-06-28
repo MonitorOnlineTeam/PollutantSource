@@ -251,6 +251,8 @@ export default [
              { path: '/sysmanage/userinfoview/:userid', component: './Userinfo/UserInfoView' },
              /* 角色管理 */
              { path: '/sysmanage/roleindex/', component: './RoleInfo/RoleIndex' },
+             /* 部门管理 */
+             { path: '/sysmanage/departindex/', component: './DepartInfo/DepartIndex' },
             /* 标准库管理-维护 */
             { path: '/sysmanage/standardlibrarydetail/:StandardLibraryID', component: './StandardLibrary/AddStandardLibrary' },
             /* 个人设置-维护 */

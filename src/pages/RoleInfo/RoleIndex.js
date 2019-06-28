@@ -321,6 +321,10 @@ class RoleIndex extends Component {
         }
     }
     showModalEdit = () => {
+        this.props.dispatch({
+            type: 'roleinfo/getrolestreeandobj',
+            payload: {}
+        })
         this.setState({
             visible: true,
             IsEdit: true,
