@@ -216,9 +216,9 @@ export default [
             /* 系统管理-意见反馈 */
             { path: '/sysmanage/feedback', component: './Administration/FeedBack' },
             /* 用户基本信息管理-标准库管理 */
-            { path: '/sysmanage/usestandardlibrary/:DGIMN/:PointName/:configId', component: './StandardLibrary/UseStandardLibrary' },
+            { path: '/sysmanage/usestandardlibrary/:DGIMN/:PointName/:configId/:targetId/:targetName', component: './StandardLibrary/UseStandardLibrary' },
             /* 用户基本信息管理-停产管理 */
-            { path: '/sysmanage/stopmanagement/:DGIMN/:PointName', component: './StopManagement/Content' },
+            { path: '/sysmanage/stopmanagement/:DGIMN/:PointName/:configId/:targetId/:targetName', component: './StopManagement/Content' },
             /* 用户基本信息管理-视频管理 */
             { path: '/sysmanage/videolists/:pointcode/:pointname', component: './PointInfo/VideoList' },
 
