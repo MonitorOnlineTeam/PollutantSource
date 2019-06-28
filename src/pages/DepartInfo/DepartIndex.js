@@ -279,7 +279,7 @@ class DepartIndex extends Component {
         this.setState({ checkedKey });
     };
     onChecks = checkedKeys => {
-        console.log("leaf=", this.state.leafTreeDatas)
+
         this.setState({ checkedKeys });
         const leafTree = [];
         checkedKeys.map(item => {
@@ -419,6 +419,7 @@ class DepartIndex extends Component {
                 UserGroup_ID: keys.toString()
             }
         })
+
         console.log("regioncode=", this.props.RegionByDepID);
 
     }
@@ -612,9 +613,11 @@ class DepartIndex extends Component {
         const rowRadioSelection = {
             type: 'radio',
             columnTitle: "选择",
-            onSelect: (selectedRowKeys, selectedRows) => {
+            selectedRowKeys: this.state.rowKeys,
+            onChange: (selectedRowKeys, selectedRows) => {
                 this.setState({
-                    selectedRowKeys: selectedRowKeys
+                    selectedRowKeys: selectedRows[0],
+                    rowKeys: selectedRowKeys
                 })
             },
         }
@@ -674,7 +677,18 @@ class DepartIndex extends Component {
                                 style={{ marginLeft: "10px" }}
                             >数据过滤</Button>
 
-                            <Table columns={this.state.columns} rowSelection={rowRadioSelection} dataSource={this.props.DepartInfoTree} />
+                            <Table
+                            // rowKey={}
+                            onRow={record => {
+                                return {
+                                    onClick: event => {
+                                        this.setState({
+                                            selectedRowKeys: record,
+                                            rowKeys: [record.key]
+                                        })
+                                    },
+                                };
+                            }} columns={this.state.columns} defaultExpandAllRows rowSelection={rowRadioSelection} dataSource={this.props.DepartInfoTree} />
 
                         </Card>
                         <div>
@@ -815,8 +829,8 @@ class DepartIndex extends Component {
                                             // defaultExpandParent
                                             >
                                                 {this.renderTreeNodes(this.props.RegionInfoTree)}
-                                            </Tree>
-                                        </div>
+                                        </Tree>
+                                    </div>
                                 }
 
 
@@ -855,15 +869,18 @@ class DepartIndex extends Component {
                                                 checkable
                                                 // checkStrictly={false}
                                                 onExpand={this.onExpands}
+                                                treeData={this.props.EntAndPoint}
                                                 // expandedKeys={this.state.expandedKey}
                                                 // autoExpandParent={this.state.autoExpandParent}
                                                 onCheck={this.onChecks}
                                                 checkedKeys={this.state.checkedKeys}
                                                 onSelect={this.onSelectData}
                                                 selectedKeys={this.state.selectedKeys}
-                                                // autoExpandParent={true}
-                                                defaultExpandAll
+                                                defaultExpandedKeys={['0']}
+                                            // autoExpandParent={true}
+                                            // defaultExpandAll
                                             >
+
                                                 {this.renderDataTreeNodes(this.props.EntAndPoint)}
                                             </Tree> : <Empty style={{marginTop: 70}} image={Empty.PRESENTED_IMAGE_SIMPLE} />
                                             }

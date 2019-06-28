@@ -218,18 +218,16 @@ class RoleIndex extends Component {
 
     }
     onChanges = nextTargetKeys => {
-        
+
         // if (nextTargetKeys.length == 0) {
         //     message.error("请至少保留一个角色")
         //     return
         // }
-        console.log("nextTargetKeys.length=",nextTargetKeys.length)
-        console.log("this.props.AllUser.length=",this.props.AllUser.length)
         this.props.dispatch({
             type: 'roleinfo/insertrolebyuser',
             payload: {
-                User_ID:nextTargetKeys,
-                Roles_ID:this.state.selectedRowKeys.key,
+                User_ID: nextTargetKeys,
+                Roles_ID: this.state.selectedRowKeys.key,
             }
         })
         this.setState({ targetKeys: nextTargetKeys });
@@ -399,9 +397,11 @@ class RoleIndex extends Component {
         const rowRadioSelection = {
             type: 'radio',
             columnTitle: "选择",
-            onSelect: (selectedRowKeys, selectedRows) => {
+            selectedRowKeys: this.state.rowKeys,
+            onChange: (selectedRowKeys, selectedRows) => {
                 this.setState({
-                    selectedRowKeys: selectedRowKeys
+                    selectedRowKeys: selectedRows[0],
+                    rowKeys: selectedRowKeys
                 })
             },
         }
@@ -424,9 +424,21 @@ class RoleIndex extends Component {
                                 onClick={this.showUserModal}
                                 style={{ marginLeft: "10px" }}
                             >分配用户</Button>
-                            <Table defaultExpandAllRows={true} columns={this.state.columns} rowSelection={rowRadioSelection} dataSource={this.props.RoleInfoTree} />,
+                            <Table
+                                onRow={record => {
+                                    return {
+                                        onClick: event => {
+                                            console.log("onClick=", record)
+                                            this.setState({
+                                                selectedRowKeys: record,
+                                                rowKeys: [record.key]
+                                            })
+                                        },
+                                    };
+                                }}
+                                defaultExpandAllRows={true} columns={this.state.columns} rowSelection={rowRadioSelection} dataSource={this.props.RoleInfoTree} />,
                         </Card>
-                        <div> 
+                        <div>
                             <Modal
                                 title={this.state.Tittle}
                                 visible={this.state.visible}

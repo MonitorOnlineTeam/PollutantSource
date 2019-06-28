@@ -13,15 +13,13 @@ import { async } from 'q';
  * 【AutoForm】系统登录
  * @params {"UserAccount": "system","UserPwd": "system","RememberMe": true}
  */
-export async function systemLogin() {
-    const params = {
-        UserAccount: "system",
-        UserPwd: "system",
-    };
+export async function systemLogin(params) {
     const defaults = {
-        RememberMe: true
+        RememberMe: true,
+        UserAccount: params.userName,
+        UserPwd: params.password,
     };
-    const body = Object.assign(defaults, params);
+    const body = Object.assign(defaults);
     const result = await postNew('/api/rest/PollutantSourceApi/LoginApi/Login', body);
     if (result.IsSuccess && result.Datas) {
         Cookie.set('ssoToken', result.Datas.Ticket);
