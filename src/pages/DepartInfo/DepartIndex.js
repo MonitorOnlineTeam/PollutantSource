@@ -624,6 +624,7 @@ class DepartIndex extends Component {
             treeCheckable: true,
             showCheckedStrategy: SHOW_PARENT,
             searchPlaceholder: '搜索',
+            treeDefaultExpandedKeys: ["0"],
             style: {
                 width: 300,
             },
@@ -798,15 +799,18 @@ class DepartIndex extends Component {
                                         <div style={{ maxHeight: "400px", overflowY: "auto" }}>
                                             <Tree
                                                 checkable
-                                                checkStrictly={false}
+                                                // checkStrictly={false}
                                                 onExpand={this.onExpand}
-                                                expandedKeys={this.state.expandedKeys}
-                                                autoExpandParent={this.state.autoExpandParent}
+                                                // expandedKeys={this.state.expandedKeys}
+                                                // autoExpandParent={this.state.autoExpandParent}
                                                 onCheck={this.onCheck}
                                                 checkedKeys={this.state.checkedKey}
                                                 onSelect={this.onSelectRegion}
                                                 selectedKeys={this.state.selectedKey}
-                                                autoExpandParent={true}
+                                                defaultExpandedKeys={['0']}
+                                                // autoExpandParent={true}
+                                                // defaultExpandAll
+                                                // defaultExpandParent
                                             >
                                                 {this.renderTreeNodes(this.props.RegionInfoTree)}
                                             </Tree>
@@ -844,15 +848,16 @@ class DepartIndex extends Component {
                                             <TreeSelect {...tProps} />
                                             <Tree
                                                 checkable
-                                                checkStrictly={false}
+                                                // checkStrictly={false}
                                                 onExpand={this.onExpands}
-                                                expandedKeys={this.state.expandedKey}
-                                                autoExpandParent={this.state.autoExpandParent}
+                                                // expandedKeys={this.state.expandedKey}
+                                                // autoExpandParent={this.state.autoExpandParent}
                                                 onCheck={this.onChecks}
                                                 checkedKeys={this.state.checkedKeys}
                                                 onSelect={this.onSelectData}
                                                 selectedKeys={this.state.selectedKeys}
-                                                autoExpandParent={true}
+                                                // autoExpandParent={true}
+                                                defaultExpandAll
                                             >
                                                 {this.renderDataTreeNodes(this.props.EntAndPoint)}
                                             </Tree>
