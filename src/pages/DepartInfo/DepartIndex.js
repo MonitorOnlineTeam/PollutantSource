@@ -16,6 +16,7 @@ import {
     message,
     Divider,
     Popconfirm,
+    Empty,
     Transfer, Switch, Tag, Tree, Radio
 } from 'antd';
 import MonitorContent from '../../components/MonitorContent/index';
@@ -278,7 +279,7 @@ class DepartIndex extends Component {
         this.setState({ checkedKey });
     };
     onChecks = checkedKeys => {
-        console.log("leaf=",this.state.leafTreeDatas)
+        console.log("leaf=", this.state.leafTreeDatas)
         this.setState({ checkedKeys });
         const leafTree = [];
         checkedKeys.map(item => {
@@ -627,6 +628,7 @@ class DepartIndex extends Component {
             treeDefaultExpandedKeys: ["0"],
             style: {
                 width: 300,
+                marginLeft: 16
             },
             dropdownStyle: {
                 maxHeight: "700px", overflowY: "auto"
@@ -808,9 +810,9 @@ class DepartIndex extends Component {
                                                 onSelect={this.onSelectRegion}
                                                 selectedKeys={this.state.selectedKey}
                                                 defaultExpandedKeys={['0']}
-                                                // autoExpandParent={true}
-                                                // defaultExpandAll
-                                                // defaultExpandParent
+                                            // autoExpandParent={true}
+                                            // defaultExpandAll
+                                            // defaultExpandParent
                                             >
                                                 {this.renderTreeNodes(this.props.RegionInfoTree)}
                                             </Tree>
@@ -824,7 +826,7 @@ class DepartIndex extends Component {
                                 title="数据过滤"
                                 visible={this.state.visibleData}
                                 onOk={this.handleDataOK}
-                                destroyOnClose="true"
+                                // destroyOnClose="true"
                                 onCancel={this.handleCancel}
                                 width={800}
 
@@ -841,12 +843,15 @@ class DepartIndex extends Component {
                                         size="large"
                                     /> :
                                         <div style={{ maxHeight: "400px", overflowY: "auto" }}>
-                                            <Radio.Group value={this.state.pollutantType} onChange={this.handleSizeChange}>
-                                                <Radio.Button value="1">废水</Radio.Button>
-                                                <Radio.Button value="2">废气</Radio.Button>
-                                            </Radio.Group>
-                                            <TreeSelect {...tProps} />
-                                            <Tree
+                                            <Row style={{position: "fixed", background: "#fff", paddingBottom: 10, zIndex: 1 }}>
+                                                <Radio.Group value={this.state.pollutantType} onChange={this.handleSizeChange}>
+                                                    <Radio.Button value="1">废水</Radio.Button>
+                                                    <Radio.Button value="2">废气</Radio.Button>
+                                                </Radio.Group>
+                                                <TreeSelect {...tProps} />
+                                            </Row>{
+                                                this.props.EntAndPoint.length ? <Tree
+                                                style={{ marginTop: 47 }}
                                                 checkable
                                                 // checkStrictly={false}
                                                 onExpand={this.onExpands}
@@ -860,7 +865,9 @@ class DepartIndex extends Component {
                                                 defaultExpandAll
                                             >
                                                 {this.renderDataTreeNodes(this.props.EntAndPoint)}
-                                            </Tree>
+                                            </Tree> : <Empty style={{marginTop: 70}} image={Empty.PRESENTED_IMAGE_SIMPLE} />
+                                            }
+                                            
                                         </div>
                                 }
 
