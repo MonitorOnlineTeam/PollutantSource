@@ -47,7 +47,7 @@ export default {
             const response = Cookie.get('token');
             if (response) {
                 const user = JSON.parse(response);
-                const responseMenu = yield call(getMenuData, {menuId: '99dbc722-033f-481a-932a-3c6436e17245', userId: user.User_ID});
+                const responseMenu = yield call(getMenuData, {menuId: '99dbc722-033f-481a-932a-3c6436e17245', userId: user.UserId});
                 if (responseMenu.requstresult === '1') {
                     const cMenu = yield call(formatter, responseMenu.data);
                     yield put({

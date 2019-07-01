@@ -246,12 +246,14 @@ export default class Content extends Component {
             ),
         }
         ];
+        const {match:{params:{configId,targetId,targetName}}}=this.props;
         return (
             <MonitorContent {...this.props} breadCrumbList={
                 [
                     { Name: '首页', Url: '/' },
                     { Name: '系统管理', Url: '' },
-                    { Name: '排口管理', Url: '/sysmanage/pointinfo' },
+                    { Name: 'AutoForm企业管理', Url: '/sysmanage/monitortarget/' + configId },
+                    { Name: '排口管理', Url: `/sysmanage/monitortarget/monitorpoint/${configId}/${targetId}/${targetName}` },
                     { Name: '停产管理', Url: '' }
                 ]
             }>
