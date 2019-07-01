@@ -25,7 +25,8 @@ import SearchWrapper from './SearchWrapper';
   searchConfigItems: autoForm.searchConfigItems,
   // columns: autoForm.columns,
   tableInfo: autoForm.tableInfo,
-  searchForm: autoForm.searchForm
+  searchForm: autoForm.searchForm,
+  routerConfig: autoForm.routerConfig
 }))
 
 export default class AutoFormIndex extends Component {
@@ -37,17 +38,35 @@ export default class AutoFormIndex extends Component {
   }
 
   componentDidMount() {
-    this.props.dispatch({
+    const { match } = this.props;
+    this.reloadPage(match.params.configId);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.location.pathname != this.props.location.pathname) {
+      if (nextProps.match.params.configId !== this.props.routerConfig)
+        this.reloadPage(nextProps.match.params.configId);
+    }
+  }
+
+  reloadPage = (configId) => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'autoForm/updateState',
+      payload: {
+        routerConfig: configId
+      }
+    });
+    dispatch({
       type: 'autoForm/getPageConfig',
       payload: {
-        configId: this.props.match.params.configId
+        configId: configId
       }
     })
   }
 
-
   render() {
-    const { searchConfigItems, searchForm, tableInfo, match: { params: { configId } } } = this.props;
+    const { searchConfigItems, searchForm, tableInfo, match: { params: { configId } }, dispatch } = this.props;
     const searchConditions = searchConfigItems[configId] || []
     const columns = tableInfo[configId] ? tableInfo[configId]["columns"] : [];
     if (this.props.loading) {
@@ -79,11 +98,49 @@ export default class AutoFormIndex extends Component {
               // }}
               onSubmitForm={(form) => this.loadReportList(form)}
               configId={configId}
+            // loadDataSourceParams={[
+            //   {
+            //     Key: "test",
+            //     Value: false,
+            //     Where: "$like"
+            //   }
+            // ]}
             ></SearchWrapper>
             <SdlTable
               style={{ marginTop: 10 }}
               // columns={columns}
               configId={configId}
+              rowChange={(key, row) => {
+                this.setState({
+                  key, row
+                })
+              }}
+              // onAdd={()=>{
+              //   console.log("点击了添加")
+              // }}
+              // appendHandleRows={row => {
+              //   return <Fragment>
+              //     <Divider type="vertical" />
+              //     <a onClick={() => {
+              //       console.log('row=', row)
+              //     }}>测试</a>
+              //   </Fragment>
+              // }}
+              // appendHandleButtons={(selectedRowKeys, selectedRows) => {
+              //   return <Fragment>
+              //     <Button icon="printer" type="primary" onClick={() => {
+              //       console.log('selectedRowKeys=', selectedRowKeys);
+              //       console.log('selectedRows=', selectedRows);
+              //     }}>维护点信息</Button>
+              //   </Fragment>
+              // }}
+            // searchParams={[
+            //   {
+            //     Key: "test",
+            //     Value: false,
+            //     Where: "$like"
+            //   }
+            // ]}
             // dataSource={dataSource}
             />
           </Card>

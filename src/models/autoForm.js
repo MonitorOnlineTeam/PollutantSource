@@ -2,12 +2,13 @@
  * @Author: Jiaqi
  * @Date: 2019-05-16 15:13:59
  * @Last Modified by: Jiaqi
- * @Last Modified time: 2019-06-04 17:07:23
+ * @Last Modified time: 2019-06-14 14:26:42
  */
 import { message } from 'antd';
 import {
   Model
 } from '../dvapack';
+import moment from 'moment'
 import * as services from '../services/autoformapi';
 
 export default Model.extend({
@@ -24,6 +25,7 @@ export default Model.extend({
     //   pageSize: 10,
     //   total: 0
     // },
+    routerConfig: "",
     tableInfo: {},
     searchForm: {},
     searchConfigItems: { // 搜索条件配置项
@@ -39,6 +41,7 @@ export default Model.extend({
     detailConfigInfo: {}, // 详情页面配置信息,
     regionList: [], // 联动数据
     fileList: [], // 文件列表
+    formLayout: {}, // 添加编辑布局
   },
   effects: {
     // 获取数据
@@ -48,17 +51,19 @@ export default Model.extend({
       const configId = payload.configId;
       // const searchForm = state.searchForm[payload.configId]
       const searchForm = state.searchForm[configId] ? state.searchForm[configId] : [];
+      console.log("searchForm=", searchForm)
       if (searchForm) {
         for (let key in searchForm) {
           let groupItem = {};
-          if (searchForm[key].value && searchForm[key].value.length) {
-            // if(state.searchForm[key]) {
-            //   state.searchForm[key]
-            // }
+          // if (searchForm[key].value && searchForm[key].value.length || Object.keys(searchForm[key].value).length) {
+          if (searchForm[key].value) {
+            // 是否是moment对象
+            const isMoment = moment.isMoment(searchForm[key].value);
             groupItem = {
               "Key": key,
-              "Value": searchForm[key].value.toString(),
+              "Value": isMoment ? moment(searchForm[key].value).format("YYYY-MM-DD HH:mm:ss") : searchForm[key].value.toString(),
             };
+
             for (let whereKey in state.whereList[configId]) {
               if (key === whereKey) {
                 groupItem.Where = state.whereList[configId][whereKey];
@@ -70,17 +75,26 @@ export default Model.extend({
           }
         }
       }
+      console.log("group=", group)
+
       const postData = {
         configId: payload.configId,
         pageIndex: searchForm.current || 1,
-        pageSize: searchForm.pageSize || 10
+        pageSize: searchForm.pageSize || 10,
+        ...payload.otherParams
       };
-      console.log("group=", group)
-      group.length ? postData.ConditionWhere = JSON.stringify({
+
+      const searchParams = payload.searchParams || [];
+
+      (group.length || searchParams.length) ? postData.ConditionWhere = JSON.stringify({
+        // group.length? postData.ConditionWhere = JSON.stringify({
         "rel": "$and",
         "group": [{
           "rel": "$and",
-          group
+          group: [
+            ...group,
+            ...searchParams
+          ]
         }]
       }) : '';
 
@@ -132,11 +146,13 @@ export default Model.extend({
         const configId = result.Datas.ConfigId;
         let columns = result.Datas.ColumnFields.filter(itm => itm.FOREIGH_DT_CONFIGID === "").map((item, index) => ({
           title: item.DF_NAME_CN,
-          dataIndex: item.FullFieldName,
+          dataIndex: item.DF_FOREIGN_TYPE === 2 ? item.FullFieldName + '_Name' : item.FullFieldName,
           key: item.FullFieldNameVerticalBar,
           align: 'center',
           width: item.DF_WIDTH,
-          fixed: result.Datas.FixedFields.filter(m => m.FullFieldName === item.FullFieldName).length > 0 ? 'left' : ''
+          sorter: item.DF_ISSORT === 1 ? (a, b) => a[item.FullFieldName] - b[item.FullFieldName] : false,
+          fixed: result.Datas.FixedFields.filter(m => m.FullFieldName === item.FullFieldName).length > 0 ? 'left' : '',
+          formatType: item.DF_ISFormat
         })
         );
 
@@ -154,11 +170,24 @@ export default Model.extend({
             configId: item.FOREIGH_DT_CONFIGID,
             configDataItemName: item.FOREIGN_DF_NAME,
             configDataItemValue: item.FOREIGN_DF_ID,
+            dateFormat: item.DF_DATEFORMAT
           };
         });
         console.log("whereList=", whereList)
         //添加
-        let addFormItems = result.Datas.CfgField.filter(cfg => cfg.DF_ISADD === 1).map(item => ({
+        const addCfgField = result.Datas.CfgField.filter(cfg => cfg.DF_ISADD === 1);
+        // const colSpanLen = ;
+        let layout = 12;
+        if (addCfgField.filter(item => item.DF_COLSPAN === null).length == addCfgField.length) {
+          // 显示两列
+          layout = 12
+        } else if (addCfgField.filter(item => item.DF_COLSPAN === 1 || item.DF_COLSPAN === 2).length == addCfgField.length) {
+          // 显示一列
+          layout = 24
+        } else {
+          layout = false
+        }
+        let addFormItems = addCfgField.map(item => ({
           type: item.DF_CONTROL_TYPE,
           labelText: item.DF_NAME_CN,
           fieldName: item.DF_NAME,
@@ -170,7 +199,10 @@ export default Model.extend({
           configDataItemName: item.FOREIGN_DF_NAME,
           configDataItemValue: item.FOREIGN_DF_ID,
           required: item.DF_ISNOTNULL === 1,
-          validator: item.DF_ISNOTNULL === 1 && (item.DF_TOOLTIP || "")//TODO：正则？
+          validator: item.DF_ISNOTNULL === 1 && (item.DF_TOOLTIP || ""),//TODO：正则？
+          validate: item.DF_VALIDATE ? item.DF_VALIDATE.split(',') : [],
+          colSpan: item.DF_COLSPAN,
+          dateFormat: item.DF_DATEFORMAT
         }));
 
 
@@ -188,23 +220,32 @@ export default Model.extend({
         })
         yield update({
           searchConfigItems: {
+            ...state.searchConfigItems,
             [configId]: searchConditions
           },
           tableInfo: {
+            ...state.tableInfo,
             [configId]: {
               ...state.tableInfo[configId],
               columns
             }
           },
           opreationButtons: {
+            ...state.opreationButtons,
             [configId]: result.Datas.OpreationButtons
           },
           whereList,
           keys: {
+            ...state.keys,
             [configId]: keys
           },
           addFormItems: {
+            ...state.addFormItems,
             [configId]: addFormItems
+          },
+          formLayout: {
+            ...state.formLayout,
+            [configId]: layout
           }
         });
       }
@@ -320,6 +361,26 @@ export default Model.extend({
         yield update({
           fileList
         })
+      }
+    },
+
+    // 导出报表
+    * exportDataExcel({ payload }, { call, update }) {
+      const result = yield call(services.exportDataExcel, { ...payload });
+      if (result.IsSuccess) {
+        console.log('suc=', result)
+        result.Datas && window.open(result.Datas)
+      } else {
+        message.error(result.reason)
+      }
+    },
+    // 下载导入模板
+    * exportTemplet({ payload }, { call, update }) {
+      const result = yield call(services.exportTemplet, { ...payload });
+      if (result.IsSuccess) {
+        result.Datas && window.open(result.Datas)
+      } else {
+        message.error(result.Datas)
       }
     }
   },

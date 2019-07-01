@@ -1,9 +1,9 @@
 /*
  * @desc: 下拉列表组件
- * @Author: Jiaqi 
- * @Date: 2019-05-22 16:38:14 
+ * @Author: Jiaqi
+ * @Date: 2019-05-22 16:38:14
  * @Last Modified by: Jiaqi
- * @Last Modified time: 2019-06-04 10:11:40
+ * @Last Modified time: 2019-06-13 15:08:04
  */
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
@@ -27,8 +27,8 @@ class SearchSelect extends Component {
   }
 
   componentDidMount() {
-    const { dispatch, configId } = this.props;
-    dispatch({
+    const { dispatch, configId, data } = this.props;
+    !data.length && dispatch({
       type: 'autoForm/getConfigIdList',
       payload: {
         configId: configId
@@ -36,7 +36,8 @@ class SearchSelect extends Component {
     })
   }
   render() {
-    const { configId, configIdList, itemValue, itemName } = this.props;
+    const { configId, configIdList, itemValue, itemName, data } = this.props;
+    const dataSource = data.length ? data : (configIdList[configId] || []);
     return (
       <Select
         allowClear
@@ -47,8 +48,10 @@ class SearchSelect extends Component {
         {...this.props}
       >
         {
-          configIdList[configId] && configIdList[configId].map(option => {
-            return <Option key={option[itemValue]} value={`${option[itemValue]}`}>{option[itemName]}</Option>
+          dataSource.map(option => {
+            return data.length ?
+              <Option key={option.key} value={option.key}>{option.value}</Option> :
+              <Option key={option[itemValue]} value={`${option[itemValue]}`}>{option[itemName]}</Option>
           })
         }
       </Select>
@@ -68,6 +71,13 @@ SearchSelect.propTypes = {
   itemName: PropTypes.string.isRequired,
   // itemValue
   itemValue: PropTypes.string.isRequired,
+  // data
+  data: PropTypes.array,
+}
+
+
+SearchSelect.defaultProps = {
+  data: []
 }
 
 export default SearchSelect;

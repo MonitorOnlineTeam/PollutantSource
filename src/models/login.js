@@ -1,8 +1,8 @@
 import Cookie from 'js-cookie';
 import router from 'umi/router';
 import { message } from 'antd';
-import { fakeAccountLogin, sendCaptcha, getip } from '../services/user';
-import { systemLogin, postAutoFromDataDelete,getPageConfigInfo } from '../services/autoformapi';
+import { fakeAccountLogin, sendCaptcha, getip, getLoginInfo, editLoginInfo, getPollutantTypes } from '../services/user';
+import { systemLogin, postAutoFromDataDelete, getPageConfigInfo } from '../services/autoformapi';
 import { Model } from '../dvapack';
 
 const delay = (timeout) => new Promise(resolve => {
@@ -17,41 +17,42 @@ export default Model.extend({
         second: 10,
         MsgId: '111',
         getIPList: [],
+        getLoginInfoList: [],
+        pollutantTypeList: [],
     },
     effects: {
         * login({ payload }, { call, put, select }) {
-           
-            const response1 = yield call(systemLogin);
-            const resss= yield call(getPageConfigInfo);
+            const response1 = yield call(systemLogin,{...payload});
+            const resss = yield call(getPageConfigInfo);
             // debugger;
             const MsgId = yield select(state => state.login.MsgId);
-            if (payload.type === 'mobile') {
-                if (!MsgId) {
-                    message.info('验证码过期，请重新获取');
-                    return false;
-                }
-            }
+            // if (payload.type === 'mobile') {
+            //     if (!MsgId) {
+            //         message.info('验证码过期，请重新获取');
+            //         return false;
+            //     }
+            // }
             yield put({
                 type: 'changeSubmitting',
                 payload: true,
             });
-            const response = yield call(fakeAccountLogin, { ...payload, MsgId });
+            // const response = yield call(fakeAccountLogin, { ...payload, MsgId });
             yield put({
                 type: 'changeLoginStatus',
-                payload: { status: response.requstresult === '1' ? 'ok' : 'faild' },
+                payload: { status: response1.IsSuccess == true ? 'ok' : 'faild' },
             });
             // Login successfully
-            if (response.requstresult === '1') {
-                Cookie.set('token', response.data);
+            if (response1.IsSuccess == true) {
+                Cookie.set('token', response1.Datas);
                 try {
-                    const {ws} = window;
-                    ws.send(response.data.User_Account);
+                    const { ws } = window;
+                    ws.send(response1.Datas.UserAccount);
                 } catch (error) {
 
                 }
                 router.push('/');
             } else {
-                message.error(response.reason, 1);
+                message.error(response1.Message, 1);
             }
         },
         * logout(_, { put }) {
@@ -74,6 +75,40 @@ export default Model.extend({
                     });
                 }
             }
+
+        },
+        //获取登陆信息配置
+        * getLoginInfo({ payload }, { put, call, update }) {
+            const loginData = yield call(getLoginInfo, { ...payload });
+            if (loginData !== null) {
+                if (loginData.requstresult === "1") {
+                    yield update({
+                        getLoginInfoList: loginData.data,
+                    });
+                }
+            }
+
+        },
+
+        //获取所有污染物类型
+        * getPollutantTypes({ payload }, { put, call, update }) {
+            const loginData = yield call(getPollutantTypes, { ...payload });
+            if (loginData !== null) {
+                if (loginData.requstresult === "1") {
+                    yield update({
+                        pollutantTypeList: loginData.data,
+                    });
+                }
+            }
+
+        },
+
+        //修改登陆信息配置
+        * editLoginInfo({ payload }, { put, call, update }) {
+            debugger
+            const loginData = yield call(editLoginInfo, { ...payload });
+            debugger
+            payload.callback(loginData.requstresult)
 
         },
         * getCaptcha({ payload }, { call, put }) {

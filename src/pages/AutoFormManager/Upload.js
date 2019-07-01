@@ -30,12 +30,15 @@ class MyUpload extends React.Component {
   render() {
     const props = {
       // action: 'http://www.mocky.io/v2/5cede1ac3000004b0c6e97ca',
-      action: 'http://172.16.9.52:8096/rest/PollutantSourceApi/UploadApi/PostFiles',
+      // action: 'http://172.16.9.52:8096/rest/PollutantSourceApi/UploadApi/PostFiles',
+      action: 'http://172.16.9.52:8096/rest/PollutantSourceApi/AutoFormDataApi/ImportDataExcel',
       onChange: this.handleChange,
       multiple: true, 
       data: {
-        FileUuid: '12345',
-        FileActualType: "1"
+        // FileUuid: '12345',
+        // FileActualType: "1"
+        ConfigID: "TestCommonPoint",
+        
       }
     };
     return (

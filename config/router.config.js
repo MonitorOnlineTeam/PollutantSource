@@ -217,14 +217,17 @@ export default [
             /* 系统管理-意见反馈 */
             { path: '/sysmanage/feedback', component: './Administration/FeedBack' },
             /* 用户基本信息管理-标准库管理 */
-            { path: '/sysmanage/usestandardlibrary/:DGIMN/:PointName', component: './StandardLibrary/UseStandardLibrary' },
+            { path: '/sysmanage/usestandardlibrary/:DGIMN/:PointName/:configId/:targetId/:targetName', component: './StandardLibrary/UseStandardLibrary' },
             /* 用户基本信息管理-停产管理 */
-            { path: '/sysmanage/stopmanagement/:DGIMN/:PointName', component: './StopManagement/Content' },
+            { path: '/sysmanage/stopmanagement/:DGIMN/:PointName/:configId/:targetId/:targetName', component: './StopManagement/Content' },
             /* 用户基本信息管理-视频管理 */
             { path: '/sysmanage/videolists/:pointcode/:pointname', component: './PointInfo/VideoList' },
 
             /* 标准库管理 */
             { path: '/sysmanage/standardlibrary', component: './StandardLibrary' },
+            /* 萤石云视频管理 */
+            { path: '/sysmanage/ysymanager/:configId/:DGIMN', component: './VedioManager/YsyDeviceIndex' },
+            { path: '/sysmanage/ysycameramanager/:DeviceId/', component: './VedioManager/YsyCameraIndex' },
 
             /* 系统管理-AutoForm */
             { path: '/sysmanage/autoformmanager', component: './autoformmanager' },
@@ -236,8 +239,21 @@ export default [
             /* 系统管理-AutoForm详情页面 */
             { path: '/autoformmanager/autoformview/:configId/:keysParams', component: './autoformmanager/autoformview' },
             // /* 系统管理-AutoForm详情页面 */
-            // { path: '/autoformmanager/upload', component: './autoformmanager/upload' },
-
+            { path: '/autoformmanager/test/:configId', component: './autoformmanager/Test' },
+            { path: '/autoformmanager/upload', component: './autoformmanager/Upload' },
+            /* 系统管理-AutoForm-监控目标 */
+            { path: '/sysmanage/monitortarget', component: './autoformmanager/monitortarget' },
+            { path: '/sysmanage/monitortarget/:configId', component: './autoformmanager/monitortarget' },
+            { path: '/sysmanage/monitortarget/monitorpoint/:configId/:targetId/:targetName', component: './autoformmanager/monitorpoint' },
+            /* AutoForm用户管理 */
+             { path: '/sysmanage/userinfoindex/:configId', component: './Userinfo/UserInfoIndex' },
+             { path: '/sysmanage/userinfoadd', component: './Userinfo/UserInfoAdd' },
+             { path: '/sysmanage/userinfoedit/:userid', component: './Userinfo/UserInfoEdit' },
+             { path: '/sysmanage/userinfoview/:userid', component: './Userinfo/UserInfoView' },
+             /* 角色管理 */
+             { path: '/sysmanage/roleindex/', component: './RoleInfo/RoleIndex' },
+             /* 部门管理 */
+             { path: '/sysmanage/departindex/', component: './DepartInfo/DepartIndex' },
             /* 标准库管理-维护 */
             { path: '/sysmanage/standardlibrarydetail/:StandardLibraryID', component: './StandardLibrary/AddStandardLibrary' },
             /* 个人设置-维护 */
@@ -265,6 +281,10 @@ export default [
                     {
                         path: '/account/settings/mypielist',
                         component: './Account/Settings/MyPieList',
+                    },
+                    {
+                        path: '/account/settings/personsettings',
+                        component: './Account/Settings/personsettings',
                     },
                 ],
             },

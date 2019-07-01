@@ -5,25 +5,18 @@
  * @Last Modified by: JianWei
  * @Last Modified time: 2019年5月24日15:28:35
  */
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 
 import {
   Form,
-  Input,
-  Button,
-  Card,
-  Spin, Icon
 } from 'antd';
+import moment from "moment";
 import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
+import { checkRules } from '@/utils/validator';
 import MonitorContent from '../../components/MonitorContent/index';
-import SearchSelect from './SearchSelect';
-import SdlCascader from './SdlCascader';
-import SdlRadio from './SdlRadio';
-import SdlCheckbox from './SdlCheckbox';
-import SdlUpload from './SdlUpload'
-import MapModal from './MapModal';
+import SdlForm from "./SdlForm"
 
 const FormItem = Form.Item;
 
@@ -61,318 +54,122 @@ class AutoFormEdit extends Component {
       },
       inputPlaceholder: "请输入",
       selectPlaceholder: "请选择",
+      configId: props.configId || props.match.params.configId,
+      keysParams: props.keysParams || JSON.parse(props.match.params.keysParams),
+      uid: props.uid || (props.match && props.match.params.uid) || null
     };
-    this.renderFormItem = this.renderFormItem.bind(this);
     this.onSubmitForm = this.onSubmitForm.bind(this);
-    this.openMapModal = this.openMapModal.bind(this);
+    this._renderForm = this._renderForm.bind(this);
   }
 
   componentDidMount() {
-    let { addFormItems, dispatch, match: { params: { configId, keysParams } } } = this.props;
-    // console.log('keys=', JSON.parse(keys))
-    if (!addFormItems || addFormItems.length === 0) {
-      dispatch({
-        type: 'autoForm/getPageConfig',
-        payload: {
-          configId: configId,
-        }
-      });
-    }
-    // 获取数据
+    let { addFormItems, dispatch } = this.props;
+    const { configId, keysParams, uid } = this._SELF_;
+    // // 获取数据
+    // dispatch({
+    //   type: 'autoForm/getFormData',
+    //   payload: {
+    //     configId: configId,
+    //     ...keysParams
+    //   }
+    // });
+  }
+
+  onSubmitForm(formData) {
+    let { form, dispatch, successCallback } = this.props;
+    const { configId, keysParams, uid } = this._SELF_;
+    // // 截取字符串，重新组织主键参数
+    // const keys = keysParams;
+    // let primaryKey = {};
+    // for (let key in keys) {
+    //   primaryKey[key.split('.').pop().toString()] = keys[key];
+    // }
+
+    // form.validateFields((err, values) => {
+    //   if (!err) {
+    //     let FormData = {};
+    //     for (let key in values) {
+    //       if (values[key] && values[key]["fileList"]) {
+    //         // 处理附件列表
+    //         FormData[key] = uid;
+    //       } else if (values[key] && moment.isMoment(values[key])) {
+    //         // 格式化moment对象
+    //         FormData[key] = moment(values[key]).format("YYYY-MM-DD HH:mm:ss")
+    //       } else {
+    //         FormData[key] = values[key] && values[key].toString()
+    //       }
+    //     }
     dispatch({
-      type: 'autoForm/getFormData',
+      type: 'autoForm/saveEdit',
       payload: {
         configId: configId,
-        ...JSON.parse(keysParams)
-      }
-    });
-
-    //console.log("configIdList===",configId);
-  }
-
-  onSubmitForm(e) {
-    e.preventDefault();
-    let { form, dispatch, match: { params: { configId, keysParams } } } = this.props;
-
-    // 截取字符串，重新组织主键参数
-    const keys = JSON.parse(keysParams);
-    let primaryKey = {};
-    for (let key in keys) {
-      primaryKey[key.split('.').pop().toString()] = keys[key];
-    }
-
-    form.validateFields((err, values) => {
-      if (!err) {
-        let FormData = {};
-        for (let key in values) {
-          if (values[key]) {
-            FormData[key] = values[key].toString()
+        FormData: {
+          ...formData
+        },
+        callback: (res) => {
+          if (res.IsSuccess) {
+            successCallback ? successCallback(res) : history.go(-1);
           }
         }
-        dispatch({
-          type: 'autoForm/saveEdit',
-          payload: {
-            configId: configId,
-            FormData: {
-              ...primaryKey,
-              ...FormData,
-            },
-            callback: (res) => {
-              history.go(-1)
-            }
-          }
-        });
       }
     });
+    //   }
+    // });
   }
 
-  // 渲染FormItem
-  renderFormItem() {
-    const { addFormItems, form: { getFieldDecorator }, editFormData, match: { params: { configId, uid } } } = this.props;
-    const { formLayout, inputPlaceholder, selectPlaceholder } = this._SELF_;
-    const formItems = addFormItems[configId] || [];
-    const formData = editFormData[configId] || {};
-    return formItems.map((item) => {
-      let element = '';
-      let { placeholder, validator } = item;
-      const { fieldName, labelText, required } = item;
-      let initialValue = formData[fieldName];
-      // 判断类型
-      switch (item.type) {
-        case "文本框":
-          validator = `${inputPlaceholder}`;
-          placeholder = placeholder || inputPlaceholder;
-
-          element = <Input placeholder={placeholder} allowClear={true} />;
-          break;
-        case '下拉列表框':
-          validator = `${selectPlaceholder}`;
-          placeholder = placeholder || selectPlaceholder;
-          element = (
-            <SearchSelect
-              configId={item.configId}
-              itemName={item.configDataItemName}
-              itemValue={item.configDataItemValue}
-            />
-          );
-          break;
-        case "多选下拉搜索树":
-          initialValue = formData[fieldName] && formData[fieldName].split(',');
-          placeholder = placeholder || selectPlaceholder;
-          element = (
-            <SdlCascader
-              itemName={item.configDataItemName}
-              itemValue={item.configDataItemValue}
-              data={item.value}
-              placeholder={placeholder}
-            />
-          )
-          break;
-        case "单选":
-          element = (
-            <SdlRadio
-              data={item.value}
-              configId={item.configId}
-            />
-          )
-          break;
-        case "多选":
-          element = (
-            <SdlCheckbox
-              data={item.value}
-              configId={item.configId}
-            />
-          )
-          break;
-        case "经度":
-          validator = `${inputPlaceholder}`;
-          placeholder = placeholder || inputPlaceholder;
-
-          element = <Input
-            suffix={<Icon
-              onClick={() => {
-                this.openMapModal({ EditMarker: true })
-                  ;
-              }}
-              type="global"
-              style={{ color: '#2db7f5', cursor: 'pointer' }}
-            />}
-            placeholder={placeholder}
-            allowClear={true}
-          />;
-          break;
-        case "纬度":
-          validator = `${inputPlaceholder}`;
-          placeholder = placeholder || inputPlaceholder;
-
-          element = <Input
-            suffix={<Icon
-              onClick={() => {
-                this.openMapModal({ EditMarker: true })
-                  ;
-              }}
-              type="global"
-              style={{ color: '#2db7f5', cursor: 'pointer' }}
-            />}
-            placeholder={placeholder}
-            allowClear={true}
-          />;
-          break;
-        case "坐标集合":
-          validator = `${inputPlaceholder}`;
-          placeholder = placeholder || inputPlaceholder;
-
-          element = <Input
-            suffix={<Icon
-              onClick={() => {
-                this.openMapModal({ EditPolygon: true, FieldName: fieldName })
-                  ;
-              }}
-              type="global"
-              style={{ color: '#2db7f5', cursor: 'pointer' }}
-            />}
-            placeholder={placeholder}
-            allowClear={true}
-          />;
-          break;
-        case "上传":
-          element = <SdlUpload
-            uid={uid}
-          />
-          break;
-        default:
-
-          break;
-      }
-      if (element) {
-        return (
-          <FormItem key={item.fieldName} {...formLayout} label={labelText}>
-            {getFieldDecorator(`${fieldName}`, {
-              initialValue: initialValue && initialValue + "",
-              rules: [
-                {
-                  required: required,
-                  message: validator + labelText,
-                },
-              ],
-            })(element)}
-          </FormItem>
-
-        );
-      }
-    });
-  }
-
-  openMapModal(obj) {
-    let { form } = this.props;
-    this.setState({
-      MapVisible: true,
-      EditMarker: obj.EditMarker || false,
-      EditPolygon: obj.EditPolygon || false,
-      polygon: form.getFieldValue(obj.FieldName) || [],
-      longitude: form.getFieldValue("Longitude"),
-      latitude: form.getFieldValue("Latitude")
-    });
-  }
-
-  setMapVisible = (flag) => {
-    this.setState({
-      MapVisible: flag
-    });
-  }
-
-  setPoint = (obj) => {
-    let { form: { setFieldsValue } } = this.props;
-    setFieldsValue({ Longitude: obj.Longitude, Latitude: obj.Latitude });
-  }
-
-  setMapPolygon = (obj) => {
-    let { form: { setFieldsValue } } = this.props;
-    setFieldsValue({ Col6: obj });
+  _renderForm() {
+    const { configId, keysParams } = this._SELF_;
+    return <SdlForm
+      configId={configId}
+      onSubmitForm={this.onSubmitForm}
+      form={this.props.form}
+      isEdit={true}
+      keysParams={keysParams}
+    ></SdlForm>
   }
 
   render() {
-    const submitFormLayout = {
-      wrapperCol: {
-        xs: { span: 24, offset: 0 },
-        sm: { span: 10, offset: 7 },
-      },
-    };
-    let { loadingAdd, loadingConfig, dispatch, configId } = this.props;
-    if (loadingAdd || loadingConfig) {
-      return (<Spin
-        style={{
-          width: '100%',
-          height: 'calc(100vh/2)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center'
-        }}
-        size="large"
-      />);
-    }
-    return (
-      <MonitorContent breadCrumbList={
-        [
-          { Name: '首页', Url: '/' },
-          { Name: '系统管理', Url: '' },
-          { Name: 'AutoForm', Url: '/sysmanage/autoformmanager/' + configId },
-          { Name: '编辑', Url: '' }
-        ]
-      }
-      >
-        <Card bordered={false}>
-          <Form onSubmit={this.onSubmitForm} hideRequiredMark={false} style={{ marginTop: 8 }}>
-            {
-              this.renderFormItem()
-            }
+    const { dispatch, breadcrumb } = this.props;
+    const { configId } = this._SELF_;
 
-            <FormItem {...submitFormLayout} style={{ marginTop: 32 }}>
-              <Button type="primary" htmlType="submit">
-                保存
-                            </Button>
-              <Button
-                style={{ marginLeft: 8 }}
-                onClick={() => {
-                  history.go(-1)
-                  // dispatch(routerRedux.push(`/sysmanage/autoformmanager`));
-                }}
-              >
-                返回
-                            </Button>
-            </FormItem>
-          </Form>
-        </Card>
+    return (
+      <Fragment>
         {
-          <MapModal
-            setMapVisible={this.setMapVisible}
-            MapVisible={this.state.MapVisible}
-            setPoint={this.setPoint}
-            setMapPolygon={this.setMapPolygon}
-            polygon={this.state.polygon}
-            longitude={this.state.longitude}
-            latitude={this.state.latitude}
-            EditMarker={this.state.EditMarker}
-            EditPolygon={this.state.EditPolygon}
-          />
+          breadcrumb ?
+            <MonitorContent breadCrumbList={
+              [
+                { Name: '首页', Url: '/' },
+                { Name: '系统管理', Url: '' },
+                { Name: 'AutoForm', Url: '/sysmanage/autoformmanager/' + configId },
+                { Name: '编辑', Url: '' }
+              ]
+            }
+            >
+              {this._renderForm()}
+            </MonitorContent> :
+            <Fragment>
+              {this._renderForm()}
+            </Fragment>
         }
-      </MonitorContent>
+      </Fragment>
     );
   }
 }
 
 
 AutoFormEdit.propTypes = {
-  // placeholder
-  placeholder: PropTypes.string,
-  // mode
-  mode: PropTypes.string,
+  // 请求成功回调
+  successCallback: PropTypes.func,
+  // 是否显示面包屑
+  breadcrumb: PropTypes.bool,
   // configId
   configId: PropTypes.string.isRequired,
-  // itemName
-  itemName: PropTypes.string.isRequired,
-  // itemValue
-  itemValue: PropTypes.string.isRequired,
+  // 主键对象
+  keysParams: PropTypes.object.isRequired,
 };
+
+AutoFormEdit.defaultProps = {
+  breadcrumb: true
+}
 
 export default AutoFormEdit;

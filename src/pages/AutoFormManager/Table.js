@@ -7,7 +7,9 @@ import {
   Col,
   Table,
   Form,
-  Select, Modal, Tag, Divider, Dropdown, Icon, Menu, Popconfirm, message
+  Badge,
+  Progress,
+  Select, Modal, Tag, Divider, Dropdown, Icon, Menu, Popconfirm, message, Upload
 } from 'antd';
 import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
@@ -33,22 +35,26 @@ class SdlTable extends PureComponent {
       selectedRowKeys: [],
       delPostData: {},
     };
-    this._SELF_ = { btnEl: [], configId: props.configId };
+    this._SELF_ = { btnEl: [], configId: props.configId, moreBtns: [] };
 
     this.loadDataSource = this.loadDataSource.bind(this);
     this.onTableChange = this.onTableChange.bind(this);
     this._renderHandleButtons = this._renderHandleButtons.bind(this);
+    this._handleTableChange = this._handleTableChange.bind(this);
+    this.moreClick = this.moreClick.bind(this);
   }
 
   componentDidMount() {
     this.loadDataSource();
   }
 
-  loadDataSource() {
+  loadDataSource(params) {
     this.props.dispatch({
       type: 'autoForm/getAutoFormData',
       payload: {
-        configId: this.props.configId
+        configId: this.props.configId,
+        searchParams: this.props.searchParams,
+        otherParams: params
       }
     });
   }
@@ -81,15 +87,39 @@ class SdlTable extends PureComponent {
       postData[item] = selectedRows.map(row => row[[item]]).toString()
       // }
     })
-    this.setState({ selectedRowKeys, delPostData: postData });
-
-
+    this.setState({ selectedRowKeys, selectedRows, delPostData: postData });
+    this.props.rowChange && this.props.rowChange(selectedRowKeys, selectedRows)
   };
 
+  handleOk = e => {
+    this.setState({
+      visible: false,
+    });
+  };
+
+  handleCancel = e => {
+    this.setState({
+      visible: false,
+    });
+  };
+
+  _handleTableChange(pagination, filters, sorter) {
+    console.log('sorter=', sorter)
+    if (sorter.order) {
+      let sorterObj = {
+        IsAsc: sorter.order === "ascend",
+        SortFileds: sorter.field
+      };
+      // sorterObj.IsAsc = sorter.order === "ascend"
+      // sorterObj.SortFileds = sorter.field;
+      this.loadDataSource(sorterObj);
+    }
+  }
+
   _renderHandleButtons() {
-    const { opreationButtons, columns, keys, dispatch } = this.props;
-    this._SELF_.btnEl = [];
-    const { btnEl, configId } = this._SELF_;
+    const { opreationButtons, keys, dispatch } = this.props;
+    this._SELF_.btnEl = []; this._SELF_.moreBtns = [];
+    const { btnEl, configId, moreBtns } = this._SELF_;
     return opreationButtons[configId] ? opreationButtons[configId].map(btn => {
       switch (btn.DISPLAYBUTTON) {
         case "add":
@@ -98,11 +128,10 @@ class SdlTable extends PureComponent {
             icon="plus"
             type="primary"
             onClick={() => {
-              dispatch(routerRedux.push(`/AutoFormManager/AutoFormAdd/${configId}`));
+              this.props.onAdd ? this.props.onAdd() : dispatch(routerRedux.push(`/AutoFormManager/AutoFormAdd/${configId}`));
             }}
           >添加
                   </Button>;
-          break;
         case "alldel":
           return <Button
             disabled={this.state.selectedRowKeys.length <= 0}
@@ -127,10 +156,43 @@ class SdlTable extends PureComponent {
             }}
           >批量删除
                          </Button>;
-          break;
         case "print":
-          return <Button icon="printer" key={btn.DISPLAYBUTTON} type="primary">打印</Button>;
+          moreBtns.push({ type: "printer", text: "打印" })
           break;
+        // return <Button icon="printer" key={btn.DISPLAYBUTTON} type="primary">打印</Button>;
+        case "exp":
+          moreBtns.push({ type: "export", text: "导出" })
+          break;
+        //   return <Button
+        //     icon="export"
+        //     key={btn.DISPLAYBUTTON}
+        //     type="primary"
+        //     onClick={() => {
+        //       dispatch({
+        //         type: 'autoForm/exportDataExcel',
+        //         payload: {
+        //           configId
+        //         }
+        //       })
+        //     }}
+        //   >
+        //     导出
+        // </Button>;
+        case "imp":
+          moreBtns.push({ type: "import", text: "导入" })
+          break;
+        //   return <Button
+        //     icon="import"
+        //     key={btn.DISPLAYBUTTON}
+        //     type="primary"
+        //     onClick={() => {
+        //       this.setState({
+        //         visible: true,
+        //       })
+        //     }}
+        //   >
+        //     导入
+        // </Button>;
         case "edit":
           btnEl.push({
             type: 'edit'
@@ -152,6 +214,35 @@ class SdlTable extends PureComponent {
     }) : null;
   }
 
+  // 更多按钮点击
+  moreClick(e) {
+    const { dispatch } = this.props;
+    const { configId } = this._SELF_;
+    switch (e.key) {
+      // 打印
+      case 'printer':
+
+        break;
+      // 导入
+      case 'import':
+        this.setState({
+          visible: true,
+        })
+        break;
+      // 导出
+      case 'export':
+        dispatch({
+          type: 'autoForm/exportDataExcel',
+          payload: {
+            configId
+          }
+        })
+        break;
+      default:
+        break;
+    }
+  }
+
   render() {
     const { loading, selectedRowKeys } = this.state;
     const { tableInfo, searchForm, keys, dispatch, configId } = this.props;
@@ -159,7 +250,7 @@ class SdlTable extends PureComponent {
     const { pageSize = 10, current = 1, total = 0 } = searchForm[configId] || {}
 
     // 计算长度
-    let _columns = columns.map(col => {
+    let _columns = (columns || []).map(col => {
       if (col.title === "文件") {
         return {
           ...col,
@@ -184,15 +275,38 @@ class SdlTable extends PureComponent {
           }
         }
       }
-      return col.width ? { width: DEFAULT_WIDTH, ...col } : { ...col, width: DEFAULT_WIDTH }
+      return {
+        ...col,
+        width: col.width || DEFAULT_WIDTH,
+        render: (text, record) => {
+          const type = col.formatType;
+          return text && <div>
+            {type === "超链接" && <a>{type}</a>}
+            {type == "小圆点" && <Badge status="warning" text={text} />}
+            {type === "标签" && <Tag>{text}</Tag>}
+            {type === "进度条" && <Progress percent={text} />}
+            {!type && text}
+          </div>
+        }
+      }
+      // return col.width ? { width: DEFAULT_WIDTH, ...col } : { ...col, width: DEFAULT_WIDTH }
     });
 
     const buttonsView = this._renderHandleButtons();
-    if (this._SELF_.btnEl.length) {
+    // let rowKey = [];
+    // if(this.props.children instanceof Array){
+    //   rowKey = this.props.children.filter(item=>item.key === "row");
+    // } else if(this.props.children instanceof Object){
+    //   rowKey = this.props.children.key === "row" && [this.props.children];
+    // }
+    // const showHandle = rowKey.length;
+    // console.log("showHandle=",showHandle)
+    if (this._SELF_.btnEl.length || this.props.appendHandleRows) {
       _columns.push({
         align: "center",
         title: "操作",
         width: 200,
+        fixed: 'right',
         render: (text, record) => (
           <div>
             {
@@ -269,6 +383,17 @@ class SdlTable extends PureComponent {
                 }
               })
             }
+            {/* {
+              React.Children.map(this.props.children, (child, i) => {
+                // if (child.props["data-position"] === "row") {
+                if (child.key === "row") {
+                  return child
+                }
+              })
+            } */}
+            {
+              this.props.appendHandleRows && this.props.appendHandleRows(record)
+            }
           </div>
         )
       });
@@ -283,14 +408,60 @@ class SdlTable extends PureComponent {
     };
     const dataSource = tableInfo[configId] ? tableInfo[configId].dataSource : [];
     // const dataSource = _tabelInfo.dataSource
+
+    const props = {
+      name: 'file',
+      multiple: true,
+      action: 'http://172.16.9.52:8095/rest/PollutantSourceApi/AutoFormDataApi/ImportDataExcel',
+      data: {
+        ConfigID: configId,
+      }
+      // onChange(info) {
+      //   const status = info.file.status;
+      //   if (status !== 'uploading') {
+      //     console.log(info.file, info.fileList);
+      //   }
+      //   if (status === 'done') {
+      //     message.success(`${info.file.name} file uploaded successfully.`);
+      //   } else if (status === 'error') {
+      //     message.error(`${info.file.name} file upload failed.`);
+      //   }
+      // },
+    };
     return (
       <Fragment>
         <Row className={styles.buttonWrapper}>
+          {buttonsView}
+          {this.props.appendHandleButtons && this.props.appendHandleButtons(this.state.selectedRowKeys, this.state.selectedRows)}
           {
-            buttonsView
+            // 更多操作
+            this._SELF_.moreBtns.length ? <Dropdown overlay={() => {
+              return <Menu onClick={this.moreClick}>
+                {
+                  this._SELF_.moreBtns.map(item => {
+                    return <Menu.Item key={item.type}>
+                      <Icon type={item.type} />
+                      {item.text}
+                    </Menu.Item>
+                  })
+                }
+              </Menu>
+            }}>
+              <Button>
+                更多操作 <Icon type="down" />
+              </Button>
+            </Dropdown> : null
           }
+          {/* {
+            React.Children.map(this.props.children, (child, i) => {
+              // if (child.props["data-position"] === "top") {
+              if (child.key === "top") {
+                return child
+              }
+            })
+          } */}
+
         </Row>
-        {/* [record["dbo.T_Bas_CommonPoint.PointCode"], record["dbo.T_Bas_CommonPoint.PointName"]] */}
         <Table
           rowKey={(record, index) => index}
           size="middle"
@@ -308,6 +479,7 @@ class SdlTable extends PureComponent {
               }
             }
           }
+          onChange={this._handleTableChange}
           rowSelection={rowSelection}
           pagination={{
             showSizeChanger: true,
@@ -322,6 +494,31 @@ class SdlTable extends PureComponent {
           {...this.props}
           columns={_columns}
         />
+        <Modal
+          title="导入"
+          visible={this.state.visible}
+          onOk={this.handleOk}
+          onCancel={this.handleCancel}
+        >
+          <Row>
+            <Col span={18}>
+              <Upload {...props}>
+                <Button>
+                  <Icon type="upload" /> 请选择文件
+                </Button>
+              </Upload>
+            </Col>
+            <Col span={6} style={{ marginTop: 6 }}>
+              <a onClick={() => {
+                dispatch({
+                  type: 'autoForm/exportTemplet',
+                  payload: {
+                    configId
+                  }
+                })
+              }}>下载导入模板</a></Col>
+          </Row>
+        </Modal>
       </Fragment>
     );
   }

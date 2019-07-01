@@ -25,7 +25,7 @@ class SdlUpload extends Component {
 
   componentDidMount() {
     const { dispatch, uid } = this.props;
-    dispatch({
+    uid && dispatch({
       type: "autoForm/getAttachmentList",
       payload: {
         FileUuid: uid

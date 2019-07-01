@@ -13,15 +13,13 @@ import { async } from 'q';
  * 【AutoForm】系统登录
  * @params {"UserAccount": "system","UserPwd": "system","RememberMe": true}
  */
-export async function systemLogin() {
-    const params = {
-        UserAccount: "system",
-        UserPwd: "system",
-    };
+export async function systemLogin(params) {
     const defaults = {
-        RememberMe: true
+        RememberMe: true,
+        UserAccount: params.userName,
+        UserPwd: params.password,
     };
-    const body = Object.assign(defaults, params);
+    const body = Object.assign(defaults);
     const result = await postNew('/api/rest/PollutantSourceApi/LoginApi/Login', body);
     if (result.IsSuccess && result.Datas) {
         Cookie.set('ssoToken', result.Datas.Ticket);
@@ -177,5 +175,23 @@ export async function getRegions(params) {
  */
 export async function getAttachmentList(params) {
     const result = await postNew('/api/rest/PollutantSourceApi/UploadApi/GetAttachmentList', params, null);
+    return result;
+}
+
+/**
+ * 【AutoForm】导出
+ * @params {"configId": "String"}
+ */
+export async function exportDataExcel(params) {
+    const result = await postNew('/api/rest/PollutantSourceApi/AutoFormDataApi/ExportDataExcel', params, null);
+    return result;
+}
+
+/**
+ * 【AutoForm】下载导入模板
+ * @params {"configId": "String"}
+ */
+export async function exportTemplet(params) {
+    const result = await postNew('/api/rest/PollutantSourceApi/AutoFormDataApi/ExportTemplet', params, null);
     return result;
 }
