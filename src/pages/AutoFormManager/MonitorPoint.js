@@ -145,7 +145,7 @@ export default class MonitorPoint extends Component {
         }
     }
 
-    onMenu = (key, id, name) => {
+    onMenu = (key, id, name,code) => {
         const { match: { params: { configId, targetId, targetName } } } = this.props;
         //match.params
         switch (key) {
@@ -157,7 +157,7 @@ export default class MonitorPoint extends Component {
                 this.props.dispatch(routerRedux.push(`/sysmanage/stopmanagement/${id}/${name}/${configId}/${targetId}/${targetName}`));
                 break;
             case '3':
-                this.props.dispatch(routerRedux.push(`/sysmanage/videolists/${id}/${name}`));
+                this.props.dispatch(routerRedux.push(`/sysmanage/ysymanager/${name}/${code}/${targetId}/${targetName}`));
                 break;
             case '4':
                 this.props.dispatch(routerRedux.push(`/pointdetail/${id}/pointinfo`));
@@ -289,9 +289,9 @@ export default class MonitorPoint extends Component {
                 size="large"
             />);
         }
-        const menu = (id, name) => (
+        const menu = (id, name,code) => (
             <Menu onClick={(e) => {
-                this.onMenu.bind()(e.key, id, name);
+                this.onMenu.bind()(e.key, id, name,code);
             }}>
                 <Menu.Item key="1"><Icon type="bars" />监测标准</Menu.Item>
                 <Menu.Item key="2"><Icon type="tool" />停产管理</Menu.Item>
@@ -352,7 +352,7 @@ export default class MonitorPoint extends Component {
                                     </Popconfirm>
                                     <Divider type="vertical" />
 
-                                    <Dropdown overlay={menu(row['dbo.T_Bas_CommonPoint.DGIMN'], row['dbo.T_Bas_CommonPoint.PointName'])} >
+                                    <Dropdown overlay={menu(row['dbo.T_Bas_CommonPoint.DGIMN'], row['dbo.T_Bas_CommonPoint.PointName'],row["dbo.T_Bas_CommonPoint.PointCode"])} >
                                         <a>
                                             更多
                                         </a>

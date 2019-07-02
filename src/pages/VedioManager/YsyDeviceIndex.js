@@ -80,7 +80,7 @@ class YsyDeviceIndex extends Component {
                                ...FormData,
                                VedioDevice_ID:1,
                            },
-                           PointCode:"0EB9F198-A195-48F3-B476-AE0B9EA8FFDD",
+                           PointCode:this.props.match.params.Pointcode,
                            callback: (result) => {
                                this.setState({
                                    visible: false,
@@ -96,7 +96,7 @@ class YsyDeviceIndex extends Component {
            const{dispatch,loading,match}=this.props;
            const pointDataWhere= [{
                Key: "[dbo]__[T_Bas_CameraMonitor]__BusinessCode",
-               Value: "0EB9F198-A195-48F3-B476-AE0B9EA8FFDD",
+               Value: match.params.Pointcode,
                Where: "$="
            }];
            if (loading) {
@@ -116,12 +116,14 @@ class YsyDeviceIndex extends Component {
                    [
                        { Name: '首页', Url: '/' },
                        { Name: '系统管理', Url: '' },
-                       { Name: '萤石云视频管理', Url: '' }
+                       { Name: '企业管理', Url: '/sysmanage/monitortarget/AEnterpriseTest' },
+                       { Name: '排口管理', Url: `/sysmanage/monitortarget/monitorpoint/AEnterpriseTest/${match.params.EntCode}/${match.params.EntName}` },
+                       { Name: '视频管理', Url: '' },
                    ]
                }
                >
                    <div className={styles.cardTitle}>
-                       <Card title="测试排口-摄像头管理">
+                       <Card title={`${match.params.Pointname}-视频管理`}>
                            <SearchWrapper
                                configId="VideoCamera"
                            />

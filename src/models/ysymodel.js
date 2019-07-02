@@ -54,12 +54,19 @@ export default Model.extend({
             const result = yield call(AddCameraMonitor, {
                 ...payload
             });
+            const pointDataWhere = [{
+                Key: "[dbo]__[T_Bas_CameraMonitor]__BusinessCode",
+                Value: payload.PointCode,
+                Where: "$="
+            }];
+
             if(result.requstresult==='1') {
                 message.success('添加成功！');
                 yield put({
                     type: 'autoForm/getAutoFormData',
                     payload: {
-                        configId: "CameraMonitor"
+                        configId: "CameraMonitor",
+                        searchParams: pointDataWhere
                     }
                 });
             }
