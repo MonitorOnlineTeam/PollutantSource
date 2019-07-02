@@ -104,7 +104,10 @@ export async function editLoginInfo(params) {
         LoginMainTitle: params.LoginMainTitle,
         LoginSubtitle: params.LoginSubtitle,
         LoginFooterMessages: params.LoginFooterMessages,
-        PollutantTypes: params.PollutantTypes
+        PollutantTypes: params.PollutantTypes,
+        AppKey: params.AppKey,
+        Secret: params.Secret,
+        VideoServer: params.VideoServer,
     };
     const result = authorpost('/api/rest/PollutantSourceApi/SystemSettingApi/editLoginInfo?authorCode=48f3889c-af8d-401f-ada2-c383031af92d', body, null);
     return result === null ? {

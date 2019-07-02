@@ -31,7 +31,8 @@ class YsyDeviceIndex extends Component {
         super(props);
 
         this.state = {
-            visible: false
+            visible: false,
+            FormDatas: {},
         };
 
     }
@@ -48,7 +49,7 @@ class YsyDeviceIndex extends Component {
         dispatch({
             type: 'autoForm/getPageConfig',
             payload: {
-                configId: 'VideoDevice1',
+                configId: 'VideoCamera',
             }
         });
     }
@@ -60,16 +61,7 @@ class YsyDeviceIndex extends Component {
        };
 
        handleOk = e => {
-           this.setState({
-               visible: false,
-           });
-       };
-
-       onSubmitForm() {
-           const {
-               dispatch,
-               form
-           } = this.props;
+           const { dispatch, form } = this.props;
            form.validateFields((err, values) => {
                if (!err) {
                    let FormData = {};
@@ -80,18 +72,31 @@ class YsyDeviceIndex extends Component {
                            FormData[key] = values[key] && values[key].toString();
                        }
                    }
-                   this.setState({
-                       FormDatas: FormData
+                   dispatch({
+                       type: 'ysymodel/AddDevice',
+                       payload: {
+                           configId: "VideoCamera",
+                           FormData: {
+                               ...FormData,
+                               VedioDevice_ID:1,
+                           },
+                           PointCode:this.props.match.params.Pointcode,
+                           callback: (result) => {
+                               this.setState({
+                                   visible: false,
+                               });
+                           }
+                       }
                    });
                }
            });
-       }
+       };
 
        render() {
            const{dispatch,loading,match}=this.props;
            const pointDataWhere= [{
                Key: "[dbo]__[T_Bas_CameraMonitor]__BusinessCode",
-               Value: "0EB9F198-A195-48F3-B476-AE0B9EA8FFDD",
+               Value: match.params.Pointcode,
                Where: "$="
            }];
            if (loading) {
@@ -111,15 +116,16 @@ class YsyDeviceIndex extends Component {
                    [
                        { Name: '首页', Url: '/' },
                        { Name: '系统管理', Url: '' },
-                       { Name: '萤石云视频管理', Url: '' }
+                       { Name: '企业管理', Url: '/sysmanage/monitortarget/AEnterpriseTest' },
+                       { Name: '排口管理', Url: `/sysmanage/monitortarget/monitorpoint/AEnterpriseTest/${match.params.EntCode}/${match.params.EntName}` },
+                       { Name: '视频管理', Url: '' },
                    ]
                }
                >
                    <div className={styles.cardTitle}>
-                       <Card title="测试排口-硬盘机管理">
+                       <Card title={`${match.params.Pointname}-视频管理`}>
                            <SearchWrapper
-                               onSubmitForm={(form) => this.loadReportList(form)}
-                               configId="CameraMonitor"
+                               configId="VideoCamera"
                            />
                            <SdlTable
                                style={{ marginTop: 10 }}
@@ -133,20 +139,10 @@ class YsyDeviceIndex extends Component {
                                onAdd={() => {
                                    this.showModal();
                                }}
-                               appendHandleRows={row =>
-                                   <Fragment>
-                                       <Divider type="vertical" />
-                                       <a onClick={() => {
-                                           dispatch(routerRedux.push(`/sysmanage/ysycameramanager/${ row["dbo.T_Bas_VideoDevice.VedioDevice_ID"]}`));
-                                       }}
-                                       >添加摄像头
-                                       </a>
-                                   </Fragment>
-                               }
                            />
                        </Card>
                        <Modal
-                           title="硬盘机管理"
+                           title="摄像头管理"
                            visible={this.state.visible}
                            destroyOnClose={true}// 清除上次数据
                            onOk={this.handleOk}
@@ -160,12 +156,11 @@ class YsyDeviceIndex extends Component {
                            width="50%"
                        >
                            <SdlForm
-                               configId="VideoDevice1"
+                               configId="VideoCamera"
                                form={this.props.form}
                                noLoad={true}
-                           >
-                        1
-                           </SdlForm>
+                               hideBtns={true}
+                           />
                        </Modal>
                    </div>
                </MonitorContent>

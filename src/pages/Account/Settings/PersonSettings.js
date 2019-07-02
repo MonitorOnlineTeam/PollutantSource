@@ -8,7 +8,7 @@ import {
     Col,
     Card,
     Radio,
-    Avatar,
+    Switch,
     Select,
     message,
     Divider
@@ -19,7 +19,7 @@ import { ceshi } from '../../../config';
 
 const FormItem = Form.Item;
 const RadioGroup = Radio.Group;
-const Option = Select.Option;
+const {Option} = Select;
 @connect(({
     loading,
     login,
@@ -35,7 +35,7 @@ class PersonSettings extends Component {
         super(props);
         this.state = {
             user_id: null,
-
+            display: this.props.getLoginInfoList != null ? this.props.getLoginInfoList.VideoServer==='1'? "block":"none":"none",
         };
     }
 
@@ -46,6 +46,7 @@ class PersonSettings extends Component {
             type: 'login/getPollutantTypes',
         });
     }
+
     //获取下拉污染物类型数据
     SelectOptions = () => {
         const { pollutantTypeList } = this.props;
@@ -58,11 +59,17 @@ class PersonSettings extends Component {
         return rtnVal;
     }
 
+    onChange=(bool)=>{
+        this.setState({
+            display:bool?"block":"none",
+        });
+    }
+
     handleSubmit = (e) => {
         e.preventDefault();
         const that = this;
         this.props.form.validateFieldsAndScroll((err, values) => {
-            debugger
+            debugger;
             if (!err) {
                 that.props.dispatch({
                     type: 'login/editLoginInfo',
@@ -73,6 +80,9 @@ class PersonSettings extends Component {
                         LoginSubtitle: values.LoginSubtitle,
                         LoginFooterMessages: values.LoginFooterMessages,
                         PollutantTypes: values.PollutantTypes,
+                        AppKey: values.AppKey,
+                        Secret: values.Secret,
+                        VideoServer: values.VideoServer?"1":"0",
                         callback: (requstresult) => {
                             if (requstresult === '1') {
                                 message.success('更新成功！');
@@ -102,6 +112,9 @@ class PersonSettings extends Component {
             LoginSubtitle,
             LoginFooterMessages,
             pTypeList,
+            AppKey,
+            Secret,
+            VideoServer
         } = getLoginInfoList === null ? {} : getLoginInfoList;
         //表单布局
         const formItemLayout = {
@@ -120,41 +133,44 @@ class PersonSettings extends Component {
                     <Form onSubmit={this.handleSubmit}>
                         <Row>
                             <Col span={12}>
-                                <FormItem  {...formItemLayout}
+                                <FormItem
+                                    {...formItemLayout}
                                     label="地址栏Logo"
                                 > {
                                         getFieldDecorator('favicon', {
                                             initialValue: favicon ? parseInt(favicon) : 0,
                                         })
-                                            (
-                                                <RadioGroup  >
-                                                    <Radio value={0}>隐藏</Radio>
-                                                    <Radio value={1}>显示</Radio>
-                                                </RadioGroup>
-                                            )
+                                        (
+                                            <RadioGroup>
+                                                <Radio value={0}>隐藏</Radio>
+                                                <Radio value={1}>显示</Radio>
+                                            </RadioGroup>
+                                        )
                                     }
                                 </FormItem>
                             </Col>
                             <Col span={12}>
-                                <FormItem  {...formItemLayout}
+                                <FormItem
+                                    {...formItemLayout}
                                     label="登陆界面Logo"
                                 > {
                                         getFieldDecorator('LoginLogo', {
                                             initialValue: LoginLogo ? parseInt(LoginLogo) : 0,
                                         })
-                                            (
-                                                <RadioGroup  >
-                                                    <Radio value={0}>隐藏</Radio>
-                                                    <Radio value={1}>显示</Radio>
-                                                </RadioGroup>
-                                            )
+                                        (
+                                            <RadioGroup>
+                                                <Radio value={0}>隐藏</Radio>
+                                                <Radio value={1}>显示</Radio>
+                                            </RadioGroup>
+                                        )
                                     }
                                 </FormItem>
                             </Col>
                         </Row>
                         <Row>
                             <Col span={12}>
-                                <FormItem  {...formItemLayout}
+                                <FormItem
+                                    {...formItemLayout}
                                     label="登陆界面主标题"
                                 >
                                     {getFieldDecorator('LoginMainTitle',
@@ -162,11 +178,12 @@ class PersonSettings extends Component {
                                             initialValue: LoginMainTitle,
                                         })(
                                             <Input placeholder="主标题" />
-                                        )}
+                                    )}
                                 </FormItem>
                             </Col>
                             <Col span={12}>
-                                <FormItem  {...formItemLayout}
+                                <FormItem
+                                    {...formItemLayout}
                                     label="登陆界面副标题"
                                 >
                                     {getFieldDecorator('LoginSubtitle',
@@ -174,13 +191,14 @@ class PersonSettings extends Component {
                                             initialValue: LoginSubtitle,
                                         })(
                                             <Input placeholder="副标题" />
-                                        )}
+                                    )}
                                 </FormItem>
                             </Col>
                         </Row>
                         <Row>
                             <Col span={12}>
-                                <FormItem  {...formItemLayout}
+                                <FormItem
+                                    {...formItemLayout}
                                     label="登陆底部说明"
                                 >
                                     {getFieldDecorator('LoginFooterMessages',
@@ -188,11 +206,12 @@ class PersonSettings extends Component {
                                             initialValue: LoginFooterMessages,
                                         })(
                                             <Input placeholder="说明" />
-                                        )}
+                                    )}
                                 </FormItem>
                             </Col>
                             <Col span={12}>
-                                <FormItem  {...formItemLayout}
+                                <FormItem
+                                    {...formItemLayout}
                                     label="污染物类型配置"
                                 >
                                     {getFieldDecorator('PollutantTypes',
@@ -200,15 +219,65 @@ class PersonSettings extends Component {
                                             initialValue: pTypeList,
                                         })(
                                             <Select
-                                                loading={pollutantTypeloading}
-                                                mode="multiple"
-                                                placeholder="污染物类型"
-                                                filterOption={true}
-                                            // onChange={this.SelectHandleChange}
-                                            >
-                                                {this.SelectOptions()}
-                                            </Select>
-                                        )}
+                                            loading={pollutantTypeloading}
+                                            mode="multiple"
+                                            placeholder="污染物类型"
+                                            filterOption={true}
+                                        >
+                                            {this.SelectOptions()}
+                                        </Select>
+                                    )}
+                                </FormItem>
+                            </Col>
+                        </Row>
+                        <Row style={{display:this.state.display}}>
+                            <Col span={12}>
+                                <FormItem
+                                    {...formItemLayout}
+                                    label="萤石云AppKey"
+                                >
+                                    {getFieldDecorator('AppKey',
+                                        {
+                                            initialValue: AppKey,
+                                        })(
+                                            <Input placeholder="萤石云AppKey" />
+                                    )}
+                                </FormItem>
+                            </Col>
+                            <Col span={12}>
+                                <FormItem
+                                    {...formItemLayout}
+                                    label="萤石云Secret"
+                                >
+                                    {getFieldDecorator('Secret',
+                                        {
+                                            initialValue: Secret,
+                                        })(
+                                        <Input placeholder="萤石云Secret" />
+                                    )}
+                                </FormItem>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col span={12}>
+                                <FormItem
+                                    {...formItemLayout}
+                                    label="视频服务商"
+                                >
+                                    {getFieldDecorator('VideoServer',
+                                        {
+                                            initialValue: VideoServer==="1",
+                                            valuePropName: 'checked',
+                                        })(
+                                        <Switch
+                                                checkedChildren="萤石云"
+                                                unCheckedChildren="海康威视"
+                                                onChange={
+                                                this.onChange
+                                            }
+                                            />
+                                    )}
+
                                 </FormItem>
                             </Col>
                         </Row>
@@ -217,7 +286,7 @@ class PersonSettings extends Component {
                                 type="primary"
                                 htmlType="submit"
                             >保存个人设置
-                           </Button>
+                            </Button>
                         </Divider>
 
                     </Form>

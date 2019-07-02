@@ -59,7 +59,8 @@ export default [
             {
                 path: '/pointdetail/:pointcode/:viewtype', component: './PointDetail', routes: [
                     /* 默认 */
-                    { path: '/pointdetail/:pointcode/:viewtype', redirect: '/pointdetail/:pointcode/:viewtype/processflowdiagram' },
+                    { path: '/pointdetail/:pointcode/:viewtype', redirect: '/pointdetail/:pointcode/:viewtype/dataquery' },
+                    // { path: '/pointdetail/:pointcode/:viewtype', redirect: '/pointdetail/:pointcode/:viewtype/processflowdiagram' },
                     /* 工艺流程图 */
                     { path: '/pointdetail/:pointcode/:viewtype/processflowdiagram', component: './PointDetail/ProcessFlowDiagram' },
                     /* 数据查询 */
@@ -225,7 +226,7 @@ export default [
             /* 标准库管理 */
             { path: '/sysmanage/standardlibrary', component: './StandardLibrary' },
             /* 萤石云视频管理 */
-            { path: '/sysmanage/ysymanager/:configId/:DGIMN', component: './VedioManager/YsyDeviceIndex' },
+            { path: '/sysmanage/ysymanager/:Pointname/:Pointcode/:EntCode/:EntName', component: './VedioManager/YsyDeviceIndex' },
             { path: '/sysmanage/ysycameramanager/:DeviceId/', component: './VedioManager/YsyCameraIndex' },
 
             /* 系统管理-AutoForm */
