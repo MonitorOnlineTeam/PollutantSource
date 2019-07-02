@@ -9,7 +9,8 @@ import {
     Tree,
     Input,
     Form,
-    message
+    message,
+    Spin,
 } from 'antd';
 import { connect } from 'dva';
 import router from 'umi/router';
@@ -31,6 +32,8 @@ const { TreeNode } = Tree;
 
 
 @connect(({ userinfo, loading }) => ({
+    treeDataLoading: loading.effects['userinfo/getdepartmenttree'],
+    RolesTreeDataLoading: loading.effects['userinfo/getrolestree'],
     treeData: userinfo.DepartTree,
     RolesTreeData: userinfo.RolesTree
 }))
@@ -203,7 +206,7 @@ export default class UserInfoAdd extends Component {
                 breadCrumbList={
                     [
                         { Name: '首页', Url: '/' },
-                        { Name: '用户管理', Url: '' },
+                        { Name: '用户管理', Url: '/sysmanage/userinfoindex/UserInfo' },
                         { Name: '添加用户', Url: '' },
                     ]
                 }
@@ -291,21 +294,35 @@ export default class UserInfoAdd extends Component {
 
                                 </Card>
                                 <Card bordered={false} title="角色设置" style={{ height: 'calc(100vh - 160px)', display: this.state.rolesState }}>
-                                    <Tree
-                                        checkable
-                                        // checkStrictly={false}
-                                        onExpand={this.onExpand}
-                                        // expandedKeys={this.state.expandedKeys}
-                                        autoExpandParent={this.state.autoExpandParent}
-                                        onCheck={this.onCheck}
-                                        checkedKeys={this.state.checkedKey}
-                                        onSelect={this.onSelect}
-                                        selectedKeys={this.state.selectedKey}
-                                        // autoExpandParent={true}
-                                        defaultExpandAll={true}
-                                    >
-                                        {this.renderTreeNodes(this.props.RolesTreeData)}
-                                    </Tree>
+                                    {
+                                        this.props.RolesTreeDataLoading ? <Spin
+                                            style={{
+                                                width: '100%',
+                                                height: 'calc(100vh/2)',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center'
+                                            }}
+                                            size="large"
+                                        /> :
+
+                                            <Tree
+                                                checkable
+                                                // checkStrictly={false}
+                                                onExpand={this.onExpand}
+                                                // expandedKeys={this.state.expandedKeys}
+                                                autoExpandParent={this.state.autoExpandParent}
+                                                onCheck={this.onCheck}
+                                                checkedKeys={this.state.checkedKey}
+                                                onSelect={this.onSelect}
+                                                selectedKeys={this.state.selectedKey}
+                                                // autoExpandParent={true}
+                                                defaultExpandAll={true}
+                                            >
+                                                {this.renderTreeNodes(this.props.RolesTreeData)}
+                                            </Tree>
+                                    }
+
                                     <Divider orientation="right" style={{ border: '1px dashed #FFFFFF' }}>
                                         <Button
                                             type="primary"
@@ -322,20 +339,33 @@ export default class UserInfoAdd extends Component {
                                     </Divider>
                                 </Card>
                                 <Card bordered={false} title="部门设置" style={{ height: 'calc(100vh - 160px)', display: this.state.departState }}>
-                                    <Tree
-                                        checkable
-                                        onExpand={this.onExpand}
-                                        // expandedKeys={this.state.expandedKeys}
-                                        autoExpandParent={this.state.autoExpandParent}
-                                        onCheck={this.onChecks}
-                                        checkedKeys={this.state.checkedKeys}
-                                        onSelect={this.onSelects}
-                                        selectedKeys={this.state.selectedKeys}
-                                        autoExpandParent={true}
-                                        defaultExpandAll={true}
-                                    >
-                                        {this.renderTreeNodes(this.props.treeData)}
-                                    </Tree>
+                                    {
+                                        this.props.treeDataLoading ? <Spin
+                                            style={{
+                                                width: '100%',
+                                                height: 'calc(100vh/2)',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center'
+                                            }}
+                                            size="large"
+                                        /> :
+
+                                            <Tree
+                                                checkable
+                                                onExpand={this.onExpand}
+                                                // expandedKeys={this.state.expandedKeys}
+                                                autoExpandParent={this.state.autoExpandParent}
+                                                onCheck={this.onChecks}
+                                                checkedKeys={this.state.checkedKeys}
+                                                onSelect={this.onSelects}
+                                                selectedKeys={this.state.selectedKeys}
+                                                autoExpandParent={true}
+                                                defaultExpandAll={true}
+                                            >
+                                                {this.renderTreeNodes(this.props.treeData)}
+                                            </Tree>
+                                    }
                                     <Divider orientation="right" style={{ border: '1px dashed #FFFFFF' }}>
                                         <Button
                                             type="primary"

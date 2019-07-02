@@ -3,6 +3,7 @@ import {
 } from '../dvapack';
 import {
     getroleinfobytree, getroleinfobyid, insertroleinfo, delroleinfo, updroleinfo, getrolestreeandobj, getalluser, getuserbyroleid, insertrolebyuser
+    ,getparenttree,getrolemenutree,getmenubyroleid,insertmenubyroleid
 } from '../services/rolelist';
 import { message } from 'antd';
 /*
@@ -18,7 +19,9 @@ export default Model.extend({
         RoleInfoOne: [],
         RolesTree: [],
         AllUser: [],
-        UserByRoleID: []
+        UserByRoleID: [],
+        // SelectMenu:[],
+        // Menu
     },
     subscriptions: {
         setup({
@@ -177,6 +180,23 @@ export default Model.extend({
             const result = yield call(insertrolebyuser, {
                 ...payload
             });
+        },
+         /*获取下拉菜单权限**/
+         * getparenttree({
+            payload
+        }, {
+            call,
+            update,
+        }) {
+            const result = yield call(getparenttree, {
+                ...payload
+            });
+            if (result.IsSuccess) {
+                yield update({
+                    AllUser: result.Datas
+                });
+            }
+
         },
     },
     reducers: {

@@ -20,6 +20,7 @@ import SdlTable from '../AutoFormManager/Table';
 import SearchWrapper from '../AutoFormManager/SearchWrapper';
 import { sdlMessage } from '../../utils/utils';
 import ColumnGroup from 'antd/lib/table/ColumnGroup';
+const { confirm } = Modal;
 
 @connect(({ loading, autoForm }) => ({
     loading: loading.effects['autoForm/getPageConfig'],
@@ -74,11 +75,39 @@ export default class UserInfoIndex extends Component {
                 User_ID: userid,
             }
         })
-      }
-      
+    }
+    showConfirm = (selectedRowKeys, selectedRows) => {
+        if (selectedRowKeys.length == 0) {
+            message.error("请至少选中一行")
+            return
+        }
+        const {dispatch} =this.props
+        confirm({
+            title: '是否确认重置密码?',
+            content: '',
+            okText: '确认',
+            cancelText: '取消',
+            onOk() {
+                var str = [];
+                selectedRows.map(item => str.push(item["dbo.Base_UserInfo.User_ID"]));
+                console.log(str);
+                dispatch({
+                    type: 'userinfo/resetpwd',
+                    payload: {
+                        User_ID: str,
+                    }
+                })
+            },
+            onCancel() {
+                console.log('取消');
+            },
+        });
+    }
+
+
     cancel(e) {
         console.log(e);
-      }
+    }
     render() {
         const { searchConfigItems, searchForm, tableInfo, match: { params: { configId } }, dispatch } = this.props;
         const searchConditions = searchConfigItems[configId] || []
@@ -100,7 +129,7 @@ export default class UserInfoIndex extends Component {
                 [
                     { Name: '首页', Url: '/' },
                     { Name: '系统管理', Url: '' },
-                    { Name: 'AutoForm用户管理', Url: '' }
+                    { Name: 'AutoForm用户管理', Url: '/sysmanage/userinfoindex/UserInfo' }
                 ]
             }>
                 <div className={styles.cardTitle}>
@@ -132,6 +161,15 @@ export default class UserInfoIndex extends Component {
                                     key, row
                                 })
                             }}
+                            appendHandleButtons={(selectedRowKeys, selectedRows) => {
+                                return <Fragment>
+                                    <Button type="danger" onClick={() => {
+                                        // console.log('selectedRowKeys=', selectedRowKeys);
+                                        // console.log('selectedRows=', selectedRows);
+                                        this.showConfirm(selectedRowKeys, selectedRows);
+                                    }}>重置密码</Button>
+                                </Fragment>
+                            }}
                             appendHandleRows={row => {
                                 return <Fragment>
                                     <a onClick={() => {
@@ -144,7 +182,7 @@ export default class UserInfoIndex extends Component {
                                     <Divider type="vertical" />
                                     <Popconfirm
                                         title="确认要删除吗?"
-                                        onConfirm={()=> {
+                                        onConfirm={() => {
                                             this.confirm(row["dbo.Base_UserInfo.User_ID"])
                                         }}
                                         onCancel={this.cancel}

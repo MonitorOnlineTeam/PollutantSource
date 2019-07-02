@@ -91,3 +91,41 @@ export async function insertrolebyuser(params) {
         data: null
     } : result;
 }
+// 获取根节点下拉选择权限（角色）
+export async function getparenttree(params) {
+    const result = postNew('/api/rest/PollutantSourceApi/AuthorApi/GetParentTree', params, null);
+    return result === null ? {
+        data: null
+    } : result;
+}
+// 获取菜单列表层级关系
+export async function getrolemenutree(params) {
+    const body={
+        Type:params.Type,
+    }
+    const result = postNew('/api/rest/PollutantSourceApi/AuthorApi/GetRoleMenuTree', body);
+    return result === null ? {
+        data: null
+    } : result;
+}
+// 获取当前角色的菜单
+export async function getmenubyroleid(params) {
+    const body={
+        Roles_ID:params.Roles_ID
+    }
+    const result = postNew('/api/rest/PollutantSourceApi/AuthorApi/GetMenuByRoleID', body, null);
+    return result === null ? {
+        data: null
+    } : result;
+}
+// 给角色添加菜单（可批量）
+export async function insertmenubyroleid(params) {
+    const body={
+        Roles_ID:params.Roles_ID,
+        MenuID:params.MenuID
+    }
+    const result = postNew('/api/rest/PollutantSourceApi/AuthorApi/InsertMenuByRoleID', body, null);
+    return result === null ? {
+        data: null
+    } : result;
+}
