@@ -25,22 +25,8 @@ class OverViewMap extends PureComponent {
     }
     render() {
         return(
-            <div
-                style={{
-                    width: '100%',
-                    height: 'calc(100vh - 67px)'
-                }}
-                className={styles.detailInfo}
-            >
-                <div style={{ width: 450,
-                    height: 'calc(100vh - 90px)',
-                    position: 'absolute',
-                    top: 70,
-                    left: 5,
-                    borderRadius: 10,
-                    zIndex:100
-                }}
-                >
+            <div className={styles.detailInfo}>
+                <div  className={styles.treepostion}>
                     {
                         this.getTreeList()
                     }
@@ -62,7 +48,7 @@ class OverViewMap extends PureComponent {
                     paddingBottom: 10,
                     borderRadius: 4,
                     border: "1px solid #d9d9d9"
-                }}>
+                }}  >
                 <StatusList />
                 </div>
 

@@ -217,6 +217,10 @@ class PdButton extends Component {
     }
 
      render() {
+
+        return(
+            <span></span>
+        )
          //如果没有值的话，会从后台加载数据
          const {operationUserInfo,dgimn,viewType,paloading,pointName}=this.props;
          //组件传值的话优先采用传入的值
