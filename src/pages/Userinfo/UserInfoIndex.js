@@ -128,8 +128,8 @@ export default class UserInfoIndex extends Component {
             <MonitorContent breadCrumbList={
                 [
                     { Name: '首页', Url: '/' },
-                    { Name: '系统管理', Url: '' },
-                    { Name: 'AutoForm用户管理', Url: '/sysmanage/userinfoindex/UserInfo' }
+                    { Name: '权限管理', Url: '' },
+                    { Name: '用户管理', Url: '/rolesmanager/userinfoindex/UserInfo' }
                 ]
             }>
                 <div className={styles.cardTitle}>
@@ -154,7 +154,7 @@ export default class UserInfoIndex extends Component {
                             // columns={columns}
                             configId={configId}
                             onAdd={() => {
-                                dispatch(routerRedux.push('/sysmanage/userinfoadd'))
+                                dispatch(routerRedux.push('/rolesmanager/userinfoadd'))
                             }}
                             rowChange={(key, row) => {
                                 this.setState({
@@ -173,11 +173,11 @@ export default class UserInfoIndex extends Component {
                             appendHandleRows={row => {
                                 return <Fragment>
                                     <a onClick={() => {
-                                        dispatch(routerRedux.push('/sysmanage/userinfoedit/' + row["dbo.Base_UserInfo.User_ID"]))
+                                        dispatch(routerRedux.push('/rolesmanager/userinfoedit/' + row["dbo.Base_UserInfo.User_ID"]))
                                     }}>编辑</a>
                                     <Divider type="vertical" />
                                     <a onClick={() => {
-                                        dispatch(routerRedux.push('/sysmanage/userinfoview/' + row["dbo.Base_UserInfo.User_ID"]))
+                                        dispatch(routerRedux.push('/rolesmanager/userinfoview/' + row["dbo.Base_UserInfo.User_ID"]))
                                     }}>详情</a>
                                     <Divider type="vertical" />
                                     <Popconfirm
