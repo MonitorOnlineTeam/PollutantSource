@@ -10,7 +10,7 @@ import {
     Input,
     Form,
     message,
-    
+    Spin,
 } from 'antd';
 import { connect } from 'dva';
 import router from 'umi/router';
@@ -34,8 +34,10 @@ const { TreeNode } = Tree;
 @connect(({ userinfo, loading }) => ({
     treeData: userinfo.DepartTree,
     RolesTreeData: userinfo.RolesTree,
-    UserRoles:userinfo.UserRoles,
-    UserDep:userinfo.UserDep
+    UserRolesLoading: loading.effects['userinfo/getrolebyuserid'],
+    UserDepLoading: loading.effects['userinfo/getdepbyuserid'],
+    UserRoles: userinfo.UserRoles,
+    UserDep: userinfo.UserDep
 }))
 @Form.create()
 export default class UserInfoEdit extends Component {
@@ -85,17 +87,17 @@ export default class UserInfoEdit extends Component {
         })
     }
 
-    componentWillReceiveProps(nextProps){
-        if(this.props.UserRoles !== nextProps.UserRoles){
+    componentWillReceiveProps(nextProps) {
+        if (this.props.UserRoles !== nextProps.UserRoles) {
             this.setState({
                 checkedKey: nextProps.UserRoles,
-                checkedKeySel:nextProps.UserRoles
+                checkedKeySel: nextProps.UserRoles
             })
         }
-        if(this.props.UserDep !== nextProps.UserDep){
+        if (this.props.UserDep !== nextProps.UserDep) {
             this.setState({
                 checkedKeys: nextProps.UserDep,
-                checkedKeysSel:nextProps.UserDep
+                checkedKeysSel: nextProps.UserDep
             })
         }
     }
@@ -154,7 +156,7 @@ export default class UserInfoEdit extends Component {
         });
 
     onSubmitForm() {
-        
+
     }
 
     postFormDatas() {
@@ -170,7 +172,7 @@ export default class UserInfoEdit extends Component {
             return;
         }
         form.validateFields((err, values) => {
-            console.log("11=",values)
+            console.log("11=", values)
             if (!err) {
                 let FormData = {};
                 for (let key in values) {
@@ -189,11 +191,11 @@ export default class UserInfoEdit extends Component {
                     type: 'userinfo/edit',
                     payload: {
                         configId: 'UserInfoAdd',
-                        User_ID:this.props.match.params.userid,
+                        User_ID: this.props.match.params.userid,
                         roleID: this.state.checkedKeySel,
                         departID: this.state.checkedKeysSel,
                         FormData: {
-                            "User_ID":this.props.match.params.userid,
+                            "User_ID": this.props.match.params.userid,
                             ...FormData,
                             // uid: uid
                         },
@@ -201,7 +203,7 @@ export default class UserInfoEdit extends Component {
                 })
             }
         });
-        
+
         // Object.keys(FormDatas).length ? dispatch({
         //     type: 'userinfo/edit',
         //     payload: {
@@ -217,7 +219,7 @@ export default class UserInfoEdit extends Component {
         //     }
         // }) : message.error("数据为空")
     }
-      
+
     render() {
         const { match, routerData, children } = this.props;
         const tablist = [{
@@ -246,7 +248,7 @@ export default class UserInfoEdit extends Component {
                 breadCrumbList={
                     [
                         { Name: '首页', Url: '/' },
-                        { Name: '用户管理', Url: '' },
+                        { Name: '用户管理', Url: '/sysmanage/userinfoindex/UserInfo' },
                         { Name: '编辑用户', Url: '' },
                     ]
                 }
@@ -315,7 +317,7 @@ export default class UserInfoEdit extends Component {
                                         <Divider orientation="right" style={{ border: '1px dashed #FFFFFF' }}>
                                             <Button
                                                 type="primary"
-                                              
+
                                                 onClick={() => {
                                                     this.setState({
                                                         activeKey: "roles",
@@ -331,19 +333,32 @@ export default class UserInfoEdit extends Component {
 
                                 </Card>
                                 <Card bordered={false} title="角色设置" style={{ height: 'calc(100vh - 160px)', display: this.state.rolesState }}>
-                                    <Tree
-                                        checkable
-                                        checkStrictly={false}
-                                        onExpand={this.onExpand}
-                                        expandedKeys={this.state.expandedKeys}
-                                        autoExpandParent={this.state.autoExpandParent}
-                                        onCheck={this.onCheck}
-                                        checkedKeys={this.state.checkedKey}
-                                        onSelect={this.onSelect}
-                                        selectedKeys={this.state.selectedKey}
-                                    >
-                                        {this.renderTreeNodes(this.props.RolesTreeData)}
-                                    </Tree>
+                                    {
+                                        this.props.UserRolesLoading ? <Spin
+                                            style={{
+                                                width: '100%',
+                                                height: 'calc(100vh/2)',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center'
+                                            }}
+                                            size="large"
+                                        /> :
+                                            <Tree
+                                                checkable
+                                                checkStrictly={false}
+                                                onExpand={this.onExpand}
+                                                expandedKeys={this.state.expandedKeys}
+                                                autoExpandParent={this.state.autoExpandParent}
+                                                onCheck={this.onCheck}
+                                                checkedKeys={this.state.checkedKey}
+                                                onSelect={this.onSelect}
+                                                selectedKeys={this.state.selectedKey}
+                                            >
+                                                {this.renderTreeNodes(this.props.RolesTreeData)}
+                                            </Tree>
+                                    }
+
                                     <Divider orientation="right" style={{ border: '1px dashed #FFFFFF' }}>
                                         <Button
                                             type="primary"
@@ -360,18 +375,32 @@ export default class UserInfoEdit extends Component {
                                     </Divider>
                                 </Card>
                                 <Card bordered={false} title="部门设置" style={{ height: 'calc(100vh - 160px)', display: this.state.departState }}>
-                                    <Tree
-                                        checkable
-                                        onExpand={this.onExpand}
-                                        expandedKeys={this.state.expandedKeys}
-                                        autoExpandParent={this.state.autoExpandParent}
-                                        onCheck={this.onChecks}
-                                        checkedKeys={this.state.checkedKeys}
-                                        onSelect={this.onSelects}
-                                        selectedKeys={this.state.selectedKeys}
-                                    >
-                                        {this.renderTreeNodes(this.props.treeData)}
-                                    </Tree>
+                                    {
+                                        this.props.UserDepLoading ? <Spin
+                                            style={{
+                                                width: '100%',
+                                                height: 'calc(100vh/2)',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center'
+                                            }}
+                                            size="large"
+                                        /> :
+
+                                            <Tree
+                                                checkable
+                                                onExpand={this.onExpand}
+                                                expandedKeys={this.state.expandedKeys}
+                                                autoExpandParent={this.state.autoExpandParent}
+                                                onCheck={this.onChecks}
+                                                checkedKeys={this.state.checkedKeys}
+                                                onSelect={this.onSelects}
+                                                selectedKeys={this.state.selectedKeys}
+                                            >
+                                                {this.renderTreeNodes(this.props.treeData)}
+                                            </Tree>
+                                    }
+
                                     <Divider orientation="right" style={{ border: '1px dashed #FFFFFF' }}>
                                         <Button
                                             type="primary"

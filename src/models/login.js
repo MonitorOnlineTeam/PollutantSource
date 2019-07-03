@@ -43,6 +43,7 @@ export default Model.extend({
             });
             // Login successfully
             if (response1.IsSuccess == true) {
+                response1.Datas.User_ID=response1.Datas.UserId;
                 Cookie.set('token', response1.Datas);
                 try {
                     const { ws } = window;

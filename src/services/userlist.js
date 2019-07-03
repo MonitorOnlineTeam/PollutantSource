@@ -134,6 +134,16 @@ export async function insertroledep(params) {
         data: null
     } : result;
 }
+// 重置密码
+export async function resetpwd(params) {
+    const body = {
+        User_ID: params.User_ID,
+    };
+    const result = post('/api/rest/PollutantSourceApi/AuthorApi/ResetPwd', body, null);
+    return result === null ? {
+        data: null
+    } : result;
+}
 // 编辑用户
 export async function edituser(params) {
     const body = {

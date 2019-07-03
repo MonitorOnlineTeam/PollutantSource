@@ -3,6 +3,7 @@ import {
 } from '../dvapack';
 import {
     getroleinfobytree, getroleinfobyid, insertroleinfo, delroleinfo, updroleinfo, getrolestreeandobj, getalluser, getuserbyroleid, insertrolebyuser
+    ,getparenttree,getrolemenutree,getmenubyroleid,insertmenubyroleid
 } from '../services/rolelist';
 import { message } from 'antd';
 /*
@@ -18,7 +19,10 @@ export default Model.extend({
         RoleInfoOne: [],
         RolesTree: [],
         AllUser: [],
-        UserByRoleID: []
+        UserByRoleID: [],
+        SelectMenu:[],
+        MenuTree:[],
+        CheckMenu:[],
     },
     subscriptions: {
         setup({
@@ -175,6 +179,63 @@ export default Model.extend({
             update,
         }) {
             const result = yield call(insertrolebyuser, {
+                ...payload
+            });
+        },
+         /*获取下拉菜单权限**/
+         * getparenttree({
+            payload
+        }, {
+            call,
+            update,
+        }) {
+            const result = yield call(getparenttree, {
+                ...payload
+            });
+            if (result.IsSuccess) {
+                yield update({
+                    SelectMenu: result.Datas
+                });
+            }
+        },
+         /*获取菜单列表层级关系**/
+         * getrolemenutree({
+            payload
+        }, {
+            call,
+            update,
+        }) {
+            const result = yield call(getrolemenutree, { ...payload });
+            if (result.IsSuccess) {
+                yield update({
+                    MenuTree: result.Datas
+                });
+            }
+        },
+        /*获取当前角色的菜单**/
+        * getmenubyroleid({
+            payload
+        }, {
+            call,
+            update,
+        }) {
+            const result = yield call(getmenubyroleid, {
+                ...payload
+            });
+            if (result.IsSuccess) {
+                yield update({
+                    CheckMenu: result.Datas
+                });
+            }
+        },
+         /*给角色添加菜单权限（可批量）**/
+         * insertmenubyroleid({
+            payload
+        }, {
+            call,
+            update,
+        }) {
+            const result = yield call(insertmenubyroleid, {
                 ...payload
             });
         },

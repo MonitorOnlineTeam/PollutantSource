@@ -4,6 +4,7 @@ import {
 import {
     getList, deleteuser, enableduser, isexistenceuser, adduser, getuser, edituser, editpersonaluser, getmypielist, mymessagelist,
     setEnterpriseDataRole, getEnterpriseDataRoles, getdeparttree, getrolestree, insertroledep, getrolebyuserid, getdepbyuserid,deluserandroledep
+    ,resetpwd
 } from '../services/userlist';
 import { postAutoFromDataAdd, postAutoFromDataUpdate } from '../services/autoformapi'
 import { message } from 'antd';
@@ -299,6 +300,24 @@ export default Model.extend({
             if (result.IsSuccess == true) {
                 message.success("添加成功");
                 history.go(-1);
+            }
+            // yield update({
+            //     requstresult: result.requstresult,
+            //     reason: result.reason
+            // });
+        },
+         /*重置密码**/
+         * resetpwd({
+            payload
+        }, {
+            call,
+            update,
+        }) {
+            const result = yield call(resetpwd, {
+                ...payload
+            });
+            if (result.IsSuccess == true) {
+                message.success("重置成功");
             }
             // yield update({
             //     requstresult: result.requstresult,

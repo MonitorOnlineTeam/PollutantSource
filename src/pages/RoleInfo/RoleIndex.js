@@ -18,6 +18,7 @@ import {
     Popconfirm,
     Transfer, Switch, Tag
 } from 'antd';
+import { routerRedux } from 'dva/router';
 import MonitorContent from '../../components/MonitorContent/index';
 import TextArea from 'antd/lib/input/TextArea';
 import difference from 'lodash/difference';
@@ -119,6 +120,10 @@ const rightTableColumns = [
 ];
 
 @connect(({ roleinfo, loading }) => ({
+    RoleInfoTreeLoading: loading.effects['roleinfo/getroleinfobytree'],
+    AllUserLoading:loading.effects['roleinfo/getalluser'],
+    UserByRoleIDLoading:loading.effects['roleinfo/getuserbyroleid'],
+    RoleInfoOneLoading:loading.effects['roleinfo/getroleinfobyid'],
     RoleInfoTree: roleinfo.RoleInfoTree,
     RoleInfoOne: roleinfo.RoleInfoOne,
     RolesTreeData: roleinfo.RolesTree,
@@ -305,6 +310,16 @@ class RoleIndex extends Component {
         })
     }
 
+    showMenuModal = () => {
+        if (this.state.selectedRowKeys.length == 0) {
+            message.error("请选中一行")
+            return
+        }
+        var keys = this.state.selectedRowKeys.key
+        // console.log("selectID=",this.props.UserByRoleID)
+        // console.log("filterArr=",this.props.AllUser)
+        this.props.dispatch(routerRedux.push('/sysmanage/rolemenu/' + keys))
+    }
     componentWillReceiveProps(nextProps) {
         if (this.props.UserByRoleID !== nextProps.UserByRoleID) {
             const selectId = nextProps.UserByRoleID.map(item => item.key)
@@ -424,7 +439,22 @@ class RoleIndex extends Component {
                                 onClick={this.showUserModal}
                                 style={{ marginLeft: "10px" }}
                             >分配用户</Button>
-                            <Table
+                            <Button
+                                onClick={this.showMenuModal}
+                                style={{ marginLeft: "10px" }}
+                            >分配权限</Button>
+                            {
+                                this.props.RoleInfoTreeLoading ? <Spin
+                                    style={{
+                                        width: '100%',
+                                        height: 'calc(100vh/2)',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center'
+                                    }}
+                                    size="large"
+                                /> :
+                                <Table
                                 onRow={record => {
                                     return {
                                         onClick: event => {
@@ -436,7 +466,8 @@ class RoleIndex extends Component {
                                         },
                                     };
                                 }}
-                                defaultExpandAllRows={true} columns={this.state.columns} rowSelection={rowRadioSelection} dataSource={this.props.RoleInfoTree} />,
+                                defaultExpandAllRows={true} columns={this.state.columns} rowSelection={rowRadioSelection} dataSource={this.props.RoleInfoTree} />
+                            }
                         </Card>
                         <div>
                             <Modal
@@ -446,60 +477,73 @@ class RoleIndex extends Component {
                                 destroyOnClose="true"
                                 onCancel={this.handleCancel}
                             >
+                                 {
+                                 this.props.RoleInfoOneLoading ? <Spin
+                                    style={{
+                                        width: '100%',
+                                        height: 'calc(100vh/2)',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center'
+                                    }}
+                                    size="large"
+                                /> :
                                 <Form onSubmit={this.handleSubmit} className="login-form">
-                                    <Form.Item label="父节点" {...formItemLayout} >
-                                        {getFieldDecorator('ParentId', {
-                                            rules: [{ required: true, message: '请选择父节点' }],
-                                            initialValue: this.state.IsEdit == true ? this.props.RoleInfoOne.ParentId : ""
-                                        })(
-                                            <TreeSelect
-                                                type="ParentId"
-                                                showSearch
-                                                style={{ width: 300 }}
-                                                //value={this.state.IsEdit==true?this.props.RoleInfoOne.ParentId:null}
-                                                dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
-                                                placeholder="请选择父节点"
-                                                allowClear
-                                                treeDefaultExpandAll
-                                                onChange={this.onChange}
-                                                treeData={this.props.RolesTreeData}
-                                                style={{ width: "100%" }}
-                                            >
-                                            </TreeSelect>
-                                        )}
-                                    </Form.Item>
-                                    <Form.Item label="角色名称"  {...formItemLayout}>
-                                        {getFieldDecorator('Roles_Name', {
-                                            rules: [{ required: true, message: '请输入角色名称' }],
-                                            initialValue: this.state.IsEdit == true ? this.props.RoleInfoOne.Roles_Name : ""
-                                        })(
-                                            <Input
-                                                type="Roles_Name"
-                                                placeholder="请输入角色名称"
-                                            />,
-                                        )}
-                                    </Form.Item>
-                                    <Form.Item label="角色描述"  {...formItemLayout}>
-                                        {getFieldDecorator('Roles_Remark', {
-                                            initialValue: this.state.IsEdit == true ? this.props.RoleInfoOne.Roles_Remark : ""
-                                        })(
-                                            <TextArea
-                                                type="Roles_Remark"
-                                                placeholder="请输入角色描述"
-                                            />,
-                                        )}
-                                    </Form.Item>
-                                    <Form.Item>
-                                        {getFieldDecorator('Roles_ID', {
-                                            initialValue: this.state.IsEdit == true ? this.props.RoleInfoOne.Roles_ID : ""
-                                        })(
-                                            <Input
-                                                type="Roles_ID"
-                                                hidden
-                                            />,
-                                        )}
-                                    </Form.Item>
-                                </Form>
+                                <Form.Item label="父节点" {...formItemLayout} >
+                                    {getFieldDecorator('ParentId', {
+                                        rules: [{ required: true, message: '请选择父节点' }],
+                                        initialValue: this.state.IsEdit == true ? this.props.RoleInfoOne.ParentId : ""
+                                    })(
+                                        <TreeSelect
+                                            type="ParentId"
+                                            showSearch
+                                            style={{ width: 300 }}
+                                            //value={this.state.IsEdit==true?this.props.RoleInfoOne.ParentId:null}
+                                            dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+                                            placeholder="请选择父节点"
+                                            allowClear
+                                            treeDefaultExpandAll
+                                            onChange={this.onChange}
+                                            treeData={this.props.RolesTreeData}
+                                            style={{ width: "100%" }}
+                                        >
+                                        </TreeSelect>
+                                    )}
+                                </Form.Item>
+                                <Form.Item label="角色名称"  {...formItemLayout}>
+                                    {getFieldDecorator('Roles_Name', {
+                                        rules: [{ required: true, message: '请输入角色名称' }],
+                                        initialValue: this.state.IsEdit == true ? this.props.RoleInfoOne.Roles_Name : ""
+                                    })(
+                                        <Input
+                                            type="Roles_Name"
+                                            placeholder="请输入角色名称"
+                                        />,
+                                    )}
+                                </Form.Item>
+                                <Form.Item label="角色描述"  {...formItemLayout}>
+                                    {getFieldDecorator('Roles_Remark', {
+                                        initialValue: this.state.IsEdit == true ? this.props.RoleInfoOne.Roles_Remark : ""
+                                    })(
+                                        <TextArea
+                                            type="Roles_Remark"
+                                            placeholder="请输入角色描述"
+                                        />,
+                                    )}
+                                </Form.Item>
+                                <Form.Item>
+                                    {getFieldDecorator('Roles_ID', {
+                                        initialValue: this.state.IsEdit == true ? this.props.RoleInfoOne.Roles_ID : ""
+                                    })(
+                                        <Input
+                                            type="Roles_ID"
+                                            hidden
+                                        />,
+                                    )}
+                                </Form.Item>
+                            </Form>
+                            }
+                                
                             </Modal>
                             <Modal
                                 title={this.state.selectedRowKeys.Roles_Name}
@@ -509,21 +553,33 @@ class RoleIndex extends Component {
                                 onCancel={this.handleCancel}
                                 width={800}
                             >
+                                {
+                                 this.props.UserByRoleIDLoading ? <Spin
+                                    style={{
+                                        width: '100%',
+                                        height: 'calc(100vh/2)',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center'
+                                    }}
+                                    size="large"
+                                /> :
                                 <TableTransfer
-                                    rowKey={record => record.User_ID}
-                                    titles={['其余用户', '存在用户']}
-                                    dataSource={this.props.AllUser}
-                                    targetKeys={targetKeys}
-                                    disabled={disabled}
-                                    showSearch={showSearch}
-                                    onChange={this.onChanges}
-                                    filterOption={(inputValue, item) =>
-                                        (item.User_Name && item.User_Name.indexOf(inputValue) !== -1) || (item.User_Account && item.User_Account.indexOf(inputValue) !== -1) || (item.Phone && item.Phone.indexOf(inputValue) !== -1)
-                                    }
-                                    leftColumns={leftTableColumns}
-                                    rightColumns={rightTableColumns}
-                                    style={{ width: "100%" }}
-                                />
+                                rowKey={record => record.User_ID}
+                                titles={['其余用户', '存在用户']}
+                                dataSource={this.props.AllUser}
+                                targetKeys={targetKeys}
+                                disabled={disabled}
+                                showSearch={showSearch}
+                                onChange={this.onChanges}
+                                filterOption={(inputValue, item) =>
+                                    (item.User_Name && item.User_Name.indexOf(inputValue) !== -1) || (item.User_Account && item.User_Account.indexOf(inputValue) !== -1) || (item.Phone && item.Phone.indexOf(inputValue) !== -1)
+                                }
+                                leftColumns={leftTableColumns}
+                                rightColumns={rightTableColumns}
+                                style={{ width: "100%" }}
+                            />
+                            }
                             </Modal>
                         </div>
                     </MonitorContent>

@@ -207,6 +207,7 @@ export default Model.extend({
             const result = yield call(insertregionbyuser, {
                 ...payload
             });
+            payload.callback(result)
         },
         /*获取当前部门的行政区**/
         * getregionbydepid({
@@ -268,6 +269,7 @@ export default Model.extend({
             const result = yield call(insertpointfilterbydepid, {
                 ...payload
             });
+            payload.callback(result)
         },
     },
     reducers: {

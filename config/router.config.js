@@ -241,19 +241,21 @@ export default [
             // /* 系统管理-AutoForm详情页面 */
             { path: '/autoformmanager/test/:configId', component: './autoformmanager/Test' },
             { path: '/autoformmanager/upload', component: './autoformmanager/Upload' },
-            /* 系统管理-AutoForm-监控目标 */
-            { path: '/sysmanage/monitortarget', component: './autoformmanager/monitortarget' },
-            { path: '/sysmanage/monitortarget/:configId', component: './autoformmanager/monitortarget' },
-            { path: '/sysmanage/monitortarget/monitorpoint/:configId/:targetId/:targetName', component: './autoformmanager/monitorpoint' },
-            /* AutoForm用户管理 */
-            { path: '/sysmanage/userinfoindex/:configId', component: './Userinfo/UserInfoIndex' },
-            { path: '/sysmanage/userinfoadd', component: './Userinfo/UserInfoAdd' },
-            { path: '/sysmanage/userinfoedit/:userid', component: './Userinfo/UserInfoEdit' },
-            { path: '/sysmanage/userinfoview/:userid', component: './Userinfo/UserInfoView' },
-            /* 角色管理 */
-            { path: '/sysmanage/roleindex/', component: './RoleInfo/RoleIndex' },
-            /* 部门管理 */
-            { path: '/sysmanage/departindex/', component: './DepartInfo/DepartIndex' },
+
+            /* 平台配置-企业管理 */
+            { path: '/platformconfig/monitortarget', component: './autoformmanager/monitortarget' },
+            { path: '/platformconfig/monitortarget/:configId', component: './autoformmanager/monitortarget' },
+            { path: '/platformconfig/monitortarget/monitorpoint/:configId/:targetId/:targetName', component: './autoformmanager/monitorpoint' },
+            /* 权限管理-用户管理 */
+            { path: '/rolesmanager/userinfoindex/:configId', component: './Userinfo/UserInfoIndex' },
+            { path: '/rolesmanager/userinfoadd', component: './Userinfo/UserInfoAdd' },
+            { path: '/rolesmanager/userinfoedit/:userid', component: './Userinfo/UserInfoEdit' },
+            { path: '/rolesmanager/userinfoview/:userid', component: './Userinfo/UserInfoView' },
+            /* 权限管理-角色管理 */
+            { path: '/rolesmanager/roleindex/', component: './RoleInfo/RoleIndex' },
+            { path: '/rolesmanager/rolemenu/:roleid', component: './RoleInfo/RoleMenu' },
+            /* 权限管理-部门管理 */
+            { path: '/rolesmanager/departindex/', component: './DepartInfo/DepartIndex' },
             /* 标准库管理-维护 */
             { path: '/sysmanage/standardlibrarydetail/:StandardLibraryID', component: './StandardLibrary/AddStandardLibrary' },
             /* 个人设置-维护 */
