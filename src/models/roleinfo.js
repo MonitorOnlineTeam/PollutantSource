@@ -20,8 +20,9 @@ export default Model.extend({
         RolesTree: [],
         AllUser: [],
         UserByRoleID: [],
-        // SelectMenu:[],
-        // Menu
+        SelectMenu:[],
+        MenuTree:[],
+        CheckMenu:[],
     },
     subscriptions: {
         setup({
@@ -193,10 +194,50 @@ export default Model.extend({
             });
             if (result.IsSuccess) {
                 yield update({
-                    AllUser: result.Datas
+                    SelectMenu: result.Datas
                 });
             }
-
+        },
+         /*获取菜单列表层级关系**/
+         * getrolemenutree({
+            payload
+        }, {
+            call,
+            update,
+        }) {
+            const result = yield call(getrolemenutree, { ...payload });
+            if (result.IsSuccess) {
+                yield update({
+                    MenuTree: result.Datas
+                });
+            }
+        },
+        /*获取当前角色的菜单**/
+        * getmenubyroleid({
+            payload
+        }, {
+            call,
+            update,
+        }) {
+            const result = yield call(getmenubyroleid, {
+                ...payload
+            });
+            if (result.IsSuccess) {
+                yield update({
+                    CheckMenu: result.Datas
+                });
+            }
+        },
+         /*给角色添加菜单权限（可批量）**/
+         * insertmenubyroleid({
+            payload
+        }, {
+            call,
+            update,
+        }) {
+            const result = yield call(insertmenubyroleid, {
+                ...payload
+            });
         },
     },
     reducers: {
