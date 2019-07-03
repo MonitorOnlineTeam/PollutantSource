@@ -1,108 +1,139 @@
-
 .demo-infinite-container {
   border: 1px solid #e8e8e8;
   border-radius: 4px;
   overflow: auto;
   padding: 8px 24px;
 }
+
 .demo-loading-container {
   position: absolute;
   bottom: 40px;
   width: 100%;
   text-align: center;
 }
-.divcontent{
-  background-image:url(/bg.png);
-  background-size:100% 100%;
+
+.divcontent {
+  background-image: url(/bg.png);
+  background-size: 100% 100%;
 }
-.divleft{
+
+.divleft {
   width: 252px;
   height: 35px;
-  background:url(/logo左.png) no-repeat center center;
+  background: url(/logo左.png) no-repeat center center;
 }
-.divright{
+
+.divright {
   width: 252px;
   height: 35px;
-  background:url(/logo右.png) no-repeat center center;
-}
-.divhead{
-   margin: 30px 0px 30px 0;
-   display:flex;
-   align-items:center;
-   justify-content:center;
-}
-.divlogotext{
-font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
-font-size:xx-large;
-color: white;
+  background: url(/logo右.png) no-repeat center center;
 }
 
+.divhead {
+  margin: 30px 0px 30px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.divlogotext {
+  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+  font-size: xx-large;
+  color: white;
+}
+.homeWrapper{
+  :global {
+    .ant-radio-button-wrapper {
+      background: #163666;
+      border-color: #3b6aaa;
+      color: #fff;
+    }
+    .ant-radio-button-wrapper:not(:first-child)::before{
+      background-color: #3b6aaa;
+    }
+    .ant-radio-group-solid .ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled){
+      background: #2b5288;
+    }
+  }
+}
 
 
 
 
-.divpoint{
-  width:320px;
+.divpoint {
+  width: 320px;
   height: 150px;
-  background:url(/btoo.png) no-repeat center center;
+  background: url(/btoo.png) no-repeat center center;
   margin: 0 auto;
   display: flex;
   align-items: center;
-  .left{
-    flex:1;
-    >div{
+
+  .left {
+    flex: 1;
+
+    >div {
       padding-left: 25px;
       text-align: left;
     }
-      .top{
-        color:#48CD77;
-      }
-      .bottom{
-        color:#CD454D;
-      }
+
+    .top {
+      color: #48CD77;
+    }
+
+    .bottom {
+      color: #CD454D;
+    }
   }
-  .center{
-    width:115px;
+
+  .center {
+    width: 115px;
     color: white;
-    .number{
+
+    .number {
       font-size: 30px;
     }
-    .name{
 
-    }
+    .name {}
   }
-  .right{
-    >div{
+
+  .right {
+    >div {
       padding-left: 20px;
       text-align: left;
     }
+
     flex:1;
-      .top{
-        margin: 0 auto;
-        color:#9F9734;
-      }
-      .bottom{
-        color:#8E99A1;
-      }
+
+    .top {
+      margin: 0 auto;
+      color: #9F9734;
+    }
+
+    .bottom {
+      color: #8E99A1;
+    }
   }
 }
-.divtable{
-  margin:0 auto;
-  width:500px;
-  table{
-    border-collapse:inherit;
+
+.divtable {
+  margin: 0 auto;
+  width: 500px;
+
+  table {
+    border-collapse: inherit;
   }
-  th{
-   width: 100px;
-   line-height:30px;
-   text-align: center;
-   color: #fff;
-  }
-  td{
+
+  th {
     width: 100px;
-    line-height:30px;
+    line-height: 30px;
+    text-align: center;
+    color: #fff;
+  }
+
+  td {
+    width: 100px;
+    line-height: 30px;
     text-align: center;
     background-color: #2B4B72;
   }
 }
-

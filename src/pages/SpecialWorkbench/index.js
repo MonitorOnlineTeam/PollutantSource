@@ -44,7 +44,6 @@ class SpecialWorkbench extends PureComponent {
      * 加载单企业或多企业
     */
     SingleOrMultiEnterprise = () => {
-        debugger
         let EntpriseList = [];
         const { entCode } = this.props
         if (!onlyOneEnt) {
