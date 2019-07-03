@@ -33,17 +33,17 @@ export default class Info extends Component {
             key: 'security',
             tab: '安全设置'
         },
-        {
-            key: 'mypielist',
-            tab: '我的派单'
-        },
-        {
-            key: 'mymessagelist',
-            tab: '我的通知'
-        },
+        // {
+        //     key: 'mypielist',
+        //     tab: '我的派单'
+        // },
+        // {
+        //     key: 'mymessagelist',
+        //     tab: '我的通知'
+        // },
         {
             key: 'personsettings',
-            tab: '个人设置'
+            tab: '系统设置'
         },
         ];
         return (
@@ -52,7 +52,7 @@ export default class Info extends Component {
                 breadCrumbList={
                     [
                         {Name:'首页',Url:'/'},
-                        {Name:'个人设置',Url:''},
+                        {Name:'个人中心',Url:''},
                     ]
                 }
             >
