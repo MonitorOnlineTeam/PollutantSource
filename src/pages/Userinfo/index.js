@@ -257,7 +257,7 @@ export default class UserList extends Component {
 
                     return <Fragment >
                         <a onClick={
-                            () => this.props.dispatch(routerRedux.push(`/sysmanage/UserDetail/${record.key}`))
+                            () => this.props.dispatch(routerRedux.push(`/rolesmanager/UserDetail/${record.key}`))
                         } > 编辑 </a>
                         <Divider type="vertical" />
                         <Popconfirm placement="left" title="确定要删除此用户吗？" onConfirm={() => this.deleteuserbyid(record.key)} okText="是" cancelText="否">
@@ -274,7 +274,7 @@ export default class UserList extends Component {
                 else {
                     return <Fragment >
                         <a onClick={
-                            () => this.props.dispatch(routerRedux.push(`/sysmanage/UserDetail/${record.key}`))
+                            () => this.props.dispatch(routerRedux.push(`/rolesmanager/UserDetail/${record.key}`))
                         } > 编辑 </a>
                         <Divider type="vertical" />
                         <Popconfirm placement="left" title="确定要删除此用户吗？" onConfirm={() => this.deleteuserbyid(record.key)} okText="是" cancelText="否">
@@ -344,7 +344,7 @@ export default class UserList extends Component {
                                     </Select>
                                     <Button type="primary" style={{ marginLeft: 10 }}
                                         onClick={() => {
-                                            this.props.dispatch(routerRedux.push(`/sysmanage/UserDetail/null`));
+                                            this.props.dispatch(routerRedux.push(`/rolesmanager/UserDetail/null`));
                                         }}>添加</Button>
                                     {/* <Button type="primary" style={{ marginLeft: 10 }}
                                         onClick={() => {
