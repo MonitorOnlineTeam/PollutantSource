@@ -89,7 +89,7 @@ export default class MonitorTarget extends Component {
             default: break;
         }
 
-        this.props.dispatch(routerRedux.push(`/sysmanage/monitortarget/monitorpoint/${match.params.configId}/${targetId}/${targetName}`))
+        this.props.dispatch(routerRedux.push(`/platformconfig/monitortarget/monitorpoint/${match.params.configId}/${targetId}/${targetName}`))
     }
 
     render() {

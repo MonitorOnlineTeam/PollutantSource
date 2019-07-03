@@ -129,7 +129,7 @@ class PersonSettings extends Component {
         };
         return (
             <div>
-                <Card bordered={false} title="个人设置" style={{ height: 'calc(100vh - 160px)' }} loading={this.props.loading}>
+                <Card bordered={false} title="系统设置" style={{ height: 'calc(100vh - 160px)' }} loading={this.props.loading}>
                     <Form onSubmit={this.handleSubmit}>
                         <Row>
                             <Col span={12}>
@@ -285,7 +285,7 @@ class PersonSettings extends Component {
                             <Button
                                 type="primary"
                                 htmlType="submit"
-                            >保存个人设置
+                            >保存
                             </Button>
                         </Divider>
 
