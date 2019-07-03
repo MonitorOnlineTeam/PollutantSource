@@ -25,6 +25,10 @@ module.exports = {
     realtimevideourl: 'http://172.16.12.152:8066/Video/MonitorLinkCamera/RealtimeCameraReact',
     //历史视频地址
     hisvideourl: 'http://172.16.12.152:8066/Video/MonitorLinkCamera/HistoryCameraReact',
+    //萤石云实时视频地址
+    ysyrealtimevideourl: 'http://localhost:8081/Video/MonitorLinkCamera/YsyRealtimeVideo',
+    //萤石云历史视频地址
+    ysyhisvideourl: 'http://localhost:8081/Video/MonitorLinkCamera/YsyRealtimeVideo',
     //设备运转率标准%
     RunningRate: 90,
     //传输有效率标准%
@@ -107,7 +111,7 @@ module.exports = {
                     pollutantCode: '200',
                     pollutantName: 'VOCS',
                     unit: 'mg/m³'
-                } 
+                }
             ],
         },
         {
@@ -121,7 +125,7 @@ module.exports = {
                     pollutantCode: 'a34002',
                     pollutantName: 'PM10',
                     unit: 'mg/m³'
-                } 
+                }
             ],
         },
         {

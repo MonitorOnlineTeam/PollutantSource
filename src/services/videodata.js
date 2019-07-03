@@ -11,6 +11,16 @@ export async function getList(params) {
         data: null
     } : result;
 }
+// 萤石云视频列表
+export async function getysyList(params) {
+    const body = {
+        VedioCameraID: params.VedioCameraID
+    };
+    const result = post('/api/rest/PollutantSourceApi/Video/GetCameraMonitorUrl', body, null);
+    return result === null ? {
+        data: null
+    } : result;
+}
 // 删除视频信息
 export async function deleteVideoInfo(params) {
     const body = {

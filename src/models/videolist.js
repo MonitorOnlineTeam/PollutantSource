@@ -1,12 +1,13 @@
 import { Icon, Popover, Badge } from 'antd';
 import React from 'react';
 import { Model } from '../dvapack';
-import { getList, deleteVideoInfo, gethistoryVideoList, updateVideoInfos, addVideoInfo, getAlarmHistory, updateAlarmHistory } from '../services/videodata';
- 
-import {querypollutantlist} from '../services/overviewApi';
-import { queryhistorydatalist } from '../services/overviewApi';
+import { getList,getysyList, deleteVideoInfo, gethistoryVideoList, updateVideoInfos, addVideoInfo, getAlarmHistory, updateAlarmHistory } from '../services/videodata';
+
+import {querypollutantlist, queryhistorydatalist } from '../services/overviewApi';
+
 import config from '../config';
 import {formatPollutantPopover} from '../utils/utils';
+
 export default Model.extend({
     namespace: 'videolist',
     state: {
@@ -30,13 +31,23 @@ export default Model.extend({
             visible: false,
             pointName: '',
         },
+        //萤石云视频参数
+        ysyvideoListParameters: {
+            DGIMN: null,
+            realtimevideofullurl: null,
+            hisvideofullurl: null,
+            requstresult: null,
+            list: [],
+            visible: false,
+            pointName: '',
+        },
     },
     effects: {
         * fetchuserlist({ payload }, { call, update, put, take, select }) {
             const { videoListParameters } = yield select(state => state.analysisdata);
             let body = {
                 DGIMN: videoListParameters.DGIMN,
-            }
+            };
             const result = yield call(getList, body);
             let temprealurl = "nodata";
             let temphisurl = "nodata";
@@ -61,6 +72,54 @@ export default Model.extend({
                 yield update({
                     videoListParameters: {
                         ...videoListParameters,
+                        ...{
+                            requstresult: result.requstresult,
+                            list: [],
+                            realtimevideofullurl: temprealurl,
+                            hisvideofullurl: temphisurl
+                        }
+                    }
+                });
+            }
+        },
+        /**萤石云视频链接 */
+        * ysyvideourl({
+            payload
+        }, {
+            call,
+            update,
+            select
+        }) {
+            const {
+                ysyvideoListParameters
+            } = yield select(state => state.analysisdata);
+            let body = {
+                VedioCameraID: payload.VedioCameraID,
+            };
+            const result = yield call(getysyList, body);
+            let temprealurl = "nodata";
+            let temphisurl = "nodata";
+            if (result.requstresult === '1') {
+                let obj = result.data[0];
+                if (obj) {
+                    temprealurl = `${config.ysyrealtimevideourl}?AppKey=${obj.AppKey}&Secret=${obj.Secret}&SerialNumber=${obj.SerialNumber}`;
+                    temphisurl = `${config.ysyrealtimevideourl}?AppKey=${obj.AppKey}&Secret=${obj.Secret}&SerialNumber=${obj.SerialNumber}`;
+                }
+                yield update({
+                    ysyvideoListParameters: {
+                        ...ysyvideoListParameters,
+                        ...{
+                            requstresult: result.requstresult,
+                            list: result.data,
+                            realtimevideofullurl: temprealurl,
+                            hisvideofullurl: temphisurl,
+                        }
+                    }
+                });
+            } else {
+                yield update({
+                    ysyvideoListParameters: {
+                        ...ysyvideoListParameters,
                         ...{
                             requstresult: result.requstresult,
                             list: [],
@@ -158,7 +217,7 @@ export default Model.extend({
 
             const body={
                 DGIMNs:payload.dgimn
-            }
+            };
             const res = yield call(querypollutantlist, body);
             let pollutants = [];
             pollutants.push({ title: "监测时间", dataIndex: "MonitorTime", key: "MonitorTime", align: 'center', width: '200px' });
@@ -169,9 +228,7 @@ export default Model.extend({
                         dataIndex: item.pollutantCode,
                         key: item.pollutantCode,
                         align: 'center',
-                        render: (value, record, index) => {
-                            return formatPollutantPopover(value,record[`${item.pollutantCode}_params`]);
-                        }
+                        render: (value, record, index) => formatPollutantPopover(value,record[`${item.pollutantCode}_params`])
                     });
                 });
             }
@@ -190,7 +247,7 @@ export default Model.extend({
         * querypollutantlisthis({ payload }, { call, update }) {
             const body={
                 DGIMNs:payload.dgimn
-            }
+            };
             const res = yield call(querypollutantlist, body);
             let pollutants = [];
             pollutants.push({ title: "监测时间", dataIndex: "MonitorTime", key: "MonitorTime", align: 'center', width: '200px' });
@@ -201,9 +258,7 @@ export default Model.extend({
                         dataIndex: item.pollutantCode,
                         key: item.pollutantCode,
                         align: 'center',
-                        render: (value, record, index) => {
-                            return formatPollutantPopover(value,record[`${item.pollutantCode}_params`]);
-                        }
+                        render: (value, record, index) => formatPollutantPopover(value,record[`${item.pollutantCode}_params`])
                     });
                 });
             }
