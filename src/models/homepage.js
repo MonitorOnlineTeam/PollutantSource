@@ -266,6 +266,9 @@ export default Model.extend({
                     data = result.data.map(item => {
                         return { "txt": `${item.PointName}：${item.PollutantNames}从${item.FirstTime}发生了${item.AlarmCount}次报警。` }
                     })
+                    if (data.length < 6) {
+                        data = data.concat(data)
+                    }
                 }
                 yield update({
                     warningInfoList: data
@@ -287,10 +290,12 @@ export default Model.extend({
                 if (result.data) {
                     data = result.data.map(item => {
                         return item.OverWarnings.map(itm => {
-                            return {"txt": `${item.PointName}：${itm.AlarmOverTime} ${itm.PollutantName} | 超标预警值为${itm.AlarmValue} | 建议浓度为${itm.SuggestValue}`}
+                            return { "txt": `${item.PointName}：${itm.AlarmOverTime} ${itm.PollutantName} | 超标预警值为${itm.AlarmValue} | 建议浓度为${itm.SuggestValue}` }
                         })
                     }).reduce((acc, cur) => acc.concat(cur))
-                    console.log('data=',data)
+                    if (data.length < 6) {
+                        data = data.concat(data)
+                    }
                 }
                 yield update({
                     earlyWarningList: data
