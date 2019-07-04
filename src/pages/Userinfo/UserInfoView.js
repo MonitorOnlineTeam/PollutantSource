@@ -44,7 +44,7 @@ class UserInfoView extends Component {
                         [
                             { Name: '首页', Url: '/' },
                             { Name: '系统管理', Url: '' },
-                            { Name: '用户管理', Url: '/sysmanage/userinfoindex/UserInfo' },
+                            { Name: '用户管理', Url: '/rolesmanager/userinfoindex/UserInfo' },
                             { Name: '详情', Url: '' }
                         ]
                     }
