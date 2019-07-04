@@ -10,6 +10,13 @@ export default [
             { path: '/user/register-result', component: './User/RegisterResult' },
         ],
     },
+    {
+        path: '/hrefLogin',
+        component: '../layouts/BlankLayout',
+        routes: [
+            { path: '/hrefLogin/:username/:pwd',component: './User/HrefLogin'},
+        ]
+    },
     // appoperation
     {
         path: '/appoperation',
@@ -42,7 +49,7 @@ export default [
         path: '/',
         component: '../layouts/BasicLayout',
         routes: [
-               { path: '/', redirect: '/overview/datalistview' },
+            { path: '/', redirect: '/overview/datalistview' },
             /* 主页 */
             {
                 path: '/homepage', component: './HomePage',
@@ -66,7 +73,7 @@ export default [
                     /* 默认 */
                     { path: '/pointdetail/:pointcode/:viewtype', redirect: '/pointdetail/:pointcode/:viewtype/processflowdiagram' },
                     /* 工艺流程图 */
-                 //   { path: '/pointdetail/:pointcode/:viewtype/processflowdiagram', component: './PointDetail/ProcessFlowDiagram' },
+                    //   { path: '/pointdetail/:pointcode/:viewtype/processflowdiagram', component: './PointDetail/ProcessFlowDiagram' },
                     { path: '/pointdetail/:pointcode/:viewtype/processflowdiagram', component: './PointDetail/ProcessFlowChart' },
                     /* 数据查询 */
                     { path: '/pointdetail/:pointcode/:viewtype/dataquery', component: './PointDetail/DataQuery' },
@@ -186,15 +193,15 @@ export default [
 
             /* 排口报警及时响应统计分析 */
             { path: '/analysis/pointalarmresponse/:entcode/:entname', component: './Analysis/AlarmResponse' },
-            
+
             /* 超标排口分析（第一版选项卡格式的，目前注释，页面存在） */
             // { path: '/analysis/overpointlist', component: './Analysis/OverPointList' },
 
             /* 超标企业分析（第二版图表格式） */
             { path: '/analysis/overresponse', component: './Analysis/OverResponseCommon' },
 
-             /* 超标排口分析（第二版图表格式） */
-             { path: '/analysis/overpointlist/:entcode/:entname', component: './Analysis/OverPointListAndChart' },
+            /* 超标排口分析（第二版图表格式） */
+            { path: '/analysis/overpointlist/:entcode/:entname', component: './Analysis/OverPointListAndChart' },
 
             /* 自行监测报告 */
             {

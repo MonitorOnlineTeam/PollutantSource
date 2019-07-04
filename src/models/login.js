@@ -52,15 +52,15 @@ export default Model.extend({
         // 通过url登录并跳转主页
         * hrefLogin({ payload }, { call, put, select }) {
             const MsgId = yield select(state => state.login.MsgId);
-            yield put({
-                type: 'changeSubmitting',
-                payload: true,
-            });
+            // yield put({
+            //     type: 'changeSubmitting',
+            //     payload: true,
+            // });
             const response = yield call(fakeAccountLogin, { ...payload, MsgId });
-            yield put({
-                type: 'changeLoginStatus',
-                payload: { status: response.requstresult === '1' ? 'ok' : 'faild' },
-            });
+            // yield put({
+            //     type: 'changeLoginStatus',
+            //     payload: { status: response.requstresult === '1' ? 'ok' : 'faild' },
+            // });
             // Login successfully
             if (response.requstresult === '1') {
                 Cookie.set('token', response.data);

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Spin } from 'antd';
 import { connect } from 'dva';
 import { Link } from 'dva/router';
 import { Form, Input, Tabs, Button, Icon, Checkbox, Row, Col, Alert } from 'antd';
@@ -14,12 +15,12 @@ export default class HrefLogin extends Component {
   }
 
   componentDidMount() {
-    const { userName, password } = this.props.match.params;
+    const { username, pwd } = this.props.match.params;
     this.props.dispatch({
       type: "login/hrefLogin",
       payload: {
-        userName: userName,
-        password: password
+        userName: username,
+        password: pwd
       }
     })
   }
