@@ -376,9 +376,9 @@
 
   //图标模块样式
   .ReactEcharts {
-    width: 138px;
+    // width: 138px;
     float: left;
-
+    flex:1;
   }
 
   .EchartsA1 {
@@ -411,7 +411,8 @@
     margin: auto 0;
     display: block;
     padding: 16px 0;
-
+    overflow: hidden;
+    display: flex;
   }
 
   .Echarts1920 {
@@ -667,7 +668,7 @@
   border: 1px solid hsl(220, 49%, 30%);
   // margin-Top: 2%;
   margin-top: 20px;
-    height: 26%;
+    height: 25%;
   overflow: hidden;
   color: #fff;
 
@@ -777,7 +778,10 @@
 
 @media screen and(max-width: 1600px) {
   @1600();
-
+  .ReactEcharts {
+    width: 138px;
+    float: left;
+  }
 
 }
 
@@ -787,5 +791,5 @@
   .RightLayout2 {
     height: 50%;
   }
-
+  
 }

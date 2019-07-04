@@ -882,7 +882,7 @@ class index extends Component {
         >
           <div style={
             {
-              width: '426px',
+              width: '454px',
               height: 'unset',
               position: 'absolute',
               top: '2%',
