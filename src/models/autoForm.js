@@ -8,6 +8,8 @@ import { message } from 'antd';
 import {
   Model
 } from '../dvapack';
+import { sdlMessage } from '../utils/utils';
+
 import moment from 'moment'
 import * as services from '../services/autoformapi';
 
@@ -89,7 +91,7 @@ export default Model.extend({
       (group.length || searchParams.length) ? postData.ConditionWhere = JSON.stringify({
         // group.length? postData.ConditionWhere = JSON.stringify({
         "rel": "$and",
-        "group": [{
+        "group": [{ 
           "rel": "$and",
           group: [
             ...group,

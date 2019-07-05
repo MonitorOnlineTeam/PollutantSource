@@ -59,7 +59,8 @@ class SdlCascader extends Component {
 
 SdlCascader.defaultProps = {
   itemName: "title",
-  itemValue: "value"
+  itemValue: "value",
+  data: []
 }
 
 export default SdlCascader;
