@@ -68,9 +68,9 @@ SearchSelect.propTypes = {
   // configId
   configId: PropTypes.string.isRequired,
   // itemName
-  itemName: PropTypes.string.isRequired,
+  itemName: PropTypes.string,
   // itemValue
-  itemValue: PropTypes.string.isRequired,
+  itemValue: PropTypes.string,
   // data
   data: PropTypes.array,
 }

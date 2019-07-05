@@ -258,6 +258,10 @@ export default [
             { path: '/rolesmanager/departindex/', component: './DepartInfo/DepartIndex' },
             /* 标准库管理-维护 */
             { path: '/sysmanage/standardlibrarydetail/:StandardLibraryID', component: './StandardLibrary/AddStandardLibrary' },
+            // 站点日报
+            { path: '/report/siteDaily', component: './Report/SiteDailyPage' },
+            // 日报汇总
+            { path: '/report/dailySummary', component: './Report/DailySummaryPage' },
             /* 个人设置-维护 */
             {
                 path: '/account/settings',

@@ -291,7 +291,7 @@ class SdlTable extends PureComponent {
       }
       // return col.width ? { width: DEFAULT_WIDTH, ...col } : { ...col, width: DEFAULT_WIDTH }
     });
-
+    
     const buttonsView = this._renderHandleButtons();
     // let rowKey = [];
     // if(this.props.children instanceof Array){
@@ -301,12 +301,15 @@ class SdlTable extends PureComponent {
     // }
     // const showHandle = rowKey.length;
     // console.log("showHandle=",showHandle)
+    let scrollXWidth = _columns.map(col => col.width).reduce((prev, curr) => prev + curr, 0);
+
     if (this._SELF_.btnEl.length || this.props.appendHandleRows) {
+      const isFixed = scrollXWidth > (window.innerWidth - 64 - 48) ? "right" : ""
       _columns.push({
         align: "center",
         title: "操作",
         width: 200,
-        // fixed: 'right',
+        fixed: isFixed,
         render: (text, record) => (
           <div>
             {
@@ -399,7 +402,6 @@ class SdlTable extends PureComponent {
       });
     }
 
-    let scrollXWidth = _columns.map(col => col.width).reduce((prev, curr) => prev + curr, 0);
 
     const rowSelection = {
       selections: true,
@@ -466,7 +468,7 @@ class SdlTable extends PureComponent {
           rowKey={(record, index) => index}
           size="small"
           loading={this.props.loading}
-          className={styles.dataTable}
+          // className={styles.dataTable}
           dataSource={dataSource}
           scroll={{ x: scrollXWidth, y: 'calc(100vh - 390px)' }}
           rowClassName={
@@ -478,9 +480,28 @@ class SdlTable extends PureComponent {
                 return 'light';
               }
             }
-          }
+          } 
           onChange={this._handleTableChange}
           rowSelection={rowSelection}
+          onRow={(record,index) => {
+            return {
+              onClick: event => {
+                const { selectedRowKeys } = this.state;
+                let keys = selectedRowKeys;
+                if(selectedRowKeys.some(item => item == index)){
+                  keys = keys.filter(item => item !== index)
+                  // keys.splice(index, 1)
+                }else{
+                  keys = keys.concat([index])
+                }
+                console.log("keys=",keys);
+                // return;
+                this.setState({
+                  selectedRowKeys: keys
+                })
+              },
+            }
+          }}
           pagination={{
             showSizeChanger: true,
             showQuickJumper: true,

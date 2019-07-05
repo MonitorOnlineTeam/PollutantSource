@@ -250,7 +250,7 @@ class SearchWrapper extends Component {
           style.marginLeft = 20;
       }
       return (
-          <Form layout="inline" style={{ marginBottom: '10' }}>
+          <Form layout="inline" >
               <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
                   {
                       this._renderFormItem()
