@@ -43,7 +43,7 @@ class UserInfoView extends Component {
                     <MonitorContent breadCrumbList={
                         [
                             { Name: '首页', Url: '/' },
-                            { Name: '系统管理', Url: '' },
+                            { Name: '权限管理', Url: '' },
                             { Name: '用户管理', Url: '/rolesmanager/userinfoindex/UserInfo' },
                             { Name: '详情', Url: '' }
                         ]
