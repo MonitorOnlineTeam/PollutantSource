@@ -102,6 +102,7 @@ export async function getparenttree(params) {
 export async function getrolemenutree(params) {
     const body={
         Type:params.Type,
+        AuthorID:params.AuthorID
     }
     const result = postNew('/api/rest/PollutantSourceApi/AuthorApi/GetRoleMenuTree', body);
     return result === null ? {

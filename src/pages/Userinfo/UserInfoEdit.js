@@ -248,7 +248,8 @@ export default class UserInfoEdit extends Component {
                 breadCrumbList={
                     [
                         { Name: '首页', Url: '/' },
-                        { Name: '用户管理', Url: '/sysmanage/userinfoindex/UserInfo' },
+                        { Name: '权限管理', Url: '' },
+                        { Name: '用户管理', Url: '/rolesmanager/userinfoindex/UserInfo' },
                         { Name: '编辑用户', Url: '' },
                     ]
                 }

@@ -238,6 +238,7 @@ export default Model.extend({
             const result = yield call(insertmenubyroleid, {
                 ...payload
             });
+            payload.callback(result);
         },
     },
     reducers: {

@@ -25,7 +25,6 @@ import { sdlMessage } from '../../utils/utils';
     loading: loading.effects['autoForm/getPageConfig'],
     autoForm: autoForm,
     searchConfigItems: autoForm.searchConfigItems,
-    // columns: autoForm.columns,
     tableInfo: autoForm.tableInfo,
     searchForm: autoForm.searchForm,
     routerConfig: autoForm.routerConfig
@@ -34,9 +33,7 @@ import { sdlMessage } from '../../utils/utils';
 export default class MonitorTarget extends Component {
     constructor(props) {
         super(props);
-
         this.state = {};
-
     }
 
     componentDidMount() {
@@ -70,21 +67,14 @@ export default class MonitorTarget extends Component {
 
     editMonitorInfo = (key, row) => {
         const { match } = this.props;
-
-        if ((!row || row.length === 0) || row.length > 1) {
-            sdlMessage("请选择一行进行操作", 'warning');
-            return false;
-        }
-        // debugger;
-        //dbo.T_Bas_Enterprise.EntCode
         const configId = match.params.configId;
 
         let targetId = '';
         let targetName = '';
         switch (match.params.configId) {
             case 'AEnterpriseTest':
-                targetId = row[0]['dbo.T_Bas_Enterprise.EntCode'];
-                targetName = row[0]['dbo.T_Bas_Enterprise.EntName']
+                targetId = row['dbo.T_Bas_Enterprise.EntCode'];
+                targetName = row['dbo.T_Bas_Enterprise.EntName']
                 break;
             default: break;
         }
@@ -112,27 +102,16 @@ export default class MonitorTarget extends Component {
             <MonitorContent breadCrumbList={
                 [
                     { Name: '首页', Url: '/' },
-                    { Name: '系统管理', Url: '' },
-                    { Name: 'AutoForm企业管理', Url: '' }
+                    { Name: '平台配置', Url: '' },
+                    { Name: '企业管理', Url: '' }
                 ]
             }>
                 <div className={styles.cardTitle}>
                     <Card>
 
                         <SearchWrapper
-                            // formItemList={searchConditions}
-                            // formChangeActionType=""
-                            // searchFormState={{
-                            // }}
                             onSubmitForm={(form) => this.loadReportList(form)}
                             configId={configId}
-                        // loadDataSourceParams={[
-                        //   {
-                        //     Key: "test",
-                        //     Value: false,
-                        //     Where: "$like"
-                        //   }
-                        // ]}
                         ></SearchWrapper>
                         <SdlTable
                             style={{ marginTop: 10 }}
@@ -143,13 +122,13 @@ export default class MonitorTarget extends Component {
                                     key, row
                                 })
                             }}
-                            appendHandleButtons={(selectedRowKeys, selectedRows) => {
+                            appendHandleRows={row => {
                                 return <Fragment>
-                                    <Button icon="printer" type="primary" onClick={() => {
-                                        // console.log('selectedRowKeys=', selectedRowKeys);
-                                        // console.log('selectedRows=', selectedRows);
-                                        this.editMonitorInfo(selectedRowKeys, selectedRows);
-                                    }}>维护点信息</Button>
+                                    <Divider type="vertical" />
+                                    <a onClick={() => {
+                                        this.editMonitorInfo('', row);
+                                    }}>维护点信息</a>
+
                                 </Fragment>
                             }}
                         >
