@@ -228,7 +228,7 @@ export default [
             /* 萤石云视频管理 */
             { path: '/sysmanage/ysymanager/:Pointname/:Pointcode/:EntCode/:EntName', component: './VedioManager/YsyDeviceIndex' },
             { path: '/sysmanage/ysycameramanager/:DeviceId/', component: './VedioManager/YsyCameraIndex' },
-
+            { path: '/sysmanage/ysycameramanager/realtimevideo/:pointcode/', component: './VedioManager/YsyRealVideo' },
             /* 系统管理-AutoForm */
             { path: '/sysmanage/autoformmanager', component: './autoformmanager' },
             { path: '/sysmanage/autoformmanager/:configId', component: './autoformmanager' },

@@ -98,12 +98,14 @@ export default Model.extend({
             };
             const result = yield call(getysyList, body);
             let temprealurl = "nodata";
-            let temphisurl = "nodata";
             if (result.requstresult === '1') {
                 let obj = result.data[0];
                 if (obj) {
-                    temprealurl = `${config.ysyrealtimevideourl}?AppKey=${obj.AppKey}&Secret=${obj.Secret}&SerialNumber=${obj.SerialNumber}`;
-                    temphisurl = `${config.ysyrealtimevideourl}?AppKey=${obj.AppKey}&Secret=${obj.Secret}&SerialNumber=${obj.SerialNumber}`;
+                    if(payload.type==='1') {
+                        temprealurl = `${config.ysyrealtimevideourl}?AppKey=${obj.AppKey}&Secret=${obj.Secret}&SerialNumber=${obj.SerialNumber}`;
+                    }else {
+                        temprealurl = `${config.ysyrealtimevideourl}?AppKey=${obj.AppKey}&Secret=${obj.Secret}&SerialNumber=${obj.SerialNumber}&begintime=${payload.begintime}&endtime=${payload.endtime}`;
+                    }
                 }
                 yield update({
                     ysyvideoListParameters: {
@@ -112,7 +114,6 @@ export default Model.extend({
                             requstresult: result.requstresult,
                             list: result.data,
                             realtimevideofullurl: temprealurl,
-                            hisvideofullurl: temphisurl,
                         }
                     }
                 });
@@ -124,7 +125,6 @@ export default Model.extend({
                             requstresult: result.requstresult,
                             list: [],
                             realtimevideofullurl: temprealurl,
-                            hisvideofullurl: temphisurl
                         }
                     }
                 });

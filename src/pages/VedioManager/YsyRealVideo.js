@@ -1,9 +1,21 @@
 import React, { Component } from 'react';
-import {Row, Col, Button, Card, Divider,Spin} from 'antd';
+import {
+    Row,
+    Col,
+    Button,
+    Card,
+    Divider,
+    Spin,
+    DatePicker,
+    message
+} from 'antd';
+import moment from 'moment';
 import { connect } from 'dva';
 import styles from './video.less';
+import MonitorContent from '../../components/MonitorContent/index';
 import RealVideoData from '../../components/Video/RealVideoData';
 import config from '../../config';
+
 
 /*
 页面：萤石云实时视频
@@ -12,14 +24,18 @@ add by xpy
 */
 
 @connect(({videolist}) => ({
-    realtimevideofullurl:videolist.videoListParameters.realtimevideofullurl,
+    ysyrealtimevideofullurl: videolist.ysyvideoListParameters.realtimevideofullurl,
 }))
 class YsyRealVideo extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-
+            endOpen:false,
+            startdateString: '',
+            enddateString: '',
+            startValue: null,
+            endValue: null,
         };
     }
 
@@ -31,9 +47,36 @@ class YsyRealVideo extends Component {
        const {match,dispatch}=this.props;
        dispatch({
            type:'videolist/ysyvideourl',
-           payload:{ VedioCameraID: match.params.pointcode }
+           payload:{
+               VedioCameraID:match.params.pointcode,
+               type:'1',
+           }
        });
    }
+
+   /**回放 */
+   backplay=()=>{
+       if (this.state.startdateString !== "" && !this.state.enddateString !== "") {
+
+           const {
+               match,
+               dispatch
+           } = this.props;
+           let begintime=this.state.startdateString;
+           dispatch({
+               type: 'videolist/ysyvideourl',
+               payload: {
+                   VedioCameraID: match.params.pointcode,
+                   begintime: this.state.startdateString,
+                   endtime: this.state.enddateString,
+                   type:'2'
+               }
+           });
+       } else {
+           message.error("请选择时间间隔");
+       }
+   }
+
 
    btnClick=(opt)=>{
        let obj={"opt":opt};
@@ -42,8 +85,64 @@ class YsyRealVideo extends Component {
        frame.postMessage(obj,config.ysyrealtimevideourl);
    }
 
+   /**时间控件 */
+   disabledStartDate = (startValue) => {
+       const {
+           endValue
+       } = this.state;
+       if (!startValue || !endValue) {
+           return false;
+       }
+       return startValue.valueOf() > endValue.valueOf();
+   }
+
+   onChange = (field, value) => {
+       this.setState({
+           [field]: value,
+       });
+   }
+
+   disabledEndDate = (endValue) => {
+       const {
+           startValue
+       } = this.state;
+       if (!endValue || !startValue) {
+           return false;
+       }
+       return endValue.valueOf() <= startValue.valueOf();
+   }
+
+   onStartChange = (value, dateString) => {
+       this.onChange('startValue', value);
+       this.setState({
+           startdateString: dateString,
+       });
+   }
+
+   onEndChange = (value, dateString) => {
+       this.onChange('endValue', value);
+       this.setState({
+           enddateString: dateString,
+       });
+   }
+
+   handleStartOpenChange = (open) => {
+       if (!open) {
+           this.setState({
+               endOpen: true
+           });
+       }
+   }
+
+   handleEndOpenChange = (open) => {
+       this.setState({
+           endOpen: open
+       });
+   }
+
    render() {
        const {ysyrealtimevideofullurl}=this.props;
+       const {endOpen}=this.state;
        if (!ysyrealtimevideofullurl) {
            return (<Spin
                style={{ width: '100%',
@@ -68,72 +167,83 @@ class YsyRealVideo extends Component {
            );
        }
        return (
-           <div style={{ height: 'calc(100vh - 225px)',width: '100%' }}>
-               <Row gutter={24} style={{ height: '65%' }}>
-                   <Col xl={18} lg={24} md={24} sm={24} xs={24} style={{ marginBottom: 10, height: '100%' }}>
-                       <iframe title="实时视频" id="ifm" src={ysyrealtimevideofullurl} frameBorder="0" width="100%" height="100%" />
-                   </Col>
-                   <Col xl={6} lg={24} md={24} sm={24} xs={24} style={{ marginBottom: 10, height: '100%' }}>
-                       <Card className={styles.hisYunStyle}>
-                           <Row>
-                               <Col span={24}>
-                                   <Button onClick={this.btnClick.bind(this,10)}>抓图</Button>
-                               </Col>
-                           </Row>
-                           <Divider type="horizontal" />
-                           <Row>
-                               <Col span={24}>
-                                   <Row>
-                                       <Col className={styles.gutterleft} span={8}><Button onClick={this.btnClick.bind(this,5)}>左上</Button></Col>
-                                       <Col className={styles.gutterleft} span={8}><Button onClick={this.btnClick.bind(this,1)}>&nbsp;&nbsp;上&nbsp;&nbsp;</Button></Col>
-                                       <Col className={styles.gutterleft} span={8}><Button onClick={this.btnClick.bind(this,7)}>右上</Button></Col>
-                                   </Row>
-                                   <Row style={{marginTop:'10px'}}>
-                                       <Col className={styles.gutterleft} span={8}><Button onClick={this.btnClick.bind(this,3)}>&nbsp;&nbsp;左&nbsp;&nbsp;</Button></Col>
-                                       <Col className={styles.gutterleft} span={8}><Button onClick={this.btnClick.bind(this,9)}>自动</Button></Col>
-                                       <Col className={styles.gutterleft} span={8}><Button onClick={this.btnClick.bind(this,4)}>&nbsp;&nbsp;右&nbsp;&nbsp;</Button></Col>
-                                   </Row>
-                                   <Row style={{marginTop:'10px'}}>
-                                       <Col className={styles.gutterleft} span={8}><Button onClick={this.btnClick.bind(this,6)}>左下</Button></Col>
-                                       <Col className={styles.gutterleft} span={8}><Button onClick={this.btnClick.bind(this,2)}>&nbsp;&nbsp;下&nbsp;&nbsp;</Button></Col>
-                                       <Col className={styles.gutterleft} span={8}><Button onClick={this.btnClick.bind(this,8)}>右下</Button></Col>
-                                   </Row>
-                               </Col>
-                           </Row>
-                           <Divider type="horizontal" />
-                           <Row>
-                               <Col span={24}>
-                                   <Row>
-                                       <Col className={styles.gutterleft} span={8}><Button onClick={this.btnClick.bind(this,11)}>&nbsp;&nbsp;+&nbsp;&nbsp;</Button></Col>
-                                       <Col className={styles.gutterleft} span={8}>变倍</Col>
-                                       <Col className={styles.gutterleft} span={8}><Button onClick={this.btnClick.bind(this,12)}>&nbsp;&nbsp;-&nbsp;&nbsp;</Button></Col>
-                                   </Row>
-                                   <Row style={{marginTop:'10px'}}>
-                                       <Col className={styles.gutterleft} span={8}><Button onClick={this.btnClick.bind(this,15)}>&nbsp;&nbsp;+&nbsp;&nbsp;</Button></Col>
-                                       <Col className={styles.gutterleft} span={8}>变焦</Col>
-                                       <Col className={styles.gutterleft} span={8}><Button onClick={this.btnClick.bind(this,16)}>&nbsp;&nbsp;-&nbsp;&nbsp;</Button></Col>
-                                   </Row>
-                                   <Row style={{marginTop:'10px'}}>
-                                       <Col className={styles.gutterleft} span={8}><Button onClick={this.btnClick.bind(this,19)}>&nbsp;&nbsp;+&nbsp;&nbsp;</Button></Col>
-                                       <Col className={styles.gutterleft} span={8}>光圈</Col>
-                                       <Col className={styles.gutterleft} span={8}><Button onClick={this.btnClick.bind(this,20)}>&nbsp;&nbsp;-&nbsp;&nbsp;</Button></Col>
-                                   </Row>
-                               </Col>
-                           </Row>
-                       </Card>
-                   </Col>
-               </Row>
-               <Row gutter={24} style={{ height: '20%' }}>
-                   <RealVideoData {...this.props} />
-                   {
-                       /* <Col xl={12} lg={24} sm={24} xs={24}>
-                       <Card title="设备参数实时信息" >
-                           {  <Table size="small" borderd={true} columns={columns} dataSource={StateData} pagination={false} />  }
-                       </Card>
-                   </Col>*/
-                   }
-               </Row>
-           </div>
+           <MonitorContent
+               {...this.props}
+               breadCrumbList={
+                   [
+                       { Name: '首页', Url: '/' },
+                       { Name: '系统管理', Url: '' },
+                       { Name: '视频', Url: '' }
+                   ]
+               }
+           >
+               <div style={{ height: 'calc(100vh - 180px)',width: '100%',margin:'20px 0px 20px 0px' }}>
+                   <Row gutter={24} style={{ height: '100%' }}>
+                       <Col xl={18} lg={24} md={24} sm={24} xs={24} style={{ marginBottom: 10, height: '100%' }}>
+                           <iframe title="实时视频" id="ifm" src={ysyrealtimevideofullurl} frameBorder="0" width="100%" height="100%" />
+                       </Col>
+                       <Col xl={6} lg={24} md={24} sm={24} xs={24} style={{ marginBottom: 10, height: '100%' }}>
+                           <Card>
+                               <Row>
+                                   <Col className={styles.gutterleft} span={8}>
+                                       <Button onClick={this.btnClick.bind(this,1)}>开始播放</Button>
+                                   </Col>
+                                   <Col className={styles.gutterleft} span={8}><Button onClick={this.btnClick.bind(this,2)}>结束播放</Button></Col>
+                                   <Col className={styles.gutterleft} span={8}><Button onClick={this.btnClick.bind(this,3)}>抓图</Button></Col>
+                               </Row>
+                               <Divider type="horizontal" />
+                               <Row>
+                                   <Col className={styles.gutterleft} span={8}>
+                                       <DatePicker
+                                           style={
+                                               {
+                                                   width: 120
+                                               }
+                                           }
+                                           disabledDate={
+                                               this.disabledStartDate
+                                           }
+                                           format="YYYY-MM-DD"
+                                           placeholder="开始日期"
+                                           onChange={
+                                               this.onStartChange
+                                           }
+                                           onOpenChange={
+                                               this.handleStartOpenChange
+                                           }
+                                       />
+                                   </Col>
+                                   <Col className={styles.gutterleft} span={8}>
+                                       <DatePicker
+                                           style={
+                                               {
+                                                   width: 120
+                                               }
+                                           }
+                                           disabledDate={
+                                               this.disabledEndDate
+                                           }
+                                           format="YYYY-MM-DD"
+                                           placeholder="结束日期"
+                                           onChange={
+                                               this.onEndChange
+                                           }
+                                           open={
+                                               endOpen
+                                           }
+                                           onOpenChange={
+                                               this.handleEndOpenChange
+                                           }
+                                       />
+                                   </Col>
+
+                                   <Col className={styles.gutterleft} span={8}><Button onClick={this.backplay.bind(this)}>回放</Button></Col>
+                               </Row>
+                           </Card>
+                       </Col>
+                   </Row>
+               </div>
+           </MonitorContent>
        );
    }
 }

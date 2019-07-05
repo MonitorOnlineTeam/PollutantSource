@@ -139,6 +139,16 @@ class YsyDeviceIndex extends Component {
                                onAdd={() => {
                                    this.showModal();
                                }}
+                               appendHandleRows={row => <Fragment>
+                                   <Divider type="vertical" />
+                                   <a onClick={() => {
+                                       dispatch(routerRedux.push(`/sysmanage/ysycameramanager/realtimevideo/${ row["dbo.T_Bas_VideoCamera.VedioCamera_ID"]}`));
+                                   }}
+                                   >播放
+                                   </a>
+                                   <Divider type="vertical" />
+                                                        </Fragment>
+                               }
                            />
                        </Card>
                        <Modal
