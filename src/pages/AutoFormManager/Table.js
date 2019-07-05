@@ -306,7 +306,7 @@ class SdlTable extends PureComponent {
         align: "center",
         title: "操作",
         width: 200,
-        fixed: 'right',
+        // fixed: 'right',
         render: (text, record) => (
           <div>
             {
@@ -464,7 +464,7 @@ class SdlTable extends PureComponent {
         </Row>
         <Table
           rowKey={(record, index) => index}
-          size="middle"
+          size="small"
           loading={this.props.loading}
           className={styles.dataTable}
           dataSource={dataSource}

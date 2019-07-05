@@ -237,6 +237,30 @@ class DepartIndex extends Component {
                             >
                                 <a href="#">删除</a>
                             </Popconfirm>
+                            <Divider type="vertical" />
+                            <a href="javascript:;" onClick={() => {
+                                this.setState({
+                                    selectedRowKeys:record
+                                   },()=> {
+                                    this.showUserModal()
+                                   })
+                            }}>分配用户</a>
+                            <Divider type="vertical" />
+                            <a href="javascript:;" onClick={() => {
+                                this.setState({
+                                    selectedRowKeys:record
+                                   },()=> {
+                                    this.showRegionModal()
+                                   })
+                            }}>区域过滤</a>
+                            <Divider type="vertical" />
+                            <a href="javascript:;" onClick={() => {
+                                this.setState({
+                                    selectedRowKeys:record
+                                   },()=> {
+                                    this.showDataModal()
+                                   })
+                            }}>数据过滤</a>
                         </span>
                 },
             ]
@@ -406,12 +430,12 @@ class DepartIndex extends Component {
         this.setState({
             visibleData: true,
             checkedKey: this.props.RegionByDepID,
-            DataTreeValue: ["110000000"],
+            DataTreeValue: ["0"],
         })
         this.props.dispatch({
             type: 'departinfo/getentandpoint',
             payload: {
-                RegionCode: ["110000000"],
+                RegionCode: ["0"],
                 PollutantType: this.state.pollutantType
             }
         })
@@ -638,7 +662,7 @@ class DepartIndex extends Component {
             searchPlaceholder: '搜索',
             treeDefaultExpandedKeys: ["0"],
             style: {
-                width: 300,
+                width: 600,
                 marginLeft: 16
             },
             dropdownStyle: {
@@ -672,7 +696,7 @@ class DepartIndex extends Component {
                             <Button type="primary"
                                 onClick={this.showModal}
                             >新增</Button>
-                            <Button
+                            {/* <Button
                                 onClick={this.showUserModal}
                                 style={{ marginLeft: "10px" }}
                             >分配用户</Button>
@@ -683,7 +707,7 @@ class DepartIndex extends Component {
                             <Button
                                 onClick={this.showDataModal}
                                 style={{ marginLeft: "10px" }}
-                            >数据过滤</Button>
+                            >数据过滤</Button> */}
 
                             <Table
                                 // rowKey={}
@@ -696,7 +720,9 @@ class DepartIndex extends Component {
                                             })
                                         },
                                     };
-                                }} columns={this.state.columns} defaultExpandAllRows rowSelection={rowRadioSelection} dataSource={this.props.DepartInfoTree} />
+                                }} 
+                                style={{marginTop:"20px"}}
+                                size="small" columns={this.state.columns} defaultExpandAllRows rowSelection={rowRadioSelection} dataSource={this.props.DepartInfoTree} />
 
 
                         </Card>
@@ -728,7 +754,7 @@ class DepartIndex extends Component {
                                                 })(
                                                     <TreeSelect
                                                         type="ParentId"
-                                                        showSearch
+                                                        // showSearch
                                                         style={{ width: 300 }}
                                                         //value={this.state.IsEdit==true?this.props.RoleInfoOne.ParentId:null}
                                                         dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
@@ -777,12 +803,12 @@ class DepartIndex extends Component {
                                 }
                             </Modal>
                             <Modal
-                                title={this.state.selectedRowKeys.UserGroup_Name}
+                                title={"分配用户-"+this.state.selectedRowKeys.UserGroup_Name}
                                 visible={this.state.visibleUser}
                                 onOk={this.handleCancel}
                                 destroyOnClose="true"
                                 onCancel={this.handleCancel}
-                                width={800}
+                                width={900}
                             >
                                 {
                                     this.props.GetUserByDepID ? <Spin
@@ -797,7 +823,7 @@ class DepartIndex extends Component {
                                     /> :
                                         <TableTransfer
                                             rowKey={record => record.User_ID}
-                                            titles={['其余用户', '存在用户']}
+                                            titles={['待分配用户', '已分配用户']}
                                             dataSource={this.props.AllUser}
                                             targetKeys={targetKeys}
                                             disabled={disabled}
@@ -808,19 +834,19 @@ class DepartIndex extends Component {
                                             }
                                             leftColumns={leftTableColumns}
                                             rightColumns={rightTableColumns}
-                                            style={{ width: "100%" }}
+                                            style={{ width: "100%",height:"600px" }}
                                         />
 
                                 }
 
                             </Modal>
                             <Modal
-                                title="区域过滤"
+                                title={"区域过滤-"+this.state.selectedRowKeys.UserGroup_Name}
                                 visible={this.state.visibleRegion}
                                 onOk={this.handleRegionOK}
                                 destroyOnClose="true"
                                 onCancel={this.handleCancel}
-                                width={800}
+                                width={900}
 
                             >
                                 {
@@ -834,7 +860,7 @@ class DepartIndex extends Component {
                                         }}
                                         size="large"
                                     /> :
-                                        <div style={{ maxHeight: "400px", overflowY: "auto" }}>
+                                        <div style={{ maxHeight: "600px", overflowY: "auto" }}>
                                             <Tree
                                                 checkable
                                                 // checkStrictly={false}
@@ -859,12 +885,12 @@ class DepartIndex extends Component {
                             </Modal>
 
                             <Modal
-                                title="数据过滤"
+                                title={"数据过滤-"+this.state.selectedRowKeys.UserGroup_Name}
                                 visible={this.state.visibleData}
                                 onOk={this.handleDataOK}
                                 // destroyOnClose="true"
                                 onCancel={this.handleCancel}
-                                width={800}
+                                width={900}
 
                             >
                                 {
@@ -879,7 +905,7 @@ class DepartIndex extends Component {
                                         }}
                                         size="large"
                                     /> :
-                                        <div style={{ maxHeight: "400px", overflowY: "auto" }}>
+                                        <div style={{ height:"600px",overflow:"auto"}}>
                                             <Row style={{ position: "fixed", background: "#fff", paddingBottom: 10, zIndex: 1 }}>
                                                 <Radio.Group value={this.state.pollutantType} onChange={this.handleSizeChange}>
                                                     <Radio.Button value="1">废水</Radio.Button>
@@ -899,7 +925,7 @@ class DepartIndex extends Component {
                                                     checkedKeys={this.state.checkedKeys}
                                                     onSelect={this.onSelectData}
                                                     selectedKeys={this.state.selectedKeys}
-                                                    defaultExpandedKeys={['0']}
+                                                    defaultExpandAll={true}
                                                 // autoExpandParent={true}
                                                 // defaultExpandAll
                                                 >

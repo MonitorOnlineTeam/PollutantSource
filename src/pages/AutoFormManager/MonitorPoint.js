@@ -145,19 +145,19 @@ export default class MonitorPoint extends Component {
         }
     }
 
-    onMenu = (key, id, name,code) => {
+    onMenu = (key, id, name, code) => {
         const { match: { params: { configId, targetId, targetName } } } = this.props;
         //match.params
         switch (key) {
             case '1':
-                this.props.dispatch(routerRedux.push(`/sysmanage/usestandardlibrary/${id}/${name}/${configId}/${targetId}/${targetName}`));
+                this.props.dispatch(routerRedux.push(`/platformconfig/usestandardlibrary/${id}/${name}/${configId}/${targetId}/${targetName}`));
                 break;
             case '2':
                 debugger;
                 this.props.dispatch(routerRedux.push(`/sysmanage/stopmanagement/${id}/${name}/${configId}/${targetId}/${targetName}`));
                 break;
             case '3':
-                this.props.dispatch(routerRedux.push(`/sysmanage/ysymanager/${name}/${code}/${targetId}/${targetName}`));
+                this.props.dispatch(routerRedux.push(`/platformconfig/ysymanager/${name}/${code}/${targetId}/${targetName}`));
                 break;
             case '4':
                 this.props.dispatch(routerRedux.push(`/pointdetail/${id}/pointinfo`));
@@ -289,12 +289,12 @@ export default class MonitorPoint extends Component {
                 size="large"
             />);
         }
-        const menu = (id, name,code) => (
+        const menu = (id, name, code) => (
             <Menu onClick={(e) => {
-                this.onMenu.bind()(e.key, id, name,code);
+                this.onMenu.bind()(e.key, id, name, code);
             }}>
                 <Menu.Item key="1"><Icon type="bars" />监测标准</Menu.Item>
-                <Menu.Item key="2"><Icon type="tool" />停产管理</Menu.Item>
+                {/* <Menu.Item key="2"><Icon type="tool" />停产管理</Menu.Item> */}
                 <Menu.Item key="3"><Icon type="youtube" />视频管理</Menu.Item>
                 {/* <Menu.Item key="4"><Icon type="home" />进入排口</Menu.Item> */}
             </Menu>
@@ -303,13 +303,15 @@ export default class MonitorPoint extends Component {
             <MonitorContent breadCrumbList={
                 [
                     { Name: '首页', Url: '/' },
-                    { Name: '系统管理', Url: '' },
-                    { Name: 'AutoForm企业管理', Url: '/sysmanage/monitortarget/' + configId },
-                    { Name: '排口管理', Url: '' }
+                    { Name: '平台配置', Url: '' },
+                    { Name: '企业管理', Url: '/platformconfig/monitortarget/' + configId },
+                    { Name: '维护点信息', Url: '' }
                 ]
             }>
                 <div className={styles.cardTitle}>
-                    <Card title={`${targetName}`} extra={<PollutantType handlePollutantTypeChange={this.getPageConfig} />}>
+                    <Card title={<span>{targetName}<Button style={{ marginLeft: 10 }} onClick={() => {
+                        history.go(-1);
+                    }} type="link" size='small'><Icon type="rollback" />返回上级</Button></span>} extra={<PollutantType handlePollutantTypeChange={this.getPageConfig} />}>
 
                         <SdlTable
                             style={{ marginTop: 10 }}
@@ -352,7 +354,7 @@ export default class MonitorPoint extends Component {
                                     </Popconfirm>
                                     <Divider type="vertical" />
 
-                                    <Dropdown overlay={menu(row['dbo.T_Bas_CommonPoint.DGIMN'], row['dbo.T_Bas_CommonPoint.PointName'],row["dbo.T_Bas_CommonPoint.PointCode"])} >
+                                    <Dropdown overlay={menu(row['dbo.T_Bas_CommonPoint.DGIMN'], row['dbo.T_Bas_CommonPoint.PointName'], row["dbo.T_Bas_CommonPoint.PointCode"])} >
                                         <a>
                                             更多
                                         </a>

@@ -16,7 +16,7 @@ import {
     message,
     Divider,
     Popconfirm,
-    Transfer, Switch, Tag
+    Transfer, Switch, Tag, Select
 } from 'antd';
 import { routerRedux } from 'dva/router';
 import MonitorContent from '../../components/MonitorContent/index';
@@ -121,14 +121,19 @@ const rightTableColumns = [
 
 @connect(({ roleinfo, loading }) => ({
     RoleInfoTreeLoading: loading.effects['roleinfo/getroleinfobytree'],
-    AllUserLoading:loading.effects['roleinfo/getalluser'],
-    UserByRoleIDLoading:loading.effects['roleinfo/getuserbyroleid'],
-    RoleInfoOneLoading:loading.effects['roleinfo/getroleinfobyid'],
+    AllUserLoading: loading.effects['roleinfo/getalluser'],
+    UserByRoleIDLoading: loading.effects['roleinfo/getuserbyroleid'],
+    RoleInfoOneLoading: loading.effects['roleinfo/getroleinfobyid'],
     RoleInfoTree: roleinfo.RoleInfoTree,
     RoleInfoOne: roleinfo.RoleInfoOne,
     RolesTreeData: roleinfo.RolesTree,
     AllUser: roleinfo.AllUser,
-    UserByRoleID: roleinfo.UserByRoleID
+    UserByRoleID: roleinfo.UserByRoleID,
+    MenuTree: roleinfo.MenuTree,
+    MenuTreeLoading: loading.effects['roleinfo/getrolemenutree'],
+    SelectMenu: roleinfo.SelectMenu,
+    CheckMenu: roleinfo.CheckMenu,
+    CheckMenuLoading: loading.effects['roleinfo/getmenubyroleid'],
 }))
 @Form.create()
 
@@ -147,6 +152,67 @@ class RoleIndex extends Component {
             allKeys: [],
             disabled: false,
             showSearch: true,
+            selectvalue: "0",
+            visibleMenu: false,
+            selectButton: [],
+            buttonState: [],
+            selectedRowKeysMenu: [],
+            expandRows: false,
+            menucolumns: [
+                {
+                    title: '菜单名称',
+                    dataIndex: 'Menu_Name',
+                    key: 'Menu_Name',
+                    width: "auto"
+                },
+                {
+                    title: '图标',
+                    dataIndex: 'Menu_Img',
+                    key: 'Menu_Img',
+                    width: 'auto',
+                },
+                {
+                    title: '页面按钮',
+                    dataIndex: 'Menu_Button1',
+                    width: 'auto',
+                    key: 'Menu_Button1',
+                    render: (text, record) => {
+                        if (record.Menu_Button.length !== 0) {
+                            return <span>
+                                { //item.State=="1"?"#2db7f5":"#DEDEDE"  
+                                    record.Menu_Button.map(item => {
+                                        if (this.state.buttonState.find(cc => cc.ID == item.ID) == undefined) {
+                                            this.state.buttonState.push({ ID: item.ID, State: item.State });
+                                        }
+                                        return <Tag color={this.state.buttonState.find(cc => cc.ID == item.ID).State == "1" ? "#2db7f5" : "#DEDEDE"} key={item.ID} onClick={(e) => {
+                                            //    console.log("but=",this.state.selectButton)
+                                            if (this.state.selectButton.length == 0) {
+                                                this.state.selectButton.push(item.ID)
+                                                this.state.buttonState.find(cc => cc.ID == item.ID).State = "1"
+                                            } else {
+                                                if (this.state.selectButton.indexOf(item.ID) == -1) {
+                                                    this.state.selectButton.push(item.ID)
+                                                    this.state.buttonState.find(cc => cc.ID == item.ID).State = "1"
+                                                } else {
+                                                    var index = this.state.selectButton.indexOf(item.ID)
+                                                    this.state.selectButton.splice(index, 1)
+                                                    this.state.buttonState.find(cc => cc.ID == item.ID).State = "0"
+                                                }
+                                            }
+                                            this.setState({
+                                                buttonState: this.state.buttonState
+                                            })
+                                            console.log(this.state.buttonState)
+                                        }}><a>{item.Name}</a></Tag>
+                                    }
+
+                                    )
+                                }
+                            </span>
+                        }
+                    }
+                },
+            ],
             columns: [
                 {
                     title: '角色名称',
@@ -215,6 +281,26 @@ class RoleIndex extends Component {
                             >
                                 <a href="#">删除</a>
                             </Popconfirm>
+                            <Divider type="vertical" />
+                            <a href="javascript:;" onClick={() => {
+                                console.log(record.Roles_ID)
+                               this.setState({
+                                selectedRowKeys:record
+                               },()=> {
+                                this.showUserModal()
+                               })
+                               
+                            }}>分配用户</a>
+                             <Divider type="vertical" />
+                            <a href="javascript:;" onClick={() => {
+                                console.log(record.Roles_ID)
+                               this.setState({
+                                selectedRowKeys:record
+                               },()=> {
+                                this.showMenuModal()
+                               })
+                              
+                            }}>菜单权限</a>
                         </span>
                 },
             ]
@@ -237,7 +323,19 @@ class RoleIndex extends Component {
         })
         this.setState({ targetKeys: nextTargetKeys });
     };
-
+    onMenuChange = (value) => {
+        this.setState({
+            selectvalue: value
+        })
+        this.props.dispatch({
+            type: 'roleinfo/getrolemenutree',
+            payload: {
+                Type: value,
+                AuthorID: this.state.selectedRowKeys.key
+            }
+        })
+        console.log(`selected ${value}`);
+    }
     onSelect = (record, selected, selectedRows) => {
         console.log("record=", record.key);
     }
@@ -256,6 +354,7 @@ class RoleIndex extends Component {
             payload: {
             }
         })
+
         // this.props.dispatch({
         //     type: 'roleinfo/getrolestreeandobj',
         //     payload: {}
@@ -282,10 +381,11 @@ class RoleIndex extends Component {
         });
     };
     showUserModal = () => {
-        if (this.state.selectedRowKeys.length == 0) {
-            message.error("请选中一行")
-            return
-        }
+        // if (this.state.selectedRowKeys.length == 0) {
+        //     message.error("请选中一行")
+        //     return
+        // }
+        console.log(this.state.selectedRowKeys)
         var keys = this.state.selectedRowKeys.key
         this.props.dispatch({
             type: 'roleinfo/getalluser',
@@ -311,14 +411,35 @@ class RoleIndex extends Component {
     }
 
     showMenuModal = () => {
-        if (this.state.selectedRowKeys.length == 0) {
-            message.error("请选中一行")
-            return
-        }
+        // if (this.state.selectedRowKeys.length == 0) {
+        //     message.error("请选中一行")
+        //     return
+        // }
         var keys = this.state.selectedRowKeys.key
+        this.setState({
+            visibleMenu: true,
+        })
+        this.props.dispatch({
+            type: 'roleinfo/getparenttree',
+            payload: {
+            }
+        })
+        this.props.dispatch({
+            type: 'roleinfo/getrolemenutree',
+            payload: {
+                Type: this.state.selectvalue,
+                AuthorID: keys
+            }
+        })
+        this.props.dispatch({
+            type: 'roleinfo/getmenubyroleid',
+            payload: {
+                Roles_ID: keys
+            }
+        })
+
         // console.log("selectID=",this.props.UserByRoleID)
         // console.log("filterArr=",this.props.AllUser)
-        this.props.dispatch(routerRedux.push('/sysmanage/rolemenu/' + keys))
     }
     componentWillReceiveProps(nextProps) {
         if (this.props.UserByRoleID !== nextProps.UserByRoleID) {
@@ -330,6 +451,11 @@ class RoleIndex extends Component {
                 visibleUser: true,
                 targetKeys: selectId,
                 // allKeys: filterArr
+            })
+        }
+        if (this.props.CheckMenu !== nextProps.CheckMenu) {
+            this.setState({
+                selectButton: nextProps.CheckMenu,
             })
         }
     }
@@ -357,8 +483,36 @@ class RoleIndex extends Component {
         this.setState({
             visible: false,
             IsEdit: false,
-            visibleUser: false
+            visibleUser: false,
+            visibleMenu: false,
         });
+    };
+    handleCancelMenu = e => {
+        // this.state.selectButton.map(item=>{
+        //     this.state.buttonState.find(cc=>cc.ID==item.ID).State="0"
+        // })
+        this.setState({
+            visibleMenu: false,
+            selectButton: [],
+            buttonState: [],
+        });
+    };
+    addRight = () => {
+        var keys = this.state.selectedRowKeys.key
+        console.log(this.state.selectButton);
+        this.props.dispatch({
+            type: 'roleinfo/insertmenubyroleid',
+            payload: {
+                Roles_ID: keys,
+                MenuID: this.state.selectButton,
+                callback: (res) => {
+                    if (res.IsSuccess) {
+                        message.success("修改成功");
+                        this.handleCancelMenu()
+                    }
+                }
+            }
+        })
     };
     handleSubmit = e => {
         e.preventDefault();
@@ -401,6 +555,7 @@ class RoleIndex extends Component {
     render() {
         const { getFieldDecorator } = this.props.form;
         const { targetKeys, disabled, showSearch } = this.state;
+        const { CheckMenu } = this.props;
         const formItemLayout = {
             labelCol: {
                 span: 6
@@ -420,6 +575,19 @@ class RoleIndex extends Component {
                 })
             },
         }
+        const rowMenuSelection = {
+            selectedRowKeys: this.state.selectButton,
+            onChange: (se, selectedRows) => {
+                this.setState({
+                    selectButton: se,
+                })
+            },
+            getCheckboxProps: record => ({
+                disabled: record.name === 'Disabled User', // Column configuration not to be checked
+                name: record.name,
+            }),
+        };
+
         return (
             <Fragment>
                 {
@@ -435,14 +603,14 @@ class RoleIndex extends Component {
                             <Button type="primary"
                                 onClick={this.showModal}
                             >新增</Button>
-                            <Button
+                            {/* <Button
                                 onClick={this.showUserModal}
                                 style={{ marginLeft: "10px" }}
                             >分配用户</Button>
                             <Button
                                 onClick={this.showMenuModal}
                                 style={{ marginLeft: "10px" }}
-                            >分配权限</Button>
+                            >分配权限</Button> */}
                             {
                                 this.props.RoleInfoTreeLoading ? <Spin
                                     style={{
@@ -454,19 +622,21 @@ class RoleIndex extends Component {
                                     }}
                                     size="large"
                                 /> :
-                                <Table
-                                onRow={record => {
-                                    return {
-                                        onClick: event => {
-                                            console.log("onClick=", record)
-                                            this.setState({
-                                                selectedRowKeys: record,
-                                                rowKeys: [record.key]
-                                            })
-                                        },
-                                    };
-                                }}
-                                defaultExpandAllRows={true} columns={this.state.columns} rowSelection={rowRadioSelection} dataSource={this.props.RoleInfoTree} />
+                                    <Table
+                                        onRow={record => {
+                                            return {
+                                                onClick: event => {
+                                                    console.log("onClick=", record)
+                                                    this.setState({
+                                                        selectedRowKeys: record,
+                                                        rowKeys: [record.key]
+                                                    })
+                                                },
+                                            };
+                                        }}
+                                        size="small"
+                                        style={{marginTop:"20px"}}
+                                        defaultExpandAllRows={true} columns={this.state.columns} rowSelection={rowRadioSelection} dataSource={this.props.RoleInfoTree} />
                             }
                         </Card>
                         <div>
@@ -477,109 +647,169 @@ class RoleIndex extends Component {
                                 destroyOnClose="true"
                                 onCancel={this.handleCancel}
                             >
-                                 {
-                                 this.props.RoleInfoOneLoading ? <Spin
-                                    style={{
-                                        width: '100%',
-                                        height: 'calc(100vh/2)',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center'
-                                    }}
-                                    size="large"
-                                /> :
-                                <Form onSubmit={this.handleSubmit} className="login-form">
-                                <Form.Item label="父节点" {...formItemLayout} >
-                                    {getFieldDecorator('ParentId', {
-                                        rules: [{ required: true, message: '请选择父节点' }],
-                                        initialValue: this.state.IsEdit == true ? this.props.RoleInfoOne.ParentId : ""
-                                    })(
-                                        <TreeSelect
-                                            type="ParentId"
-                                            showSearch
-                                            style={{ width: 300 }}
-                                            //value={this.state.IsEdit==true?this.props.RoleInfoOne.ParentId:null}
-                                            dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
-                                            placeholder="请选择父节点"
-                                            allowClear
-                                            treeDefaultExpandAll
-                                            onChange={this.onChange}
-                                            treeData={this.props.RolesTreeData}
-                                            style={{ width: "100%" }}
-                                        >
-                                        </TreeSelect>
-                                    )}
-                                </Form.Item>
-                                <Form.Item label="角色名称"  {...formItemLayout}>
-                                    {getFieldDecorator('Roles_Name', {
-                                        rules: [{ required: true, message: '请输入角色名称' }],
-                                        initialValue: this.state.IsEdit == true ? this.props.RoleInfoOne.Roles_Name : ""
-                                    })(
-                                        <Input
-                                            type="Roles_Name"
-                                            placeholder="请输入角色名称"
-                                        />,
-                                    )}
-                                </Form.Item>
-                                <Form.Item label="角色描述"  {...formItemLayout}>
-                                    {getFieldDecorator('Roles_Remark', {
-                                        initialValue: this.state.IsEdit == true ? this.props.RoleInfoOne.Roles_Remark : ""
-                                    })(
-                                        <TextArea
-                                            type="Roles_Remark"
-                                            placeholder="请输入角色描述"
-                                        />,
-                                    )}
-                                </Form.Item>
-                                <Form.Item>
-                                    {getFieldDecorator('Roles_ID', {
-                                        initialValue: this.state.IsEdit == true ? this.props.RoleInfoOne.Roles_ID : ""
-                                    })(
-                                        <Input
-                                            type="Roles_ID"
-                                            hidden
-                                        />,
-                                    )}
-                                </Form.Item>
-                            </Form>
-                            }
-                                
+                                {
+                                    this.props.RoleInfoOneLoading ? <Spin
+                                        style={{
+                                            width: '100%',
+                                            height: 'calc(100vh/2)',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center'
+                                        }}
+                                        size="large"
+                                    /> :
+                                        <Form onSubmit={this.handleSubmit} className="login-form">
+                                            <Form.Item label="父节点" {...formItemLayout} >
+                                                {getFieldDecorator('ParentId', {
+                                                    rules: [{ required: true, message: '请选择父节点' }],
+                                                    initialValue: this.state.IsEdit == true ? this.props.RoleInfoOne.ParentId : ""
+                                                })(
+                                                    <TreeSelect
+                                                        type="ParentId"
+                                                        // showSearch
+                                                        style={{ width: 300 }}
+                                                        //value={this.state.IsEdit==true?this.props.RoleInfoOne.ParentId:null}
+                                                        dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+                                                        placeholder="请选择父节点"
+                                                        allowClear
+                                                        treeDefaultExpandAll
+                                                        onChange={this.onChange}
+                                                        treeData={this.props.RolesTreeData}
+                                                        style={{ width: "100%" }}
+                                                    >
+                                                    </TreeSelect>
+                                                )}
+                                            </Form.Item>
+                                            <Form.Item label="角色名称"  {...formItemLayout}>
+                                                {getFieldDecorator('Roles_Name', {
+                                                    rules: [{ required: true, message: '请输入角色名称' }],
+                                                    initialValue: this.state.IsEdit == true ? this.props.RoleInfoOne.Roles_Name : ""
+                                                })(
+                                                    <Input
+                                                        type="Roles_Name"
+                                                        placeholder="请输入角色名称"
+                                                    />,
+                                                )}
+                                            </Form.Item>
+                                            <Form.Item label="角色描述"  {...formItemLayout}>
+                                                {getFieldDecorator('Roles_Remark', {
+                                                    initialValue: this.state.IsEdit == true ? this.props.RoleInfoOne.Roles_Remark : ""
+                                                })(
+                                                    <TextArea
+                                                        type="Roles_Remark"
+                                                        placeholder="请输入角色描述"
+                                                    />,
+                                                )}
+                                            </Form.Item>
+                                            <Form.Item>
+                                                {getFieldDecorator('Roles_ID', {
+                                                    initialValue: this.state.IsEdit == true ? this.props.RoleInfoOne.Roles_ID : ""
+                                                })(
+                                                    <Input
+                                                        type="Roles_ID"
+                                                        hidden
+                                                    />,
+                                                )}
+                                            </Form.Item>
+                                        </Form>
+                                }
+
                             </Modal>
                             <Modal
-                                title={this.state.selectedRowKeys.Roles_Name}
+                                title={"分配用户-"+this.state.selectedRowKeys.Roles_Name}
                                 visible={this.state.visibleUser}
                                 onOk={this.handleCancel}
                                 destroyOnClose="true"
                                 onCancel={this.handleCancel}
-                                width={800}
+                                width={900}
                             >
                                 {
-                                 this.props.UserByRoleIDLoading ? <Spin
-                                    style={{
-                                        width: '100%',
-                                        height: 'calc(100vh/2)',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center'
-                                    }}
-                                    size="large"
-                                /> :
-                                <TableTransfer
-                                rowKey={record => record.User_ID}
-                                titles={['其余用户', '存在用户']}
-                                dataSource={this.props.AllUser}
-                                targetKeys={targetKeys}
-                                disabled={disabled}
-                                showSearch={showSearch}
-                                onChange={this.onChanges}
-                                filterOption={(inputValue, item) =>
-                                    (item.User_Name && item.User_Name.indexOf(inputValue) !== -1) || (item.User_Account && item.User_Account.indexOf(inputValue) !== -1) || (item.Phone && item.Phone.indexOf(inputValue) !== -1)
+                                    this.props.UserByRoleIDLoading ? <Spin
+                                        style={{
+                                            width: '100%',
+                                            height: 'calc(100vh/2)',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center'
+                                        }}
+                                        size="large"
+                                    /> :
+                                        <TableTransfer
+                                            rowKey={record => record.User_ID}
+                                            titles={['待分配用户', '已分配用户']}
+                                            dataSource={this.props.AllUser}
+                                            targetKeys={targetKeys}
+                                            disabled={disabled}
+                                            showSearch={showSearch}
+                                            onChange={this.onChanges}
+                                            filterOption={(inputValue, item) =>
+                                                (item.User_Name && item.User_Name.indexOf(inputValue) !== -1) || (item.User_Account && item.User_Account.indexOf(inputValue) !== -1) || (item.Phone && item.Phone.indexOf(inputValue) !== -1)
+                                            }
+                                            leftColumns={leftTableColumns}
+                                            rightColumns={rightTableColumns}
+                                            style={{ width: "100%", height: "600px" }}
+                                        />
                                 }
-                                leftColumns={leftTableColumns}
-                                rightColumns={rightTableColumns}
-                                style={{ width: "100%" }}
-                            />
-                            }
+                            </Modal>
+                            <Modal
+                                title={"菜单权限-"+this.state.selectedRowKeys.Roles_Name}
+                                visible={this.state.visibleMenu}
+                                onOk={this.addRight}
+                                destroyOnClose="true"
+                                onCancel={this.handleCancelMenu}
+                                width={1200}>
+                                <div style={{ width: '100%', maxHeight: "600px", overflow: "auto" }}>
+                                    {
+                                        <div>
+                                            <Select
+                                                showSearch
+                                                style={{ width: 200 }}
+                                                placeholder="请选择系统"
+                                                optionFilterProp="children"
+                                                onChange={this.onMenuChange}
+                                                onFocus={this.onFocus}
+                                                onBlur={this.onBlur}
+                                                onSearch={this.onSearch}
+                                                value={this.state.selectvalue}
+                                                filterOption={(input, option) =>
+                                                    option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                                                }
+                                            >
+                                                {this.props.SelectMenu.map((item, key) => (<Option key={item.ID} >{item.Name}</Option>))
+                                                }
+                                            </Select>
+                                            <Switch checkedChildren="全部展开" unCheckedChildren="全部关闭"  checked={this.state.expandRows}  onChange={(e)=>{
+                                                this.setState({
+                                                    expandRows:e
+                                                })
+                                            }}
+                                            />
+                                        </div>
+                                    }
+                                    {
+                                        this.props.MenuTreeLoading ? <Spin
+                                            style={{
+                                                width: '100%',
+                                                height: 'calc(100vh/2)',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center'
+                                            }}
+                                            size="large"
+                                        /> :
+                                            <Table
+                                                onRow={record => {
+                                                    return {
+                                                        onClick: event => {
+                                                            console.log("onClick=", this.props.CheckMenu)
+                                                        },
+                                                    };
+                                                }}
+                                                size="small"
+                                                defaultExpandAllRows={true} rowSelection={rowMenuSelection} columns={this.state.menucolumns} dataSource={this.props.MenuTree} />
+                                    }
+
+                                </div>
                             </Modal>
                         </div>
                     </MonitorContent>

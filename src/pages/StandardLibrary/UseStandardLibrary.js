@@ -52,7 +52,7 @@ class UseStandardLibrary extends Component {
         this.props.dispatch({
             type: 'standardlibrary/getuselist',
             payload: {
-                DGIMN:this.state.DGIMN,
+                DGIMN: this.state.DGIMN,
                 pageIndex: pageIndex === undefined ? 1 : pageIndex,
                 pageSize: pageSize === undefined ? 4 : pageSize,
             },
@@ -104,18 +104,18 @@ class UseStandardLibrary extends Component {
         if (this.props.list.length > 0) {
             this.props.list.map((item, key) => {
                 rtnVal.push(
-                    <div key={`${key }1`} className={styles.item}>
-                        <div key={`${key }2`} className={styles.standardlibrary}>{item.Name}</div>
-                        <Divider key={`${key }3`} dashed={true} />
-                        <div key={`${key }4`} className={styles.child}>{that.renderPollutantItem(item.child)}</div>
-                        <div key={`${key }5`} className={styles.foot}>
-                            <div key={`${key }6`} className={styles.use}>
-                                <div key={`${key }7`} style={{ position: 'relative' }}>
-                                    <Row key={`${key }8`} justify="center" type="flex">
-                                        <Col key={`${key }9`} span={9}>
+                    <div key={`${key}1`} className={styles.item}>
+                        <div key={`${key}2`} className={styles.standardlibrary}>{item.Name}</div>
+                        <Divider key={`${key}3`} dashed={true} />
+                        <div key={`${key}4`} className={styles.child}>{that.renderPollutantItem(item.child)}</div>
+                        <div key={`${key}5`} className={styles.foot}>
+                            <div key={`${key}6`} className={styles.use}>
+                                <div key={`${key}7`} style={{ position: 'relative' }}>
+                                    <Row key={`${key}8`} justify="center" type="flex">
+                                        <Col key={`${key}9`} span={9}>
 
                                             <a
-                                                key={`${key }10`}
+                                                key={`${key}10`}
                                                 className={styles.a}
                                                 onClick={() => {
                                                     that.setState({
@@ -127,17 +127,17 @@ class UseStandardLibrary extends Component {
                                                 }}
                                             >
 
-                                                <Icon key={`${key }11`} type="search" /> 查看更多
+                                                <Icon key={`${key}11`} type="search" /> 查看更多
                                             </a>
                                         </Col>
-                                        <Col key={`${key }11`} span={3}>  <Divider type="vertical" />
+                                        <Col key={`${key}11`} span={3}>  <Divider type="vertical" />
                                         </Col>
-                                        <Col key={`${key }12`} span={9}>
+                                        <Col key={`${key}12`} span={9}>
                                             <Popconfirm placement="left" title="确定要此标准下所有污染物应用到此监测点下吗？" onConfirm={() => that.UseALL(item.key)} okText="是" cancelText="否">
                                                 <a
-                                                    key={`${key }13`}
+                                                    key={`${key}13`}
                                                     className={styles.a}
-                                                > <Icon key={`${key }14`} type="appstore" /> 应用全部
+                                                > <Icon key={`${key}14`} type="appstore" /> 应用全部
                                                 </a>
                                             </Popconfirm>
                                         </Col>
@@ -156,10 +156,10 @@ class UseStandardLibrary extends Component {
     renderPollutantItem = (pollutantList) => {
         const rtnVal = [];
         pollutantList.map((item, key) => {
-            rtnVal.push(<div key={`${key }1`} className={styles.pollutant}>
+            rtnVal.push(<div key={`${key}1`} className={styles.pollutant}>
                 {
-                    <Col key={`${key }2`} span={12}><span className={styles.pollutantName}>{item.PollutantName}:</span></Col>
-                }   <Col key={`${key }3`} span={12}><span className={styles.UpperLimit}>{item.UpperLimit}-{item.LowerLimit}</span></Col>
+                    <Col key={`${key}2`} span={12}><span className={styles.pollutantName}>{item.PollutantName}:</span></Col>
+                }   <Col key={`${key}3`} span={12}><span className={styles.UpperLimit}>{item.UpperLimit}-{item.LowerLimit}</span></Col>
             </div>);
         });
         return rtnVal;
@@ -191,7 +191,7 @@ class UseStandardLibrary extends Component {
                 width: '10%',
                 render: (text, record) => {
                     if (text === 0) {
-                        return <span> <Tag color="magenta"> 无报警 </Tag> </span>;
+                        return <span> <Tag> 无报警 </Tag> </span>;
                     }
                     if (text === 1) {
                         return <span> <Tag color="green"> 上限报警 </Tag> </span>;
@@ -273,7 +273,7 @@ class UseStandardLibrary extends Component {
                 render: (text, record) => {
                     if (text === '0') {
                         return <span>
-                            <Button type="dashed">
+                            <Button size='small' type="dashed">
                                 <a
                                     title="单击设置为监测中"
                                     style={{ color: '#D1D1D1' }}
@@ -285,7 +285,7 @@ class UseStandardLibrary extends Component {
                             </Button>
                         </span>;
                     }
-                    return <span> <Button color="blue"> <a
+                    return <span> <Button size='small' color="blue"> <a
                         title="单击从监测中移除"
                         onClick={
                             () => this.IsEnabled(0, record)
@@ -317,23 +317,25 @@ class UseStandardLibrary extends Component {
                 }
             },
         ];
-        const {match:{params:{configId,targetId,targetName}}}=this.props;
+        const { match: { params: { configId, targetId, targetName } } } = this.props;
         return (
             <MonitorContent
                 {...this.props}
                 breadCrumbList={
                     [
                         { Name: '首页', Url: '/' },
-                        { Name: '系统管理', Url: '' },
-                        { Name: 'AutoForm企业管理', Url: '/sysmanage/monitortarget/' + configId },
-                        { Name: '排口管理', Url: `/sysmanage/monitortarget/monitorpoint/${configId}/${targetId}/${targetName}` },
+                        { Name: '平台管理', Url: '' },
+                        { Name: '企业管理', Url: '/platformconfig/monitortarget/' + configId },
+                        { Name: '维护点信息', Url: `/platformconfig/monitortarget/monitorpoint/${configId}/${targetId}/${targetName}` },
                         { Name: '设置标准', Url: '' }
                     ]
                 }
                 className={styles.antCss}
             >
-                <Card bordered={false} title={this.props.match.params.PointName} style={{ width: '100%' }}>
-                    <div className={styles.card}>
+                <Card bordered={false} title={<span>{targetName + '-' + this.props.match.params.PointName}<Button style={{ marginLeft: 10 }} onClick={() => {
+                    history.go(-1);
+                }} type="link" size='small'><Icon type="rollback" />返回上级</Button></span>} style={{ width: '100%' }}>
+                    {/* <div className={styles.card}>
                         {
                             this.renderStandardList()
                         }
@@ -348,9 +350,9 @@ class UseStandardLibrary extends Component {
                             onChange={this.onChange}
                             size="small"
                         />
-                    </div>
-                    <div className={styles.pageHeader}>
-                        <h3>污染物标准选择</h3>
+                    </div> */}
+                    <div className={styles.pageHeader} style={{ marginBottom: 10 }}>
+                        <Button icon="search">查看标准库</Button>
                     </div>
                     <Card className={styles.antCss}>
                         <div className={styles.table}>
