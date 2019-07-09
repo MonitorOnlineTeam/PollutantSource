@@ -8,9 +8,15 @@ import { message } from 'antd';
 export default Model.extend({
   namespace: 'report',
   state: {
+    dateReportForm:{
+      PollutantSourceType: 1,
+      // Regions: ["110000000", "110100000", "110101000"],
+      // EntCode: "",
+      ReportTime: moment()
+    },
     pollutantList: [],
     pollutantTypeList: [],
-    siteDailyDayData: [],
+    dateReportData: [],
     enterpriseList: [],
     dailySummaryDataList: []
   },
@@ -41,10 +47,20 @@ export default Model.extend({
       }
     },
     // 获取站点日报数据
-    * getSiteDailyDayData({
+    * getDateReportData({
       payload
     }, { call, update, select }) {
-      const result = yield call(services.getSiteDailyDayReport, payload);
+      const dateReportForm = yield select(state => state.report.dateReportForm)
+      const postData = {
+        // ...payload,
+        PollutantSourceType: dateReportForm.PollutantSourceType && dateReportForm.PollutantSourceType.value,
+        ReportTime: dateReportForm.ReportTime && moment(dateReportForm.ReportTime.value).format("YYYY-MM-DD"),
+        Regions: dateReportForm.Regions && dateReportForm.Regions.value.toString(),
+        EntCode: dateReportForm.EntCode && dateReportForm.EntCode.value,
+        ...payload
+      }
+      let serviceApi = payload.type === "siteDaily" ? services.getSiteDailyDayReport : (payload.type === "monthly" ? services.getMonthlyReport : services.getAnnalsReport)
+      const result = yield call(serviceApi, postData);
       if (result.IsSuccess) {
         let data = [];
         if (result.Datas.length) {
@@ -61,7 +77,7 @@ export default Model.extend({
         // console.log('data=',data)
         // message.success("统计成功！")
         yield update({
-          siteDailyDayData: data
+          dateReportData: data
         })
       }
     },
@@ -81,7 +97,7 @@ export default Model.extend({
     // 获取企业
     * getEnterpriseList({
       payload
-    }, { call, update }) {
+    }, { call, update, select }) {
       const postData = {
         ConditionWhere: JSON.stringify({
           "rel": "$and",
@@ -99,16 +115,23 @@ export default Model.extend({
       }
       const result = yield call(services.getEnterpriseList, { configId: "AEnterpriseTest", ...postData });
       if (result.IsSuccess) {
+        const dateReportForm = yield select(state => state.report.dateReportForm);
         yield update({
-          enterpriseList: result.Datas.DataSource
+          enterpriseList: result.Datas.DataSource,
+          dateReportForm: {
+            ...dateReportForm,
+            EntCode: result.Datas.DataSource.length && result.Datas.DataSource[0]["dbo.T_Bas_Enterprise.EntCode"]
+          }
         })
+        payload.callback && payload.callback(result)
       }
     },
     // 获取汇总日报数据
     * getDailySummaryDataList({
       payload
     }, { call, update }) {
-      const result = yield call(services.getDailySummaryList, payload);
+      let serviceApi = payload.type === "daily" ? services.getDailySummaryList : (payload.type === "monthly" ? services.getSummaryMonthReport : services.getSummaryYearReport)
+      const result = yield call(serviceApi, payload);
       if (result.IsSuccess) {
         let data = [];
         if (result.Datas.length) {

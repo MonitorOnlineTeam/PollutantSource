@@ -18,7 +18,7 @@ import styles from './index.less';
 const { confirm } = Modal;
 
 // 默认长度
-const DEFAULT_WIDTH = 150;
+const DEFAULT_WIDTH = 180;
 
 @connect(({ loading, autoForm }) => ({
   loading: loading.effects['autoForm/getAutoFormData'],
@@ -281,17 +281,20 @@ class SdlTable extends PureComponent {
         render: (text, record) => {
           const type = col.formatType;
           return text && <div>
-            {type === "超链接" && <a>{type}</a>}
+            {type === "超链接" &&
+              <a style={{ wordWrap: 'break-word', wordBreak: 'break-all' }}>{text}</a>
+            }
             {type == "小圆点" && <Badge status="warning" text={text} />}
             {type === "标签" && <Tag>{text}</Tag>}
             {type === "进度条" && <Progress percent={text} />}
-            {!type && text}
+            {!type && <div style={{ wordWrap: 'break-word', wordBreak: 'break-all' }}>
+              {text}
+            </div>}
           </div>
         }
       }
       // return col.width ? { width: DEFAULT_WIDTH, ...col } : { ...col, width: DEFAULT_WIDTH }
     });
-    
     const buttonsView = this._renderHandleButtons();
     // let rowKey = [];
     // if(this.props.children instanceof Array){
@@ -308,7 +311,7 @@ class SdlTable extends PureComponent {
       _columns.push({
         align: "center",
         title: "操作",
-        width: 200,
+        width: 180,
         fixed: isFixed,
         render: (text, record) => (
           <div>
@@ -480,21 +483,20 @@ class SdlTable extends PureComponent {
                 return 'light';
               }
             }
-          } 
+          }
           onChange={this._handleTableChange}
           rowSelection={rowSelection}
-          onRow={(record,index) => {
+          onRow={(record, index) => {
             return {
               onClick: event => {
                 const { selectedRowKeys } = this.state;
                 let keys = selectedRowKeys;
-                if(selectedRowKeys.some(item => item == index)){
+                if (selectedRowKeys.some(item => item == index)) {
                   keys = keys.filter(item => item !== index)
                   // keys.splice(index, 1)
-                }else{
+                } else {
                   keys = keys.concat([index])
                 }
-                console.log("keys=",keys);
                 // return;
                 this.setState({
                   selectedRowKeys: keys

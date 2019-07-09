@@ -56,3 +56,35 @@ export async function summaryReportExcel(params) {
   return result === null ? { data: null } : result;
 }
 
+/**
+ * 获取站点月报数据
+ */
+export async function getMonthlyReport(params) {
+  const result = await post('/api/rest/PollutantSourceApi/ReportApi/GetMonthReport', params, null);
+  return result === null ? { data: null } : result;
+}
+
+/**
+ * 获取站点年报表
+ */
+export async function getAnnalsReport(params) {
+  const result = await post('/api/rest/PollutantSourceApi/ReportApi/GetYearReport', params, null);
+  return result === null ? { data: null } : result;
+}
+
+/**
+ * 获取汇总月报数据
+ */
+export async function getSummaryMonthReport(params) {
+  const result = await post('/api/rest/PollutantSourceApi/ReportApi/GetSummaryMonthReport', params, null);
+  return result === null ? { data: null } : result;
+}
+
+/**
+ * 获取汇总年报数据
+ */
+export async function getSummaryYearReport(params) {
+  const result = await post('/api/rest/PollutantSourceApi/ReportApi/GetSummaryYearReport', params, null);
+  return result === null ? { data: null } : result;
+}
+
