@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import {
     Card, Icon, Divider, Table, message, Tag, Modal, Pagination, Popconfirm, Button, Row, Col, Empty,
 } from 'antd';
@@ -10,8 +10,9 @@ import EditPollutant from "./EditPollutant";
 import PollutantView from "./PollutantView";
 import styles from './index.less';
 import MonitorContent from '../../components/MonitorContent/index';
+import SdlTable from '../../pages/AutoFormManager/Table';
 
-@connect(({ loading, standardlibrary }) => ({
+@connect(({ loading, standardlibrary, autoForm }) => ({
     ...loading,
     list: standardlibrary.uselist,
     total: standardlibrary.total,
@@ -30,6 +31,7 @@ class UseStandardLibrary extends Component {
             title: '',
             width: '500',
             PollutantCode: null,
+            standardlibraryModal: false
         };
     }
 
@@ -42,7 +44,16 @@ class UseStandardLibrary extends Component {
             Fvisible: false,
         });
     }
+    componentDidMount() {
+        const { dispatch, match } = this.props;
 
+        dispatch({
+            type: 'autoForm/getPageConfig',
+            payload: {
+                configId: 'service_StandardLibrary'
+            }
+        })
+    }
     componentWillMount() {
         this.onChange();
         this.getpollutantbydgimn();
@@ -75,6 +86,10 @@ class UseStandardLibrary extends Component {
                 DGIMN: this.state.DGIMN,
                 StandardLibraryID: StandardLibraryID,
                 callback: () => {
+                    debugger;
+                    this.setState({
+                        standardlibraryModal: false
+                    });
                     if (this.props.requstresult === '1') {
                         message.success('应用成功');
                     } else {
@@ -317,7 +332,8 @@ class UseStandardLibrary extends Component {
                 }
             },
         ];
-        const { match: { params: { configId, targetId, targetName } } } = this.props;
+        console.log("this.props.PollutantListByDGIMN=", this.props.PollutantListByDGIMN);
+        const { searchConfigItems, searchForm, tableInfo, match: { params: { targetName, configId, targetId, pollutantType } }, dispatch, pointDataWhere, isEdit } = this.props;
         return (
             <MonitorContent
                 {...this.props}
@@ -334,7 +350,11 @@ class UseStandardLibrary extends Component {
             >
                 <Card bordered={false} title={<span>{targetName + '-' + this.props.match.params.PointName}<Button style={{ marginLeft: 10 }} onClick={() => {
                     history.go(-1);
-                }} type="link" size='small'><Icon type="rollback" />返回上级</Button></span>} style={{ width: '100%' }}>
+                }} type="link" size='small'><Icon type="rollback" />返回上级</Button></span>} style={{ width: '100%' }}  extra={<Button onClick={() => {
+                    this.setState({
+                        standardlibraryModal: true
+                    })
+                }} icon="search">查看标准库</Button>}>
                     {/* <div className={styles.card}>
                         {
                             this.renderStandardList()
@@ -351,9 +371,13 @@ class UseStandardLibrary extends Component {
                             size="small"
                         />
                     </div> */}
-                    <div className={styles.pageHeader} style={{ marginBottom: 10 }}>
-                        <Button icon="search">查看标准库</Button>
-                    </div>
+                    {/* <div className={styles.pageHeader} style={{ marginBottom: 10 }}>
+                        <Button onClick={() => {
+                            this.setState({
+                                standardlibraryModal: true
+                            })
+                        }} icon="search">查看标准库</Button>
+                    </div> */}
                     <Card className={styles.antCss}>
                         <div className={styles.table}>
                             <Table
@@ -378,7 +402,49 @@ class UseStandardLibrary extends Component {
                             />
                         </div>
                     </Card>
-
+                    <Modal
+                        visible={this.state.standardlibraryModal}
+                        title={'选择标准库'}
+                        width={'50%'}
+                        footer={false}
+                        destroyOnClose={true}// 清除上次数据
+                        onCancel={
+                            () => {
+                                this.setState({
+                                    standardlibraryModal: false
+                                });
+                            }
+                        }
+                    >
+                        {
+                            <SdlTable
+                                style={{ marginTop: 10 }}
+                                configId={'service_StandardLibrary'}
+                                searchParams={[
+                                    {
+                                        Key: "dbo__T_Cod_PollutantType__PollutantTypeCode",
+                                        Value: `${pollutantType}`,
+                                        Where: "$="
+                                    }
+                                ]}
+                                appendHandleRows={row => {
+                                    return <Fragment>
+                                        <Popconfirm
+                                            title="确认要应用标准吗?"
+                                            onConfirm={() => {
+                                                this.UseALL(row["dbo.T_Base_StandardLibrary.Guid"])
+                                            }}
+                                            onCancel={this.cancel}
+                                            okText="是"
+                                            cancelText="否"
+                                        >
+                                            <a href="#">应用标准</a>
+                                        </Popconfirm>
+                                    </Fragment>
+                                }}
+                            />
+                        }
+                    </Modal>
                     <Modal
                         visible={this.state.Fvisible}
                         title={this.state.title}

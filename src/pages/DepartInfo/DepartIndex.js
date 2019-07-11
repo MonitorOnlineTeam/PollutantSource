@@ -687,7 +687,7 @@ class DepartIndex extends Component {
                     <MonitorContent breadCrumbList={
                         [
                             { Name: '首页', Url: '/' },
-                            { Name: '系统管理', Url: '' },
+                            { Name: '权限管理', Url: '' },
                             { Name: '部门管理', Url: '' },
                         ]
                     }

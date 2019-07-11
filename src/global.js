@@ -2,6 +2,12 @@ import React from 'react';
 import { notification, Button, message } from 'antd';
 import { formatMessage } from 'umi/locale';
 
+// 全局提示配置
+message.config({
+  top: 70,
+  maxCount: 3,
+});
+
 // Notify user if offline now
 window.addEventListener('sw.offline', () => {
   message.warning(formatMessage({ id: 'app.pwa.offline' }));

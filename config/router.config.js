@@ -42,7 +42,7 @@ export default [
         path: '/',
         component: '../layouts/BasicLayout',
         routes: [
-            { path: '/', redirect: './sysmanage/autoformmanager/TestCommonPoint' },
+            { path: '/', redirect: './rolesmanager/userinfoindex/UserInfo' },
             /* 主页 */
             {
                 path: '/homepage', component: './HomePage',
@@ -217,7 +217,7 @@ export default [
             /* 系统管理-意见反馈 */
             { path: '/sysmanage/feedback', component: './Administration/FeedBack' },
             /* 用户基本信息管理-标准库管理 */
-            { path: '/platformconfig/usestandardlibrary/:DGIMN/:PointName/:configId/:targetId/:targetName', component: './StandardLibrary/UseStandardLibrary' },
+            { path: '/platformconfig/usestandardlibrary/:DGIMN/:PointName/:configId/:targetId/:targetName/:pollutantType', component: './StandardLibrary/UseStandardLibrary' },
             /* 用户基本信息管理-停产管理 */
             { path: '/sysmanage/stopmanagement/:DGIMN/:PointName/:configId/:targetId/:targetName', component: './StopManagement/Content' },
             /* 用户基本信息管理-视频管理 */
@@ -259,6 +259,10 @@ export default [
             { path: '/rolesmanager/departindex/', component: './DepartInfo/DepartIndex' },
             /* 标准库管理-维护 */
             { path: '/sysmanage/standardlibrarydetail/:StandardLibraryID', component: './StandardLibrary/AddStandardLibrary' },
+            // 站点日报
+            { path: '/report/siteDaily', component: './Report/SiteDailyPage' },
+            // 日报汇总
+            { path: '/report/dailySummary', component: './Report/DailySummaryPage' },
             /* 个人设置-维护 */
             {
                 path: '/account/settings',

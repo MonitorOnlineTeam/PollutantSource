@@ -187,6 +187,7 @@ export default Model.extend({
                     ...payload
                 },
             });
+            payload.callback();
         },
         /**删除标准库主表 */
         * deletestandardlibrarybyid({

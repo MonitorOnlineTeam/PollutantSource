@@ -150,10 +150,9 @@ export default class MonitorPoint extends Component {
         //match.params
         switch (key) {
             case '1':
-                this.props.dispatch(routerRedux.push(`/platformconfig/usestandardlibrary/${id}/${name}/${configId}/${targetId}/${targetName}`));
+                this.props.dispatch(routerRedux.push(`/platformconfig/usestandardlibrary/${id}/${name}/${configId}/${targetId}/${targetName}/${this.state.pollutantType}`));
                 break;
             case '2':
-                debugger;
                 this.props.dispatch(routerRedux.push(`/sysmanage/stopmanagement/${id}/${name}/${configId}/${targetId}/${targetName}`));
                 break;
             case '3':

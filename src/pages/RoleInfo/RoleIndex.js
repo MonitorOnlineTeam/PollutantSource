@@ -284,22 +284,22 @@ class RoleIndex extends Component {
                             <Divider type="vertical" />
                             <a href="javascript:;" onClick={() => {
                                 console.log(record.Roles_ID)
-                               this.setState({
-                                selectedRowKeys:record
-                               },()=> {
-                                this.showUserModal()
-                               })
-                               
+                                this.setState({
+                                    selectedRowKeys: record
+                                }, () => {
+                                    this.showUserModal()
+                                })
+
                             }}>分配用户</a>
-                             <Divider type="vertical" />
+                            <Divider type="vertical" />
                             <a href="javascript:;" onClick={() => {
                                 console.log(record.Roles_ID)
-                               this.setState({
-                                selectedRowKeys:record
-                               },()=> {
-                                this.showMenuModal()
-                               })
-                              
+                                this.setState({
+                                    selectedRowKeys: record
+                                }, () => {
+                                    this.showMenuModal()
+                                })
+
                             }}>菜单权限</a>
                         </span>
                 },
@@ -587,14 +587,14 @@ class RoleIndex extends Component {
                 name: record.name,
             }),
         };
-
+       
         return (
             <Fragment>
                 {
                     <MonitorContent breadCrumbList={
                         [
                             { Name: '首页', Url: '/' },
-                            { Name: '系统管理', Url: '' },
+                            { Name: '权限管理', Url: '' },
                             { Name: '角色管理', Url: '' },
                         ]
                     }
@@ -635,7 +635,7 @@ class RoleIndex extends Component {
                                             };
                                         }}
                                         size="small"
-                                        style={{marginTop:"20px"}}
+                                        style={{ marginTop: "20px" }}
                                         defaultExpandAllRows={true} columns={this.state.columns} rowSelection={rowRadioSelection} dataSource={this.props.RoleInfoTree} />
                             }
                         </Card>
@@ -716,7 +716,7 @@ class RoleIndex extends Component {
 
                             </Modal>
                             <Modal
-                                title={"分配用户-"+this.state.selectedRowKeys.Roles_Name}
+                                title={"分配用户-" + this.state.selectedRowKeys.Roles_Name}
                                 visible={this.state.visibleUser}
                                 onOk={this.handleCancel}
                                 destroyOnClose="true"
@@ -752,7 +752,7 @@ class RoleIndex extends Component {
                                 }
                             </Modal>
                             <Modal
-                                title={"菜单权限-"+this.state.selectedRowKeys.Roles_Name}
+                                title={"菜单权限-" + this.state.selectedRowKeys.Roles_Name}
                                 visible={this.state.visibleMenu}
                                 onOk={this.addRight}
                                 destroyOnClose="true"
@@ -760,7 +760,7 @@ class RoleIndex extends Component {
                                 width={1200}>
                                 <div style={{ width: '100%', maxHeight: "600px", overflow: "auto" }}>
                                     {
-                                        <div>
+                                        <div style={{ marginBottom: 10 }}>
                                             <Select
                                                 showSearch
                                                 style={{ width: 200 }}
@@ -778,12 +778,12 @@ class RoleIndex extends Component {
                                                 {this.props.SelectMenu.map((item, key) => (<Option key={item.ID} >{item.Name}</Option>))
                                                 }
                                             </Select>
-                                            <Switch checkedChildren="全部展开" unCheckedChildren="全部关闭"  checked={this.state.expandRows}  onChange={(e)=>{
+                                            {/* <Switch checkedChildren="全部展开" unCheckedChildren="全部关闭"  checked={this.state.expandRows}  onChange={(e)=>{
                                                 this.setState({
                                                     expandRows:e
                                                 })
                                             }}
-                                            />
+                                            /> */}
                                         </div>
                                     }
                                     {

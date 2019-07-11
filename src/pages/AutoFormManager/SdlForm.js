@@ -351,7 +351,7 @@ class SdlForm extends PureComponent {
           }
         }
         return (
-          <Col span={colSpan}>
+          <Col span={colSpan} style={{display: item.isHide == 1 ? "none" : ""}}>
             <FormItem key={fieldName} {...layout} label={labelText}>
               {getFieldDecorator(`${fieldName}`, {
                 initialValue: initialValue,
