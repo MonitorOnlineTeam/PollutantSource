@@ -17,7 +17,26 @@
 
   }
 
+.dataTable {
+  :global {
+.ant-table-fixed-header .ant-table-scroll .ant-table-header {
+  overflow: hidden;
+  width: 99.7%;
+}
+    .ant-table-body {
+      // min-height: calc(100vh - 58px);
+      height: calc(100vh - 25px);
+      overflow: auto;
+      // overflow-y: scroll;
 
+    }
+    .ant-table-placeholder {
+      position: absolute;
+      top: 50px;
+      width: 100%;
+    }
+  }
+}
   .realYunStyle
   {
     min-width:300px;

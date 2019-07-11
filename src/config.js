@@ -15,7 +15,7 @@ module.exports = {
     enterpriceid: '51216eae-8f11-4578-ad63-5127f78f6cca',
     isMultiEnterprise: false,
     apiPrefix: '/mock',
-    webSocketPushURL: '172.16.12.152:40005',
+    webSocketPushURL: '172.16.12.152:50005',
     imgaddress: 'http://172.16.12.152:8066/api/upload/',
     //年度检测报告路径
     annualmonitoringreportaddress: 'http://172.16.12.152:8066/api/upload/report/pdf/year/',

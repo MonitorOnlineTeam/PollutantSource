@@ -157,7 +157,7 @@ export default class MonitorPoint extends Component {
                 this.props.dispatch(routerRedux.push(`/sysmanage/stopmanagement/${id}/${name}/${configId}/${targetId}/${targetName}`));
                 break;
             case '3':
-                this.props.dispatch(routerRedux.push(`/platformconfig/ysymanager/${name}/${code}/${targetId}/${targetName}`));
+                this.props.dispatch(routerRedux.push(`/platformconfig/ysymanager/${name}/${code}/${id}/${targetId}/${targetName}`));
                 break;
             case '4':
                 this.props.dispatch(routerRedux.push(`/pointdetail/${id}/pointinfo`));

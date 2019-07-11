@@ -220,18 +220,19 @@ export default Model.extend({
             };
             const res = yield call(querypollutantlist, body);
             let pollutants = [];
-            pollutants.push({ title: "监测时间", dataIndex: "MonitorTime", key: "MonitorTime", align: 'center', width: '200px' });
+            // pollutants.push({ title: "监测时间", dataIndex: "MonitorTime", key: "MonitorTime", align: 'center', width: '200px' });
             if (res.length > 0) {
                 res.map((item, key) => {
                     pollutants = pollutants.concat({
-                        title: `${item.pollutantName}(${item.unit})`,
-                        dataIndex: item.pollutantCode,
-                        key: item.pollutantCode,
+                        title: `${item.PollutantName}(${item.Unit})`,
+                        dataIndex: item.PollutantCode,
+                        key: item.PollutantCode,
                         align: 'center',
-                        render: (value, record, index) => formatPollutantPopover(value,record[`${item.pollutantCode}_params`])
+                        render: (value, record, index) => formatPollutantPopover(value, record[`${item.PollutantCode}_params`])
                     });
                 });
             }
+
             if (pollutants.length === 1)
                 pollutants = [];
             yield update({ columns: pollutants });
@@ -239,8 +240,8 @@ export default Model.extend({
         * queryhistorydatalist({ payload }, { select, call, update }) {
             const res = yield call(queryhistorydatalist, { ...payload });
             let realdata = [];
-            if (res.data.length > 0) {
-                realdata.push({ key: "1", ...res.data[0] });
+            if (res.Datas.length > 0) {
+                realdata.push({ key: "1", ...res.Datas[0] });
             }
             yield update({ realdata: realdata });
         },
@@ -250,15 +251,16 @@ export default Model.extend({
             };
             const res = yield call(querypollutantlist, body);
             let pollutants = [];
-            pollutants.push({ title: "监测时间", dataIndex: "MonitorTime", key: "MonitorTime", align: 'center', width: '200px' });
+            pollutants.push({ title: "监测时间", dataIndex: "MonitorTime", key: "MonitorTime", align: 'left', width: '160px',fixed: 'left' });
             if (res.length > 0) {
                 res.map((item, key) => {
                     pollutants = pollutants.concat({
-                        title: `${item.pollutantName}(${item.unit})`,
-                        dataIndex: item.pollutantCode,
-                        key: item.pollutantCode,
-                        align: 'center',
-                        render: (value, record, index) => formatPollutantPopover(value,record[`${item.pollutantCode}_params`])
+                        title: `${item.PollutantName}(${item.Unit})`,
+                        dataIndex: item.PollutantCode,
+                        key: item.PollutantCode,
+                        align: 'left',
+                        width: '160px',
+                        render: (value, record, index) => formatPollutantPopover(value, record[`${item.PollutantCode}_params`])
                     });
                 });
             }
@@ -269,12 +271,11 @@ export default Model.extend({
         * queryhistorydatalisthis({ payload }, { call, update }) {
             const res = yield call(queryhistorydatalist, { ...payload });
             let realdata = [];
-            if (res.data.length > 0) {
-                const datas = res.data;
+            if (res.Datas.length > 0) {
+                const datas = res.Datas;
                 for (let i = 0; i < datas.length; i++) {
                     const element = datas[i];
-                    if (realdata.length < 5)
-                        realdata.push({ key: i.toString(), ...element });
+                    realdata.push({ key: i.toString(), ...element });
                 }
             }
             yield update({ hisrealdata: realdata });

@@ -226,10 +226,8 @@ export default [
             /* 标准库管理 */
             { path: '/sysmanage/standardlibrary', component: './StandardLibrary' },
             /* 萤石云视频管理 */
-            { path: '/sysmanage/ysymanager/:Pointname/:Pointcode/:EntCode/:EntName', component: './VedioManager/YsyDeviceIndex' },
-            { path: '/sysmanage/ysycameramanager/:DeviceId/', component: './VedioManager/YsyCameraIndex' },
-            { path: '/sysmanage/ysycameramanager/realtimevideo/:pointcode/', component: './VedioManager/YsyRealVideo' },
-            { path: '/platformconfig/ysymanager/:Pointname/:Pointcode/:EntCode/:EntName', component: './VedioManager/YsyDeviceIndex' },
+            { path: '/sysmanage/ysycameramanager/realtimevideo/:ID/:pointcode/', component: './VedioManager/YsyRealVideo' },
+            { path: '/platformconfig/ysymanager/:Pointname/:Pointcode/:DGIMN/:EntCode/:EntName', component: './VedioManager/YsyDeviceIndex' },
             { path: '/platformconfig/ysycameramanager/:DeviceId/', component: './VedioManager/YsyCameraIndex' },
 
             /* 系统管理-AutoForm */

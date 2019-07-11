@@ -142,12 +142,12 @@ class YsyDeviceIndex extends Component {
                                appendHandleRows={row => <Fragment>
                                    <Divider type="vertical" />
                                    <a onClick={() => {
-                                       dispatch(routerRedux.push(`/sysmanage/ysycameramanager/realtimevideo/${ row["dbo.T_Bas_VideoCamera.VedioCamera_ID"]}`));
+                                       dispatch(routerRedux.push(`/sysmanage/ysycameramanager/realtimevideo/${ row["dbo.T_Bas_VideoCamera.VedioCamera_ID"]}/${this.props.match.params.DGIMN}`));
                                    }}
                                    >播放
                                    </a>
                                    <Divider type="vertical" />
-                                                        </Fragment>
+                               </Fragment>
                                }
                            />
                        </Card>
