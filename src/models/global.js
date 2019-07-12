@@ -172,7 +172,7 @@ export default Model.extend({
 
         // 获取按钮权限
         * getBtnAuthority({ payload }, { call, update, select }) {
-            const menuCode = yield select(state => state.menu.menuCode);
+            // const menuCode = yield select(state => state.menu.menuCode);
             const result = yield call(getBtnAuthority, payload);
             if(result.IsSuccess){
                 const btnsAuthority = result.Datas.map(item => item.Code);
