@@ -353,4 +353,9 @@ export async function queryoperationTaskInfo(params) {
     return result === null ? { data: null } : result;
 }
 
+// 获取用户按钮权限
+export async function getBtnAuthority(params) {
+    const result = await post('/api/rest/PollutantSourceApi/AuthorApi/GetButtonByUserID', params, null);
+    return result === null ? { data: null } : result;
+}
 
