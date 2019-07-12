@@ -244,9 +244,10 @@ class SdlMap extends PureComponent {
                     mapCenter: [longitude, latitude]
                   })
                 }
+                const path = this.props.path && JSON.parse(this.props.path);
                 this.setState({
                   mapVisible: true,
-                  path: this.props.path && JSON.parse(this.props.path),
+                  path: path
                 })
               }}
               type="global"
@@ -286,6 +287,8 @@ class SdlMap extends PureComponent {
                     longitude: undefined
                   },
                   address: undefined,
+                  polygon: undefined,
+                  path: undefined
                 })
               }}>清除全部</Button>
 
@@ -322,9 +325,14 @@ SdlMap.propTypes = {
   latitude: PropTypes.number,
   longitude: PropTypes.number,
   onOk: PropTypes.func,
+  // 是否可以设置经纬度
   handleMarker: PropTypes.bool,
+  // 是否可以设置区域厂界
   handlePolygon: PropTypes.bool,
+  // 弹窗 、显示
   mode: PropTypes.string,
+  // 厂界坐标
+  path: PropTypes.object,
 }
 
 SdlMap.defaultProps = {

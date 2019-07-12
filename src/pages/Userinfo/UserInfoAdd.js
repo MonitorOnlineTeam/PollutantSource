@@ -150,6 +150,7 @@ export default class UserInfoAdd extends Component {
             FormDatas: formData
         })
         console.log('FormData=', formData);
+        // return;
     }
 
     postFormDatas() {

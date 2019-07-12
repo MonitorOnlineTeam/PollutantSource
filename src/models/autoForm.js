@@ -150,7 +150,7 @@ export default Model.extend({
           title: item.DF_NAME_CN,
           dataIndex: item.DF_FOREIGN_TYPE === 2 ? item.FullFieldName + '_Name' : item.FullFieldName,
           key: item.FullFieldNameVerticalBar,
-          align: 'center',
+          align: item.DF_ALIGN,
           width: item.DF_WIDTH,
           sorter: item.DF_ISSORT === 1 ? (a, b) => a[item.FullFieldName] - b[item.FullFieldName] : false,
           fixed: result.Datas.FixedFields.filter(m => m.FullFieldName === item.FullFieldName).length > 0 ? 'left' : '',
@@ -204,7 +204,8 @@ export default Model.extend({
           validator: item.DF_ISNOTNULL === 1 && (item.DF_TOOLTIP || ""),//TODO：正则？
           validate: item.DF_VALIDATE ? item.DF_VALIDATE.split(',') : [],
           colSpan: item.DF_COLSPAN,
-          dateFormat: item.DF_DATEFORMAT
+          dateFormat: item.DF_DATEFORMAT,
+          isHide: item.DF_HIDDEN
         }));
 
 
@@ -320,7 +321,7 @@ export default Model.extend({
         let detailFormItems = result.Datas.CfgField.filter(cfg => cfg.DF_ISEDIT === 1).map(item => ({
           type: item.DF_CONTROL_TYPE,
           labelText: item.DF_NAME_CN,
-          fieldName: item.DF_NAME,
+          fieldName:  item.DF_FOREIGN_TYPE === 2 ? item.FullFieldName + "_Name" : (item.FOREIGH_DT_CONFIGID ? item.FOREIGN_DF_NAME : item.DF_NAME),  // 判断是否是外键或表连接
           // configId: item.DT_CONFIG_ID,
           configId: item.FOREIGH_DT_CONFIGID,
           configDataItemName: item.FOREIGN_DF_NAME,
@@ -338,12 +339,13 @@ export default Model.extend({
     },
 
     // 获取联动
-    * getRegions({ payload }, { call, update }) {
+    * getRegions({ payload, callback }, { call, update }) {
       const result = yield call(services.getRegions, { ...payload });
       if (result.IsSuccess) {
         yield update({
           regionList: result.Datas
         })
+        callback && callback(result)
       }
     },
 
