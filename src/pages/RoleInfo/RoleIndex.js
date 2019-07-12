@@ -587,7 +587,7 @@ class RoleIndex extends Component {
                 name: record.name,
             }),
         };
-       
+
         return (
             <Fragment>
                 {
@@ -759,35 +759,9 @@ class RoleIndex extends Component {
                                 onCancel={this.handleCancelMenu}
                                 width={1200}>
                                 <div style={{ width: '100%', maxHeight: "600px", overflow: "auto" }}>
+
                                     {
-                                        <div style={{ marginBottom: 10 }}>
-                                            <Select
-                                                showSearch
-                                                style={{ width: 200 }}
-                                                placeholder="请选择系统"
-                                                optionFilterProp="children"
-                                                onChange={this.onMenuChange}
-                                                onFocus={this.onFocus}
-                                                onBlur={this.onBlur}
-                                                onSearch={this.onSearch}
-                                                value={this.state.selectvalue}
-                                                filterOption={(input, option) =>
-                                                    option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                                                }
-                                            >
-                                                {this.props.SelectMenu.map((item, key) => (<Option key={item.ID} >{item.Name}</Option>))
-                                                }
-                                            </Select>
-                                            {/* <Switch checkedChildren="全部展开" unCheckedChildren="全部关闭"  checked={this.state.expandRows}  onChange={(e)=>{
-                                                this.setState({
-                                                    expandRows:e
-                                                })
-                                            }}
-                                            /> */}
-                                        </div>
-                                    }
-                                    {
-                                        this.props.MenuTreeLoading ? <Spin
+                                        this.props.CheckMenuLoading ? <Spin
                                             style={{
                                                 width: '100%',
                                                 height: 'calc(100vh/2)',
@@ -797,16 +771,45 @@ class RoleIndex extends Component {
                                             }}
                                             size="large"
                                         /> :
-                                            <Table
-                                                onRow={record => {
-                                                    return {
-                                                        onClick: event => {
-                                                            console.log("onClick=", this.props.CheckMenu)
-                                                        },
-                                                    };
+                                            <div>
+                                                <div style={{ marginBottom: 10 }}>
+                                                    <Select
+                                                        showSearch
+                                                        style={{ width: 200 }}
+                                                        placeholder="请选择系统"
+                                                        optionFilterProp="children"
+                                                        onChange={this.onMenuChange}
+                                                        onFocus={this.onFocus}
+                                                        onBlur={this.onBlur}
+                                                        onSearch={this.onSearch}
+                                                        value={this.state.selectvalue}
+                                                        filterOption={(input, option) =>
+                                                            option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                                                        }
+                                                    >
+                                                        {this.props.SelectMenu.map((item, key) => (<Option key={item.ID} >{item.Name}</Option>))
+                                                        }
+                                                    </Select>
+                                                    {/* <Switch checkedChildren="全部展开" unCheckedChildren="全部关闭"  checked={this.state.expandRows}  onChange={(e)=>{
+                                                    this.setState({
+                                                        expandRows:e
+                                                    })
                                                 }}
-                                                size="small"
-                                                defaultExpandAllRows={true} rowSelection={rowMenuSelection} columns={this.state.menucolumns} dataSource={this.props.MenuTree} />
+                                                /> */}
+                                                </div>
+
+                                                <Table
+                                                    onRow={record => {
+                                                        return {
+                                                            onClick: event => {
+                                                                console.log("onClick=", record)
+                                                            },
+                                                        };
+                                                    }}
+                                                    size="small"
+                                                    defaultExpandAllRows={true} rowSelection={rowMenuSelection} columns={this.state.menucolumns} dataSource={this.props.MenuTree} />
+                                            </div>
+
                                     }
 
                                 </div>

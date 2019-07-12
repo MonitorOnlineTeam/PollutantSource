@@ -1,12 +1,13 @@
 import { Icon, Popover, Badge } from 'antd';
 import React from 'react';
 import { Model } from '../dvapack';
-import { getList, deleteVideoInfo, gethistoryVideoList, updateVideoInfos, addVideoInfo, getAlarmHistory, updateAlarmHistory } from '../services/videodata';
- 
-import {querypollutantlist} from '../services/overviewApi';
-import { queryhistorydatalist } from '../services/overviewApi';
+import { getList,getysyList, deleteVideoInfo, gethistoryVideoList, updateVideoInfos, addVideoInfo, getAlarmHistory, updateAlarmHistory } from '../services/videodata';
+
+import {querypollutantlist, queryhistorydatalist } from '../services/overviewApi';
+
 import config from '../config';
 import {formatPollutantPopover} from '../utils/utils';
+
 export default Model.extend({
     namespace: 'videolist',
     state: {
@@ -30,13 +31,23 @@ export default Model.extend({
             visible: false,
             pointName: '',
         },
+        //萤石云视频参数
+        ysyvideoListParameters: {
+            DGIMN: null,
+            realtimevideofullurl: null,
+            hisvideofullurl: null,
+            requstresult: null,
+            list: [],
+            visible: false,
+            pointName: '',
+        },
     },
     effects: {
         * fetchuserlist({ payload }, { call, update, put, take, select }) {
             const { videoListParameters } = yield select(state => state.analysisdata);
             let body = {
                 DGIMN: videoListParameters.DGIMN,
-            }
+            };
             const result = yield call(getList, body);
             let temprealurl = "nodata";
             let temphisurl = "nodata";
@@ -66,6 +77,54 @@ export default Model.extend({
                             list: [],
                             realtimevideofullurl: temprealurl,
                             hisvideofullurl: temphisurl
+                        }
+                    }
+                });
+            }
+        },
+        /**萤石云视频链接 */
+        * ysyvideourl({
+            payload
+        }, {
+            call,
+            update,
+            select
+        }) {
+            const {
+                ysyvideoListParameters
+            } = yield select(state => state.analysisdata);
+            let body = {
+                VedioCameraID: payload.VedioCameraID,
+            };
+            const result = yield call(getysyList, body);
+            let temprealurl = "nodata";
+            if (result.requstresult === '1') {
+                let obj = result.data[0];
+                if (obj) {
+                    if(payload.type==='1') {
+                        temprealurl = `${config.ysyrealtimevideourl}?AppKey=${obj.AppKey}&Secret=${obj.Secret}&SerialNumber=${obj.SerialNumber}`;
+                    }else {
+                        temprealurl = `${config.ysyrealtimevideourl}?AppKey=${obj.AppKey}&Secret=${obj.Secret}&SerialNumber=${obj.SerialNumber}&begintime=${payload.begintime}&endtime=${payload.endtime}`;
+                    }
+                }
+                yield update({
+                    ysyvideoListParameters: {
+                        ...ysyvideoListParameters,
+                        ...{
+                            requstresult: result.requstresult,
+                            list: result.data,
+                            realtimevideofullurl: temprealurl,
+                        }
+                    }
+                });
+            } else {
+                yield update({
+                    ysyvideoListParameters: {
+                        ...ysyvideoListParameters,
+                        ...{
+                            requstresult: result.requstresult,
+                            list: [],
+                            realtimevideofullurl: temprealurl,
                         }
                     }
                 });
@@ -158,23 +217,22 @@ export default Model.extend({
 
             const body={
                 DGIMNs:payload.dgimn
-            }
+            };
             const res = yield call(querypollutantlist, body);
             let pollutants = [];
-            pollutants.push({ title: "监测时间", dataIndex: "MonitorTime", key: "MonitorTime", align: 'center', width: '200px' });
+            // pollutants.push({ title: "监测时间", dataIndex: "MonitorTime", key: "MonitorTime", align: 'center', width: '200px' });
             if (res.length > 0) {
                 res.map((item, key) => {
                     pollutants = pollutants.concat({
-                        title: `${item.pollutantName}(${item.unit})`,
-                        dataIndex: item.pollutantCode,
-                        key: item.pollutantCode,
+                        title: `${item.PollutantName}(${item.Unit})`,
+                        dataIndex: item.PollutantCode,
+                        key: item.PollutantCode,
                         align: 'center',
-                        render: (value, record, index) => {
-                            return formatPollutantPopover(value,record[`${item.pollutantCode}_params`]);
-                        }
+                        render: (value, record, index) => formatPollutantPopover(value, record[`${item.PollutantCode}_params`])
                     });
                 });
             }
+
             if (pollutants.length === 1)
                 pollutants = [];
             yield update({ columns: pollutants });
@@ -182,28 +240,27 @@ export default Model.extend({
         * queryhistorydatalist({ payload }, { select, call, update }) {
             const res = yield call(queryhistorydatalist, { ...payload });
             let realdata = [];
-            if (res.data.length > 0) {
-                realdata.push({ key: "1", ...res.data[0] });
+            if (res.Datas.length > 0) {
+                realdata.push({ key: "1", ...res.Datas[0] });
             }
             yield update({ realdata: realdata });
         },
         * querypollutantlisthis({ payload }, { call, update }) {
             const body={
                 DGIMNs:payload.dgimn
-            }
+            };
             const res = yield call(querypollutantlist, body);
             let pollutants = [];
-            pollutants.push({ title: "监测时间", dataIndex: "MonitorTime", key: "MonitorTime", align: 'center', width: '200px' });
+            pollutants.push({ title: "监测时间", dataIndex: "MonitorTime", key: "MonitorTime", align: 'left', width: '160px',fixed: 'left' });
             if (res.length > 0) {
                 res.map((item, key) => {
                     pollutants = pollutants.concat({
-                        title: `${item.pollutantName}(${item.unit})`,
-                        dataIndex: item.pollutantCode,
-                        key: item.pollutantCode,
-                        align: 'center',
-                        render: (value, record, index) => {
-                            return formatPollutantPopover(value,record[`${item.pollutantCode}_params`]);
-                        }
+                        title: `${item.PollutantName}(${item.Unit})`,
+                        dataIndex: item.PollutantCode,
+                        key: item.PollutantCode,
+                        align: 'left',
+                        width: '160px',
+                        render: (value, record, index) => formatPollutantPopover(value, record[`${item.PollutantCode}_params`])
                     });
                 });
             }
@@ -214,12 +271,11 @@ export default Model.extend({
         * queryhistorydatalisthis({ payload }, { call, update }) {
             const res = yield call(queryhistorydatalist, { ...payload });
             let realdata = [];
-            if (res.data.length > 0) {
-                const datas = res.data;
+            if (res.Datas.length > 0) {
+                const datas = res.Datas;
                 for (let i = 0; i < datas.length; i++) {
                     const element = datas[i];
-                    if (realdata.length < 5)
-                        realdata.push({ key: i.toString(), ...element });
+                    realdata.push({ key: i.toString(), ...element });
                 }
             }
             yield update({ hisrealdata: realdata });
