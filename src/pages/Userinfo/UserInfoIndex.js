@@ -8,6 +8,7 @@ import {
     Table,
     Form,
     Spin,
+    Tooltip,
     Select, Modal, Tag, Divider, Dropdown, Icon, Menu, Popconfirm, message, DatePicker, InputNumber
 } from 'antd';
 import styles from './index.less';
@@ -81,7 +82,7 @@ export default class UserInfoIndex extends Component {
             message.error("请至少选中一行")
             return
         }
-        const {dispatch} =this.props
+        const { dispatch } = this.props
         confirm({
             title: '是否确认重置密码?',
             content: '',
@@ -172,25 +173,32 @@ export default class UserInfoIndex extends Component {
                             }}
                             appendHandleRows={row => {
                                 return <Fragment>
-                                    <a onClick={() => {
-                                        dispatch(routerRedux.push('/rolesmanager/userinfoedit/' + row["dbo.Base_UserInfo.User_ID"]))
-                                    }}>编辑</a>
+                                    <Tooltip title="编辑">
+                                        <a onClick={() => {
+                                            dispatch(routerRedux.push('/rolesmanager/userinfoedit/' + row["dbo.Base_UserInfo.User_ID"]))
+                                        }}><Icon type="edit" style={{ fontSize: 16 }} /></a>
+                                    </Tooltip>
                                     <Divider type="vertical" />
-                                    <a onClick={() => {
-                                        dispatch(routerRedux.push('/rolesmanager/userinfoview/' + row["dbo.Base_UserInfo.User_ID"]))
-                                    }}>详情</a>
+                                    <Tooltip title="详情">
+                                        <a onClick={() => {
+                                            dispatch(routerRedux.push('/rolesmanager/userinfoview/' + row["dbo.Base_UserInfo.User_ID"]))
+                                        }}><Icon type="profile" style={{ fontSize: 16 }} />
+                                        </a>
+                                    </Tooltip>
                                     <Divider type="vertical" />
-                                    <Popconfirm
-                                        title="确认要删除吗?"
-                                        onConfirm={() => {
-                                            this.confirm(row["dbo.Base_UserInfo.User_ID"])
-                                        }}
-                                        onCancel={this.cancel}
-                                        okText="是"
-                                        cancelText="否"
-                                    >
-                                        <a href="#">删除</a>
-                                    </Popconfirm>
+                                    <Tooltip title="删除">
+                                        <Popconfirm
+                                            title="确认要删除吗?"
+                                            onConfirm={() => {
+                                                this.confirm(row["dbo.Base_UserInfo.User_ID"])
+                                            }}
+                                            onCancel={this.cancel}
+                                            okText="是"
+                                            cancelText="否"
+                                        >
+                                            <a href="#"><Icon type="delete" style={{ fontSize: 16 }} title="删除" /></a>
+                                        </Popconfirm>
+                                    </Tooltip>
                                 </Fragment>
                             }}
                         // loadDataSourceParams={[

@@ -240,7 +240,7 @@ export default [
             /* 系统管理-AutoForm详情页面 */
             { path: '/autoformmanager/autoformview/:configId/:keysParams', component: './autoformmanager/autoformview' },
             // /* 系统管理-AutoForm详情页面 */
-            { path: '/autoformmanager/test/:configId', component: './autoformmanager/Test' },
+            { path: '/test', component: './Test/Test' },
             { path: '/autoformmanager/upload', component: './autoformmanager/Upload' },
 
             /* 平台配置-企业管理 */
@@ -259,10 +259,10 @@ export default [
             { path: '/rolesmanager/departindex/', component: './DepartInfo/DepartIndex' },
             /* 标准库管理-维护 */
             { path: '/sysmanage/standardlibrarydetail/:StandardLibraryID', component: './StandardLibrary/AddStandardLibrary' },
-            // 站点日报
-            { path: '/report/siteDaily', component: './Report/SiteDailyPage' },
-            // 日报汇总
-            { path: '/report/dailySummary', component: './Report/DailySummaryPage' },
+            // 时间报表
+            { path: '/report/:reportType', component: './Report/DateReportPage' },
+            // 汇总报表
+            { path: '/report/summary/:reportType', component: './Report/SummaryReportPage' },
             /* 个人设置-维护 */
             {
                 path: '/account/settings',
