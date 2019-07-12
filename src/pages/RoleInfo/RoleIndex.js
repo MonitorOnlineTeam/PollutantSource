@@ -16,7 +16,7 @@ import {
     message,
     Divider,
     Popconfirm,
-    Transfer, Switch, Tag, Select
+    Transfer, Switch, Tag, Select, Tooltip
 } from 'antd';
 import { routerRedux } from 'dva/router';
 import MonitorContent from '../../components/MonitorContent/index';
@@ -242,6 +242,8 @@ class RoleIndex extends Component {
                     title: '操作',
                     dataIndex: '',
                     key: 'x',
+                    align: 'left',
+                    width: '200px',
                     render: (text, record) =>
                         <span>
                             <a href="javascript:;" onClick={() => {
@@ -253,7 +255,9 @@ class RoleIndex extends Component {
                                     }
                                 })
                                 this.showModalEdit()
-                            }}>编辑</a>
+                            }}><Tooltip title="编辑">
+                                    <a><Icon type="edit" style={{ fontSize: 16 }} /></ a>
+                                </Tooltip></a>
                             <Divider type="vertical" />
                             <Popconfirm
                                 title="确认要删除吗?"
@@ -278,8 +282,10 @@ class RoleIndex extends Component {
                                 onCancel={this.cancel}
                                 okText="是"
                                 cancelText="否"
-                            >
-                                <a href="#">删除</a>
+                            >  
+                                <a href="#"><Tooltip title="删除">
+                                    <a> <Icon type="delete" theme="twoTone"  style={{ fontSize: 16 }} /></ a>
+                                </Tooltip></a>
                             </Popconfirm>
                             <Divider type="vertical" />
                             <a href="javascript:;" onClick={() => {
@@ -290,7 +296,9 @@ class RoleIndex extends Component {
                                     this.showUserModal()
                                 })
 
-                            }}>分配用户</a>
+                            }}><Tooltip title="分配用户">
+                            <a> <Icon type="usergroup-add"  style={{ fontSize: 16 }} /></ a>
+                        </Tooltip></a>
                             <Divider type="vertical" />
                             <a href="javascript:;" onClick={() => {
                                 console.log(record.Roles_ID)
@@ -300,7 +308,9 @@ class RoleIndex extends Component {
                                     this.showMenuModal()
                                 })
 
-                            }}>菜单权限</a>
+                            }}><Tooltip title="菜单权限">
+                            <a> <Icon type="menu"  style={{ fontSize: 16 }} /></ a>
+                        </Tooltip></a>
                         </span>
                 },
             ]
