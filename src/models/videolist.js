@@ -3,7 +3,7 @@ import React from 'react';
 import { Model } from '../dvapack';
 import { getList,getysyList, deleteVideoInfo, gethistoryVideoList, updateVideoInfos, addVideoInfo, getAlarmHistory, updateAlarmHistory } from '../services/videodata';
 
-import {querypollutantlist, queryhistorydatalist } from '../services/overviewApi';
+import {querypollutantlist, queryhistorydatalist,queryhistorydatalistbyrealtime } from '../services/overviewApi';
 
 import config from '../config';
 import {formatPollutantPopover} from '../utils/utils';
@@ -20,7 +20,12 @@ export default Model.extend({
         columns: [],
         realdata: [],
         hiscolumns: [],
-        hisrealdata: [],
+        hisrealdataList: {
+            hisrealdata:[],
+            total:0,
+            pageIndex:1,
+            pageSize:15,
+        },
         //视频参数
         videoListParameters: {
             DGIMN: null,
@@ -101,10 +106,10 @@ export default Model.extend({
             if (result.requstresult === '1') {
                 let obj = result.data[0];
                 if (obj) {
-                    if(payload.type==='1') {
-                        temprealurl = `${config.ysyrealtimevideourl}?AppKey=${obj.AppKey}&Secret=${obj.Secret}&SerialNumber=${obj.SerialNumber}`;
+                    if(payload.type===1) {
+                        temprealurl = `${config.ysyrealtimevideourl}?AppKey=${obj.AppKey}&Secret=${obj.Secret}&SerialNumber=${obj.SerialNumber}&type=1`;
                     }else {
-                        temprealurl = `${config.ysyrealtimevideourl}?AppKey=${obj.AppKey}&Secret=${obj.Secret}&SerialNumber=${obj.SerialNumber}&begintime=${payload.begintime}&endtime=${payload.endtime}`;
+                        temprealurl = `${config.ysyrealtimevideourl}?AppKey=${obj.AppKey}&Secret=${obj.Secret}&SerialNumber=${obj.SerialNumber}&type=2`;
                     }
                 }
                 yield update({
@@ -269,10 +274,10 @@ export default Model.extend({
             yield update({ hiscolumns: pollutants });
         },
         * queryhistorydatalisthis({ payload }, { call, update }) {
-            const res = yield call(queryhistorydatalist, { ...payload });
+            const res = yield call(queryhistorydatalistbyrealtime, { ...payload });
             let realdata = [];
-            if (res.Datas.length > 0) {
-                const datas = res.Datas;
+            if (res.data.length > 0) {
+                const datas = res.data;
                 for (let i = 0; i < datas.length; i++) {
                     const element = datas[i];
                     realdata.push({ key: i.toString(), ...element });

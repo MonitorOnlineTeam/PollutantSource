@@ -79,7 +79,7 @@ class HistoryVideo extends Component {
                 DGIMNs: match.params.pointcode,
                 datatype: 'realtime',
                 pageIndex: 1,
-                pageSize: 15,
+                pageSize: 20,
                 beginTime: beginTime,
                 endTime: endTime
             }
@@ -98,16 +98,6 @@ class HistoryVideo extends Component {
                 columns={hiscolumns}
                 size="small"
                 scroll={{ x: x,y: 'calc(100vh - 530px)'}}
-                pagination={
-                    {
-                        'total': this.props.total,
-                        'pageSize': this.props.pageSize,
-                        'current': this.props.pageIndex,
-                        onChange: this.onChange,
-                        onShowSizeChange: this.onShowSizeChange,
-                        pageSizeOptions: ['5', '10', '20', '30', '40']
-                    }
-                }
             />
         );
     }

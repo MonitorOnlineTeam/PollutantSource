@@ -52,6 +52,7 @@ class YsyRealVideoData extends Component {
         });
     }
 
+    //<Alert message="Info Text" type="info" />
     getTreeDatalist = () => {
         const {realdata,columns} = this.props;
         let res = [];
@@ -66,7 +67,7 @@ class YsyRealVideoData extends Component {
                                 <span className={styles.pointName}>{item.title}</span>
                                 <span className={styles.pollutantType}>{realdata[0][code]===undefined?"-":realdata[0][code]}</span>
                             </div>
-                        </div><Divider type="horizontal" />
+                        </div>
                     </Fragment>);
 
                 });
@@ -85,8 +86,8 @@ class YsyRealVideoData extends Component {
         }
 
         return (
-            <div>
-                <Card title="实时数据" style={{height: 'calc(100vh - 347px)',overflowY: 'scroll'}} extra={<div style={{color:'gray'}}>{MonitorTime}</div>} loading={isloadingC && isloadingP} size="small">
+            <div className={styles.tab}>
+                <Card title="实时数据" style={{height: 'calc(100vh - 322px)',overflowY: 'scroll'}} extra={<div style={{color:'gray'}}>{MonitorTime}</div>} loading={isloadingC && isloadingP} size="small">
                     {
                         this.getTreeDatalist()
                     }

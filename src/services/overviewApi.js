@@ -27,12 +27,12 @@ export async function querypollutanttypecode(params) {
         "pointName": "1号脱硫出口",
         "status": 1,
         "terate": 1,
-   
+
     }
  */
 export async function querydatalist(params) {
     if (params.dgimn)
-          params.DGIMNs = params.dgimn;
+        params.DGIMNs = params.dgimn;
     const result = await post('/api/rest/PollutantSourceApi/BaseDataApi/AllTypeSummaryList', params, null);
     return result === null ? { data: null } : result.Datas;
 }
@@ -65,7 +65,10 @@ export async function queryhistorydatalist(params) {
     const result = await post('/api/rest/PollutantSourceApi/MonDataApi/GetAllTypeDataList', params, null);
     return result === null ? { data: null } : result;
 }
-
+export async function queryhistorydatalistbyrealtime(params) {
+    const result = await post('/api/rest/PollutantSourceApi/PRealTime/GetRealTimeData', params, null);
+    return result === null ? { data: null } : result;
+}
 /**
  * 【智能监控】获取排口下的污染物
  * @params {

@@ -52,45 +52,82 @@ class YsyRealVideo extends Component {
             displayHStartBtn: "block",
             displayHEndBtn: "none",
             vIsLoading:false,
+            playtime: "",
         };
     }
 
    componentWillMount = () => {
        window.addEventListener("message", this.receiveMessage, false);
-       this.getVideoIp();
+       this.getVideoIp(1);
    }
 
    componentWillUnmount() {
        window.removeEventListener("message", this.receiveMessage);
+       clearInterval(this.timerID);
    }
 
    receiveMessage = ( event ) => {
-       console.log("-----------------------------------",event);
        if(event!==undefined){
-           if(event.data.key==="success") {
+           if(event.data.key==="success") {//实时视频
                message.success("播放成功");
                this.setState({
                    displayRStartBtn: "none",
                    displayREndBtn: "block",
                });
            }
+           if (event.data.key === "successhis") {//历史
+               message.success("播放成功");
+               this.setState({
+                   displayHStartBtn: "none",
+                   displayHEndBtn: "block",
+               });
+           }
            if (event.data.key === "err") {
                this.setState({
                    displayRStartBtn: "block",
                    displayREndBtn: "none",
+                   displayHStartBtn: "block",
+                   displayHEndBtn: "none",
                });
                message.error(event.data.value);
+           }
+           if (event.data.key === "playback") {
+               this.backplay();
+           }
+           if (event.data.key === "his") {
+               this.setState({
+                   displayHStartBtn: "block",
+                   displayHEndBtn: "none",
+               });
+           }
+           if(event.data.key==="time") {
+               console.log("-------------------------------------", moment(event.data.value).format("YYYY-MM-DD HH:mm:ss").toString());
+               let time = moment(event.data.value).format("YYYY-MM-DD HH:mm:ss");
+               let etime = moment(this.state.enddateString);
+               if (moment(time) < etime) {
+                   this.setState({
+                       playtime: moment(event.data.value).format("YYYY-MM-DD HH:mm:ss").toString(),
+                   });
+               } else {
+                   this.setState({
+                       playtime:""
+                   });
+               }
+               let obj={"opt":2};
+               let frame = document.getElementById('ifm').contentWindow;
+               frame.postMessage(obj,config.ysyrealtimevideourl);
            }
        }
    };
 
-   getVideoIp=()=>{
+   /**获取url */
+   getVideoIp=(type)=>{
        const {match,dispatch}=this.props;
        dispatch({
            type:'videolist/ysyvideourl',
            payload:{
                VedioCameraID:match.params.ID,
-               type:'1',
+               type:type,
            }
        });
    }
@@ -98,19 +135,35 @@ class YsyRealVideo extends Component {
    /**回放操作 */
    backplay=()=>{
        if (this.state.startdateString !== "" && !this.state.enddateString !== "") {
-           this.setState({
-               displayHStartBtn: "none",
-               displayHEndBtn: "block",
-           });
-           let obj = {
-               "btime": this.state.startdateString,
-               "etime": this.state.enddateString,
-               "opt":5,
-           };
-           let frame = document.getElementById('ifm').contentWindow;
-           frame.postMessage(obj, config.ysyrealtimevideourl);
+           if(this.state.playtime==="") {
+               this.setState({
+                   displayHStartBtn: "none",
+                   displayHEndBtn: "block",
+               });
+               let obj = {
+                   "btime": this.state.startdateString,
+                   "etime": this.state.enddateString,
+                   "opt": 5,
+               };
+               let frame = document.getElementById('ifm').contentWindow;
+               frame.postMessage(obj, config.ysyrealtimevideourl);
 
-           this.child.startPlay(moment(this.state.startdateString,'YYYY-MM-DD HH:mm:ss'),moment(this.state.enddateString,'YYYY-MM-DD HH:mm:ss'));
+               this.child.startPlay(moment(this.state.startdateString, 'YYYY-MM-DD HH:mm:ss'), moment(this.state.enddateString, 'YYYY-MM-DD HH:mm:ss'));
+           }else {
+               this.setState({
+                   displayHStartBtn: "none",
+                   displayHEndBtn: "block",
+               });
+               let obj = {
+                   "btime": this.state.playtime,
+                   "etime": this.state.enddateString,
+                   "opt": 5,
+               };
+               let frame = document.getElementById('ifm').contentWindow;
+               frame.postMessage(obj, config.ysyrealtimevideourl);
+
+               this.child.startPlay(moment(this.state.stoptime, 'YYYY-MM-DD HH:mm:ss'), moment(this.state.enddateString, 'YYYY-MM-DD HH:mm:ss'));
+           }
        } else {
            message.error("请选择时间间隔");
        }
@@ -120,11 +173,14 @@ class YsyRealVideo extends Component {
 
    backbtnClick=(opt)=>{
        if(opt===2) {
-           this.child.endPlay();
            this.setState({
                displayHStartBtn: "block",
                displayHEndBtn: "none",
            });
+           let obj={"opt":opt};
+           obj={"opt":4};
+           let frame = document.getElementById('ifm').contentWindow;
+           frame.postMessage(obj,config.ysyrealtimevideourl);
        }
        if (opt === 1) {
            this.setState({
@@ -132,14 +188,11 @@ class YsyRealVideo extends Component {
                displayHEndBtn: "block",
            });
        }
-       let obj={"opt":opt};
-       obj={"opt":opt};
-       let frame = document.getElementById('ifm').contentWindow;
-       frame.postMessage(obj,config.ysyrealtimevideourl);
    }
 
    /**实时视频视频按钮 */
    btnClick=(opt)=>{
+       debugger;
        if(opt===2) {
            this.setState({
                displayRStartBtn: "block",
@@ -160,6 +213,9 @@ class YsyRealVideo extends Component {
 
    /**时间控件 */
    onChange=(value, dateString)=> {
+       this.setState({
+           stoptime: ""
+       });
        if(value.length>1) {
            this.setState({
                startdateString: dateString[0],
@@ -181,21 +237,20 @@ class YsyRealVideo extends Component {
     /**tabs切换 */
     tabsChange=(key)=>{
         if(key==='1') {
-            let obj={"opt":1};
-            let frame = document.getElementById('ifm').contentWindow;
-            frame.postMessage(obj,config.ysyrealtimevideourl);
             this.setState({
-                displayR: "block",
-                displayH: "none",
+                displayR:"block",
+                displayH:"none",
             });
+            this.getVideoIp(1);
         }
         if(key==='2') {
+            this.getVideoIp(2);
             let obj={"opt":2};
             let frame = document.getElementById('ifm').contentWindow;
             frame.postMessage(obj,config.ysyrealtimevideourl);
             this.setState({
-                displayR:"none",
-                displayH:"block",
+                displayR: "none",
+                displayH: "block",
             });
         }
     }
@@ -268,7 +323,7 @@ class YsyRealVideo extends Component {
                                                 <a style={{marginLeft:'10px',color:"black"}} onClick={this.btnClick.bind(this,3)}>抓取图片</a>
                                             </Col>
                                         </Row>
-                                        <Divider type="horizontal" />
+                                        <Divider type="dashed" />
                                         <Row gutter={48} style={{display:this.state.displayR}}>
                                             <Col xl={24} lg={24} md={24} sm={24} xs={24}>
                                                 {this.state.displayR&& <YsyRealVideoData {...this.props} />}
@@ -280,8 +335,8 @@ class YsyRealVideo extends Component {
                                             <Col className={styles.gutterleft} span={24}>
                                                 <RangePicker
                                                     style={{width:'380px'}}
-                                                    showTime={{ format: 'HH:mm' }}
-                                                    format="YYYY-MM-DD HH:mm"
+                                                    showTime={{ format: 'HH:mm:ss' }}
+                                                    format="YYYY-MM-DD HH:mm:ss"
                                                     placeholder={['开始时间', '结束时间']}
                                                     onChange={this.onChange}
                                                 />
