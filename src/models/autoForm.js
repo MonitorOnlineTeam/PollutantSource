@@ -158,6 +158,8 @@ export default Model.extend({
         })
         );
 
+        const checkboxOrRadio = result.Datas.MulType;
+
         let whereList = {};
         let searchConditions = result.Datas.CfgField.filter(itm => itm.DF_ISQUERY === 1).map((item, index) => {
           index === 0 ? whereList[configId] = {} : '';
@@ -175,7 +177,6 @@ export default Model.extend({
             dateFormat: item.DF_DATEFORMAT
           };
         });
-        console.log("whereList=", whereList)
         //添加
         const addCfgField = result.Datas.CfgField.filter(cfg => cfg.DF_ISADD === 1);
         // const colSpanLen = ;
@@ -230,7 +231,8 @@ export default Model.extend({
             ...state.tableInfo,
             [configId]: {
               ...state.tableInfo[configId],
-              columns
+              columns,
+              checkboxOrRadio,
             }
           },
           opreationButtons: {
@@ -386,7 +388,8 @@ export default Model.extend({
       } else {
         message.error(result.Datas)
       }
-    }
+    },
+
   },
   reducers: {
     // 保存搜索框数据

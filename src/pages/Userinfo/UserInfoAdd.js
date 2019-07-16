@@ -154,7 +154,6 @@ export default class UserInfoAdd extends Component {
     }
 
     postFormDatas() {
-        this.onSubmitForm();
         const { dispatch, form, RolesTreeData } = this.props;
         const { FormDatas, leafTreeDatas, checkedKeySel, checkedKeysSel } = this.state;
         if (checkedKeySel.length == 0) {
@@ -165,18 +164,48 @@ export default class UserInfoAdd extends Component {
             message.error("部门不能为空");
             return;
         }
-        Object.keys(FormDatas).length ? dispatch({
-            type: 'userinfo/add',
-            payload: {
-                configId: 'UserInfoAdd',
-                roleID: this.state.checkedKeySel,
-                departID: this.state.checkedKeysSel,
-                FormData: {
-                    ...FormDatas,
-                    // uid: uid
-                },
+        // Object.keys(FormDatas).length ? dispatch({
+        //     type: 'userinfo/add',
+        //     payload: {
+        //         configId: 'UserInfoAdd',
+        //         roleID: this.state.checkedKeySel,
+        //         departID: this.state.checkedKeysSel,
+        //         FormData: {
+        //             ...FormDatas,
+        //             // uid: uid
+        //         },
+        //     }
+        // }) : message.error("数据为空")
+        form.validateFields((err, values) => {
+            console.log("11=", values)
+            if (!err) {
+                let FormData = {};
+                for (let key in values) {
+                    if (values[key] && values[key]["fileList"]) {
+                        FormData[key] = uid;
+                    } else {
+                        FormData[key] = values[key] && values[key].toString()
+                    }
+                }
+                // this.setState({
+                //     FormDatas: FormData
+                // })
+                console.log('FormData=', FormData);
+                // return;
+                dispatch({
+                    type: 'userinfo/add',
+                    payload: {
+                        configId: 'UserInfoAdd',
+                        roleID: this.state.checkedKeySel,
+                        departID: this.state.checkedKeysSel,
+                        FormData: {
+                            ...FormData,
+                            // uid: uid
+                        },
+                    }
+                })
             }
-        }) : message.error("数据为空")
+        });
     }
 
     render() {
@@ -292,6 +321,21 @@ export default class UserInfoAdd extends Component {
                                             >下一步
                                         </Button>
                                         </Divider>
+                                        {/* <Divider orientation="right" style={{ border: '1px dashed #FFFFFF' }}>
+                                            <Button
+                                                type="primary"
+
+                                                onClick={() => {
+                                                    this.setState({
+                                                        activeKey: "roles",
+                                                        baseState: 'none',
+                                                        rolesState: 'block',
+                                                        departState: 'none'
+                                                    })
+                                                }}
+                                            >下一步
+                                        </Button>
+                                        </Divider> */}
                                     </SdlForm>
 
                                 </Card>

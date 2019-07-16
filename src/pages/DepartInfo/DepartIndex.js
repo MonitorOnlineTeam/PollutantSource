@@ -17,7 +17,7 @@ import {
     Divider,
     Popconfirm,
     Empty,
-    Transfer, Switch, Tag, Tree, Radio
+    Transfer, Switch, Tag, Tree, Radio,Tooltip
 } from 'antd';
 import MonitorContent from '../../components/MonitorContent/index';
 import TextArea from 'antd/lib/input/TextArea';
@@ -127,7 +127,7 @@ const rightTableColumns = [
     GetAllUser: loading.effects['departinfo/getalluser'],
     GetDepartInfoByTree: loading.effects['departinfo/getdepartinfobytree'],
     DepartInfoOneLoading: loading.effects['departinfo/getdepartinfobyid'],
-    CheckPointLoading:loading.effects['departinfo/getpointbydepid'],
+    CheckPointLoading: loading.effects['departinfo/getpointbydepid'],
     DepartInfoTree: departinfo.DepartInfoTree,
     DepartInfoOne: departinfo.DepartInfoOne,
     DepartTree: departinfo.DepartTree,
@@ -198,6 +198,8 @@ class DepartIndex extends Component {
                     title: '操作',
                     dataIndex: '',
                     key: 'x',
+                    align: 'left',
+                    width: '320px',
                     render: (text, record) =>
                         <span>
                             <a href="javascript:;" onClick={() => {
@@ -209,7 +211,9 @@ class DepartIndex extends Component {
                                     }
                                 })
                                 this.showModalEdit()
-                            }}>编辑</a>
+                            }}><Tooltip title="编辑">
+                                    <a><Icon type="edit" style={{ fontSize: 16 }} /></ a>
+                                </Tooltip></a>
                             <Divider type="vertical" />
                             <Popconfirm
                                 title="确认要删除吗?"
@@ -235,32 +239,40 @@ class DepartIndex extends Component {
                                 okText="是"
                                 cancelText="否"
                             >
-                                <a href="#">删除</a>
+                                <a href="#"><Tooltip title="删除">
+                                    <a><Icon type="delete" style={{ fontSize: 16 }} /></ a>
+                                </Tooltip></a>
                             </Popconfirm>
                             <Divider type="vertical" />
                             <a href="javascript:;" onClick={() => {
                                 this.setState({
-                                    selectedRowKeys:record
-                                   },()=> {
+                                    selectedRowKeys: record
+                                }, () => {
                                     this.showUserModal()
-                                   })
-                            }}>分配用户</a>
+                                })
+                            }}><Tooltip title="分配用户">
+                                    <a> <Icon type="usergroup-add" style={{ fontSize: 16 }} /></ a>
+                                </Tooltip></a>
                             <Divider type="vertical" />
                             <a href="javascript:;" onClick={() => {
                                 this.setState({
-                                    selectedRowKeys:record
-                                   },()=> {
+                                    selectedRowKeys: record
+                                }, () => {
                                     this.showRegionModal()
-                                   })
-                            }}>区域过滤</a>
+                                })
+                            }}><Tooltip title="区域过滤">
+                            <a> <Icon type="filter" style={{ fontSize: 16 }} /></ a>
+                        </Tooltip></a>
                             <Divider type="vertical" />
                             <a href="javascript:;" onClick={() => {
                                 this.setState({
-                                    selectedRowKeys:record
-                                   },()=> {
+                                    selectedRowKeys: record
+                                }, () => {
                                     this.showDataModal()
-                                   })
-                            }}>数据过滤</a>
+                                })
+                            }}><Tooltip title="数据过滤">
+                            <a> <Icon type="filter" style={{ fontSize: 16 }} /></ a>
+                        </Tooltip></a>
                         </span>
                 },
             ]
@@ -720,8 +732,8 @@ class DepartIndex extends Component {
                                             })
                                         },
                                     };
-                                }} 
-                                style={{marginTop:"20px"}}
+                                }}
+                                style={{ marginTop: "20px" }}
                                 size="small" columns={this.state.columns} defaultExpandAllRows rowSelection={rowRadioSelection} dataSource={this.props.DepartInfoTree} />
 
 
@@ -803,7 +815,7 @@ class DepartIndex extends Component {
                                 }
                             </Modal>
                             <Modal
-                                title={"分配用户-"+this.state.selectedRowKeys.UserGroup_Name}
+                                title={"分配用户-" + this.state.selectedRowKeys.UserGroup_Name}
                                 visible={this.state.visibleUser}
                                 onOk={this.handleCancel}
                                 destroyOnClose="true"
@@ -834,14 +846,14 @@ class DepartIndex extends Component {
                                             }
                                             leftColumns={leftTableColumns}
                                             rightColumns={rightTableColumns}
-                                            style={{ width: "100%",height:"600px" }}
+                                            style={{ width: "100%", height: "600px" }}
                                         />
 
                                 }
 
                             </Modal>
                             <Modal
-                                title={"区域过滤-"+this.state.selectedRowKeys.UserGroup_Name}
+                                title={"区域过滤-" + this.state.selectedRowKeys.UserGroup_Name}
                                 visible={this.state.visibleRegion}
                                 onOk={this.handleRegionOK}
                                 destroyOnClose="true"
@@ -885,7 +897,7 @@ class DepartIndex extends Component {
                             </Modal>
 
                             <Modal
-                                title={"数据过滤-"+this.state.selectedRowKeys.UserGroup_Name}
+                                title={"数据过滤-" + this.state.selectedRowKeys.UserGroup_Name}
                                 visible={this.state.visibleData}
                                 onOk={this.handleDataOK}
                                 // destroyOnClose="true"
@@ -905,7 +917,7 @@ class DepartIndex extends Component {
                                         }}
                                         size="large"
                                     /> :
-                                        <div style={{ height:"600px",overflow:"auto"}}>
+                                        <div style={{ height: "600px", overflow: "auto" }}>
                                             <Row style={{ position: "fixed", background: "#fff", paddingBottom: 10, zIndex: 1 }}>
                                                 <Radio.Group value={this.state.pollutantType} onChange={this.handleSizeChange}>
                                                     <Radio.Button value="1">废水</Radio.Button>
