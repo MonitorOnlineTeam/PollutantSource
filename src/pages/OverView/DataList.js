@@ -250,10 +250,8 @@ class dataList extends PureComponent {
                 render: (value, record, index) => {
                     const content=this.getEntButton(record);
                     return (
-                    // <span onClick={()=>this.toworkbenchmodel(record)} style={{ cursor: 'pointer' }}>{value}
-                    // </span>
-                    {value}
-                );
+                   <span>{record.entName}</span> 
+                   );
                 }
             })
         }
