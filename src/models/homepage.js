@@ -292,7 +292,8 @@ export default Model.extend({
                         return item.OverWarnings.map(itm => {
                             return { "txt": `${item.PointName}：${itm.AlarmOverTime} ${itm.PollutantName} | 超标预警值为${itm.AlarmValue} | 建议浓度为${itm.SuggestValue}` }
                         })
-                    }).reduce((acc, cur) => acc.concat(cur))
+                    })
+                    data = data.length ? data.reduce((acc, cur) => acc.concat(cur)) : data;
                     if (data.length < 6) {
                         data = data.concat(data)
                     }

@@ -19,8 +19,8 @@ export default class HrefLogin extends Component {
     this.props.dispatch({
       type: "login/hrefLogin",
       payload: {
-        userName: username,
-        password: pwd
+        userName: "system",
+        password: "system"
       }
     })
   }

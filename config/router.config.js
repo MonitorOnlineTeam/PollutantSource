@@ -14,7 +14,7 @@ export default [
         path: '/hrefLogin',
         component: '../layouts/BlankLayout',
         routes: [
-            { path: '/hrefLogin/:username/:pwd',component: './User/HrefLogin'},
+            { path: '/hrefLogin',component: './User/HrefLogin'},
         ]
     },
     // appoperation
