@@ -3,7 +3,7 @@ import {
     Model
 } from '../dvapack';
 import {
-    GetExceptionProcessing, GetTaskCount, GetAlarmAnalysis, GetAllMonthEmissionsByPollutant, GetRateStatisticsByEnt
+    GetExceptionProcessing, GetTaskCount, GetAlarmAnalysis, GetAllMonthEmissionsByPollutant, GetRateStatisticsByEnt, getWarningInfo, getEarlyWarningInfo
 } from '../services/homepage';
 
 export default Model.extend({
@@ -13,7 +13,7 @@ export default Model.extend({
         requstresult: null,
         loading: false,
         reason: null,
-        entCode:null,
+        entCode: null,
         RateStatisticsByEnt: {
             beginTime: moment().format('YYYY-MM-01 HH:mm:ss'),
             endTime: moment().format('YYYY-MM-DD HH:mm:ss'),
@@ -37,7 +37,7 @@ export default Model.extend({
         AllMonthEmissionsByPollutant: {
             beginTime: moment().format('YYYY-01-01 HH:mm:ss'),
             endTime: moment().add(1, 'years').format('YYYY-MM-01 HH:mm:ss'),
-            pollutantCode:['01','02','03'],
+            pollutantCode: ['01', '02', '03'],
             ycdate: [],
             ycdata: [],
             ycAnalData: [],
@@ -48,7 +48,23 @@ export default Model.extend({
             dyhwdata: [],
             dyhwAnalData: [],
         },
-        wheretopage:null
+        wheretopage: null,
+        earlyWarningParams: {
+            beginTime: moment().minute() < 30 ? moment().add(-1, 'hour').format("YYYY-MM-DD HH:00:00") : moment().add(-1, 'hour').format("YYYY-MM-DD HH:00:00"),
+            endTime: moment().add(1, 'hour').format('YYYY-MM-DD HH:00:00'),
+            pageIndex: 1,
+            pageSize: 100,
+        },
+        warningInfoParams: {
+            beginTime: moment().format("YYYY-MM-DD 00:00:00"),
+            endTime: moment().format('YYYY-MM-DD HH:mm:ss'),
+            entCode: null,
+            pageIndex: 1,
+            pageSize: 100,
+            PollutantType: "2",
+        },
+        warningInfoList: [],
+        earlyWarningList: []
     },
     subscriptions: {
         setup({
@@ -79,7 +95,7 @@ export default Model.extend({
             let body = {
                 beginTime: RateStatisticsByEnt.beginTime,
                 endTime: RateStatisticsByEnt.endTime,
-                entCode:payload.entCode
+                entCode: payload.entCode
             };
             const response = yield call(GetRateStatisticsByEnt, body);
             yield update({
@@ -96,7 +112,7 @@ export default Model.extend({
           * @param {传递参数} 传递参数
           * @param {操作} 操作项
           */
-        * getExceptionProcessing({payload}, {
+        * getExceptionProcessing({ payload }, {
             call,
             put,
             update,
@@ -108,7 +124,7 @@ export default Model.extend({
             let body = {
                 beginTime: ExceptionProcessing.beginTime,
                 endTime: ExceptionProcessing.endTime,
-                entCode:payload.entCode
+                entCode: payload.entCode
             };
             const response = yield call(GetExceptionProcessing, body);
             yield update({
@@ -125,7 +141,7 @@ export default Model.extend({
           * @param {传递参数} 传递参数
           * @param {操作} 操作项
           */
-        * getTaskCount({payload}, {
+        * getTaskCount({ payload }, {
             call,
             put,
             update,
@@ -153,7 +169,7 @@ export default Model.extend({
           * @param {传递参数} 传递参数
           * @param {操作} 操作项
           */
-        * getAlarmAnalysis({payload}, {
+        * getAlarmAnalysis({ payload }, {
             call,
             put,
             update,
@@ -165,7 +181,7 @@ export default Model.extend({
             let body = {
                 beginTime: AlarmAnalysis.beginTime,
                 endTime: AlarmAnalysis.endTime,
-                entCode:payload.entCode
+                entCode: payload.entCode
             };
             const response = yield call(GetAlarmAnalysis, body);
             yield update({
@@ -182,7 +198,7 @@ export default Model.extend({
           * @param {传递参数} 传递参数
           * @param {操作} 操作项
           */
-        * getAllMonthEmissionsByPollutant({payload}, {
+        * getAllMonthEmissionsByPollutant({ payload }, {
             call,
             put,
             update,
@@ -195,25 +211,25 @@ export default Model.extend({
                 beginTime: AllMonthEmissionsByPollutant.beginTime,
                 endTime: AllMonthEmissionsByPollutant.endTime,
                 pollutantCode: AllMonthEmissionsByPollutant.pollutantCode,
-                entCode:payload.entCode
+                entCode: payload.entCode
             };
             const response = yield call(GetAllMonthEmissionsByPollutant, body);
             let ycdate = [];
             let ycdata = [];
             response.data[0].monthList.map((ele) => {
-                ycdate.push(`${ele.DataDate.split('-')[1] }月`);
+                ycdate.push(`${ele.DataDate.split('-')[1]}月`);
                 ycdata.push(ele.Emissions.toFixed(2));
             });
             let eyhldate = [];
             let eyhldata = [];
             response.data[1].monthList.map((ele) => {
-                eyhldate.push(`${ele.DataDate.split('-')[1] }月`);
+                eyhldate.push(`${ele.DataDate.split('-')[1]}月`);
                 eyhldata.push(ele.Emissions.toFixed(2));
             });
             let dyhwdate = [];
             let dyhwdata = [];
             response.data[2].monthList.map((ele) => {
-                dyhwdate.push(`${ele.DataDate.split('-')[1] }月`);
+                dyhwdate.push(`${ele.DataDate.split('-')[1]}月`);
                 dyhwdata.push(ele.Emissions.toFixed(2));
             });
             yield update({
@@ -233,6 +249,61 @@ export default Model.extend({
                 }
             });
         },
+
+        // 获取报警信息
+        * getWarningInfo({ payload }, {
+            call, put, update, select
+        }) {
+            const warningInfoParams = yield select(state => state.homepage.warningInfoParams);
+            const postData = {
+                ...warningInfoParams,
+                PollutantType: payload.PollutantType || warningInfoParams.PollutantType,
+            }
+            const result = yield call(getWarningInfo, postData);
+            if (result.requstresult === "1") {
+                let data = [];
+                if (result.data) {
+                    data = result.data.map(item => {
+                        return { "txt": `${item.PointName}：${item.PollutantNames}从${item.FirstTime}发生了${item.AlarmCount}次报警。` }
+                    })
+                    if (data.length < 6) {
+                        data = data.concat(data)
+                    }
+                }
+                yield update({
+                    warningInfoList: data
+                })
+            }
+        },
+        // 获取预警信息
+        * getEarlyWarningInfo({ payload }, {
+            call, put, update, select
+        }) {
+            const earlyWarningParams = yield select(state => state.homepage.earlyWarningParams);
+            const postData = {
+                ...earlyWarningParams,
+                // PollutantType: payload.PollutantType || warningInfoParams.PollutantType,
+            }
+            const result = yield call(getEarlyWarningInfo, postData);
+            if (result.requstresult === "1") {
+                let data = [];
+                if (result.data) {
+                    data = result.data.map(item => {
+                        return item.OverWarnings.map(itm => {
+                            return { "txt": `${item.PointName}：${itm.AlarmOverTime} ${itm.PollutantName} | 超标预警值为${itm.AlarmValue} | 建议浓度为${itm.SuggestValue}` }
+                        })
+                    })
+                    data = data.length ? data.reduce((acc, cur) => acc.concat(cur)) : data;
+                    if (data.length < 6) {
+                        data = data.concat(data)
+                    }
+                }
+                yield update({
+                    earlyWarningList: data
+                })
+            }
+        }
+
     },
     reducers: {
         save(state, action) {

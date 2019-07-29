@@ -1,4 +1,5 @@
-export function getPointStatusImg(status, stop, type = 1,width) {
+import styles from './utils.less'
+export function getPointStatusImg(status, stop, type = 1, width, path) {
     if (stop) {
         return '';
     }
@@ -16,7 +17,7 @@ export function getPointStatusImg(status, stop, type = 1,width) {
         if (status === 3) {
             imgSrc = "/gisexception.png"
         }
-    } else if(type === 2) {
+    } else if (type === 2) {
         imgWidth = 20;
         imgSrc = "/gas@unline.png";
         if (status === 1) {
@@ -29,7 +30,7 @@ export function getPointStatusImg(status, stop, type = 1,width) {
             imgSrc = "/gas@exception.png"
         }
     }
-    else if(type === 10) {
+    else if (type === 10) {
         imgWidth = 20;
         imgSrc = "/vocunline.png";
         if (status === 1) {
@@ -42,8 +43,7 @@ export function getPointStatusImg(status, stop, type = 1,width) {
             imgSrc = "/vocexception.png"
         }
     }
-    else if(type === 12)
-    {
+    else if (type === 12) {
         imgWidth = 20;
         imgSrc = "/dustunline.png";
         if (status === 1) {
@@ -56,9 +56,17 @@ export function getPointStatusImg(status, stop, type = 1,width) {
             imgSrc = "/dustexception.png"
         }
     }
-    if(width)
-    {
-        imgWidth=width;
+    if (width) {
+        imgWidth = width;
     }
-    return <img style={{ width: imgWidth }} src={imgSrc} />;
+    if (path === "home") {
+        return <div className={styles.container}>
+            <img className={styles.dot} style={{ width: 20 }} src={imgSrc} />
+            {status === 2 && <div className={styles.pulse}></div>}
+            {status === 2 && <div className={styles.pulse1}></div>}
+        </div>
+    } else {
+        return <img style={{ width: imgWidth }} src={imgSrc} />;
+    }
+
 }

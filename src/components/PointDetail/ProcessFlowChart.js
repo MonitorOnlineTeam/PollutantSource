@@ -127,7 +127,7 @@ export default class ProcessFlowChart extends Component {
     //系统参数
     getsystemparam=(param)=>{
         const {paramstatusInfo}=this.props;
-        if(paramstatusInfo)
+        if(paramstatusInfo.length)
         {
             const nameInfo = paramstatusInfo.find(value => {
                 return value.statename.indexOf(param) > -1;

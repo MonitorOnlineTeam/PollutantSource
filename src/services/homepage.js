@@ -7,6 +7,7 @@
 import {
     post
 } from '../dvapack/request';
+import {pageUrl} from '../utils/common';
 
 /**
  * 统计企业 传输有效率 实施联网率  设备运转率 （月初到今天）
@@ -74,6 +75,26 @@ export async function GetAllMonthEmissionsByPollutant(params) {
         entCode:params.entCode
     };
     const result = post('/api/rest/PollutantSourceApi/PHomePage/GetAllMonthEmissionsByPollutant', body, null);
+    return result === null ? {
+        data: null
+    } : result;
+}
+
+/**
+ * 报警信息
+ */
+export async function getWarningInfo(params) {
+    const result = post(pageUrl.workbench.allPointOverDataList, params||{}, null);
+    return result === null ? {
+        data: null
+    } : result;
+}
+
+/**
+ * 实时预警
+ */
+export async function getEarlyWarningInfo(params) {
+    const result = post(pageUrl.workbench.hourDataOverWarningPageList, params, null);
     return result === null ? {
         data: null
     } : result;
