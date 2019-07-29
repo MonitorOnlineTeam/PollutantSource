@@ -254,7 +254,11 @@ class index extends Component {
      * 智能质控_渲染图表
      */
     getOption = (type) => {
+
+        
+     
         const {rsdata}=this.props.RateStatisticsByEnt;
+        
         let networkeRate = rsdata.NetworkeRate===undefined?0:(parseFloat(rsdata.NetworkeRate) * 100).toFixed(0);
         let runningRate = rsdata.RunningRate === undefined ? 0 : (parseFloat(rsdata.RunningRate) * 100).toFixed(0);
         let transmissionEffectiveRate = rsdata.TransmissionEffectiveRate === undefined ? 0 : (parseFloat(rsdata.TransmissionEffectiveRate) * 100).toFixed(0);
@@ -496,6 +500,18 @@ class index extends Component {
              dyhwdata,
              dyhwAnalData,
          } = this.props.allMonthEmissionsByPollutant;
+
+         console.log(ycdate);
+         console.log(ycdata);
+         console.log(ycAnalData);
+         console.log(eyhldate);
+         console.log(eyhldata);
+         console.log(eyhlAnalData);
+         console.log(dyhwdate);
+         console.log(dyhwdata);
+         console.log(dyhwAnalData);
+         
+         debugger;
          let TheMonth = this.state.TheMonth;
          let color = [];
          let SumDisplacement=0;//总排量
@@ -705,7 +721,8 @@ class index extends Component {
         //地图点位点击
         markersEvents = {
             click: (MapsOption, marker) => {
-                const itemdata = marker.F.extData;
+                debugger;
+                const itemdata = marker.B.extData;
                 this.treeCilck(itemdata);
             }
         };

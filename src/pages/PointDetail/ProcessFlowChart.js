@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Layout,Card,Col,Badge, Button  } from 'antd';
+import { Layout,Card,Col,Badge, Button,Avatar   } from 'antd';
 import GyPic from '../../components/PointDetail/ProcessFlowChart';
 // import styles from './index.less';
 import styles from './ProcessFlowChart.less';
@@ -23,7 +23,7 @@ export default class ProcessFlowChart extends Component {
         this.state={
             paramInfo:[],
             collapsed:true,
-            contentstyle:styles.content
+            contentstyle:styles.hiddentrigger
         }
         this.props.dispatch({
             type: 'points/updateState',
@@ -111,6 +111,55 @@ export default class ProcessFlowChart extends Component {
         }
        return null;
     }
+    
+    //图片点击事件
+    imgClick=(paramInfolist,stateInfolist,dataInfolist)=>{
+        let res=[];
+     
+       if(stateInfolist && stateInfolist.length>0)
+       {
+            
+            stateInfolist.map(item=>{
+                let statusstyle=styles.exceptionstatus;
+                if(item.statename=="正常")
+                {
+                    statusstyle=styles.normalstatus
+                }
+                res.push(<div className={statusstyle}>
+                    <Badge status="processing"  text={`${item.name}:${item.statename}`} />
+            </div>)
+            })
+       }
+       if(paramInfolist && paramInfolist.length>0)
+       {
+               paramInfolist.map(item=>{
+                    res.push(<div className={styles.datalist}> <Badge color="#3B91FF" status="success" text={`${item.statename}:${item.value}`} /></div>)
+                })
+       }
+       if(dataInfolist && dataInfolist.length>0)
+       {
+           dataInfolist.map((item,key)=>{
+               debugger;
+               if(item.pollutantName)
+               {
+                  res.push(<div className={styles.dataInfo}><Avatar size="small" style={{ color: '#f56a00', backgroundColor: '#fde3cf' }}>{key+1}
+                  </Avatar>{item.pollutantName}:{item.value?item.value: "-"}</div>)
+                  if(item.pollutantParamInfo && item.pollutantParamInfo.length>0)
+                  {
+                       item.pollutantParamInfo.map(param=>{
+                           res.push(<div className={styles.datalist} style={{marginLeft:20}}> <Badge color="#3B91FF" status="success" text={`${param.statename}:${param.value}`} /> </div>)
+                       })
+                  }
+               }
+           })
+       }
+        this.setState({
+            paramInfo:res,
+            collapsed:false,
+            contentstyle:styles.content
+        })
+    }
+
 
     //点击事件
     paramClick=(item,status)=>{
@@ -161,11 +210,10 @@ export default class ProcessFlowChart extends Component {
         const pointcode = match.params.pointcode; // 任务ID
         return (
             <div style={{overflowX:'hidden'}}>
-                <Layout>
-                <Content className={this.state.contentstyle}>
-                   <Layout  hasSider={true}>
-                   <Content><GyPic DGIMN={pointcode} /></Content>
-                        <Sider  collapsedWidth={10}    theme="light"  
+                   <Layout  className={this.state.contentstyle} hasSider={true}>
+                   <Content><GyPic imgClick={(paramInfolist,stateInfolist,dataInfolist)=>
+                    this.imgClick(paramInfolist,stateInfolist,dataInfolist)} DGIMN={pointcode} /></Content>
+                        <Sider width={250}   collapsedWidth={10} theme="light"  
                         collapsed={this.state.collapsed}
                         onCollapse={this.onCollapse}
                         collapsible={true} 
@@ -175,12 +223,6 @@ export default class ProcessFlowChart extends Component {
                         </div>
                     </Sider>
                  </Layout>
-                 </Content>
-                 <Footer className={styles.footer}>
-                 {/* <div className={styles.infotitle}>分析仪器</div> */}
-                 {this.getparamInfo()}
-                </Footer>
-                </Layout>
             </div>
          
         );

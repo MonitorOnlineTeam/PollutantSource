@@ -19,7 +19,6 @@ class AMapModule extends React.Component {
             status: 0
         };
     }
-
     componentWillMount() {
         if (!window.AMap && !(window.google && window.google.maps)) {
             axios.get(googleMapSdk, {timeout: 1000}).then(res => {
@@ -55,7 +54,7 @@ class AMapModule extends React.Component {
                     map.setLang(mapLang);
 
                     // 在新中心点添加 marker
-                    if(lat && log)
+                    if(latlngxy && latlngxy.length>0)
                     {
                         marker = new window.AMap.Marker({
                             map: map,

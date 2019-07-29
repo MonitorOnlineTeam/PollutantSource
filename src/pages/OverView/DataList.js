@@ -28,8 +28,6 @@ class dataList extends PureComponent {
     /**页面初始化 */
     componentDidMount() {
         const { dispatch } = this.props;
-
-
         // 由于数据一览没有全部，初始化为废气
         !!!this.props.selectpollutantTypeCode && dispatch({
             type: 'overview/updateState',
@@ -252,10 +250,9 @@ class dataList extends PureComponent {
                 render: (value, record, index) => {
                     const content=this.getEntButton(record);
                     return (
-                    // <Popover trigger="click" content={content}>
-                    <span onClick={()=>this.toworkbenchmodel(record)} style={{ cursor: 'pointer' }}>{value}
-                    </span>
-                 //  </Popover>
+                    // <span onClick={()=>this.toworkbenchmodel(record)} style={{ cursor: 'pointer' }}>{value}
+                    // </span>
+                    {value}
                 );
                 }
             })

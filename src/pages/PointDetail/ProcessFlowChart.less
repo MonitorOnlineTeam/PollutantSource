@@ -40,24 +40,51 @@
 .content :global{
     margin-bottom: 5px;
     font-size: 15px;
-    height: 655px;
+ //   height: 800px;
+      overflow: hidden;
     .ant-layout-sider-trigger{
-        position: relative;
+         position: relative;
+       //  bottom: 300px;
     }
+}
+
+.hiddentrigger :global{ 
+    .ant-layout-sider-trigger{
+        display: none;
+   }
 }
 .contentcollapse :global
 {
     margin-bottom: 5px;
     font-size: 15px;
-    height: 655px;
+ //   height: 800px;
+    overflow: hidden;
     .ant-layout-sider-trigger{
-        position: relative;
-        bottom: 300px;
+         position: relative;
+          bottom: 300px;
     }
 }
 .detailtitle{
    border-bottom: 1px solid #ECECEC;
    padding-bottom: 10px;
+}
+ 
+.datalist :global
+{
+    .ant-badge-status-success {
+        background-color: #3B91FF;
+    }
+}
+
+.dataInfo :global{
+    .ant-avatar-sm
+    {
+        width: 18px;
+        height: 18px;
+        line-height: 18px;
+        border-radius: 50%;
+        margin-right: 5px;
+    }
 }
 
 

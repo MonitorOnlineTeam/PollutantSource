@@ -86,7 +86,7 @@ class MapContent extends Component {
     //地图点位点击
     markersEvents = {
         click: (MapsOption, marker) => {
-            const itemdata = marker.F.extData;
+            const itemdata = marker.B.extData;
             this.treeCilck(itemdata);
         }
     };
@@ -155,7 +155,6 @@ class MapContent extends Component {
             size="large"
         />);
     }
-    
       const baseinfo = selectent?selectent:baseModel;
       //地图中心
       let mapCenter;
@@ -188,7 +187,7 @@ class MapContent extends Component {
               resizeEnable={true}
               zoom={zoom}
               center={mapCenter}
-              mapStyle="fresh"
+       //       mapStyle="fresh"
               amapkey={amapKey}
               plugins={plugins}
           >

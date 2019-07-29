@@ -141,11 +141,11 @@ class EntMapContent extends Component {
     //地图点位点击
     markersEvents = {
         click: (MapsOption, marker) => {
-            const itemdata = marker.F.extData;
+            const itemdata = marker.B.extData;
             this.entClick(itemdata);
         },
         mouseover: (MapsOption, marker) => {
-            const itemdata = marker.F.extData;
+            const itemdata = marker.B.extData;
             console.log(itemdata);
             this.setState({
                 entName:itemdata.abbreviation,
@@ -154,7 +154,7 @@ class EntMapContent extends Component {
             });
         },
         mouseout: (MapsOption, marker) => {
-            const itemdata = marker.F.extData;
+            const itemdata = marker.B.extData;
             this.setState({
                 visible:false,
             });
@@ -196,9 +196,9 @@ class EntMapContent extends Component {
           <Map
               events={this.mapEvents}
               resizeEnable={true}
-              mapStyle="fresh"
-              amapkey={amapKey}
-              plugins={plugins}
+           //   mapStyle="fresh"
+               amapkey={amapKey}
+               plugins={plugins}
           >
           {this.getMarkers()}
           {/* {this.getpolygon()} */}

@@ -123,9 +123,7 @@ export default class ProcessFlowChart extends Component {
         }
         return '0';
     }
-    testClick=()=>{
-        alert();
-    }
+     
     //系统参数
     getsystemparam=(param)=>{
         const {paramstatusInfo}=this.props;
@@ -134,7 +132,8 @@ export default class ProcessFlowChart extends Component {
             const nameInfo = paramstatusInfo.find(value => {
                 return value.statename.indexOf(param) > -1;
             }) 
-            return nameInfo.value
+            if(nameInfo)
+            return nameInfo.value;
         }
     }
     //系统状态
@@ -159,6 +158,52 @@ export default class ProcessFlowChart extends Component {
           
         }
     }
+    //图片上的点击事件
+    positionClick=(param,status,data)=>{
+       const {imgClick,paramstatusInfo,stateInfo,paramsInfo}=this.props;
+       const paramlist=param?param.split(","):null;
+       const statuslist=status?status.split(","):null;
+       const datalist=data?data.split(","):null;
+       let paramInfolist=[];
+       let stateInfolist=[];
+       let dataInfolist=[];
+       if(paramlist)
+       {
+            paramlist.map(item=>{
+                const params=paramstatusInfo.find(value=>{
+                    return value.statecode==item;
+                })
+                if(params)
+                paramInfolist.push(params);
+            })
+       }
+       if(statuslist)
+       {
+            statuslist.map(item=>{
+                const statuses=stateInfo.find(value=>{
+                    return value.code==item;
+                })
+                if(statuses)
+                stateInfolist.push(statuses);
+            })
+       }
+       if(datalist)
+       {
+            datalist.map(item=>{
+                const datas=paramsInfo.find(value=>{
+                    return value.pollutantCode==item;
+                })
+                if(datas)
+                dataInfolist.push(datas);
+            })
+       }
+
+       if(paramInfolist.length>0 || stateInfolist.length>0 || dataInfolist.length>0) 
+       {
+            imgClick(paramInfolist,stateInfolist,dataInfolist);
+       }
+    }
+
 
     render() {
         const { scale, translation } = this.state;
@@ -175,7 +220,7 @@ export default class ProcessFlowChart extends Component {
 
         return (
  
-            <div className={styles.GyProcessPic} style={{ height: '680px' }}>
+            <div style={{height:'calc(100vh - 220px)'}} className={styles.GyProcessPic}>
                 {isloading ? <Spin style={{
                     width: '100%',
                     height: 'calc(100vh - 260px)',
@@ -191,36 +236,72 @@ export default class ProcessFlowChart extends Component {
                         maxScale={5}
                         showControls={true}>
                         <div className={styles.imgBg1} >
-                        <div style={{  position: 'relative', left: '60px', 
-                        top: '400px', fontWeight: '700', fontSize: '10px' }}>探头温度:{this.getsystemparam('系统采样探头温度')}°C</div>
+                        <div onClick={()=>this.positionClick("i33003,i33004,i33001","i12110,i12105")} style={{  position: 'relative', left: '60px', 
+                        top: '390px', fontWeight: '700', fontSize: '10px',width:300 }} className={styles.divClick}>探头温度:{this.getsystemparam('系统采样探头温度')}°C</div>
                         <div style={{  position: 'relative', left: '260px', 
-                        top: '380px', fontWeight: '700', fontSize: '10px' }}>管线温度:{this.getsystemparam('系统采样管线温度')}°C</div>
+                        top: '380px', fontWeight: '700', fontSize: '10px' ,width:300}}
+                        onClick={()=>this.positionClick("i33003,i33004,i33001","i12110,i12105")} className={styles.divClick}>管线温度:{this.getsystemparam('系统采样管线温度')}°C</div>
                         <div style={{  position: 'relative', left: '225px', 
-                        top: '580px', fontWeight: '700', fontSize: '10px' }}>钢气瓶压力:{this.getsystemparam('钢气瓶压力')}Pa</div>
+                        top: '580px', fontWeight: '700', fontSize: '10px',width:300 }} className={styles.divClick}>钢气瓶压力:{this.getsystemparam('钢气瓶压力')}Pa</div>
                         <div style={{  position: 'relative', left: '585px', 
-                        top: '295px', fontWeight: '700', fontSize: '10px' }}>冷凝器温度:{this.getsystemparam('冷凝器温度')}°C</div>
-                        <div style={{  position: 'relative', left: '330px', 
-                        top: '370px', fontWeight: '700', fontSize: '10px' }}>电磁阀使用次数:{this.getsystemparam('电磁阀累计使用次数')}次</div>
+                        top: '295px', fontWeight: '700', fontSize: '10px',width:300 }} className={styles.divClick}>冷凝器温度:{this.getsystemparam('冷凝器温度')}°C</div>
+                        <div style={{  position: 'relative', left: '680px', 
+                        top: '290px', fontWeight: '700', fontSize: '10px',width:300 }} className={styles.divClick}>使用次数:{this.getsystemparam('电磁阀累计使用次数')}次</div>
 
+                        <div style={{  position: 'relative', left: '150px', 
+                        top: '430px', fontWeight: '700', fontSize: '10px',width:300 }} className={styles.divClick}>使用次数:{this.getsystemparam('采样泵累计使用时间')}次</div>
+                        <div style={{  position: 'relative', left: '365px', 
+                        top: '360px', fontWeight: '700', fontSize: '10px',width:300 }} className={styles.divClick}>使用次数:{this.getsystemparam('蠕动泵累计使用时间')}次</div>
                         
                         <div style={{  position: 'relative', left: '600px', 
-                        top: '240px', fontWeight: '700', fontSize: '10px' }}>
+                        top: '200px', fontWeight: '700', fontSize: '10px' ,width:300}} className={styles.divClick}>
                           {this.getsystemstate("制冷器")}
                         </div>
                         <div style={{  position: 'relative', left: '260px', 
-                        top: '245px', fontWeight: '700', fontSize: '10px' }}>
+                        top: '210px', fontWeight: '700', fontSize: '10px' ,width:300}} className={styles.divClick} 
+                         onClick={()=>this.positionClick("i33003,i33004,i33001","i12110,i12105")}>
                           {this.getsystemstate("采样管线")}
                          </div>
-                         <div style={{  position: 'relative', left: '480px', 
-                        top: '215px', fontWeight: '700', fontSize: '10px' }}>
-                          {this.getsystemstate("湿度")}
-                         </div>
+                  
                          <div style={{  position: 'relative', left: '80px', 
-                        top: '210px', fontWeight: '700', fontSize: '10px' }}>
-                          {this.getsystemstate("探头吹扫")}
+                        top: '190px', fontWeight: '700', fontSize: '10px' ,width:300}} className={styles.divClick} 
+                         onClick={()=>this.positionClick("i33003,i33004,i33001","i12110,i12105")}>
+                           {this.getsystemstate("探头吹扫")}
                          </div>
 
+                         <div style={{  position: 'relative', left: '375px', 
+                          top: '320px', fontWeight: '700', fontSize: '10px' ,width:300}} className={styles.divClick}>
+                          {this.getsystemstate("蠕动泵状态")}
+                         </div>
+                         <div style={{  position: 'relative', left: '805px', 
+                          top: '300px', fontWeight: '700', fontSize: '10px',width:300 }} className={styles.divClick}>
+                          {this.getsystemstate("废液桶液位")}
+                         </div>
+
+                         <div style={{  position: 'relative', left: '480px', 
+                          top: '110px', fontWeight: '700', fontSize: '10px',width:55,height:60 }}
+                          onClick={()=>this.positionClick("","i12102","s05")}
+                          className={styles.divClick}>
+                          {this.getsystemstate("湿度")}
+                         </div>
+                         <div style={{  position: 'relative', left: '120px', 
+                        top: '-95px', fontWeight: '700', fontSize: '10px',width:150,height:50 }} 
+                        onClick={()=>this.positionClick("","","s07,s08,b02")} className={styles.divClick}>
+                         </div>
+
+                         <div style={{  position: 'relative', left: '120px', 
+                        top: '-70px', fontWeight: '700', fontSize: '10px',width:150,height:50 }} 
+                        onClick={()=>this.positionClick("","","01")} className={styles.divClick}>
+                         </div>
+
+                         <div style={{ position: 'relative', left: '1010px', 
+                         top: '-30px', fontWeight: '700', fontSize: '10px',width:150,height:50 }} 
+                         onClick={()=>this.positionClick("","","02,03")} className={styles.divClick}> 
+                         </div>
+
+                        
                         </div>
+                        
                         
                         
                         

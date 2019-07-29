@@ -266,7 +266,29 @@ class OverPointListAndChart extends Component {
     render() {
         const { rangeDate, mode } = this.state;
         const { overdatalist, loading, clickDate } = this.props;
-        let tableTitle = `${moment(clickDate).format('YYYY-MM')}月响应情况(${this.props.match.params.entname})`
+        let tableTitle="";
+        let Crumbs=[  
+            { Name: '智能分析', Url: '' }
+         ]
+
+      //  let tableTitle = `${moment(clickDate).format('YYYY-MM')}月响应情况(${this.props.match.params.entname})`
+
+
+         if(onlyOneEnt)
+        {
+            tableTitle=`${moment(this.props.clickDate).format('YYYY-MM')}月超标情况`
+            Crumbs=Crumbs.concat(
+               { Name: '月度超标情况', Url: '' }
+            )
+        }
+        else
+        {
+            tableTitle=`${moment(clickDate).format('YYYY-MM')}月超标情况(${this.props.match.params.entname})`
+            Crumbs=Crumbs.concat(
+                { Name: '企业月度超标情况', Url: '/analysis/overresponse' },
+                { Name: '排口月度超标情况', Url: '' }
+             )
+        }
         const columnsPoints = [
             {
                 title: (<span style={{ fontWeight: 'bold' }}>排口名称</span>),
@@ -364,12 +386,13 @@ class OverPointListAndChart extends Component {
         ];
         return (
             <MonitorContent {...this.props} breadCrumbList={
-                [
-                    { Name: '首页', Url: '/' },
-                    { Name: '智能分析', Url: '' },
-                    { Name: '超标企业分析', Url: '/analysis/overresponse' },
-                    { Name: '排口超标分析', Url: '' }
-                ]
+                // [
+                //     { Name: '首页', Url: '/' },
+                //     { Name: '智能分析', Url: '' },
+                //     { Name: '超标企业分析', Url: '/analysis/overresponse' },
+                //     { Name: '排口超标分析', Url: '' }
+                // ]
+                Crumbs
             }>
 
                 <Card
