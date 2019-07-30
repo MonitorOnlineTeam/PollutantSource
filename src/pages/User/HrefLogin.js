@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Spin } from 'antd';
 import { connect } from 'dva';
 import { Link } from 'dva/router';
+import router from 'umi/router';
 import { Form, Input, Tabs, Button, Icon, Checkbox, Row, Col, Alert } from 'antd';
 import styles from './Login.less';
 
@@ -15,14 +16,16 @@ export default class HrefLogin extends Component {
   }
 
   componentDidMount() {
-    const { username, pwd } = this.props.match.params;
-    this.props.dispatch({
+    // const { username, pwd } = this.props.match.params;
+    const hostname = window.location.hostname;
+    const begin = hostname.split(".")[0];
+    begin !== "61" ? this.props.dispatch({
       type: "login/hrefLogin",
       payload: {
-        userName: "system",
-        password: "system"
+        userName: "liudazhuang",
+        password: "123456"
       }
-    })
+    }) : router.push("/user/login")
   }
   render() {
     return (
