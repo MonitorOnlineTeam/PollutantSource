@@ -263,11 +263,11 @@ export default class pointlist extends Component {
                     <a href="#" > 删除 </a>
                 </Popconfirm>
              <Divider type="vertical" />
-             <Dropdown overlay={menu(record.key,record.pointName)} >
+             {/* <Dropdown overlay={menu(record.key,record.pointName)} >
                  <a>
                    更多 <Icon type="down" />
                  </a>
-             </Dropdown>
+             </Dropdown> */}
          </Fragment >
          
          ),

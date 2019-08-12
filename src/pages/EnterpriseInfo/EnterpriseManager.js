@@ -131,9 +131,6 @@ class EnterpriseManager extends Component {
                 callback:(item)=>{
                     if(item&&item.IsSuccess) {
                         message.success("下载成功");
-                        // console.log(item);
-                        // debugger;
-                        // window.location.href=item.Data;
                         window.open(item.Data, '_blank');
                     }else {
                         message.error(item.Message||'服务器内部错误！');

@@ -311,7 +311,7 @@ export async function GetFeedbackList(params) {
         pageIndex: params.pageIndex,
         pageSize: params.pageSize,
     };
-    const result = upload('/api/rest/PollutantSourceApi/UserInfoApi/GetFeedBackList', body, null);
+    const result = upload('/api/rest/PollutantSourceApi/WxServer/GetFeedBackList', body, null);
     return result === null ? {
         data: null
     } : result;
@@ -323,7 +323,7 @@ export async function DeleteFeedBackByID(params) {
         ID: params.ID,
     };
     debugger
-    const result = upload('/api/rest/PollutantSourceApi/UserInfoApi/DeleteFeedBackByID', body, null);
+    const result = upload('/api/rest/PollutantSourceApi/WxServer/DeleteFeedBackByID', body, null);
     debugger
     return result === null ? {
         data: null

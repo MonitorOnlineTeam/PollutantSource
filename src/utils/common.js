@@ -34,16 +34,16 @@ export const pageUrl = {
     },
     changeMyMessageStatus:'/api/rest/PollutantSourceApi/PWorkbench/SetMyMessageStatus',
     EnterpriseManager:{
-        getEnterprise:'/api/rest/PollutantSourceApi/UserInfoApi/GetEnterprise',
-        getEnterprisePageList:'/api/rest/PollutantSourceApi/UserInfoApi/GetEnterprisePageList',
-        addEnterprise:'/api/rest/PollutantSourceApi/UserInfoApi/AddEnterprise',
-        editEnterprise:'/api/rest/PollutantSourceApi/UserInfoApi/EditEnterprise',
-        deleteEnterprise:'/api/rest/PollutantSourceApi/UserInfoApi/DeleteEnterprise',
-        getAllPointQRCoderZip:'/api/rest/PollutantSourceApi/UserInfoApi/GetAllPointQRCoderZip'
+        getEnterprise:'/api/rest/PollutantSourceApi/WxServer/GetEnterprise',
+        getEnterprisePageList:'/api/rest/PollutantSourceApi/WxServer/GetEnterprisePageList',
+        addEnterprise:'/api/rest/PollutantSourceApi/WxServer/AddEnterprise',
+        editEnterprise:'/api/rest/PollutantSourceApi/WxServer/EditEnterprise',
+        deleteEnterprise:'/api/rest/PollutantSourceApi/WxServer/DeleteEnterprise',
+        getAllPointQRCoderZip:'/api/rest/PollutantSourceApi/WxServer/GetAllPointQRCoderZip'
     },
     UserManager:{
-        setEnterpriseDataRole:'/api/rest/PollutantSourceApi/UserInfoApi/SetEnterpriseDataRole',
-        getEnterpriseDataRoles:'/api/rest/PollutantSourceApi/UserInfoApi/GetEnterpriseDataRoles',
+        setEnterpriseDataRole:'/api/rest/PollutantSourceApi/WxServer/SetEnterpriseDataRole',
+        getEnterpriseDataRoles:'/api/rest/PollutantSourceApi/WxServer/GetEnterpriseDataRoles',
     }
 };
 

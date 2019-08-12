@@ -162,15 +162,6 @@ export default class FeedBack extends Component {
             width: '15%',
             sorter: (a, b) => Date.parse(a.CreateTime) - Date.parse(b.CreateTime),
         },
-        // {
-        //     title: '是否处理',
-        //     dataIndex: 'WhetherDeal',
-        //     key: 'WhetherDeal',
-        //     width: '10%',
-        //     render: (text, record) => (
-        //         text === true ? '已处理' : '未处理'
-        //     )
-        // },
         {
             title: '操作',
             width: '15%',
@@ -189,24 +180,11 @@ export default class FeedBack extends Component {
         return (
             <MonitorContent {...this.props} breadCrumbList={
                 [
-                    // { Name: '首页', Url: '' },
-                    // { Name: '系统管理', Url: '' },
                     { Name: '意见反馈', Url: '' }
                 ]
             }>
                 <div className={styles.cardTitle}>
                     <Card bordered={false}>
-                        {/* <Form layout="inline" style={{ marginBottom: 10 }}>
-                            <Row gutter={8} >
-                                <Col span={24} >
-                                    <Search placeholder="名称"
-                                        onSearch={this.serachName}
-                                        style={{ width: 200, marginRight: 20 }} />
-                                    <Button type="primary" style={{ marginLeft: 10 }}
-                                        onClick={() => this.showModal(null)} > 添加 </Button>
-                                </Col>
-                            </Row>
-                        </Form> */}
                         <Table
                             loading={this.props.loading}
                             columns={columns}

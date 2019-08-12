@@ -161,7 +161,7 @@ export default class UserList extends Component {
                 this.onMenu.bind()(e.key, id,userName,roleName);
             }}>
                 
-                        <Menu.Item key="1"><Icon type="setting" />数据过滤</Menu.Item>
+                        {/* <Menu.Item key="1"><Icon type="setting" />数据过滤</Menu.Item> */}
                         {
                             isMultiEnterprise?<Menu.Item key="2"><Icon type="setting" />企业过滤</Menu.Item>
                             :''
@@ -198,16 +198,6 @@ export default class UserList extends Component {
                 return text;
             }
         },
-        // {
-        //     title: '角色名称',
-        //     dataIndex: 'Roles_Name',
-        //     key: 'Roles_Name',
-        //     width: '10%',
-        //     align: 'center',
-        //     render: (text, record) => {
-        //         return text;
-        //     }
-        // },
         {
             title: '电话号码',
             dataIndex: 'Phone',
@@ -218,16 +208,6 @@ export default class UserList extends Component {
                 return text;
             }
         },
-        // {
-        //     title: '推送类型',
-        //     dataIndex: 'SendPush',
-        //     key: 'SendPush',
-        //     width: '20%',
-        //     align: 'center',
-        //     render: (text, record) => {
-        //         return text;
-        //     }
-        // },
         {
             title: '状态',
             dataIndex: 'DeleteMark',
@@ -297,8 +277,6 @@ export default class UserList extends Component {
         return (
             <MonitorContent {...this.props} breadCrumbList={
                 [
-                    // { Name: '首页', Url: '' },
-                    // { Name: '系统管理', Url: '' },
                     { Name: '用户管理', Url: '' }
                 ]
             }>
@@ -343,12 +321,6 @@ export default class UserList extends Component {
                                         onClick={() => {
                                             this.props.dispatch(routerRedux.push(`/sysmanage/UserDetail/null`));
                                         }}>添加</Button>
-                                    {/* <Button type="primary" style={{ marginLeft: 10 }}
-                                        onClick={() => {
-                                            this.setState({
-                                                EntDataFilterVisible:true
-                                            })
-                                        }}>企业过滤</Button> */}
                                 </Col>
                             </Row>
                         </Form>
@@ -399,7 +371,7 @@ export default class UserList extends Component {
 
                         <Modal
                             visible={this.state.EntDataFilterVisible}
-                            title={`企业过滤-${this.state.userName}-${this.state.roleName}`}
+                            title={`企业过滤-${this.state.userName}`}
                             width='50%'
                             destroyOnClose={true}// 清除上次数据
                             footer={false}

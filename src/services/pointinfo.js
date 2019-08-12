@@ -10,9 +10,9 @@ export async function getpointlist(params) {
         pageIndex: params.pageIndex,
         pageSize: params.pageSize,
         DGIMNs: params.DGIMNs,
-        EntCode:params.EntCode
+        entCode:params.EntCode
     };
-    const result = post('/api/rest/PollutantSourceApi/PPointAndData/GetPointList', body, null);
+    const result = post('/api/rest/PollutantSourceApi/WxServer/GetPointList', body, null);
     return result === null ? {
         data: null
     } : result;
@@ -46,7 +46,7 @@ export async function addpoint(params) {
         Col10:params.Col10
     };
 
-    const result = post('/api/rest/PollutantSourceApi/PPointAndData/AddPoint', body, null);
+    const result = post('/api/rest/PollutantSourceApi/WxServer/AddPoint', body, null);
     return result === null ? {
         data: null
     } : result;
@@ -73,7 +73,7 @@ export async function getpoint(params) {
     const body = {
         DGIMNs: params.DGIMN
     };
-    const result = post('/api/rest/PollutantSourceApi/PPointAndData/GetPoint', body, null);
+    const result = post('/api/rest/PollutantSourceApi/WxServer/GetPoint', body, null);
     return result === null ? {
         data: null
     } : result;
@@ -104,7 +104,7 @@ export async function editpoint(params) {
         Col9:params.Col9,
         Col10:params.Col10
     };
-    const result = post('/api/rest/PollutantSourceApi/PPointAndData/EditPoint', body, null);
+    const result = post('/api/rest/PollutantSourceApi/WxServer/EditPoint', body, null);
     return result === null ? {
         data: null
     } : result;
@@ -114,7 +114,7 @@ export async function deletepoint(params) {
     const body = {
         DGIMNs: params.DGIMN
     };
-    const result = post('/api/rest/PollutantSourceApi/PPointAndData/DeletePoint', body, null);
+    const result = post('/api/rest/PollutantSourceApi/WxServer/DeletePoint', body, null);
     return result === null ? {
         data: null
     } : result;

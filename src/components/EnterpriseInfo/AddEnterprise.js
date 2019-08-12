@@ -370,6 +370,22 @@ submitEnterprise =(params)=>{
                                      )}
                                  </FormItem>
                              </Col>
+                             <Col xl={12} lg={24} md={24} sm={24} xs={24}>
+                                 <FormItem
+                                     {...formItemLayout}
+                                     label="服务地址"
+                                 >
+                                     {getFieldDecorator('LocationUrl', {
+                                         initialValue:row?`${row.LocationUrl}`:'',
+                                         rules: [{
+                                             required: true,
+                                             message: '请输入服务地址',
+                                         }],
+                                     })(
+                                         <Input />
+                                     )}
+                                 </FormItem>
+                             </Col>
                          </Row>
                          <Row gutter={24}>
                              <Col span={24}>

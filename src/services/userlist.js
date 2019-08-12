@@ -15,7 +15,7 @@ export async function getList(params) {
         DeleteMark: params.DeleteMark,
     };
 
-    const result = post('/api/rest/PollutantSourceApi/PUserInfo/GetAllUserInfo', body, null);
+    const result = post('/api/rest/PollutantSourceApi/WxServer/GetAllUserInfo', body, null);
     return result === null ? {
         data: null
     } : result;
@@ -25,7 +25,7 @@ export async function deleteuser(params) {
     const body = {
         UserId: params.UserId
     };
-    const result = post('/api/rest/PollutantSourceApi/PUserInfo/DeleteUserInfo', body, null);
+    const result = post('/api/rest/PollutantSourceApi/WxServer/DeleteUserInfo', body, null);
     return result === null ? {
         data: null
     } : result;
@@ -36,7 +36,7 @@ export async function enableduser(params) {
         UserId: params.UserId,
         Enalbe: params.Enalbe
     };
-    const result = post('/api/rest/PollutantSourceApi/PUserInfo/EnableOrDisableUser', body, null);
+    const result = post('/api/rest/PollutantSourceApi/WxServer/EnableOrDisableUser', body, null);
     return result === null ? {
         data: null
     } : result;
@@ -46,7 +46,7 @@ export async function isexistenceuser(params) {
     const body = {
         User_Account: params.UserAccount,
     };
-    const result = post('/api/rest/PollutantSourceApi/PUserInfo/IsExistenceUser', body, null);
+    const result = post('/api/rest/PollutantSourceApi/WxServer/IsExistenceUser', body, null);
     return result === null ? {
         data: null
     } : result;
@@ -68,7 +68,7 @@ export async function adduser(params) {
         DeleteMark: params.DeleteMark,
         Roles_Id: "4122f8b4-9c03-466c-b194-a5116e744fe1"//params.RolesId
     };
-    const result = post('/api/rest/PollutantSourceApi/PUserInfo/AddUserInfo', body, null);
+    const result = post('/api/rest/PollutantSourceApi/WxServer/AddUserInfo', body, null);
     return result === null ? {
         data: null
     } : result;
@@ -78,7 +78,7 @@ export async function getuser(params) {
     const body = {
         UserId: params.UserId
     };
-    const result = post('/api/rest/PollutantSourceApi/PUserInfo/GetUserInfo', body, null);
+    const result = post('/api/rest/PollutantSourceApi/WxServer/GetUserInfo', body, null);
     return result === null ? {
         data: null
     } : result;
@@ -101,7 +101,7 @@ export async function edituser(params) {
         DeleteMark: params.DeleteMark,
         Roles_Id:"4122f8b4-9c03-466c-b194-a5116e744fe1",// params.RolesId
     };
-    const result = post('/api/rest/PollutantSourceApi/PUserInfo/EditUserInfo', body, null);
+    const result = post('/api/rest/PollutantSourceApi/WxServer/EditUserInfo', body, null);
     return result === null ? {
         data: null
     } : result;

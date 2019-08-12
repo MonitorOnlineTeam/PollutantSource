@@ -389,7 +389,6 @@ export default class pointview extends Component {
         return (
             <MonitorContent {...this.props} breadCrumbList={
                 [
-                    // { Name: '首页', Url: '/' },
                     {Name:'企业管理',Url:'/EnterpriseManager'},
                     {Name:'排口管理',Url:`/sysmanage/pointinfo/${this.props.match.params.EntCode}`},
                     { Name: '排口详情', Url: '' }
@@ -421,20 +420,6 @@ export default class pointview extends Component {
                             </DescriptionList>
                         </Card.Grid>
                     </Card>
-                        {/* {this.state.PollutantType=== "none"? null:this.renderChildCems()}
-                        <div className={this.state.AddVisitable ? styles.show : styles.hide} 
-                        style={{display: this.state.PollutantType}}>
-                            <Card>
-                                <Button type="dashed" block onClick={() => {
-                                    this.setState({
-                                        MSVisitable: true,
-                                        title: '监测系统',
-                                        width: '40%',
-                                        ID: 'null',
-                                    })
-                                }}>添加监测子系统</Button>
-                            </Card>
-                        </div> */}
                 </div>
                 <Modal
                     visible={this.state.MSVisitable}
