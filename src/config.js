@@ -17,15 +17,15 @@ module.exports = {
     isMultiEnterprise: false,
     apiPrefix: '/mock',
     webSocketPushURL: '172.16.12.152:40005',
-    imgaddress: 'http://172.16.12.152:8066/api/upload/',
+    imgaddress: 'http://172.16.12.183:8066/api/upload/',
     //年度检测报告路径
-    annualmonitoringreportaddress: 'http://172.16.12.152:8066/api/upload/report/pdf/year/',
+    annualmonitoringreportaddress: 'http://172.16.12.183:8066/api/upload/report/pdf/year/',
     //使用文档路径
-    documentationaddress: 'http://172.16.12.152:8066/api/upload/documentation/',
+    documentationaddress: 'http://172.16.12.183:8066/api/upload/documentation/',
     //实时视频地址
-    realtimevideourl: 'http://172.16.12.152:8066/Video/MonitorLinkCamera/RealtimeCameraReact',
+    realtimevideourl: 'http://172.16.12.183:8066/Video/MonitorLinkCamera/RealtimeCameraReact',
     //历史视频地址
-    hisvideourl: 'http://172.16.12.152:8066/Video/MonitorLinkCamera/HistoryCameraReact',
+    hisvideourl: 'http://172.16.12.183:8066/Video/MonitorLinkCamera/HistoryCameraReact',
     //设备运转率标准%
     RunningRate: 90,
     //传输有效率标准%
