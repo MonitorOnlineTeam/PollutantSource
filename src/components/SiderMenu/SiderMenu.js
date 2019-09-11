@@ -68,7 +68,7 @@ export default class SiderMenu extends PureComponent {
               <div className={styles.logo} id="logo">
                   <Link to="/homepage">
                       <img src={logo} alt="logo" />
-                      <h1>污染源在线监控微信小程序管理平台</h1>
+                      <h1>污染源扫码查后台管理</h1>
                   </Link>
               </div>
               <Suspense fallback={<PageLoading />}>

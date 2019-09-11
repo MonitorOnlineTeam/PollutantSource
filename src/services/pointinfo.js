@@ -43,7 +43,8 @@ export async function addpoint(params) {
         Col7:params.Col7,
         Col8:params.Col8,
         Col9:params.Col9,
-        Col10:params.Col10
+        Col10:params.Col10,
+        Col4:params.Col4
     };
 
     const result = post('/api/rest/PollutantSourceApi/WxServer/AddPoint', body, null);
@@ -102,7 +103,8 @@ export async function editpoint(params) {
         Col7:params.Col7,
         Col8:params.Col8,
         Col9:params.Col9,
-        Col10:params.Col10
+        Col10:params.Col10,
+        Col4:params.Col4
     };
     const result = post('/api/rest/PollutantSourceApi/WxServer/EditPoint', body, null);
     return result === null ? {

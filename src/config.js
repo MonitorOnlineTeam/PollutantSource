@@ -1,8 +1,8 @@
 module.exports = {
-    name: '污染源在线监控微信小程序管理平台',
+    name: '污染源扫码查后台管理',
     logindesc: 'SDL 您身边的环境污染分析专家',
     prefix: 'monitorEnterprise',
-    footerText: '污染源在线监控微信小程序管理平台   2018 sdl',
+    footerText: '污染源扫码查后台管理   2018 sdl',
     amapKey: 'c5cb4ec7ca3ba4618348693dd449002d',
     centerlongitude: '118.510962',
     centerlatitude: '38.976271',
