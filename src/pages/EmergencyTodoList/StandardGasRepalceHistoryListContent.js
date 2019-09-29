@@ -12,6 +12,72 @@ import moment from 'moment';
 import { routerRedux } from 'dva/router';
 import RangePicker_ from '../../components/PointDetail/RangePicker_';
 import styles from './StandardGasRepalceHistoryListContent.less';
+const datas=[
+    {
+        "TaskID":"beaedfe3-daa6-4d45-a1f8-371699f6cbc8",
+        "TypeID":4,
+        "CreateUserID":"印飞星",
+        "Content":"氮气(2019-08-11 23:59:59)",
+        "CreateTime":"2019-03-11 13:49:42",
+        "FormMainID":"ded3ba59-3ae8-47f0-8d24-a0a74670885a",
+        "IsSign":false,
+        "TaskStatus":3
+    },{
+        "TaskID":"beaedfe3-daa6-4d45-a1f8-371699f6cbc8",
+        "TypeID":4,
+        "CreateUserID":"王娇娇",
+        "Content":"标气(2019-07-24 10:59:59)",
+        "CreateTime":"2019-02-22 08:49:42",
+        "FormMainID":"ded3ba59-3ae8-47f0-8d24-a0a74670885a",
+        "IsSign":false,
+        "TaskStatus":3
+    },{
+        "TaskID":"beaedfe3-daa6-4d45-a1f8-371699f6cbc8",
+        "TypeID":4,
+        "CreateUserID":"刘家印",
+        "Content":"氮气(2019-08-22 15:59:59)",
+        "CreateTime":"2019-03-11 13:49:42",
+        "FormMainID":"ded3ba59-3ae8-47f0-8d24-a0a74670885a",
+        "IsSign":false,
+        "TaskStatus":3
+    },{
+        "TaskID":"beaedfe3-daa6-4d45-a1f8-371699f6cbc8",
+        "TypeID":4,
+        "CreateUserID":"李建军",
+        "Content":"标气(2019-08-11 23:59:59)",
+        "CreateTime":"2019-03-11 13:49:42",
+        "FormMainID":"ded3ba59-3ae8-47f0-8d24-a0a74670885a",
+        "IsSign":false,
+        "TaskStatus":3
+    },{
+        "TaskID":"beaedfe3-daa6-4d45-a1f8-371699f6cbc8",
+        "TypeID":4,
+        "CreateUserID":"王娇娇",
+        "Content":"氮气(2019-04-11 23:59:59)",
+        "CreateTime":"2019-03-02 13:49:42",
+        "FormMainID":"ded3ba59-3ae8-47f0-8d24-a0a74670885a",
+        "IsSign":false,
+        "TaskStatus":3
+    },{
+        "TaskID":"beaedfe3-daa6-4d45-a1f8-371699f6cbc8",
+        "TypeID":4,
+        "CreateUserID":"印飞星",
+        "Content":"标气(2019-07-11 20:59:59)",
+        "CreateTime":"2019-04-11 13:49:42",
+        "FormMainID":"ded3ba59-3ae8-47f0-8d24-a0a74670885a",
+        "IsSign":false,
+        "TaskStatus":3
+    },{
+        "TaskID":"beaedfe3-daa6-4d45-a1f8-371699f6cbc8",
+        "TypeID":4,
+        "CreateUserID":"张爱国",
+        "Content":"标气(2019-06-11 22:59:59)",
+        "CreateTime":"2019-02-09 13:49:42",
+        "FormMainID":"ded3ba59-3ae8-47f0-8d24-a0a74670885a",
+        "IsSign":false,
+        "TaskStatus":3
+    }
+]
 
 @connect(({ maintenancelist, loading }) => ({
     loading: loading.effects['maintenancelist/GetStandardGasRepalceHistoryList'],
@@ -105,7 +171,7 @@ class StandardGasRepalceHistoryListContent extends Component {
     }
 
     render() {
-        const dataSource = this.props.HistoryStandardGasRepalceRecordList === [] ? [] : this.props.HistoryStandardGasRepalceRecordList;
+        const dataSource = datas//this.props.HistoryStandardGasRepalceRecordList === [] ? [] : this.props.HistoryStandardGasRepalceRecordList;
         const columns = [{
             title: '运维人',
             width: '20%',

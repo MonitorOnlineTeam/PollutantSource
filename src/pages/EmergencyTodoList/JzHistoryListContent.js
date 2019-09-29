@@ -16,6 +16,59 @@ import RangePicker_ from '../../components/PointDetail/RangePicker_';
 import { routerRedux } from 'dva/router';
 import styles from '../EmergencyTodoList/JzHistoryListContent.less';
 
+const datas=[
+    {
+        "CreateUserID":"印飞星",
+        "CreateTime":"2019-06-02 16:02:58",
+        "TaskID":"281d87da-7156-4956-93ae-cf6d4a3799ae",
+        "TypeID":8,
+        "Content":"零点漂移仪器校准(O2:,SO2:,NOX:,颗粒物:),量程漂移仪器校准(O2:,SO2:,NOX:,颗粒物:)",
+        "FormMainID":"9552676a-483c-43bc-a779-0f03e2520bfe",
+        "IsSign":false,
+        "TaskStatus":3
+    },
+    {
+        "CreateUserID":"王娇娇",
+        "CreateTime":"2019-03-11 09:15:02",
+        "TaskID":"beaedfe3-daa6-4d45-a1f8-371699f6cbc8",
+        "TypeID":8,
+        "Content":"零点漂移仪器校准(SO2:是,NOX:,颗粒物:是,O2:是),量程漂移仪器校准(SO2:是,NOX:,颗粒物:否,O2:是)",
+        "FormMainID":"1172e190-c858-41a2-8963-6160ffb704cd",
+        "IsSign":false,
+        "TaskStatus":3
+    },
+    {
+        "CreateUserID":"李建军",
+        "CreateTime":"2019-08-08 12:55:02",
+        "TaskID":"beaedfe3-daa6-4d45-a1f8-371699f6cbc8",
+        "TypeID":8,
+        "Content":"零点漂移仪器校准(SO2:是,NOX:,颗粒物:是,O2:是)",
+        "FormMainID":"1172e190-c858-41a2-8963-6160ffb704cd",
+        "IsSign":false,
+        "TaskStatus":3
+    },
+    {
+        "CreateUserID":"印飞星",
+        "CreateTime":"2019-02-11 16:22:02",
+        "TaskID":"beaedfe3-daa6-4d45-a1f8-371699f6cbc8",
+        "TypeID":8,
+        "Content":"零点漂移仪器校准(SO2:是,NOX:,颗粒物:是,O2:是),量程漂移仪器校准(SO2:是,NOX:,颗粒物:否,O2:是)",
+        "FormMainID":"1172e190-c858-41a2-8963-6160ffb704cd",
+        "IsSign":false,
+        "TaskStatus":3
+    },
+    {
+        "CreateUserID":"张家印",
+        "CreateTime":"2019-06-11 13:55:02",
+        "TaskID":"beaedfe3-daa6-4d45-a1f8-371699f6cbc8",
+        "TypeID":8,
+        "Content":"零点漂移仪器校准(SO2:是,NOX:,颗粒物:是,O2:是)",
+        "FormMainID":"1172e190-c858-41a2-8963-6160ffb704cd",
+        "IsSign":false,
+        "TaskStatus":3
+    },
+]
+
 @connect(({ maintenancelist, loading }) => ({
     loading: loading.effects['maintenancelist/GetJzHistoryList'],
     JzHistoryRecord: maintenancelist.JzHistoryList,
@@ -106,7 +159,7 @@ class JzHistoryListContent extends Component {
 
     render() {
         const SCREEN_HEIGHT = document.querySelector('body').offsetHeight - 150;
-        const dataSource = this.props.JzHistoryRecord;
+        const dataSource =datas// this.props.JzHistoryRecord;
         const columns = [{
             title: '运维人',
             width: '20%',

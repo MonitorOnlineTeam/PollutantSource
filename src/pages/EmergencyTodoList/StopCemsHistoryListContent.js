@@ -14,6 +14,79 @@ import { routerRedux } from 'dva/router';
 import RangePicker_ from '../../components/PointDetail/RangePicker_';
 import styles from './StopCemsHistoryListContent.less';
 
+const datas=[
+    {
+        "FormMainID":"609cd9f2-3fac-43b3-803e-7fb031373cbd",
+        "TaskID":"c39151b5-bdcd-473a-bab0-2d202f7887cc",
+        "TypeID":2,
+        "TypeName":"StopCemsHistoryList",
+        "Content":"{'EnterpriseName':'首钢京唐钢铁联合有限责任公司','PointPosition':'','StopSummary':''}",
+        "CreateUserID":"印飞星",
+        "CreateTime":"2019-01-08 14:46:16",
+        "SignContent":null,
+        "SignTime":null,
+        "StopHour":146.02,
+        "ReasonContent":"",
+        "IsSign":false,
+        "TaskStatus":3
+    }, {
+        "FormMainID":"609cd9f2-3fac-43b3-803e-7fb031373cbd",
+        "TaskID":"c39151b5-bdcd-473a-bab0-2d202f7887cc",
+        "TypeID":2,
+        "TypeName":"StopCemsHistoryList",
+        "Content":"{'EnterpriseName':'首钢京唐钢铁联合有限责任公司','PointPosition':'','StopSummary':''}",
+        "CreateUserID":"王娇娇",
+        "CreateTime":"2019-05-09 09:22:16",
+        "SignContent":null,
+        "SignTime":null,
+        "StopHour":25.03,
+        "ReasonContent":"",
+        "IsSign":false,
+        "TaskStatus":3
+    }, {
+        "FormMainID":"609cd9f2-3fac-43b3-803e-7fb031373cbd",
+        "TaskID":"c39151b5-bdcd-473a-bab0-2d202f7887cc",
+        "TypeID":2,
+        "TypeName":"StopCemsHistoryList",
+        "Content":"{'EnterpriseName':'首钢京唐钢铁联合有限责任公司','PointPosition':'','StopSummary':''}",
+        "CreateUserID":"王娇娇",
+        "CreateTime":"2019-03-27 09:02:16",
+        "SignContent":null,
+        "SignTime":null,
+        "StopHour":52.07,
+        "ReasonContent":"",
+        "IsSign":false,
+        "TaskStatus":3
+    }, {
+        "FormMainID":"609cd9f2-3fac-43b3-803e-7fb031373cbd",
+        "TaskID":"c39151b5-bdcd-473a-bab0-2d202f7887cc",
+        "TypeID":2,
+        "TypeName":"StopCemsHistoryList",
+        "Content":"{'EnterpriseName':'首钢京唐钢铁联合有限责任公司','PointPosition':'','StopSummary':''}",
+        "CreateUserID":"印飞星",
+        "CreateTime":"2019-04-05 12:46:16",
+        "SignContent":null,
+        "SignTime":null,
+        "StopHour":102.05,
+        "ReasonContent":"",
+        "IsSign":false,
+        "TaskStatus":3
+    }, {
+        "FormMainID":"609cd9f2-3fac-43b3-803e-7fb031373cbd",
+        "TaskID":"c39151b5-bdcd-473a-bab0-2d202f7887cc",
+        "TypeID":2,
+        "TypeName":"StopCemsHistoryList",
+        "Content":"{'EnterpriseName':'首钢京唐钢铁联合有限责任公司','PointPosition':'','StopSummary':''}",
+        "CreateUserID":"王娇娇",
+        "CreateTime":"2019-08-08 14:22:16",
+        "SignContent":null,
+        "SignTime":null,
+        "StopHour":16.02,
+        "ReasonContent":"",
+        "IsSign":false,
+        "TaskStatus":3
+    }
+]
 @connect(({ maintenancelist, loading }) => ({
     loading: loading.effects['maintenancelist/GetStopCemsHistoryList'],
     StopCemsHistoryList: maintenancelist.StopCemsHistoryList,
@@ -106,7 +179,7 @@ class StopCemsHistoryListContent extends Component {
     }
 
     render() {
-        const dataSource = this.props.StopCemsHistoryList === null ? [] : this.props.StopCemsHistoryList;
+        const dataSource =datas // this.props.StopCemsHistoryList === null ? [] : this.props.StopCemsHistoryList;
         const columns = [{
             title: '运维人',
             width: '20%',

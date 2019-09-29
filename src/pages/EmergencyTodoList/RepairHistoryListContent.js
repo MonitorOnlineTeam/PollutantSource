@@ -14,6 +14,38 @@ import { routerRedux } from 'dva/router';
 import RangePicker_ from '../../components/PointDetail/RangePicker_';
 import styles from './RepairHistoryListContent.less';
 
+const datas=[
+    {
+        "FormMainID":"bf702f0d-e39a-45f0-ae36-8a8318b2b66f",
+        "TaskID":"808f0439-acfa-4374-91fe-8539f41680c7",
+        "TypeID":1,
+        "CreateUserID":"印飞星",
+        "CreateTime":"2019-04-20 15:19:01",
+        "IsSign":false,
+        "TaskStatus":3,
+        "RecordItem":"颗粒物测量仪"
+    },
+    {
+        "FormMainID":"bf702f0d-e39a-45f0-ae36-8a8318b2b66f",
+        "TaskID":"808f0439-acfa-4374-91fe-8539f41680c7",
+        "TypeID":1,
+        "CreateUserID":"王娇娇",
+        "CreateTime":"2019-01-20 15:19:01",
+        "IsSign":false,
+        "TaskStatus":3,
+        "RecordItem":"颗粒物测量仪"
+    },
+    {
+        "FormMainID":"bf702f0d-e39a-45f0-ae36-8a8318b2b66f",
+        "TaskID":"808f0439-acfa-4374-91fe-8539f41680c7",
+        "TypeID":1,
+        "CreateUserID":"王娇娇",
+        "CreateTime":"2019-03-20 15:19:01",
+        "IsSign":false,
+        "TaskStatus":3,
+        "RecordItem":"颗粒物测量仪"
+    }
+]
 @connect(({ maintenancelist, loading }) => ({
     loading: loading.effects['maintenancelist/GetRepairHistoryList'],
     HistoryRepairHistoryRecods: maintenancelist.RepairHistoryList,
@@ -107,7 +139,7 @@ class RepairHistoryListContent extends Component {
     }
 
     render() {
-        const dataSource = this.props.HistoryRepairHistoryRecods === null ? null : this.props.HistoryRepairHistoryRecods;
+        const dataSource =datas // this.props.HistoryRepairHistoryRecods === null ? null : this.props.HistoryRepairHistoryRecods;
         const columns = [{
             title: '运维人',
             width: '20%',

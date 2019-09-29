@@ -12,6 +12,117 @@ import { routerRedux } from 'dva/router';
 import RangePicker_ from '../../components/PointDetail/RangePicker_';
 import styles from "./DeviceExceptionHistoryListContent.less";
 
+const datas=[
+    {
+        "FormMainID":"5d42e57e-5bc4-43ef-9651-687fda584635",
+        "TaskID":"beaedfe3-daa6-4d45-a1f8-371699f6cbc8",
+        "TypeID":10,
+        "TypeName":"DeviceExceptionHistoryList",
+        "Content":"3",
+        "CreateUserID":"王娇娇",
+        "CreateTime":"2019-03-11 14:09:48",
+        "SignContent":null,
+        "SignTime":null,
+        "detailID":"19a07d95-0c47-469d-986c-b00f2ae0c704",
+        "ExceptionStatus":"分钟数据连续零值",
+        "ExceptionReason":"分钟数据连续零值",
+        "DealingSituations":"已解决",
+        "IsOk":"0",
+        "IsSign":false,
+        "TaskStatus":"3"
+    },
+    {
+        "FormMainID":"5d42e57e-5bc4-43ef-9651-687fda584635",
+        "TaskID":"beaedfe3-daa6-4d45-a1f8-371699f6cbc8",
+        "TypeID":10,
+        "TypeName":"DeviceExceptionHistoryList",
+        "Content":"3",
+        "CreateUserID":"印飞星",
+        "CreateTime":"2019-09-11 09:09:48",
+        "SignContent":null,
+        "SignTime":null,
+        "detailID":"19a07d95-0c47-469d-986c-b00f2ae0c704",
+        "ExceptionStatus":"小时数据连续零值",
+        "ExceptionReason":"小时数据连续零值",
+        "DealingSituations":"已解决",
+        "IsOk":"0",
+        "IsSign":false,
+        "TaskStatus":"3"
+    },
+    {
+        "FormMainID":"5d42e57e-5bc4-43ef-9651-687fda584635",
+        "TaskID":"beaedfe3-daa6-4d45-a1f8-371699f6cbc8",
+        "TypeID":10,
+        "TypeName":"DeviceExceptionHistoryList",
+        "Content":"3",
+        "CreateUserID":"张家印",
+        "CreateTime":"2019-04-25 13:44:48",
+        "SignContent":null,
+        "SignTime":null,
+        "detailID":"19a07d95-0c47-469d-986c-b00f2ae0c704",
+        "ExceptionStatus":"小时数据连续异常",
+        "ExceptionReason":"小时数据连续异常",
+        "DealingSituations":"已解决",
+        "IsOk":"0",
+        "IsSign":false,
+        "TaskStatus":"3"
+    },
+    {
+        "FormMainID":"5d42e57e-5bc4-43ef-9651-687fda584635",
+        "TaskID":"beaedfe3-daa6-4d45-a1f8-371699f6cbc8",
+        "TypeID":10,
+        "TypeName":"DeviceExceptionHistoryList",
+        "Content":"3",
+        "CreateUserID":"李建军",
+        "CreateTime":"2019-08-09 15:12:48",
+        "SignContent":null,
+        "SignTime":null,
+        "detailID":"19a07d95-0c47-469d-986c-b00f2ae0c704",
+        "ExceptionStatus":"分钟数据连续零值",
+        "ExceptionReason":"分钟数据连续零值",
+        "DealingSituations":"已解决",
+        "IsOk":"0",
+        "IsSign":false,
+        "TaskStatus":"3"
+    },
+    {
+        "FormMainID":"5d42e57e-5bc4-43ef-9651-687fda584635",
+        "TaskID":"beaedfe3-daa6-4d45-a1f8-371699f6cbc8",
+        "TypeID":10,
+        "TypeName":"DeviceExceptionHistoryList",
+        "Content":"3",
+        "CreateUserID":"印飞星",
+        "CreateTime":"2019-02-22 16:25:48",
+        "SignContent":null,
+        "SignTime":null,
+        "detailID":"19a07d95-0c47-469d-986c-b00f2ae0c704",
+        "ExceptionStatus":"分钟数据连续零值",
+        "ExceptionReason":"分钟数据连续零值",
+        "DealingSituations":"已解决",
+        "IsOk":"0",
+        "IsSign":false,
+        "TaskStatus":"3"
+    },
+    {
+        "FormMainID":"5d42e57e-5bc4-43ef-9651-687fda584635",
+        "TaskID":"beaedfe3-daa6-4d45-a1f8-371699f6cbc8",
+        "TypeID":10,
+        "TypeName":"DeviceExceptionHistoryList",
+        "Content":"3",
+        "CreateUserID":"王娇娇",
+        "CreateTime":"2019-06-05 13:11:48",
+        "SignContent":null,
+        "SignTime":null,
+        "detailID":"19a07d95-0c47-469d-986c-b00f2ae0c704",
+        "ExceptionStatus":"小时数据连续零值",
+        "ExceptionReason":"小时数据连续零值",
+        "DealingSituations":"已解决",
+        "IsOk":"0",
+        "IsSign":false,
+        "TaskStatus":"3"
+    },
+]
+
 @connect(({ maintenancelist, loading }) => ({
     loading: loading.effects['maintenancelist/GetDeviceExceptionHistoryList'],
     HistoryDeviceExceptionList: maintenancelist.DeviceExceptionHistroyList,
@@ -102,7 +213,7 @@ class DeviceExceptionHistoryListContent extends Component {
     }
 
     render() {
-        const dataSource = this.props.HistoryDeviceExceptionList === null ? null : this.props.HistoryDeviceExceptionList;
+        const dataSource =datas// this.props.HistoryDeviceExceptionList === null ? null : this.props.HistoryDeviceExceptionList;
         const columns = [{
             title: '运维人',
             width: '13%',
