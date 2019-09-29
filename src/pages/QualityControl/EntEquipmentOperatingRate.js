@@ -221,17 +221,18 @@ export default class EntEquipmentOperatingRate extends Component {
                                         }
                                     }
                                 }
-                                pagination={{
-                                    showSizeChanger: true,
-                                    showQuickJumper: true,
-                                    sorter: true,
-                                    'total': this.props.total,
-                                    'pageSize': this.props.pageSize,
-                                    'current': this.props.pageIndex,
-                                    // onChange: this.onChange,
-                                    // onShowSizeChange: this.onShowSizeChange,
-                                    pageSizeOptions: ['10', '20', '30', '40', '50']
-                                }}
+                                pagination={{ pageSize: 20 }}
+                                // pagination={{
+                                //     showSizeChanger: true,
+                                //     showQuickJumper: true,
+                                //     sorter: true,
+                                //     'total': this.props.total,
+                                //     'pageSize': this.props.pageSize,
+                                //     'current': this.props.pageIndex,
+                                //     // onChange: this.onChange,
+                                //     // onShowSizeChange: this.onShowSizeChange,
+                                //     pageSizeOptions: ['10', '20', '30', '40', '50']
+                                // }}
                             />
                         </Row>
 

@@ -33,7 +33,7 @@ for (let i = dateYear; i > dateYear - 10; --i) {
     alarmresponse
 }) => ({
     loadingPointsTable: loading.effects[pageUrl.getEntsData],
- 
+
     total: alarmresponse.total,
     pageSize: alarmresponse.pageSize,
     pageIndex: alarmresponse.pageIndex,
@@ -84,7 +84,7 @@ export default class EntAlarmResponse extends Component {
             },
         });
     }
- 
+
     handleTableChange = (pagination, filters, sorter) => {
         if (sorter.order) {
             this.updateState({
@@ -101,7 +101,7 @@ export default class EntAlarmResponse extends Component {
                 pageSize: pagination.pageSize
             });
         }
-       this.getPointsTableData(pagination.current);
+        this.getPointsTableData(pagination.current);
     }
     onDateChange = (value, dateString) => {
         let endTime = moment(dateString).add(1, 'months').add(-1, 'days').format('YYYY-MM-DD HH:mm:ss');
@@ -275,7 +275,7 @@ export default class EntAlarmResponse extends Component {
                 }
             }
         ];
-       
+
         return (
             <MonitorContent {...this.props} breadCrumbList={
                 [
@@ -311,34 +311,35 @@ export default class EntAlarmResponse extends Component {
                         <Row style={styles.cardTitle.cardBg}>
 
                             <Card
-                                style={{ marginTop: 16 }}
+                                style={{ marginTop: 16}}
                                 // type="inner"
                                 bordered={false}
                                 title={`${moment(this.props.clickDate).format('YYYY-MM')}月响应情况`}>
                                 <Table
                                     rowKey={(record, index) => `complete${index}`}
-                                    style={{}}
+                                    // style={{minHeight: '300px'}}
                                     className={styles.dataTable}
                                     loading={this.props.loadingPointsTable}
                                     columns={columnsPoints}
                                     onChange={this.handleTableChange}
                                     size="small"// small middle
                                     dataSource={this.props.entTableData}
-                                    scroll={{ y: 'calc(100vh - 390px)' }}
-                                    pagination={{
-                                        showSizeChanger: true,
-                                        showQuickJumper: true,
-                                        sorter: true,
-                                        'total': this.props.total,
-                                        'pageSize': this.props.pageSize,
-                                        'current': this.props.pageIndex,
-                                        pageSizeOptions: ['10', '20', '30', '40', '50']
-                                    }}
+                                    scroll={{ y: '228px' }}
+                                    pagination={{ pageSize: 10 }}
+                                // pagination={{
+                                //     showSizeChanger: true,
+                                //     showQuickJumper: true,
+                                //     sorter: true,
+                                //     'total': this.props.total,
+                                //     'pageSize': this.props.pageSize,
+                                //     'current': this.props.pageIndex,
+                                //     pageSizeOptions: ['10', '20', '30', '40', '50']
+                                // }}
                                 />
                             </Card>
 
                         </Row>
-                    
+
                     </Card>
                 </div>
             </MonitorContent>

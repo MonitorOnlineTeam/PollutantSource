@@ -20,7 +20,7 @@ import styles from './index.less';
 import ReactEcharts from 'echarts-for-react';
 import MonitorContent from '../../components/MonitorContent/index';
 import { connect } from 'dva';
-import {onlyOneEnt} from '../../config'
+import { onlyOneEnt } from '../../config'
 import Link from 'umi/link';
 // import { debug } from 'util';
 // const { MonthPicker } = DatePicker;
@@ -30,7 +30,7 @@ const pageUrl = {
     updateState: 'pollutantemissions/updateState',
     getChartData: 'pollutantemissions/getEntChartData',
     getPointDaysData: 'pollutantemissions/getPointDaysData',
-    getEntsData:'pollutantemissions/getEntsData',
+    getEntsData: 'pollutantemissions/getEntsData',
 };
 
 const dateChildren = [];
@@ -46,7 +46,7 @@ for (let i = dateYear; i > dateYear - 10; --i) {
     loadingTable: loading.effects[pageUrl.getEntsData],
     loadingChart: loading.effects[pageUrl.getChartData],
     loadingDays: loading.effects[pageUrl.getPointDaysData],
-    
+
     total: pollutantemissions.total,
     pageSize: pollutantemissions.pageSize,
     pageIndex: pollutantemissions.pageIndex,
@@ -55,14 +55,14 @@ for (let i = dateYear; i > dateYear - 10; --i) {
     xAxisData: pollutantemissions.xAxisData,
     seriesData: pollutantemissions.seriesData,
 
-    entxAxisData:pollutantemissions.entxAxisData,
-    entseriesData:pollutantemissions.entseriesData,
+    entxAxisData: pollutantemissions.entxAxisData,
+    entseriesData: pollutantemissions.entseriesData,
 
     pollutantCodes: pollutantemissions.pollutantCodes,
     emissionsSort: pollutantemissions.emissionsSort,
     selectedDate: pollutantemissions.selectedDate,
     clickDate: pollutantemissions.clickDate,
-    enttableDatas:pollutantemissions.enttableDatas
+    enttableDatas: pollutantemissions.enttableDatas
 }))
 export default class EntPollutantEmissions extends Component {
     constructor(props) {
@@ -92,15 +92,15 @@ export default class EntPollutantEmissions extends Component {
             payload: payload,
         });
     }
- 
-   getEntsTableData=(pageIndex)=>{
+
+    getEntsTableData = (pageIndex) => {
         this.props.dispatch({
             type: pageUrl.getEntsData,
             payload: {
                 pageIndex: pageIndex,
             },
         });
-   }
+    }
 
     getPointDaysTableData = (pageIndex) => {
         this.props.dispatch({
@@ -231,7 +231,7 @@ export default class EntPollutantEmissions extends Component {
         this.getEntsTableData(1);
     }
     render() {
-         const columns = [
+        const columns = [
             {
                 title: (<span style={{ fontWeight: 'bold' }}>企业名称</span>),
                 dataIndex: 'EnterpriseName',
@@ -253,7 +253,7 @@ export default class EntPollutantEmissions extends Component {
 
                 sorter: true,
                 render: (text, record) => {
-                    return (text/1000/1000/1000).toFixed(6);
+                    return (text / 1000 / 1000 / 1000).toFixed(6);
                 }
             }
         ];
@@ -323,16 +323,17 @@ export default class EntPollutantEmissions extends Component {
                                     onChange={this.handleTableChange}
                                     size="small"// small middle
                                     dataSource={this.props.enttableDatas}
-                                    scroll={{ y: 'calc(100vh - 390px)' }}
-                                    pagination={{
-                                        showSizeChanger: true,
-                                        showQuickJumper: true,
-                                        sorter: true,
-                                        'total': this.props.total,
-                                        'pageSize': this.props.pageSize,
-                                        'current': this.props.pageIndex,
-                                        pageSizeOptions: ['10', '20', '30', '40', '50']
-                                    }}
+                                    scroll={{ y: 'calc(100vh - 690px)', minHeight: 300 }}
+                                    pagination={{ pageSize: 10 }}
+                                // pagination={{
+                                //     showSizeChanger: true,
+                                //     showQuickJumper: true,
+                                //     sorter: true,
+                                //     'total': this.props.total,
+                                //     'pageSize': this.props.pageSize,
+                                //     'current': this.props.pageIndex,
+                                //     pageSizeOptions: ['10', '20', '30', '40', '50']
+                                // }}
                                 />
                             </Card>
 
