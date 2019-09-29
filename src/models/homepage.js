@@ -188,7 +188,13 @@ export default Model.extend({
                 AlarmAnalysis: {
                     ...AlarmAnalysis,
                     ...{
-                        aaData: response.data,
+                        // aaData: response.data,
+                        aaData: {
+                            ...response.data,
+                            LessThan2Hour: 12, 
+                            GreaterThan8Hour: 23,
+                            OtherTime: 7
+                        }
                     }
                 }
             });

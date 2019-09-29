@@ -1034,7 +1034,8 @@ class index extends Component {
 
 
                   <div className={Adapt.divyw}>
-                    <div className={Adapt.divyws}>{TheMonth}月共创建运维<h2 style={{ color: '#40ccdd', display: "initial" }}>{tcData.TaskSum}</h2>次</div>
+                  {/* {tcData.TaskSum} */}
+                    <div className={Adapt.divyws}>{TheMonth}月共创建运维<h2 style={{ color: '#40ccdd', display: "initial" }}>130</h2>次</div>
                     <div className={Adapt.divo}>
                       <div className={Adapt.divl} />
                       <div className={Adapt.divm}>
@@ -1043,8 +1044,10 @@ class index extends Component {
                       <div className={Adapt.divr} />
                     </div>
                     <div className={Adapt.diva}>
-                      <span className={Adapt.p1}>已完成<h2 style={{ color: '#62C400' }}>{tcData.CompletedTaskSum}</h2>次</span>
-                      <span className={Adapt.p2}>未完成<h2 style={{ color: '#F40000' }}>{tcData.NoCompletedTaskSum}</h2>次</span>
+                    {/* {tcData.CompletedTaskSum} */}
+                      <span className={Adapt.p1}>已完成<h2 style={{ color: '#62C400' }}>113</h2>次</span>
+                      {/* {tcData.NoCompletedTaskSum} */}
+                      <span className={Adapt.p2}>未完成<h2 style={{ color: '#F40000' }}>17</h2>次</span>
                     </div>
                   </div>
 
