@@ -108,7 +108,7 @@ export default class EntEquipmentOperatingRate extends Component {
                 title: (<span style={{ fontWeight: 'bold' }}>企业名称</span>),
                 dataIndex: 'EnterpriseName',
                 key: 'EnterpriseName',
-                width: '20%',
+                width: '80%',
                 align: 'left',
                 backgroundColor: 'red',
                 render: (text, record) => {
@@ -120,7 +120,7 @@ export default class EntEquipmentOperatingRate extends Component {
                 dataIndex: 'RunningRate',
                 key: 'RunningRate',
                 align: 'center',
-                width:'40%',
+                width:'10%',
                 sorter: true,
                 render: (text, record) => {
                     // 红色：#f5222d 绿色：#52c41a
