@@ -46,7 +46,6 @@ export default class OperationData extends Component {
     }
     //查询数据
     GetData = () => {
-        debugger
         this.updateState({
             OperationCalendar: {
                 ...this.props.OperationCalendar,

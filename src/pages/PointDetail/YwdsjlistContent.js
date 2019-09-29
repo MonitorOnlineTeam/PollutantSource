@@ -24,7 +24,7 @@ class YwdsjlistContent extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            rangeDate: [moment(moment(new Date()).subtract(3, 'month').format('YYYY-MM-DD 00:00:00')), moment(moment(new Date()).format('YYYY-MM-DD 23:59:59'))],
+            rangeDate: [moment(moment(new Date()).subtract(3, 'year').format('YYYY-MM-DD 00:00:00')), moment(moment(new Date()).format('YYYY-MM-DD 23:59:59'))],
             iconLoading: false
         };
     }
@@ -35,7 +35,7 @@ class YwdsjlistContent extends Component {
             pageIndex: 1,
             pageSize: 10,
             taskType: 0, //任务类型（0：全部，1：巡检任务，2：应急任务）
-            beginTime: moment().subtract(3, 'month').format('YYYY-MM-DD 00:00:00'), //运维大事记开始时间
+            beginTime: moment().subtract(3, 'year').format('YYYY-MM-DD 00:00:00'), //运维大事记开始时间
             endTime: moment().format('YYYY-MM-DD 23:59:59'), //运维大事记结束时间
             IsAlarmTimeout: false, //是否报警响应超时
             DGIMN: this.props.pointcode == null ? "1" : this.props.pointcode

@@ -169,7 +169,8 @@ class OverEnterpriseListAndChart extends Component {
                             position: 'inside'
                         }
                     },
-                    data: this.props.Zs01,
+                    // data: this.props.Zs01,
+                    data: [0, 0, 0, 0, 0, 0, 0, 0, 2, 2],
                 },
                 {
                     name: '折算二氧化硫',
@@ -182,7 +183,8 @@ class OverEnterpriseListAndChart extends Component {
                             position: 'inside'
                         }
                     },
-                    data: this.props.Zs02,
+                    // data: this.props.Zs02,
+                    data: [2, 0, 0, 0, 0, 0, 0, 0, 1, 3],
                 },
                 {
                     name: '折算氮氧化物',
@@ -195,7 +197,8 @@ class OverEnterpriseListAndChart extends Component {
                             position: 'inside'
                         }
                     },
-                    data: this.props.Zs03,
+                    // data: this.props.Zs03,
+                    data: [0, 0, 0, 0, 0, 0, 0, 0, 1, 1],
                 },
             ]
         };
@@ -248,6 +251,44 @@ class OverEnterpriseListAndChart extends Component {
     render() {
         const { rangeDate, mode } = this.state;
         const { overdatalist, loading } = this.props;
+        let dataSource = overdatalist;
+        dataSource = [
+            {
+                EntCode: "",
+                EntName: "首钢京唐钢铁联合有限责任公司",
+                Zs01: 2,
+                Zs02: 1,
+                Zs03: 0,
+            },
+            {
+                EntCode: "",
+                EntName: "广东瑞明电力股份有限公司",
+                Zs01: 3,
+                Zs02: 0,
+                Zs03: 1,
+            },
+            {
+                EntCode: "",
+                EntName: "广西农垦集团天成纸业有限公司",
+                Zs01: 1,
+                Zs02: 0,
+                Zs03: 3,
+            },
+            {
+                EntCode: "",
+                EntName: "武汉钢铁集团鄂州钢铁有限公司",
+                Zs01: 1,
+                Zs02: 2,
+                Zs03: 3,
+            },
+            {
+                EntCode: "",
+                EntName: "金川集团有限公司",
+                Zs01: 3,
+                Zs02: 2,
+                Zs03: 3,
+            },
+        ]
         let tableTitle = tableTitle = `${moment(this.props.clickDate).format('YYYY-MM')}月响应情况`
         const columnsPoints = [
             {
@@ -364,7 +405,7 @@ class OverEnterpriseListAndChart extends Component {
                                 columns={columnsPoints}
                                 onChange={this.handleTableChange}
                                 size="middle"
-                                dataSource={overdatalist}
+                                dataSource={dataSource}
                                 scroll={{ y: 'calc(100vh - 390px)' }}
                                 pagination={{
                                     showSizeChanger: true,
