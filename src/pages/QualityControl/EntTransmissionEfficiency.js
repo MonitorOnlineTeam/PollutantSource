@@ -112,23 +112,23 @@ export default class EntTransmissionEfficiency extends Component {
                 }
             },
             {
-                title: (<span style={{ fontWeight: 'bold' }}>传输率</span>),
+                title: (<span style={{ fontWeight: 'bold' }}>传输率(%)</span>),
                 dataIndex: 'TransmissionRate',
                 key: 'TransmissionRate',
                 width: '15%',
                 align: 'left',
                 render: (text, record) => {
                     if (record.AvgTransmissionRate <= text) {
-                        return <span className={styles.normaldata}>{(parseFloat(text) * 100).toFixed(2) + '%'}</span>;
+                        return <span className={styles.normaldata}>{(parseFloat(text) * 100).toFixed(2)}</span>;
                     }
-                    const content = (<span><Icon type="warning" style={{ color: '#EEC900' }} />平均值{(parseFloat(record.AvgTransmissionRate) * 100).toFixed(2) + '%'}</span>)
+                    const content = (<span><Icon type="warning" style={{ color: '#EEC900' }} />平均值{(parseFloat(record.AvgTransmissionRate) * 100).toFixed(2)}</span>)
                     return (<Popover content={content} trigger="hover">
-                        <span className={styles.avgtext}><Badge className={styles.warningdata} status="warning" />{(parseFloat(text) * 100).toFixed(2) + '%'}
+                        <span className={styles.avgtext}><Badge className={styles.warningdata} status="warning" />{(parseFloat(text) * 100).toFixed(2)}
                         </span> </Popover>);
                 }
             },
             {
-                title: (<span style={{ fontWeight: 'bold' }}>有效率</span>),
+                title: (<span style={{ fontWeight: 'bold' }}>有效率(%)</span>),
                 dataIndex: 'EffectiveRate',
                 key: 'EffectiveRate',
                 width: '15%',
@@ -136,11 +136,11 @@ export default class EntTransmissionEfficiency extends Component {
                 sorter: (a, b) => a.EffectiveRate - b.EffectiveRate,
                 render: (text, record) => {
                     if (record.AvgEffectiveRate <= text) {
-                        return <span className={styles.normaldata}>{(parseFloat(text) * 100).toFixed(2) + '%'}</span>;
+                        return <span className={styles.normaldata}>{(parseFloat(text) * 100).toFixed(2) }</span>;
                     }
-                    const content = (<span><Icon type="warning" style={{ color: '#EEC900' }} />平均值{(parseFloat(record.AvgEffectiveRate) * 100).toFixed(2) + '%'}</span>)
+                    const content = (<span><Icon type="warning" style={{ color: '#EEC900' }} />平均值{(parseFloat(record.AvgEffectiveRate) * 100).toFixed(2)}</span>)
                     return (<Popover content={content} trigger="hover">
-                        <span className={styles.avgtext}><Badge className={styles.warningdata} status="warning" />{(parseFloat(text) * 100).toFixed(2) + '%'}
+                        <span className={styles.avgtext}><Badge className={styles.warningdata} status="warning" />{(parseFloat(text) * 100).toFixed(2)}
                         </span> </Popover>);
                 }
             },
@@ -149,7 +149,7 @@ export default class EntTransmissionEfficiency extends Component {
                 dataIndex: 'TransmissionEffectiveRate',
                 key: 'TransmissionEffectiveRate',
                 // width: '250px',
-                width: '30%',
+                width: '10%',
                 // align: 'center',
                 sorter: true,
                 render: (text, record) => {

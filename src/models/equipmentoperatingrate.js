@@ -5,7 +5,7 @@
  */
 
 import { Model } from '../dvapack';
-import { getEquipmentOperatingRateForPoints,getEntEquipmentOperatingRateForPoints } from '../services/EquipmentOperatingRateApi';
+import { getEquipmentOperatingRateForPoints, getEntEquipmentOperatingRateForPoints } from '../services/EquipmentOperatingRateApi';
 import moment from 'moment';
 
 export default Model.extend({
@@ -17,19 +17,19 @@ export default Model.extend({
         beginTime: moment().format('YYYY-MM-01 HH:mm:ss'),
         endTime: moment().format('YYYY-MM-DD HH:mm:ss'),
         EORSort: 'ascend',
-        enttableDatas:[],
-        entcode:null,
-        entname:null,
+        enttableDatas: [],
+        entcode: null,
+        entname: null,
         entCode: null,
     },
     subscriptions: {
     },
     effects: {
-        * getData({payload}, { call, put, update, select }) {
-            const {beginTime, endTime, pageSize, EORSort} = yield select(state => state.equipmentoperatingrate);
+        * getData({ payload }, { call, put, update, select }) {
+            const { beginTime, endTime, pageSize, EORSort } = yield select(state => state.equipmentoperatingrate);
             const { entCode } = yield select(state => state.equipmentoperatingrate);
             let body = {
-                enterpriseCodes:(payload.entcode && payload.entcode!="null" && payload.entcode!="0")?[payload.entcode]:null,
+                enterpriseCodes: (payload.entcode && payload.entcode != "null" && payload.entcode != "0") ? [payload.entcode] : null,
                 beginTime: beginTime,
                 endTime: endTime,
                 pageSize: pageSize,
@@ -38,8 +38,7 @@ export default Model.extend({
                 entCode: entCode
             };
             const response = yield call(getEquipmentOperatingRateForPoints, body);
-            if(response && response.data && response.requstresult==="1")
-            {
+            if (response && response.data && response.requstresult === "1") {
                 yield update({
                     tableDatas: response.data,
                     total: response.total,
@@ -47,8 +46,8 @@ export default Model.extend({
                 });
             }
         },
-        * getEntData({payload}, { call, put, update, select }) {
-            const {beginTime, endTime, pageSize, EORSort} = yield select(state => state.equipmentoperatingrate);
+        * getEntData({ payload }, { call, put, update, select }) {
+            const { beginTime, endTime, pageSize, EORSort } = yield select(state => state.equipmentoperatingrate);
             let body = {
                 beginTime: beginTime,
                 endTime: endTime,
@@ -56,9 +55,119 @@ export default Model.extend({
                 EORSort: EORSort,
                 pageIndex: payload.pageIndex,
             };
-            const response = yield call(getEntEquipmentOperatingRateForPoints, body);
-            if(response && response.data && response.requstresult==="1")
-            {
+            //const response = yield call(getEntEquipmentOperatingRateForPoints, body);
+
+            const response = {
+                "requstresult": "1", "reason": "操作成功", "operation": "Post", "data": [
+                    {
+                        "EnterpriseCode": "51216eae-8f11-4578-ad63-5127f78f6cca",
+                        "EnterpriseName": "首钢京唐钢铁联合有限责任公司",
+                        "PointCode": null,
+                        "PointName": null,
+                        "DGIMN": null,
+                        "DataDate": null,
+                        "NormalRunTime": 2723.0,
+                        "ProducesTime": 4488.0,
+                        "StopProductionTime": 0.0,
+                        "RunningRate": 1,
+                        "AvgNormalRunTime": 0.0,
+                        "AvgProducesTime": 0.0,
+                        "AvgStopProductionTime": 0.0
+                    },
+                    {
+                        "EnterpriseCode": "51216eae-8f11-4578-ad63-5127f78f6cca",
+                        "EnterpriseName": "广东瑞明电力股份有限公司",
+                        "PointCode": null,
+                        "PointName": null,
+                        "DGIMN": null,
+                        "DataDate": null,
+                        "NormalRunTime": 2723.0,
+                        "ProducesTime": 4488.0,
+                        "StopProductionTime": 0.0,
+                        "RunningRate": 0.94387,
+                        "AvgNormalRunTime": 0.0,
+                        "AvgProducesTime": 0.0,
+                        "AvgStopProductionTime": 0.0
+                    },
+                    {
+                        "EnterpriseCode": "51216eae-8f11-4578-ad63-5127f78f6cca",
+                        "EnterpriseName": "广西农垦集团天成纸业有限公司",
+                        "PointCode": null,
+                        "PointName": null,
+                        "DGIMN": null,
+                        "DataDate": null,
+                        "NormalRunTime": 2723.0,
+                        "ProducesTime": 4488.0,
+                        "StopProductionTime": 0.0,
+                        "RunningRate": 0.90481,
+                        "AvgNormalRunTime": 0.0,
+                        "AvgProducesTime": 0.0,
+                        "AvgStopProductionTime": 0.0
+                    },
+                    {
+                        "EnterpriseCode": "51216eae-8f11-4578-ad63-5127f78f6cca",
+                        "EnterpriseName": "武汉钢铁集团鄂州钢铁有限公司",
+                        "PointCode": null,
+                        "PointName": null,
+                        "DGIMN": null,
+                        "DataDate": null,
+                        "NormalRunTime": 2723.0,
+                        "ProducesTime": 4488.0,
+                        "StopProductionTime": 0.0,
+                        "RunningRate": 0.81925,
+                        "AvgNormalRunTime": 0.0,
+                        "AvgProducesTime": 0.0,
+                        "AvgStopProductionTime": 0.0
+                    },
+                    {
+                        "EnterpriseCode": "51216eae-8f11-4578-ad63-5127f78f6cca",
+                        "EnterpriseName": "金川集团有限公司",
+                        "PointCode": null,
+                        "PointName": null,
+                        "DGIMN": null,
+                        "DataDate": null,
+                        "NormalRunTime": 2723.0,
+                        "ProducesTime": 4488.0,
+                        "StopProductionTime": 0.0,
+                        "RunningRate": 0.77618,
+                        "AvgNormalRunTime": 0.0,
+                        "AvgProducesTime": 0.0,
+                        "AvgStopProductionTime": 0.0
+                    },
+                    {
+                        "EnterpriseCode": "51216eae-8f11-4578-ad63-5127f78f6cca",
+                        "EnterpriseName": "新疆巴州塔什店华能电厂",
+                        "PointCode": null,
+                        "PointName": null,
+                        "DGIMN": null,
+                        "DataDate": null,
+                        "NormalRunTime": 2723.0,
+                        "ProducesTime": 4488.0,
+                        "StopProductionTime": 0.0,
+                        "RunningRate": 0.72511,
+                        "AvgNormalRunTime": 0.0,
+                        "AvgProducesTime": 0.0,
+                        "AvgStopProductionTime": 0.0
+                    },
+                    {
+                        "EnterpriseCode": "51216eae-8f11-4578-ad63-5127f78f6cca",
+                        "EnterpriseName": "金昌水泥集团有限责任公司",
+                        "PointCode": null,
+                        "PointName": null,
+                        "DGIMN": null,
+                        "DataDate": null,
+                        "NormalRunTime": 2723.0,
+                        "ProducesTime": 4488.0,
+                        "StopProductionTime": 0.0,
+                        "RunningRate": 0.86619,
+                        "AvgNormalRunTime": 0.0,
+                        "AvgProducesTime": 0.0,
+                        "AvgStopProductionTime": 0.0
+                    }
+                ], "total": 1
+            }
+
+            if (response && response.data && response.requstresult === "1") {
                 yield update({
                     enttableDatas: response.data,
                     total: response.total,

@@ -245,7 +245,7 @@ export default class EntPollutantEmissions extends Component {
                 }
             },
             {
-                title: (<span style={{ fontWeight: 'bold' }}>排放量(mg/m³)</span>),
+                title: (<span style={{ fontWeight: 'bold' }}>排放量(t)</span>),
                 dataIndex: 'Emissions',
                 key: 'Emissions',
                 align: 'left',
@@ -253,7 +253,7 @@ export default class EntPollutantEmissions extends Component {
 
                 sorter: true,
                 render: (text, record) => {
-                    return text;
+                    return (text/1000/1000/1000).toFixed(6);
                 }
             }
         ];
