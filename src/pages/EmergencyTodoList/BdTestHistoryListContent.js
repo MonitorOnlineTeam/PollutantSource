@@ -13,6 +13,69 @@ import { routerRedux } from 'dva/router';
 import RangePicker_ from '../../components/PointDetail/RangePicker_';
 import styles from './BdTestHistoryListContent.less';
 
+const datas=[
+    {
+        "FormMainID":"666a44a4-c2d7-4758-89d4-62a755c3e3e5",
+        "TaskID":"808f0439-acfa-4374-91fe-8539f41680c7",
+        "TypeID":9,
+        "CreateUserID":"王娇娇",
+        "CreateTime":"2019-03-15 12:20:23",
+        "EvaluateResults":"1",
+        "IsSign":false,
+        "TaskStatus":3
+    },
+    {
+        "FormMainID":"666a44a4-c2d7-4758-89d4-62a755c3e3e5",
+        "TaskID":"808f0439-acfa-4374-91fe-8539f41680c7",
+        "TypeID":9,
+        "CreateUserID":"张家印",
+        "CreateTime":"2019-04-19 11:21:23",
+        "EvaluateResults":"1",
+        "IsSign":false,
+        "TaskStatus":3
+    },
+    {
+        "FormMainID":"666a44a4-c2d7-4758-89d4-62a755c3e3e5",
+        "TaskID":"808f0439-acfa-4374-91fe-8539f41680c7",
+        "TypeID":9,
+        "CreateUserID":"王娇娇",
+        "CreateTime":"2019-09-10 09:20:23",
+        "EvaluateResults":"1",
+        "IsSign":false,
+        "TaskStatus":3
+    },
+    {
+        "FormMainID":"666a44a4-c2d7-4758-89d4-62a755c3e3e5",
+        "TaskID":"808f0439-acfa-4374-91fe-8539f41680c7",
+        "TypeID":9,
+        "CreateUserID":"印飞星",
+        "CreateTime":"2019-06-10 15:10:23",
+        "EvaluateResults":"1",
+        "IsSign":false,
+        "TaskStatus":3
+    },
+    {
+        "FormMainID":"666a44a4-c2d7-4758-89d4-62a755c3e3e5",
+        "TaskID":"808f0439-acfa-4374-91fe-8539f41680c7",
+        "TypeID":9,
+        "CreateUserID":"李建军",
+        "CreateTime":"2019-03-08 12:28:23",
+        "EvaluateResults":"1",
+        "IsSign":false,
+        "TaskStatus":3
+    },
+    {
+        "FormMainID":"666a44a4-c2d7-4758-89d4-62a755c3e3e5",
+        "TaskID":"808f0439-acfa-4374-91fe-8539f41680c7",
+        "TypeID":9,
+        "CreateUserID":"王娇娇",
+        "CreateTime":"2019-07-04 14:17:23",
+        "EvaluateResults":"1",
+        "IsSign":false,
+        "TaskStatus":3
+    },
+]
+
 @connect(({ maintenancelist, loading }) => ({
     loading: loading.effects['maintenancelist/GetBdTestHistoryList'],
     BdHistoryInfoList: maintenancelist.BdTestHistoryList,
@@ -106,7 +169,7 @@ class BdTestHistoryListContent extends Component {
     }
 
     render() {
-        const dataSource = this.props.BdHistoryInfoList === null ? null : this.props.BdHistoryInfoList;
+        const dataSource =datas// this.props.BdHistoryInfoList === null ? null : this.props.BdHistoryInfoList;
         const columns = [{
             title: '运维人',
             width: '20%',
@@ -118,17 +181,21 @@ class BdTestHistoryListContent extends Component {
             dataIndex: 'DealingSituations',
             key: 'DealingSituations',
             render: (text, record) => {
-                if (text !== undefined) {
-                    let content = text.split(',');
-                    var resu = [];
-                    content.map((item, key) => {
-                        item = item.replace('(', '  ');
-                        item = item.replace(')', '');
-                        resu.push(
-                            <Tag key={key} style={{ marginBottom: 1.5, marginTop: 1.5 }} color="#108ee9">{item}</Tag>
-                        );
-                    });
-                }
+                var resu = [];
+                // if (text !== undefined) {
+                //     let content = text.split(',');
+                //     var resu = [];
+                //     content.map((item, key) => {
+                //         item = item.replace('(', '  ');
+                //         item = item.replace(')', '');
+                //         resu.push(
+                //             <Tag key={key} style={{ marginBottom: 1.5, marginTop: 1.5 }} color="#108ee9">{item}</Tag>
+                //         );
+                //     });
+                // }
+                resu.push(
+                    <Tag key={0} style={{ marginBottom: 1.5, marginTop: 1.5 }} color="#108ee9">合格</Tag>
+                );
                 return resu;
             }
         }, {

@@ -15,6 +15,79 @@ import RangePicker_ from '../../components/PointDetail/RangePicker_';
 import styles from './WQCQFInspectionHistoryListContent.less';
 import { EnumPsOperationForm } from '../../utils/enum';
 
+const datas=[
+    {
+        "TaskID":"b22bbd00-488c-4232-86a9-84f2b8d88693",
+        "TypeID":6,
+        "CreateUserID":"印飞星",
+        "CreateTime":"2019-08-14 15:49:43",
+        "Content":"更换标气",
+        "FormMainID":"43ed2050-5a7d-4ecd-823a-5d5828737a9d",
+        "IsSign":false,
+        "TaskStatus":3
+    },
+    {
+        "TaskID":"b22bbd00-488c-4232-86a9-84f2b8d88693",
+        "TypeID":6,
+        "CreateUserID":"王娇娇",
+        "CreateTime":"2019-04-15 15:49:43",
+        "Content":"更换标气",
+        "FormMainID":"43ed2050-5a7d-4ecd-823a-5d5828737a9d",
+        "IsSign":false,
+        "TaskStatus":3
+    },
+    {
+        "TaskID":"b22bbd00-488c-4232-86a9-84f2b8d88693",
+        "TypeID":6,
+        "CreateUserID":"李建军",
+        "CreateTime":"2019-03-08 15:49:43",
+        "Content":"更换滤芯",
+        "FormMainID":"43ed2050-5a7d-4ecd-823a-5d5828737a9d",
+        "IsSign":false,
+        "TaskStatus":3
+    },
+    {
+        "TaskID":"b22bbd00-488c-4232-86a9-84f2b8d88693",
+        "TypeID":6,
+        "CreateUserID":"王娇娇",
+        "CreateTime":"2019-03-22 15:49:43",
+        "Content":"更换标气",
+        "FormMainID":"43ed2050-5a7d-4ecd-823a-5d5828737a9d",
+        "IsSign":false,
+        "TaskStatus":3
+    },
+    {
+        "TaskID":"b22bbd00-488c-4232-86a9-84f2b8d88693",
+        "TypeID":6,
+        "CreateUserID":"张家印",
+        "CreateTime":"2019-03-08 15:49:43",
+        "Content":"更换滤芯",
+        "FormMainID":"43ed2050-5a7d-4ecd-823a-5d5828737a9d",
+        "IsSign":false,
+        "TaskStatus":3
+    },
+    {
+        "TaskID":"b22bbd00-488c-4232-86a9-84f2b8d88693",
+        "TypeID":6,
+        "CreateUserID":"印飞星",
+        "CreateTime":"2019-04-08 15:49:43",
+        "Content":"更换标气",
+        "FormMainID":"43ed2050-5a7d-4ecd-823a-5d5828737a9d",
+        "IsSign":false,
+        "TaskStatus":3
+    },
+    {
+        "TaskID":"b22bbd00-488c-4232-86a9-84f2b8d88693",
+        "TypeID":6,
+        "CreateUserID":"王娇娇",
+        "CreateTime":"2019-05-08 15:49:43",
+        "Content":"更换滤芯",
+        "FormMainID":"43ed2050-5a7d-4ecd-823a-5d5828737a9d",
+        "IsSign":false,
+        "TaskStatus":3
+    },
+]
+
 @connect(({ maintenancelist, loading }) => ({
     loading: loading.effects['maintenancelist/GetInspectionHistoryList'],
     HistoryInspectionHistoryRecordList: maintenancelist.InspectionHistoryList,
@@ -127,7 +200,7 @@ class WQCQFInspectionHistoryListContent extends Component {
     }
 
     render() {
-        const dataSource = this.props.HistoryInspectionHistoryRecordList === [] ? [] : this.props.HistoryInspectionHistoryRecordList;
+        const dataSource = datas //this.props.HistoryInspectionHistoryRecordList === [] ? [] : this.props.HistoryInspectionHistoryRecordList;
         const columns = [{
             title: '运维人',
             width: '20%',

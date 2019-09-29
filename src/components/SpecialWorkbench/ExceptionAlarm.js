@@ -48,7 +48,7 @@ class ExceptionAlarm extends PureComponent {
             "逻辑异常": "volcano",
             "状态异常": "orange"
         };
-        listData = exceptionAlarm.tableDatas.map((item,key) => {
+        listData = exceptionAlarm.tableDatas.map((item,key,index) => {
 
             //判断报警是否超过4小时
             const seconds = moment().diff(moment(item.FirstAlarmTime), 'minutes');
@@ -56,8 +56,7 @@ class ExceptionAlarm extends PureComponent {
             const minutes = Math.floor(seconds % 60);
             const color = hour >= 4 ? 'red' : 'rgb(129,203,237)';
             const minutesLable = minutes > 0 ? `${minutes}分钟` : '';
-
-            const labelDiv = <div style={{ color: `${color}` }}>已发生{hour}小时{minutesLable}</div>;
+            const labelDiv = <div style={{ color: `${color}` }}>已发生3小时{minutesLable}</div>;
             //未响应，按钮是派单;响应了超过4个小时是督办
             let btnDiv = '';
 
@@ -92,8 +91,8 @@ class ExceptionAlarm extends PureComponent {
                 ),
                 content: '',
                 extra: (
-                    <div style={{ marginTop: 30, marginRight: 70, textAlign: 'center' }}>
-                        {labelDiv}
+                    <div style={{ marginTop: 5, marginRight: 10, textAlign: 'center' }}>
+                        {key==0?labelDiv:<div></div>}
                         {btnDiv}
                     </div>
                 )

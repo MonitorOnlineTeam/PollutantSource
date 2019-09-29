@@ -12,6 +12,68 @@ import moment from 'moment';
 import { routerRedux } from 'dva/router';
 import RangePicker_ from '../../components/PointDetail/RangePicker_';
 import styles from './ConsumablesReplaceHistoryListContent.less';
+const datas=[
+    {
+        "TaskID":"7a7c737d-0424-4a35-ae16-4f09540fac38",
+        "TypeID":3,
+        "CreateUserID":"印飞星",
+        "Content":"标气1(5)",
+        "CreateTime":"2019-03-08 14:48:46",
+        "FormMainID":"a33b4da3-c0fa-43b0-97f0-2ddbe7984104",
+        "IsSign":false,
+        "TaskStatus":3
+    },
+    {
+        "TaskID":"7a7c737d-0424-4a35-ae16-4f09540fac38",
+        "TypeID":3,
+        "CreateUserID":"王娇娇",
+        "Content":"滤芯(4)",
+        "CreateTime":"2019-04-25 13:42:46",
+        "FormMainID":"a33b4da3-c0fa-43b0-97f0-2ddbe7984104",
+        "IsSign":false,
+        "TaskStatus":3
+    },
+    {
+        "TaskID":"7a7c737d-0424-4a35-ae16-4f09540fac38",
+        "TypeID":3,
+        "CreateUserID":"李建军",
+        "Content":"标气1(2)",
+        "CreateTime":"2019-01-23 15:48:46",
+        "FormMainID":"a33b4da3-c0fa-43b0-97f0-2ddbe7984104",
+        "IsSign":false,
+        "TaskStatus":3
+    },
+    {
+        "TaskID":"7a7c737d-0424-4a35-ae16-4f09540fac38",
+        "TypeID":3,
+        "CreateUserID":"印飞星",
+        "Content":"取样管线(4)",
+        "CreateTime":"2019-06-25 09:48:46",
+        "FormMainID":"a33b4da3-c0fa-43b0-97f0-2ddbe7984104",
+        "IsSign":false,
+        "TaskStatus":3
+    },
+    {
+        "TaskID":"7a7c737d-0424-4a35-ae16-4f09540fac38",
+        "TypeID":3,
+        "CreateUserID":"张家星",
+        "Content":"标气1(5)",
+        "CreateTime":"2019-03-08 14:48:46",
+        "FormMainID":"a33b4da3-c0fa-43b0-97f0-2ddbe7984104",
+        "IsSign":false,
+        "TaskStatus":3
+    },
+    {
+        "TaskID":"7a7c737d-0424-4a35-ae16-4f09540fac38",
+        "TypeID":3,
+        "CreateUserID":"王娇娇",
+        "Content":"滤芯(3)",
+        "CreateTime":"2019-07-08 13:54:46",
+        "FormMainID":"a33b4da3-c0fa-43b0-97f0-2ddbe7984104",
+        "IsSign":false,
+        "TaskStatus":3
+    },
+]
 
 @connect(({ maintenancelist, loading }) => ({
     loading: loading.effects['maintenancelist/GetConsumablesReplaceHistoryList'],
@@ -105,7 +167,7 @@ class ConsumablesReplaceHistoryList extends Component {
     }
 
     render() {
-        const dataSource = this.props.HistoryConsumablesReplaceRecordList === null ? null : this.props.HistoryConsumablesReplaceRecordList;
+        const dataSource =datas// this.props.HistoryConsumablesReplaceRecordList === null ? null : this.props.HistoryConsumablesReplaceRecordList;
         const columns = [{
             title: '运维人',
             width: '20%',
