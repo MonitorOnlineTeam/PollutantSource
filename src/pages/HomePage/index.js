@@ -913,7 +913,7 @@ class index extends Component {
           resizeEnable={true}
           events={this.mapEvents}
           zoom={this.state.zoom}
-          mapStyle="amap://styles/darkblue"
+          mapStyle="amap://styles/blue"
           amapkey={amapKey}
           center={mapCenter}
 
