@@ -252,15 +252,16 @@ export default class EntTransmissionEfficiency extends Component {
                                         }
                                     }
                                 }
-                                pagination={{
-                                    showSizeChanger: true,
-                                    showQuickJumper: true,
-                                    sorter: true,
-                                    'total': this.props.total,
-                                    'pageSize': this.props.pageSize,
-                                    'current': this.props.pageIndex,
-                                    pageSizeOptions: ['10', '20', '30', '40', '50']
-                                }}
+                                pagination={{ pageSize: 20 }}
+                                // pagination={{
+                                //     showSizeChanger: true,
+                                //     showQuickJumper: true,
+                                //     sorter: true,
+                                //     'total': this.props.total,
+                                //     'pageSize': this.props.pageSize,
+                                //     'current': this.props.pageIndex,
+                                //     pageSizeOptions: ['10', '20', '30', '40', '50']
+                                // }}
                             />
                         </Row>
                     </Card>

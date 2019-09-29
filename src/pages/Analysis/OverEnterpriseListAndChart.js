@@ -406,16 +406,17 @@ class OverEnterpriseListAndChart extends Component {
                                 onChange={this.handleTableChange}
                                 size="middle"
                                 dataSource={dataSource}
-                                scroll={{ y: 'calc(100vh - 390px)' }}
-                                pagination={{
-                                    showSizeChanger: true,
-                                    showQuickJumper: true,
-                                    sorter: true,
-                                    'total': this.props.total,
-                                    'pageSize': this.props.pageSize,
-                                    'current': this.props.pageIndex,
-                                    pageSizeOptions: ['10', '20', '30', '40', '50']
-                                }}
+                                scroll={{ y: '228px' }}
+                                pagination={{pageSize:10}}
+                                // pagination={{
+                                //     showSizeChanger: true,
+                                //     showQuickJumper: true,
+                                //     sorter: true,
+                                //     'total': this.props.total,
+                                //     'pageSize': this.props.pageSize,
+                                //     'current': this.props.pageIndex,
+                                //     pageSizeOptions: ['10', '20', '30', '40', '50']
+                                // }}
                             />
                         </Card>
                     </Row>
