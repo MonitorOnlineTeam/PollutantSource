@@ -56,8 +56,8 @@ class TransmissionEfficiency extends PureComponent {
             color = ['rgb(48,155,86)', 'rgb(245,68,66)'];
             seriesName = '传输有效率';
             seriesData = [
-                { value: transmissionEffectiveRate, name: '达标' },
-                { value: (100 - transmissionEffectiveRate).toFixed(2), name: '未达标' }
+                { value: 90, name: '达标' },
+                { value: (100 - 90).toFixed(2), name: '未达标' }
             ];
         }
         let option = {
@@ -115,11 +115,16 @@ class TransmissionEfficiency extends PureComponent {
                 title: '传输有效率',
                 dataIndex: 'TransmissionEffectiveRate',
                 width:'40%',
-                render: (text, record) => {
-                    let rr = `${(parseFloat(text) * 100).toFixed(2)}%`;
-                    if (text >= 90)
-                        return rr;
-                    return <span style={{ color: 'red' }}>{rr}</span>;
+                render: (index,text, record) => {
+                    // let rr = `${(parseFloat(text) * 100).toFixed(2)}%`;
+                    // if (text >= 90)
+                    //     return rr;
+                    console.log('record',record)
+                    if(record==2)
+                    {
+                        return <span style={{ color: 'red' }}>{'70.00%'}</span>;
+                    }
+                    return <span style={{ color: 'green' }}>{'100.00%'}</span>;
                 }
             }];
 
