@@ -47,12 +47,12 @@ const RadioButton = Radio.Button;
 let _thismap;
 
 @connect(({
-            loading,
-            workbenchmodel,
-            baseinfo,
-            overview,
-            homepage,
-          }) => ({
+  loading,
+  workbenchmodel,
+  baseinfo,
+  overview,
+  homepage,
+}) => ({
   loadingdatalist: loading.effects[pageUrl.getdatalist],
   loadingRateStatistics: loading.effects[pageUrl.getRateStatisticsByEnt],
   loadingbaseinfo: loading.effects[pageUrl.getbaseinfo],
@@ -244,18 +244,41 @@ class index extends Component {
     const retVal = [];
     const { epData } = this.props.ExceptionProcessing;
     const TheMonth = this.state.TheMonth;
+    let earlyWarningList = this.props.earlyWarningList;
+    // 假数据
+    earlyWarningList = [
+      { "txt": `1号排口：2019-09-29 13:18:39 二氧化硫 | 超标预警值为13.1 | 建议浓度为11.2` },
+      { "txt": `1号排口：2019-08-21 13:18:39 二氧化硫 | 超标预警值为13.1 | 建议浓度为11.2` },
+      { "txt": `1号排口：2019-09-29 13:18:39 二氧化硫 | 超标预警值为13.1 | 建议浓度为11.2` },
+      { "txt": `1号排口：2019-09-29 13:18:39 二氧化硫 | 超标预警值为13.1 | 建议浓度为11.2` },
+      { "txt": `1号排口：2019-09-29 13:18:39 二氧化硫 | 超标预警值为13.1 | 建议浓度为11.2` },
+      { "txt": `1号排口：2019-09-29 13:18:39 二氧化硫 | 超标预警值为13.1 | 建议浓度为11.2` },
+      { "txt": `1号排口：2019-09-29 13:18:39 二氧化硫 | 超标预警值为13.1 | 建议浓度为11.2` },
+      { "txt": `1号排口：2019-09-29 13:18:39 二氧化硫 | 超标预警值为13.1 | 建议浓度为11.2` },
+      { "txt": `1号排口：2019-09-29 13:18:39 二氧化硫 | 超标预警值为13.1 | 建议浓度为11.2` },
+      { "txt": `1号排口：2019-09-29 13:18:39 二氧化硫 | 超标预警值为13.1 | 建议浓度为11.2` },
+      { "txt": `1号排口：2019-09-29 13:18:39 二氧化硫 | 超标预警值为13.1 | 建议浓度为11.2` },
+      { "txt": `1号排口：2019-09-29 13:18:39 二氧化硫 | 超标预警值为13.1 | 建议浓度为11.2` },
+      { "txt": `1号排口：2019-09-29 13:18:39 二氧化硫 | 超标预警值为13.1 | 建议浓度为11.2` },
+      { "txt": `1号排口：2019-09-29 13:18:39 二氧化硫 | 超标预警值为13.1 | 建议浓度为11.2` },
+      { "txt": `1号排口：2019-09-29 13:18:39 二氧化硫 | 超标预警值为13.1 | 建议浓度为11.2` },
+      { "txt": `1号排口：2019-09-29 13:18:39 二氧化硫 | 超标预警值为13.1 | 建议浓度为11.2` },
+      { "txt": `1号排口：2019-09-29 13:18:39 二氧化硫 | 超标预警值为13.1 | 建议浓度为11.2` },
+      { "txt": `1号排口：2019-09-29 13:18:39 二氧化硫 | 超标预警值为13.1 | 建议浓度为11.2` },
+    ]
+
     retVal.push(
-      <div style={{height: "100%"}}>
+      <div style={{ height: "100%" }}>
         <div className={Adapt.divson1}>{TheMonth}月质控智能预警<h2>{epData.ThisMonthEP}</h2>次</div>
         <div className={Adapt.divson2}>
           <div className={
             Adapt.Layered1
           }
           > 同比 {
-            epData.ThisMonthTB > 0 ?
-              <div><i className={Adapt.padd} /><h2 style={{ color: '#FF4E4E' }}>{Math.abs(epData.ThisMonthTB)}</h2><h5 style={{ color: '#FF4E4E' }}>次</h5></div> :
-              <div><i className={Adapt.pdeduct} /><h2 style={{ color: '#5BF287' }}>{Math.abs(epData.ThisMonthTB)}</h2><h5 style={{ color: '#5BF287' }}>次</h5></div>
-          }
+              epData.ThisMonthTB > 0 ?
+                <div><i className={Adapt.padd} /><h2 style={{ color: '#FF4E4E' }}>{Math.abs(epData.ThisMonthTB)}</h2><h5 style={{ color: '#FF4E4E' }}>次</h5></div> :
+                <div><i className={Adapt.pdeduct} /><h2 style={{ color: '#5BF287' }}>{Math.abs(epData.ThisMonthTB)}</h2><h5 style={{ color: '#5BF287' }}>次</h5></div>
+            }
           </div>
           <div className={Adapt.Layered1}>环比 {
             epData.ThisMonthHB > 0 ?
@@ -269,7 +292,7 @@ class index extends Component {
             <i>▍</i>
             实时预警
                 </div> */}
-          <Marquee loopData={this.props.earlyWarningList} direction='vertical' verticalItemHeight='30px' />
+          <Marquee loopData={earlyWarningList} direction='vertical' verticalItemHeight='30px' />
           {/* <ul className={Adapt.list}>
                 {
                   this.state.loopData.map(item => <li>{item.txt}</li>)
@@ -304,6 +327,11 @@ class index extends Component {
     let networkeRate = rsdata.NetworkeRate === undefined ? 0 : (parseFloat(rsdata.NetworkeRate) * 100).toFixed(0);
     let runningRate = rsdata.RunningRate === undefined ? 0 : (parseFloat(rsdata.RunningRate) * 100).toFixed(0);
     let transmissionEffectiveRate = rsdata.TransmissionEffectiveRate === undefined ? 0 : (parseFloat(rsdata.TransmissionEffectiveRate) * 100).toFixed(0);
+
+    // 假数据
+    networkeRate = 95;
+    runningRate = 100;
+    transmissionEffectiveRate = 90
 
     let legendData = [];
     let color = [];
@@ -456,14 +484,14 @@ class index extends Component {
       value: aaData.LessThan2Hour,
       name: '二小时内响应'
     },
-      {
-        value: aaData.GreaterThan8Hour,
-        name: '超八小时响应'
-      },
-      {
-        value: aaData.OtherTime,
-        name: '其他'
-      }
+    {
+      value: aaData.GreaterThan8Hour,
+      name: '超八小时响应'
+    },
+    {
+      value: aaData.OtherTime,
+      name: '其他'
+    }
     ];
     let option = {
       color: ['rgb(77,199,140)', 'rgb(90,203,254)', 'rgb(234,203,0)'],
@@ -686,14 +714,14 @@ class index extends Component {
     const { pollutantTypelist } = this.props;
     let res = [];
     if (pollutantTypelist) {
-      res.push(<RadioButton value="" style={{top: -1}}>全部</RadioButton>);
+      res.push(<RadioButton value="" style={{ top: -1 }}>全部</RadioButton>);
       pollutantTypelist.map((item, key) => {
         let type = "";
-        if(item.pollutantTypeCode == 2){ type = "△" }  // 废气
-        if(item.pollutantTypeCode == 1){ type = "○" }  // 废水
-        if(item.pollutantTypeCode == 10){ type = "☆" }  // 厂界voc
-        if(item.pollutantTypeCode == 12){ type = "□" }  // 厂界扬尘
-        res.push(<RadioButton key={key} value={item.pollutantTypeCode}>{item.pollutantTypeName} <span style={{fontSize: 16}} >{type}</span></RadioButton>)
+        if (item.pollutantTypeCode == 2) { type = "△" }  // 废气
+        if (item.pollutantTypeCode == 1) { type = "○" }  // 废水
+        if (item.pollutantTypeCode == 10) { type = "☆" }  // 厂界voc
+        if (item.pollutantTypeCode == 12) { type = "□" }  // 厂界扬尘
+        res.push(<RadioButton key={key} value={item.pollutantTypeCode}>{item.pollutantTypeName} <span style={{ fontSize: 16 }} >{type}</span></RadioButton>)
       })
     }
     return res;
@@ -862,12 +890,31 @@ class index extends Component {
         size="large"
       />);
     }
+    let warningInfoList = this.props.warningInfoList;
+    warningInfoList = [
+      { "txt": `1号排口：二氧化硫从2019-09-29 13:23:18发生了4次报警。` },
+      { "txt": `1号排口：二氧化硫从2019-09-29 13:23:18发生了4次报警。` },
+      { "txt": `1号排口：二氧化硫从2019-09-29 13:23:18发生了4次报警。` },
+      { "txt": `1号排口：二氧化硫从2019-09-29 13:23:18发生了4次报警。` },
+      { "txt": `1号排口：二氧化硫从2019-09-29 13:23:18发生了4次报警。` },
+      { "txt": `1号排口：二氧化硫从2019-09-29 13:23:18发生了4次报警。` },
+      { "txt": `1号排口：二氧化硫从2019-09-29 13:23:18发生了4次报警。` },
+      { "txt": `1号排口：二氧化硫从2019-09-29 13:23:18发生了4次报警。` },
+      { "txt": `1号排口：二氧化硫从2019-09-29 13:23:18发生了4次报警。` },
+      { "txt": `1号排口：二氧化硫从2019-09-29 13:23:18发生了4次报警。` },
+      { "txt": `1号排口：二氧化硫从2019-09-29 13:23:18发生了4次报警。` },
+      { "txt": `1号排口：二氧化硫从2019-09-29 13:23:18发生了4次报警。` },
+      { "txt": `1号排口：二氧化硫从2019-09-29 13:23:18发生了4次报警。` },
+      { "txt": `1号排口：二氧化硫从2019-09-29 13:23:18发生了4次报警。` },
+      { "txt": `1号排口：二氧化硫从2019-09-29 13:23:18发生了4次报警。` },
+    ]
+
     return (
 
       <div className={styles.homeWrapper} style={{ width: '100%', height: 'calc(100vh - 67px)' }}>
         <header className={Adapt.homeHeader}>
           <p><span>SDL</span> 污染源智能分析系统</p>
-          <a className={Adapt.backMenu} href="" onClick={()=>{
+          <a className={Adapt.backMenu} href="" onClick={() => {
             this.props.dispatch(routerRedux.push("/"))
           }}>返回菜单</a>
         </header>
@@ -989,7 +1036,7 @@ class index extends Component {
             <div className={Adapt.leftContainer}>
               {/* LEFT@3 */}
               <div className={Adapt.LeftLayout3}>
-                <div style={{overflow: "hidden"}}>
+                <div style={{ overflow: "hidden" }}>
                   <div className={Adapt.divfirt}>
                     <p>智能运维</p>
                   </div>
@@ -1011,7 +1058,7 @@ class index extends Component {
                   </div>
 
                 </div>
-                <div style={{overflow: "hidden"}}>
+                <div style={{ overflow: "hidden" }}>
                   <div>
                     <div className={Adapt.Layered1Title}>
                       <p>{TheMonth}月异常报警及响应情况</p>
@@ -1040,7 +1087,7 @@ class index extends Component {
                         </div>
                       </div>
                     </div>
-                    <div className={Adapt.Layered1} style={{marginTop: 30}}>
+                    <div className={Adapt.Layered1} style={{ marginTop: 30 }}>
                       <br />
                       {this.AlarmAnalysisData()}
                     </div>
@@ -1071,7 +1118,7 @@ class index extends Component {
             </Radio.Group>
           </div>
           <div className={Adapt.overproofWrapper}>
-            <div className={Adapt.title}>7月超标汇总</div>
+            <div className={Adapt.title}>{TheMonth}月超标汇总</div>
             <div className={Adapt.content}>
               <ul className={Adapt.colum}>
                 <li>污染物</li>
@@ -1144,7 +1191,6 @@ class index extends Component {
               </div>
             </div>
             <div className={Adapt.RightLayout2} style={{}}>
-
               {/*氮氧化物排污许可情况  */}
               <div className={Adapt.NOx}>
                 <div className={Adapt.divtitle}>
@@ -1241,7 +1287,7 @@ class index extends Component {
                 <i>▍</i>
                 报警信息
               </div>
-              <Marquee loopData={this.props.warningInfoList} direction='vertical' verticalItemHeight='30px' />
+              <Marquee loopData={warningInfoList} direction='vertical' verticalItemHeight='30px' />
               {/* <div className={Adapt.overproofWrapper}>
 
               </div> */}
